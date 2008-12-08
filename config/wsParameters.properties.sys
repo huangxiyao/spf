@@ -1,0 +1,49 @@
+#
+# This file contains environment properties for HPP Systest web service.
+##############################################################################
+
+#
+#Set the current mode
+#
+Mode=Systest
+#
+#Endpoint url
+#
+EndPointSystest=https://hppwssys2.passport.hp.com/ssawebsrvc50/services/PassportService
+#
+#User name for connecting to endpoint url of staging environment.
+#
+UserNameSystest=ServPortal
+#
+#Password for connecting to endpoint url of staging environment.
+#
+PasswordSystest=qwerty.4ServPortal
+#
+#http proxy host for connecting to endpoint url
+#
+ProxyHostSystest=
+#
+#http proxy port for connecting to endpoint url
+#
+ProxyPortSystest=
+#
+#The hosts which should be connected too directly and not through the proxy server.
+#
+NonProxyHostsSystest=
+#
+#User name for HPP web service login as an administrator. The administrator 
+#privilege is used to manipulate user.
+#
+AdminUserSystest=sp_hppwebservice
+#
+#Password for HPP web service login as an administrator. The administrator 
+#privilege is used to manipulate user.
+#
+AdminPasswordSystest=123!@#qweASD
+#
+#Default language code in soap request header.
+#
+DefaultLangCodeSystest=en
+
+
+
