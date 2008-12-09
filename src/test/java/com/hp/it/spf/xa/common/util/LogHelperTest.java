@@ -30,7 +30,7 @@ public class LogHelperTest extends TestCase {
 		map.put("key5", "value5");		
 		
 		String str = LogHelper.formatParaInfo(map);
-		assertEquals(str, "key1:value1 | key3:value3 | key5:value5 | key2:value2 | key4:value4");
+		assertEquals(str, "key1: value1 | key3: value3 | key5: value5 | key2: value2 | key4: value4");
 	}
 	
 	/**
@@ -65,6 +65,6 @@ public class LogHelperTest extends TestCase {
 		map.put("key5", "value5");		
 		
 		String str = LogHelper.formatParaInfo(map);
-		assertEquals(str, "key1:{ key11:value11 | key14:value14 | key12:value12 | key13:value13 } | key3:value3 | key5:value5 | key2:value2 | key4:{ key41:value41 | key42:value42 | key43:value43 | key44:{ key441:value441 | key442:value442 } }");
+		assertEquals(str, "key1: { key11: value11 | key14: value14 | key12: value12 | key13: value13 } | key3: value3 | key5: value5 | key2: value2 | key4: { key41: value41 | key42: value42 | key43: value43 | key44: { key441: value441 | key442: value442 } }");
 	}	
 }

@@ -147,11 +147,26 @@ public class I18nUtilityTest extends TestCase {
     public void testGetUserDisplayName() {
         String fn = "yingzhi";
         String ln = "wu";
+        
         Locale plocale = Locale.CHINA;
-
         String userDisName = I18nUtility.getUserDisplayName(fn, ln, plocale);
-
-        assertEquals("yingzhi wu", userDisName);
+        assertEquals("wu yingzhi", userDisName);
+        
+        plocale = Locale.TAIWAN;
+        userDisName = I18nUtility.getUserDisplayName(fn, ln, plocale);
+        assertEquals("wu yingzhi", userDisName);
+        
+        plocale = Locale.KOREA;
+        userDisName = I18nUtility.getUserDisplayName(fn, ln, plocale);
+        assertEquals("wu yingzhi", userDisName);
+        
+        plocale = Locale.JAPAN;
+        userDisName = I18nUtility.getUserDisplayName(fn, ln, plocale);
+        assertEquals("wu yingzhi", userDisName);
+        
+        plocale = Locale.US;
+        userDisName = I18nUtility.getUserDisplayName(fn, ln, plocale);
+        assertEquals("wu yingzhi", userDisName);
     }
 
 }
