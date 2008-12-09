@@ -166,7 +166,7 @@ public class I18nUtilityTest extends TestCase {
         
         plocale = Locale.US;
         userDisName = I18nUtility.getUserDisplayName(fn, ln, plocale);
-        assertEquals("wu yingzhi", userDisName);
+        assertEquals("yingzhi wu", userDisName);
     }
 
 }
