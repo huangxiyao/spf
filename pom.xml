@@ -41,6 +41,20 @@
 			<version>1.1.1</version>
 		</dependency>
 	</dependencies>
+	<description>Common utilities for both portal and portlet sides of the Shared Portal Framework.  Currently includes abstract base utilities for portal and portlet file content interpolation (useful for any use case involving display of an authored HTML file with certain dynamic substitutions supported), internationalization, property resource bundle management (hot-reloadable property files), etc.</description>
+	<inceptionYear>December 2008</inceptionYear>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson</url>
+	</ciManagement>
+	<scm>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/common-utilities</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/common-utilities</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/common-utilities</url>
+	</scm>
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
 	<build>
 		<plugins>
 			<plugin>
