@@ -3,7 +3,7 @@
  * Copyright (c) 2008 HP. All Rights Reserved.
  * 
  */
-package com.hp.it.spf.xa.common.util;
+package com.hp.it.spf.xa.common;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 
 /**
  * <p>

@@ -3,7 +3,7 @@
  * Copyright (c) 2008 HP. All Rights Reserved.
  *
  */
-package com.hp.it.spf.xa.common.util;
+package com.hp.it.spf.xa.log;
 
 import java.util.Iterator;
 import java.util.Map;

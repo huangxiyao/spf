@@ -5,7 +5,7 @@
  * Common internationalization/localization utility for both portal and portlet.
  * This is the parent class of both portal I18nUtility and portlet I18nUtility classes.
  */
-package com.hp.it.spf.xa.common.util;
+package com.hp.it.spf.xa.i18n;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,6 +21,8 @@ import java.util.TimeZone;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import com.hp.it.spf.xa.common.PropertyResourceBundleManager;
 
 /**
  * A concrete base class including methods for internationalization/localization

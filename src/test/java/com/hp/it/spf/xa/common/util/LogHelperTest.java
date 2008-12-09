@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.hp.it.spf.xa.common.util.LogHelper;
+import com.hp.it.spf.xa.log.LogHelper;
 
 import junit.framework.TestCase;
 

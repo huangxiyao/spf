@@ -8,7 +8,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.Date;
 
-import com.hp.it.spf.xa.common.util.I18nUtility;
+import com.hp.it.spf.xa.i18n.I18nUtility;
 
 import junit.framework.TestCase;
 

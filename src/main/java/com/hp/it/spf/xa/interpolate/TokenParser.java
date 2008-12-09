@@ -3,11 +3,13 @@
  * Copyright (c) 2008 HP. All Rights Reserved.
  * 
  */
-package com.hp.it.spf.xa.common.util;
+package com.hp.it.spf.xa.interpolate;
 
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.hp.it.spf.xa.common.PropertyResourceBundleManager;
 
 /**
  * <p>
@@ -422,7 +424,7 @@ public abstract class TokenParser {
 	 * @param key
 	 *            token key
 	 * @return value
-	 * @see com.hp.it.spf.xa.common.util.PropertyResourceBundleManager
+	 * @see com.hp.it.spf.xa.common.PropertyResourceBundleManager
 	 */
 	/* Added by CK for 1000790073 */
 	private String getToken(String key) {

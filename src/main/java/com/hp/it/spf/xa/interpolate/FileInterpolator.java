@@ -6,7 +6,7 @@
  * dynamic values for various tokens, and returning the substituted
  * content to the calling class.
  */
-package com.hp.it.spf.xa.common.util;
+package com.hp.it.spf.xa.interpolate;
 
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
