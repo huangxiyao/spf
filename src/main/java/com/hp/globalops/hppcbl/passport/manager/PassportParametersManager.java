@@ -1,7 +1,8 @@
 package com.hp.globalops.hppcbl.passport.manager;
 
 import java.util.ResourceBundle;
-import com.hp.it.spf.xa.common.util.PropertyResourceBundleManager;
+
+import com.hp.it.spf.xa.common.PropertyResourceBundleManager;
 
 public class PassportParametersManager {
 
