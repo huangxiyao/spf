@@ -1,10 +1,7 @@
 package com.hp.globalops.hppcbl.passport;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
-import com.hp.globalops.hppcbl.passport.beans.Fault;
 import com.hp.globalops.hppcbl.passport.tasks.AddUserToGroupTask;
 import com.hp.globalops.hppcbl.passport.tasks.AdminCreateUserTask;
 import com.hp.globalops.hppcbl.passport.tasks.AdminModifyUserTask;
@@ -927,6 +924,7 @@ public class PassportService {
 		return response;
 	}
 
+	/* Not used
 	private void displayFaults(ArrayList faults) {
 		if (faults.size() > 0) {
 			Iterator iter = faults.iterator();
@@ -936,6 +934,7 @@ public class PassportService {
 			}
 		}
 	}
+	*/
 
 	public String getSystemLangCode() {
 		return mSystemLangCode;

@@ -6,6 +6,7 @@ import com.hp.globalops.hppcbl.passport.beans.Fault;
 
 public class PassportServiceException extends Exception {
 
+	private static final long serialVersionUID = 6542036331847239408L;
 	private ArrayList faults = null;
 
 	public PassportServiceException() {

@@ -2,7 +2,9 @@
 package com.hp.globalops.hppcbl.passport.beans;
 
 public class Fault implements java.io.Serializable, java.lang.Comparable  {
-    private int ruleNumber;
+
+	private static final long serialVersionUID = 3106673949496346557L;
+	private int ruleNumber;
     private String fieldName;
     private String code;
     private String description;

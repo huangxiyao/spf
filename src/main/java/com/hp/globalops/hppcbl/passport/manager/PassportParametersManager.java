@@ -1,8 +1,7 @@
 package com.hp.globalops.hppcbl.passport.manager;
 
-import java.util.Enumeration;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import com.hp.it.spf.xa.common.util.PropertyResourceBundleManager;
 
 public class PassportParametersManager {
 
@@ -38,7 +37,7 @@ public class PassportParametersManager {
     }
 
     private void init() {
-        ResourceBundle parameters = PropertyManager
+        ResourceBundle parameters = PropertyResourceBundleManager
                 .getBundle(IConstantPassportService.WSPARAMETERSFILENAME);
         setMode(parameters.getString(IConstantPassportService.MODE));
         // System.out.println("Mode=" + getMode());
@@ -76,7 +75,7 @@ public class PassportParametersManager {
     }
 
     public String getAdminPassword() {
-        return PropertyManager.getString(
+        return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
                 IConstantPassportService.ADMINPASSWORD_PREFIX + getMode());
     }
@@ -86,7 +85,7 @@ public class PassportParametersManager {
     }
 
     public String getAdminUser() {
-        return PropertyManager.getString(
+        return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
                 IConstantPassportService.ADMINUSER_PREFIX + getMode());
     }
@@ -96,7 +95,7 @@ public class PassportParametersManager {
     }
 
     public String getDefaultLangCode() {
-        return PropertyManager.getString(
+        return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
                 IConstantPassportService.DEFAULTLANGCODE_PREFIX + getMode());
     }
@@ -106,7 +105,7 @@ public class PassportParametersManager {
     }
 
     public String getEndPoint() {
-        return PropertyManager.getString(
+        return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
                 IConstantPassportService.ENDPOINTS_PREFIX + getMode());
     }
@@ -116,7 +115,7 @@ public class PassportParametersManager {
     }
 
     public String getMode() {
-        return PropertyManager.getString(
+        return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
                 IConstantPassportService.MODE);
     }
@@ -126,7 +125,7 @@ public class PassportParametersManager {
     }
 
     public String getNonProxyHosts() {
-        return PropertyManager.getString(
+        return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
                 IConstantPassportService.NONPROXYHOSTS_PREFIX + getMode());
     }
@@ -136,7 +135,7 @@ public class PassportParametersManager {
     }
 
     public String getPassword() {
-        return PropertyManager.getString(
+        return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
                 IConstantPassportService.PASSWORD_PREFIX + getMode());
     }
@@ -146,7 +145,7 @@ public class PassportParametersManager {
     }
 
     public String getProxyHost() {
-        return PropertyManager.getString(
+        return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
                 IConstantPassportService.PROXYHOST_PREFIX + getMode());
     }
@@ -156,7 +155,7 @@ public class PassportParametersManager {
     }
 
     public String getProxyPort() {
-        return PropertyManager.getString(
+        return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
                 IConstantPassportService.PROXYPORT_PREFIX + getMode());
     }
@@ -166,7 +165,7 @@ public class PassportParametersManager {
     }
 
     public String getUserName() {
-        return PropertyManager.getString(
+        return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
                 IConstantPassportService.USERNAME_PREFIX + getMode());
     }

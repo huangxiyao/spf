@@ -11,7 +11,8 @@ import org.apache.axis.AxisFault;
 
 public class TaskExecutionException extends Exception{
 
-    private AxisFault axisFault;
+	private static final long serialVersionUID = 5503349460135816643L;
+	private AxisFault axisFault;
 
     public TaskExecutionException(AxisFault axisFault){
         this.axisFault=axisFault;
