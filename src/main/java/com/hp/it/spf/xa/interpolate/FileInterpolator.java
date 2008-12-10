@@ -11,21 +11,22 @@ package com.hp.it.spf.xa.interpolate;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * <p>
  * An abstract base class for performing file interpolation (reading and
  * substitution) in portal and portlet frameworks. See the portal and portlet
- * concrete subclasses for more information. This class uses the TokenParser
- * heavily to do its work.
+ * concrete subclasses for more information. This class uses the base
+ * TokenParser heavily to do its work.
  * </p>
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.cas.spf.portal.common.utils.FileInterpolator
- *      com.hp.it.cas.spf.portlet.common.utils.FileInterpolator
- *      com.hp.it.spf.xa.common.util.TokenParser
+ * @see com.hp.it.spf.xa.interpolate.portal.FileInterpolator
+ *      com.hp.it.spf.xa.interpolate.portlet.FileInterpolator
+ *      com.hp.it.spf.xa.interpolate.TokenParser
  * 
  */
 public abstract class FileInterpolator {
@@ -41,13 +42,10 @@ public abstract class FileInterpolator {
 	protected String baseContentFilePath = null;
 
 	/**
-	 * Detailed parser for special token
+	 * Token parser for parsing the content string
 	 */
 	protected TokenParser t = null;
 
-	/**
-	 * Construction function
-	 */
 	public FileInterpolator() {
 	}
 
@@ -61,20 +59,12 @@ public abstract class FileInterpolator {
 	protected abstract String getLocalizedContentFilePath();
 
 	/**
-	 * Get the ISO 639-1 language code for the user, such as zh. Different
-	 * action by portal and portlet, so therefore this is an abstract method.
+	 * Get the locale for the user. Different action by portal and portlet, so
+	 * therefore this is an abstract method.
 	 * 
-	 * @return ISO 639-1 language code
+	 * @return locale
 	 */
-	protected abstract String getLanguageCode();
-
-	/**
-	 * Get the RFC 3066 language tag for the user, such as zh-CN. Different
-	 * action by portal and portlet, so therefore this is an abstract method.
-	 * 
-	 * @return RFC 3066 language tag
-	 */
-	protected abstract String getLanguageTag();
+	protected abstract Locale getLocale();
 
 	/**
 	 * Get the email address for the user. Different action by portal and
@@ -83,6 +73,22 @@ public abstract class FileInterpolator {
 	 * @return email
 	 */
 	protected abstract String getEmail();
+
+	/**
+	 * Get the first name for the user. Different action by portal and portlet,
+	 * so therefore this is an abstract method.
+	 * 
+	 * @return first name
+	 */
+	protected abstract String getFirstName();
+
+	/**
+	 * Get the last name for the user. Different action by portal and portlet,
+	 * so therefore this is an abstract method.
+	 * 
+	 * @return last name
+	 */
+	protected abstract String getLastName();
 
 	/**
 	 * Get the portal site name for the current portal site. Different action by
@@ -109,6 +115,25 @@ public abstract class FileInterpolator {
 	 * values. The final string is returned. Returns null if there was a problem
 	 * with the interpolation (eg the file was not found, or the base content
 	 * file path provided earlier was null).
+	 * </p>
+	 * <p>
+	 * For a list and description of all the supported tokens, see the concrete
+	 * subclass documentation. This interpolate method is responsible for
+	 * substituting the following tokens, in the following order:
+	 * <dl>
+	 * <dt><code>&lt;TOKEN:<i>key</i>&gt;</code></dt>
+	 * <dd>This token is parsed first, and the substituted content is added to
+	 * the string. So subsequent substitutions operate against the value for the
+	 * <i>key</i> - therefore that value may itself contain other tokens.
+	 * <dt><code>&lt;LANGUAGE-CODE&gt;</code></dt>
+	 * <dt><code>&lt;LANGUAGE-TAG&gt;</code></dt>
+	 * <dt><code>&lt;CONTENT-URL:</i>path</i>&gt;</code></dt>
+	 * <dt><code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt;</code></dt>
+	 * <dt><code>&lt;SITE&gt;</code></dt>
+	 * <dt><code>&lt;EMAIL&gt;</code></dt>
+	 * <dt><code>&lt;NAME&gt;</code></dt>
+	 * <dt><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></dt>
+	 * </dl>
 	 * </p>
 	 * 
 	 * @return String the file content (null if file was not found or was empty)
@@ -140,10 +165,10 @@ public abstract class FileInterpolator {
 		content = t.parseToken(content);
 
 		// Add current ISO language code
-		content = t.parseLanguageCode(content, getLanguageCode());
+		content = t.parseLanguageCode(content, getLocale());
 
 		// Add current RFC language code
-		content = t.parseLanguageTag(content, getLanguageTag());
+		content = t.parseLanguageTag(content, getLocale());
 
 		// Transfer tag to localized URL.
 		content = t.parseNoLocalizedContentURL(content);
@@ -151,11 +176,19 @@ public abstract class FileInterpolator {
 		// Transfer tag to unlocalized URL
 		content = t.parseLocalizedContentURL(content);
 
+		// Add current site name
+		content = t.parseSite(content, getSite());
+
 		// Add current user email
 		content = t.parseEmail(content, getEmail());
 
-		// Add current site name
-		content = t.parseSite(content, getSite());
+		// Add current user display name
+		content = t.parseName(content, getFirstName(), getLastName(),
+				getLocale());
+
+		// Add other property values for current user
+		content = t.parseUserProperty(content);
+
 		return content;
 	}
 
@@ -183,5 +216,20 @@ public abstract class FileInterpolator {
 			return null;
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * Get the value of the given user property from the portal User object in
+	 * the portal context (portal request) provided to the constructor. Returns
+	 * null if this has not been set in the request (eg, when the user is not
+	 * logged-in), or the portal context provided to the constructor was null.
+	 * 
+	 * @return email
+	 */
+	protected String getUserProperty(String key) {
+		if (t == null) {
+			return null;
+		}
+		return t.getUserProperty(key);
 	}
 }

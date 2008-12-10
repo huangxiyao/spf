@@ -8,27 +8,42 @@ package com.hp.it.spf.xa.interpolate;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Locale;
 
 import com.hp.it.spf.xa.common.PropertyResourceBundleManager;
+import com.hp.it.spf.xa.i18n.I18nUtility;
 
 /**
  * <p>
  * An abstract base class for parsing strings looking for tokens to substitute
  * in portal and portlet contexts. See the concrete portal and portlet
  * subclasses for further information. This base class and its subclasses are
- * used heavily by the portal and portlet FileInterpolator classes. See the
- * method documentation for a description of the various token substitutions
- * which are supported.
+ * used heavily by the base, portal and portlet FileInterpolator classes.
  * </p>
+ * <p>
+ * The following token substitutions are supported. See the method documentation
+ * for further description.
+ * </p>
+ * <dl>
+ * <dt><code>&lt;TOKEN:<i>key</i>&gt;</code></dt>
+ * <dt><code>&lt;LANGUAGE-CODE&gt;</code></dt>
+ * <dt><code>&lt;LANGUAGE-TAG&gt;</code></dt>
+ * <dt><code>&lt;CONTENT-URL:</i>path</i>&gt;</code></dt>
+ * <dt><code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt;</code></dt>
+ * <dt><code>&lt;SITE&gt;</code></dt>
+ * <dt><code>&lt;EMAIL&gt;</code></dt>
+ * <dt><code>&lt;NAME&gt;</code></dt>
+ * <dt><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></dt>
+ * </dl>
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.cas.spf.portal.utils.TokenParser
- *      com.hp.it.cas.spf.portlet.utils.TokenParser
- *      com.hp.it.spf.xa.common.util.FileInterpolator
- *      com.hp.it.cas.spf.portal.utils.FileInterpolator
- *      com.hp.it.cas.spf.portlet.utils.FileInterpolator
+ * @see com.hp.it.spf.xa.interpolate.portal.TokenParser
+ *      com.hp.it.spf.xa.interpolate.portlet.TokenParser
+ *      com.hp.it.spf.xa.interpolate.FileInterpolator
+ *      com.hp.it.spf.xa.interpolate.portal.FileInterpolator
+ *      com.hp.it.spf.xa.interpolate.portlet.FileInterpolator
  * 
  */
 public abstract class TokenParser {
@@ -71,6 +86,16 @@ public abstract class TokenParser {
 	 * This class attribute is the token for the user's email address.
 	 */
 	private static final String TOKEN_EMAIL = "<EMAIL>";
+
+	/**
+	 * This class attribute is the token for the user's email address.
+	 */
+	private static final String TOKEN_NAME = "<NAME>";
+
+	/**
+	 * This class attribute is the user property token.
+	 */
+	private static final String TOKEN_USER_PROPERTY = "<USER-PROPERTY:";
 
 	/**
 	 * This class attribute is the token for the current portal site.
@@ -129,6 +154,20 @@ public abstract class TokenParser {
 			boolean localized);
 
 	/**
+	 * <p>
+	 * Get the value of the given user property. This should return null if the
+	 * user property is not found (or is not a string), or the user object is
+	 * guest or null (ie the user is not logged in). Different action by portal
+	 * and portlet, so therefore this is an abstract method.
+	 * </p>
+	 * 
+	 * @param key
+	 *            The property name
+	 * @return The property value
+	 */
+	protected abstract String getUserProperty(String key);
+
+	/**
 	 * An inner class interface for deciding whether a content section enclosed
 	 * within a container token should be included in the interpolated content.
 	 * Different action by portal and portlet, and also different depending on
@@ -172,46 +211,52 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the given string, substituting the given ISO 639-1 language code
-	 * for the <code>&lt;LANGUAGE-CODE&gt;</code> token. For example:
-	 * <code>&lt;a
+	 * Parses the given string, substituting the ISO 639-1 language code for the
+	 * given locale in place of the <code>&lt;LANGUAGE-CODE&gt;</code> token.
+	 * For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?lang=&lt;LANGUAGE-CODE&gt;"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
 	 * href="https://ovsc.hp.com?lang=ja"&gt;go to OVSC&lt;/a&gt;</code>
-	 * when you provide the language code "ja". If you provide a null language
-	 * code, the token is replaced with blank. If you provide null content, null
-	 * is returned.
+	 * when you provide a Japanese-language locale. If you provide a null
+	 * locale, the token is replaced with blank. If you provide null content,
+	 * null is returned.
 	 * </p>
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param lang
-	 *            The ISO 639-1 language code.
+	 * @param loc
+	 *            The locale.
 	 * 
 	 * @return The interpolated string.
 	 */
-	public String parseLanguageCode(String content, String lang) {
+	public String parseLanguageCode(String content, Locale loc) {
 		if (content == null) {
 			return null;
+		}
+		String lang = null;
+		if (loc != null) {
+			lang = loc.getLanguage();
 		}
 		if (lang == null) {
 			lang = "";
 		}
+		lang = lang.trim().toLowerCase(); // By convention, use lowercase
 		return content.replaceAll(TOKEN_LANGUAGE_CODE, lang);
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, substituting the given RFC 3066 language tag for
-	 * the <code>&lt;LANGUAGE-TAG&gt;</code> token. For example: <code>&lt;a
+	 * the given locale in place of the <code>&lt;LANGUAGE-TAG&gt;</code>
+	 * token. For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?lang=&lt;LANGUAGE-TAG&gt;"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
 	 * href="https://ovsc.hp.com?lang=zn-CN"&gt;go to OVSC&lt;/a&gt;</code>
-	 * when you provide the language tag "zh-CN". If you provide a null language
-	 * tag, the token is replaced with blank. If you provide null content, null
-	 * is returned.
+	 * when you provide the Chinese (China) locale. If you provide a null
+	 * locale, the token is replaced with blank. If you provide null content,
+	 * null is returned.
 	 * </p>
 	 * 
 	 * @param lang
@@ -220,10 +265,11 @@ public abstract class TokenParser {
 	 *            The content string.
 	 * @return The interpolated string.
 	 */
-	public String parseLanguageTag(String content, String lang) {
+	public String parseLanguageTag(String content, Locale loc) {
 		if (content == null) {
 			return null;
 		}
+		String lang = I18nUtility.localeToLanguageTag(loc);
 		if (lang == null) {
 			lang = "";
 		}
@@ -347,6 +393,42 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
+	 * Parses the given string, substituting the given first and last names (in
+	 * proper display order for the given locale) in place of the
+	 * <code>&lt;NAME&gt;</code> token. For example:
+	 * <code>Welcome, &lt;NAME&gt;!</code> is changed to
+	 * <code>Welcome, <i>first</i> <i>last</i>!</code> for most locales (and
+	 * by default - eg if the given locale is null). However in some Asian
+	 * locales (eg Japan, China, etc), it would be changed to
+	 * <code>Welcome, <i>last</i> <i>first</i>!</code> If you provide null
+	 * first and last names, the token is replaced with blank. If you provide
+	 * null content, null is returned.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @param firstName
+	 *            The first (given) name.
+	 * @param lastName
+	 *            The last (family) name.
+	 * @param locale
+	 *            The locale.
+	 * @return The interpolated string.
+	 */
+	public String parseName(String content, String firstName, String lastName,
+			Locale loc) {
+		if (content == null) {
+			return null;
+		}
+		String name = I18nUtility.getUserDisplayName(firstName, lastName, loc);
+		if (name == null) {
+			name = "";
+		}
+		return content.replaceAll(TOKEN_NAME, name);
+	}
+
+	/**
+	 * <p>
 	 * Parses the given string, substituting the given site name for the
 	 * <code>&lt;SITE&gt;</code> token. The site name is intended to be the
 	 * name for the virtual portal site. For example: <code>&lt;a
@@ -373,6 +455,57 @@ public abstract class TokenParser {
 			siteName = "";
 		}
 		return content.replaceAll(TOKEN_SITE, siteName);
+	}
+
+	/**
+	 * <p>
+	 * Parses the given string, converting the
+	 * <code>&lt;USER-PROPERTY:<i>key</i>&gt;</code> token into the value
+	 * for that key in the user properties. Actual implementation depends on
+	 * portal or portlet context. For example, in the portal context:
+	 * <code>Your phone number is: &lt;USER-PROPERTY:day_phone&gt;</code> is
+	 * returned as: <code>Your phone number is: 123 456 7890</code> assuming
+	 * the <code>day_phone</code> property in the portal user object is set to
+	 * that value. An example for the portlet context:
+	 * <code>Hello &lt;USER-PROPERTY:user.name.given&gt;!</code> is returned
+	 * as: <code>Hello Scott!</code> assuming the <code>user.name.given</code>
+	 * property in the portlet request (ie PortletRequest.USER_INFO) is set to
+	 * that value.
+	 * </p>
+	 * <p>
+	 * If the given string property is not found (or the user properties are
+	 * guest or null - eg the user is not logged-in), then the token is replaced
+	 * by blank. If you provide null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> Portal and portlet contexts use different property names
+	 * for the same elements. The list of property names is not provided here.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parseUserProperty(String content) {
+		if (content == null) {
+			return null;
+		}
+		String regEx = "(" + TOKEN_USER_PROPERTY + ".*?>)";
+		Pattern p = Pattern.compile(regEx);
+		Matcher m = p.matcher(content);
+		while (m.find()) {
+			String str = m.group();
+			String key = str.substring(str.indexOf(TOKEN_USER_PROPERTY)
+					+ TOKEN_USER_PROPERTY.length(), str.length() - 1);
+			String token = getUserProperty(key.trim());
+			if (token != null) {
+				content = content.replaceAll(str, token);
+			} else {
+				content = content.replaceAll(str, "");
+			}
+		}
+		return content;
+
 	}
 
 	/**
@@ -405,7 +538,7 @@ public abstract class TokenParser {
 			String str = m.group();
 			String key = str.substring(str.indexOf(TOKEN_TOKEN)
 					+ TOKEN_TOKEN.length(), str.length() - 1);
-			String token = getToken(key);
+			String token = getToken(key.trim());
 			if (token != null) {
 				content = content.replaceAll(str, token);
 			} else {

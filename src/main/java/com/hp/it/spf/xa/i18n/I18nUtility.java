@@ -660,7 +660,8 @@ public class I18nUtility {
 	 * <p>
 	 * Return the whole user name (given name and surname) in the customary
 	 * order according to the given locale. Returns null if both of the name
-	 * parameters are null.
+	 * parameters are null. Defaults to the customary Western order (given name
+	 * then surname).
 	 * </p>
 	 * 
 	 * @param givenName
