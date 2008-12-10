@@ -22,7 +22,7 @@ import java.util.TimeZone;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.hp.it.spf.xa.common.PropertyResourceBundleManager;
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 
 /**
  * A concrete base class including methods for internationalization/localization

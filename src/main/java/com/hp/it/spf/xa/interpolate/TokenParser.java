@@ -10,8 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Locale;
 
-import com.hp.it.spf.xa.common.PropertyResourceBundleManager;
 import com.hp.it.spf.xa.i18n.I18nUtility;
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 
 /**
  * <p>
@@ -557,7 +557,7 @@ public abstract class TokenParser {
 	 * @param key
 	 *            token key
 	 * @return value
-	 * @see com.hp.it.spf.xa.common.PropertyResourceBundleManager
+	 * @see com.hp.it.spf.xa.properties.PropertyResourceBundleManager
 	 */
 	/* Added by CK for 1000790073 */
 	private String getToken(String key) {
