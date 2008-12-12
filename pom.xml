@@ -45,7 +45,7 @@
 	<inceptionYear>December 2008</inceptionYear>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson</url>
+		<url>http://samson.atl.hp.com:8080/hudson/job/common-utilities/</url>
 	</ciManagement>
 	<scm>
 		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/common-utilities</connection>
