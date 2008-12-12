@@ -64,8 +64,11 @@ public class I18nUtility {
 	 */
 	public static final String HPP_SIMP_CHINESE_LANG = "13";
 
+	/**
+	 * Logger for logging errors.
+	 */
 	private static final Log LOG = LogFactory.getLog(I18nUtility.class);
-
+	 
 	/**
 	 * Protected to prevent external construction except by subclasses. Use the
 	 * portal or portlet I18nUtility class instead.
@@ -202,26 +205,17 @@ public class I18nUtility {
 		}
 		pHppLangCode = pHppLangCode.trim().toLowerCase();
 		Locale locale = null;
-		try {
-			if (HPP_TRAD_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
-				locale = new Locale("zh", "TW");
-			} else if (HPP_SIMP_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
-				locale = new Locale("zh", "CN");
+		if (HPP_TRAD_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
+			locale = new Locale("zh", "TW");
+		} else if (HPP_SIMP_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
+			locale = new Locale("zh", "CN");
+		} else {
+			if (pHppCountryCode != null) {
+				pHppCountryCode = pHppCountryCode.trim().toUpperCase();
+				locale = new Locale(pHppLangCode, pHppCountryCode);
 			} else {
-				if (pHppCountryCode != null) {
-					pHppCountryCode = pHppCountryCode.trim().toUpperCase();
-					locale = new Locale(pHppLangCode, pHppCountryCode);
-				} else {
-					locale = new Locale(pHppLangCode);
-				}
+				locale = new Locale(pHppLangCode);
 			}
-		} catch (Exception ex) {
-			LOG
-					.debug("I18nUtility: caught Exception: hppLanguageToLocale failed with HPP language code "
-							+ pHppLangCode
-							+ ", HPP country code "
-							+ pHppCountryCode);
-			LOG.debug("I18nUtility: " + ex.getMessage());
 		}
 		return locale;
 	}
@@ -346,25 +340,18 @@ public class I18nUtility {
 		}
 		pLangTag = pLangTag.trim().toLowerCase();
 		Locale locale = null;
-		try {
-			// RFC 3066 specifies "-" as delimiter but we will accept "_" as
-			// well
-			String[] effLocale = pLangTag.split("[_-]");
-			int length = effLocale.length;
-			if (length <= 1) {
-				locale = new Locale(effLocale[0].trim());
-			} else if (length > 1 && length <= 2) {
-				locale = new Locale(effLocale[0].trim(), effLocale[1].trim()
-						.toUpperCase());
-			} else if (length > 2) {
-				locale = new Locale(effLocale[0].trim(), effLocale[1].trim()
-						.toUpperCase(), effLocale[2].trim());
-			}
-		} catch (Exception ex) {
-			LOG
-					.debug("I18nUtility: caught Exception: languageTagToLocale failed with language tag "
-							+ pLangTag);
-			LOG.debug("I18nUtility: " + ex.getMessage());
+		// RFC 3066 specifies "-" as delimiter but we will accept "_" as
+		// well
+		String[] effLocale = pLangTag.split("[_-]");
+		int length = effLocale.length;
+		if (length <= 1) {
+			locale = new Locale(effLocale[0].trim());
+		} else if (length > 1 && length <= 2) {
+			locale = new Locale(effLocale[0].trim(), effLocale[1].trim()
+					.toUpperCase());
+		} else if (length > 2) {
+			locale = new Locale(effLocale[0].trim(), effLocale[1].trim()
+					.toUpperCase(), effLocale[2].trim());
 		}
 		return locale;
 	}
@@ -398,8 +385,7 @@ public class I18nUtility {
 				}
 			});
 		} catch (Exception e) {
-			LOG.debug("I18nUtility: caught Exception: sortLocales failed.");
-			LOG.debug("I18nUtility: " + e.getMessage());
+			// Ignore exception and return unsorted list.
 		}
 		return list;
 	}
@@ -599,9 +585,7 @@ public class I18nUtility {
 				result = true;
 			}
 		} catch (Exception e) {
-			LOG.debug("I18nUtility: caught Exception: fileExists failed for "
-					+ pPath + pFileName);
-			LOG.debug("I18nUtility: " + e.getMessage());
+			// Exception (eg file not found) - ignore and return false.
 		}
 		return result;
 	}

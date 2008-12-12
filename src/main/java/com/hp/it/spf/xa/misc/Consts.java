@@ -11,13 +11,14 @@ package com.hp.it.spf.xa.misc;
  * </p>
  * 
  * @version TBD
+ * @see com.hp.it.spf.xa.misc.portal.Consts com.hp.it.spf.xa.misc.portlet.Consts
  */
 public class Consts {
 
 	/**
-	 * The PortletRequest.USER_INFO P3P map key value for: email address.
-	 * TODO - these key names will probably change to correspond with the SOAP 
-	 * user object we create.
+	 * The PortletRequest.USER_INFO P3P map key value for: email address. TODO -
+	 * these key names will probably change to correspond with the SOAP user
+	 * object we create.
 	 */
 	public static final String KEY_USER_INFO_EMAIL = "user.business-info.online.email";
 	public static final String KEY_USER_INFO_GIVEN_NAME = "user.name.given";
