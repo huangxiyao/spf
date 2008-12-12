@@ -67,8 +67,8 @@ public class I18nUtility {
 	private static final Log LOG = LogFactory.getLog(I18nUtility.class);
 
 	/**
-	 * Protected to prevent external construction. Use the portal or portlet
-	 * I18nUtility class instead.
+	 * Protected to prevent external construction except by subclasses. Use the
+	 * portal or portlet I18nUtility class instead.
 	 */
 	protected I18nUtility() {
 
@@ -406,22 +406,25 @@ public class I18nUtility {
 
 	/**
 	 * <p>
-	 * Returns the path and filename of the given version of the given file (ie,
-	 * localized to best-fit the given locale, or not, per the boolean switch),
-	 * if it exists in the given path. If it does not exist, this method returns
-	 * null. This method also returns null if any of its required parameters are
-	 * null. The given path should be an absolute path (otherwise the file
-	 * lookup is relative to the current working directory; specify a blank or
-	 * null path to search the current working directory). Note that on a
-	 * case-sensitive filesystem, this is a case-sensitive lookup.
+	 * Looks up the given base filename in the given path, and returns the
+	 * filename as per the boolean switch: either the best-fit localized
+	 * filename for the given locale which exists at that path, or the given
+	 * base filename. The given base filename may include some path relative to
+	 * the given path. If no appropriate file for that filename exists in the
+	 * given path, then null is returned. This method also returns null if any
+	 * of its required parameters are null. The given path should be an absolute
+	 * path (otherwise the file lookup is relative to the current working
+	 * directory; specify a blank or null path to search the current working
+	 * directory). Note that on a case-sensitive filesystem, this is a
+	 * case-sensitive lookup.
 	 * </p>
 	 * 
 	 * <p>
 	 * If you set the boolean parameter to false, this method will just verify
-	 * that the file exists at the given path (returning the combined pathname
-	 * if so, otherwise returning null). You do not need to specify the locale
-	 * parameter in this case; you can set that to null. The base filename
-	 * parameter is required.
+	 * that the given base filename exists at the given path (returning the
+	 * given filename if so, otherwise returning null). You do not need to
+	 * specify the locale parameter in this case; you can set that to null. The
+	 * base filename parameter is required.
 	 * </p>
 	 * 
 	 * <p>
@@ -431,39 +434,41 @@ public class I18nUtility {
 	 * that base and locale. The method follows the standard Java sequence in
 	 * this (see ResourceBundle class documentation) and thus may return a
 	 * locale-tagged localized pathname, or the base pathname if that is the
-	 * best fit). If a best-fitting file is found, then its combined pathname is
-	 * returned; otherwise null is returned.
+	 * best fit. Whatever the best-fit file, its filename is returned (including
+	 * any path which was in the given filename). Otherwise null is returned.
 	 * </p>
 	 * 
 	 * <p>
-	 * For example: in /files consider that we have the files foo.htm,
-	 * foo_fr_CA.htm, and foo_fr.htm. Then:
+	 * For example: in <code>/files/html</code> consider that we have the
+	 * files <code>foo.htm</code>, <code>foo_fr_CA.htm</code>, and
+	 * <code>foo_fr.htm</code>. Then:
 	 * </p>
 	 * 
 	 * <dl>
-	 * <dt>getLocalizedFileName("/files", "foo.htm", Locale.FRENCH, true)</dt>
-	 * <dd>returns "/files/foo_fr.htm"</dd>
-	 * <dt>getLocalizedFileName("/files", "foo.htm", Locale.FRANCE, true)</dt>
-	 * <dd>returns "/files/foo_fr.htm"</dd>
-	 * <dt>getLocalizedFileName("/files", "foo.htm", Locale.CANADA_FRENCH,
-	 * true)</dt>
-	 * <dd>returns "/files/foo_fr_CA.htm"</dd>
-	 * <dt>getLocalizedFileName("/files", "foo.htm", Locale.ITALIAN, true)</dt>
-	 * <dd>returns "/files/foo.htm"</dd>
-	 * <dt>getLocalizedFileName("/files", "foo.htm", null, false)</dt>
-	 * <dd>returns "/files/foo.htm"</dd>
-	 * <dt>getLocalizedFileName("/files", "bar.htm", Locale.FRENCH, true)</dt>
-	 * <dd>returns null</dd>
-	 * <dt>getLocalizedFileName("/files", "bar.htm", null, false)</dt>
-	 * <dd>returns null</dd>
+	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", Locale.FRENCH, true)</code></dt>
+	 * <dd>returns <code>html/foo_fr.htm</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", Locale.FRANCE, true)</code></dt>
+	 * <dd>returns <code>html/foo_fr.htm</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "/html/foo.htm", Locale.CANADA_FRENCH,
+	 * true)</code></dt>
+	 * <dd>returns <code>/html/foo_fr_CA.htm</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "/html/foo.htm", Locale.ITALIAN, true)</code></dt>
+	 * <dd>returns <code>/html/foo.htm</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", null, false)</code></dt>
+	 * <dd>returns <code>html/foo.htm</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "html/bar.htm", Locale.FRENCH, true)</code></dt>
+	 * <dd>returns <code>null</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "foo.htm", null, false)</code></dt>
+	 * <dd>returns <code>null</code></dd>
 	 * </dl>
 	 * 
 	 * <p>
 	 * On case-sensitive filesystems, lowercase is assumed for the langage and
 	 * variant codes, and uppercase is assumed for the country code. Thus in the
-	 * above examples, different results would obtain if foo_fr.htm and/or
-	 * foo_fr_CA.htm were tagged with uppercase language or lowercase country.
-	 * Be sure your resource bundles follow the convention.
+	 * above examples, different results would obtain if <code>foo_fr.htm</code>
+	 * and/or <code>foo_fr_CA.htm</code> were tagged with uppercase language
+	 * or lowercase country. Be sure your resource bundles follow the
+	 * convention.
 	 * </p>
 	 * 
 	 * @param pPath
@@ -471,14 +476,15 @@ public class I18nUtility {
 	 *            absolute path; otherwise is relative to current working
 	 *            directory).
 	 * @param pBaseFileName
-	 *            The name of the base file to search.
+	 *            The name of the base file to search (may include some path,
+	 *            which is treated as relative to the path parameter).
 	 * @param pLocale
 	 *            The locale (not required if boolean parameter is false).
 	 * @param pLocalized
 	 *            The version of the file for which to search: the base file
 	 *            (false) or the best-fitting localized file (true).
-	 * @return The pathname (combination of given path and filename) as per the
-	 *         parameters, or null if no qualifying file was found.
+	 * @return The proper filename as per the parameters, or null if no
+	 *         qualifying file was found.
 	 * 
 	 */
 	public static String getLocalizedFilePath(String pPath,

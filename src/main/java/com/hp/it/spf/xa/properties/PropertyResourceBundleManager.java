@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.hp.it.spf.xa.common.Utils;
+import com.hp.it.spf.xa.misc.Utils;
 
 
 /**

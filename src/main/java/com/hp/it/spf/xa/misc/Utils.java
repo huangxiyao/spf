@@ -2,7 +2,7 @@
  * Project: Shared Portal Framework
  * Copyright (c) 2008 HP. All Rights Reserved.
  */
-package com.hp.it.spf.xa.common;
+package com.hp.it.spf.xa.misc;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
