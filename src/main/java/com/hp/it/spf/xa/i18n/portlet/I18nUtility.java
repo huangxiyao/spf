@@ -490,7 +490,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            final message string.
 	 * @return The message string, according to the above parameters.
 	 */
-	public static String getI18nValue(PortletRequest request, String key,
+	public static String getMessage(PortletRequest request, String key,
 			boolean escapeHTML) {
 		return getMessage(request, key, null, null, null, null, escapeHTML);
 	}
@@ -514,7 +514,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            The locale to assume (instead of the one inside the request).
 	 * @return The message string, according to the above parameters.
 	 */
-	public static String getI18nValue(PortletRequest request, String key,
+	public static String getMessage(PortletRequest request, String key,
 			Locale locale) {
 		return getMessage(request, key, null, null, null, locale, false);
 	}
