@@ -14,10 +14,10 @@ import javax.portlet.PortletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.util.HtmlUtils;
 
 import com.hp.it.spf.xa.misc.portlet.Utils;
-import com.hp.it.spf.xa.help.ContextualHelpParam;
+import com.hp.it.spf.xa.help.ContextualHelpProvider;
+import com.hp.it.spf.xa.help.ContextualHelpUtility;
 
 /**
  * A class of useful internationalization/localization methods for use by
@@ -381,29 +381,28 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * ignored; any unfilled placeholders remain.</li>
 	 * </p>
 	 * <p>
-	 * <li>Contextual-help parameters are provided via the Map array. These
-	 * Maps are used to populate any special contextual-help tokens (<code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code>
+	 * <li>Contextual-help parameters are provided via the
+	 * ContextualHelpProvider array. These ContextualHelpProviders are used to
+	 * populate any special contextual-help tokens (<code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code>
 	 * found in the message string. Those tokens can be used to denote parts of
-	 * the message string which are to be linked to appropriate contextual help.
-	 * They may not be nested. Each Map in the array, in order, contains the
-	 * parameters for populating that particular contextual-help unit. Any extra
-	 * Maps in the array beyond the number of
-	 * <code>&lt;Contextual_Help&gt;</code> tokens in the string are ignored;
-	 * any unfilled <code>&lt;Contextual_Help&gt;</code> tokens in the string
-	 * beyond the number of Maps remain. Each Map should contain the following
-	 * key-value pairs (any others are ignored):
-	 * <dl>
-	 * <dt><code>titleKey</code></dt>
-	 * <dd>Required (or the Map is skipped). String. Another message key, for
-	 * the title message to use in the contextual-help popup.</dd>
-	 * <dt><code>contentKey</code></dt>
-	 * <dd>Required (or the Map is skipped). String. Another message key, for
-	 * the content message to use in the contextual-help popup.</dd>
-	 * <dt><code>noScriptHref</code></dt>
-	 * <dd>Optional. String. A URL to provide for the contextual-help
-	 * hyperlink, to be used by the browser in the case that JavaScript is
-	 * disabled.</dd>
-	 * </dl>
+	 * the message string which are to be linked to contextual help, where the
+	 * contextual help is provided by the corresponding ContextualHelpProvider
+	 * in the array.
+	 * <ul>
+	 * <li><code>&lt;Contextual_Help&gt;</code> tokens may not be nested.</li>
+	 * <li>Each ContextualHelpProvider in the array, in order, provides the
+	 * logic for populating the corresponding contextual-help token.</li>
+	 * <li> The content surrounded by the contextual-help token is used as the
+	 * link content for the ContextualHelpProvider. By the time you pass the
+	 * ContextualHelpProvider to this method, you should already have used the
+	 * other ContextualHelpProvider setters to set the other parameters for
+	 * contextual-help, such as help content.</li>
+	 * <li> Any extra ContextualHelpProviders in the array beyond the number of
+	 * <code>&lt;Contextual_Help&gt;</code> tokens in the string are ignored.</li>
+	 * <li> Any unmated <code>&lt;Contextual_Help&gt;</code> tokens in the
+	 * string beyond the number of ContextualHelpProviders are ignored.</li>
+	 * <li> See the ContextualHelpProvider class hierarchy for more information.</li>
+	 * </ul>
 	 * </p>
 	 * </ul>
 	 * <p>
@@ -440,7 +439,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            A default message to return if the message string is not
 	 *            found.
 	 * @param cParams
-	 *            An array of contextual-help parameters to interpolate into the
+	 *            An array of contextual-help providers to interpolate into the
 	 *            message string.
 	 * @param escapeHTML
 	 *            Whether to escape any HTML special characters found in the
@@ -449,7 +448,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static String getI18nValue(PortletRequest request, String key,
 			Object[] params, Locale locale, String defaultMsg,
-			ContextualHelpParam[] cParams, boolean escapeHTML) {
+			ContextualHelpProvider[] cParams, boolean escapeHTML) {
 
 		if (key == null || request == null) {
 			return null;
@@ -461,16 +460,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		ApplicationContext ac = Utils.getApplicationContext(request);
 		if (ac != null) {
 			msg = ac.getMessage(key, params, defaultMsg, locale);
-			// TODO: insert code here to strip <No_Localization> begin/end
-			// tokens.
-			//
-			if (escapeHTML) {
-				msg = HtmlUtils.htmlEscape(msg);
-			}
-			// TODO: insert code here to strip <Contextual_Help> begin/end
-			// tokens and replace with contextual-help markup per the
-			// cParams. Note that HTML-escaping will have changed those to
-			// &lt;Contextual_Help&gt; tokens!
+			msg = parseNoLocalization(msg);
+			msg = ContextualHelpUtility.parseContextualHelp(msg, cParams, escapeHTML);
 		}
 		return msg;
 	}
@@ -482,7 +473,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * localized for the given locale, interpolated with the given parameters,
 	 * and defaulted with the given default message string if not found. This
 	 * method works exactly like
-	 * <code>getI18nValue(PortletRequest,String,Object[],Locale,String,ContextualHelpParams[],false)</code>
+	 * <code>getI18nValue(PortletRequest,String,Object[],Locale,String,ContextualHelpProvider[],false)</code>
 	 * (see).
 	 * </p>
 	 * 
@@ -502,7 +493,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static String getI18nValue(PortletRequest request, String key,
 			Object[] params, Locale locale, String defaultMsg,
-			ContextualHelpParam[] cParams) {
+			ContextualHelpProvider[] cParams) {
 		return getI18nValue(request, key, params, locale, defaultMsg, cParams,
 				false);
 	}
