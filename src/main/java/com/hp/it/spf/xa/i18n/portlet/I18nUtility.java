@@ -430,25 +430,25 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            The portlet request.
 	 * @param key
 	 *            A message key.
-	 * @param params
-	 *            An array of parameters to interpolate into the message string.
-	 * @param locale
-	 *            The locale to assume (not necessarily the same as the one
-	 *            inside the request).
 	 * @param defaultMsg
 	 *            A default message to return if the message string is not
 	 *            found.
+	 * @param params
+	 *            An array of parameters to interpolate into the message string.
 	 * @param cParams
 	 *            An array of contextual-help providers to interpolate into the
 	 *            message string.
+	 * @param locale
+	 *            The locale to assume (not necessarily the same as the one
+	 *            inside the request).
 	 * @param escapeHTML
 	 *            Whether to escape any HTML special characters found in the
 	 *            final message string.
 	 * @return The message string, according to the above parameters.
 	 */
-	public static String getI18nValue(PortletRequest request, String key,
-			Object[] params, Locale locale, String defaultMsg,
-			ContextualHelpProvider[] cParams, boolean escapeHTML) {
+	public static String getMessage(PortletRequest request, String key,
+			String defaultMsg, Object[] params,
+			ContextualHelpProvider[] cParams, Locale locale, boolean escapeHTML) {
 
 		if (key == null || request == null) {
 			return null;
@@ -461,7 +461,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		if (ac != null) {
 			msg = ac.getMessage(key, params, defaultMsg, locale);
 			msg = parseNoLocalization(msg);
-			msg = ContextualHelpUtility.parseContextualHelp(msg, cParams, escapeHTML);
+			msg = ContextualHelpUtility.parseContextualHelp(msg, cParams,
+					escapeHTML);
 		}
 		return msg;
 	}
@@ -469,11 +470,14 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	/**
 	 * <p>
 	 * Returns a message string for the given key from a message properties file
-	 * in any configured portlet resource bundle; the returned string is
-	 * localized for the given locale, interpolated with the given parameters,
-	 * and defaulted with the given default message string if not found. This
-	 * method works exactly like
-	 * <code>getI18nValue(PortletRequest,String,Object[],Locale,String,ContextualHelpProvider[],false)</code>
+	 * in any configured portlet resource bundle; the returned string is escaped
+	 * (meaning that any HTML special characters it contains, like
+	 * <code>&lt;</code>, are converted to their equivalent HTML character
+	 * entities).
+	 * </p>
+	 * <p>
+	 * This method works exactly like
+	 * <code>getMessage(request,key,null,null,null,null,escapeHTML)</code>
 	 * (see).
 	 * </p>
 	 * 
@@ -481,78 +485,65 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            The portlet request.
 	 * @param key
 	 *            A message key.
-	 * @param params
-	 *            An array of parameters to interpolate into the message string.
-	 * @param locale
-	 *            The locale to assume (not necessarily the same as the one
-	 *            inside the request).
-	 * @param defaultMsg
-	 *            A default message to return if the message string is not
-	 *            found.
+	 * @param escapeHTML
+	 *            Whether to escape any HTML special characters found in the
+	 *            final message string.
 	 * @return The message string, according to the above parameters.
 	 */
 	public static String getI18nValue(PortletRequest request, String key,
-			Object[] params, Locale locale, String defaultMsg,
+			boolean escapeHTML) {
+		return getMessage(request, key, null, null, null, null, escapeHTML);
+	}
+
+	/**
+	 * <p>
+	 * Returns a message string for the given key from a message properties file
+	 * in any configured portlet resource bundle; the returned string is
+	 * localized for the given locale instead of the one inside the request.
+	 * </p>
+	 * <p>
+	 * This method works exactly like
+	 * <code>getMessage(request,key,null,null,null,locale,false)</code> (see).
+	 * </p>
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @param key
+	 *            A message key.
+	 * @param locale
+	 *            The locale to assume (instead of the one inside the request).
+	 * @return The message string, according to the above parameters.
+	 */
+	public static String getI18nValue(PortletRequest request, String key,
+			Locale locale) {
+		return getMessage(request, key, null, null, null, locale, false);
+	}
+
+	/**
+	 * <p>
+	 * Returns a message string for the given key from a message properties file
+	 * in any configured portlet resource bundle; the returned string is
+	 * localized for locale of the given request, and interpolated with the
+	 * given contextual-help parameters.
+	 * </p>
+	 * <p>
+	 * This method works exactly like
+	 * <code>getMessage(request,key,null,null,cParams,null,false)</code>
+	 * (see).
+	 * </p>
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @param key
+	 *            A message key.
+	 * @param cParams
+	 *            An array of contextual-help providers to interpolate into the
+	 *            message string.
+	 * @return The message string, according to the above parameters.
+	 */
+	public static String getMessage(PortletRequest request, String key,
 			ContextualHelpProvider[] cParams) {
-		return getI18nValue(request, key, params, locale, defaultMsg, cParams,
-				false);
-	}
-
-	/**
-	 * <p>
-	 * Returns a message string for the given key from a message properties file
-	 * in any configured portlet resource bundle; the returned string is
-	 * localized for the given locale, interpolated with the given parameters,
-	 * and defaulted with the given default message string if not found. This
-	 * method works exactly like
-	 * <code>getI18nValue(PortletRequest,String,Object[],Locale,String,null,false)</code>
-	 * (see).
-	 * </p>
-	 * 
-	 * @param request
-	 *            The portlet request.
-	 * @param key
-	 *            A message key.
-	 * @param params
-	 *            An array of parameters to interpolate into the message string.
-	 * @param locale
-	 *            The locale to assume (not necessarily the same as the one
-	 *            inside the request).
-	 * @param defaultMsg
-	 *            A default message to return if the message string is not
-	 *            found.
-	 * @return The message string, according to the above parameters.
-	 */
-	public static String getI18nValue(PortletRequest request, String key,
-			Object[] params, Locale locale, String defaultMsg) {
-		return getI18nValue(request, key, params, locale, defaultMsg, null,
-				false);
-	}
-
-	/**
-	 * <p>
-	 * Returns a message string for the given key from a message properties file
-	 * in any configured portlet resource bundle; the returned string is
-	 * localized for the given locale and interpolated with the given
-	 * parameters. This method works exactly like
-	 * <code>getI18nValue(PortletRequest,String,Object[],Locale,null,null,false)</code>
-	 * (see).
-	 * </p>
-	 * 
-	 * @param request
-	 *            The portlet request.
-	 * @param key
-	 *            A message key.
-	 * @param params
-	 *            An array of parameters to interpolate into the message string.
-	 * @param locale
-	 *            The locale to assume (not necessarily the same as the one
-	 *            inside the request).
-	 * @return The message string, according to the above parameters.
-	 */
-	public static String getI18nValue(PortletRequest request, String key,
-			Object[] params, Locale locale) {
-		return getI18nValue(request, key, params, locale, null, null, false);
+		return getMessage(request, key, null, null, cParams, null, false);
 	}
 
 	/**
@@ -560,9 +551,11 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * Returns a message string for the given key from a message properties file
 	 * in any configured portlet resource bundle; the returned string is
 	 * localized for the locale of the given request, and interpolated with the
-	 * given parameters. This method works exactly like
-	 * <code>getI18nValue(PortletRequest,String,Object[],null,null,null,false)</code>
-	 * (see).
+	 * given parameters.
+	 * </p>
+	 * <p>
+	 * This method works exactly like
+	 * <code>getMessage(request,key,null,params,null,null,false)</code> (see).
 	 * </p>
 	 * 
 	 * @param request
@@ -573,9 +566,36 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            An array of parameters to interpolate into the message string.
 	 * @return The message string, according to the above parameters.
 	 */
-	public static String getI18nValue(PortletRequest request, String key,
+	public static String getMessage(PortletRequest request, String key,
 			Object[] params) {
-		return getI18nValue(request, key, params, null, null, null, false);
+		return getMessage(request, key, null, params, null, null, false);
+	}
+
+	/**
+	 * <p>
+	 * Returns a message string for the given key from a message properties file
+	 * in any configured portlet resource bundle; the returned string is
+	 * localized for the locale of the given request. You can provide a default
+	 * message string through this method. No parameter substitution is
+	 * performed.
+	 * </p>
+	 * <p>
+	 * This method works exactly like
+	 * <code>getMessage(request,key,null,null,null,null,false)</code> (see).
+	 * </p>
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @param key
+	 *            A message key.
+	 * @param defaultMsg
+	 *            A default message to return if the message string is not
+	 *            found.
+	 * @return The message string, according to the above parameters.
+	 */
+	public static String getMessage(PortletRequest request, String key,
+			String defaultMsg) {
+		return getMessage(request, key, defaultMsg, null, null, null, false);
 	}
 
 	/**
@@ -583,9 +603,11 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * Returns a message string for the given key from a message properties file
 	 * in any configured portlet resource bundle; the returned string is
 	 * localized for the locale of the given request. No parameter substitution
-	 * is performed. This method works exactly like
-	 * <code>getI18nValue(PortletRequest,String,null,null,null,null,false)</code>
-	 * (see).
+	 * is performed.
+	 * </p>
+	 * <p>
+	 * This method works exactly like
+	 * <code>getMessage(request,key,null,null,null,null,false)</code> (see).
 	 * </p>
 	 * 
 	 * @param request
@@ -594,8 +616,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            A message key.
 	 * @return The message string, according to the above parameters.
 	 */
-	public static String getI18nValue(PortletRequest request, String key) {
-		return getI18nValue(request, key, null, null, null, null, false);
+	public static String getMessage(PortletRequest request, String key) {
+		return getMessage(request, key, null, null, null, null, false);
 	}
 
 }
