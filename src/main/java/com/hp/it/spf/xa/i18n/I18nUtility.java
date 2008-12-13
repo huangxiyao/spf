@@ -65,10 +65,16 @@ public class I18nUtility {
 	public static final String HPP_SIMP_CHINESE_LANG = "13";
 
 	/**
+	 * Regular expression for an opening or closing
+	 * <code>&lt;No_Localization&gt;</code> tag.
+	 */
+	private static String NO_LOCALIZATION_REGEX = "</?NO_LOCALIZATION>";
+
+	/**
 	 * Logger for logging errors.
 	 */
 	private static final Log LOG = LogFactory.getLog(I18nUtility.class);
-	 
+
 	/**
 	 * Protected to prevent external construction except by subclasses. Use the
 	 * portal or portlet I18nUtility class instead.
@@ -712,5 +718,26 @@ public class I18nUtility {
 		}
 
 		return reverseFlag ? (ln + " " + fn) : (fn + " " + ln);
+	}
+
+	/**
+	 * Returns the given message string, with any of the special no-localization
+	 * tokens (<code>&lt;No_Localization&gt;</code> and the corresponding end
+	 * token <code>&lt;/No_Localization&gt;</code>) removed. These tokens may
+	 * be embedded in message properties to indicate to the translator that no
+	 * translation should be performed. Since the translator will typically
+	 * leave that markup in there, this method will be used to remove it. Note:
+	 * the content surrounded by the tokens is retained; only the tokens
+	 * themselves are removed.
+	 * 
+	 * @param msg
+	 *            A message string.
+	 * @return The message string with no-localization tokens removed.
+	 */
+	public static String parseNoLocalization(String msg) {
+		if (msg == null) {
+			return null;
+		}
+		return msg.replaceAll(NO_LOCALIZATION_REGEX, "");
 	}
 }
