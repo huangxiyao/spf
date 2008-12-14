@@ -130,21 +130,21 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * </p>
 	 * 
 	 * <dl>
-	 * <dt><code>getLocalizedFileName(request, "html/foo.htm")</code> when
+	 * <dt><code>getLocalizedFilePath(request, "html/foo.htm")</code> when
 	 * <code>request</code> contains Canada French (<code>Locale.CANADA_FRENCH</code>)</dt>
 	 * <dd>returns
 	 * <code><i>portlet-resource-folder</i>/html/foo_fr_CA.htm</code></dd>
 	 * 
-	 * <dt><code>getLocalizedFileName(request, "/html/foo.htm")</code> when
+	 * <dt><code>getLocalizedFilePath(request, "/html/foo.htm")</code> when
 	 * <code>request</code> contains France French (<code>Locale.FRANCE</code>)</dt>
 	 * <dd>returns <code><i>portlet-resource-folder</i>/html/foo_fr.htm</code></dd>
 	 * 
-	 * <dt><code>getLocalizedFileName(request, "html/foo.htm")</code> when
+	 * <dt><code>getLocalizedFilePath(request, "html/foo.htm")</code> when
 	 * <code>request</code> contains generic Italian (<code>Locale.ITALIAN</code>)</dt>
 	 * <dd>returns <code><i>portlet-resource-folder</i>/html/foo.htm</code></dd>
 	 * </dt>
 	 * 
-	 * <dt><code>getLocalizedFileName(request, "html/bar.htm")</code></dt>
+	 * <dt><code>getLocalizedFilePath(request, "html/bar.htm")</code></dt>
 	 * <dd>returns <code>null</code></dd>
 	 * </dl>
 	 * 
@@ -198,14 +198,90 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		if (resourceBundleDir == null || pReq == null || pBaseFileName == null) {
 			return null;
 		}
+		pBaseFileName = pBaseFileName.trim();
 		String fileName = getLocalizedFileName(resourceBundleDir,
 				pBaseFileName, pReq.getLocale(), pLocalized);
 		if (fileName == null) {
 			return null;
 		}
-		return slashify(resourceBundleDir + fileName);
+		return slashify(resourceBundleDir + "/" + fileName);
 	}
 
+	/**
+	 * <p>
+	 * Returns the absolute pathname for a localized portlet resource bundle
+	 * file, where the filename is retrieved (properly localized) from the
+	 * portlet's message resources using the given key and default. The filename
+	 * in the message resource must be that of a secondary support file for the
+	 * same portal component. <b>Important:</b> The component must be a style
+	 * or secondary page; other components are not supported.
+	 * </p>
+	 * <p>
+	 * This method works like
+	 * <code>getLocalizedFilePath(PortletRequest,String)</code>, but where
+	 * the localized filename string is taken from a message resource of the
+	 * portlet, using the given key and default filename. Thus this method
+	 * relies on the best-candidate filename for each locale already existing in
+	 * the localized message properties for that locale, at the given key. (And
+	 * if the key is not found, it applies the given default filename.) Thus the
+	 * method just reads the filename from the message, assumes that file is the
+	 * best one for that locale, and returns a path for it accordingly.
+	 * </p>
+	 * <p>
+	 * The file named in the message resource must be located in the portlet
+	 * resource bundle folder on the portlet server. The filename from the
+	 * message resource may include a subfolder relative to that portlet
+	 * resource bundle folder. The path to the portlet resource bundle folder is
+	 * configured in <code>i18n_portlet_config.properties</code>.
+	 * </p>
+	 * <p>
+	 * The default filename is an optional parameter; if left null or blank, and
+	 * the key is not found in the available messages, then null is returned.
+	 * Null is also returned if the file named in the message resource does not
+	 * actually exist, or if the portlet request or key parameters were null.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> As mentioned, this method relies on you having placed the
+	 * proper localized filenames for each locale into the message resources for
+	 * each locale. If you would rather not do that, and would rather just have
+	 * the system inspect the available files in the resource bundle vis-a-vis
+	 * the locale automatically, use the companion
+	 * <code>getLocalizedFilePath(PortletRequest,String)</code> method.
+	 * </p>
+	 * 
+	 * @param pReq
+	 *            The portlet request.
+	 * @param pKey
+	 *            The key for a message property containing the localized
+	 *            filename.
+	 * @param pDefault
+	 *            The default filename to use if the message property does not
+	 *            exist.
+	 * @return The absolute pathname of the best-candidate localized file in the
+	 *         portlet bundle folder, or null if no qualifying file was found.
+	 */
+	public static String getLocalizedFilePath(PortletRequest pReq,
+			String pKey, String pDefault) {
+		if (resourceBundleDir == null || pReq == null || pKey == null) {
+			return null;
+		}
+		pKey = pKey.trim();
+		if (pDefault != null) {
+			pDefault = pDefault.trim();
+		}
+		try {
+			// get the localized filename from the message resources
+			String fileName = getMessage(pReq, pKey, pDefault);
+
+			// check if the file exists - if not, return false.
+			if (fileName != null && fileExists(resourceBundleDir, fileName)) {
+				return slashify(resourceBundleDir + "/" + fileName);
+			}
+		} catch (Exception ex) {
+		}
+		return null;
+	}
+	
 	/**
 	 * <p>
 	 * Returns a URL (suitable for presentation to the user) for downloading a
@@ -288,7 +364,6 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return A URL for downloading the best-fit localized version of the base
 	 *         file from the portlet resource bundle folder, or null if no
 	 *         qualifying file was found.
-	 * 
 	 */
 	public static String getLocalizedFileURL(PortletRequest pReq,
 			String pBaseFileName) {
@@ -336,13 +411,14 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		if (pReq == null || pBaseFileName == null) {
 			return null;
 		}
+		pBaseFileName = pBaseFileName.trim();
 		String fileName = getLocalizedFileName(resourceBundleDir,
 				pBaseFileName, pReq.getLocale(), pLocalized);
 		// TODO: at present the URL is formed by adding the relay servlet path
 		// to the returned filename. This may need to change to support remoted
 		// portlets.
 		if (fileName != null) {
-			fileName = slashify(relayServletPath + fileName);
+			fileName = slashify(relayServletPath + "/" + fileName);
 		}
 		return fileName;
 	}
@@ -350,10 +426,10 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	/**
 	 * <p>
 	 * Returns a URL (suitable for presentation to the user) for downloading a
-	 * portlet resource bundle file, where the filename is retrieved (properly
-	 * localized) from the portlet's message resources using the given key and
-	 * default. The returned URL is a relative URL (ie relative to the scheme,
-	 * hostname, and port used in the current request) and is ready for
+	 * localized portlet resource bundle file, where the filename is retrieved
+	 * (properly localized) from the portlet's message resources using the given
+	 * key and default. The returned URL is a relative URL (ie relative to the
+	 * scheme, hostname, and port used in the current request) and is ready for
 	 * presentation to the user in the portlet response; it does not need to be
 	 * encoded or rewritten. For example, you can take the return from this
 	 * method, and express it as the <code>SRC=</code> attribute in an
@@ -412,6 +488,10 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		if (pReq == null || pKey == null) {
 			return null;
 		}
+		pKey = pKey.trim();
+		if (pDefault != null) {
+			pDefault = pDefault.trim();
+		}
 		try {
 			// get the localized filename from the message resources
 			String fileName = getMessage(pReq, pKey, pDefault);
@@ -423,7 +503,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			// remoted
 			// portlets.
 			if (fileName != null && fileExists(resourceBundleDir, fileName)) {
-				return slashify(relayServletPath + fileName);
+				return slashify(relayServletPath + "/" + fileName);
 			}
 		} catch (Exception ex) {
 		}
