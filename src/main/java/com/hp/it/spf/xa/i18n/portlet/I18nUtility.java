@@ -198,7 +198,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		if (resourceBundleDir == null || pReq == null || pBaseFileName == null) {
 			return null;
 		}
-		String fileName = getLocalizedFilePath(resourceBundleDir,
+		String fileName = getLocalizedFileName(resourceBundleDir,
 				pBaseFileName, pReq.getLocale(), pLocalized);
 		if (fileName == null) {
 			return null;
@@ -271,6 +271,15 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * with uppercase language or lowercase country. Be sure your resource
 	 * bundles follow the convention.
 	 * </p>
+	 * <p>
+	 * <b>Note:</b> As mentioned, this method automatically discovers the
+	 * best-fit localized file for the locale. A common alternative technique
+	 * for generating a localized file URL relies on the best-fit localized file
+	 * already being stored in a message resource. Of course, this relies on you
+	 * having arranged that, but if you would rather generate your localized
+	 * file URL that way, use the companion
+	 * <code>getLocalizedFileURL(PortletRequest,String,String)</code> method.
+	 * </p>
 	 * 
 	 * @param pReq
 	 *            The portlet request.
@@ -327,7 +336,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		if (pReq == null || pBaseFileName == null) {
 			return null;
 		}
-		String fileName = getLocalizedFilePath(resourceBundleDir,
+		String fileName = getLocalizedFileName(resourceBundleDir,
 				pBaseFileName, pReq.getLocale(), pLocalized);
 		// TODO: at present the URL is formed by adding the relay servlet path
 		// to the returned filename. This may need to change to support remoted
@@ -336,6 +345,89 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			fileName = slashify(relayServletPath + fileName);
 		}
 		return fileName;
+	}
+
+	/**
+	 * <p>
+	 * Returns a URL (suitable for presentation to the user) for downloading a
+	 * portlet resource bundle file, where the filename is retrieved (properly
+	 * localized) from the portlet's message resources using the given key and
+	 * default. The returned URL is a relative URL (ie relative to the scheme,
+	 * hostname, and port used in the current request) and is ready for
+	 * presentation to the user in the portlet response; it does not need to be
+	 * encoded or rewritten. For example, you can take the return from this
+	 * method, and express it as the <code>SRC=</code> attribute in an
+	 * <code>&lt;IMG&gt;</code> tag.
+	 * </p>
+	 * <p>
+	 * This method works like
+	 * <code>getLocalizedFileURL(PortletRequest,String)</code>, but where the
+	 * localized filename string is taken from a message resource of the
+	 * portlet, using the given key and default filename. Thus this method
+	 * relies on the best-candidate filename for each locale already existing in
+	 * the localized message properties for that locale, at the given key. (And
+	 * if the key is not found, it applies the given default filename.) Thus the
+	 * method just reads the filename from the message, assumes that file is the
+	 * best one for that locale, and returns a URL for it accordingly.
+	 * </p>
+	 * <p>
+	 * The file named in the message resource must be located in the portlet
+	 * resource bundle folder on the portlet server. The filename from the
+	 * message resource may include a subfolder relative to that portlet
+	 * resource bundle folder. The path to the portlet resource bundle folder is
+	 * configured in <code>i18n_portlet_config.properties</code>.
+	 * </p>
+	 * <p>
+	 * The default filename is an optional parameter; if left null or blank, and
+	 * the key is not found in the available messages, then null is returned.
+	 * Null is also returned if the file named in the message resource does not
+	 * actually exist, or if the portlet request or key parameters were null.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> As mentioned, this method relies on you having placed the
+	 * proper localized filenames for each locale into the message resources for
+	 * each locale. If you would rather not do that, and would rather just have
+	 * the system inspect the available files in the resource bundle vis-a-vis
+	 * the locale automatically to build the URL, use the companion
+	 * <code>getLocalizedFileURL(PortletRequest,String)</code> method.
+	 * </p>
+	 * 
+	 * @param pReq
+	 *            The portlet request.
+	 * @param pKey
+	 *            The key for a message property containing the localized
+	 *            filename.
+	 * @param pDefault
+	 *            The default filename to use if the message property does not
+	 *            exist.
+	 * @return A URL for downloading the best-fit localized version of the base
+	 *         file from the portlet resource bundle folder, or null if no
+	 *         qualifying file was found.
+	 */
+	public static String getLocalizedFileURL(PortletRequest pReq, String pKey,
+			String pDefault) {
+		if (relayServletPath == null || resourceBundleDir == null) {
+			return null;
+		}
+		if (pReq == null || pKey == null) {
+			return null;
+		}
+		try {
+			// get the localized filename from the message resources
+			String fileName = getMessage(pReq, pKey, pDefault);
+
+			// check if the file exists - if not, return false.
+			// TODO: at present the URL is formed by adding the relay servlet
+			// path
+			// to the returned filename. This may need to change to support
+			// remoted
+			// portlets.
+			if (fileName != null && fileExists(resourceBundleDir, fileName)) {
+				return slashify(relayServletPath + fileName);
+			}
+		} catch (Exception ex) {
+		}
+		return null;
 	}
 
 	/**
