@@ -479,7 +479,7 @@ public class I18nUtility {
 	 *         qualifying file was found.
 	 * 
 	 */
-	public static String getLocalizedFilePath(String pPath,
+	public static String getLocalizedFileName(String pPath,
 			String pBaseFileName, Locale pLocale, boolean pLocalized) {
 		if (pBaseFileName == null || (pLocalized == true && pLocale == null)) {
 			return null;
