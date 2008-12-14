@@ -18,6 +18,7 @@ import org.springframework.context.ApplicationContext;
 import com.hp.it.spf.xa.misc.portlet.Utils;
 import com.hp.it.spf.xa.help.ContextualHelpProvider;
 import com.hp.it.spf.xa.help.ContextualHelpUtility;
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 
 /**
  * A class of useful internationalization/localization methods for use by
@@ -26,7 +27,7 @@ import com.hp.it.spf.xa.help.ContextualHelpUtility;
  * @author <link href="liping.yan@hp.com">Liping Yan</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.cas.spf.common.utils.I18nUtility
+ * @see com.hp.it.spf.xa.i18n.I18nUtility
  */
 
 public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
@@ -69,7 +70,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	static {
 		try {
-			ResourceBundle bundle = ResourceBundle
+			ResourceBundle bundle = PropertyResourceBundleManager
 					.getBundle(I18nUtility.PORTLET_I18N_CONFIG_FILE);
 			relayServletPath = "/"
 					+ bundle
@@ -209,10 +210,12 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * <p>
 	 * Returns a URL (suitable for presentation to the user) for downloading a
 	 * proper localized version of the given base filename of a portlet resource
-	 * bundle. The returned URL is ready for presentation to the user in the
-	 * portlet response; it does not need to be encoded or rewritten. For
-	 * example, you can take the return from this method, and express it as the
-	 * <code>SRC=</code> attribute in an <code>&lt;IMG&gt;</code> tag.
+	 * bundle. The returned URL is a relative URL (ie relative to the scheme,
+	 * hostname, and port used in the current request) and is ready for
+	 * presentation to the user in the portlet response; it does not need to be
+	 * encoded or rewritten. For example, you can take the return from this
+	 * method, and express it as the <code>SRC=</code> attribute in an
+	 * <code>&lt;IMG&gt;</code> tag.
 	 * </p>
 	 * <p>
 	 * The given filename must be a base filename for a portlet resource bundle,
@@ -241,17 +244,19 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * <dl>
 	 * <dt><code>getLocalizedFileURL(request, "html/foo.htm")</code> when
 	 * <code>request</code> contains Canada French (<code>Locale.CANADA_FRENCH</code>)</dt>
-	 * <dd>returns a URL for <code>html/foo_fr_CA.htm</code> in the portlet
-	 * resource bundle folder. (The exact URL may vary depending on the
-	 * implementation of this method, and is not documented here.)</dd>
+	 * <dd>returns a relative URL for <code>html/foo_fr_CA.htm</code> in the
+	 * portlet resource bundle folder. (The exact URL may vary depending on the
+	 * implementation of this method, and is not documented here. But note that
+	 * it is a relative URL to the scheme, hostname, and port in the current
+	 * request.)</dd>
 	 * 
 	 * <dt><code>getLocalizedFileURL(request, "/html/foo.htm")</code> when
 	 * <code>request</code> contains France French (<code>Locale.FRANCE</code>)</dt>
-	 * <dd>returns a URL for <code>html/foo_fr.htm</code>.</dd>
+	 * <dd>returns a relative URL for <code>html/foo_fr.htm</code>.</dd>
 	 * 
 	 * <dt><code>getLocalizedFileURL(request, "html/foo.htm")</code> when
 	 * <code>request</code> contains generic Italian (<code>Locale.ITALIAN</code>)</dt>
-	 * <dd>returns a URL for <code>html/foo.htm</code></dd>
+	 * <dd>returns a relative URL for <code>html/foo.htm</code></dd>
 	 * </dt>
 	 * 
 	 * <dt><code>getLocalizedFileURL(request, "html/bar.htm")</code></dt>
@@ -286,10 +291,12 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * Returns a URL (suitable for presentation to the user) for downloading the
 	 * given version of the given portlet resource bundle file (ie, localized to
 	 * best-fit the locale in the given request, or not, per the boolean
-	 * switch). The returned URL is ready for presentation to the user in the
-	 * portlet response; it does not need to be encoded or rewritten. For
-	 * example, you can take the return from this method, and express it as the
-	 * <code>SRC=</code> attribute in an <code>&lt;IMG&gt;</code> tag.
+	 * switch). The returned URL is a relative URL (ie relative to the scheme,
+	 * hostname, and port used in the current request) and is ready for
+	 * presentation to the user in the portlet response; it does not need to be
+	 * encoded or rewritten. For example, you can take the return from this
+	 * method, and express it as the <code>SRC=</code> attribute in an
+	 * <code>&lt;IMG&gt;</code> tag.
 	 * </p>
 	 * <p>
 	 * If the boolean switch is set to <code>true</code>, this method works
