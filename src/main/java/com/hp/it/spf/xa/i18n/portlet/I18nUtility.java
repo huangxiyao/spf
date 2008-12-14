@@ -199,6 +199,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
+		if (pBaseFileName.length() == 0) {
+			return null;
+		}
 		String fileName = getLocalizedFileName(resourceBundleDir,
 				pBaseFileName, pReq.getLocale(), pLocalized);
 		if (fileName == null) {
@@ -266,6 +269,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pKey = pKey.trim();
+		if (pKey.length() == 0) {
+			return null;
+		}
 		if (pDefault != null) {
 			pDefault = pDefault.trim();
 		}
@@ -412,6 +418,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
+		if (pBaseFileName.length() == 0) {
+			return null;
+		}
 		String fileName = getLocalizedFileName(resourceBundleDir,
 				pBaseFileName, pReq.getLocale(), pLocalized);
 		// TODO: at present the URL is formed by adding the relay servlet path
@@ -489,6 +498,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pKey = pKey.trim();
+		if (pKey.length() == 0) {
+			return null;
+		}
 		if (pDefault != null) {
 			pDefault = pDefault.trim();
 		}
