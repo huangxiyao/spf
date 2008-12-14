@@ -263,8 +263,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return The absolute pathname of the best-candidate localized file in the
 	 *         portlet bundle folder, or null if no qualifying file was found.
 	 */
-	public static String getLocalizedFilePath(PortletRequest pReq,
-			String pKey, String pDefault) {
+	public static String getLocalizedFilePath(PortletRequest pReq, String pKey,
+			String pDefault) {
 		if (resourceBundleDir == null || pReq == null || pKey == null) {
 			return null;
 		}
@@ -287,7 +287,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * <p>
 	 * Returns a URL (suitable for presentation to the user) for downloading a
@@ -612,9 +612,10 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * </p>
 	 * <p>
 	 * The given default string (this too is HTML-escaped per the boolean
-	 * switch) is returned if the message is not found. If you gave a null
-	 * default string, then null is returned. If the given request or key are
-	 * null, or the application context cannot be found, then null is returned.
+	 * switch) is returned if the message or its resource bundle is not found in
+	 * the portlet application contxt. (If you gave a null default string, then
+	 * the key itself is used.) This default is also returned if the required
+	 * parameters (key and request) are themselves null.
 	 * </p>
 	 * 
 	 * @param request
@@ -640,20 +641,21 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	public static String getMessage(PortletRequest request, String key,
 			String defaultMsg, Object[] params,
 			ContextualHelpProvider[] cParams, Locale locale, boolean escapeHTML) {
-
-		if (key == null || request == null) {
-			return null;
+		if (defaultMsg == null) {
+			defaultMsg = key;
 		}
-		if (locale == null) {
-			locale = request.getLocale();
-		}
-		String msg = null;
-		ApplicationContext ac = Utils.getApplicationContext(request);
-		if (ac != null) {
-			msg = ac.getMessage(key, params, defaultMsg, locale);
-			msg = parseNoLocalization(msg);
-			msg = ContextualHelpUtility.parseContextualHelp(msg, cParams,
-					escapeHTML);
+		String msg = defaultMsg;
+		if (key != null && request != null) {
+			if (locale == null) {
+				locale = request.getLocale();
+			}
+			ApplicationContext ac = Utils.getApplicationContext(request);
+			if (ac != null) {
+				msg = ac.getMessage(key, params, defaultMsg, locale);
+				msg = parseNoLocalization(msg);
+				msg = ContextualHelpUtility.parseContextualHelp(msg, cParams,
+						escapeHTML);
+			}
 		}
 		return msg;
 	}
