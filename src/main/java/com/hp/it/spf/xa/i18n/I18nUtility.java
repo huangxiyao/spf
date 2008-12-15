@@ -698,16 +698,22 @@ public class I18nUtility {
 
 		// get langs from properties files
 		String reverseList = null;
-		try {
-			ResourceBundle rb = PropertyResourceBundleManager
-					.getBundle(I18N_CONFIG_FILE);
-			reverseList = rb.getString(I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS);
-			// LOG.info("I18nUtility: get username display langs {" +
-			// reverseList + "}");
-		} catch (Exception ex) {
+		ResourceBundle rb = PropertyResourceBundleManager
+				.getBundle(I18N_CONFIG_FILE);
+		if (rb == null) {
 			LOG.error("I18nUtility: getUserDisplayName failed to open "
 					+ I18N_CONFIG_FILE + " properties file");
-			LOG.error("I18nUtility: " + ex.getMessage());
+		} else {
+			try {
+				reverseList = rb
+						.getString(I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS);
+			} catch (Exception ex) {
+				LOG.warn("I18nUtility: getUserDisplayName failed to find "
+						+ I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS
+						+ " property in " + I18N_CONFIG_FILE
+						+ " properties file");
+				LOG.warn("I18nUtility: " + ex.getMessage());
+			}
 		}
 
 		// the given locale's language is in the reverse list

@@ -92,8 +92,8 @@ public class Utils {
 	/**
 	 * <p>
 	 * Decode a base-64 encoded string of bytecodes using the given encoding,
-	 * returning the decoded value. Returns null if the given encoding is not
-	 * supported.
+	 * returning the decoded value. Returns the given string if the given
+	 * encoding is not supported, or there is a problem decoding the string.
 	 * </p>
 	 * 
 	 * @param in
@@ -122,9 +122,9 @@ public class Utils {
 				return new String(abyte0, 0, k, enc);
 			}
 		} catch (UnsupportedEncodingException e) {
-			return null;
+			return base64Codes;
 		} catch (IOException e) {
-			return null;
+			return base64Codes;
 		}
 	}
 
