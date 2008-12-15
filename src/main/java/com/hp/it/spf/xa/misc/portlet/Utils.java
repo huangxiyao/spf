@@ -35,40 +35,6 @@ import org.springframework.web.portlet.context.PortletApplicationContextUtils;
 public class Utils extends com.hp.it.spf.xa.misc.Utils {
 
 	/**
-	 * expression for regular.
-	 */
-	private static final String REGEXP = "(1[0-2]{1}|[1-9]{1}"
-			+ "|0[1-9]{1})/(([0-2]{0,1}\\d{1})|("
-			+ "3[0-1]{1}))/(\\d{4})\\s((1[0-2]{1})"
-			+ "|([0]{0,1}[0-9]{1})):([0-5]{0,1}\\d{1}):"
-			+ "([0-5]{0,1}\\d{1})\\s([aApP]{1}[mM]{1})";
-
-	/**
-	 * const for month.
-	 */
-	private static final int MONTH = 12;
-
-	/**
-	 * const for temp year.
-	 */
-	private static final int TEMPYEAR = 5;
-
-	/**
-	 * const for temp time.
-	 */
-	private static final int TEMPTIME = 3;
-
-	/**
-	 * Date format used to format the date in String.
-	 */
-	private static final String DATEFORMAT_12 = "DD-MM-YYYY HH:mm PM/AM";
-
-	/**
-	 * Date format used to format the date in String.
-	 */
-	private static final String DATEFORMAT_24 = "HH:mm DD MM YYYY";
-
-	/**
 	 * Returns the Spring ApplicationContext object from the given portlet
 	 * request. Returns null if a null request was provided.
 	 * 

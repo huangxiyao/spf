@@ -69,27 +69,35 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * mechanism (eg portlet resource request) may be needed.
 	 */
 	static {
-		try {
-			ResourceBundle bundle = PropertyResourceBundleManager
-					.getBundle(I18nUtility.PORTLET_I18N_CONFIG_FILE);
-			relayServletPath = "/"
-					+ bundle
-							.getString(I18nUtility.PORTLET_I18N_CONFIG_PROP_RELAY_SERVLET_PATH)
-					+ "/";
-			relayServletPath = slashify(relayServletPath);
-			resourceBundleDir = "/"
-					+ bundle
-							.getString(I18nUtility.PORTLET_I18N_CONFIG_PROP_BUNDLE_DIR)
-					+ "/";
-			resourceBundleDir = slashify(resourceBundleDir);
-		} catch (Exception ex) {
+		ResourceBundle bundle = PropertyResourceBundleManager
+				.getBundle(I18nUtility.PORTLET_I18N_CONFIG_FILE);
+		if (bundle == null) {
 			logger
 					.error("I18nUtility: Failed to open "
 							+ I18nUtility.PORTLET_I18N_CONFIG_FILE
 							+ " properties file");
-			logger.error("I18nUtility: " + ex.getMessage());
 			relayServletPath = null;
 			resourceBundleDir = null;
+		} else {
+			try {
+				relayServletPath = "/"
+						+ bundle
+								.getString(I18nUtility.PORTLET_I18N_CONFIG_PROP_RELAY_SERVLET_PATH)
+						+ "/";
+				relayServletPath = slashify(relayServletPath);
+				resourceBundleDir = "/"
+						+ bundle
+								.getString(I18nUtility.PORTLET_I18N_CONFIG_PROP_BUNDLE_DIR)
+						+ "/";
+				resourceBundleDir = slashify(resourceBundleDir);
+			} catch (Exception ex) {
+				logger.error("I18nUtility: Required property(s) missing from "
+						+ I18nUtility.PORTLET_I18N_CONFIG_FILE
+						+ " properties file");
+				logger.error("I18nUtility: " + ex.getMessage());
+				relayServletPath = null;
+				resourceBundleDir = null;
+			}
 		}
 	}
 
