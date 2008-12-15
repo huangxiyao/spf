@@ -660,9 +660,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			ApplicationContext ac = Utils.getApplicationContext(request);
 			if (ac != null) {
 				msg = ac.getMessage(key, params, defaultMsg, locale);
-				msg = parseNoLocalization(msg);
+				msg = filterNoLocalizationTokens(msg);
 				ContextualHelpUtility c = new ContextualHelpUtility();
-				msg = c.parseContextualHelp(msg, cParams, escapeHTML);
+				msg = c.parseContextualHelpTokens(msg, cParams, escapeHTML);
 			}
 		}
 		return msg;
