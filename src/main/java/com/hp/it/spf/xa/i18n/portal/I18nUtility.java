@@ -57,6 +57,16 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	private static final String SITE_ADDL_LOCALE_CONFIG_FILE = "site_locale_support";
 
 	/**
+	 * Regular expression for opening <code>&lt;SPAN&gt;</code> tag.
+	 */
+	private static String OPEN_SPAN_REGEX = "(?i:<SPAN .*>)";
+
+	/**
+	 * Regular expression for closing <code>&lt;SPAN&gt;</code> tag.
+	 */
+	private static String CLOSE_SPAN_REGEX = "(?i:</SPAN>)";
+
+	/**
 	 * Private to prevent external construction.
 	 */
 	private I18nUtility() {
@@ -818,7 +828,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return The message string, according to the above parameters.
 	 */
 	public static String getValue(String pKey, PortalContext pContext) {
-		return getValue(pKey, null, pContext, null, null, null, false);
+		return getValue(pKey, null, pContext, null, null, null, false, false);
 	}
 
 	/**
@@ -846,7 +856,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static String getValue(String pKey, String pDefaultValue,
 			PortalContext pContext) {
-		return getValue(pKey, pDefaultValue, pContext, null, null, null, false);
+		return getValue(pKey, pDefaultValue, pContext, null, null, null, false,
+				false);
 	}
 
 	/**
@@ -876,7 +887,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	public static String getValue(String pUID, String pKey,
 			String pDefaultValue, PortalContext pContext) {
 		return getValue(pUID, pKey, pDefaultValue, pContext, null, null, null,
-				false);
+				false, false);
 	}
 
 	/**
@@ -904,7 +915,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	public static String getValue(String pUID, String pKey,
 			String pDefaultValue, Locale pLocale) {
 		return getValue(pUID, pKey, pDefaultValue, pLocale, null, null, null,
-				false);
+				false, false);
 	}
 
 	/**
@@ -935,7 +946,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	public static String getValue(String pUID, String pKey,
 			String pDefaultValue, Locale pLocale, Object[] pArgs) {
 		return getValue(pUID, pKey, pDefaultValue, pLocale, pArgs, null, null,
-				false);
+				false, false);
 	}
 
 	/**
@@ -967,7 +978,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	public static String getValue(String pUID, String pKey,
 			String pDefaultValue, PortalContext pContext, Object[] pArgs) {
 		return getValue(pUID, pKey, pDefaultValue, pContext, pArgs, null, null,
-				false);
+				false, false);
 	}
 
 	/**
@@ -997,7 +1008,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static String getValue(String pKey, String pDefaultValue,
 			PortalContext pContext, Object[] pArgs) {
-		return getValue(pKey, pDefaultValue, pContext, pArgs, null, null, false);
+		return getValue(pKey, pDefaultValue, pContext, pArgs, null, null,
+				false, false);
 	}
 
 	/**
@@ -1023,7 +1035,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static String getValue(String pKey, PortalContext pContext,
 			Object[] pArgs) {
-		return getValue(pKey, null, pContext, pArgs, null, null, false);
+		return getValue(pKey, null, pContext, pArgs, null, null, false, false);
 	}
 
 	/**
@@ -1057,11 +1069,15 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @param pEscape
 	 *            Whether to escape any HTML special characters found in the
 	 *            final message string.
+	 * @param pFilterSpan
+	 *            Whether to remove any Vignette-generated
+	 *            <code>&lt;SPAN&gt;</code> markup from the final message
+	 *            string.
 	 * @return The message string, according to the above parameters.
 	 */
 	public static String getValue(String pKey, String pDefaultValue,
 			PortalContext pContext, Object[] pArgs, GlobalHelpProvider[] gArgs,
-			ContextualHelpProvider[] cArgs, boolean pEscape) {
+			ContextualHelpProvider[] cArgs, boolean pEscape, boolean pFilterSpan) {
 		if (pDefaultValue == null) {
 			pDefaultValue = pKey;
 		}
@@ -1070,7 +1086,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			Style style = getCurrentComponent(pContext);
 			if (style != null) {
 				value = getValue(style.getUID(), pKey, pDefaultValue, pContext,
-						pArgs, gArgs, cArgs, pEscape);
+						pArgs, gArgs, cArgs, pEscape, pFilterSpan);
 			}
 		}
 		return value;
@@ -1081,10 +1097,11 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * Returns a message string for the given key from a message properties file
 	 * loaded against the given component ID; the returned string is localized
 	 * for the given locale, interpolated with the given parameters, defaulted
-	 * with the given default message string if not found, and HTML-escaped per
-	 * the given boolean switch. This method uses both published and unpublished
-	 * Vignette API's and goes beyond them to provide additional useful
-	 * functionality (such as support for embedded contextual help).
+	 * with the given default message string if not found, and escaped or
+	 * filtered as per the given boolean switches. This method uses both
+	 * published and unpublished Vignette API's and goes beyond them to provide
+	 * additional useful functionality (such as support for embedded contextual
+	 * help).
 	 * </p>
 	 * <p>
 	 * Selection of the particular localized message properties file is as per
@@ -1165,6 +1182,16 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * entities (eg <code>&amp;lt;</code>before returning to you.
 	 * </p>
 	 * <p>
+	 * In some occasions, Vignette inserts
+	 * <code>&lt;SPAN lang="<i>tag</i>"&gt;...&lt;/SPAN&gt;</code> markup
+	 * around localized content. Even if this happens, normally it is not
+	 * visible in the browser, and helps rendering by an assistive device (eg
+	 * reader) the user may be using. But in some contexts (eg strings you are
+	 * going to use within the HTML <code>&lt;TITLE&gt;</code> tag) it is
+	 * visible in some browsers. So depending on your audience, you may want to
+	 * remove this markup. Set the filter-span switch to true in that case.
+	 * </p>
+	 * <p>
 	 * If the message string contains any special
 	 * <code>&lt;No_Localization&gt;...&lt;/No_Localization&gt;</code> tokens,
 	 * those are removed. (You can use these tokens in message properties to
@@ -1200,12 +1227,16 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @param pEscape
 	 *            Whether to escape any HTML special characters found in the
 	 *            final message string.
+	 * @param pFilterSpan
+	 *            Whether to remove any Vignette-generated
+	 *            <code>&lt;SPAN&gt;</code> markup from the final message
+	 *            string.
 	 * @return The message string, according to the above parameters.
 	 */
 	public static String getValue(String pUID, String pKey,
 			String pDefaultValue, Locale pLocale, Object[] pArgs,
 			GlobalHelpProvider[] gArgs, ContextualHelpProvider[] cArgs,
-			boolean pEscape) {
+			boolean pEscape, boolean pFilterSpan) {
 		if (pDefaultValue == null) {
 			pDefaultValue = pKey;
 		}
@@ -1230,12 +1261,17 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		String value = pDefaultValue;
 		try {
 			value = localizedBundle.getString(pKey, pDefaultValue);
+			// filter unwanted tokens and markup
+			value = filterNoLocalizationTokens(value);
+			if (pFilterSpan) {
+				value = filterSpan(value);
+			}
+			// substitute parameters
 			value = MessageFormat.format(value, pArgs);
-			value = parseNoLocalization(value);
 			GlobalHelpUtility g = new GlobalHelpUtility();
-			value = g.parseGlobalHelp(value, gArgs, pEscape);
+			value = g.parseGlobalHelpTokens(value, gArgs, pEscape);
 			ContextualHelpUtility c = new ContextualHelpUtility();
-			value = c.parseContextualHelp(value, cArgs, pEscape);
+			value = c.parseContextualHelpTokens(value, cArgs, pEscape);
 			return value;
 		} catch (Exception ex) {
 		}
@@ -1274,12 +1310,16 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @param pEscape
 	 *            Whether to escape any HTML special characters found in the
 	 *            final message string.
+	 * @param pFilterSpan
+	 *            Whether to remove any Vignette-generated
+	 *            <code>&lt;SPAN&gt;</code> markup from the final message
+	 *            string.
 	 * @return The message string, according to the above parameters.
 	 */
 	public static String getValue(String pUID, String pKey,
 			String pDefaultValue, PortalContext pContext, Object[] pArgs,
 			GlobalHelpProvider[] gArgs, ContextualHelpProvider[] cArgs,
-			boolean pEscape) {
+			boolean pEscape, boolean pFilterSpan) {
 		if (pDefaultValue == null) {
 			pDefaultValue = pKey;
 		}
@@ -1289,12 +1329,37 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 					.getRequest();
 			Locale locale = getLocale(request);
 			return getValue(pUID, pKey, pDefaultValue, locale, pArgs, gArgs,
-					cArgs, pEscape);
+					cArgs, pEscape, pFilterSpan);
 		} catch (Exception e) {
 			return value;
 		}
 	}
 
+	/**
+	 * Returns the given message string, with any HTML <code>&lt;SPAN&gt;</code>
+	 * markup removed. Vignette may insert these automatically into message
+	 * strings, so this message can be called to remove them.
+	 * 
+	 * @param msg
+	 *            A message string.
+	 * @return The message string with <code>&lt;SPAN&gt;</code> markup
+	 *         removed.
+	 */
+	public static String filterSpan(String msg) {
+		if (msg == null) {
+			return null;
+		}
+		msg = msg.replaceAll(OPEN_SPAN_REGEX, "");
+		return msg.replaceAll(CLOSE_SPAN_REGEX, "");
+	}
+
+	/**
+	 * Get the current portal component.
+	 * 
+	 * @param pContext
+	 *            Current portal context.
+	 * @return Current portal component.
+	 */
 	private static Style getCurrentComponent(PortalContext pContext) {
 		Style thisStyleObject = pContext.getCurrentStyle();
 		if (thisStyleObject == null) {

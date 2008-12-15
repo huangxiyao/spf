@@ -46,7 +46,7 @@ public class GlobalHelpUtility extends HelpUtility {
 	 * @return The given message string, interpolated with all applicable help
 	 *         markup.
 	 */
-	public String parseGlobalHelp(String msg,
+	public String parseGlobalHelpTokens(String msg,
 			GlobalHelpProvider[] gParams, boolean escapeHTML) {
 		this.token = "GLOBAL_HELP";
 		return super.parseHelp(msg, gParams, escapeHTML);
