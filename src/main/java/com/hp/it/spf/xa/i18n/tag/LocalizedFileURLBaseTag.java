@@ -123,10 +123,18 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 	protected String defaultValue;
 
 	/**
+	 * Initialize tag attribute values.
+	 */
+	public LocalizedFileURLBaseTag () {
+		file = null;
+		key = null;
+		defaultValue = null;
+	}
+	
+	/**
 	 * Perform tag processing.
 	 * 
 	 * @throws JspException
-	 *             JspException
 	 * @return integer
 	 */
 	public int doStartTag() throws JspException {
@@ -141,18 +149,29 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 		} catch (Exception e) {
 			logError(this, "SPF localized file URL tag error: "
 					+ e.getMessage());
+			JspException jspE = new JspException(e);
+			throw jspE;
 		}
 		return EVAL_BODY_INCLUDE;
 	}
 
 	/**
-	 * Set file from <code>file</code> tag attribute.
+	 * Set file from <code>file</code> attribute.
 	 * 
 	 * @param string
 	 *            Value from the <code>file</code> tag attribute.
 	 */
 	public void setFile(String string) {
 		file = string;
+	}
+
+	/**
+	 * Get value of the <code>file</code> attribute.
+	 * 
+	 * @return Value of the <code>file</code> attribute.
+	 */
+	public String getFile() {
+		return file;
 	}
 
 	/**
@@ -166,6 +185,15 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 	}
 
 	/**
+	 * Get value of the <code>key</code> attribute.
+	 * 
+	 * @return Value of the <code>key</code> attribute.
+	 */
+	public String getKey() {
+		return key;
+	}
+
+	/**
 	 * Set default value from <code>defaultValue</code> tag attribute.
 	 * 
 	 * @param string
@@ -173,6 +201,15 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 	 */
 	public void setDefaultValue(String string) {
 		defaultValue = string;
+	}
+
+	/**
+	 * Get value of the <code>defaultValue</code> attribute.
+	 * 
+	 * @return Value of the <code>defaultValue</code> attribute.
+	 */
+	public String getDefaultValue() {
+		return defaultValue;
 	}
 
 	/**
