@@ -12,22 +12,35 @@ import com.hp.it.spf.xa.help.ContextualHelpProvider;
  * contextual help popup window.
  * </p>
  * <p>
- * This is the style of contextual-help popup which is rendered by the portal
- * and portlet frameworks' <code>&lt;i18nContextualHelpParam&gt;</code> tags.
- * Use those tags inside the <code>&lt;i18nValue&gt;</code> tag body to render
+ * <b>In the portlet framework:</b> This is the style of contextual-help popup
+ * which is rendered by the <code>&lt;spf-help-portlet:contextualHelp&gt;</code>
+ * tag. This is also the style of contextual-help popup which is rendered by the
+ * <code>&lt;spf-i18n-portlet:contextualHelpParam&gt;</code> tag. Use that tag
+ * inside the <code>&lt;spf-i18n-portlet:message&gt;</code> tag body to render
  * this kind of contextual-help popup into a message with your chosen
- * attributes. (Using the <code>&lt;i18nContextualHelpParam&gt;</code> tag
+ * attributes. (Using the
+ * <code>&lt;spf-i18n-portlet:contxtualHelpParam&gt;</code> tag instantiates
+ * this class.) You can also instantiate this class directly, and pass it to the
+ * portlet <code>I18nUtility.getMessage</code> methods to produce a message
+ * containing this style of contextual-help popup.
+ * </p>
+ * <p>
+ * <b>In the portal framework:</b> This is the style of contextual-help popup
+ * which is rendered by the <code>&lt;spf-help-portal:contextualHelp&gt;</code>
+ * tag. This is also the style of contextual-help popup which is rendered by the
+ * <code>&lt;spf-i18n-portal:i18nContextualHelpParam&gt;</code> tag. Use this
+ * tag inside the <code>&lt;spf-i18n-portal:i18nValue&gt;</code> tag body to
+ * render this kind of contextual-help popup into a message with your chosen
+ * attributes. (Using the
+ * <code>&lt;spf-i18n-portal:i18nContextualHelpParam&gt;</code> tag
  * instantiates this class.) You can also instantiate this class directly and
- * pass it to the <code>I18nUtility.getI18nValue</code> methods of the portal
- * and portlet frameworks to produce this default-style contextual-help popup.
+ * pass it to the portal <code>I18nUtility.getValue</code> methods to produce
+ * a message containing this style of contextual-help popup.
  * </p>
  * <p>
  * If you are not happy with the default contextual-help popup style, you can
  * implement your own. Just extend the abstract base class like this one does.
- * You can even implement a tag for it, which instantiates your
- * ContextualHelpProvider subclass and sets it to the
- * <code>&lt;i18nValue&gt;</code> contents (just like the SPF's
- * <code>&lt;i18nContextualHelpParam&gt;</code> tags do with this one).
+ * You can even implement a tag for it, similar to the ones mentioned above.
  * </p>
  * <p>
  * TODO: Need to finish implementing this class. The logic for the
@@ -88,7 +101,7 @@ public class DefaultContextualHelpProvider extends ContextualHelpProvider {
 	 * @param pNoScriptHref
 	 *            A URL to fallback upon in the noscript case.
 	 */
-	public void setLinkContent(String pNoScriptHref) {
+	public void setNoScriptHref(String pNoScriptHref) {
 		if (pNoScriptHref == null) {
 			pNoScriptHref = "";
 		}

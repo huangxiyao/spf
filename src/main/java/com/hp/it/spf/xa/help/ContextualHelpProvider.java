@@ -4,11 +4,13 @@
  */
 package com.hp.it.spf.xa.help;
 
+import com.hp.it.spf.xa.help.HelpProvider;
+
 /**
  * <p>
  * The abstract base class for contextual help providers. Subclass this to
  * provide a concrete implementation of a contextual help popup for your
- * particular portlet.
+ * particular application.
  * </p>
  * <p>
  * For our purposes, contextual help is a hyperlink surrounding some content
@@ -19,17 +21,13 @@ package com.hp.it.spf.xa.help;
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  */
-public abstract class ContextualHelpProvider {
+public abstract class ContextualHelpProvider extends HelpProvider {
 
 	/**
-	 * All contextual help has help content.
+	 * All contextual help has help content -- the text or HTML markup revealed
+	 * when the contextual-help hyperlink is clicked.
 	 */
 	protected String helpContent = "";
-
-	/**
-	 * All contextual help has link content.
-	 */
-	protected String linkContent = "";
 
 	/**
 	 * Protected to prevent external construction except by subclasses. Use an
@@ -41,11 +39,8 @@ public abstract class ContextualHelpProvider {
 
 	/**
 	 * Setter for the help content string: any string of text or HTML which you
-	 * want to display inside the contextual-help popup. Depending on how the
-	 * contextual help is invoked, your help content may or may not later be
-	 * escaped (ie conversion of HTML special characters like <code>&lt;</code>
-	 * inside the help content to their corresponding HTML character entities).
-	 * When using this method, you should pass unescaped content.
+	 * want to display inside the contextual-help popup. When using this method,
+	 * you should pass unescaped content.
 	 * 
 	 * @param pHelpContent
 	 *            The help content.
@@ -56,34 +51,4 @@ public abstract class ContextualHelpProvider {
 		}
 		this.helpContent = pHelpContent;
 	}
-
-	/**
-	 * Setter for the link content string: any string of text or HTML which you
-	 * want to surround with a hyperlink for the contextual-help popup.
-	 * Depending on how the contextual help is invoked, your link content may or
-	 * may not later be escaped (ie conversion of HTML special characters like
-	 * <code>&lt;</code> inside the link content to their corresponding HTML
-	 * character entities). When using this method, you should pass unescaped
-	 * content.
-	 * 
-	 * @param pLinkContent
-	 *            The help content.
-	 */
-	public void setLinkContent(String pLinkContent) {
-		if (pLinkContent == null) {
-			pLinkContent = "";
-		}
-		this.linkContent = pLinkContent;
-	}
-
-	/**
-	 * Returns the HTML string for the contextual help, including the link
-	 * content surrounded by a hyperlink which, if clicked, will reveal the help
-	 * content in an appropriately-formed popup window.
-	 * 
-	 * @param escape
-	 * @return
-	 */
-	public abstract String getHTML(boolean escape);
-
 }
