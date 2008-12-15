@@ -59,7 +59,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	/**
 	 * Regular expression for opening <code>&lt;SPAN&gt;</code> tag.
 	 */
-	private static String OPEN_SPAN_REGEX = "(?i:<SPAN .*>)";
+	private static String OPEN_SPAN_REGEX = "(?i:<SPAN.*?>)";
 
 	/**
 	 * Regular expression for closing <code>&lt;SPAN&gt;</code> tag.
