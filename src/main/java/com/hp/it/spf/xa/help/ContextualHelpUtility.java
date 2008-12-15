@@ -46,7 +46,7 @@ public class ContextualHelpUtility extends HelpUtility {
 	 * @return The given message string, interpolated with all applicable help
 	 *         markup.
 	 */
-	public String parseContextualHelp(String msg,
+	public String parseContextualHelpTokens(String msg,
 			ContextualHelpProvider[] cParams, boolean escapeHTML) {
 		this.token = "CONTEXTUAL_HELP";
 		return super.parseHelp(msg, cParams, escapeHTML);

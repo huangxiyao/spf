@@ -68,7 +68,7 @@ public class I18nUtility {
 	 * Regular expression for an opening or closing
 	 * <code>&lt;No_Localization&gt;</code> tag.
 	 */
-	private static String NO_LOCALIZATION_REGEX = "</?NO_LOCALIZATION>";
+	private static String NO_LOCALIZATION_REGEX = "(?i:</?NO_LOCALIZATION>)";
 
 	/**
 	 * Logger for logging errors.
@@ -740,7 +740,7 @@ public class I18nUtility {
 	 *            A message string.
 	 * @return The message string with no-localization tokens removed.
 	 */
-	public static String parseNoLocalization(String msg) {
+	public static String filterNoLocalizationTokens(String msg) {
 		if (msg == null) {
 			return null;
 		}
