@@ -557,11 +557,11 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * loader can find it.
 	 * </p>
 	 * <p>
-	 * Parameter substitution is as per the Java standard behavior for
-	 * MessageFormat. No parameter substitution is performed if the given
-	 * parameters are empty or null, or the message string contains no parameter
-	 * placeholders. Note there are 2 kinds of parameters: general string
-	 * parameters, and contextual-help parameters:
+	 * Parameter substitution is supported. No parameter substitution is
+	 * performed if the given parameters are empty or null, or the message
+	 * string contains no parameter placeholders. Note there are 2 kinds of
+	 * parameters and their placeholders: general string parameters, and
+	 * contextual-help parameters:
 	 * </p>
 	 * <ul>
 	 * <p>
@@ -574,7 +574,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * <p>
 	 * <li>Contextual-help parameters are provided via the
 	 * ContextualHelpProvider array. These ContextualHelpProviders are used to
-	 * populate any special contextual-help tokens (<code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code>
+	 * populate any special contextual-help tokens (<code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code>)
 	 * found in the message string. Those tokens can be used to denote parts of
 	 * the message string which are to be linked to contextual help, where the
 	 * contextual help is provided by the corresponding ContextualHelpProvider
@@ -653,8 +653,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			if (ac != null) {
 				msg = ac.getMessage(key, params, defaultMsg, locale);
 				msg = parseNoLocalization(msg);
-				msg = ContextualHelpUtility.parseContextualHelp(msg, cParams,
-						escapeHTML);
+				ContextualHelpUtility c = new ContextualHelpUtility();
+				msg = c.parseContextualHelp(msg, cParams, escapeHTML);
 			}
 		}
 		return msg;
