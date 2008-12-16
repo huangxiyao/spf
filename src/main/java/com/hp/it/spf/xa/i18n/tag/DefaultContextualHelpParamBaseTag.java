@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.tagext.Tag;
 
 import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
 import com.hp.it.spf.xa.help.DefaultContextualHelpProvider;
@@ -84,11 +85,11 @@ public abstract class DefaultContextualHelpParamBaseTag extends TagSupport {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String titleKey;
+	protected String titleKey;
 
-	private String noScriptHref;
+	protected String noScriptHref;
 
-	private String contentKey;
+	protected String contentKey;
 
 	/**
 	 * Get the value of the <code>titleKey</code> attribute.
@@ -165,7 +166,7 @@ public abstract class DefaultContextualHelpParamBaseTag extends TagSupport {
 	 * @throws JspException
 	 */
 	public int doEndTag() throws JspException {
-		javax.servlet.jsp.tagext.Tag parent = getParent();
+		Tag parent = getParent();
 		if (parent == null) {
 			String msg = "SPF contextual help param tag error: requires surrounding message tag.";
 			logError(this, msg);

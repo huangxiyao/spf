@@ -21,22 +21,29 @@ import com.hp.it.spf.xa.help.ContextualHelpProvider;
 
 /**
  * <p>
- * An abstract base class representing a message tag such as the
- * portlet framework's <code>&lt;spf-i18n-portlet:message&gt;</code> tag and the
- * portal framework's <code>&lt;spf-i18n-portal:i18nValue&gt;</code> tag. You use
- * these tags to express message resources.  Inside the body of these tags, you can
- * define string and contextual help parameter values for the tags, using the
- * <code>&lt;spf-i18n-portlet:param&gt;</code> and <code>&lt;spf-i18n-portlet:contextualHelpParam&gt;</code>
- * tags in the portlet framework, and the similarly-named tags (in <code>spf-i18n-portal</code>) for the portal
- * framework.
+ * An abstract base class representing a message tag such as the portlet
+ * framework's <code>&lt;spf-i18n-portlet:message&gt;</code> tag and the
+ * portal framework's <code>&lt;spf-i18n-portal:i18nValue&gt;</code> tag. You
+ * use these tags to express message resources. Inside the body of these tags,
+ * you can define string and contextual help parameter values for the tags,
+ * using the <code>&lt;spf-i18n-portlet:param&gt;</code> and
+ * <code>&lt;spf-i18n-portlet:contextualHelpParam&gt;</code> tags in the
+ * portlet framework, and the similarly-named tags (in
+ * <code>spf-i18n-portal</code>) for the portal framework.
  * </p>
  * <p>
- * Every kind of message tag has at least 2 attributes, which are represented in this base class.
- * <code>key="<i>message-key</i>"</code> is the key to lookup in the message resource bundle,
- * and <code>defaultValue="<i>default-value</i>"</code> is an optional default to assign if the key
- * cannot be found (if not provided, then the key itself will be used as a default).
+ * Every kind of message tag has at least 3 attributes, which are represented in
+ * this base class. <code>key="<i>message-key</i>"</code> is the key to
+ * lookup in the message resource bundle, and
+ * <code>defaultValue="<i>default-value</i>"</code> is an optional default
+ * to assign if the key cannot be found (if not provided, then the key itself
+ * will be used as a default). <code>escape="<i>escape-html</i>"</code> is
+ * an optional switch (default: <code>"false"</code>) which if set to
+ * <code>"true"</code> will convert any HTML special characters found in the
+ * message string or its parameters into their equivalent HTML character
+ * entities.
  * </p>
-  * 
+ * 
  * @author <link href="kuang.cheng@hp.com"> Cheng Kuang </link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
@@ -45,13 +52,17 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 
 	private static final long serialVersionUID = 1L;
 
-	private String key;
+	protected String key;
 
-	private String defaultValue;
+	protected String defaultValue;
 
-	private List params;
+	protected String escape;
 
-	private List cParams;
+	protected boolean escapeEnabled;
+
+	protected List params;
+
+	protected List cParams;
 
 	/**
 	 * Initialize the tag values.
@@ -92,6 +103,51 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	 */
 	public void setKey(String key) {
 		this.key = key;
+	}
+
+	/**
+	 * Get the value of the <code>key</code> attribute.
+	 * 
+	 * @return Value of the <code>key</code> attribute.
+	 */
+	public String getKey() {
+		return key;
+	}
+
+	/**
+	 * Set the escape-HTML switch from the <code>escape</code> attribute.
+	 * 
+	 * @param key
+	 *            Value of the <code>key</code> attribute.
+	 */
+	public void setEscape(String value) {
+		this.escape = value;
+		this.escapeEnabled = false;
+		if (value != null) {
+			value = value.trim();
+			if ("true".equalsIgnoreCase(value)) {
+				this.escapeEnabled = true;
+			}
+		}
+	}
+
+	/**
+	 * Get the value of the <code>escape</code> attribute.
+	 * 
+	 * @return Value of the <code>escape</code> attribute.
+	 */
+	public String getEscape() {
+		return escape;
+	}
+
+	/**
+	 * Returns true if <code>escape="true"</code> (case-insensitive) and false
+	 * otherwise.
+	 * 
+	 * @return Whether escape-HTML behavior is enabled.
+	 */
+	public boolean isEscapeEnabled() {
+		return escapeEnabled;
 	}
 
 	/**

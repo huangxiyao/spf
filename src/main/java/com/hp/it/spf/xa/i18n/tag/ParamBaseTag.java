@@ -28,7 +28,7 @@ import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
  * <p>
  * <code>&lt;param&gt;</code> tag has one attribute,
  * <code>value="<i>string</i>"</code> where <i>string</i> is the value of a
- * parameter to be substituted.
+ * parameter to be substituted.  It is a required attribute.
  * </p>
  * 
  * @author <link href="kuang.cheng@hp.com">Cheng Kuang </link>
@@ -42,7 +42,7 @@ public abstract class ParamBaseTag extends TagSupport {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String value;
+	protected String value;
 
 	/**
 	 * Get the value of the <code>value</code> attribute.
