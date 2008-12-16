@@ -31,4 +31,32 @@ public abstract class GlobalHelpProvider extends HelpProvider {
 
 	}
 
+	/**
+	 * <p>
+	 * Returns the HTML string for the global help, including the link content
+	 * surrounded by a hyperlink which, if clicked, will reveal the global help
+	 * secondary page in an appropriately-formed popup window.
+	 * </p>
+	 * <p>
+	 * The first boolean parameter controls whether or not to escape any HTML
+	 * special characters like <code>&lt;</code> (ie convert them to
+	 * corresponding HTML character entities so that they display literally)
+	 * found in the link content.
+	 * </p>
+	 * <p>
+	 * The second boolean parameter controls whether or not to remove any HTML
+	 * <code>&lt;SPAN&gt;</code> markup from the link content, which Vignette
+	 * may have automatically added.
+	 * </p>
+	 * 
+	 * @param escape
+	 *            Whether or not to escape HTML in the link content.
+	 * @param filterSpan
+	 *            Whether or not to strip <code>&lt;SPAN&gt;</code> from the
+	 *            link content.
+	 * @return The HTML string for a global help hyperlink containing the link
+	 *         content that was set.
+	 */
+	public abstract String getHTML(boolean escape, boolean filterSpan);
+
 }

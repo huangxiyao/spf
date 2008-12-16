@@ -41,14 +41,6 @@ import com.hp.it.spf.xa.help.portal.GlobalHelpProvider;
 public class DefaultGlobalHelpProvider extends GlobalHelpProvider {
 
 	/**
-	 * Default contextual help can put an alternate URL in the global-help
-	 * hyperlink which the browser will open if JavaScript is not supported.
-	 * (Default global help style requires JavaScript, so this allows for a
-	 * noscript alternative.)
-	 */
-	private String noScriptHref = "";
-
-	/**
 	 * Empty constructor; use the setters to provide the attributes.
 	 */
 	public DefaultGlobalHelpProvider() {
@@ -56,35 +48,60 @@ public class DefaultGlobalHelpProvider extends GlobalHelpProvider {
 	}
 
 	/**
-	 * Setter for the noscript URL: any URL you want to be opened instead of the
-	 * global-help popup in a non-JavaScript-enabled browser. Default-style
-	 * global help requires the use of JavaScript, so this lets you provide an
-	 * alternative experience for non-JavaScript-enabled browsers.
+	 * <p>
+	 * Returns the HTML string for the global help, including the link content
+	 * surrounded by a hyperlink which, if clicked, will reveal the global help
+	 * secondary page in an appropriately-formed popup window.
+	 * </p>
+	 * <p>
+	 * The boolean parameter controls whether or not to escape any HTML special
+	 * characters like <code>&lt;</code> (ie convert them to corresponding
+	 * HTML character entities so that they display literally) found in the link
+	 * content.
+	 * </p>
+	 * <p>
+	 * In this method, any HTML <code>&lt;SPAN&gt;</code> markup in the link
+	 * content, which Vignette may have automatically added, is retained.
+	 * </p>
 	 * 
-	 * @param pNoScriptHref
-	 *            A URL to fallback upon in the noscript case.
+	 * @param escape
+	 *            Whether or not to escape HTML in the link content.
+	 * @return The HTML string for a global help hyperlink containing the link
+	 *         content that was set.
 	 */
-	public void setNoScriptHref(String pNoScriptHref) {
-		if (pNoScriptHref == null) {
-			pNoScriptHref = "";
-		}
-		this.noScriptHref = pNoScriptHref;
+	public String getHTML(boolean escape) {
+		return getHTML(escape, false);
 	}
 
 	/**
+	 * <p>
 	 * Returns the HTML string for the global help, including the link content
 	 * surrounded by a hyperlink which, if clicked, will reveal the global help
-	 * secondary page in an appropriately-formed popup window. The boolean
-	 * parameter controls whether or not to escape any HTML special characters
-	 * like <code>&lt;</code> (ie convert them to corresponding HTML character
-	 * entities so that they display literally) found in the link content.
+	 * secondary page in an appropriately-formed popup window.
+	 * </p>
+	 * <p>
+	 * The first boolean parameter controls whether or not to escape any HTML
+	 * special characters like <code>&lt;</code> (ie convert them to
+	 * corresponding HTML character entities so that they display literally)
+	 * found in the link content.
+	 * </p>
+	 * <p>
+	 * The second boolean parameter controls whether or not to remove any HTML
+	 * <code>&lt;SPAN&gt;</code> markup from the link content, which Vignette
+	 * may have automatically added.
+	 * </p>
 	 * 
 	 * TODO: Must implement this method, see notes above.
 	 * 
 	 * @param escape
-	 * @return
+	 *            Whether or not to escape HTML in the link content.
+	 * @param filterSpan
+	 *            Whether or not to strip <code>&lt;SPAN&gt;</code> from the
+	 *            link content.
+	 * @return The HTML string for a global help hyperlink containing the link
+	 *         content that was set.
 	 */
-	public String getHTML(boolean escape) {
+	public String getHTML(boolean escape, boolean filterSpan) {
 		String html = "";
 		return html;
 	}
