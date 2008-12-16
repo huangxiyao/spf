@@ -4,8 +4,6 @@
  */
 package com.hp.it.spf.xa.i18n.tag;
 
-import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,7 +12,6 @@ import java.util.Map;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import com.hp.it.spf.xa.help.ContextualHelpProvider;
@@ -52,17 +49,38 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * The <code>key</code> attribute from the tag.
+	 */
 	protected String key;
 
+	/**
+	 * The <code>defaultValue</code> attribute from the tag.
+	 */
 	protected String defaultValue;
 
+	/**
+	 * The <code>escape</code> attribute from the tag.
+	 */
 	protected String escape;
 
+	/**
+	 * A boolean switch representing the <code>escape</code> attribute in
+	 * boolean form.
+	 */
 	protected boolean escapeEnabled;
 
+	/**
+	 * The list of string parameters from any string parameter tags enclosed in
+	 * the message tag body.
+	 */
 	protected List params;
 
-	protected List cParams;
+	/**
+	 * The list of contextual help providers from any contextual help parameter
+	 * tags enclosed in the message tag body.
+	 */
+	protected List cProviders;
 
 	/**
 	 * Initialize the tag values.
@@ -70,7 +88,7 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	public MessageBaseTag() {
 		key = null;
 		defaultValue = null;
-		cParams = null;
+		cProviders = null;
 		params = null;
 		escape = null;
 		escapeEnabled = false;
@@ -119,8 +137,8 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	/**
 	 * Set the escape-HTML switch from the <code>escape</code> attribute.
 	 * 
-	 * @param key
-	 *            Value of the <code>key</code> attribute.
+	 * @param value
+	 *            Value of the <code>escape</code> attribute.
 	 */
 	public void setEscape(String value) {
 		this.escape = value;
@@ -167,8 +185,8 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	 * message. String parameters come from any string parameter tags contained
 	 * inside the message tag body (see StringParamBaseTag).
 	 * 
-	 * @param A
-	 *            string parameter.
+	 * @param o
+	 *            A string parameter.
 	 */
 	public void addParam(Object o) {
 		if (params == null) {
@@ -182,25 +200,25 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	 * the message. These come from any contextual help parameter tags contained
 	 * inside the message tag body (see ContextualHelpParamBaseTag).
 	 * 
-	 * @param A
-	 *            parameter set for one instance of contextual help.
+	 * @param c
+	 *            A parameter set for one instance of contextual help.
 	 */
-	public void addCParam(ContextualHelpProvider c) {
-		if (cParams == null) {
-			cParams = new ArrayList();
+	public void addContextualHelpProvider(ContextualHelpProvider c) {
+		if (cProviders == null) {
+			cProviders = new ArrayList();
 		}
-		cParams.add(c);
+		cProviders.add(c);
 	}
 
 	/**
 	 * Clear all buffered parameters.
 	 */
-	private void clearParams() {
+	protected void clearParams() {
 		if (params != null) {
 			params.clear();
 		}
-		if (cParams != null) {
-			Iterator itr = cParams.iterator();
+		if (cProviders != null) {
+			Iterator itr = cProviders.iterator();
 			while (itr.hasNext()) {
 				Object obj = itr.next();
 				if (obj != null) {
@@ -211,7 +229,7 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 					}
 				}
 			}
-			cParams.clear();
+			cProviders.clear();
 		}
 	}
 

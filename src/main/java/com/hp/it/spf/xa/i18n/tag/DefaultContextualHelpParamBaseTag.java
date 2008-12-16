@@ -5,14 +5,10 @@
 
 package com.hp.it.spf.xa.i18n.tag;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.tagext.Tag;
+import javax.servlet.jsp.tagext.TagSupport;
 
-import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
 import com.hp.it.spf.xa.help.DefaultContextualHelpProvider;
 
 /**
@@ -188,7 +184,7 @@ public abstract class DefaultContextualHelpParamBaseTag extends TagSupport {
 		c.setTitleContent(title);
 		c.setNoScriptHref(noScriptHref);
 		MessageBaseTag messageTag = (MessageBaseTag) parent;
-		messageTag.addCParam(c);
+		messageTag.addContextualHelpProvider(c);
 		return super.doEndTag();
 	}
 
