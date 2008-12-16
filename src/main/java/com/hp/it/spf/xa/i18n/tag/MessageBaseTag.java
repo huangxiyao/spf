@@ -72,6 +72,8 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 		defaultValue = null;
 		cParams = null;
 		params = null;
+		escape = null;
+		escapeEnabled = false;
 	}
 
 	/**
