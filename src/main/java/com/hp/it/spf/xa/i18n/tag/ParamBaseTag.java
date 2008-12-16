@@ -17,7 +17,7 @@ import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
  * <p>
  * An abstract base class representing a string parameter tag such as the
  * portlet framework's <code>&lt;spf-i18n-portlet:param&gt;</code> tag and the
- * portal framework's <code>&lt;spf-i18n-portal:param&gt;</code> tag. You use
+ * portal framework's <code>&lt;spf-i18n-portal:i18nParam&gt;</code> tag. You use
  * these tags to define string parameter values for surrounding message tags,
  * such as the portlet frameworks' <code>&lt;spf-i18n-portlet:message&gt;</code>
  * tag and the portal framework's <code>&lt;spf-i18n-portal:i18nValue&gt;</code>
@@ -26,7 +26,7 @@ import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
  * into the message.
  * </p>
  * <p>
- * <code>&lt;param&gt;</code> tag has one attribute,
+ * The <code>&lt;param&gt;</code> tag has one attribute,
  * <code>value="<i>string</i>"</code> where <i>string</i> is the value of a
  * parameter to be substituted.  It is a required attribute.
  * </p>
