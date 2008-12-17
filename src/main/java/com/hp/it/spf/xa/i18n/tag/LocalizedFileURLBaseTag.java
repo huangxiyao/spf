@@ -147,7 +147,7 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 			url = url.trim();
 			out.print(url);
 		} catch (Exception e) {
-			logError(this, "SPF localized file URL tag error: "
+			logError(this, "LocalizedFileURLBaseTag error: "
 					+ e.getMessage());
 			JspException jspE = new JspException(e);
 			throw jspE;

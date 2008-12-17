@@ -4,9 +4,6 @@
  */
 package com.hp.it.spf.xa.help;
 
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import com.hp.it.spf.xa.misc.Utils;
 import com.hp.it.spf.xa.help.HelpUtility;
 import com.hp.it.spf.xa.help.ContextualHelpProvider;
 

@@ -7,14 +7,15 @@ package com.hp.it.spf.xa.i18n.tag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
-import javax.servlet.jsp.tagext.TagSupport;
 
-import com.hp.it.spf.xa.help.DefaultContextualHelpProvider;
+import com.hp.it.spf.xa.i18n.tag.ContextualHelpParamBaseTag;
+import com.hp.it.spf.xa.help.ContextualHelpProvider;
+import com.hp.it.spf.xa.help.ClassicContextualHelpProvider;
 
 /**
  * <p>
- * An abstract base class representing a default-style contextual help parameter
- * tag such as the portlet framework's
+ * An abstract base class representing a "classic"-style contextual help
+ * parameter tag such as the portlet framework's
  * <code>&lt;spf-i18n-portlet:contextualHelpParam&gt;</code> tag and the
  * portal framework's
  * <code>&lt;spf-i18n-portal:i18nContextualHelpParam&gt;</code> tag. You use
@@ -74,7 +75,8 @@ import com.hp.it.spf.xa.help.DefaultContextualHelpProvider;
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  */
-public abstract class DefaultContextualHelpParamBaseTag extends TagSupport {
+public abstract class ClassicContextualHelpParamBaseTag extends
+		ContextualHelpParamBaseTag {
 	/**
 	 * serialVersionUID long
 	 */
@@ -146,52 +148,44 @@ public abstract class DefaultContextualHelpParamBaseTag extends TagSupport {
 	/**
 	 * Initialize the tag attributes.
 	 */
-	public DefaultContextualHelpParamBaseTag() {
+	public ClassicContextualHelpParamBaseTag() {
+		super();
 		titleKey = null;
 		noScriptHref = null;
 		contentKey = null;
 	}
 
 	/**
-	 * Do the tag processing. An error is thrown if the tag discovers it is not
-	 * contained inside the body of a surrounding message tag (any subclass of
-	 * MessageBaseTag).
+	 * Return an instance of the "classic"-style contextual help provider,
+	 * populated with the parameters from the current tag. This throws a
+	 * JspException if the required parameters for that provider (ie the
+	 * <code>titleKey</code> and <code>contentKey</code> attributes) were
+	 * not specified in the tag.
 	 * 
-	 * @return int int
+	 * @return ContextualHelpProvider
 	 * @throws JspException
 	 */
-	public int doEndTag() throws JspException {
-		Tag parent = getParent();
-		if (parent == null) {
-			String msg = "SPF contextual help param tag error: requires surrounding message tag.";
-			logError(this, msg);
-			throw new JspException(msg);
-		}
-		if (!(parent instanceof MessageBaseTag)) {
-			String msg = "SPF contextual help param tag error: requires surrounding message tag.";
-			logError(this, msg);
-			throw new JspException(msg);
-		}
+	public ContextualHelpProvider getContextualHelpProvider()
+			throws JspException {
 		if (titleKey == null || contentKey == null) {
-			String msg = "SPF contextual help param tag error: both the titleKey and contentKey are required attributes.";
+			String msg = "ClassicContextualHelpParamBaseTag error: both the titleKey and contentKey are required attributes.";
 			logError(this, msg);
 			throw new JspException(msg);
 		}
 		String title = getTitle();
 		String content = getContent();
-		DefaultContextualHelpProvider c = new DefaultContextualHelpProvider();
+		ClassicContextualHelpProvider c = new ClassicContextualHelpProvider();
 		c.setHelpContent(content);
 		c.setTitleContent(title);
 		c.setNoScriptHref(noScriptHref);
-		MessageBaseTag messageTag = (MessageBaseTag) parent;
-		messageTag.addContextualHelpProvider(c);
-		return super.doEndTag();
+		return c;
 	}
 
 	/**
 	 * Abstract method for getting the contextual help title string from a
-	 * message resource. Different action for portal and portlet, so this is an
-	 * abstract method.
+	 * message resource. Should return the title key itself if there was a
+	 * problem. Different action for portal and portlet, so this is an abstract
+	 * method.
 	 * 
 	 * @return The help title message.
 	 */
@@ -199,8 +193,9 @@ public abstract class DefaultContextualHelpParamBaseTag extends TagSupport {
 
 	/**
 	 * Abstract method for getting the contextual help content string from a
-	 * message resource. Different action for portal and portlet, so this is an
-	 * abstract method.
+	 * message resource. Should return the content key itself if there was a
+	 * problem. Different action for portal and portlet, so this is an abstract
+	 * method.
 	 * 
 	 * @return The help content message.
 	 */

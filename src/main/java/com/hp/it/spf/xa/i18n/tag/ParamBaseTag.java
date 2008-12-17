@@ -76,17 +76,17 @@ public abstract class ParamBaseTag extends TagSupport {
 	public int doEndTag() throws JspException {
 		javax.servlet.jsp.tagext.Tag parent = getParent();
 		if (parent == null) {
-			String msg = "SPF string param tag error: requires surrounding message tag.";
+			String msg = "ParamBaseTag error: requires surrounding message tag of type MessageBaseTag.";
 			logError(this, msg);
 			throw new JspException(msg);
 		}
 		if (!(parent instanceof MessageBaseTag)) {
-			String msg = "SPF string param tag error: requires surrounding message tag.";
+			String msg = "ParamBaseTag error: requires surrounding message tag of type MessageBaseTag.";
 			logError(this, msg);
 			throw new JspException(msg);
 		}
 		if (value == null) {
-			String msg = "SPF string param tag error: value is a required attribute.";
+			String msg = "ParamBaseTag error: value is a required attribute.";
 			logError(this, msg);
 			throw new JspException(msg);
 		}

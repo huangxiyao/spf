@@ -259,7 +259,7 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 			}
 			out.print(value);
 		} catch (Exception e) {
-			logError(this, "SPF message tag error: " + e.getMessage());
+			logError(this, "MessageBaseTag error: " + e.getMessage());
 			JspException jspE = new JspException(e);
 			throw jspE;
 		}

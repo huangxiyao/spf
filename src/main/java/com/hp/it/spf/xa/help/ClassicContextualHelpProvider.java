@@ -8,7 +8,7 @@ import com.hp.it.spf.xa.help.ContextualHelpProvider;
 
 /**
  * <p>
- * A concrete contextual help provider, which produces a default-style
+ * A concrete contextual help provider, which produces a "classic"-style
  * contextual help popup window.
  * </p>
  * <p>
@@ -38,49 +38,49 @@ import com.hp.it.spf.xa.help.ContextualHelpProvider;
  * a message containing this style of contextual-help popup.
  * </p>
  * <p>
- * If you are not happy with the default contextual-help popup style, you can
+ * If you are not happy with the "classic" contextual-help popup style, you can
  * implement your own. Just extend the abstract base class like this one does.
  * You can even implement a tag for it, similar to the ones mentioned above.
  * </p>
  * <p>
  * TODO: Need to finish implementing this class. The logic for the
- * implementation should largely come from the ContextualHelpBaseTag class in
- * the Service Portal (OS) code.
+ * implementation should largely come from the ContextualHelpBaseTag.todo file
+ * (taken from the ContextualHelpBaseTag.java file in the Service Portal (OS) code).
  * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  */
-public class DefaultContextualHelpProvider extends ContextualHelpProvider {
+public class ClassicContextualHelpProvider extends ContextualHelpProvider {
 
 	/**
-	 * Default contextual help has a title. This is the title content.
+	 * "Classic" contextual help has a title. This is the title content.
 	 */
 	private String titleContent = "";
 
 	/**
-	 * Default contextual help can put an alternate URL in the contextual-help
+	 * "Classic" contextual help can put an alternate URL in the contextual-help
 	 * hyperlink which the browser will open if JavaScript is not supported.
-	 * (Default contextual help style requires JavaScript, so this allows for a
-	 * noscript alternative.)
+	 * ("Classic" contextual help style requires JavaScript, so this allows for
+	 * a noscript alternative.)
 	 */
 	private String noScriptHref = "";
 
 	/**
 	 * Empty constructor; use the setters to provide the attributes.
 	 */
-	public DefaultContextualHelpProvider() {
+	public ClassicContextualHelpProvider() {
 
 	}
 
 	/**
 	 * Setter for the title content string: any string of text or HTML which you
-	 * want to display as the title of the default-style contextual-help popup.
-	 * Depending on how the contextual help is invoked, your title content may
-	 * or may not later be escaped (ie conversion of HTML special characters
-	 * like <code>&lt;</code> inside the title content to their corresponding
-	 * HTML character entities). When using this method, you should pass
-	 * unescaped content.
+	 * want to display as the title of the "classic"-style contextual-help
+	 * popup. Depending on how the contextual help is invoked, your title
+	 * content may or may not later be escaped (ie conversion of HTML special
+	 * characters like <code>&lt;</code> inside the title content to their
+	 * corresponding HTML character entities). When using this method, you
+	 * should pass unescaped content.
 	 * 
 	 * @param pTitleContent
 	 *            The title content.
@@ -94,9 +94,10 @@ public class DefaultContextualHelpProvider extends ContextualHelpProvider {
 
 	/**
 	 * Setter for the noscript URL: any URL you want to be opened instead of the
-	 * contextual-help popup in a non-JavaScript-enabled browser. Default-style
-	 * contextual help requires the use of JavaScript, so this lets you provide
-	 * an alternative experience for non-JavaScript-enabled browsers.
+	 * contextual-help popup in a non-JavaScript-enabled browser.
+	 * "Classic"-style contextual help requires the use of JavaScript, so this
+	 * lets you provide an alternative experience for non-JavaScript-enabled
+	 * browsers.
 	 * 
 	 * @param pNoScriptHref
 	 *            A URL to fallback upon in the noscript case.
@@ -109,9 +110,17 @@ public class DefaultContextualHelpProvider extends ContextualHelpProvider {
 	}
 
 	/**
-	 * Returns the HTML string for the contextual help, including the link
-	 * content surrounded by a hyperlink which, if clicked, will reveal the help
-	 * content in an appropriately-formed popup window.
+	 * <p>
+	 * Returns the HTML string for the "classic"-style contextual help,
+	 * including the link content surrounded by a hyperlink which, if clicked,
+	 * will reveal the help content in an appropriately-formed popup window.
+	 * </p>
+	 * <p>
+	 * The boolean parameter controls whether or not to escape any HTML special
+	 * characters like <code>&lt;</code> (ie convert them to corresponding
+	 * HTML character entities so that they display literally) found in the
+	 * content.
+	 * </p>
 	 * 
 	 * TODO: Must implement this method, see notes above.
 	 * 
