@@ -19,8 +19,8 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  * portal component.
  * </p>
  * <p>
- * Both portal and portlet tags have 2 alternative sets of attributes, stored in
- * this base class:
+ * Both portal and portlet tags have 2 alternative attributes, stored in this
+ * base class:
  * </p>
  * <ul>
  * <li>
@@ -55,12 +55,10 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  * </li>
  * <li>
  * <p>
- * Alternatively, the <code>key="<i>message-key</i>"</code> and optional
- * <code>defaultValue="<i>default-value</i>"</code> attributes can be used.
- * In this event, the <i>message-key</i> is used to lookup the particular
- * localized filename in a message resource bundle for the portal or portlet. If
- * that message is found, its value is used as the localized filename in the
- * URL; if not found, then the optional <i>default-value</i> is used.
+ * Alternatively, the <code>fileKey="<i>message-key</i>"</code> attribute
+ * can be used. In this event, the <i>message-key</i> is used to lookup the
+ * particular localized filename in a message resource bundle for the portal or
+ * portlet. That value is then used as the localized filename in the URL.
  * </p>
  * <ul>
  * <li>
@@ -88,9 +86,8 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  * </li>
  * <li>
  * <p>
- * If both of the above sets of attributes are provided, the
- * <code>file="<i>base-filename</i>"</code> attribute is used and the others
- * are ignored.
+ * If both of the above attributes are provided, the
+ * <code>file="<i>base-filename</i>"</code> attribute is preferred.
  * </p>
  * </li>
  * </ul>
@@ -99,12 +96,12 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  * Based on the locale in the current user request, the attributes above, and
  * the available localized files, the expressed URL will point to the proper
  * file. (When the file is expressed as a <i>base-filename</i> instead of
- * identified explicitly via <i>message-key</i> and <i>default-value</i>, the
- * logic for finding the proper file is similar to that practiced by the
- * Java-standard ResourceBundle class.) The expressed URL is already encoded if
- * necessary and can be presented to the user in your response (for example, in
- * a <code>&lt;img&gt;</code> tag). If the file did not exist, however, then
- * an empty string is expressed.
+ * identified explicitly via <i>message-key</i>, the logic for finding the
+ * proper file is similar to that practiced by the Java-standard ResourceBundle
+ * class.) The expressed URL is already encoded if necessary and can be
+ * presented to the user in your response (for example, in a
+ * <code>&lt;img&gt;</code> tag). If the file did
+ * not exist, however, then the expressed URL is an empty string.
  * </p>
  * 
  * @author <link href="ming.zou@hp.com">Ming</link>
@@ -118,19 +115,24 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * The value of the <code>file</code> attribute from the tag.
+	 */
 	protected String file;
-	protected String key;
-	protected String defaultValue;
+
+	/**
+	 * The value of the <code>fileKey</code> attribute from the tag.
+	 */
+	protected String fileKey;
 
 	/**
 	 * Initialize tag attribute values.
 	 */
-	public LocalizedFileURLBaseTag () {
+	public LocalizedFileURLBaseTag() {
 		file = null;
-		key = null;
-		defaultValue = null;
+		fileKey = null;
 	}
-	
+
 	/**
 	 * Perform tag processing.
 	 * 
@@ -138,6 +140,11 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 	 * @return integer
 	 */
 	public int doStartTag() throws JspException {
+		if (file == null && fileKey == null) {
+			String msg = "LocalizedFileURLBaseTag error: either the file or fileKey attributes are required.";
+			logError(this, msg);
+			throw new JspException(msg);
+		}
 		JspWriter out = pageContext.getOut();
 		try {
 			String url = getLocalizedFileURL();
@@ -147,8 +154,7 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 			url = url.trim();
 			out.print(url);
 		} catch (Exception e) {
-			logError(this, "LocalizedFileURLBaseTag error: "
-					+ e.getMessage());
+			logError(this, "LocalizedFileURLBaseTag error: " + e.getMessage());
 			JspException jspE = new JspException(e);
 			throw jspE;
 		}
@@ -162,7 +168,7 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 	 *            Value from the <code>file</code> tag attribute.
 	 */
 	public void setFile(String string) {
-		file = string;
+		file = normalize(string);
 	}
 
 	/**
@@ -175,41 +181,22 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 	}
 
 	/**
-	 * Set key from <code>key</code> tag attribute.
+	 * Set key from <code>fileKey</code> tag attribute.
 	 * 
 	 * @param string
-	 *            Value from the <code>key</code> tag attribute.
+	 *            Value from the <code>fileKey</code> tag attribute.
 	 */
-	public void setKey(String string) {
-		key = string;
+	public void setFileKey(String string) {
+		fileKey = normalize(string);
 	}
 
 	/**
-	 * Get value of the <code>key</code> attribute.
+	 * Get value of the <code>fileKey</code> attribute.
 	 * 
-	 * @return Value of the <code>key</code> attribute.
+	 * @return Value of the <code>fileKey</code> attribute.
 	 */
-	public String getKey() {
-		return key;
-	}
-
-	/**
-	 * Set default value from <code>defaultValue</code> tag attribute.
-	 * 
-	 * @param string
-	 *            Value from the <code>defaultValue</code> tag attribute.
-	 */
-	public void setDefaultValue(String string) {
-		defaultValue = string;
-	}
-
-	/**
-	 * Get value of the <code>defaultValue</code> attribute.
-	 * 
-	 * @return Value of the <code>defaultValue</code> attribute.
-	 */
-	public String getDefaultValue() {
-		return defaultValue;
+	public String getFileKey() {
+		return fileKey;
 	}
 
 	/**
@@ -230,5 +217,22 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 	 *            The error message.
 	 */
 	public abstract void logError(Object obj, String msg);
+
+	/**
+	 * Normalize blank string values to null - so the return is either a
+	 * non-blank string, or null.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private String normalize(String value) {
+		if (value != null) {
+			value = value.trim();
+			if (value.equals("")) {
+				value = null;
+			}
+		}
+		return value;
+	}
 
 }

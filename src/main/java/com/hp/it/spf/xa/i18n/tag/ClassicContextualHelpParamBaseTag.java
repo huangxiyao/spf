@@ -29,24 +29,34 @@ import com.hp.it.spf.xa.help.ClassicContextualHelpProvider;
  * </p>
  * <p>
  * The style of contextual help rendered by this tag is the SPF-provided default
- * style. For both portal and portlet frameworks, this tag has 3 attributes:
+ * style. For both portal and portlet frameworks, this tag has the following
+ * attributes:
  * </p>
  * <ul>
  * <li>
  * <p>
- * The <code>titleKey="<i>title-key</i>"</code> attribute gives a message
- * resource key for a message string containing the string to use for the
- * contextual help title. This message string will be obtained from the resource
- * bundle(s) available to your portlet or portal component. This is a required
- * attribute.
+ * The <code>title="<i>title</i>"</code> and
+ * <code>titleKey="<i>title-key</i>"</code> attributes are alternative ways
+ * of providing the title in the contextual help popup. If you provide the
+ * <code>title</code> attribute, then its value is used as the title.
+ * Alternatively, if you provide the <code>titleKey</code> attribute, then its
+ * value is used as a message resource key for a message string containing the
+ * title. This message string will be obtained from the resource bundle(s)
+ * available to your portlet or portal component. One or the other attribute is
+ * required. If you specify both, then <code>title</code> will take
+ * precedence.
  * </p>
  * </li>
  * <li>
  * <p>
- * The <code>contentKey="<i>content-key</i>"</code> attribute gives a
- * message resource key for a message string to be used for the help content
- * itself. This message string will likewise be looked-up in your resource
- * bundle(s) by this class. This is a required attribute.
+ * The <code>content="<i>content</i>"</code> and
+ * <code>contentKey="<i>content-key</i>"</code> attributes are alternative
+ * ways of providing the help content for the popup. If you provide the
+ * <code>content</code> attribute, then its value is used directly.
+ * Alternatively, if you provide the <code>contentKey</code> attribute, then
+ * its value is used as a message resource key for a message string containing
+ * the content. One or the other attribute is required. If you specify both,
+ * then <code>content</code> will take precedence.
  * </p>
  * </li>
  * <li>
@@ -82,11 +92,50 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Stores the value of the <code>title</code> attribute.
+	 */
+	protected String title;
+
+	/**
+	 * Stores the value of the <code>titleKey</code> attribute.
+	 */
 	protected String titleKey;
 
+	/**
+	 * Stores the value of the <code>noScriptHref</code> attribute.
+	 */
 	protected String noScriptHref;
 
+	/**
+	 * Stores the value of the <code>content</code> attribute.
+	 */
+	protected String content;
+
+	/**
+	 * Stores the value of the <code>contentKey</code> attribute.
+	 */
 	protected String contentKey;
+
+	/**
+	 * Get the value of the <code>title</code> attribute.
+	 * 
+	 * @return The <code>title</code> attribute.
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * Set the value from the <code>title</code> attribute, with blank values
+	 * normalized to null.
+	 * 
+	 * @param value
+	 *            The <code>title</code> attribute.
+	 */
+	public void setTitle(String value) {
+		this.title = normalize(value);
+	}
 
 	/**
 	 * Get the value of the <code>titleKey</code> attribute.
@@ -98,13 +147,33 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	}
 
 	/**
-	 * Set the value from the <code>titleKey</code> attribute.
+	 * Set the value from the <code>titleKey</code> attribute, with blank
+	 * values normalized to null.
 	 * 
 	 * @param value
 	 *            The <code>titleKey</code> attribute.
 	 */
 	public void setTitleKey(String value) {
-		this.titleKey = value;
+		this.titleKey = normalize(value);
+	}
+
+	/**
+	 * Get the value of the <code>content</code> attribute.
+	 * 
+	 * @return The <code>content</code> attribute.
+	 */
+	public String getContent() {
+		return content;
+	}
+
+	/**
+	 * Set the value from the <code>content</code> attribute.
+	 * 
+	 * @param value
+	 *            The <code>content</code> attribute.
+	 */
+	public void setContent(String value) {
+		this.content = normalize(value);
 	}
 
 	/**
@@ -123,7 +192,7 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 *            The <code>contentKey</code> attribute.
 	 */
 	public void setContentKey(String value) {
-		this.contentKey = value;
+		this.contentKey = normalize(value);
 	}
 
 	/**
@@ -142,7 +211,7 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 *            The <code>noScriptHref</code> attribute.
 	 */
 	public void setNoScriptHref(String value) {
-		this.noScriptHref = value;
+		this.noScriptHref = normalize(value);
 	}
 
 	/**
@@ -150,9 +219,11 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 */
 	public ClassicContextualHelpParamBaseTag() {
 		super();
+		title = null;
 		titleKey = null;
 		noScriptHref = null;
 		contentKey = null;
+		content = null;
 	}
 
 	/**
@@ -167,16 +238,27 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 */
 	public ContextualHelpProvider getContextualHelpProvider()
 			throws JspException {
-		if (titleKey == null || contentKey == null) {
-			String msg = "ClassicContextualHelpParamBaseTag error: both the titleKey and contentKey are required attributes.";
+		if (title == null && titleKey == null) {
+			String msg = "ClassicContextualHelpParamBaseTag error: either the title or titleKey are required attributes.";
 			logError(this, msg);
 			throw new JspException(msg);
 		}
-		String title = getTitle();
-		String content = getContent();
+		if (content == null && contentKey == null) {
+			String msg = "ClassicContextualHelpParamBaseTag error: either the content or contentKey are required attributes.";
+			logError(this, msg);
+			throw new JspException(msg);
+		}
+		String actualTitle = title;
+		if (actualTitle == null) {
+			actualTitle = getTitleMessage();
+		}
+		String actualContent = content;
+		if (actualContent == null) {
+			actualContent = getContentMessage();
+		}
 		ClassicContextualHelpProvider c = new ClassicContextualHelpProvider();
-		c.setHelpContent(content);
-		c.setTitleContent(title);
+		c.setHelpContent(actualContent);
+		c.setTitleContent(actualTitle);
 		c.setNoScriptHref(noScriptHref);
 		return c;
 	}
@@ -189,7 +271,7 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 * 
 	 * @return The help title message.
 	 */
-	public abstract String getTitle();
+	public abstract String getTitleMessage();
 
 	/**
 	 * Abstract method for getting the contextual help content string from a
@@ -199,7 +281,7 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 * 
 	 * @return The help content message.
 	 */
-	public abstract String getContent();
+	public abstract String getContentMessage();
 
 	/**
 	 * Abstract method for logging a tag error. Different action for portal and
@@ -212,4 +294,20 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 */
 	public abstract void logError(Object obj, String msg);
 
+	/**
+	 * Normalize blank string values to null - so the return is either a
+	 * non-blank string, or null.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private String normalize(String value) {
+		if (value != null) {
+			value = value.trim();
+			if (value.equals("")) {
+				value = null;
+			}
+		}
+		return value;
+	}
 }

@@ -106,23 +106,25 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	}
 
 	/**
-	 * Set the default value from the <code>defaultValue</code> attribute.
+	 * Set the default value from the <code>defaultValue</code> attribute,
+	 * normalizing blank to null.
 	 * 
 	 * @param defaultValue
 	 *            Value of the <code>defaultValue</code> attribute.
 	 */
 	public void setDefaultValue(String defaultValue) {
-		this.defaultValue = defaultValue;
+		this.defaultValue = normalize(defaultValue);
 	}
 
 	/**
-	 * Set the key from the <code>key</code> attribute.
+	 * Set the key from the <code>key</code> attribute, normalizing blank to
+	 * null.
 	 * 
 	 * @param key
 	 *            Value of the <code>key</code> attribute.
 	 */
 	public void setKey(String key) {
-		this.key = key;
+		this.key = normalize(key);
 	}
 
 	/**
@@ -135,13 +137,14 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	}
 
 	/**
-	 * Set the escape-HTML switch from the <code>escape</code> attribute.
+	 * Set the escape-HTML switch from the <code>escape</code> attribute,
+	 * normalizing blank to null.
 	 * 
 	 * @param value
 	 *            Value of the <code>escape</code> attribute.
 	 */
 	public void setEscape(String value) {
-		this.escape = value;
+		this.escape = normalize(value);
 		this.escapeEnabled = false;
 		if (value != null) {
 			value = value.trim();
@@ -214,6 +217,10 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	 * Clear all buffered parameters.
 	 */
 	protected void clearParams() {
+		key = null;
+		defaultValue = null;
+		escape = null;
+		escapeEnabled = false;
 		if (params != null) {
 			params.clear();
 		}
@@ -248,6 +255,11 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	 * @throws JspException
 	 */
 	public int doEndTag() throws JspException {
+		if (key == null) {
+			String msg = "MessageBaseTag error: key is a required attribute.";
+			logError(this, msg);
+			throw new JspException(msg);
+		}
 		if (defaultValue == null) {
 			setDefaultValue(key);
 		}
@@ -284,5 +296,22 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	 *            The error message.
 	 */
 	public abstract void logError(Object obj, String msg);
+
+	/**
+	 * Normalize blank string values to null - so the return is either a
+	 * non-blank string, or null.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	protected String normalize(String value) {
+		if (value != null) {
+			value = value.trim();
+			if (value.equals("")) {
+				value = null;
+			}
+		}
+		return value;
+	}
 
 }

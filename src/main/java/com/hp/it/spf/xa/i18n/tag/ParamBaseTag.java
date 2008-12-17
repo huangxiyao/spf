@@ -37,6 +37,9 @@ public abstract class ParamBaseTag extends TagSupport {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Stores the value of the <code>value</code> attribute.
+	 */
 	protected String value;
 
 	/**
