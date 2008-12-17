@@ -8,8 +8,8 @@ import com.hp.it.spf.xa.help.portal.GlobalHelpProvider;
 
 /**
  * <p>
- * A concrete global help provider, which produces a default-style global help
- * popup window.
+ * A concrete global help provider, which produces the "classic"-style global
+ * help popup window.
  * </p>
  * <p>
  * This is the style of global-help popup which is rendered by the portal
@@ -25,33 +25,34 @@ import com.hp.it.spf.xa.help.portal.GlobalHelpProvider;
  * produce this default-style global-help popup.
  * </p>
  * <p>
- * If you are not happy with the default global-help popup style, you can
- * implement your own. Just extend the abstract base class like this one does.
- * You can even implement a tag for it, similar to the above.
+ * If you are not happy with the "classic" global-help popup style, you can
+ * implement your own. Just extend the abstract base class, GlobalHelpProvider,
+ * like this one does. You can even implement a tag for it, similar to the
+ * above.
  * </p>
  * <p>
  * TODO: Need to finish implementing this class. The logic for the
- * implementation should largely come from the GlobalHelpBaseTag class in the
- * Service Portal (OS) code.
+ * implementation should largely come from the GlobalHelpBaseTag.todo file
+ * (taken from the GlobalHelpBaseTag.java file in the Service Portal (OS) code).
  * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  */
-public class DefaultGlobalHelpProvider extends GlobalHelpProvider {
+public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 
 	/**
 	 * Empty constructor; use the setters to provide the attributes.
 	 */
-	public DefaultGlobalHelpProvider() {
+	public ClassicGlobalHelpProvider() {
 
 	}
 
 	/**
 	 * <p>
-	 * Returns the HTML string for the global help, including the link content
-	 * surrounded by a hyperlink which, if clicked, will reveal the global help
-	 * secondary page in an appropriately-formed popup window.
+	 * Returns the HTML string for the "classic"-style global help, including
+	 * the link content surrounded by a hyperlink which, if clicked, will reveal
+	 * the global help secondary page in an appropriately-formed popup window.
 	 * </p>
 	 * <p>
 	 * The boolean parameter controls whether or not to escape any HTML special
