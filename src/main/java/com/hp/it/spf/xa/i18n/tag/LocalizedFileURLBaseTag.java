@@ -6,7 +6,7 @@ package com.hp.it.spf.xa.i18n.tag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  * <p>
@@ -108,7 +108,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  */
-public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
+public abstract class LocalizedFileURLBaseTag extends TagSupport {
 
 	/**
 	 * serialVersionUID long
@@ -139,7 +139,7 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 	 * @throws JspException
 	 * @return integer
 	 */
-	public int doStartTag() throws JspException {
+	public int doEndTag() throws JspException {
 		if (file == null && fileKey == null) {
 			String msg = "LocalizedFileURLBaseTag error: either the file or fileKey attributes are required.";
 			logError(this, msg);
@@ -158,7 +158,7 @@ public abstract class LocalizedFileURLBaseTag extends BodyTagSupport {
 			JspException jspE = new JspException(e);
 			throw jspE;
 		}
-		return EVAL_BODY_INCLUDE;
+		return super.doEndTag();
 	}
 
 	/**
