@@ -42,10 +42,45 @@ import com.hp.it.spf.xa.help.portal.GlobalHelpProvider;
 public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 
 	/**
+	 * "Classic" global help has an optional page fragment - this is an anchor
+	 * identifier within the global help page that you want the global help URL
+	 * to point to.
+	 */
+	private String fragment = "";
+
+	/**
 	 * Empty constructor; use the setters to provide the attributes.
 	 */
 	public ClassicGlobalHelpProvider() {
 
+	}
+
+	/**
+	 * Setter for the fragment string, which is an anchor name inside the global
+	 * help HTML content to which you want the global help window to auto-scroll
+	 * when the global help link is clicked. Having a fragment in your global
+	 * help is optional. For example, if you set the fragment to
+	 * <code>foo</code>, the global help hyperlink returned by the getHTML()
+	 * method (see) will, when clicked, open a global-help window that
+	 * auto-scrolls to the <code>&lt;a name="foo"&gt;</code> part of the
+	 * document.
+	 * 
+	 * @param pFragment
+	 *            The anchor name (the "#" symbol at the beginning is not
+	 *            needed).
+	 */
+	public void setFragment(String pFragment) {
+		if (pFragment == null) {
+			pFragment = "";
+		}
+		pFragment = pFragment.trim();
+		while (pFragment.startsWith("#")) {
+			if (pFragment.length() > 1) 
+				pFragment = pFragment.substring(1);
+			else
+				pFragment = "";
+		}
+		this.fragment = pFragment;
 	}
 
 	/**
