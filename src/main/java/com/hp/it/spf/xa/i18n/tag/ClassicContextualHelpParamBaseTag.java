@@ -231,7 +231,8 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 * populated with the parameters from the current tag. This throws a
 	 * JspException if the required parameters for that provider (ie the
 	 * <code>titleKey</code> and <code>contentKey</code> attributes) were
-	 * not specified in the tag.
+	 * not specified in the tag. This method leaves the link content
+	 * unpopulated; the surrounding tag will populate that.
 	 * 
 	 * @return ContextualHelpProvider
 	 * @throws JspException

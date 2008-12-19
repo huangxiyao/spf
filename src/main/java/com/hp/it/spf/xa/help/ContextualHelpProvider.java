@@ -50,6 +50,7 @@ public abstract class ContextualHelpProvider extends HelpProvider {
 		if (pHelpContent == null) {
 			pHelpContent = "";
 		}
+		pHelpContent = pHelpContent.trim();
 		this.helpContent = pHelpContent;
 	}
 }

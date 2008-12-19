@@ -89,6 +89,7 @@ public class ClassicContextualHelpProvider extends ContextualHelpProvider {
 		if (pTitleContent == null) {
 			pTitleContent = "";
 		}
+		pTitleContent = pTitleContent.trim();
 		this.titleContent = pTitleContent;
 	}
 
@@ -106,6 +107,7 @@ public class ClassicContextualHelpProvider extends ContextualHelpProvider {
 		if (pNoScriptHref == null) {
 			pNoScriptHref = "";
 		}
+		pNoScriptHref = pNoScriptHref.trim();
 		this.noScriptHref = pNoScriptHref;
 	}
 
