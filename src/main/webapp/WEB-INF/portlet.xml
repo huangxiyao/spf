@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<portlet-app
+	xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
+	                    http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
+	version="1.0">
+
+	<portlet>
+		<description>
+			Interpolates and displays an HTML file (localized).
+		</description>
+		<portlet-name>HTMLViewer</portlet-name>
+		<display-name>HTMLViewer</display-name>
+		<portlet-class>
+			com.hp.frameworks.wpa.portlet.WPADispatcherPortlet
+		</portlet-class>
+
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/html_viewer.xml</value>
+		</init-param>
+
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>config</portlet-mode>
+		</supports>
+
+		<supported-locale>en</supported-locale>
+
+		<portlet-info>
+			<title>Content</title>
+			<short-title>Content</short-title>
+			<keywords>content</keywords>
+		</portlet-info>
+
+		<portlet-preferences>
+			<preference>
+				<name>viewFilename</name>
+			</preference>
+			<preference>
+				<name>launchButtonless</name>
+			</preference>
+			<preference>
+				<name>linkClass</name>
+				<value>fs-htmlviewer-link-color</value>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+	<custom-portlet-mode>
+		<portlet-mode>config</portlet-mode>
+	</custom-portlet-mode>
+
+	<!-- Define the user attributes the portal should provide to 
+		the portlet in the P3P USER_INFO map. If you use the 
+		generic user-property token in your view file, be sure
+		to add the corresponding user attribute here. -->
+	<user-attribute>
+		<description>User's email address</description>
+		<name>user.business-info.online.email</name>
+	</user-attribute>
+	<user-attribute>
+		<description>User's first name</description>
+		<name>user.name.given</name>
+	</user-attribute>
+	<user-attribute>
+		<description>User's last name</description>
+		<name>user.name.family</name>
+	</user-attribute>
+</portlet-app>
