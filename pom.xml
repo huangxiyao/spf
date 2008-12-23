@@ -3,9 +3,9 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.wsrp</groupId>
-	<artifactId>soap-extractor</artifactId>
+	<artifactId>wsrp-extractor</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<name>soap-extractor</name>
+	<name>wsrp-extractor</name>
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -37,9 +37,9 @@
 	</dependencies>
 	<inceptionYear>December 2008</inceptionYear>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/soap-extractor</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/soap-extractor</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/soap-extractor</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/wsrp-extractor</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/wsrp-extractor</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/wsrp-extractor</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
