@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PortletWindowPreferenceRegistry version="1.0">
+<PortletWindowPreference name="portletdriver.WSRPConsumerAdminPortlet" portletName="portletdriver.WSRPConsumerAdminPortlet" userName="default">
+<Properties/>
+</PortletWindowPreference>
+<PortletWindowPreference name="portletdriver.WSRPProducerAdminPortlet" portletName="portletdriver.WSRPProducerAdminPortlet" userName="default">
+<Properties>
+<Collection name="prefProperties">
+<String name="producerContext" value="|producer"/>
+<String name="producerPort" value="|8080"/>
+<String name="producerHost" value="|localhost"/>
+<String name="isLocal" value="|true"/>
+</Collection>
+<Collection name="prefReadOnly">
+<String name="producerContext" value="false"/>
+<String name="producerPort" value="false"/>
+<String name="producerHost" value="false"/>
+<String name="isLocal" value="false"/>
+</Collection>
+</Properties>
+</PortletWindowPreference>
+<PortletWindowPreference name="portletdriver.WSRPProducerAdminPortlet" portletName="portletdriver.WSRPProducerAdminPortlet" userName="NONE">
+<Properties>
+<Collection name="prefProperties">
+<String name="producerPort" value="7002"/>
+<String name="producerContext" value="portletdriver"/>
+<String name="producerHost" value="localhost"/>
+<String name="isLocal" value="true"/>
+</Collection>
+</Properties>
+</PortletWindowPreference>
+<PortletWindowPreference name="portletdriver.WSRPConsumerAdminPortlet" portletName="portletdriver.WSRPConsumerAdminPortlet" userName="NONE">
+<Properties>
+<Collection name="prefProperties">
+<String name="consumerHost" value="localhost"/>
+<String name="isLocal" value="true"/>
+</Collection>
+</Properties>
+</PortletWindowPreference>
+<PortletWindowPreference name="jsr168portlets.Hello World" portletName="jsr168portlets.Hello World" userName="default">
+<Properties>
+<Collection name="prefProperties">
+<String name="ViewFileName" value=""/>
+<String name="portlet.image" value=""/>
+<String name="LaunchButtonLess" value=""/>
+</Collection>
+<Collection name="prefReadOnly">
+<String name="ViewFileName" value="false"/>
+<String name="portlet.image" value="false"/>
+<String name="LaunchButtonLess" value="false"/>
+</Collection>
+</Properties>
+</PortletWindowPreference>
+<PortletWindowPreference name="jsr168portlets.Test World" portletName="jsr168portlets.Test World" userName="default">
+<Properties>
+<Collection name="prefProperties">
+<String name="value1" value=""/>
+</Collection>
+<Collection name="prefReadOnly">
+<String name="value1" value="false"/>
+</Collection>
+</Properties>
+</PortletWindowPreference>
+<PortletWindowPreference name="WelcomePortlet.WelcomePortlet" portletName="WelcomePortlet.WelcomePortlet" userName="default">
+<Properties/>
+</PortletWindowPreference>
+<PortletWindowPreference name="EventsLab.TestSimpleEventSenderPortlet" portletName="EventsLab.TestSimpleEventSenderPortlet" userName="default">
+<Properties/>
+</PortletWindowPreference>
+<PortletWindowPreference name="EventsLab.TestSimpleEventReceiverPortlet" portletName="EventsLab.TestSimpleEventReceiverPortlet" userName="default">
+<Properties/>
+</PortletWindowPreference>
+<PortletWindowPreference name="jsr168portlets.Test World" portletName="jsr168portlets.Test World" userName="ZXBpOnVzZXIuc3RhbmRhcmQ7MjJlOWI1M2NkNzcwNDk5ZGIxOTM1NjEwMjQ4MzZmZjA=">
+<Properties>
+<Collection name="prefProperties">
+<String name="value1" value="shanghai"/>
+</Collection>
+</Properties>
+</PortletWindowPreference>
+<PortletWindowPreference name="test2" portletName="jsr168portlets.Test World" userName="default">
+<Properties>
+<Collection name="prefProperties">
+<String name="value1" value=""/>
+</Collection>
+<Collection name="prefReadOnly">
+<String name="value1" value="false"/>
+</Collection>
+</Properties>
+</PortletWindowPreference>
+<PortletWindowPreference name="jsr168portlets.Test World" portletName="jsr168portlets.Test World" userName="NONE">
+<Properties>
+<Collection name="prefProperties">
+<String name="value1" value="hangzhou"/>
+</Collection>
+</Properties>
+</PortletWindowPreference>
+<PortletWindowPreference name="we__remote__56437" portletName="jsr168portlets.Test World" userName="default">
+<Properties>
+<Collection name="prefProperties">
+<String name="portletHandle" value="jsr168portlets.Test World"/>
+</Collection>
+</Properties>
+</PortletWindowPreference>
+<PortletWindowPreference name="test1" portletName="jsr168portlets.Test World" userName="default">
+<Properties>
+<Collection name="prefProperties">
+<String name="value1" value=""/>
+</Collection>
+<Collection name="prefReadOnly">
+<String name="value1" value="false"/>
+</Collection>
+</Properties>
+</PortletWindowPreference>
+</PortletWindowPreferenceRegistry>

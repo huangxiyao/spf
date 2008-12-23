@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PortletAppRegistry version="1.0">
+<PortletApp name="portletdriver.WSRPProducerAdminPortlet" portletName="portletdriver.WSRPProducerAdminPortlet">
+<Properties>
+<String name="title" value="WSRP Producer Admin Portlet"/>
+<String name="archiveName" value="portletdriver.war"/>
+<String name="archiveType" value="war"/>
+<Collection name="supportedContentTypes">
+<String value="text/html"/>
+</Collection>
+<Collection name="supportsMap">
+<Collection name="text/html">
+<String value="VIEW"/>
+<String value="EDIT"/>
+<String value="HELP"/>
+</Collection>
+</Collection>
+</Properties>
+</PortletApp>
+<PortletApp name="WelcomePortlet.WelcomePortlet" portletName="WelcomePortlet.WelcomePortlet">
+<Properties>
+<String name="title" value="Hello Portlet World"/>
+<String name="archiveName" value="WelcomePortlet.war"/>
+<String name="description" value="WelcomePortlet"/>
+<String name="shortTitle" value="Hello Portlet World"/>
+<String name="archiveType" value="war"/>
+<Collection name="supportedContentTypes">
+<String value="text/html"/>
+</Collection>
+<Collection name="displayNameMap">
+<String name="en-US" value="WelcomePortlet"/>
+</Collection>
+<Collection name="roleMap">
+<String name="role2" value="EMPLOYEE_ROLE"/>
+</Collection>
+<Collection name="descriptionMap">
+<String name="en-US" value="WelcomePortlet"/>
+</Collection>
+<Collection name="supportsMap">
+<Collection name="text/html">
+<String value="VIEW"/>
+</Collection>
+</Collection>
+</Properties>
+</PortletApp>
+</PortletAppRegistry>
