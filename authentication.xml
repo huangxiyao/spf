@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<!--
+*
+* Copyright 1999-2004 Vignette Corporation.
+* All rights reserved.
+*
+* THIS PROGRAM IS CONFIDENTIAL AND AN UNPUBLISHED WORK AND TRADE
+* SECRET OF THE COPYRIGHT HOLDER, AND DISTRIBUTED ONLY UNDER RESTRICTION.
+*
+* EXCEPT AS EXPLICITLY STATED IN A WRITTEN AGREEMENT BETWEEN THE PARTIES,
+* THE SOFTWARE IS PROVIDED AS-IS, WITHOUT WARRANTIES OF ANY KIND, EXPRESS
+* OR IMPLIED, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT,
+* PERFORMANCE, AND QUALITY.
+*
+-->
+
+<!-- 
+* This file contains sample configurations for each of the authenticators
+* shipped with Vignette Portal. If you are using Windows, SQL, or SSO authentication,
+* you can cut and paste the appropriate realm from this file into
+* authentication.xml. If you are using JNDI authentication, Vignette Portal uses the 
+* appropriate JNDI authentication file (for example, 
+* Vignette Portal/config/examples/jndi/jndi_authentication_netscape.xml) instead of 
+* authentication.xml. Refer to Vignette Portal Configuration Guide for more details 
+* about configuring JNDI authentication.
+*
+* Comments in authentication.xml provide information about each of the
+* elements and attributes in authentication files.
+-->
+
+
+<!DOCTYPE AUTHENTICATION 
+	SYSTEM "dtd/authentication.dtd">
+
+<AUTHENTICATION>
+		<!-- A Realm for a Single Sign-On Product or Basic Authentication.
+		     Username will be retrieved by calling 
+		     MySSOUsernameRetriever.getSSOUsername(HttpServletRequest).
+		     Override com.yourcompany.authentication.MySSOUsernameRetriever
+		     with the class name of your SSOUsernameRetriever interface implementation.
+		-->
+		<REALM
+			id="hpp_realm1"
+			title="Single Sign On"
+			description="Single Sign On"
+			default="true"
+			logon-case-sensitive="true"
+		>
+			<SSO-USERNAME-CLASS>com.hp.it.spf.sso.portal.SharedPortalSSOAuthenticator</SSO-USERNAME-CLASS>
+		</REALM>
+</AUTHENTICATION>
