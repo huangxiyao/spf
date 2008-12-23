@@ -105,11 +105,11 @@
 	  
 	  <filter>
 		    <filter-name>PortalURLRewriterFilter</filter-name>
-		    <filter-class>com.hp.it.spf.common.portalurl.filter.PortalURLRewriterFilter</filter-class>
+		    <filter-class>com.hp.it.spf.xa.portalurl.portal.filter.PortalURLRewriterFilter</filter-class>
 	  </filter>
 	  <filter>
 		    <filter-name>RequestBindingFilter</filter-name>
-		    <filter-class>com.hp.it.spf.portal.wsrp.injection.context.RequestBindingFilter</filter-class>
+		    <filter-class>com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter</filter-class>
 	  </filter>
 	  <!-- SPP FILTER DEFINITIONS - END -->
     <!-- BEGIN HPD Filters  -->
