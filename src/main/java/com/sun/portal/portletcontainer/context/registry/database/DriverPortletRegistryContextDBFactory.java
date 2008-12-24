@@ -6,7 +6,7 @@ import com.sun.portal.portletcontainer.context.registry.PortletRegistryException
 
 public class DriverPortletRegistryContextDBFactory implements PortletRegistryContextFactory {
 	
-	private static String implementation = "com.sun.portal.portletcontainer.admin.PortletRegistryContextDBImpl";
+	private static String implementation = "com.sun.portal.portletcontainer.admin.database.PortletRegistryContextDBImpl";
 	
 	/**
      * Returns a new instance of the Portlet Registry
