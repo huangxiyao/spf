@@ -12,12 +12,12 @@ import javax.persistence.EntityTransaction;
 
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletDeplymentDescriptor;
 
-public class PortletDeplymentDescriptorDao {
-	private static Logger LOG = Logger.getLogger(PortletDeplymentDescriptorDao.class.toString());
+public class PortletDeploymentDescriptorDao {
+	private static Logger LOG = Logger.getLogger(PortletDeploymentDescriptorDao.class.toString());
 	
 	private EntityManagerFactory emFactory;
 	
-	public PortletDeplymentDescriptorDao() {
+	public PortletDeploymentDescriptorDao() {
 		emFactory = EntityManagerFactoryManager.getInstance().getFactory();;
 	}
 	
