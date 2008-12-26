@@ -13,6 +13,7 @@ import javax.persistence.Query;
 
 import com.sun.portal.portletcontainer.admin.registry.database.dao.EntityManagerFactoryManager;
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletAppRegistryDao;
+import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletDeploymentDescriptorDao;
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletWindowRegistryDao;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyCollection;
@@ -50,6 +51,7 @@ public class DatabaseInit {
 	public static void insertDataIntoTables() {
 		initPortletWindowTables();	
 		initPortletAppTables();
+		initPortletDescriptorTables();
 	}
 	
 	public static void clearData() {
@@ -330,6 +332,16 @@ public class DatabaseInit {
 		} finally {			
 			em.close();
 		}			
+	}
+
+	private static void initPortletDescriptorTables() {
+		PortletDeploymentDescriptorDao dao = new PortletDeploymentDescriptorDao();
+		dao.SaveOrUpdate("DisplayProfileRemotePortlet_portlet.xml",
+				DatabaseInit.class.getClassLoader().getResourceAsStream(
+						"DisplayProfileRemotePortlet_portlet.xml"));
+		dao.SaveOrUpdate("portletdriver_portlet.xml", DatabaseInit.class
+				.getClassLoader().getResourceAsStream(
+						"portletdriver_portlet.xml"));
 	}
 	
 	public static void test(){
