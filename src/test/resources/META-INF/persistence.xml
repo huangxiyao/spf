@@ -14,8 +14,8 @@
 
     <properties>
 
-         <property name="eclipselink.jdbc.user" value="liuye"/>
-         <property name="eclipselink.jdbc.password" value="liuye"/>
+         <property name="eclipselink.jdbc.user" value="openportal"/>
+         <property name="eclipselink.jdbc.password" value="wsrp"/>
          <property name="eclipselink.jdbc.url" value="jdbc:oracle:thin:@kding:1521:openportal"/>
          <property name="eclipselink.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>         
 <!--
