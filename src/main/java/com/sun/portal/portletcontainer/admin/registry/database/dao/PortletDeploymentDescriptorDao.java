@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletDeplymentDescriptor;
+import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletDeploymentDescriptor;
 
 public class PortletDeploymentDescriptorDao {
 	private static Logger LOG = Logger.getLogger(PortletDeploymentDescriptorDao.class.toString());
@@ -26,7 +26,7 @@ public class PortletDeploymentDescriptorDao {
 	    EntityTransaction tran = em.getTransaction();
 	    
 	    try {	    	
-	    	PortletDeplymentDescriptor descriptor = em.find(PortletDeplymentDescriptor.class, descriptorName);
+	    	PortletDeploymentDescriptor descriptor = em.find(PortletDeploymentDescriptor.class, descriptorName);
 	    	if (descriptor != null) {
 		    	ByteArrayInputStream bais = new ByteArrayInputStream(descriptor.getContent());
 		    	tran.begin();
@@ -48,7 +48,7 @@ public class PortletDeploymentDescriptorDao {
 		EntityManager em = emFactory.createEntityManager();
 		EntityTransaction tran = em.getTransaction();
 		try {
-	    	PortletDeplymentDescriptor descriptor = new PortletDeplymentDescriptor();
+	    	PortletDeploymentDescriptor descriptor = new PortletDeploymentDescriptor();
 	    	
 	    	// read inputstream into byte array
 	    	int len;

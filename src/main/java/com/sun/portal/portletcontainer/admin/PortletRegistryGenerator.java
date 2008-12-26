@@ -20,7 +20,7 @@ import com.sun.portal.container.PortletID;
 import com.sun.portal.container.PortletLang;
 import com.sun.portal.portletcontainer.admin.registry.PortletRegistryTags;
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletAppRegistryDao;
-import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletDeplymentDescriptorDao;
+import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletDeploymentDescriptorDao;
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletWindowPreferenceRegistryDao;
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletWindowRegistryDao;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp;
@@ -506,7 +506,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
     public Boolean unregister(String configFileLocation, String warFileLocation, String warName) throws Exception {
         File warFile = new File(warFileLocation, warName+WAR_SUFFIX);        
         String ddName = warName + DD_SUFFIX;
-        PortletDeplymentDescriptorDao dao = new PortletDeplymentDescriptorDao();
+        PortletDeploymentDescriptorDao dao = new PortletDeploymentDescriptorDao();
         InputStream in = null;
         try {
         	in = dao.loadBeforeRemove(ddName);
@@ -611,7 +611,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             String portletAppName) throws Exception {
     	String descriptorName = portletAppName + DD_SUFFIX;
         try{            
-        	PortletDeplymentDescriptorDao dao = new PortletDeplymentDescriptorDao();
+        	PortletDeploymentDescriptorDao dao = new PortletDeploymentDescriptorDao();
         	dao.SaveOrUpdate(descriptorName, portletXMLStream);
         }catch(Exception ioe){
             throw new PortletRegistryException("errorStreamRead",ioe);
