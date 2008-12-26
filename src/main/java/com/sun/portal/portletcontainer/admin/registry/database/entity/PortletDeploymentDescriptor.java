@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="PORTLET_DEPLOYMENT_DESCRIPTOR")
-public class PortletDeplymentDescriptor implements Serializable {
+public class PortletDeploymentDescriptor implements Serializable {
 	private static final long serialVersionUID = 4822447175343994374L;
 	
 	private String descriptorName;
