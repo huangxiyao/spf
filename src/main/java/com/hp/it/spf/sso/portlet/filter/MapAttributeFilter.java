@@ -95,8 +95,6 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
             forVAP(request);
         } else {
             forOpenPortal(request);
-
-            modifyLocale(request);
         }
     }
 
@@ -145,38 +143,6 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
                 } catch (IllegalArgumentException e) {
                 } catch (IllegalAccessException e) {
                 } catch (InvocationTargetException e) {
-                }
-            }
-        }
-    }
-
-    /**
-     * OpenPortal incorrectly create the locale passed from Consumer by SOAP
-     */
-    private void modifyLocale(PortletRequest request) {
-        Locale currLocale = request.getLocale();
-        if (currLocale != null) {
-            String[] locale = currLocale.toString().split("[-_]");
-            Locale excatLocale = Locale.getDefault();
-            if (locale.length > 1) {
-                excatLocale = new Locale(locale[0], locale[1]);
-            } else {
-                excatLocale = new Locale(locale[0]);
-            }
-            HttpServletRequest rq = (HttpServletRequest)request
-                    .getAttribute("javax.portlet.portletc.httpServletRequest");
-            Object obj = rq.getAttribute("portlet_container_request");
-            if (obj != null) {
-                try {
-                    Field field = (Field)obj.getClass().getDeclaredField(
-                            "request");
-                    field.setAccessible(true);
-                    Method method = field.getType().getMethod("setLocale",
-                            new Class[] { Locale.class });
-                    method.invoke(field.get(obj), new Object[] { excatLocale });
-                    field.setAccessible(false);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
         }
