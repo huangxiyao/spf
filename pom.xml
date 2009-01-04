@@ -90,7 +90,7 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>eclipse</groupId>
+			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>eclipselink</artifactId>
 			<version>1.0.1</version>
 			<scope>test</scope>
