@@ -29,13 +29,13 @@ public class SharedPortalSSOAuthenticator implements SSOUsernameRetriever {
      * @see com.epicentric.authentication.SSOUsernameRetriever#getSSOUsername(javax.servlet.http.HttpServletRequest)
      */
     public String getSSOUsername(HttpServletRequest request) {
-	String ssoUsername = null;
-	HttpSession session = request.getSession(true);
-	try {
-	    ssoUsername = (String) session.getAttribute(AuthenticationConsts.SSO_USERNAME);
-	} catch (Exception ex) {
-	    LOG.debug("Can't find SSO username which must be already defined in http session, maybe this is a guest user");
-	}
+		String ssoUsername = null;
+		HttpSession session = request.getSession(true);
+		try {
+		    ssoUsername = (String) session.getAttribute(AuthenticationConsts.SSO_USERNAME);
+		} catch (Exception ex) {
+		    LOG.debug("Can't find SSO username which must be already defined in http session, maybe this is a guest user");
+		}
 		return ssoUsername;
     }
 }
