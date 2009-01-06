@@ -82,6 +82,7 @@
 			</url>
 		</site>
 	</distributionManagement>
+	<inceptionYear>January 2009</inceptionYear>
 	<build>
 		<plugins>
 			<plugin>
