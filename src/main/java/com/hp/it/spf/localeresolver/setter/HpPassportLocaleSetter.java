@@ -1,23 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: HpPassportLocaleSetter.java
- * PACKAGE : com.hp.it.spf.localeresolver.setter
- * $Id: HpPassportLocaleSetter.java,v 1.4 2007/05/18 07:31:53 marcd Exp $
- * $Log: HpPassportLocaleSetter.java,v $
- * Revision 1.4  2007/05/18 07:31:53  marcd
- * interface
- *
- * Revision 1.3  2007/05/17 07:21:01  marcd
- * add javadoc
- *
- * Revision 1.2  2007/04/17 01:41:32  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.setter;
 
 import java.util.HashSet;

@@ -1,29 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: HppHeaderLocaleProvider.java
- * PACKAGE : com.hp.it.spf.localeresolver.provider
- * $Id: HppHeaderLocaleProvider.java,v 1.9 2007/06/20 07:55:18 marcd Exp $
- * $Log: HppHeaderLocaleProvider.java,v $
- * Revision 1.9  2007/06/20 07:55:18  marcd
- * stonger restrictions on login condition
- *
- * Revision 1.8  2007/05/18 07:29:33  marcd
- * get the china coutry code right
- *
- * Revision 1.7  2007/05/17 07:37:32  marcd
- * add javadoc
- *
- * Revision 1.6  2007/04/17 01:54:35  marcd
- * add constant
- *
- * Revision 1.5  2007/04/17 01:41:34  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.provider;
 
 import javax.servlet.http.Cookie;

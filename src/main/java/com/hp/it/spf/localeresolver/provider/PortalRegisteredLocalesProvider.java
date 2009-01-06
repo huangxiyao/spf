@@ -1,23 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: VignettePortalRegisteredLocalesProvider.java
- * PACKAGE : com.hp.it.spf.localeresolver.provider
- * $Id: PortalRegisteredLocalesProvider.java,v 1.2 2007/05/17 07:37:32 marcd Exp $
- * $Log: PortalRegisteredLocalesProvider.java,v $
- * Revision 1.2  2007/05/17 07:37:32  marcd
- * add javadoc
- *
- * Revision 1.1  2007/04/20 07:38:29  marcd
- * rename
- *
- * Revision 1.4  2007/04/17 01:41:34  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.provider;
 
 import java.util.Collection;

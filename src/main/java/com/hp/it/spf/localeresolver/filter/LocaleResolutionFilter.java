@@ -1,26 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * Filter for setting locale
- * 
- * FILENAME: LocaleResolutionFilter.java
- * PACKAGE : com.hp.it.spf.localeresolver.filter
- * $Id: LocaleResolutionFilter.java,v 1.9 2007/07/30 02:45:45 marcd Exp $
- * $Log: LocaleResolutionFilter.java,v $
- * Revision 1.9  2007/07/30 02:45:45  marcd
- * remove the resolution test
- *
- * Revision 1.8  2007/05/18 07:32:12  marcd
- * Interface
- *
- * Revision 1.7  2007/05/17 07:25:41  marcd
- * add javadoc
- *
- * Revision 1.6  2007/04/17 01:41:36  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.filter;
 
 import java.io.IOException;

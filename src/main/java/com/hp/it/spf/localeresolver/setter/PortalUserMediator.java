@@ -1,26 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: VignetteUserMediator.java
- * PACKAGE : com.hp.it.spf.localeresolver.setter
- * $Id: PortalUserMediator.java,v 1.3 2007/05/18 07:31:53 marcd Exp $
- * $Log: PortalUserMediator.java,v $
- * Revision 1.3  2007/05/18 07:31:53  marcd
- * interface
- *
- * Revision 1.2  2007/05/17 07:12:21  marcd
- * add javadoc
- *
- * Revision 1.1  2007/04/20 07:38:26  marcd
- * rename
- *
- * Revision 1.2  2007/04/17 01:41:32  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.setter;
 
 import javax.servlet.http.HttpServletRequest;

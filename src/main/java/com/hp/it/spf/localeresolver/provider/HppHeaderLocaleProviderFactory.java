@@ -1,20 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: HppHeaderLocaleProviderFactory.java
- * PACKAGE : com.hp.it.spf.localeresolver.provider
- * $Id: HppHeaderLocaleProviderFactory.java,v 1.3 2007/05/17 07:30:08 marcd Exp $
- * $Log: HppHeaderLocaleProviderFactory.java,v $
- * Revision 1.3  2007/05/17 07:30:08  marcd
- * add javadoc
- *
- * Revision 1.2  2007/04/17 01:41:34  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.provider;
 
 import javax.servlet.http.HttpServletRequest;
