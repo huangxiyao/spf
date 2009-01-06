@@ -1,17 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: LocaleResolutionFilterTest.java
- * PACKAGE : com.hp.it.spf.localeresolver.filter
- * $Id: LocaleResolutionFilterTest.java,v 1.2 2007/04/17 01:52:08 marcd Exp $
- * $Log: LocaleResolutionFilterTest.java,v $
- * Revision 1.2  2007/04/17 01:52:08  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.filter;
 
 import javax.servlet.ServletException;

@@ -1,29 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: VignetteUserLocaleSetterTest.java
- * PACKAGE : com.hp.it.spf.localeresolver.filter
- * $Id: PortalUserLocaleSetterTest.java,v 1.4 2007/06/28 07:14:40 marcd Exp $
- * $Log: PortalUserLocaleSetterTest.java,v $
- * Revision 1.4  2007/06/28 07:14:40  marcd
- * add restrictions for multiple requests
- *
- * Revision 1.3  2007/06/20 05:59:39  marcd
- * open filter for setting action on guest users
- *
- * Revision 1.2  2007/05/29 08:23:51  marcd
- * modified mock location
- *
- * Revision 1.1  2007/04/20 07:39:26  marcd
- * rename to follow the main directory and finish up a bit on the unit testing
- *
- * Revision 1.3  2007/04/17 01:52:04  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.setter;
 
 import java.util.Locale;

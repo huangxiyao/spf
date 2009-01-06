@@ -1,20 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: MockLocaleSetter.java
- * PACKAGE : com.hp.it.spf.localeresolver.filter
- * $Id: MockLocaleSetter.java,v 1.3 2007/05/29 08:23:49 marcd Exp $
- * $Log: MockLocaleSetter.java,v $
- * Revision 1.3  2007/05/29 08:23:49  marcd
- * modified mock location
- *
- * Revision 1.2  2007/04/17 01:52:02  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.mock;
 
 import java.util.Locale;

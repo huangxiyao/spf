@@ -1,17 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: SurrogatePassportService.java
- * PACKAGE : com.hp.it.spf.localeresolver.filter
- * $Id: SurrogatePassportService.java,v 1.2 2007/04/17 01:52:02 marcd Exp $
- * $Log: SurrogatePassportService.java,v $
- * Revision 1.2  2007/04/17 01:52:02  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.mock;
 
 import com.hp.globalops.hppcbl.passport.PassportService;

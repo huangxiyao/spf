@@ -1,23 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: HpCookieLocalSetterTest.java
- * PACKAGE : com.hp.it.spf.localeresolver.filter
- * $Id: HpDomainCookieLocalSetterTest.java,v 1.1 2007/09/30 03:09:08 marcd Exp $
- * $Log: HpDomainCookieLocalSetterTest.java,v $
- * Revision 1.1  2007/09/30 03:09:08  marcd
- * add cookie for clarion interop
- *
- * Revision 1.3  2007/09/30 02:35:00  marcd
- * add cookie for clarion interop
- *
- * Revision 1.2  2007/04/17 01:52:04  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.setter;
 
 import java.util.Locale;

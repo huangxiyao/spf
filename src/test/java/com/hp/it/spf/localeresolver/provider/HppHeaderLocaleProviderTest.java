@@ -1,23 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: HppHeaderLocaleProviderTest.java
- * PACKAGE : com.hp.it.spf.localeresolver.filter
- * $Id: HppHeaderLocaleProviderTest.java,v 1.5 2007/06/20 07:55:32 marcd Exp $
- * $Log: HppHeaderLocaleProviderTest.java,v $
- * Revision 1.5  2007/06/20 07:55:32  marcd
- * stonger restrictions on login condition
- *
- * Revision 1.4  2007/04/20 07:39:28  marcd
- * rename to follow the main directory and finish up a bit on the unit testing
- *
- * Revision 1.3  2007/04/17 01:52:06  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.provider;
 
 import java.util.Collection;

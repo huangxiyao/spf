@@ -1,17 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: MockLocaleProviderFactory.java
- * PACKAGE : com.hp.it.spf.localeresolver.filter
- * $Id: MockLocaleProviderFactory.java,v 1.2 2007/04/17 01:52:02 marcd Exp $
- * $Log: MockLocaleProviderFactory.java,v $
- * Revision 1.2  2007/04/17 01:52:02  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.localeresolver.mock;
 
 import javax.servlet.http.HttpServletRequest;
