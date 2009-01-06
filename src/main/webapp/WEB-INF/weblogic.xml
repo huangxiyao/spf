@@ -4,18 +4,18 @@
    "http://www.bea.com/servers/wls700/dtd/weblogic700-web-jar.dtd">
 <!-- $Header: /external/Repo3/SP_FW/open-sign/WebContent/WEB-INF/weblogic.xml,v 1.2 2006/11/16 00:55:01 djorgen Exp $ -->
 <weblogic-web-app>
-   <session-descriptor>
-      <session-param>
-         <param-name>TrackingEnabled</param-name>
-         <param-value>false</param-value>
-      </session-param>
-      <session-param>
-         <param-name>CookiesEnabled</param-name>
-         <param-value>false</param-value>
-      </session-param>
-      <session-param>
-         <param-name>URLRewritingEnabled</param-name>
-         <param-value>false</param-value>
-      </session-param>
-   </session-descriptor>
+	<session-descriptor>
+		<session-param>
+			<param-name>TrackingEnabled</param-name>
+			<param-value>false</param-value>
+		</session-param>
+		<session-param>
+			<param-name>CookiesEnabled</param-name>
+			<param-value>false</param-value>
+		</session-param>
+		<session-param>
+			<param-name>URLRewritingEnabled</param-name>
+			<param-value>false</param-value>
+		</session-param>
+	</session-descriptor>
 </weblogic-web-app>
