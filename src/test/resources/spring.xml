@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	>
+
+<bean id="localeResolver" class="com.hp.fast.web.spring.NegotiatedLanguageLocaleResolver">
+	<constructor-arg ref="language-negotiator"/>
+	<property name="defaultLocale" value="en_US.."/>
+</bean>
+
+<!-- Controllers -->
+	
+	<bean id="html-controller" class="org.springframework.web.servlet.mvc.UrlFilenameViewController">
+		<property name="prefix" value="/pages/"/>
+	</bean>
+
+	<bean id="atom-controller" class="org.springframework.web.servlet.mvc.UrlFilenameViewController">
+		<property name="prefix" value="/syndication/atom/"/>
+	</bean>
+	
+<!-- View resolvers -->
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+
+<!-- Negotiators -->
+
+	<bean id="language-negotiator" class="com.hp.fast.web.http.LanguageNegotiator">
+		<constructor-arg>
+			<list>
+				<value>en_US</value>
+				<value>en</value>
+				<value>de</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="character-set-negotiator" class="com.hp.fast.web.http.CharacterSetNegotiator">
+		<constructor-arg value="UTF-8"/>
+	</bean>
+	
+	<bean id="view-negotiators" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<bean class="com.hp.fast.web.http.MediaTypeNegotiator">
+					<constructor-arg>
+						<list>
+							<value>application/xhtml+xml</value>
+							<value>text/xml</value>
+							<value>text/html</value>
+						</list>
+					</constructor-arg>
+				</bean>
+				<ref local="language-negotiator"/>
+				<ref local="character-set-negotiator"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="atom-negotiators" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<bean class="com.hp.fast.web.http.MediaTypeNegotiator">
+					<constructor-arg index="0">
+						<list>
+							<value>application/atom+xml</value>
+						</list>
+					</constructor-arg>
+				</bean>
+				<ref local="language-negotiator"/>
+				<ref local="character-set-negotiator"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+<!-- Mappings -->
+	
+	<bean id="html-mapper" class="com.hp.fast.web.spring.ContentNegotiatingHandlerMapping">
+		<property name="alwaysUseFullPath" value="true"/>
+		<property name="urlMap">
+			<map>
+				<entry key="/document/?*" value-ref="html-controller"/>
+			</map>
+		</property>
+		<property name="negotiators" ref="view-negotiators"/>
+		<property name="interceptors">
+			<list>
+				<bean class="com.hp.fast.web.spring.NegotiatedContentHandlerInterceptor">
+					<property name="negotiators" ref="view-negotiators"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="atom-mapper" class="com.hp.fast.web.spring.ContentNegotiatingHandlerMapping">
+		<property name="alwaysUseFullPath" value="true"/>
+		<property name="urlMap">
+			<map>
+				<entry key="/document/?*" value-ref="atom-controller"/>
+			</map>
+		</property>
+		<property name="negotiators" ref="atom-negotiators"/>
+		<property name="interceptors">
+			<list>
+				<bean class="com.hp.fast.web.spring.NegotiatedContentHandlerInterceptor">
+					<property name="negotiators" ref="atom-negotiators"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+</beans>

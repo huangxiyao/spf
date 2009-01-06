@@ -1,0 +1,45 @@
+<body>
+	<p>HP.com specific locale negotiation components.<p>
+	
+	<p>{@link com.hp.fast.web.hpweb.LocaleFilter}, a servlet filter, is the primary class of interest to applications. It implements all HP.com requirements
+	regarding user locale resolution. The filter intercepts incoming requests, gathers all locale information available in the request, compares it against
+	application locale availability and selects the best match.</p>
+	
+	<p>Solutions for Spring MVC based applications are provided in the {@link com.hp.fast.web.spring} package.</p>
+	
+	<p>Out-of-the-box the {@link com.hp.fast.web.hpweb.LocaleFilter} addresses all HP.com locale requirements. It is parameterized to enable application-specific
+	HP Passport integration.</p>
+	
+	<p>A web application will typically:</p>
+	<ol>
+		<li>Provide an implementation of {@link com.hp.fast.web.hpweb.LocaleProvider} that returns the locales in which the application is available.</li>
+		
+		<li>If the application is integrated with HP Passport:
+			<ol style="list-style-type:lower-alpha">
+				<li>Provide an implementation of {@link com.hp.fast.web.hpweb.LocaleProvider} that returns the locale specified in the user's HP Passport profile. The way in which an application retrieves this information is specific to the HP Passport integration.</li>
+				
+				<li>Provide an implementation of {@link com.hp.fast.web.hpweb.LocaleProviderFactory} that returns instances of the locale provider defined in the previous step.</li>
+			</ol>
+		</li>
+		
+		<li>Configure the {@link com.hp.fast.web.hpweb.LocaleFilter} in the application's <code>web.xml</code> including initialization parameters specifying the above implementation classes.</li>
+	</ol>
+	
+	<p>The following illustrates the configuration of the {@link com.hp.fast.web.hpweb.LocaleFilter}.</p>
+	
+<code><pre>
+&lt;filter&gt;
+	&lt;filter-name&gt;Locale Filter&lt;/filter-name&gt;
+	&lt;filter-class&gt;com.hp.fast.web.hpweb.LocaleFilter&lt;/filter-class&gt;
+	&lt;init-param&gt;
+		&lt;param-name&gt;targetLocaleProvider&lt;/param-name&gt;
+		&lt;param-value&gt;com.hp.myapplication.MyApplicationLocaleProvider&lt;/param-value&gt;
+	&lt;/init-param&gt;
+	&lt;init-param&gt;
+		&lt;param-name&gt;passportLocaleProviderFactory&lt;/param-name&gt;
+		&lt;param-value&gt;com.hp.myapplication.MyPassportLocaleProviderFactory&lt;/param-value&gt;
+	&lt;/init-param&gt;
+&lt;/filter&gt;
+</pre></code>
+	
+</body>
