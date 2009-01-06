@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>SPF_portlet_portlets_htmlviewer</name>
+	<name>html-viewer</name>
 	<comment></comment>
 	<projects>
 		<project>portlet-utilities</project>
