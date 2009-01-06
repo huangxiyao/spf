@@ -15,7 +15,7 @@
  *
  *
  */ 
-package com.hp.it.spf.xa.test.portal;
+package com.hp.it.spf.xa.mock.portal;
 
 import java.io.Serializable;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.hp.it.spf.xa.test.portal;
+package com.hp.it.spf.xa.mock.portal;
 
 import com.vignette.portal.website.enduser.PortalURI;
 

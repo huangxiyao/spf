@@ -16,7 +16,7 @@
  *
  */
 
-package com.hp.it.spf.xa.test.portal;
+package com.hp.it.spf.xa.mock.portal;
 
 import com.epicentric.common.website.SessionInfo;
 
