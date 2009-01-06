@@ -83,6 +83,18 @@
 		</site>
 	</distributionManagement>
 	<inceptionYear>January 2009</inceptionYear>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/html-viewer/</url>
+	</ciManagement>
+	<scm>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</url>
+	</scm>
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
 	<build>
 		<plugins>
 			<plugin>
