@@ -7,7 +7,7 @@ package com.hp.it.spf.localeresolver.mock;
 import javax.servlet.http.HttpServletRequest;
 import com.epicentric.entity.ChildEntity;
 import com.hp.it.spf.localeresolver.setter.IUserMediator;
-import com.hp.it.spf.xa.test.portal.MockUser;
+import com.hp.it.spf.xa.mock.portal.MockUser;
 
 /**
  * @author <link href="marc.derosa@hp.com"></link>

@@ -12,9 +12,9 @@ import com.epicentric.common.website.SessionInfo;
 import com.hp.fast.web.hpweb.LanguageNegotiator;
 import com.hp.it.spf.localeresolver.mock.MockUserMediator;
 import com.hp.it.spf.localeresolver.setter.PortalUserLocaleSetter;
-import com.hp.it.spf.xa.test.portal.MockUser;
-import com.hp.it.spf.xa.test.portal.SurrogateSessionInfo;
-import com.hp.it.spf.xa.test.portal.SurrogateSite;
+import com.hp.it.spf.xa.mock.portal.MockUser;
+import com.hp.it.spf.xa.mock.portal.SurrogateSessionInfo;
+import com.hp.it.spf.xa.mock.portal.SurrogateSite;
 
 import junit.framework.TestCase;
 
