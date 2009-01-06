@@ -1,4 +1,7 @@
-/* $Header: /external/Repo3/SP_FW/portal_lib/locale_FAST/src/main/java/com/hp/fast/web/hpweb/LocaleFilter.java,v 1.1 2007/04/03 10:05:14 marcd Exp $ */
+/*
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 
 package com.hp.fast.web.hpweb;
 

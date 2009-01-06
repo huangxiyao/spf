@@ -1,3 +1,8 @@
+/*
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
+
 package com.hp.fast.web.hpweb;
 
 import java.util.ArrayList;
