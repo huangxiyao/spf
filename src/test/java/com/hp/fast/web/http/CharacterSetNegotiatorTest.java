@@ -1,5 +1,7 @@
-/* $Id: CharacterSetNegotiatorTest.java,v 1.1 2007/04/03 10:05:07 marcd Exp $ */
-
+/*
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.fast.web.http;
 
 import java.nio.charset.Charset;
