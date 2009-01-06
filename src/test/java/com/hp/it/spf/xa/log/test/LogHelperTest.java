@@ -1,4 +1,4 @@
-package com.hp.it.spf.xa.log;
+package com.hp.it.spf.xa.log.test;
 
 
 import java.util.HashMap;

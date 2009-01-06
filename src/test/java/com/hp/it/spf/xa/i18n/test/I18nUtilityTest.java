@@ -1,4 +1,4 @@
-package com.hp.it.spf.xa.i18n;
+package com.hp.it.spf.xa.i18n.test;
 
 
 import java.util.ArrayList;
