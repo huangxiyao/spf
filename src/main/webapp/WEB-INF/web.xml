@@ -59,25 +59,16 @@
 		<servlet-class>
 			com.hp.frameworks.wpa.portlet.logging.WPALogConfigServlet
 		</servlet-class>
-		<!-- Configure the logg.xml path.default will be search the /WEB-INF/logger.xml
-			If not found, it will search the timber's default logger.xml.-->
-		<!--
-			<init-param>
-			<param-name>config</param-name>
-			<param-value>/WEB-INF/wpaplog/logger.xml</param-value>
-			<description>Configure the logger.xml's load path</description>
-			</init-param>
-		-->
+
 		<!-- logRoot should be the realpath,For windows,should be C:/...,
 			For Unix should be /rootpath/...-->
 		<init-param>
 			<param-name>logRoot</param-name>
-			<param-value>/var/sasuapps/spf</param-value>
+			<param-value>/var/sasuapps/spf/logs/htmlviewer</param-value>
 			<description>
 				The root path for the HTMLViewer portlet log files.
 			</description>
 		</init-param>
-		<!-- The host address. If not set, it will be the host's ip address -->
 
 		<load-on-startup>0</load-on-startup>
 	</servlet>

@@ -8,7 +8,7 @@
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="3" />
 		<param name="File"
-			value="${LOG_ROOT}/logs/htmlviewer/debug/debug.log" />
+			value="${LOG_ROOT}/debug/debug.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{MM/dd/yyyy, HH:mm:ss} | %p | %c | %m%n" />
@@ -20,7 +20,7 @@
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="3" />
 		<param name="File"
-			value="${LOG_ROOT}/logs/htmlviewer/main/business/business.log" />
+			value="${LOG_ROOT}/main/business/business.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %X{SESSION_ID} | %X{CLIENT_ID} | %X{PORTLET_NAME} | %X{REQUEST_TYPE} | %X{PORTLET_MODE} | %X{WINDOW_STATE} | %X{PAGE_ID} | %X{LOCALE} | %X{ERROR_CODE} | %m%n" />
@@ -32,7 +32,7 @@
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="3" />
 		<param name="File"
-			value="${LOG_ROOT}/logs/htmlviewer/main/error/error.log" />
+			value="${LOG_ROOT}/main/error/error.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %m %n" />
@@ -44,7 +44,7 @@
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="3" />
 		<param name="File"
-			value="${LOG_ROOT}/logs/htmlviewer/main/performance/performance.log" />
+			value="${LOG_ROOT}/main/performance/performance.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %X{SESSION_ID} | %X{PORTLET_NAME} | %X{REQUEST_TYPE} | %m%n" />
