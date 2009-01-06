@@ -773,7 +773,7 @@ public class AuthenticatorHelper {
         try {
             LOG.info("Retrieving user " + email);
             User u = UserManager.getInstance().getUser(
-                    AuthenticationConsts.PROPERTY_EMAIL_ID, email);
+                    AuthenticationConsts.PROPERTY_EMAIL_ID, email.toLowerCase());
             LOG.info("Retrieved user " + email);
             return u;
         } catch (EntityNotFoundException e) {
