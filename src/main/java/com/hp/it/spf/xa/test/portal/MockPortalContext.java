@@ -1,4 +1,4 @@
-package com.hp.it.spf.xa.common.portal.mock;
+package com.hp.it.spf.xa.test.portal;
 
 import java.util.Map;
 
@@ -12,8 +12,6 @@ import com.epicentric.page.Page;
 import com.epicentric.site.Site;
 import com.epicentric.template.Style;
 import com.epicentric.user.User;
-import com.hp.it.spf.xa.common.portal.surrogate.SurrogateSite;
-import com.hp.it.spf.xa.common.portal.surrogate.SurrogateStyle;
 import com.vignette.portal.website.enduser.PortalContext;
 import com.vignette.portal.website.enduser.PortalRequest;
 import com.vignette.portal.website.enduser.PortalResponse;

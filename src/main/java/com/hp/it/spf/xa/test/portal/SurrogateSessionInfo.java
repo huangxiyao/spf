@@ -16,7 +16,7 @@
  *
  */
 
-package com.hp.it.spf.xa.common.portal.surrogate;
+package com.hp.it.spf.xa.test.portal;
 
 import com.epicentric.common.website.SessionInfo;
 
