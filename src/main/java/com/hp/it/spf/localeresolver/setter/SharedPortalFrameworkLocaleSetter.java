@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.hp.it.spf.xa.misc.portal.Consts;
 
-public class ServicePortalLocaleSetter implements ILocaleSetter {
+public class SharedPortalFrameworkLocaleSetter implements ILocaleSetter {
 	private ArrayList setters = new ArrayList();
 	
-	public ServicePortalLocaleSetter() {
+	public SharedPortalFrameworkLocaleSetter() {
 		setters.add(new PortalUserLocaleSetter());
 		setters.add(new HpDomainCookieLocaleSetter(Consts.COOKIE_NAME_LOCALE));
 	}

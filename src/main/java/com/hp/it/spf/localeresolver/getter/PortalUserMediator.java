@@ -2,7 +2,7 @@
  * Project: Shared Portal Framework
  * Copyright (c) 2008 HP. All Rights Reserved.
  */
-package com.hp.it.spf.localeresolver.setter;
+package com.hp.it.spf.localeresolver.getter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
