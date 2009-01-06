@@ -7,7 +7,7 @@
     <display-name>Vignette Portal</display-name>
     <description>Vignette Portal</description>
     <distributable/>
-
+		
     <!--BEGIN HPD Context Params -->
     <!--
       - Key of the system property that should specify the root directory of this
@@ -101,21 +101,21 @@
         <filter-class>com.vignette.portal.website.enduser.filters.JSPAccessFilter</filter-class>
     </filter>
 
-	  <!-- SPP FILTER DEFINITIONS - BEGIN -->
-	  
-	  <filter>
-		    <filter-name>PortalURLRewriterFilter</filter-name>
-		    <filter-class>com.hp.it.spf.xa.portalurl.portal.filter.PortalURLRewriterFilter</filter-class>
-	  </filter>
-	  <filter>
-		    <filter-name>RequestBindingFilter</filter-name>
-		    <filter-class>com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter</filter-class>
-	  </filter>
-	  <filter>
-		    <filter-name>SessionInitializationFilter</filter-name>
-		    <filter-class>com.hp.it.spf.sso.portal.SessionInitializationFilter</filter-class>
-	  </filter>
-	  <!-- SPP FILTER DEFINITIONS - END -->
+    <!-- SPP FILTER DEFINITIONS - BEGIN -->
+    <filter>
+        <filter-name>PortalURLRewriterFilter</filter-name>
+        <filter-class>com.hp.it.spf.xa.portalurl.portal.filter.PortalURLRewriterFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>RequestBindingFilter</filter-name>
+        <filter-class>com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>SessionInitializationFilter</filter-name>
+        <filter-class>com.hp.it.spf.sso.portal.SessionInitializationFilter</filter-class>
+    </filter>
+    <!-- SPP FILTER DEFINITIONS - END -->
+	
     <!-- BEGIN HPD Filters  -->
     <!-- Only uncomment if HPD is being used.
      <filter>
@@ -177,7 +177,6 @@
     </filter>
     <!-- GLOBAL FILTER DEFINITIONS - END -->
 
-	  
     <!-- BEGIN HPD Filter Mappings  -->
     <!-- Only uncomment if HPD is being used.
     <filter-mapping>
@@ -297,20 +296,20 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
 
-	  <!-- SPP FILTER MAPPING - BEGIN -->	
-	  <filter-mapping>
-		    <filter-name>PortalURLRewriterFilter</filter-name>
-		    <url-pattern>/site/*</url-pattern>
-	  </filter-mapping>
-	  <filter-mapping>
-		    <filter-name>RequestBindingFilter</filter-name>
-		    <url-pattern>/site/*</url-pattern>
-	  </filter-mapping>
-	  <filter-mapping>
-		    <filter-name>SessionInitializationFilter</filter-name>
-		    <url-pattern>/*</url-pattern>
-	  </filter-mapping>
-	  <!-- SPP FILTER MAPPING - END -->
+    <!-- SPP FILTER MAPPING - BEGIN -->    
+    <filter-mapping>
+        <filter-name>PortalURLRewriterFilter</filter-name>
+        <url-pattern>/site/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>RequestBindingFilter</filter-name>
+        <url-pattern>/site/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>SessionInitializationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- SPP FILTER MAPPING - END -->
     <!-- END-USER WEBSITE FILTER MAPPINGS - END -->
 
     <!-- ADMIN WEBSITE FILTER MAPPINGS - BEGIN -->
@@ -449,13 +448,6 @@
 
     <!-- BEGIN HPD Listeners   -->
 
-    <!-- This listener starts the Portal-HPD Invalidation Manager. -->
-    <!-- Only uncomment if HPD is being used.
-    <listener>
-        <listener-class>com.vignette.portal.hpd.invalidation.InvalidationManager</listener-class>
-    </listener>
-    -->
-
     <!--
       - Loads the root application context of this web app at startup,
       - by default from "/WEB-INF/applicationContext.xml".
@@ -474,6 +466,14 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
     -->
+    
+    <!-- This listener starts the Portal-HPD Invalidation Manager. -->
+    <!-- Only uncomment if HPD is being used.
+    <listener>
+        <listener-class>com.vignette.portal.hpd.invalidation.InvalidationManager</listener-class>
+    </listener>
+    -->
+
     <!-- END HPD Listeners   -->
     <!-- GLOBAL APPLICATION LISTENERS - END -->
 
