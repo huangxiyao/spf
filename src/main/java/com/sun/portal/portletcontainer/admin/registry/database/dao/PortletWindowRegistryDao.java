@@ -2,6 +2,7 @@ package com.sun.portal.portletcontainer.admin.registry.database.dao;
 
 import java.util.List;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -36,8 +37,7 @@ public class PortletWindowRegistryDao {
 			tran.commit();
 		} catch (Exception ex) {
 			if(tran.isActive()) tran.rollback();
-			LOG.warning("add portletWindow error, portletWindowName: " + portletWindow.getName());
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "add portletWindow error, portletWindowName: " + portletWindow.getName(), ex);			
 			throw new RuntimeException(ex);
 		} finally {			
 			if (em!=null) em.close();
@@ -62,8 +62,7 @@ public class PortletWindowRegistryDao {
 			tran.commit();
 		} catch (Exception ex) {
 			if(tran.isActive()) tran.rollback();
-			LOG.warning("add portletWindows error. " );
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "add portletWindows error.", ex);			
 			throw new RuntimeException(ex);
 		} finally {			
 			if (em!=null) em.close();
@@ -83,8 +82,7 @@ public class PortletWindowRegistryDao {
 			List<PortletWindow> list = query.getResultList();
 			return list;
 		} catch (Exception ex) {
-			LOG.warning("get all portletWindow error");
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "get all portletWindow error.", ex);
 		} finally {		
 			em.close();
 		}
@@ -115,8 +113,7 @@ public class PortletWindowRegistryDao {
 			}	
 			return portletWindow;
 		} catch (Exception ex) {
-			LOG.warning("get portletWindow error, portletWindowName: " + portletWindowName);
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "get portletWindow error, portletWindowName: " + portletWindowName, ex);			
 		} finally {
 			em.close();
 		}		
@@ -144,8 +141,7 @@ public class PortletWindowRegistryDao {
 			List<PortletWindow> portletWindows = query.getResultList();
 			return portletWindows;
 		} catch (Exception ex) {
-			LOG.warning("get portletWindows error, portletName: " + portletName);
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "get portletWindows error, portletName: " + portletName, ex);
 		} finally {
 			em.close();
 		}
@@ -182,8 +178,7 @@ public class PortletWindowRegistryDao {
 			tran.commit();
 		} catch (Exception ex) {
 			if(tran.isActive()) tran.rollback();
-			LOG.warning("delte portletWindow error, portletWindowName: " + portletWindowName);
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "delte portletWindow error, portletWindowName: " + portletWindowName, ex);			
 			throw new RuntimeException(ex);
 		} finally {			
 			if (em!=null) em.close();
@@ -213,8 +208,7 @@ public class PortletWindowRegistryDao {
 			tran.commit();
 		} catch (Exception ex) {
 			if(tran.isActive()) tran.rollback();
-			LOG.warning("delte portletWindows error, portletName: " + portletName);
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "delte portletWindows error, portletName: " + portletName, ex);			
 			throw new RuntimeException(ex);
 		} finally {			
 			if (em!=null) em.close();
@@ -238,8 +232,7 @@ public class PortletWindowRegistryDao {
 			tran.commit();
 		} catch (Exception ex) {
 			if(tran.isActive()) tran.rollback();
-			LOG.warning("update portletWindow error, portletWindowName: " + portletWindow.getName());
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "update portletWindow error, portletWindowName: " + portletWindow.getName(), ex);
 			throw new RuntimeException(ex);
 		} finally {			
 			if (em!=null) em.close();
@@ -269,8 +262,7 @@ public class PortletWindowRegistryDao {
 				maxRow = Integer.parseInt(value.toString());
 			}				
 		} catch (Exception ex) {
-			LOG.warning("get max row error");
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "get max row error", ex);
 		} finally {
 			em.close();
 		}

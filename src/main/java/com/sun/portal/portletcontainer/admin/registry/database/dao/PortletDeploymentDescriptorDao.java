@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -36,8 +37,7 @@ public class PortletDeploymentDescriptorDao {
 	    	}	    		    	
 		} catch (Exception ex) {
 			if(tran!=null && tran.isActive()) tran.rollback();
-			LOG.warning("get portlet deployment descriptor error, descriptorName: " + descriptorName);
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "get portlet deployment descriptor error, descriptorName: " + descriptorName, ex);
 		} finally {
 			em.close();
 		}	
@@ -71,8 +71,7 @@ public class PortletDeploymentDescriptorDao {
 	    	tran.commit();	    	
 		} catch (Exception ex) {
 			if(tran!=null && tran.isActive()) tran.rollback();
-			LOG.warning("save portlet deployment descriptor error, descriptorName: " + descriptorName);
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "save portlet deployment descriptor error, descriptorName: " + descriptorName, ex);			
 		} finally {
 			em.close();
 		}	

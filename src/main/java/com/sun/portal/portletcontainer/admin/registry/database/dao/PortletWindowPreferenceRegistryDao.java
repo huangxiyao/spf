@@ -3,6 +3,7 @@ package com.sun.portal.portletcontainer.admin.registry.database.dao;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -41,8 +42,7 @@ public class PortletWindowPreferenceRegistryDao {
         } catch (Exception ex) {
             if (tran.isActive())
                 tran.rollback();
-            LOG.warning("add portletWindows error. ");
-            LOG.warning("error message: " + ex.getMessage());
+            LOG.log(Level.WARNING, "add portletWindows error.", ex);
             throw new RuntimeException(ex);
         } finally {
             if (em != null)
@@ -68,10 +68,7 @@ public class PortletWindowPreferenceRegistryDao {
             tran.commit();
         } catch (Exception ex) {
             tran.rollback();
-            LOG
-                    .warning("add portletWindowPreference error, portletWindowName: "
-                            + portletWindowPreference.getName());
-            LOG.warning("error message: " + ex.getMessage());
+            LOG.log(Level.WARNING, "add portletWindowPreference error, portletWindowName: " + portletWindowPreference.getName(), ex);            
             throw new RuntimeException(ex);
         } finally {
             if (em != null)
@@ -106,10 +103,8 @@ public class PortletWindowPreferenceRegistryDao {
             }
             return portletWindowPreference;
         } catch (Exception ex) {
-            LOG
-                    .warning("get portletWindowPreference error, portletWindowName: "
-                            + portletWindowName + ", userName: " + userName);
-            LOG.warning("error message: " + ex.getMessage());
+        	LOG.log(Level.WARNING, "get portletWindowPreference error, portletWindowName: "
+                    + portletWindowName + ", userName: " + userName, ex);            
         } finally {
             em.close();
         }
@@ -147,10 +142,8 @@ public class PortletWindowPreferenceRegistryDao {
             }
             return resultMap;
         } catch (Exception ex) {
-            LOG
-                    .warning("get portletWindowPreference error, portletWindowName: "
-                            + portletWindowName + ", userName: " + userName);
-            LOG.warning("error message: " + ex.getMessage());
+        	LOG.log(Level.WARNING, "get portletWindowPreference error, portletWindowName: "
+                    + portletWindowName + ", userName: " + userName, ex); 
         } finally {
             em.close();
         }
@@ -184,9 +177,7 @@ public class PortletWindowPreferenceRegistryDao {
         } catch (Exception ex) {
             if (tran.isActive())
                 tran.rollback();
-            LOG.warning("delte portletWindows error, portletName: "
-                    + portletName);
-            LOG.warning("error message: " + ex.getMessage());
+            LOG.log(Level.WARNING, "delte portletWindows error, portletName: " + portletName, ex); 
             throw new RuntimeException(ex);
         } finally {
             if (em != null)
@@ -223,10 +214,8 @@ public class PortletWindowPreferenceRegistryDao {
         } catch (Exception ex) {
             if (tran.isActive())
                 tran.rollback();
-            LOG
-                    .warning("add portletWindowPreference error, portletWindowName: "
-                            + portletWindowPreference.getName());
-            LOG.warning("error message: " + ex.getMessage());
+            LOG.log(Level.WARNING, "add portletWindowPreference error, portletWindowName: "
+                    + portletWindowPreference.getName(), ex);
             throw new RuntimeException(ex);
         } finally {
             if (em != null)

@@ -1,6 +1,7 @@
 package com.sun.portal.portletcontainer.admin.registry.database.dao;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -32,8 +33,7 @@ public class PortletAppRegistryDao {
 			List<PortletApp> list = query.getResultList();
 			return list;
 		} catch (Exception ex) {
-			LOG.warning("get all portlets error");
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "get all portlet error", ex);			
 		} finally {		
 			em.close();
 		}
@@ -60,8 +60,7 @@ public class PortletAppRegistryDao {
 			PortletApp portletApp = (PortletApp)query.getSingleResult();
 			return portletApp;
 		} catch (Exception ex) {
-			LOG.warning("get portlet error");
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "get portlet error", ex);
 		} finally {		
 			em.close();
 		}
@@ -92,8 +91,7 @@ public class PortletAppRegistryDao {
 			tran.commit();
 		} catch (Exception ex) {
 			if(tran.isActive()) tran.rollback();
-			LOG.warning("delte portlet error, portletName: " + portletName);
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "delte portlet error, portletName: " + portletName, ex);		
 			throw new RuntimeException(ex);
 		} finally {			
 			if (em!=null) em.close();
@@ -113,8 +111,7 @@ public class PortletAppRegistryDao {
 			tran.commit();
 		} catch (Exception ex) {
 			if(tran.isActive()) tran.rollback();
-			LOG.warning("create portlets error.");
-			LOG.warning("error message: " + ex.getMessage());
+			LOG.log(Level.WARNING, "create portlets error.", ex);
 			throw new RuntimeException(ex);
 		} finally {			
 			if (em!=null) em.close();

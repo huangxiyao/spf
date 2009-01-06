@@ -116,8 +116,12 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
     }
     
     
-    public void register(File updatedArchiveFile, String warFileLocation,
-            Properties roleProperties, Properties userInfoProperties, PortletLang portletLang) throws Exception {
+    public void register(File updatedArchiveFile, 
+    					 String warFileLocation,
+    					 Properties roleProperties, 
+    					 Properties userInfoProperties, 
+    					 Properties portletWindowProperties,
+    					 PortletLang portletLang) throws Exception {
     	
         List portletAppList = new ArrayList();
         List portletWindowList = new ArrayList();
@@ -147,7 +151,8 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             } catch (IOException ignored) {}
         }
         portletsDescriptor = portletAppDescriptor.getPortletsDescriptor();
-        createPortletRegistryElements(portletAppList, portletWindowList, portletWindowPreferenceList, roleProperties, userInfoProperties, getWebAppRoles(jar), portletLang);
+//        createPortletRegistryElements( roleProperties, userInfoProperties, getWebAppRoles(jar), portletLang);
+        createPortletRegistryElements(portletAppList, portletWindowList, portletWindowPreferenceList, roleProperties, userInfoProperties, portletWindowProperties, getWebAppRoles(jar), portletLang);
         
         PortletAppRegistryDao portletAppRegistryDao = new PortletAppRegistryDao();
         portletAppRegistryDao.addPortlets(portletAppList);
@@ -196,6 +201,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
     										   List portletWindowPreferenceList,
     										   Properties roleProperties, 
     										   Properties userInfoProperties, 
+    										   Properties portletWindowProperties,
     										   List webAppRoles, 
     										   PortletLang portletLang) throws PortletRegistryException {
         List portletDescriptors = portletsDescriptor.getPortletDescriptors();
@@ -244,6 +250,8 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             portletWindow.setRemote(Boolean.FALSE.toString());
             portletWindow.setLang(portletLang.toString());
             
+
+            
             // fill PortletWindowPreference
             portletWindowPreference.setPortletName(portletIDValue);
             portletWindowPreference.setName(portletIDValue);
@@ -278,7 +286,14 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             PortletRegistryUtils.setStringProperty(portletWindow, TITLE_KEY, title);
             
             // When created through deploy, its visible
-            PortletRegistryUtils.setStringProperty(portletWindow, VISIBLE_KEY, Boolean.FALSE.toString());
+            if(portletWindowProperties != null) {
+            	//String visible = portletWindowProperties.getProperty(VISIBLE_KEY, Boolean.FALSE.toString());
+            	String visible = Boolean.FALSE.toString();
+            	PortletRegistryUtils.setStringProperty(portletWindow, VISIBLE_KEY, visible);				
+			} else {
+				PortletRegistryUtils.setStringProperty(portletWindow, VISIBLE_KEY, Boolean.FALSE.toString());
+			}
+            
             // When created through deploy, its thick
             PortletRegistryUtils.setStringProperty(portletWindow, WIDTH_KEY, "thick");
             // set PortletApp ROW_KEY
