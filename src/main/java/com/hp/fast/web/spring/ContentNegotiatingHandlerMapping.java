@@ -1,4 +1,7 @@
-/* $Id: ContentNegotiatingHandlerMapping.java,v 1.1 2007/04/03 10:05:16 marcd Exp $ */
+/*
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 
 package com.hp.fast.web.spring;
 
