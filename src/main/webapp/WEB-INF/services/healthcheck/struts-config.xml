@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+<struts-config>
+   <!-- Registers the view files for the foreground healthcheck
+        reporting Web pages. -->
+   <global-forwards type="com.hp.bco.pl.wpa.action.WPAActionForward">
+      <forward name="isWorking" path="/healthcheck/jsp/isWorking.jsp"/>
+      <forward name="notWorking" path="/healthcheck/jsp/notWorking.jsp"/>
+      <forward name="isWorkingAndOpen" path="/healthcheck/jsp/isWorkingAndOpen.jsp"/>
+      <forward name="notWorkingAndOpen" path="/healthcheck/jsp/notWorkingAndOpen.jsp"/>
+   </global-forwards>
+   
+   <!-- Registers the model class for the foreground healthcheck 
+        reporting Web pages. -->
+   <action-mappings type="com.hp.bco.pl.wpa.action.WPAActionMapping">
+      <action
+         path="/isWorking"
+         type="com.hp.it.spf.ac.healthcheck.web.IsWorkingAction">
+      </action>
+      <action
+         path="/isWorkingAndOpen"
+         type="com.hp.it.spf.ac.healthcheck.web.IsWorkingAndOpenAction">
+      </action>
+   </action-mappings>
+   
+   <!-- Registers the background healthcheck functionality. -->
+   <plug-in className="com.hp.it.spf.ac.healthcheck.background.HealthcheckDriverPlugIn"/>
+</struts-config>

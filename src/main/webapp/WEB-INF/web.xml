@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">
+<web-app>
+
+	<display-name>Healthcheck</display-name>
+	<description>
+		This application performs periodic healthchecks against the open
+		sign and the portal, and responds to load-balancer healthchecks
+		with the outcome. This application is part of the Shared Portal
+		Framework.
+	</description>
+
+	<filter>
+		<filter-name>TransactionLoggingFilter</filter-name>
+		<filter-class>
+			com.hp.bco.pl.wpa.filter.transactionlogging.WPATransactionLoggingFilter
+		</filter-class>
+	</filter>
+
+	<!-- NOTE: The TransactionLoggingFilter MUST be the first filter in the filter chain. -->
+	<!-- Please add any additional filter-mappings for other filters AFTER -->
+	<!-- the filter-mapping for the TransactionLoggingFilter! -->
+
+	<filter-mapping>
+		<filter-name>TransactionLoggingFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+
+	<!-- Log Configuration Servlet -->
+	<servlet>
+		<servlet-name>HealthcheckLogConfigServlet</servlet-name>
+		<servlet-class>
+			com.hp.it.spf.ac.healthcheck.background.HealthcheckLogConfigServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		<init-param>
+			<param-name>logRoot</param-name>
+			<param-value>/var/sasuapps/spf/logs/healthcheck</param-value>
+		</init-param>
+		<!-- Even though the healthcheck application does not refer to this,
+			hostAddress init-param, WPA itself seems to need it when
+			executed in the WebLogic Server 9 environment.  Under WebLogic 
+			Server 8, its absence did not matter.  DSJ 2007/10/29 -->
+		<init-param>
+			<param-name>hostAddress</param-name>
+			<param-value>NOT_USED</param-value>
+		</init-param>
+	</servlet>
+
+	<!-- Action Servlet Configuration -->
+	<servlet>
+		<servlet-name>ActionServlet</servlet-name>
+		<servlet-class>
+			com.hp.bco.pl.wpa.action.WPAActionServlet
+		</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<!-- Action Servlet Mapping -->
+	<servlet-mapping>
+		<servlet-name>ActionServlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+
+</web-app>

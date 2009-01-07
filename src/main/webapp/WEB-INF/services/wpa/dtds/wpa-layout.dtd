@@ -1,0 +1,25 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<!--
+	To support validation of your configuration file and for
+	admin plug-in compatibility, include the
+	following DOCTYPE element at the beginning of your file
+	(after the "xml" declaration):
+	
+	<!DOCTYPE layouts PUBLIC "WPA_LAYOUT_DTD" 
+		"http://websat.cup.hp.com/dtds/wpa-layout.dtd">
+
+-->
+
+<!ELEMENT layouts (layout*)>
+<!ELEMENT layout (action?, model*)>
+<!ELEMENT action EMPTY>
+<!ELEMENT model EMPTY>
+<!ATTLIST 
+	 layout name ID #REQUIRED
+	 path CDATA #REQUIRED>
+<!ATTLIST action class CDATA #REQUIRED>
+<!ATTLIST model 
+	 factoryclass CDATA #REQUIRED
+	 name CDATA #REQUIRED
+	 config CDATA #IMPLIED>
+

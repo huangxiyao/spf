@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<!-- $Header: /external/Repo3/SP_FW/healthcheck/WebContent/WEB-INF/services/healthcheck/system/xml/logger.xml,v 1.5 2008/06/10 05:52:12 xiexing Exp $ -->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+<!-- /healthcheck/system/xml/logger.xml - healthcheck app Log4J config
+     
+     This file contains Log4J logger configuration for the healthcheck
+     application.  It is a fallback Log4J configuration file used by the
+     HealthcheckLogConfigServlet if an overriding healthcheckLogger.xml
+     cannot be found on the CLASSPATH. -->
+     
+	<!-- Appenders -->
+	<appender name="HEALTHCHECK_APPENDER" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${LOG_ROOT}/services/healthcheck/healthcheck.log" />
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{MM/dd/yyyy, HH:mm:ss} | %m%n"/>		
+		</layout>
+	</appender>
+
+	<!-- Loggers -->
+	<logger name="HEALTHCHECK_LOG" additivity="false">
+		<level value="ALL"/>
+		<appender-ref ref="HEALTHCHECK_APPENDER"/>
+	</logger>
+
+</log4j:configuration>
+
