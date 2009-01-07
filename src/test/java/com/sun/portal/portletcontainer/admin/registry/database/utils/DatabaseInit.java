@@ -1,7 +1,6 @@
 package com.sun.portal.portletcontainer.admin.registry.database.utils;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +18,6 @@ import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyCollection;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyMeta;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindow;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindowPropertyMeta;
 
 public class DatabaseInit {
 
@@ -256,41 +254,11 @@ public class DatabaseInit {
 		pw.setName(map.get("name"));
 		pw.setPortletName(map.get("portletName"));
 		pw.setRemote(map.get("remote"));
-		pw.setVersion(map.get("version"));
-		pw.setUserName(map.get("username"));
-		
-		Set<PortletWindowPropertyMeta> set = pw.getPortletWindowPropertyMetas();
-		
-		// create PortletWindowPropertyMeta
-		PortletWindowPropertyMeta collectionString = new PortletWindowPropertyMeta();
-		collectionString.setName("row");
-		collectionString.setValue(map.get("row"));
-		collectionString.setPortletWindow(pw);
-		set.add(collectionString);
-		
-	    collectionString = new PortletWindowPropertyMeta();
-		collectionString.setName("width");
-		collectionString.setValue(map.get("width"));
-		collectionString.setPortletWindow(pw);
-		set.add(collectionString);
-		
-		collectionString = new PortletWindowPropertyMeta();
-		collectionString.setName("title");
-		collectionString.setValue(map.get("title"));
-		collectionString.setPortletWindow(pw);
-		set.add(collectionString);
-		
-		collectionString = new PortletWindowPropertyMeta();
-		collectionString.setName("visible");
-		collectionString.setValue(map.get("visible"));
-		collectionString.setPortletWindow(pw);
-		set.add(collectionString);
-		
-		collectionString = new PortletWindowPropertyMeta();
-		collectionString.setName("entityIDPrefix");
-		collectionString.setValue(map.get("entityIDPrefix"));
-		collectionString.setPortletWindow(pw);
-		set.add(collectionString);
+		pw.setWidth(map.get("width"));
+		pw.setTitle(map.get("title"));
+		pw.setVisible(map.get("visible"));
+		pw.setEntityIDPrefix(map.get("entityIDPrefix"));
+
 		return pw;
 	}
 
