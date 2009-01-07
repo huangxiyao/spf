@@ -72,6 +72,7 @@
 		<name>Shared Portal Framework: TSG IT</name>
 	</organization>
 	<build>
+		<finalName>spf-wsrp-injector</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
