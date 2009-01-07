@@ -11,6 +11,7 @@ import javax.portlet.RenderResponse;
 import org.springframework.web.portlet.ModelAndView;
 
 import com.hp.it.spf.htmlviewer.portlet.util.Consts;
+import com.hp.it.spf.htmlviewer.portlet.util.Utils;
 import com.hp.it.spf.htmlviewer.portlet.exception.InternalErrorException;
 import com.hp.it.spf.xa.interpolate.portlet.FileInterpolatorController;
 
@@ -92,19 +93,17 @@ public class ViewController extends FileInterpolatorController {
 			throw new InternalErrorException(Consts.ERROR_CODE_FILE_NULL);
 		}
 
+		// If launch-buttonless, update the file content accordingly.
 		ModelAndView modelView = new ModelAndView(viewName);
-		modelView.addObject(Consts.VIEW_CONTENT, fileContent);
-
 		PortletPreferences pp = request.getPreferences();
 		String buttonLess = pp.getValue(Consts.LAUNCH_BUTTONLESS, null);
 		if (buttonLess != null && buttonLess.equals("true")) {
 			modelView.addObject(Consts.LAUNCH_BUTTONLESS, "true");
+			fileContent = Utils.addButtonlessChildLauncher(response, fileContent);
 		}
 
-		String linkClass = pp.getValue(Consts.LINK_CLASS, null);
-		if (linkClass != null && linkClass.trim().length() > 0) {
-			modelView.addObject(Consts.LINK_CLASS, linkClass);
-		}
+		// Set the file content to display into the model.
+		modelView.addObject(Consts.VIEW_CONTENT, fileContent);
 
 		return modelView;
 	}

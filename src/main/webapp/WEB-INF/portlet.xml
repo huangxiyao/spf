@@ -43,10 +43,6 @@
 			<preference>
 				<name>launchButtonless</name>
 			</preference>
-			<preference>
-				<name>linkClass</name>
-				<value>fs-htmlviewer-link-color</value>
-			</preference>
 		</portlet-preferences>
 	</portlet>
 	<custom-portlet-mode>
@@ -57,6 +53,7 @@
 		the portlet in the P3P USER_INFO map. If you use the 
 		generic user-property token in your view file, be sure
 		to add the corresponding user attribute here. -->
+	<!-- TODO: Should define all the user attributes here. -->
 	<user-attribute>
 		<description>User's email address</description>
 		<name>user.business-info.online.email</name>

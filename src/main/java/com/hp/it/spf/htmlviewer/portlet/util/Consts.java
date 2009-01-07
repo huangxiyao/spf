@@ -32,9 +32,6 @@ public class Consts {
 	/** View content model attribute. */
 	public static final String VIEW_CONTENT = "viewContent";
 
-	/** Link class portlet preference and model attribute. */
-	public static final String LINK_CLASS = "linkClass";
-
 	/**
 	 * Portlet resource bundle directory sub-folder containing the HTML files to
 	 * view.

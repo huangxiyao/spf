@@ -1,20 +1,4 @@
-/* TODO: use standard classes for this instead; will we even have this CSS anymore? */
-/* used by HTML viewer portlet */
-/* The name of 'fs-linkout-link-color' must be the same with the value of 'LinkClass' in portlet.xml */
-
-a.fs-htmlviewer-link-color:link {
-	color: #000000;
-	font-size: 12px;
-	font-family: Arial;
-	text-decoration: underline;
-}
-
-a.fs-htmlviewer-link-color:visited {
-	color: #660066;
-	font-size: 12px;
-	font-family: Arial;
-	text-decoration: underline;
-}
+/* Standard CSS classes for the HTMLViewer portlet application. */
 
 fs-htmlviewer-error-message {
 	color: #red;
