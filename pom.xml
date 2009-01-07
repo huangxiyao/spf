@@ -45,6 +45,7 @@
 		<name>Shared Portal Framework: TSG IT</name>
 	</organization>
 	<build>
+		<finalName>spf-wsrp-extractor</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
