@@ -57,6 +57,11 @@
 			<artifactId>struts</artifactId>
 			<version>1.2.6</version>
 		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>admission-controller</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<distributionManagement>
 		<repository>
