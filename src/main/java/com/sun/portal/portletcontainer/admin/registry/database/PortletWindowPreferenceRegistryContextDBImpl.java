@@ -30,7 +30,7 @@ import java.util.Map;
 import com.sun.portal.portletcontainer.admin.registry.PortletRegistryTags;
 import com.sun.portal.portletcontainer.admin.registry.PortletWindowPreferenceRegistryContext;
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletWindowPreferenceRegistryDao;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindowPreference;
+import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindow;
 import com.sun.portal.portletcontainer.admin.registry.database.utils.PortletRegistryUtils;
 import com.sun.portal.portletcontainer.context.registry.PortletRegistryContext;
 import com.sun.portal.portletcontainer.context.registry.PortletRegistryException;
@@ -101,12 +101,12 @@ public class PortletWindowPreferenceRegistryContextDBImpl implements
     public void createPreferences(String portletName, String portletWindowName,
             String userName, Map prefMap, boolean create)
             throws PortletRegistryException {
-        PortletWindowPreference portletWindowPreference = windowPreferenceRegistryDao
+        PortletUserWindow portletWindowPreference = windowPreferenceRegistryDao
                 .getPortletWindowPreference(portletWindowName, userName);
         boolean needCreate = portletWindowPreference == null;
         if (needCreate) {
-            portletWindowPreference = new PortletWindowPreference();
-            portletWindowPreference.setName(portletWindowName);
+            portletWindowPreference = new PortletUserWindow();
+            portletWindowPreference.setWindowName(portletWindowName);
             portletWindowPreference.setPortletName(portletName);
             portletWindowPreference.setUserName(userName);
         }
