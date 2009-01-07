@@ -24,8 +24,8 @@ import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletDeploy
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletWindowPreferenceRegistryDao;
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletWindowRegistryDao;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindow;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindow;
+import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindow;
 import com.sun.portal.portletcontainer.admin.registry.database.utils.PortletRegistryUtils;
 import com.sun.portal.portletcontainer.common.PortletDeployConfigReader;
 import com.sun.portal.portletcontainer.common.PortletPreferencesUtility;
@@ -238,11 +238,11 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             portletApp.setPortletName(portletIDValue);
             portletApp.setName(portletIDValue);
             
-            // set portletApp ARCHIVE_NAME_KEY            
-            PortletRegistryUtils.setStringProperty(portletApp, ARCHIVE_NAME_KEY, getPortletWarName());
-            
+            // set portletApp ARCHIVE_NAME_KEY    
+            portletApp.setArchiveName(getPortletWarName());
+                        
             // set portletApp ARCHIVE_TYPE_KEY
-            PortletRegistryUtils.setStringProperty(portletApp, ARCHIVE_TYPE_KEY, getPortletWarName().substring(getPortletWarName().lastIndexOf('.')+1));
+            portletApp.setArchiveType(getPortletWarName().substring(getPortletWarName().lastIndexOf('.')+1));
                      
             // fill PortletWindow
             portletWindow.setPortletName(portletIDValue);
@@ -274,10 +274,10 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             }
             
             // set PortletApp TITLE_KEY
-            PortletRegistryUtils.setStringProperty(portletApp, TITLE_KEY, title);
+            portletApp.setTitle(title);
                         
             // set PortletApp SHORT_TITLE_KEY
-            PortletRegistryUtils.setStringProperty(portletApp, SHORT_TITLE_KEY, shortTitle);
+            portletApp.setShortTitle(shortTitle);
             
             // set PortletApp KEYWORDS_KEY
             PortletRegistryUtils.setCollectionProperty(portletApp, KEYWORDS_KEY, keywords);
@@ -304,10 +304,10 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             }
             
             // set PortletApp TITLE_KEY
-            PortletRegistryUtils.setStringProperty(portletApp, TITLE_KEY, title);
+            portletApp.setTitle(title);
             
             // set PortletApp DESCRIPTION_KEY
-            PortletRegistryUtils.setStringProperty(portletApp, DESCRIPTION_KEY, description);
+            portletApp.setDescription(description);
                         
             PortletPreferencesDescriptor ppd = portletDescriptor.getPortletPreferencesDescriptor();
             List preferenceDescriptors = null;
@@ -510,7 +510,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
                 if (constrainedPortlets != null && constrainedPortlets.contains(portletName)) {
                     String tgType = scd.getTransportGuaranteeType();
                     if (tgType != null && tgType.length() > 0) {
-                    	PortletRegistryUtils.setStringProperty(portletApp, TRANSPORT_GUARANTEE_KEY, tgType);
+                    	portletApp.setTransportGuarantee(tgType);
                     }
                 }
             }

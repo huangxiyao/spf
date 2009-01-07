@@ -15,8 +15,7 @@ import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletAppReg
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletDeploymentDescriptorDao;
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletWindowRegistryDao;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyCollection;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyMeta;
+import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppProperties;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindow;
 
 public class DatabaseInit {
@@ -127,46 +126,17 @@ public class DatabaseInit {
 	
 	private static PortletApp createPortletApp(Map<String, String> map, Map<String, Map<String, String>> cMap) {
 		PortletApp portletApp =  new PortletApp();
-		portletApp.setLang(map.get("lang"));
+
 		portletApp.setName(map.get("name"));
 		portletApp.setPortletName(map.get("portletName"));
-		portletApp.setRemote(map.get("remote"));
-		portletApp.setVersion(map.get("version"));
-		portletApp.setUserName(map.get("username"));
-		
-		Set<PortletAppPropertyMeta> set = portletApp.getPortletAppPropertyMetas();
-		
-		PortletAppPropertyMeta collectionString = new PortletAppPropertyMeta();
-		collectionString.setName("title");
-		collectionString.setValue(map.get("title"));
-		collectionString.setPortletApp(portletApp);
-		set.add(collectionString);
-		
-	    collectionString = new PortletAppPropertyMeta();
-		collectionString.setName("archiveName");
-		collectionString.setValue(map.get("archiveName"));
-		collectionString.setPortletApp(portletApp);
-		set.add(collectionString);
-		
-		collectionString = new PortletAppPropertyMeta();
-		collectionString.setName("description");
-		collectionString.setValue(map.get("description"));
-		collectionString.setPortletApp(portletApp);
-		set.add(collectionString);
-		
-		collectionString = new PortletAppPropertyMeta();
-		collectionString.setName("shortTitle");
-		collectionString.setValue(map.get("shortTitle"));
-		collectionString.setPortletApp(portletApp);
-		set.add(collectionString);
-		
-		collectionString = new PortletAppPropertyMeta();
-		collectionString.setName("archiveType");
-		collectionString.setValue(map.get("archiveType"));
-		collectionString.setPortletApp(portletApp);
-		set.add(collectionString);
-		
-		Set<PortletAppPropertyCollection> collectionSet = portletApp.getPortletAppPropertyCollections();		
+		portletApp.setTitle(map.get("title"));
+		portletApp.setArchiveName(map.get("archiveName"));
+		portletApp.setDescription(map.get("description"));
+		portletApp.setShortTitle(map.get("shortTitle"));
+		portletApp.setArchiveType(map.get("archiveType"));
+
+
+		Set<PortletAppProperties> collectionSet = portletApp.getPortletAppProperties();		
 		
 		for (Entry centry : (Set<Entry<String, Map<String, String>>>)cMap.entrySet()) {
 			String name = (String)centry.getKey();
@@ -183,13 +153,13 @@ public class DatabaseInit {
 //				}
 //				break;
 //			}
-			PortletAppPropertyCollection collectionSetString = new PortletAppPropertyCollection();
-			collectionSetString.setName(name);
+			PortletAppProperties collectionSetString = new PortletAppProperties();
+			collectionSetString.setPropertyName(name);
 			Map collectionMap = (Map)cMap.get((String)centry.getKey());
 			
 			for (Entry entry : (Set<Entry>)collectionMap.entrySet()) {
-				collectionSetString.setElementName((String)entry.getKey());
-				collectionSetString.setElementValue((String)entry.getValue());
+				collectionSetString.setSubElementName((String)entry.getKey());
+				collectionSetString.setSubElementValue((String)entry.getValue());
 			}
 			collectionSetString.setPortletApp(portletApp);
 			collectionSet.add(collectionSetString);			

@@ -72,13 +72,13 @@ public class PortletAppRegistryContextDBImpl implements PortletAppRegistryContex
 
 	public String getShortTitle(String portletName, String desiredLocale) throws PortletRegistryException {
 		PortletApp portletApp = portletAppRegistryDao.getPortlet(portletName);
-		String shortTitle = PortletRegistryUtils.getStringProperty(portletApp, PortletRegistryTags.SHORT_TITLE_KEY);
+		String shortTitle = portletApp.getShortTitle();			
 		return shortTitle;
 	}
 
 	public String getTitle(String portletName, String desiredLocale) throws PortletRegistryException {
 		PortletApp portletApp = portletAppRegistryDao.getPortlet(portletName);
-		String title = PortletRegistryUtils.getStringProperty(portletApp, PortletRegistryTags.TITLE_KEY);
+		String title = portletApp.getTitle();			
 		return title;
 	}
 

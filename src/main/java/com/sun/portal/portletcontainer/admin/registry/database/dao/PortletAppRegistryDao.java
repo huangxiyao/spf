@@ -7,8 +7,10 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.sun.portal.portletcontainer.admin.database.exception.PortletRegistryDBException;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp;
 
 public class PortletAppRegistryDao {
@@ -26,18 +28,20 @@ public class PortletAppRegistryDao {
 		
 		String sql = "select x"
 				   + "  from PortletApp x";
-		LOG.fine("JPA SQL: " + sql);
+		if (LOG.isLoggable(Level.FINE)) {
+			LOG.fine("JPA SQL: " + sql);
+		}
 		
 		try {
 			Query query = em.createQuery(sql);
 			List<PortletApp> list = query.getResultList();
 			return list;
 		} catch (Exception ex) {
-			LOG.log(Level.WARNING, "get all portlet error", ex);			
+			LOG.log(Level.WARNING, "get all portlet error.", ex);	
+			throw new PortletRegistryDBException("get all portlet error.");
 		} finally {		
 			em.close();
 		}
-		return null;
 	}
 	
 	/**
@@ -52,19 +56,23 @@ public class PortletAppRegistryDao {
 		String sql = "select x"
 				   + "  from PortletApp x" 
 				   + " where x.portletName = :portletName";
-		LOG.fine("JPA SQL: " + sql);
+		if (LOG.isLoggable(Level.FINE)) {
+			LOG.fine("JPA SQL: " + sql);
+		}
 		
 		try {
 			Query query = em.createQuery(sql);
 			query.setParameter("portletName", portletName);
 			PortletApp portletApp = (PortletApp)query.getSingleResult();
 			return portletApp;
+		} catch (NoResultException ex) {
+			return null;
 		} catch (Exception ex) {
-			LOG.log(Level.WARNING, "get portlet error", ex);
+			LOG.log(Level.WARNING, "get portlet error.", ex);
+			throw new PortletRegistryDBException("get portlet error.");
 		} finally {		
 			em.close();
 		}
-		return null;
 	}
 	
 	public void removePortlet(String portletName) {
@@ -90,11 +98,13 @@ public class PortletAppRegistryDao {
 			// excute the sql to delete all the items in the database
 			tran.commit();
 		} catch (Exception ex) {
-			if(tran.isActive()) tran.rollback();
+			if(tran.isActive()) {
+				tran.rollback();
+			}
 			LOG.log(Level.WARNING, "delte portlet error, portletName: " + portletName, ex);		
-			throw new RuntimeException(ex);
+			throw new PortletRegistryDBException("delte portlet error.");
 		} finally {			
-			if (em!=null) em.close();
+			em.close();
 		}	
 	}
 	
@@ -110,11 +120,13 @@ public class PortletAppRegistryDao {
 			// excute the sql to delete all the items in the database
 			tran.commit();
 		} catch (Exception ex) {
-			if(tran.isActive()) tran.rollback();
+			if(tran.isActive()) {
+				tran.rollback();
+			}
 			LOG.log(Level.WARNING, "create portlets error.", ex);
-			throw new RuntimeException(ex);
+			throw new PortletRegistryDBException("create portlets error.");
 		} finally {			
-			if (em!=null) em.close();
+			em.close();
 		}	
 	}
 }

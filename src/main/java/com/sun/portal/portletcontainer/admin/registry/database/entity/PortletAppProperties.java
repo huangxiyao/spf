@@ -14,55 +14,56 @@ import javax.persistence.TableGenerator;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="PORTLET_APP_PROPERTY_COL" ,
-	   uniqueConstraints={@UniqueConstraint(columnNames={"PORTLET_APP_ID", "NAME", "ELEMENTNAME", "ELEMENTVALUE"})}
+@Table(name="PORTLET_APP_PROPERTIES" ,
+	   uniqueConstraints={@UniqueConstraint(columnNames={"PORTLET_APP_ID", "PROPERTYNAME", "SUBELEMENTNAME", "SUBELEMENTVALUE"})}
       )
-public class PortletAppPropertyCollection implements Serializable {
+public class PortletAppProperties implements Serializable {
 	private static final long serialVersionUID = 1600035287322087852L;
 	
 	private Long id;
-	private String name;
-	private String elementName;
-	private String elementValue;
+	private String propertyName;
+	private String subElementName;
+	private String subElementValue;
 	private PortletApp portletApp;
 	
-	public PortletAppPropertyCollection() {
+	public PortletAppProperties() {
 	}
 
 	@Id
-	@TableGenerator(name="PortletAppPropertyCollectionID", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.TABLE, generator="PortletAppPropertyCollectionID")
+	@TableGenerator(name="PortletAppPropertiesID", allocationSize=1)
+	@GeneratedValue(strategy=GenerationType.TABLE, generator="PortletAppPropertiesID")
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
+	}	
 	
 	@Column(nullable=false)
-	public String getName() {
-		return name;
+	public String getPropertyName() {
+		return propertyName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPropertyName(String propertyName) {
+		this.propertyName = propertyName;
 	}
 
-	public String getElementName() {
-		return elementName;
+	@Column(nullable=false)
+	public String getSubElementName() {
+		return subElementName;
 	}
 
-	public void setElementName(String elementName) {
-		this.elementName = elementName;
+	public void setSubElementName(String subElementName) {
+		this.subElementName = subElementName;
 	}
 
-	public String getElementValue() {
-		return elementValue;
+	public String getSubElementValue() {
+		return subElementValue;
 	}
 
-	public void setElementValue(String elementValue) {
-		this.elementValue = elementValue;
+	public void setSubElementValue(String subElementValue) {
+		this.subElementValue = subElementValue;
 	}
 
 	@ManyToOne

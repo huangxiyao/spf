@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.sun.portal.portletcontainer.admin.database.exception.PortletRegistryDBException;
@@ -120,6 +121,8 @@ public class PortletWindowRegistryDao {
 				portletWindow = (PortletWindow)obj;
 			}	
 			return portletWindow;
+		} catch (NoResultException ex) {
+			return null;
 		} catch (Exception ex) {
 			LOG.log(Level.WARNING, "get portletWindow error, portletWindowName: " + portletWindowName, ex);
 			throw new PortletRegistryDBException("get portletWindow error.");

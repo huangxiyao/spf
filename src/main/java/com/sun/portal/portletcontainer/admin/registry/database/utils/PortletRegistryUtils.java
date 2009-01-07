@@ -10,8 +10,7 @@ import java.util.Set;
 
 import com.sun.portal.portletcontainer.admin.registry.PortletRegistryTags;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyCollection;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyMeta;
+import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppProperties;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindow;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindowPreference;
 import com.sun.portal.portletcontainer.context.registry.PortletRegistryException;
@@ -35,20 +34,20 @@ public class PortletRegistryUtils {
 	 *  
 	 * @param portletApp
 	 * 					   PortletApp entity
-	 * @param collectionName
+	 * @param propertyName
 	 *                     collection name
 	 * @param elementName
 	 *                     element name of the collection
 	 * @return
 	 * 					   elements map
 	 */
-	public static Map<String, String> getCollectionProperty(PortletApp portletApp, String collectionName) {
+	public static Map<String, String> getCollectionProperty(PortletApp portletApp, String propertyName) {
 		Map<String, String> map = new HashMap<String, String>();
 		// iterator all collections and set the specified collection's elements into the map
-		Set<PortletAppPropertyCollection> collectionSet = portletApp.getPortletAppPropertyCollections();
-		for (PortletAppPropertyCollection collection : collectionSet) {
-			if (collection.getName().equals(collectionName)) {
-				map.put(collection.getElementName(), collection.getElementValue());
+		Set<PortletAppProperties> collectionSet = portletApp.getPortletAppProperties();
+		for (PortletAppProperties collection : collectionSet) {
+			if (collection.getPropertyName().equals(propertyName)) {
+				map.put(collection.getSubElementName(), collection.getSubElementValue());
 			}
 		}
 		return map.size()>0 ? map : null;
@@ -63,12 +62,12 @@ public class PortletRegistryUtils {
      * 
 	 * @param portletApp 
 	 * 					  PortletApp entity
-	 * @param collectionName
+	 * @param propertyName
 	 *                    collection name
 	 * @param elementList
 	 *                    collection element value list
 	 */
-	public static void setCollectionProperty(PortletApp portletApp, String collectionName, List<String> elementList) {
+	public static void setCollectionProperty(PortletApp portletApp, String propertyName, List<String> elementList) {
 		// convert list<listValue> to Map<listValue, listValue>
 		Map<String, String> map = new HashMap<String, String>();
         if(elementList != null) {
@@ -78,7 +77,7 @@ public class PortletRegistryUtils {
                 map.put(s, s);
             }
         }
-        setCollectionProperty(portletApp, collectionName, map);    
+        setCollectionProperty(portletApp, propertyName, map);    
 	}
 	
 	/**
@@ -95,28 +94,28 @@ public class PortletRegistryUtils {
      * 
 	 * @param portletApp 
 	 * 					  PortletApp entity
-	 * @param collectionName
+	 * @param propertyName
 	 *                    collection name
 	 * @param elementMap
 	 *                    collection element value map
 	 */
 	@SuppressWarnings("unchecked")
-	public static void setCollectionProperty(PortletApp portletApp, String collectionName, Map<String, String> elementMap) {
-		Set<PortletAppPropertyCollection> existCollectionSet = portletApp.getPortletAppPropertyCollections();
-		for (PortletAppPropertyCollection existCollection : existCollectionSet) {
-			if(existCollection.getName().equals(collectionName)) {
+	public static void setCollectionProperty(PortletApp portletApp, String propertyName, Map<String, String> elementMap) {
+		Set<PortletAppProperties> existCollectionSet = portletApp.getPortletAppProperties();
+		for (PortletAppProperties existCollection : existCollectionSet) {
+			if(existCollection.getPropertyName().equals(propertyName)) {
 				//can not set value to an existing collection
 				return;
 			}
 		}
 		// only can add none exist collection into the portletApp
 		for (String elementName : elementMap.keySet()) {
-			PortletAppPropertyCollection collection = new PortletAppPropertyCollection();
-			collection.setName(collectionName);
-			collection.setElementName(elementName);
+			PortletAppProperties collection = new PortletAppProperties();
+			collection.setPropertyName(propertyName);
+			collection.setSubElementName(elementName);
 			Object elementValue = elementMap.get(elementName);
 			if(elementValue instanceof String) {
-				collection.setElementValue(elementMap.get(elementName));
+				collection.setSubElementValue(elementMap.get(elementName));
 			} else if (elementValue instanceof List) {
 				// if the element value is a list, then contact all the list value to 
 				// string seperated with comma. e.g SUPPORTS_MAP_KEY
@@ -129,58 +128,12 @@ public class PortletRegistryUtils {
 						bufferedValue.append(",");
 					}
 				}
-				collection.setElementValue(bufferedValue.toString());
+				collection.setSubElementValue(bufferedValue.toString());
 			}
 			collection.setPortletApp(portletApp);
-			portletApp.getPortletAppPropertyCollections().add(collection);
+			portletApp.getPortletAppProperties().add(collection);
 		}
-	}
-	
-	/**
-	 * Retrieve the String property value with the
-	 * given property name in PortletApp object
-	 * @param portletApp
-	 *  			PortletApp entity
-	 * @param propertyName
-	 * 				property name
-	 * @return porperty value
-	 */
-	public static String getStringProperty(PortletApp portletApp, String propertyName) {
-		for(PortletAppPropertyMeta property : portletApp.getPortletAppPropertyMetas()) {
-			if (property.getName().equals(propertyName)) {
-        		return property.getValue();
-        	}
-        }  
-        return null;
-	}
-	
-	/**
-	 * Set the property value into the portlet window object
-	 * @param portletApp
-	 *                PortletWindow entity
-	 * @param propertyName
-	 *                property name
-	 * @param porpertyValue
-	 *                property value
-	 *                
-	 */
-	public static void setStringProperty(PortletApp portletApp, 
-										 String propertyName, 
-										 String porpertyValue) {
-		// if the property already exists, update the value
-		for(PortletAppPropertyMeta property : portletApp.getPortletAppPropertyMetas()) {
-			if (property.getName().equals(propertyName)) {
-				property.setValue(porpertyValue);
-				return;
-			}
-		}
-		// the property doesn't exist, add a new property 
-		PortletAppPropertyMeta property = new PortletAppPropertyMeta();
-		property.setName(propertyName);
-		property.setValue(porpertyValue);
-		property.setPortletApp(portletApp);		
-		portletApp.getPortletAppPropertyMetas().add(property);
-	}
+	}	
 	
 	/**
 	 * Convert Map<String, String> to List<String>

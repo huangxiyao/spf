@@ -22,15 +22,17 @@ public class PortletApp implements Serializable {
 	private Long id;
 	private String name;
 	private String portletName;
-	private String userName;
-	private String remote;
-    private String lang;
-	private String version;
-	private Set<PortletAppPropertyMeta> portletAppPropertyMetas = new HashSet<PortletAppPropertyMeta>();
-	private Set<PortletAppPropertyCollection> portletAppPropertyCollections = new HashSet<PortletAppPropertyCollection>();
 	
-	public PortletApp(){	
-		 remote = Boolean.FALSE.toString();
+	private String title;
+	private String archiveName;
+	private String archiveType;
+	private String description;
+	private String shortTitle;
+	private String transportGuarantee;
+	
+	private Set<PortletAppProperties> portletAppProperties = new HashSet<PortletAppProperties>();
+	
+	public PortletApp(){		
 	}
 
 	@Id
@@ -62,55 +64,60 @@ public class PortletApp implements Serializable {
 		this.portletName = portletName;
 	}
 
-	public String getVersion() {
-		return version;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setVersion(String version) {
-		this.version = version;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getArchiveName() {
+		return archiveName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setArchiveName(String archiveName) {
+		this.archiveName = archiveName;
 	}
 
-	public String getRemote() {
-		return remote;
+	public String getArchiveType() {
+		return archiveType;
 	}
 
-	public void setRemote(String remote) {
-		this.remote = remote;
+	public void setArchiveType(String archiveType) {
+		this.archiveType = archiveType;
 	}
 
-	public String getLang() {
-		return lang;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setLang(String lang) {
-		this.lang = lang;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-	
+
+	public String getShortTitle() {
+		return shortTitle;
+	}
+
+	public void setShortTitle(String shortTitle) {
+		this.shortTitle = shortTitle;
+	}
+
+	public String getTransportGuarantee() {
+		return transportGuarantee;
+	}
+
+	public void setTransportGuarantee(String transportGuarantee) {
+		this.transportGuarantee = transportGuarantee;
+	}
+
 	@OneToMany(mappedBy="portletApp", cascade=CascadeType.ALL)
-	public Set<PortletAppPropertyMeta> getPortletAppPropertyMetas() {
-		return portletAppPropertyMetas;
+	public Set<PortletAppProperties> getPortletAppProperties() {
+		return portletAppProperties;
 	}
 
-	public void setPortletAppPropertyMetas(
-			Set<PortletAppPropertyMeta> portletAppPropertyMetas) {
-		this.portletAppPropertyMetas = portletAppPropertyMetas;
-	}
-
-	@OneToMany(mappedBy="portletApp", cascade=CascadeType.ALL)
-	public Set<PortletAppPropertyCollection> getPortletAppPropertyCollections() {
-		return portletAppPropertyCollections;
-	}
-
-	public void setPortletAppPropertyCollections(
-			Set<PortletAppPropertyCollection> portletAppPropertyCollections) {
-		this.portletAppPropertyCollections = portletAppPropertyCollections;
+	public void setPortletAppProperties(Set<PortletAppProperties> portletAppProperties) {
+		this.portletAppProperties = portletAppProperties;
 	}
 }
