@@ -7,8 +7,8 @@
 <%------------------------------------------------------------- DIRECTIVES --%>
 
 <jsp:directive.page
-	import="com.hp.it.spf.htmlviewer.portlet.util.Consts" />
-<jsp:directive.page import="com.hp.it.spf.htmlviewer.portlet.util.Utils" />
+	import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" />
+<jsp:directive.page import="com.hp.it.spf.xa.htmlviewer.portlet.util.Utils" />
 
 <%---------------------------------------------------------- TAG LIBRARIES --%>
 

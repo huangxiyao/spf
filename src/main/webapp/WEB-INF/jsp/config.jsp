@@ -6,7 +6,7 @@
 
 <%------------------------------------------------------------- DIRECTIVES --%>
 
-<jsp:directive.page import="com.hp.it.spf.htmlviewer.portlet.util.Consts" />
+<jsp:directive.page import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" />
 
 <%---------------------------------------------------------- TAG LIBRARIES --%>
 
