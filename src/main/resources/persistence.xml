@@ -11,8 +11,8 @@
 		<class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp</class>
 		<class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyCollection</class>
 		<class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyMeta</class>
+		<class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindow</class>
 		<class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindowPreference</class>
-		<class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindowPreferencePropertyCollection</class>
 		<class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletDeploymentDescriptor</class>
 
 		<properties>
