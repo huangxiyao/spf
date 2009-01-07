@@ -45,13 +45,14 @@ public class PortletWindowPreferenceRegistryDao {
             if (tran.isActive()){
                 tran.rollback();            	
             }
-            if (LOG.isLoggable(Level.WARNING)){
-                LOG.log(Level.WARNING, "add portletWindows error.", ex);
-                throw new PortletRegistryDBException("add portletWindows error.");            	
+            if (LOG.isLoggable(Level.WARNING)) {
+                LOG.log(Level.WARNING, "add portlet Window Preferences error.", ex);      	
             }
+            throw new PortletRegistryDBException("add portlet Window Preferences error.");      
         } finally {
-            if (em != null)
+            if (em != null) {
                 em.close();
+            }
         }
     }
 
@@ -72,12 +73,17 @@ public class PortletWindowPreferenceRegistryDao {
             // persist the portlet window preference into the database
             tran.commit();
         } catch (Exception ex) {
-            tran.rollback();
-            LOG.log(Level.WARNING, "add portletUserWindowPreference error, portletWindowName: " + portletWindowPreference.getWindowName(), ex);            
+            if (tran.isActive()){
+                tran.rollback();            	
+            }
+            if (LOG.isLoggable(Level.WARNING)) {
+            	LOG.log(Level.WARNING, "add portlet Window Preference error, portletWindowName: " + portletWindowPreference.getWindowName(), ex);                       	
+            }
             throw new RuntimeException(ex);
         } finally {
-            if (em != null)
-                em.close();
+            if (em != null) {
+                em.close();            	
+            }
         }
     }
 
@@ -95,32 +101,38 @@ public class PortletWindowPreferenceRegistryDao {
 
         String sql = "select x" + "  from PortletUserWindow x"
                 + " where x.windowName = :windowName and x.userName = :userName";
-        LOG.fine("JPA SQL: " + sql);
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("JPA SQL: " + sql);
+        }
 
         try {
             Query query = em.createQuery(sql);
             query.setParameter("windowName", portletWindowName);
             query.setParameter("userName", userName);
+
             Object obj = query.getSingleResult();
             PortletUserWindow portletWindowPreference = null;
             if (obj != null) {
+                em.refresh(obj);
                 portletWindowPreference = (PortletUserWindow)obj;
             }
             return portletWindowPreference;
         } catch (NoResultException e) {
         	if (LOG.isLoggable(Level.WARNING)){
-            	LOG.log(Level.WARNING, "not found portletUserWindowPreference error, portletWindowName: "
+            	LOG.log(Level.WARNING, "not found portlet Window Preference error, portletWindowName: "
                         + portletWindowName + ", userName: " + userName);        		
         	}
+            return null;
         } catch (Exception ex) {
-        	String message = "get portletUserWindowPreference error, portletWindowName: "
+        	String message = "get portlet Window Preference error, portletWindowName: "
                 + portletWindowName + ", userName: " + userName;
-        	LOG.log(Level.WARNING, message, ex);
+        	if (LOG.isLoggable(Level.WARNING)){
+        		LOG.log(Level.WARNING, message, ex);       		
+        	}
         	throw new PortletRegistryDBException(message);
         } finally {
             em.close();
         }
-        return null;
     }
 
     /**
@@ -139,14 +151,21 @@ public class PortletWindowPreferenceRegistryDao {
         String sql = "select x.preferenceName, x.preferenceValue"
                 + "  from PortletUserWindowPreference x"
                 + " where x.type = :type and x.portletUserWindow.windowName = :windowName and x.portletUserWindow.userName = :userName";
-        LOG.fine("JPA SQL: " + sql);
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("JPA SQL: " + sql);
+        }
 
         try {
             Query query = em.createQuery(sql);
             query.setParameter("windowName", portletWindowName);
             query.setParameter("userName", userName);
             query.setParameter("type", type);
+            // for eclipselink
+            query.setHint("eclipselink.refresh", "true");
+            // for toplink
+            query.setHint("toplink.refresh", "true");
             List result = query.getResultList();
+            em.refresh(result);
             Map resultMap = new HashMap();
             for (Object object : result) {
                 Object[] element = (Object[])object;
@@ -155,16 +174,20 @@ public class PortletWindowPreferenceRegistryDao {
             return resultMap;
         } catch (NoResultException e) {
         	if (LOG.isLoggable(Level.WARNING)){
-            	LOG.log(Level.WARNING, "not found portletUserWindowPreference error, portletWindowName: "
+            	LOG.log(Level.WARNING, "not found portlet Window Preference error, portletWindowName: "
                         + portletWindowName + ", userName: " + userName);        		
         	}
+            return null;
         } catch (Exception ex) {
-        	LOG.log(Level.WARNING, "get portletUserWindowPreference error, portletWindowName: "
-                    + portletWindowName + ", userName: " + userName, ex); 
+        	String message = "get portlet Window Preference error, portletWindowName: "
+                + portletWindowName + ", userName: " + userName;
+            if (LOG.isLoggable(Level.WARNING)) {
+                LOG.log(Level.WARNING, message, ex); 
+            }
+        	throw new PortletRegistryDBException(message);
         } finally {
             em.close();
         }
-        return null;
     }
 
     /**
@@ -180,7 +203,9 @@ public class PortletWindowPreferenceRegistryDao {
 
         String sql = "select x from PortletUserWindow x"
                 + " where x.portletName = :portletName";
-        LOG.fine("JPA SQL: " + sql);
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("JPA SQL: " + sql);
+        }
         try {
             tran.begin();
             Query query = em.createQuery(sql);
@@ -192,13 +217,17 @@ public class PortletWindowPreferenceRegistryDao {
             // excute the sql to delete all the items in the database
             tran.commit();
         } catch (Exception ex) {
-            if (tran.isActive())
-                tran.rollback();
-            LOG.log(Level.WARNING, "delete portletWindows error, portletName: " + portletName, ex); 
+            if (tran.isActive()) {
+                tran.rollback();            	
+            }
+            if (LOG.isLoggable(Level.WARNING)) {
+                LOG.log(Level.WARNING, "delete portlet Window Preference error, portletName: " + portletName, ex); 
+            }
             throw new RuntimeException(ex);
         } finally {
-            if (em != null)
-                em.close();
+            if (em != null) {
+                em.close();            	
+            }
         }
     }
 
@@ -215,7 +244,9 @@ public class PortletWindowPreferenceRegistryDao {
         EntityTransaction tran = em.getTransaction();
         String sql = "delete from PortletUserWindowPreference x"
                 + " where x.portletUserWindow.userName = :userName and x.portletUserWindow.windowName = :portletWindowName";
-        LOG.fine("JPA SQL: " + sql);
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("JPA SQL: " + sql);
+        }
         try {
             tran.begin();
             Query query = em.createQuery(sql);
@@ -229,14 +260,18 @@ public class PortletWindowPreferenceRegistryDao {
             // persist the portlet windows into the database
             tran.commit();
         } catch (Exception ex) {
-            if (tran.isActive())
-                tran.rollback();
-            LOG.log(Level.WARNING, "add portletUserWindowPreference error, portletWindowName: "
-                    + portletWindowPreference.getWindowName(), ex);
+            if (tran.isActive()) {
+                tran.rollback();            	
+            }
+            if (LOG.isLoggable(Level.WARNING)) {
+                LOG.log(Level.WARNING, "add portlet Window Preference error, portletWindowName: "
+                        + portletWindowPreference.getWindowName(), ex);
+            }
             throw new RuntimeException(ex);
         } finally {
-            if (em != null)
-                em.close();
+            if (em != null) {
+                em.close();            	
+            }
         }
     }
 }
