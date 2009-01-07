@@ -107,6 +107,7 @@
 	<organization>
 	</organization>
 	<build>
+		<finalName>spf-pc-database-persistence</finalName>
 		<resources>
 			<resource>
 				<targetPath>META-INF</targetPath>
