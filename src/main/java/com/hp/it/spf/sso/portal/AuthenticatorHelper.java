@@ -86,7 +86,7 @@ public class AuthenticatorHelper {
                 .getUserName());
         userProperties.put(AuthenticationConsts.PROPERTY_DOMAIN_ID, realmId);
         userProperties.put(AuthenticationConsts.PROPERTY_EMAIL_ID, ssoUser
-                .getEmail());
+                .getEmail().toLowerCase());
         userProperties.put(AuthenticationConsts.PROPERTY_FIRSTNAME_ID, ssoUser
                 .getFirstName());
         userProperties.put(AuthenticationConsts.PROPERTY_LASTNAME_ID, ssoUser
