@@ -4,7 +4,6 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider> 
     <!--<non-jta-data-source>jdbc/WSRPDataSource</non-jta-data-source>-->
     <class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindow</class>
-    <class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindowPropertyMeta</class>
     <class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp</class>
     <class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyCollection</class>
     <class>com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyMeta</class>
@@ -21,12 +20,12 @@
 <!--
          <property name="eclipselink.logging.level" value="INFO"/>
          <property name="eclipselink.logging.file" value="C:\java\workspace\OpenPortalDBPersistence\logs\logs.txt"/>         
-
+-->
          <property name="eclipselink.ddl-generation" value="create-tables"/>
          <property name="eclipselink.create-ddl-jdbc-file-name" value="tables.sql"/>
          <property name="eclipselink.application-location" value="C:\java\workspace\OpenPortalDBPersistence\sql"/>
          <property name="eclipselink.ddl-generation.output-mode" value="sql-script"/>
--->
+
     </properties>
   </persistence-unit>
 </persistence>
