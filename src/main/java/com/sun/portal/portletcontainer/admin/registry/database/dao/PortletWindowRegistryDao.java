@@ -1,7 +1,6 @@
 package com.sun.portal.portletcontainer.admin.registry.database.dao;
 
 import java.util.List;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
+import com.sun.portal.portletcontainer.admin.database.exception.PortletRegistryDBException;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindow;
 
 public class PortletWindowRegistryDao {
@@ -36,11 +36,13 @@ public class PortletWindowRegistryDao {
 			// persist the portlet windows into the database
 			tran.commit();
 		} catch (Exception ex) {
-			if(tran.isActive()) tran.rollback();
+			if(tran.isActive()) {
+				tran.rollback();
+			}
 			LOG.log(Level.WARNING, "add portletWindow error, portletWindowName: " + portletWindow.getName(), ex);			
-			throw new RuntimeException(ex);
+			throw new PortletRegistryDBException("add portletWindow error.");
 		} finally {			
-			if (em!=null) em.close();
+			em.close();
 		}	
 	}
 	
@@ -61,11 +63,13 @@ public class PortletWindowRegistryDao {
 			// persist the portlet windows into the database
 			tran.commit();
 		} catch (Exception ex) {
-			if(tran.isActive()) tran.rollback();
+			if(tran.isActive()) {
+				tran.rollback();
+			}
 			LOG.log(Level.WARNING, "add portletWindows error.", ex);			
-			throw new RuntimeException(ex);
+			throw new PortletRegistryDBException("add portletWindows error.");
 		} finally {			
-			if (em!=null) em.close();
+			em.close();
 		}	
 	}
 	
@@ -75,7 +79,9 @@ public class PortletWindowRegistryDao {
 		
 		String sql = "select x"
 				   + "  from PortletWindow x";
-		LOG.fine("JPA SQL: " + sql);
+		if (LOG.isLoggable(Level.FINE)) {
+			LOG.fine("JPA SQL: " + sql);
+		}
 		
 		try {
 			Query query = em.createQuery(sql);
@@ -83,10 +89,10 @@ public class PortletWindowRegistryDao {
 			return list;
 		} catch (Exception ex) {
 			LOG.log(Level.WARNING, "get all portletWindow error.", ex);
+			throw new PortletRegistryDBException("get all portletWindow error.");
 		} finally {		
 			em.close();
 		}
-		return null;
 	}
 	
 	/**
@@ -101,7 +107,9 @@ public class PortletWindowRegistryDao {
 		String sql = "select x"
 				   + "  from PortletWindow x"
 				   + " where x.name = :name";
-		LOG.fine("JPA SQL: " + sql);
+		if (LOG.isLoggable(Level.FINE)) {
+			LOG.fine("JPA SQL: " + sql);
+		}
 		
 		try {
 			Query query = em.createQuery(sql);
@@ -113,11 +121,11 @@ public class PortletWindowRegistryDao {
 			}	
 			return portletWindow;
 		} catch (Exception ex) {
-			LOG.log(Level.WARNING, "get portletWindow error, portletWindowName: " + portletWindowName, ex);			
+			LOG.log(Level.WARNING, "get portletWindow error, portletWindowName: " + portletWindowName, ex);
+			throw new PortletRegistryDBException("get portletWindow error.");
 		} finally {
 			em.close();
-		}		
-		return null;
+		}
 	}
 	
 	/**
@@ -133,7 +141,9 @@ public class PortletWindowRegistryDao {
 		String sql = "select x"
 				   + "  from PortletWindow x"
 				   + " where x.portletName = :portletName";
-		LOG.fine("JPA SQL: " + sql);
+		if (LOG.isLoggable(Level.FINE)) {
+			LOG.fine("JPA SQL: " + sql);
+		}
 		
 		try {
 			Query query = em.createQuery(sql);
@@ -142,10 +152,10 @@ public class PortletWindowRegistryDao {
 			return portletWindows;
 		} catch (Exception ex) {
 			LOG.log(Level.WARNING, "get portletWindows error, portletName: " + portletName, ex);
+			throw new PortletRegistryDBException("get portletWindows error.");
 		} finally {
 			em.close();
-		}
-		return null;
+		}		
 	}
 	
 	
@@ -177,11 +187,13 @@ public class PortletWindowRegistryDao {
 			// excute the sql to delete all the items in the database
 			tran.commit();
 		} catch (Exception ex) {
-			if(tran.isActive()) tran.rollback();
+			if(tran.isActive()) {
+				tran.rollback();
+			}
 			LOG.log(Level.WARNING, "delte portletWindow error, portletWindowName: " + portletWindowName, ex);			
-			throw new RuntimeException(ex);
+			throw new PortletRegistryDBException("delte portletWindow error.");
 		} finally {			
-			if (em!=null) em.close();
+			em.close();
 		}		
 	}
 	
@@ -207,11 +219,13 @@ public class PortletWindowRegistryDao {
 			// excute the sql to delete all the items in the database
 			tran.commit();
 		} catch (Exception ex) {
-			if(tran.isActive()) tran.rollback();
+			if(tran.isActive()) {
+				tran.rollback();
+			}
 			LOG.log(Level.WARNING, "delte portletWindows error, portletName: " + portletName, ex);			
-			throw new RuntimeException(ex);
+			throw new PortletRegistryDBException("delte portletWindows error.");
 		} finally {			
-			if (em!=null) em.close();
+			em.close();
 		}		
 	}
 	
@@ -231,41 +245,13 @@ public class PortletWindowRegistryDao {
 			// automatically update the object in the persistence layer if necessary
 			tran.commit();
 		} catch (Exception ex) {
-			if(tran.isActive()) tran.rollback();
+			if(tran.isActive()) {
+				tran.rollback();
+			}
 			LOG.log(Level.WARNING, "update portletWindow error, portletWindowName: " + portletWindow.getName(), ex);
-			throw new RuntimeException(ex);
+			throw new PortletRegistryDBException("update portletWindow error.");
 		} finally {			
-			if (em!=null) em.close();
+			em.close();
 		}	
 	}	
-	
-	/**
-	 * retrieve max row value of all portlet window properties
-	 * @return
-	 *         max row number
-	 */
-	@SuppressWarnings("unchecked")
-	public int getMaxRow() {
-		int maxRow = 0;
-		EntityManager em = emFactory.createEntityManager();
-		
-		String sql = "select max(value)"
-				   + "  from portlet_window_property_meta"
-				   + " where name = 'row'";
-		LOG.fine("JPA Native SQL: " + sql);
-	
-		try {
-			Query query = em.createNativeQuery(sql);
-			Object obj = query.getSingleResult();
-			if (obj instanceof List) {
-				String value = (String)((List)obj).get(0);
-				maxRow = Integer.parseInt(value.toString());
-			}				
-		} catch (Exception ex) {
-			LOG.log(Level.WARNING, "get max row error", ex);
-		} finally {
-			em.close();
-		}
-		return maxRow;
-	}
 }

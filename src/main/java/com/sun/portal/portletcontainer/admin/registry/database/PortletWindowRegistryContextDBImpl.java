@@ -7,11 +7,9 @@ import com.sun.portal.container.EntityID;
 import com.sun.portal.container.PortletLang;
 import com.sun.portal.container.PortletType;
 import com.sun.portal.portletcontainer.admin.registry.PortletRegistryConstants;
-import com.sun.portal.portletcontainer.admin.registry.PortletRegistryTags;
 import com.sun.portal.portletcontainer.admin.registry.PortletWindowRegistryContext;
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletWindowRegistryDao;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindow;
-import com.sun.portal.portletcontainer.admin.registry.database.utils.PortletRegistryUtils;
 import com.sun.portal.portletcontainer.context.registry.PortletRegistryException;
 
 public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistryContext{
@@ -45,26 +43,21 @@ public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistry
 			PortletWindow newPortletWindow = new PortletWindow();
 			newPortletWindow.setName(portletWindowName);
 			newPortletWindow.setPortletName(existPortletWindow.getPortletName());
-			newPortletWindow.setUserName(existPortletWindow.getUserName());
 			// additional relative to PortletWindowRegistryContextImpl
-			newPortletWindow.setRemote(Boolean.toString(false));
-			newPortletWindow.setVersion("1.0");
+			newPortletWindow.setRemote(Boolean.FALSE.toString());
+			
 			// If title is not present use title of the existing portlet window name
             if(title == null){
-            	title = PortletRegistryUtils.getStringProperty(existPortletWindow, PortletRegistryTags.TITLE_KEY);
+            	title = existPortletWindow.getTitle();            	
             }
-            PortletRegistryUtils.setStringProperty(newPortletWindow, PortletRegistryTags.TITLE_KEY, title);
+            newPortletWindow.setTitle(title);            
             
-            String entityIDPrefix = PortletRegistryUtils.getStringProperty(existPortletWindow, PortletRegistryTags.ENTITY_ID_PREFIX_KEY);
-            PortletRegistryUtils.setStringProperty(newPortletWindow, PortletRegistryTags.ENTITY_ID_PREFIX_KEY, entityIDPrefix);
+            String entityIDPrefix = existPortletWindow.getEntityIDPrefix();
+            newPortletWindow.setEntityIDPrefix(entityIDPrefix);
             
-            PortletRegistryUtils.setStringProperty(newPortletWindow, PortletRegistryTags.WIDTH_KEY, PortletRegistryConstants.WIDTH_THIN);
-            PortletRegistryUtils.setStringProperty(newPortletWindow, PortletRegistryTags.VISIBLE_KEY, Boolean.toString(false));
+            newPortletWindow.setWidth(PortletRegistryConstants.WIDTH_THIN);
+            newPortletWindow.setVisible(Boolean.FALSE.toString());     
             
-            // row
-            int row = windowRegistryDao.getMaxRow();
-            PortletRegistryUtils.setStringProperty(newPortletWindow, PortletRegistryTags.ROW_KEY, String.valueOf(row+1));
-                        
             windowRegistryDao.addPortletWindow(newPortletWindow);
             
 		} else {
@@ -97,7 +90,7 @@ public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistry
             boolean isRemote = "true".equals(portletWindow.getRemote());
             
             // check is visible
-            String visibleValue = PortletRegistryUtils.getStringProperty(portletWindow, PortletRegistryTags.VISIBLE_KEY);
+            String visibleValue = portletWindow.getVisible();            	
             boolean isVisible = PortletRegistryConstants.VISIBLE_TRUE.equals(visibleValue);
                                     
             if ( portletType.equals(PortletType.ALL)
@@ -114,7 +107,7 @@ public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistry
 	
 	public String getConsumerID(String portletWindowName) throws PortletRegistryException {
 		PortletWindow portletWindow = windowRegistryDao.getPortletWindow(portletWindowName);
-		String consumerId = PortletRegistryUtils.getStringProperty(portletWindow, PortletRegistryTags.CONSUMER_ID);
+		String consumerId = portletWindow.getConsumerId();
 		return consumerId;
 	}
 
@@ -122,7 +115,7 @@ public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistry
 		PortletWindow portletWindow = windowRegistryDao.getPortletWindow(portletWindowName);
 		portletWindowName = portletWindow.getName();
         EntityID entityID = new EntityID();
-        String entityIDPrefix = PortletRegistryUtils.getStringProperty(portletWindow, PortletRegistryTags.ENTITY_ID_PREFIX_KEY);
+        String entityIDPrefix = portletWindow.getEntityIDPrefix();
         entityID.setPrefix(entityIDPrefix);
         entityID.setPortletWindowName(portletWindowName);
 		return entityID;
@@ -135,7 +128,7 @@ public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistry
         for(PortletWindow portletWindow : portletWindows){ 
             String portletWindowName = portletWindow.getName();
             EntityID entityID = new EntityID();
-            String entityIDPrefix = PortletRegistryUtils.getStringProperty(portletWindow, PortletRegistryTags.ENTITY_ID_PREFIX_KEY);
+            String entityIDPrefix = portletWindow.getEntityIDPrefix();
             entityID.setPrefix(entityIDPrefix);
             entityID.setPortletWindowName(portletWindowName);
             entityIds.add(entityID);
@@ -146,7 +139,7 @@ public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistry
 	
 	public String getPortletID(String portletWindowName) throws PortletRegistryException {
 		PortletWindow portletWindow = windowRegistryDao.getPortletWindow(portletWindowName);
-		String portletId = PortletRegistryUtils.getStringProperty(portletWindow, PortletRegistryTags.PORTLET_ID);
+		String portletId = portletWindow.getPortletID();
 		return portletId;
 	}
 
@@ -164,7 +157,7 @@ public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistry
 
 	public String getPortletWindowTitle(String portletWindowName) throws PortletRegistryException {
 		PortletWindow portletWindow = windowRegistryDao.getPortletWindow(portletWindowName);
-		String title = PortletRegistryUtils.getStringProperty(portletWindow, PortletRegistryTags.TITLE_KEY);
+		String title = portletWindow.getTitle();
 		return title;
 	}
 
@@ -179,7 +172,7 @@ public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistry
 
 	public String getProducerEntityID(String portletWindowName) throws PortletRegistryException {
 		PortletWindow portletWindow = windowRegistryDao.getPortletWindow(portletWindowName);
-		String producerEntityID = PortletRegistryUtils.getStringProperty(portletWindow, PortletRegistryTags.PRODUCER_ENTITY_ID);
+		String producerEntityID = portletWindow.getProducerEntityID();
 		return producerEntityID;
 	}
 
@@ -195,15 +188,18 @@ public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistry
 		return remotePortletWindows;
 	}
 
+	/**
+	 * use id instead of the row number
+	 */
 	public Integer getRowNumber(String portletWindowName) throws PortletRegistryException {
 		PortletWindow portletWindow = windowRegistryDao.getPortletWindow(portletWindowName);
-		String rowNumber = PortletRegistryUtils.getStringProperty(portletWindow, PortletRegistryTags.ROW_KEY);
-		return new Integer(rowNumber);
+		String id = String.valueOf(portletWindow.getId());
+		return new Integer(id);
 	}
 
 	public String getWidth(String portletWindowName) throws PortletRegistryException {
 		PortletWindow portletWindow = windowRegistryDao.getPortletWindow(portletWindowName);
-		String width = PortletRegistryUtils.getStringProperty(portletWindow, PortletRegistryTags.WIDTH_KEY);
+		String width = portletWindow.getWidth();
 		return width;
 	}
 
@@ -220,7 +216,7 @@ public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistry
 			throws PortletRegistryException {		
 		// retreive the portlet window
 		PortletWindow portletWindow = windowRegistryDao.getPortletWindow(portletWindowName);
-		String visibleValue = PortletRegistryUtils.getStringProperty(portletWindow, PortletRegistryTags.VISIBLE_KEY);
+		String visibleValue = portletWindow.getVisible();
 		boolean isVisible = PortletRegistryConstants.VISIBLE_TRUE.equals(visibleValue);
 		
 		return isVisible;
@@ -234,26 +230,21 @@ public class PortletWindowRegistryContextDBImpl implements PortletWindowRegistry
 		windowRegistryDao.removePortletWindows(portletName);		
 	}
 
-	/**
-	 * this func is different with PortletWindowRegistryContextImpl.setPortletWindowTitle
-	 * for that function only change the title value in the portlet window object stored 
-	 * in the JVM (collectionStringTable)
-	 */
 	public void setPortletWindowTitle(String portletWindowName, String title) throws PortletRegistryException {
 		PortletWindow portletWindow = windowRegistryDao.getPortletWindow(portletWindowName);
-		PortletRegistryUtils.setStringProperty(portletWindow, PortletRegistryTags.TITLE_KEY, title);
+		portletWindow.setTitle(title);		
 		windowRegistryDao.updatePortletWindow(portletWindow);		
 	}
 
 	public void setWidth(String portletWindowName, String width) throws PortletRegistryException {
 		PortletWindow portletWindow = windowRegistryDao.getPortletWindow(portletWindowName);
-		PortletRegistryUtils.setStringProperty(portletWindow, PortletRegistryTags.WIDTH_KEY, width);
+		portletWindow.setWidth(width);
 		windowRegistryDao.updatePortletWindow(portletWindow);			
 	}
 
 	public void showPortletWindow(String portletWindowName, boolean visible) throws PortletRegistryException {
 		PortletWindow portletWindow = windowRegistryDao.getPortletWindow(portletWindowName);
-		PortletRegistryUtils.setStringProperty(portletWindow, PortletRegistryTags.VISIBLE_KEY, String.valueOf(visible));
+		portletWindow.setVisible(String.valueOf(visible));		
 		windowRegistryDao.updatePortletWindow(portletWindow);		
 	}	
 }

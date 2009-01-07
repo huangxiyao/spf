@@ -1,21 +1,17 @@
 package com.sun.portal.portletcontainer.admin.registry.database.entity;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 @Entity
-@Table(name = "PORTLET_WINDOW")
+@Table(name="PORTLET_WINDOW")
 public class PortletWindow implements Serializable {
 	private static final long serialVersionUID = 3970508135775283028L;
 	
@@ -24,9 +20,15 @@ public class PortletWindow implements Serializable {
 	private String lang;
 	private String portletName;
 	private String remote;
-	private String version;
-	private String userName;
-	private Set<PortletWindowPropertyMeta> portletWindowPropertyMetas = new HashSet<PortletWindowPropertyMeta>();
+	
+	private String width;	
+	private String title;
+	private String visible;
+	private String entityIDPrefix;
+	private String portletHandle;
+	private String consumerId;
+	private String producerEntityID;
+	private String portletID;
 	
 	public PortletWindow() {
 		remote = Boolean.FALSE.toString();
@@ -74,29 +76,67 @@ public class PortletWindow implements Serializable {
 		this.remote = remote;
 	}	
 
-	public String getVersion() {
-		return version;
+	public String getWidth() {
+		return width;
 	}
 
-	public void setVersion(String version) {
-		this.version = version;
+	public void setWidth(String width) {
+		this.width = width;
+	}
+	
+	public String getTitle() {
+		return title;
 	}
 
-	@OneToMany(mappedBy = "portletWindow", cascade=CascadeType.ALL)
-	public Set<PortletWindowPropertyMeta> getPortletWindowPropertyMetas() {
-		return portletWindowPropertyMetas;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public void setPortletWindowPropertyMetas(
-			Set<PortletWindowPropertyMeta> portletWindowPropertyMetas) {
-		this.portletWindowPropertyMetas = portletWindowPropertyMetas;
+	public String getVisible() {
+		return visible;
 	}
 
-	public String getUserName() {
-		return userName;
+	public void setVisible(String visible) {
+		this.visible = visible;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public String getEntityIDPrefix() {
+		return entityIDPrefix;
 	}
+
+	public void setEntityIDPrefix(String entityIDPrefix) {
+		this.entityIDPrefix = entityIDPrefix;
+	}
+
+	public String getPortletHandle() {
+		return portletHandle;
+	}
+
+	public void setPortletHandle(String portletHandle) {
+		this.portletHandle = portletHandle;
+	}
+
+	public String getConsumerId() {
+		return consumerId;
+	}
+
+	public void setConsumerId(String consumerId) {
+		this.consumerId = consumerId;
+	}
+
+	public String getProducerEntityID() {
+		return producerEntityID;
+	}
+
+	public void setProducerEntityID(String producerEntityID) {
+		this.producerEntityID = producerEntityID;
+	}
+
+	public String getPortletID() {
+		return portletID;
+	}
+
+	public void setPortletID(String portletID) {
+		this.portletID = portletID;
+	}	
 }

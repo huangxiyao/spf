@@ -215,7 +215,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
         }
         //retrive the current max row number
         PortletWindowRegistryDao portletWindowRegistryDao = new PortletWindowRegistryDao();
-        int maxRow = portletWindowRegistryDao.getMaxRow();        
+            
         for (int i = 0; i < portletDescriptors.size(); i++) {
             // Instantiate the objects required to write to the registry files
             portletApp = new PortletApp();
@@ -260,7 +260,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             String entityIDPrefix = entityID.getPrefix();
             logger.log(Level.FINE, "PSPL_CSPPAM0009", entityIDPrefix);
             // set portletWindow ENTITY_ID_PREFIX_KEY
-            PortletRegistryUtils.setStringProperty(portletWindow, ENTITY_ID_PREFIX_KEY, entityIDPrefix);
+            portletWindow.setEntityIDPrefix(entityIDPrefix);           
                         
             PortletInfoDescriptor portletInfo = portletDescriptor.getPortletInfoDescriptor();
             String title = portletName;
@@ -283,21 +283,20 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             PortletRegistryUtils.setCollectionProperty(portletApp, KEYWORDS_KEY, keywords);
                         
             // set portletWindow TITLE_KEY
-            PortletRegistryUtils.setStringProperty(portletWindow, TITLE_KEY, title);
+            portletWindow.setTitle(title);           
             
             // When created through deploy, its visible
             if(portletWindowProperties != null) {
             	//String visible = portletWindowProperties.getProperty(VISIBLE_KEY, Boolean.FALSE.toString());
             	String visible = Boolean.FALSE.toString();
-            	PortletRegistryUtils.setStringProperty(portletWindow, VISIBLE_KEY, visible);				
+            	portletWindow.setVisible(visible);
+            					
 			} else {
-				PortletRegistryUtils.setStringProperty(portletWindow, VISIBLE_KEY, Boolean.FALSE.toString());
+				portletWindow.setVisible(Boolean.FALSE.toString());
 			}
             
             // When created through deploy, its thick
-            PortletRegistryUtils.setStringProperty(portletWindow, WIDTH_KEY, "thick");
-            // set PortletApp ROW_KEY
-            PortletRegistryUtils.setStringProperty(portletWindow, ROW_KEY, String.valueOf(++maxRow));
+            portletWindow.setWidth("thick");
             
             String description = "";
             if (portletDescriptor.getDescription() != null) {
@@ -595,11 +594,11 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
         portletWindow.setPortletName(portletId);
         portletWindow.setRemote(Boolean.TRUE.toString());
         
-        PortletRegistryUtils.setStringProperty(portletWindow, CONSUMER_ID, consumerId);
-        PortletRegistryUtils.setStringProperty(portletWindow, PRODUCER_ENTITY_ID, producerEntityId);
-        PortletRegistryUtils.setStringProperty(portletWindow, PORTLET_HANDLE, portletHandle);
-        PortletRegistryUtils.setStringProperty(portletWindow, PORTLET_ID, portletId);
-             
+        portletWindow.setConsumerId(consumerId);
+        portletWindow.setProducerEntityID(producerEntityId);
+        portletWindow.setPortletHandle(portletHandle);
+        portletWindow.setPortletID(portletId);
+        
         portletWindowList.add(portletWindow);
         PortletWindowRegistryDao portletWindowRegistryDao = new PortletWindowRegistryDao();
         portletWindowRegistryDao.addPortletWindows(portletWindowList);

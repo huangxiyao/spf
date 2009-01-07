@@ -12,10 +12,8 @@ import com.sun.portal.portletcontainer.admin.registry.PortletRegistryTags;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyCollection;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyMeta;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindow;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindow;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindowPreference;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindowPropertyMeta;
 import com.sun.portal.portletcontainer.context.registry.PortletRegistryException;
 
 /**
@@ -226,53 +224,6 @@ public class PortletRegistryUtils {
     }
 	//------------------------------------//PortletApp-------------------------------------------
 	
-	//------------------------------------PortletWindow-------------------------------------------
-	/**
-	 * Set the property value into the portlet window object
-	 * @param portletWindow
-	 *                PortletWindow entity
-	 * @param propertyName
-	 *                property name
-	 * @param porpertyValue
-	 *                property value
-	 */
-	public static void setStringProperty(PortletWindow portletWindow, 
-										 String propertyName, 
-										 String porpertyValue) {
-		// if the property already exists, update the value
-		for(PortletWindowPropertyMeta property : portletWindow.getPortletWindowPropertyMetas()) {
-			if (property.getName().equals(propertyName)) {
-				property.setValue(porpertyValue);
-				return;
-			}
-		}
-		// the property doesn't exist, add a new property 
-		PortletWindowPropertyMeta property = new PortletWindowPropertyMeta();
-		property.setName(propertyName);
-		property.setValue(porpertyValue);
-		property.setPortletWindow(portletWindow);		
-		portletWindow.getPortletWindowPropertyMetas().add(property);
-	}
-	
-	/**
-	 * Retrieve the property value from the portlet window
-	 * @param portletWindow
-	 *                portlet window
-	 * @param propertyName
-	 *                property name
-	 * @return
-	 *                property value, null if property does not exist
-	 */
-	public static String getStringProperty(PortletWindow portletWindow, String propertyName) {
-		for(PortletWindowPropertyMeta property : portletWindow.getPortletWindowPropertyMetas()) {
-			if (property.getName().equals(propertyName)) {
-        		return property.getValue();
-        	}
-        }  
-        return null;
-	}	
-	//------------------------------------//PortletWindow-------------------------------------------
-
 	//------------------------------------PortletWindowPreference-------------------------------------------
 	/**
 	 * Set the values for the Collection tag specified by the key. This Collection tag is
