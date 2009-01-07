@@ -13,8 +13,8 @@ import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyCollection;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletAppPropertyMeta;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindow;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindowPreference;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindowPreferencePropertyCollection;
+import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindow;
+import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindowPreference;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindowPropertyMeta;
 import com.sun.portal.portletcontainer.context.registry.PortletRegistryException;
 
@@ -287,7 +287,7 @@ public class PortletRegistryUtils {
 	 * @param elementList
 	 *                    collection element value list
 	 */
-	public static void setCollectionProperty(PortletWindowPreference portletWindowPreference, String collectionName, List<String> elementList) {
+	public static void setCollectionProperty(PortletUserWindow portletWindowPreference, String collectionName, List<String> elementList) {
 		Map<String, String> m = new HashMap<String, String>();
         if(elementList != null) {
             int size = elementList.size();
@@ -322,12 +322,12 @@ public class PortletRegistryUtils {
 	 * @param elementMap
 	 *                    collection element value list
 	 */
-	public static void setCollectionProperty(PortletWindowPreference portletWindowPreference, String collectionName, Map<String, String> elementMap) {
+	public static void setCollectionProperty(PortletUserWindow portletWindowPreference, String collectionName, Map<String, String> elementMap) {
 		// check if the collection exist or not
-		Set<PortletWindowPreferencePropertyCollection> existCollectionSet = portletWindowPreference.getPwPreferencePropertyCollections();
-		Set<PortletWindowPreferencePropertyCollection> removeSet = new HashSet<PortletWindowPreferencePropertyCollection>();
-		for (PortletWindowPreferencePropertyCollection existCollection : existCollectionSet) {
-			if(existCollection.getName().equals(collectionName)) {
+		Set<PortletUserWindowPreference> existCollectionSet = portletWindowPreference.getPortletWindowPreference();
+		Set<PortletUserWindowPreference> removeSet = new HashSet<PortletUserWindowPreference>();
+		for (PortletUserWindowPreference existCollection : existCollectionSet) {
+			if(existCollection.getType().equals(collectionName)) {
 				removeSet.add(existCollection);
 			}
 		}
@@ -335,12 +335,12 @@ public class PortletRegistryUtils {
 		
 		// add collection
 		for (String elementName : elementMap.keySet()) {
-			PortletWindowPreferencePropertyCollection collection = new PortletWindowPreferencePropertyCollection();
-			collection.setName(collectionName);
-			collection.setElementName(elementName);
-			collection.setElementValue(elementMap.get(elementName));		
-			collection.setPortletWindowPreference(portletWindowPreference);
-			portletWindowPreference.getPwPreferencePropertyCollections().add(collection);
+			PortletUserWindowPreference collection = new PortletUserWindowPreference();
+			collection.setType(collectionName);
+			collection.setPreferenceName(elementName);
+			collection.setPreferenceValue(elementMap.get(elementName));		
+			collection.setPortletUserWindow(portletWindowPreference);
+			portletWindowPreference.getPortletWindowPreference().add(collection);
 		}
 	}
 	//------------------------------------//PortletWindowPreference-------------------------------------------
