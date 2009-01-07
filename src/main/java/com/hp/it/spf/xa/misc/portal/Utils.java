@@ -306,6 +306,12 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @param key
 	 *            The user property name.
 	 * @return The user property value.
+	 * 
+	 * TODO: It is currently unclear if custom attributes will be extension
+	 * attributes of the Vignette User object, or not. If they are (that is the
+	 * way we did it for SP OS) then the following code will work. If they are
+	 * not, the "else" block in the following code must be updated, to look for
+	 * the key in the special custom attributes (wherever that is).
 	 */
 	public static Object getUserProperty(PortalContext portalContext, String key) {
 		if (portalContext == null || key == null) {
@@ -324,14 +330,13 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	/**
 	 * <p>
 	 * Utility method to remove unwanted SiteMinder characters passed as part of
-	 * the SiteMinder header string. If the given string does not contain the recognizable SiteMinder
-	 * padding, then it is returned.
+	 * the SiteMinder header string. If the given string does not contain the
+	 * recognizable SiteMinder padding, then it is returned.
 	 * </p>
 	 * <p>
-	 * Example: SM_USER in the headers has a value
-	 * like this: <code>=?UTF-8?B?dmlnbmV0dGVBZG1pbg0=?=</code> and in that
-	 * case, the example trimmed output required is:
-	 * <code>dmlnbmV0dGVBZG1pbg0</code>
+	 * Example: SM_USER in the headers has a value like this:
+	 * <code>=?UTF-8?B?dmlnbmV0dGVBZG1pbg0=?=</code> and in that case, the
+	 * example trimmed output required is: <code>dmlnbmV0dGVBZG1pbg0</code>
 	 * </p>
 	 * 
 	 * @param in
