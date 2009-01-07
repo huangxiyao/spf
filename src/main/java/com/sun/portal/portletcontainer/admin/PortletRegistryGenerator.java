@@ -25,7 +25,7 @@ import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletWindow
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletWindowRegistryDao;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletApp;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindow;
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindowPreference;
+import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindow;
 import com.sun.portal.portletcontainer.admin.registry.database.utils.PortletRegistryUtils;
 import com.sun.portal.portletcontainer.common.PortletDeployConfigReader;
 import com.sun.portal.portletcontainer.common.PortletPreferencesUtility;
@@ -207,7 +207,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
         List portletDescriptors = portletsDescriptor.getPortletDescriptors();
         PortletApp portletApp; 
         PortletWindow portletWindow;
-        PortletWindowPreference portletWindowPreference;
+        PortletUserWindow portletWindowPreference;
         int size = portletDescriptors.size();
         if(size == 0){
             Object[] tokens = {"portlet.xml"};
@@ -220,7 +220,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             // Instantiate the objects required to write to the registry files
             portletApp = new PortletApp();
             portletWindow = new PortletWindow();
-            portletWindowPreference = new PortletWindowPreference();
+            portletWindowPreference = new PortletUserWindow();
             
             portletAppList.add(portletApp);
             portletWindowList.add(portletWindow);
@@ -254,7 +254,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             
             // fill PortletWindowPreference
             portletWindowPreference.setPortletName(portletIDValue);
-            portletWindowPreference.setName(portletIDValue);
+            portletWindowPreference.setWindowName(portletIDValue);
             
             EntityID entityID = new EntityID(portletID);
             String entityIDPrefix = entityID.getPrefix();
@@ -605,10 +605,10 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
         portletWindowRegistryDao.addPortletWindows(portletWindowList);
         logger.log(Level.FINE, "PSPL_CSPPAM0010", "save portletWindows");
         
-        PortletWindowPreference portletWindowPreference = new PortletWindowPreference();
+        PortletUserWindow portletWindowPreference = new PortletUserWindow();
         portletWindowPreferenceList.add(portletWindowPreference);
         portletWindowPreference.setPortletName(portletId);
-        portletWindowPreference.setName(portletWindowName);
+        portletWindowPreference.setWindowName(portletWindowName);
         Map preferences = new HashMap();
         preferences.put(PORTLET_HANDLE,portletHandle);
         PortletRegistryUtils.setCollectionProperty(portletWindowPreference, PREFERENCE_PROPERTIES_KEY, preferences);
