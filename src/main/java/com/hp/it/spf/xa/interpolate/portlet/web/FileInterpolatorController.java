@@ -2,12 +2,14 @@
  * Project: Shared Portal Framework.
  * Copyright (c) 2008 HP. All Rights Reserved.
  */
-package com.hp.it.spf.xa.interpolate.portlet;
+package com.hp.it.spf.xa.interpolate.portlet.web;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.mvc.AbstractController;
+
+import com.hp.it.spf.xa.interpolate.portlet.FileInterpolator;
 
 
 /**
