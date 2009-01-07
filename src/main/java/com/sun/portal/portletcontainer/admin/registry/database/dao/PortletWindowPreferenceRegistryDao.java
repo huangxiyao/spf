@@ -219,10 +219,11 @@ public class PortletWindowPreferenceRegistryDao {
             if (tran.isActive()) {
                 tran.rollback();            	
             }
+            String message = "delete portlet Window Preference error, portletName: " + portletName;
             if (LOG.isLoggable(Level.WARNING)) {
-                LOG.log(Level.WARNING, "delete portlet Window Preference error, portletName: " + portletName, ex); 
+                LOG.log(Level.WARNING, message, ex); 
             }
-            throw new RuntimeException(ex);
+        	throw new PortletRegistryDBException(message);
         } finally {
             if (em != null) {
                 em.close();            	
@@ -262,11 +263,12 @@ public class PortletWindowPreferenceRegistryDao {
             if (tran.isActive()) {
                 tran.rollback();            	
             }
+            String message = "add portlet Window Preference error, portletWindowName: "
+                + portletWindowPreference.getWindowName();
             if (LOG.isLoggable(Level.WARNING)) {
-                LOG.log(Level.WARNING, "add portlet Window Preference error, portletWindowName: "
-                        + portletWindowPreference.getWindowName(), ex);
+                LOG.log(Level.WARNING, message, ex);
             }
-            throw new RuntimeException(ex);
+        	throw new PortletRegistryDBException(message);
         } finally {
             if (em != null) {
                 em.close();            	
