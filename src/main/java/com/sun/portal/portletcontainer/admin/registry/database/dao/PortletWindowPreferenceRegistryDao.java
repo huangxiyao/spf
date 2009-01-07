@@ -9,9 +9,11 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletWindowPreference;
+import com.sun.portal.portletcontainer.admin.database.exception.PortletRegistryDBException;
+import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindow;
 
 public class PortletWindowPreferenceRegistryDao {
     private static Logger LOG = Logger
@@ -29,21 +31,24 @@ public class PortletWindowPreferenceRegistryDao {
      * @param portletWindowPreferenceList
      */
     public void addPortletWindowPreferences(
-            List<PortletWindowPreference> portletWindowPreferenceList) {
+            List<PortletUserWindow> portletWindowPreferenceList) {
         EntityManager em = emFactory.createEntityManager();
         EntityTransaction tran = em.getTransaction();
         try {
             tran.begin();
-            for (PortletWindowPreference portletWindowPreference : portletWindowPreferenceList) {
+            for (PortletUserWindow portletWindowPreference : portletWindowPreferenceList) {
                 em.persist(portletWindowPreference);
             }
             // persist the portlet windows into the database
             tran.commit();
         } catch (Exception ex) {
-            if (tran.isActive())
-                tran.rollback();
-            LOG.log(Level.WARNING, "add portletWindows error.", ex);
-            throw new RuntimeException(ex);
+            if (tran.isActive()){
+                tran.rollback();            	
+            }
+            if (LOG.isLoggable(Level.WARNING)){
+                LOG.log(Level.WARNING, "add portletWindows error.", ex);
+                throw new PortletRegistryDBException("add portletWindows error.");            	
+            }
         } finally {
             if (em != null)
                 em.close();
@@ -56,7 +61,7 @@ public class PortletWindowPreferenceRegistryDao {
      * @param portletWindowPreference
      */
     public void addPortletWindowPreference(
-            PortletWindowPreference portletWindowPreference) {
+            PortletUserWindow portletWindowPreference) {
         EntityManager em = emFactory.createEntityManager();
 
         EntityTransaction tran = em.getTransaction();
@@ -68,7 +73,7 @@ public class PortletWindowPreferenceRegistryDao {
             tran.commit();
         } catch (Exception ex) {
             tran.rollback();
-            LOG.log(Level.WARNING, "add portletWindowPreference error, portletWindowName: " + portletWindowPreference.getName(), ex);            
+            LOG.log(Level.WARNING, "add portletUserWindowPreference error, portletWindowName: " + portletWindowPreference.getWindowName(), ex);            
             throw new RuntimeException(ex);
         } finally {
             if (em != null)
@@ -84,27 +89,34 @@ public class PortletWindowPreferenceRegistryDao {
      * @param userName
      * @return
      */
-    public PortletWindowPreference getPortletWindowPreference(
+    public PortletUserWindow getPortletWindowPreference(
             String portletWindowName, String userName) {
         EntityManager em = emFactory.createEntityManager();
 
-        String sql = "select x" + "  from PortletWindowPreference x"
-                + " where x.name = :name and x.userName = :userName";
+        String sql = "select x" + "  from PortletUserWindow x"
+                + " where x.windowName = :windowName and x.userName = :userName";
         LOG.fine("JPA SQL: " + sql);
 
         try {
             Query query = em.createQuery(sql);
-            query.setParameter("name", portletWindowName);
+            query.setParameter("windowName", portletWindowName);
             query.setParameter("userName", userName);
             Object obj = query.getSingleResult();
-            PortletWindowPreference portletWindowPreference = null;
+            PortletUserWindow portletWindowPreference = null;
             if (obj != null) {
-                portletWindowPreference = (PortletWindowPreference)obj;
+                portletWindowPreference = (PortletUserWindow)obj;
             }
             return portletWindowPreference;
+        } catch (NoResultException e) {
+        	if (LOG.isLoggable(Level.WARNING)){
+            	LOG.log(Level.WARNING, "not found portletUserWindowPreference error, portletWindowName: "
+                        + portletWindowName + ", userName: " + userName);        		
+        	}
         } catch (Exception ex) {
-        	LOG.log(Level.WARNING, "get portletWindowPreference error, portletWindowName: "
-                    + portletWindowName + ", userName: " + userName, ex);            
+        	String message = "get portletUserWindowPreference error, portletWindowName: "
+                + portletWindowName + ", userName: " + userName;
+        	LOG.log(Level.WARNING, message, ex);
+        	throw new PortletRegistryDBException(message);
         } finally {
             em.close();
         }
@@ -121,19 +133,19 @@ public class PortletWindowPreferenceRegistryDao {
      */
 
     public Map getPortletWindowPreferences(String portletWindowName,
-            String userName, String name) {
+            String userName, String type) {
         EntityManager em = emFactory.createEntityManager();
 
-        String sql = "select x.elementName, x.elementValue"
-                + "  from PortletWindowPreferencePropertyCollection x"
-                + " where x.name = :name and x.portletWindowPreference.name = :windowName and x.portletWindowPreference.userName = :userName";
+        String sql = "select x.preferenceName, x.preferenceValue"
+                + "  from PortletUserWindowPreference x"
+                + " where x.type = :type and x.portletUserWindow.windowName = :windowName and x.portletUserWindow.userName = :userName";
         LOG.fine("JPA SQL: " + sql);
 
         try {
             Query query = em.createQuery(sql);
             query.setParameter("windowName", portletWindowName);
             query.setParameter("userName", userName);
-            query.setParameter("name", name);
+            query.setParameter("type", type);
             List result = query.getResultList();
             Map resultMap = new HashMap();
             for (Object object : result) {
@@ -141,8 +153,13 @@ public class PortletWindowPreferenceRegistryDao {
                 resultMap.put((String)element[0], (String)element[1]);
             }
             return resultMap;
+        } catch (NoResultException e) {
+        	if (LOG.isLoggable(Level.WARNING)){
+            	LOG.log(Level.WARNING, "not found portletUserWindowPreference error, portletWindowName: "
+                        + portletWindowName + ", userName: " + userName);        		
+        	}
         } catch (Exception ex) {
-        	LOG.log(Level.WARNING, "get portletWindowPreference error, portletWindowName: "
+        	LOG.log(Level.WARNING, "get portletUserWindowPreference error, portletWindowName: "
                     + portletWindowName + ", userName: " + userName, ex); 
         } finally {
             em.close();
@@ -161,7 +178,7 @@ public class PortletWindowPreferenceRegistryDao {
 
         EntityTransaction tran = em.getTransaction();
 
-        String sql = "select x from PortletWindowPreference x"
+        String sql = "select x from PortletUserWindow x"
                 + " where x.portletName = :portletName";
         LOG.fine("JPA SQL: " + sql);
         try {
@@ -177,7 +194,7 @@ public class PortletWindowPreferenceRegistryDao {
         } catch (Exception ex) {
             if (tran.isActive())
                 tran.rollback();
-            LOG.log(Level.WARNING, "delte portletWindows error, portletName: " + portletName, ex); 
+            LOG.log(Level.WARNING, "delete portletWindows error, portletName: " + portletName, ex); 
             throw new RuntimeException(ex);
         } finally {
             if (em != null)
@@ -192,18 +209,18 @@ public class PortletWindowPreferenceRegistryDao {
      *            portlet window name
      */
     public void updatePortletWindowPreference(
-            PortletWindowPreference portletWindowPreference) {
+            PortletUserWindow portletWindowPreference) {
         EntityManager em = emFactory.createEntityManager();
 
         EntityTransaction tran = em.getTransaction();
-        String sql = "delete from PortletWindowPreferencePropertyCollection x"
-                + " where x.portletWindowPreference.userName = :userName and x.portletWindowPreference.name = :portletWindowName";
+        String sql = "delete from PortletUserWindowPreference x"
+                + " where x.portletUserWindow.userName = :userName and x.portletUserWindow.windowName = :portletWindowName";
         LOG.fine("JPA SQL: " + sql);
         try {
             tran.begin();
             Query query = em.createQuery(sql);
             query.setParameter("portletWindowName", portletWindowPreference
-                    .getName());
+                    .getWindowName());
             query.setParameter("userName", portletWindowPreference
                     .getUserName());
             query.executeUpdate();
@@ -214,8 +231,8 @@ public class PortletWindowPreferenceRegistryDao {
         } catch (Exception ex) {
             if (tran.isActive())
                 tran.rollback();
-            LOG.log(Level.WARNING, "add portletWindowPreference error, portletWindowName: "
-                    + portletWindowPreference.getName(), ex);
+            LOG.log(Level.WARNING, "add portletUserWindowPreference error, portletWindowName: "
+                    + portletWindowPreference.getWindowName(), ex);
             throw new RuntimeException(ex);
         } finally {
             if (em != null)
