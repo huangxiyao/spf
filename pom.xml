@@ -25,6 +25,7 @@
 		<name>Shared Portal Framework: TSG IT</name>
 	</organization>
 	<build>
+		<finalName>spf-portlet-filter</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
