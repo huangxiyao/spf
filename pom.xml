@@ -85,12 +85,12 @@
 	<inceptionYear>January 2009</inceptionYear>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/html-viewer/</url>
+		<url>http://samson.atl.hp.com:8080/hudson/job/locale-resolver/</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/locale-resolver</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/locale-resolver</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/locale-resolver</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
