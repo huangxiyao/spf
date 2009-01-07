@@ -165,7 +165,6 @@ public class PortletWindowPreferenceRegistryDao {
             // for toplink
             query.setHint("toplink.refresh", "true");
             List result = query.getResultList();
-            em.refresh(result);
             Map resultMap = new HashMap();
             for (Object object : result) {
                 Object[] element = (Object[])object;
