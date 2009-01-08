@@ -16,12 +16,13 @@ import com.hp.it.spf.xa.help.ClassicContextualHelpProvider;
  * <p>
  * An abstract base class representing a "classic"-style contextual help
  * parameter tag such as the portlet framework's
- * <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code> tag and the
- * portal framework's
- * <code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code> tag. You use
- * these tags to define parameters for surrounding message tags for messages
- * containing <code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code>
- * tokens. These message tags include the portlet framework's
+ * <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code> tag and
+ * the portal framework's
+ * <code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code> tag.
+ * You use these tags to define parameters for surrounding message tags for
+ * messages containing
+ * <code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code> tokens.
+ * These message tags include the portlet framework's
  * <code>&lt;spf-i18n-portlet:message&gt;</code> tag and the portal
  * framework's <code>&lt;spf-i18n-portal:i18nValue&gt;</code> tag (see). You
  * place the contextual help parameter tag inside the body of the surrounding
@@ -206,7 +207,7 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 * Abstract method for getting the contextual help title string from a
 	 * message resource. Should return the title key itself if there was a
 	 * problem. Different action for portal and portlet, so this is an abstract
-	 * method.
+	 * method. The method should return the "raw" message, without any escaping.
 	 * 
 	 * @return The help title message.
 	 */

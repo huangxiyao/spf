@@ -12,6 +12,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import com.hp.it.spf.xa.help.ContextualHelpProvider;
 import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
+import com.hp.it.spf.xa.misc.Utils;
 
 /**
  * <p>
@@ -31,7 +32,7 @@ import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
  * <p>
  * The <code>anchor="<i>anchor-text</i>"</code> and
  * <code>anchorKey="<i>anchor-text-key</i>"</code> attributes are
- * alternative ways of providing the some arbirary text content for the help
+ * alternative ways of providing some arbitrary text content for the help
  * hyperlink. If you provide the <code>anchor</code> attribute, then its value
  * is used as the hyperlink content. Alternatively, if you provide the
  * <code>anchorKey</code> attribute, then its value is used as a message
@@ -39,8 +40,46 @@ import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
  * string will be obtained from the resource bundle(s) available to your portlet
  * or portal component.
  * </p>
+ * </li>
+ * <li>
  * <p>
- * TODO: finish this JavaDoc.
+ * The <code>anchorImg="<i>anchor-img-src</i>"</code> and
+ * <code>anchorImgKey="<i>anchor-img-src-key</i>"</code> attributes are
+ * alternative ways of indicating that an image should be the content of the
+ * help hyperlink, and providing the <code>src</code> URL for the image. As
+ * with the above keys, <code>anchorImg</code> takes precedence over
+ * <code>anchorImgKey</code>. If provided, the <code>anchorImg</code> value
+ * should be the complete image URL itself (encoded as necessary). Otherwise if
+ * provided, the <code>anchorImgKey</code> value should be a message resource
+ * key for a message string containing the complete image URL itself (encoded as
+ * necessary).
+ * </p>
+ * </li>
+ * </ul>
+ * <p>
+ * At least one of the above attributes must be specified. <code>anchor</code>
+ * takes priority, followed by <code>anchorKey</code>, <code>anchorImg</code>,
+ * and lastly <code>anchorImgKey</code>.
+ * </p>
+ * <p>
+ * In addition, the following attributes are supported:
+ * </p>
+ * <ul>
+ * <li>
+ * <p>
+ * If an image was specified, then an <code>alt</code> text string for that
+ * image can be specified with
+ * <code>anchorImgAlt="<i>anchor-img-alt-text</i>"</code> or
+ * <code>anchorImgAltKey="<i>anchor-img-alt-text-key</i>"</code>. The
+ * former takes priority over the latter.
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * Finally, <code>escape="<i>escape-html</i>"</code> is an optional switch
+ * (default: <code>"false"</code>) which if set to <code>"true"</code> will
+ * convert any HTML special characters found in the any of the above attributes
+ * into their equivalent HTML character entities.
  * </p>
  * </li>
  * </ul>
@@ -267,14 +306,14 @@ public abstract class HelpBaseTag extends TagSupport {
 	public void release() {
 
 		super.release();
-		this.anchorKey = null;
-		this.anchor = null;
-		this.anchorImgKey = null;
-		this.anchorImg = null;
-		this.anchorImgAltKey = null;
-		this.anchorImgAlt = null;
-		this.escape = null;
-		this.escapeEnabled = false;
+		anchorKey = null;
+		anchor = null;
+		anchorImgKey = null;
+		anchorImg = null;
+		anchorImgAltKey = null;
+		anchorImgAlt = null;
+		escape = null;
+		escapeEnabled = false;
 	}
 
 	/**
@@ -343,5 +382,4 @@ public abstract class HelpBaseTag extends TagSupport {
 		}
 		return value;
 	}
-
 }

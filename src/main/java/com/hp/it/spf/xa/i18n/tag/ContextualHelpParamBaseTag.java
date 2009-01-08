@@ -148,7 +148,7 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	 * Abstract method for getting the contextual help content string from a
 	 * message resource. Should return the content key itself if there was a
 	 * problem. Different action for portal and portlet, so this is an abstract
-	 * method.
+	 * method. The method should return the "raw" message, without any escaping.
 	 * 
 	 * @return The help content message.
 	 */
