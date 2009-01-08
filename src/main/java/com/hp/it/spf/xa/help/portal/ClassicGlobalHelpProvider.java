@@ -4,7 +4,14 @@
  */
 package com.hp.it.spf.xa.help.portal;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.vignette.portal.website.enduser.PortalContext;
+
 import com.hp.it.spf.xa.help.portal.GlobalHelpProvider;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.misc.portal.Consts;
+import com.hp.it.spf.xa.misc.Utils;
 
 /**
  * <p>
@@ -30,16 +37,85 @@ import com.hp.it.spf.xa.help.portal.GlobalHelpProvider;
  * like this one does. You can even implement a tag for it, similar to the
  * above.
  * </p>
- * <p>
- * TODO: Need to finish implementing this class. The logic for the
- * implementation should largely come from the GlobalHelpBaseTag.todo file
- * (taken from the GlobalHelpBaseTag.java file in the Service Portal (OS) code).
- * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  */
 public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
+
+	/**
+	 * Name of a request attribute which tracks how often global help link
+	 * markup has been generated during this request lifecycle (ie it tracks how
+	 * many times getHTML has been invoked during this request lifecycle).
+	 */
+	private String CLASSIC_GLOBAL_HELP_COUNTER_ATTR = "ClassicGlobalHelpProvider.count";
+
+	/**
+	 * The JavaScript string for the classic global help popup.
+	 */
+	private String CLASSIC_GLOBAL_HELP_JS = "<script type=\"text/javascript\" language=\"JavaScript\">\n"
+			+ "var classicGlobalHelpUtil = \n"
+			+ "{ \n"
+			+ "    addEvent: function(elm, evType, fn) \n"
+			+ "    { \n"
+			+ "        if (elm.addEventListener) \n "
+			+ "        { \n"
+			+ "            elm.addEventListener(evType, fn, false); \n"
+			+ "            return true; \n"
+			+ "        }  \n"
+			+ "        else if (elm.attachEvent) \n"
+			+ "        { \n"
+			+ "            var r = elm.attachEvent('on' + evType, fn); \n"
+			+ "            return r; \n"
+			+ "        } \n"
+			+ "        else \n"
+			+ "        { \n"
+			+ "            elm['on' + evType] = fn; \n"
+			+ "        }\n"
+			+ "    } \n"
+			+ "} \n"
+			+ "function openClassicGlobalHelpWindow(e) {\n"
+			+ "    var el;\n\n"
+			// Try to retrieve the element that is the source of the event.
+			+ "    if (window.event && window.event.srcElement) {\n"
+			// IE
+			+ "        el = window.event.srcElement;\n"
+			+ "    }\n\n"
+			+ "    if (e && e.target) {\n"
+			// Firefox
+			+ "        el = e.target;\n"
+			+ "    }\n\n"
+			// If the element can't be retrieved, exit.
+			+ "    if (!el) {\n"
+			+ "        return;\n"
+			+ "    }\n\n"
+			+ "    var url;\n"
+			+ "    if (el.tagName == 'IMG') {\n"
+			+ "        if (el.parentElement != null) {\n"
+			+ "            url = el.parentElement.href;\n"
+			+ "        }\n"
+			+ "        else {\n"
+			+ "            url = el.parentNode;\n"
+			+ "        }\n"
+			+ "    }\n"
+			+ "    else {\n"
+			+ "        url = el.href;\n"
+			+ "    }\n\n"
+			// Open the new window
+			+ "    var helpWindow = window.open(url, 'spfGlobalHelp', 'height=610,width=410,menubar=no,status=no,toolbar=no,resizable=yes');\n"
+			+ "    helpWindow.focus();\n\n"
+			// Cancel any further bubbling of the event and disable the
+			// default action.
+			+ "    if (window.event) {\n"
+			+ "        window.event.cancelBubble = true;\n"
+			+ "        window.event.returnValue = false;\n"
+			+ "    }\n\n"
+			+ "    if (e && e.stopPropagation && e.preventDefault) {\n"
+			+ "        e.stopPropagation();\n"
+			+ "        e.preventDefault();\n"
+			+ "    }\n\n"
+			+ "}\n\n"
+			+ "</script>";
 
 	/**
 	 * "Classic" global help has an optional page fragment - this is an anchor
@@ -49,10 +125,19 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	private String fragment = "";
 
 	/**
-	 * Empty constructor; use the setters to provide the attributes.
+	 * The request for this classic global help provider.
 	 */
-	public ClassicGlobalHelpProvider() {
+	private PortalContext portalContext = null;
 
+	/**
+	 * <p>
+	 * Constructor for the "classic"-style global help provider for a particular
+	 * request. If a null PortalContext is provided, the getHTML methods of this
+	 * class will not work (ie will return null).
+	 * </p>
+	 */
+	public ClassicGlobalHelpProvider(PortalContext pContext) {
+		portalContext = pContext;
 	}
 
 	/**
@@ -75,7 +160,7 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 		}
 		pFragment = pFragment.trim();
 		while (pFragment.startsWith("#")) {
-			if (pFragment.length() > 1) 
+			if (pFragment.length() > 1)
 				pFragment = pFragment.substring(1);
 			else
 				pFragment = "";
@@ -99,6 +184,10 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * In this method, any HTML <code>&lt;SPAN&gt;</code> markup in the link
 	 * content, which Vignette may have automatically added, is retained.
 	 * </p>
+	 * <p>
+	 * This method requires that a valid HttpServletRequest was given to the
+	 * constructor. If not, it returns null.
+	 * </p>
 	 * 
 	 * @param escape
 	 *            Whether or not to escape HTML in the link content.
@@ -111,9 +200,9 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 
 	/**
 	 * <p>
-	 * Returns the HTML string for the global help, including the link content
-	 * surrounded by a hyperlink which, if clicked, will reveal the global help
-	 * secondary page in an appropriately-formed popup window.
+	 * Returns the HTML string for the "classic"-style global help, including
+	 * the link content surrounded by a hyperlink which, if clicked, will reveal
+	 * the global help secondary page in an appropriately-formed popup window.
 	 * </p>
 	 * <p>
 	 * The first boolean parameter controls whether or not to escape any HTML
@@ -126,8 +215,10 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * <code>&lt;SPAN&gt;</code> markup from the link content, which Vignette
 	 * may have automatically added.
 	 * </p>
-	 * 
-	 * TODO: Must implement this method, see notes above.
+	 * <p>
+	 * This method requires that a valid HttpServletRequest was given to the
+	 * constructor. If not, it returns null.
+	 * </p>
 	 * 
 	 * @param escape
 	 *            Whether or not to escape HTML in the link content.
@@ -138,8 +229,90 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 *         content that was set.
 	 */
 	public String getHTML(boolean escape, boolean filterSpan) {
-		String html = "";
-		return html;
+
+		if (portalContext == null) {
+			return null;
+		}
+		HttpServletRequest request = portalContext.getHttpServletRequest();
+		if (request == null) {
+			return null;
+		}
+
+		// Get the global help link counter which tracks any previous
+		// invocation.
+		int count = 0;
+		Object countString = request
+				.getAttribute(CLASSIC_GLOBAL_HELP_COUNTER_ATTR);
+		if (countString == null) {
+			count = 0;
+		} else {
+			try {
+				count = Integer.parseInt((String) countString);
+			} catch (NumberFormatException e) { // should never happen
+				count = 0;
+			}
+		}
+
+		// If common JavaScript has not previously been returned, then include
+		// it now. Bump the counter.
+		StringBuffer html = new StringBuffer();
+		if (count == 0) {
+			html.append(CLASSIC_GLOBAL_HELP_JS);
+		}
+		++count;
+
+		// Make the anchor ID.
+		String id = "classicGlobalHelp" + count;
+
+		// Make the link text.
+		String link = this.linkContent;
+		if (filterSpan) { // Remove Vignette-introduced <SPAN> tags if needed.
+			link = I18nUtility.filterSpan(link);
+		}
+		if (escape) { // Escape XML meta-characters if needed.
+			link = Utils.escapeXml(link);
+		}
+
+		// Make the URI for the global help.
+		String uri = portalContext.createDisplayURI(Consts.PAGE_GLOBAL_HELP)
+				.toString();
+		if (this.fragment != null) {
+			uri += "#" + fragment;
+		}
+
+		// Generate the main HTML and event-handling code by assembling the
+		// pieces.
+		html.append("<a ");
+		html.append("id=\"" + id + "\" ");
+		html.append("href=\"" + uri + "\" ");
+		html.append(">" + link + "</a>");
+		html.append("<script>");
+		html.append("classicGlobalHelpUtil.addEvent(document.getElementById('"
+				+ id + "'), 'click', openClassicGlobalHelpWindow);");
+		html.append("</script>");
+
+		// Store the counter to remember how many links we have done.
+		request.setAttribute(CLASSIC_GLOBAL_HELP_COUNTER_ATTR, String
+				.valueOf(count));
+		return html.toString();
 	}
 
+	/**
+	 * <p>
+	 * Use this method at any time during the request lifecycle, if for some
+	 * reason you need the next getHTML invokation to return the common
+	 * JavaScript again. This generally is not recommended, because if you
+	 * aggregate in the same page multiple getHTML results, which were generated
+	 * before and after a resetHTML, a JavaScript runtime conflict will arise.
+	 * </p>
+	 * 
+	 */
+	public void resetHTML() {
+		if (portalContext != null) {
+			HttpServletRequest request = portalContext.getHttpServletRequest();
+			if (request != null) {
+				request.removeAttribute(CLASSIC_GLOBAL_HELP_COUNTER_ATTR);
+			}
+		}
+	}
 }
