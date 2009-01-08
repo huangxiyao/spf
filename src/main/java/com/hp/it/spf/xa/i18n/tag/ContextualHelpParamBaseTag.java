@@ -10,31 +10,33 @@ import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.hp.it.spf.xa.help.ContextualHelpProvider;
+import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
 
 /**
  * <p>
  * An abstract base class for all contextual help parameter tags, including the
- * tags for "classic"-style contextual help parameters (eg the portlet framework's
- * <code>&lt;spf-i18n-portlet:contextualHelpParam&gt;</code> tag). If you
- * create another style of rendering contextual help, and would like to render
- * that style by embedding
+ * tags for "classic"-style contextual help parameters (eg the portlet
+ * framework's <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code>
+ * tag). If you create another style of rendering contextual help, and would
+ * like to render that style by embedding
  * <code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code> tokens into
  * your message string, then you should develop a contextual help parameter tag
- * class by subclassing from this one. Implement the abstract method which
- * should construct and return your new kind of ContextualHelpProvider; this
- * base class will set that into the parent message tag for output.
+ * class by subclassing from this one. Implement the abstract methods which
+ * should construct and return your new kind of ContextualHelpProvider with your
+ * content message; this base class will set that into the parent message tag
+ * for output.
  * </p>
  * <p>
  * All contextual help has help content, so all contextual help parameter tags
- * support attributes to pass in the help conent.
- * The <code>content="<i>content</i>"</code> and
+ * support attributes to pass in the help conent. The
+ * <code>content="<i>content</i>"</code> and
  * <code>contentKey="<i>content-key</i>"</code> attributes are alternative
- * ways of providing the help content. If you provide the
- * <code>content</code> attribute, then its value is used directly.
- * Alternatively, if you provide the <code>contentKey</code> attribute, then
- * its value is used as a message resource key for a message string containing
- * the content. One or the other attribute is required. If you specify both,
- * then <code>content</code> will take precedence.
+ * ways of providing the help content. If you provide the <code>content</code>
+ * attribute, then its value is used directly. Alternatively, if you provide the
+ * <code>contentKey</code> attribute, then its value is used as a message
+ * resource key for a message string containing the content (this is the duty 
+ * of one of the abstract methods). One or the other attribute is required. If
+ * you specify both, then <code>content</code> will take precedence.
  * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
