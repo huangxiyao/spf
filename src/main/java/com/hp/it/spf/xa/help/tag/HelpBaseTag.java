@@ -352,8 +352,9 @@ public abstract class HelpBaseTag extends TagSupport {
 	 * contextual), so this method is abstract.
 	 * 
 	 * @return The help hyperlink markup.
+	 * @throws JspException
 	 */
-	public abstract String getHTML();
+	public abstract String getHTML() throws JspException;
 
 	/**
 	 * Abstract method for logging a tag error. Different action for portal and
