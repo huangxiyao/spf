@@ -20,16 +20,16 @@ import com.hp.it.spf.xa.misc.Utils;
  * </p>
  * <p>
  * This is the style of global-help popup which is rendered by the portal
- * framework's <code>&lt;spf-help-portal:globalHelp&gt;</code> tag. It is also
- * the style rendered by the portal framework's
- * <code>&lt;spf-i18n-portal:i18nGlobalHelpParam&gt;</code> tag. Use that tag
- * inside the <code>&lt;spf-i18n-portal:i18nValue&gt;</code> tag body to
- * render this kind of global-help popup into a message with your chosen
+ * framework's <code>&lt;spf-help-portal:classicGlobalHelp&gt;</code> tag. It
+ * is also the style rendered by the portal framework's
+ * <code>&lt;spf-i18n-portal:i18nClassicGlobalHelpParam&gt;</code> tag. Use
+ * that tag inside the <code>&lt;spf-i18n-portal:i18nValue&gt;</code> tag body
+ * to render this kind of global-help popup into a message with your chosen
  * attributes. (Using the
- * <code>&lt;spf-i18n-portal:i18nGlobalHelpParam&gt;</code> tag instantiates
- * this class.) You can also instantiate this class directly and pass it to the
- * <code>I18nUtility.getValue</code> methods of the portal framework to
- * produce this default-style global-help popup.
+ * <code>&lt;spf-i18n-portal:i18nClassic GlobalHelpParam&gt;</code> tag
+ * instantiates this class.) You can also instantiate this class directly and
+ * pass it to the <code>I18nUtility.getValue</code> methods of the portal
+ * framework to produce this classic-style global-help popup.
  * </p>
  * <p>
  * If you are not happy with the "classic" global-help popup style, you can
@@ -54,9 +54,9 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * The JavaScript string for the classic global help popup.
 	 */
 	private String CLASSIC_GLOBAL_HELP_JS = "<script type=\"text/javascript\" language=\"JavaScript\">\n"
-		    + "if (typeof(loadedClassicGlobalHelpJS) == 'undefined') \n"
-	        + "{ \n"
-	        + "    var loadedClassGlobalHelpJS = true; \n"
+			+ "if (typeof(loadedClassicGlobalHelpJS) == 'undefined') \n"
+			+ "{ \n"
+			+ "    var loadedClassGlobalHelpJS = true; \n"
 			+ "    var classicGlobalHelpUtil = \n"
 			+ "    { \n"
 			+ "        addEvent: function(elm, evType, fn) \n"
@@ -118,8 +118,7 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 			+ "            e.preventDefault();\n"
 			+ "        }\n\n"
 			+ "    }\n"
-			+ "}\n"
-			+ "</script>";
+			+ "}\n" + "</script>";
 
 	/**
 	 * "Classic" global help has an optional page fragment - this is an anchor
@@ -129,7 +128,7 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	private String fragment = "";
 
 	/**
-	 * The request for this classic global help provider.
+	 * The portal context for this classic global help provider.
 	 */
 	private PortalContext portalContext = null;
 
@@ -189,7 +188,7 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * content, which Vignette may have automatically added, is retained.
 	 * </p>
 	 * <p>
-	 * This method requires that a valid HttpServletRequest was given to the
+	 * This method requires that a valid PortalContext was given to the
 	 * constructor. If not, it returns null.
 	 * </p>
 	 * 
@@ -220,7 +219,7 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * may have automatically added.
 	 * </p>
 	 * <p>
-	 * This method requires that a valid HttpServletRequest was given to the
+	 * This method requires that a valid PortalContext was given to the
 	 * constructor. If not, it returns null.
 	 * </p>
 	 * 
