@@ -81,7 +81,7 @@ public abstract class HelpUtility {
 		String regex = "</?" + token + ">";
 		Pattern tokenPattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		Matcher tokenMatcher = tokenPattern.matcher(msg);
-		String result = "";
+		StringBuffer result = new StringBuffer();
 		String token, content = "";
 		int matchTo = 0, matchFrom = 0, i = 0;
 		short lookingFor = BEGIN;
@@ -91,7 +91,7 @@ public abstract class HelpUtility {
 			content += msg.substring(matchTo, matchFrom);
 			if (lookingFor == BEGIN) {
 				if (token.equalsIgnoreCase(beginToken)) {
-					result += treat(content, escapeHTML);
+					result.append(treat(content, escapeHTML));
 					content = "";
 					lookingFor = END;
 				}
@@ -101,9 +101,9 @@ public abstract class HelpUtility {
 							&& hParams[i] != null) {
 						HelpProvider p = hParams[i++];
 						p.setLinkContent(content);
-						result += p.getHTML(escapeHTML);
+						result.append(p.getHTML(escapeHTML));
 					} else {
-						result += treat(content, escapeHTML);
+						result.append(treat(content, escapeHTML));
 					}
 					content = "";
 					lookingFor = BEGIN;
@@ -114,8 +114,8 @@ public abstract class HelpUtility {
 		if (matchTo < msg.length()) {
 			content += msg.substring(matchTo);
 		}
-		result += treat(content, escapeHTML);
-		return result;
+		result.append(treat(content, escapeHTML));
+		return result.toString();
 	}
 
 	private static String treat(String content, boolean escapeHTML) {
