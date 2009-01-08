@@ -333,7 +333,7 @@ public abstract class HelpBaseTag extends TagSupport {
 		}
 		JspWriter out = pageContext.getOut();
 		try {
-			String value = getHTML();
+			String value = getHTML(getLinkContent());
 			if (value == null) {
 				value = "";
 			}
@@ -401,10 +401,11 @@ public abstract class HelpBaseTag extends TagSupport {
 	 * contextual), so this method is abstract. This method should apply any
 	 * needed escaping/filtering to the markup.
 	 * 
-	 * @return The help hyperlink markup.
+	 * @param linkContent The markup to put inside the hyperlink.
+	 * @return The total help hyperlink markup.
 	 * @throws JspException
 	 */
-	public abstract String getHTML() throws JspException;
+	public abstract String getHTML(String linkContent) throws JspException;
 
 	/**
 	 * Abstract method for getting a message from a resource bundle. Different

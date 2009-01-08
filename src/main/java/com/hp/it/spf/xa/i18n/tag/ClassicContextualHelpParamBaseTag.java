@@ -190,11 +190,11 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 		}
 		String actualTitle = title;
 		if (actualTitle == null) {
-			actualTitle = getTitleMessage();
+			actualTitle = getMessage(titleKey);
 		}
 		String actualContent = content;
 		if (actualContent == null) {
-			actualContent = getContentMessage();
+			actualContent = getMessage(contentKey);
 		}
 		ClassicContextualHelpProvider c = newClassicContextualHelpProvider();
 		c.setHelpContent(actualContent);
@@ -202,16 +202,6 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 		c.setNoScriptHref(noScriptHref);
 		return c;
 	}
-
-	/**
-	 * Abstract method for getting the contextual help title string from a
-	 * message resource. Should return the title key itself if there was a
-	 * problem. Different action for portal and portlet, so this is an abstract
-	 * method. The method should return the "raw" message, without any escaping.
-	 * 
-	 * @return The help title message.
-	 */
-	public abstract String getTitleMessage();
 
 	/**
 	 * Abstract method for getting an empty classic contextual help provider.

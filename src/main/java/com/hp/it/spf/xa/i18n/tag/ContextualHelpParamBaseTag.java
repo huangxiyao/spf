@@ -34,9 +34,9 @@ import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
  * ways of providing the help content. If you provide the <code>content</code>
  * attribute, then its value is used directly. Alternatively, if you provide the
  * <code>contentKey</code> attribute, then its value is used as a message
- * resource key for a message string containing the content (this is the duty 
- * of one of the abstract methods). One or the other attribute is required. If
- * you specify both, then <code>content</code> will take precedence.
+ * resource key for a message string containing the content (this is the duty of
+ * one of the abstract methods). One or the other attribute is required. If you
+ * specify both, then <code>content</code> will take precedence.
  * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
@@ -145,14 +145,16 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 			throws JspException;
 
 	/**
-	 * Abstract method for getting the contextual help content string from a
-	 * message resource. Should return the content key itself if there was a
-	 * problem. Different action for portal and portlet, so this is an abstract
-	 * method. The method should return the "raw" message, without any escaping.
+	 * Abstract method for getting a contextual help text string from a message
+	 * resource. Should return the content key itself if there was a problem.
+	 * Different action for portal and portlet, so this is an abstract method.
+	 * The method should return the "raw" message, without any escaping.
 	 * 
-	 * @return The help content message.
+	 * @param key
+	 *            The message key.
+	 * @return The message value.
 	 */
-	public abstract String getContentMessage();
+	public abstract String getMessage(String key);
 
 	/**
 	 * Abstract method for logging a tag error. Different action for portal and
