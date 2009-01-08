@@ -3,30 +3,22 @@
  * Copyright (c) 2008 HP. All Rights Reserved.
  */
 
-package com.hp.it.spf.xa.i18n.tag;
+package com.hp.it.spf.xa.help.tag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 
-import com.hp.it.spf.xa.i18n.tag.ContextualHelpParamBaseTag;
+import com.hp.it.spf.xa.help.tag.ContextualHelpBaseTag;
 import com.hp.it.spf.xa.help.ContextualHelpProvider;
 import com.hp.it.spf.xa.help.ClassicContextualHelpProvider;
 
 /**
  * <p>
- * An abstract base class representing a "classic"-style contextual help
- * parameter tag such as the portlet framework's
- * <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code> tag and
- * the portal framework's
- * <code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code> tag.
- * You use these tags to define parameters for surrounding message tags for
- * messages containing
- * <code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code> tokens.
- * These message tags include the portlet framework's
- * <code>&lt;spf-i18n-portlet:message&gt;</code> tag and the portal
- * framework's <code>&lt;spf-i18n-portal:i18nValue&gt;</code> tag (see). You
- * place the contextual help parameter tag inside the body of the surrounding
- * message tag, in order to pass parameters in that order into the message.
+ * An abstract base class representing a "classic"-style contextual help tag
+ * such as the portlet framework's
+ * <code>&lt;spf-help-portlet:classicContextualHelp&gt;</code> tag and the
+ * portal framework's <code>&lt;spf-help-portal:classicContextualHelp&gt;</code>
+ * tag.
  * </p>
  * <p>
  * The style of contextual help rendered by this tag is the SPF-provided classic
@@ -62,20 +54,19 @@ import com.hp.it.spf.xa.help.ClassicContextualHelpProvider;
  * <p>
  * As noted above, this tag is for the classic-style rendering of contextual
  * help. If you would like a custom style, you must implement your own custom
- * tag for it. Like the above tags, your custom tag would be used inside a
- * message tag body. Implement a ContextualHelpProvider concrete subclass for
- * that custom style. Then implement a tag class for it, like this one. Have the
- * tag construct the appropriate kind of ContextualHelpProvider subclass
- * corresponding to that custom style, and have the tag add it into the parent
- * message tag's list.
+ * tag for it. Implement a ContextualHelpProvider concrete subclass for that
+ * custom style. Then implement a tag class for it, like this one, extending
+ * ContextualHelpBaseTag. Have the tag construct the appropriate kind of
+ * ContextualHelpProvider subclass corresponding to that custom style, and
+ * return its HTML.
  * </p>
  * 
  * @author <link href="kuang.cheng@hp.com">Cheng Kuang</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  */
-public abstract class ClassicContextualHelpParamBaseTag extends
-		ContextualHelpParamBaseTag {
+public abstract class ClassicContextualHelpBaseTag extends
+		ContextualHelpBaseTag {
 	/**
 	 * serialVersionUID long
 	 */
@@ -137,20 +128,6 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	}
 
 	/**
-	 * Returns the title content, from either the <code>title</code> attribute
-	 * or the <code>titleKey</code> message.
-	 * 
-	 * @return The string to use as the title content.
-	 */
-	public String getTitleContent() {
-		String actualTitle = title;
-		if (actualTitle == null) {
-			actualTitle = getMessage(titleKey);
-		}
-		return actualTitle;
-	}
-
-	/**
 	 * Get the value of the <code>noScriptHref</code> attribute.
 	 * 
 	 * @return The <code>noScriptHref</code> attribute.
@@ -170,9 +147,23 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	}
 
 	/**
+	 * Returns the title content, from either the <code>title</code> attribute
+	 * or the <code>titleKey</code> message.
+	 * 
+	 * @return The string to use as the title content.
+	 */
+	public String getTitleContent() {
+		String actualTitle = title;
+		if (actualTitle == null) {
+			actualTitle = getMessage(titleKey);
+		}
+		return actualTitle;
+	}
+
+	/**
 	 * Initialize the tag attributes.
 	 */
-	public ClassicContextualHelpParamBaseTag() {
+	public ClassicContextualHelpBaseTag() {
 		super();
 		title = null;
 		titleKey = null;
@@ -184,29 +175,35 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 * populated with the parameters from the current tag. This throws a
 	 * JspException if the required parameters for that provider (ie the
 	 * <code>titleKey</code> and <code>contentKey</code> attributes) were
-	 * not specified in the tag. This method leaves the link content
-	 * unpopulated; the surrounding tag will populate that.
+	 * not specified in the tag.
 	 * 
+	 * @param linkContent
 	 * @return ContextualHelpProvider
 	 * @throws JspException
 	 */
-	public ContextualHelpProvider getContextualHelpProvider()
+	public ContextualHelpProvider getContextualHelpProvider(String linkContent)
 			throws JspException {
-		String actualTitle = getTitleContent();
-		if (actualTitle == null) {
-			String msg = "ClassicContextualHelpParamBaseTag error: either the title or titleKey are required attributes.";
+		if (linkContent == null) {
+			String msg = "ClassicContextualHelpBaseTag error: one of the following attributes is required: anchor, anchorKey, anchorImg, anchorImgKey.";
 			logError(this, msg);
 			throw new JspException(msg);
 		}
-		String actualContent = getHelpContent();
-		if (actualContent == null) {
-			String msg = "ClassicContextualHelpParamBaseTag error: either the content or contentKey are required attributes.";
+		String titleContent = getTitleContent();
+		if (titleContent == null) {
+			String msg = "ClassicContextualHelpBaseTag error: either the title or titleKey are required attributes.";
+			logError(this, msg);
+			throw new JspException(msg);
+		}
+		String helpContent = getHelpContent();
+		if (helpContent == null) {
+			String msg = "ClassicContextualHelpBaseTag error: either the content or contentKey are required attributes.";
 			logError(this, msg);
 			throw new JspException(msg);
 		}
 		ClassicContextualHelpProvider c = newClassicContextualHelpProvider();
-		c.setHelpContent(actualContent);
-		c.setTitleContent(actualTitle);
+		c.setLinkContent(linkContent);
+		c.setHelpContent(helpContent);
+		c.setTitleContent(titleContent);
 		c.setNoScriptHref(noScriptHref);
 		return c;
 	}

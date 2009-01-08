@@ -3,7 +3,7 @@
  * Copyright (c) 2008 HP. All Rights Reserved.
  */
 
-package com.hp.it.spf.xa.i18n.tag;
+package com.hp.it.spf.xa.help.tag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
@@ -11,25 +11,26 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import com.hp.it.spf.xa.help.ContextualHelpProvider;
 import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
+import com.hp.it.spf.xa.help.tag.HelpBaseTag;
 
 /**
  * <p>
- * An abstract base class for all contextual help parameter tags, including the
- * tags for "classic"-style contextual help parameters (eg the portlet
- * framework's <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code>
- * tag). If you create another style of rendering contextual help, and would
- * like to render that style by embedding
- * <code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code> tokens into
- * your message string, then you should develop a contextual help parameter tag
- * class by subclassing from this one. Implement the abstract methods which
- * should construct and return your new kind of ContextualHelpProvider with your
- * content message; this base class will set that into the parent message tag
- * for output.
+ * An abstract base class for all contextual help tags, including the tags for
+ * "classic"-style contextual help (eg the portlet framework's
+ * <code>&lt;spf-help-portlet:classicContextualHelp&gt;</code> tag). If you
+ * create another style of rendering contextual help, and would like to render
+ * that help with a custom tag, then you should develop your custom contextual
+ * help tag class by subclassing from this one.
  * </p>
  * <p>
- * All contextual help has help content, so all contextual help parameter tags
- * support attributes to pass in the help conent. The
- * <code>content="<i>content</i>"</code> and
+ * All contextual help kinds inherit from the HelpBaseTag class and thus take
+ * their tags take the same attributes as documented for that class. In
+ * addition, all contextual help has help content, so all contextual help
+ * parameter tags support the following attributes to pass in the help content:
+ * </p>
+ * <ul>
+ * <li>
+ * <p> The <code>content="<i>content</i>"</code> and
  * <code>contentKey="<i>content-key</i>"</code> attributes are alternative
  * ways of providing the help content. If you provide the <code>content</code>
  * attribute, then its value is used directly. Alternatively, if you provide the
@@ -38,11 +39,13 @@ import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
  * one of the abstract methods). One or the other attribute is required. If you
  * specify both, then <code>content</code> will take precedence.
  * </p>
+ * </li>
+ * </ul>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  */
-public abstract class ContextualHelpParamBaseTag extends TagSupport {
+public abstract class ContextualHelpBaseTag extends HelpBaseTag {
 	/**
 	 * serialVersionUID long
 	 */
@@ -113,37 +116,33 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	/**
 	 * Initialize the tag attributes.
 	 */
-	public ContextualHelpParamBaseTag() {
+	public ContextualHelpBaseTag() {
 		super();
 		contentKey = null;
 		content = null;
 	}
 
+	
 	/**
-	 * Do the tag processing. An error is thrown if the tag discovers it is not
-	 * contained inside the body of a surrounding message tag (any subclass of
-	 * MessageBaseTag). Otherwise, it takes the ContextualHelpProvider provided
-	 * by the concrete subclass and sets it into the parent message tag.
+	 * Gets a ContextualHelpProvider to get the HTML for the contextual help hyperlink
+	 * and return it to the tag.
 	 * 
-	 * @return int
+	 * @param linkContent
+	 *            The string of HTML markup to enclose inside the link.
+	 * @return The total HTML markup for the contextual help hyperlink corresponding
+	 *         to the attributes of this tag.
 	 * @throws JspException
 	 */
-	public int doEndTag() throws JspException {
-		Tag parent = getParent();
-		if (parent == null) {
-			String msg = "ContextualHelpParamBaseTag error: requires surrounding message tag of type MessageBaseTag.";
+	public String getHTML(String linkContent) throws JspException {
+		// Get the link content (exception if none was defined or found)
+		if (linkContent == null) {
+			String msg = "ContextualHelpBaseTag error: one of the following attributes is required: anchor, anchorKey, anchorImg, anchorImgKey.";
 			logError(this, msg);
 			throw new JspException(msg);
 		}
-		if (!(parent instanceof MessageBaseTag)) {
-			String msg = "ContextualHelpParamBaseTag error: requires surrounding message tag of type MessageBaseTag.";
-			logError(this, msg);
-			throw new JspException(msg);
-		}
-		ContextualHelpProvider c = getContextualHelpProvider();
-		MessageBaseTag messageTag = (MessageBaseTag) parent;
-		messageTag.addContextualHelpProvider(c);
-		return super.doEndTag();
+		// Get and return the contextual help hyperlink HTML
+		ContextualHelpProvider c = getContextualHelpProvider(linkContent);
+		return c.getHTML(escapeEnabled);
 	}
 
 	/**
@@ -151,35 +150,9 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	 * attributes. Throw a JspException if there was a problem. Different action
 	 * depending on the particular style of contextual help, so this is
 	 * abstract.
-	 * 
-	 * @return The contextual help provider containing the contextual help
-	 *         parameters.
 	 */
-	public abstract ContextualHelpProvider getContextualHelpProvider()
+	public abstract ContextualHelpProvider getContextualHelpProvider(String linkContent)
 			throws JspException;
-
-	/**
-	 * Abstract method for getting a contextual help text string from a message
-	 * resource. Should return the content key itself if there was a problem.
-	 * Different action for portal and portlet, so this is an abstract method.
-	 * The method should return the "raw" message, without any escaping.
-	 * 
-	 * @param key
-	 *            The message key.
-	 * @return The message value.
-	 */
-	public abstract String getMessage(String key);
-
-	/**
-	 * Abstract method for logging a tag error. Different action for portal and
-	 * portlet, so this is an abstract method.
-	 * 
-	 * @param obj
-	 *            The object asking to log this error.
-	 * @param msg
-	 *            The error message.
-	 */
-	public abstract void logError(Object obj, String msg);
 
 	/**
 	 * Normalize blank string values to null - so the return is either a
@@ -197,5 +170,4 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 		}
 		return value;
 	}
-
 }
