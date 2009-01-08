@@ -37,8 +37,7 @@ public class PortletAppRegistryDao {
 			List<PortletApp> list = query.getResultList();
 			return list;
 		} catch (Exception ex) {
-			LOG.log(Level.WARNING, "get all portlet error.", ex);	
-			throw new PortletRegistryDBException("get all portlet error.");
+			throw new PortletRegistryDBException("get all portlet error.", ex);
 		} finally {		
 			em.close();
 		}
@@ -68,8 +67,7 @@ public class PortletAppRegistryDao {
 		} catch (NoResultException ex) {
 			return null;
 		} catch (Exception ex) {
-			LOG.log(Level.WARNING, "get portlet error.", ex);
-			throw new PortletRegistryDBException("get portlet error.");
+			throw new PortletRegistryDBException("get portlet error.", ex);
 		} finally {		
 			em.close();
 		}
@@ -101,8 +99,7 @@ public class PortletAppRegistryDao {
 			if(tran.isActive()) {
 				tran.rollback();
 			}
-			LOG.log(Level.WARNING, "delte portlet error, portletName: " + portletName, ex);		
-			throw new PortletRegistryDBException("delte portlet error.");
+			throw new PortletRegistryDBException("delte portlet error, portletName: " + portletName, ex);
 		} finally {			
 			em.close();
 		}	
@@ -123,8 +120,7 @@ public class PortletAppRegistryDao {
 			if(tran.isActive()) {
 				tran.rollback();
 			}
-			LOG.log(Level.WARNING, "create portlets error.", ex);
-			throw new PortletRegistryDBException("create portlets error.");
+			throw new PortletRegistryDBException("create portlets error.", ex);
 		} finally {			
 			em.close();
 		}	

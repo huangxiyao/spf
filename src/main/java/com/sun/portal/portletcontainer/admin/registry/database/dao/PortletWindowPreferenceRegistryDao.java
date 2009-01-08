@@ -45,10 +45,7 @@ public class PortletWindowPreferenceRegistryDao {
             if (tran.isActive()){
                 tran.rollback();            	
             }
-            if (LOG.isLoggable(Level.WARNING)) {
-                LOG.log(Level.WARNING, "add portlet Window Preferences error.", ex);      	
-            }
-            throw new PortletRegistryDBException("add portlet Window Preferences error.");      
+            throw new PortletRegistryDBException("add portlet Window Preferences error.", ex);      
         } finally {
             if (em != null) {
                 em.close();
@@ -76,10 +73,7 @@ public class PortletWindowPreferenceRegistryDao {
             if (tran.isActive()){
                 tran.rollback();            	
             }
-            if (LOG.isLoggable(Level.WARNING)) {
-            	LOG.log(Level.WARNING, "add portlet Window Preference error, portletWindowName: " + portletWindowPreference.getWindowName(), ex);                       	
-            }
-            throw new RuntimeException(ex);
+            throw new PortletRegistryDBException("add portlet Window Preference error, portletWindowName: " + portletWindowPreference.getWindowName(), ex);
         } finally {
             if (em != null) {
                 em.close();            	
@@ -126,10 +120,7 @@ public class PortletWindowPreferenceRegistryDao {
         } catch (Exception ex) {
         	String message = "get portlet Window Preference error, portletWindowName: "
                 + portletWindowName + ", userName: " + userName;
-        	if (LOG.isLoggable(Level.WARNING)){
-        		LOG.log(Level.WARNING, message, ex);       		
-        	}
-        	throw new PortletRegistryDBException(message);
+        	throw new PortletRegistryDBException(message, ex);
         } finally {
             em.close();
         }
@@ -179,11 +170,8 @@ public class PortletWindowPreferenceRegistryDao {
             return null;
         } catch (Exception ex) {
         	String message = "get portlet Window Preference error, portletWindowName: "
-                + portletWindowName + ", userName: " + userName;
-            if (LOG.isLoggable(Level.WARNING)) {
-                LOG.log(Level.WARNING, message, ex); 
-            }
-        	throw new PortletRegistryDBException(message);
+                + portletWindowName + ", userName: " + userName;            
+        	throw new PortletRegistryDBException(message, ex);
         } finally {
             em.close();
         }
@@ -220,10 +208,7 @@ public class PortletWindowPreferenceRegistryDao {
                 tran.rollback();            	
             }
             String message = "delete portlet Window Preference error, portletName: " + portletName;
-            if (LOG.isLoggable(Level.WARNING)) {
-                LOG.log(Level.WARNING, message, ex); 
-            }
-        	throw new PortletRegistryDBException(message);
+            throw new PortletRegistryDBException(message, ex);
         } finally {
             if (em != null) {
                 em.close();            	
@@ -265,10 +250,7 @@ public class PortletWindowPreferenceRegistryDao {
             }
             String message = "add portlet Window Preference error, portletWindowName: "
                 + portletWindowPreference.getWindowName();
-            if (LOG.isLoggable(Level.WARNING)) {
-                LOG.log(Level.WARNING, message, ex);
-            }
-        	throw new PortletRegistryDBException(message);
+           throw new PortletRegistryDBException(message, ex);
         } finally {
             if (em != null) {
                 em.close();            	

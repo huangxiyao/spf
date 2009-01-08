@@ -40,8 +40,7 @@ public class PortletWindowRegistryDao {
 			if(tran.isActive()) {
 				tran.rollback();
 			}
-			LOG.log(Level.WARNING, "add portletWindow error, portletWindowName: " + portletWindow.getName(), ex);			
-			throw new PortletRegistryDBException("add portletWindow error.");
+			throw new PortletRegistryDBException("add portletWindow error, portletWindowName: " + portletWindow.getName(), ex);
 		} finally {			
 			em.close();
 		}	
@@ -67,8 +66,7 @@ public class PortletWindowRegistryDao {
 			if(tran.isActive()) {
 				tran.rollback();
 			}
-			LOG.log(Level.WARNING, "add portletWindows error.", ex);			
-			throw new PortletRegistryDBException("add portletWindows error.");
+			throw new PortletRegistryDBException("add portletWindows error.", ex);
 		} finally {			
 			em.close();
 		}	
@@ -89,8 +87,7 @@ public class PortletWindowRegistryDao {
 			List<PortletWindow> list = query.getResultList();
 			return list;
 		} catch (Exception ex) {
-			LOG.log(Level.WARNING, "get all portletWindow error.", ex);
-			throw new PortletRegistryDBException("get all portletWindow error.");
+			throw new PortletRegistryDBException("get all portletWindow error.", ex);
 		} finally {		
 			em.close();
 		}
@@ -123,9 +120,8 @@ public class PortletWindowRegistryDao {
 			return portletWindow;
 		} catch (NoResultException ex) {
 			return null;
-		} catch (Exception ex) {
-			LOG.log(Level.WARNING, "get portletWindow error, portletWindowName: " + portletWindowName, ex);
-			throw new PortletRegistryDBException("get portletWindow error.");
+		} catch (Exception ex) {			
+			throw new PortletRegistryDBException("get portletWindow error, portletWindowName: " + portletWindowName, ex);
 		} finally {
 			em.close();
 		}
@@ -154,8 +150,7 @@ public class PortletWindowRegistryDao {
 			List<PortletWindow> portletWindows = query.getResultList();
 			return portletWindows;
 		} catch (Exception ex) {
-			LOG.log(Level.WARNING, "get portletWindows error, portletName: " + portletName, ex);
-			throw new PortletRegistryDBException("get portletWindows error.");
+			throw new PortletRegistryDBException("get portletWindows error, portletName: " + portletName, ex);
 		} finally {
 			em.close();
 		}		
@@ -193,8 +188,7 @@ public class PortletWindowRegistryDao {
 			if(tran.isActive()) {
 				tran.rollback();
 			}
-			LOG.log(Level.WARNING, "delte portletWindow error, portletWindowName: " + portletWindowName, ex);			
-			throw new PortletRegistryDBException("delte portletWindow error.");
+			throw new PortletRegistryDBException("delte portletWindow error, portletWindowName: " + portletWindowName, ex);
 		} finally {			
 			em.close();
 		}		
@@ -224,9 +218,8 @@ public class PortletWindowRegistryDao {
 		} catch (Exception ex) {
 			if(tran.isActive()) {
 				tran.rollback();
-			}
-			LOG.log(Level.WARNING, "delte portletWindows error, portletName: " + portletName, ex);			
-			throw new PortletRegistryDBException("delte portletWindows error.");
+			}					
+			throw new PortletRegistryDBException("delte portletWindows error, portletName: " + portletName, ex);
 		} finally {			
 			em.close();
 		}		
@@ -250,9 +243,8 @@ public class PortletWindowRegistryDao {
 		} catch (Exception ex) {
 			if(tran.isActive()) {
 				tran.rollback();
-			}
-			LOG.log(Level.WARNING, "update portletWindow error, portletWindowName: " + portletWindow.getName(), ex);
-			throw new PortletRegistryDBException("update portletWindow error.");
+			}			
+			throw new PortletRegistryDBException("update portletWindow error, portletWindowName: " + portletWindow.getName(), ex);
 		} finally {			
 			em.close();
 		}	
