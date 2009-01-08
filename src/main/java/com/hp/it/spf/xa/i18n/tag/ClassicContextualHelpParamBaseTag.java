@@ -196,7 +196,7 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 		if (actualContent == null) {
 			actualContent = getContentMessage();
 		}
-		ClassicContextualHelpProvider c = new ClassicContextualHelpProvider();
+		ClassicContextualHelpProvider c = newClassicContextualHelpProvider();
 		c.setHelpContent(actualContent);
 		c.setTitleContent(actualTitle);
 		c.setNoScriptHref(noScriptHref);
@@ -212,6 +212,14 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 * @return The help title message.
 	 */
 	public abstract String getTitleMessage();
+
+	/**
+	 * Abstract method for getting an empty classic contextual help provider.
+	 * Different action for portal and portlet, so this is an abstract method.
+	 * 
+	 * @return An empty classic contextual help provider.
+	 */
+	public abstract ClassicContextualHelpProvider newClassicContextualHelpProvider();
 
 	/**
 	 * Abstract method for logging a tag error. Different action for portal and

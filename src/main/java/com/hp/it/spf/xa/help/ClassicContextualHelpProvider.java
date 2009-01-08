@@ -8,31 +8,36 @@ import com.hp.it.spf.xa.help.ContextualHelpProvider;
 
 /**
  * <p>
- * A concrete contextual help provider, which produces a "classic"-style
- * contextual help popup window.
+ * An abstract contextual help provider, which produces a "classic"-style
+ * contextual help popup window. Although this class is abstract, it does most
+ * of the work in producing the markup for that popup window. It delegates to
+ * the concrete subclass only the work of state tracking (since the
+ * implementation of that varies for portal and portlet).
  * </p>
  * <p>
  * <b>In the portlet framework:</b> This is the style of contextual-help popup
- * which is rendered by the <code>&lt;spf-help-portlet:contextualHelp&gt;</code>
- * tag. This is also the style of contextual-help popup which is rendered by the
- * <code>&lt;spf-i18n-portlet:contextualHelpParam&gt;</code> tag. Use that tag
- * inside the <code>&lt;spf-i18n-portlet:message&gt;</code> tag body to render
- * this kind of contextual-help popup into a message with your chosen
+ * which is rendered by the
+ * <code>&lt;spf-help-portlet:classicContextualHelp&gt;</code> tag. This is
+ * also the style of contextual-help popup which is rendered by the
+ * <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code> tag. Use
+ * that tag inside the <code>&lt;spf-i18n-portlet:message&gt;</code> tag body
+ * to render this kind of contextual-help popup into a message with your chosen
  * attributes. (Using the
- * <code>&lt;spf-i18n-portlet:contxtualHelpParam&gt;</code> tag instantiates
- * this class.) You can also instantiate this class directly, and pass it to the
- * portlet <code>I18nUtility.getMessage</code> methods to produce a message
- * containing this style of contextual-help popup.
+ * <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code> tag
+ * instantiates this class.) You can also instantiate this class directly, and
+ * pass it to the portlet <code>I18nUtility.getMessage</code> methods to
+ * produce a message containing this style of contextual-help popup.
  * </p>
  * <p>
  * <b>In the portal framework:</b> This is the style of contextual-help popup
- * which is rendered by the <code>&lt;spf-help-portal:contextualHelp&gt;</code>
- * tag. This is also the style of contextual-help popup which is rendered by the
- * <code>&lt;spf-i18n-portal:i18nContextualHelpParam&gt;</code> tag. Use this
- * tag inside the <code>&lt;spf-i18n-portal:i18nValue&gt;</code> tag body to
- * render this kind of contextual-help popup into a message with your chosen
- * attributes. (Using the
- * <code>&lt;spf-i18n-portal:i18nContextualHelpParam&gt;</code> tag
+ * which is rendered by the
+ * <code>&lt;spf-help-portal:classicContextualHelp&gt;</code> tag. This is
+ * also the style of contextual-help popup which is rendered by the
+ * <code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code> tag.
+ * Use this tag inside the <code>&lt;spf-i18n-portal:i18nValue&gt;</code> tag
+ * body to render this kind of contextual-help popup into a message with your
+ * chosen attributes. (Using the
+ * <code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code> tag
  * instantiates this class.) You can also instantiate this class directly and
  * pass it to the portal <code>I18nUtility.getValue</code> methods to produce
  * a message containing this style of contextual-help popup.
@@ -45,18 +50,27 @@ import com.hp.it.spf.xa.help.ContextualHelpProvider;
  * <p>
  * TODO: Need to finish implementing this class. The logic for the
  * implementation should largely come from the ContextualHelpBaseTag.todo file
- * (taken from the ContextualHelpBaseTag.java file in the Service Portal (OS) code).
+ * (taken from the ContextualHelpBaseTag.java file in the Service Portal (OS)
+ * code).
  * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  */
-public class ClassicContextualHelpProvider extends ContextualHelpProvider {
+public abstract class ClassicContextualHelpProvider extends
+		ContextualHelpProvider {
+
+	/**
+	 * Name of a request attribute which tracks how often contextual help link
+	 * markup has been generated during this request lifecycle (ie it tracks how
+	 * many times getHTML has been invoked during this request lifecycle).
+	 */
+	protected String CLASSIC_CONTEXTUAL_HELP_COUNTER_ATTR = "ClassicContextualHelpProvider.count";
 
 	/**
 	 * "Classic" contextual help has a title. This is the title content.
 	 */
-	private String titleContent = "";
+	protected String titleContent = "";
 
 	/**
 	 * "Classic" contextual help can put an alternate URL in the contextual-help
@@ -64,12 +78,13 @@ public class ClassicContextualHelpProvider extends ContextualHelpProvider {
 	 * ("Classic" contextual help style requires JavaScript, so this allows for
 	 * a noscript alternative.)
 	 */
-	private String noScriptHref = "";
+	protected String noScriptHref = "";
 
 	/**
-	 * Empty constructor; use the setters to provide the attributes.
+	 * Protected to prevent external construction except by subclasses. Use an
+	 * appropriate subclass instead.
 	 */
-	public ClassicContextualHelpProvider() {
+	protected ClassicContextualHelpProvider() {
 
 	}
 
@@ -115,7 +130,8 @@ public class ClassicContextualHelpProvider extends ContextualHelpProvider {
 	 * <p>
 	 * Returns the HTML string for the "classic"-style contextual help,
 	 * including the link content surrounded by a hyperlink which, if clicked,
-	 * will reveal the help content in an appropriately-formed popup window.
+	 * will reveal the help content in an appropriately-formed DHTML popup
+	 * layer.
 	 * </p>
 	 * <p>
 	 * The boolean parameter controls whether or not to escape any HTML special
@@ -133,5 +149,31 @@ public class ClassicContextualHelpProvider extends ContextualHelpProvider {
 		String html = "";
 		return html;
 	}
+
+	/**
+	 * An abstract method to get a counter of how many times in this request
+	 * lifecycle a classic contextual help provider has been generated (ie its
+	 * getHTML method has been invoked). Different action for portal and
+	 * portlet, so this is an abstract method.
+	 * 
+	 * @return The counter.
+	 */
+	public abstract int getClassicContextualHelpCounter();
+
+	/**
+	 * An abstract method to increment the counter of how many times in this
+	 * request lifecycle a classic contextual help provider has been generated
+	 * (ie its getHTML method has been invoked). Different action for portal and
+	 * portlet, so this is an abstract method.
+	 */
+	public abstract void bumpClassicContextualHelpCounter();
+
+	/**
+	 * An abstract method to reset the counter of how many times in this request
+	 * lifecycle a classic contextual help provider has been generated (ie its
+	 * getHTML method has been invoked). Different action for portal and
+	 * portlet, so this is an abstract method.
+	 */
+	public abstract void resetClassicContextualHelpCounter();
 
 }
