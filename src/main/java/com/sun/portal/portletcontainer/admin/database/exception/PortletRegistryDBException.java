@@ -9,4 +9,8 @@ public class PortletRegistryDBException extends RuntimeException {
 	public PortletRegistryDBException(String message) {
 		super(message);
 	}
+	
+	public PortletRegistryDBException(String message, Throwable ta) {
+		super(message, ta);
+	}
 }
