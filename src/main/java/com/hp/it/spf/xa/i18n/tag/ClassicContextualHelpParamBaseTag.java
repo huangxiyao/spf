@@ -28,9 +28,9 @@ import com.hp.it.spf.xa.help.ClassicContextualHelpProvider;
  * message tag, in order to pass parameters in that order into the message.
  * </p>
  * <p>
- * The style of contextual help rendered by this tag is the SPF-provided default
+ * The style of contextual help rendered by this tag is the SPF-provided classic
  * style. For both portal and portlet frameworks, this tag has the following
- * attributes:
+ * attributes (plus the attributes in the superclass):
  * </p>
  * <ul>
  * <li>
@@ -49,18 +49,6 @@ import com.hp.it.spf.xa.help.ClassicContextualHelpProvider;
  * </li>
  * <li>
  * <p>
- * The <code>content="<i>content</i>"</code> and
- * <code>contentKey="<i>content-key</i>"</code> attributes are alternative
- * ways of providing the help content for the popup. If you provide the
- * <code>content</code> attribute, then its value is used directly.
- * Alternatively, if you provide the <code>contentKey</code> attribute, then
- * its value is used as a message resource key for a message string containing
- * the content. One or the other attribute is required. If you specify both,
- * then <code>content</code> will take precedence.
- * </p>
- * </li>
- * <li>
- * <p>
  * The <code>noScriptHref="<i>url</i>"</code> attribute gives an alternative
  * URL to offer the browser to use in case JavaScript is disabled. Because the
  * default-style contextual help requires JavaScript, it will not work if
@@ -71,7 +59,7 @@ import com.hp.it.spf.xa.help.ClassicContextualHelpProvider;
  * </li>
  * </ul>
  * <p>
- * As noted above, this tag is for the default-style rendering of contextual
+ * As noted above, this tag is for the classic-style rendering of contextual
  * help. If you would like a custom style, you must implement your own custom
  * tag for it. Like the above tags, your custom tag would be used inside a
  * message tag body. Implement a ContextualHelpProvider concrete subclass for
@@ -106,16 +94,6 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 * Stores the value of the <code>noScriptHref</code> attribute.
 	 */
 	protected String noScriptHref;
-
-	/**
-	 * Stores the value of the <code>content</code> attribute.
-	 */
-	protected String content;
-
-	/**
-	 * Stores the value of the <code>contentKey</code> attribute.
-	 */
-	protected String contentKey;
 
 	/**
 	 * Get the value of the <code>title</code> attribute.
@@ -158,44 +136,6 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	}
 
 	/**
-	 * Get the value of the <code>content</code> attribute.
-	 * 
-	 * @return The <code>content</code> attribute.
-	 */
-	public String getContent() {
-		return content;
-	}
-
-	/**
-	 * Set the value from the <code>content</code> attribute.
-	 * 
-	 * @param value
-	 *            The <code>content</code> attribute.
-	 */
-	public void setContent(String value) {
-		this.content = normalize(value);
-	}
-
-	/**
-	 * Get the value of the <code>contentKey</code> attribute.
-	 * 
-	 * @return The <code>contentKey</code> attribute.
-	 */
-	public String getContentKey() {
-		return contentKey;
-	}
-
-	/**
-	 * Set the value from the <code>contentKey</code> attribute.
-	 * 
-	 * @param value
-	 *            The <code>contentKey</code> attribute.
-	 */
-	public void setContentKey(String value) {
-		this.contentKey = normalize(value);
-	}
-
-	/**
 	 * Get the value of the <code>noScriptHref</code> attribute.
 	 * 
 	 * @return The <code>noScriptHref</code> attribute.
@@ -222,8 +162,6 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 		title = null;
 		titleKey = null;
 		noScriptHref = null;
-		contentKey = null;
-		content = null;
 	}
 
 	/**
@@ -275,16 +213,6 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	public abstract String getTitleMessage();
 
 	/**
-	 * Abstract method for getting the contextual help content string from a
-	 * message resource. Should return the content key itself if there was a
-	 * problem. Different action for portal and portlet, so this is an abstract
-	 * method.
-	 * 
-	 * @return The help content message.
-	 */
-	public abstract String getContentMessage();
-
-	/**
 	 * Abstract method for logging a tag error. Different action for portal and
 	 * portlet, so this is an abstract method.
 	 * 
@@ -295,20 +223,4 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 */
 	public abstract void logError(Object obj, String msg);
 
-	/**
-	 * Normalize blank string values to null - so the return is either a
-	 * non-blank string, or null.
-	 * 
-	 * @param value
-	 * @return
-	 */
-	private String normalize(String value) {
-		if (value != null) {
-			value = value.trim();
-			if (value.equals("")) {
-				value = null;
-			}
-		}
-		return value;
-	}
 }

@@ -24,6 +24,18 @@ import com.hp.it.spf.xa.help.ContextualHelpProvider;
  * should construct and return your new kind of ContextualHelpProvider; this
  * base class will set that into the parent message tag for output.
  * </p>
+ * <p>
+ * All contextual help has help content, so all contextual help parameter tags
+ * support attributes to pass in the help conent.
+ * The <code>content="<i>content</i>"</code> and
+ * <code>contentKey="<i>content-key</i>"</code> attributes are alternative
+ * ways of providing the help content. If you provide the
+ * <code>content</code> attribute, then its value is used directly.
+ * Alternatively, if you provide the <code>contentKey</code> attribute, then
+ * its value is used as a message resource key for a message string containing
+ * the content. One or the other attribute is required. If you specify both,
+ * then <code>content</code> will take precedence.
+ * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
@@ -35,10 +47,60 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Initialize the tag attributes. Currently an empty constructor, as there
-	 * are currently no tag attributes.
+	 * Stores the value of the <code>content</code> attribute.
+	 */
+	protected String content;
+
+	/**
+	 * Stores the value of the <code>contentKey</code> attribute.
+	 */
+	protected String contentKey;
+
+	/**
+	 * Get the value of the <code>content</code> attribute.
+	 * 
+	 * @return The <code>content</code> attribute.
+	 */
+	public String getContent() {
+		return content;
+	}
+
+	/**
+	 * Set the value from the <code>content</code> attribute.
+	 * 
+	 * @param value
+	 *            The <code>content</code> attribute.
+	 */
+	public void setContent(String value) {
+		this.content = normalize(value);
+	}
+
+	/**
+	 * Get the value of the <code>contentKey</code> attribute.
+	 * 
+	 * @return The <code>contentKey</code> attribute.
+	 */
+	public String getContentKey() {
+		return contentKey;
+	}
+
+	/**
+	 * Set the value from the <code>contentKey</code> attribute.
+	 * 
+	 * @param value
+	 *            The <code>contentKey</code> attribute.
+	 */
+	public void setContentKey(String value) {
+		this.contentKey = normalize(value);
+	}
+
+	/**
+	 * Initialize the tag attributes.
 	 */
 	public ContextualHelpParamBaseTag() {
+		super();
+		contentKey = null;
+		content = null;
 	}
 
 	/**
@@ -81,6 +143,16 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 			throws JspException;
 
 	/**
+	 * Abstract method for getting the contextual help content string from a
+	 * message resource. Should return the content key itself if there was a
+	 * problem. Different action for portal and portlet, so this is an abstract
+	 * method.
+	 * 
+	 * @return The help content message.
+	 */
+	public abstract String getContentMessage();
+
+	/**
 	 * Abstract method for logging a tag error. Different action for portal and
 	 * portlet, so this is an abstract method.
 	 * 
@@ -90,5 +162,22 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	 *            The error message.
 	 */
 	public abstract void logError(Object obj, String msg);
+
+	/**
+	 * Normalize blank string values to null - so the return is either a
+	 * non-blank string, or null.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	protected String normalize(String value) {
+		if (value != null) {
+			value = value.trim();
+			if (value.equals("")) {
+				value = null;
+			}
+		}
+		return value;
+	}
 
 }
