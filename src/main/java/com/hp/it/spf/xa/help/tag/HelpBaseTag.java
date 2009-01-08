@@ -347,14 +347,88 @@ public abstract class HelpBaseTag extends TagSupport {
 	}
 
 	/**
+	 * Assembles the content of the global help hyperlink (ie the anchor content
+	 * itself) from the various tag attributes, and returns it. This content is
+	 * not yet escaped; the concrete subclass will do that when its getHTML
+	 * method is called.
+	 */
+	protected String getLinkContent() {
+
+		String linkContent = null;
+		if (anchor != null) {
+			// If anchor attribute was provided, take that as the link content.
+			linkContent = anchor;
+		} else if (anchorKey != null) {
+			// Else if anchorKey attribute was provided, take that message as
+			// the link content.
+			linkContent = normalize(getMessage(anchorKey));
+		} else if (anchorImg != null || anchorImgKey != null) {
+			// Else if an image was indicated, build an <img> tag for the link
+			// content.
+			String imgUrl = null;
+			if (anchorImg != null) {
+				// If an anchorImg attribute was provided, take that value as
+				// the image URL.
+				imgUrl = anchorImg;
+			} else {
+				// If an anchorImgKey attribute was provided, take that value as
+				// a base filename of an external image, and get a localized
+				// file URL for it and use that as the image URL.
+				imgUrl = normalize(getLocalizedImageURL(anchorImgKey));
+			}
+			String imgAlt = null;
+			if (anchorImgAlt != null) {
+				// If an anchorImgAlt attribute was provided, take that value as
+				// the image alt.
+				imgAlt = anchorImgAlt;
+			} else if (anchorImgAltKey != null) {
+				// If an anchorImgAltKey attribute was provided, take that
+				// message as the image alt.
+				imgAlt = normalize(getMessage(anchorImgAltKey));
+			}
+			linkContent = "<img src=\"" + imgUrl + "\" ";
+			if (imgAlt != null) {
+				linkContent += "alt=\"" + imgAlt + "\" ";
+			}
+			linkContent += "style=\"cursor:pointer\" border=\"0\">";
+		}
+		return linkContent;
+	}
+
+	/**
 	 * Abstract method for getting the tag markup (ie the help hyperlink
 	 * markup). The action is different depending on the type of help (global or
-	 * contextual), so this method is abstract.
+	 * contextual), so this method is abstract. This method should apply any
+	 * needed escaping/filtering to the markup.
 	 * 
 	 * @return The help hyperlink markup.
 	 * @throws JspException
 	 */
 	public abstract String getHTML() throws JspException;
+
+	/**
+	 * Abstract method for getting a message from a resource bundle. Different
+	 * action for portal and portlet so this is an abstract method. The message
+	 * should be returned unescaped and unfiltered; any necessary
+	 * escaping/filtering will happen later, in the getHTML method.
+	 * 
+	 * @param key
+	 *            The message key.
+	 * @return The message value (unescaped and unfiltered), localized for the
+	 *         user.
+	 */
+	public abstract String getMessage(String key);
+
+	/**
+	 * Abstract method for getting a localized image URL. Different action for
+	 * portal and portlet so this is an abstract method.
+	 * 
+	 * @param baseFilename
+	 *            The image basefilename (eg <code>picture.jpg</code>).
+	 * @return A URL, properly built and encoded, for the best-candidate
+	 *         localized version of that image for the user.
+	 */
+	public abstract String getLocalizedImageURL(String baseFilename);
 
 	/**
 	 * Abstract method for logging a tag error. Different action for portal and
