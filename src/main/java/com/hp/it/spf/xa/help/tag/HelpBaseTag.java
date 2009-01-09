@@ -18,7 +18,7 @@ import com.hp.it.spf.xa.misc.Utils;
  * <p>
  * An abstract base class for all help tags, including both contextual and
  * global help tags, such as the "classic"-style portal global help tag (<code>&lt;spf-help-portal:classicGlobalHelp&gt;</code>)
- * and the "classic"-style portlet contextual help tag (<code>&lt;spf-help-portal:classicContextualHelp&gt;</code>).
+ * and the "classic"-style portlet contextual help tag (<code>&lt;spf-help-portlet:classicContextualHelp&gt;</code>).
  * If you create another style of rendering either kind of help, and would like
  * to render that help with a custom tag, then you should develop your custom
  * help tag class by subclassing from this one.
@@ -401,11 +401,12 @@ public abstract class HelpBaseTag extends TagSupport {
 	 * contextual), so this method is abstract. This method should apply any
 	 * needed escaping/filtering to the markup.
 	 * 
-	 * @param linkContent The markup to put inside the hyperlink.
+	 * @param linkContent
+	 *            The markup to put inside the hyperlink.
 	 * @return The total help hyperlink markup.
 	 * @throws JspException
 	 */
-	public abstract String getHTML(String linkContent) throws JspException;
+	protected abstract String getHTML(String linkContent) throws JspException;
 
 	/**
 	 * Abstract method for getting a message from a resource bundle. Different
@@ -418,7 +419,7 @@ public abstract class HelpBaseTag extends TagSupport {
 	 * @return The message value (unescaped and unfiltered), localized for the
 	 *         user.
 	 */
-	public abstract String getMessage(String key);
+	protected abstract String getMessage(String key);
 
 	/**
 	 * Abstract method for getting a localized image URL. Different action for
@@ -429,7 +430,7 @@ public abstract class HelpBaseTag extends TagSupport {
 	 * @return A URL, properly built and encoded, for the best-candidate
 	 *         localized version of that image for the user.
 	 */
-	public abstract String getLocalizedImageURL(String baseFilename);
+	protected abstract String getLocalizedImageURL(String baseFilename);
 
 	/**
 	 * Abstract method for logging a tag error. Different action for portal and
@@ -440,7 +441,7 @@ public abstract class HelpBaseTag extends TagSupport {
 	 * @param msg
 	 *            The error message.
 	 */
-	public abstract void logError(Object obj, String msg);
+	protected abstract void logError(Object obj, String msg);
 
 	/**
 	 * Normalize blank string values to null - so the return is either a

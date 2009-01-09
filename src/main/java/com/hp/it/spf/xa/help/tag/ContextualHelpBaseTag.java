@@ -133,7 +133,7 @@ public abstract class ContextualHelpBaseTag extends HelpBaseTag {
 	 *         to the attributes of this tag.
 	 * @throws JspException
 	 */
-	public String getHTML(String linkContent) throws JspException {
+	protected String getHTML(String linkContent) throws JspException {
 		// Get the link content (exception if none was defined or found)
 		if (linkContent == null) {
 			String msg = "ContextualHelpBaseTag error: one of the following attributes is required: anchor, anchorKey, anchorImg, anchorImgKey.";
@@ -151,7 +151,7 @@ public abstract class ContextualHelpBaseTag extends HelpBaseTag {
 	 * depending on the particular style of contextual help, so this is
 	 * abstract.
 	 */
-	public abstract ContextualHelpProvider getContextualHelpProvider(String linkContent)
+	protected abstract ContextualHelpProvider getContextualHelpProvider(String linkContent)
 			throws JspException;
 
 	/**

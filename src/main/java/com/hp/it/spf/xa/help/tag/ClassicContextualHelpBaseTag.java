@@ -181,7 +181,7 @@ public abstract class ClassicContextualHelpBaseTag extends
 	 * @return ContextualHelpProvider
 	 * @throws JspException
 	 */
-	public ContextualHelpProvider getContextualHelpProvider(String linkContent)
+	protected ContextualHelpProvider getContextualHelpProvider(String linkContent)
 			throws JspException {
 		if (linkContent == null) {
 			String msg = "ClassicContextualHelpBaseTag error: one of the following attributes is required: anchor, anchorKey, anchorImg, anchorImgKey.";
@@ -214,6 +214,6 @@ public abstract class ClassicContextualHelpBaseTag extends
 	 * 
 	 * @return An empty classic contextual help provider.
 	 */
-	public abstract ClassicContextualHelpProvider newClassicContextualHelpProvider();
+	protected abstract ClassicContextualHelpProvider newClassicContextualHelpProvider();
 
 }

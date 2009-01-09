@@ -155,7 +155,7 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	 * @return The contextual help provider containing the contextual help
 	 *         parameters.
 	 */
-	public abstract ContextualHelpProvider getContextualHelpProvider()
+	protected abstract ContextualHelpProvider getContextualHelpProvider()
 			throws JspException;
 
 	/**
@@ -168,7 +168,7 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	 *            The message key.
 	 * @return The message value.
 	 */
-	public abstract String getMessage(String key);
+	protected abstract String getMessage(String key);
 
 	/**
 	 * Abstract method for logging a tag error. Different action for portal and
@@ -179,7 +179,7 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	 * @param msg
 	 *            The error message.
 	 */
-	public abstract void logError(Object obj, String msg);
+	protected abstract void logError(Object obj, String msg);
 
 	/**
 	 * Normalize blank string values to null - so the return is either a

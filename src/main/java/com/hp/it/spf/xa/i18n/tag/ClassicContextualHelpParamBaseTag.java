@@ -190,7 +190,7 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 * @return ContextualHelpProvider
 	 * @throws JspException
 	 */
-	public ContextualHelpProvider getContextualHelpProvider()
+	protected ContextualHelpProvider getContextualHelpProvider()
 			throws JspException {
 		String actualTitle = getTitleContent();
 		if (actualTitle == null) {
@@ -217,6 +217,6 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 * 
 	 * @return An empty classic contextual help provider.
 	 */
-	public abstract ClassicContextualHelpProvider newClassicContextualHelpProvider();
+	protected abstract ClassicContextualHelpProvider newClassicContextualHelpProvider();
 
 }

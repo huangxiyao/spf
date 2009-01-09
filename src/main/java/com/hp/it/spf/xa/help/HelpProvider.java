@@ -50,7 +50,7 @@ public abstract class HelpProvider {
 		if (pLinkContent == null) {
 			pLinkContent = "";
 		}
-		this.linkContent = pLinkContent;
+		this.linkContent = pLinkContent.trim();
 	}
 
 	/**
