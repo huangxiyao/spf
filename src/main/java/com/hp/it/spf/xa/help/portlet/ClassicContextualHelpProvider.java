@@ -4,7 +4,14 @@
  */
 package com.hp.it.spf.xa.help.portlet;
 
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
+import javax.portlet.RenderResponse;
+import javax.portlet.PortletURL;
+
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 
 /**
  * <p>
@@ -42,14 +49,21 @@ public class ClassicContextualHelpProvider extends
 	private PortletRequest request = null;
 
 	/**
+	 * The response for this classic contextual help provider.
+	 */
+	private PortletResponse response = null;
+
+	/**
 	 * <p>
 	 * Constructor for the "classic"-style contextual help provider for a
-	 * particular request. If a null PortletRequest is provided, the getHTML
-	 * methods of this class will not work (ie will return null).
+	 * particular request. If a null parameter is provided, the getHTML methods
+	 * of this class may not work.
 	 * </p>
 	 */
-	public ClassicContextualHelpProvider(PortletRequest pRequest) {
+	public ClassicContextualHelpProvider(PortletRequest pRequest,
+			PortletResponse pResponse) {
 		request = pRequest;
+		response = pResponse;
 	}
 
 	/**
@@ -59,7 +73,7 @@ public class ClassicContextualHelpProvider extends
 	 * 
 	 * @return The counter.
 	 */
-	public int getClassicContextualHelpCounter() {
+	protected int getClassicContextualHelpCounter() {
 
 		int count = 0;
 		if (request != null) {
@@ -85,7 +99,7 @@ public class ClassicContextualHelpProvider extends
 	 * generated (ie its getHTML method has been invoked). Different action for
 	 * portal and portlet, so this is an abstract method.
 	 */
-	public void bumpClassicContextualHelpCounter() {
+	protected void bumpClassicContextualHelpCounter() {
 
 		int count = 0;
 		if (request != null) {
@@ -102,9 +116,89 @@ public class ClassicContextualHelpProvider extends
 	 * (ie its getHTML method has been invoked). Different action for portal and
 	 * portlet, so this is an abstract method.
 	 */
-	public void resetClassicContextualHelpCounter() {
+	protected void resetClassicContextualHelpCounter() {
 		if (request != null) {
 			request.removeAttribute(CLASSIC_CONTEXTUAL_HELP_COUNTER_ATTR);
 		}
 	}
+
+	/**
+	 * A concrete method to generate the hyperlink URL to use for contextual
+	 * help in the noscript case. If there was a <code>noscriptHref</code>
+	 * attribute, which is not a document fragment (ie does not begin with
+	 * <code>#</code>), then the <code>noscriptHref</code> is used as the
+	 * noscript URL. Otherwise, if the portlet supports help mode, the noscript
+	 * URL is a render URL pointing to that mode (and if the
+	 * <code>noscriptHref</code> is a document fragment (ie does begin with
+	 * <code>#</code>), then that fragment is passed as a parameter).
+	 * Finally, if the portlet does not support help mode, the noscript URL is
+	 * null.
+	 */
+	protected String getNoScriptUrl() {
+
+		String noscriptUrl = null;
+		try {
+			if (noScriptHref != null && !noScriptHref.startsWith("#")) {
+				noscriptUrl = noScriptHref;
+			} else if (request != null && response != null
+					&& response instanceof RenderResponse) {
+				if (request.isPortletModeAllowed(PortletMode.HELP)) {
+					RenderResponse render = (RenderResponse) response;
+					PortletURL url = render.createRenderURL();
+					url.setPortletMode(PortletMode.HELP);
+
+					// pass current mode
+					String mode = request.getPortletMode().toString()
+							.toLowerCase();
+					if (mode != null) {
+						url.setParameter("mode", mode);
+					}
+
+					// pass fragment name
+					if (noScriptHref != null && noScriptHref.startsWith("#")) {
+						String fragmentName = noScriptHref.substring(1);
+						url.setParameter("fragment", fragmentName);
+					}
+					noscriptUrl = url.toString();
+				}
+			}
+		} catch (PortletModeException e) {
+		}
+		return noscriptUrl;
+	}
+
+	/**
+	 * A concrete method to generate the image URL for the popup close button.
+	 * This close button is presumed to be named
+	 * <code>/images/btn_close.gif</code> and located in the portlet resource
+	 * bundle directory. If it is not found there, then the string
+	 * <code>/images/btn_close.gif</code> is returned. <b>Note</b>: this image
+	 * may be localized if desired; this method looks for the best-candidate
+	 * image loaded in the portlet resource bundle directory.
+	 */
+	protected String getCloseImageUrl() {
+		String url = "/images/" + CLOSE_BUTTON_IMG_NAME;
+		if (request != null) {
+			url = I18nUtility.getLocalizedFileURL(request, url);
+		}
+		return url;
+	}
+
+	/**
+	 * A concrete method to get the image alt text for the popup close button.
+	 * This text is presumed to be stored in the current portlet's configured
+	 * message resources, under a message key named
+	 * <code>contextualHelp.close.alt</code>. If it is not found there, then
+	 * the message key itself is returned. <b>Note:</b> the returned message is
+	 * the best-candidate localized version found in the resource bundle for the
+	 * user's current locale.
+	 */
+	protected String getCloseImageAlt() {
+		String alt = CLOSE_BUTTON_IMG_ALT;
+		if (request != null) {
+			alt = I18nUtility.getMessage(request, alt);
+		}
+		return alt;
+	}
+
 }
