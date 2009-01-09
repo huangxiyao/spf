@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import com.sun.portal.portletcontainer.admin.database.exception.PortletRegistryDBException;
+
 
 public class EntityManagerFactoryManager {
 	private static Logger LOG = Logger.getLogger(EntityManagerFactoryManager.class.toString());
@@ -16,9 +18,8 @@ public class EntityManagerFactoryManager {
 	static {
 		try {
 			emf = Persistence.createEntityManagerFactory("portletregistry_datasource");
-		} catch (Exception ex){
-			LOG.log(Level.WARNING, "Create entity manager factory error!");
-			LOG.log(Level.WARNING, ex.getMessage());
+		} catch (Exception ex){			
+			throw new PortletRegistryDBException("Create entity manager factory error!", ex);
 		}
 	}
 	
@@ -30,7 +31,9 @@ public class EntityManagerFactoryManager {
 	}
 	
 	public EntityManagerFactory getFactory(){
-		LOG.log(Level.FINE, "Retrieved entity manager facotry: " + emf.toString());
+		if (LOG.isLoggable(Level.INFO)) {
+			LOG.log(Level.FINE, "Retrieved entity manager facotry: " + emf.toString());
+		}
 		return emf;
 	}
 }
