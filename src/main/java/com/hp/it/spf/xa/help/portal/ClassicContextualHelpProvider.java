@@ -123,7 +123,7 @@ public class ClassicContextualHelpProvider extends
 	 * 
 	 * @return The counter.
 	 */
-	public int getClassicContextualHelpCounter() {
+	protected int getClassicContextualHelpCounter() {
 
 		int count = 0;
 		if (portalContext != null) {
@@ -152,7 +152,7 @@ public class ClassicContextualHelpProvider extends
 	 * generated (ie its getHTML method has been invoked). Different action for
 	 * portal and portlet, so this is an abstract method.
 	 */
-	public void bumpClassicContextualHelpCounter() {
+	protected void bumpClassicContextualHelpCounter() {
 
 		int count = 0;
 		if (portalContext != null) {
@@ -173,7 +173,7 @@ public class ClassicContextualHelpProvider extends
 	 * (ie its getHTML method has been invoked). Different action for portal and
 	 * portlet, so this is an abstract method.
 	 */
-	public void resetClassicContextualHelpCounter() {
+	protected void resetClassicContextualHelpCounter() {
 		if (portalContext != null) {
 			HttpServletRequest request = portalContext.getHttpServletRequest();
 			if (request != null) {
@@ -182,4 +182,62 @@ public class ClassicContextualHelpProvider extends
 		}
 	}
 
+	/**
+	 * A concrete method to generate the hyperlink URL to use for contextual
+	 * help in the noscript case. If there was a <code>noscriptHref</code>
+	 * attribute, which is not a document fragment (ie does not begin with
+	 * <code>#</code>), then the <code>noscriptHref</code> is used as the
+	 * noscript URL. If the <code>noscriptHref</code> is a document fragment
+	 * (ie does begin with <code>#</code>), then the noscript URL points to
+	 * that fragment in the global help secondary page. But if the
+	 * <code>noscriptHref</code> attribute was not provided, then the noscript
+	 * URL just points to the top of the global help secondary page. Null is
+	 * returned if for some reason the URL could not be built.
+	 */
+	protected String getNoScriptUrl() {
+		String noScriptUrl = null;
+		if (noScriptHref != null && !noScriptHref.startsWith("#")) {
+			noScriptUrl = noScriptHref;
+		} else if (portalContext != null) {
+			noScriptUrl = portalContext.createDisplayURI(
+					Consts.PAGE_GLOBAL_HELP).toString();
+			if (noScriptHref != null && noScriptHref.startsWith("#")) {
+				noScriptUrl += noScriptHref;
+			}
+		}
+		return noScriptUrl;
+	}
+
+	/**
+	 * A concrete method to generate the image URL for the popup close button.
+	 * This close button is presumed to be named <code>btn_close.gif</code>
+	 * and located in the current portal component. If it is not found there,
+	 * then the string <code>btn_close.gif</code> is returned. <b>Note</b>:
+	 * this image may be localized if desired; this method looks for the
+	 * best-candidate image loaded in the portal component.
+	 */
+	protected String getCloseImageUrl() {
+		String url = CLOSE_BUTTON_IMG_NAME;
+		if (portalContext != null) {
+			url = I18nUtility.getLocalizedFileURL(portalContext, url);
+		}
+		return url;
+	}
+
+	/**
+	 * A concrete method to get the image alt text for the popup close button.
+	 * This text is presumed to be stored in the current portal component's
+	 * message resources, under a message key named
+	 * <code>contextualHelp.close.alt</code>. If it is not found there, then
+	 * the message key itself is returned. <b>Note:</b> the returned message is
+	 * the best-candidate localized version found in the resource bundle for the
+	 * user's current locale.
+	 */
+	protected String getCloseImageAlt() {
+		String alt = CLOSE_BUTTON_IMG_ALT;
+		if (portalContext != null) {
+			alt = I18nUtility.getValue(CLOSE_BUTTON_IMG_ALT, portalContext);
+		}
+		return alt;
+	}
 }

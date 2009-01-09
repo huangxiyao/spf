@@ -48,12 +48,12 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * markup has been generated during this request lifecycle (ie it tracks how
 	 * many times getHTML has been invoked during this request lifecycle).
 	 */
-	private String CLASSIC_GLOBAL_HELP_COUNTER_ATTR = "ClassicGlobalHelpProvider.count";
+	private static String CLASSIC_GLOBAL_HELP_COUNTER_ATTR = "ClassicGlobalHelpProvider.count";
 
 	/**
 	 * The JavaScript string for the classic global help popup.
 	 */
-	private String CLASSIC_GLOBAL_HELP_JS = "<script type=\"text/javascript\" language=\"JavaScript\">\n"
+	private static String CLASSIC_GLOBAL_HELP_JS = "<script type=\"text/javascript\" language=\"JavaScript\">\n"
 			+ "if (typeof(loadedClassicGlobalHelpJS) == 'undefined') \n"
 			+ "{ \n"
 			+ "    var loadedClassGlobalHelpJS = true; \n"
@@ -264,7 +264,7 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 		}
 		++count;
 
-		// Make the anchor ID.
+		// Make the element ID.
 		String id = "classicGlobalHelp" + count;
 
 		// Make the link text.
@@ -304,9 +304,7 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * <p>
 	 * Use this method at any time during the request lifecycle, if for some
 	 * reason you need the next getHTML invokation to return the common
-	 * JavaScript again. This generally is not recommended, because if you
-	 * aggregate in the same page multiple getHTML results, which were generated
-	 * before and after a resetHTML, a JavaScript runtime conflict will arise.
+	 * JavaScript again. This generally is not recommended.
 	 * </p>
 	 * 
 	 */
