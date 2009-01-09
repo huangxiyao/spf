@@ -19,7 +19,7 @@
 		<site>
 			<id>cas.sdk</id>
 			<name>CAS SDK</name>
-			<url>scp://localhost:/var/www/sdk/${project.artifactId}/${project.version}</url>
+			<url>file:/var/www/sdk/${project.artifactId}/${project.version}</url>
 		</site>
 	</distributionManagement>
 	<dependencies>
