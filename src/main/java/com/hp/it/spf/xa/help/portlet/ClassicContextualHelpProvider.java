@@ -90,7 +90,6 @@ public class ClassicContextualHelpProvider extends
 			}
 		}
 		return count;
-
 	}
 
 	/**
@@ -103,8 +102,7 @@ public class ClassicContextualHelpProvider extends
 
 		int count = 0;
 		if (request != null) {
-			count = getClassicContextualHelpCounter();
-			count++;
+			count = getClassicContextualHelpCounter() + 1;
 			request.setAttribute(CLASSIC_CONTEXTUAL_HELP_COUNTER_ATTR, String
 					.valueOf(count));
 		}
@@ -134,7 +132,7 @@ public class ClassicContextualHelpProvider extends
 	 * Finally, if the portlet does not support help mode, the noscript URL is
 	 * null.
 	 */
-	protected String getNoScriptUrl() {
+	protected String getNoScriptURL() {
 
 		String noscriptUrl = null;
 		try {
@@ -171,17 +169,25 @@ public class ClassicContextualHelpProvider extends
 	 * A concrete method to generate the image URL for the popup close button.
 	 * This close button is presumed to be named
 	 * <code>/images/btn_close.gif</code> and located in the portlet resource
-	 * bundle directory. If it is not found there, then the string
-	 * <code>/images/btn_close.gif</code> is returned. <b>Note</b>: this image
-	 * may be localized if desired; this method looks for the best-candidate
-	 * image loaded in the portlet resource bundle directory.
+	 * bundle directory. This image may be localized if desired; this method
+	 * looks for the particular localized image loaded in the portlet resource
+	 * bundle directory which is the best-candidate given the current locale. If
+	 * no image is found there, then the method assumes it is inside the current
+	 * portlet application and returns an encoded URL pointing to it there.
 	 */
-	protected String getCloseImageUrl() {
-		String url = "/images/" + CLOSE_BUTTON_IMG_NAME;
+	protected String getCloseImageURL() {
+		String defaultUrl = "/images/" + CLOSE_BUTTON_IMG_NAME;
+		String url = defaultUrl;
 		if (request != null) {
 			url = I18nUtility.getLocalizedFileURL(request, url);
+			if (url == null) {
+				url = defaultUrl;
+				if (response != null) {
+					url = response.encodeURL(url);
+				}
+			}
 		}
-		return url;
+		return slashify(url);
 	}
 
 	/**
@@ -189,16 +195,15 @@ public class ClassicContextualHelpProvider extends
 	 * This text is presumed to be stored in the current portlet's configured
 	 * message resources, under a message key named
 	 * <code>contextualHelp.close.alt</code>. If it is not found there, then
-	 * the message key itself is returned. <b>Note:</b> the returned message is
-	 * the best-candidate localized version found in the resource bundle for the
+	 * an empty string is returned. <b>Note:</b> the returned message is the
+	 * best-candidate localized version found in the resource bundle for the
 	 * user's current locale.
 	 */
 	protected String getCloseImageAlt() {
-		String alt = CLOSE_BUTTON_IMG_ALT;
+		String alt = "";
 		if (request != null) {
-			alt = I18nUtility.getMessage(request, alt);
+			alt = I18nUtility.getMessage(request, CLOSE_BUTTON_IMG_ALT, "");
 		}
 		return alt;
 	}
-
 }
