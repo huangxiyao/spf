@@ -143,7 +143,6 @@ public class ClassicContextualHelpProvider extends
 			}
 		}
 		return count;
-
 	}
 
 	/**
@@ -158,13 +157,11 @@ public class ClassicContextualHelpProvider extends
 		if (portalContext != null) {
 			HttpServletRequest request = portalContext.getHttpServletRequest();
 			if (request != null) {
-				count = getClassicContextualHelpCounter();
-				count++;
+				count = getClassicContextualHelpCounter() + 1;
 				request.setAttribute(CLASSIC_CONTEXTUAL_HELP_COUNTER_ATTR,
 						String.valueOf(count));
 			}
 		}
-
 	}
 
 	/**
@@ -194,7 +191,7 @@ public class ClassicContextualHelpProvider extends
 	 * URL just points to the top of the global help secondary page. Null is
 	 * returned if for some reason the URL could not be built.
 	 */
-	protected String getNoScriptUrl() {
+	protected String getNoScriptURL() {
 		String noScriptUrl = null;
 		if (noScriptHref != null && !noScriptHref.startsWith("#")) {
 			noScriptUrl = noScriptHref;
@@ -211,17 +208,23 @@ public class ClassicContextualHelpProvider extends
 	/**
 	 * A concrete method to generate the image URL for the popup close button.
 	 * This close button is presumed to be named <code>btn_close.gif</code>
-	 * and located in the current portal component. If it is not found there,
-	 * then the string <code>btn_close.gif</code> is returned. <b>Note</b>:
-	 * this image may be localized if desired; this method looks for the
-	 * best-candidate image loaded in the portal component.
+	 * and located in the current portal component. This image may be localized
+	 * if desired; this method looks for the particular localized image (loaded
+	 * in the current portal component's secondary support files) which is the
+	 * best-candidate given the current locale. If the image is not found there,
+	 * then a URL pointing to <code>/images/btn_close.gif</code> under the
+	 * portal root path is assumed and returned.
 	 */
-	protected String getCloseImageUrl() {
-		String url = CLOSE_BUTTON_IMG_NAME;
+	protected String getCloseImageURL() {
+		String url = "/images/" + CLOSE_BUTTON_IMG_NAME;
 		if (portalContext != null) {
-			url = I18nUtility.getLocalizedFileURL(portalContext, url);
+			url = I18nUtility.getLocalizedFileURL(portalContext,
+					CLOSE_BUTTON_IMG_NAME);
+			if (url == null) {
+				url = portalContext.getPortalHttpRoot() + "/" + url;
+			}
 		}
-		return url;
+		return slashify(url);
 	}
 
 	/**
@@ -229,14 +232,14 @@ public class ClassicContextualHelpProvider extends
 	 * This text is presumed to be stored in the current portal component's
 	 * message resources, under a message key named
 	 * <code>contextualHelp.close.alt</code>. If it is not found there, then
-	 * the message key itself is returned. <b>Note:</b> the returned message is
-	 * the best-candidate localized version found in the resource bundle for the
+	 * an empty string is returned. <b>Note:</b> the returned message is the
+	 * best-candidate localized version found in the resource bundle for the
 	 * user's current locale.
 	 */
 	protected String getCloseImageAlt() {
-		String alt = CLOSE_BUTTON_IMG_ALT;
+		String alt = "";
 		if (portalContext != null) {
-			alt = I18nUtility.getValue(CLOSE_BUTTON_IMG_ALT, portalContext);
+			alt = I18nUtility.getValue(CLOSE_BUTTON_IMG_ALT, "", portalContext);
 		}
 		return alt;
 	}
