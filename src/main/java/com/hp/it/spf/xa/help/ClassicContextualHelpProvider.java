@@ -442,7 +442,8 @@ public abstract class ClassicContextualHelpProvider extends
 		String link = this.linkContent;
 		String title = this.titleContent;
 		String help = this.helpContent;
-		if (link.startsWith("<img ")) { // Add element ID to <img> if needed.
+		if (link.startsWith("<img ")) { // Add element ID to <img> (it does not
+			// already have it and the script needs it).
 			link = "<img id=\"" + id + "\" " + link.substring(5);
 		}
 		if (escape) { // Escape XML meta-characters if needed.
@@ -452,10 +453,10 @@ public abstract class ClassicContextualHelpProvider extends
 		}
 
 		// Make the noscript URL.
-		String noscriptUrl = getNoScriptUrl();
+		String noscriptUrl = getNoScriptURL();
 
 		// Make the close button image URL and alt message.
-		String closeButtonUrl = getCloseImageUrl();
+		String closeButtonUrl = getCloseImageURL();
 		String closeButtonAlt = getCloseImageAlt();
 
 		// Generate the main HTML and event-handling code by assembling the
@@ -482,14 +483,16 @@ public abstract class ClassicContextualHelpProvider extends
 						+ "HelpFrame\" src=\"javascript:false;\" style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
 		html.append("</script>");
 
-		// Next, add the noscript for unscripted browsers, but only if a
-		// noscript URL was found.
+		// Next, add the noscript for unscripted browsers. Use the noscript URL
+		// if one was returned.
+		html.append("<noscript>");
 		if (noscriptUrl != null) {
-			html.append("<noscript>");
 			html.append("<a href=\"" + noscriptUrl + "\" target=\"_self\">"
 					+ link + "</a>");
-			html.append("</noscript>");
+		} else {
+			html.append(link);
 		}
+		html.append("</noscript>");
 
 		// Next, write the popup window (layer) itself.
 
@@ -536,7 +539,9 @@ public abstract class ClassicContextualHelpProvider extends
 				.append("classicContextualHelpUtil.addEvent(document.getElementById('"
 						+ id + "HelpClose'), 'click', hideObject);\n");
 		html.append("</script>");
-		
+
+		// Bump counter and return.
+		bumpClassicContextualHelpCounter();
 		return html.toString();
 	}
 
@@ -583,13 +588,13 @@ public abstract class ClassicContextualHelpProvider extends
 	 * help in the noscript case. Different action for portal and portlet, so
 	 * this is an abstract method.
 	 */
-	protected abstract String getNoScriptUrl();
+	protected abstract String getNoScriptURL();
 
 	/**
 	 * An abstract method to generate the image URL for the popup close button.
 	 * Different action for portal and portlet, so this is an abstract method.
 	 */
-	protected abstract String getCloseImageUrl();
+	protected abstract String getCloseImageURL();
 
 	/**
 	 * An abstract method to get the image alt text for the popup close button.
@@ -622,5 +627,22 @@ public abstract class ClassicContextualHelpProvider extends
 			}
 		}
 		return buffer.toString();
+	}
+
+	/**
+	 * <p>
+	 * Returns the given path, with any consecutive file separators ("/" for
+	 * Java) reduced to just one.
+	 * </p>
+	 * 
+	 * @param pPath
+	 *            The file path to clean-up.
+	 * @return The cleaned-up file path.
+	 */
+	protected String slashify(String pPath) {
+		if (pPath == null) {
+			return null;
+		}
+		return pPath.replaceAll("/+", "/");
 	}
 }
