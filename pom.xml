@@ -42,9 +42,9 @@
 		</dependency>
 	</dependencies>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/wsrp-extractor</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/wsrp-extractor</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/wsrp-extractor</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/wsrp-extractor</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/wsrp-extractor</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/wsrp-extractor</url>
 	</scm>
 	<build>
 		<finalName>spf-wsrp-extractor</finalName>
