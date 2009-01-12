@@ -6,6 +6,12 @@
 	<artifactId>wsrp-extractor</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>wsrp-extractor</name>
+	<parent>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<artifactId>spf-pom</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<description>Put description here</description>
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -35,15 +41,11 @@
 			<version>1.3</version>
 		</dependency>
 	</dependencies>
-	<inceptionYear>December 2008</inceptionYear>
 	<scm>
 		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/wsrp-extractor</connection>
 		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/wsrp-extractor</developerConnection>
 		<url>http://samson.atl.hp.com/svn/spf/source/wsrp/trunk/wsrp-extractor</url>
 	</scm>
-	<organization>
-		<name>Shared Portal Framework: TSG IT</name>
-	</organization>
 	<build>
 		<finalName>spf-wsrp-extractor</finalName>
 		<plugins>
