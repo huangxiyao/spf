@@ -5,6 +5,7 @@
 	<artifactId>spf-pom</artifactId>
 	<name>Shared Portal Framework Super POM</name>
 	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<description>This POM encapsulates all the reporting features of the shared portal framework.</description>
 	<ciManagement>
 		<system>Hudson</system>
