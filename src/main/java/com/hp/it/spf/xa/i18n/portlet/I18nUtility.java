@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,7 +45,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * file. See file for definition.
 	 */
 	public static final String PORTLET_I18N_CONFIG_PROP_BUNDLE_DIR = "portlet.bundleDirectory";
-	public static final String PORTLET_I18N_CONFIG_PROP_RELAY_SERVLET_PATH = "servlet.fileRelay.path";
+	public static final String PORTLET_I18N_CONFIG_PROP_RELAY_SERVLET_URL = "servlet.fileRelay.url";
+	public static final String RELAY_SERVLET_DEFAULT_PATH = "/relay";
 
 	/**
 	 * Logger instance.
@@ -54,7 +56,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	/**
 	 * Relay servlet name (actual value is configured in property file).
 	 */
-	private static String relayServletPath = null;
+	private static String relayServletUrl = null;
 
 	/**
 	 * Portlet resource bundle directory (actual value is configured in property
@@ -70,34 +72,39 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	static {
 		ResourceBundle bundle = PropertyResourceBundleManager
-				.getBundle(I18nUtility.PORTLET_I18N_CONFIG_FILE);
+				.getBundle(PORTLET_I18N_CONFIG_FILE);
 		if (bundle == null) {
-			logger
-					.error("I18nUtility: Failed to open "
-							+ I18nUtility.PORTLET_I18N_CONFIG_FILE
-							+ " properties file");
-			relayServletPath = null;
+			logger.error("I18nUtility: Failed to open "
+					+ PORTLET_I18N_CONFIG_FILE + " file");
+			relayServletUrl = null;
 			resourceBundleDir = null;
 		} else {
 			try {
-				relayServletPath = "/"
-						+ bundle
-								.getString(I18nUtility.PORTLET_I18N_CONFIG_PROP_RELAY_SERVLET_PATH)
-						+ "/";
-				relayServletPath = slashify(relayServletPath);
 				resourceBundleDir = "/"
-						+ bundle
-								.getString(I18nUtility.PORTLET_I18N_CONFIG_PROP_BUNDLE_DIR)
+						+ bundle.getString(PORTLET_I18N_CONFIG_PROP_BUNDLE_DIR)
 						+ "/";
 				resourceBundleDir = slashify(resourceBundleDir);
 			} catch (Exception ex) {
-				logger.error("I18nUtility: Required property(s) missing from "
-						+ I18nUtility.PORTLET_I18N_CONFIG_FILE
-						+ " properties file");
+				logger
+						.error("I18nUtility: Required property "
+								+ PORTLET_I18N_CONFIG_PROP_BUNDLE_DIR
+								+ " missing from " + PORTLET_I18N_CONFIG_FILE
+								+ " file");
 				logger.error("I18nUtility: " + ex.getMessage());
-				relayServletPath = null;
 				resourceBundleDir = null;
 			}
+			try {
+				relayServletUrl = "/"
+						+ bundle
+								.getString(I18nUtility.PORTLET_I18N_CONFIG_PROP_RELAY_SERVLET_URL)
+						+ "/";
+				relayServletUrl = slashify(relayServletUrl);
+			} catch (Exception ex) { // not an error if this property didn't
+				// exist
+			}
+		}
+		if (relayServletUrl == null || relayServletUrl.equals("")) {
+			relayServletUrl = RELAY_SERVLET_DEFAULT_PATH;
 		}
 	}
 
@@ -297,14 +304,13 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	}
 
 	/**
-	 * <p>
-	 * Returns a URL (suitable for presentation to the user) for downloading a
-	 * proper localized version of the given base filename of a portlet resource
-	 * bundle. The returned URL is a relative URL (ie relative to the scheme,
-	 * hostname, and port used in the current request) and is ready for
-	 * presentation to the user in the portlet response; it does not need to be
-	 * encoded or rewritten. For example, you can take the return from this
-	 * method, and express it as the <code>SRC=</code> attribute in an
+	 * Returns a file-relay URL (suitable for presentation to the user) for
+	 * downloading the given version of the given portlet resource bundle base
+	 * filename (ie, localized to best-fit the locale in the given request, or
+	 * not, per the boolean switch). The returned URL is ready for presentation
+	 * to the user in the portlet response; it does not need to be encoded or
+	 * rewritten. For example, you can take the return from this method, and
+	 * express it as the <code>SRC</code> attribute in an HTML
 	 * <code>&lt;IMG&gt;</code> tag.
 	 * </p>
 	 * <p>
@@ -334,19 +340,19 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * <dl>
 	 * <dt><code>getLocalizedFileURL(request, "html/foo.htm")</code> when
 	 * <code>request</code> contains Canada French (<code>Locale.CANADA_FRENCH</code>)</dt>
-	 * <dd>returns a relative URL for <code>html/foo_fr_CA.htm</code> in the
-	 * portlet resource bundle folder. (The exact URL may vary depending on the
-	 * implementation of this method, and is not documented here. But note that
-	 * it is a relative URL to the scheme, hostname, and port in the current
-	 * request.)</dd>
+	 * <dd>returns a file-relay URL for <code>html/foo_fr_CA.htm</code> in
+	 * the portlet resource bundle folder. (The exact URL may vary depending on
+	 * the implementation of this method, and is not documented here. But note
+	 * that it is a relative URL to the scheme, hostname, and port in the
+	 * current request.)</dd>
 	 * 
 	 * <dt><code>getLocalizedFileURL(request, "/html/foo.htm")</code> when
 	 * <code>request</code> contains France French (<code>Locale.FRANCE</code>)</dt>
-	 * <dd>returns a relative URL for <code>html/foo_fr.htm</code>.</dd>
+	 * <dd>returns a file-relay URL for <code>html/foo_fr.htm</code>.</dd>
 	 * 
 	 * <dt><code>getLocalizedFileURL(request, "html/foo.htm")</code> when
 	 * <code>request</code> contains generic Italian (<code>Locale.ITALIAN</code>)</dt>
-	 * <dd>returns a relative URL for <code>html/foo.htm</code></dd>
+	 * <dd>returns a file-relay URL for <code>html/foo.htm</code></dd>
 	 * </dt>
 	 * 
 	 * <dt><code>getLocalizedFileURL(request, "html/bar.htm")</code></dt>
@@ -370,14 +376,30 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * file URL that way, use the companion
 	 * <code>getLocalizedFileURL(PortletRequest,String,String)</code> method.
 	 * </p>
+	 * <p>
+	 * <b>Note:</b> The file-relay URL points to the location configured in
+	 * <code>i18n_portlet_config.properties</code>. (The proper localized
+	 * filename is included as a parameter in that URL.) If you have deployed
+	 * the file-relay service (currently a servlet) inside your portlet
+	 * application, you should not use this method. Instead, use the method
+	 * which takes a portlet response as well.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> This method uses the <code>getLocalizedFilePath</code>
+	 * method to determine the proper best-candidate localized file for the
+	 * given filename, looking in the portlet resource bundle directory. Then,
+	 * it uses the <code>getFileRelayURL</code> method in this class to
+	 * generate a file-relay URL for it. Please see those other methods for
+	 * additional documentation.
+	 * </p>
 	 * 
 	 * @param pReq
 	 *            The portlet request.
 	 * @param pBaseFileName
 	 *            The name of the base file to search.
-	 * @return A URL for downloading the best-fit localized version of the base
-	 *         file from the portlet resource bundle folder, or null if no
-	 *         qualifying file was found.
+	 * @return A file-relay URL, for downloading the best-fit localized version
+	 *         of the base file from the portlet resource bundle folder, or null
+	 *         if no qualifying file was found.
 	 */
 	public static String getLocalizedFileURL(PortletRequest pReq,
 			String pBaseFileName) {
@@ -386,22 +408,30 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 	/**
 	 * <p>
-	 * Returns a URL (suitable for presentation to the user) for downloading the
-	 * given version of the given portlet resource bundle file (ie, localized to
-	 * best-fit the locale in the given request, or not, per the boolean
-	 * switch). The returned URL is a relative URL (ie relative to the scheme,
-	 * hostname, and port used in the current request) and is ready for
-	 * presentation to the user in the portlet response; it does not need to be
-	 * encoded or rewritten. For example, you can take the return from this
-	 * method, and express it as the <code>SRC=</code> attribute in an
+	 * Returns a file-relay URL (suitable for presentation to the user) for
+	 * downloading the given version of the given portlet resource bundle base
+	 * filename (ie, localized to best-fit the locale in the given request, or
+	 * not, per the boolean switch). The returned URL is ready for presentation
+	 * to the user in the portlet response; it does not need to be encoded or
+	 * rewritten. For example, you can take the return from this method, and
+	 * express it as the <code>SRC</code> attribute in an HTML
 	 * <code>&lt;IMG&gt;</code> tag.
 	 * </p>
 	 * <p>
-	 * If the boolean switch is set to <code>true</code>, this method works
-	 * exactly like <code>getLocalizedFileURL(PortletRequest,String)</code>
-	 * (see). If the boolean switch is set to <code>false</code>, this method
-	 * does not actually localize the returned filename. Instead, the returned
-	 * filename points to the base filename if it existed, and null otherwise.
+	 * This method uses the <code>getLocalizedFilePath</code> method to
+	 * determine the proper best-candidate localized file for the given
+	 * filename, looking in the portlet resource bundle directory. Then, it uses
+	 * the <code>getFileRelayURL</code> method in this class to generate a
+	 * file-relay URL for it. Please see those other methods for additional
+	 * documentation.
+	 * <p>
+	 * If the given boolean switch is set to <code>true</code>, this method
+	 * works exactly like
+	 * <code>getLocalizedFileURL(PortletRequest,String)</code> (see). If the
+	 * boolean switch is set to <code>false</code>, this method does not
+	 * actually localize the returned filename. Instead, the returned URL
+	 * indicates to download just the base filename if it existed, and if it did
+	 * not exist, the returned URL is null.
 	 * </p>
 	 * 
 	 * @param pReq
@@ -411,15 +441,15 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @param pLocalized
 	 *            The version of the file for which to search: the base file
 	 *            (false) or the best-fitting localized file (true).
-	 * @return A URL for downloading the best-fit localized version of the base
-	 *         file from the portlet resource bundle folder, or null if no
-	 *         qualifying file was found.
+	 * @return A file-relay URL, for downloading the best-fit localized version
+	 *         of the base file from the portlet resource bundle folder, or null
+	 *         if no qualifying file was found.
 	 * 
 	 */
 	public static String getLocalizedFileURL(PortletRequest pReq,
 			String pBaseFileName, boolean pLocalized) {
 
-		if (relayServletPath == null || resourceBundleDir == null) {
+		if (relayServletUrl == null || resourceBundleDir == null) {
 			return null;
 		}
 		if (pReq == null || pBaseFileName == null) {
@@ -431,32 +461,28 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		}
 		String fileName = getLocalizedFileName(resourceBundleDir,
 				pBaseFileName, pReq.getLocale(), pLocalized);
-		// TODO: at present the URL is formed by adding the relay servlet path
-		// to the returned filename. This may need to change to support remoted
-		// portlets.
 		if (fileName != null) {
-			fileName = slashify(relayServletPath + "/" + fileName);
+			fileName = getFileRelayURL(fileName);
 		}
 		return fileName;
 	}
 
 	/**
 	 * <p>
-	 * Returns a URL (suitable for presentation to the user) for downloading a
-	 * localized portlet resource bundle file, where the filename is retrieved
-	 * (properly localized) from the portlet's message resources using the given
-	 * key and default. The returned URL is a relative URL (ie relative to the
-	 * scheme, hostname, and port used in the current request) and is ready for
+	 * Returns a file-relay URL (suitable for presentation to the user) for
+	 * downloading a localized portlet resource bundle file, where the filename
+	 * is retrieved (properly localized) from the portlet's message resources
+	 * using the given key and default. The returned URL is ready for
 	 * presentation to the user in the portlet response; it does not need to be
 	 * encoded or rewritten. For example, you can take the return from this
-	 * method, and express it as the <code>SRC=</code> attribute in an
+	 * method, and express it as the <code>SRC</code> attribute in an HTML
 	 * <code>&lt;IMG&gt;</code> tag.
 	 * </p>
 	 * <p>
 	 * This method works like
-	 * <code>getLocalizedFileURL(PortletRequest,String)</code>, but where the
-	 * localized filename string is taken from a message resource of the
-	 * portlet, using the given key and default filename. Thus this method
+	 * <code>getLocalizedFileURL(PortletRequest,String)</code>, but in which
+	 * the localized filename string is instead taken from a message resource of
+	 * the portlet, using the given key and default filename. Thus this method
 	 * relies on the best-candidate filename for each locale already existing in
 	 * the localized message properties for that locale, at the given key. (And
 	 * if the key is not found, it applies the given default filename.) Thus the
@@ -484,6 +510,21 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * the locale automatically to build the URL, use the companion
 	 * <code>getLocalizedFileURL(PortletRequest,String)</code> method.
 	 * </p>
+	 * <p>
+	 * <b>Note:</b> The returned file-relay URL points to the location
+	 * configured in <code>i18n_portlet_config.properties</code>. (The proper
+	 * localized filename is included as a parameter in that URL.) If you have
+	 * deployed the file-relay service (currently a servlet) inside your portlet
+	 * application, you should not use this method. Instead, use the method
+	 * which takes a portlet response as well.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> This method uses the <code>getMessage</code> method to
+	 * determine the proper filename. Then, it uses the
+	 * <code>getFileRelayURL</code> method in this class to generate a
+	 * file-relay URL for it. Please see those other methods for additional
+	 * documentation.
+	 * </p>
 	 * 
 	 * @param pReq
 	 *            The portlet request.
@@ -499,7 +540,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static String getLocalizedFileURL(PortletRequest pReq, String pKey,
 			String pDefault) {
-		if (relayServletPath == null || resourceBundleDir == null) {
+		if (relayServletUrl == null || resourceBundleDir == null) {
 			return null;
 		}
 		if (pReq == null || pKey == null) {
@@ -523,7 +564,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			// remoted
 			// portlets.
 			if (fileName != null && fileExists(resourceBundleDir, fileName)) {
-				return slashify(relayServletPath + "/" + fileName);
+				return slashify(relayServletUrl + "/" + fileName);
 			}
 		} catch (Exception ex) {
 		}
@@ -821,4 +862,91 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		return getMessage(request, key, null, null, null, null, false);
 	}
 
+	/**
+	 * <p>
+	 * Returns the file-relay URL for the given filename. A file-relay URL is a
+	 * URL which will download the file from the portlet bundle directory
+	 * indicated by the given filename. For example, you can make a file-relay
+	 * URL using this method, and then embed it as the value of the
+	 * <code>SRC</code> attribute in an HTML <code>&lt;IMG&gt;</code> tag;
+	 * the end-user browser will then use that file-relay URL to download the
+	 * image from the portlet bundle directory.
+	 * </p>
+	 * <p>
+	 * This method just calls the two-parameter peer method,
+	 * <code>getRelayServletURL(PortletResponse,String)</code> (see), passing
+	 * null for the portlet response.
+	 * </p>
+	 * 
+	 * @param fileName
+	 *            The file which the returned URL should indicate as a
+	 *            parameter.
+	 * @return The file-relay URL, ready for emitting to the end-user browser.
+	 */
+	public static String getFileRelayURL(String fileName) {
+		return getFileRelayURL(null, fileName);
+	}
+
+	/**
+	 * <p>
+	 * Returns the file-relay URL for the given filename and portlet response. A
+	 * file-relay URL is a URL which will download the file from the portlet
+	 * bundle directory indicated by the given filename. For example, you can
+	 * make a file-relay URL using this method, and then embed it as the value
+	 * of the <code>SRC</code> attribute in an HTML <code>&lt;IMG&gt;</code>
+	 * tag; the end-user browser will then use that file-relay URL to download
+	 * the image from the portlet bundle directory.
+	 * </p>
+	 * <p>
+	 * The current implementation of file-relay in the Shared Portal Framework
+	 * uses a servlet (the relay servlet). The servlet may be deployed anywhere,
+	 * so long as it is accessible to the end-user browser, and so long as its
+	 * URL is configured in the <code>i18n_portlet_config.properties</code>
+	 * file. Alternatively, you can deploy the servlet inside your portlet
+	 * application, under the path <code>/relay</code> (or you can define an
+	 * alternate path in <code>i18n_portlet_config.properties</code> if
+	 * desired).
+	 * </p>
+	 * <p>
+	 * If you pass a null response to this method, or define an absolute URL
+	 * inside <code>i18n_portlet_config.properties</code>, the URL returned
+	 * by this method just includes that URL literally. Otherwise, this method
+	 * returns a URL which is encoded using the portlet response, and which
+	 * points to the relay servlet which is assumed to be deployed inside your
+	 * portlet application. In either case, the given filename is a parameter in
+	 * the URL.
+	 * </p>
+	 * <p>
+	 * The filename is a required parameter; null is returned if you pass a null
+	 * filename. This method does not check first to see if the filename
+	 * actually exists.
+	 * </p>
+	 * 
+	 * @param response
+	 *            The response for the portlet whose WAR contains the relay
+	 *            service. Null if the relay service is deployed at the URL
+	 *            configured in <code>i18n_portlet_config.properties</code>,
+	 *            not in the portlet WAR.
+	 * @param fileName
+	 *            The file which the returned URL should indicate as a
+	 *            parameter.
+	 * @return The file-relay URL, ready for emitting to the end-user browser.
+	 */
+	public static String getFileRelayURL(PortletResponse response,
+			String fileName) {
+		if (fileName == null) {
+			return null;
+		}
+		fileName = fileName.trim();
+		if (fileName.equals("")) {
+			return null;
+		}
+		String url = null;
+		if (response == null || !url.startsWith("/")) {
+			url = slashify(relayServletUrl + "/" + fileName);
+		} else {
+			url = slashify(response.encodeURL(relayServletUrl) + "/" + fileName);
+		}
+		return url;
+	}
 }
