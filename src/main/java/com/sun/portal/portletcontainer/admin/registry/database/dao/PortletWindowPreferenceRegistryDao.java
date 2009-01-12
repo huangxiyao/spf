@@ -107,7 +107,6 @@ public class PortletWindowPreferenceRegistryDao {
             Object obj = query.getSingleResult();
             PortletUserWindow portletWindowPreference = null;
             if (obj != null) {
-                em.refresh(obj);
                 portletWindowPreference = (PortletUserWindow)obj;
             }
             return portletWindowPreference;
@@ -151,10 +150,6 @@ public class PortletWindowPreferenceRegistryDao {
             query.setParameter("windowName", portletWindowName);
             query.setParameter("userName", userName);
             query.setParameter("type", type);
-            // for eclipselink
-            query.setHint("eclipselink.refresh", "true");
-            // for toplink
-            query.setHint("toplink.refresh", "true");
             List result = query.getResultList();
             Map resultMap = new HashMap();
             for (Object object : result) {
