@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <epideploy:component
 	build-version="gold"
-	component-id="spcommonutilsjarfile"
+	component-id="SPF-common-utilities"
 	component-type="Generic Component"
-	description="Misc assets."
+	description="Shared Portal Framework common utilities"
 	epi-build="105"
 	epi-version="7.2.1"
 	major-version="1"
 	minor-version="0"
-	title="Service Portal CommonUtils jar file" 
+	title="SPF common utilities" 
 	xmlns:epideploy="http://www.epicentric.com/deployment">
 </epideploy:component>
