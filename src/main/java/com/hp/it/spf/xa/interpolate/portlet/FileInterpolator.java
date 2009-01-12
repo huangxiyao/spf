@@ -9,6 +9,7 @@
 package com.hp.it.spf.xa.interpolate.portlet;
 
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import java.util.Locale;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,10 +26,10 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * parameters you setup in the constructor.
  * </p>
  * <p>
- * This class uses the portlet TokenParser to do most of its
- * work. As of this writing, the following tokens are supported in the input
- * file (note: these are not XML - except where noted, tokens are case-sensitive
- * and do not require a closing tag):
+ * This class uses the portlet TokenParser to do most of its work. As of this
+ * writing, the following tokens are supported in the input file (note: these
+ * are not XML - except where noted, tokens are case-sensitive and do not
+ * require a closing tag):
  * </p>
  * 
  * <dl>
@@ -188,8 +189,9 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * Use this token to insert the full name of the user into the interpolated
  * content, where the given (first) and family (last) names are in the customary
  * order for the user's locale. The name is taken from the
- * <code>user.name.given</code> and <code>user.name.family</code> properties of the portal
- * user object, and the locale is taken from the current portlet request.
+ * <code>user.name.given</code> and <code>user.name.family</code> properties
+ * of the portal user object, and the locale is taken from the current portlet
+ * request.
  * </p>
  * <p>
  * For example, <code>&lt;NAME&gt;</code> is replaced with
@@ -272,11 +274,11 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * <p>
  * Use this token to lookup a value for the given key in a property file, and
  * insert that value into the interpolated content. The property file, by
- * default, is <code>default_tokens.properties</code>, but you can
- * override that in the FileInterpolator constructor. The property value may
- * itself contain any content including any of the special markup tokens
- * supported by FileInterpolator, <b>except</b> another
- * <code>&lt;TOKEN:key&gt;</code> token.
+ * default, is <code>default_tokens.properties</code>, but you can override
+ * that in the FileInterpolator constructor. The property value may itself
+ * contain any content including any of the special markup tokens supported by
+ * FileInterpolator, <b>except</b> another <code>&lt;TOKEN:key&gt;</code>
+ * token.
  * </p>
  * <p>
  * Whether you use <code>default_tokens.properties</code> or your own
@@ -310,11 +312,11 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * Use this token to insert a given string property of the user into the
  * interpolated content. The <code><i>key</i></code> parameter in the token
  * is the name of the user property, and the user properties themselves are
- * taken from the P3P user information in the current portlet request. For example,
- * <code>&lt;USER-PROPERTY:user.name.given&gt;</code> is replaced with
- * <code>Scott</code> for a user with such a first (given) name. The property
- * name <code><i>key</i></code>'s are not listed here and may vary based on
- * the portal implementation.
+ * taken from the P3P user information in the current portlet request. For
+ * example, <code>&lt;USER-PROPERTY:user.name.given&gt;</code> is replaced
+ * with <code>Scott</code> for a user with such a first (given) name. The
+ * property name <code><i>key</i></code>'s are not listed here and may vary
+ * based on the portal implementation.
  * </p>
  * <p>
  * If the property is not found in the user object, or is not a string, then an
@@ -341,6 +343,11 @@ public class FileInterpolator extends
 	private PortletRequest request = null;
 
 	/**
+	 * Portlet response.
+	 */
+	private PortletResponse response = null;
+
+	/**
 	 * Portlet friendly ID of current portlet instance - added by ck for CR
 	 * 1000790086
 	 */
@@ -358,8 +365,8 @@ public class FileInterpolator extends
 
 	/**
 	 * <p>
-	 * Constructs a new FileInterpolator for the given base content pathname and
-	 * request.
+	 * Constructs a new FileInterpolator for the given base content pathname,
+	 * request, and response.
 	 * </p>
 	 * <p>
 	 * The base content pathname provided should include any necessary path
@@ -384,12 +391,16 @@ public class FileInterpolator extends
 	 * 
 	 * @param request
 	 *            The portlet request
+	 * @param response
+	 *            The portlet response
 	 * @param baseContentFilePath
 	 *            The base filename and path relative to where the class loader
 	 *            searches for the file content to interpolate
 	 */
-	public FileInterpolator(PortletRequest request, String baseContentFilePath) {
+	public FileInterpolator(PortletRequest request, PortletResponse response,
+			String baseContentFilePath) {
 		this.request = request;
+		this.response = response;
 		this.baseContentFilePath = baseContentFilePath;
 		this.userGroups = null;
 		// get the friend id for the current portlet
@@ -397,17 +408,17 @@ public class FileInterpolator extends
 		// TODO - we will need to pass the portlet friendly ID over WSRP instead
 		// -
 		// so the key name for accessing that will probably change.
-		if (request != null) {
+		if (request != null && response != null) {
 			this.portletId = request
 					.getProperty(Consts.KEY_PORTLET_FRIENDLY_ID);
-			this.t = new TokenParser(request);
+			this.t = new TokenParser(request, response);
 		}
 	}
 
 	/**
 	 * <p>
 	 * Constructs a new FileInterpolator for the given base content pathname,
-	 * request, and user groups.
+	 * request, response, and user groups.
 	 * </p>
 	 * <p>
 	 * The base content pathname provided should include any necessary path
@@ -431,6 +442,8 @@ public class FileInterpolator extends
 	 * 
 	 * @param request
 	 *            The portlet request
+	 * @param response
+	 *            The portlet response
 	 * @param baseContentFilePath
 	 *            The base filename and path relative to where the class loader
 	 *            searches for the file content to interpolate
@@ -439,9 +452,10 @@ public class FileInterpolator extends
 	 *            any <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code>
 	 *            tokens in the file content)
 	 */
-	public FileInterpolator(PortletRequest request, String baseContentFilePath,
-			String[] userGroups) {
+	public FileInterpolator(PortletRequest request, PortletResponse response,
+			String baseContentFilePath, String[] userGroups) {
 		this.request = request;
+		this.response = response;
 		this.baseContentFilePath = baseContentFilePath;
 		this.userGroups = userGroups;
 		// get the friend id for the current portlet
@@ -449,17 +463,17 @@ public class FileInterpolator extends
 		// TODO - we will need to pass the portlet friendly ID over WSRP instead
 		// -
 		// so the key name for accessing that will probably change.
-		if (request != null) {
+		if (request != null && response != null) {
 			this.portletId = request
 					.getProperty(Consts.KEY_PORTLET_FRIENDLY_ID);
-			this.t = new TokenParser(request);
+			this.t = new TokenParser(request, response);
 		}
 	}
 
 	/**
 	 * <p>
 	 * Constructs a new FileInterpolator for the given base content pathname,
-	 * request, user groups, and token-substitutions pathname.
+	 * request, response, user groups, and token-substitutions pathname.
 	 * </p>
 	 * <p>
 	 * The base content pathname provided should include any necessary path
@@ -485,6 +499,8 @@ public class FileInterpolator extends
 	 * 
 	 * @param request
 	 *            The portlet request
+	 * @param response
+	 *            The portlet response
 	 * @param baseContentFilePath
 	 *            The base filename and path relative to where the class loader
 	 *            searches for the file content to interpolate
@@ -499,9 +515,10 @@ public class FileInterpolator extends
 	 *            file content)
 	 */
 	/* Added by CK for 1000790073 */
-	public FileInterpolator(PortletRequest request, String baseContentFilePath,
-			String[] userGroups, String subsFilePath) {
+	public FileInterpolator(PortletRequest request, PortletResponse response,
+			String baseContentFilePath, String[] userGroups, String subsFilePath) {
 		this.request = request;
+		this.response = response;
 		this.baseContentFilePath = baseContentFilePath;
 		this.userGroups = userGroups;
 		// get the friendly ID for the current portlet
@@ -509,10 +526,10 @@ public class FileInterpolator extends
 		// TODO - we will need to pass the portlet friendly ID over WSRP instead
 		// -
 		// so the key name for accessing that will probably change.
-		if (request != null) {
+		if (request != null && response != null) {
 			this.portletId = request
 					.getProperty(Consts.KEY_PORTLET_FRIENDLY_ID);
-			this.t = new TokenParser(request, subsFilePath);
+			this.t = new TokenParser(request, response, subsFilePath);
 		}
 	}
 
@@ -574,18 +591,19 @@ public class FileInterpolator extends
 	}
 
 	/**
-	 * Get the locale from the portal request in the portal context provided to the constructor.
-	 * Returns null if the portal context provided to the constructor was null.
+	 * Get the locale from the portal request in the portal context provided to
+	 * the constructor. Returns null if the portal context provided to the
+	 * constructor was null.
 	 * 
 	 * @return The current preferred locale for the user
 	 */
-    protected Locale getLocale() {
+	protected Locale getLocale() {
 		if (request == null) {
 			return null;
 		}
 		return request.getLocale();
-    }
-    
+	}
+
 	/**
 	 * Get the email address from the user information
 	 * (PortletRequest.USER_INFO) in the portlet request provided to the

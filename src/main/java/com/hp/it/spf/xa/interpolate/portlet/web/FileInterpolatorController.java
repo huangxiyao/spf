@@ -11,7 +11,6 @@ import org.springframework.web.portlet.mvc.AbstractController;
 
 import com.hp.it.spf.xa.interpolate.portlet.FileInterpolator;
 
-
 /**
  * <p>
  * An abstract base class for a Spring portlet controller which performs file
@@ -95,17 +94,18 @@ public abstract class FileInterpolatorController extends AbstractController {
 	 * @return String[] group names
 	 */
 	protected String[] getUserGroups(RenderRequest request) {
-		
-		/* TODO - replace with code to get groups from PortletRequest.USER_INFO map.
+
+		/*
+		 * TODO - replace with code to get groups from PortletRequest.USER_INFO
+		 * map.
 		 * 
-		if (request
-				.getAttribute(com.hp.it.cas.spf.common.utils.Consts.REQUEST_ATTR_GROUPS) != null) {
-			return (String[]) request
-					.getAttribute(com.hp.it.cas.spf.common.utils.Consts.REQUEST_ATTR_GROUPS);
-		} else
-			return null;
-		*/
-		
+		 * if (request
+		 * .getAttribute(com.hp.it.cas.spf.common.utils.Consts.REQUEST_ATTR_GROUPS) !=
+		 * null) { return (String[]) request
+		 * .getAttribute(com.hp.it.cas.spf.common.utils.Consts.REQUEST_ATTR_GROUPS); }
+		 * else return null;
+		 */
+
 		return new String[] {};
 	}
 
@@ -131,8 +131,8 @@ public abstract class FileInterpolatorController extends AbstractController {
 		// FileInterpolator f = new FileInterpolator(request, relativeName,
 		// userGroups);
 		// added by ck for cr 1000790073
-		FileInterpolator f = new FileInterpolator(request, relativeName,
-				userGroups, this.subsFileName);
+		FileInterpolator f = new FileInterpolator(request, response,
+				relativeName, userGroups, this.subsFileName);
 		String fileContent = f.interpolate();
 		return this.execute(request, response, fileContent);
 	}

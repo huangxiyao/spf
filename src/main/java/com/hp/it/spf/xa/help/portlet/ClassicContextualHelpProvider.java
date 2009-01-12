@@ -176,10 +176,10 @@ public class ClassicContextualHelpProvider extends
 	 * portlet application and returns an encoded URL pointing to it there.
 	 */
 	protected String getCloseImageURL() {
-		String defaultUrl = "/images/" + CLOSE_BUTTON_IMG_NAME;
+		String defaultUrl = slashify("/images/" + CLOSE_BUTTON_IMG_NAME);
 		String url = defaultUrl;
 		if (request != null) {
-			url = I18nUtility.getLocalizedFileURL(request, url);
+			url = I18nUtility.getLocalizedFileURL(request, response, url);
 			if (url == null) {
 				url = defaultUrl;
 				if (response != null) {
@@ -187,7 +187,7 @@ public class ClassicContextualHelpProvider extends
 				}
 			}
 		}
-		return slashify(url);
+		return url;
 	}
 
 	/**

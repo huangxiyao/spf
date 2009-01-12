@@ -5,6 +5,7 @@
 package com.hp.it.spf.xa.interpolate.portlet;
 
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,6 +45,11 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * Portlet request.
 	 */
 	private PortletRequest request = null;
+
+	/**
+	 * Portlet response.
+	 */
+	private PortletResponse response = null;
 
 	/**
 	 * Portlet logging.
@@ -107,36 +113,42 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * <p>
-	 * Constructs a new TokenParser for the given portlet request. The default
-	 * token-substitutions property file (<code>default_tokens.properties</code>)
+	 * Constructs a new TokenParser for the given portlet request and response.
+	 * The default token-substitutions property file (<code>default_tokens.properties</code>)
 	 * will be assumed, if subsequent parseToken calls find any
 	 * <code>&lt;TOKEN:key&gt;</code> tokens.
 	 * </p>
 	 * 
 	 * @param request
 	 *            The portlet request
+	 * @param response
+	 *            The portlet response
 	 */
-	public TokenParser(PortletRequest request) {
+	public TokenParser(PortletRequest request, PortletResponse response) {
 		this.request = request;
+		this.response = response;
 	}
 
 	/**
 	 * <p>
-	 * Constructs a new TokenParser for the given portlet request, and
-	 * overriding the token-substitutions property file. The given file, instead
-	 * of the default (<code>default_tokens.properties</code>) will be
-	 * assumed, if subsequent parseToken calls find any
+	 * Constructs a new TokenParser for the given portlet request and response,
+	 * and overriding the token-substitutions property file. The given file,
+	 * instead of the default (<code>default_tokens.properties</code>) will
+	 * be assumed, if subsequent parseToken calls find any
 	 * <code>&lt;TOKEN:key&gt;</code> tokens.
 	 * </p>
 	 * 
 	 * @param request
 	 *            The portlet request
+	 * @param response
+	 *            The portlet response
 	 * @param subsFilePath
 	 *            The token-substitution filename and path (relative to the
 	 *            class loader)
 	 */
 	/* Added by CK for 1000790073 */
-	public TokenParser(PortletRequest request, String subsFilePath) {
+	public TokenParser(PortletRequest request, PortletResponse response,
+			String subsFilePath) {
 		this.request = request;
 		if (subsFilePath != null) {
 			this.subsFilePath = subsFilePath;
@@ -169,8 +181,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		if (request == null) {
 			return null;
 		}
-		String path = I18nUtility.getLocalizedFileURL(request, baseFilePath,
-				localized);
+		String path = I18nUtility.getLocalizedFileURL(request, response,
+				baseFilePath, localized);
 		if (path == null || path.trim().length() == 0) {
 			return null;
 		}
