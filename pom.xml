@@ -6,29 +6,13 @@
 	<packaging>jar</packaging>
 	<name>pc-database-persistence</name>
 	<version>1.0-SNAPSHOT</version>
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>Internal Releases</name>
-			<url>
-				http://samson.atl.hp.com:8081/nexus/content/repositories/releases
-			</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>Internal Snapshots</name>
-			<url>
-				http://samson.atl.hp.com:8081/nexus/content/repositories/snapshots
-			</url>
-		</snapshotRepository>
-		<site>
-			<id>cas.sdk</id>
-			<name>CAS SDK</name>
-			<url>
-				scp://localhost:/var/www/sdk/${project.artifactId}/${project.version}
-			</url>
-		</site>
-	</distributionManagement>
+	<parent>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<artifactId>spf-pom</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<description>Put description here</description>
+	
 	<dependencies>
 		<dependency>
 			<groupId>javax.portlet</groupId>
@@ -103,9 +87,10 @@
 		</dependency>
 	</dependencies>
 	<scm>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/openportal/trunk/pc-database-persistence</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/openportal/trunk/pc-database-persistence</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/openportal/trunk/pc-database-persistence</url>
 	</scm>
-	<organization>
-	</organization>
 	<build>
 		<finalName>spf-pc-database-persistence</finalName>
 		<resources>
