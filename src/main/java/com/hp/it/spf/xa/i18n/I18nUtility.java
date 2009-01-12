@@ -599,7 +599,8 @@ public class I18nUtility {
 	/**
 	 * <p>
 	 * Returns the given path, with any consecutive file separators ("/" for
-	 * Java) reduced to just one.
+	 * Java) reduced to just one.  The given path is also trimmed of
+	 * whitespace.
 	 * </p>
 	 * 
 	 * @param pPath
@@ -610,6 +611,7 @@ public class I18nUtility {
 		if (pPath == null) {
 			return null;
 		}
+		pPath = pPath.trim();
 		return pPath.replaceAll("/+", "/");
 	}
 
