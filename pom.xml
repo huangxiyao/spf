@@ -6,12 +6,12 @@
 	<artifactId>portlet-filter</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>portlet-filter</name>
+	<description>Vignette Portal does not allow sending different sets of profile attributes for different sites, and the profile structure supported by Vignette Portal must be predefined. In SPF, this issue was addressed by injecting user profile information into the WSRP SOAP request. The injection occurred in the consumer by a project called wsrp-injector. On the producer side, the profile was extracted from WSRP SOAP request by another project called wsrp-extractor. This project provides a filter to transfer the user profile from http request to portlet request and made available to the portlets as a map.</description>
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
 		<artifactId>spf-pom</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	<description>Put description here</description>
 	<dependencies>
 		<dependency>
 			<groupId>javax.portlet</groupId>
