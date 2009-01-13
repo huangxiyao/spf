@@ -31,7 +31,7 @@ public class ExceptionUtil {
 	
 	// Secondary page type ID for the system error page with horizontal
 	// navigation in the C-frame.
-	public static String NAV_ERROR_TEMPLATE = "ANON_SP_ERROR";
+	public static String NAV_ERROR_TEMPLATE = "ANON_SPF_ERROR";
 	
 	// Map session scope attribute name
 	public static String SYSTEM_ERROR_PAGE_MAP = "systemErrorPage";
@@ -47,8 +47,7 @@ public class ExceptionUtil {
 	 */
 	static public PortalURI redirectSystemErrorPage(PortalContext portalContext, 
             String errorCode) {
-		return redirectSystemErrorPage( portalContext, errorCode, false);
-		
+		return redirectSystemErrorPage( portalContext, errorCode, false);	
 	}
 		
 	/**
@@ -69,8 +68,7 @@ public class ExceptionUtil {
     	map.put(ERROR_CODE_ATTR, errorCode);
     	session.setAttribute(SYSTEM_ERROR_PAGE_MAP, map);
 	    
-	    return systemErrorPage;
-		
+	    return systemErrorPage;	
 	}
 
 	/**
@@ -116,7 +114,5 @@ public class ExceptionUtil {
     	session.setAttribute(SYSTEM_ERROR_PAGE_MAP, map);
 	    
 	    return systemErrorPage;
-		
 	}
-	
 }

@@ -16,12 +16,6 @@ package com.hp.it.spf.xa.misc.portal;
 public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 
 	/**
-	 * TODO - remove this attribute after removing the HPP fault tag from the
-	 * tags package (keeping it for now to avoid compile problems)
-	 */
-	public static final String SESSION_ATTR_HPP_USER_ERROR = "SPF_HPP_USER_ERROR";
-
-	/**
 	 * The name of the session attribute containing transient status message.
 	 * Used by logout secondary page type action to set a logout message; can be
 	 * retrieved and removed by a JSP to display.
@@ -55,17 +49,6 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String PAGE_FED_ERROR = "ANON_SPF_FED_ERROR";
 	public static final String PAGE_SELECT_LOCALE = "ANON_SPF_SELECT_LOCALE";
 	public static final String PAGE_LOGOUT = "SPF_LOGOUT";
-
-	/**
-	 * The global help secondary page component ID (used by global help tag and
-	 * other components referring to global help).
-	 */
-	public static final String COMPONENT_GLOBAL_HELP = "SpfGlobalHelpPage";
-
-	/**
-	 * Default title for non-localized system error page.
-	 */
-	public static final String ERROR_PAGE_TITLE = "Could not open page";
 
 	/**
 	 * Following are property IDs that represent custom attributes added in
