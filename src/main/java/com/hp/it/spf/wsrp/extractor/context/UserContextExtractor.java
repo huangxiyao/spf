@@ -1,26 +1,24 @@
 package com.hp.it.spf.wsrp.extractor.context;
 
-import org.apache.log4j.Logger;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPEnvelope;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.soap.Name;
-import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPElement;
 import javax.xml.soap.Node;
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPHeader;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
-import javax.servlet.http.HttpServletRequest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.Set;
+import org.apache.log4j.Logger;
 
 import com.hp.it.spf.wsrp.extractor.profile.ProfileHelper;
 
@@ -28,7 +26,7 @@ import com.hp.it.spf.wsrp.extractor.profile.ProfileHelper;
  * Extracts user context data from the appropriate SOAP header elements and make them available to portlets
  * as map in portlet request.
  */
-public class UserContextExtractor implements SOAPHandler{
+public class UserContextExtractor implements SOAPHandler {
 
 	public static final String USER_CONTEXT_KEYS_KEY = "com.hp.spp.UserContextKeys";
 	public static final String USER_PROFILE_KEY = "com.hp.spp.UserProfile";
@@ -49,6 +47,13 @@ public class UserContextExtractor implements SOAPHandler{
         return null;
     }
 	
+	/**
+	 * handle message context
+	 * @param mc
+	 * 			message context
+	 * @return
+	 * 	        true/false
+	 */
 	public boolean handleMessage(MessageContext mc) {
 		if(mc instanceof SOAPMessageContext){
 			if(isRequest(mc) && isNeedHandledSOAPAction(mc)){
@@ -59,19 +64,17 @@ public class UserContextExtractor implements SOAPHandler{
 	}
 
 	public boolean handleFault(MessageContext mc) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	public void close(MessageContext mc) {
-		// TODO Auto-generated method stub
 		
 	}    
     
 	/**
 	 * Extracts the context data and make it available to portlets.
-	 * @param messageContext current message context
-	 * @throws AxisFault If unexpected error occurs during the processing.
+	 * @param messageContext 
+	 * 				current message context
 	 */
 	public void invoke(SOAPMessageContext messageContext) {		
 		
@@ -223,9 +226,10 @@ public class UserContextExtractor implements SOAPHandler{
 	}
 	
 	/**
-	 * Check request operation
+	 * Check currect request is inbound or outbound
 	 * @param mc
-	 * @return is request
+	 * 			message context
+	 * @return if the request is inbound, then return true
 	 */
 	private boolean isRequest(MessageContext mc){
 		return !((Boolean)mc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY)).booleanValue();
