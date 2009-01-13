@@ -45,4 +45,15 @@ public class MockPortalURI implements PortalURI {
         return null;
     }
 
+	public PortalURI addPageContextParameter(String arg0, String arg1,
+			String arg2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PortalURI setPageContextParameter(String arg0, String arg1,
+			String[] arg2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

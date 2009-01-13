@@ -104,4 +104,9 @@ public class MockPortalRequest implements PortalRequest {
 
     }
 
+	public boolean isResourceRequest() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

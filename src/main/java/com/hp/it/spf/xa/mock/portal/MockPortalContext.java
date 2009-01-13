@@ -177,4 +177,47 @@ public class MockPortalContext implements PortalContext {
         
     }
 
+	public PortalURI createFriendlyMenuItemURI(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PortalURI createFriendlyMenuItemURI(String arg0, String arg1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PortalURI createMenuItemFriendlyTemplateResolverURI(String arg0,
+			String arg1, String arg2, String arg3) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PortalURI createMenuItemTemplateResolverURI(String arg0,
+			String arg1, String arg2, String arg3) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PortalURI createResourceURI(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PortalURI createSiteFriendlyMenuItemURI(String arg0, String arg1,
+			String arg2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PortalURI createSiteMenuItemURI(String arg0, String arg1, String arg2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getResolverId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
