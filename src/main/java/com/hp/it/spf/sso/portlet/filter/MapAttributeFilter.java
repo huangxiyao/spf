@@ -65,6 +65,9 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
     // prefix of the attribute passed by VAP
     private final String VIGNETTE_PREFIX = "com.vignette.portal.attribute.portlet.";
 
+    /**
+     * init filter config for filter
+     */
     public void init(FilterConfig filterConfig) throws PortletException {
         this.filterConfig = filterConfig;
     }
@@ -73,8 +76,8 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
 
     }
 
-    /* (non-Javadoc)
-     * @see javax.portlet.filter.ActionFilter#doFilter(javax.portlet.ActionRequest, javax.portlet.ActionResponse, javax.portlet.filter.FilterChain)
+    /**
+     * map Atttribute from portal To portlet for action request
      */
     public void doFilter(ActionRequest actionRequest,
             ActionResponse actionResponse, FilterChain filterChain)
@@ -83,8 +86,9 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
         filterChain.doFilter(actionRequest, actionResponse);
     }
 
-    /* (non-Javadoc)
-     * @see javax.portlet.filter.RenderFilter#doFilter(javax.portlet.RenderRequest, javax.portlet.RenderResponse, javax.portlet.filter.FilterChain)
+
+    /**
+     * map Atttribute from portal To portlet for render request
      */
     public void doFilter(RenderRequest renderRequest,
             RenderResponse renderResponse, FilterChain filterChain)
@@ -93,8 +97,8 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
         filterChain.doFilter(renderRequest, renderResponse);
     }
 
-    /* (non-Javadoc)
-     * @see javax.portlet.filter.ResourceFilter#doFilter(javax.portlet.ResourceRequest, javax.portlet.ResourceResponse, javax.portlet.filter.FilterChain)
+    /**
+     * map Atttribute from portal To portlet for resource request
      */
     public void doFilter(ResourceRequest resourceRequest,
             ResourceResponse resourceResponse, FilterChain filterChain)
@@ -103,8 +107,8 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
         filterChain.doFilter(resourceRequest, resourceResponse);
     }
 
-    /* (non-Javadoc)
-     * @see javax.portlet.filter.EventFilter#doFilter(javax.portlet.EventRequest, javax.portlet.EventResponse, javax.portlet.filter.FilterChain)
+    /**
+     * map Atttribute from portal To portlet for event request
      */
     public void doFilter(EventRequest eventRequest,
             EventResponse eventResponse, FilterChain filterChain)
