@@ -33,6 +33,9 @@ import org.w3c.dom.Node;
  * AttributeValue: String | Map | List
  * List: "[" (AttributeValue ", ")* "]
  * </code>
+ * 
+ * @author Oliver, Kaijian Ding, Ye Liu
+ * @version 1.0
  */
 public class ProfileHelper {
 

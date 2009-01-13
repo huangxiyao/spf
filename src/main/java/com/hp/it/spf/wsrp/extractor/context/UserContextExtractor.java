@@ -37,7 +37,7 @@ import com.hp.it.spf.wsrp.extractor.profile.ProfileHelper;
  * The injection occurred in the consumer with another project called wsrp-injector. 
  * On the producer side, this project can extract the profile from WSRP SOAP request.
  * 
- * @author wuyingzh
+ * @author Oliver, Kaijian Ding, Ye Liu
  * @version 1.0
  * @see com.hp.it.spf.wsrp.injector.context.UserContextInjector
  */

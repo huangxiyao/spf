@@ -8,8 +8,8 @@ package com.hp.it.spf.wsrp.extractor.profile;
  * Interface which contains the constant used.
  * <p>
  *
- * @author mvidal@capgemini.fr
- *
+ * @author Oliver, Kaijian Ding, Ye Liu
+ * @version 1.0
  */
 public interface Constants {
 
