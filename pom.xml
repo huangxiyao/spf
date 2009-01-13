@@ -5,14 +5,14 @@
 	<artifactId>session-initialization</artifactId>
 	<name>sso session-initialization</name>
 	<version>1.0.0-SNAPSHOT</version>
-	<description>This session initialization project provides the followinng features:&lt;tr/&gt;
-1. SSO Authenticator module/filter; &lt;tr/&gt;
-2. Pulls authentication attributes from Siteminder header;&lt;tr/&gt;
-3. Uses unique ID of user to pull list of attributes from UPS;&lt;tr/&gt;
-4. Uses UPS attributes to generate groups from UGS;&lt;tr/&gt;
-5. Synchronizes Vignette Session State, database (Vgn user and extended profile) with all of the above;&lt;tr/&gt;
-6. Should refresh when data is updated;&lt;tr/&gt;
-7. Preserve Federation Capability for Service Portal OS support;&lt;tr/&gt;
+	<description>This session initialization project provides the followinng features:
+1. SSO Authenticator module/filter; 
+2. Pulls authentication attributes from Siteminder header;
+3. Uses unique ID of user to pull list of attributes from UPS;
+4. Uses UPS attributes to generate groups from UGS;
+5. Synchronizes Vignette Session State, database (Vgn user and extended profile) with all of the above;
+6. Should refresh when data is updated;
+7. Preserve Federation Capability for Service Portal OS support;
 8. Develop way to pass user custom user attribute object from Portal to Portlet.</description>
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
