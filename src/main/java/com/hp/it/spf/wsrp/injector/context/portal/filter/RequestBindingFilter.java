@@ -17,6 +17,8 @@ import com.vignette.portal.log.LogWrapper;
 /**
  * Filter used to add the incoming request to {@link RequestMap} so it's
  * available to {@link UserContextKeysInjector} during WSRP requests.
+ * @author Oliver, Kaijian Ding, Ye Liu
+ * @version TBD
  */
 public class RequestBindingFilter implements Filter {
     private static final LogWrapper LOG = new LogWrapper(

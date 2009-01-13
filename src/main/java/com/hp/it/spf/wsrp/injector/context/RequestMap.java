@@ -10,6 +10,8 @@ import java.util.Collections;
 
 /**
  * Singleton map used to pass request information between {@link RequestBindingFilter} and {@link UserContextKeysInjector}.
+ * @author Oliver, Kaijian Ding, Ye Liu
+ * @version TBD
  */
 public class RequestMap {
 	/**

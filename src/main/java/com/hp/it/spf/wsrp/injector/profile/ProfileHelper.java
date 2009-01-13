@@ -31,6 +31,8 @@ import com.vignette.portal.log.LogWrapper;
  * AttributeValue: String | Map | List
  * List: "[" (AttributeValue ", ")* "]
  * </code>
+ * @author Oliver, Kaijian Ding, Ye Liu
+ * @version TBD
  */
 public class ProfileHelper {
 
