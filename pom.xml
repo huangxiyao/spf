@@ -6,7 +6,7 @@
 	<artifactId>wsrp-extractor</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>wsrp-extractor</name>
-	<description>Vignette Portal does not allow sending different sets of profile attributes for different sites, and the profile structure supported by Vignette Portal must be predefined. In SPF, this issue was addressed by injecting user profile information into the WSRP SOAP request. The injection occurred in the consumer with another project called wsrp-injector. On the producer side, this project can extract the profile from WSRP SOAP request and made available to the portlets as a map. </description>
+	<description>Vignette Portal does not allow sending different sets of profile attributes for different sites, and the profile structure supported by Vignette Portal must be predefined. In SPF, this issue was addressed by injecting user profile information into the WSRP SOAP request. The injection occurred in the consumer with another project called wsrp-injector. On the producer side, this project can extract the profile from WSRP SOAP request.</description>
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
 		<artifactId>spf-pom</artifactId>
