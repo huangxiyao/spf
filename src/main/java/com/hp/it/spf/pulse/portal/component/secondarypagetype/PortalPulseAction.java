@@ -11,12 +11,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.hp.it.spf.pulse.portal.component.generic.DatabaseCheckTask;
-import com.hp.it.spf.pulse.portal.component.generic.HPPWebServiceCheckTask;
-import com.hp.it.spf.pulse.portal.component.generic.IComponentCheckTask;
-import com.hp.it.spf.pulse.portal.component.generic.PortalPulseConfig;
-import com.hp.it.spf.pulse.portal.component.generic.PortalPulseConfigException;
-import com.hp.it.spf.pulse.portal.component.generic.WebPageCheckTask;
+import com.hp.it.spf.pulse.portal.component.secondarypagetype.util.DatabaseCheckTask;
+import com.hp.it.spf.pulse.portal.component.secondarypagetype.util.HPPWebServiceCheckTask;
+import com.hp.it.spf.pulse.portal.component.secondarypagetype.util.IComponentCheckTask;
+import com.hp.it.spf.pulse.portal.component.secondarypagetype.util.PortalPulseConfig;
+import com.hp.it.spf.pulse.portal.component.secondarypagetype.util.PortalPulseConfigException;
+import com.hp.it.spf.pulse.portal.component.secondarypagetype.util.WebPageCheckTask;
 import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
 import com.vignette.portal.website.enduser.PortalURI;
