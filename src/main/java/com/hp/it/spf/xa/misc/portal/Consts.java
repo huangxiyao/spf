@@ -54,7 +54,7 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String PAGE_FED_LOGOUT = "ANON_SPF_FED_LOGOUT";
 	public static final String PAGE_FED_ERROR = "ANON_SPF_FED_ERROR";
 	public static final String PAGE_SELECT_LOCALE = "ANON_SPF_SELECT_LOCALE";
-	public static final String PAGE_LOGOUT = "SP_LOGOUT";
+	public static final String PAGE_LOGOUT = "SPF_LOGOUT";
 
 	/**
 	 * The global help secondary page component ID (used by global help tag and
