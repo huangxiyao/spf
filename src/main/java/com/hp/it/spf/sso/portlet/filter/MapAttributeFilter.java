@@ -30,6 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
+ * A filter transfers user profile map from http request to portlet request.
+ * </p>
+ * <p>
  * Vignette Portal does not allow sending different sets of profile attributes 
  * for different sites, and the profile structure supported by Vignette Portal 
  * must be predefined. In SPF, this issue was addressed by injecting user profile 
