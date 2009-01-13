@@ -47,6 +47,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * prevent any concurrency issues, the access to the request must be synchronized. The scope of the
  * synchronized block must be limited to avoid bottlenecks.
  * </p>
+ * @author Oliver, Kaijian Ding, Ye Liu
+ * @version TBD
  */
 public class UserContextInjector extends BasicHandler {
 	private static final LogWrapper LOG = new LogWrapper(UserContextInjector.class, "[SP-INJECTION]" + UserContextInjector.class.getName());
@@ -54,7 +56,13 @@ public class UserContextInjector extends BasicHandler {
 	public static final ProfileHelper PROFILE_HELPER = new ProfileHelper();
 	static final String WSRP_PROFILE_ERROR_FLAG = "WsrpProfileError";
 
-
+    /**
+     * Retrieve user profile map from session and Injcet user profile map into soap.
+     * Add UserContextKeys and UserProfile to soap header section .
+     * 
+     * @param MessageContext
+     *            messageContext
+     */
 	public void invoke(MessageContext messageContext) throws AxisFault {
 		// We are only interested in getMarkup and performBlockingInteraction. If this is not the case
 		// exit from this method.
@@ -99,6 +107,10 @@ public class UserContextInjector extends BasicHandler {
 		}
 	}
 
+	/** 
+	 * @param MessageContext messageContext
+	 * @return if it is supported wsrp version, for now v1 and v2 are supported	 *            
+	 */
 	static boolean isWsrpBaseCall(MessageContext messageContext) {
 		String actionURI = messageContext.getSOAPActionURI();
 		return "urn:oasis:names:tc:wsrp:v1:getMarkup".equals(actionURI) ||
@@ -302,6 +314,11 @@ public class UserContextInjector extends BasicHandler {
 		return ("443".equals(port) ? null : port);
 	}
 
+	/**
+	 * Get user profile map from session by defined key
+	 * @param request
+	 * @return
+	 */
 	private Map getUserProfileMap(HttpServletRequest request) {
 		//synchronize this as multiple WSRP threads will access the request in parallel and we don't
 		// know the underlying request implemenation
