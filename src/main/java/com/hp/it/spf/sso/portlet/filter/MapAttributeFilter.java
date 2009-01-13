@@ -1,11 +1,13 @@
+/*
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.sso.portlet.filter;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -26,6 +28,21 @@ import javax.portlet.filter.RenderFilter;
 import javax.portlet.filter.ResourceFilter;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * <p>
+ * Vignette Portal does not allow sending different sets of profile attributes 
+ * for different sites, and the profile structure supported by Vignette Portal 
+ * must be predefined. In SPF, this issue was addressed by injecting user profile 
+ * information into the WSRP SOAP request. The injection occurred in the consumer 
+ * by a project called wsrp-injector. On the producer side, the profile was 
+ * extracted from WSRP SOAP request by another project called wsrp-extractor. 
+ * This project provides a filter to transfer the user profile from http request 
+ * to portlet request and made available to the portlets as a map.
+ * </p>
+ * 
+ * @author Oliver, Kaijian Ding, Ye Liu
+ * @version TBD
+ */
 public class MapAttributeFilter implements ActionFilter, RenderFilter,
         EventFilter, ResourceFilter {
     private FilterConfig filterConfig;
