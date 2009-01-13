@@ -394,8 +394,14 @@ public interface Constants {
 	 */
 	public static final int SPP_DISCLAIMER_SIMULATION_ERROR_CODE = 10002;
 
+	/**
+	 * Consent flag
+	 */
 	public static final String CONSENT_FLAG = "ConsentFlag";
 
+	/**
+	 * Clear user profile flag
+	 */
 	public static final String CLEAR_USERPROFILE_FLAG = "_clear_userprofile";
 	
 }

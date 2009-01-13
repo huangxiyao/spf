@@ -59,32 +59,32 @@ public class ProfileHelper {
 	}
 
 
-		/**
-		* Transforms simulated user profile into an legacy profile. The simulated user
-		* information key's of Constants.MAP_SIMULATOR.key
-		* @param java.util.HashMap
-		* @return java.util.Map containing information about both LoggedIn user and may contain Simulated User
-		*	information in case if logged in user is in simulation mode (and also depends on the modes)
-		*
-		*/
-		public Map toLegacySimulatingProfile(Map map){
-				Map legacyProfile = toLegacyProfile(map);
+	/**
+	* Transforms simulated user profile into an legacy profile. The simulated user
+	* information key's of Constants.MAP_SIMULATOR.key
+	* @param java.util.HashMap
+	* @return java.util.Map containing information about both LoggedIn user and may contain Simulated User
+	*	information in case if logged in user is in simulation mode (and also depends on the modes)
+	*
+	*/
+	public Map toLegacySimulatingProfile(Map map){
+			Map legacyProfile = toLegacyProfile(map);
 
-				//if the user is simulated user then get the simulated map
-				 String isSimulating = (String) map.get(Constants.MAP_IS_SIMULATING);
-				 if (isSimulating!=null && isSimulating.equalsIgnoreCase("true")){
-					 Map simulatedMap = (java.util.Map)map.get(Constants.MAP_SIMULATOR);
-					 Iterator it = simulatedMap.entrySet().iterator();
-					 while (it.hasNext()) {
-					     Map.Entry pairs = (Map.Entry)it.next();
-					     Object value = pairs.getValue();
-					     if(value instanceof String)
-					    	 legacyProfile.put(Constants.MAP_SIMULATOR + "." + (String) pairs.getKey(), value);
-					 }
-
+			//if the user is simulated user then get the simulated map
+			 String isSimulating = (String) map.get(Constants.MAP_IS_SIMULATING);
+			 if (isSimulating!=null && isSimulating.equalsIgnoreCase("true")){
+				 Map simulatedMap = (java.util.Map)map.get(Constants.MAP_SIMULATOR);
+				 Iterator it = simulatedMap.entrySet().iterator();
+				 while (it.hasNext()) {
+				     Map.Entry pairs = (Map.Entry)it.next();
+				     Object value = pairs.getValue();
+				     if(value instanceof String)
+				    	 legacyProfile.put(Constants.MAP_SIMULATOR + "." + (String) pairs.getKey(), value);
 				 }
 
-			return legacyProfile;
+			 }
+
+		return legacyProfile;
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class ProfileHelper {
 		return (Map) stack.pop();
 	}
 
-	protected void writeObject(StringBuffer sb, Object obj) {
+	private void writeObject(StringBuffer sb, Object obj) {
 		if (obj == null) {
 			sb.append("");
 		} else if (obj instanceof Map) {
@@ -188,7 +188,7 @@ public class ProfileHelper {
 		}
 	}
 
-	protected void writeMap(StringBuffer sb, Map map) {
+	private void writeMap(StringBuffer sb, Map map) {
 		sb.append('{');
 		if (map != null && !map.isEmpty()) {
 			for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
@@ -203,7 +203,7 @@ public class ProfileHelper {
 		sb.append('}');
 	}
 
-	protected void writeList(StringBuffer sb, List lst) {
+	private void writeList(StringBuffer sb, List lst) {
 		sb.append('[');
 		if (lst != null && !lst.isEmpty()) {
 			for (Iterator it = lst.iterator(); it.hasNext();) {
@@ -216,7 +216,7 @@ public class ProfileHelper {
 		sb.append(']');
 	}
 
-	protected void escape(StringBuffer sb, String s) {
+	private void escape(StringBuffer sb, String s) {
 		if (s == null || s.length() == 0) {
 			return;
 		}
@@ -231,7 +231,7 @@ public class ProfileHelper {
 		}
 	}
 
-	protected int readObject(Stack stack, String s, int pos) {
+	private int readObject(Stack stack, String s, int pos) {
 		if (s == null) {
 			throw new IllegalArgumentException("String cannot be null");
 		}
@@ -280,7 +280,7 @@ public class ProfileHelper {
 		throw new IllegalStateException("How do we get here?");
 	}
 
-	protected int readMap(Stack stack, String s, int pos) {
+	private int readMap(Stack stack, String s, int pos) {
 		if (s.charAt(pos) != '{') {
 			throw new IllegalArgumentException("Error parsing map: "
 					+ s.substring(pos));
@@ -311,7 +311,7 @@ public class ProfileHelper {
 		return pos;
 	}
 
-	protected int readKey(Stack stack, String s, int pos) {
+	private int readKey(Stack stack, String s, int pos) {
 		int posEnd = pos;
 		while (posEnd < s.length() && !eqAt(s, posEnd, '=')) {
 			posEnd++;
@@ -324,7 +324,7 @@ public class ProfileHelper {
 		return posEnd;
 	}
 
-	protected int readList(Stack stack, String s, int pos) {
+	private int readList(Stack stack, String s, int pos) {
 		if (s.charAt(pos) != '[') {
 			throw new IllegalArgumentException("Error parsing list: "
 					+ s.substring(pos));
@@ -353,7 +353,7 @@ public class ProfileHelper {
 		return pos;
 	}
 
-	protected String unescape(String s, int startPos, int endPos) {
+	private String unescape(String s, int startPos, int endPos) {
 		if (s == null || s.length() == 0) {
 			return s;
 		}
@@ -375,7 +375,7 @@ public class ProfileHelper {
 		return sb.toString();
 	}
 
-	protected boolean eqAt(String s, int pos, char c) {
+	private boolean eqAt(String s, int pos, char c) {
 		return s.charAt(pos) == c && (pos == 0 || s.charAt(pos - 1) != '\\');
 	}
 }

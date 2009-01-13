@@ -25,12 +25,32 @@ import com.hp.it.spf.wsrp.extractor.profile.ProfileHelper;
 /**
  * Extracts user context data from the appropriate SOAP header elements and make them available to portlets
  * as map in portlet request.
+ * <br/>
+ * Vignette Portal does not allow sending different sets of profile attributes for different sites, 
+ * and the profile structure supported by Vignette Portal must be predefined.
+ * <br/> 
+ * In SPF, this issue was addressed by injecting user profile information into the WSRP SOAP request. 
+ * The injection occurred in the consumer with another project called wsrp-injector. 
+ * On the producer side, this project can extract the profile from WSRP SOAP request.
+ * 
+ * @author wuyingzh
+ * @version 1.0
+ * @see com.hp.it.spf.wsrp.injector.context.UserContextInjector
  */
 public class UserContextExtractor implements SOAPHandler {
-
+	/*
+	 * UserContextKeys object's key value, use this key to retrieve the UserContextKeys object
+	 */
 	public static final String USER_CONTEXT_KEYS_KEY = "com.hp.spp.UserContextKeys";
+	
+	/*
+	 * UserProfile object's key value, use this key to retrieve the UserProfile object
+	 */
 	public static final String USER_PROFILE_KEY = "com.hp.spp.UserProfile";
 	
+	/*
+	 * the signature of the soap method that need to be handled
+	 */
 	public static final String[] SOAP_ACTION = {"\"urn:oasis:names:tc:wsrp:v1:getMarkup\"",
 												"\"urn:oasis:names:tc:wsrp:v2:getMarkup\"",
 												"\"urn:oasis:names:tc:wsrp:v1:performBlockingInteraction\"",
@@ -41,14 +61,23 @@ public class UserContextExtractor implements SOAPHandler {
 
 	private static final Logger mLog = Logger.getLogger(UserContextExtractor.class);
 	private static final Logger mTLog = Logger.getLogger("TIME." + UserContextExtractor.class.getName());
+	
+	/*
+	 * @see com.hp.it.spf.wsrp.extractor.profile.ProfileHelper
+	 */
 	public static final ProfileHelper PROFILE_HELPER = new ProfileHelper();
 	
+	/*
+	 * @see javax.xml.ws.handler.soap.SOAPHandler#getHeaders()
+	 */
 	public Set getHeaders() {
         return null;
     }
 	
 	/**
-	 * handle message context
+	 * Handle inbound message, if the soap action need to be handle, then extractor user
+	 * profile information from soap message's head
+	 * 
 	 * @param mc
 	 * 			message context
 	 * @return
@@ -63,10 +92,21 @@ public class UserContextExtractor implements SOAPHandler {
 		return true;
 	}
 
+	/**
+	 * Handle fault if any error occurs
+	 * 
+	 * @param mc
+	 * 			message context
+	 * @return
+	 * 			true/false
+	 */
 	public boolean handleFault(MessageContext mc) {
 		return true;
 	}
-
+	
+	/*
+	 * @see javax.xml.ws.handler.Handler#close(javax.xml.ws.handler.MessageContext)
+	 */
 	public void close(MessageContext mc) {
 		
 	}    
@@ -110,6 +150,15 @@ public class UserContextExtractor implements SOAPHandler {
 		}
 	}
 
+	/**
+	 * Extract user profile information from soap
+	 * 
+	 * @param envelope
+	 * 				soap envelope
+	 * @return
+	 * 				user profile map
+	 * @throws SOAPException
+	 */
 	private Map extractUserContext(SOAPEnvelope envelope) throws SOAPException {
 		Name headerName = envelope.createName("UserContext", "spp", "http://www.hp.com/spp");
 		SOAPHeader header = envelope.getHeader();
