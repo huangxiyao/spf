@@ -45,14 +45,14 @@ public class I18nUtility {
 	 * The name of the internationalization configuration file. (The file
 	 * extension .properties is assumed by the PropertyResourceBundleManager.)
 	 */
-	public static final String I18N_CONFIG_FILE = "i18n_config";
+	protected static final String I18N_CONFIG_FILE = "i18n_config";
 
 	/**
 	 * Various properties in the internationalization configuration file. See
 	 * file for definition.
 	 */
-	public static final String I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS = "userDisplayName.reverse.lang";
-	public static final String I18N_CONFIG_KEY_EMAIL_ENCODING_FOR = "emailTemplate.encoding";
+	protected static final String I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS = "userDisplayName.reverse.lang";
+	protected static final String I18N_CONFIG_KEY_EMAIL_ENCODING_FOR = "emailTemplate.encoding";
 
 	/**
 	 * The HPP proprietary language code for traditional Chinese.
