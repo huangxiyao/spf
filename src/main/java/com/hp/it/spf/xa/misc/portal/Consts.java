@@ -43,7 +43,7 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 */
 	public static final String PAGE_SYSTEM_ERROR = "ANON_SPF_SYSTEM_ERROR";
 	public static final String PAGE_AUTH_ERROR = "ANON_SPF_AUTH_ERROR";
-	public static final String PAGE_HEALTH_CHECK = "ANON_SPF_HEALTH_CHECK";
+	public static final String PAGE_PORTAL_PULSE = "ANON_SPF_PORTAL_PULSE";
 	public static final String PAGE_GLOBAL_HELP = "ANON_SPF_GLOBAL_HELP";
 	public static final String PAGE_FED_LOGOUT = "ANON_SPF_FED_LOGOUT";
 	public static final String PAGE_FED_ERROR = "ANON_SPF_FED_ERROR";
