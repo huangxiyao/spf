@@ -31,6 +31,7 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * <dt><code>&lt;CONTENT-URL:</i>path</i>&gt;</code></dt>
  * <dt><code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt;</code></dt>
  * <dt><code>&lt;SITE&gt;</code></dt>
+ * <dt><code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code></dt>
  * <dt><code>&lt;EMAIL&gt;</code></dt>
  * <dt><code>&lt;NAME&gt;</code></dt>
  * <dt><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></dt>
@@ -102,6 +103,12 @@ public abstract class TokenParser {
 	 */
 	/* Added by CK for 1000790073 */
 	private static final String TOKEN_SITE = "<SITE>";
+
+	/**
+	 * This class attribute is the name of the container token for a site
+	 * section.
+	 */
+	private static final String TOKEN_SITE_CONTAINER = "SITE";
 
 	private int containerIndex; // For container parsing.
 	private int containerLevel; // For container parsing.
@@ -547,6 +554,98 @@ public abstract class TokenParser {
 		}
 		return content;
 
+	}
+
+	/**
+	 * <p>
+	 * Parses the string for any <code>&lt;SITE:<i>names</i>&gt;</code>
+	 * content; such content is deleted if the given site name does not match
+	 * (otherwise only the special markup is removed). The <i>names</i> may
+	 * include one or more site names, delimited by "|" for a logical-or.
+	 * <code>&lt;SITE:<i>names</i>&gt;</code> markup may be nested for
+	 * logical-and (however since any one site has only one site name, the
+	 * desire to logical-and seems unlikely).
+	 * </p>
+	 * 
+	 * <p>
+	 * <b>Note:</b> As of this writing, the site names should be Vignette "site
+	 * DNS name" strings. The current site name for the request is provided by
+	 * Vignette. The match against site names in the token is case-insensitive.
+	 * </p>
+	 * 
+	 * <p>
+	 * For example, consider the following content string:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for all sites to display.
+	 *  &lt;SITE:abc|def&gt;
+	 *  This content is to be displayed only in the abc or def sites.
+	 *  &lt;/PORTLET&gt;
+	 * </pre>
+	 * 
+	 * <p>
+	 * If the given site name is ABC, the returned content string is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for all sites to display.
+	 *  
+	 *  This content is to be displayed only in the abc or def sites.
+	 *     
+	 * </pre>
+	 * 
+	 * <p>
+	 * But if the given site name is abcd, the returned content string is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for all sites to display.
+	 *  
+	 *  
+	 * </pre>
+	 * 
+	 * <p>
+	 * If you provide null content, null is returned. If you provide null or
+	 * empty site name, all <code>&lt;SITE:names&gt;</code>-enclosed sections
+	 * are removed from the content.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @param portletIds
+	 *            The portlet IDs.
+	 * @return The interpolated string.
+	 */
+	public String parseSiteContainer(String content, String siteName) {
+
+		return parseContainer(content, TOKEN_SITE_CONTAINER,
+				new SiteContainerMatcher(siteName));
+	}
+
+	/**
+	 * ContainerMatcher for site section parsing. The constructor stores a site
+	 * name into the class. The match method returns true if the given site name
+	 * is an exact match (case-insensitive) of the stored site name.
+	 */
+	protected class SiteContainerMatcher extends ContainerMatcher {
+
+		protected SiteContainerMatcher(String siteName) {
+			super(siteName);
+		}
+
+		protected boolean match(String containerKey) {
+			String siteName = (String) subjectOfComparison;
+			if (siteName != null && containerKey != null) {
+				containerKey = containerKey.trim().toUpperCase();
+				siteName = siteName.trim().toUpperCase();
+				if (!siteName.equals("") && !containerKey.equals("")) {
+					if (siteName.equals(containerKey))
+						return true;
+				}
+			}
+			return false;
+		}
 	}
 
 	/**

@@ -133,6 +133,7 @@ public abstract class FileInterpolator {
 	 * <dt><code>&lt;EMAIL&gt;</code></dt>
 	 * <dt><code>&lt;NAME&gt;</code></dt>
 	 * <dt><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></dt>
+	 * <dt><code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code></dt>
 	 * </dl>
 	 * </p>
 	 * 
@@ -189,6 +190,9 @@ public abstract class FileInterpolator {
 		// Add other property values for current user
 		content = t.parseUserProperty(content);
 
+		// Parse site sections
+		content = t.parseSiteContainer(content, getSite());
+		
 		return content;
 	}
 
