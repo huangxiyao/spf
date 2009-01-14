@@ -269,12 +269,16 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 
 		// Make the link text.
 		String link = this.linkContent;
-		if (filterSpan) { // Remove Vignette-introduced <SPAN> tags if needed.
+		 // Remove Vignette-introduced <SPAN> tags if needed.
+		if (filterSpan) {
 			link = I18nUtility.filterSpan(link);
 		}
-		if (escape) { // Escape XML meta-characters if needed.
+		 // Escape XML meta-characters if needed.
+		if (escape) {
 			link = Utils.escapeXml(link);
 		}
+		// Remove special <NO_LOCALIZATION> markup.
+		link = I18nUtility.filterNoLocalizationTokens(link);
 
 		// Make the URI for the global help.
 		String uri = portalContext.createDisplayURI(Consts.PAGE_GLOBAL_HELP)
