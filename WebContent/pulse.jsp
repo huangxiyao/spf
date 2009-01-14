@@ -9,6 +9,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="com.hp.it.spf.pulse.portal.component.secondarypagetype.util.*"%>
+<%@ page import="com.hp.it.spf.xa.misc.portal.Consts"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.net.*"%>
 <%@ page session="true"%>
@@ -30,7 +31,7 @@ Current Time:
 <br />
 <br />
 <%
-	List taskList = (List) session.getAttribute("portal-pulse.tasks");
+	List taskList = (List) session.getAttribute(Consts.SESSION_ATTR_PORTAL_PULSE_DATA);
 
 	if (taskList != null) {
 		out.println("<table cellpadding=0 cellspacing=0 width=635>");
