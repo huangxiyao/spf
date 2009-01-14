@@ -21,6 +21,7 @@ import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
 import com.vignette.portal.website.enduser.PortalURI;
 import com.vignette.portal.website.enduser.components.BaseAction;
+import com.hp.it.spf.xa.misc.portal.Consts;
 
 /**
  * A display action for the portal pulse page. This action loads the portal
@@ -69,7 +70,8 @@ public class PortalPulseAction extends BaseAction {
 		HttpSession session = portalContext.getPortalRequest().getSession();
 
 		// taskList containing the monitoring tasks
-		List taskList = (List) session.getAttribute("portal-pulse.tasks");
+		List taskList = (List) session
+				.getAttribute(Consts.SESSION_ATTR_PORTAL_PULSE_DATA);
 		if (taskList == null) {
 			PortalPulseConfig pulseConfig = new PortalPulseConfig();
 
@@ -82,8 +84,8 @@ public class PortalPulseAction extends BaseAction {
 
 			/*
 			 * comment by ck for 1000813522 --remove the hard code tasks, both
-			 * these tasks should be controlled through pulse.xml initial
-			 * the monitoring tasks taskList = new ArrayList(11);
+			 * these tasks should be controlled through pulse.xml initial the
+			 * monitoring tasks taskList = new ArrayList(11);
 			 * IComponentCheckTask task; task = new DatabaseCheckTask();
 			 * task.init(); taskList.add(task); task = new
 			 * HPPWebServiceCheckTask(); task.init(); taskList.add(task); List
@@ -96,7 +98,8 @@ public class PortalPulseAction extends BaseAction {
 			 */
 			// added by ck for CR 1000813522
 			taskList = pulseConfig.getMonitoringTaskList();
-			session.setAttribute("portal-pulse.tasks", taskList);
+			session.setAttribute(Consts.SESSION_ATTR_PORTAL_PULSE_DATA,
+					taskList);
 		}
 
 		String xSiteAvailable = "yes";
@@ -118,7 +121,7 @@ public class PortalPulseAction extends BaseAction {
 				xSiteAvailable = "no";
 			}
 		}
-		response.addHeader("X-Site-Available", xSiteAvailable);
+		response.addHeader(Consts.RESP_HDR_X_SITE_AVAILABLE, xSiteAvailable);
 
 		return null; // null meaning continue to display pulse page
 	}
