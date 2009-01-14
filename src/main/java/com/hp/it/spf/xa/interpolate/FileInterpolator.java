@@ -100,13 +100,13 @@ public abstract class FileInterpolator {
 	protected abstract String getSite();
 
 	/**
-	 * Log a string to the error log. Different action by portal and portlet, so
-	 * therefore this is an abstract method.
+	 * Log a warning string to the log file. Different action by portal and
+	 * portlet, so therefore this is an abstract method.
 	 * 
 	 * @param msg
 	 *            string to log
 	 */
-	protected abstract void logError(String msg);
+	protected abstract void logWarning(String msg);
 
 	/**
 	 * <p>
@@ -149,14 +149,14 @@ public abstract class FileInterpolator {
 		// Get localized file path
 		String filePath = getLocalizedContentFilePath();
 		if (filePath == null) {
-			logError("Text file is not found: " + filePath);
+			logWarning("Text file is not found: " + filePath);
 			return null;
 		}
 
 		// Read all file content from HTML file
 		String content = getContent(filePath);
 		if (content == null) {
-			logError("Text file is not found or empty: " + filePath);
+			logWarning("Text file is not found or empty: " + filePath);
 			return null;
 		}
 
@@ -192,7 +192,7 @@ public abstract class FileInterpolator {
 
 		// Parse site sections
 		content = t.parseSiteContainer(content, getSite());
-		
+
 		return content;
 	}
 
@@ -221,7 +221,7 @@ public abstract class FileInterpolator {
 		}
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Get the value of the given user property from the portal User object in
 	 * the portal context (portal request) provided to the constructor. Returns
