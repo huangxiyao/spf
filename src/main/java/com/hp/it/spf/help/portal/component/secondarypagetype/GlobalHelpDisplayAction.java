@@ -34,9 +34,16 @@ public class GlobalHelpDisplayAction extends BaseAction {
 			GlobalHelpDisplayAction.class);
 
 	/**
-	 * HTML file name of global help
+	 * Base name of portal default global help HTML file (secondary support file
+	 * in this component)
 	 */
 	private static final String GLOBAL_HELP_BASE_NAME = "globalHelp.html";
+
+	/**
+	 * Base name of site-specific global help HTML file (secondary support file
+	 * in this component)
+	 */
+	private static final String SITE_GLOBAL_HELP_BASE_NAME_SUFFIX = "GlobalHelp.html";
 
 	/**
 	 * Get the <code>globalHelp.html</code> file content, localized and
@@ -63,25 +70,47 @@ public class GlobalHelpDisplayAction extends BaseAction {
 			// String[] userGroups = AuthenticationUtility
 			// .getGroupsFromCurrentUser(request);
 			String[] userGroups = null;
+			FileInterpolator f = null;
+			String baseName = null;
+			String helpContent = null;
 
-			FileInterpolator f = new FileInterpolator(portalContext,
-					GLOBAL_HELP_BASE_NAME, userGroups);
-			String helpContent = f.interpolate();
-			// If the content is not null, then store into request
+			// First look for site-specific global help file.
+			baseName = portalContext.getCurrentSite().getDNSName()
+					+ SITE_GLOBAL_HELP_BASE_NAME_SUFFIX;
+			f = new FileInterpolator(portalContext, baseName, userGroups);
+			helpContent = f.interpolate();
+
+			// If the content is not null or blank, then store into request
 			if (helpContent != null && helpContent.trim().length() > 0) {
 				request.setAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA,
 						helpContent);
 			} else {
-				throw new Exception(GLOBAL_HELP_BASE_NAME
-						+ " secondary support file is empty or not found.");
+				// If the content was null or blank, try default global help
+				// file.
+				f = new FileInterpolator(portalContext, GLOBAL_HELP_BASE_NAME,
+						userGroups);
+				helpContent = f.interpolate();
+
+				// If the content is not null or blank, then store into request.
+				if (helpContent != null && helpContent.trim().length() > 0) {
+					request.setAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA,
+							helpContent);
+				} else {
+					throw new Exception(
+							"GlobalHelpDisplayAction: both "
+									+ baseName
+									+ " and "
+									+ GLOBAL_HELP_BASE_NAME
+									+ " secondary support files are empty or not found in this component.");
+				}
 			}
 			// Redirect to primary JSP
 			return null;
 		} catch (Exception ex) {
 			// Redirect to system error page
 			LOG.error("GlobalHelpDisplayAction error: " + ex);
-			return ExceptionUtil.redirectSystemErrorPage(portalContext,
-					null, null, null);
+			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
+					null, null);
 		}
 	}
 }
