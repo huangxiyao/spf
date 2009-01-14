@@ -39,17 +39,17 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String REQUEST_ATTR_GLOBAL_HELP_DATA = "SPF_GLOBAL_HELP_DATA";
 
 	/**
-	 * The name of the session attribute storing portal pulse configuration data.
-	 * Set by the secondary page type action for use by the secondary page JSP.
+	 * The name of the session attribute storing portal pulse data. Set by the
+	 * secondary page type action for use by the secondary page JSP.
 	 */
-	public static final String SESSION_ATTR_PORTAL_PULSE_CONFIG = "SPF_PORTAL_PULSE_CONFIG";
-	
+	public static final String SESSION_ATTR_PORTAL_PULSE_DATA = "SPF_PORTAL_PULSE_DATA";
+
 	/**
-	 * The name of the response header from the portal pulse page which indicates if
-	 * the site is available.
+	 * The name of the response header from the portal pulse page which
+	 * indicates if the site is available.
 	 */
 	public static final String RESP_HDR_X_SITE_AVAILABLE = "X-Site-Available";
-	
+
 	/**
 	 * Various secondary page friendly IDs.
 	 */
