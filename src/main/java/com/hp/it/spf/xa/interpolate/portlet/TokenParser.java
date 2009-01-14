@@ -16,10 +16,14 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * The concrete subclass for parsing strings looking for tokens to substitute in
  * the portlet context. This class is used heavily by the portlet
- * FileInterpolator - see that class for complete token documentation. See the
- * method documentation here (and in the base class) for a description of the
- * various token substitutions which are supported.
+ * FileInterpolator. The following token substitutions are supported by this
+ * class (plus those supported by the base class). See the method documentation
+ * here (and in the base class) for further description.
  * </p>
+ * <dl>
+ * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
+ * <dt><code>&lt;PORTLET:<i>ids</i>&gt;...&lt;/PORTLET&gt;</code></dt>
+ * </dl>
  * 
  * @author <link href="xiao-bing.zuo@hp.com">Zuo Xiaobing</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
@@ -33,13 +37,13 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * This class attribute is the name of the container token for a group
 	 * section.
 	 */
-	private static final String TOKEN_GROUP = "GROUP";
+	private static final String TOKEN_GROUP_CONTAINER = "GROUP";
 
 	/**
 	 * This class attribute is the name of the container token for a portlet
 	 * section.
 	 */
-	private static final String TOKEN_PORTLET = "PORTLET";
+	private static final String TOKEN_PORTLET_CONTAINER = "PORTLET";
 
 	/**
 	 * Portlet request.
@@ -62,9 +66,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * group name exactly matches (case-insensitive) any of the stored group
 	 * names.
 	 */
-	protected class GroupMatcher extends ContainerMatcher {
+	protected class GroupContainerMatcher extends ContainerMatcher {
 
-		protected GroupMatcher(String[] groups) {
+		protected GroupContainerMatcher(String[] groups) {
 			super(groups);
 		}
 
@@ -91,9 +95,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * into the class. The match method returns true if the given portlet ID is
 	 * a substring (case-insensitive) of the stored portlet ID.
 	 */
-	protected class PortletMatcher extends ContainerMatcher {
+	protected class PortletContainerMatcher extends ContainerMatcher {
 
-		protected PortletMatcher(String portletID) {
+		protected PortletContainerMatcher(String portletID) {
 			super(portletID);
 		}
 
@@ -289,16 +293,16 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 *            The user groups.
 	 * @return The interpolated string.
 	 */
-	public String parseGroup(String content, String[] userGroups) {
+	public String parseGroupContainer(String content, String[] userGroups) {
 
-		return super.parseContainer(content, TOKEN_GROUP, new GroupMatcher(
-				userGroups));
+		return super.parseContainer(content, TOKEN_GROUP_CONTAINER,
+				new GroupContainerMatcher(userGroups));
 	}
 
 	/**
 	 * <p>
 	 * Parses the string for any <code>&lt;PORTLET:<i>ids</i>&gt;</code>
-	 * content; such content is deleted if the given portlet IDs do not qualify
+	 * content; such content is deleted if the given portlet ID does not qualify
 	 * (otherwise only the special markup is removed). The <i>ids</i> may
 	 * include one or more portlet IDs, delimited by "|" for a logical-or.
 	 * <code>&lt;PORTLET:<i>ids</i>&gt;</code> markup may be nested for
@@ -325,7 +329,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * </pre>
 	 * 
 	 * <p>
-	 * If the given portlet IDs include AbcXyz, the returned content string is:
+	 * If the given portlet ID is AbcXyz, the returned content string is:
 	 * </p>
 	 * 
 	 * <pre>
@@ -336,8 +340,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * </pre>
 	 * 
 	 * <p>
-	 * But if the given portlet IDs are just xyz, the returned content string
-	 * is:
+	 * But if the given portlet ID is just xyz, the returned content string is:
 	 * </p>
 	 * 
 	 * <pre>
@@ -348,7 +351,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * 
 	 * <p>
 	 * If you provide null content, null is returned. If you provide null or
-	 * empty portlet IDs, all <code>&lt;PORTLET&gt;</code>-enclosed sections
+	 * empty portlet ID, all <code>&lt;PORTLET&gt;</code>-enclosed sections
 	 * are removed from the content.
 	 * </p>
 	 * 
@@ -358,10 +361,10 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 *            The portlet IDs.
 	 * @return The interpolated string.
 	 */
-	public String parsePortlet(String content, String portletID) {
+	public String parsePortletContainer(String content, String portletID) {
 
-		return super.parseContainer(content, TOKEN_PORTLET, new PortletMatcher(
-				portletID));
+		return super.parseContainer(content, TOKEN_PORTLET_CONTAINER,
+				new PortletContainerMatcher(portletID));
 	}
 
 }

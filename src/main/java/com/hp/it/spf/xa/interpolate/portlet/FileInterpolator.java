@@ -91,19 +91,19 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * request, if necessary (eg to augment them or derive them from elsewhere).
  * </p>
  * <p>
- * In the <code>groups</code> parameter to the <code>&lt;GROUP&gt;</code>
- * token, you can list just a single group name, or multiple group names (use
- * the <code>|</code> character to delimit them). The content enclosed by the
- * <code>&lt;GROUP&gt;</code> and <code>&lt;/GROUP&gt;</code> tokens is
- * omitted from the returned content unless the groups provided to the
- * constructor match one of those group names.
+ * In the <code>groups</code> parameter to the
+ * <code>&lt;GROUP:groups&gt;</code> token, you can list just a single group
+ * name, or multiple group names (use the <code>|</code> character to delimit
+ * them). The content enclosed by the <code>&lt;GROUP:groups&gt;</code> and
+ * <code>&lt;/GROUP&gt;</code> tokens is omitted from the returned content
+ * unless the groups provided to the constructor match one of those group names.
  * </p>
  * <p>
- * The content enclosed by the <code>&lt;GROUP&gt;</code> and
+ * The content enclosed by the <code>&lt;GROUP:groups&gt;</code> and
  * <code>&lt;/GROUP&gt;</code> tokens can be anything, including any of the
  * special tokens listed here (even other
- * <code>&lt;GROUP&gt;...&lt;/GROUP&gt;</code> sections - ie, you can "nest"
- * them).
+ * <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code> sections - ie, you can
+ * "nest" them).
  * </p>
  * <p>
  * For example, the following markup selectively includes or omits the content
@@ -218,12 +218,13 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * making administration of the portlet contents easier.
  * </p>
  * <p>
- * In the <code>portlets</code> parameter to the <code>&lt;PORTLET&gt;</code>
- * token, you can list just a single portlet friendly ID, or multiple (use the
- * <code>|</code> character to delimit them). The content enclosed by the
- * <code>&lt;PORTLET&gt;</code> and <code>&lt;/PORTLET&gt;</code> tokens is
- * omitted from the returned content unless the portlet friendly ID in the
- * request matches one of those values. The match is a case-insensitive
+ * In the <code>portlets</code> parameter to the
+ * <code>&lt;PORTLET:portlets&gt;</code> token, you can list just a single
+ * portlet friendly ID, or multiple (use the <code>|</code> character to
+ * delimit them). The content enclosed by the
+ * <code>&lt;PORTLET:portlets&gt;</code> and <code>&lt;/PORTLET&gt;</code>
+ * tokens is omitted from the returned content unless the portlet friendly ID in
+ * the request matches one of those values. The match is a case-insensitive
  * substring match.
  * </p>
  * <p>
@@ -232,11 +233,11 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * does this automatically (a non-standard behavior).
  * </p>
  * <p>
- * The content enclosed by the <code>&lt;PORTLET&gt;</code> and
+ * The content enclosed by the <code>&lt;PORTLET:portlets&gt;</code> and
  * <code>&lt;/PORTLET&gt;</code> tokens can be anything, including any of the
  * special tokens supported by this class (including other
- * <code>&lt;PORTLET&gt;...&lt;/PORTLET&gt;</code> tokens - ie you can "nest"
- * them.
+ * <code>&lt;PORTLET:portlets&gt;...&lt;/PORTLET&gt;</code> tokens - ie you
+ * can "nest" them.
  * </p>
  * <p>
  * For example, the following markup selectively includes or omits the content
@@ -266,6 +267,54 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * by default - the value set is the so-called "site DNS name"). For example,
  * <code>&lt;SITE&gt;</code> is replaced with <code>itrc</code> when the
  * portlet is requested from the <code>itrc</code> portal site.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>&lt;SITE:names&gt;...&lt;/SITE&gt;</code></dt>
+ * <dd>
+ * <p>
+ * Use this token around a section of content which should only be included in
+ * the interpolated content if the current request is for a particular portal
+ * site (as indicated by the site name in the request). For example, using this
+ * token, a single file can contain content for multiple portal sites, perhaps
+ * making administration of the sites easier.
+ * </p>
+ * <p>
+ * In the <code>names</code> parameter to the <code>&lt;SITE:names&gt;</code>
+ * token, you can list just a single site name, or multiple (use the
+ * <code>|</code> character to delimit them). The content enclosed by the
+ * <code>&lt;SITE:names&gt;</code> and <code>&lt;/SITE&gt;</code> tokens is
+ * omitted from the returned content unless the site name in the request matches
+ * one of those values. The match is case-insensitive.
+ * </p>
+ * <p>
+ * This method assumes that the site name has been set by the portal into the
+ * proper-namespaced attribute in the portlet request. Vignette Portal does this
+ * automatically (a non-standard behavior).
+ * </p>
+ * <p>
+ * The content enclosed by the <code>&lt;SITE:names&gt;</code> and
+ * <code>&lt;/SITE&gt;</code> tokens can be anything, including any of the
+ * special tokens supported by this class (including other
+ * <code>&lt;SITE:names&gt;...&lt;/SITE&gt;</code> tokens - ie you can "nest"
+ * them.
+ * </p>
+ * <p>
+ * For example, the following markup selectively includes or omits the content
+ * depending on the site as indicated:
+ * </p>
+ * <p>
+ * 
+ * <pre>
+ * This content is for all portlets using this file to show.
+ * &lt;SITE:site_A|site_B&gt;
+ * This content is only to be shown when the portlet is in site_A or site_B.
+ * &lt;SITE:site_B&gt;
+ * This content is only to be shown when the portlet is in site_B.
+ * &lt;/SITE&gt;
+ * &lt;/SITE&gt;
+ * </pre>
+ * 
  * </p>
  * </dd>
  * 
@@ -561,11 +610,11 @@ public class FileInterpolator extends
 
 		// parse the portlet token
 		// added by ck for cr 1000790086
-		content = t.parsePortlet(content, portletId);
+		content = t.parsePortletContainer(content, portletId);
 		// parse the portlet token ---end
 
 		// parse the group token
-		content = t.parseGroup(content, userGroups);
+		content = t.parseGroupContainer(content, userGroups);
 
 		return content;
 	}
