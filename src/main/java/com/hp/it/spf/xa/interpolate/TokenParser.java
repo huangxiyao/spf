@@ -613,8 +613,8 @@ public abstract class TokenParser {
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param portletIds
-	 *            The portlet IDs.
+	 * @param siteName
+	 *            The portal site name.
 	 * @return The interpolated string.
 	 */
 	public String parseSiteContainer(String content, String siteName) {
