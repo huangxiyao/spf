@@ -640,7 +640,7 @@ public abstract class TokenParser {
 				containerKey = containerKey.trim().toUpperCase();
 				siteName = siteName.trim().toUpperCase();
 				if (!siteName.equals("") && !containerKey.equals("")) {
-					if (siteName.equals(containerKey))
+					if (siteName.equalsIgnoreCase(containerKey))
 						return true;
 				}
 			}
