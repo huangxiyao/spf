@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<epideploy:component build-version="Gold"
+	component-id="SPFPortalPulseSecondaryPage"
+	component-type="Secondary Pages"
+	description="Shared Portal Framework secondary page for performing portal pulse and displaying results."
+	epi-build="251" epi-version="7.2.2" major-version="7" minor-version="2"
+	title="Shared Portal Framework - Portal Pulse"
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:required-component
+		component-id="SPFPortalPulseSecondaryPageType"
+		component-type="Secondary Page Types" major-version="7"
+		minor-version="2" />
+	<epideploy:detail>
+		<style-info apply-template-header="false"
+			description="Shared Portal Framework secondary page for performing portal pulse and displaying results."
+			friendly-id="ANON_SPF_PORTAL_PULSE"
+			id="SPFPortalPulseSecondaryPage"
+			primary-filename="pulse.jsp" processing-type="ACTION_BASED"
+			template-default="true"
+			template-uid="SPFPortalPulseSecondaryPageType"
+			title="Shared Portal Framework - Portal Pulse" visible="true">
+			<actions>
+				<group-reference group-id="INHERIT_ALL" />
+			</actions>
+		</style-info>
+	</epideploy:detail>
+</epideploy:component>
