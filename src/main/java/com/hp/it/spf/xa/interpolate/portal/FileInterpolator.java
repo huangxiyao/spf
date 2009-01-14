@@ -87,18 +87,18 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * In the <code><i>groups</i></code> parameter to the
- * <code>&lt;GROUP&gt;</code> token, you can list just a single group name, or
- * multiple group names (use the <code>|</code> character to delimit them).
- * The content enclosed by the <code>&lt;GROUP&gt;</code> and
+ * <code>&lt;GROUP:groups&gt;</code> token, you can list just a single group
+ * name, or multiple group names (use the <code>|</code> character to delimit
+ * them). The content enclosed by the <code>&lt;GROUP:groups&gt;</code> and
  * <code>&lt;/GROUP&gt;</code> tokens is omitted from the returned content
  * unless the groups provided to the constructor match one of those group names.
  * </p>
  * <p>
- * The content enclosed by the <code>&lt;GROUP&gt;</code> and
+ * The content enclosed by the <code>&lt;GROUP:groups&gt;</code> and
  * <code>&lt;/GROUP&gt;</code> tokens can be anything, including any of the
  * special tokens listed here (even other
- * <code>&lt;GROUP&gt;...&lt;/GROUP&gt;</code> sections - ie, you can "nest"
- * them).
+ * <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code> sections - ie, you can
+ * "nest" them).
  * </p>
  * <p>
  * For example, the following markup selectively includes or omits the content
@@ -201,10 +201,55 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <dd>
  * <p>
  * Use this token to insert the site name of the current portal site into the
- * interpolated content. The site name is taken from the portal context. For
- * example, <code>&lt;SITE&gt;</code> is replaced with <code>itrc</code>
- * when the portal component invoking this FileInterpolator is requested from
- * the <code>itrc</code> portal site.
+ * interpolated content. The site name is taken from the portal context (it is
+ * the Vignette "site DNS name" element). For example, <code>&lt;SITE&gt;</code>
+ * is replaced with <code>itrc</code> when the portal component invoking this
+ * FileInterpolator is requested from the <code>itrc</code> portal site.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>&lt;SITE:names&gt;...&lt;/SITE&gt;</code></dt>
+ * <dd>
+ * <p>
+ * Use this token around a section of content which should only be included in
+ * the interpolated content if the current request is for a particular portal
+ * site (as indicated by the site name in the request). For example, using this
+ * token, a single file can contain content for multiple portal sites, perhaps
+ * making administration of the sites easier.
+ * </p>
+ * <p>
+ * In the <code>names</code> parameter to the <code>&lt;SITE:names&gt;</code>
+ * token, you can list just a single site name, or multiple (use the
+ * <code>|</code> character to delimit them). The content enclosed by the
+ * <code>&lt;SITE:names&gt;</code> and <code>&lt;/SITE&gt;</code> tokens is
+ * omitted from the returned content unless the site name in the request matches
+ * one of those values. The match is case-insensitive. The site name in the
+ * request is gotten from the portal context (it is the Vignette "site DNS
+ * name").
+ * </p>
+ * <p>
+ * The content enclosed by the <code>&lt;SITE:names&gt;</code> and
+ * <code>&lt;/SITE&gt;</code> tokens can be anything, including any of the
+ * special tokens supported by this class (including other
+ * <code>&lt;SITE:names&gt;...&lt;/SITE&gt;</code> tokens - ie you can "nest"
+ * them.
+ * </p>
+ * <p>
+ * For example, the following markup selectively includes or omits the content
+ * depending on the site as indicated:
+ * </p>
+ * <p>
+ * 
+ * <pre>
+ * This content is for all sites to show.
+ * &lt;SITE:site_A|site_B&gt;
+ * This content is only to be shown in site_A or site_B.
+ * &lt;SITE:site_B&gt;
+ * This content is only to be shown in site_B.
+ * &lt;/SITE&gt;
+ * &lt;/SITE&gt;
+ * </pre>
+ * 
  * </p>
  * </dd>
  * 
@@ -459,7 +504,7 @@ public class FileInterpolator extends
 		String content = super.interpolate();
 
 		// parse the group token
-		content = t.parseGroup(content, userGroups);
+		content = t.parseGroupContainer(content, userGroups);
 
 		return content;
 
@@ -484,8 +529,9 @@ public class FileInterpolator extends
 	}
 
 	/**
-	 * Get the locale from the portal request in the portal context provided to the constructor.
-	 * Returns null if the portal context provided to the constructor was null.
+	 * Get the locale from the portal request in the portal context provided to
+	 * the constructor. Returns null if the portal context provided to the
+	 * constructor was null.
 	 * 
 	 * @return The current preferred locale for the user
 	 */
@@ -495,7 +541,7 @@ public class FileInterpolator extends
 		}
 		return portalContext.getPortalRequest().getLocale();
 	}
-	
+
 	/**
 	 * Get the email address from the portal User object in the portal context
 	 * (portal request) provided to the constructor. Returns null if this has
