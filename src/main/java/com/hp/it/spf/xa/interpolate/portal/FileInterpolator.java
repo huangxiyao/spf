@@ -599,13 +599,13 @@ public class FileInterpolator extends
 	}
 
 	/**
-	 * Log error.
+	 * Log warning.
 	 * 
 	 * @param msg
 	 *            log message
 	 */
-	protected void logError(String msg) {
-		portalLog.error(msg);
+	protected void logWarning(String msg) {
+		portalLog.warning(msg);
 	}
 
 }
