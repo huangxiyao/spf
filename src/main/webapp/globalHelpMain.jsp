@@ -28,19 +28,8 @@ content, wrapped inside a table which provides a print control.
     @import url("<%= cssPath %>");
 </style>
 
-<div id="print">
-<script type="text/javascript" language="javascript" charset="utf-8">
-    // <![CDATA[
-    document.writeln('<a class="helpLink" href="#" onclick="globalHelpPrint();return false;"><spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="globalhelp.print.text" defaultValue="Print"/></a>');
-    // ]]>
-</script>
-<noscript>
-<spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="globalhelp.print.noscript.text" defaultValue="To print this document use Ctrl+p on your keypad."/>
-</noscript>
-</div>
-
+<%-- Render the global help content --%>
 <%
-    //Get the content from the request and display on the page
     Object o = portalContext.getPortalRequest().getRequest().getAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA);
     if (o!=null) {
         out.println(o.toString());		

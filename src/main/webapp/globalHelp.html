@@ -1,13 +1,29 @@
+<!-- Here is a sample print hyperlink; this one refers to a
+globalHelpPrint() JavaScript assumed to be supplied by your grid
+or styles for this page. You provide the grid and styles. -->
+
+<div id="print">
+<script type="text/javascript"
+	language="javascript" charset="utf-8">
+    // <![CDATA[
+    document.writeln('<a class="helpLink" href="#" onclick="globalHelpPrint();return false;">Print</a>');
+    // ]]>
+</script>
+<noscript>To print this document use Ctrl+p on your keypad.</noscript>
+</div>
+
+<!-- Here is some sample help content -->
+
 <h1 class="contentHeader"><a name="index">Put your help title
 here.</a></h1>
 
 <i>
 <p><strong>Customization instructions:</strong> This is a template.
-Delete these instructions and modify the rest for your portal. You can
-use any HTML, CSS and JavaScript you like. You can also refer to style
-classes defined in the <code>globalHelp.css</code> file. And you can
-refer to any of the special markup tokens supported by global help, such
-as:</p>
+Delete these instructions and modify the rest of the page for your
+portal. You can use any HTML, CSS and JavaScript you like. You can also
+refer to style classes defined in the <code>globalHelp.css</code> file.
+And you can refer to any of the special markup tokens supported by
+global help, such as:</p>
 
 <blockquote><code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code>
 (where groups are one or more groups to which the enclosed content
