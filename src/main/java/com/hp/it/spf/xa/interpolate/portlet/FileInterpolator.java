@@ -763,14 +763,14 @@ public class FileInterpolator extends
 	}
 
 	/**
-	 * Log error.
+	 * Log warning.
 	 * 
 	 * @param msg
 	 *            log message
 	 */
-	protected void logError(String msg) {
-		if (portletLog.isErrorEnabled()) {
-			portletLog.error(msg);
+	protected void logWarning(String msg) {
+		if (portletLog.isWarnEnabled()) {
+			portletLog.warn(msg);
 		}
 	}
 }
