@@ -23,6 +23,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <dl>
  * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
  * <dt><code>&lt;PORTLET:<i>ids</i>&gt;...&lt;/PORTLET&gt;</code></dt>
+ * <dt><code>&lt;ROLE:<i>roles</i>^gt;...&lt;/ROLE&gt;</code></dt>
  * </dl>
  * 
  * @author <link href="xiao-bing.zuo@hp.com">Zuo Xiaobing</link>
@@ -44,6 +45,12 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * section.
 	 */
 	private static final String TOKEN_PORTLET_CONTAINER = "PORTLET";
+
+	/**
+	 * This class attribute is the name of the container token for a role
+	 * section.
+	 */
+	private static final String TOKEN_ROLE_CONTAINER = "ROLE";
 
 	/**
 	 * Portlet request.
@@ -110,6 +117,28 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 					if (portletID.indexOf(containerKey) > -1)
 						return true;
 				}
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * ContainerMatcher for role parsing. The constructor stores a portlet
+	 * request into the class. The match method returns true if the stored
+	 * portlet request is in the role indicated by the given role name.
+	 */
+	protected class RoleContainerMatcher extends ContainerMatcher {
+
+		protected RoleContainerMatcher(PortletRequest request) {
+			super(request);
+		}
+
+		protected boolean match(String containerKey) {
+			PortletRequest request = (PortletRequest) subjectOfComparison;
+			if (request != null && containerKey != null) {
+				containerKey = containerKey.trim();
+				if (request.isUserInRole(containerKey))
+					return true;
 			}
 			return false;
 		}
@@ -358,7 +387,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * @param content
 	 *            The content string.
 	 * @param portletIds
-	 *            The portlet IDs.
+	 *            The portlet friendly ID.
 	 * @return The interpolated string.
 	 */
 	public String parsePortletContainer(String content, String portletID) {
@@ -367,4 +396,72 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 				new PortletContainerMatcher(portletID));
 	}
 
+	/**
+	 * <p>
+	 * Parses the string for any <code>&lt;ROLE:<i>roles</i>&gt;</code>
+	 * content; such content is deleted if the given role names do not qualify
+	 * (otherwise only the special markup is removed). The <i>roles</i> may
+	 * include one or more role names, delimited by "|" for a logical-or.
+	 * <code>&lt;ROLE:<i>roles</i>&GT;</code> markup may be nested for
+	 * logical-and.
+	 * </p>
+	 * 
+	 * <p>
+	 * For example, consider the following content string:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 *  &lt;ROLE:abc|def&gt;
+	 *  This content is only for users in the abc or def roles.
+	 *    &lt;ROLE:xyz&gt;
+	 *    This content is only for users in both the xyz role 
+	 *    and the abc or def roles.
+	 *    &lt;/ROLE&gt;
+	 *  &lt;/ROLE&gt;
+	 * </pre>
+	 * 
+	 * <p>
+	 * If the given roles include abc, def, and xyz, the returned content string
+	 * is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 *  
+	 *  This content is only for users in the abc or def roles.
+	 *  
+	 *    his content is only for users in both the xyz role  
+	 *    and the abc or def roles.
+	 *    
+	 *    
+	 * </pre>
+	 * 
+	 * <p>
+	 * But if the given roles include only abc, the returned content string is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 *  
+	 *  This content is only for users in the abc or def roles.
+	 *  
+	 *  
+	 * </pre>
+	 * 
+	 * <p>
+	 * If you provide null content, null is returned. If you provide null or
+	 * empty roles, all <code>&lt;ROLE&gt;</code>-enclosed sections are
+	 * removed from the content.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parseRoleContainer(String content) {
+
+		return super.parseContainer(content, TOKEN_ROLE_CONTAINER,
+				new RoleContainerMatcher(request));
+	}
 }

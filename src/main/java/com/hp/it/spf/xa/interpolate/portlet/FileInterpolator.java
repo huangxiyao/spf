@@ -258,6 +258,53 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * </p>
  * </dd>
  * 
+ * <dt><code>&lt;ROLE:roles&gt;...&lt;/ROLE&gt;</code></dt>
+ * <dd>
+ * <p>
+ * Use this token around a section of content which should only be included in
+ * the interpolated content if the user is in any one (or more) of the listed
+ * roles. For example, using this token, a single file can contain the proper
+ * content for multiple kinds of users, simplifying administration of a portlet
+ * which must display different content for different user roles.
+ * </p>
+ * <p>
+ * The roles to be checked are those contained in the PortletRequest, provided
+ * to the FileInterpolator through the constructor (see).
+ * </p>
+ * <p>
+ * In the <code>roles</code> parameter to the
+ * <code>&lt;ROLE:roles&gt;</code> token, you can list just a single role
+ * name, or multiple role names (use the <code>|</code> character to delimit
+ * them). The content enclosed by the <code>&lt;ROLE:roles&gt;</code> and
+ * <code>&lt;/ROLE&gt;</code> tokens is omitted from the returned content
+ * unless the PortletRequest indicates the user is in one of those role(s).
+ * </p>
+ * <p>
+ * The content enclosed by the <code>&lt;ROLE:roles&gt;</code> and
+ * <code>&lt;/ROLE&gt;</code> tokens can be anything, including any of the
+ * special tokens listed here (even other
+ * <code>&lt;ROLE:roles&gt;...&lt;/ROLE&gt;</code> sections - ie, you can
+ * "nest" them).
+ * </p>
+ * <p>
+ * For example, the following markup selectively includes or omits the content
+ * depending on the user roles as indicated:
+ * </p>
+ * <p>
+ * 
+ * <pre>
+ * This content is for everybody.
+ * &lt;ROLE:A&gt;
+ * This content is only for users in role A.
+ * &lt;ROLE:B|C&gt;
+ * This content is only for users in roles A and B, or A and C.
+ * &lt;/ROLE&gt;
+ * &lt;/ROLE&gt;
+ * </pre>
+ * 
+ * </p>
+ * </dd>
+ * 
  * <dt><code>&lt;SITE&gt;</code></dt>
  * <dd>
  * <p>
@@ -615,6 +662,9 @@ public class FileInterpolator extends
 
 		// parse the group token
 		content = t.parseGroupContainer(content, userGroups);
+
+		// parse the role token
+		content = t.parseRoleContainer(content);
 
 		return content;
 	}
