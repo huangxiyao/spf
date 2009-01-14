@@ -2,8 +2,7 @@
 globalHelpPrint() JavaScript assumed to be supplied by your grid
 or styles for this page. You provide the grid and styles. -->
 
-<div id="print">
-<script type="text/javascript"
+<div id="print"><script type="text/javascript"
 	language="javascript" charset="utf-8">
     // <![CDATA[
     document.writeln('<a class="helpLink" href="#" onclick="globalHelpPrint();return false;">Print</a>');
@@ -41,7 +40,19 @@ logged-in)<br>
 localized files among the global help secondary page component's support
 files)<br>
 <br>
+<code>&lt;SITE:names&gt;...&lt;/SITE&gt;</code>code> (to add different
+content for different sites - this is not useful if you are only
+authoring site-specific content)<br>
+<br>
 And more (see usage documentation for a complete list).</blockquote>
+
+<p>When you are done, name this file <code>&lt;your-site&gt;GlobalHelp.html</code>
+if it is site-specific (where <code>&lt;your-site&gt;</code> is your
+site's "DNS name" in Vignette), or just <code>&lt;globalHelp.html&gt;</code>
+if your file applies to all portal sites. Upload it as a secondary
+support file in the <code>Shared Portal Framework - Global Help
+Page</code> secondary page and finally create the localized versions as
+desired.</p>
 </i>
 
 <p class="sectionSeparator"></p>
