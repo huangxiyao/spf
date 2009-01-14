@@ -92,7 +92,7 @@ public class UserContextInjector extends BasicHandler {
 				Map userContextKeys = retrieveUserContextKeys(request);
 					LOG.info("User context keys: " + userContextKeys);
 
-					// Using new SPP 2.5 way of serializing user profile and context keys
+					// Using new way of serializing user profile and context keys
 					Map userProfile = getUserProfileMap(request);
                     LOG.info("user profile: " + userProfile);
 					injectUserContext(envelope, userContextKeys, userProfile);
