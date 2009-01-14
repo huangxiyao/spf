@@ -4,14 +4,14 @@
 	component-type="Secondary Page Types"
 	description="Shared Portal Framework secondary page type for performing portal pulse and displaying results."
 	epi-build="251" epi-version="7.2.2" major-version="7" minor-version="2"
-	title="Shared Portal Framework - Portal Pulse"
+	title="Shared Portal Framework - Portal Pulse Page"
 	xmlns:epideploy="http://www.epicentric.com/deployment">
 	<epideploy:detail>
 		<template-info allow-guest-access="true"
 			description="Shared Portal Framework secondary page type for performing portal pulse and displaying results."
 			friendly-id="ANON_SPF_PORTAL_PULSE" header-filename=""
 			id="SPFPortalPulseSecondaryPageType" is-system="false"
-			title="Shared Portal Framework - Portal Pulse"
+			title="Shared Portal Framework - Portal Pulse Page"
 			type="templatetype_page_content_include" visible="true">
 			<actions>
 				<action id="1" type="PRE_DISPLAY">
