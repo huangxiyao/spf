@@ -1,3 +1,8 @@
+/*
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ *
+ */
 package com.hp.it.spf.wsrp.injector.profile;
 
 import java.util.ArrayList;
@@ -7,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,7 +20,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter;
 import com.vignette.portal.log.LogWrapper;
 
 

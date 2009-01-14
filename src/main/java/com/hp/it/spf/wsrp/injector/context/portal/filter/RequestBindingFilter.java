@@ -1,3 +1,8 @@
+/*
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ *
+ */
 package com.hp.it.spf.wsrp.injector.context.portal.filter;
 
 import java.io.IOException;
