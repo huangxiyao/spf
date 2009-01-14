@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 
 import com.hp.it.spf.xa.help.ContextualHelpProvider;
+import com.hp.it.spf.xa.i18n.I18nUtility;
 import com.hp.it.spf.xa.misc.Utils;
 
 /**
@@ -442,15 +443,21 @@ public abstract class ClassicContextualHelpProvider extends
 		String link = this.linkContent;
 		String title = this.titleContent;
 		String help = this.helpContent;
-		if (link.startsWith("<img ")) { // Add element ID to <img> (it does not
-			// already have it and the script needs it).
+		// Add element ID to <img> (it does not already have it and the script
+		// needs it).
+		if (link.startsWith("<img ")) {
 			link = "<img id=\"" + id + "\" " + link.substring(5);
 		}
-		if (escape) { // Escape XML meta-characters if needed.
+		// Escape XML meta-characters if needed.
+		if (escape) {
 			link = Utils.escapeXml(link);
 			title = Utils.escapeXml(title);
 			help = Utils.escapeXml(help);
 		}
+		// Remove special <NO_LOCALIZATION> markup.
+		link = I18nUtility.filterNoLocalizationTokens(link);
+		title = I18nUtility.filterNoLocalizationTokens(title);
+		help = I18nUtility.filterNoLocalizationTokens(help);
 
 		// Make the noscript URL.
 		String noscriptUrl = getNoScriptURL();
