@@ -39,8 +39,7 @@ forwarding action.  Defaults are provided if they were not set. --%>
 
 		errorMessage = I18nUtility.getI18nValue(i18nID, 
 			"default_error_message",
-			"The page you were looking for is not available at this time.<br/>Please try again later.",
-			portalContext);
+			null, portalContext);
 	}
 %>
 
@@ -60,8 +59,7 @@ forwarding action.  Defaults are provided if they were not set. --%>
 
 		errorTitle = I18nUtility.getI18nValue(i18nID, 
 			"default_error_title",
-			"Could not open page",
-			portalContext);
+			null, portalContext);
 	}
 %>
 
@@ -87,8 +85,7 @@ forwarding action.  Defaults are provided if they were not set. --%>
     if (errorCode != null && errorCode.length() != 0) {
 		errorCodeMessage = I18nUtility.getI18nValue(i18nID,
 			"error_code_message_format",
-			"(Error {0})",
-			portalContext);
+			null, portalContext);
 		errorCodeMessage =
 			MessageFormat.format(errorCodeMessage, new String[] {errorCode});
 	}
@@ -96,9 +93,17 @@ forwarding action.  Defaults are provided if they were not set. --%>
 
 <%-- Output page data --%>
 <div style="padding-top: 10px; margin-left: 10px">
-<h3 class="errorTitle"><%= errorTitle %></h3>
-
-<p class="errorDescription"><%= errorMessage %></p>
-
-<p class="errorCode"><%= errorCodeMessage %></p>
+<h3 class="spf-error-title"><%= errorTitle %></h3>
+<table border="0" cellspacing="0">
+	<tr>
+		<td>
+		<p class="spf-error-message"><%= errorMessage %></p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		<p class="spf-error-code"><%= errorCodeMessage %></p>
+		</td>
+	</tr>
+</table>
 </div>
