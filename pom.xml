@@ -6,10 +6,14 @@
 	<artifactId>portal-pulse-secondarypagetype</artifactId>
 	<name>SPF portal pulse secondary page type</name>
 	<version>1.0.0-SNAPSHOT</version>
-	<description>Classes and other artifacts for the Shared Portal Framework
+	<description>
+		Classes and other artifacts for the Shared Portal Framework
 		portal pulse secondary page type. This Vignette component
 		provides the display action code for performing the check-tasks
-		configured in the pulse.xml file.</description>
+		configured in the pulse.xml file. The pulse.xml file should be
+		deployed in the global resources folder, where the administrator
+		can access it.
+	</description>
 	<inceptionYear>January 2009</inceptionYear>
 	<parent>
 		<artifactId>spf-pom</artifactId>
@@ -18,12 +22,20 @@
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/portal-pulse-secondarypagetype</url>
+		<url>
+			http://samson.atl.hp.com:8080/hudson/job/portal-pulse-secondarypagetype
+		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/portal-pulse-secondarypagetype</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/portal-pulse-secondarypagetype</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/portal-pulse-secondarypagetype</url>
+		<connection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/portal-pulse-secondarypagetype
+		</connection>
+		<developerConnection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/portal-pulse-secondarypagetype
+		</developerConnection>
+		<url>
+			http://samson.atl.hp.com/svn/spf/source/comps/trunk/portal-pulse-secondarypagetype
+		</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
