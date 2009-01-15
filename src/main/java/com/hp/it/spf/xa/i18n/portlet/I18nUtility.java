@@ -764,6 +764,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
+		pBaseFileName = slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
