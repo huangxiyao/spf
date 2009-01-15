@@ -51,9 +51,9 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String RESP_HDR_X_SITE_AVAILABLE = "X-Site-Available";
 
 	/**
-	 * Various secondary page friendly IDs.
+	 * Various secondary page template friendly IDs.
 	 */
-	public static final String PAGE_SYSTEM_ERROR = "ANON_SPF_SYSTEM_ERROR";
+	public static final String PAGE_SYSTEM_ERROR = "ERROR";
 	public static final String PAGE_AUTH_ERROR = "ANON_SPF_AUTH_ERROR";
 	public static final String PAGE_PORTAL_PULSE = "ANON_SPF_PORTAL_PULSE";
 	public static final String PAGE_GLOBAL_HELP = "ANON_SPF_GLOBAL_HELP";

@@ -11,108 +11,86 @@ import javax.servlet.http.HttpSession;
 
 import com.vignette.portal.website.enduser.PortalContext;
 import com.vignette.portal.website.enduser.PortalURI;
+import com.hp.it.spf.xa.misc.portal.Consts;
 
 /**
- * <p>This class provides exception utility methods for creating 
- * the <code>PortalURI</code> object to the Service Portal system
- * error page.
+ * <p>
+ * This class provides exception utility methods for creating the
+ * <code>PortalURI</code> object to the Service Portal system error page.
  * </p>
  * 
  * @author sunnyee
  * @version TBD
- */	
+ */
 public class ExceptionUtil {
 
 	// ------------------------------------------------------------- Constants
-	
-	// Secondary page type ID for the system error page with no horizontal
-	// navigation in the C-frame.
-	public static String NO_NAV_ERROR_TEMPLATE = "ERROR";
-	
-	// Secondary page type ID for the system error page with horizontal
-	// navigation in the C-frame.
-	public static String NAV_ERROR_TEMPLATE = "ANON_SPF_ERROR";
-	
+
 	// Map session scope attribute name
-	public static String SYSTEM_ERROR_PAGE_MAP = "systemErrorPage";
-	
+	public static String SESSION_ATTR_SYSTEM_ERROR_DATA = "SPF_SYSTEM_ERROR_DATA";
+
 	// Map attribute names
-	public static String PAGE_TITLE_ATTR = "title";
+	public static String PAGE_TITLE_ATTR = "errorTitle";
 	public static String ERROR_CODE_ATTR = "errorCode";
 	public static String ERROR_MESSAGE_ATTR = "errorMessage";
-	
+
 	/**
-	 * Create a PortalURI for redirecting to the SPF System Error page with
-	 * no horizontal navigation in the C-frame, and show error code in page.
+	 * Create a PortalURI for redirecting to the SPF system error secondary
+	 * page, and show the given error code in the page (along with the default
+	 * title and message for a system error). A default error code is displayed
+	 * if null is provided.
+	 * 
+	 * @param portalContext
+	 *            The portal context.
+	 * @param errorCode
+	 *            An error code of arbitrary format (SPF does not impose a
+	 *            format) to display on the system error secondary page.
+	 * @return PortalURI For redirecting to the system error secondary page.
 	 */
-	static public PortalURI redirectSystemErrorPage(PortalContext portalContext, 
-            String errorCode) {
-		return redirectSystemErrorPage( portalContext, errorCode, false);	
-	}
-		
-	/**
-	 * Create a PortalURI for redirecting to the SPF System Error page with
-	 * or without horizontal navigation in the C-frame as indicated by 
-	 * the showNavMenu parameter, and show error code in page.
-	 */
-	static public PortalURI redirectSystemErrorPage(PortalContext portalContext, 
-            String errorCode, boolean showNavMenu) {
-		
-	    PortalURI systemErrorPage = showNavMenu ? 
-	    		portalContext.createDisplayURI(NAV_ERROR_TEMPLATE) :
-	    		portalContext.createDisplayURI(NO_NAV_ERROR_TEMPLATE);
-	    
-	    // Use map object to store error code to pass to JSP.
-    	HttpSession session = portalContext.getPortalRequest().getSession();
-    	HashMap map = new HashMap(1);
-    	map.put(ERROR_CODE_ATTR, errorCode);
-    	session.setAttribute(SYSTEM_ERROR_PAGE_MAP, map);
-	    
-	    return systemErrorPage;	
+	static public PortalURI redirectSystemErrorPage(
+			PortalContext portalContext, String errorCode) {
+		return redirectSystemErrorPage(portalContext, null, errorCode, null);
 	}
 
 	/**
-	 * Create a PortalURI for redirecting to the SPF System Error page with no
-	 * horizontal navigation in the C-frame, and show title string, error code 
-	 * string, and error message in page.
+	 * Create a PortalURI for redirecting to the SPF system error secondary
+	 * page, and show the given title, error code, and message in the page.
+	 * Defaults for these are displayed in the page if null is provided.
+	 * 
+	 * @param portalContext
+	 *            The portal context.
+	 * @param errorTitle
+	 *            The title to display on the system error secondary page.
+	 * @param errorCode
+	 *            An error code of arbitrary format (SPF does not impose a
+	 *            format) to display on the system error secondary page.
+	 * @param errorMessage
+	 *            The error message to display on the system error secondary
+	 *            page page.
+	 * @return PortalURI For redirecting to the system error secondary page.
 	 */
-	static public PortalURI redirectSystemErrorPage(PortalContext portalContext, 
-            String title, String errorCode, String errorMessage) { 
-		
-		return redirectSystemErrorPage(portalContext, 
-            title, errorCode, errorMessage, false); 
-	}
-		
-	/**
-	 * Create a PortalURI for redirecting to the SPF System Error page with or
-	 * without horizontal navigation in the C-frame as indicated by the
-	 * showNavMenu parameter.   Show title string, error code string, 
-	 * and error message in page.
-	 */
-	static public PortalURI redirectSystemErrorPage(PortalContext portalContext, 
-            String title, String errorCode, String errorMessage,
-            boolean showNavMenu) {
-		
-		
-	    PortalURI systemErrorPage = showNavMenu ? 
-	    		portalContext.createDisplayURI(NAV_ERROR_TEMPLATE) :
-	    		portalContext.createDisplayURI(NO_NAV_ERROR_TEMPLATE);
-	    
-	    // Use map object to store title, error code, and error message to
-	    // pass to JSP.
-    	HttpSession session = portalContext.getPortalRequest().getSession();
-    	HashMap map = new HashMap(3);
-	    if (title != null) {
-	    	map.put(PAGE_TITLE_ATTR, title);
-	    }
-	    if (errorCode != null) {
-	    	map.put(ERROR_CODE_ATTR, errorCode);
-	    }
-	    if (errorMessage != null) {
-	    	map.put(ERROR_MESSAGE_ATTR, errorMessage);
-	    }
-    	session.setAttribute(SYSTEM_ERROR_PAGE_MAP, map);
-	    
-	    return systemErrorPage;
+	static public PortalURI redirectSystemErrorPage(
+			PortalContext portalContext, String errorTitle, String errorCode,
+			String errorMessage) {
+
+		PortalURI systemErrorPage = portalContext
+				.createDisplayURI(Consts.PAGE_SYSTEM_ERROR);
+
+		// Use map object to store title, error code, and error message to
+		// pass to JSP.
+		HttpSession session = portalContext.getPortalRequest().getSession();
+		HashMap map = new HashMap(3);
+		if (errorTitle != null) {
+			map.put(PAGE_TITLE_ATTR, errorTitle);
+		}
+		if (errorCode != null) {
+			map.put(ERROR_CODE_ATTR, errorCode);
+		}
+		if (errorMessage != null) {
+			map.put(ERROR_MESSAGE_ATTR, errorMessage);
+		}
+		session.setAttribute(SESSION_ATTR_SYSTEM_ERROR_DATA, map);
+
+		return systemErrorPage;
 	}
 }
