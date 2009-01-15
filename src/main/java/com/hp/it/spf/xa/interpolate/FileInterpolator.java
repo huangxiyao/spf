@@ -9,6 +9,7 @@
 package com.hp.it.spf.xa.interpolate;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.Locale;
@@ -50,13 +51,13 @@ public abstract class FileInterpolator {
 	}
 
 	/**
-	 * Get the file path, already localized to the best-fitting file for the
-	 * locale in the current request. Different action by portal and portlet, so
-	 * therefore this is an abstract method.
+	 * Get the input stream for the file to interpolate, already localized to
+	 * the best-fitting file for the locale in the current request. Different
+	 * action by portal and portlet, so therefore this is an abstract method.
 	 * 
-	 * @return file path
+	 * @return input stream for the localized file to interpolate
 	 */
-	protected abstract String getLocalizedContentFilePath();
+	protected abstract InputStream getLocalizedContentFileAsStream();
 
 	/**
 	 * Get the locale for the user. Different action by portal and portlet, so
@@ -146,17 +147,19 @@ public abstract class FileInterpolator {
 		if (this.baseContentFilePath == null) {
 			return null;
 		}
-		// Get localized file path
-		String filePath = getLocalizedContentFilePath();
-		if (filePath == null) {
-			logWarning("Text file is not found: " + filePath);
+		// Get localized file input stream
+		InputStream fileStream = getLocalizedContentFileAsStream();
+		if (fileStream == null) {
+			logWarning("Localized text file is not found for base file: "
+					+ this.baseContentFilePath);
 			return null;
 		}
 
 		// Read all file content from HTML file
-		String content = getContent(filePath);
+		String content = getContent(fileStream);
 		if (content == null) {
-			logWarning("Text file is not found or empty: " + filePath);
+			logWarning("Localized text file is empty or unreadable for base file: "
+					+ this.baseContentFilePath);
 			return null;
 		}
 
@@ -199,22 +202,20 @@ public abstract class FileInterpolator {
 	/**
 	 * Gets the file content.
 	 * 
-	 * @param filePath
-	 *            the file path
+	 * @param fileStream
+	 *            the input stream
 	 * @return String the file content, normally not empty
 	 */
-	private String getContent(String filePath) {
+	private String getContent(InputStream fileStream) {
 
 		StringBuffer sb = new StringBuffer();
 		try {
-			FileInputStream fi = new FileInputStream(filePath);
-			InputStreamReader is = new InputStreamReader(fi, "utf-8");
+			InputStreamReader is = new InputStreamReader(fileStream, "utf-8");
 			char[] ch = new char[bufferSize];
 			int len = 0;
 			while ((len = is.read(ch)) != -1) {
 				sb.append(ch, 0, len);
 			}
-			fi.close();
 			is.close();
 		} catch (IOException e) {
 			return null;

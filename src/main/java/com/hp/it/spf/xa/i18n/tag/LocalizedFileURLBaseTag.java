@@ -31,13 +31,16 @@ import javax.servlet.jsp.tagext.TagSupport;
  * <ul>
  * <li>
  * <p>
- * In the portlet case, this should be a resource bundle located in the portlet
- * resource bundle folder. The <i>base-filename</i> may include some leading
- * path relative to that folder. For example, <code>/images/picture.jpg</code> -
- * in this example, the <code>picture*.jpg</code> bundle of files should be
- * located in the <code>images/</code> subdirectory of the portlet resource
- * bundle folder (the location of this folder is configured in the
- * <code>i18n_portlet_config.properties</code> file).
+ * In the portlet case, this may be a base filename for a bundle of files
+ * located in the portlet resource bundle folder or in your portlet WAR. The
+ * <i>base-filename</i> may include some leading path relative to that. For
+ * example, <code>/images/picture.jpg</code>. In this example, the
+ * <code>picture*.jpg</code> bundle of files could be located in the
+ * <code>images/</code> subdirectory of the portlet resource bundle folder
+ * (the location of this folder is configured in the
+ * <code>i18n_portlet_config.properties</code> file). Or, the files could be
+ * located in the <code>images/</code> subdirectory of the portlet
+ * application.
  * </p>
  * </li>
  * <li>
@@ -63,15 +66,14 @@ import javax.servlet.jsp.tagext.TagSupport;
  * <ul>
  * <li>
  * <p>
- * In the portlet case, this message should be in a resource bundle located in
- * the portlet resource bundle folder. The message value (ie the filename to
- * include in the URL) can include some leading path relative to that folder.
- * For example, the value in the French message resource bundle could be
- * <code>/images/picture_fr.jpg</code> - and in this example, the
- * <code>picture*.jpg</code> bundle of files should be located in the
- * <code>images/</code> subdirectory of the portlet resource bundle folder
- * (the location of this folder is configured in the
- * <code>i18n_portlet_config.properties</code> file).
+ * In the portlet case, this message should be in a resource bundle accessible
+ * to the classloader (eg, located in the portlet resource bundle folder or
+ * inside your portlet WAR or in some other location you have configured). The
+ * message value (ie the filename to include in the URL) can include some
+ * leading path relative to that folder. For example, the value in the French
+ * message resource bundle could be <code>/images/picture_fr.jpg</code> - and
+ * in this example, the <code>picture*.jpg</code> bundle of files should be
+ * located as mentioned above.
  * </p>
  * </li>
  * <li>
@@ -100,8 +102,10 @@ import javax.servlet.jsp.tagext.TagSupport;
  * proper file is similar to that practiced by the Java-standard ResourceBundle
  * class.) The expressed URL is already encoded if necessary and can be
  * presented to the user in your response (for example, in a
- * <code>&lt;img&gt;</code> tag). If the file did
- * not exist, however, then the expressed URL is an empty string.
+ * <code>&lt;img&gt;</code> tag). If the file did not exist, however, then the
+ * expressed URL points to the base file anyway (if the browser subsequently
+ * opens the URL, it will of course get an HTTP 404 error since the file does
+ * not exist).
  * </p>
  * 
  * @author <link href="ming.zou@hp.com">Ming</link>

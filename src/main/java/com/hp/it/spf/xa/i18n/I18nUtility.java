@@ -485,10 +485,12 @@ public class I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
+		pBaseFileName = slashify(pBaseFileName);
 		if (pPath == null) {
 			pPath = "";
 		}
 		pPath = pPath.trim();
+		pPath = slashify(pPath);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}

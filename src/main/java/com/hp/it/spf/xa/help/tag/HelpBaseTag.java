@@ -50,9 +50,9 @@ import com.hp.it.spf.xa.misc.Utils;
  * with the above keys, <code>anchorImg</code> takes precedence over
  * <code>anchorImgKey</code>. If provided, the <code>anchorImg</code> value
  * should be the complete image URL itself (encoded as necessary). Otherwise if
- * provided, the <code>anchorImgKey</code> value should be a message resource
- * key for a message string containing the complete image URL itself (encoded as
- * necessary).
+ * provided, the <code>anchorImgKey</code> value should be a base filename for
+ * a (potentially localized) image file (See the concrete subclasses for how
+ * this works.)
  * </p>
  * </li>
  * </ul>
