@@ -222,6 +222,13 @@ public class ClassicContextualHelpProvider extends
 					CLOSE_BUTTON_IMG_NAME);
 			if (url == null) {
 				url = portalContext.getPortalHttpRoot() + "/" + url;
+				// make sure the path includes the portal application context
+				// root
+				String contextPath = portalContext.getPortalRequest()
+						.getContextPath();
+				if (!url.startsWith(contextPath)) {
+					return slashify(contextPath + "/" + url);
+				}
 			}
 		}
 		return slashify(url);

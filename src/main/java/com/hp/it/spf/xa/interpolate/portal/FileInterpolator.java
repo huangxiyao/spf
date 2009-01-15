@@ -10,6 +10,7 @@ package com.hp.it.spf.xa.interpolate.portal;
 
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
+import java.io.InputStream;
 import com.epicentric.user.User;
 import com.epicentric.common.website.SessionUtils;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
@@ -38,7 +39,11 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <dt><code>&lt;CONTENT-URL:<i>pathname</i>&gt;</code></dt>
  * <dd>
  * <p>
- * Use this token to insert a URL for an external, static, secondary support
+ * <b>Deprecated. Use <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code>
+ * instead.</b>
+ * </p>
+ * <p>
+ * Use this token to insert a URL for an <b>unlocalized</b> secondary support
  * file (such as an administrator-uploaded image) into the interpolated content.
  * For the <code><i>pathname</i></code> in the token, use the filename for
  * the particular secondary support file.
@@ -56,6 +61,14 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * The returned text string will contain the necessary URL for showing the image
  * to the user.
+ * </p>
+ * <p>
+ * <b>Note:</b> This token is for <b>unlocalized</b> content only. For
+ * <b>localized</b> secondary support files, see the
+ * <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code> token. Actually the
+ * <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code> token works for
+ * unlocalized content too, so the <code>&lt;CONTENT-URL:pathname&gt;</code>
+ * token is deprecated. It is retained for backward-compatibility.
  * </p>
  * 
  * <dt><code>&lt;EMAIL&gt;</code></dt>
@@ -145,7 +158,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <dt><code>&lt;LOCALIZED-CONTENT-URL:<i>pathname</i>&gt;</code></dt>
  * <dd>
  * <p>
- * Use this token to insert a URL for an external, static, localized secondary
+ * Use this token to insert a URL for a (potentially localzied) secondary
  * support file (such as an administrator-uploaded image containing a picture of
  * some text) into the interpolated content. Upload the secondary support files
  * (both the base file and the localized versions) into the portal component
@@ -511,20 +524,19 @@ public class FileInterpolator extends
 	}
 
 	/**
-	 * Get the pathname for the best-candidate localized content file available
-	 * among the secondary support files of the current portal component, based
-	 * on the request locale and base content filename provided to the
-	 * constructor. The returned pathname is an absolute path. Null is returned
-	 * if the file is not found or the portal context or content file provided
-	 * to the constructor was null.
+	 * Get an input stream for the best-candidate localized content file
+	 * available among the secondary support files of the current portal
+	 * component, based on the request locale and base content filename provided
+	 * to the constructor. Null is returned if the file is not found or the
+	 * portal context or content file provided to the constructor was null.
 	 * 
-	 * @return file path
+	 * @return The input stream for the file
 	 */
-	protected String getLocalizedContentFilePath() {
+	protected InputStream getLocalizedContentFileAsStream() {
 		if (portalContext == null || baseContentFilePath == null) {
 			return null;
 		}
-		return I18nUtility.getLocalizedFilePath(portalContext,
+		return I18nUtility.getLocalizedFileAsStream(portalContext,
 				baseContentFilePath);
 	}
 

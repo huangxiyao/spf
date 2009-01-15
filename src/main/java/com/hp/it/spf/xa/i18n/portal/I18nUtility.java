@@ -11,6 +11,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -341,23 +344,23 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 	/**
 	 * <p>
-	 * Returns the absolute pathname for a proper localized version of the given
-	 * base filename in the indicated portal component. The given filename must
-	 * be a base filename for a static resource bundle comprised of secondary
-	 * support files, stored against the portal component indicated in the given
-	 * portal context.
+	 * Returns an input stream for a proper localized version of the given base
+	 * filename in the indicated portal component. The given filename must be a
+	 * base filename for a static resource bundle comprised of secondary support
+	 * files, stored against the portal component indicated in the given portal
+	 * context.
 	 * </p>
 	 * <p>
 	 * This method uses the locale and portal component indicated in the given
 	 * portal context, to find the best-candidate localized version of the given
 	 * file among the resource bundles found among the component's secondary
 	 * support files. The logic for finding the best-candidate is the same as
-	 * that used by the Java-standard ResourceBundle class. Thus the pathname
-	 * returned by this method will include the best-candidate locale-tagged
-	 * filename, or the given base filename if there is no better fit. If the
-	 * resource bundle does not exist at all among the portal component's
-	 * secondary support files, the method returns null. This method also
-	 * returns null if any of its parameters are null.
+	 * that used by the Java-standard ResourceBundle class. Thus the input
+	 * stream returned by this method will come from the best-candidate
+	 * locale-tagged filename, or the given base filename if there is no better
+	 * fit. If the resource bundle does not exist at all among the portal
+	 * component's secondary support files, the method returns null. This method
+	 * also returns null if any of its parameters are null.
 	 * </p>
 	 * <p>
 	 * For example: among the portal component's secondary support files,
@@ -403,32 +406,34 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * already being stored in a message resource. Of course, this relies on you
 	 * having arranged that, but if you would rather generate your localized
 	 * file URL that way, use the companion
-	 * <code>getLocalizedFilePath(PortalContext,String,String)</code> method.
+	 * <code>getLocalizedFileAsStream(PortalContext,String,String)</code>
+	 * method.
 	 * </p>
 	 * 
 	 * @param pContext
 	 *            The portal context.
 	 * @param pBaseFileName
 	 *            The name of the base file to search.
-	 * @return The absolute pathname of the best-candidate localized file in the
-	 *         portal component, or null if no qualifying file was found.
+	 * @return An input stream for the best-candidate localized file, or null if
+	 *         none was found.
 	 */
-	public static String getLocalizedFilePath(PortalContext pContext,
+	public static InputStream getLocalizedFileAsStream(PortalContext pContext,
 			String pBaseFileName) {
-		return getLocalizedFilePath(pContext, pBaseFileName, true);
+		return getLocalizedFileAsStream(pContext, pBaseFileName, true);
 	}
 
 	/**
 	 * <p>
-	 * Returns the absolute pathname in the indicated portal component for the
-	 * given version of the given base filename (e, localized to best-fit the
-	 * indicated locale, or not, per the boolean switch). The given filename
-	 * must be a base filename for a static resource bundle comprised of
-	 * secondary support files, stored against the portal component indicated in
-	 * the given portal context.
+	 * Returns an input stream for the given version of the given base filename
+	 * in the current portal component (e, the particular file chosen for the
+	 * input stream is the one which is localized to best-fit the indicated
+	 * locale, or not, per the boolean switch). The given filename must be a
+	 * base filename for a static resource bundle comprised of secondary support
+	 * files, stored against the portal component indicated in the given portal
+	 * context.
 	 * <p>
 	 * If the boolean switch is set to <code>true</code>, this method works
-	 * exactly like <code>getLocalizedFilePath(PortalContext,String)</code>
+	 * exactly like <code>getLocalizedFileAsStream(PortalContext,String)</code>
 	 * (see). If the boolean switch is set to <code>false</code>, this method
 	 * does not actually localize the returned filename. Instead, the returned
 	 * filename points to the base filename if it existed, and null otherwise.
@@ -441,34 +446,42 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @param pLocalized
 	 *            The version of the file for which to search: the base file
 	 *            (false) or the best-fitting localized file (true).
-	 * @return The absolute pathname of the best-candidate localized file in the
-	 *         portal component, or null if no qualifying file was found.
+	 * @return An input stream for the best-candidate localized file, or null if
+	 *         none was found.
 	 */
-	public static String getLocalizedFilePath(PortalContext pContext,
+	public static InputStream getLocalizedFileAsStream(PortalContext pContext,
 			String pBaseFileName, boolean pLocalized) {
+
 		if (pContext == null || pBaseFileName == null) {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
+		pBaseFileName = slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
-		try {
-			String filePath = null;
-			String fileURL = getLocalizedFileURL(pContext, pBaseFileName,
-					pLocalized);
-			if (fileURL == null) {
-				throw new Exception();
+
+		// get the relative path for the current portal component
+		Style thisStyleObject = getCurrentComponent(pContext);
+		String relPath = thisStyleObject.getUrlSafeRelativePath();
+
+		// get the absolute path for the current portal component - this is
+		// the path to the location of its secondary support files
+		String absPath = pContext.getPortalRequest().getSession()
+				.getServletContext().getRealPath(relPath)
+				+ "/";
+		Locale locale = getLocale(pContext.getPortalRequest().getRequest());
+		String fileName = getLocalizedFileName(absPath, pBaseFileName, locale,
+				pLocalized);
+
+		// file path is just the absolute path + the filename (if not null -
+		// otherwise return null)
+		if (fileName != null) {
+			fileName = slashify(absPath + "/" + fileName);
+			try {
+				return new FileInputStream(fileName);
+			} catch (FileNotFoundException e) { // should never happen
 			}
-			if (fileURL.startsWith(pContext.getPortalHttpRoot())) {
-				fileURL = fileURL.substring(pContext.getPortalHttpRoot()
-						.length());
-				fileURL = slashify("/" + fileURL);
-			}
-			filePath = pContext.getPortalRequest().getSession()
-					.getServletContext().getRealPath(fileURL);
-			return filePath;
-		} catch (Exception ex) {
 		}
 		return null;
 	}
@@ -497,7 +510,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * returned by this method will point to the best-candidate locale-tagged
 	 * filename, or the given base filename if there is no better fit. If the
 	 * resource bundle does not exist at all among the portal component's
-	 * secondary support files, the method returns null. This method also
+	 * secondary support files, the method returns a URL pointing to the base
+	 * filename (of course, if subsequently opened by a browser, this URL will
+	 * trigger an HTTP 404 error since the file does not exist). This method
 	 * returns null if any of its parameters are null.
 	 * </p>
 	 * <p>
@@ -527,7 +542,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * </dt>
 	 * 
 	 * <dt><code>getLocalizedFileURL(context, "photo.jpg")</code></dt>
-	 * <dd>returns <code>null</code></dd>
+	 * <dd>returns a relative secondary support file URL for
+	 * <code>photo.jpg</code> (if opened by the browser, this will trigger an
+	 * HTTP 404 error)</dd>
 	 * </dl>
 	 * 
 	 * <p>
@@ -597,51 +614,60 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
+		pBaseFileName = slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
-		try {
-			// get the relative path for the current portal component
-			Style thisStyleObject = getCurrentComponent(pContext);
-			String relPath = thisStyleObject.getUrlSafeRelativePath();
+		// get the relative path for the current portal component
+		Style thisStyleObject = getCurrentComponent(pContext);
+		String relPath = thisStyleObject.getUrlSafeRelativePath();
 
-			// get the absolute path for the current portal component - this is
-			// the path to the location of its secondary support files
-			String absPath = pContext.getPortalRequest().getSession()
-					.getServletContext().getRealPath(relPath)
-					+ "/";
-			Locale locale = getLocale(pContext.getPortalRequest().getRequest());
-			String fileName = getLocalizedFileName(absPath, pBaseFileName,
-					locale, pLocalized);
-			// relative URL is just the portal context root path + the relative
-			// path to the component + the localized filename (if not null)
-			if (relPath != null && fileName != null) {
-				return slashify(pContext.getPortalHttpRoot() + "/" + relPath
-						+ "/" + fileName);
-			}
-		} catch (Exception ex) {
+		// get the absolute path for the current portal component - this is
+		// the path to the location of its secondary support files
+		String absPath = pContext.getPortalRequest().getSession()
+				.getServletContext().getRealPath(relPath)
+				+ "/";
+		Locale locale = getLocale(pContext.getPortalRequest().getRequest());
+		String fileName = getLocalizedFileName(absPath, pBaseFileName, locale,
+				pLocalized);
+		// relative URL is just the portal context root path + the relative
+		// path to the component + the localized filename (if not null)
+		String url = null;
+		if (fileName != null) {
+			url = slashify(pContext.getPortalHttpRoot() + "/" + relPath + "/"
+					+ fileName);
+		} else {
+			url = slashify(pContext.getPortalHttpRoot() + "/" + relPath + "/"
+					+ pBaseFileName);
 		}
-		return null;
+		// make sure the path includes the portal application context root
+		String contextPath = pContext.getPortalRequest().getContextPath();
+		if (!url.startsWith(contextPath)) {
+			return contextPath + "/" + url;
+		} else {
+			return url;
+		}
 	}
 
 	/**
 	 * <p>
-	 * Returns the absolute pathname for a localized file in the indicated
-	 * portal component, where the filename is retrieved (properly localized)
-	 * from the component's message resources using the given key and default.
-	 * The filename in the message resource must be that of a secondary support
-	 * file for the same portal component.
+	 * Returns an input stream for a localized file in the indicated portal
+	 * component, where the filename is retrieved (properly localized) from the
+	 * component's message resources using the given key and default. The
+	 * filename in the message resource must be that of a secondary support file
+	 * for the same portal component.
 	 * </p>
 	 * <p>
 	 * This method works like
-	 * <code>getLocalizedFilePath(PortalContext,String)</code>, but where the
-	 * localized filename string is taken from a message resource of the portal
-	 * component, using the given key and default filename. Thus this method
-	 * relies on the best-candidate filename for each locale already existing in
-	 * the localized message properties for that locale, at the given key. (And
-	 * if the key is not found, it applies the given default filename.) Thus the
-	 * method just reads the filename from the message, assumes that file is the
-	 * best one for that locale, and returns a path for it accordingly.
+	 * <code>getLocalizedFileAsStream(PortalContext,String)</code>, but where
+	 * the localized filename string is taken from a message resource of the
+	 * portal component, using the given key and default filename. Thus this
+	 * method relies on the best-candidate filename for each locale already
+	 * existing in the localized message properties for that locale, at the
+	 * given key. (And if the key is not found, it applies the given default
+	 * filename.) Thus the method just reads the filename from the message,
+	 * assumes that file is the best one for that locale, and returns a path for
+	 * it accordingly.
 	 * </p>
 	 * <p>
 	 * The default filename is an optional parameter; if left null or blank, and
@@ -667,10 +693,10 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @param pDefault
 	 *            The default filename to use if the message property does not
 	 *            exist.
-	 * @return The absolute pathname of the best-candidate localized file in the
-	 *         portal component, or null if no qualifying file was found.
+	 * @return An input stream for the best-candidate localized file, or null if
+	 *         none was found.
 	 */
-	public static String getLocalizedFilePath(PortalContext pContext,
+	public static InputStream getLocalizedFileAsStream(PortalContext pContext,
 			String pKey, String pDefault) {
 		if (pContext == null || pKey == null) {
 			return null;
@@ -681,21 +707,36 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		}
 		if (pDefault != null) {
 			pDefault = pDefault.trim();
+			if (pDefault.length() == 0) {
+				return null;
+			}
 		}
-		try {
-			String fileURL = getLocalizedFileURL(pContext, pKey, pDefault);
-			if (fileURL == null) {
-				throw new Exception();
+
+		// get the relative path for the current portal component
+		Style thisStyleObject = getCurrentComponent(pContext);
+		String relPath = thisStyleObject.getUrlSafeRelativePath();
+
+		// get the absolute path for the current portal component - this is
+		// the path to the location of its secondary support files
+		String absPath = pContext.getPortalRequest().getSession()
+				.getServletContext().getRealPath(relPath)
+				+ "/";
+
+		// get the filename from the message resources
+		String fileName = getValue(pKey, pDefault, pContext);
+
+		// file path is just the absolute path + the filename (if not null -
+		// otherwise return null - also return null if file doesn't exist)
+		if (fileName != null && !fileName.equals(pKey)
+				&& (fileName.length() > 0)) {
+			fileName = slashify(fileName);
+			if (fileExists(absPath, fileName)) {
+				fileName = slashify(absPath + "/" + fileName);
+				try {
+					return new FileInputStream(fileName);
+				} catch (FileNotFoundException e) { // should never happen
+				}
 			}
-			if (fileURL.startsWith(pContext.getPortalHttpRoot())) {
-				fileURL = fileURL.substring(pContext.getPortalHttpRoot()
-						.length());
-				fileURL = slashify("/" + fileURL);
-			}
-			String filePath = pContext.getPortalRequest().getSession()
-					.getServletContext().getRealPath(fileURL);
-			return filePath;
-		} catch (Exception ex) {
 		}
 		return null;
 	}
@@ -725,16 +766,19 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * <p>
 	 * The default filename is an optional parameter; if left null or blank, and
 	 * the key is not found in the available messages, then null is returned.
-	 * Null is also returned if the secondary support file matching the resolved
-	 * name does not actually exist, or if the portal context or key parameters
-	 * were null.
+	 * Null is also returned if the portal context or key parameters were null.
+	 * If the key was found in the available messages, but a file matching the
+	 * message value does not exist in the current portal component, a URL
+	 * pointing to the base filename will be returned anyway (of course, if a
+	 * browser subsequently opens this URL, it will get an HTTP 404 error since
+	 * the file does not exist).
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> As mentioned, this method relies on you having placed the
 	 * proper localized filenames for each locale into the message resources for
 	 * each locale. If you would rather not do that, and would rather just have
-	 * the system inspect the available files in the resource bundle vis-a-vis
-	 * the locale automatically to build the URL, use the companion
+	 * the system inspect the available files in the resource bundle
+	 * automatically to build the URL, use the companion
 	 * <code>getLocalizedFileURL(PortalContext,String)</code> method.
 	 * </p>
 	 * 
@@ -761,30 +805,45 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		}
 		if (pDefault != null) {
 			pDefault = pDefault.trim();
+			if (pDefault.length() == 0) {
+				return null;
+			}
 		}
-		try {
-			// get the relative path for the current portal component
-			Style thisStyleObject = getCurrentComponent(pContext);
-			String relPath = thisStyleObject.getUrlSafeRelativePath();
+		// get the relative path for the current portal component
+		Style thisStyleObject = getCurrentComponent(pContext);
+		String relPath = thisStyleObject.getUrlSafeRelativePath();
 
-			// get the absolute path for the current portal component - this is
-			// the path to the location of its secondary support files
-			String absPath = pContext.getPortalRequest().getSession()
-					.getServletContext().getRealPath(relPath)
-					+ "/";
+		// get the absolute path for the current portal component - this is
+		// the path to the location of its secondary support files
+		String absPath = pContext.getPortalRequest().getSession()
+				.getServletContext().getRealPath(relPath)
+				+ "/";
 
-			// get the localized filename from the message resources
-			String fileName = I18nUtility.getValue(pKey, pDefault, pContext);
+		// get the localized filename from the message resources
+		String fileName = I18nUtility.getValue(pKey, pDefault, pContext);
 
-			// check if the file exists - if not, return false.
-			// relative URL is just the portal context root path + the relative
-			// path to the component + the localized filename (if not null)
-			if (absPath != null && fileName != null
-					&& fileExists(absPath, fileName)) {
-				return slashify(pContext.getPortalHttpRoot() + "/" + relPath
+		// check if the file exists - if not, return its url anyway unless
+		// message was not found or blank.
+		// relative URL is just the portal context root path + the relative
+		// path to the component + the localized filename (if not null)
+		if (fileName != null && !fileName.equals(pKey)
+				&& (fileName.length() > 0)) {
+			fileName = slashify(fileName);
+			String url = null;
+			if (fileExists(absPath, fileName)) {
+				url = slashify(pContext.getPortalHttpRoot() + "/" + relPath
+						+ "/" + fileName);
+			} else {
+				url = slashify(pContext.getPortalHttpRoot() + "/" + relPath
 						+ "/" + fileName);
 			}
-		} catch (Exception ex) {
+			// make sure the path includes the portal application context root
+			String contextPath = pContext.getPortalRequest().getContextPath();
+			if (!url.startsWith(contextPath)) {
+				return slashify(contextPath + "/" + url);
+			} else {
+				return url;
+			}
 		}
 		return null;
 	}

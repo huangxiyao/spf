@@ -211,21 +211,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		if (portalContext == null) {
 			return null;
 		}
-		String path = I18nUtility.getLocalizedFileURL(portalContext,
-				baseFilePath, localized);
-		if (path == null || path.trim().length() == 0) {
-			return null;
-		} else {
-			String contextPath = portalContext.getPortalRequest()
-					.getContextPath();
-			if (contextPath == null || contextPath.trim().length() == 0) {
-				return null;
-			} else if (!path.startsWith(contextPath)) {
-				return contextPath + "/" + path;
-			} else {
-				return path;
-			}
-		}
+		return I18nUtility.getLocalizedFileURL(portalContext, baseFilePath,
+				localized);
 	}
 
 	/**
