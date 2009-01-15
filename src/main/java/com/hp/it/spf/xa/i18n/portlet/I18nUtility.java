@@ -8,9 +8,14 @@ package com.hp.it.spf.xa.i18n.portlet;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.net.MalformedURLException;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+import javax.portlet.PortletContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -138,83 +143,99 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 	/**
 	 * <p>
-	 * Returns the absolute pathname for a proper localized version of the given
-	 * base filename of a portlet resource bundle. The filename must be a base
-	 * filename for a portlet resource bundle, located in the portlet resource
-	 * bundle folder on the portlet server. The given filename may include a
-	 * subfolder relative to that portlet resource bundle folder. The path to
+	 * Returns an input stream for a proper localized version of the given base
+	 * filename of a portlet resource bundle. The filename must be a base
+	 * filename for a portlet resource bundle. The bundle may be located in the
+	 * portlet resource bundle folder on the portlet server (eg, outside of the
+	 * portlet application). Alternatively, the bundle may be inside the portlet
+	 * application, as a set of static resources. In either case, the given base
+	 * filename may include a subfolder relative to the portlet resource bundle
+	 * folder or portlet application root, respectively. (Note that the path to
 	 * the portlet resource bundle folder is configured in
-	 * <code>i18n_portlet_config.properties</code>. Since this method returns
-	 * an absolute pathname, the portlet resource bundle folder path will be
-	 * included at the beginning of the returned value.
+	 * <code>i18n_portlet_config.properties</code>.)
 	 * </p>
 	 * <p>
 	 * This method uses the locale from the given portlet request to find the
 	 * best-candidate localized version of the given file in the resource
 	 * bundle. The logic for finding the best-candidate is the same as that used
-	 * by the Java-standard ResourceBundle class. Thus the pathname returned by
-	 * this method will include the best-candidate locale-tagged filename, or
-	 * the given base filename if there is no better fit. If the resource bundle
-	 * does not exist at all (note that on a case-sensitive filesystem, this is
-	 * a case-sensitive lookup), the method returns null. This method also
-	 * returns null if any of its parameters are null.
+	 * by the Java-standard ResourceBundle class. Thus the input stream returned
+	 * by this method will come from the best-candidate locale-tagged filename,
+	 * or the given base filename if there is no better fit. If the resource
+	 * bundle does not exist at all (note that on a case-sensitive filesystem,
+	 * the lookup into the portlet resource bundle folder is a case-sensitive
+	 * lookup), the method returns null. This method also returns null if any of
+	 * its parameters are null.
 	 * </p>
 	 * <p>
 	 * For example: in the portlet resource bundle folder consider that we have
 	 * the files <code>html/foo.htm</code>, <code>html/foo_fr_CA.htm</code>,
-	 * and <code>html/foo_fr.htm</code>. Then:
+	 * and <code>html/foo_fr.htm</code>. Also, inside the portlet
+	 * application, consider that we have the files <code>html/bar.htm</code>
+	 * and <code>html/bar_it.htm</code>. Then:
 	 * </p>
 	 * 
 	 * <dl>
 	 * <dt><code>getLocalizedFilePath(request, "html/foo.htm")</code> when
 	 * <code>request</code> contains Canada French (<code>Locale.CANADA_FRENCH</code>)</dt>
-	 * <dd>returns
+	 * <dd>returns a file input stream for
 	 * <code><i>portlet-resource-folder</i>/html/foo_fr_CA.htm</code></dd>
 	 * 
 	 * <dt><code>getLocalizedFilePath(request, "/html/foo.htm")</code> when
 	 * <code>request</code> contains France French (<code>Locale.FRANCE</code>)</dt>
-	 * <dd>returns <code><i>portlet-resource-folder</i>/html/foo_fr.htm</code></dd>
+	 * <dd>returns a file input stream for
+	 * <code><i>portlet-resource-folder</i>/html/foo_fr.htm</code></dd>
 	 * 
 	 * <dt><code>getLocalizedFilePath(request, "html/foo.htm")</code> when
 	 * <code>request</code> contains generic Italian (<code>Locale.ITALIAN</code>)</dt>
-	 * <dd>returns <code><i>portlet-resource-folder</i>/html/foo.htm</code></dd>
+	 * <dd>returns a file input stream for
+	 * <code><i>portlet-resource-folder</i>/html/foo.htm</code></dd>
 	 * </dt>
 	 * 
-	 * <dt><code>getLocalizedFilePath(request, "html/bar.htm")</code></dt>
+	 * <dt><code>getLocalizedFilePath(request, "html/bar.htm")</code> when
+	 * <code>request</code> contains generic Italian (<code>Locale.ITALIAN</code>)</dt>
+	 * <dd>returns an input stream for <code>/html/bar_it.htm</code> in the
+	 * portlet application.</dd>
+	 * 
+	 * <dt><code>getLocalizedFilePath(request, "html/bar.htm")</code> when
+	 * <code>request</code> contains generic French (<code>Locale.FRENCH</code>)</dt>
+	 * <dd>returns an input stream for <code>/html/bar.htm</code> in the
+	 * portlet application.</dd>
+	 * 
+	 * <dt><code>getLocalizedFilePath(request, "html/foobar.htm")</code></dt>
 	 * <dd>returns <code>null</code></dd>
 	 * </dl>
 	 * 
 	 * <p>
 	 * <b>Note:</b> On case-sensitive filesystems, lowercase is assumed for the
 	 * langage and variant codes, and uppercase is assumed for the country code.
-	 * Thus in the above examples, different results would obtain if
-	 * <code>foo_fr.htm</code> and/or <code>foo_fr_CA.htm</code> were tagged
-	 * with uppercase language or lowercase country. Be sure your resource
-	 * bundles follow the convention.
+	 * Thus in the above examples, different results from the portlet resource
+	 * bundle folder would obtain if <code>foo_fr.htm</code> and/or
+	 * <code>foo_fr_CA.htm</code> were tagged with uppercase language or
+	 * lowercase country. Be sure your resource bundles follow the convention.
 	 * </p>
 	 * 
 	 * @param pReq
 	 *            The portlet request.
 	 * @param pBaseFileName
 	 *            The name of the base file to search.
-	 * @return The absolute pathname of the best-candidate localized file in the
-	 *         portlet bundle folder, or null if no qualifying file was found.
+	 * @return An input stream for the best-candidate localized file, or null if
+	 *         none was found.
 	 * 
 	 */
-	public static String getLocalizedFilePath(PortletRequest pReq,
+	public static InputStream getLocalizedFileAsStream(PortletRequest pReq,
 			String pBaseFileName) {
-		return getLocalizedFilePath(pReq, pBaseFileName, true);
+		return getLocalizedFileAsStream(pReq, pBaseFileName, true);
 	}
 
 	/**
 	 * <p>
-	 * Returns the absolute pathname for the given version of the given portlet
+	 * Returns an input stream for the given version of the given portlet
 	 * resource bundle file (ie, localized to best-fit the locale in the given
 	 * request, or not, per the boolean switch). If the boolean switch is set to
 	 * <code>true</code>, this method works exactly like
-	 * <code>getLocalizedFilePath(PortletRequest,String)</code> (see). If the
-	 * boolean switch is set to <code>false</code>, this method does not
-	 * actually localize the returned filename. Instead, the returned filename
+	 * <code>getLocalizedFileAsStream(PortletRequest,String)</code> (see). If
+	 * the boolean switch is set to <code>false</code>, this method does not
+	 * actually localize the given filename. Instead, the returned input stream
 	 * points to the base filename if it existed, and null otherwise.
 	 * </p>
 	 * 
@@ -225,53 +246,70 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @param pLocalized
 	 *            The version of the file for which to search: the base file
 	 *            (false) or the best-fitting localized file (true).
-	 * @return The absolute pathname of the best-candidate localized file in the
-	 *         portlet bundle folder, or null if no qualifying file was found.
+	 * @return An input stream for the best-candidate localized file, or null if
+	 *         none was found.
 	 * 
 	 */
-	public static String getLocalizedFilePath(PortletRequest pReq,
+	public static InputStream getLocalizedFileAsStream(PortletRequest pReq,
 			String pBaseFileName, boolean pLocalized) {
+
 		if (resourceBundleDir == null || pReq == null || pBaseFileName == null) {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
+		pBaseFileName = slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
+		PortletContext pContext = pReq.getPortletSession().getPortletContext();
+
+		// Get the localized filename by looking in the portlet resource bundle
+		// folder.
 		String fileName = getLocalizedFileName(resourceBundleDir,
 				pBaseFileName, pReq.getLocale(), pLocalized);
-		if (fileName == null) {
-			return null;
+
+		// If the localized filename was found, make and return an input stream
+		// for it. Otherwise, look for the localized filename inside the portlet
+		// application. If we find it there, make and return an input stream for
+		// it. Finally, return null if still it was not found.
+		if (fileName != null) {
+			fileName = slashify(resourceBundleDir + "/" + fileName);
+			try {
+				return new FileInputStream(fileName);
+			} catch (FileNotFoundException e) { // should never happen
+			}
 		}
-		return slashify(resourceBundleDir + "/" + fileName);
+		fileName = getLocalizedFileName(pReq, pBaseFileName, pReq.getLocale(),
+				pLocalized);
+		if (fileName != null) {
+			return pContext.getResourceAsStream(fileName);
+		}
+		return null;
 	}
 
 	/**
 	 * <p>
-	 * Returns the absolute pathname for a localized portlet resource bundle
-	 * file, where the filename is retrieved (properly localized) from the
-	 * portlet's message resources using the given key and default. The filename
-	 * in the message resource must be that of a secondary support file for the
-	 * same portal component. <b>Important:</b> The component must be a style
-	 * or secondary page; other components are not supported.
+	 * Returns an input stream for a localized portlet resource bundle file,
+	 * where the actual filename is retrieved (properly localized) from the
+	 * portlet's message resources using the given key and default. The file
+	 * itself may be located in the portlet resource bundle folder on the
+	 * portlet server (eg, outside of the portlet application). Alternatively,
+	 * the file may be inside the portlet application, as a static resource. In
+	 * either case, the filename in the message resource may include a subfolder
+	 * relative to the portlet resource bundle folder or portlet application
+	 * root, respectively. (Note that the path to the portlet resource bundle
+	 * folder is configured in <code>i18n_portlet_config.properties</code>.)
 	 * </p>
 	 * <p>
 	 * This method works like
-	 * <code>getLocalizedFilePath(PortletRequest,String)</code>, but where
-	 * the localized filename string is taken from a message resource of the
-	 * portlet, using the given key and default filename. Thus this method
+	 * <code>getLocalizedFileAsStream(PortletRequest,String)</code>, but
+	 * where the localized filename string is taken from a message resource of
+	 * the portlet, using the given key and default filename. Thus this method
 	 * relies on the best-candidate filename for each locale already existing in
 	 * the localized message properties for that locale, at the given key. (And
 	 * if the key is not found, it applies the given default filename.) Thus the
 	 * method just reads the filename from the message, assumes that file is the
 	 * best one for that locale, and returns a path for it accordingly.
-	 * </p>
-	 * <p>
-	 * The file named in the message resource must be located in the portlet
-	 * resource bundle folder on the portlet server. The filename from the
-	 * message resource may include a subfolder relative to that portlet
-	 * resource bundle folder. The path to the portlet resource bundle folder is
-	 * configured in <code>i18n_portlet_config.properties</code>.
 	 * </p>
 	 * <p>
 	 * The default filename is an optional parameter; if left null or blank, and
@@ -283,9 +321,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * <b>Note:</b> As mentioned, this method relies on you having placed the
 	 * proper localized filenames for each locale into the message resources for
 	 * each locale. If you would rather not do that, and would rather just have
-	 * the system inspect the available files in the resource bundle vis-a-vis
-	 * the locale automatically, use the companion
-	 * <code>getLocalizedFilePath(PortletRequest,String)</code> method.
+	 * the system inspect the available files in the resource bundle
+	 * automatically, use the companion
+	 * <code>getLocalizedFileAsStream(PortletRequest,String)</code> method.
 	 * </p>
 	 * 
 	 * @param pReq
@@ -299,8 +337,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return The absolute pathname of the best-candidate localized file in the
 	 *         portlet bundle folder, or null if no qualifying file was found.
 	 */
-	public static String getLocalizedFilePath(PortletRequest pReq, String pKey,
-			String pDefault) {
+	public static InputStream getLocalizedFileAsStream(PortletRequest pReq,
+			String pKey, String pDefault) {
 		if (resourceBundleDir == null || pReq == null || pKey == null) {
 			return null;
 		}
@@ -310,72 +348,107 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		}
 		if (pDefault != null) {
 			pDefault = pDefault.trim();
-		}
-		try {
-			// get the localized filename from the message resources
-			String fileName = getMessage(pReq, pKey, pDefault);
-
-			// check if the file exists - if not, return false.
-			if (fileName != null && fileExists(resourceBundleDir, fileName)) {
-				return slashify(resourceBundleDir + "/" + fileName);
+			if (pDefault.length() == 0) {
+				return null;
 			}
-		} catch (Exception ex) {
+		}
+		PortletContext pContext = pReq.getPortletSession().getPortletContext();
+
+		// Get the localized filename from the message resources
+		String fileName = getMessage(pReq, pKey, pDefault);
+
+		// Check if the localized filename message was found (ie is not null and
+		// not equal to the key). If so, then return an input stream for that.
+		// But if the file was not found, or the message was not found, return
+		// an input stream for the file inside the portlet application. This
+		// will return null if the file still was not found.
+		if (fileName != null && !fileName.equals(pKey)
+				&& (fileName.length() > 0)) {
+			fileName = slashify(resourceBundleDir + "/" + fileName);
+			try {
+				return new FileInputStream(fileName);
+			} catch (FileNotFoundException e) {
+				return pContext.getResourceAsStream(fileName);
+			}
 		}
 		return null;
 	}
 
 	/**
-	 * Returns a file-relay URL (suitable for presentation to the user) for
-	 * downloading the given version of the given portlet resource bundle base
-	 * filename (ie, localized to best-fit the locale in the given request, or
-	 * not, per the boolean switch). The returned URL is ready for presentation
-	 * to the user in the portlet response; it does not need to be encoded or
-	 * rewritten. For example, you can take the return from this method, and
-	 * express it as the <code>SRC</code> attribute in an HTML
-	 * <code>&lt;IMG&gt;</code> tag.
+	 * <p>
+	 * Returns a URL (suitable for presentation to the user) for downloading a
+	 * localized portlet resource bundle file for the given base filename, where
+	 * the localized filename is obtained by inspecting the contents of the
+	 * system. The returned URL is ready for presentation to the user in the
+	 * portlet response; it does not need to be encoded or rewritten. For
+	 * example, you can take the return from this method, and express it as the
+	 * <code>SRC</code> attribute in an HTML <code>&lt;IMG&gt;</code> tag.
 	 * </p>
 	 * <p>
-	 * The given filename must be a base filename for a portlet resource bundle,
-	 * located in the portlet resource bundle folder on the portlet server. The
-	 * given filename may include a subfolder relative to that portlet resource
-	 * bundle folder. (The path to the portlet resource bundle folder is
-	 * configured in <code>i18n_portlet_config.properties</code>.)
+	 * The given filename must be a base filename for a portlet resource bundle.
+	 * The base file, and its localized variants, may be located in the portlet
+	 * resource bundle folder on the portlet server. In this case, the given
+	 * filename may include a subfolder relative to that portlet resource bundle
+	 * folder. (The path to the portlet resource bundle folder is configured in
+	 * <code>i18n_portlet_config.properties</code>.) In this case, the
+	 * returned URL will be a file-relay URL pointing to that particular
+	 * localized file in the portlet resource bundle folder.
+	 * </p>
+	 * <p>
+	 * Alternatively, the base and localized files may be located inside your
+	 * portlet application, among the static resources. The given base filename,
+	 * in this case, should include a folder (relative to the application root)
+	 * where the image is located. In this case, the returned URL will be an
+	 * encoded static resource URL for the particular localized file in the
+	 * portlet application.
 	 * </p>
 	 * <p>
 	 * This method uses the locale from the given portlet request to find the
-	 * best-candidate localized version of the given file in the resource
-	 * bundle. The logic for finding the best-candidate is the same as that used
-	 * by the Java-standard ResourceBundle class. Thus the URL returned by this
-	 * method will point to the best-candidate locale-tagged filename, or the
-	 * given base filename if there is no better fit. If the resource bundle
-	 * does not exist at all (note that on a case-sensitive filesystem, this is
-	 * a case-sensitive lookup), the method returns null.
+	 * best-candidate localized file in the resource bundle (ie, in the set of
+	 * base and localized files for the given base filename). The logic for
+	 * finding the best-candidate is the same as that used by the Java-standard
+	 * ResourceBundle class. Thus the URL returned by this method will point to
+	 * the best-candidate locale-tagged filename, or the given base filename if
+	 * there is no better fit. If the resource bundle does not exist at all
+	 * (note that on a case-sensitive filesystem, this is a case-sensitive
+	 * lookup), the method returns a URL referencing the base filename as a
+	 * static resource inside the portlet application. (This will, of course, be
+	 * a URL which points to a missing resource, causing an HTTP 404 error if
+	 * opened.)
 	 * </p>
 	 * <p>
 	 * For example: in the portlet resource bundle folder consider that we have
 	 * the files <code>html/foo.htm</code>, <code>html/foo_fr_CA.htm</code>,
-	 * and <code>html/foo_fr.htm</code>. Then:
+	 * and <code>html/foo_fr.htm</code>. Also consider that we have, in the
+	 * portlet application, the files <code>html/bar.htm</code> and
+	 * <code>html/bar_it.htm</code>. Then:
 	 * </p>
 	 * <dl>
 	 * <dt><code>getLocalizedFileURL(request, response, "html/foo.htm")</code>
 	 * when <code>request</code> contains Canada French (<code>Locale.CANADA_FRENCH</code>)</dt>
 	 * <dd>returns a file-relay URL for <code>html/foo_fr_CA.htm</code> in
 	 * the portlet resource bundle folder. (The exact URL may vary depending on
-	 * the implementation of this method, and is not documented here. But note
-	 * that it is a relative URL to the scheme, hostname, and port in the
-	 * current request.)</dd>
+	 * the implementation of this method, and is not documented here.)</dd>
 	 * 
 	 * <dt><code>getLocalizedFileURL(request, response, "/html/foo.htm")</code>
 	 * when <code>request</code> contains France French (<code>Locale.FRANCE</code>)</dt>
-	 * <dd>returns a file-relay URL for <code>html/foo_fr.htm</code>.</dd>
+	 * <dd>returns a file-relay URL for <code>html/foo_fr.htm</code> in the
+	 * portlet resource bundle folder.</dd>
 	 * 
 	 * <dt><code>getLocalizedFileURL(request, response, "html/foo.htm")</code>
 	 * when <code>request</code> contains generic Italian (<code>Locale.ITALIAN</code>)</dt>
-	 * <dd>returns a file-relay URL for <code>html/foo.htm</code></dd>
-	 * </dt>
+	 * <dd>returns a file-relay URL for <code>html/foo.htm</code> in the
+	 * portlet resource bundle folder.</dd>
 	 * 
-	 * <dt><code>getLocalizedFileURL(request, response, "html/bar.htm")</code></dt>
-	 * <dd>returns <code>null</code></dd>
+	 * <dt><code>getLocalizedFileURL(request, response, "/html/bar.htm")</code>
+	 * when <code>request</code> contains generic Italian (<code>Locale.ITALIAN</code>)</dt>
+	 * <dd>returns an encoded resource URL for <code>/html/bar.htm</code>
+	 * inside the portlet application.</dd>
+	 * 
+	 * <dt><code>getLocalizedFileURL(request, response, "html/foobar.htm")</code></dt>
+	 * <dd>returns an encoded resource URL for <code>/html/foobar.htm</code>
+	 * inside the portlet application. Since that file does not actually exist,
+	 * the browser will get an HTTP 404 when requesting this URL.</dd>
 	 * </dl>
 	 * <p>
 	 * <b>Note:</b> On case-sensitive filesystems, lowercase is assumed for the
@@ -395,19 +468,21 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * filename is included as additional-path on the URL in either case.
 	 * </p>
 	 * <p>
-	 * <b>Note:</b> This method uses the <code>getLocalizedFilePath</code>
-	 * method to determine the proper best-candidate localized file for the
-	 * given filename, looking in the portlet resource bundle directory. Then,
-	 * it uses the <code>getFileRelayURL</code> method in this class to
-	 * generate a file-relay URL for it. Please see those other methods for
-	 * additional documentation.
+	 * <b>Note:</b> This method uses the <code>getLocalizedFileName</code>
+	 * methods to determine the proper best-candidate localized file for the
+	 * given filename, looking in the portlet resource bundle directory first,
+	 * and the portlet application second. It also may use the
+	 * <code>getFileRelayURL</code> method to generate a file-relay URL for it
+	 * (ie, if the portlet resource bundle folder is where the file was found).
+	 * Please see those other methods for additional documentation.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> As mentioned, this method automatically discovers the
 	 * best-fit localized file for the locale. An alternative technique for
-	 * generating a localized file URL relies on the best-fit localized file
-	 * already being stored in a message resource. If you would rather generate
-	 * your localized file URL that way, you should use the companion
+	 * generating a localized file URL relies on the name of the best-fit
+	 * localized file already being stored in a message resource. If you would
+	 * rather generate your localized file URL that way, you should use the
+	 * companion
 	 * <code>getLocalizedFileURL(PortletRequest,PortletResponse,String,String)</code>
 	 * method instead of this one.
 	 * </p>
@@ -418,9 +493,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            The portlet response.
 	 * @param pBaseFileName
 	 *            The name of the base file to search.
-	 * @return A file-relay URL, for downloading the best-fit localized version
-	 *         of the base file from the portlet resource bundle folder, or null
-	 *         if no qualifying file was found.
+	 * @return A URL for downloading the best-fit localized version of the base
+	 *         file.
 	 */
 	public static String getLocalizedFileURL(PortletRequest pReq,
 			PortletResponse pResp, String pBaseFileName) {
@@ -429,14 +503,13 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 	/**
 	 * <p>
-	 * Returns a file-relay URL (suitable for presentation to the user) for
-	 * downloading the given version of the given portlet resource bundle base
-	 * filename (ie, localized to best-fit the locale in the given request, or
-	 * not, per the boolean switch). The returned URL is ready for presentation
-	 * to the user in the portlet response; it does not need to be encoded or
-	 * rewritten. For example, you can take the return from this method, and
-	 * express it as the <code>SRC</code> attribute in an HTML
-	 * <code>&lt;IMG&gt;</code> tag.
+	 * Returns a URL (suitable for presentation to the user) for downloading the
+	 * given version of the given portlet resource bundle base filename (ie,
+	 * localized to best-fit the locale in the given request, or not, per the
+	 * boolean switch). The returned URL is ready for presentation to the user
+	 * in the portlet response; it does not need to be encoded or rewritten. For
+	 * example, you can take the return from this method, and express it as the
+	 * <code>SRC</code> attribute in an HTML <code>&lt;IMG&gt;</code> tag.
 	 * </p>
 	 * <p>
 	 * If the given boolean switch is set to <code>true</code>, this method
@@ -445,8 +518,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * (see). If the boolean switch is set to <code>false</code>, this method
 	 * works mostly like the other one, but it does not actually localize the
 	 * returned filename. Instead, the returned URL just references the base
-	 * filename if it existed, and if it did not exist, the returned URL is
-	 * null.
+	 * filename wherever that file was found (assumed to be in the portlet
+	 * application, by default).
 	 * </p>
 	 * 
 	 * @param pReq
@@ -458,81 +531,109 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @param pLocalized
 	 *            The version of the file for which to search: the base file
 	 *            (false) or the best-fitting localized file (true).
-	 * @return A file-relay URL, for downloading the best-fit localized version
-	 *         of the base file from the portlet resource bundle folder, or null
-	 *         if no qualifying file was found.
+	 * @return A URL for downloading the best-fit localized version of the base
+	 *         file.
 	 * 
 	 */
 	public static String getLocalizedFileURL(PortletRequest pReq,
 			PortletResponse pResp, String pBaseFileName, boolean pLocalized) {
 
-		if (resourceBundleDir == null) {
-			return null;
-		}
-		if (pReq == null || pBaseFileName == null) {
+		if (resourceBundleDir == null || pReq == null || pResp == null
+				|| pBaseFileName == null) {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
+		pBaseFileName = slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
+
+		// Get the localized filename by looking in the portlet resource bundle
+		// folder.
 		String fileName = getLocalizedFileName(resourceBundleDir,
 				pBaseFileName, pReq.getLocale(), pLocalized);
+
+		// If the localized filename was found, make and return a file-relay URL
+		// for it. Otherwise, look for the localized filename inside the portlet
+		// application. If we find it there, make and return an encoded resource
+		// URL pointing to it. If still we do not find it, make and return an
+		// encoded resource URL pointing to the given base filename inside the
+		// portlet application, by default.
 		if (fileName != null) {
-			fileName = getFileRelayURL(pResp, fileName);
+			return getFileRelayURL(pResp, fileName);
+		} else {
+			fileName = getLocalizedFileName(pReq, pBaseFileName, pReq
+					.getLocale(), pLocalized);
+			if (fileName != null) {
+				return pResp.encodeURL(fileName);
+			} else {
+				return pResp.encodeURL(pBaseFileName);
+			}
 		}
-		return fileName;
 	}
 
 	/**
 	 * <p>
-	 * Returns a file-relay URL (suitable for presentation to the user) for
-	 * downloading a localized portlet resource bundle file, where the filename
-	 * is retrieved (properly localized) from the portlet's message resources
-	 * using the given key and default. The returned URL is ready for
-	 * presentation to the user in the portlet response; it does not need to be
-	 * encoded or rewritten. For example, you can take the return from this
-	 * method, and express it as the <code>SRC</code> attribute in an HTML
-	 * <code>&lt;IMG&gt;</code> tag.
+	 * Returns a URL (suitable for presentation to the user) for downloading a
+	 * localized portlet resource bundle file, where the filename is retrieved
+	 * (properly localized) from the portlet's message resources using the given
+	 * key and default. The returned URL is ready for presentation to the user
+	 * in the portlet response; it does not need to be encoded or rewritten. For
+	 * example, you can take the return from this method, and express it as the
+	 * <code>SRC</code> attribute in an HTML <code>&lt;IMG&gt;</code> tag.
 	 * </p>
 	 * <p>
 	 * This method works like
 	 * <code>getLocalizedFileURL(PortletRequest,PortletResponse,String)</code>,
-	 * but in which the localized filename string is instead taken from a
-	 * message resource of the portlet, using the given key and default
-	 * filename. Thus this method relies on the best-candidate filename for each
-	 * locale already existing in the localized message properties for that
-	 * locale, at the given key. (And if the key is not found, it applies the
-	 * given default filename.) Thus the method just reads the filename from the
-	 * message, assumes that file is the best one for that locale, and returns a
-	 * URL for it accordingly.
+	 * but in which the localized filename is instead gotten from a message
+	 * resource of the portlet, using the given key and default filename. Thus
+	 * this method relies on the best-candidate filename for each locale already
+	 * existing in the localized message properties for that locale, at the
+	 * given key. (And if the key is not found, it applies the given default
+	 * filename.) Thus the method just reads the filename from the message,
+	 * assumes that file is the best one for that locale, and returns a URL for
+	 * it accordingly.
 	 * </p>
 	 * <p>
-	 * The file named in the message resource must be located in the portlet
+	 * The file named in the message resource may be located in the portlet
 	 * resource bundle folder on the portlet server. The filename from the
 	 * message resource may include a subfolder relative to that portlet
 	 * resource bundle folder. The path to the portlet resource bundle folder is
-	 * configured in <code>i18n_portlet_config.properties</code>.
+	 * configured in <code>i18n_portlet_config.properties</code>. In this
+	 * case, the returned URL is a file-relay URL pointing to that file in the
+	 * portlet resource bundle directory.
+	 * </p>
+	 * <p>
+	 * Alternatively, the file named in the message resource may be located
+	 * inside your portlet application, among the static resources. The filename
+	 * from the message resource, in this case, should include a folder
+	 * (relative to the applciation root) where the image is located. In this
+	 * case, the returned URL is an encoded resource URL pointing to that file
+	 * inside the portlet application.
 	 * </p>
 	 * <p>
 	 * The default filename is an optional parameter; if left null or blank, and
 	 * the key is not found in the available messages, then null is returned.
-	 * Null is also returned if the file named in the message resource does not
-	 * actually exist, or if the portlet request or key parameters were null.
+	 * Null is also returned if the portlet request, response, or key parameters
+	 * were null. If the key is found in the available messages, but the file
+	 * named in that message does not actually exist in either the portlet
+	 * resource bundle folder or the portlet application, then a URL referencing
+	 * the missing resource is returned anyway (and the brower will get an HTTP
+	 * 404 error when opening that URL).
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> This method uses the <code>getMessage</code> method to
-	 * determine the proper filename. Then, it uses the
-	 * <code>getFileRelayURL</code> method in this class to generate a
-	 * file-relay URL for it. Please see those other methods for additional
-	 * documentation.
+	 * determine the proper filename. Then (if the file exists in the portlet
+	 * resource bundle folder), it may use the <code>getFileRelayURL</code>
+	 * method in this class to generate a file-relay URL for it. Please see
+	 * those other methods for additional documentation.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> As mentioned, this method relies on you having placed the
 	 * proper localized filenames for each locale into the message resources for
 	 * each locale. If you would rather not do that, and would rather just have
-	 * the system inspect the available files in the resource bundle vis-a-vis
-	 * the locale automatically to build the URL, use the companion
+	 * the system inspect the available files in the resource bundle
+	 * automatically to build the URL, use the companion
 	 * <code>getLocalizedFileURL(PortletRequest,PortletResponse,String)</code>
 	 * method instead of this one.
 	 * </p>
@@ -548,15 +649,12 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            The default filename to use if the message property does not
 	 *            exist.
 	 * @return A URL for downloading the best-fit localized version of the base
-	 *         file from the portlet resource bundle folder, or null if no
-	 *         qualifying file was found.
+	 *         file.
 	 */
 	public static String getLocalizedFileURL(PortletRequest pReq,
 			PortletResponse pResp, String pKey, String pDefault) {
-		if (resourceBundleDir == null) {
-			return null;
-		}
-		if (pReq == null || pKey == null) {
+		if (resourceBundleDir == null || pReq == null || pResp == null
+				|| pKey == null) {
 			return null;
 		}
 		pKey = pKey.trim();
@@ -565,18 +663,190 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		}
 		if (pDefault != null) {
 			pDefault = pDefault.trim();
-		}
-		try {
-			// get the localized filename from the message resources
-			String fileName = getMessage(pReq, pKey, pDefault);
-
-			// check if the file exists - if not, return false.
-			if (fileName != null && fileExists(resourceBundleDir, fileName)) {
-				return getFileRelayURL(pResp, fileName);
+			if (pDefault.length() == 0) {
+				return null;
 			}
-		} catch (Exception ex) {
+		}
+
+		// Get the localized filename from the message resources
+		String fileName = getMessage(pReq, pKey, pDefault);
+
+		// Check if the localized filename message was found or defaulted (ie is
+		// not null and not equal to the key). If so, then check if that file
+		// exists in the portlet resource bundle directory. If so, then return a
+		// relay URL for that. If not, assume it exists as a static resource
+		// inside the portlet application, and return an encoded resource URL
+		// for that. If the filename was not found in the message resources,
+		// though, return null.
+		if (fileName != null && !fileName.equals(pKey)
+				&& (fileName.length() > 0)) {
+			fileName = slashify(fileName);
+			if (fileExists(resourceBundleDir, fileName)) {
+				return getFileRelayURL(pResp, fileName);
+			} else {
+				return pResp.encodeURL(fileName);
+			}
 		}
 		return null;
+	}
+
+	/**
+	 * <p>
+	 * Looks up the given base filename inside the given request's portlet
+	 * application, and returns the filename as per the boolean switch: either
+	 * the best-fit localized filename for the given locale which exists in the
+	 * application, or the given base filename. The given base filename may
+	 * include some path relative to the context root of the application. If no
+	 * appropriate file for that filename exists in the application, then null
+	 * is returned. This method also returns null if any of its required
+	 * parameters are null.
+	 * </p>
+	 * <p>
+	 * If you set the boolean parameter to false, this method will just verify
+	 * that the given base filename exists in the application (returning the
+	 * given filename if so, otherwise returning null). You do not need to
+	 * specify the locale parameter in this case; you can set that to null. The
+	 * base filename parameter is required.
+	 * </p>
+	 * <p>
+	 * If you set the boolean parameter to true, both the base filename and
+	 * locale parameters are required. This method will treat the given file as
+	 * a resource bundle base, and look for the file which best-fits that base
+	 * and locale inside the portlet application. The method follows the
+	 * standard Java sequence in this (see ResourceBundle class documentation)
+	 * and thus may return a locale-tagged localized pathname, or the base
+	 * pathname if that is the best fit. Whatever the best-fit file, its
+	 * filename is returned (including any path which was in the given
+	 * filename). Otherwise null is returned.
+	 * </p>
+	 * <p>
+	 * For example: in <code>html/</code> under the root of our application,
+	 * consider that we have the files <code>foo.htm</code>,
+	 * <code>foo_fr_CA.htm</code>, and <code>foo_fr.htm</code>. Then:
+	 * </p>
+	 * <dl>
+	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", Locale.FRENCH, true)</code></dt>
+	 * <dd>returns <code>html/foo_fr.htm</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", Locale.FRANCE, true)</code></dt>
+	 * <dd>returns <code>html/foo_fr.htm</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "/html/foo.htm", Locale.CANADA_FRENCH,
+	 * true)</code></dt>
+	 * <dd>returns <code>/html/foo_fr_CA.htm</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "/html/foo.htm", Locale.ITALIAN, true)</code></dt>
+	 * <dd>returns <code>/html/foo.htm</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", null, false)</code></dt>
+	 * <dd>returns <code>html/foo.htm</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "html/bar.htm", Locale.FRENCH, true)</code></dt>
+	 * <dd>returns <code>null</code></dd>
+	 * <dt><code>getLocalizedFileName("/files", "foo.htm", null, false)</code></dt>
+	 * <dd>returns <code>null</code></dd>
+	 * </dl>
+	 * 
+	 * @param pReq
+	 *            The portlet request for the application.
+	 * @param pBaseFileName
+	 *            The name of the base file to search (may include some path,
+	 *            which is treated as relative to root of the portlet
+	 *            application).
+	 * @param pLocale
+	 *            The locale (not required if boolean parameter is false).
+	 * @param pLocalized
+	 *            The version of the file for which to search: the base file
+	 *            (false) or the best-fitting localized file (true).
+	 * @return The proper filename as per the parameters, or null if no
+	 *         qualifying file was found.
+	 */
+	public static String getLocalizedFileName(PortletRequest pReq,
+			String pBaseFileName, Locale pLocale, boolean pLocalized) {
+
+		if (pReq == null || pBaseFileName == null
+				|| (pLocalized == true && pLocale == null)) {
+			return null;
+		}
+		pBaseFileName = pBaseFileName.trim();
+		if (pBaseFileName.length() == 0) {
+			return null;
+		}
+		PortletContext pContext = pReq.getPortletSession().getPortletContext();
+
+		// Resolve localized file
+		if (pLocalized) {
+			String localizedFileName = null;
+			String fileName = null;
+			String extension = null;
+			try {
+				fileName = pBaseFileName.substring(0,
+						pBaseFileName.lastIndexOf(".")).trim();
+				extension = pBaseFileName.substring(
+						pBaseFileName.lastIndexOf(".")).trim();
+			} catch (Exception ex) {
+				fileName = pBaseFileName;
+				extension = "";
+			}
+
+			StringBuffer localizedFile = new StringBuffer(pBaseFileName
+					.length() + 10);
+			localizedFile.append(fileName);
+
+			String language = pLocale.getLanguage().trim().toLowerCase();
+			String country = pLocale.getCountry().trim().toUpperCase();
+			String variant = pLocale.getVariant().trim().toLowerCase();
+
+			if (language.length() > 1) {
+				localizedFile.append("_").append(language);
+				if (country.length() > 1) {
+					localizedFile.append("_").append(country);
+					if (variant.length() > 1) {
+						localizedFile.append("_").append(variant);
+
+						// filename_lang_cc_varint.extension
+						localizedFile.append(extension);
+						localizedFileName = localizedFile.toString();
+						try {
+							if (pContext.getResource(localizedFileName) != null) {
+								return localizedFileName;
+							}
+						} catch (MalformedURLException e) {
+						}
+						localizedFile.delete(localizedFile.lastIndexOf("_"),
+								localizedFile.length());
+					}
+
+					// filename_lang_cc.extension
+					localizedFile.append(extension);
+					localizedFileName = localizedFile.toString();
+					try {
+						if (pContext.getResource(localizedFileName) != null) {
+							return localizedFileName;
+						}
+					} catch (MalformedURLException e) {
+					}
+					localizedFile.delete(localizedFile.lastIndexOf("_"),
+							localizedFile.length());
+				}
+
+				// filename_lang.extension
+				localizedFile.append(extension);
+				localizedFileName = localizedFile.toString();
+				try {
+					if (pContext.getResource(localizedFileName) != null) {
+						return localizedFileName;
+					}
+				} catch (MalformedURLException e) {
+				}
+			}
+		}
+
+		// filename.extension
+		try {
+			if (pContext.getResource(pBaseFileName) != null) {
+				return pBaseFileName;
+			}
+		} catch (MalformedURLException e) {
+		}
+		// all the files do not exist
+		return null;
+
 	}
 
 	/**
@@ -607,11 +877,14 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * </p>
 	 * <p>
 	 * Your resource bundle files must be located somewhere findable by the
-	 * class loader - preferably in the portlet resource bundle folder dedicated
-	 * for this purpose. The location of the portlet resource bundle folder is
-	 * configured in the <code>i18n_portlet_config.properties</code> file;
-	 * this folder should also be specified on the classpath so that the class
-	 * loader can find it.
+	 * class loader. For example, you could put them in the usual location,
+	 * inside your portlet WAR. But for ease of administration (eg to permit
+	 * localization by the administrator without having to touch the portlet
+	 * WAR), we recommend you put them in the portlet resource bundle folder
+	 * dedicated for this purpose. The location of the portlet resource bundle
+	 * folder is configured in the <code>i18n_portlet_config.properties</code>
+	 * file; this folder should also be specified on the classpath so that the
+	 * class loader can find it.
 	 * </p>
 	 * <p>
 	 * Parameter substitution is supported. No parameter substitution is

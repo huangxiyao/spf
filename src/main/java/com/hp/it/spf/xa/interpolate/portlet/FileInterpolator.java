@@ -8,6 +8,7 @@
  */
 package com.hp.it.spf.xa.interpolate.portlet;
 
+import java.io.InputStream;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import java.util.Locale;
@@ -36,16 +37,24 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * <dt><code>&lt;CONTENT-URL:pathname&gt;</code></dt>
  * <dd>
  * <p>
- * Use this token to insert a URL for an external, static, resource file (such
- * as an administrator-uploaded image) into the interpolated content. Put the
- * external resource file into the portlet bundle directory on each server. You
- * may put it into any appropriate subdirectory of the portlet bundle directory.
- * For the <code>pathname</code> in the token, use the filename and path
- * relative to the portlet bundle directory.
+ * <b>Deprecated. Use <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code>
+ * instead.</b>
+ * </p>
+ * <p>
+ * Use this token to insert a URL for an <b>unlocalized</b> static resource
+ * file into the interpolated content. You can put the file into the portlet
+ * resource bundle directory on each portlet server (eg, for easy administrator
+ * access). Or you can package the file as a static resource inside your portlet
+ * WAR. Either way works. In either case, you can put the file into a
+ * subdirectory of the portlet resource bundle directory or portlet application
+ * root, respectively. For the <code>pathname</code> in the token, use the
+ * filename and path to the subdirectory (if applicable), relative to the
+ * portlet resource bundle directory or portlet application root.
  * </p>
  * <p>
  * For example, put <code>picture.jpg</code> into the portlet bundle directory
- * on each server, in the <code>images/</code> subdirectory. Then put the
+ * on each server, in the <code>images/</code> subdirectory. Or, put it into
+ * the <code>images</code> subdirectory of your portlet WAR. Then put the
  * following markup into an HTML text file to be processed by the
  * FileInterpolator:
  * </p>
@@ -57,9 +66,16 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * to the user.
  * </p>
  * <p>
- * <b>Note:</b> This assumes the file-relay servlet is deployed on the same
- * server as the portlet bundle directory, which is assumed to be the portal
- * server itself. This only works for local portlets, not remoted portlets.
+ * <b>Note:</b> For the portlet resource bundle directory to work, you must
+ * have deployed the file-relay servlet into your portlet application.
+ * </p>
+ * <p>
+ * <b>Note:</b> This token is for <b>unlocalized</b> content only. For
+ * <b>localized</b> static content, see the
+ * <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code> token. Actually the
+ * <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code> token works for
+ * unlocalized content too, so the <code>&lt;CONTENT-URL:pathname&gt;</code>
+ * token is deprecated. It is retained for backward-compatibility.
  * </p>
  * 
  * <dt><code>&lt;EMAIL&gt;</code></dt>
@@ -150,37 +166,41 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * <dt><code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code></dt>
  * <dd>
  * <p>
- * Use this token to insert a URL for an external, static, localized resource
- * file (such as an administrator-uploaded image containing a picture of some
- * text) into the interpolated content. Put the external resource bundle (both
- * the base file, and the various localized versions) into the portlet bundle
- * directory on each server (you may put them into any appropriate subdirectory
- * of the portlet bundle directory). For the <code>pathname</code> in the
- * token, use the filename of the base file, and the path relative to the
- * portlet bundle directory. The FileInterpolator will replace this token with a
- * URL for the best-fit candidate file in your resource bundle for the locale in
- * the request.
+ * Use this token to insert a URL for a (potentially localized) static resource
+ * file into the interpolated content. This token lets you indicate the base
+ * filename of the resource you want to display, via the <code>pathname</code>.
+ * It will then find the best-candidate localized version of that file for the
+ * user's locale which you have made available. (For an unlocalized resource,
+ * the base file is used.) You can put the base file and its localized variants
+ * into the portlet resource bundle directory on each portlet server (eg, for
+ * easy administrator access). Or you can package them as static resources
+ * inside your portlet WAR. Either way works. In either case, you can put the
+ * file(s) into a subdirectory of the portlet resource bundle directory or
+ * portlet application root, respectively. For the <code>pathname</code> in
+ * the token, use the base filename and path to the subdirectory (if
+ * applicable), relative to the portlet resource bundle directory or portlet
+ * application root.
  * </p>
  * <p>
  * For example, put <code>picture.jpg</code> into the portlet bundle directory
  * on each server, in the <code>images/</code> subdirectory. Also put any
  * localized versions of the file (eg <code>picture_fr.jpg</code> for French,
  * <code>picture_fr_CA.jpg</code> for French (Canada), etc) into the same
- * location. Then put the following markup into an HTML text file to be
- * processed by the FileInterpolator:
+ * location. (Or, put all those files into the <code>images/</code>
+ * subdirectory of your portlet WAR.) Then put the following markup into an HTML
+ * text file to be processed by the FileInterpolator:
  * </p>
  * <p>
  * <code>&lt;IMG SRC="&lt;LOCALIZED-CONTENT-URL:/images/picture.jpg&gt;"&gt;</code>
  * </p>
  * <p>
  * The returned text string will contain the necessary URL for showing the
- * best-fit image to the user. The logic for determining the best-fit will
- * resemble that used by the Java-standard ResourceBundle class (see).
+ * best-fit image to the user. The logic for determining the best-fit resembles
+ * that used by the Java-standard ResourceBundle class (see).
  * </p>
  * <p>
- * <b>Note:</b> This assumes the file-relay servlet is deployed on the same
- * server as the portlet bundle directory, which is assumed to be the portal
- * server itself. This only works for local portlets, not remoted portlets.
+ * <b>Note:</b> For the portlet resource bundle directory to work, you must
+ * have deployed the file-relay servlet into your portlet application.
  * </p>
  * 
  * <dt><code>&lt;NAME&gt;</code></dt>
@@ -272,12 +292,12 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * to the FileInterpolator through the constructor (see).
  * </p>
  * <p>
- * In the <code>roles</code> parameter to the
- * <code>&lt;ROLE:roles&gt;</code> token, you can list just a single role
- * name, or multiple role names (use the <code>|</code> character to delimit
- * them). The content enclosed by the <code>&lt;ROLE:roles&gt;</code> and
- * <code>&lt;/ROLE&gt;</code> tokens is omitted from the returned content
- * unless the PortletRequest indicates the user is in one of those role(s).
+ * In the <code>roles</code> parameter to the <code>&lt;ROLE:roles&gt;</code>
+ * token, you can list just a single role name, or multiple role names (use the
+ * <code>|</code> character to delimit them). The content enclosed by the
+ * <code>&lt;ROLE:roles&gt;</code> and <code>&lt;/ROLE&gt;</code> tokens is
+ * omitted from the returned content unless the PortletRequest indicates the
+ * user is in one of those role(s).
  * </p>
  * <p>
  * The content enclosed by the <code>&lt;ROLE:roles&gt;</code> and
@@ -670,23 +690,20 @@ public class FileInterpolator extends
 	}
 
 	/**
-	 * Get the pathname for the best-candidate localized content file available
-	 * in the portlet bundle directory, based on the request locale and base
-	 * content pathname provided to the constructor. The returned pathname is an
-	 * absolute path, including the portlet bundle directory, any
-	 * subdirectory(s), and the best-fit localized file name. Null is returned
-	 * if the file is not found or the request or content file provided to the
-	 * constructor were null.
+	 * Get an input stream for the best-candidate localized content file
+	 * available in the portlet bundle directory or portlet application, based
+	 * on the request locale and base content pathname provided to the
+	 * constructor. Null is returned if the file is not found or the request or
+	 * content file provided to the constructor were null.
 	 * 
-	 * @return file path
+	 * @return The input stream for the file
 	 */
-	protected String getLocalizedContentFilePath() {
+	protected InputStream getLocalizedContentFileAsStream() {
 		if (request == null || baseContentFilePath == null) {
 			return null;
 		}
-		String filePath = com.hp.it.spf.xa.i18n.portlet.I18nUtility
-				.getLocalizedFilePath(request, baseContentFilePath);
-		return filePath;
+		return com.hp.it.spf.xa.i18n.portlet.I18nUtility
+				.getLocalizedFileAsStream(request, baseContentFilePath);
 	}
 
 	/**

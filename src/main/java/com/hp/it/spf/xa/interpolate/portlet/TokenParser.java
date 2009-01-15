@@ -193,9 +193,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * Get a URL for the given file pathname, localized (or not) depending on
 	 * the boolean parameter (if true, the URL is for the best-candidate
 	 * localized version of that file, otherwise it is just for the file
-	 * itself). This should return null if the URL cannot be built (eg the file
-	 * is not found). This method is implemented using I18nUtility
-	 * getLocalizedFileURL (see).
+	 * itself). This method is implemented using I18nUtility getLocalizedFileURL
+	 * (see).
 	 * </p>
 	 * <p>
 	 * The given file pathname should be a base filename and path relative to
@@ -211,15 +210,11 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 */
 	protected String getContentURL(String baseFilePath, boolean localized) {
 
-		if (request == null) {
+		if (request == null || response == null) {
 			return null;
 		}
-		String path = I18nUtility.getLocalizedFileURL(request, response,
-				baseFilePath, localized);
-		if (path == null || path.trim().length() == 0) {
-			return null;
-		}
-		return path;
+		return I18nUtility.getLocalizedFileURL(request, response, baseFilePath,
+				localized);
 	}
 
 	/**

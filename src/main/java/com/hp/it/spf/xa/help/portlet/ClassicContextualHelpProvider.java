@@ -166,34 +166,22 @@ public class ClassicContextualHelpProvider extends
 	}
 
 	/**
-	 * A concrete method to generate the image URL for the popup close button.
-	 * This close button is presumed to be named
-	 * <code>/images/btn_close.gif</code> and located in the portlet resource
-	 * bundle directory. This image may be localized if desired; this method
-	 * looks for the particular localized image loaded in the portlet resource
-	 * bundle directory which is the best-candidate given the current locale. If
-	 * no image is found there, then the method assumes it is inside the current
-	 * portlet application and returns an encoded URL pointing to it there.
+	 * A concrete method to generate the image URL for the popup close button in
+	 * a portlet. This close button is presumed to be named
+	 * <code>/images/btn_close.gif</code> and located in either the portlet
+	 * resource bundle directory, or in your portlet WAR. This image may be
+	 * localized if desired; the method looks for the particular localized image
+	 * file which is the best-candidate given the current locale.
 	 */
 	protected String getCloseImageURL() {
-		String defaultUrl = slashify("/images/" + CLOSE_BUTTON_IMG_NAME);
-		String url = defaultUrl;
-		if (request != null) {
-			url = I18nUtility.getLocalizedFileURL(request, response, url);
-			if (url == null) {
-				url = defaultUrl;
-				if (response != null) {
-					url = response.encodeURL(url);
-				}
-			}
-		}
-		return url;
+		String url = slashify("/images/" + CLOSE_BUTTON_IMG_NAME);
+		return I18nUtility.getLocalizedFileURL(request, response, url);
 	}
 
 	/**
-	 * A concrete method to get the image alt text for the popup close button.
-	 * This text is presumed to be stored in the current portlet's configured
-	 * message resources, under a message key named
+	 * A concrete method to get the image alt text for the popup close button in
+	 * a portlet. This text is presumed to be stored in the current portlet's
+	 * configured message resources, under a message key named
 	 * <code>contextualHelp.close.alt</code>. If it is not found there, then
 	 * an empty string is returned. <b>Note:</b> the returned message is the
 	 * best-candidate localized version found in the resource bundle for the
