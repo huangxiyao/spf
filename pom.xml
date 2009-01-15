@@ -7,9 +7,12 @@
 	<name>SPF global help secondary page</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>
-		Classes and other artifacts for the Shared Portal Framework
+		JSPs, HTML and other artifacts for the Shared Portal Framework
 		global help secondary page. This Vignette component displays the
-		global help.
+		global help. The portal site's custom help content should be
+		provided in the globalHelp.html file or a site-specific variant,
+		siteGlobalHelp.html (where &quot;site&quot; is the site name in
+		Vignette).
 	</description>
 	<inceptionYear>January 2009</inceptionYear>
 	<parent>
@@ -19,12 +22,20 @@
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/global-help-secondarypage</url>
+		<url>
+			http://samson.atl.hp.com:8080/hudson/job/global-help-secondarypage
+		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/global-help-secondarypage</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/global-help-secondarypage</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/global-help-secondarypage</url>
+		<connection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/global-help-secondarypage
+		</connection>
+		<developerConnection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/global-help-secondarypage
+		</developerConnection>
+		<url>
+			http://samson.atl.hp.com/svn/spf/source/comps/trunk/global-help-secondarypage
+		</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
