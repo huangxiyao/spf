@@ -1,6 +1,9 @@
 <%-- This JSP displays an SPF-standard system error based on error title, code 
 and message attributes expected to have been set in the session by the 
-forwarding action.  Defaults are provided if they were not set. --%>
+forwarding action.  Defaults are provided if they were not set. 
+
+This JSP assumes that the surrounding grid or styles have defined the 
+following CSS classes: errorTitle, errorMessage, and errorCode. --%>
 
 <%@ page import="com.epicentric.template.Style"%>
 <%@ page import="com.vignette.portal.util.WebUtils"%>
@@ -93,16 +96,16 @@ forwarding action.  Defaults are provided if they were not set. --%>
 
 <%-- Output page data --%>
 <div style="padding-top: 10px; margin-left: 10px">
-<h3 class="spf-error-title"><%= errorTitle %></h3>
+<h3 class="errorTitle"><%= errorTitle %></h3>
 <table border="0" cellspacing="0">
 	<tr>
 		<td>
-		<p class="spf-error-message"><%= errorMessage %></p>
+		<p class="errorMessage"><%= errorMessage %></p>
 		</td>
 	</tr>
 	<tr>
 		<td>
-		<p class="spf-error-code"><%= errorCodeMessage %></p>
+		<p class="errorCode"><%= errorCodeMessage %></p>
 		</td>
 	</tr>
 </table>
