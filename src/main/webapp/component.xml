@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="1"
+	component-id="SPFAuthErrorSecondaryPageType"
+	component-type="Secondary Page Types"
+	description="Shared Portal Framework secondary page type for displaying an authorization error."
+	epi-build="251" epi-version="7.2.2" major-version="7" minor-version="2"
+	title="Shared Portal Framework - Authorization Error Page"
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:detail>
+		<template-info allow-guest-access="true"
+			description="Shared Portal Framework secondary page type for displaying an authorization error."
+			friendly-id="ANON_SPF_AUTH_ERROR" header-filename=""
+			id="SPFAuthErrorSecondaryPageType" is-system="false"
+			title="Shared Portal Framework - Authorization Error Page"
+			type="templatetype_page_content_include" visible="true">
+			<actions></actions>
+		</template-info>
+	</epideploy:detail>
+</epideploy:component>
