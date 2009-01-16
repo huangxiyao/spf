@@ -1,66 +1,64 @@
-<!-- Here is a sample print hyperlink; this one refers to a
+<!--                              -->
+<!-- Sample global help HTML file -->
+<!--                              -->
+
+<!-- This is a template for the global help HTML file.  Delete these
+comments and modify the rest of this file as needed for the portal.
+You can use any HTML, CSS, and JavaScript you like (but don't use
+the html, head, title, body, or any other page-wide tags).  You can also  
+use any ospecial markup tokens supported by global help in the Shared
+Portal Framework - see the usage documentation.  When you are 
+finished, name the file:
+
+- If your global help is for a particular portal site, name the file
+<site-name>GlobalHelp.html where <site-name> is the site name for the
+site in Vignette.
+
+- If your global help is for all portal sites which don't have site-
+particular global help, name the file globalHelp.html.
+
+Then upload this file to the Shared Portal Framework's Global Help
+Page component in Vignette console.  Upload it as a secondary support
+file.  The component will discover and display your file at runtime. -->
+
+<!--                              -->
+
+<!-- You can refer to external CSS in this file.  Create your styles
+in a CSS file.  Then give the file an appropriate name. Eg, if you 
+are providing styles just for a particular portal site, name the file
+<site-name>GlobalHelp.css where <site-name> is the site name for the
+site in Vignette.  Or if you are providing styles for all sites without
+site-specific styles, name it globalHelp.css.  Then upload it as a 
+secondary support file into the Global Help Page component in Vignette.
+And put a token to resolve it below, like this one (be sure to set the
+filename to match the name you chose): -->
+
+<link href="<CONTENT-URL:globalHelp.css>" rel="stylesheet" type="text/css">
+
+<!--                              -->
+
+<!-- You can refer to scripts or CSS defined in the grid or styles for
+this page, too.  Here is a sample print hyperlink; this one refers to a
 globalHelpPrint() JavaScript assumed to be supplied by your grid
 or styles for this page. You provide the grid and styles. -->
 
-<div id="print"><script type="text/javascript"
-	language="javascript" charset="utf-8">
+<div id="print">
+	<script type="text/javascript" language="javascript" charset="utf-8">
     // <![CDATA[
     document.writeln('<a class="helpLink" href="#" onclick="globalHelpPrint();return false;">Print</a>');
     // ]]>
-</script>
-<noscript>To print this document use Ctrl+p on your keypad.</noscript>
+	</script>
+	<noscript>To print this document use Ctrl+p on your keypad.</noscript>
 </div>
 
-<!-- Here is some sample help content -->
+<!-- Here is some sample help content referring to styles in the CSS -->
 
-<h1 class="contentHeader"><a name="index">Put your help title
-here.</a></h1>
-
-<i>
-<p><strong>Customization instructions:</strong> This is a template.
-Delete these instructions and modify the rest of the page for your
-portal. You can use any HTML, CSS and JavaScript you like. You can also
-refer to style classes defined in the <code>globalHelp.css</code> file.
-And you can refer to any of the special markup tokens supported by
-global help, such as:</p>
-
-<blockquote><code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code>
-(where groups are one or more groups to which the enclosed content
-should be limited)<br>
-<br>
-<code>&lt;TOKEN:key&gt;</code> (define your token key-value pairs in <code>default_token_subs.properties</code>
-on the portal server)<br>
-<br>
-<code>&lt;NAME&gt;</code> (the user's name, or blank if not logged-in)<br>
-<br>
-<code>&lt;EMAIL&gt;</code> (the user's email address, or blank if not
-logged-in)<br>
-<br>
-<code>&lt;LOCALIZED-CONTENT-URL:file&gt;</code> (include your base and
-localized files among the global help secondary page component's support
-files)<br>
-<br>
-<code>&lt;SITE:names&gt;...&lt;/SITE&gt;</code>code> (to add different
-content for different sites - this is not useful if you are only
-authoring site-specific content)<br>
-<br>
-And more (see usage documentation for a complete list).</blockquote>
-
-<p>When you are done, name this file <code>&lt;your-site&gt;GlobalHelp.html</code>
-if it is site-specific (where <code>&lt;your-site&gt;</code> is your
-site's "DNS name" in Vignette), or just <code>&lt;globalHelp.html&gt;</code>
-if your file applies to all portal sites. Upload it as a secondary
-support file in the <code>Shared Portal Framework - Global Help
-Page</code> secondary page and finally create the localized versions as
-desired.</p>
-</i>
-
-<p class="sectionSeparator"></p>
+<h1 class="contentHeader"><a name="index">Put your help title here.</a></h1>
 
 <strong>
 <ul>
-	<li><a class="helpLink" href="#topic1">Put link text for topic
-	1 here</a>
+	<li><a class="helpLink" href="#topic1">Put link text for
+topic 1 here</a>
 	<ul>
 		<li><a class="helpLink" href="#topic1.1">Put link text for
 		subtopic 1.1 here</a></li>
@@ -68,8 +66,8 @@ desired.</p>
 		subtopic 1.2 here</a></li>
 	</ul>
 	</li>
-	<li><a class="helpLink" href="#topic2">Put link text for topic
-	2 here</a></li>
+	<li><a class="helpLink" href="#topic2">Put link text for
+	topic 2 here</a></li>
 	<li>Etc.</li>
 </ul>
 </strong>
