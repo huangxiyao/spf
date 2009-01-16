@@ -40,6 +40,11 @@
 	</organization>
 	<dependencies>
 		<dependency>
+			<groupId>com.hp.it.spf.comps</groupId>
+			<artifactId>auth-error-secondarypagetype</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>common-utilities</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
