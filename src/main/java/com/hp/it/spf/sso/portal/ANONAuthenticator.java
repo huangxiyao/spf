@@ -5,6 +5,9 @@
  */
 package com.hp.it.spf.sso.portal;
 
+import java.util.Map;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.epicentric.common.website.SessionUtils;
@@ -55,4 +58,19 @@ public class ANONAuthenticator extends AbstractAuthenticator {
                     .getSession())).getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID);
         }
     }
+    
+    /**
+     * retrieve anonymouse user's profile
+     */
+    protected Map<String, String> getUserProfile() {
+    	return null;
+    }
+    
+    /**
+     * retrieve anonymouse user's group
+     */
+    @SuppressWarnings("unchecked")
+	protected Set getUserGroup() {
+    	return null;
+    }    
 }

@@ -6,6 +6,7 @@
 package com.hp.it.spf.sso.portal;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -37,6 +38,25 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
         super(request);
     }
 
+    protected void mapHeaderToUserProfileMap() {
+    	super.mapHeaderToUserProfileMap();
+    	
+    	// Set lanuage into SSOUser, if null, set to default EN
+    	String language = getValue(AuthenticationConsts.HEADER_LANGUAGE_PROPERTY_NAME);
+    	if (language == null || ("").equals(language.trim())) {
+    		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, AuthenticationConsts.DEFAULT_LANGUAGE);							
+    	} else {
+    		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, language);
+    	}
+    	
+    	// if profileid is not specified, then use email to instead
+    	String profileId = userProfile.get(AuthenticationConsts.PROPERTY_PROFILE_ID);
+    	if (profileId == null || profileId.trim().equals("")) {
+	    	userProfile.put(AuthenticationConsts.PROPERTY_PROFILE_ID, 
+	    					userProfile.get(AuthenticationConsts.PROPERTY_EMAIL_ID));
+    	} 
+    }
+    
     /**
      * This method is used to retrieve group info for AtHP users It will get the
      * group info from the request header and analyse. Only the group starting
@@ -44,7 +64,8 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
      * 
      * @return retrived groups
      */
-    protected Set retrieveGroup() {
+    @SuppressWarnings("unchecked")
+	protected Set getUserGroup() {
         Set groups = new HashSet();
         String groupstring = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
         // groups are divided by ,
@@ -60,5 +81,12 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
             }
         }
         return groups;
+    }
+    
+    /**
+     * retrieve user profile for atHP
+     */
+    protected Map<String, String> getUserProfile() {
+    	return null;
     }
 }

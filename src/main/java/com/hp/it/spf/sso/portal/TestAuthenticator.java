@@ -43,31 +43,37 @@ public class TestAuthenticator extends AbstractAuthenticator {
 
 	private final String VIGNETTE_PREFIX = "com.vignette.portal.attribute.portlet.";
 
-	/**
-	 * Constructor for TestAuthenticator. It will get the resource bundle file
-	 * for TestAuthenticator. Then it will read current user from the resource
-	 * bundle file. The current user's info will be read from its property file
-	 * as well.
-	 * 
-	 * @param request
-	 *            HttpServletRequest object
-	 */
-	public TestAuthenticator(HttpServletRequest request) {
-		this.request = request;
-		profileFileName = retrieveProfileFile();
-		try {
-			LOG.info("Get Resource Bundle File = " + profileFileName);
-			// Read current user's info.
-			prop = ResourceBundle.getBundle(profileFileName);
-			LOG
-					.info("Refresh Resource Bundle File for user "
-							+ profileFileName);
-		} catch (MissingResourceException e) {
-			LOG.info("No Resource Bundle File = " + profileFileName);
-			request.getSession().setAttribute(
-					AuthenticationConsts.SESSION_ATTR_SSO_ERROR, "1");
-		}
-	}
+
+    /**
+     * Constructor for TestAuthenticator. It will get the resource bundle file
+     * for TestAuthenticator. Then it will read current user from the resource
+     * bundle file. The current user's info will be read from its property file
+     * as well.
+     * 
+     * @param request
+     *            HttpServletRequest object
+     */
+    public TestAuthenticator(HttpServletRequest request) {
+        this.request = request;
+        
+        profileFileName = retrieveProfileFile();
+        try {
+            LOG.info("Get Resource Bundle File = " + profileFileName);
+            // Read current user's info.
+            prop = ResourceBundle.getBundle(profileFileName);
+            LOG
+                    .info("Refresh Resource Bundle File for user "
+                            + profileFileName);
+        } catch (MissingResourceException e) {
+            LOG.info("No Resource Bundle File = " + profileFileName);
+            request.getSession().setAttribute(
+                    AuthenticationConsts.SESSION_ATTR_SSO_ERROR, "1");
+        }        
+      
+        // retrieve user profile
+        userProfile = getUserProfile();       
+        mapUserProfile2SSOUser();
+    }
 
 	private String retrieveProfileFile() {
 		String rbFile = retrieveRbFile();
@@ -139,41 +145,41 @@ public class TestAuthenticator extends AbstractAuthenticator {
 		}
 	}
 
-	/**
-	 * Get group info and return as a Set
-	 * 
-	 * @return groups
-	 */
-	protected Set retrieveGroup() {
-		Set groups = new HashSet();
-		String groupstring = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
-		// groups are divided by ,
-		if (groupstring != null) {
-			StringTokenizer st = new StringTokenizer(groupstring, ",");
-			while (st.hasMoreElements()) {
-				String group = (String) st.nextElement();
-				LOG.info("Get UserGroup = " + group);
-				groups.add(group);
-			}
-		}
-		return groups;
-	}
+    /**
+     * Get group info and return as a Set
+     * 
+     * @return groups
+     */
+    protected Set getUserGroup() {
+        Set groups = new HashSet();
+        String groupstring = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
+        // groups are divided by ,
+        if (groupstring != null) {
+            StringTokenizer st = new StringTokenizer(groupstring, ",");
+            while(st.hasMoreElements()) {
+                String group = (String)st.nextElement();
+                LOG.info("Get UserGroup = " + group);
+                groups.add(group);
+            }
+        }
+        return groups;
+    }
 
-	/**
-	 * Prepare infos for userProfile Map
-	 * 
-	 * @return customizedProfile map
-	 */
-	protected Map getCustomizedProfile() {
-		Map customizedProfile = new HashMap();
-		Enumeration propertyKeys = prop.getKeys();
-		while (propertyKeys.hasMoreElements()) {
-			String customizedProfileKey = (String) propertyKeys.nextElement();
-			customizedProfile.put(customizedProfileKey, prop
-					.getString(customizedProfileKey));
-		}
-		return customizedProfile;
-	}
+    /**
+     * Prepare infos for userProfile Map
+     * 
+     * @return customizedProfile map
+     */
+    protected Map getUserProfile() {
+        Map customizedProfile = new HashMap();
+        Enumeration propertyKeys = prop.getKeys();
+        while(propertyKeys.hasMoreElements()) {
+            String customizedProfileKey = (String)propertyKeys.nextElement();
+            customizedProfile.put(customizedProfileKey, prop
+                    .getString(customizedProfileKey));
+        }
+        return customizedProfile;
+    }
 
 	/**
 	 * This method is used to perform all related tasks. 1. It will invoke the

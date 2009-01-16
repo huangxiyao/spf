@@ -371,7 +371,7 @@ public class AuthenticatorHelper {
      *            HttpServletRequest
      * @return true if this user needs to be updated, otherwise false
      */
-    static boolean needUpdateVAPUser(HttpServletRequest request) {
+    static boolean needSyncUser(HttpServletRequest request) {
         return "true".equalsIgnoreCase((String)request
                 .getParameter("initSession"))
                 || !AuthenticatorHelper.isVAPLoggedIn(request);

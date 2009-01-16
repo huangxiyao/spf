@@ -12,11 +12,12 @@ import com.epicentric.authentication.SSOUsernameRetriever;
 import com.vignette.portal.log.LogWrapper;
 
 /**
- * This class implements SSOUsernameRetriever and returns a valid SSO user name
- * defined in session Vignette will call getSSOUsername method in this class to
+ * This class implements SSOUsernameRetriever interface and returns a valid SSO user name
+ * defined in session. Vignette will call getSSOUsername method in this class to
  * implement SSO
  * 
- * @author <link href="kaijian.ding@hp.com">dingk</link>
+ * @author <link href="kaijian.ding@hp.com">dingk</link>,  		
+ * 		   <link href="ying-zhiw@hp.com">Oliver</link>
  * @version TBD
  */
 public class SharedPortalSSOAuthenticator implements SSOUsernameRetriever {

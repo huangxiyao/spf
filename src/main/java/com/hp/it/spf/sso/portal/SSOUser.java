@@ -16,6 +16,8 @@ class SSOUser implements Serializable {
     private String firstName = null;
 
     private String lastName = null;
+    
+    private String profileId = null;
 
     private String email = null;
 
@@ -85,7 +87,15 @@ class SSOUser implements Serializable {
         this.country = country;
     }
 
-    /**
+    public String getProfileId() {
+		return profileId;
+	}
+
+	public void setProfileId(String profileId) {
+		this.profileId = profileId;
+	}
+
+	/**
      * Get the property email
      * 
      * @return the email
