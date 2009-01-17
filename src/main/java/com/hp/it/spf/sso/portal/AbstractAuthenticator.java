@@ -128,7 +128,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         	// updated vap user
             User updatedVAPUser = syncVAPUser();
             // map user profile and vap user group to session
-            mapProfile2Session(updatedVAPUser);
+            saveUserProfile2Session(updatedVAPUser);
         }
         
         userName = ssoUser.getUserName();
@@ -183,7 +183,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * 				vignette user
      */
     @SuppressWarnings("unchecked")
-	protected void mapProfile2Session(User vapUser) {
+	protected void saveUserProfile2Session(User vapUser) {
     	// append all external user profile retrieved from UPS/Persona
     	userProfile.putAll(getUserProfile());
     	userProfileInSession.putAll(userProfile);
@@ -348,9 +348,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 
     /**
      * This method is used to synchronize user's info. This class will create
-     * user in Vignette if the user is first time here AND will update user if
-     * needed AND will cleanup session if session user and request user are
-     * different AND will do nothing if seesion error flag is catched
+     * user in Vignette if the user is first time here; or update user if
+     * needed; or cleanup session if session user and request user are
+     * different; or do nothing if session error flag is caught
      * 
      * @see firstTimeUser()
      * @see updateUser(com.epicentric.user.User, boolean)
