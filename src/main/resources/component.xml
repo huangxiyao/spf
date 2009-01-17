@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="1"
+	component-id="SPFLocaleSelectorSecondaryPageType"
+	component-type="Secondary Page Types"
+	description="Shared Portal Framework secondary page type for persisting a user locale selection."
+	epi-build="251" epi-version="7.2.2" major-version="7" minor-version="2"
+	title="Shared Portal Framework - Locale Selector Process"
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:detail>
+		<template-info allow-guest-access="true"
+			description="Shared Portal Framework secondary page type for persisting a user locale selection."
+			friendly-id="ANON_SPF_SELECT_LOCALE" header-filename=""
+			id="SPFLocaleSelectorSecondaryPageType" is-system="false"
+			title="Shared Portal Framework - Locale Selector Process"
+			type="templatetype_page_content_include" visible="true">
+			<actions>
+				<group id="1">
+					<action id="1" type="PROCESS">
+						<class>
+							com.hp.it.spf.localeselector.portal.component.secondarypagetype.SelectLocaleProcessAction
+						</class>
+					</action>
+					<action id="2" type="PROCESS">
+						<class>
+							com.hp.it.spf.localeselector.portal.component.secondarypagetype.SelectLocaleRedirectProcessAction
+						</class>
+					</action>
+				</group>
+				<!-- other action groups could be added here in future -->
+			</actions>
+		</template-info>
+	</epideploy:detail>
+</epideploy:component>
