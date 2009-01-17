@@ -41,14 +41,6 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
     protected void mapHeaderToUserProfileMap() {
     	super.mapHeaderToUserProfileMap();
     	
-    	// Set lanuage into SSOUser, if null, set to default EN
-    	String language = getValue(AuthenticationConsts.HEADER_LANGUAGE_PROPERTY_NAME);
-    	if (language == null || ("").equals(language.trim())) {
-    		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, AuthenticationConsts.DEFAULT_LANGUAGE);							
-    	} else {
-    		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, language);
-    	}
-    	
     	// if profileid is not specified, then use email to instead
     	String profileId = userProfile.get(AuthenticationConsts.PROPERTY_PROFILE_ID);
     	if (profileId == null || profileId.trim().equals("")) {

@@ -159,6 +159,13 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     	userProfile.put(AuthenticationConsts.PROPERTY_COUNTRY_ID, 
         				getValue(AuthenticationConsts.HEADER_COUNTRY_PROPERTY_NAME)); 
     	   	
+    	// Set lanuage into SSOUser, if null, set to default EN
+    	String language = getValue(AuthenticationConsts.HEADER_LANGUAGE_PROPERTY_NAME);
+    	if (language == null || ("").equals(language.trim())) {
+    		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, AuthenticationConsts.DEFAULT_LANGUAGE);							
+    	} else {
+    		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, language);
+    	}
     }    
     
     /**

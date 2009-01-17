@@ -88,16 +88,13 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     }
 
     protected void mapHeaderToUserProfileMap() {
-    	super.mapHeaderToUserProfileMap();
+    	super.mapHeaderToUserProfileMap();    	
     	
     	// Set lanuage into SSOUser, if null, set to default EN
-    	String language = getValue(AuthenticationConsts.HEADER_LANGUAGE_PROPERTY_NAME);
-    	if (language == null || ("").equals(language.trim())) {
-    		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, AuthenticationConsts.DEFAULT_LANGUAGE);							
-    	} else {
-    		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, I18nUtility.hppLanguageToISOLanguage(language));
-    	}
-    }
+		String language = userProfile.get(AuthenticationConsts.PROPERTY_LANGUAGE_ID);
+		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, 
+						I18nUtility.hppLanguageToISOLanguage(language));
+	}
     
     /**
      * Retrieve user profile for HPP
