@@ -15,12 +15,12 @@
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/locale-selector-secondarypagetype</url>
+		<url>http://samson.atl.hp.com:8080/hudson/job/locale-selector-secondarypage</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-selector-secondarypagetype</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-selector-secondarypagetype</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-selector-secondarypagetype</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-selector-secondarypage</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-selector-secondarypage</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-selector-secondarypage</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
