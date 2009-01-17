@@ -8,7 +8,7 @@
 	<epideploy:detail>
 		<template-info allow-guest-access="false"
 			description="Shared Portal Framework style type for all kinds of locale widgets, including the locale selector and locale indicator."
-			friendly-id="ANON_SPF_LOCALE_WIDGET" header-filename=""
+			friendly-id="spfLocaleWidget" header-filename=""
 			id="SPFLocaleWidgetStyleType" is-system="false"
 			system-secondary-page-type="false" title="Shared Portal Framework - Locale Widget Style Type"
 			type="templatetype_ui_element" visible="true" />
