@@ -87,11 +87,11 @@ class SSOUser implements Serializable {
         this.country = country;
     }
 
-    public String getProfileId() {
+    String getProfileId() {
 		return profileId;
 	}
 
-	public void setProfileId(String profileId) {
+	void setProfileId(String profileId) {
 		this.profileId = profileId;
 	}
 
