@@ -2,13 +2,13 @@
 <epideploy:component build-version="1"
 	component-id="SPFLocaleSelectorSecondaryPageType"
 	component-type="Secondary Page Types"
-	description="Shared Portal Framework secondary page type for persisting a user locale selection."
+	description="Shared Portal Framework secondary page type for persisting a user locale selection variously."
 	epi-build="251" epi-version="7.2.2" major-version="7" minor-version="2"
 	title="Shared Portal Framework - Locale Selector Process"
 	xmlns:epideploy="http://www.epicentric.com/deployment">
 	<epideploy:detail>
 		<template-info allow-guest-access="true"
-			description="Shared Portal Framework secondary page type for persisting a user locale selection."
+			description="Shared Portal Framework secondary page type for persisting a user locale selection variously."
 			friendly-id="ANON_SPF_SELECT_LOCALE" header-filename=""
 			id="SPFLocaleSelectorSecondaryPageType" is-system="false"
 			title="Shared Portal Framework - Locale Selector Process"
