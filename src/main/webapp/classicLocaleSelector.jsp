@@ -5,7 +5,8 @@
 	STYLE TYPE: Shared Portal Framework - Locale Widget Style Type
 	USES HEADER FILE: Yes
 
-Displays the "classic" locale selector.
+Displays the "classic" locale selector when multiple locales are available.
+If only one locale is available, displays the "classic" locale indicator.
 -----------------------------------------------------------------------------%>
 
 <%---------------------------------------------------------------- IMPORTS --%>
