@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.it.spf.comps</groupId>
+	<artifactId>locale-selector-secondarypage</artifactId>
+	<name>SPF locale selector secondary page</name>
+	<version>1.0.0-SNAPSHOT</version>
+	<description>Artifacts for the Shared Portal Framework locale selector secondary page. This Vignette component triggers the process action chain in the secondary page type to persist the user's locale selection into the standard location (request, HP.com cookies, and HPP).</description>
+	<inceptionYear>January 2009</inceptionYear>
+	<parent>
+		<artifactId>spf-pom</artifactId>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/locale-selector-secondarypagetype</url>
+	</ciManagement>
+	<scm>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-selector-secondarypagetype</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-selector-secondarypagetype</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-selector-secondarypagetype</url>
+	</scm>
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
+	<dependencies>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>common-utilities</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>portal-tags</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>portal-utilities</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.comps</groupId>
+			<artifactId>locale-selector-secondarypagetype</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>

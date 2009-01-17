@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="1"
+	component-id="SPFLocaleSelectorSecondaryPage"
+	component-type="Secondary Pages"
+	description="Shared Portal Framework secondary page for persisting a user locale selection to the standard locations."
+	epi-build="251" epi-version="7.2.2" major-version="7" minor-version="2"
+	title="Shared Portal Framework - Locale Selector Process"
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:required-component
+		component-id="SPFLocaleSelectorSecondaryPageType"
+		component-type="Secondary Page Types" major-version="7"
+		minor-version="2" />
+	<epideploy:detail>
+		<style-info apply-template-header="false"
+			description="Shared Portal Framework secondary page for persisting a user locale selection to the standard locations."
+			friendly-id="ANON_SPF_SELECT_LOCALE"
+			id="SPFLocaleSelectorSecondaryPage" is-system="false"
+			processing-type="action_based" template-default="false"
+			template-uid="SPFLocaleSelectorSecondaryPageType"
+			title="Service Portal - Select Locale" visible="true">
+			<actions>
+				<!-- This process action group is the one which stores to the request, HP.com cookies, and HPP, then redirects to the target. -->
+				<group-reference group-id="1" />
+			</actions>
+		</style-info>
+	</epideploy:detail>
+</epideploy:component>
