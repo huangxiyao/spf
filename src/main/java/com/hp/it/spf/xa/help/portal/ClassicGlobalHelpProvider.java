@@ -269,11 +269,11 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 
 		// Make the link text.
 		String link = this.linkContent;
-		 // Remove Vignette-introduced <SPAN> tags if needed.
+		// Remove Vignette-introduced <SPAN> tags if needed.
 		if (filterSpan) {
 			link = I18nUtility.filterSpan(link);
 		}
-		 // Escape XML meta-characters if needed.
+		// Escape XML meta-characters if needed.
 		if (escape) {
 			link = Utils.escapeXml(link);
 		}
@@ -283,20 +283,27 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 		// Make the URI for the global help.
 		String uri = portalContext.createDisplayURI(Consts.PAGE_GLOBAL_HELP)
 				.toString();
-		if (this.fragment != null) {
-			uri += "#" + fragment;
+		if (uri != null) { // should be null if no global help
+			if (this.fragment != null) {
+				uri += "#" + fragment;
+			}
 		}
 
 		// Generate the main HTML and event-handling code by assembling the
 		// pieces.
-		html.append("<a ");
-		html.append("id=\"" + id + "\" ");
-		html.append("href=\"" + uri + "\" ");
-		html.append(">" + link + "</a>");
-		html.append("<script>");
-		html.append("classicGlobalHelpUtil.addEvent(document.getElementById('"
-				+ id + "'), 'click', openClassicGlobalHelpWindow);");
-		html.append("</script>");
+		if (uri != null) { // should be null if no global help
+			html.append("<a ");
+			html.append("id=\"" + id + "\" ");
+			html.append("href=\"" + uri + "\" ");
+			html.append(">" + link + "</a>");
+			html.append("<script>");
+			html
+					.append("classicGlobalHelpUtil.addEvent(document.getElementById('"
+							+ id + "'), 'click', openClassicGlobalHelpWindow);");
+			html.append("</script>");
+		} else {
+			html.append(link);
+		}
 
 		// Store the counter to remember how many links we have done.
 		request.setAttribute(CLASSIC_GLOBAL_HELP_COUNTER_ATTR, String
