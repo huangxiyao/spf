@@ -229,7 +229,8 @@ public abstract class ClassicContextualHelpBaseTag extends
 	}
 
 	/**
-	 * Set the value from the <code>noScriptHref</code> attribute.
+	 * Set the value from the <code>noScriptHref</code> attribute, with blank
+	 * values normalized to null.
 	 * 
 	 * @param value
 	 *            The <code>noScriptHref</code> attribute.
@@ -248,13 +249,14 @@ public abstract class ClassicContextualHelpBaseTag extends
 	}
 
 	/**
-	 * Set the value from the <code>width</code> attribute.
+	 * Set the value from the <code>width</code> attribute. Blank values are
+	 * not normalized to null.
 	 * 
 	 * @param value
 	 *            The <code>width</code> attribute.
 	 */
 	public void setWidth(String value) {
-		this.width = normalize(value);
+		this.width = value;
 	}
 
 	/**
@@ -267,13 +269,14 @@ public abstract class ClassicContextualHelpBaseTag extends
 	}
 
 	/**
-	 * Set the value from the <code>borderStyle</code> attribute.
+	 * Set the value from the <code>borderStyle</code> attribute. Blank values
+	 * are not normalized to null.
 	 * 
 	 * @param value
 	 *            The <code>borderStyle</code> attribute.
 	 */
 	public void setBorderStyle(String value) {
-		this.borderStyle = normalize(value);
+		this.borderStyle = value;
 	}
 
 	/**
@@ -286,13 +289,14 @@ public abstract class ClassicContextualHelpBaseTag extends
 	}
 
 	/**
-	 * Set the value from the <code>titleBgStyle</code> attribute.
+	 * Set the value from the <code>titleBgStyle</code> attribute. Blank
+	 * values are not normalized to null.
 	 * 
 	 * @param value
 	 *            The <code>titleBgStyle</code> attribute.
 	 */
 	public void setTitleBgStyle(String value) {
-		this.titleBgStyle = normalize(value);
+		this.titleBgStyle = value;
 	}
 
 	/**
@@ -305,13 +309,14 @@ public abstract class ClassicContextualHelpBaseTag extends
 	}
 
 	/**
-	 * Set the value from the <code>titleFontStyle</code> attribute.
+	 * Set the value from the <code>titleFontStyle</code> attribute. Blank
+	 * values are not normalized to null.
 	 * 
 	 * @param value
 	 *            The <code>titleFontStyle</code> attribute.
 	 */
 	public void setTitleFontStyle(String value) {
-		this.titleFontStyle = normalize(value);
+		this.titleFontStyle = value;
 	}
 
 	/**
@@ -324,13 +329,14 @@ public abstract class ClassicContextualHelpBaseTag extends
 	}
 
 	/**
-	 * Set the value from the <code>contentBgStyle</code> attribute.
+	 * Set the value from the <code>contentBgStyle</code> attribute. Blank
+	 * values are not normalized to null.
 	 * 
 	 * @param value
 	 *            The <code>contentBgStyle</code> attribute.
 	 */
 	public void setContentBgStyle(String value) {
-		this.contentBgStyle = normalize(value);
+		this.contentBgStyle = value;
 	}
 
 	/**
@@ -343,13 +349,14 @@ public abstract class ClassicContextualHelpBaseTag extends
 	}
 
 	/**
-	 * Set the value from the <code>contentFontStyle</code> attribute.
+	 * Set the value from the <code>contentFontStyle</code> attribute. Blank
+	 * values are not normalized to null.
 	 * 
 	 * @param value
 	 *            The <code>contentFontStyle</code> attribute.
 	 */
 	public void setContentFontStyle(String value) {
-		this.contentFontStyle = normalize(value);
+		this.contentFontStyle = value;
 	}
 
 	/**

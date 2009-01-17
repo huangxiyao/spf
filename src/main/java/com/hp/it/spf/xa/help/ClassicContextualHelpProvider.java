@@ -488,6 +488,8 @@ public abstract class ClassicContextualHelpProvider extends
 	 *            (the default).
 	 */
 	public void setBorderStyle(String pBorderStyle) {
+		if (pBorderStyle != null) 
+			pBorderStyle = pBorderStyle.trim();
 		this.borderStyle = pBorderStyle;
 	}
 
@@ -503,6 +505,8 @@ public abstract class ClassicContextualHelpProvider extends
 	 *            <code>background-color:blue</code> (the default).
 	 */
 	public void setTitleBgStyle(String pTitleBgStyle) {
+		if (pTitleBgStyle != null)
+			pTitleBgStyle = pTitleBgStyle.trim();
 		this.titleBgStyle = pTitleBgStyle;
 	}
 
@@ -525,6 +529,8 @@ public abstract class ClassicContextualHelpProvider extends
 	 *            (the default).
 	 */
 	public void setTitleFontStyle(String pTitleFontStyle) {
+		if (pTitleFontStyle != null)
+			pTitleFontStyle = pTitleFontStyle.trim();
 		this.titleFontStyle = pTitleFontStyle;
 	}
 
@@ -540,6 +546,8 @@ public abstract class ClassicContextualHelpProvider extends
 	 *            <code>background-color:white</code> (the default).
 	 */
 	public void setContentBgStyle(String pContentBgStyle) {
+		if (pContentBgStyle != null) 
+			pContentBgStyle = pContentBgStyle.trim();
 		this.contentBgStyle = pContentBgStyle;
 	}
 
@@ -562,6 +570,8 @@ public abstract class ClassicContextualHelpProvider extends
 	 *            <code>color:black</code> (the default).
 	 */
 	public void setContentFontStyle(String pContentFontStyle) {
+		if (pContentFontStyle != null) 
+			pContentFontStyle = pContentFontStyle.trim();
 		this.contentFontStyle = pContentFontStyle;
 	}
 
