@@ -5,6 +5,7 @@
 package com.hp.it.spf.xa.help.portal;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.StringTokenizer;
 
 import com.vignette.portal.website.enduser.PortalContext;
 
@@ -49,6 +50,11 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * many times getHTML has been invoked during this request lifecycle).
 	 */
 	private static String CLASSIC_GLOBAL_HELP_COUNTER_ATTR = "ClassicGlobalHelpProvider.count";
+
+	/**
+	 * Default window features for the global help child window.
+	 */
+	private static String DEFAULT_WINDOW_FEATURES = "height=610,width=410,menubar=no,status=no,toolbar=no,resizable=yes";
 
 	/**
 	 * The JavaScript string for the classic global help popup.
@@ -105,7 +111,7 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 			+ "            url = el.href;\n"
 			+ "        }\n\n"
 			// Open the new window
-			+ "        var helpWindow = window.open(url, 'spfGlobalHelp', 'height=610,width=410,menubar=no,status=no,toolbar=no,resizable=yes');\n"
+			+ "        var helpWindow = window.open(url, 'spfGlobalHelp', windowFeatures);\n"
 			+ "        helpWindow.focus();\n\n"
 			// Cancel any further bubbling of the event and disable the
 			// default action.
@@ -126,6 +132,12 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * to point to.
 	 */
 	private String fragment = "";
+
+	/**
+	 * "Classic" global help opens the help in a child window - this variable
+	 * stores the window features for that child window.
+	 */
+	private String windowFeatures = null;
 
 	/**
 	 * The portal context for this classic global help provider.
@@ -169,6 +181,25 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 				pFragment = "";
 		}
 		this.fragment = pFragment;
+	}
+
+	/**
+	 * Setter for the window features used in the JavaScript to open the global
+	 * help child window. If you never call this method, or pass null to it,
+	 * then the default window features for classic global help will be used.
+	 * These are:
+	 * <code>height=610,width=410,menubar=no,status=no,toolbar=no,resizable=yes</code>.
+	 * 
+	 * @param pWindowFeatures
+	 *            The window features to use for the child window. This can be
+	 *            any set of feature/value pairs which are valid for the
+	 *            JavaScript <code>window.open</code> method.
+	 */
+	public void setWindowFeatures(String pWindowFeatures) {
+		if (pWindowFeatures != null) {
+			pWindowFeatures = pWindowFeatures.trim();
+		}
+		this.windowFeatures = pWindowFeatures;
 	}
 
 	/**
@@ -280,11 +311,21 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 		// Remove special <NO_LOCALIZATION> markup.
 		link = I18nUtility.filterNoLocalizationTokens(link);
 
+		// Make the window features.
+		String windowFeaturesParam = this.windowFeatures == null ? DEFAULT_WINDOW_FEATURES
+				: this.windowFeatures;
+		if (windowFeaturesParam == null) {
+			windowFeaturesParam = "''";
+		} else {
+			windowFeaturesParam = "'"
+					+ escapeQuotes(windowFeaturesParam.trim()) + "'";
+		}
+
 		// Make the URI for the global help.
 		String uri = portalContext.createDisplayURI(Consts.PAGE_GLOBAL_HELP)
 				.toString();
 		if (uri != null) { // should be null if no global help
-			if (this.fragment != null) {
+			if (!this.fragment.equals("")) {
 				uri += "#" + fragment;
 			}
 		}
@@ -296,7 +337,8 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 			html.append("id=\"" + id + "\" ");
 			html.append("href=\"" + uri + "\" ");
 			html.append(">" + link + "</a>");
-			html.append("<script>");
+			html.append("<script>\n");
+			html.append("var windowFeatures = " + windowFeaturesParam + ";\n");
 			html
 					.append("classicGlobalHelpUtil.addEvent(document.getElementById('"
 							+ id + "'), 'click', openClassicGlobalHelpWindow);");
@@ -327,4 +369,51 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 			}
 		}
 	}
+
+	/**
+	 * Returns the input string with all occurrences of the quote characters
+	 * <code>"</code> and <code>'</code> escaped with the <code>\</code>
+	 * character.
+	 * 
+	 * @param input
+	 *            String
+	 * @return The string with escaped quotes
+	 */
+	private String escapeQuotes(String input) {
+
+		if (input == null)
+			return null;
+		StringBuffer buffer = new StringBuffer();
+		StringTokenizer st = new StringTokenizer(input, "\\", true);
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			if (token.equals("\\")) {
+				buffer.append("\\\\");
+			} else {
+				buffer.append(token);
+			}
+		}
+		st = new StringTokenizer(buffer.toString(), "\"", true);
+		buffer = new StringBuffer();
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			if (token.equals("\"")) {
+				buffer.append("\\\"");
+			} else {
+				buffer.append(token);
+			}
+		}
+		st = new StringTokenizer(buffer.toString(), "'", true);
+		buffer = new StringBuffer();
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			if (token.equals("'")) {
+				buffer.append("\\'");
+			} else {
+				buffer.append(token);
+			}
+		}
+		return buffer.toString();
+	}
+
 }
