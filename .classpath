@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/webapp"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SPF_common_libraries_externals"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SPF_portal_libraries_externals"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SPF_portal_libraries_sso"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/common-utilities"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/portal-utilities"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/portal-tags"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

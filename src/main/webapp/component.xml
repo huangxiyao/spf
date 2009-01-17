@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold"
+	component-id="SPFLocaleIndicatorClassicStyle" component-type="Styles"
+	description="Shared Portal Framework style for the classic look-and-feel locale indicator."
+	epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0"
+	title="Shared Portal Framework - Classic Locale Indicator Style"
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:required-component
+		component-id="SPFLocaleWidgetStyleType" component-type="Style Types"
+		major-version="1" minor-version="0" />
+	<epideploy:detail>
+		<style-info apply-template-header="true"
+			description="Shared Portal Framework style for the classic look-and-feel locale indicator."
+			friendly-id="spfClassicLocaleIndicator" id="SPFLocaleIndicatorClassicStyle"
+			is-system="false" primary-filename="classicLocaleIndicator.jsp"
+			processing-type="JSP_BASED" template-default="false"
+			template-uid="SPFLocaleWidgetStyleType"
+			title="Shared Portal Framework - Classic Locale Indicator Style"
+			visible="true" />
+	</epideploy:detail>
+</epideploy:component>
