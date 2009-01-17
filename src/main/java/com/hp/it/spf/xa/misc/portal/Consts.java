@@ -120,4 +120,10 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public final static String LOGOUT_DEFAULT_SITE = "spf";
 	public final static String LOGOUT_SITE_PARAM = "site";
 
+	/**
+	 * The names of the locale selector form input element and target element.
+	 */
+	public final static String LOCALE_SELECTOR_INPUT_NAME = "spfSelectedLocale";
+	public final static String LOCALE_SELECTOR_TARGET_NAME = "spfLocaleSelectorTarget";
+	
 }
