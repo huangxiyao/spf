@@ -71,17 +71,47 @@ public abstract class ClassicContextualHelpProvider extends
 	 * markup has been generated during this request lifecycle (ie it tracks how
 	 * many times getHTML has been invoked during this request lifecycle).
 	 */
-	protected static final String CLASSIC_CONTEXTUAL_HELP_COUNTER_ATTR = "ClassicContextualHelpProvider.count";
+	protected static String CLASSIC_CONTEXTUAL_HELP_COUNTER_ATTR = "ClassicContextualHelpProvider.count";
 
 	/**
-	 * Constant for close image file on the div.
+	 * Constant for close image file in the classic popup.
 	 */
-	protected static final String CLOSE_BUTTON_IMG_NAME = "btn_close.gif";
+	protected static String CLOSE_BUTTON_IMG_NAME = "btn_close.gif";
 
 	/**
-	 * Constant for message key for close image alt on the div.
+	 * Constant for message key for close image alt in the classic popup.
 	 */
-	protected static final String CLOSE_BUTTON_IMG_ALT = "contextualHelp.close.alt";
+	protected static String CLOSE_BUTTON_IMG_ALT = "contextualHelp.close.alt";
+
+	/**
+	 * Default width for classic popup.
+	 */
+	protected static int DEFAULT_WIDTH = 300;
+
+	/**
+	 * Default border style for classic popup.
+	 */
+	protected static String DEFAULT_BORDER_STYLE = "border-width:1px;border-style:solid;border-color:black";
+
+	/**
+	 * Default title background style for classic popup.
+	 */
+	protected static String DEFAULT_TITLE_BG_STYLE = "background-color:blue";
+
+	/**
+	 * Default title font style for classic popup.
+	 */
+	protected static String DEFAULT_TITLE_FONT_STYLE = "color:white;font-weight:bold";
+
+	/**
+	 * Default content background style for classic popup.
+	 */
+	protected static String DEFAULT_CONTENT_BG_STYLE = "background-color:white";
+
+	/**
+	 * Default content font style for classic popup.
+	 */
+	protected static String DEFAULT_CONTENT_FONT_STYLE = "color:black";
 
 	/**
 	 * The JavaScript string for the classic contextual help popup.
@@ -358,6 +388,36 @@ public abstract class ClassicContextualHelpProvider extends
 	protected String noScriptHref = "";
 
 	/**
+	 * This is the width set to use for the classic popup.
+	 */
+	protected int width = 0;
+
+	/**
+	 * This is the style of border set to use for the classic popup.
+	 */
+	protected String borderStyle = null;
+
+	/**
+	 * This is the background style to use for the title in the classic popup.
+	 */
+	protected String titleBgStyle = null;
+
+	/**
+	 * This is the font style to use for the title in the classic popup.
+	 */
+	protected String titleFontStyle = null;
+
+	/**
+	 * This is the background style to use for the content in the classic popup.
+	 */
+	protected String contentBgStyle = null;
+
+	/**
+	 * This is the font style to use for the content in the classic popup.
+	 */
+	protected String contentFontStyle = null;
+
+	/**
 	 * Protected to prevent external construction except by subclasses. Use an
 	 * appropriate subclass instead.
 	 */
@@ -404,6 +464,108 @@ public abstract class ClassicContextualHelpProvider extends
 	}
 
 	/**
+	 * Setter for the pixel width of the "classic"-style contextual help popup.
+	 * If you never call this method, or you pass a non-positive number to it,
+	 * the default width will be assumed (300 pixels).
+	 * 
+	 * @param pWidth
+	 *            The width of the popup, in pixels.
+	 */
+	public void setWidth(int pWidth) {
+		this.width = pWidth;
+	}
+
+	/**
+	 * Setter for the table border CSS style to use for the "classic"-style
+	 * contextual help popup. If you never call this method, or pass null, the
+	 * default style will be used (a solid black 1-pixel border).
+	 * 
+	 * @param pBorderStyle
+	 *            The CSS style for the popup border. This can be any string of
+	 *            CSS properties valid for the HTML <code>&lt;TABLE&gt;</code>
+	 *            tag border. For example,
+	 *            <code>border-width:1px;border-style:solid;border-color:black</code>
+	 *            (the default).
+	 */
+	public void setBorderStyle(String pBorderStyle) {
+		this.borderStyle = pBorderStyle;
+	}
+
+	/**
+	 * Setter for the background style to use for the title in the
+	 * "classic"-style contextual help popup. If you never call this method, or
+	 * pass null, the default style will be used (blue background).
+	 * 
+	 * @param pTitleBgStyle
+	 *            The CSS style for the title background. This can be any string
+	 *            of CSS properties valid for the HTML <code>&lt;TD&gt;</code>
+	 *            tag background. For example,
+	 *            <code>background-color:blue</code> (the default).
+	 */
+	public void setTitleBgStyle(String pTitleBgStyle) {
+		this.titleBgStyle = pTitleBgStyle;
+	}
+
+	/**
+	 * <p>
+	 * Setter for the font style to use for the title text in the
+	 * "classic"-style contextual help popup. If you never call this method, or
+	 * pass null, the default style will be used (bold white).
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> You can alternatively specify title font (and other)
+	 * effects in the title string itself, which you pass to the
+	 * <code>setTitleContent</code> method.
+	 * </p>
+	 * 
+	 * @param pTitleFontStyle
+	 *            The CSS style for the title font. This can be any string of
+	 *            CSS properties valid for the HTML <code>&lt;FONT&gt;</code>
+	 *            tag. For example, <code>color:white;font-weight:bold</code>
+	 *            (the default).
+	 */
+	public void setTitleFontStyle(String pTitleFontStyle) {
+		this.titleFontStyle = pTitleFontStyle;
+	}
+
+	/**
+	 * Setter for the background style to use for the help content in the
+	 * "classic"-style contextual help popup. If you never call this method, or
+	 * pass null, the default style will be used (white background).
+	 * 
+	 * @param pContentBgStyle
+	 *            The CSS style for the content background. This can be any
+	 *            string of CSS properties valid for the HTML
+	 *            <code>&lt;TD&gt;</code> tag background. For example,
+	 *            <code>background-color:white</code> (the default).
+	 */
+	public void setContentBgStyle(String pContentBgStyle) {
+		this.contentBgStyle = pContentBgStyle;
+	}
+
+	/**
+	 * <p>
+	 * Setter for the font style to use for the help content text in the
+	 * "classic"-style contextual help popup. If you never call this method, or
+	 * pass null, the default style will be used (black).
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> You can alternatively specify help content font (and other)
+	 * effects in the help content string itself, which you pass to the
+	 * <code>setHelpContent</code> method.
+	 * </p>
+	 * 
+	 * @param pContentFontStyle
+	 *            The CSS style for the help content font. This can be any
+	 *            string of CSS properties valid for the HTML
+	 *            <code>&lt;FONT&gt;</code> tag. For example,
+	 *            <code>color:black</code> (the default).
+	 */
+	public void setContentFontStyle(String pContentFontStyle) {
+		this.contentFontStyle = pContentFontStyle;
+	}
+
+	/**
 	 * <p>
 	 * Returns the HTML string for the "classic"-style contextual help,
 	 * including the link content surrounded by a hyperlink which, if clicked,
@@ -445,7 +607,7 @@ public abstract class ClassicContextualHelpProvider extends
 		String help = this.helpContent;
 		// Add element ID to <img> (it does not already have it and the script
 		// needs it).
-		if (link.startsWith("<img ")) {
+		if ((link != null) && (link.startsWith("<img ")) && (link.length() > 5)) {
 			link = "<img id=\"" + id + "\" " + link.substring(5);
 		}
 		// Escape XML meta-characters if needed.
@@ -466,11 +628,59 @@ public abstract class ClassicContextualHelpProvider extends
 		String closeButtonUrl = getCloseImageURL();
 		String closeButtonAlt = getCloseImageAlt();
 
+		// Make the various styles.
+		String widthAttr = "" + (this.width <= 0 ? DEFAULT_WIDTH : this.width);
+		String borderStyleAttr = this.borderStyle == null ? DEFAULT_BORDER_STYLE
+				: this.borderStyle;
+		String titleBgStyleAttr = this.titleBgStyle == null ? DEFAULT_TITLE_BG_STYLE
+				: this.titleBgStyle;
+		String titleFontStyleAttr = this.titleFontStyle == null ? DEFAULT_TITLE_FONT_STYLE
+				: this.titleFontStyle;
+		String contentBgStyleAttr = this.contentBgStyle == null ? DEFAULT_CONTENT_BG_STYLE
+				: this.contentBgStyle;
+		String contentFontStyleAttr = this.contentFontStyle == null ? DEFAULT_CONTENT_FONT_STYLE
+				: this.contentFontStyle;
+		if (widthAttr == null) {
+			widthAttr = "";
+		} else {
+			widthAttr = "width=\"" + Utils.escapeXml(widthAttr.trim()) + "\" ";
+		}
+		if (borderStyleAttr == null) {
+			borderStyleAttr = "";
+		} else {
+			borderStyleAttr = "style=\""
+					+ Utils.escapeXml(borderStyleAttr.trim()) + "\" ";
+		}
+		if (titleBgStyleAttr == null) {
+			titleBgStyleAttr = "";
+		} else {
+			titleBgStyleAttr = "style=\""
+					+ Utils.escapeXml(titleBgStyleAttr.trim()) + "\" ";
+		}
+		if (titleFontStyleAttr == null) {
+			titleFontStyleAttr = "";
+		} else {
+			titleFontStyleAttr = "style=\""
+					+ Utils.escapeXml(titleFontStyleAttr.trim()) + "\" ";
+		}
+		if (contentBgStyleAttr == null) {
+			contentBgStyleAttr = "";
+		} else {
+			contentBgStyleAttr = "style=\""
+					+ Utils.escapeXml(contentBgStyleAttr.trim()) + "\" ";
+		}
+		if (contentFontStyleAttr == null) {
+			contentFontStyleAttr = "";
+		} else {
+			contentFontStyleAttr = "style=\""
+					+ Utils.escapeXml(contentFontStyleAttr.trim()) + "\" ";
+		}
+
 		// Generate the main HTML and event-handling code by assembling the
 		// pieces. First, assemble the event-handler script.
 
 		html.append("<script>\n");
-		if (link.startsWith("<img ")) {
+		if (link != null && link.startsWith("<img ")) {
 			// If the anchor text is an image tag, then don't need an
 			// anchor tag to surround it.
 			html.append("document.write('" + link + "');\n");
@@ -507,33 +717,46 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("id=\"" + id + "Help\" ");
 		html.append("onmousedown=\"grab(this)\" ");
 		html
-				.append("style=\"cursor:pointer;position:absolute;background-color:white;display:none;top:200px;left:200px;border: 1px solid black;\">\n");
-		html.append("<table width=300 cellpadding=2 cellspacing=0 border=0>\n");
-		html.append("<tr height=2 bgcolor=\"#0000FF\"><td colspan=3 /></tr>\n");
-		html.append("<tr valign=middle height=20>\n");
+				.append("style=\"cursor:pointer;position:absolute;background-color:white;display:none;top:200px;left:200px\">\n");
+		html.append("<table " + borderStyleAttr + widthAttr
+				+ "cellpadding=2 cellspacing=0>\n");
 		// Write title bar with title string and close button, with surrounding
 		// top and bottom cells for padding.
-		html.append("<td align=left bgcolor=\"#0000FF\" height=20>");
-		html.append("<font color=\"#FFFFFF\"><strong>&nbsp;"
-				+ escapeQuotes(title) + "</strong></font>");
+		html.append("<tr height=2><td " + titleBgStyleAttr
+				+ "colspan=4 /></tr>\n");
+		html.append("<tr valign=middle height=20>\n");
+		html.append("<td " + titleBgStyleAttr + ">&nbsp;</td>\n");
+		html.append("<td align=left " + titleBgStyleAttr + "height=20>");
+		if (!titleFontStyleAttr.equals("")) {
+			html.append("<font " + titleFontStyleAttr + ">");
+			html.append(title);
+			html.append("</font>");
+		} else {
+			html.append(title);
+		}
 		html.append("</td>\n");
-		html.append("<td bgcolor=\"#0000FF\">&nbsp;</td>");
-		html.append("<td bgcolor=\"#0000FF\">");
+		html.append("<td " + titleBgStyleAttr + ">&nbsp;</td>\n");
+		html.append("<td " + titleBgStyleAttr + ">");
 		html.append("<img id=\"" + id + "HelpClose\" ");
 		html.append("src=\"" + closeButtonUrl + "\" ");
 		html.append("style=\"cursor:pointer\" alt=\"" + closeButtonAlt + "\" ");
 		html
 				.append("width=\"15\" height=\"15\" align=right border=\"0\"/ ></td>\n");
-		// Right padding for button
 		html.append("</tr>\n");
-		html.append("<tr height=2 bgcolor=\"#0000FF\"><td colspan=3 /></tr>\n");
+		html.append("<tr height=2><td " + titleBgStyleAttr
+				+ "colspan=4 /></tr>\n");
 		html.append("<tr valign=top height=\"100%\">\n");
-		html.append("<td colspan=3>\n");
-		html.append("<table width=300 cellpadding=10 cellspacing=10>\n");
-		html.append("<tr><td align=left>\n");
+		html.append("<td " + contentBgStyleAttr + "colspan=4>\n");
 		// Write popup content
-		html.append("<p>");
-		html.append(escapeQuotes(help));
+		html.append("<table cellpadding=10 cellspacing=10>\n");
+		html.append("<tr><td align=left><p>");
+		if (!contentFontStyleAttr.equals("")) {
+			html.append("<font " + contentFontStyleAttr + ">");
+			html.append(help);
+			html.append("</font>");
+		} else {
+			html.append(help);
+		}
 		html.append("</p></td></tr>\n");
 		html.append("</table></td>\n");
 		html.append("</tr></table>\n");
@@ -608,33 +831,6 @@ public abstract class ClassicContextualHelpProvider extends
 	 * Different action for portal and portlet, so this is an abstract method.
 	 */
 	protected abstract String getCloseImageAlt();
-
-	/**
-	 * Returns the input string with all occurrences of the double-quote
-	 * character <code>"</code> replaced with the <code>\"</code> character
-	 * sequence.
-	 * 
-	 * @param input
-	 *            String
-	 * @return The string with escaped quotes
-	 */
-	private String escapeQuotes(String input) {
-
-		if (input == null)
-			return null;
-		StringBuffer buffer = new StringBuffer();
-		StringTokenizer st = new StringTokenizer(input, "\"", true);
-
-		while (st.hasMoreTokens()) {
-			String token = st.nextToken();
-			if (token.equals("\"")) {
-				buffer.append("\\\"");
-			} else {
-				buffer.append(token);
-			}
-		}
-		return buffer.toString();
-	}
 
 	/**
 	 * <p>

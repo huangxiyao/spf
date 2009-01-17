@@ -58,6 +58,67 @@ import com.hp.it.spf.xa.help.ClassicContextualHelpProvider;
  * this attribute.
  * </p>
  * </li>
+ * <li>
+ * <p>
+ * The <code>width="<i>width</i>"</code> attribute gives the width to use
+ * for the contextual help popup. This is specified in pixels. The default is
+ * 300.
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * The <code>borderStyle="<i>border-style</i>"</code> attribute gives the
+ * style to use for the contextual help popup border. This is specified using
+ * CSS properties. You may use any properties which are valid border properties
+ * for the HTML <code>&lt;TABLE&gt;</code> tag. For example,
+ * <code>borderStyle="border-width:1px;border-style:solid;border-color:black"</code>
+ * (which is also the default: a thin solid black line).
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * The <code>titleBgStyle="<i>title-background-style</i>"</code> attribute
+ * gives the style to use for the contextual help title background. This is
+ * specified using CSS properties. You may use any properties which are valid
+ * background properties for the HTML <code>&lt;TD&gt;</code> tag. For
+ * example, <code>titleBgStyle="background-color:blue"</code> (which is also
+ * the default: a blue background).
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * The <code>titleFontStyle="<i>title-font-style</i>"</code> attribute gives
+ * the style to use for the contextual help title content. This is specified
+ * using CSS properties. You may use any properties which are valid for the HTML
+ * <code>&lt;FONT&gt;</code> tag. For example,
+ * <code>titleFontStyle="color:white;font-weight:bold"</code> (which is also
+ * the default: bold white text). (<b>Note:</b> This attribute is not the only
+ * way to specify title font styles; you can just embed your desired font (and
+ * other) effects in the title content string itself.)
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * The <code>contentBgStyle="<i>help-content-background-style</i>"</code>
+ * attribute gives the style to use for the contextual help content background.
+ * This is specified using CSS properties. You may use any properties which are
+ * valid background properties for the HTML <code>&lt;TD&gt;</code> tag. For
+ * example, <code>titleBgStyle="background-color:white"</code> (which is also
+ * the default: a white background).
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * The <code>contentFontStyle="<i>help-content-font-style</i>"</code>
+ * attribute gives the style to use for the contextual help content. This is
+ * specified using CSS properties. You may use any properties which are valid
+ * for the HTML <code>&lt;FONT&gt;</code> tag. For example,
+ * <code>contentFontStyle="color:black"</code> (which is also the default:
+ * black text). (<b>Note:</b> This attribute is not the only way to specify
+ * content font styles; you can just embed your desired font (and other) effects
+ * in the help content string itself.)
+ * </p>
+ * </li>
  * </ul>
  * <p>
  * As noted above, this tag is for the classic-style rendering of contextual
@@ -95,6 +156,36 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	 * Stores the value of the <code>noScriptHref</code> attribute.
 	 */
 	protected String noScriptHref;
+
+	/**
+	 * Stores the value of the <code>width</code> attribute.
+	 */
+	protected String width;
+
+	/**
+	 * Stores the value of the <code>borderStyle</code> attribute.
+	 */
+	protected String borderStyle;
+
+	/**
+	 * Stores the value of the <code>titleBgStyle</code> attribute.
+	 */
+	protected String titleBgStyle;
+
+	/**
+	 * Stores the value of the <code>titleFontStyle</code> attribute.
+	 */
+	protected String titleFontStyle;
+
+	/**
+	 * Stores the value of the <code>contentBgStyle</code> attribute.
+	 */
+	protected String contentBgStyle;
+
+	/**
+	 * Stores the value of the <code>contentFontStyle</code> attribute.
+	 */
+	protected String contentFontStyle;
 
 	/**
 	 * Get the value of the <code>title</code> attribute.
@@ -170,6 +261,120 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 	}
 
 	/**
+	 * Get the value of the <code>width</code> attribute.
+	 * 
+	 * @return The <code>width</code> attribute.
+	 */
+	public String getWidth() {
+		return width;
+	}
+
+	/**
+	 * Set the value from the <code>width</code> attribute.
+	 * 
+	 * @param value
+	 *            The <code>width</code> attribute.
+	 */
+	public void setWidth(String value) {
+		this.width = normalize(value);
+	}
+
+	/**
+	 * Get the value of the <code>borderStyle</code> attribute.
+	 * 
+	 * @return The <code>borderStyle</code> attribute.
+	 */
+	public String getBorderStyle() {
+		return borderStyle;
+	}
+
+	/**
+	 * Set the value from the <code>borderStyle</code> attribute.
+	 * 
+	 * @param value
+	 *            The <code>borderStyle</code> attribute.
+	 */
+	public void setBorderStyle(String value) {
+		this.borderStyle = normalize(value);
+	}
+
+	/**
+	 * Get the value of the <code>titleBgStyle</code> attribute.
+	 * 
+	 * @return The <code>titleBgStyle</code> attribute.
+	 */
+	public String getTitleBgStyle() {
+		return titleBgStyle;
+	}
+
+	/**
+	 * Set the value from the <code>titleBgStyle</code> attribute.
+	 * 
+	 * @param value
+	 *            The <code>titleBgStyle</code> attribute.
+	 */
+	public void setTitleBgStyle(String value) {
+		this.titleBgStyle = normalize(value);
+	}
+
+	/**
+	 * Get the value of the <code>titleFontStyle</code> attribute.
+	 * 
+	 * @return The <code>titleFontStyle</code> attribute.
+	 */
+	public String getTitleFontStyle() {
+		return titleFontStyle;
+	}
+
+	/**
+	 * Set the value from the <code>titleFontStyle</code> attribute.
+	 * 
+	 * @param value
+	 *            The <code>titleFontStyle</code> attribute.
+	 */
+	public void setTitleFontStyle(String value) {
+		this.titleFontStyle = normalize(value);
+	}
+
+	/**
+	 * Get the value of the <code>contentBgStyle</code> attribute.
+	 * 
+	 * @return The <code>contentBgStyle</code> attribute.
+	 */
+	public String getContentBgStyle() {
+		return contentBgStyle;
+	}
+
+	/**
+	 * Set the value from the <code>contentBgStyle</code> attribute.
+	 * 
+	 * @param value
+	 *            The <code>contentBgStyle</code> attribute.
+	 */
+	public void setContentBgStyle(String value) {
+		this.contentBgStyle = normalize(value);
+	}
+
+	/**
+	 * Get the value of the <code>contentFontStyle</code> attribute.
+	 * 
+	 * @return The <code>contentFontStyle</code> attribute.
+	 */
+	public String getContentFontStyle() {
+		return contentFontStyle;
+	}
+
+	/**
+	 * Set the value from the <code>contentFontStyle</code> attribute.
+	 * 
+	 * @param value
+	 *            The <code>contentFontStyle</code> attribute.
+	 */
+	public void setContentFontStyle(String value) {
+		this.contentFontStyle = normalize(value);
+	}
+
+	/**
 	 * Initialize the tag attributes.
 	 */
 	public ClassicContextualHelpParamBaseTag() {
@@ -177,6 +382,12 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 		title = null;
 		titleKey = null;
 		noScriptHref = null;
+		width = null;
+		borderStyle = null;
+		titleBgStyle = null;
+		titleFontStyle = null;
+		contentBgStyle = null;
+		contentFontStyle = null;
 	}
 
 	/**
@@ -208,6 +419,16 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 		c.setHelpContent(actualContent);
 		c.setTitleContent(actualTitle);
 		c.setNoScriptHref(noScriptHref);
+		c.setBorderStyle(borderStyle);
+		c.setTitleBgStyle(titleBgStyle);
+		c.setTitleFontStyle(titleFontStyle);
+		c.setContentBgStyle(contentBgStyle);
+		c.setContentFontStyle(contentFontStyle);
+		try {
+			c.setWidth(Integer.parseInt(width));
+		} catch (NumberFormatException e) {
+			// leave unset in case of bad value
+		}
 		return c;
 	}
 
