@@ -107,7 +107,7 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 		if (actualContent == null) {
 			actualContent = getMessage(contentKey);
 		}
-		return actualContent;
+		return normalize(actualContent);
 	}
 
 	/**

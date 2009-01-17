@@ -110,7 +110,7 @@ public abstract class ContextualHelpBaseTag extends HelpBaseTag {
 		if (actualContent == null) {
 			actualContent = getMessage(contentKey);
 		}
-		return actualContent;
+		return normalize(actualContent);
 	}
 
 	/**

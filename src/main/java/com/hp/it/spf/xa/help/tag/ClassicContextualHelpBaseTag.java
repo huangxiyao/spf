@@ -370,7 +370,7 @@ public abstract class ClassicContextualHelpBaseTag extends
 		if (actualTitle == null) {
 			actualTitle = getMessage(titleKey);
 		}
-		return actualTitle;
+		return normalize(actualTitle);
 	}
 
 	/**
