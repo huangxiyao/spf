@@ -5,20 +5,9 @@
 	<display-name>HTMLViewer</display-name>
 
 	<description>
-		This is a Portlet Web Application which contains the Shared
-		Portal Framework HTMLViewer portlet.
+		This is a WPAP/Spring portlet application which contains the
+		Shared Portal Framework HTMLViewer portlet.
 	</description>
-
-	<!-- ADDED BY VIGNETTE PORTLET PACKAGING TOOL.  DO NOT EDIT -->
-	<context-param>
-		<param-name>contextPath</param-name>
-		<param-value>portlet_htmlviewer</param-value>
-		<description>
-			The context root to which this web application is deployed.
-			Used by the Portal JSR 168 implementation.
-		</description>
-	</context-param>
-	<!-- END THIS VIGNETTE PACKAGING TOOL ADDITION. -->
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -27,39 +16,18 @@
 		</param-value>
 	</context-param>
 
-	<!-- ADDED BY VIGNETTE PORTLET PACKAGING TOOL.  DO NOT EDIT -->
-	<listener>
-		<listener-class>
-			com.vignette.portal.portlet.jsrcontainer.PortletApplicationServletContextListener
-		</listener-class>
-	</listener>
-	<!-- END THIS VIGNETTE PACKAGING TOOL ADDITION. -->
-
 	<listener>
 		<listener-class>
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
 
-	<!-- ADDED BY VIGNETTE PORTLET PACKAGING TOOL.  DO NOT EDIT -->
-	<servlet>
-		<servlet-name>PortletCommandServlet</servlet-name>
-		<display-name>Portlet Command Servlet</display-name>
-		<description>
-			Utilized by Portal to invoke JSR 168 portlets
-		</description>
-		<servlet-class>
-			com.vignette.portal.portlet.jsrcontainer.PortletCommandServlet
-		</servlet-class>
-	</servlet>
-	<!-- END THIS VIGNETTE PACKAGING TOOL ADDITION. -->
-
+	<!-- The WPAP log configuration servlet -->
 	<servlet>
 		<servlet-name>LogConfigServlet</servlet-name>
 		<servlet-class>
 			com.hp.frameworks.wpa.portlet.logging.WPALogConfigServlet
 		</servlet-class>
-
 		<!-- logRoot should be the realpath,For windows,should be C:/...,
 			For Unix should be /rootpath/...-->
 		<init-param>
@@ -69,10 +37,10 @@
 				The root path for the HTMLViewer portlet log files.
 			</description>
 		</init-param>
-
 		<load-on-startup>0</load-on-startup>
 	</servlet>
 
+	<!-- The Spring view renderer servlet, for helping Spring portlet render views (eg JSP) -->
 	<servlet>
 		<servlet-name>ViewRendererServlet</servlet-name>
 		<servlet-class>
@@ -80,18 +48,20 @@
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-
-
-	<!-- ADDED BY VIGNETTE PORTLET PACKAGING TOOL.  DO NOT EDIT -->
-	<servlet-mapping>
-		<servlet-name>PortletCommandServlet</servlet-name>
-		<url-pattern>/portletCommand/*</url-pattern>
-	</servlet-mapping>
-	<!-- END THIS VIGNETTE PACKAGING TOOL ADDITION. -->
-
 	<servlet-mapping>
 		<servlet-name>ViewRendererServlet</servlet-name>
 		<url-pattern>/WEB-INF/servlet/view</url-pattern>
 	</servlet-mapping>
 
+	<!-- The SPF file-relay servlet, for hosting file-download from the portlet bundle directory -->
+	<servlet>
+		<servlet-name>FileRelayServlet</servlet-name>
+		<servlet-class>
+			com.hp.it.spf.xa.relay.servlet.RelayServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FileRelayServlet</servlet-name>
+		<url-pattern>/relay/*</url-pattern>
+	</servlet-mapping>
 </web-app>
