@@ -51,15 +51,16 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static final String PORTLET_I18N_CONFIG_PROP_BUNDLE_DIR = "portlet.bundleDirectory";
 	public static final String PORTLET_I18N_CONFIG_PROP_RELAY_URL = "servlet.fileRelay.url";
-	public static final String PORTLET_I18N_CONFIG_PROP_RELAY_IS_PORTLET = "servlet.fileRelay.isPortletResource";
 
 	/**
 	 * The default URL for the relay servlet.
 	 */
-	private static final String RELAY_PATH_DEFAULT = "/relay";
-	private static final String RELAY_IS_PORTLET = "yes";
-	private static final String RELAY_IS_NOT_PORTLET = "no";
-	private static final String RELAY_IS_PORTLET_DEFAULT = RELAY_IS_PORTLET;
+	public static final String RELAY_PATH_DEFAULT = "/relay";
+
+	/**
+	 * The default portlet resource bundle directory.
+	 */
+	public static final String BUNDLE_DIR_DEFAULT = "/opt/sasuapps/spf/globalResources/portlet/i18n";
 
 	/**
 	 * Logger instance.
@@ -69,18 +70,13 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	/**
 	 * Relay servlet name (actual value is configured in property file).
 	 */
-	private static String relayServletUrl = RELAY_PATH_DEFAULT;
-
-	/**
-	 * Is the relay servlet a portlet resource.
-	 */
-	private static String relayServletIsPortlet = RELAY_IS_PORTLET_DEFAULT;
+	private static String relayServletURL = RELAY_PATH_DEFAULT;
 
 	/**
 	 * Portlet resource bundle directory (actual value is configured in property
 	 * file).
 	 */
-	private static String resourceBundleDir = null;
+	private static String resourceBundleDir = BUNDLE_DIR_DEFAULT;
 
 	/**
 	 * Static block to initialize relay servlet info and portlet resource bundle
@@ -90,48 +86,39 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		ResourceBundle bundle = PropertyResourceBundleManager
 				.getBundle(PORTLET_I18N_CONFIG_FILE);
 		if (bundle == null) {
-			logger.error("I18nUtility: Failed to open "
+			logger.warn("I18nUtility: Failed to open "
 					+ PORTLET_I18N_CONFIG_FILE + " file");
-			relayServletUrl = RELAY_PATH_DEFAULT;
-			relayServletIsPortlet = RELAY_IS_PORTLET_DEFAULT;
-			resourceBundleDir = null;
+			relayServletURL = RELAY_PATH_DEFAULT;
+			resourceBundleDir = BUNDLE_DIR_DEFAULT;
 		} else {
 			try {
 				resourceBundleDir = "/"
 						+ bundle.getString(PORTLET_I18N_CONFIG_PROP_BUNDLE_DIR)
 						+ "/";
-				resourceBundleDir = slashify(resourceBundleDir);
 			} catch (Exception ex) { // error if prop not exist
 				logger
-						.error("I18nUtility: Required property "
+						.warn("I18nUtility: property "
 								+ PORTLET_I18N_CONFIG_PROP_BUNDLE_DIR
-								+ " missing from " + PORTLET_I18N_CONFIG_FILE
+								+ " not found in " + PORTLET_I18N_CONFIG_FILE
 								+ " file");
-				logger.error("I18nUtility: " + ex.getMessage());
-				resourceBundleDir = null;
+				logger.warn("I18nUtility: " + ex.getMessage());
+				resourceBundleDir = BUNDLE_DIR_DEFAULT;
 			}
 			try {
-				relayServletUrl = "/"
+				relayServletURL = "/"
 						+ bundle.getString(PORTLET_I18N_CONFIG_PROP_RELAY_URL)
 						+ "/";
-				relayServletUrl = slashify(relayServletUrl);
-			} catch (Exception ex) { // not an error if prop not exist
-				relayServletUrl = RELAY_PATH_DEFAULT;
-			}
-			try {
-				relayServletIsPortlet = bundle
-						.getString(PORTLET_I18N_CONFIG_PROP_RELAY_IS_PORTLET);
-				if (relayServletIsPortlet.equalsIgnoreCase("yes")
-						|| relayServletIsPortlet.equalsIgnoreCase("true")
-						|| relayServletIsPortlet.equalsIgnoreCase("")) {
-					relayServletIsPortlet = RELAY_IS_PORTLET;
-				} else {
-					relayServletIsPortlet = RELAY_IS_NOT_PORTLET;
-				}
-			} catch (Exception ex) { // not an error if prop not exist
-				relayServletIsPortlet = RELAY_IS_PORTLET_DEFAULT;
+				relayServletURL = slashify(relayServletURL);
+			} catch (Exception ex) {
+				logger.warn("I18nUtility: property "
+						+ PORTLET_I18N_CONFIG_PROP_RELAY_URL + " not found in "
+						+ PORTLET_I18N_CONFIG_FILE + " file");
+				logger.warn("I18nUtility: " + ex.getMessage());
+				relayServletURL = RELAY_PATH_DEFAULT;
 			}
 		}
+		resourceBundleDir = slashify(resourceBundleDir);
+		relayServletURL = slashify(relayServletURL);
 	}
 
 	/**
@@ -560,7 +547,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		// encoded resource URL pointing to the given base filename inside the
 		// portlet application, by default.
 		if (fileName != null) {
-			return getFileRelayURL(pResp, fileName);
+			return getFileRelayURL(pReq, pResp, fileName);
 		} else {
 			fileName = getLocalizedFileName(pReq, pBaseFileName, pReq
 					.getLocale(), pLocalized);
@@ -682,7 +669,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 				&& (fileName.length() > 0)) {
 			fileName = slashify(fileName);
 			if (fileExists(resourceBundleDir, fileName)) {
-				return getFileRelayURL(pResp, fileName);
+				return getFileRelayURL(pReq, pResp, fileName);
 			} else {
 				return pResp.encodeURL(fileName);
 			}
@@ -1205,24 +1192,32 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            path.
 	 * @return The file-relay URL, ready for emitting to the end-user browser.
 	 */
-	public static String getFileRelayURL(PortletResponse response,
-			String fileName) {
-		if (fileName == null || relayServletUrl == null
-				|| relayServletIsPortlet == null) {
+	public static String getFileRelayURL(PortletRequest request,
+			PortletResponse response, String fileName) {
+		if (fileName == null || relayServletURL == null || request == null
+				|| response == null) {
 			return null;
 		}
 		fileName = fileName.trim();
 		if (fileName.equals("")) {
 			return null;
 		}
-		String url = null;
-		if (response != null && relayServletUrl.startsWith("/")
-				&& relayServletIsPortlet.equals(RELAY_IS_PORTLET)) {
-			url = response
-					.encodeURL(slashify(relayServletUrl + "/" + fileName));
-		} else {
-			url = slashify(relayServletUrl + "/" + fileName);
+		PortletContext context = request.getPortletSession()
+				.getPortletContext();
+
+		// If the configured relay URL is relative and exists inside the current
+		// portlet application, then encode and return it. Otherwise just return
+		// it unencoded (so it could be a portal-relative URL instead of a
+		// portlet URL in that case, or it could be another absolute URL
+		// entirely). In either case, attach the filename as additional path.
+		try {
+			if ((relayServletURL.startsWith("/"))
+					&& (context.getResource(relayServletURL) != null)) {
+				return response.encodeURL(slashify(relayServletURL + "/"
+						+ fileName));
+			}
+		} catch (MalformedURLException e) {
 		}
-		return url;
+		return (slashify(relayServletURL + "/" + fileName));
 	}
 }
