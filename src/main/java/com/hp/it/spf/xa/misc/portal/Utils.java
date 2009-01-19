@@ -5,6 +5,9 @@
  */
 package com.hp.it.spf.xa.misc.portal;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Enumeration;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -370,7 +373,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 *            The cookie path.
 	 * @param maxAge
 	 *            The cookie expiration timer (negative for session cookie).
-	 * @return
+	 * @return The new cookie.
 	 */
 	public static Cookie newCookie(String name, String value, String domain,
 			String path, int maxAge) {
@@ -385,4 +388,119 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		return cookie;
 	}
 
+	/**
+	 * Returns an absolute URL for the given request. This includes the hostname
+	 * and port used by the browser, the path (including context root path,
+	 * context relative path, and any additional path) and the form parameters
+	 * (attached as a query string regardless of whether they were submitted in
+	 * a query string via GET, or in the request body via POST). This method
+	 * returns null given a null request.
+	 * 
+	 * @param request
+	 *            The current request.
+	 * @return The URL in string form.
+	 */
+	public static String getRequestURL(HttpServletRequest request) {
+		if (request == null) {
+			return null;
+		}
+		String url = "";
+		Enumeration params;
+		String[] values;
+		String scheme, hostAndPort, host, context, path, info, query, name, value;
+		int port, i;
+
+		// We could probably use request.getRequestURL for most of the below,
+		// but to ensure we get the URL in the form we want, we will piece it
+		// together using the more granular API's instead.
+		// First get the scheme used by the browser: http or https
+		scheme = request.getScheme();
+		if (scheme == null)
+			scheme = "http";
+		scheme = scheme.toLowerCase();
+
+		// Next get the host and port used by the browser. This comes from the
+		// Host header which should always be present (otherwise it is assumed
+		// to be the current server name and port). The Host header should
+		// contain the hostname plus any non-standard port; use the non-standard
+		// port if found, otherwise use the default port.
+		hostAndPort = request.getHeader("Host");
+		if (hostAndPort == null) {
+			host = request.getServerName();
+			port = request.getServerPort();
+		} else {
+			if ((i = hostAndPort.indexOf(":")) != -1) {
+				host = hostAndPort.substring(0, i);
+				if (i < hostAndPort.length() - 1) {
+					try {
+						port = Integer.parseInt(hostAndPort.substring(i + 1));
+					} catch (NumberFormatException e) {
+						port = 0;
+					}
+				} else {
+					port = 0;
+				}
+			} else {
+				host = hostAndPort;
+				port = 0;
+			}
+		}
+		host = host.toLowerCase();
+		if (scheme.equals("http") && (port == 80))
+			port = 0;
+		if (scheme.equals("https") && (port == 443))
+			port = 0;
+		hostAndPort = host;
+		if (port > 0)
+			hostAndPort += ":" + port;
+
+		// Next get the root path.
+		context = request.getContextPath();
+		if (context == null)
+			context = "";
+
+		// Next get the path.
+		path = request.getServletPath();
+		if (path == null)
+			path = "";
+
+		// Next get any additional path info.
+		info = request.getPathInfo();
+		if (info == null)
+			info = "";
+
+		// Lastly get the query string. In the case of a GET, this basically
+		// just builds a duplicate query string. In the case of a POST, any
+		// POST'ed request parameters are copied into the query string too, so
+		// that the returned URL stands a better chance of accurately reflecting
+		// the whole original request.
+		query = "";
+		params = request.getParameterNames();
+		if (params != null) {
+			while (params.hasMoreElements()) {
+				name = (String) params.nextElement();
+				values = request.getParameterValues(name);
+				if (values != null) {
+					for (i = 0; i < values.length; i++) {
+						value = values[i];
+						if (!"".equals(query))
+							query += "&";
+						try {
+							query += URLEncoder.encode(name, "UTF-8");
+							query += "=";
+							query += URLEncoder.encode(value, "UTF-8");
+						} catch (UnsupportedEncodingException e) {
+							// should never happen
+						}
+					}
+				}
+			}
+		}
+		if (!"".equals(query))
+			query = "?" + query;
+
+		// Now put the redirect URL together.
+		url = scheme + "://" + hostAndPort + context + path + info + query;
+		return url;
+	}
 }
