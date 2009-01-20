@@ -39,6 +39,13 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String REQUEST_ATTR_GLOBAL_HELP_DATA = "SPF_GLOBAL_HELP_DATA";
 
 	/**
+	 * The "resume" URL to be presented to the user in the federated logout
+	 * confirmation page. Set by the secondary page type action for use by the
+	 * secondary page JSP.
+	 */
+	public static final String REQUEST_ATTR_FED_LOGOUT_RESUME_URL = "SPF_FED_LOGOUT_RESUME_URL";
+
+	/**
 	 * The name of the session attribute storing portal pulse data. Set by the
 	 * secondary page type action for use by the secondary page JSP.
 	 */
@@ -125,5 +132,5 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 */
 	public final static String LOCALE_SELECTOR_INPUT_NAME = "spfSelectedLocale";
 	public final static String LOCALE_SELECTOR_TARGET_NAME = "spfLocaleSelectorTarget";
-	
+
 }
