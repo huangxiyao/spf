@@ -17,13 +17,14 @@
 
 <portlet:defineObjects />
 <jsp:scriptlet>
-	String pathToImages = (String)renderRequest.getContextPath() + "/css/html_viewer.css";
+	String pathToCSS = (String)renderRequest.getContextPath() + "/css/html_viewer.css";
+	String errorCode = (String)renderRequest.getParameter(Consts.ERROR_CODE);
 </jsp:scriptlet>
 
 <%---------------------------------------------------------------- MARKUP ---%>
 
 <link
-	href="<%= renderResponse.encodeURL(pathToImages) %>/css/html_viewer.css"
+	href="<%= renderResponse.encodeURL(pathToCSS) %>"
 	rel="stylesheet" type="text/css">
 <table>
 	<tbody>
@@ -31,8 +32,10 @@
 			<td><spf-i18n-portlet:message key="<%= Consts.ERROR_CODE_INTERNAL %>.message" /></td>
 		</tr>
 		<tr>
-			<td>(<spf-i18n-portlet:message key="error.code.message" /> <c:out
-				value="${exception.errorCode}"></c:out>)</td>
+			<td><spf-i18n-portlet:message key="error.code.message">
+					<spf-i18n-portlet:param value="<%= errorCode %>" />
+				</spf-i18n-portlet:message>
+			</td>
 		</tr>
 	</tbody>
 </table>

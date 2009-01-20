@@ -16,13 +16,12 @@
 
 <portlet:defineObjects/>
 <jsp:scriptlet>
-	String pathToImages = (String) renderRequest.getContextPath() + "/css/html_viewer.css";
+	String pathToCSS = (String) renderRequest.getContextPath() + "/css/html_viewer.css";
 </jsp:scriptlet>
 
 <%---------------------------------------------------------------- MARKUP ---%>
 
-<link href="<%= renderResponse.encodeURL(pathToImages) %>" rel="stylesheet"
-	type="text/css">
+<link href="<%= renderResponse.encodeURL(pathToCSS) %>" rel="stylesheet" type="text/css">
 <c:if test="${! empty errorMessage }">
 	<span class="fs-htmlviewer-error-message">
 		<%= renderRequest.getAttribute(Consts.ERROR_MESSAGE) %>
