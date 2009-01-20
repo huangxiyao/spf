@@ -74,6 +74,8 @@ public class GlobalHelpDisplayAction extends BaseAction {
 			String baseName = null;
 			String helpContent = null;
 
+			LOG.info("GlobalHelpDisplayAction: invoked.");
+
 			// First look for site-specific global help file.
 			baseName = portalContext.getCurrentSite().getDNSName()
 					+ SITE_GLOBAL_HELP_BASE_NAME_SUFFIX;
@@ -82,6 +84,9 @@ public class GlobalHelpDisplayAction extends BaseAction {
 
 			// If the content is not null or blank, then store into request
 			if (helpContent != null && helpContent.trim().length() > 0) {
+				LOG
+						.info("GlobalHelpDisplayAction: rendering content from proper localized version of "
+								+ baseName + " secondary support file.");
 				request.setAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA,
 						helpContent);
 			} else {
@@ -93,6 +98,10 @@ public class GlobalHelpDisplayAction extends BaseAction {
 
 				// If the content is not null or blank, then store into request.
 				if (helpContent != null && helpContent.trim().length() > 0) {
+					LOG
+							.info("GlobalHelpDisplayAction: rendering content from proper localized version of "
+									+ GLOBAL_HELP_BASE_NAME
+									+ " secondary support file.");
 					request.setAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA,
 							helpContent);
 				} else {
@@ -104,10 +113,10 @@ public class GlobalHelpDisplayAction extends BaseAction {
 									+ " secondary support files are empty or not found in this component.");
 				}
 			}
-			// Redirect to primary JSP
+			// Redirect null so action will forward normally to view
 			return null;
 		} catch (Exception ex) {
-			// Redirect to system error page
+			// Redirect to system error page if anything unusual happens
 			LOG.error("GlobalHelpDisplayAction error: " + ex);
 			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
 					null, null);
