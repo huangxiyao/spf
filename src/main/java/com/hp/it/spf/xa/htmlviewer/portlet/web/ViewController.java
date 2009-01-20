@@ -14,6 +14,7 @@ import com.hp.it.spf.xa.htmlviewer.portlet.exception.InternalErrorException;
 import com.hp.it.spf.xa.htmlviewer.portlet.util.Consts;
 import com.hp.it.spf.xa.htmlviewer.portlet.util.Utils;
 import com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController;
+import com.hp.websat.timber.logging.Log;
 
 /**
  * The controller class for view mode of the HTMLViewer portlet. HTMLViewer is a
@@ -86,10 +87,15 @@ public class ViewController extends FileInterpolatorController {
 	 */
 	protected ModelAndView execute(RenderRequest request,
 			RenderResponse response, String fileContent) throws Exception {
+
+		Log.logInfo(this, "ViewController: render phase invoked.");
 		if (fileContent != null) {
 			fileContent = fileContent.trim();
 		}
 		if (fileContent == null || fileContent.length() == 0) {
+			Log
+					.logError(this,
+							"ViewController: content is not found or empty.");
 			throw new InternalErrorException(Consts.ERROR_CODE_FILE_NULL);
 		}
 
@@ -98,8 +104,13 @@ public class ViewController extends FileInterpolatorController {
 		PortletPreferences pp = request.getPreferences();
 		String buttonLess = pp.getValue(Consts.LAUNCH_BUTTONLESS, null);
 		if (buttonLess != null && buttonLess.equals("true")) {
+			Log
+					.logInfo(
+							this,
+							"ViewController: enable buttonless child window launch for content-embedded hyperlinks.");
 			modelView.addObject(Consts.LAUNCH_BUTTONLESS, "true");
-			fileContent = Utils.addButtonlessChildLauncher(response, fileContent);
+			fileContent = Utils.addButtonlessChildLauncher(response,
+					fileContent);
 		}
 
 		// Set the file content to display into the model.

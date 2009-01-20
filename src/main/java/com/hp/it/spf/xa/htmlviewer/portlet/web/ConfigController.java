@@ -17,6 +17,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
 import com.hp.it.spf.xa.htmlviewer.portlet.exception.InputErrorException;
 import com.hp.it.spf.xa.htmlviewer.portlet.util.Consts;
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+import com.hp.websat.timber.logging.Log;
 
 /**
  * The controller class for config mode of the HTMLViewer portlet. HTMLViewer is
@@ -66,6 +67,7 @@ public class ConfigController extends AbstractController {
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 
+		Log.logInfo(this, "ConfigController: render phase invoked.");
 		PortletPreferences pp = request.getPreferences();
 		ModelAndView modelView = new ModelAndView(viewName);
 		modelView.addObject(Consts.VIEW_FILENAME, pp.getValue(
@@ -94,15 +96,29 @@ public class ConfigController extends AbstractController {
 	 */
 	protected void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
+
+		Log.logInfo(this, "ConfigController: action phase invoked.");
 		try {
 			String viewFile = request.getParameter(Consts.VIEW_FILENAME);
 			String buttonLess = request.getParameter(Consts.LAUNCH_BUTTONLESS);
 
 			if (viewFile == null || viewFile.trim().length() == 0) {
-				throw new InputErrorException(Consts.ERROR_CODE_VIEW_FILENAME_NULL);
+				// use info logging as this is a user error only, not a system
+				// error
+				Log
+						.logInfo(this,
+								"ConfigController: view filename from form is null or empty.");
+				throw new InputErrorException(
+						Consts.ERROR_CODE_VIEW_FILENAME_NULL);
 			}
 			if ((viewFile.indexOf("/") != -1) || (viewFile.indexOf("\\")) != -1) {
-				throw new InputErrorException(Consts.ERROR_CODE_VIEW_FILENAME_PATH);
+				// use info logging as this is a user error only, not a system
+				// error
+				Log
+						.logInfo(this,
+								"ConfigController: view filename from form contains path information.");
+				throw new InputErrorException(
+						Consts.ERROR_CODE_VIEW_FILENAME_PATH);
 			}
 
 			if (buttonLess != null
@@ -116,6 +132,10 @@ public class ConfigController extends AbstractController {
 			pp.setValue(Consts.VIEW_FILENAME, viewFile);
 			pp.setValue(Consts.LAUNCH_BUTTONLESS, buttonLess);
 			pp.store();
+			Log.logInfo(this,
+					"ConfigController: preferences saved: view filename: "
+							+ viewFile + "; launch buttonless child window: "
+							+ buttonLess);
 		} catch (InputErrorException e) {
 			response.setRenderParameter(Consts.ERROR_CODE, e.getErrorCode());
 		}
