@@ -14,6 +14,7 @@ import com.vignette.portal.website.enduser.PortalContext;
 import com.vignette.portal.website.enduser.PortalURI;
 import com.vignette.portal.website.enduser.components.BaseAction;
 
+import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.misc.portal.Consts;
 
 /**
@@ -46,28 +47,39 @@ public class SelectLocaleRedirectProcessAction extends BaseAction {
 	 */
 	public PortalURI execute(PortalContext portalContext) {
 
-		HttpServletRequest request = portalContext.getPortalRequest()
-				.getRequest();
-		HttpServletResponse response = portalContext.getPortalResponse()
-				.getResponse();
-
-		String redirectUrl = (String) request
-				.getParameter(Consts.LOCALE_SELECTOR_TARGET_NAME);
-
-		// if the target url is absent,use the HTTP referer header
-		if (redirectUrl == null || redirectUrl.trim().equals("")) {
-			redirectUrl = request.getHeader("Referer");
-		}
-		// not sure why we need to do this - therefore leaving it in
-		redirectUrl = this.filterUrlLocaleParams(redirectUrl);
-
-		LOG.info("Locale selector: redirecting to target URL: " + redirectUrl);
 		try {
-			response.sendRedirect(redirectUrl);
-		} catch (IOException ex) {
-			LOG.error("Redirect failed!  More detail: " + ex);
+			HttpServletRequest request = portalContext.getPortalRequest()
+					.getRequest();
+			HttpServletResponse response = portalContext.getPortalResponse()
+					.getResponse();
+
+			String redirectUrl = (String) request
+					.getParameter(Consts.LOCALE_SELECTOR_TARGET_NAME);
+
+			// if the target url is absent,use the HTTP referer header
+			if (redirectUrl == null || redirectUrl.trim().equals("")) {
+				redirectUrl = request.getHeader("Referer");
+			}
+			// not sure why we need to do this - therefore leaving it in
+			redirectUrl = this.filterUrlLocaleParams(redirectUrl);
+
+			LOG.info("SelectLocaleRedirectProcessAction: redirecting to target URL: "
+					+ redirectUrl);
+			try {
+				response.sendRedirect(redirectUrl);
+			} catch (IOException ex) {
+				LOG.error("SelectLocaleRedirectProcessAction: Redirect failed!  More detail: " + ex);
+			}
+
+			// return null so process will continue normally (redirect having
+			// already been set in the response, above)
+			return null;
+		} catch (Exception ex) {
+			// redirect to system error page if anything unusual happens
+			LOG.error("SelectLocaleRedirectProcessAction error: " + ex);
+			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
+					null, null);
 		}
-		return null;
 	}
 
 	/**

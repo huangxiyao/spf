@@ -16,6 +16,7 @@ import com.hp.globalops.hppcbl.passport.PassportService;
 import com.hp.globalops.hppcbl.passport.PassportServiceException;
 import com.hp.globalops.hppcbl.passport.beans.Fault;
 import com.hp.globalops.hppcbl.webservice.ProfileCore;
+import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
@@ -60,73 +61,92 @@ public class SelectLocaleProcessAction extends BaseAction {
 	 */
 	public PortalURI execute(PortalContext portalContext) {
 
-		boolean sFlag = true; // indicate whether the whole process is success
-		// or not
-		HttpServletRequest request = portalContext.getPortalRequest()
-				.getRequest();
-		HttpServletResponse response = portalContext.getPortalResponse()
-				.getResponse();
+		try {
+			boolean sFlag = true; // indicate whether the whole process is
+			// success
+			// or not
+			HttpServletRequest request = portalContext.getPortalRequest()
+					.getRequest();
+			HttpServletResponse response = portalContext.getPortalResponse()
+					.getResponse();
 
-		// get locale selected by user from request object
-		String localeStr = (String) request
-				.getParameter(Consts.LOCALE_SELECTOR_INPUT_NAME);
+			// get locale selected by user from request object
+			String localeStr = (String) request
+					.getParameter(Consts.LOCALE_SELECTOR_INPUT_NAME);
 
-		// convert to locale Object
-		Locale plocale = I18nUtility.languageTagToLocale(localeStr);
+			// convert to locale Object
+			Locale plocale = I18nUtility.languageTagToLocale(localeStr);
 
-		LOG.info("Locale selector: Requested to set new locale: " + plocale);
-		if (isAvailableLocale(request, plocale)) {
-			// set locale into the request
-			LOG.info("Updating user's locale into request for Vignette.");
-			boolean setLocaleFlag = I18nUtility.setLocale(request, plocale);
-			if (!setLocaleFlag) {
+			LOG.info("SelectLocaleProcessAction: invoked to set new locale: "
+					+ plocale);
+			if (isAvailableLocale(request, plocale)) {
+				// set locale into the request
 				LOG
-						.error("Update user's locale into request for Vignette failed!");
-				sFlag = false;
-			}
-
-			LOG.info("Updating user's locale into HP.com standard cookie(s).");
-			addCookie(response, Consts.HPCOM_LANG_PARAM, plocale.getLanguage(),
-					1 * SECONDS_PER_YEAR);
-			if (hasCountry(plocale)) {
-				// country is not null, set country cookie
-				addCookie(response, Consts.HPCOM_COUNTRY_PARAM, plocale
-						.getCountry(), 1 * SECONDS_PER_YEAR);
-			} else {
-				// country is null, delete country cookie
-				delCookie(response, Consts.HPCOM_COUNTRY_PARAM);
-			}
-
-			if (isAuthenticatedByHPP(request)) {
-				try {
-					LOG.info("Updating user's locale into HPP."
-							+ " HPP language code: "
-							+ I18nUtility.localeToHPPLanguage(plocale));
-					updateLocaleInHPP(portalContext, request, plocale);
-				} catch (PassportServiceException e) {
-					Object obj = e.getFaults().get(0);
-					if (obj instanceof Fault) {
-						LOG.error("Update user's locale into HPP failed!"
-								+ " More detail: "
-								+ ((Fault) obj).getDescription());
-					}
+						.info("SelectLocaleProcessAction: Updating user's locale into request for Vignette.");
+				boolean setLocaleFlag = I18nUtility.setLocale(request, plocale);
+				if (!setLocaleFlag) {
+					LOG
+							.error("SelectLocaleProcessAction: Update user's locale into request for Vignette failed!");
 					sFlag = false;
+				}
+
+				// set locale into the HP.com cookies
+				LOG
+						.info("SelectLocaleProcessAction: Updating user's locale into HP.com standard cookie(s).");
+				addCookie(response, Consts.HPCOM_LANG_PARAM, plocale
+						.getLanguage(), 1 * SECONDS_PER_YEAR);
+				if (hasCountry(plocale)) {
+					// country is not null, set country cookie
+					addCookie(response, Consts.HPCOM_COUNTRY_PARAM, plocale
+							.getCountry(), 1 * SECONDS_PER_YEAR);
+				} else {
+					// country is null, delete country cookie
+					delCookie(response, Consts.HPCOM_COUNTRY_PARAM);
+				}
+
+				// set locale into HPP
+				if (isAuthenticatedByHPP(request)) {
+					try {
+						LOG
+								.info("SelectLocaleProcessAction: Updating user's locale into HPP. HPP language code: "
+										+ I18nUtility
+												.localeToHPPLanguage(plocale));
+						updateLocaleInHPP(portalContext, request, plocale);
+					} catch (PassportServiceException e) {
+						Object obj = e.getFaults().get(0);
+						if (obj instanceof Fault) {
+							LOG
+									.error("SelectLocaleProcessAction: Update user's locale into HPP failed!"
+											+ " More detail: "
+											+ ((Fault) obj).getDescription());
+						}
+						sFlag = false;
+					}
+				} else {
+					LOG
+							.info("SelectLocaleProcessAction: Not an HPP user or not logged-in - will not update locale into HPP.");
 				}
 			} else {
 				LOG
-						.info("Not an HPP user or not logged-in - will not update locale into HPP.");
+						.error("SelectLocaleProcessAction: The locale, "
+								+ plocale
+								+ ", is not in the site available locales! No updates performed.");
+				sFlag = false;
 			}
-		} else {
-			LOG.error("The locale, " + plocale
-					+ ", is not supported in site available locales!");
-			sFlag = false;
-		}
 
-		// log the outcome
-		if (!sFlag) {
-			LOG.error("Locale selector: process failed!");
+			// log the outcome
+			if (!sFlag) {
+				LOG.error("SelectLocaleProcessAction: process failed!");
+			}
+
+			// return null so process will continue normally
+			return null;
+		} catch (Exception ex) {
+			// redirect to system error page if anything unusual happens
+			LOG.error("SetLocaleProcessAction error: " + ex);
+			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
+					null, null);
 		}
-		return null;
 	}
 
 	/**
