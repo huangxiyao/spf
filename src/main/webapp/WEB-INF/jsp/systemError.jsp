@@ -7,7 +7,11 @@
 <%------------------------------------------------------------- DIRECTIVES --%>
 
 <jsp:directive.page
-	import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts>
+	import="com.hp.it.spf.xa.i18n.portlet.I18nUtility" />
+<jsp:directive.page
+	import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" />
+<jsp:directive.page
+	import="com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController" />
 
 <%---------------------------------------------------------- TAG LIBRARIES --%>
 
@@ -18,7 +22,12 @@
 <portlet:defineObjects />
 <jsp:scriptlet>
 	String pathToCSS = (String)renderRequest.getContextPath() + "/css/html_viewer.css";
-	String errorCode = (String)renderRequest.getParameter(Consts.ERROR_CODE);
+	String errorCode = (String)renderRequest.getAttribute(FileInterpolatorController.REQUEST_ATTR_ERROR_CODE);
+	if (errorCode == null) 
+		errorCode = Consts.ERROR_CODE_INTERNAL;
+	String errorMessage = (String)renderRequest.getAttribute(FileInterpolatorController.REQUEST_ATTR_ERROR_MESSAGE);
+	if (errorMessage == null)
+		errorMessage = I18nUtility.getMessage(renderRequest, Consts.ERROR_CODE_INTERNAL);	
 </jsp:scriptlet>
 
 <%---------------------------------------------------------------- MARKUP ---%>
@@ -29,13 +38,16 @@
 <table>
 	<tbody>
 		<tr>
-			<td><spf-i18n-portlet:message key="<%= Consts.ERROR_CODE_INTERNAL %>.message" /></td>
+			<td><p><span class="span.fs-htmlviewer-internal-error-message">
+				<%= errorMessage %>
+			</span></p></td>
 		</tr>
 		<tr>
-			<td><spf-i18n-portlet:message key="error.code.message">
+			<td><p><span class="span.fs-htmlviewer-internal-error-code">
+				<spf-i18n-portlet:message key="error.code">
 					<spf-i18n-portlet:param value="<%= errorCode %>" />
 				</spf-i18n-portlet:message>
-			</td>
+			</span></p></td>
 		</tr>
 	</tbody>
 </table>

@@ -7,7 +7,7 @@
 <%------------------------------------------------------------- DIRECTIVES --%>
 
 <jsp:directive.page
-	import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts>
+	import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" />
 
 <%---------------------------------------------------------- TAG LIBRARIES --%>
 
@@ -28,13 +28,16 @@
 <table>
 	<tbody>
 		<tr>
-			<td><spf-i18n-portlet:message key="<%= Consts.ERROR_CODE_INTERNAL %>.message" /></td>
+			<td><p><span class="span.fs-htmlviewer-internal-error-message">
+				<spf-i18n-portlet:message key="<%= Consts.ERROR_CODE_INTERNAL %>" />
+			</span></p></td>
 		</tr>
 		<tr>
-			<td><spf-i18n-portlet:message key="error.code.message">
+			<td><p><span class="span.fs-htmlviewer-internal-error-code">
+				<spf-i18n-portlet:message key="error.code">
 					<spf-i18n-portlet:param value="<%= Consts.ERROR_CODE_INTERNAL %>" />
 				</spf-i18n-portlet:message>
-			</td>
+			</span></p></td>
 		</tr>
 	</tbody>
 </table>

@@ -1,7 +1,19 @@
 /* Standard CSS classes for the HTMLViewer portlet application. */
 
-fs-htmlviewer-error-message {
-	color: #red;
-	font-size: 12px;
-	font-family: Arial;
+span.fs-htmlviewer-config-error-message {
+	color: red;
+}
+span.fs-htmlviewer-config-error-label {
+	color: red;
+	font: bold;
+}
+span.fs-htmlviewer-internal-error-message {
+	/* reserved */
+}
+span.fs-htmlviewer-internal-error-code {
+	font: italic smaller;
+}
+span.fs-htmlviewer-config-info-message {
+	color: green;
+	font: bold;
 }

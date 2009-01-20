@@ -23,16 +23,27 @@
 
 <link href="<%= renderResponse.encodeURL(pathToCSS) %>" rel="stylesheet" type="text/css">
 <c:if test="${! empty errorMessage }">
-	<span class="fs-htmlviewer-error-message">
-		<%= renderRequest.getAttribute(Consts.ERROR_MESSAGE) %>
-	</span>
-	<br>
+	<p>
+		<span class="fs-htmlviewer-config-error-label">
+			<spf-i18n-portlet:message key="error.message"/>
+		</span>&nbsp;
+		<span class="fs-htmlviewer-config-error-message">
+			<c:out value="${errorMessage}"/>
+		</span>
+	</p>
+</c:if>
+<c:if test="${! empty infoMessage }">
+	<p>
+		<span class="fs-htmlviewer-config-info-message">
+			<c:out value="${infoMessage}"/>
+		</span>
+	</p>
 </c:if>
 <form name="htmlViewerConfig" action='<portlet:actionURL/>' method="post">
 	<table>
 		<tr>
 			<td nowrap>
-				<spf-help-portlet:contextualHelp anchorKey="config.viewfilename" titleKey="config.viewfilename.help.title" contentKey="config.viewfilename.help.content"/>&nbsp;&nbsp;
+				<spf-help-portlet:contextualHelp anchorKey="config.viewfilename" titleKey="config.viewfilename.help.title" contentKey="config.viewfilename.help.content" width="450"/>&nbsp;&nbsp;
 			</td>					
 			<td>
 				<input type="text" name="<%= Consts.VIEW_FILENAME %>" value="<%= renderRequest.getAttribute(Consts.VIEW_FILENAME) %>">

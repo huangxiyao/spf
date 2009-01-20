@@ -8,7 +8,6 @@
 
 <jsp:directive.page
 	import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" />
-<jsp:directive.page import="com.hp.it.spf.xa.htmlviewer.portlet.util.Utils" />
 
 <%---------------------------------------------------------- TAG LIBRARIES --%>
 
@@ -18,9 +17,12 @@
 
 <portlet:defineObjects />
 <jsp:scriptlet>
-	String fileContent = (String) request.getAttribute(Consts.VIEW_CONTENT);
+	String pathToCSS = (String) renderRequest.getContextPath() + "/css/html_viewer.css";
 </jsp:scriptlet>
 
 <%---------------------------------------------------------------- MARKUP ---%>
 
-<%= fileContent %>
+<link
+	href="<%= renderResponse.encodeURL(pathToCSS) %>"
+	rel="stylesheet" type="text/css">
+<c:out value="${viewContent}"/>
