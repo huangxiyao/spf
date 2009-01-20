@@ -120,7 +120,7 @@ public class LogoutDisplayAction extends BaseAction {
 				LOG.info("LogoutDisplayAction: user was standard HPP - redirecting to site home page.");
 				String msg = I18nUtility.getValue(portalContext
 						.getCurrentSecondaryPage().getUID(),
-						"signout.confirmation.text", "", portalContext);
+						"logout.confirmation.text", "", portalContext);
 				session.setAttribute(Consts.SESSION_ATTR_STATUS_MSG, msg);
 				url = portalContext.getSiteURI(site);
 			}
