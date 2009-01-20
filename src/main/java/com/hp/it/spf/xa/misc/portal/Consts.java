@@ -46,6 +46,13 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String REQUEST_ATTR_FED_LOGOUT_RESUME_URL = "SPF_FED_LOGOUT_RESUME_URL";
 
 	/**
+	 * The "try again" URL to be presented to the user in the federation error
+	 * page. Set by the secondary page type action for use in the secondary page
+	 * JSP.
+	 */
+	public static final String REQUEST_ATTR_FED_ERROR_TRY_AGAIN_URL = "SPF_FED_ERROR_TRY_AGAIN_URL";
+
+	/**
 	 * The name of the session attribute storing portal pulse data. Set by the
 	 * secondary page type action for use by the secondary page JSP.
 	 */
