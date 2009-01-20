@@ -28,7 +28,9 @@ public class FedLogoutConfirmationDisplayAction extends BaseAction {
 
 	/**
 	 * Ensure the user is actually federated and redirect to the portal site
-	 * home page if not.
+	 * home page if not. If the user is federated, forward to the logout
+	 * confirmation page (and set a URL for resuming the user's session as a
+	 * request attribute to be presented to the user by the view).
 	 * 
 	 * @return The destination URI where user will be redirected after executing
 	 * @param portalContext
