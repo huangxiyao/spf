@@ -11,6 +11,7 @@ import javax.portlet.RenderResponse;
 import org.springframework.web.portlet.ModelAndView;
 
 import com.hp.it.spf.xa.htmlviewer.portlet.exception.InternalErrorException;
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 import com.hp.it.spf.xa.htmlviewer.portlet.util.Consts;
 import com.hp.it.spf.xa.htmlviewer.portlet.util.Utils;
 import com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController;
@@ -52,9 +53,16 @@ public class ViewController extends FileInterpolatorController {
 	}
 
 	/**
+	 * <p>
 	 * Gets the base filename of the file resource bundle to interpolate and
 	 * display, from the portlet preferences where the portlet config mode
-	 * stored it.
+	 * stored it. Throws an <code>InternalErrorException</code> if the
+	 * filename cannot be found.
+	 * </p>
+	 * <p>
+	 * The render-phase controller in the abstract superclass calls this method
+	 * at the beginning of its execution.
+	 * </p>
 	 * 
 	 * @param request
 	 *            The render request.
@@ -66,14 +74,29 @@ public class ViewController extends FileInterpolatorController {
 
 		PortletPreferences pp = request.getPreferences();
 		String viewFileName = pp.getValue(Consts.VIEW_FILENAME, null);
+		if (viewFileName == null || viewFileName.length() == 0) {
+			Log.logError(this,
+					"ViewController: view filename is not found or empty.");
+			throw new InternalErrorException(
+					Consts.ERROR_CODE_VIEW_FILENAME_NULL);
+		}
 		return Consts.HTML_FILE_FOLD + viewFileName;
 	}
 
 	/**
-	 * Parse the given file content (already interpolated by the portlet
-	 * FileInterpolator) to markup hyperlinks according to the launch-buttonless
-	 * config option, then set the content into the model for display by the
-	 * JSP.
+	 * <p>
+	 * Parses the given file content (already interpolated by the portlet
+	 * FileInterpolator) to rewrite hyperlinks according to the
+	 * launch-buttonless config option, then sets the content into the model for
+	 * display by the JSP. The model attribute name used for it is
+	 * <code>viewContent</code>, so that is the request attribute which the
+	 * JSP should display. However, an <code>InternalErrorException</code> is
+	 * thrown if the given file content is null or empty.
+	 * </p>
+	 * <p>
+	 * The render-phase controller in the abstract superclass calls this method
+	 * at the end of its execution.
+	 * </p>
 	 * 
 	 * @param request
 	 *            The render request.
@@ -81,7 +104,8 @@ public class ViewController extends FileInterpolatorController {
 	 *            The interpolated file content.
 	 * @param response
 	 *            The render response.
-	 * @return The model containing the file content to display.
+	 * @return The model containing the file content to display, inside the
+	 *         <code>viewContent</code> attribute.
 	 * @throws Exception
 	 *             Some exception.
 	 */

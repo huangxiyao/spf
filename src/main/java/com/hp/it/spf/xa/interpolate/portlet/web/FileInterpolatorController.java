@@ -10,6 +10,7 @@ import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.mvc.AbstractController;
 
 import com.hp.it.spf.xa.interpolate.portlet.FileInterpolator;
+import com.hp.it.spf.xa.exception.portlet.SPFException;
 import com.hp.websat.timber.logging.Log;
 
 /**
@@ -43,7 +44,20 @@ import com.hp.websat.timber.logging.Log;
  */
 public abstract class FileInterpolatorController extends AbstractController {
 
-	// added by ck for cr 1000790073
+	/**
+	 * The request attribute to which any error code is stored. The error code
+	 * is taken from any <code>SPFException</code> thrown by the concrete
+	 * execute method.
+	 */
+	public static String REQUEST_ATTR_ERROR_CODE = "errorCode";
+
+	/**
+	 * The request attribute to which any error message is stored. The error
+	 * message is taken from any <code>SPFException</code> thrown by the
+	 * concrete execute method.
+	 */
+	public static String REQUEST_ATTR_ERROR_MESSAGE = "errorMessage";
+
 	/**
 	 * Stores the name of the token-substitutions file to use for any file-based
 	 * token substitutions. The default is null, which causes the
@@ -53,10 +67,23 @@ public abstract class FileInterpolatorController extends AbstractController {
 	protected String subsFileName = null;
 
 	/**
+	 * <p>
 	 * Implement this method to return the base filename of the text (eg HTML)
 	 * file you want to interpolate for display. The returned filename should
 	 * include sufficient path information that the file can be found using the
 	 * standard system class loader.
+	 * </p>
+	 * <p>
+	 * If the concrete implementation of this method encounters an error, it
+	 * should throw an exception. Any exception you throw from this message will
+	 * be propagated to Spring (which will forward to your proper error-handling
+	 * JSP, or otherwise a default error-handling JSP, if you have configured
+	 * Spring correctly). If you throw any instance of <code>SPFException</code>,
+	 * note that the FileInterpolatorController will store its error code and
+	 * message into two request attributes which your error-handling JSP may
+	 * display if you choose. These request attributes are named
+	 * <code>errorCode</code> and <code>errorMessage</code>, respectively.
+	 * </p>
 	 * 
 	 * @param request
 	 *            The request
@@ -69,8 +96,28 @@ public abstract class FileInterpolatorController extends AbstractController {
 			throws Exception;
 
 	/**
+	 * <p>
 	 * Implement this method to render the file content string provided. That
 	 * string contains the interpolated file text to display.
+	 * </p>
+	 * <p>
+	 * If the concrete implementation of this method encounters an error, it
+	 * should throw an exception. Any exception you throw from this message will
+	 * be propagated to Spring (which will forward to your proper error-handling
+	 * JSP, or otherwise a default error-handling JSP, if you have configured
+	 * Spring correctly). If you throw any instance of <code>SPFException</code>,
+	 * note that the FileInterpolatorController will store its error code and
+	 * message into two render parameters which your error-handling JSP may
+	 * display if you choose. The render parameters are named
+	 * <code>errorCode</code> and <code>errorMessage</code>, respectively.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> The concrete implementation of this method should expect
+	 * and handle the case the the provided file content is null or empty. Some
+	 * implementations may consider that an error condition and throw an
+	 * exception accordingly. Others might not (for example, they might render
+	 * some default content).
+	 * </p>
 	 * 
 	 * @param request
 	 *            The request
@@ -111,10 +158,29 @@ public abstract class FileInterpolatorController extends AbstractController {
 	}
 
 	/**
-	 * Gets the filename from the request (using the concrete getFilename method
-	 * you implement), uses the portlet FileInterpolator to get a string of text
-	 * content from the file (interpolated with all of the proper dynamic
-	 * values), and renders it using the concrete execute method you implement.
+	 * <p>
+	 * Invoked during the render phase, this method gets the filename from the
+	 * request (using the concrete getFilename method you implement), uses the
+	 * portlet FileInterpolator to get a string of text content from the file
+	 * (interpolated with all of the proper dynamic values), and finishes by
+	 * calling the concrete execute method you implement.
+	 * </p>
+	 * <p>
+	 * If your execute method throws an instance of <code>SPFException</code>,
+	 * this method also sets the error code and message from the exception as
+	 * render parameters before re-throwing the exception back to Spring (which
+	 * should forward it to the proper view, if you have configured Spring
+	 * correctly). The render parameters are <code>errorCode</code> and
+	 * <code>errorMessage</code> - so your error view can display those
+	 * elements if desired.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> This method does not consider it an error if the
+	 * interpolated file content is blank (or not found). It will just pass it
+	 * to the concrete execute method anyway. It is the execute method's
+	 * responsibility to check for that condition if desired (since not all
+	 * implementations may consider empty or missing content to be an error).
+	 * </p>
 	 * 
 	 * @param request
 	 *            RenderRequest
@@ -127,14 +193,27 @@ public abstract class FileInterpolatorController extends AbstractController {
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 
-		Log.logInfo(this, "FileInterpolatorController: render phase invoked.");
-		String relativeName = getFilename(request);
-		String[] userGroups = getUserGroups(request);
-
-		Log.logInfo(this, "FileInterpolatorController: rendering file content from proper localized version of base file: " + relativeName);
-		FileInterpolator f = new FileInterpolator(request, response,
-				relativeName, userGroups, this.subsFileName);
-		String fileContent = f.interpolate();
-		return this.execute(request, response, fileContent);
+		try {
+			Log.logInfo(this,
+					"FileInterpolatorController: render phase invoked.");
+			String[] userGroups = getUserGroups(request);
+			String relativeName = getFilename(request);
+			Log
+					.logInfo(
+							this,
+							"FileInterpolatorController: rendering file content from proper localized version of base file: "
+									+ relativeName);
+			FileInterpolator f = new FileInterpolator(request, response,
+					relativeName, userGroups, this.subsFileName);
+			String fileContent = f.interpolate();
+			return this.execute(request, response, fileContent);
+		} catch (SPFException e) {
+			if (e.getErrorCode() != null)
+				request.setAttribute(REQUEST_ATTR_ERROR_CODE, e.getErrorCode());
+			if (e.getErrorMessage() != null)
+				request.setAttribute(REQUEST_ATTR_ERROR_MESSAGE, e
+						.getErrorMessage());
+			throw e;
+		}
 	}
 }
