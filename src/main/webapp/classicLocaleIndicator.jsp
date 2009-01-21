@@ -22,8 +22,19 @@ Displays the "classic" locale indicator.
 
 <%----------------------------------------------------------------- SCRIPT --%>
 
+<jsp:scriptlet>
+	// Record page attribute for the proper CSS file URL.
+	String cssFile = portalContext.getCurrentSite().getDNSName() + "ClassicLocaleIndicator.css";
+	if (I18nUtility.getLocalizedFileAsStream(portalContext, cssFile) == null) 
+		cssFile = "classicLocaleIndicator.css";
+	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile);
+	pageContext.setAttribute("cssURL", cssURL);
+</jsp:scriptlet>
+
 <%----------------------------------------------------------------- MARKUP --%>
 
 <div id="spfLocaleIndicator">
-<spf-i18n-portal:classicLocaleIndicator />
+	<span class="spf-localeindicator-classic">
+		<spf-i18n-portal:classicLocaleIndicator />
+	</span>
 </div>
