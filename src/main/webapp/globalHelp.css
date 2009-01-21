@@ -1,12 +1,12 @@
 /*
-This file is a template for a CSS file which you can
-reference in your global help content.  The styles 
-defined here can be applied in your global help. See 
-the globalHelp.html template file for instructions
-concerning this file.
+This file is a template for a CSS file which you can reference in 
+your global help content.  The styles defined here can be applied
+in your global help.  See the globalHelp.html template file for
+instructions concerning this file.  Be sure to name this CSS file
+such that it matches the reference from your global help content
+(see the globalHelp.html template file).
 */
-
-.contentHeader {
+.spf-globalhelp-content-header {
 	font-family: Tahoma, Arial;
 	font-size: 12px;
 	font-weight: bold;
@@ -17,7 +17,7 @@ concerning this file.
 	padding: 2px 0 2px 0;
 }
 
-.bannerText {
+.spf-globalhelp-banner {
 	font-family: Tahoma, Arial;
 	font-size: 18px;
 	font-weight: bold;
@@ -28,7 +28,7 @@ concerning this file.
 	padding: 2px 0 2px 0;
 }
 
-.helpSubject {
+.spf-globalhelp-subject {
 	font-family: Tahoma, Arial;
 	font-size: 14px;
 	font-style: italic;
@@ -40,16 +40,16 @@ concerning this file.
 	padding: 12px 0 12px 0;
 }
 
-.helpBody {
+.spf-globalhelp-body {
 	font-family: Tahoma, Arial;
 	font-size: 12px;
 	color: #000000;
 	text-align: left;
 	vertical-align: middle;
-	margin-left : 12px;
+	margin-left: 12px;
 }
 
-a.helpLink {
+a.spf-globalhelp-link {
 	color: Black;
 	text-decoration: underline;
 	font-family: Tahoma, Arial;
@@ -61,13 +61,12 @@ a.helpLink {
 	padding: 2px 0 2px 0;
 }
 
-a.helpLink:visited {
+a.spf-globalhelp-link:visited {
 	color: Black;
 }
 
-a.helpLink:hover {
+a.spf-globalhelp-link:hover {
 	color: #000000;
-	
 }
 
 #print {
