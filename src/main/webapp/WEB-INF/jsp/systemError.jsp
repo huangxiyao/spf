@@ -21,7 +21,6 @@
 
 <portlet:defineObjects />
 <jsp:scriptlet>
-	String pathToCSS = (String)renderRequest.getContextPath() + "/css/html_viewer.css";
 	String errorCode = (String)renderRequest.getAttribute(FileInterpolatorController.REQUEST_ATTR_ERROR_CODE);
 	if (errorCode == null) 
 		errorCode = Consts.ERROR_CODE_INTERNAL;
@@ -32,18 +31,16 @@
 
 <%---------------------------------------------------------------- MARKUP ---%>
 
-<link
-	href="<%= renderResponse.encodeURL(pathToCSS) %>"
-	rel="stylesheet" type="text/css">
+<link href="<%= renderResponse.encodeURL("/css/html_viewer.css") %>" rel="stylesheet" type="text/css">
 <table>
 	<tbody>
 		<tr>
-			<td><p><span class="span.fs-htmlviewer-internal-error-message">
+			<td><p><span class="spf-htmlviewer-internal-error-message">
 				<%= errorMessage %>
 			</span></p></td>
 		</tr>
 		<tr>
-			<td><p><span class="span.fs-htmlviewer-internal-error-code">
+			<td><p><span class="spf-htmlviewer-internal-error-code">
 				<spf-i18n-portlet:message key="error.code">
 					<spf-i18n-portlet:param value="<%= errorCode %>" />
 				</spf-i18n-portlet:message>

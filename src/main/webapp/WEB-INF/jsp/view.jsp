@@ -17,12 +17,10 @@
 
 <portlet:defineObjects />
 <jsp:scriptlet>
-	String pathToCSS = (String) renderRequest.getContextPath() + "/css/html_viewer.css";
 </jsp:scriptlet>
 
 <%---------------------------------------------------------------- MARKUP ---%>
 
-<link
-	href="<%= renderResponse.encodeURL(pathToCSS) %>"
-	rel="stylesheet" type="text/css">
+<link href="<%= renderResponse.encodeURL("/css/html_viewer.css") %>" rel="stylesheet" type="text/css">
+
 <c:out value="${viewContent}"/>

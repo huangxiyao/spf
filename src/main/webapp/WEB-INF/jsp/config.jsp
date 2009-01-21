@@ -16,25 +16,24 @@
 
 <portlet:defineObjects/>
 <jsp:scriptlet>
-	String pathToCSS = (String) renderRequest.getContextPath() + "/css/html_viewer.css";
 </jsp:scriptlet>
 
 <%---------------------------------------------------------------- MARKUP ---%>
 
-<link href="<%= renderResponse.encodeURL(pathToCSS) %>" rel="stylesheet" type="text/css">
+<link href="<%= renderResponse.encodeURL("/css/html_viewer.css") %>" rel="stylesheet" type="text/css">
 <c:if test="${! empty errorMessage }">
 	<p>
-		<span class="fs-htmlviewer-config-error-label">
+		<span class="spf-htmlviewer-config-error-label">
 			<spf-i18n-portlet:message key="error.message"/>
 		</span>&nbsp;
-		<span class="fs-htmlviewer-config-error-message">
+		<span class="spf-htmlviewer-config-error-message">
 			<c:out value="${errorMessage}"/>
 		</span>
 	</p>
 </c:if>
 <c:if test="${! empty infoMessage }">
 	<p>
-		<span class="fs-htmlviewer-config-info-message">
+		<span class="spf-htmlviewer-config-info-message">
 			<c:out value="${infoMessage}"/>
 		</span>
 	</p>
