@@ -1,9 +1,10 @@
 <%-- This JSP displays an SPF-standard system error based on error title, code 
 and message attributes expected to have been set in the session by the 
-forwarding action.  Defaults are provided if they were not set. 
+forwarding action.  Defaults are provided if they were not set.
 
-This JSP assumes that the surrounding grid or styles have defined the 
-following CSS classes: errorTitle, errorMessage, and errorCode. --%>
+This JSP references styles defined in either <site>SystemError.css or the
+default file, systemError.css.  These are assumed to be secondary support
+files in this component. --%>
 
 <%@ page import="com.epicentric.template.Style"%>
 <%@ page import="com.vignette.portal.util.WebUtils"%>
