@@ -97,9 +97,9 @@ following CSS classes: errorTitle, errorMessage, and errorCode. --%>
 <%-- Prepare CSS URL --%>
 <%
 	String cssFile = portalContext.getCurrentSite().getDNSName() + "SystemError.css";
-	if (I18nUtility.getLocalizedFileAsStream(portalContext, cssFile) == null) 
+	if (I18nUtility.getLocalizedFileAsStream(portalContext, cssFile, false) == null) 
 		cssFile = "systemError.css";
-	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile);
+	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile, false);
 %>
 
 <%-- Output page data --%>
