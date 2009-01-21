@@ -94,18 +94,28 @@ following CSS classes: errorTitle, errorMessage, and errorCode. --%>
 	}
 %>
 
+<%-- Prepare CSS URL --%>
+<%
+	String cssFile = portalContext.getCurrentSite().getDNSName() + "SystemError.css";
+	if (I18nUtility.getLocalizedFileAsStream(portalContext, cssFile) == null) 
+		cssFile = "systemError.css";
+	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile);
+%>
+
 <%-- Output page data --%>
+<link href="<%= cssURL %>" rel="stylesheet" type="text/css">
+
 <div style="padding-top: 10px; margin-left: 10px">
-<h3 class="errorTitle"><%= errorTitle %></h3>
+<h3 class="spf-systemerror-title"><%= errorTitle %></h3>
 <table border="0" cellspacing="0">
 	<tr>
 		<td>
-		<p class="errorMessage"><%= errorMessage %></p>
+		<p class="spf-systemerror-message"><%= errorMessage %></p>
 		</td>
 	</tr>
 	<tr>
 		<td>
-		<p class="errorCode"><%= errorCodeMessage %></p>
+		<p class="spf-systemerror-code"><%= errorCodeMessage %></p>
 		</td>
 	</tr>
 </table>
