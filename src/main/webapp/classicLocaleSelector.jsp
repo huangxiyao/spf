@@ -31,9 +31,9 @@ If only one locale is available, displays the "classic" locale indicator.
 	
 	// Record page attribute for the proper CSS file URL.
 	String cssFile = portalContext.getCurrentSite().getDNSName() + "ClassicLocaleSelector.css";
-	if (I18nUtility.getLocalizedFileAsStream(portalContext, cssFile) == null) 
+	if (I18nUtility.getLocalizedFileAsStream(portalContext, cssFile, false) == null) 
 		cssFile = "classicLocaleSelector.css";
-	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile);
+	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile, false);
 	pageContext.setAttribute("cssURL", cssURL);
 </jsp:scriptlet>
 
