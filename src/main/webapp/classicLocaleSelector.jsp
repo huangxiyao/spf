@@ -25,21 +25,35 @@ If only one locale is available, displays the "classic" locale indicator.
 <%----------------------------------------------------------------- SCRIPT --%>
 
 <jsp:scriptlet>
-boolean enableSelector = I18nUtility.multipleLocalesEnabled(request);
-pageContext.setAttribute("enableSelector", Boolean.valueOf(enableSelector));
+	// Record page attribute for whether multiple locales exist.
+	boolean enableSelector = I18nUtility.multipleLocalesEnabled(request);
+	pageContext.setAttribute("enableSelector", Boolean.valueOf(enableSelector));
+	
+	// Record page attribute for the proper CSS file URL.
+	String cssFile = portalContext.getCurrentSite().getDNSName() + "ClassicLocaleSelector.css";
+	if (I18nUtility.getLocalizedFileAsStream(portalContext, cssFile) == null) 
+		cssFile = "classicLocaleSelector.css";
+	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile);
+	pageContext.setAttribute("cssURL", cssURL);
 </jsp:scriptlet>
 
 <%----------------------------------------------------------------- MARKUP --%>
 
+<link href="<%= cssURL %>" rel="stylesheet" type="text/css">
+
 <c:choose>
 	<c:when test="${enableSelector}">
-<div id="spfLocaleSelector">
-<spf-i18n-portal:classicLocaleSelector labelKey="label.text" />
-</div>
+		<div id="spfLocaleSelector">
+			<span class="spf-localeselector-classic">
+				<spf-i18n-portal:classicLocaleSelector labelKey="label.text" />
+			</span>
+		</div>
 	</c:when>
 	<c:otherwise>
-<div id="spfLocaleIndicator">
-<spf-i18n-portal:classicLocaleIndicator />
-</div>
+		<div id="spfLocaleIndicator">
+			<span class="spf-localeindicator-classic">
+				<spf-i18n-portal:classicLocaleIndicator />
+			</span>
+		</div>
 	</c:otherwise>
 </c:choose>
