@@ -28,31 +28,31 @@ secondary support files in this component. --%>
 <link href="<%= cssURL %>" rel="stylesheet" type="text/css">
 
 <p class="spf-fedlogoutconfirm-section-header">
-	<spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fedlogout.section.1.text" defaultValue="fedlogout.section.1.text"/>		
+	<spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fed_logout.section.1.text"/>		
 </p>
 <p class="spf-fedlogoutconfirm-section-text">
-	<spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fedlogout.section.2.text" defaultValue="fedlogout.section.2.text"/><br />
-	<span class="spf-fedlogoutconfirm-section-text-note"><spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fedlogout.section.3.text" defaultValue="fedlogout.section.3.text"/></span>
-	<span class="spf-fedlogoutconfirm-section-text-note-details"><spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fedlogout.section.4.text" defaultValue="fedlogout.section.4.text"/></span>
+	<spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fed_logout.section.2.text"/><br/>
+	<span class="spf-fedlogoutconfirm-section-text-note"><spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fed_logout.section.3.text"/></span>
+	<span class="spf-fedlogoutconfirm-section-text-note-details"><spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fed_logout.section.4.text"/></span>
 </p>
 <table>
 	<tr>
 		<td colspan="2" class="spf-fedlogoutconfirm-section-text">
-			<spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fedlogout.section.5.text" defaultValue="fedlogout.section.5.text"/>
+			<spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fed_logout.section.5.text"/>
 		</td>	
 	</tr>
 	<tr>
 		<td rowspan="2" width="20" />					
 		<td class="spf-fedlogoutconfirm-section-text-link">					
 			<a href="<%= resumeURL %>">
-				<blockquote><li><spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fedlogout.section.6.text" defaultValue="fedlogout.section.6.text"/></li></blockquote>
+				<blockquote><li><spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fed_logout.section.6.text"/></li></blockquote>
 			</a>						
 		</td>
 	</tr>
 	<tr>			
 		<td class="spf-fedlogoutconfirm-section-text-link">					
 			<a href="javascript:window.close()">
-				<blockquote><li><sp-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fedlogout.section.7.text" defaultValue="fedlogout.section.7.text"/></li></blockquote>
+				<blockquote><li><sp-i18n-portal:i18nValue stringID="<%= i18nID %>" key="fed_logout.section.7.text"/></li></blockquote>
 			</a>						
 		</td>
 	</tr>
