@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<inceptionYear>January 2009</inceptionYear>
+	<parent>
+		<artifactId>spf-pom</artifactId>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.it.spf.comps</groupId>
+	<artifactId>fed-launch-error-secondarypage</artifactId>
+	<name>SPF federation launch error secondary page</name>
+	<version>1.0.0-SNAPSHOT</version>
+	<description>
+		JSPs and other artifacts for the Shared Portal Framework
+		federation launch error secondary page. This Vignette component
+		provides the view artifacts for presenting the generic
+		federation error page to the user.
+	</description>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>
+			http://samson.atl.hp.com:8080/hudson/job/fed-launch-error-secondarypage
+		</url>
+	</ciManagement>
+	<scm>
+		<connection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/fed-launch-error-secondarypage
+		</connection>
+		<developerConnection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/fed-launch-error-secondarypage
+		</developerConnection>
+		<url>
+			http://samson.atl.hp.com/svn/spf/source/comps/trunk/fed-launch-error-secondarypage
+		</url>
+	</scm>
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
+	<dependencies>
+		<dependency>
+			<groupId>com.hp.it.spf.comps</groupId>
+			<artifactId>fed-launch-error-secondarypagetype</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>common-utilities</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>portal-utilities</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>

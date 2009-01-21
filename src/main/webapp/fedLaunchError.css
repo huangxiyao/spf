@@ -1,0 +1,24 @@
+/* This file contains the default CSS styles for the SPF federation
+error page.  Use this file as a template to define your own style for
+this page.  Name your new file "<site>FedLaunchError.css" (where <site>
+is your site DNS name in Vignette) and upload it as a new secondary
+support file into the SPF federation launch error secondary page
+component, using the Vignette console. */
+
+.spf-fedlauncherror-section-header {
+	font-size: large;
+	font-weight: bold;
+	text-align: left;
+	vertical-align: bottom;
+	padding-top: 5px;
+	padding-bottom: 0px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	border-bottom-color: black;
+	border-bottom-style: solid;
+	border-bottom-height: 5px;
+}
+
+.spf-fedlauncherror-section-text {
+	padding-left: 10px;
+}
