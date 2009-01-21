@@ -50,7 +50,7 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 * page. Set by the secondary page type action for use in the secondary page
 	 * JSP.
 	 */
-	public static final String REQUEST_ATTR_FED_ERROR_TRY_AGAIN_URL = "SPF_FED_ERROR_TRY_AGAIN_URL";
+	public static final String REQUEST_ATTR_FED_ERROR_RETRY_URL = "SPF_FED_ERROR_RETRY_URL";
 
 	/**
 	 * The name of the session attribute storing portal pulse data. Set by the
