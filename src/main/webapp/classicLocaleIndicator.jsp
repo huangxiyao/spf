@@ -12,6 +12,7 @@ Displays the "classic" locale indicator.
 
 <jsp:directive.page import="com.epicentric.user.User" />
 <jsp:directive.page import="com.vignette.portal.website.enduser.utils.ConsoleURIFactory" />
+<jsp:directive.page import="com.hp.it.spf.xa.i18n.portal.I18nUtility" />
 
 <%----------------------------------------------------------- TAG LIBRARIES--%>
 
@@ -32,6 +33,8 @@ Displays the "classic" locale indicator.
 </jsp:scriptlet>
 
 <%----------------------------------------------------------------- MARKUP --%>
+
+<link href="<%= cssURL %>" rel="stylesheet" type="text/css">
 
 <div id="spfLocaleIndicator">
 	<span class="spf-localeindicator-classic">
