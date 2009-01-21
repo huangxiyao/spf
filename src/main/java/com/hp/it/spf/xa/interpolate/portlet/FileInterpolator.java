@@ -162,7 +162,6 @@ import com.hp.it.spf.xa.misc.portlet.Consts;
  * </p>
  * </dd>
  * 
- * <dl>
  * <dt><code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code></dt>
  * <dd>
  * <p>
