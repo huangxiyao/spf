@@ -79,7 +79,7 @@ public class FedLaunchErrorDisplayAction extends BaseAction {
 				launchUrl = portalContext.getSiteURI(portalContext
 						.getCurrentSite().getDNSName());
 			}
-			request.setAttribute(Consts.REQUEST_ATTR_FED_ERROR_TRY_AGAIN_URL, launchUrl);
+			request.setAttribute(Consts.REQUEST_ATTR_FED_ERROR_RETRY_URL, launchUrl);
 			return null;
 		} catch (Exception ex) {
 			// redirect to system error page if anything unusual happens
