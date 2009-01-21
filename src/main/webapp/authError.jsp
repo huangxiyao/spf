@@ -1,7 +1,8 @@
-<%-- This JSP displays an SPF-standard authorization error page. 
+<%-- This JSP displays an SPF-standard authorization error page.
 
-This JSP assumes that the surrounding grid or styles have defined the 
-following CSS classes: errorTitle, errorMessage, and errorCode. --%>
+This JSP references styles defined in either <site>AuthError.css or the
+default file, authError.css.  These are assumed to be secondary support
+files in this component. --%>
 
 <%@ page import="com.epicentric.common.website.SessionUtils"%>
 <%@ page import="com.hp.it.spf.xa.i18n.portal.I18nUtility"%>
