@@ -5,7 +5,7 @@ for your own site.  Name your new file "<site>SystemError.css" (where
 secondary support file into the SPF system error secondary page component
 using the Vignette console. */
 
-.spf-spf-systemerror-title {
+.spf-systemerror-title {
 	font-size: larger;
 	font-weight: bold;
 	margin-top: 0;
