@@ -570,8 +570,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @param pBaseFileName
 	 *            The name of the base file to search.
 	 * @return A URL for downloading the best-fit localized version of the base
-	 *         file from the portal component, or null if no qualifying file was
-	 *         found.
+	 *         file from the portal component.
 	 */
 	public static String getLocalizedFileURL(PortalContext pContext,
 			String pBaseFileName) {
@@ -605,8 +604,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            The version of the file for which to search: the base file
 	 *            (false) or the best-fitting localized file (true).
 	 * @return A URL for downloading the best-fit localized version of the base
-	 *         file from the portal component, or null if no qualifying file was
-	 *         found.
+	 *         file from the portal component.
 	 */
 	public static String getLocalizedFileURL(PortalContext pContext,
 			String pBaseFileName, boolean pLocalized) {
@@ -791,8 +789,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            The default filename to use if the message property does not
 	 *            exist.
 	 * @return A URL for downloading the best-fit localized version of the base
-	 *         file from the portal component, or null if no qualifying file was
-	 *         found.
+	 *         file from the portal component.
 	 */
 	public static String getLocalizedFileURL(PortalContext pContext,
 			String pKey, String pDefault) {
