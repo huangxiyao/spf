@@ -16,8 +16,10 @@ import com.vignette.portal.log.LogWrapper;
  * defined in session. Vignette will call getSSOUsername method in this class to
  * implement SSO
  * 
- * @author <link href="kaijian.ding@hp.com">dingk</link>,  		
- * 		   <link href="ying-zhiw@hp.com">Oliver</link>
+ * @author <link href="kaijian.ding@hp.com">dingk</link>
+ * @author <link href="ye.liu@hp.com">liuye</link>
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * 
  * @version TBD
  */
 public class SPFSSOUserNameRetriever implements SSOUsernameRetriever {
