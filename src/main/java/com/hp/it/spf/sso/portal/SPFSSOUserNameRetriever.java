@@ -33,9 +33,8 @@ public class SPFSSOUserNameRetriever implements SSOUsernameRetriever {
      */
     public String getSSOUsername(HttpServletRequest request) {
 		String ssoUsername = null;
-		HttpSession session = request.getSession(true);
 		try {
-		    ssoUsername = (String) session.getAttribute(AuthenticationConsts.SSO_USERNAME);
+		    ssoUsername = (String) request.getAttribute(AuthenticationConsts.SSO_USERNAME);
 		} catch (Exception ex) {
 		    LOG.debug("Can't find SSO username which must be already defined in http session, maybe this is a guest user");
 		}
