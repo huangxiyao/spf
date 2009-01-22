@@ -22,10 +22,11 @@ import com.vignette.portal.website.enduser.PortalContext;
  * AuthenticationUtility is the public interface open to others.
  * 
  * @author <link href="kaijian.ding@hp.com">dingk</link>
- * @author <link href="ye.liu@hp.com">liuliyey</link>
+ * @author <link href="ye.liu@hp.com">liuye</link>
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * 
  * @version TBD
  */
-
 public class AuthenticationUtility {
     private static final com.vignette.portal.log.LogWrapper LOG = AuthenticatorHelper
             .getLog(AuthenticationUtility.class);

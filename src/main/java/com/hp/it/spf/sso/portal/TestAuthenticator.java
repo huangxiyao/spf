@@ -200,7 +200,6 @@ public class TestAuthenticator extends AbstractAuthenticator {
 				"active"));
 		// guestMode is for logout
 		if ("true".equalsIgnoreCase(request.getParameter("guestMode"))) {
-			request.getSession().removeAttribute(USER_PROFILE_KEY);
 			// cleanupsession() will only clean session attributes starting from
 			// sp_
 			AuthenticatorHelper.cleanupSession(request);
@@ -223,7 +222,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 					// pass userProfile to portlets in vignette way
 					request.setAttribute(VIGNETTE_PREFIX + portlet
 							+ ".javax.portlet.userinfo", request.getSession()
-							.getAttribute(USER_PROFILE_KEY));
+							.getAttribute(AuthenticationConsts.USER_PROFILE_KEY));
 				}
 			}
 			User user = SessionUtils.getCurrentUser(request.getSession());

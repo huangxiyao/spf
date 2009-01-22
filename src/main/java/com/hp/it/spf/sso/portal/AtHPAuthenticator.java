@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
  * This authenticator is used for AtHP users
  * 
  * @author <link href="kaijian.ding@hp.com">dingk</link>
+ * @author <link href="ye.liu@hp.com">liuye</link>
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * 
  * @version TBD
  * @see com.hp.it.spf.sso.portal.AbstractAuthenticator
  */
@@ -38,17 +41,18 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
         super(request);
     }
 
+    @SuppressWarnings("unchecked")
     protected void mapHeaderToUserProfileMap() {
-    	super.mapHeaderToUserProfileMap();
-    	
-    	// if profileid is not specified, then use email to instead
-    	String profileId = userProfile.get(AuthenticationConsts.PROPERTY_PROFILE_ID);
-    	if (profileId == null || profileId.trim().equals("")) {
-	    	userProfile.put(AuthenticationConsts.PROPERTY_PROFILE_ID, 
-	    					userProfile.get(AuthenticationConsts.PROPERTY_EMAIL_ID));
-    	} 
+        super.mapHeaderToUserProfileMap();
+
+        // if profileid is not specified, then use email to instead
+        String profileId = (String)userProfile.get(AuthenticationConsts.KEY_PROFILE_ID);
+        if (profileId == null || profileId.trim().equals("")) {
+            userProfile.put(AuthenticationConsts.KEY_PROFILE_ID,
+                            userProfile.get(AuthenticationConsts.KEY_EMAIL));
+        }
     }
-    
+
     /**
      * This method is used to retrieve group info for AtHP users It will get the
      * group info from the request header and analyse. Only the group starting
@@ -57,7 +61,7 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
      * @return retrived groups
      */
     @SuppressWarnings("unchecked")
-	protected Set getUserGroup() {
+    protected Set getUserGroup() {
         Set groups = new HashSet();
         String groupstring = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
         // groups are divided by ,
@@ -65,7 +69,8 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
             StringTokenizer st = new StringTokenizer(groupstring, "^");
             while (st.hasMoreElements()) {
                 String temp = (String)st.nextElement();
-                if (temp.toLowerCase().startsWith(AuthenticationConsts.ATHP_GROUP_PREFIX)) {
+                if (temp.toLowerCase()
+                        .startsWith(AuthenticationConsts.ATHP_GROUP_PREFIX)) {
                     String group = temp.substring(3, temp.indexOf(','));
                     LOG.info("Get UserGroup = " + group);
                     groups.add(group);
@@ -74,11 +79,11 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
         }
         return groups;
     }
-    
+
     /**
      * retrieve user profile for atHP
      */
     protected Map<String, String> getUserProfile() {
-    	return null;
+        return null;
     }
 }

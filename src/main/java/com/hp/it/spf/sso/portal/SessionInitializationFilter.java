@@ -29,7 +29,10 @@ import com.vignette.portal.website.enduser.PortalURI;
  * This is a servlet filter will be called for every user's request. This filter
  * will do some actions for SSO and login
  * 
- * @author Oliver, Kaijian, Liu ye
+ * @author <link href="kaijian.ding@hp.com">dingk</link>
+ * @author <link href="ye.liu@hp.com">liuye</link>
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * 
  * @version TBD
  */
 public class SessionInitializationFilter implements Filter {

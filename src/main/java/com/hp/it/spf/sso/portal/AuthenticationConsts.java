@@ -10,6 +10,8 @@ import com.hp.it.spf.xa.misc.portal.Consts;
 class AuthenticationConsts {
 
 	static final String SSO_USERNAME = "SSO_username";
+	
+	static final String USER_PROFILE_KEY = "userProfile";
 
     static final String HEADER_CONSTS_FILE_BASE = "SharedPortalSSO";
 
@@ -49,7 +51,7 @@ class AuthenticationConsts {
     static final String PROPERTY_SECURITYLEVEL_ID = Consts.PROPERTY_SECURITYLEVEL_ID;
 
     static final String PROPERTY_LAST_CHANGE_DATE_ID = Consts.PROPERTY_LAST_CHANGE_DATE_ID;
-
+    
     static final String PROPERTY_SP_TIMEZONE_ID = Consts.PROPERTY_SP_TIMEZONE_ID;
 
     static final String PROPERTY_TIMEZONE_ID = Consts.PROPERTY_TIMEZONE_ID;
@@ -77,6 +79,8 @@ class AuthenticationConsts {
     static final String PROPERTY_STATE_ID = "state";
 
     static final String PROPERTY_CITY_ID = "city";
+    
+    static final String PROPERTY_LAST_LOGIN_DATE_ID = "lastlogindate";
 
     static final String PROPERTY_PRIMARY_SITE_ID = Consts.PROPERTY_PRIMARY_SITE_ID;
     
@@ -89,7 +93,7 @@ class AuthenticationConsts {
     /**
      * Property names for those attributes in http headers
      */
-    static final  String HEADER_USER_NAME_PROPERTY_NAME = "USER_NAME";
+    static final String HEADER_USER_NAME_PROPERTY_NAME = "USER_NAME";
 
     static final String HEADER_PROFILE_ID_PROPERTY_NAME = "PROFILE_ID";
 
@@ -146,9 +150,54 @@ class AuthenticationConsts {
     static final String HEADER_PHONE_EXT = "PHONE_EXT";
     
     static final String HEADER_ATHP_FLAG = "SM_AUTHDIRNAME";
+    
+    /**
+     * keys for those attributes in userProfile map in http session
+     */
+    static final String KEY_PROFILE_ID = "ProfileId";
+    
+    static final String KEY_USER_NAME = "LoginId";
+    
+    static final String KEY_FIRST_NAME = "FirstName";
+    
+    static final String KEY_LAST_NAME = "LastName";
+    
+    static final String KEY_EMAIL = "Email";
+    
+    static final String KEY_LANGUAGE = "Language";
+    
+    static final String KEY_COUNTRY = "Country";
+    
+    static final String KEY_LAST_LOGIN_DATE = "LastLoginDate";
+    
+    static final String KEY_SP_TIMEZONE = "Timezone";
+    
+    static final String KEY_LAST_CHANGE_DATE = "LastChangeDate";
+    
+    static final String KEY_EMAIL_PREF = "EmailContactPref";
+    
+    static final String KEY_PHONE_PREF = "PhoneContactPref";
+    
+    static final String KEY_POSTAL_PREF = "PostalContactPref";
+    
+    static final String KEY_SECURITY_LEVEL = "SecurityLevel";
+    
+    static final String KEY_PHONE_NUMBER = "PhoneNumber";
+    
+    static final String KEY_PHONE_NUMBER_EXT = "PhoneNumberExt";
+    
+    static final String KEY_MAIL_STOP = "MailStop";
+    
+    static final String KEY_STREET = "Street";
+    
+    static final String KEY_CITY = "City";
+    
+    static final String KEY_ZIP = "Zip";
+    
+    static final String KEY_STATE = "State";
 
     /**
-     * ServicePortal session attributes prefix
+     * SharedPortal session attributes prefix
      */
     static final String RETAINED_PARAMETER_PREFIX = "SP_RETAIN_";
 
@@ -174,7 +223,7 @@ class AuthenticationConsts {
     static final String SESSION_ATTR_SSO_ERROR = "SP_SSO_ERROR";
     
     /**
-     * ServicePortal Group attributes
+     * SharedPortal Group attributes
      */
     
     static final String GROUP_TITLE = "title";
@@ -212,3 +261,4 @@ class AuthenticationConsts {
     public final static String SP_FN_FED_NAME = "SP_FN_FED";
     public final static String SP_FN_HPP_NAME = "SP_FN_HPP";
 }
+

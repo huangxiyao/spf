@@ -6,6 +6,7 @@
 package com.hp.it.spf.sso.portal;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,9 @@ import com.vignette.portal.log.LogWrapper;
  * AuthenticatorHelper is the private utility class used for this SSO module.
  * 
  * @author <link href="kaijian.ding@hp.com">dingk</link>
+ * @author <link href="ye.liu@hp.com">liuye</link>
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * 
  * @version TBD
  */
 public class AuthenticatorHelper {
@@ -70,6 +75,7 @@ public class AuthenticatorHelper {
      * @see com.epicentric.user.UserManager#createUser(java.util.Map)
      * @see com.epicentric.user.User#save()
      */
+    @SuppressWarnings("unchecked")
     static User createVAPUser(SSOUser ssoUser)
             throws UniquePropertyValueConflictException,
             EntityPersistenceException {
@@ -77,26 +83,29 @@ public class AuthenticatorHelper {
         LOG.info("creating new vap user start");
         // get realm id
         Realm rlm = AuthenticationManager.getDefaultAuthenticationManager()
-                .getSSORealm();
+                                         .getSSORealm();
         String realmId = rlm.getID();
 
         Map userProperties = new HashMap();
         // Setting VAP User object
-//        userProperties.put(AuthenticationConsts.PROPERTY_PROFILE_ID, ssoUser.getProfileId());
-        userProperties.put(AuthenticationConsts.PROPERTY_USER_NAME_ID, ssoUser
-                .getUserName());
+        userProperties.put(AuthenticationConsts.PROPERTY_PROFILE_ID, ssoUser.getProfileId());
+        userProperties.put(AuthenticationConsts.PROPERTY_USER_NAME_ID, ssoUser.getUserName());
         userProperties.put(AuthenticationConsts.PROPERTY_DOMAIN_ID, realmId);
-        userProperties.put(AuthenticationConsts.PROPERTY_EMAIL_ID, ssoUser
-                .getEmail().toLowerCase());
-        userProperties.put(AuthenticationConsts.PROPERTY_FIRSTNAME_ID, ssoUser
-                .getFirstName());
-        userProperties.put(AuthenticationConsts.PROPERTY_LASTNAME_ID, ssoUser
-                .getLastName());
-        userProperties.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, ssoUser
-                .getLanguage());
-        userProperties.put(AuthenticationConsts.PROPERTY_COUNTRY_ID, ssoUser
-                .getCountry());
-
+        userProperties.put(AuthenticationConsts.PROPERTY_EMAIL_ID, ssoUser.getEmail().toLowerCase());
+        userProperties.put(AuthenticationConsts.PROPERTY_FIRSTNAME_ID, ssoUser.getFirstName());
+        userProperties.put(AuthenticationConsts.PROPERTY_LASTNAME_ID, ssoUser.getLastName());
+        userProperties.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, ssoUser.getLanguage());
+        userProperties.put(AuthenticationConsts.PROPERTY_COUNTRY_ID, ssoUser.getCountry());
+        userProperties.put(AuthenticationConsts.PROPERTY_SP_TIMEZONE_ID, ssoUser.getTimeZone());
+        userProperties.put(AuthenticationConsts.PROPERTY_TIMEZONE_ID,
+                           AuthenticatorHelper.getTimeZoneOffset(ssoUser.getTimeZone()));
+        userProperties.put(AuthenticationConsts.PROPERTY_LAST_CHANGE_DATE_ID,
+                           ssoUser.getLastChangeDate());
+        if (ssoUser.getLastLoginDate() != null) {
+            userProperties.put(AuthenticationConsts.PROPERTY_LAST_LOGIN_DATE_ID,
+                               ssoUser.getLastLoginDate());
+        }
+        
         try {
             User user = UserManager.getInstance().createUser(userProperties);
             addUser2Group(user, ssoUser.getGroups());
@@ -134,15 +143,22 @@ public class AuthenticatorHelper {
         LOG.info("updating vap user start");
         // Setting VAP User object
         try {
-//            user.setProperty(AuthenticationConsts.PROPERTY_PROFILE_ID, ssoUser.getProfileId());
-            user.setProperty(AuthenticationConsts.PROPERTY_FIRSTNAME_ID,
-                    ssoUser.getFirstName());
-            user.setProperty(AuthenticationConsts.PROPERTY_LASTNAME_ID, ssoUser
-                    .getLastName());
-            user.setProperty(AuthenticationConsts.PROPERTY_LANGUAGE_ID, ssoUser
-                    .getLanguage());
-            user.setProperty(AuthenticationConsts.PROPERTY_COUNTRY_ID, ssoUser
-                    .getCountry());
+            user.setProperty(AuthenticationConsts.PROPERTY_PROFILE_ID, ssoUser.getProfileId());
+            user.setProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID, ssoUser.getUserName());
+            user.setProperty(AuthenticationConsts.PROPERTY_EMAIL_ID, ssoUser.getEmail());
+            user.setProperty(AuthenticationConsts.PROPERTY_FIRSTNAME_ID, ssoUser.getFirstName());
+            user.setProperty(AuthenticationConsts.PROPERTY_LASTNAME_ID, ssoUser.getLastName());
+            user.setProperty(AuthenticationConsts.PROPERTY_LANGUAGE_ID, ssoUser.getLanguage());
+            user.setProperty(AuthenticationConsts.PROPERTY_COUNTRY_ID, ssoUser.getCountry());
+            user.setProperty(AuthenticationConsts.PROPERTY_SP_TIMEZONE_ID, ssoUser.getTimeZone());
+            user.setProperty(AuthenticationConsts.PROPERTY_TIMEZONE_ID, 
+                             AuthenticatorHelper.getTimeZoneOffset(ssoUser.getTimeZone()));
+            user.setProperty(AuthenticationConsts.PROPERTY_LAST_CHANGE_DATE_ID,
+                             ssoUser.getLastChangeDate());
+            if (ssoUser.getLastLoginDate() != null) {
+                user.setProperty(AuthenticationConsts.PROPERTY_LAST_LOGIN_DATE_ID,
+                                 ssoUser.getLastLoginDate());
+            }
 
             // updateUserGroup(user, ssoUser.getGroups());
             LOG.info("Updated user:" + ssoUser.getUserName());
@@ -209,14 +225,23 @@ public class AuthenticatorHelper {
      * @return true if need to update group, otherwise false
      * @see isEqualedSet(java.util.Set, java.util.Set)
      */
+    @SuppressWarnings("unchecked")
     static boolean needUpdateGroup(Set userGroups, Set newGroups) {
         if (newGroups == null && userGroups == null) {
             return false;
         }
         if (newGroups == null || userGroups == null) {
             return true;
-        }
-        return !newGroups.equals(getUserGroupTitleSet(userGroups));
+        }        
+        Set<String> withoutLocal = new HashSet<String>();
+        Set<String> userGroupsTitleSet = getUserGroupTitleSet(userGroups);
+        for (String title : userGroupsTitleSet) {
+            if (!title.startsWith("LOCAL_")) {
+                withoutLocal.add(title);
+            }
+        }      
+        
+        return !newGroups.equals(withoutLocal);
     }
 
     /**
@@ -364,19 +389,14 @@ public class AuthenticatorHelper {
     }
 
     /**
-     * Check if the VAP user needs to be updated. Compare the initSession
-     * parameter and true
+     * Check if the initSession tag is true
      * 
-     * @param request
-     *            HttpServletRequest
-     * @return true if this user needs to be updated, otherwise false
+     * @param request HttpServletRequest
+     * @return <code>true</code> if force init session, otherwise <code>false</code>
      */
-    static boolean needSyncUser(HttpServletRequest request) {
-        return "true".equalsIgnoreCase((String)request
-                .getParameter("initSession"))
-                || !AuthenticatorHelper.isVAPLoggedIn(request);
+    static boolean isForceInitSession(HttpServletRequest request) {
+        return "true".equalsIgnoreCase((String)request.getParameter("initSession"));
     }
-
     /**
      * Check if the user has loged into VAP. If user from session can be
      * retrieved and is not a guest user, which means user has logged in.
@@ -601,6 +621,7 @@ public class AuthenticatorHelper {
                 }
             }
         }
+        
         // reset vignette session info to the guest user state
         SessionInfo sessionInfo = (SessionInfo)session
                 .getAttribute(SessionInfo.SESSION_INFO_NAME);
@@ -762,29 +783,39 @@ public class AuthenticatorHelper {
     }
 
     /**
-     * Retrieves a user based on a given email.
+     * Retrieves a user based on property.
      * 
-     * @param email
-     *            email
+     * @param property user property
+     * @param value    property value            
      * @return an instance of the User object corresponding to the logon id or
      *         null, if not found
      */
-    static User retrieveUserByEmail(String email) {
+    static User retrieveUserByProperty(String property, String value) {
         try {
-            LOG.info("Retrieving user " + email);
-            User u = UserManager.getInstance().getUser(
-                    AuthenticationConsts.PROPERTY_EMAIL_ID, email.toLowerCase());
-            LOG.info("Retrieved user " + email);
+            LOG.info("Retrieving user. PROPERTY: " + property + " VALUE: " + value);
+            User u = UserManager.getInstance().getUser(property, value);
+            LOG.info("Retrieved user. PROPERTY: " + property + " VALUE: " + value);
             return u;
         } catch (EntityNotFoundException e) {
-            LOG.info("User " + email + " not found");
+            LOG.info("User with PROPERTY: " + property + " VALUE: "  + value + " not found");
             return null;
         } catch (EntityPersistenceException e) {
-            LOG
-                    .error("Entity Persistence Exception when retrieving user by email");
+            LOG.error("Entity Persistence Exception when retrieving user.  PROPERTY: " + property + " VALUE: " + value);
             LOG.error(e);
             return null;
         }
+    }
+    
+    /**
+     * Get the timeZone offset.
+     * 
+     * @param timeZone
+     * @return
+     */
+    static Integer getTimeZoneOffset(String timeZone) {
+        TimeZone tz = TimeZone.getTimeZone(timeZone);
+        return new Integer(tz.getOffset(new Date().getTime())
+                / (60 * 60 * 1000));
     }
 
     /**

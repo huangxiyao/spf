@@ -6,18 +6,19 @@
 package com.hp.it.spf.sso.portal;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 class SSOUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private String profileId = null;
+    
     private String userName = null;
 
     private String firstName = null;
 
     private String lastName = null;
-    
-    private String profileId = null;
 
     private String email = null;
 
@@ -26,20 +27,12 @@ class SSOUser implements Serializable {
     private String language = null;
 
     private String timeZone = null;
+    
+    private Date lastChangeDate = null;
+    
+    private Date lastLoginDate = null;
 
     private Set groups = null;
-
-    private String mailStop = null;
-
-    private String street = null;
-
-    private String city = null;
-
-    private String zipCode = null;
-
-    private String state = null;
-
-    private String phone = null;
 
     Set getGroups() {
         return groups;
@@ -190,63 +183,19 @@ class SSOUser implements Serializable {
         this.language = language;
     }
 
-    String getCity() {
-        return city;
+    public Date getLastChangeDate() {
+        return this.lastChangeDate;
     }
 
-    void setCity(String city) {
-        this.city = city;
+    public void setLastChangeDate(Date lastChangeDate) {
+        this.lastChangeDate = lastChangeDate;
     }
 
-    String getMailStop() {
-        return mailStop;
+    public Date getLastLoginDate() {
+        return this.lastLoginDate;
     }
 
-    void setMailStop(String mailStop) {
-        this.mailStop = mailStop;
+    public void setLastLoginDate(Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
     }
-
-    String getState() {
-        return state;
-    }
-
-    void setState(String state) {
-        this.state = state;
-    }
-
-    String getStreet() {
-        return street;
-    }
-
-    void setStreet(String street) {
-        this.street = street;
-    }
-
-    String getZipCode() {
-        return zipCode;
-    }
-
-    void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    /**
-     * Get the property phone
-     * 
-     * @return the phone
-     */
-    String getPhone() {
-        return phone;
-    }
-
-    /**
-     * Set the property phone
-     * 
-     * @param phone
-     *            the phone to set
-     */
-    void setPhone(String phone) {
-        this.phone = phone;
-    }
-
 }

@@ -19,7 +19,12 @@ import com.hp.it.spf.xa.i18n.portal.I18nUtility;
  * This authenticator is for HPP users.
  * 
  * @author <link href="kaijian.ding@hp.com">dingk</link>
+ * @author <link href="ye.liu@hp.com">liuye</link>
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * 
  * @version TBD
+ * 
+ * @see com.hp.it.spf.sso.portal.AbstractAuthenticator
  */
 public class HPPAuthenticator extends AbstractAuthenticator {
     private static final long serialVersionUID = 1L;
@@ -87,12 +92,13 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         return group;
     }
 
+    @SuppressWarnings("unchecked")
     protected void mapHeaderToUserProfileMap() {
     	super.mapHeaderToUserProfileMap();    	
     	
     	// Set lanuage into SSOUser, if null, set to default EN
-		String language = userProfile.get(AuthenticationConsts.PROPERTY_LANGUAGE_ID);
-		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, 
+		String language = (String)userProfile.get(AuthenticationConsts.KEY_LANGUAGE);
+		userProfile.put(AuthenticationConsts.KEY_LANGUAGE, 
 						I18nUtility.hppLanguageToISOLanguage(language));
 	}
     

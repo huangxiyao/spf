@@ -1,14 +1,16 @@
 /*
- * Project: Shared Portal Framework
+ * Project: Shared Portal Framework 
  * Copyright (c) 2008 HP. All Rights Reserved.
- *
  */
 package com.hp.it.spf.sso.portal;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,14 +21,19 @@ import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.UniquePropertyValueConflictException;
 import com.epicentric.site.Site;
 import com.epicentric.user.User;
+import com.vignette.portal.log.LogWrapper;
 
 /**
  * AbstractAuthenticator is the father authenticator. All other authenticators
  * will be extended from this class.
+ * <p>
+ * This class defines the public process of doing session initialization.
+ * </p>
  * 
  * @author <link href="kaijian.ding@hp.com">dingk</link>
+ * @author <link href="ye.liu@hp.com">liuye</link>
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @version TBD
- * 
  */
 public abstract class AbstractAuthenticator implements IAuthenticator {
 
@@ -35,27 +42,13 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      */
     private static final long serialVersionUID = 1L;
 
-    private static final com.vignette.portal.log.LogWrapper LOG = AuthenticatorHelper
-            .getLog(AbstractAuthenticator.class);
+    private static final LogWrapper LOG = AuthenticatorHelper.getLog(AbstractAuthenticator.class);
 
-    /**
-     * User profile map which is saved into the current session
-     */
-    @SuppressWarnings("unchecked")
-	protected Map userProfileInSession = new TreeMap();
-    
     /**
      * User profile information, it is retrieved from request header, UPS etc.
-     * 
      */
-    protected Map<String, String> userProfile = null;
-
-    /**
-     * VAP_LOGON_PROPERTY_NAME String
-     */
-    protected static final String VAP_LOGON_PROPERTY_NAME = "logon";
-
-    protected static final String USER_PROFILE_KEY = "userProfile";
+    @SuppressWarnings("unchecked")
+    protected Map userProfile = new HashMap();
 
     /**
      * rb ResourceBundle
@@ -68,8 +61,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     protected String userName = null;
 
     /**
-     * This Object is used to synchronous some user profile inform
-     * with vignette user
+     * This Object is used to synchronous some user profile inform with vignette
+     * user
      */
     protected SSOUser ssoUser = new SSOUser();
 
@@ -93,8 +86,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      */
     public AbstractAuthenticator(HttpServletRequest request) {
         this.request = request;
-        
-        // retrieve corresponding resourcebundle according to current Authenticator class
+
+        // retrieve corresponding resourcebundle according to current
+        // Authenticator class
         String rbFile = retrieveRbFile();
         try {
             rb = ResourceBundle.getBundle(rbFile);
@@ -102,133 +96,174 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         } catch (Exception e) {
             LOG.error("No Resource Bundle File = " + rbFile);
             throw new RuntimeException("No Resource Bundle File = " + rbFile, e);
-        }        
+        }
 
         mapHeaderToUserProfileMap();
-        mapUserProfile2SSOUser();  
     }
-    
+
     /**
-     * This method is used to perform all related tasks. 1. It will invoke the
-     * mapRequest2User() method to map all the information from SSO product to
-     * SSOUser object. 2. Invoke the syncUser() method to perform the sync from
-     * SSOUser object to VAP. 3. Set the correct user name
+     * This method is used to perform all related tasks.
+     * <ol>
+     * <li>It will check if there is a user in session.</li>
+     * <li>If there is a user in session, then check if it is different with the
+     * user who has just logged in.</li>
+     * <li>If the user is same, then check if user recent updated.</li>
+     * <li>If the user is not changed, then check if the initSession tag is set</li>
+     * </ol>
+     * if the user doesn't need to be synchronized to VAP, then return the
+     * userName of the current user's name. Otherwise, synchronize user to VAP
+     * database and map all user profiles and groups to session.
      * 
      * @see com.hp.it.spf.sso.portal.IAuthenticator#execute()
      */
+    @SuppressWarnings("unchecked")
     public void execute() {
         // If user is logged in and session user is different with request user,
         // clean up session
-        if (AuthenticatorHelper.isVAPLoggedIn(request) && isDiffUser()) {
-            AuthenticatorHelper.cleanupSession(request);
+        if (AuthenticatorHelper.isVAPLoggedIn(request)) {
+            if (isDiffUser()) {
+                userProfile.put(AuthenticationConsts.KEY_LAST_LOGIN_DATE, new Date());
+                AuthenticatorHelper.cleanupSession(request);
+            } else if (isUserRecentUpdated()) {
+                AuthenticatorHelper.cleanupSession(request);
+            } else if (AuthenticatorHelper.isForceInitSession(request)) {
+                AuthenticatorHelper.cleanupSession(request);
+            } else {
+                userName = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
+                return;
+            }
+        } else {
+            userProfile.put(AuthenticationConsts.KEY_LAST_LOGIN_DATE, new Date());
         }
-        if (AuthenticatorHelper.needSyncUser(request)) {
-        	// retrieve user group from UGS to SSOUser
-        	// and synchronous to VAP user, and return the 
-        	// updated vap user
-            User updatedVAPUser = syncVAPUser();
-            // map user profile and vap user group to session
-            saveUserProfile2Session(updatedVAPUser);
-        }
-        
+
+        // retrieve user group from UGS to SSOUser
+        // and synchronous to VAP user, and return the
+        // updated vap user
+        User updatedVAPUser = syncVAPUser();
+        // map user profile and vap user group to session
+        saveUserProfile2Session(updatedVAPUser);
+
         userName = ssoUser.getUserName();
-    }    
+    }
 
     /**
      * Map all header profiles to userProfile map
      */
+    @SuppressWarnings("unchecked")
     protected void mapHeaderToUserProfileMap() {
-    	userProfile.put(AuthenticationConsts.PROPERTY_PROFILE_ID, 
-			    		getValue(AuthenticationConsts.HEADER_PROFILE_ID_PROPERTY_NAME));
-    	userProfile.put(AuthenticationConsts.PROPERTY_USER_NAME_ID, 
-    				    getValue(AuthenticationConsts.HEADER_USER_NAME_PROPERTY_NAME));
-    	
-    	String email = getValue(AuthenticationConsts.HEADER_EMAIL_ADDRESS_PROPERTY_NAME);
-    	if (email != null) {
-    	    int index = email.indexOf("^");
-    	    if (index > -1) {
-    	        email = email.substring(0, index);
-    	    }
-    	}
-    	userProfile.put(AuthenticationConsts.PROPERTY_EMAIL_ID, email);
-    		
-    	userProfile.put(AuthenticationConsts.PROPERTY_FIRSTNAME_ID, 
-    			        getValue(AuthenticationConsts.HEADER_FIRST_NAME_PROPERTY_NAME));
-    	userProfile.put(AuthenticationConsts.PROPERTY_LASTNAME_ID, 
-		        		getValue(AuthenticationConsts.HEADER_LAST_NAME_PROPERTY_NAME));
-    	userProfile.put(AuthenticationConsts.PROPERTY_COUNTRY_ID, 
-        				getValue(AuthenticationConsts.HEADER_COUNTRY_PROPERTY_NAME)); 
-    	   	
-    	// Set lanuage into SSOUser, if null, set to default EN
-    	String language = getValue(AuthenticationConsts.HEADER_LANGUAGE_PROPERTY_NAME);
-    	if (language == null || ("").equals(language.trim())) {
-    		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, AuthenticationConsts.DEFAULT_LANGUAGE);							
-    	} else {
-    		userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, language);
-    	}
-    }    
-    
+        userProfile.put(AuthenticationConsts.KEY_PROFILE_ID,
+                        getValue(AuthenticationConsts.HEADER_PROFILE_ID_PROPERTY_NAME));
+        userProfile.put(AuthenticationConsts.KEY_USER_NAME,
+                        getValue(AuthenticationConsts.HEADER_USER_NAME_PROPERTY_NAME));
+
+        // set email
+        String email = getValue(AuthenticationConsts.HEADER_EMAIL_ADDRESS_PROPERTY_NAME);
+        if (email != null) {
+            int index = email.indexOf("^");
+            if (index > -1) {
+                email = email.substring(0, index);
+            }
+        }
+        userProfile.put(AuthenticationConsts.KEY_EMAIL, email);
+
+        userProfile.put(AuthenticationConsts.KEY_FIRST_NAME,
+                        getValue(AuthenticationConsts.HEADER_FIRST_NAME_PROPERTY_NAME));
+        userProfile.put(AuthenticationConsts.KEY_LAST_NAME,
+                        getValue(AuthenticationConsts.HEADER_LAST_NAME_PROPERTY_NAME));
+        userProfile.put(AuthenticationConsts.KEY_COUNTRY,
+                        getValue(AuthenticationConsts.HEADER_COUNTRY_PROPERTY_NAME));
+
+        // Set lanuage into SSOUser, if null, set to default EN
+        String language = getValue(AuthenticationConsts.HEADER_LANGUAGE_PROPERTY_NAME);
+        if (language == null || ("").equals(language.trim())) {
+            userProfile.put(AuthenticationConsts.KEY_LANGUAGE,
+                            AuthenticationConsts.DEFAULT_LANGUAGE);
+        } else {
+            userProfile.put(AuthenticationConsts.KEY_LANGUAGE, language);
+        }
+                
+        // Set Last Change Date for SSOUser in format
+        SimpleDateFormat format = new SimpleDateFormat(getProperty(AuthenticationConsts.HEADER_DATE_FORMAT_NAME));
+        String lastChangeStr = getValue(AuthenticationConsts.HEADER_LAST_CHANGE_DATE_PROPERTY_NAME);
+        if (lastChangeStr != null) {
+            try {
+                userProfile.put(AuthenticationConsts.KEY_LAST_CHANGE_DATE,
+                                format.parse(lastChangeStr));
+            } catch (ParseException pe) {
+                LOG.error("Can't set last change date as"
+                          + lastChangeStr
+                          + pe.getMessage());
+            }
+        }
+
+        // Set timezone into SSOUser, default value if timezone not found
+        String tz = getProperty(getValue(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
+        if (tz == null || ("").equals(tz.trim())) {
+            userProfile.put(AuthenticationConsts.KEY_SP_TIMEZONE,
+                            AuthenticationConsts.DEFAULT_TIMEZONE);
+        } else {
+            userProfile.put(AuthenticationConsts.KEY_SP_TIMEZONE, tz);
+        }
+
+    }
+
     /**
-     * Map the essential attributes used every time from request to ssoUser. These
-     * key values are used for sso every time.
+     * Map the essential attributes used every time from request to ssoUser.
+     * These key values are used for sso every time.
      */
     protected void mapUserProfile2SSOUser() {
-    	ssoUser.setProfileId(userProfile.get(AuthenticationConsts.PROPERTY_PROFILE_ID));
-    	ssoUser.setUserName(userProfile.get(AuthenticationConsts.PROPERTY_USER_NAME_ID));
-		ssoUser.setEmail(userProfile.get(AuthenticationConsts.PROPERTY_EMAIL_ID));
-		ssoUser.setFirstName(userProfile.get(AuthenticationConsts.PROPERTY_FIRSTNAME_ID));
-		ssoUser.setLastName(userProfile.get(AuthenticationConsts.PROPERTY_LASTNAME_ID));
-		ssoUser.setCountry(userProfile.get(AuthenticationConsts.PROPERTY_COUNTRY_ID));
-		ssoUser.setLanguage(userProfile.get(AuthenticationConsts.PROPERTY_LANGUAGE_ID));
+        ssoUser.setProfileId((String)userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
+        ssoUser.setUserName((String)userProfile.get(AuthenticationConsts.KEY_USER_NAME));
+        ssoUser.setEmail((String)userProfile.get(AuthenticationConsts.KEY_EMAIL));
+        ssoUser.setFirstName((String)userProfile.get(AuthenticationConsts.KEY_FIRST_NAME));
+        ssoUser.setLastName((String)userProfile.get(AuthenticationConsts.KEY_LAST_NAME));
+        ssoUser.setCountry((String)userProfile.get(AuthenticationConsts.KEY_COUNTRY));
+        ssoUser.setLanguage((String)userProfile.get(AuthenticationConsts.KEY_LANGUAGE));
+        ssoUser.setTimeZone((String)userProfile.get(AuthenticationConsts.KEY_SP_TIMEZONE));
+        ssoUser.setLastChangeDate((Date)userProfile.get(AuthenticationConsts.KEY_LAST_CHANGE_DATE));
+        ssoUser.setLastLoginDate((Date)userProfile.get(AuthenticationConsts.KEY_LAST_LOGIN_DATE));
     }
 
     /**
-     * Map user profile information and group information retrieved from vap user
-     * into session as a map
+     * Map user profile information and group information retrieved from vap
+     * user into session as a map
      * 
      * @param vapUser
-     * 				vignette user
+     *            vignette user
      */
     @SuppressWarnings("unchecked")
-	protected void saveUserProfile2Session(User vapUser) {
-    	// append all external user profile retrieved from UPS/Persona
-    	userProfile.putAll(getUserProfile());
-    	userProfileInSession.putAll(userProfile);
-    	userProfileInSession.put(AuthenticationConsts.HEADER_GROUP_NAME, 
-    							 new TreeSet(
-                                         AuthenticatorHelper.getUserGroupTitleSet(
-                                        		 AuthenticatorHelper.getUserGroupSet(vapUser)
-                                         )
-                                 )
-    							);
-        request.getSession().setAttribute(USER_PROFILE_KEY, userProfileInSession);
+    protected void saveUserProfile2Session(User vapUser) {
+        userProfile.put(AuthenticationConsts.HEADER_GROUP_NAME,
+                        new TreeSet(AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser))));
+        request.getSession()
+               .setAttribute(AuthenticationConsts.USER_PROFILE_KEY, userProfile);
     }
-    
-    
 
-    
     /**
      * If this user is first time login, create it in Vignette If error occured,
      * an error flag will be set in the session.
      * 
-     * @see mapRequest2ExtentUser()
-     * @see getGroups()
      * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
      *      #createVAPUser(com.hp.it.spf.sso.portal.SSOUser)
-     * 
-     * @return the new Created VAP User
+     * @return the new created VAP User
      */
-    protected User createVAPUser() {    	
+    protected User createVAPUser() {
         try {
             return AuthenticatorHelper.createVAPUser(ssoUser);
         } catch (UniquePropertyValueConflictException e) {
             userName = null;
-            LOG.error("Required unique values conflict when creating user " + e.getMessage());
-            request.getSession().setAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR, "1");
+            LOG.error("Required unique values conflict when creating user "
+                      + e.getMessage());
+            request.getSession()
+                   .setAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR,
+                                 "1");
         } catch (EntityPersistenceException e) {
             userName = null;
-            LOG.error("Entity persistence exception when creating user " + e.getMessage());
-            request.getSession().setAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR, "1");
+            LOG.error("Entity persistence exception when creating user "
+                      + e.getMessage());
+            request.getSession()
+                   .setAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR,
+                                 "1");
         }
         return null;
     }
@@ -239,14 +274,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * user is loggin in If error occured, set an error flag in the session
      * 
      * @param vapUser
-     *            input the vignette User Object
-     * @param isLoggedIn
-     *            input whether the user is logged in
-     * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
-     *      #needUpdatePrimarySite(com.hp.it.spf.sso.portal.SSOUser,
-     *      com.epicentric.user.User)
-     * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
-     *      #updateUserPrimarySite(com.epicentric.user.User, java.lang.String)
+     *            vignette user
+     * @return updated vignette user
      * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
      *      #needUpdateVAPUser(com.epicentric.user.User, java.util.Date,
      *      java.lang.String)
@@ -267,24 +296,27 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             updateVAPUserGroups(vapUser);
 
             // Update user to the appropriate authentication groups.
-            AuthenticatorHelper.assignUserToAuthenticationGroup(request, vapUser);
+            AuthenticatorHelper.assignUserToAuthenticationGroup(request,
+                                                                vapUser);
 
             // If user's info need to update, save this user
             vapUser.save();
-            
+
             return vapUser;
-            
+
         } catch (UniquePropertyValueConflictException e) {
             LOG.error("Required unique values conflict when updating user"
-                    + e.getMessage());
-            request.getSession().setAttribute(
-                    AuthenticationConsts.SESSION_ATTR_SSO_ERROR, "1");
+                      + e.getMessage());
+            request.getSession()
+                   .setAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR,
+                                 "1");
         } catch (EntityPersistenceException e) {
             LOG.error("Entity persistence exception when updating user"
-                    + e.getMessage());
-            request.getSession().setAttribute(
-                    AuthenticationConsts.SESSION_ATTR_SSO_ERROR, "1");
-        }        
+                      + e.getMessage());
+            request.getSession()
+                   .setAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR,
+                                 "1");
+        }
         return null;
     }
 
@@ -295,7 +327,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * an error flag in the session.
      * 
      * @param user
-     *            The user retrieved from vignette
+     *            the user retrieved from vignette
      * @return true if user's group is updated, otherwise return false
      * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
      *      #needUpdateGroup(java.util.Set, java.util.Set)
@@ -308,8 +340,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      *             if update group failed
      */
     @SuppressWarnings("unchecked")
-	protected boolean updateVAPUserGroups(User user)
-            throws EntityPersistenceException {
+    protected boolean updateVAPUserGroups(User user) throws EntityPersistenceException {
         // Retrieve group from vignette
         Set oldGroups = AuthenticatorHelper.getUserGroupSet(user);
 
@@ -335,22 +366,65 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * @see com.epicentric.common.website.SessionUtils#getCurrentUser(javax.servlet.http.HttpSession)
      */
     protected boolean isDiffUser() {
-        String emailVap = "";
+        String profileIdVap = "";
 
-        // Retrieve current user and its email from session
+        // Retrieve current user and its profile ID from session
         User currentUser = SessionUtils.getCurrentUser(request.getSession());
-        if (currentUser.getProperty(AuthenticationConsts.PROPERTY_EMAIL_ID) != null) {
-            emailVap = (String)currentUser
-                    .getProperty(AuthenticationConsts.PROPERTY_EMAIL_ID);
+        if (currentUser.getProperty(AuthenticationConsts.PROPERTY_PROFILE_ID) != null) {
+            profileIdVap = (String)currentUser
+                    .getProperty(AuthenticationConsts.PROPERTY_PROFILE_ID);
         }
-        // If email is different, return true
-        if (!emailVap.equals(ssoUser.getEmail())) {
-            LOG.info("email_vap:" + emailVap);
-            LOG.info("email:" + ssoUser.getEmail());
+        // If profile ID is different, return true
+        if (!profileIdVap.equals(userProfile.get(AuthenticationConsts.KEY_PROFILE_ID))) {
+            LOG.info("profile_id_vap:" + profileIdVap);
+            LOG.info("profileid:" + ssoUser.getProfileId());
             return true;
         }
-        LOG.info("same user in session: " + emailVap);
+        LOG.info("same user in session: " + profileIdVap);
         return false;
+    }
+
+    /**
+     * Check if the lastChangeDate indicates the User profile is updated
+     * 
+     * @return <code>true</code> if lastChangeDate shows the user profile is
+     *         changed. Otherwise, <code>false</code>
+     */
+    protected boolean isUserRecentUpdated() {
+        // Retrieve timeZone, lastChangeDate from userProfile map
+        String timeZone = (String)userProfile.get(AuthenticationConsts.KEY_SP_TIMEZONE);
+        Date lastChangeDate = (Date)userProfile.get(AuthenticationConsts.KEY_LAST_CHANGE_DATE);
+
+        // Retrieve current user from session
+        User currUser = SessionUtils.getCurrentUser(request.getSession());
+
+        Date lastChangeDateVap = null;
+        Integer tzVap = null;
+        // Retrieve user's current timezone offset and last change date
+        if (currUser != null) {
+            if (currUser.getProperty(AuthenticationConsts.PROPERTY_LAST_CHANGE_DATE_ID) != null) {
+                lastChangeDateVap = ((Date)currUser.getProperty(AuthenticationConsts.PROPERTY_LAST_CHANGE_DATE_ID));
+            }
+            if (currUser.getProperty(AuthenticationConsts.PROPERTY_TIMEZONE_ID) != null) {
+                tzVap = (Integer)currUser.getProperty(AuthenticationConsts.PROPERTY_TIMEZONE_ID);
+            }
+        }
+        // Retrieve timezone offset from request header
+        Integer tzOffSet = new Integer("0");
+        if (timeZone == null) {
+            tzOffSet = tzVap;
+        } else {
+            tzOffSet = AuthenticatorHelper.getTimeZoneOffset(timeZone);
+        }
+        // Judge
+        if (lastChangeDate == null || timeZone == null) {
+            return false;
+        } else if (lastChangeDateVap == null || tzVap == null) {
+            return true;
+        } else {
+            return lastChangeDate.after(lastChangeDateVap)
+                   || !tzVap.equals(tzOffSet);
+        }
     }
 
     /**
@@ -359,88 +433,68 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * needed; or cleanup session if session user and request user are
      * different; or do nothing if session error flag is caught
      * 
-     * @see firstTimeUser()
-     * @see updateUser(com.epicentric.user.User, boolean)
-     * @see checkDiffUser()
-     * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
-     *      #isVAPLoggedIn(javax.servlet.http.HttpServletRequest)
-     * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
-     *      #retrieveUserByEmail(java.util.String)
-     * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
-     *      #cleanupSession(javax.servlet.http.HttpServletRequest)
+     * @return updated or new vignette user
      */
+    @SuppressWarnings("unchecked")
     protected User syncVAPUser() {
-        if (request == null) {
-            return null;
-        }
-        if (ssoUser.getUserName() == null) {
-            LOG.info("can't sync from http request");
-            return null;
-        }
         // if there is an error happened before in this user sysc process,
         // do not update again any more
-        if (request.getSession().getAttribute(
-                AuthenticationConsts.SESSION_ATTR_SSO_ERROR) != null) {
+        if (request.getSession()
+                   .getAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR) != null) {
             LOG.error("catched by sso");
             userName = null;
             return null;
         }
 
+        // append all external user profile retrieved from UPS/Persona
+        userProfile.putAll(getUserProfile());
+        this.mapUserProfile2SSOUser();
         ssoUser.setGroups(getUserGroup());
-        
+
         // Retrieve user from Vignette by email.
-        User vapUser = getVapUser(ssoUser);
-        
+        User vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_PROFILE_ID,
+                                                                  ssoUser.getProfileId());
+
         // If user has not been created in Vignette, then create this user
         if (vapUser == null) {
+            // TODO employee number doesn't exist at the beginning, email will
+            // be instead of profileid
             LOG.info("Not found this user in SP, now creating this user"
-                    + ssoUser.getUserName());
+                     + ssoUser.getUserName());
             vapUser = createVAPUser();
         } else { // Try to update user info if needed
-        	vapUser = updateVAPUser(vapUser);
-        }      
-        
+            vapUser = updateVAPUser(vapUser);
+        }
+
         return vapUser;
     }
-    
+
     /**
-     * Get vap user according to ssouser
-     * @param user
-     * 			sso user
-     * @return
-     *          vap user
-     */
-    public User getVapUser(SSOUser user) {
-    	User vapUser = AuthenticatorHelper.retrieveUserByEmail(user.getEmail());
-        return vapUser;
-    }
-    
-    /**
-     * This is the abstract method used to retrieve user profile
-     * according to different orignal of the logged in user's information
+     * This is the abstract method used to retrieve user profile according to
+     * different orignal of the logged in user's information
      * 
      * @return user profile map
      */
     protected abstract Map<String, String> getUserProfile();
-    
+
     /**
-     * This is the abstract method used to retrieve user group info and return as a Set
+     * This is the abstract method used to retrieve user group info and return
+     * as a Set
      * 
      * @return retrieved groups set
      */
     @SuppressWarnings("unchecked")
-	protected abstract Set getUserGroup();
+    protected abstract Set getUserGroup();
 
     /**
      * This method is used to return the current site object in session
-     * 
      */
     public Site getCurrentSite() {
         SessionInfo sessionInfo = (SessionInfo)request.getSession()
-                .getAttribute(SessionInfo.SESSION_INFO_NAME);
+                                                      .getAttribute(SessionInfo.SESSION_INFO_NAME);
         return sessionInfo != null ? sessionInfo.getSite() : null;
     }
-    
+
     /**
      * Retreive the corresponding resourece bundle file for authenticator
      * 
@@ -451,7 +505,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         String packageName = this.getClass().getPackage().getName() + ".";
         return className.replaceFirst(packageName, "");
     }
-    
+
     /**
      * Return corresponding field value in request header
      * 
@@ -463,9 +517,10 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      *      java.lang.String);
      */
     protected String getValue(String fieldName) {
-        return AuthenticatorHelper.getRequestHeader(request, getProperty(fieldName));
+        return AuthenticatorHelper.getRequestHeader(request,
+                                                    getProperty(fieldName));
     }
-    
+
     /**
      * Use resource bundle to get property
      * 

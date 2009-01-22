@@ -18,6 +18,9 @@ import com.epicentric.user.User;
  * This antenticator will called for guest users.
  * 
  * @author <link href="kaijian.ding@hp.com">dingk</link>
+ * @author <link href="ye.liu@hp.com">liuye</link>
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * 
  * @version TBD
  */
 public class ANONAuthenticator extends AbstractAuthenticator {
