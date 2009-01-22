@@ -6,8 +6,8 @@ package com.hp.it.spf.localeresolver.provider;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.hp.fast.web.hpweb.LocaleProvider;
-import com.hp.fast.web.hpweb.LocaleProviderFactory;
+import com.hp.it.spf.localeresolver.core.hpweb.LocaleProvider;
+import com.hp.it.spf.localeresolver.core.hpweb.LocaleProviderFactory;
 
 /**
  * @author <link href="marc.derosa@hp.com"></link>

@@ -2,10 +2,11 @@
  * Project: Shared Portal Framework
  * Copyright (c) 2008 HP. All Rights Reserved.
  */
-package com.hp.it.spf.localeresolver.filter;
+
+package com.hp.it.spf.localeresolver.core.hpweb;
 
 import java.io.IOException;
-import java.util.Locale;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -15,39 +16,59 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.hp.it.spf.localeresolver.core.hpweb.LanguageNegotiator;
-import com.hp.it.spf.localeresolver.core.hpweb.LocaleProviderFactory;
-import com.hp.it.spf.localeresolver.setter.ILocaleSetter;
+import com.hp.it.spf.localeresolver.core.http.NoAcceptableLanguageException;
 
 /**
- * @author <link href="marc.derosa@hp.com"></link>
- * @version $Revision 0$ $Date. 01/01/2007$
+ * A servlet filter that resolves user and application locales per HP.com
+ * standards. The filter sets the locale of the response to the resolved value.
+ * Applications can retrieve the value via
+ * {@link javax.servlet.ServletResponse#getLocale()}.
+ * 
+ * <p>
+ * The filter may be configured with the following parameters. The value of each
+ * parameter is the name of a class that implements the
+ * {@link com.hp.it.spf.localeresolver.core.hpweb.LocaleProviderFactory} interface. The class will
+ * be instantiated using its null-argument constructor.
+ * </p>
+ * 
+ * <dl>
+ * <dt><code>targetLocaleProviderFactory</code></dt>
+ * <dd>
+ * <p>
+ * The locales in which the target (application) is localized, defaults to the
+ * JVM default locale
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>defaultLocaleProviderFactory</code></dt>
+ * <dd>
+ * <p>
+ * The last-resort locale provider. Used if no locale could otherwise be
+ * determined.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>passportLocaleProviderFactory</code></dt>
+ * <dd>
+ * <p>
+ * The locales the subject (user) has specified in their HP Passport profile
+ * </p>
+ * </dd>
+ * </dl>
+ * 
+ * @author Quintin May
+ * @version $Revision: 1.1 $
  */
-public class LocaleResolutionFilter implements Filter {
+public class LocaleFilter implements Filter {
     private final LanguageNegotiator languageNegotiator = new LanguageNegotiator();
-    private ILocaleSetter appSpecificLocaleSetter;
-    
-    /**
-     * Resolves a locale.
-     * <p>The framework code set cookies.  The local code set the vignette user locale</p>
-     * @param request the http sevlet request
-     * @param response the http servlet response
-     * @param chain the next link in the chain
-     * @throws IOException .
-     * @throws ServletException .
-     */
+
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
-            HttpServletRequest req = (HttpServletRequest) request;
-            HttpServletResponse resp = (HttpServletResponse) response;
             try {
-                //if (this.appSpecificLocaleSetter.shouldResolveLocale(req)) {
-                    languageNegotiator.negotiate(req, resp);
-                    Locale locale = (Locale) languageNegotiator.negotiatedValue(req);
-                    appSpecificLocaleSetter.setLocale(req, resp, locale);
-                //}
-            } catch (Exception ex) {
+                languageNegotiator.negotiate((HttpServletRequest) request,
+                        (HttpServletResponse) response);
+            } catch (NoAcceptableLanguageException ex) {
                 throw new ServletException(ex);
             }
         }
@@ -55,10 +76,6 @@ public class LocaleResolutionFilter implements Filter {
         chain.doFilter(request, response);
     }
 
-    /**
-     * @param configuration the configuration info set in web.xml
-     * @throws ServletException .
-     */
     public void init(FilterConfig configuration) throws ServletException {
         try {
             String className;
@@ -88,20 +105,12 @@ public class LocaleResolutionFilter implements Filter {
                         .setPassportLocaleProviderFactory((LocaleProviderFactory) Class
                                 .forName(className).newInstance());
             }
-            
-            className = configuration.getInitParameter("appSpecificLocaleSetter");
-            if (className != null) {
-                this.appSpecificLocaleSetter = (ILocaleSetter) Class
-                    .forName(className).newInstance();
-            }
         } catch (Exception ex) {
             throw new ServletException(ex);
         }
     }
 
-    /**
-     * Nothing to destroy.
-     */
     public void destroy() {
     }
+
 }

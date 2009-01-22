@@ -9,7 +9,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 import com.epicentric.common.website.SessionInfo;
-import com.hp.fast.web.hpweb.LanguageNegotiator;
+import com.hp.it.spf.localeresolver.core.hpweb.LanguageNegotiator;
 import com.hp.it.spf.localeresolver.mock.MockUserMediator;
 import com.hp.it.spf.localeresolver.setter.PortalUserLocaleSetter;
 import com.hp.it.spf.xa.mock.portal.MockUser;

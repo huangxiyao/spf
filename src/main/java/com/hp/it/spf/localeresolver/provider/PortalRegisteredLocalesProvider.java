@@ -8,7 +8,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
-import com.hp.fast.web.hpweb.LocaleProvider;
+
+import com.hp.it.spf.localeresolver.core.hpweb.LocaleProvider;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 
 /**
