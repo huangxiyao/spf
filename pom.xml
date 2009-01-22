@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.xa</groupId>
-	<artifactId>common-ws-hpp</artifactId>
-	<name>SPF common HPP W/S client</name>
+	<artifactId>spf-common-hpp</artifactId>
+	<name>SPF common HPP WebServices client</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>Client API library for HPP WebServices offered by Shared Portal Framework.  This project is used by the SPF portal and portlet frameworks, and is offered to feature-services for their use as well.  This client is current as of the HPP W/S 5.0 &quot;Corralco&quot; release.  Please note: this client is offered on a &quot;best-effort&quot; basis only.  If you use this client, you should understand that the HPP (not SPF) team owns these Web Services, and that this client will not necessarily be kept up-to-date with all subsequent HPP W/S releases and features (only those needed by the framework).</description>
 	<inceptionYear>December 2008</inceptionYear>
@@ -15,12 +15,12 @@
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/common-ws-hpp/</url>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-common-hpp</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/hpp/trunk/common-ws-hpp</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/hpp/trunk/common-ws-hpp</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/hpp/trunk/common-ws-hpp</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/hpp/trunk/spf-common-hpp</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/hpp/trunk/spf-common-hpp</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/hpp/trunk/spf-common-hpp</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
@@ -57,11 +57,6 @@
 			<version>2.0.3</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.it.spf.xa</groupId>
-			<artifactId>common-utilities</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>commons-discovery</groupId>
 			<artifactId>commons-discovery</artifactId>
 			<version>0.2</version>
@@ -74,10 +69,9 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.bea</groupId>
-			<artifactId>weblogic</artifactId>
-			<version>9.2.1.0</version>
-			<scope>runtime</scope>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
