@@ -78,9 +78,9 @@ public class ViewController extends FileInterpolatorController {
 			Log.logError(this,
 					"ViewController: view filename is not found or empty.");
 			throw new InternalErrorException(
-					Consts.ERROR_CODE_VIEW_FILENAME_NULL);
+					Consts.ERROR_CODE_FILE_NULL);
 		}
-		return Consts.HTML_FILE_FOLD + viewFileName;
+		return Utils.slashify(Consts.HTML_FILE_FOLD + viewFileName);
 	}
 
 	/**

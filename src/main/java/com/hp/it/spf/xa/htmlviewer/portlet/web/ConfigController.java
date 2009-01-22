@@ -13,9 +13,9 @@ import javax.portlet.RenderResponse;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.mvc.AbstractController;
 
-import com.hp.it.spf.xa.misc.portlet.Utils;
 import com.hp.it.spf.xa.htmlviewer.portlet.exception.InputErrorException;
 import com.hp.it.spf.xa.htmlviewer.portlet.util.Consts;
+import com.hp.it.spf.xa.htmlviewer.portlet.util.Utils;
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 import com.hp.websat.timber.logging.Log;
 
@@ -189,7 +189,7 @@ public class ConfigController extends AbstractController {
 			}
 
 			PortletPreferences pp = request.getPreferences();
-			pp.setValue(Consts.VIEW_FILENAME, viewFile);
+			pp.setValue(Consts.VIEW_FILENAME, Utils.slashify(viewFile));
 			pp.setValue(Consts.LAUNCH_BUTTONLESS, buttonLess);
 			pp.store();
 			response.setRenderParameter(Consts.INFO_CODE,
