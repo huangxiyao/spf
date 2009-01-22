@@ -9,7 +9,7 @@ import com.hp.it.spf.xa.misc.portal.Consts;
 
 class AuthenticationConsts {
 
-	static final String SSO_USERNAME = "SSO_username";
+	static final String SSO_USERNAME = "SP_SSO_USERNAME";
 	
 	static final String USER_PROFILE_KEY = "userProfile";
 

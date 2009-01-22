@@ -116,8 +116,7 @@ public class SessionInitializationFilter implements Filter {
 			authenticator.execute();
 			ssoUsername = authenticator.getUserName();
 		}
-		HttpSession session = request.getSession(true);
-		session.setAttribute(AuthenticationConsts.SSO_USERNAME, ssoUsername);
+		request.setAttribute(AuthenticationConsts.SSO_USERNAME, ssoUsername);		
 	}
 
 	/**

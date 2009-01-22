@@ -31,13 +31,12 @@ public class SPFSSOUserNameRetriever implements SSOUsernameRetriever {
      * @return userName
      * @see com.epicentric.authentication.SSOUsernameRetriever#getSSOUsername(javax.servlet.http.HttpServletRequest)
      */
-    public String getSSOUsername(HttpServletRequest request) {
-		String ssoUsername = null;
-		try {
-		    ssoUsername = (String) request.getAttribute(AuthenticationConsts.SSO_USERNAME);
-		} catch (Exception ex) {
-		    LOG.debug("Can't find SSO username which must be already defined in http session, maybe this is a guest user");
-		}
-		return ssoUsername;
+    public String getSSOUsername(HttpServletRequest request) {      
+        if (request.getAttribute(AuthenticationConsts.SSO_USERNAME) != null) {
+            return (String)request.getAttribute(AuthenticationConsts.SSO_USERNAME);
+        } else {
+            LOG.debug("Retrieve null from request for SSO username.");
+            return null;
+        }       
     }
 }

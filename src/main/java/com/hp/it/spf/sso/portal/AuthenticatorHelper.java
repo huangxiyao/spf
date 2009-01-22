@@ -614,12 +614,16 @@ public class AuthenticatorHelper {
             String next = (String)it.nextElement();
             LOG.info("Session Attribute:" + next);
             if (next.indexOf(AuthenticationConsts.PARAMETER_PREFIX) >= 0) {
-                if (next
-                        .indexOf(AuthenticationConsts.RETAINED_PARAMETER_PREFIX) < 0) {
+                if (next.indexOf(AuthenticationConsts.RETAINED_PARAMETER_PREFIX) < 0) {
                     session.removeAttribute(next);
                     LOG.info("Removed Session Attribute:" + next);
                 }
             }
+        }
+        
+        // remove user profile stored in session
+        if (session.getAttribute(AuthenticationConsts.USER_PROFILE_KEY) != null) {
+            session.removeAttribute(AuthenticationConsts.USER_PROFILE_KEY);
         }
         
         // reset vignette session info to the guest user state
