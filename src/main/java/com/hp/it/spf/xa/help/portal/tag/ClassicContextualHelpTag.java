@@ -137,56 +137,69 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </li>
  * <li>
  * <p>
- * The <code>borderStyle="<i>border-style</i>"</code> attribute gives the
- * style to use for the contextual help popup border. This is specified using
- * CSS properties. You may use any properties which are valid border properties
+ * The <code>borderStyle="<i>border-style</i>"</code> and
+ * <code>borderClass="<i>border-class</i>"</code> attributes are alternate
+ * ways of specifying a CSS style for the contextual help popup border. With the
+ * <code>borderStyle</code> attribute, you pass an inline CSS style. This
+ * should be a string of any CSS properties which are valid border properties
  * for the HTML <code>&lt;TABLE&gt;</code> tag. For example,
- * <code>borderStyle="border-width:1px;border-style:solid;border-color:black"</code>
- * (which is also the default: a thin solid black line).
+ * <code>borderStyle="border-width:1px;border-style:solid;border-color:black"</code>.
+ * With the <code>borderClass</code> attribute, you pass the name of a CSS
+ * class you have already included in your JSP page. That class should specify
+ * the same kind of properties as you would in <code>borderStyle</code> - for
+ * example, <code>borderClass="my-help-border"</code> where you have elsewhere
+ * defined the following CSS class:
+ * <code>.my-help-border { border-width:1px; ... }</code>. If you do not
+ * provide either the <code>borderClass</code> or <code>borderStyle</code>
+ * attributes, then the default border style is a think solid black line. (If
+ * you just want to clear this default, without positively providing a
+ * replacement style, just pass an empty string to <code>borderStyle</code>
+ * and/or <code>borderClass</code>.)
  * </p>
  * </li>
  * <li>
  * <p>
- * The <code>titleBgStyle="<i>title-background-style</i>"</code> attribute
- * gives the style to use for the contextual help title background. This is
- * specified using CSS properties. You may use any properties which are valid
- * background properties for the HTML <code>&lt;TD&gt;</code> tag. For
- * example, <code>titleBgStyle="background-color:blue"</code> (which is also
- * the default: a blue background).
+ * The <code>titleStyle="<i>title-style</i>"</code> and
+ * <code>titleClass="<i>title-class</i>"</code> attributes are alternate
+ * ways of specifying a CSS style for the contextual help popup title. With the
+ * <code>titleStyle</code> attribute, you pass an inline CSS style. This
+ * should be a string of any CSS properties which are valid properties for your
+ * title and/or the HTML <code>&lt;TD&gt;</code> tag. For example,
+ * <code>titleStyle="background-color:blue;color:white;font-weight:bold"</code>.
+ * With the <code>titleClass</code> attribute, you pass the name of a CSS
+ * class you have already included in your JSP page. That class should specify
+ * the same kind of properties as you would in <code>titleStyle</code> - for
+ * example, <code>titleClass="my-help-title"</code> where you have elsewhere
+ * defined the following CSS class:
+ * <code>.my-help-title { background-color:blue; ... }</code>. If you do not
+ * provide either the <code>titleClass</code> or <code>titleStyle</code>
+ * attributes, then the default title is a bold white font on blue background.
+ * (If you just want to clear this default, without positively providing a
+ * replacement style, just pass an empty string to <code>titleStyle</code>
+ * and/or <code>titleClass</code>.)
  * </p>
  * </li>
  * <li>
  * <p>
- * The <code>titleFontStyle="<i>title-font-style</i>"</code> attribute gives
- * the style to use for the contextual help title content. This is specified
- * using CSS properties. You may use any properties which are valid for the HTML
- * <code>&lt;FONT&gt;</code> tag. For example,
- * <code>titleFontStyle="color:white;font-weight:bold"</code> (which is also
- * the default: bold white text). (<b>Note:</b> This attribute is not the only
- * way to specify title font styles; you can just embed your desired font (and
- * other) effects in the title content string itself.)
- * </p>
- * </li>
- * <li>
- * <p>
- * The <code>contentBgStyle="<i>help-content-background-style</i>"</code>
- * attribute gives the style to use for the contextual help content background.
- * This is specified using CSS properties. You may use any properties which are
- * valid background properties for the HTML <code>&lt;TD&gt;</code> tag. For
- * example, <code>titleBgStyle="background-color:white"</code> (which is also
- * the default: a white background).
- * </p>
- * </li>
- * <li>
- * <p>
- * The <code>contentFontStyle="<i>help-content-font-style</i>"</code>
- * attribute gives the style to use for the contextual help content. This is
- * specified using CSS properties. You may use any properties which are valid
- * for the HTML <code>&lt;FONT&gt;</code> tag. For example,
- * <code>contentFontStyle="color:black"</code> (which is also the default:
- * black text). (<b>Note:</b> This attribute is not the only way to specify
- * content font styles; you can just embed your desired font (and other) effects
- * in the help content string itself.)
+ * The <code>contentStyle="<i>content-style</i>"</code> and
+ * <code>contentClass="<i>content-class</i>"</code> attributes are alternate
+ * ways of specifying a CSS style for the contextual help popup content. With
+ * the <code>contentStyle</code> attribute, you pass an inline CSS style. This
+ * should be a string of any CSS properties which are valid properties for your
+ * content and/or the HTML <code>&lt;TD&gt;</code> tag. For example,
+ * <code>contentStyle="background-color:white;color:black;font-weight:normal"</code>.
+ * With the <code>contentClass</code> attribute, you pass the name of a CSS
+ * class you have already included in your JSP page. That class should specify
+ * the same kind of properties as you would in <code>contentStyle</code> - for
+ * example, <code>contentClass="my-help-content"</code> where you have
+ * elsewhere defined the following CSS class:
+ * <code>.my-help-content { background-color:white; ... }</code>. If you do
+ * not provide either the <code>contentClass</code> or
+ * <code>contentStyle</code> attributes, then the default style for the help
+ * content is a normal black font on white background. (If you just want to
+ * clear this default, without positively providing a replacement style, just
+ * pass an empty string to <code>contentStyle</code> and/or
+ * <code>contentClass</code>.)
  * </p>
  * </li>
  * </ul>
