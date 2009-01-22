@@ -53,12 +53,6 @@ import com.hp.it.spf.xa.misc.Utils;
  * implement your own. Just extend the abstract base class like this one does.
  * You can even implement a tag for it, similar to the ones mentioned above.
  * </p>
- * <p>
- * TODO: Need to finish implementing this class. The logic for the
- * implementation should largely come from the ContextualHelpBaseTag.todo file
- * (taken from the ContextualHelpBaseTag.java file in the Service Portal (OS)
- * code).
- * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
@@ -94,24 +88,14 @@ public abstract class ClassicContextualHelpProvider extends
 	protected static String DEFAULT_BORDER_STYLE = "border-width:1px;border-style:solid;border-color:black";
 
 	/**
-	 * Default title background style for classic popup.
+	 * Default title style for classic popup.
 	 */
-	protected static String DEFAULT_TITLE_BG_STYLE = "background-color:blue";
+	protected static String DEFAULT_TITLE_STYLE = "background-color:blue;color:white;font-weight:bold";
 
 	/**
-	 * Default title font style for classic popup.
+	 * Default content style for classic popup.
 	 */
-	protected static String DEFAULT_TITLE_FONT_STYLE = "color:white;font-weight:bold";
-
-	/**
-	 * Default content background style for classic popup.
-	 */
-	protected static String DEFAULT_CONTENT_BG_STYLE = "background-color:white";
-
-	/**
-	 * Default content font style for classic popup.
-	 */
-	protected static String DEFAULT_CONTENT_FONT_STYLE = "color:black";
+	protected static String DEFAULT_CONTENT_STYLE = "background-color:white;color:black;font-weight:normal";
 
 	/**
 	 * The JavaScript string for the classic contextual help popup.
@@ -398,24 +382,29 @@ public abstract class ClassicContextualHelpProvider extends
 	protected String borderStyle = null;
 
 	/**
-	 * This is the background style to use for the title in the classic popup.
+	 * This is the style to use for the title in the classic popup.
 	 */
-	protected String titleBgStyle = null;
+	protected String titleStyle = null;
 
 	/**
-	 * This is the font style to use for the title in the classic popup.
+	 * This is the style to use for the content in the classic popup.
 	 */
-	protected String titleFontStyle = null;
+	protected String contentStyle = null;
 
 	/**
-	 * This is the background style to use for the content in the classic popup.
+	 * This is the CSS class to use for the border of the classic popup.
 	 */
-	protected String contentBgStyle = null;
+	protected String borderClass = null;
 
 	/**
-	 * This is the font style to use for the content in the classic popup.
+	 * This is the CSS class to use for the title in the classic popup.
 	 */
-	protected String contentFontStyle = null;
+	protected String titleClass = null;
+
+	/**
+	 * This is the CSS class to use for the content in the classic popup.
+	 */
+	protected String contentClass = null;
 
 	/**
 	 * Protected to prevent external construction except by subclasses. Use an
@@ -477,61 +466,94 @@ public abstract class ClassicContextualHelpProvider extends
 
 	/**
 	 * Setter for the table border CSS style to use for the "classic"-style
-	 * contextual help popup. If you never call this method, or pass null, the
-	 * default style will be used (a solid black 1-pixel border).
+	 * contextual help popup. Provide a CSS string of properties as you would
+	 * for a standard inline HTML <code>style</code> attribute. The properties
+	 * should be CSS border properties like <code>border-width</code> and
+	 * <code>border-color</code>, valid for styling an HTML
+	 * <code>&lt;TABLE&gt;</code> tag border. If you never call this method,
+	 * or pass null, and you never call the <code>setBorderClass</code>
+	 * method, or pass null, then the default style will be used (a solid black
+	 * 1-pixel border). You can pass a blank string if you just want to clear
+	 * that default.
 	 * 
 	 * @param pBorderStyle
-	 *            The CSS style for the popup border. This can be any string of
-	 *            CSS properties valid for the HTML <code>&lt;TABLE&gt;</code>
-	 *            tag border. For example,
+	 *            The CSS style for the popup border. For example,
 	 *            <code>border-width:1px;border-style:solid;border-color:black</code>
-	 *            (the default).
+	 *            (the default). Pass blank to just clear the default.
 	 */
 	public void setBorderStyle(String pBorderStyle) {
-		if (pBorderStyle != null) 
+		if (pBorderStyle != null)
 			pBorderStyle = pBorderStyle.trim();
 		this.borderStyle = pBorderStyle;
 	}
 
 	/**
-	 * Setter for the background style to use for the title in the
-	 * "classic"-style contextual help popup. If you never call this method, or
-	 * pass null, the default style will be used (blue background).
+	 * Setter for the table border CSS class to use for the "classic"-style
+	 * contextual help popup. Provide the name of a CSS class as you would for a
+	 * standard HTML <code>class</code> attribute. This should be a class
+	 * which you are planning to include in the same page as the HTML from this
+	 * ClassicContextualHelpProvider. That class can define any CSS properties
+	 * valid for the HTML <code>&lt;TABLE&gt;</code> tag border, like
+	 * <code>border-color</code>. If you never call this method, or pass
+	 * null, and you never call the <code>setBorderStyle</code> method, or
+	 * pass null, then the default style will be used (a solid black 1-pixel
+	 * border). You can pass a blank string if you just want to clear that
+	 * default.
 	 * 
-	 * @param pTitleBgStyle
-	 *            The CSS style for the title background. This can be any string
-	 *            of CSS properties valid for the HTML <code>&lt;TD&gt;</code>
-	 *            tag background. For example,
-	 *            <code>background-color:blue</code> (the default).
+	 * @param pBorderClass
+	 *            The name of the CSS class for the popup border. Pass blank to
+	 *            just clear the default style.
 	 */
-	public void setTitleBgStyle(String pTitleBgStyle) {
-		if (pTitleBgStyle != null)
-			pTitleBgStyle = pTitleBgStyle.trim();
-		this.titleBgStyle = pTitleBgStyle;
+	public void setBorderClass(String pBorderClass) {
+		if (pBorderClass != null)
+			pBorderClass = pBorderClass.trim();
+		this.borderClass = pBorderClass;
 	}
 
 	/**
-	 * <p>
-	 * Setter for the font style to use for the title text in the
-	 * "classic"-style contextual help popup. If you never call this method, or
-	 * pass null, the default style will be used (bold white).
-	 * </p>
-	 * <p>
-	 * <b>Note:</b> You can alternatively specify title font (and other)
-	 * effects in the title string itself, which you pass to the
-	 * <code>setTitleContent</code> method.
-	 * </p>
+	 * Setter for the CSS style to use for the title in the "classic"-style
+	 * contextual help popup. Provide a CSS string of properties as you would
+	 * for a standard inline HTML <code>style</code> attribute. The properties
+	 * should be CSS properties like <code>background-color</code> and
+	 * <code>color</code>, valid for styling the contents of an HTML
+	 * <code>&lt;TD&gt;</code> tag. If you never call this method, or pass
+	 * null, and you never call the <code>setTitleClass</code> method, or pass
+	 * null, then the default style will be used (bold white font on a blue
+	 * background). You can pass a blank string if you just want to clear that
+	 * default.
 	 * 
-	 * @param pTitleFontStyle
-	 *            The CSS style for the title font. This can be any string of
-	 *            CSS properties valid for the HTML <code>&lt;FONT&gt;</code>
-	 *            tag. For example, <code>color:white;font-weight:bold</code>
-	 *            (the default).
+	 * @param pTitleStyle
+	 *            The CSS style for the popup title. For example,
+	 *            <code>background-color:blue;color:white;font-weight:bold</code>
+	 *            (the default). Pass blank to just clear the default.
 	 */
-	public void setTitleFontStyle(String pTitleFontStyle) {
-		if (pTitleFontStyle != null)
-			pTitleFontStyle = pTitleFontStyle.trim();
-		this.titleFontStyle = pTitleFontStyle;
+	public void setTitleStyle(String pTitleStyle) {
+		if (pTitleStyle != null)
+			pTitleStyle = pTitleStyle.trim();
+		this.titleStyle = pTitleStyle;
+	}
+
+	/**
+	 * Setter for the CSS class to use for the title in the "classic"-style
+	 * contextual help popup. Provide the name of a CSS class as you would for a
+	 * standard HTML <code>class</code> attribute. This should be a class
+	 * which you are planning to include in the same page as the HTML from this
+	 * ClassicContextualHelpProvider. That class can define any CSS properties
+	 * valid for the contents of an HTML <code>&lt;TD&gt;</code> tag, like
+	 * <code>background-color</code>. If you never call this method, or pass
+	 * null, and you never call the <code>setTitleStyle</code> method, or pass
+	 * null, then the default style will be used (bold white font on a blue
+	 * background). You can pass a blank string if you just want to clear that
+	 * default.
+	 * 
+	 * @param pTitleClass
+	 *            The name of the CSS class for the popup title. Pass blank to
+	 *            just clear the default style.
+	 */
+	public void setTitleClass(String pTitleClass) {
+		if (pTitleClass != null)
+			pTitleClass = pTitleClass.trim();
+		this.titleClass = pTitleClass;
 	}
 
 	/**
@@ -545,34 +567,50 @@ public abstract class ClassicContextualHelpProvider extends
 	 *            <code>&lt;TD&gt;</code> tag background. For example,
 	 *            <code>background-color:white</code> (the default).
 	 */
-	public void setContentBgStyle(String pContentBgStyle) {
-		if (pContentBgStyle != null) 
-			pContentBgStyle = pContentBgStyle.trim();
-		this.contentBgStyle = pContentBgStyle;
+	/**
+	 * Setter for the CSS style to use for the help content in the
+	 * "classic"-style contextual help popup. Provide a CSS string of properties
+	 * as you would for a standard inline HTML <code>style</code> attribute.
+	 * The properties should be CSS properties like
+	 * <code>background-color</code> and <code>color</code>, valid for
+	 * styling the contents of an HTML <code>&lt;TD&gt;</code> tag. If you
+	 * never call this method, or pass null, and you never call the
+	 * <code>setContentClass</code> method, or pass null, then the default
+	 * style will be used (normal black font on a white background). You can
+	 * pass a blank string if you just want to clear that default.
+	 * 
+	 * @param pContentStyle
+	 *            The CSS style for the popup help content. For example,
+	 *            <code>background-color:white;color:blank;font-weight:normal</code>
+	 *            (the default). Pass blank to just clear the default.
+	 */
+	public void setContentStyle(String pContentStyle) {
+		if (pContentStyle != null)
+			pContentStyle = pContentStyle.trim();
+		this.contentStyle = pContentStyle;
 	}
 
 	/**
-	 * <p>
-	 * Setter for the font style to use for the help content text in the
-	 * "classic"-style contextual help popup. If you never call this method, or
-	 * pass null, the default style will be used (black).
-	 * </p>
-	 * <p>
-	 * <b>Note:</b> You can alternatively specify help content font (and other)
-	 * effects in the help content string itself, which you pass to the
-	 * <code>setHelpContent</code> method.
-	 * </p>
+	 * Setter for the CSS class to use for the help content in the
+	 * "classic"-style contextual help popup. Provide the name of a CSS class as
+	 * you would for a standard HTML <code>class</code> attribute. This should
+	 * be a class which you are planning to include in the same page as the HTML
+	 * from this ClassicContextualHelpProvider. That class can define any CSS
+	 * properties valid for the contents of an HTML <code>&lt;TD&gt;</code>
+	 * tag, like <code>background-color</code>. If you never call this
+	 * method, or pass null, and you never call the <code>setContentStyle</code>
+	 * method, or pass null, then the default style will be used (normal black
+	 * font on a white background). You can pass a blank string if you just want
+	 * to clear that default.
 	 * 
-	 * @param pContentFontStyle
-	 *            The CSS style for the help content font. This can be any
-	 *            string of CSS properties valid for the HTML
-	 *            <code>&lt;FONT&gt;</code> tag. For example,
-	 *            <code>color:black</code> (the default).
+	 * @param pContentClass
+	 *            The name of the CSS class for the popup help content. Pass
+	 *            blank to just clear the default style.
 	 */
-	public void setContentFontStyle(String pContentFontStyle) {
-		if (pContentFontStyle != null) 
-			pContentFontStyle = pContentFontStyle.trim();
-		this.contentFontStyle = pContentFontStyle;
+	public void setContentClass(String pContentClass) {
+		if (pContentClass != null)
+			pContentClass = pContentClass.trim();
+		this.contentClass = pContentClass;
 	}
 
 	/**
@@ -588,8 +626,6 @@ public abstract class ClassicContextualHelpProvider extends
 	 * HTML character entities so that they display literally) found in the
 	 * content.
 	 * </p>
-	 * 
-	 * TODO: Must implement this method, see notes above.
 	 * 
 	 * @param escape
 	 * @return
@@ -638,54 +674,43 @@ public abstract class ClassicContextualHelpProvider extends
 		String closeButtonUrl = getCloseImageURL();
 		String closeButtonAlt = getCloseImageAlt();
 
-		// Make the various styles.
-		String widthAttr = "" + (this.width <= 0 ? DEFAULT_WIDTH : this.width);
-		String borderStyleAttr = this.borderStyle == null ? DEFAULT_BORDER_STYLE
-				: this.borderStyle;
-		String titleBgStyleAttr = this.titleBgStyle == null ? DEFAULT_TITLE_BG_STYLE
-				: this.titleBgStyle;
-		String titleFontStyleAttr = this.titleFontStyle == null ? DEFAULT_TITLE_FONT_STYLE
-				: this.titleFontStyle;
-		String contentBgStyleAttr = this.contentBgStyle == null ? DEFAULT_CONTENT_BG_STYLE
-				: this.contentBgStyle;
-		String contentFontStyleAttr = this.contentFontStyle == null ? DEFAULT_CONTENT_FONT_STYLE
-				: this.contentFontStyle;
-		if (widthAttr == null) {
-			widthAttr = "";
-		} else {
-			widthAttr = "width=\"" + Utils.escapeXml(widthAttr.trim()) + "\" ";
-		}
-		if (borderStyleAttr == null) {
-			borderStyleAttr = "";
-		} else {
-			borderStyleAttr = "style=\""
-					+ Utils.escapeXml(borderStyleAttr.trim()) + "\" ";
-		}
-		if (titleBgStyleAttr == null) {
-			titleBgStyleAttr = "";
-		} else {
-			titleBgStyleAttr = "style=\""
-					+ Utils.escapeXml(titleBgStyleAttr.trim()) + "\" ";
-		}
-		if (titleFontStyleAttr == null) {
-			titleFontStyleAttr = "";
-		} else {
-			titleFontStyleAttr = "style=\""
-					+ Utils.escapeXml(titleFontStyleAttr.trim()) + "\" ";
-		}
-		if (contentBgStyleAttr == null) {
-			contentBgStyleAttr = "";
-		} else {
-			contentBgStyleAttr = "style=\""
-					+ Utils.escapeXml(contentBgStyleAttr.trim()) + "\" ";
-		}
-		if (contentFontStyleAttr == null) {
-			contentFontStyleAttr = "";
-		} else {
-			contentFontStyleAttr = "style=\""
-					+ Utils.escapeXml(contentFontStyleAttr.trim()) + "\" ";
-		}
-
+		// Make the width.
+		String widthAttr = "";
+		if (this.width > 0)
+			widthAttr = "width=\"" + this.width + "\" ";
+		if ("".equals(widthAttr) && (DEFAULT_WIDTH > 0))
+			widthAttr = "width=\"" + DEFAULT_WIDTH + "\" ";
+		
+		// Make the border style.
+		String borderStyleAttr = "";
+		if (this.borderStyle != null)
+			borderStyleAttr += "style=\""
+				+ Utils.escapeXml(this.borderStyle) + "\" ";
+		if (this.borderClass != null)
+			borderStyleAttr += "class=\"" + Utils.escapeXml(this.borderClass) + "\" ";
+		if ("".equals(borderStyleAttr) && (DEFAULT_BORDER_STYLE != null))
+			borderStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_BORDER_STYLE) + "\" ";
+		
+		// Make the title style.
+		String titleStyleAttr = "";
+		if (this.titleStyle != null)
+			titleStyleAttr += "style=\""
+				+ Utils.escapeXml(this.titleStyle) + "\" ";
+		if (this.titleClass != null)
+			titleStyleAttr += "class=\"" + Utils.escapeXml(this.titleClass) + "\" ";
+		if ("".equals(titleStyleAttr) && (DEFAULT_TITLE_STYLE != null))
+			titleStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_TITLE_STYLE) + "\" ";
+		
+		// Make the help content style.
+		String contentStyleAttr = "";
+		if (this.contentStyle != null)
+			contentStyleAttr += "style=\""
+				+ Utils.escapeXml(this.contentStyle) + "\" ";
+		if (this.contentClass != null)
+			contentStyleAttr += "class=\"" + Utils.escapeXml(this.contentClass) + "\" ";
+		if ("".equals(contentStyleAttr) && (DEFAULT_CONTENT_STYLE != null))
+			contentStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_CONTENT_STYLE) + "\" ";
+		
 		// Generate the main HTML and event-handling code by assembling the
 		// pieces. First, assemble the event-handler script.
 
@@ -732,41 +757,29 @@ public abstract class ClassicContextualHelpProvider extends
 				+ "cellpadding=2 cellspacing=0>\n");
 		// Write title bar with title string and close button, with surrounding
 		// top and bottom cells for padding.
-		html.append("<tr height=2><td " + titleBgStyleAttr
+		html.append("<tr height=2><td " + titleStyleAttr
 				+ "colspan=4 /></tr>\n");
 		html.append("<tr valign=middle height=20>\n");
-		html.append("<td " + titleBgStyleAttr + ">&nbsp;</td>\n");
-		html.append("<td align=left " + titleBgStyleAttr + "height=20>");
-		if (!titleFontStyleAttr.equals("")) {
-			html.append("<font " + titleFontStyleAttr + ">");
-			html.append(title);
-			html.append("</font>");
-		} else {
-			html.append(title);
-		}
+		html.append("<td " + titleStyleAttr + ">&nbsp;</td>\n");
+		html.append("<td align=left " + titleStyleAttr + "height=20>");
+		html.append(title);
 		html.append("</td>\n");
-		html.append("<td " + titleBgStyleAttr + ">&nbsp;</td>\n");
-		html.append("<td " + titleBgStyleAttr + ">");
+		html.append("<td " + titleStyleAttr + ">&nbsp;</td>\n");
+		html.append("<td " + titleStyleAttr + ">");
 		html.append("<img id=\"" + id + "HelpClose\" ");
 		html.append("src=\"" + closeButtonUrl + "\" ");
 		html.append("style=\"cursor:pointer\" alt=\"" + closeButtonAlt + "\" ");
 		html
 				.append("width=\"15\" height=\"15\" align=right border=\"0\"/ ></td>\n");
 		html.append("</tr>\n");
-		html.append("<tr height=2><td " + titleBgStyleAttr
+		html.append("<tr height=2><td " + titleStyleAttr
 				+ "colspan=4 /></tr>\n");
 		html.append("<tr valign=top height=\"100%\">\n");
-		html.append("<td " + contentBgStyleAttr + "colspan=4>\n");
+		html.append("<td " + contentStyleAttr + "colspan=4>\n");
 		// Write popup content
 		html.append("<table cellpadding=10 cellspacing=10>\n");
 		html.append("<tr><td align=left><p>");
-		if (!contentFontStyleAttr.equals("")) {
-			html.append("<font " + contentFontStyleAttr + ">");
-			html.append(help);
-			html.append("</font>");
-		} else {
-			html.append(help);
-		}
+		html.append(help);
 		html.append("</p></td></tr>\n");
 		html.append("</table></td>\n");
 		html.append("</tr></table>\n");
