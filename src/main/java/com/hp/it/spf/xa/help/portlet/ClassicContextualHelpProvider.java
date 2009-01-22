@@ -69,7 +69,8 @@ public class ClassicContextualHelpProvider extends
 	/**
 	 * A concrete implementation, to get a counter of how many times in this
 	 * request lifecycle a classic contextual help provider has been generated
-	 * (ie its getHTML method has been invoked).
+	 * (ie its getHTML method has been invoked). If a null portlet request was
+	 * given to the constructor, this method always returns 0.
 	 * 
 	 * @return The counter.
 	 */
@@ -95,8 +96,8 @@ public class ClassicContextualHelpProvider extends
 	/**
 	 * A concrete implementation, to increment the counter of how many times in
 	 * this request lifecycle a classic contextual help provider has been
-	 * generated (ie its getHTML method has been invoked). Different action for
-	 * portal and portlet, so this is an abstract method.
+	 * generated (ie its getHTML method has been invoked). If a null portlet
+	 * request was given to the constructor, this method does nothing.
 	 */
 	protected void bumpClassicContextualHelpCounter() {
 
@@ -112,7 +113,8 @@ public class ClassicContextualHelpProvider extends
 	 * A concrete implementation, to reset the counter of how many times in this
 	 * request lifecycle a classic contextual help provider has been generated
 	 * (ie its getHTML method has been invoked). Different action for portal and
-	 * portlet, so this is an abstract method.
+	 * portlet, so this is an abstract method. If a null portlet request was
+	 * given to the constructor, this method does nothing.
 	 */
 	protected void resetClassicContextualHelpCounter() {
 		if (request != null) {

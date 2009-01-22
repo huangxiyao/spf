@@ -134,22 +134,27 @@
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>titleBgStyle</name>
+			<name>borderClass</name>
 			<required>false</required>
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>titleFontStyle</name>
+			<name>titleStyle</name>
 			<required>false</required>
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>contentBgStyle</name>
+			<name>titleClass</name>
 			<required>false</required>
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>contentFontStyle</name>
+			<name>contentStyle</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>contentClass</name>
 			<required>false</required>
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>
