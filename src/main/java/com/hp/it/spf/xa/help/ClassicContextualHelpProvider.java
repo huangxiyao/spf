@@ -93,12 +93,14 @@ public abstract class ClassicContextualHelpProvider extends
 	protected static String DEFAULT_TITLE_STYLE = "background-color:blue;color:white;font-weight:bold";
 
 	/**
-	 * Default content style for classic popup.
+	 * Default help content style for classic popup.
 	 */
-	protected static String DEFAULT_CONTENT_STYLE = "background-color:white;color:black;font-weight:normal";
+	protected static String DEFAULT_HELP_STYLE = "background-color:white;color:black;font-weight:normal";
 
 	/**
-	 * The JavaScript string for the classic contextual help popup.
+	 * The JavaScript string for the classic contextual help popup open, close,
+	 * and drag-and-drop behavior. The popup itself is not defined in this
+	 * JavaScript.
 	 */
 	private static String CLASSIC_CONTEXTUAL_HELP_JS = "<script type=\"text/javascript\" language=\"JavaScript\">\n"
 			+ "if (typeof(loadedClassicContextualHelpJS) == 'undefined') \n"
@@ -387,9 +389,9 @@ public abstract class ClassicContextualHelpProvider extends
 	protected String titleStyle = null;
 
 	/**
-	 * This is the style to use for the content in the classic popup.
+	 * This is the style to use for the help content in the classic popup.
 	 */
-	protected String contentStyle = null;
+	protected String helpStyle = null;
 
 	/**
 	 * This is the CSS class to use for the border of the classic popup.
@@ -402,9 +404,9 @@ public abstract class ClassicContextualHelpProvider extends
 	protected String titleClass = null;
 
 	/**
-	 * This is the CSS class to use for the content in the classic popup.
+	 * This is the CSS class to use for the help content in the classic popup.
 	 */
-	protected String contentClass = null;
+	protected String helpClass = null;
 
 	/**
 	 * Protected to prevent external construction except by subclasses. Use an
@@ -557,17 +559,6 @@ public abstract class ClassicContextualHelpProvider extends
 	}
 
 	/**
-	 * Setter for the background style to use for the help content in the
-	 * "classic"-style contextual help popup. If you never call this method, or
-	 * pass null, the default style will be used (white background).
-	 * 
-	 * @param pContentBgStyle
-	 *            The CSS style for the content background. This can be any
-	 *            string of CSS properties valid for the HTML
-	 *            <code>&lt;TD&gt;</code> tag background. For example,
-	 *            <code>background-color:white</code> (the default).
-	 */
-	/**
 	 * Setter for the CSS style to use for the help content in the
 	 * "classic"-style contextual help popup. Provide a CSS string of properties
 	 * as you would for a standard inline HTML <code>style</code> attribute.
@@ -579,15 +570,15 @@ public abstract class ClassicContextualHelpProvider extends
 	 * style will be used (normal black font on a white background). You can
 	 * pass a blank string if you just want to clear that default.
 	 * 
-	 * @param pContentStyle
+	 * @param pHelpStyle
 	 *            The CSS style for the popup help content. For example,
 	 *            <code>background-color:white;color:blank;font-weight:normal</code>
 	 *            (the default). Pass blank to just clear the default.
 	 */
-	public void setContentStyle(String pContentStyle) {
-		if (pContentStyle != null)
-			pContentStyle = pContentStyle.trim();
-		this.contentStyle = pContentStyle;
+	public void setHelpStyle(String pHelpStyle) {
+		if (pHelpStyle != null)
+			pHelpStyle = pHelpStyle.trim();
+		this.helpStyle = pHelpStyle;
 	}
 
 	/**
@@ -603,14 +594,14 @@ public abstract class ClassicContextualHelpProvider extends
 	 * font on a white background). You can pass a blank string if you just want
 	 * to clear that default.
 	 * 
-	 * @param pContentClass
+	 * @param pHelpClass
 	 *            The name of the CSS class for the popup help content. Pass
 	 *            blank to just clear the default style.
 	 */
-	public void setContentClass(String pContentClass) {
-		if (pContentClass != null)
-			pContentClass = pContentClass.trim();
-		this.contentClass = pContentClass;
+	public void setHelpClass(String pHelpClass) {
+		if (pHelpClass != null)
+			pHelpClass = pHelpClass.trim();
+		this.helpClass = pHelpClass;
 	}
 
 	/**
@@ -680,37 +671,43 @@ public abstract class ClassicContextualHelpProvider extends
 			widthAttr = "width=\"" + this.width + "\" ";
 		if ("".equals(widthAttr) && (DEFAULT_WIDTH > 0))
 			widthAttr = "width=\"" + DEFAULT_WIDTH + "\" ";
-		
+
 		// Make the border style.
 		String borderStyleAttr = "";
 		if (this.borderStyle != null)
-			borderStyleAttr += "style=\""
-				+ Utils.escapeXml(this.borderStyle) + "\" ";
+			borderStyleAttr += "style=\"" + Utils.escapeXml(this.borderStyle)
+					+ "\" ";
 		if (this.borderClass != null)
-			borderStyleAttr += "class=\"" + Utils.escapeXml(this.borderClass) + "\" ";
+			borderStyleAttr += "class=\"" + Utils.escapeXml(this.borderClass)
+					+ "\" ";
 		if ("".equals(borderStyleAttr) && (DEFAULT_BORDER_STYLE != null))
-			borderStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_BORDER_STYLE) + "\" ";
-		
+			borderStyleAttr += "style=\""
+					+ Utils.escapeXml(DEFAULT_BORDER_STYLE) + "\" ";
+
 		// Make the title style.
 		String titleStyleAttr = "";
 		if (this.titleStyle != null)
-			titleStyleAttr += "style=\""
-				+ Utils.escapeXml(this.titleStyle) + "\" ";
+			titleStyleAttr += "style=\"" + Utils.escapeXml(this.titleStyle)
+					+ "\" ";
 		if (this.titleClass != null)
-			titleStyleAttr += "class=\"" + Utils.escapeXml(this.titleClass) + "\" ";
+			titleStyleAttr += "class=\"" + Utils.escapeXml(this.titleClass)
+					+ "\" ";
 		if ("".equals(titleStyleAttr) && (DEFAULT_TITLE_STYLE != null))
-			titleStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_TITLE_STYLE) + "\" ";
-		
+			titleStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_TITLE_STYLE)
+					+ "\" ";
+
 		// Make the help content style.
-		String contentStyleAttr = "";
-		if (this.contentStyle != null)
-			contentStyleAttr += "style=\""
-				+ Utils.escapeXml(this.contentStyle) + "\" ";
-		if (this.contentClass != null)
-			contentStyleAttr += "class=\"" + Utils.escapeXml(this.contentClass) + "\" ";
-		if ("".equals(contentStyleAttr) && (DEFAULT_CONTENT_STYLE != null))
-			contentStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_CONTENT_STYLE) + "\" ";
-		
+		String helpStyleAttr = "";
+		if (this.helpStyle != null)
+			helpStyleAttr += "style=\"" + Utils.escapeXml(this.helpStyle)
+					+ "\" ";
+		if (this.helpClass != null)
+			helpStyleAttr += "class=\"" + Utils.escapeXml(this.helpClass)
+					+ "\" ";
+		if ("".equals(helpStyleAttr) && (DEFAULT_HELP_STYLE != null))
+			helpStyleAttr += "style=\""
+					+ Utils.escapeXml(DEFAULT_HELP_STYLE) + "\" ";
+
 		// Generate the main HTML and event-handling code by assembling the
 		// pieces. First, assemble the event-handler script.
 
@@ -775,7 +772,7 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("<tr height=2><td " + titleStyleAttr
 				+ "colspan=4 /></tr>\n");
 		html.append("<tr valign=top height=\"100%\">\n");
-		html.append("<td " + contentStyleAttr + "colspan=4>\n");
+		html.append("<td " + helpStyleAttr + "colspan=4>\n");
 		// Write popup content
 		html.append("<table cellpadding=10 cellspacing=10>\n");
 		html.append("<tr><td align=left><p>");

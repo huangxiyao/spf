@@ -467,8 +467,8 @@ public abstract class ClassicContextualHelpParamBaseTag extends
 		c.setBorderClass(borderClass);
 		c.setTitleStyle(titleStyle);
 		c.setTitleClass(titleClass);
-		c.setContentStyle(contentStyle);
-		c.setContentClass(contentClass);
+		c.setHelpStyle(contentStyle);
+		c.setHelpClass(contentClass);
 		try {
 			c.setWidth(Integer.parseInt(width));
 		} catch (NumberFormatException e) {
