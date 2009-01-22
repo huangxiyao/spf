@@ -18,7 +18,7 @@
 
 	<!-- Abstract Default Exception Handler Bean -->
 	<bean id="defaultExceptionHandlerTemplate"
-		class="com.hp.frameworks.wpa.portlet.handler.WPASimpleMappingExceptionResolver"
+		class="com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver"
 		abstract="true">
 		<property name="defaultErrorView" value="defaultError" />
 		<property name="logResolvedException" value="true" />

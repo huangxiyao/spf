@@ -40,8 +40,7 @@
 		parent="defaultExceptionHandlerTemplate">
 		<property name="exceptionMappings">
 			<props>
-				<prop
-					key="com.hp.it.spf.xa.htmlviewer.portlet.exception.InternalErrorException">
+				<prop key="com.hp.it.spf.xa.htmlviewer.portlet.exception.InternalErrorException">
 					systemError
 				</prop>
 			</props>

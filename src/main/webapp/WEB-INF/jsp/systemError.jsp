@@ -7,11 +7,9 @@
 <%------------------------------------------------------------- DIRECTIVES --%>
 
 <jsp:directive.page
-	import="com.hp.it.spf.xa.i18n.portlet.I18nUtility" />
-<jsp:directive.page
 	import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" />
 <jsp:directive.page
-	import="com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController" />
+	import="com.hp.it.spf.xa.exception.portlet.ExceptionUtil" />
 
 <%---------------------------------------------------------- TAG LIBRARIES --%>
 
@@ -21,12 +19,8 @@
 
 <portlet:defineObjects />
 <jsp:scriptlet>
-	String errorCode = (String)renderRequest.getAttribute(FileInterpolatorController.REQUEST_ATTR_ERROR_CODE);
-	if (errorCode == null) 
-		errorCode = Consts.ERROR_CODE_INTERNAL;
-	String errorMessage = (String)renderRequest.getAttribute(FileInterpolatorController.REQUEST_ATTR_ERROR_MESSAGE);
-	if (errorMessage == null)
-		errorMessage = I18nUtility.getMessage(renderRequest, Consts.ERROR_CODE_INTERNAL);	
+	String errorCode = ExceptionUtil.getErrorCode(renderRequest, Consts.ERROR_CODE_INTERNAL);
+	String errorMessage = ExceptionUtil.getDisplayMessage(renderRequest, Consts.ERROR_CODE_INTERNAL);
 </jsp:scriptlet>
 
 <%---------------------------------------------------------------- MARKUP ---%>
