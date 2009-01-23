@@ -166,10 +166,11 @@ public class SelectLocaleProcessAction extends BaseAction {
 	}
 
 	/**
-	 * Check if the user is authenticated against HPP. TODO: This is currently
-	 * stubbed-out since the new authentication utility is not ready yet. Need
-	 * to call the new authentication utility here, when the code is ready.
+	 * Check if the user is authenticated against HPP.
 	 */
+	// TODO: This is currently stubbed-out since the new authentication utility
+	// is not ready yet. Need to call the new authentication utility here, when
+	// the code is ready.
 	private boolean isAuthenticatedByHPP(HttpServletRequest request) {
 		/*
 		 * return AuthenticationUtility.loggedIntoHPP(request) ||
