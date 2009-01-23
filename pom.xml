@@ -26,6 +26,10 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-portlet-filters</url>
+	</ciManagement>
 	<scm>
 		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-filters</connection>
 		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-filters</developerConnection>
