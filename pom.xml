@@ -3,9 +3,9 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.wsrp</groupId>
-	<artifactId>wsrp-injector</artifactId>
-	<version>1.0-SNAPSHOT</version>
-	<name>wsrp-injector</name>
+	<artifactId>spf-wsrp-injector</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>spf-wsrp-injector</name>
 	<description>Vignette Portal does not allow sending different sets of profile attributes for different sites, and the profile structure supported by Vignette Portal must be predefined. In SPF, this issue was addressed by injecting user profile information into the WSRP SOAP request. The injection occurred in the consumer by this project. On the producer side, the profile was extracted from WSRP SOAP request by another project called wsrp-extractor.</description>
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
@@ -69,29 +69,8 @@
 		</dependency>
 	</dependencies>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/wsrp-injector</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/wsrp-injector</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/wsrp-injector</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-wsrp-injector</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-wsrp-injector</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-wsrp-injector</url>
 	</scm>
-	<build>
-		<finalName>spf-wsrp-injector</finalName>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.1</version>
-			</plugin>
-		</plugins>
-	</build>
 </project>
