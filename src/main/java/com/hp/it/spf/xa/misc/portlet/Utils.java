@@ -68,6 +68,11 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 */
 	public static Object getUserProperty(PortletRequest request, String key) {
 		if (request != null && key != null) {
+			// TODO: Check that this logic integrates correctly with new
+			// authentication module. May need to change this method to get user
+			// attributes from different location in the request. Also see the
+			// property key name constants, defined in the common Consts class -
+			// they are marked TODO as well.
 			Object o = request.getAttribute(PortletRequest.USER_INFO);
 			if (o != null) {
 				Map userMap = (Map) o;
@@ -77,4 +82,74 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		return null;
 	}
 
+	/**
+	 * Get the user groups from the given portlet request. These are the
+	 * authorization groups defined for the current request in the portal (thus
+	 * they are portal elements, not part of the portlet application itself).
+	 * The SPF framework propagates the user groups from the portal to the
+	 * portlet where they are made accessible in the request, so this method
+	 * just returns them from the request. The method returns null if there were
+	 * no groups in the request.
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @return The list of groups (null if none).
+	 */
+	public static String[] getGroups(PortletRequest request) {
+		String[] groups = null;
+		if (request != null) {
+			// TODO: Get groups from request using new authentication module. If
+			// no groups found in request, return null. A key name for this is
+			// defined in the common Consts class - see TODO there.
+		}
+		return groups;
+	}
+
+	/**
+	 * Get the portal site name from the given portlet request. The portal site
+	 * name is the unique identifier for the current portal site (thus it is not
+	 * an element from the portlet application itself; it is an element from the
+	 * portal). For Vignette Portal, this is the "site DNS name". The SPF
+	 * framework propagates the portal site name from the portal to the portlet,
+	 * where it is made accessible in the request. So this method just returns
+	 * the site name from the given request. The method returns null if no site
+	 * name was recorded in the request.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static String getSiteName(PortletRequest request) {
+		String siteName = null;
+		if (request != null) {
+			// TODO: Get portal site name from request using new authentication
+			// module. If not found in request, return null. A key name for this
+			// is defined in the common Consts class - see TODO there.
+		}
+		return siteName;
+	}
+
+	/**
+	 * Get the portlet ID from the given portlet request. The portlet ID is the
+	 * unique identifier for the portlet instance as provisioned in the portal
+	 * (thus it is not an element from the portlet application itself; it is an
+	 * element from the portal). For Vignette Portal, this is the "portlet
+	 * friendly ID" configured by the portal administrator on the portlet
+	 * instance. The SPF framework propagates the portlet ID from the from the
+	 * portal to the portlet, where it is made accessible in the request. So
+	 * this method just returns the portlet ID from the given request. The
+	 * method returns null if no portlet ID was recorded in the request.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static String getPortletID(PortletRequest request) {
+		String portletId = null;
+		if (request != null) {
+			// TODO: Get portlet ID (currently, the Vignette portlet friendly
+			// ID) from the request using the new authentication module. If not
+			// found in request, return null. A key name for this is
+			// defined in the common Consts class - see TODO there.
+		}
+		return portletId;
+	}
 }

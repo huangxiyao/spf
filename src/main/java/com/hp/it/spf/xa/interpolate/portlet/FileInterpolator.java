@@ -16,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.hp.it.spf.xa.misc.portlet.Consts;
+import com.hp.it.spf.xa.misc.portlet.Utils;
 
 /**
  * <p>
@@ -463,17 +464,6 @@ public class FileInterpolator extends
 	private PortletResponse response = null;
 
 	/**
-	 * Portlet friendly ID of current portlet instance - added by ck for CR
-	 * 1000790086
-	 */
-	private String portletId = null;
-
-	/**
-	 * Groups of current user
-	 */
-	protected String[] userGroups = null;
-
-	/**
 	 * Portlet log.
 	 */
 	private Log portletLog = LogFactory.getLog(FileInterpolator.class);
@@ -491,17 +481,10 @@ public class FileInterpolator extends
 	 * locale in the given request.
 	 * </p>
 	 * <p>
-	 * <b>Note:</b> No user groups are passed in this constructor. Therefore
-	 * any <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code> tokens in the
-	 * file content will be treated as if the user is not a member of those
-	 * groups. You should use this constructor only if you know the file will
-	 * not contain those tokens.
-	 * </p>
-	 * <p>
 	 * <b>Note:</b> No token-substitutions property file is passed in this
-	 * constructor, either. Therefore any <code>&lt;TOKEN:key&gt;</code>
-	 * tokens in the file content will be resolved against the default
-	 * token-substitutions property file (<code>default_tokens.properties</code>).
+	 * constructor. Therefore any <code>&lt;TOKEN:key&gt;</code> tokens in the
+	 * file content will be resolved against the default token-substitutions
+	 * property file (<code>default_tokens.properties</code>).
 	 * </p>
 	 * 
 	 * @param request
@@ -517,15 +500,7 @@ public class FileInterpolator extends
 		this.request = request;
 		this.response = response;
 		this.baseContentFilePath = baseContentFilePath;
-		this.userGroups = null;
-		// get the friend id for the current portlet
-		// added by ck for cr 1000790086
-		// TODO - we will need to pass the portlet friendly ID over WSRP instead
-		// -
-		// so the key name for accessing that will probably change.
 		if (request != null && response != null) {
-			this.portletId = request
-					.getProperty(Consts.KEY_PORTLET_FRIENDLY_ID);
 			this.t = new TokenParser(request, response);
 		}
 	}
@@ -533,7 +508,7 @@ public class FileInterpolator extends
 	/**
 	 * <p>
 	 * Constructs a new FileInterpolator for the given base content pathname,
-	 * request, response, and user groups.
+	 * request, response, and token-substitutions pathname.
 	 * </p>
 	 * <p>
 	 * The base content pathname provided should include any necessary path
@@ -541,66 +516,6 @@ public class FileInterpolator extends
 	 * extension) for a resource bundle of one or more localized files. The
 	 * interpolate method will open the best-fit localized file based on the
 	 * locale in the given request.
-	 * </p>
-	 * <p>
-	 * The user groups provided are to be used with any
-	 * <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code> tokens in the file
-	 * content; if you know there are none, you can pass an empty or null array.
-	 * </p>
-	 * <p>
-	 * <b>Note:</b> A token-substitutions property file (to be used with any
-	 * <code>&lt;TOKEN:key&gt;</code> tokens in the file content) is not
-	 * passed in this constructor. Therefore any <code>&lt;TOKEN:key&gt;</code>
-	 * tokens in the file content will be resolved against the default
-	 * token-substitutions property file (<code>default_tokens.properties</code>).
-	 * </p>
-	 * 
-	 * @param request
-	 *            The portlet request
-	 * @param response
-	 *            The portlet response
-	 * @param baseContentFilePath
-	 *            The base filename and path relative to where the class loader
-	 *            searches for the file content to interpolate
-	 * @param userGroups
-	 *            An array of strings to use as the user groups (for purposes of
-	 *            any <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code>
-	 *            tokens in the file content)
-	 */
-	public FileInterpolator(PortletRequest request, PortletResponse response,
-			String baseContentFilePath, String[] userGroups) {
-		this.request = request;
-		this.response = response;
-		this.baseContentFilePath = baseContentFilePath;
-		this.userGroups = userGroups;
-		// get the friend id for the current portlet
-		// added by ck for cr 1000790086
-		// TODO - we will need to pass the portlet friendly ID over WSRP instead
-		// -
-		// so the key name for accessing that will probably change.
-		if (request != null && response != null) {
-			this.portletId = request
-					.getProperty(Consts.KEY_PORTLET_FRIENDLY_ID);
-			this.t = new TokenParser(request, response);
-		}
-	}
-
-	/**
-	 * <p>
-	 * Constructs a new FileInterpolator for the given base content pathname,
-	 * request, response, user groups, and token-substitutions pathname.
-	 * </p>
-	 * <p>
-	 * The base content pathname provided should include any necessary path
-	 * (relative to the class loader) followed by the base filename (including
-	 * extension) for a resource bundle of one or more localized files. The
-	 * interpolate method will open the best-fit localized file based on the
-	 * locale in the given request.
-	 * </p>
-	 * <p>
-	 * The user groups provided are to be used with any
-	 * <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code> tokens in the file
-	 * content; if you know there are none, you can pass an empty or null array.
 	 * </p>
 	 * <p>
 	 * The token-substitutions pathname provided is to be used with any
@@ -619,31 +534,18 @@ public class FileInterpolator extends
 	 * @param baseContentFilePath
 	 *            The base filename and path relative to where the class loader
 	 *            searches for the file content to interpolate
-	 * @param userGroups
-	 *            An array of strings to use as the user groups (for purposes of
-	 *            any <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code>
-	 *            tokens in the file content)
 	 * @param subsFilePath
 	 *            The filename and path relative to where the class loader
 	 *            searches for the token-substitutions property file (for
 	 *            purposes of any <code>&lt;TOKEN:key&gt;</code> tokens in the
 	 *            file content)
 	 */
-	/* Added by CK for 1000790073 */
 	public FileInterpolator(PortletRequest request, PortletResponse response,
-			String baseContentFilePath, String[] userGroups, String subsFilePath) {
+			String baseContentFilePath, String subsFilePath) {
 		this.request = request;
 		this.response = response;
 		this.baseContentFilePath = baseContentFilePath;
-		this.userGroups = userGroups;
-		// get the friendly ID for the current portlet
-		// added by ck for cr 1000790086
-		// TODO - we will need to pass the portlet friendly ID over WSRP instead
-		// -
-		// so the key name for accessing that will probably change.
 		if (request != null && response != null) {
-			this.portletId = request
-					.getProperty(Consts.KEY_PORTLET_FRIENDLY_ID);
 			this.t = new TokenParser(request, response, subsFilePath);
 		}
 	}
@@ -676,11 +578,8 @@ public class FileInterpolator extends
 
 		// parse the portlet token
 		// added by ck for cr 1000790086
-		content = t.parsePortletContainer(content, portletId);
+		content = t.parsePortletContainer(content, getPortletID());
 		// parse the portlet token ---end
-
-		// parse the group token
-		content = t.parseGroupContainer(content, userGroups);
 
 		// parse the role token
 		content = t.parseRoleContainer(content);
@@ -729,7 +628,15 @@ public class FileInterpolator extends
 	 * @return email
 	 */
 	protected String getEmail() {
-		return getUserProperty(Consts.KEY_USER_INFO_EMAIL);
+		if (request == null) {
+			return null;
+		}
+		try {
+			return (String) Utils.getUserProperty(request,
+					Consts.KEY_USER_INFO_EMAIL);
+		} catch (ClassCastException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -742,7 +649,15 @@ public class FileInterpolator extends
 	 * @return first (given) name
 	 */
 	protected String getFirstName() {
-		return getUserProperty(Consts.KEY_USER_INFO_GIVEN_NAME);
+		if (request == null) {
+			return null;
+		}
+		try {
+			return (String) Utils.getUserProperty(request,
+					Consts.KEY_USER_INFO_GIVEN_NAME);
+		} catch (ClassCastException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -755,7 +670,15 @@ public class FileInterpolator extends
 	 * @return last (family) name
 	 */
 	protected String getLastName() {
-		return getUserProperty(Consts.KEY_USER_INFO_FAMILY_NAME);
+		if (request == null) {
+			return null;
+		}
+		try {
+			return (String) Utils.getUserProperty(request,
+					Consts.KEY_USER_INFO_FAMILY_NAME);
+		} catch (ClassCastException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -765,19 +688,41 @@ public class FileInterpolator extends
 	 * 
 	 * @return site name
 	 */
-	/*
-	 * Added by CK for 1000790073 TODO - we will need to pass the portal site
-	 * name over WSRP instead - so the key name for accessing that will probably
-	 * change.
-	 */
 	protected String getSite() {
 		if (request == null) {
 			return null;
 		}
-		String siteName = request.getProperty(Consts.KEY_PORTLET_SITE_NAME);
-		return siteName;
+		return Utils.getSiteName(request);
 	}
 
+	/**
+	 * Get the authorization groups from the portlet request provided to the
+	 * constructor. Returns null if these have not been set in the request, or
+	 * the request provided to the constructor was null.
+	 * 
+	 * @return list of groups
+	 */
+	protected String[] getGroups() {
+		if (request == null) {
+			return null;
+		}
+		return Utils.getGroups(request);
+	}
+
+	/**
+	 * Get the portlet ID (ie the Vignette portlet friendly ID) from the portlet
+	 * request provided to the constructor. Returns null if this has not been
+	 * set in the request, or the request provided to the constructor was null.
+	 * 
+	 * @return portlet ID
+	 */
+	protected String getPortletID() {
+		if (request == null) {
+			return null;
+		}
+		return Utils.getPortletID(request);
+	}
+	
 	/**
 	 * Log warning.
 	 * 

@@ -11,6 +11,7 @@ import org.springframework.web.portlet.mvc.AbstractController;
 
 import com.hp.it.spf.xa.interpolate.portlet.FileInterpolator;
 import com.hp.it.spf.xa.exception.portlet.SPFException;
+import com.hp.it.spf.xa.misc.portlet.Utils;
 import com.hp.websat.timber.logging.Log;
 
 /**
@@ -113,31 +114,6 @@ public abstract class FileInterpolatorController extends AbstractController {
 			RenderResponse response, String fileContent) throws Exception;
 
 	/**
-	 * Returns the user groups from the portlet request. It is assumed they were
-	 * set into the proper namespaced attribute by the portal container (the SPF
-	 * Vignette PreDisplayAction for the PageDisplay secondary page currently
-	 * does this automatically); otherwise null is returned.
-	 * 
-	 * @param request
-	 * @return String[] group names
-	 */
-	protected String[] getUserGroups(RenderRequest request) {
-
-		/*
-		 * TODO - replace with code to get groups from PortletRequest.USER_INFO
-		 * map.
-		 * 
-		 * if (request
-		 * .getAttribute(com.hp.it.cas.spf.common.utils.Consts.REQUEST_ATTR_GROUPS) !=
-		 * null) { return (String[]) request
-		 * .getAttribute(com.hp.it.cas.spf.common.utils.Consts.REQUEST_ATTR_GROUPS); }
-		 * else return null;
-		 */
-
-		return new String[] {};
-	}
-
-	/**
 	 * <p>
 	 * Invoked during the render phase, this method gets the filename from the
 	 * request (using the concrete getFilename method you implement), uses the
@@ -172,12 +148,14 @@ public abstract class FileInterpolatorController extends AbstractController {
 			RenderResponse response) throws Exception {
 
 		Log.logInfo(this, "FileInterpolatorController: render phase invoked.");
-		String[] userGroups = getUserGroups(request);
 		String relativeName = getFilename(request);
-		Log.logInfo(this, "FileInterpolatorController: rendering file content from proper localized version of base file: "
+		Log
+				.logInfo(
+						this,
+						"FileInterpolatorController: rendering file content from proper localized version of base file: "
 								+ relativeName);
 		FileInterpolator f = new FileInterpolator(request, response,
-				relativeName, userGroups, this.subsFileName);
+				relativeName, this.subsFileName);
 		String fileContent = f.interpolate();
 		return this.execute(request, response, fileContent);
 	}

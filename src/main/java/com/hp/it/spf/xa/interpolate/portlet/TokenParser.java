@@ -35,12 +35,6 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
 public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
-	 * This class attribute is the name of the container token for a group
-	 * section.
-	 */
-	private static final String TOKEN_GROUP_CONTAINER = "GROUP";
-
-	/**
 	 * This class attribute is the name of the container token for a portlet
 	 * section.
 	 */
@@ -66,36 +60,6 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * Portlet logging.
 	 */
 	private Log portletLog = LogFactory.getLog(FileInterpolator.class);
-
-	/**
-	 * ContainerMatcher for group parsing. The constructor stores an array of
-	 * group names into the class. The match method returns true if the given
-	 * group name exactly matches (case-insensitive) any of the stored group
-	 * names.
-	 */
-	protected class GroupContainerMatcher extends ContainerMatcher {
-
-		protected GroupContainerMatcher(String[] groups) {
-			super(groups);
-		}
-
-		protected boolean match(String containerKey) {
-			String[] groups = (String[]) subjectOfComparison;
-			if (groups != null && containerKey != null) {
-				containerKey = containerKey.trim();
-				if (!containerKey.equals("")) {
-					for (int i = 0; i < groups.length; i++) {
-						if (groups[i] != null) {
-							if (groups[i].trim().equalsIgnoreCase(containerKey)) {
-								return true;
-							}
-						}
-					}
-				}
-			}
-			return false;
-		}
-	}
 
 	/**
 	 * ContainerMatcher for portlet parsing. The constructor stores a portlet ID
@@ -249,78 +213,6 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		if (portletLog.isErrorEnabled()) {
 			portletLog.error(msg);
 		}
-	}
-
-	/**
-	 * <p>
-	 * Parses the string for any <code>&lt;GROUP:<i>groups</i>&gt;</code>
-	 * content; such content is deleted if the given user groups do not qualify
-	 * (otherwise only the special markup is removed). The <i>groups</i> may
-	 * include one or more group names, delimited by "|" for a logical-or.
-	 * <code>&lt;GROUP:<i>groups</i>&GT;</code> markup may be nested for
-	 * logical-and.
-	 * </p>
-	 * 
-	 * <p>
-	 * For example, consider the following content string:
-	 * </p>
-	 * 
-	 * <pre>
-	 *  This content is for everyone.
-	 *  &lt;GROUP:abc|def&gt;
-	 *  This content is only for members of the abc or def groups.
-	 *    &lt;GROUP:xyz&gt;
-	 *    This content is only for members of both the xyz group 
-	 *    and the abc or def groups.
-	 *    &lt;/GROUP&gt;
-	 *  &lt;/GROUP&gt;
-	 * </pre>
-	 * 
-	 * <p>
-	 * If the given user groups include abc, def, and xyz, the returned content
-	 * string is:
-	 * </p>
-	 * 
-	 * <pre>
-	 *  This content is for everyone.
-	 *  
-	 *  This content is only for members of the abc or def groups.
-	 *  
-	 *    This content is only for members of both the xyz group 
-	 *    and the abc or def groups.
-	 *    
-	 *    
-	 * </pre>
-	 * 
-	 * <p>
-	 * But if the given user groups include only abc, the returned content
-	 * string is:
-	 * </p>
-	 * 
-	 * <pre>
-	 *  This content is for everyone.
-	 *  
-	 *  This content is only for members of the abc or def groups.
-	 *  
-	 *  
-	 * </pre>
-	 * 
-	 * <p>
-	 * If you provide null content, null is returned. If you provide null or
-	 * empty groups, all <code>&lt;GROUP&gt;</code>-enclosed sections are
-	 * removed from the content.
-	 * </p>
-	 * 
-	 * @param content
-	 *            The content string.
-	 * @param userGroups
-	 *            The user groups.
-	 * @return The interpolated string.
-	 */
-	public String parseGroupContainer(String content, String[] userGroups) {
-
-		return super.parseContainer(content, TOKEN_GROUP_CONTAINER,
-				new GroupContainerMatcher(userGroups));
 	}
 
 	/**
