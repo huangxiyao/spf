@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.xa</groupId>
-	<artifactId>portal-utilities</artifactId>
+	<artifactId>spf-portal-utilities</artifactId>
 	<name>SPF portal utilities</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>
@@ -13,7 +13,8 @@
 		(used by the global help secondary page, for example),
 		internationalization (including generating localized resource
 		file URLs and getting localized message properties with various
-		optional hooks such as contextual help), etc.
+		optional hooks such as contextual help), help (including
+		contextual and global help), etc.
 	</description>
 	<inceptionYear>December 2008</inceptionYear>
 	<parent>
@@ -24,29 +25,24 @@
 	<ciManagement>
 		<system>Hudson</system>
 		<url>
-			http://samson.atl.hp.com:8080/hudson/job/portal-utilities/
+			http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities
 		</url>
 	</ciManagement>
 	<scm>
 		<connection>
-			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/portal-utilities
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portal-utilities
 		</connection>
 		<developerConnection>
-			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/portal-utilities
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portal-utilities
 		</developerConnection>
 		<url>
-			http://samson.atl.hp.com/svn/spf/source/xa/trunk/portal-utilities
+			http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portal-utilities
 		</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
 	</organization>
 	<dependencies>
-		<dependency>
-			<groupId>com.hp.it.spf.xa</groupId>
-			<artifactId>common-utilities</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -94,7 +90,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
-			<artifactId>common-ws-hpp</artifactId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-hpp</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
