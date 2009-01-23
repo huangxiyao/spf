@@ -66,10 +66,6 @@ public class GlobalHelpDisplayAction extends BaseAction {
 			HttpServletRequest request = portalContext.getPortalRequest()
 					.getRequest();
 
-			// TODO: Get the user groups using the new SPF method.
-			// String[] userGroups = AuthenticationUtility
-			// .getGroupsFromCurrentUser(request);
-			String[] userGroups = null;
 			FileInterpolator f = null;
 			String baseName = null;
 			String helpContent = null;
@@ -79,7 +75,7 @@ public class GlobalHelpDisplayAction extends BaseAction {
 			// First look for site-specific global help file.
 			baseName = portalContext.getCurrentSite().getDNSName()
 					+ SITE_GLOBAL_HELP_BASE_NAME_SUFFIX;
-			f = new FileInterpolator(portalContext, baseName, userGroups);
+			f = new FileInterpolator(portalContext, baseName);
 			helpContent = f.interpolate();
 
 			// If the content is not null or blank, then store into request
@@ -92,8 +88,7 @@ public class GlobalHelpDisplayAction extends BaseAction {
 			} else {
 				// If the content was null or blank, try default global help
 				// file.
-				f = new FileInterpolator(portalContext, GLOBAL_HELP_BASE_NAME,
-						userGroups);
+				f = new FileInterpolator(portalContext, GLOBAL_HELP_BASE_NAME);
 				helpContent = f.interpolate();
 
 				// If the content is not null or blank, then store into request.
