@@ -143,8 +143,8 @@ public class AuthenticatorHelper {
         LOG.info("updating vap user start");
         // Setting VAP User object
         try {
-            user.setProperty(AuthenticationConsts.PROPERTY_PROFILE_ID, ssoUser.getProfileId());
-            user.setProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID, ssoUser.getUserName());
+            //user.setProperty(AuthenticationConsts.PROPERTY_PROFILE_ID, ssoUser.getProfileId());
+            //user.setProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID, ssoUser.getUserName());
             user.setProperty(AuthenticationConsts.PROPERTY_EMAIL_ID, ssoUser.getEmail());
             user.setProperty(AuthenticationConsts.PROPERTY_FIRSTNAME_ID, ssoUser.getFirstName());
             user.setProperty(AuthenticationConsts.PROPERTY_LASTNAME_ID, ssoUser.getLastName());
