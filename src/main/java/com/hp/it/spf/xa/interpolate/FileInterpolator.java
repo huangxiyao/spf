@@ -101,6 +101,14 @@ public abstract class FileInterpolator {
 	protected abstract String getSite();
 
 	/**
+	 * Get the authorization groups for the current request. Different action by
+	 * portal and portlet, so therefore this is an abstract method.
+	 * 
+	 * @return array of groups
+	 */
+	protected abstract String[] getGroups();
+	
+	/**
 	 * Log a warning string to the log file. Different action by portal and
 	 * portlet, so therefore this is an abstract method.
 	 * 
@@ -196,6 +204,9 @@ public abstract class FileInterpolator {
 		// Parse site sections
 		content = t.parseSiteContainer(content, getSite());
 
+		// Parse group sections
+		content = t.parseGroupContainer(content, getGroups());
+
 		return content;
 	}
 
@@ -223,18 +234,4 @@ public abstract class FileInterpolator {
 		return sb.toString();
 	}
 
-	/**
-	 * Get the value of the given user property from the portal User object in
-	 * the portal context (portal request) provided to the constructor. Returns
-	 * null if this has not been set in the request (eg, when the user is not
-	 * logged-in), or the portal context provided to the constructor was null.
-	 * 
-	 * @return email
-	 */
-	protected String getUserProperty(String key) {
-		if (t == null) {
-			return null;
-		}
-		return t.getUserProperty(key);
-	}
 }
