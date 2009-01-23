@@ -1,0 +1,12 @@
+package com.hp.it.spf.user.group.utils;
+
+public class IUGSConstant {
+	// Definition of parameters list name
+	public final static String UGSPARAMETERSFILENAME = "UGSParameters";
+    
+    public final static String MODE = "Mode";
+    public final static String ENDPOINTS_PREFIX = "EndPoint";
+    public final static String USERNAME_PREFIX = "UserName";
+    public final static String PASSWORD_PREFIX = "Password";
+    public final static String TIMEOUT = "Timeout";
+}
