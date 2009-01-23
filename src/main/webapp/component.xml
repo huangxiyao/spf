@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <epideploy:component build-version="Gold"
-	component-id="SPFSystemErrorSecondaryPage"
+	component-id="spf-system-error-secondarypage"
 	component-type="Secondary Pages"
 	description="Shared Portal Framework secondary page for display of default system error page."
 	epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0"
@@ -13,7 +13,7 @@
 	<epideploy:detail>
 		<style-info apply-template-header="true"
 			description="Shared Portal Framework secondary page for display of default system error page."
-			friendly-id="ANON_SPF_SYSTEM_ERROR" id="SPFSystemErrorSecondaryPage"
+			friendly-id="ANON_SPF_SYSTEM_ERROR" id="spf-system-error-secondarypage"
 			is-system="false" primary-filename="systemError.jsp"
 			processing-type="ACTION_BASED" template-default="true"
 			template-uid="template0053"
