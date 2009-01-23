@@ -12,7 +12,7 @@ import com.epicentric.common.website.Localizer;
 import com.epicentric.common.website.SessionInfo;
 import com.epicentric.entity.ChildEntity;
 import com.epicentric.site.Site;
-import com.hp.it.spf.localeresolver.core.hpweb.LanguageNegotiator;
+import com.hp.it.spf.localeresolver.hpweb.LanguageNegotiator;
 import com.hp.it.spf.localeresolver.portal.getter.IUserMediator;
 import com.hp.it.spf.localeresolver.portal.getter.PortalUserMediator;
 

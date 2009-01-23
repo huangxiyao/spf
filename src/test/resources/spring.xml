@@ -6,7 +6,7 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
 	>
 
-<bean id="localeResolver" class="com.hp.it.spf.localeresolver.core.spring.NegotiatedLanguageLocaleResolver">
+<bean id="localeResolver" class="com.hp.it.spf.localeresolver.spring.NegotiatedLanguageLocaleResolver">
 	<constructor-arg ref="language-negotiator"/>
 	<property name="defaultLocale" value="en_US.."/>
 </bean>
@@ -30,7 +30,7 @@
 
 <!-- Negotiators -->
 
-	<bean id="language-negotiator" class="com.hp.it.spf.localeresolver.core.http.LanguageNegotiator">
+	<bean id="language-negotiator" class="com.hp.it.spf.localeresolver.http.LanguageNegotiator">
 		<constructor-arg>
 			<list>
 				<value>en_US</value>
@@ -40,14 +40,14 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="character-set-negotiator" class="com.hp.it.spf.localeresolver.core.http.CharacterSetNegotiator">
+	<bean id="character-set-negotiator" class="com.hp.it.spf.localeresolver.http.CharacterSetNegotiator">
 		<constructor-arg value="UTF-8"/>
 	</bean>
 	
 	<bean id="view-negotiators" class="java.util.ArrayList">
 		<constructor-arg>
 			<list>
-				<bean class="com.hp.it.spf.localeresolver.core.http.MediaTypeNegotiator">
+				<bean class="com.hp.it.spf.localeresolver.http.MediaTypeNegotiator">
 					<constructor-arg>
 						<list>
 							<value>application/xhtml+xml</value>
@@ -65,7 +65,7 @@
 	<bean id="atom-negotiators" class="java.util.ArrayList">
 		<constructor-arg>
 			<list>
-				<bean class="com.hp.it.spf.localeresolver.core.http.MediaTypeNegotiator">
+				<bean class="com.hp.it.spf.localeresolver.http.MediaTypeNegotiator">
 					<constructor-arg index="0">
 						<list>
 							<value>application/atom+xml</value>
@@ -80,7 +80,7 @@
 	
 <!-- Mappings -->
 	
-	<bean id="html-mapper" class="com.hp.it.spf.localeresolver.core.spring.ContentNegotiatingHandlerMapping">
+	<bean id="html-mapper" class="com.hp.it.spf.localeresolver.spring.ContentNegotiatingHandlerMapping">
 		<property name="alwaysUseFullPath" value="true"/>
 		<property name="urlMap">
 			<map>
@@ -90,14 +90,14 @@
 		<property name="negotiators" ref="view-negotiators"/>
 		<property name="interceptors">
 			<list>
-				<bean class="com.hp.it.spf.localeresolver.core.spring.NegotiatedContentHandlerInterceptor">
+				<bean class="com.hp.it.spf.localeresolver.spring.NegotiatedContentHandlerInterceptor">
 					<property name="negotiators" ref="view-negotiators"/>
 				</bean>
 			</list>
 		</property>
 	</bean>
 	
-	<bean id="atom-mapper" class="com.hp.it.spf.localeresolver.core.spring.ContentNegotiatingHandlerMapping">
+	<bean id="atom-mapper" class="com.hp.it.spf.localeresolver.spring.ContentNegotiatingHandlerMapping">
 		<property name="alwaysUseFullPath" value="true"/>
 		<property name="urlMap">
 			<map>
@@ -107,7 +107,7 @@
 		<property name="negotiators" ref="atom-negotiators"/>
 		<property name="interceptors">
 			<list>
-				<bean class="com.hp.it.spf.localeresolver.core.spring.NegotiatedContentHandlerInterceptor">
+				<bean class="com.hp.it.spf.localeresolver.spring.NegotiatedContentHandlerInterceptor">
 					<property name="negotiators" ref="atom-negotiators"/>
 				</bean>
 			</list>

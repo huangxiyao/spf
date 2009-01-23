@@ -8,8 +8,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
-import com.hp.it.spf.localeresolver.core.hpweb.AbstractLocaleProvider;
-import com.hp.it.spf.localeresolver.core.hpweb.LocaleProvider;
+import com.hp.it.spf.localeresolver.hpweb.AbstractLocaleProvider;
+import com.hp.it.spf.localeresolver.hpweb.LocaleProvider;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;

@@ -6,8 +6,8 @@ package com.hp.it.spf.localeresolver.portal.mock;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.hp.it.spf.localeresolver.core.hpweb.LocaleProvider;
-import com.hp.it.spf.localeresolver.core.hpweb.LocaleProviderFactory;
+import com.hp.it.spf.localeresolver.hpweb.LocaleProvider;
+import com.hp.it.spf.localeresolver.hpweb.LocaleProviderFactory;
 
 /**
  * @author <link href="marc.derosa@hp.com"></link>
