@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.sso</groupId>
-	<artifactId>session-initialization</artifactId>
+	<artifactId>spf-session-initialization</artifactId>
 	<name>sso session-initialization</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>This session initialization project provides the followinng features:
@@ -20,15 +20,16 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/sso/trunk/session-initialization</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/sso/trunk/session-initialization</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/sso/trunk/session-initialization</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/sso/trunk/spf-session-initialization</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/sso/trunk/spf-session-initialization</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/sso/trunk/spf-session-initialization</url>
 	</scm>
 	<dependencies>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
-			<artifactId>common-utilities</artifactId>
+			<artifactId>spf-common-utilities</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -52,13 +53,15 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
-			<artifactId>portal-utilities</artifactId>
+			<artifactId>spf-portal-utilities</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
-			<artifactId>common-ws-hpp</artifactId>
+			<artifactId>spf-common-hpp</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>wsdl4j</groupId>
@@ -68,7 +71,6 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>spf-session-initialization</finalName>
 		<resources>
 			<resource>
 				<filtering>true</filtering>
