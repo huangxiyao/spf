@@ -1,13 +1,13 @@
 <body>
 	<p>HP.com specific locale negotiation components.<p>
 	
-	<p>{@link com.hp.it.spf.localeresolver.core.hpweb.LocaleFilter}, a servlet filter, is the primary class of interest to applications. It implements all HP.com requirements
+	<p>{@link com.hp.it.spf.localeresolver.core.filter.LocaleFilter}, a servlet filter, is the primary class of interest to applications. It implements all HP.com requirements
 	regarding user locale resolution. The filter intercepts incoming requests, gathers all locale information available in the request, compares it against
 	application locale availability and selects the best match.</p>
 	
 	<p>Solutions for Spring MVC based applications are provided in the {@link com.hp.it.spf.localeresolver.core.spring} package.</p>
 	
-	<p>Out-of-the-box the {@link com.hp.it.spf.localeresolver.core.hpweb.LocaleFilter} addresses all HP.com locale requirements. It is parameterized to enable application-specific
+	<p>Out-of-the-box the {@link com.hp.it.spf.localeresolver.core.filter.LocaleFilter} addresses all HP.com locale requirements. It is parameterized to enable application-specific
 	HP Passport integration.</p>
 	
 	<p>A web application will typically:</p>
@@ -22,15 +22,15 @@
 			</ol>
 		</li>
 		
-		<li>Configure the {@link com.hp.it.spf.localeresolver.core.hpweb.LocaleFilter} in the application's <code>web.xml</code> including initialization parameters specifying the above implementation classes.</li>
+		<li>Configure the {@link com.hp.it.spf.localeresolver.core.filter.LocaleFilter} in the application's <code>web.xml</code> including initialization parameters specifying the above implementation classes.</li>
 	</ol>
 	
-	<p>The following illustrates the configuration of the {@link com.hp.it.spf.localeresolver.core.hpweb.LocaleFilter}.</p>
+	<p>The following illustrates the configuration of the {@link com.hp.it.spf.localeresolver.core.filter.LocaleFilter}.</p>
 	
 <code><pre>
 &lt;filter&gt;
 	&lt;filter-name&gt;Locale Filter&lt;/filter-name&gt;
-	&lt;filter-class&gt;com.hp.it.spf.localeresolver.core.hpweb.LocaleFilter&lt;/filter-class&gt;
+	&lt;filter-class&gt;com.hp.it.spf.localeresolver.core.filter.LocaleFilter&lt;/filter-class&gt;
 	&lt;init-param&gt;
 		&lt;param-name&gt;targetLocaleProvider&lt;/param-name&gt;
 		&lt;param-value&gt;com.hp.myapplication.MyApplicationLocaleProvider&lt;/param-value&gt;

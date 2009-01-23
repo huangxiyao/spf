@@ -7,6 +7,8 @@ package com.hp.it.spf.localeresolver.core.hpweb;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.hp.it.spf.localeresolver.core.filter.LocaleFilter;
+
 /**
  * Factory that returns locale providers. Used by the {@link LocaleFilter} to
  * retrieve the application specific HP Passport user profile locale settings.
