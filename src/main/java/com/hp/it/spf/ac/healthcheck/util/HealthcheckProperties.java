@@ -14,10 +14,10 @@ import java.util.Properties;
 import javax.servlet.ServletContext;
 
 import com.hp.bco.pl.wpa.util.Environment;
-import com.hp.it.spf.ac.status.ClosedStatus;
-import com.hp.it.spf.ac.status.DownStatus;
-import com.hp.it.spf.ac.status.HealthcheckStatus;
-import com.hp.it.spf.ac.status.OpenStatus;
+import com.hp.it.spf.xa.ac.HealthcheckStatus;
+import com.hp.it.spf.xa.ac.ClosedStatus;
+import com.hp.it.spf.xa.ac.DownStatus;
+import com.hp.it.spf.xa.ac.OpenStatus;
 
 
 /**

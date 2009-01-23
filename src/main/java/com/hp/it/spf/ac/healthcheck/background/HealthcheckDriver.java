@@ -17,10 +17,10 @@ import com.hp.it.spf.ac.healthcheck.background.HealthcheckLogger;
 import com.hp.it.spf.ac.healthcheck.background.OpenSignHealthcheckClient;
 import com.hp.it.spf.ac.healthcheck.background.PortalPulseHealthcheckClient;
 import com.hp.it.spf.ac.healthcheck.util.HealthcheckProperties;
-import com.hp.it.spf.ac.status.ClosedStatus;
-import com.hp.it.spf.ac.status.DownStatus;
-import com.hp.it.spf.ac.status.HealthcheckStatus;
-import com.hp.it.spf.ac.status.OpenStatus;
+import com.hp.it.spf.xa.ac.HealthcheckStatus;
+import com.hp.it.spf.xa.ac.ClosedStatus;
+import com.hp.it.spf.xa.ac.DownStatus;
+import com.hp.it.spf.xa.ac.OpenStatus;
 
 /**
  * This singleton class is the controller for the background healthcheck feature

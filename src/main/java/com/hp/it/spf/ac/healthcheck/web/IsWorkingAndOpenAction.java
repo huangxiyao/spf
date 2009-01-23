@@ -20,8 +20,8 @@ import com.hp.bco.pl.wpa.util.Environment;
 import com.hp.bco.pl.wpa.util.WPAGlobal;
 import com.hp.bco.pl.transaction.TransactionProxy;
 import com.hp.it.spf.ac.healthcheck.web.References;
-import com.hp.it.spf.ac.status.HealthcheckStatus;
-import com.hp.it.spf.ac.status.OpenStatus;
+import com.hp.it.spf.xa.ac.HealthcheckStatus;
+import com.hp.it.spf.xa.ac.OpenStatus;
 
 // Import other service packages.
 

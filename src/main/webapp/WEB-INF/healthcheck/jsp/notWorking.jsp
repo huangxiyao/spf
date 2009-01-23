@@ -4,7 +4,7 @@ View file for case where site is working.
 -------------------------------------%>
 <jsp:directive.page import="com.hp.it.spf.ac.healthcheck.web.References" />
 <jsp:directive.page import="com.hp.bco.pl.wpa.util.Environment" />
-<jsp:directive.page import="com.hp.it.spf.ac.status.HealthcheckStatus" />
+<jsp:directive.page import="com.hp.it.spf.xa.ac.HealthcheckStatus" />
 <%
 	HealthcheckStatus status = HealthcheckStatus.retrieve(Environment
 			.getInstance().getContext());
