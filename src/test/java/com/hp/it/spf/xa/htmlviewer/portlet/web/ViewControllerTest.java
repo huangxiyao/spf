@@ -1,9 +1,6 @@
-/**
- * Project: Service Portal
- * Copyright (c) 2007 HP. All Rights Reserved
- * <Some comments of this file>
- * 
- * TODO add log
+/*
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
  */
 package com.hp.it.spf.xa.htmlviewer.portlet.web;
 
