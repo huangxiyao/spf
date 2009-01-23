@@ -1,6 +1,5 @@
 package com.hp.it.spf.user.group.manager;
 
-import java.util.Map;
 
 public class UserGroupRetrieverFactory {
 	/**
@@ -8,7 +7,7 @@ public class UserGroupRetrieverFactory {
 	 * @param params
 	 * @return
 	 */
-	public static IUserGroupRetriever createUserGroupsImpl(Map<String, String> params) {
-		return null;
+	public static IUserGroupRetriever createUserGroupImpl() {
+		return new SSOUserGroupRetriever();
 	}
 }
