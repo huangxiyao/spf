@@ -15,6 +15,7 @@ import com.epicentric.user.User;
 import com.epicentric.common.website.SessionUtils;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.misc.portal.Consts;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
 
@@ -341,11 +342,6 @@ public class FileInterpolator extends
 	private PortalContext portalContext = null;
 
 	/**
-	 * Groups of current user.
-	 */
-	protected String[] userGroups = null;
-
-	/**
 	 * Portal log.
 	 */
 	private LogWrapper portalLog = new LogWrapper(FileInterpolator.class);
@@ -361,14 +357,6 @@ public class FileInterpolator extends
 	 * open the best-fit localized version of that secondary support file, based
 	 * on the locale in the given request.
 	 * </p>
-	 * <p>
-	 * <b>Note:</b> No user groups are passed in this constructor. Therefore
-	 * any <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code> tokens in the
-	 * file content will be treated as if the user is not a member of those
-	 * groups. You should use this constructor only if you know the file will
-	 * not contain those tokens.
-	 * </p>
-	 * <p>
 	 * <b>Note:</b> A token-substitutions property file (to be used with any
 	 * <code>&lt;TOKEN:key&gt;</code> tokens in the file content) is not
 	 * passed in this constructor. Therefore any <code>&lt;TOKEN:key&gt;</code>
@@ -385,7 +373,6 @@ public class FileInterpolator extends
 	public FileInterpolator(PortalContext portalContext, String baseContentFile) {
 		this.portalContext = portalContext;
 		this.baseContentFilePath = baseContentFile;
-		this.userGroups = null;
 		if (portalContext != null) {
 			this.t = new TokenParser(portalContext);
 		}
@@ -394,52 +381,7 @@ public class FileInterpolator extends
 	/**
 	 * <p>
 	 * Constructs a new FileInterpolator for the given base content secondary
-	 * support filename, portal context, and user groups.
-	 * </p>
-	 * <p>
-	 * The filename provided should be the base name of the secondary support
-	 * file containing the content to interpolate. The interpolate method will
-	 * open the best-fit localized version of that secondary support file, based
-	 * on the locale in the given request.
-	 * </p>
-	 * <p>
-	 * The user groups provided are to be used with any
-	 * <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code> tokens in the file
-	 * content; if you know there are none, you can pass an empty or null array.
-	 * </p>
-	 * <p>
-	 * <b>Note:</b> A token-substitutions property file (to be used with any
-	 * <code>&lt;TOKEN:key&gt;</code> tokens in the file content) is not
-	 * passed in this constructor. Therefore any <code>&lt;TOKEN:key&gt;</code>
-	 * tokens in the file content will be resolved against the default
-	 * token-substitutions property file (<code>default_tokens.properties</code>).
-	 * </p>
-	 * 
-	 * @param portalContext
-	 *            The portal context
-	 * @param baseContentFile
-	 *            The base filename of the text secondary support file to
-	 *            interpolate
-	 * @param userGroups
-	 *            An array of strings to use as the user groups (for purposes of
-	 *            any <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code>
-	 *            tokens in the file content)
-	 */
-	public FileInterpolator(PortalContext portalContext,
-			String baseContentFile, String[] userGroups) {
-		this.portalContext = portalContext;
-		this.baseContentFilePath = baseContentFile;
-		this.userGroups = userGroups;
-		if (portalContext != null) {
-			this.t = new TokenParser(portalContext);
-		}
-	}
-
-	/**
-	 * <p>
-	 * Constructs a new FileInterpolator for the given base content secondary
-	 * support filename, portal context, user groups, and token-substitutions
-	 * pathname.
+	 * support filename, portal context, and token-substitutions pathname.
 	 * </p>
 	 * <p>
 	 * The content filename provided should be the base name of the secondary
@@ -447,12 +389,6 @@ public class FileInterpolator extends
 	 * method will open the best-fit localized version of that secondary support
 	 * file, based on the locale in the given request.
 	 * </p>
-	 * <p>
-	 * The user groups provided are to be used with any
-	 * <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code> tokens in the file
-	 * content; if you know there are none, you can pass an empty or null array.
-	 * </p>
-	 * <p>
 	 * <p>
 	 * The token-substitutions pathname provided is to be used with any
 	 * <code>&lt;TOKEN:key&gt;</code> tokens in the file content; they will be
@@ -468,10 +404,6 @@ public class FileInterpolator extends
 	 * @param baseContentFile
 	 *            The base filename of the text secondary support file to
 	 *            interpolate
-	 * @param userGroups
-	 *            An array of strings to use as the user groups (for purposes of
-	 *            any <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code>
-	 *            tokens in the file content)
 	 * @param subsFilePath
 	 *            The filename and path relative to where the class loader
 	 *            searches for the token-substitutions property file (for
@@ -480,10 +412,9 @@ public class FileInterpolator extends
 	 */
 	/* Added by CK for 1000790073 */
 	public FileInterpolator(PortalContext portalContext,
-			String relativeFilePath, String[] userGroups, String subsFileBase) {
+			String relativeFilePath, String subsFileBase) {
 		this.portalContext = portalContext;
 		this.baseContentFilePath = relativeFilePath;
-		this.userGroups = userGroups;
 		if (portalContext != null) {
 			this.t = new TokenParser(portalContext, subsFileBase);
 		}
@@ -513,14 +444,7 @@ public class FileInterpolator extends
 		if (portalContext == null || baseContentFilePath == null) {
 			return null;
 		}
-		TokenParser t = (TokenParser) this.t;
-		String content = super.interpolate();
-
-		// parse the group token
-		content = t.parseGroupContainer(content, userGroups);
-
-		return content;
-
+		return super.interpolate();
 	}
 
 	/**
@@ -563,7 +487,15 @@ public class FileInterpolator extends
 	 * @return email
 	 */
 	protected String getEmail() {
-		return getUserProperty(Consts.PROPERTY_EMAIL_ID);
+		if (portalContext == null) {
+			return null;
+		}
+		try {
+			return (String) Utils.getUserProperty(portalContext,
+					Consts.PROPERTY_EMAIL_ID);
+		} catch (ClassCastException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -575,7 +507,15 @@ public class FileInterpolator extends
 	 * @return first (given) name
 	 */
 	protected String getFirstName() {
-		return getUserProperty(Consts.PROPERTY_FIRSTNAME_ID);
+		if (portalContext == null) {
+			return null;
+		}
+		try {
+			return (String) Utils.getUserProperty(portalContext,
+					Consts.PROPERTY_FIRSTNAME_ID);
+		} catch (ClassCastException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -587,7 +527,15 @@ public class FileInterpolator extends
 	 * @return last (family) name
 	 */
 	protected String getLastName() {
-		return getUserProperty(Consts.PROPERTY_LASTNAME_ID);
+		if (portalContext == null) {
+			return null;
+		}
+		try {
+			return (String) Utils.getUserProperty(portalContext,
+					Consts.PROPERTY_LASTNAME_ID);
+		} catch (ClassCastException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -608,6 +556,20 @@ public class FileInterpolator extends
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	/**
+	 * Get the authorization groups from the portlet request provided to the
+	 * constructor. Returns null if these have not been set in the request, or
+	 * the request provided to the constructor was null.
+	 * 
+	 * @return list of groups
+	 */
+	protected String[] getGroups() {
+		if (portalContext == null) {
+			return null;
+		}
+		return Utils.getGroups(portalContext);
 	}
 
 	/**

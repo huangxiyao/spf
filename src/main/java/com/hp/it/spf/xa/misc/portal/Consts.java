@@ -65,79 +65,284 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String RESP_HDR_X_SITE_AVAILABLE = "X-Site-Available";
 
 	/**
-	 * Various secondary page template friendly IDs.
+	 * The template friendly ID for the SPF-standard system error secondary
+	 * page.
 	 */
 	public static final String PAGE_SYSTEM_ERROR = "ERROR";
+
+	/**
+	 * The template friendly ID for the SPF-standard authorization error
+	 * secondary page.
+	 */
 	public static final String PAGE_AUTH_ERROR = "ANON_SPF_AUTH_ERROR";
+
+	/**
+	 * The template friendly ID for the SPF-standard portal pulse secondary
+	 * page.
+	 */
 	public static final String PAGE_PORTAL_PULSE = "ANON_SPF_PORTAL_PULSE";
+
+	/**
+	 * The template friendly ID for the SPF-standard global help secondary page.
+	 */
 	public static final String PAGE_GLOBAL_HELP = "ANON_SPF_GLOBAL_HELP";
+
+	/**
+	 * The template friendly ID for the SPF-standard federated logout secondary
+	 * page.
+	 */
 	public static final String PAGE_FED_LOGOUT = "ANON_SPF_FED_LOGOUT";
+
+	/**
+	 * The template friendly ID for the SPF-standard federation error secondary
+	 * page.
+	 */
 	public static final String PAGE_FED_ERROR = "ANON_SPF_FED_ERROR";
+
+	/**
+	 * The template friendly ID for the SPF-standard locale selector secondary
+	 * page.
+	 */
 	public static final String PAGE_SELECT_LOCALE = "ANON_SPF_SELECT_LOCALE";
+
+	/**
+	 * The template friendly ID for the SPF-standard logout secondary page.
+	 */
 	public static final String PAGE_LOGOUT = "SPF_LOGOUT";
 
 	/**
-	 * Following are property IDs that represent custom attributes added in
-	 * entity_management.xml
+	 * The Vignette User object property for user ID. This is the user ID, not
+	 * the user person name.
 	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
 	public static final String PROPERTY_USER_NAME_ID = "username";
-	public static final String PROPERTY_DOMAIN_ID = "domain";
-	public static final String PROPERTY_PROFILE_ID = "profileid";
-	public static final String PROPERTY_CUSTOMER_ID = "customerid";
-	public static final String PROPERTY_EMAIL_PREF_ID = "emailcontactpref";
-	public static final String PROPERTY_PHONE_PREF_ID = "phonecontactpref";
-	public static final String PROPERTY_POSTAL_PREF_ID = "postalcontactpref";
-	public static final String PROPERTY_SECURITYLEVEL_ID = "securitylevel";
-	public static final String PROPERTY_LAST_CHANGE_DATE_ID = "lastchangedate";
-	public static final String PROPERTY_SP_TIMEZONE_ID = "sp_timezone";
-	public static final String PROPERTY_TIMEZONE_ID = "timezone";
-	public static final String PROPERTY_FIRSTNAME_ID = "firstname";
-	public static final String PROPERTY_LASTNAME_ID = "lastname";
-	public static final String PROPERTY_LANGUAGE_ID = "language";
-	public static final String PROPERTY_COUNTRY_ID = "country";
-	public static final String PROPERTY_EMAIL_ID = "email";
-	public static final String PROPERTY_PRIMARY_SITE_ID = "primary_site_id";
-	public static final String PROPERTY_LOGON_ID = "logon";
-	public static final String PROPERTY_PHONE_ID = "day_phone";
-	public static final String PROPERTY_PHONE_EXT_ID = "day_phone_ext";
-	public static final String PROPERTY_RECENT_ACCESS_HOST = "recent_access_host";
 
 	/**
-	 * Config information for setting cookies HP-wide.
+	 * The Vignette User object property for domain.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_DOMAIN_ID = "domain";
+
+	/**
+	 * The Vignette User object property for profile ID.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_PROFILE_ID = "profileid";
+
+	/**
+	 * The Vignette User object property for customer ID.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_CUSTOMER_ID = "customerid";
+
+	/**
+	 * The Vignette User object property for email contact preference.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_EMAIL_PREF_ID = "emailcontactpref";
+
+	/**
+	 * The Vignette User object property for phone contact preference.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_PHONE_PREF_ID = "phonecontactpref";
+
+	/**
+	 * The Vignette User object property for postal contact preference.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_POSTAL_PREF_ID = "postalcontactpref";
+
+	/**
+	 * The Vignette User object property for security level.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_SECURITYLEVEL_ID = "securitylevel";
+
+	/**
+	 * The Vignette User object property for last change timestamp.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_LAST_CHANGE_DATE_ID = "lastchangedate";
+
+	/**
+	 * The Vignette User object property for SPF-standard timezone.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_SP_TIMEZONE_ID = "sp_timezone";
+
+	/**
+	 * The Vignette User object property for Vignette-standard timezone (which
+	 * is really just a GMT offset, not a timezone).
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_TIMEZONE_ID = "timezone";
+
+	/**
+	 * The Vignette User object property for first (given) name.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_FIRSTNAME_ID = "firstname";
+
+	/**
+	 * The Vignette User object property for last (family) name.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_LASTNAME_ID = "lastname";
+
+	/**
+	 * The Vignette User object property for language code.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_LANGUAGE_ID = "language";
+
+	/**
+	 * The Vignette User object property for country code.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_COUNTRY_ID = "country";
+
+	/**
+	 * The Vignette User object property for email address.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_EMAIL_ID = "email";
+
+	/**
+	 * The Vignette User object property for last used site DNS name.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_PRIMARY_SITE_ID = "primary_site_id";
+
+	/**
+	 * The Vignette User object property for logon. I do not know what this is.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_LOGON_ID = "logon";
+
+	/**
+	 * The Vignette User object property for user phone number.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_PHONE_ID = "day_phone";
+
+	/**
+	 * The Vignette User object property for user phone extension.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_PHONE_EXT_ID = "day_phone_ext";
+
+	/**
+	 * The Vignette User object property for last used portal hostname.
+	 */
+	// TODO - check this is still correct in new authentication solution. This
+	// property key is used with the portal Utils.getUserProperty method - see
+	// TODO there.
+	public static final String PROPERTY_RECENT_ACCESS_HOST = "recent_access_host";
+
+	// TODO - many user properties are listed above - add any ones which are
+	// missing, so that they will be defined for portal component developers.
+	// These property keys are used with the portal Utils.getUserProperty method
+	// - see TODO there.
+
+	/**
+	 * Use this path when setting an HP.com-wide cookie.
 	 */
 	public static final String HP_COOKIE_PATH = "/";
+
+	/**
+	 * Use this domain when setting an HP.com-wide cookie.
+	 */
 	public static final String HP_COOKIE_DOMAIN = ".hp.com";
 
 	/**
-	 * HP.com standard names for country and language query parameters and
-	 * cookies.
+	 * The name of the HP.com standard query parameter and cookie for language
+	 * code.
 	 */
 	public static final String HPCOM_LANG_PARAM = "lang";
+
+	/**
+	 * The name of the HP.com standard query parameter and cookie for country
+	 * code.
+	 */
 	public static final String HPCOM_COUNTRY_PARAM = "cc";
 
 	/**
-	 * Prefix your session attribute names with this string, and they will be
-	 * <b>kept</b> after logout from the portal.
+	 * Prefix your portal session attribute names with this string, and they
+	 * will be <b>kept</b> after logout from the portal. (This is for portal
+	 * session attributes only, not portlet.)
 	 */
 	public final static String STICKY_SESSION_ATTR_PREFIX = "SPF_RETAIN";
 
 	/**
-	 * Prefix your session attribute names with this string, and they will be
-	 * <b>removed</b> for you upon logout from the portal.
+	 * Prefix your portal session attribute names with this string, and they
+	 * will be <b>removed</b> for you upon logout from the portal. (This is for
+	 * portal session attributes only, not portlet.)
 	 */
 	public final static String UNSTICKY_SESSION_ATTR_PREFIX = "SPF_";
 
 	/**
-	 * Constants used for logout (shared between utilities and logout secondary
-	 * page type).
+	 * The default site name to assume during logout for the redirect target.
 	 */
 	public final static String LOGOUT_DEFAULT_SITE = "spf";
+
+	/**
+	 * The name of the query parameter containing the site name to use for the
+	 * logout redirect target.
+	 */
 	public final static String LOGOUT_SITE_PARAM = "site";
 
 	/**
-	 * The names of the locale selector form input element and target element.
+	 * The name of the locale selector form parameter (ie this is the form
+	 * parameter containing the chosen locale submitted by the user).
 	 */
 	public final static String LOCALE_SELECTOR_INPUT_NAME = "spfSelectedLocale";
+
+	/**
+	 * The name of the locale selector redirect target form parameter (ie this
+	 * is the form parameter containing the redirect target submitted by the
+	 * user - typically hidden).
+	 */
 	public final static String LOCALE_SELECTOR_TARGET_NAME = "spfLocaleSelectorTarget";
 
 }

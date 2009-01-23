@@ -309,12 +309,6 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @param key
 	 *            The user property name.
 	 * @return The user property value.
-	 * 
-	 * TODO: It is currently unclear if custom attributes will be extension
-	 * attributes of the Vignette User object, or not. If they are (that is the
-	 * way we did it for SP OS) then the following code will work. If they are
-	 * not, the "else" block in the following code must be updated, to look for
-	 * the key in the special custom attributes (wherever that is).
 	 */
 	public static Object getUserProperty(PortalContext portalContext, String key) {
 		if (portalContext == null || key == null) {
@@ -323,11 +317,33 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		HttpSession session = portalContext.getPortalRequest().getRequest()
 				.getSession();
 		User currentUser = SessionUtils.getCurrentUser(session);
+		// TODO: Get user property from the current user object, if not a guest
+		// user. If a guest (or null) user, or the property does not exist in
+		// the user, return null. Also see the property key name constants,
+		// defined in the portal Consts class - they are marked TODO as well.
 		if (currentUser != null && !currentUser.isGuestUser()) {
 			return currentUser.getProperty(key.trim());
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Get the user groups from the given portal context. These are the
+	 * authorization groups defined for the current request in the portal. The
+	 * method returns null if there were no groups in the request.
+	 * 
+	 * @param portalContext
+	 *            The portal context.
+	 * @return The list of groups (null if none).
+	 */
+	public static String[] getGroups(PortalContext portalContext) {
+		String[] groups = null;
+		if (portalContext != null) {
+			// TODO: Get groups from request using new authentication module. If
+			// no groups found in request, return null.
+		}
+		return groups;
 	}
 
 	/**
