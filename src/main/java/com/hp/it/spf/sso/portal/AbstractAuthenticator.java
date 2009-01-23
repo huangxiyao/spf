@@ -447,7 +447,10 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         }
 
         // append all external user profile retrieved from UPS/Persona
-        userProfile.putAll(getUserProfile());
+        Map upMap = getUserProfile();
+        if (upMap != null) {
+            userProfile.putAll(upMap);
+        }
         this.mapUserProfile2SSOUser();
         ssoUser.setGroups(getUserGroup());
 
