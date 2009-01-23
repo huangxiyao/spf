@@ -514,6 +514,7 @@ public class AuthenticatorHelper {
         boolean needToUpdate = false;
 
         // calculate the group name to assign
+        /*
         String groupToAssign = null;
         if (loggedIntoFed(request)) {
             groupToAssign = AuthenticationConsts.SP_FN_FED_NAME;
@@ -589,7 +590,7 @@ public class AuthenticatorHelper {
             LOG.error("Fail to assign user to authentication group: "
                     + groupToAssign);
             LOG.error(e);
-        }
+        }*/
 
         return needToUpdate;
     }
