@@ -1,20 +1,7 @@
 /*
- * Project: Service Portal
- * Copyright (c) 2006 HP. All Rights Reserved
- * 
- * 
- * FILENAME: MockUser.java
- * PACKAGE : com.hp.serviceportal.framework.filter
- * $Id: MockUser.java,v 1.1 2007/05/29 08:23:06 marcd Exp $
- * $Log: MockUser.java,v $
- * Revision 1.1  2007/05/29 08:23:06  marcd
- * add some testing classes
- *
- * Revision 1.2  2007/04/17 01:52:02  marcd
- * add stuff for javadoc
- *
- *
- */ 
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.xa.mock.portal;
 
 import java.io.Serializable;
