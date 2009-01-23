@@ -76,6 +76,7 @@
 				<includes>
 					<include>AtHPAuthenticator.properties</include>
 					<include>HPPAuthenticator.properties</include>
+					<include>UGSParameters.properties</include>
 				</includes>
 				<excludes>
 				</excludes>
