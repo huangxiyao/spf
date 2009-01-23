@@ -55,17 +55,20 @@
 		the portlet in the P3P USER_INFO map. If you use the 
 		generic user-property token in your view file, be sure
 		to add the corresponding user attribute here. -->
-	<!-- TODO: Should define all the user attributes here. -->
+	<!-- TODO: Check the attributes defined below, and add all 
+		the missing ones.  We should define all the user attributes
+		here, so portlet developers can use this as a template for
+		their portlet.xml. -->
 	<user-attribute>
 		<description>User's email address</description>
 		<name>user.business-info.online.email</name>
 	</user-attribute>
 	<user-attribute>
-		<description>User's first name</description>
+		<description>User's first (given) name</description>
 		<name>user.name.given</name>
 	</user-attribute>
 	<user-attribute>
-		<description>User's last name</description>
+		<description>User's last (family) name</description>
 		<name>user.name.family</name>
 	</user-attribute>
 </portlet-app>
