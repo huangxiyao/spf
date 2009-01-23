@@ -96,9 +96,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         } catch (Exception e) {
             LOG.error("No Resource Bundle File = " + rbFile);
             throw new RuntimeException("No Resource Bundle File = " + rbFile, e);
-        }
-
-        mapHeaderToUserProfileMap();
+        }        
     }
 
     /**
@@ -118,6 +116,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      */
     @SuppressWarnings("unchecked")
     public void execute() {
+        mapHeaderToUserProfileMap();
+        
         // If user is logged in and session user is different with request user,
         // clean up session
         if (AuthenticatorHelper.isVAPLoggedIn(request)) {

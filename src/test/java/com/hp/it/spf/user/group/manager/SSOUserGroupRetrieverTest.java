@@ -155,7 +155,7 @@ public class SSOUserGroupRetrieverTest {
         Set<String> groupSet = retriever.getGroups(siteName, userProfile);  
         for(String group : groupSet) {
             System.out.println(group);
-        }
+        }        
     }
 
 }

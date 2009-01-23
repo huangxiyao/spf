@@ -35,15 +35,6 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 
     private String clHeaderHpp = null;
 
-    @SuppressWarnings("unused")
-	private String adminSessionToken = null;
-
-    @SuppressWarnings("unused")
-	private String adminUserName = null;
-
-    @SuppressWarnings("unused")
-	private String adminUserPWD = null;
-
     /**
      * This is the constructor for HPP Authenticator. First, it will call the
      * constructor of AbstractAuthenticator which is its father class to do some
@@ -58,9 +49,6 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      */
     public HPPAuthenticator(HttpServletRequest request) {
         super(request);
-        PassportParametersManager wsManagerInstance = PassportParametersManager.getInstance();
-        adminUserName = wsManagerInstance.getAdminUser();
-        adminUserPWD = wsManagerInstance.getAdminPassword();
               
     	// retrieve the cl_header list
     	if (clHeaderList == null) {

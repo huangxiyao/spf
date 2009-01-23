@@ -68,11 +68,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
             LOG.info("No Resource Bundle File = " + profileFileName);
             request.getSession().setAttribute(
                     AuthenticationConsts.SESSION_ATTR_SSO_ERROR, "1");
-        }        
-      
-        // retrieve user profile
-        userProfile = getUserProfile();       
-        mapUserProfile2SSOUser();
+        }      
     }
 
 	private String retrieveProfileFile() {
@@ -181,6 +177,11 @@ public class TestAuthenticator extends AbstractAuthenticator {
         return customizedProfile;
     }
 
+    protected void mapHeaderToUserProfileMap() {   
+        // retrieve user profile
+        userProfile = getUserProfile();  
+    }
+    
 	/**
 	 * This method is used to perform all related tasks. 1. It will invoke the
 	 * mapRequest2User() method to map all the information from SSO product to
