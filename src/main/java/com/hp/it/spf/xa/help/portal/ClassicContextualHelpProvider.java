@@ -217,9 +217,11 @@ public class ClassicContextualHelpProvider extends
 	protected String getCloseImageURL() {
 		String url = "/images/" + CLOSE_BUTTON_IMG_NAME;
 		if (portalContext != null) {
-			url = I18nUtility.getLocalizedFileURL(portalContext,
-					CLOSE_BUTTON_IMG_NAME);
-			if (url == null) {
+			if (I18nUtility.getLocalizedFileAsStream(portalContext,
+					CLOSE_BUTTON_IMG_NAME) != null) {
+				url = I18nUtility.getLocalizedFileURL(portalContext,
+						CLOSE_BUTTON_IMG_NAME);
+			} else {
 				url = portalContext.getPortalHttpRoot() + "/" + url;
 				// make sure the path includes the portal application context
 				// root

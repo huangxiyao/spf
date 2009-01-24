@@ -61,7 +61,12 @@ public class ClassicLocaleIndicatorTag extends LocaleIndicatorBaseTag {
 			// get locale object and display it in the page
 			Locale locale = I18nUtility
 					.getLocale((HttpServletRequest) pageContext.getRequest());
-			html += I18nUtility.getLocaleDisplayName(locale);
+			// get display name in same locale (not necessarily current
+			// locale) - note that HPWeb standard is to display country
+			// first, language second
+			String dispName = I18nUtility.getLocaleDisplayName(locale,
+					locale, I18nUtility.LOCALE_BY_COUNTRY);
+			html += dispName;
 		} catch (Exception ex) {
 			String errMsg = "ClassicLocaleIndicatorTag error: "
 					+ ex.getMessage();

@@ -16,6 +16,7 @@ import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
 import com.hp.it.spf.xa.i18n.portal.tag.LocaleSelectorBaseTag;
 import com.hp.it.spf.xa.misc.portal.Consts;
+import com.hp.it.spf.xa.misc.portal.Utils;
 
 /**
  * <p>
@@ -50,16 +51,21 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * The name of the submit button image for the classic locale selector form.
+	 */
+	protected static String SUBMIT_BUTTON_IMG_NAME = "btn_submit.gif";
+
+	/**
 	 * The <code>label</code> attribute from the tag.
 	 */
-	private String label;
+	protected String label;
 
 	/**
 	 * The <code>labelKey</code> attribute from the tag.
 	 */
-	private String labelKey;
+	protected String labelKey;
 
-	private static final LogWrapper LOGGER = new LogWrapper(
+	protected static final LogWrapper LOGGER = new LogWrapper(
 			ClassicLocaleSelectorTag.class);
 
 	/**
@@ -124,9 +130,6 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 			PortalContext portalContext = (PortalContext) pageContext
 					.getRequest().getAttribute("portalContext");
 			HttpServletRequest request = portalContext.getHttpServletRequest();
-			Collection locales = I18nUtility.getAvailableLocales(request);
-			locales = I18nUtility.sortLocales(locales);
-			Locale defaultLocale = I18nUtility.getLocale(request);
 			String actualLabel = label;
 			if (actualLabel == null) {
 				actualLabel = I18nUtility.getValue(labelKey, portalContext);
@@ -137,6 +140,14 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 				actualLabel = "";
 			}
 
+			// get available locales and sort them by the current locale - note
+			// that HPWeb standard is to sort and display by country first,
+			// language second
+			Locale currentLocale = I18nUtility.getLocale(request);
+			Collection locales = I18nUtility.getAvailableLocales(request);
+			locales = I18nUtility.sortLocales(locales, currentLocale,
+					I18nUtility.LOCALE_BY_COUNTRY);
+
 			// begin selector table layout
 			html += "<table>\n";
 			html += "<tr>\n";
@@ -146,21 +157,28 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 
 			// drop down list column
 			html += "<td>\n";
-			html += "<select id=selector name=\"" + widgetName + "\">\n";
+			html += "<select id=\"" + widgetName + "\" name=\"" + widgetName + "\">\n";
 			if (locales != null) {
 				Iterator atts = locales.iterator();
 				int i = 1;
 				while (atts.hasNext()) {
 					Locale locale = (Locale) atts.next();
-					String dispName = I18nUtility.getLocaleDisplayName(locale);
+					// get display name in same locale (not necessarily current
+					// locale) - note that HPWeb standard is to display country
+					// first, language second
+					String dispName = I18nUtility.getLocaleDisplayName(locale,
+							locale, I18nUtility.LOCALE_BY_COUNTRY);
 					String value = I18nUtility.localeToLanguageTag(locale);
-					html += "<option value=" + "\"" + value + "\"";
+					// both the display name and value need to be HTML-escaped
+					// just in case
+					html += "<option value=" + "\"" + Utils.escapeXml(value)
+							+ "\"";
 					// make the default locale selected if it is not empty
-					if ((defaultLocale != null)
-							&& (locale.equals(defaultLocale))) {
+					if ((currentLocale != null)
+							&& (locale.equals(currentLocale))) {
 						html += " selected";
 					}
-					html += ">" + dispName + "</option>\n";
+					html += ">" + Utils.escapeXml(dispName) + "</option>\n";
 					i++;
 				}
 			}
@@ -168,10 +186,9 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 			html += "</td>\n";
 
 			// button column
-			String imgLink = portalContext.getPortalRequest().getContextPath()
-					+ "/images/i18n/hpweb_1-2_arrw_sbmt.gif";
+			String imgLink = getSubmitImageURL(portalContext);
 			html += "<td valign=\"middle\">\n";
-			html += "<input type=\"image\" name=\"locale_selector_btn\" src=\""
+			html += "<input type=\"image\" name=\"btn_" + widgetName + "\" src=\""
 					+ imgLink + "\">\n";
 			html += "</td>\n";
 
@@ -226,6 +243,38 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	}
 
 	/**
+	 * A method to generate the image URL for the classic locale selector's
+	 * submit button. This button is presumed to be named
+	 * <code>btn_submit.gif</code> and located in the current portal
+	 * component. This image may be localized if desired; this method looks for
+	 * the particular localized image (loaded in the current portal component's
+	 * secondary support files) which is the best-candidate given the current
+	 * locale. If the image is not found there, then a URL pointing to
+	 * <code>/images/btn_submit.gif</code> under the portal root path is
+	 * assumed and returned.
+	 */
+	private String getSubmitImageURL(PortalContext portalContext) {
+		String url = "/images/" + SUBMIT_BUTTON_IMG_NAME;
+		if (portalContext != null) {
+			if (I18nUtility.getLocalizedFileAsStream(portalContext,
+					SUBMIT_BUTTON_IMG_NAME) != null) {
+				url = I18nUtility.getLocalizedFileURL(portalContext,
+						SUBMIT_BUTTON_IMG_NAME);
+			} else {
+				url = portalContext.getPortalHttpRoot() + "/" + url;
+				// make sure the path includes the portal application context
+				// root
+				String contextPath = portalContext.getPortalRequest()
+						.getContextPath();
+				if (!url.startsWith(contextPath)) {
+					return slashify(contextPath + "/" + url);
+				}
+			}
+		}
+		return slashify(url);
+	}
+
+	/**
 	 * Normalize blank string values to null - so the return is either a
 	 * non-blank string, or null.
 	 * 
@@ -242,4 +291,21 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 		return value;
 	}
 
+	/**
+	 * <p>
+	 * Returns the given path, with any consecutive file separators ("/" for
+	 * Java) reduced to just one. The given path is also trimmed of whitespace.
+	 * </p>
+	 * 
+	 * @param pPath
+	 *            The file path to clean-up.
+	 * @return The cleaned-up file path.
+	 */
+	private String slashify(String pPath) {
+		if (pPath == null) {
+			return null;
+		}
+		pPath = pPath.trim();
+		return pPath.replaceAll("/+", "/");
+	}
 }
