@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <epideploy:component build-version="1"
-	component-id="SPFFedLaunchErrorSecondaryPageType"
+	component-id="spf-fed-launch-error-secondarypagetype"
 	component-type="Secondary Page Types"
 	description="Shared Portal Framework secondary page type for displaying a federation launch error page."
 	epi-build="251" epi-version="7.2.2" major-version="7" minor-version="2"
@@ -10,7 +10,7 @@
 		<template-info allow-guest-access="true"
 			description="Shared Portal Framework secondary page type for displaying a federation launch error page."
 			friendly-id="ANON_SPF_FED_ERROR" header-filename=""
-			id="SPFFedLaunchErrorSecondaryPageType" is-system="false"
+			id="spf-fed-launch-error-secondarypagetype" is-system="false"
 			title="Shared Portal Framework - Federation Launch Error Page"
 			type="templatetype_page_content_include" visible="true">
 			<actions>
