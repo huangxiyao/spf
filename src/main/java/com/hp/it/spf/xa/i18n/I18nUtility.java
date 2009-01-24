@@ -65,6 +65,18 @@ public class I18nUtility {
 	public static final String HPP_SIMP_CHINESE_LANG = "13";
 
 	/**
+	 * A control flag for the locale methods, to sort/display country first and
+	 * language second.
+	 */
+	public static final int LOCALE_BY_COUNTRY = 1;
+
+	/**
+	 * A control flag for the <code>sortLocales</code> method, to sort
+	 * descending.
+	 */
+	public static final int LOCALE_DESCENDING = 2;
+
+	/**
 	 * Regular expression for an opening or closing
 	 * <code>&lt;No_Localization&gt;</code> tag.
 	 */
@@ -317,14 +329,16 @@ public class I18nUtility {
 		}
 		String language = pLocale.getLanguage().trim().toLowerCase();
 		String country = pLocale.getCountry().trim().toUpperCase();
-		StringBuffer result = new StringBuffer(4);
+		String variant = pLocale.getVariant().trim();
+		StringBuffer result = new StringBuffer();
 		if (language.length() > 0) {
 			result.append(language);
 			if (country.length() > 0) {
 				result.append('-').append(country);
+				if (variant.length() > 0) {
+					result.append('-').append(variant);
+				}
 			}
-		} else {
-			result.append(country);
 		}
 		return result.toString();
 	}
@@ -364,9 +378,12 @@ public class I18nUtility {
 
 	/**
 	 * <p>
-	 * Sort any Collection of locales in ascending order by RFC 3066 language
-	 * tag value. Returns the Collection in the form of an ArrayList. If the
-	 * collection did not purely contain locales, it is returned unsorted.
+	 * Sort the given collection of locales alphabetically. The sort is in
+	 * ascending order by language first, country second, and variant third.
+	 * They are sorted alphabetically according to the display names for those
+	 * elements in the system default locale. The method returns the collection
+	 * in the form of an ArrayList. If the collection did not purely contain
+	 * locales, it is returned unsorted.
 	 * </p>
 	 * 
 	 * @param pLocales
@@ -374,22 +391,136 @@ public class I18nUtility {
 	 * @return Sorted locales, in the form of an ArrayList.
 	 */
 	public static Collection sortLocales(Collection pLocales) {
+		return sortLocales(pLocales, null, 0);
+	}
+
+	/**
+	 * <p>
+	 * Sort the given collection of locales alphabetically according to the
+	 * given locale. The sort is in ascending order by language first, country
+	 * second, and variant third. They are sorted alphabetically according to
+	 * the display names for those elements in the given locale. The method
+	 * returns the collection in the form of an ArrayList. If the collection did
+	 * not purely contain locales, it is returned unsorted.
+	 * </p>
+	 * 
+	 * @param pLocales
+	 *            Collection of locales.
+	 * @param Locale
+	 *            The locale in which to alphabetize the collection.
+	 * @return Sorted locales, in the form of an ArrayList.
+	 */
+	public static Collection sortLocales(Collection pLocales, Locale loc) {
+		return sortLocales(pLocales, loc, 0);
+	}
+
+	/**
+	 * <p>
+	 * Sort the given collection of locales alphabetically according to the
+	 * given locale and flags. The sort takes into account the language,
+	 * country, and variant according to the flags (a bitmask):
+	 * </p>
+	 * <ul>
+	 * <li>
+	 * <p>
+	 * If the flags include the <code>LOCALE_BY_COUNTRY</code> bit, then the
+	 * sort is by country first and language second. Otherwise it is by language
+	 * first and country second. (In both cases, any variant is third.)
+	 * </p>
+	 * </li>
+	 * <li>
+	 * <p>
+	 * If the flags include the <code>LOCALE_DESCENDING</code> bit, then the
+	 * sort is in descending order. Otherwise it is ascending.
+	 * </p>
+	 * </li>
+	 * </ul>
+	 * <p>
+	 * The method returns the collection in the form of an ArrayList. If the
+	 * collection did not purely contain locales, it is returned unsorted.
+	 * </p>
+	 * 
+	 * @param pLocales
+	 *            Collection of locales.
+	 * @param locale
+	 *            The locale in which to alphabetize the collection.
+	 * @param flags
+	 *            A bitmask of control flags (see description above).
+	 * @return Sorted locales, in the form of an ArrayList.
+	 */
+	public static Collection sortLocales(Collection pLocales, Locale loc,
+			int flags) {
 		if (pLocales == null) {
 			return null;
 		}
+		if (loc == null) {
+			loc = Locale.getDefault();
+		}
+		final Locale fLoc = loc;
 		List list = new ArrayList();
 		list.addAll(pLocales);
 		try {
-			Collections.sort(list, new Comparator() {
-				public int compare(Object o1, Object o2) {
-					return (((Locale) o1).getLanguage().trim().toLowerCase()
-							+ "_" + ((Locale) o1).getCountry().trim()
-							.toUpperCase()).compareTo(((Locale) o2)
-							.getLanguage().trim().toLowerCase()
-							+ "_"
-							+ ((Locale) o2).getCountry().trim().toUpperCase());
+			if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY) {
+				if ((flags & LOCALE_DESCENDING) == LOCALE_DESCENDING) {
+					// Sort by country, descending
+					Collections.sort(list, new Comparator() {
+						public int compare(Object o2, Object o1) {
+							Locale loc1 = (Locale) o1;
+							Locale loc2 = (Locale) o2;
+							return (loc1.getDisplayCountry(fLoc)
+									+ loc1.getDisplayLanguage(fLoc) + loc1
+									.getDisplayVariant(fLoc)).compareTo(loc2
+									.getDisplayCountry(fLoc)
+									+ loc2.getDisplayLanguage(fLoc)
+									+ loc2.getDisplayVariant(fLoc));
+						}
+					});
+				} else {
+					// Sort by country, ascending
+					Collections.sort(list, new Comparator() {
+						public int compare(Object o1, Object o2) {
+							Locale loc1 = (Locale) o1;
+							Locale loc2 = (Locale) o2;
+							return (loc1.getDisplayCountry(fLoc)
+									+ loc1.getDisplayLanguage(fLoc) + loc1
+									.getDisplayVariant(fLoc)).compareTo(loc2
+									.getDisplayCountry(fLoc)
+									+ loc2.getDisplayLanguage(fLoc)
+									+ loc2.getDisplayVariant(fLoc));
+						}
+					});
 				}
-			});
+			} else {
+				if ((flags & LOCALE_DESCENDING) == LOCALE_DESCENDING) {
+					// Sort by language, descending
+					Collections.sort(list, new Comparator() {
+						public int compare(Object o2, Object o1) {
+							Locale loc1 = (Locale) o1;
+							Locale loc2 = (Locale) o2;
+							return (loc1.getDisplayLanguage(fLoc)
+									+ loc1.getDisplayCountry(fLoc) + loc1
+									.getDisplayVariant(fLoc)).compareTo(loc2
+									.getDisplayLanguage(fLoc)
+									+ loc2.getDisplayCountry(fLoc)
+									+ loc2.getDisplayVariant(fLoc));
+						}
+					});
+				} else {
+					// Default - sort by language, ascending
+					Collections.sort(list, new Comparator() {
+						public int compare(Object o1, Object o2) {
+							Locale loc1 = (Locale) o1;
+							Locale loc2 = (Locale) o2;
+							return (loc1.getDisplayLanguage(fLoc)
+									+ loc1.getDisplayCountry(fLoc) + loc1
+									.getDisplayVariant(fLoc)).compareTo(loc2
+									.getDisplayLanguage(fLoc)
+									+ loc2.getDisplayCountry(fLoc)
+									+ loc2.getDisplayVariant(fLoc));
+						}
+					});
+				}
+			}
 		} catch (Exception e) {
 			// Ignore exception and return unsorted list.
 		}
@@ -601,8 +732,7 @@ public class I18nUtility {
 	/**
 	 * <p>
 	 * Returns the given path, with any consecutive file separators ("/" for
-	 * Java) reduced to just one.  The given path is also trimmed of
-	 * whitespace.
+	 * Java) reduced to just one. The given path is also trimmed of whitespace.
 	 * </p>
 	 * 
 	 * @param pPath
@@ -620,9 +750,12 @@ public class I18nUtility {
 	/**
 	 * <p>
 	 * Return the locale display name, localized for that same locale. For a
-	 * country-specific locale, this will be in the format "language (country)".
+	 * country-specific locale, this will be in the format "language - country".
 	 * For a generic locale (ie language only, no country), this will be in the
-	 * format "language". Returns null if the parameter is null.
+	 * format "language". In either case, if there is a variant in the locale,
+	 * it will be included parenthetically at the end: "language - country
+	 * (variant)" or "language (variant)". Returns null if the parameter is
+	 * null.
 	 * </p>
 	 * 
 	 * @param pLocale
@@ -630,16 +763,18 @@ public class I18nUtility {
 	 * @return The localized display name for the locale.
 	 */
 	public static String getLocaleDisplayName(Locale pLocale) {
-		return getLocaleDisplayName(pLocale, pLocale);
+		return getLocaleDisplayName(pLocale, pLocale, 0);
 	}
 
 	/**
 	 * <p>
 	 * Return the display name of one locale, localized for another locale. For
-	 * a country-specific locale, this will be in the format "language
-	 * (country)". For a generic locale (ie language only, no country), this
-	 * will be in the format "language". Returns null if either parameter is
-	 * null.
+	 * a country-specific locale, this will be in the format "language -
+	 * country". For a generic locale (ie language only, no country), this will
+	 * be in the format "language". In either case, if there is a variant in the
+	 * locale, it will be included parenthetically at the end: "language -
+	 * country (variant)" or "language (variant)". Returns null if the parameter
+	 * is null.
 	 * </p>
 	 * 
 	 * @param pLocale1
@@ -650,10 +785,80 @@ public class I18nUtility {
 	 *         locale.
 	 */
 	public static String getLocaleDisplayName(Locale pLocale1, Locale pLocale2) {
-		if (pLocale1 == null || pLocale2 == null) {
+		return getLocaleDisplayName(pLocale1, pLocale2, 0);
+	}
+
+	/**
+	 * <p>
+	 * Return the display name of one locale, localized for another locale,
+	 * according to the given flags.
+	 * </p>
+	 * <ul>
+	 * <li>
+	 * <p>
+	 * By default (ie, when the flags are <code>0</code>), the language is
+	 * given priority in the display name. For a country-specific locale, this
+	 * will be in the format "language - country". For a generic locale (ie
+	 * language only, no country), this will be in the format "language".
+	 * </p>
+	 * </li>
+	 * <li>
+	 * <p>
+	 * When the flags (a bitmask) include the <code>LOCALE_BY_COUNTRY</code>
+	 * bit, the country is given priority. For a country-specific locale, it
+	 * will be in the format "country - language". For a generic locale, it will
+	 * be just "language". Note this is the current HPWeb standard.
+	 * </p>
+	 * </li>
+	 * </ul>
+	 * <p>
+	 * In either case, if there is a variant in the locale, it will be included
+	 * parenthetically at the end: "language - country (variant)" or "language
+	 * (variant)". Returns null if the parameter is null.
+	 * </p>
+	 * 
+	 * @param pLocale1
+	 *            A locale.
+	 * @param pLocale2
+	 *            A locale in which to render the display name.
+	 * @param flags
+	 *            Control bits, see description above.
+	 * @return The display name for the first locale, localized by the second
+	 *         locale.
+	 */
+	public static String getLocaleDisplayName(Locale pLocale1, Locale pLocale2,
+			int flags) {
+		if (pLocale1 == null) {
 			return null;
 		}
-		return pLocale1.getDisplayName(pLocale2);
+		if (pLocale2 == null) {
+			pLocale2 = Locale.getDefault();
+		}
+		String displayLanguage = pLocale1.getDisplayLanguage(pLocale2);
+		String displayCountry = pLocale1.getDisplayCountry(pLocale2);
+		String displayVariant = pLocale1.getDisplayVariant(pLocale2);
+		if (displayLanguage != null)
+			displayLanguage = displayLanguage.trim();
+		if (displayCountry != null)
+			displayCountry = displayCountry.trim();
+		if (displayVariant != null)
+			displayVariant = displayVariant.trim();
+		String displayName = "";
+		if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY) {
+			if (displayCountry.equals("") || displayLanguage.equals(""))
+				displayName = displayCountry + displayLanguage;
+			else
+				displayName = displayCountry + " - " + displayLanguage;
+		} else {
+			if (displayCountry.equals("") || displayLanguage.equals(""))
+				displayName = displayLanguage + displayCountry;
+			else
+				displayName = displayLanguage + " - " + displayCountry;
+		}
+		if (!displayVariant.equals("")) {
+			displayName += " (" + displayVariant + ")";
+		}
+		return displayName;
 	}
 
 	/**
