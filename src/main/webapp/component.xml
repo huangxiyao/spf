@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <epideploy:component build-version="1"
-	component-id="SPFLogoutSecondaryPageType"
+	component-id="spf-logout-secondarypagetype"
 	component-type="Secondary Page Types"
 	description="Shared Portal Framework secondary page type for the logout process."
 	epi-build="251" epi-version="7.2.2" major-version="7" minor-version="2"
@@ -10,7 +10,7 @@
 		<template-info allow-guest-access="true"
 			description="Shared Portal Framework secondary page type for the logout process."
 			friendly-id="SPF_LOGOUT" header-filename=""
-			id="SPFLogoutSecondaryPageType" is-system="false"
+			id="spf-logout-secondarypagetype" is-system="false"
 			title="Shared Portal Framework - Logout Process"
 			type="templatetype_page_content_include" visible="true">
 			<actions>
