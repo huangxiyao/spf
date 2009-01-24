@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<epideploy:component component-id="SPFAuthErrorSecondaryPage"
+<epideploy:component component-id="spf-auth-error-secondarypage"
 	component-type="Secondary Pages" major-version="7" minor-version="0"
 	build-version="00" pi-version="7.0" epi-build="1"
 	title="Shared Portal Framework - Authorization Error Page"
 	description="Shared Portal Framework secondary page for displaying an authorization error."
 	xmlns:epideploy="http://www.epicentric.com/deployment">
 	<epideploy:required-component
-		component-id="SPFAuthErrorSecondaryPageType"
+		component-id="spf-auth-error-secondarypagetype"
 		component-type="Secondary Page Types" major-version="7"
 		minor-version="0" />
 	<epideploy:detail>
-		<style-info id="SPFAuthErrorSecondaryPage"
+		<style-info id="spf-auth-error-secondarypage"
 			friendly-id="ANON_SPF_AUTH_ERROR"
 			title="Shared Portal Framework - Authorization Error Page"
 			description="Shared Portal Framework secondary page for displaying an authorization error."
 			primary-filename="authError.jsp"
-			template-uid="SPFAuthErrorSecondaryPageType" template-default="true"
+			template-uid="spf-auth-error-secondarypagetype" template-default="true"
 			is-system="false" visible="true" processing-type="action_based">
 			<actions>
 				<group-reference group-id="INHERIT_ALL" />
