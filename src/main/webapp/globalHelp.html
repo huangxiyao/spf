@@ -31,27 +31,37 @@ site in Vignette.  Or if you are providing styles for all sites without
 site-specific styles, name it globalHelp.css.  Then upload it as a 
 secondary support file into the Global Help Page component in Vignette.
 And put a token to resolve it below, like this one (be sure to set the
-filename to match the name you chose): -->
+filename in the token to match the name you chose): -->
 
-<link href="<CONTENT-URL:globalHelp.css>" rel="stylesheet" type="text/css">
+<link href="<CONTENT-URL:globalHelp.css>" rel="stylesheet" type="text/css"/>
 
 <!--                              -->
 
-<!-- You can refer to scripts or CSS defined in the grid or styles for
-this page, too.  Here is a sample print hyperlink; this one refers to a
-globalHelpPrint() JavaScript assumed to be supplied by your grid
-or styles for this page. You provide the grid and styles. -->
+<!-- You can also refer to external JavaScript in this file.  Put your 
+JavaScript in a JS file.  Then give the file an appropriate name.  Eg, 
+if you are providing JavaScript just for a particular portal site, name
+the file <site-name>GlobalHelp.js where <site-name> is the site name 
+for the site in Vignette.  Or if you are providing scripts for all sites
+without site-specific scripts, name it globalHelp.js.  Then upload the
+file as a secondary support file into the Global Help Page component in
+Vignette.  And put a token to resolve it below, like this one (be sure to
+set the filename in the token to match the filename you chose): -->
 
-<div id="print">
+<script src="<CONTENT-URL:globalHelp.js>" type="text/javascript" language="javascript" charset="utf-8"/>
+
+<!-- Here is an example of a print hyperlink, for printing the global
+help content.  This example calls JavaScript defined in the above script. -->
+
+<div id="print"><font size="-1">
 	<script type="text/javascript" language="javascript" charset="utf-8">
     // <![CDATA[
     document.writeln('<a class="spf-globalhelp-link" href="#" onclick="globalHelpPrint();return false;">Print</a>');
     // ]]>
 	</script>
 	<noscript>To print this document use Ctrl+p on your keypad.</noscript>
-</div>
+</font></div>
 
-<!-- Here is some sample help content referring to styles in the CSS -->
+<!-- Here is some sample help content referring to styles in the above CSS. -->
 
 <h1 class="spf-globalhelp-content-header"><a name="index">Put your help title here.</a></h1>
 
