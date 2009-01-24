@@ -4,11 +4,17 @@
  */
 package com.hp.it.spf.xa.i18n.portal.tag;
 
+import java.util.Collection;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.vignette.portal.log.LogWrapper;
+import com.vignette.portal.website.enduser.PortalContext;
 
 /**
  * <p>
@@ -64,7 +70,15 @@ public abstract class LocaleIndicatorBaseTag extends TagSupport {
 
 		JspWriter out = pageContext.getOut();
 		try {
-			String html = getHTML();
+			// Get the current locale and list of available locales.
+			PortalContext portalContext = (PortalContext) pageContext
+					.getRequest().getAttribute("portalContext");
+			HttpServletRequest request = portalContext.getHttpServletRequest();
+			Locale currentLocale = I18nUtility.getLocale(request);
+
+			// Get the widget for the locale indicator from the concrete
+			// subclass and express it.
+			String html = getHTML(currentLocale);
 			out.println(html);
 		} catch (Exception ex) {
 			LOGGER.error("LocaleIndicatorBaseTag error: " + ex.getMessage());
@@ -75,13 +89,13 @@ public abstract class LocaleIndicatorBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Get the tag HTML. Because there could be different renderings by
-	 * different subclasses, this is abstract. A JspException should be thrown
-	 * if there is an error.
+	 * Get the tag HTML for the given current locale. A JspException should be
+	 * thrown if there is an error.
 	 * 
+	 * @param currentLocale The current locale.
 	 * @return The locale selector HTML markup.
 	 * @throws JspException
 	 */
-	protected abstract String getHTML() throws JspException;
+	protected abstract String getHTML(Locale currentLocale) throws JspException;
 
 }

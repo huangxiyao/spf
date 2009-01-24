@@ -49,23 +49,27 @@ public class ClassicLocaleIndicatorTag extends LocaleIndicatorBaseTag {
 
 	/**
 	 * Get the HTML string for rendering the "classic"-style locale indicator
-	 * for the current locale.
+	 * for the given current locale.
 	 * 
+	 * @param currentLocale
+	 *            The current locale.
 	 * @throws JspException
 	 * @return The HTML string for "classic"-style locale indicator.
 	 */
-	protected String getHTML() throws JspException {
+	protected String getHTML(Locale currentLocale) throws JspException {
 
 		String html = "";
+		if (currentLocale == null) {
+			String msg = "ClassicLocaleIndicatorTag error: the base tag did not provide a locale.";
+			LOGGER.error(msg);
+			throw new JspException(msg);
+		}
 		try {
-			// get locale object and display it in the page
-			Locale locale = I18nUtility
-					.getLocale((HttpServletRequest) pageContext.getRequest());
 			// get display name in same locale (not necessarily current
 			// locale) - note that HPWeb standard is to display country
 			// first, language second
-			String dispName = I18nUtility.getLocaleDisplayName(locale,
-					locale, I18nUtility.LOCALE_BY_COUNTRY);
+			String dispName = I18nUtility.getLocaleDisplayName(currentLocale,
+					currentLocale, I18nUtility.LOCALE_BY_COUNTRY);
 			html += dispName;
 		} catch (Exception ex) {
 			String errMsg = "ClassicLocaleIndicatorTag error: "

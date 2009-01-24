@@ -89,28 +89,38 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	/**
 	 * <p>
 	 * Get the HTML for the "classic"-style locale selector widget (the part of
-	 * the form which is visible to the user). The classic locale selector
-	 * consists of a label (indicated by the tag attributes - at least one is
-	 * required, although blank is permissible, or else a JspException is
-	 * thrown) and an HTML <code>&lt;SELECT&gt;</code> element listing all the
-	 * available locales for the current portal site. The current effective
-	 * locale is the default. The available locales from which to choose and the
-	 * current locale are gotten from the portal I18nUtility.
+	 * the form which is visible to the user), using the given parameters. The
+	 * classic locale selector consists of a label (indicated by the tag
+	 * attributes - at least one is required, although blank is permissible, or
+	 * else a JspException is thrown) and an HTML <code>&lt;SELECT&gt;</code>
+	 * element listing all the available locales for the current portal site.
+	 * The current effective locale is the default. The available locales from
+	 * which to choose and the current locale are passed in by the superclass.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> The contract here is that the returned HTML must name the
-	 * <code>&lt;SELECT&gt;</code> with the given widget name, and the
-	 * selectable values must be RFC 3066 language tags (eg <code>zh-CN</code>
-	 * for Simplified Chinese). That is what the locale selector secondary page
-	 * type is expecting.
+	 * <code>&lt;SELECT&gt;</code> with the given widget name and available
+	 * locales, and the selectable values must be RFC 3066 language tags (eg
+	 * <code>zh-CN</code> for Simplified Chinese). That is what the locale
+	 * selector secondary page type is expecting. Also, there is no need for
+	 * this method to return the <code>&lt;FORM&gt;</code> tag or any hidden
+	 * inputs to the form (eg the locale selector redirect target URL) because
+	 * the superclass provides those.
 	 * </p>
 	 * 
 	 * @param widgetName
 	 *            The name to use for the <code>&lt;SELECT&gt;</code> element.
+	 * @param availableLocales
+	 *            An unsorted collection of all of the available locales (one or
+	 *            more) from which the user may select.
+	 * @param currentLocale
+	 *            The user's current locale.
 	 * @throws JspException
 	 * @return The HTML string for "classic"-style locale selector.
 	 */
-	protected String getWidgetHTML(String widgetName) throws JspException {
+	protected String getWidgetHTML(String widgetName,
+			Collection availableLocales, Locale currentLocale)
+			throws JspException {
 
 		String html = "";
 		if (label == null && labelKey == null) {
@@ -129,7 +139,6 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 		try {
 			PortalContext portalContext = (PortalContext) pageContext
 					.getRequest().getAttribute("portalContext");
-			HttpServletRequest request = portalContext.getHttpServletRequest();
 			String actualLabel = label;
 			if (actualLabel == null) {
 				actualLabel = I18nUtility.getValue(labelKey, portalContext);
@@ -140,14 +149,6 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 				actualLabel = "";
 			}
 
-			// get available locales and sort them by the current locale - note
-			// that HPWeb standard is to sort and display by country first,
-			// language second
-			Locale currentLocale = I18nUtility.getLocale(request);
-			Collection locales = I18nUtility.getAvailableLocales(request);
-			locales = I18nUtility.sortLocales(locales, currentLocale,
-					I18nUtility.LOCALE_BY_COUNTRY);
-
 			// begin selector table layout
 			html += "<table>\n";
 			html += "<tr>\n";
@@ -157,15 +158,21 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 
 			// drop down list column
 			html += "<td>\n";
-			html += "<select id=\"" + widgetName + "\" name=\"" + widgetName + "\">\n";
-			if (locales != null) {
-				Iterator atts = locales.iterator();
+			html += "<select id=\"" + widgetName + "\" name=\"" + widgetName
+					+ "\">\n";
+			if (availableLocales != null) {
+				// sort available locales by the current locale - note that
+				// HPWeb standard is to sort and display by country first,
+				// language second, alphabetically by the current locale
+				availableLocales = I18nUtility.sortLocales(availableLocales,
+						currentLocale, I18nUtility.LOCALE_BY_COUNTRY);
+				Iterator atts = availableLocales.iterator();
 				int i = 1;
 				while (atts.hasNext()) {
 					Locale locale = (Locale) atts.next();
 					// get display name in same locale (not necessarily current
 					// locale) - note that HPWeb standard is to display country
-					// first, language second
+					// first, language second, in the same locale
 					String dispName = I18nUtility.getLocaleDisplayName(locale,
 							locale, I18nUtility.LOCALE_BY_COUNTRY);
 					String value = I18nUtility.localeToLanguageTag(locale);
@@ -173,7 +180,7 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 					// just in case
 					html += "<option value=" + "\"" + Utils.escapeXml(value)
 							+ "\"";
-					// make the default locale selected if it is not empty
+					// make the current locale selected if it is not empty
 					if ((currentLocale != null)
 							&& (locale.equals(currentLocale))) {
 						html += " selected";
@@ -188,8 +195,8 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 			// button column
 			String imgLink = getSubmitImageURL(portalContext);
 			html += "<td valign=\"middle\">\n";
-			html += "<input type=\"image\" name=\"btn_" + widgetName + "\" src=\""
-					+ imgLink + "\">\n";
+			html += "<input type=\"image\" name=\"btn_" + widgetName
+					+ "\" src=\"" + imgLink + "\">\n";
 			html += "</td>\n";
 
 			// end selector table layout

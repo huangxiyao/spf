@@ -76,17 +76,23 @@ public abstract class LocaleSelectorBaseTag extends TagSupport {
 
 		JspWriter out = pageContext.getOut();
 		try {
-			// Get the HTML for the select widget itself.
-			String widget = getWidgetHTML(Consts.LOCALE_SELECTOR_INPUT_NAME);
-			String html = "";
-
-			// Get the form HTML to wrap around it.
+			// Get the current locale and list of available locales.
 			PortalContext portalContext = (PortalContext) pageContext
 					.getRequest().getAttribute("portalContext");
 			HttpServletRequest request = portalContext.getHttpServletRequest();
+			Collection availableLocales = I18nUtility
+					.getAvailableLocales(request);
+			Locale currentLocale = I18nUtility.getLocale(request);
+
+			// Get the HTML for the select widget itself.
+			String widget = getWidgetHTML(Consts.LOCALE_SELECTOR_INPUT_NAME,
+					availableLocales, currentLocale);
+
+			// Get the form HTML to wrap around it.
 			// Make the form action.
 			String localeSelectorURI = portalContext.createProcessURI(
 					Consts.PAGE_SELECT_LOCALE).toString();
+			String html = "";
 			if (localeSelectorURI != null) {
 				html += "<form action=\"" + localeSelectorURI
 						+ "\" method=post>\n";
@@ -116,8 +122,10 @@ public abstract class LocaleSelectorBaseTag extends TagSupport {
 	/**
 	 * <p>
 	 * Get the HTML for the locale selector widget itself (the part of the form
-	 * which is visible to the user). Because there could be different
-	 * renderings by different subclasses, this is abstract. A JspException
+	 * which is visible to the user), using the given parameters. This method
+	 * should only return the various form elements that are visible; the
+	 * <code>&lt;FORM&gt;</code> tag and hidden target input should not be
+	 * part of it because they are provided by this base class. A JspException
 	 * should be thrown if there is an error.
 	 * </p>
 	 * <p>
@@ -131,10 +139,16 @@ public abstract class LocaleSelectorBaseTag extends TagSupport {
 	 * 
 	 * @param widgetName
 	 *            The form element name to use in this widget.
+	 * @param availableLocales
+	 *            An unsorted collection of all of the available locales (one or
+	 *            more) from which the user may select.
+	 * @param currentLocale
+	 *            The user's current locale.
 	 * @return The locale selector HTML markup.
 	 * @throws JspException
 	 */
-	protected abstract String getWidgetHTML(String widgetName)
+	protected abstract String getWidgetHTML(String widgetName,
+			Collection availableLocales, Locale currentLocale)
 			throws JspException;
 
 }
