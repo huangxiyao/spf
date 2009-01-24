@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <epideploy:component build-version="Gold" 
-	component-id="SPFGlobalHelpSecondaryPageType" 
+	component-id="spf-global-help-secondarypagetype" 
 	component-type="Secondary Page Types" 
 	description="Shared Portal Framework secondary page type for display of global help." 
 	epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0" 
@@ -10,7 +10,7 @@
 		<template-info allow-guest-access="true" 
 			description="Shared Portal Framework secondary page type for display of global help." 
 			friendly-id="ANON_SPF_GLOBAL_HELP" header-filename="" 
-			id="SPFGlobalHelpSecondaryPageType" is-system="false" 
+			id="spf-global-help-secondarypagetype" is-system="false" 
 			system-secondary-page-type="false" 
 			title="Shared Portal Framework - Global Help Page" 
 			type="templatetype_page_content_include" visible="true">

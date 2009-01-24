@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
-	<artifactId>global-help-secondarypagetype</artifactId>
+	<artifactId>spf-global-help-secondarypagetype</artifactId>
 	<name>SPF global help secondary page type</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>
@@ -20,27 +20,17 @@
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/global-help-secondarypagetype</url>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-global-help-secondarypagetype</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/global-help-secondarypagetype</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/global-help-secondarypagetype</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/global-help-secondarypagetype</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-global-help-secondarypagetype</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-global-help-secondarypagetype</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-global-help-secondarypagetype</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
 	</organization>
 	<dependencies>
-		<dependency>
-			<groupId>com.hp.it.spf.xa</groupId>
-			<artifactId>common-utilities</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hp.it.spf.xa</groupId>
-			<artifactId>portal-utilities</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-jsr-container-taglib</artifactId>
@@ -65,6 +55,11 @@
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-log</artifactId>
 			<version>7.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-portal-utilities</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
