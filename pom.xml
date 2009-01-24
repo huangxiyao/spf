@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.hp.it.spf.comps</groupId>
-  <artifactId>locale-widget-styletype</artifactId>
+  <artifactId>spf-locale-widget-styletype</artifactId>
   <name>SPF locale widget style type</name>
   <version>1.0.0-SNAPSHOT</version>
   <description>Artifacts for the Shared Portal Framework locale widget style type.  Locale widgets include the locale selector and locale indicator. </description>
@@ -13,12 +13,12 @@
   </parent>
   <ciManagement>
   	<system>Hudson</system>
-  	<url>http://samson.atl.hp.com:8080/hudson/job/locale-widget-styletype</url>
+  	<url>http://samson.atl.hp.com:8080/hudson/job/spf-locale-widget-styletype</url>
   </ciManagement>
   <scm>
-  	<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-widget-styletype</connection>
-  	<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-widget-styletype</developerConnection>
-  	<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/locale-widget-styletype</url>
+  	<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-locale-widget-styletype</connection>
+  	<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-locale-widget-styletype</developerConnection>
+  	<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-locale-widget-styletype</url>
   </scm>
   <organization>
   	<name>Shared Portal Framework: TSG IT</name>
