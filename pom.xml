@@ -33,16 +33,6 @@
 	</organization>
 	<dependencies>
 		<dependency>
-			<groupId>com.hp.it.spf.xa</groupId>
-			<artifactId>common-utilities</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hp.it.spf.xa</groupId>
-			<artifactId>portlet-utilities</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>com.hp.websat</groupId>
 			<artifactId>wpap-core</artifactId>
 			<version>2.2.0</version>
@@ -66,6 +56,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring</artifactId>
 			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-portlet-utilities</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
