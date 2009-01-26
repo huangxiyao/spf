@@ -57,9 +57,6 @@ public abstract class LocaleSelectorProvider {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final LogWrapper LOGGER = new LogWrapper(
-			LocaleSelectorProvider.class);
-
 	/**
 	 * The portal context for this locale selector provider.
 	 */

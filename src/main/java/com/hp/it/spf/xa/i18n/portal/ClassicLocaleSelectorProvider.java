@@ -84,9 +84,6 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	 */
 	protected String listClass;
 
-	private static final LogWrapper LOGGER = new LogWrapper(
-			ClassicLocaleSelectorProvider.class);
-
 	/**
 	 * <p>
 	 * Constructor for the "classic"-style locale selector provider for a
