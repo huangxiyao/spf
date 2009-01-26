@@ -123,13 +123,13 @@ public class I18nUtilityTest extends TestCase {
 
         Locale tempLocale = null;
         tempLocale = (Locale)iterator.next();
+        assertEquals(tempLocale, new Locale("zh"));
+        tempLocale = (Locale)iterator.next();
         assertEquals(tempLocale, new Locale("en"));
         tempLocale = (Locale)iterator.next();
         assertEquals(tempLocale, new Locale("en", "US"));
         tempLocale = (Locale)iterator.next();
         assertEquals(tempLocale, new Locale("th"));
-        tempLocale = (Locale)iterator.next();
-        assertEquals(tempLocale, new Locale("zh"));
     }
 
     /* public void testSlashify() {
