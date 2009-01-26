@@ -21,12 +21,22 @@ import com.hp.it.spf.xa.misc.portal.Utils;
 /**
  * <p>
  * The tag class for the "classic"-style locale selector (ie the
- * <code>&lt;spf-i18n-portal:classicLocaleSelector&gt;</code> tag). This tag
- * requires a label string to insert next to the selector widget itself, which
- * can be passed via either the <code>label="<i>string</i>"</code> attribute
- * or the <code>labelKey="<i>message-key</i>"</code> attribute. If the
- * former, the given <i>string</i> is used as the label text directly. If the
- * latter, the given <i>message-key</i> is used to lookup an appropriate
+ * <code>&lt;spf-i18n-portal:classicLocaleSelector&gt;</code> tag). The
+ * locales expressed are the ones currently available for the portal site,
+ * sorted by locale. The locale currently resolved for the user is marked as the
+ * pre-selected default.
+ * </p>
+ * <p>
+ * This tag takes the following tag attributes:
+ * </p>
+ * <ul>
+ * <li>
+ * <p>
+ * This tag requires a label string to insert next to the selector widget
+ * itself, which can be passed via either the <code>label="<i>string</i>"</code>
+ * attribute or the <code>labelKey="<i>message-key</i>"</code> attribute. If
+ * the former, the given <i>string</i> is used as the label text directly. If
+ * the latter, the given <i>message-key</i> is used to lookup an appropriate
  * localized message for the user's current locale in the current portal
  * component's resource bundle (if not found, then the <i>message-key</i>
  * itself is used for this purpose). If both <code>label</code> and
@@ -34,11 +44,58 @@ import com.hp.it.spf.xa.misc.portal.Utils;
  * takes precedence. And if <code>label</code> and <code>defaultLabel</code>
  * are provided, the <code>defaultLabel</code> is ignored.
  * </p>
+ * </li>
+ * <li>
  * <p>
- * The locales expressed are the ones currently available for the portal site,
- * sorted by locale. The locale currently resolved for the user is marked as the
- * pre-selected default.
+ * The <code>labelStyle="<i>title-style</i>"</code> and
+ * <code>labelClass="<i>title-class</i>"</code> attributes are alternate
+ * ways of specifying a CSS style for the locale selector's label. With the
+ * <code>labelStyle</code> attribute, you pass an inline CSS style. This
+ * should be a string of any CSS properties which are valid properties for your
+ * label and/or the HTML <code>&lt;TD&gt;</code> tag. For example,
+ * <code>labelStyle="background-color:black;color:white;font-weight:bold"</code>.
+ * With the <code>labelClass</code> attribute, you pass the name of a CSS
+ * class you have already included in your JSP. That class should specify the
+ * same kind of properties as you would in <code>labelStyle</code> - for
+ * example, <code>labelClass="my-label-style"</code> where you have elsewhere
+ * defined the following CSS class:
+ * <code>.my-label-style { background-color:black; ... }</code>. There is no
+ * default applied.
  * </p>
+ * </li>
+ * The <code>labelStyle="<i>label-style</i>"</code> and
+ * <code>labelClass="<i>label-class</i>"</code> attributes are alternate
+ * ways of specifying a CSS style for the locale selector's label. With the
+ * <code>labelStyle</code> attribute, you pass an inline CSS style. This
+ * should be a string of any CSS properties which are valid properties for your
+ * label and/or the HTML <code>&lt;TD&gt;</code> tag. For example,
+ * <code>labelStyle="background-color:black;color:white;font-weight:bold"</code>.
+ * With the <code>labelClass</code> attribute, you pass the name of a CSS
+ * class you have already included in your JSP. That class should specify the
+ * same kind of properties as you would in <code>labelStyle</code> - for
+ * example, <code>labelClass="my-label-style"</code> where you have elsewhere
+ * defined the following CSS class:
+ * <code>.my-label-style { background-color:black; ... }</code>. There is no
+ * default applied.
+ * <li>
+ * <p>
+ * The <code>listStyle="<i>list-style</i>"</code> and
+ * <code>listClass="<i>list-class</i>"</code> attributes are alternate ways
+ * of specifying a CSS style for the locale selector's label. With the
+ * <code>listStyle</code> attribute, you pass an inline CSS style. This should
+ * be a string of any CSS properties which are valid properties for locale list
+ * (ie, the HTML <code>&lt;SELECT&gt;</code> tag. For example,
+ * <code>labelStyle="background-color:yellow;color:black;font-style:italic"</code>.
+ * With the <code>listClass</code> attribute, you pass the name of a CSS class
+ * you have already included in your JSP. That class should specify the same
+ * kind of properties as you would in <code>listStyle</code> - for example,
+ * <code>listClass="my-list-style"</code> where you have elsewhere defined the
+ * following CSS class:
+ * <code>.my-list-style { background-color:yellow; ... }</code>. There is no
+ * default applied.
+ * </p>
+ * </li>
+ * </ul>
  * 
  * @author <link href="maomao.guan@hp.com">Aaron</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
@@ -56,6 +113,16 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	protected static String SUBMIT_BUTTON_IMG_NAME = "btn_submit.gif";
 
 	/**
+	 * The default style to apply to the label. Currently null.
+	 */
+	protected static String DEFAULT_LABEL_STYLE = null;
+
+	/**
+	 * The default style to apply to the list. Currently null.
+	 */
+	protected static String DEFAULT_LIST_STYLE = null;
+
+	/**
 	 * The <code>label</code> attribute from the tag.
 	 */
 	protected String label;
@@ -64,6 +131,26 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	 * The <code>labelKey</code> attribute from the tag.
 	 */
 	protected String labelKey;
+
+	/**
+	 * Stores the value of the <code>labelStyle</code> attribute.
+	 */
+	protected String labelStyle;
+
+	/**
+	 * Stores the value of the <code>labelClass</code> attribute.
+	 */
+	protected String labelClass;
+
+	/**
+	 * Stores the value of the <code>listStyle</code> attribute.
+	 */
+	protected String listStyle;
+
+	/**
+	 * Stores the value of the <code>listClass</code> attribute.
+	 */
+	protected String listClass;
 
 	protected static final LogWrapper LOGGER = new LogWrapper(
 			ClassicLocaleSelectorTag.class);
@@ -75,6 +162,10 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	public ClassicLocaleSelectorTag() {
 		labelKey = null;
 		label = null;
+		labelClass = null;
+		labelStyle = null;
+		listClass = null;
+		listStyle = null;
 	}
 
 	/**
@@ -84,6 +175,10 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 		super.release();
 		labelKey = null;
 		label = null;
+		labelClass = null;
+		labelStyle = null;
+		listClass = null;
+		listStyle = null;
 	}
 
 	/**
@@ -129,7 +224,7 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 			throw new JspException(msg);
 		}
 		if (widgetName != null) {
-			widgetName = widgetName.trim();
+			widgetName = Utils.escapeXml(widgetName.trim());
 		}
 		if ((widgetName == null) || (widgetName.length() == 0)) {
 			String msg = "ClassicLocaleSelectorTag error: the base tag did not provide a widget name.";
@@ -139,6 +234,8 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 		try {
 			PortalContext portalContext = (PortalContext) pageContext
 					.getRequest().getAttribute("portalContext");
+
+			// Get the label to use.
 			String actualLabel = label;
 			if (actualLabel == null) {
 				actualLabel = I18nUtility.getValue(labelKey, portalContext);
@@ -149,16 +246,40 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 				actualLabel = "";
 			}
 
+			// Get the label style to use.
+			String labelStyleAttr = "";
+			if (this.labelStyle != null)
+				labelStyleAttr += "style=\"" + Utils.escapeXml(this.labelStyle)
+						+ "\" ";
+			if (this.labelClass != null)
+				labelStyleAttr += "class=\"" + Utils.escapeXml(this.labelClass)
+						+ "\" ";
+			if ("".equals(labelStyleAttr) && (DEFAULT_LABEL_STYLE != null))
+				labelStyleAttr += "style=\""
+						+ Utils.escapeXml(DEFAULT_LABEL_STYLE) + "\" ";
+
+			// Get the list style to use.
+			String listStyleAttr = "";
+			if (this.listStyle != null)
+				listStyleAttr += "style=\"" + Utils.escapeXml(this.listStyle)
+						+ "\" ";
+			if (this.listClass != null)
+				listStyleAttr += "class=\"" + Utils.escapeXml(this.listClass)
+						+ "\" ";
+			if ("".equals(listStyleAttr) && (DEFAULT_LIST_STYLE != null))
+				listStyleAttr += "style=\""
+						+ Utils.escapeXml(DEFAULT_LIST_STYLE) + "\" ";
+
 			// begin selector table layout
-			html += "<table>\n";
+			html += "<table cellpadding=\"2\" cellspacing=\"0\">\n";
 			html += "<tr>\n";
 
 			// label column
-			html += "<td valign=MIDDLE>" + actualLabel + "</td>\n";
+			html += "<td " + labelStyleAttr + "valign=\"middle\">" + actualLabel + "</td>\n";
 
 			// drop down list column
-			html += "<td>\n";
-			html += "<select id=\"" + widgetName + "\" name=\"" + widgetName
+			html += "<td " + labelStyleAttr + ">\n";
+			html += "<select " + listStyleAttr + "id=\"" + widgetName + "\" name=\"" + widgetName
 					+ "\">\n";
 			if (availableLocales != null) {
 				// sort available locales by the current locale - note that
@@ -194,7 +315,7 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 
 			// button column
 			String imgLink = getSubmitImageURL(portalContext);
-			html += "<td valign=\"middle\">\n";
+			html += "<td " + labelStyleAttr + "valign=\"middle\">\n";
 			html += "<input type=\"image\" name=\"btn_" + widgetName
 					+ "\" src=\"" + imgLink + "\">\n";
 			html += "</td>\n";
@@ -247,6 +368,86 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	 */
 	public String getLabelKey() {
 		return label;
+	}
+
+	/**
+	 * Get the value of the <code>labelStyle</code> attribute.
+	 * 
+	 * @return The <code>labelStyle</code> attribute.
+	 */
+	public String getLabelStyle() {
+		return labelStyle;
+	}
+
+	/**
+	 * Set the value from the <code>labelStyle</code> attribute. Blank values
+	 * are not normalized to null.
+	 * 
+	 * @param value
+	 *            The <code>labelStyle</code> attribute.
+	 */
+	public void setLabelStyle(String value) {
+		this.labelStyle = value;
+	}
+
+	/**
+	 * Get the value of the <code>labelClass</code> attribute.
+	 * 
+	 * @return The <code>labelClass</code> attribute.
+	 */
+	public String getLabelClass() {
+		return labelClass;
+	}
+
+	/**
+	 * Set the value from the <code>labelClass</code> attribute. Blank values
+	 * are not normalized to null.
+	 * 
+	 * @param value
+	 *            The <code>labelClass</code> attribute.
+	 */
+	public void setLabelClass(String value) {
+		this.labelClass = value;
+	}
+
+	/**
+	 * Get the value of the <code>listStyle</code> attribute.
+	 * 
+	 * @return The <code>listStyle</code> attribute.
+	 */
+	public String getListStyle() {
+		return listStyle;
+	}
+
+	/**
+	 * Set the value from the <code>listStyle</code> attribute. Blank values
+	 * are not normalized to null.
+	 * 
+	 * @param value
+	 *            The <code>listStyle</code> attribute.
+	 */
+	public void setListStyle(String value) {
+		this.listStyle = value;
+	}
+
+	/**
+	 * Get the value of the <code>listClass</code> attribute.
+	 * 
+	 * @return The <code>listClass</code> attribute.
+	 */
+	public String getListClass() {
+		return listClass;
+	}
+
+	/**
+	 * Set the value from the <code>listClass</code> attribute. Blank values
+	 * are not normalized to null.
+	 * 
+	 * @param value
+	 *            The <code>listClass</code> attribute.
+	 */
+	public void setListClass(String value) {
+		this.listClass = value;
 	}
 
 	/**
