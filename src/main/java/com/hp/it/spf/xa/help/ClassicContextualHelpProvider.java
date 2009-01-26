@@ -102,7 +102,7 @@ public abstract class ClassicContextualHelpProvider extends
 	 * and drag-and-drop behavior. The popup itself is not defined in this
 	 * JavaScript.
 	 */
-	private static String CLASSIC_CONTEXTUAL_HELP_JS = "<script type=\"text/javascript\" language=\"JavaScript\">\n"
+	protected static String CLASSIC_CONTEXTUAL_HELP_JS = "<script type=\"text/javascript\" language=\"JavaScript\">\n"
 			+ "if (typeof(loadedClassicContextualHelpJS) == 'undefined') \n"
 			+ "{ \n"
 			+ "    var loadedContextualHelpJS = true; \n"
