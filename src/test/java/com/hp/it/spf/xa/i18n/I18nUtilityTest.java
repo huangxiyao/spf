@@ -141,7 +141,7 @@ public class I18nUtilityTest extends TestCase {
     public void testGetLocaleDisplayName() {
         Locale locale = new Locale("zh", "CN");
         String name = I18nUtility.getLocaleDisplayName(locale);
-        assertEquals(name, "中文 (中国)");
+        assertEquals(name, "中国 - 中文");
     }
 
     public void testGetUserDisplayName() {
