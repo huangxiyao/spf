@@ -6,6 +6,8 @@ package com.hp.it.spf.xa.help.portal;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.StringTokenizer;
+import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
 
 import com.vignette.portal.website.enduser.PortalContext;
 
@@ -49,17 +51,17 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * markup has been generated during this request lifecycle (ie it tracks how
 	 * many times getHTML has been invoked during this request lifecycle).
 	 */
-	private static String CLASSIC_GLOBAL_HELP_COUNTER_ATTR = "ClassicGlobalHelpProvider.count";
+	protected static String CLASSIC_GLOBAL_HELP_COUNTER_ATTR = "ClassicGlobalHelpProvider.count";
 
 	/**
 	 * Default window features for the global help child window.
 	 */
-	private static String DEFAULT_WINDOW_FEATURES = "height=610,width=410,menubar=no,status=no,toolbar=no,resizable=yes";
+	protected static String DEFAULT_WINDOW_FEATURES = "height=610,width=410,menubar=no,status=no,toolbar=no,resizable=yes";
 
 	/**
 	 * The JavaScript string for the classic global help popup.
 	 */
-	private static String CLASSIC_GLOBAL_HELP_JS = "<script type=\"text/javascript\" language=\"JavaScript\">\n"
+	protected static String CLASSIC_GLOBAL_HELP_JS = "<script type=\"text/javascript\" language=\"JavaScript\">\n"
 			+ "if (typeof(loadedClassicGlobalHelpJS) == 'undefined') \n"
 			+ "{ \n"
 			+ "    var loadedClassGlobalHelpJS = true; \n"
@@ -131,18 +133,13 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * identifier within the global help page that you want the global help URL
 	 * to point to.
 	 */
-	private String fragment = "";
+	protected String fragment = "";
 
 	/**
 	 * "Classic" global help opens the help in a child window - this variable
 	 * stores the window features for that child window.
 	 */
-	private String windowFeatures = null;
-
-	/**
-	 * The portal context for this classic global help provider.
-	 */
-	private PortalContext portalContext = null;
+	protected String windowFeatures = null;
 
 	/**
 	 * <p>
@@ -152,7 +149,7 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 	 * </p>
 	 */
 	public ClassicGlobalHelpProvider(PortalContext pContext) {
-		portalContext = pContext;
+		super(pContext);
 	}
 
 	/**
@@ -326,7 +323,11 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 				.toString();
 		if (uri != null) { // should be null if no global help
 			if (!this.fragment.equals("")) {
-				uri += "#" + fragment;
+				try {
+					uri += "#" + URLEncoder.encode(fragment, "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					uri += "#" + fragment; // should never happen
+				}
 			}
 		}
 

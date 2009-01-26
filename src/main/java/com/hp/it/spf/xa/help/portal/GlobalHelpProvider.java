@@ -5,6 +5,7 @@
 package com.hp.it.spf.xa.help.portal;
 
 import com.hp.it.spf.xa.help.HelpProvider;
+import com.vignette.portal.website.enduser.PortalContext;
 
 /**
  * <p>
@@ -24,11 +25,16 @@ import com.hp.it.spf.xa.help.HelpProvider;
 public abstract class GlobalHelpProvider extends HelpProvider {
 
 	/**
+	 * The portal context for this global help provider.
+	 */
+	protected PortalContext portalContext = null;
+
+	/**
 	 * Protected to prevent external construction except by subclasses. Use an
 	 * appropriate subclass instead.
 	 */
-	protected GlobalHelpProvider() {
-
+	protected GlobalHelpProvider(PortalContext pContext) {
+		this.portalContext = pContext;
 	}
 
 	/**

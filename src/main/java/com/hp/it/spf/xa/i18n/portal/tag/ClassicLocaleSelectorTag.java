@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.i18n.portal.LocaleSelectorProvider;
+import com.hp.it.spf.xa.i18n.portal.ClassicLocaleSelectorProvider;
 import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
 import com.hp.it.spf.xa.i18n.portal.tag.LocaleSelectorBaseTag;
@@ -41,18 +43,18 @@ import com.hp.it.spf.xa.misc.portal.Utils;
  * component's resource bundle (if not found, then the <i>message-key</i>
  * itself is used for this purpose). If both <code>label</code> and
  * <code>labelKey</code> are provided, the <code>label</code> attribute
- * takes precedence. And if <code>label</code> and <code>defaultLabel</code>
- * are provided, the <code>defaultLabel</code> is ignored.
+ * takes precedence. It is an error if neither <code>label</code> nor
+ * <code>labelKey</code> are provided.
  * </p>
  * </li>
  * <li>
  * <p>
  * The <code>labelStyle="<i>title-style</i>"</code> and
- * <code>labelClass="<i>title-class</i>"</code> attributes are alternate
- * ways of specifying a CSS style for the locale selector's label. With the
- * <code>labelStyle</code> attribute, you pass an inline CSS style. This
- * should be a string of any CSS properties which are valid properties for your
- * label and/or the HTML <code>&lt;TD&gt;</code> tag. For example,
+ * <code>labelClass="<i>title-class</i>"</code> attributes are optional
+ * alternative ways of specifying a CSS style for the locale selector's label.
+ * With the <code>labelStyle</code> attribute, you pass an inline CSS style.
+ * This should be a string of any CSS properties which are valid properties for
+ * your label and/or the HTML <code>&lt;TD&gt;</code> tag. For example,
  * <code>labelStyle="background-color:black;color:white;font-weight:bold"</code>.
  * With the <code>labelClass</code> attribute, you pass the name of a CSS
  * class you have already included in your JSP. That class should specify the
@@ -63,28 +65,14 @@ import com.hp.it.spf.xa.misc.portal.Utils;
  * default applied.
  * </p>
  * </li>
- * The <code>labelStyle="<i>label-style</i>"</code> and
- * <code>labelClass="<i>label-class</i>"</code> attributes are alternate
- * ways of specifying a CSS style for the locale selector's label. With the
- * <code>labelStyle</code> attribute, you pass an inline CSS style. This
- * should be a string of any CSS properties which are valid properties for your
- * label and/or the HTML <code>&lt;TD&gt;</code> tag. For example,
- * <code>labelStyle="background-color:black;color:white;font-weight:bold"</code>.
- * With the <code>labelClass</code> attribute, you pass the name of a CSS
- * class you have already included in your JSP. That class should specify the
- * same kind of properties as you would in <code>labelStyle</code> - for
- * example, <code>labelClass="my-label-style"</code> where you have elsewhere
- * defined the following CSS class:
- * <code>.my-label-style { background-color:black; ... }</code>. There is no
- * default applied.
  * <li>
  * <p>
  * The <code>listStyle="<i>list-style</i>"</code> and
- * <code>listClass="<i>list-class</i>"</code> attributes are alternate ways
- * of specifying a CSS style for the locale selector's label. With the
- * <code>listStyle</code> attribute, you pass an inline CSS style. This should
- * be a string of any CSS properties which are valid properties for locale list
- * (ie, the HTML <code>&lt;SELECT&gt;</code> tag. For example,
+ * <code>listClass="<i>list-class</i>"</code> attributes are optional
+ * alternative ways of specifying a CSS style for the locale selector's label.
+ * With the <code>listStyle</code> attribute, you pass an inline CSS style.
+ * This should be a string of any CSS properties which are valid properties for
+ * locale list (ie, the HTML <code>&lt;SELECT&gt;</code> tag. For example,
  * <code>labelStyle="background-color:yellow;color:black;font-style:italic"</code>.
  * With the <code>listClass</code> attribute, you pass the name of a CSS class
  * you have already included in your JSP. That class should specify the same
@@ -96,6 +84,30 @@ import com.hp.it.spf.xa.misc.portal.Utils;
  * </p>
  * </li>
  * </ul>
+ * <p>
+ * Finally, from the base class, the following optional tags are also supported:
+ * </p>
+ * <ul>
+ * <li>
+ * <p>
+ * <code>escape="<i>true-or-false</i>"</code> is an optional switch
+ * (default: <code>"false"</code>) which if set to <code>"true"</code> will
+ * convert any HTML special characters found in the label into their equivalent
+ * HTML character entities. <b>Note:</b> Regardless of the value of this
+ * switch, the locale options in the list are escaped (though generally they
+ * should contain no HTML markup anyway).
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * <code>filterSpan="<i>true-or-false</i>"</code> is another optional switch
+ * (default: <code>"false"</code>) which, when set to <code>true</code>,
+ * removes any <code>&lt;SPAN&gt;</code> which Vignette may have injected into
+ * the label, if any.
+ * </p>
+ * </li>
+ * </ul>
+ * 
  * 
  * @author <link href="maomao.guan@hp.com">Aaron</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
@@ -106,21 +118,6 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	 * serialVersionUID long
 	 */
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * The name of the submit button image for the classic locale selector form.
-	 */
-	protected static String SUBMIT_BUTTON_IMG_NAME = "btn_submit.gif";
-
-	/**
-	 * The default style to apply to the label. Currently null.
-	 */
-	protected static String DEFAULT_LABEL_STYLE = null;
-
-	/**
-	 * The default style to apply to the list. Currently null.
-	 */
-	protected static String DEFAULT_LIST_STYLE = null;
 
 	/**
 	 * The <code>label</code> attribute from the tag.
@@ -160,8 +157,9 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	 * 
 	 */
 	public ClassicLocaleSelectorTag() {
-		labelKey = null;
+		super();
 		label = null;
+		labelKey = null;
 		labelClass = null;
 		labelStyle = null;
 		listClass = null;
@@ -173,8 +171,8 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	 */
 	public void release() {
 		super.release();
-		labelKey = null;
 		label = null;
+		labelKey = null;
 		labelClass = null;
 		labelStyle = null;
 		listClass = null;
@@ -182,158 +180,38 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	}
 
 	/**
-	 * <p>
-	 * Get the HTML for the "classic"-style locale selector widget (the part of
-	 * the form which is visible to the user), using the given parameters. The
-	 * classic locale selector consists of a label (indicated by the tag
-	 * attributes - at least one is required, although blank is permissible, or
-	 * else a JspException is thrown) and an HTML <code>&lt;SELECT&gt;</code>
-	 * element listing all the available locales for the current portal site.
-	 * The current effective locale is the default. The available locales from
-	 * which to choose and the current locale are passed in by the superclass.
-	 * </p>
-	 * <p>
-	 * <b>Note:</b> The contract here is that the returned HTML must name the
-	 * <code>&lt;SELECT&gt;</code> with the given widget name and available
-	 * locales, and the selectable values must be RFC 3066 language tags (eg
-	 * <code>zh-CN</code> for Simplified Chinese). That is what the locale
-	 * selector secondary page type is expecting. Also, there is no need for
-	 * this method to return the <code>&lt;FORM&gt;</code> tag or any hidden
-	 * inputs to the form (eg the locale selector redirect target URL) because
-	 * the superclass provides those.
-	 * </p>
+	 * Return an instance of the "classic"-style locale selector provider,
+	 * populated with the parameters from the current tag. This throws a
+	 * JspException if the required parameters for that provider (ie the label
+	 * content) were not specified in the tag.
 	 * 
-	 * @param widgetName
-	 *            The name to use for the <code>&lt;SELECT&gt;</code> element.
-	 * @param availableLocales
-	 *            An unsorted collection of all of the available locales (one or
-	 *            more) from which the user may select.
-	 * @param currentLocale
-	 *            The user's current locale.
+	 * @return LocaleSelectorProvider
 	 * @throws JspException
-	 * @return The HTML string for "classic"-style locale selector.
 	 */
-	protected String getWidgetHTML(String widgetName,
-			Collection availableLocales, Locale currentLocale)
+	protected LocaleSelectorProvider getLocaleSelectorProvider()
 			throws JspException {
 
-		String html = "";
-		if (label == null && labelKey == null) {
+		String labelContent = getLabelContent();
+		if (labelContent == null) {
 			String msg = "ClassicLocaleSelectorTag error: either the label or labelKey are required attributes.";
 			LOGGER.error(msg);
 			throw new JspException(msg);
 		}
-		if (widgetName != null) {
-			widgetName = Utils.escapeXml(widgetName.trim());
-		}
-		if ((widgetName == null) || (widgetName.length() == 0)) {
-			String msg = "ClassicLocaleSelectorTag error: the base tag did not provide a widget name.";
-			LOGGER.error(msg);
-			throw new JspException(msg);
-		}
-		try {
-			PortalContext portalContext = (PortalContext) pageContext
-					.getRequest().getAttribute("portalContext");
-
-			// Get the label to use.
-			String actualLabel = label;
-			if (actualLabel == null) {
-				actualLabel = I18nUtility.getValue(labelKey, portalContext);
-			}
-			if (actualLabel != null) {
-				actualLabel = actualLabel.trim();
-			} else {
-				actualLabel = "";
-			}
-
-			// Get the label style to use.
-			String labelStyleAttr = "";
-			if (this.labelStyle != null)
-				labelStyleAttr += "style=\"" + Utils.escapeXml(this.labelStyle)
-						+ "\" ";
-			if (this.labelClass != null)
-				labelStyleAttr += "class=\"" + Utils.escapeXml(this.labelClass)
-						+ "\" ";
-			if ("".equals(labelStyleAttr) && (DEFAULT_LABEL_STYLE != null))
-				labelStyleAttr += "style=\""
-						+ Utils.escapeXml(DEFAULT_LABEL_STYLE) + "\" ";
-
-			// Get the list style to use.
-			String listStyleAttr = "";
-			if (this.listStyle != null)
-				listStyleAttr += "style=\"" + Utils.escapeXml(this.listStyle)
-						+ "\" ";
-			if (this.listClass != null)
-				listStyleAttr += "class=\"" + Utils.escapeXml(this.listClass)
-						+ "\" ";
-			if ("".equals(listStyleAttr) && (DEFAULT_LIST_STYLE != null))
-				listStyleAttr += "style=\""
-						+ Utils.escapeXml(DEFAULT_LIST_STYLE) + "\" ";
-
-			// begin selector table layout
-			html += "<table cellpadding=\"2\" cellspacing=\"0\">\n";
-			html += "<tr>\n";
-
-			// label column
-			html += "<td " + labelStyleAttr + "valign=\"middle\">" + actualLabel + "</td>\n";
-
-			// drop down list column
-			html += "<td " + labelStyleAttr + ">\n";
-			html += "<select " + listStyleAttr + "id=\"" + widgetName + "\" name=\"" + widgetName
-					+ "\">\n";
-			if (availableLocales != null) {
-				// sort available locales by the current locale - note that
-				// HPWeb standard is to sort and display by country first,
-				// language second, alphabetically by the current locale
-				availableLocales = I18nUtility.sortLocales(availableLocales,
-						currentLocale, I18nUtility.LOCALE_BY_COUNTRY);
-				Iterator atts = availableLocales.iterator();
-				int i = 1;
-				while (atts.hasNext()) {
-					Locale locale = (Locale) atts.next();
-					// get display name in same locale (not necessarily current
-					// locale) - note that HPWeb standard is to display country
-					// first, language second, in the same locale
-					String dispName = I18nUtility.getLocaleDisplayName(locale,
-							locale, I18nUtility.LOCALE_BY_COUNTRY);
-					String value = I18nUtility.localeToLanguageTag(locale);
-					// both the display name and value need to be HTML-escaped
-					// just in case
-					html += "<option value=" + "\"" + Utils.escapeXml(value)
-							+ "\"";
-					// make the current locale selected if it is not empty
-					if ((currentLocale != null)
-							&& (locale.equals(currentLocale))) {
-						html += " selected";
-					}
-					html += ">" + Utils.escapeXml(dispName) + "</option>\n";
-					i++;
-				}
-			}
-			html += "</select>\n";
-			html += "</td>\n";
-
-			// button column
-			String imgLink = getSubmitImageURL(portalContext);
-			html += "<td " + labelStyleAttr + "valign=\"middle\">\n";
-			html += "<input type=\"image\" name=\"btn_" + widgetName
-					+ "\" src=\"" + imgLink + "\">\n";
-			html += "</td>\n";
-
-			// end selector table layout
-			html += "</tr>\n";
-			html += "</table>\n";
-		} catch (Exception ex) {
-			String errMsg = "ClassicLocaleSelectorTag error: "
-					+ ex.getMessage();
-			LOGGER.error(errMsg);
-			throw new JspException(errMsg, ex);
-		}
-		return html;
+		PortalContext portalContext = (PortalContext) pageContext.getRequest()
+				.getAttribute("portalContext");
+		ClassicLocaleSelectorProvider c = new ClassicLocaleSelectorProvider(
+				portalContext);
+		c.setLabelContent(labelContent);
+		c.setLabelStyle(labelStyle);
+		c.setLabelClass(labelClass);
+		c.setListStyle(listStyle);
+		c.setListClass(listClass);
+		return c;
 	}
 
 	/**
-	 * Set the label from the <code>label</code> attribute in the tag.
+	 * Set the label from the <code>label</code> attribute in the tag. This
+	 * sets a normalized value (ie trimmed and blank converted to null).
 	 * 
 	 * @param label
 	 *            The label text.
@@ -353,6 +231,7 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 
 	/**
 	 * Set the label key from the <code>labelKey</code> attribute in the tag.
+	 * This sets a normalized value (ie trimmed and blank converted to null).
 	 * 
 	 * @param labelKey
 	 *            The label key.
@@ -451,69 +330,18 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	}
 
 	/**
-	 * A method to generate the image URL for the classic locale selector's
-	 * submit button. This button is presumed to be named
-	 * <code>btn_submit.gif</code> and located in the current portal
-	 * component. This image may be localized if desired; this method looks for
-	 * the particular localized image (loaded in the current portal component's
-	 * secondary support files) which is the best-candidate given the current
-	 * locale. If the image is not found there, then a URL pointing to
-	 * <code>/images/btn_submit.gif</code> under the portal root path is
-	 * assumed and returned.
-	 */
-	private String getSubmitImageURL(PortalContext portalContext) {
-		String url = "/images/" + SUBMIT_BUTTON_IMG_NAME;
-		if (portalContext != null) {
-			if (I18nUtility.getLocalizedFileAsStream(portalContext,
-					SUBMIT_BUTTON_IMG_NAME) != null) {
-				url = I18nUtility.getLocalizedFileURL(portalContext,
-						SUBMIT_BUTTON_IMG_NAME);
-			} else {
-				url = portalContext.getPortalHttpRoot() + "/" + url;
-				// make sure the path includes the portal application context
-				// root
-				String contextPath = portalContext.getPortalRequest()
-						.getContextPath();
-				if (!url.startsWith(contextPath)) {
-					return slashify(contextPath + "/" + url);
-				}
-			}
-		}
-		return slashify(url);
-	}
-
-	/**
-	 * Normalize blank string values to null - so the return is either a
-	 * non-blank string, or null.
+	 * Returns the label content, from either the <code>label</code> attribute
+	 * or the <code>labelKey</code> message.
 	 * 
-	 * @param value
-	 * @return
+	 * @return The string to use as the label content.
 	 */
-	private String normalize(String value) {
-		if (value != null) {
-			value = value.trim();
-			if (value.equals("")) {
-				value = null;
-			}
+	public String getLabelContent() {
+		String actualLabel = label;
+		if (actualLabel == null) {
+			PortalContext portalContext = (PortalContext) pageContext
+					.getRequest().getAttribute("portalContext");
+			actualLabel = I18nUtility.getValue(labelKey, portalContext);
 		}
-		return value;
-	}
-
-	/**
-	 * <p>
-	 * Returns the given path, with any consecutive file separators ("/" for
-	 * Java) reduced to just one. The given path is also trimmed of whitespace.
-	 * </p>
-	 * 
-	 * @param pPath
-	 *            The file path to clean-up.
-	 * @return The cleaned-up file path.
-	 */
-	private String slashify(String pPath) {
-		if (pPath == null) {
-			return null;
-		}
-		pPath = pPath.trim();
-		return pPath.replaceAll("/+", "/");
+		return normalize(actualLabel);
 	}
 }

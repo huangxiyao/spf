@@ -103,7 +103,6 @@ public abstract class GlobalHelpBaseTag extends HelpBaseTag {
 	 * Releases tag resources.
 	 */
 	public void release() {
-
 		super.release();
 		filterSpan = null;
 		filterSpanEnabled = false;
