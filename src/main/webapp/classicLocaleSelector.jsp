@@ -44,9 +44,10 @@ If only one locale is available, displays the "classic" locale indicator.
 <c:choose>
 	<c:when test="${enableSelector}">
 		<div id="spfLocaleSelector">
-			<span class="spf-localeselector-classic">
-				<spf-i18n-portal:classicLocaleSelector labelKey="label.text" />
-			</span>
+			<spf-i18n-portal:classicLocaleSelector
+				labelKey="label.text"
+				labelClass="spf-localeselector-classic-label"
+				listClass="spf-localeselector-classic-list" />
 		</div>
 	</c:when>
 	<c:otherwise>

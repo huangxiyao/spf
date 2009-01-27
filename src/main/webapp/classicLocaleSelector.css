@@ -7,9 +7,12 @@ in Vignette) and upload it as a new secondary support file into the SPF
 console. */
 
 /* When multiple locales are available for the site, this component
-renders a select widget with a text label.  This CSS style applies 
-to that. */
-.spf-localeselector-classic {
+renders a select list with a text label.  These CSS styles apply to 
+those renderings. */
+.spf-localeselector-classic-label {
+	/* reserved for you to customize */
+}
+.spf-localeselector-classic-list {
 	/* reserved for you to customize */
 }
 
