@@ -71,7 +71,7 @@ public class ViewControllerTest extends TestCase {
         MockRenderResponse renderResponse = new MockRenderResponse();
         renderRequest.addPreferredLocale(new Locale("zh", "CN"));
         PortletPreferences pp = renderRequest.getPreferences();
-        pp.setValue(Consts.VIEW_FILENAME, "test.htm");
+        pp.setValue(Consts.VIEW_FILENAME, "test.html");
         ModelAndView modelAndView = (ModelAndView) viewController
                 .handleRenderRequest(renderRequest, renderResponse);
         assertEquals(modelAndView.getViewName(), "view");
