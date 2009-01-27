@@ -40,8 +40,13 @@
 			<artifactId>jsp-api</artifactId>
 			<version>2.1</version>
 		</dependency>
+		<dependency>
+			<groupId>javax.portlet</groupId>
+			<artifactId>portlet-api</artifactId>
+			<version>2.0</version>
+		</dependency>
 	</dependencies>
-	<description>Common utilities for both portal and portlet sides of the Shared Portal Framework.  Currently includes common and abstract utilities for portal and portlet file content interpolation (useful for any use case involving display of an authored HTML file with certain dynamic substitutions supported), internationalization, property resource bundle management (hot-reloadable property files), help, etc.</description>
+	<description>Common utilities for both portal and portlet sides of the Shared Portal Framework.  Currently includes common and abstract utilities for portal and portlet file content interpolation (useful for any use case involving display of an authored HTML file with certain dynamic substitutions supported), internationalization, property resource bundle management (hot-reloadable property files), contextual help, portal URL creation (targeting URLs with parameters to portlets), etc.</description>
 	<inceptionYear>December 2008</inceptionYear>
 	<parent>
 		<artifactId>spf-pom</artifactId>
