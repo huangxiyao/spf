@@ -137,6 +137,7 @@ public class ViewController extends FileInterpolatorController {
 					fileContent);
 		}
 
+		System.out.println("fileContent is [" + fileContent + "]");
 		// Set the file content to display into the model.
 		modelView.addObject(Consts.VIEW_CONTENT, fileContent);
 
