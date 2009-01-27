@@ -80,7 +80,7 @@ public class ViewControllerTest extends TestCase {
         assertEquals("view", modelAndView.getViewName());
         Map map = modelAndView.getModel();
         String content = (String) map.get(Consts.VIEW_CONTENT);
-        System.out.println(content);
+        // System.out.println(content);
         assertEquals("<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1></body></html>",
                 content);
     }
