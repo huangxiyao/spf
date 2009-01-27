@@ -44,9 +44,8 @@ public class ViewControllerTest extends TestCase {
     public void testGetRelativeHtmlName() throws Exception {
         MockRenderRequest renderRequest = new MockRenderRequest();
         PortletPreferences pp = renderRequest.getPreferences();
-        pp.setValue(Consts.VIEW_FILENAME, "view.htm");
-        assertEquals(viewController.getFilename(renderRequest),
-                "/html/view.htm");
+        pp.setValue(Consts.VIEW_FILENAME, "test.html");
+        assertEquals("/html/test.html", viewController.getFilename(renderRequest));
     }
 
     /**
