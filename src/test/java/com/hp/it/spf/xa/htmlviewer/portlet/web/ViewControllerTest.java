@@ -71,16 +71,13 @@ public class ViewControllerTest extends TestCase {
         MockRenderResponse renderResponse = new MockRenderResponse();
         renderRequest.addPreferredLocale(new Locale("zh", "CN"));
         PortletPreferences pp = renderRequest.getPreferences();
-        pp.setValue(Consts.VIEW_FILENAME, "1.htm");
+        pp.setValue(Consts.VIEW_FILENAME, "test.htm");
         ModelAndView modelAndView = (ModelAndView) viewController
                 .handleRenderRequest(renderRequest, renderResponse);
         assertEquals(modelAndView.getViewName(), "view");
         System.out.println(renderRequest.getAttribute(Consts.VIEW_CONTENT));
         assertEquals(
                 renderRequest.getAttribute(Consts.VIEW_CONTENT),
-                "<a href=\"http://www.sina.com.cn?lang=zh\">"
-                        + "go to OVSC</a><br><a href=\"http://localhost/mockportlet?urlType=render;"
-                        + "portletMode=help\">go to help mode </a><br><img src=\"/relay//images/1_zh_CN.jpg\">"
-                        + "<img src=\"/relay//images/2.jpg\">");
+                "<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1></body></html>");
     }
 }
