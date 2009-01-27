@@ -5,6 +5,7 @@
 package com.hp.it.spf.xa.htmlviewer.portlet.web;
 
 import java.util.Locale;
+import java.util.Map;
 import javax.portlet.PortletPreferences;
 import junit.framework.TestCase;
 import org.springframework.mock.web.portlet.MockRenderRequest;
@@ -58,7 +59,10 @@ public class ViewControllerTest extends TestCase {
         MockRenderResponse renderResponse = new MockRenderResponse();
         ModelAndView modelAndView = (ModelAndView) viewController.execute(
                 renderRequest, renderResponse, "file content");
-        assertEquals(modelAndView.getViewName(), "view");
+        assertEquals("view", modelAndView.getViewName());
+        Map map = modelAndView.getModel();
+        String content = (String) map.get(Consts.VIEW_CONTENT);
+        assertEquals("file content", content);
     }
 
     /**
@@ -74,10 +78,11 @@ public class ViewControllerTest extends TestCase {
         pp.setValue(Consts.VIEW_FILENAME, "test.html");
         ModelAndView modelAndView = (ModelAndView) viewController
                 .handleRenderRequest(renderRequest, renderResponse);
-        assertEquals(modelAndView.getViewName(), "view");
-        System.out.println(renderRequest.getAttribute(Consts.VIEW_CONTENT));
-        assertEquals(
-                renderRequest.getAttribute(Consts.VIEW_CONTENT),
-                "<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1></body></html>");
+        assertEquals("view", modelAndView.getViewName());
+        Map map = modelAndView.getModel();
+        String content = (String) map.get(Consts.VIEW_CONTENT);
+        System.out.println(content);
+        assertEquals("<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1></body></html>",
+                content);
     }
 }
