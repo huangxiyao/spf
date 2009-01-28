@@ -111,7 +111,7 @@ public class LogoutDisplayAction extends BaseAction {
 				url = request.getParameter("TARGET");
 				if (url == null) {
 					url = portalContext.getSiteURI(site) + "template."
-							+ Consts.PAGE_FED_LOGOUT;
+							+ Consts.PAGE_FRIENDLY_ID_FED_LOGOUT;
 				}
 			} else {
 				// finally, assume standard HPP case and redirect to portal site
