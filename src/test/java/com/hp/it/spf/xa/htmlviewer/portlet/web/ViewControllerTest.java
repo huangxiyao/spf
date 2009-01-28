@@ -83,12 +83,19 @@ public class ViewControllerTest extends TestCase {
         System.out.println("testHandleRenderRequestInternal.1 got: " + content);
         assertEquals("<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1></body></html>",
                 content);
-        pp.setValue(Consts.VIEW_FILENAME, "test_loc_content_url.html");
+        pp.setValue(Consts.VIEW_FILENAME, "test_loc_content_url_1.html");
         modelAndView = (ModelAndView) viewController.handleRenderRequest(renderRequest, renderResponse);
         map = modelAndView.getModel();
         content = (String) map.get(Consts.VIEW_CONTENT);
         System.out.println("testHandleRenderRequestInternal.2 got: " + content);
-        assertEquals("<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1></body></html>",
+        assertEquals("<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1> Here is an image tag: <img src=\"/images/test_zh.gif\"></body></html>",
+                content);
+        pp.setValue(Consts.VIEW_FILENAME, "test_loc_content_url_2.html");
+        modelAndView = (ModelAndView) viewController.handleRenderRequest(renderRequest, renderResponse);
+        map = modelAndView.getModel();
+        content = (String) map.get(Consts.VIEW_CONTENT);
+        System.out.println("testHandleRenderRequestInternal.2 got: " + content);
+        assertEquals("<html><head><title>Hello world!</title></head><body><h1>Hello world!</h1> Here is an image tag: <img src=\"/images/nonexistent.gif\"></body></html>",
                 content);        
     }
 }
