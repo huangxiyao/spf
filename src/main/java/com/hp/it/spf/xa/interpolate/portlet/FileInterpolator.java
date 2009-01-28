@@ -487,21 +487,21 @@ public class FileInterpolator extends
 	 * property file (<code>default_tokens.properties</code>).
 	 * </p>
 	 * 
-	 * @param request
+	 * @param pRequest
 	 *            The portlet request
-	 * @param response
+	 * @param pResponse
 	 *            The portlet response
-	 * @param baseContentFilePath
+	 * @param pBaseContentFilePath
 	 *            The base filename and path relative to where the class loader
 	 *            searches for the file content to interpolate
 	 */
-	public FileInterpolator(PortletRequest request, PortletResponse response,
-			String baseContentFilePath) {
-		this.request = request;
-		this.response = response;
-		this.baseContentFilePath = baseContentFilePath;
-		if (request != null && response != null) {
-			this.t = new TokenParser(request, response);
+	public FileInterpolator(PortletRequest pRequest, PortletResponse pResponse,
+			String pBaseContentFilePath) {
+		this.request = pRequest;
+		this.response = pResponse;
+		this.baseContentFilePath = pBaseContentFilePath;
+		if (pRequest != null && pResponse != null) {
+			this.t = new TokenParser(pRequest, pResponse);
 		}
 	}
 
@@ -527,11 +527,11 @@ public class FileInterpolator extends
 	 * can pass null for this parameter.
 	 * </p>
 	 * 
-	 * @param request
+	 * @param pRequest
 	 *            The portlet request
-	 * @param response
+	 * @param pResponse
 	 *            The portlet response
-	 * @param baseContentFilePath
+	 * @param pBaseContentFilePath
 	 *            The base filename and path relative to where the class loader
 	 *            searches for the file content to interpolate
 	 * @param subsFilePath
@@ -540,13 +540,13 @@ public class FileInterpolator extends
 	 *            purposes of any <code>&lt;TOKEN:key&gt;</code> tokens in the
 	 *            file content)
 	 */
-	public FileInterpolator(PortletRequest request, PortletResponse response,
-			String baseContentFilePath, String subsFilePath) {
-		this.request = request;
-		this.response = response;
-		this.baseContentFilePath = baseContentFilePath;
-		if (request != null && response != null) {
-			this.t = new TokenParser(request, response, subsFilePath);
+	public FileInterpolator(PortletRequest pRequest, PortletResponse pResponse,
+			String pBaseContentFilePath, String subsFilePath) {
+		this.request = pRequest;
+		this.response = pResponse;
+		this.baseContentFilePath = pBaseContentFilePath;
+		if (pRequest != null && pResponse != null) {
+			this.t = new TokenParser(pRequest, pResponse, subsFilePath);
 		}
 	}
 

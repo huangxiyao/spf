@@ -116,14 +116,14 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * <code>&lt;TOKEN:key&gt;</code> tokens.
 	 * </p>
 	 * 
-	 * @param request
+	 * @param pRequest
 	 *            The portlet request
-	 * @param response
+	 * @param pResponse
 	 *            The portlet response
 	 */
-	public TokenParser(PortletRequest request, PortletResponse response) {
-		this.request = request;
-		this.response = response;
+	public TokenParser(PortletRequest pRequest, PortletResponse pResponse) {
+		this.request = pRequest;
+		this.response = pResponse;
 	}
 
 	/**
@@ -135,20 +135,21 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * <code>&lt;TOKEN:key&gt;</code> tokens.
 	 * </p>
 	 * 
-	 * @param request
+	 * @param pRequest
 	 *            The portlet request
-	 * @param response
+	 * @param pResponse
 	 *            The portlet response
-	 * @param subsFilePath
+	 * @param pSubsFilePath
 	 *            The token-substitution filename and path (relative to the
 	 *            class loader)
 	 */
 	/* Added by CK for 1000790073 */
-	public TokenParser(PortletRequest request, PortletResponse response,
-			String subsFilePath) {
-		this.request = request;
-		if (subsFilePath != null) {
-			this.subsFilePath = subsFilePath;
+	public TokenParser(PortletRequest pRequest, PortletResponse pResponse,
+			String pSubsFilePath) {
+		this.request = pRequest;
+		this.response = pResponse;
+		if (pSubsFilePath != null) {
+			this.subsFilePath = pSubsFilePath;
 		}
 	}
 
