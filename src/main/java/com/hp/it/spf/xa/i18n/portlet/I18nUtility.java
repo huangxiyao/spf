@@ -527,11 +527,13 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 		if (resourceBundleDir == null || pReq == null || pResp == null
 				|| pBaseFileName == null) {
+System.out.println("getLocalizedFileURL.1");
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
 		pBaseFileName = slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
+			System.out.println("getLocalizedFileURL.2");
 			return null;
 		}
 
@@ -547,13 +549,17 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		// encoded resource URL pointing to the given base filename inside the
 		// portlet application, by default.
 		if (fileName != null) {
+			System.out.println("getLocalizedFileURL.3");
 			return getFileRelayURL(pReq, pResp, fileName);
 		} else {
+			System.out.println("getLocalizedFileURL.4");
 			fileName = getLocalizedFileName(pReq, pBaseFileName, pReq
 					.getLocale(), pLocalized);
 			if (fileName != null) {
+				System.out.println("getLocalizedFileURL.5");
 				return pResp.encodeURL(fileName);
 			} else {
+				System.out.println("getLocalizedFileURL.6");
 				return pResp.encodeURL(pBaseFileName);
 			}
 		}
