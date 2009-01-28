@@ -369,25 +369,25 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * </p>
 	 * 
 	 * <dl>
-	 * <dt><code>getLocalizedFilePath(context, "foo.jpg")</code> when
+	 * <dt><code>getLocalizedFileStream(context, "foo.jpg")</code> when
 	 * <code>context</code> contains Canada French (<code>Locale.CANADA_FRENCH</code>)</dt>
 	 * <dd>returns
 	 * <code><i>root-path</i>/<i>portal-root-path</i>/<i>component-path</i>/foo_fr_CA.jpg</code>
 	 * (where the various path values depend on the environment and are not
 	 * documented here)</dd>
 	 * 
-	 * <dt><code>getLocalizedFilePath(context, "foo.jpg")</code> when
+	 * <dt><code>getLocalizedFileStream(context, "foo.jpg")</code> when
 	 * <code>context</code> contains France French (<code>Locale.FRANCE</code>)</dt>
 	 * <dd>returns
 	 * <code><i>root-path</i>/<i>portal-root-path</i>/<i>component-path</i>/foo_fr.jpg</code></dd>
 	 * 
-	 * <dt><code>getLocalizedFilePath(request, "foo.jpg")</code> when
+	 * <dt><code>getLocalizedFileStream(request, "foo.jpg")</code> when
 	 * <code>context</code> contains generic Italian (<code>Locale.ITALIAN</code>)</dt>
 	 * <dd>returns
 	 * <code><i>root-path</i>/<i>portal-root-path</i>/<i>component-path</i>/foo.jpg</code></dd>
 	 * </dt>
 	 * 
-	 * <dt><code>getLocalizedFilePath(request, "bar.jpg")</code></dt>
+	 * <dt><code>getLocalizedFileStream(request, "bar.jpg")</code></dt>
 	 * <dd>returns <code>null</code></dd>
 	 * </dl>
 	 * 
@@ -406,7 +406,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * already being stored in a message resource. Of course, this relies on you
 	 * having arranged that, but if you would rather generate your localized
 	 * file URL that way, use the companion
-	 * <code>getLocalizedFileAsStream(PortalContext,String,String)</code>
+	 * <code>getLocalizedFileStream(PortalContext,String,String)</code>
 	 * method.
 	 * </p>
 	 * 
@@ -417,9 +417,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return An input stream for the best-candidate localized file, or null if
 	 *         none was found.
 	 */
-	public static InputStream getLocalizedFileAsStream(PortalContext pContext,
+	public static InputStream getLocalizedFileStream(PortalContext pContext,
 			String pBaseFileName) {
-		return getLocalizedFileAsStream(pContext, pBaseFileName, true);
+		return getLocalizedFileStream(pContext, pBaseFileName, true);
 	}
 
 	/**
@@ -433,7 +433,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * context.
 	 * <p>
 	 * If the boolean switch is set to <code>true</code>, this method works
-	 * exactly like <code>getLocalizedFileAsStream(PortalContext,String)</code>
+	 * exactly like <code>getLocalizedFileStream(PortalContext,String)</code>
 	 * (see). If the boolean switch is set to <code>false</code>, this method
 	 * does not actually localize the returned filename. Instead, the returned
 	 * filename points to the base filename if it existed, and null otherwise.
@@ -449,7 +449,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return An input stream for the best-candidate localized file, or null if
 	 *         none was found.
 	 */
-	public static InputStream getLocalizedFileAsStream(PortalContext pContext,
+	public static InputStream getLocalizedFileStream(PortalContext pContext,
 			String pBaseFileName, boolean pLocalized) {
 
 		if (pContext == null || pBaseFileName == null) {
@@ -657,7 +657,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * </p>
 	 * <p>
 	 * This method works like
-	 * <code>getLocalizedFileAsStream(PortalContext,String)</code>, but where
+	 * <code>getLocalizedFileStream(PortalContext,String)</code>, but where
 	 * the localized filename string is taken from a message resource of the
 	 * portal component, using the given key and default filename. Thus this
 	 * method relies on the best-candidate filename for each locale already
@@ -680,7 +680,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * each locale. If you would rather not do that, and would rather just have
 	 * the system inspect the available files in the resource bundle vis-a-vis
 	 * the locale automatically, use the companion
-	 * <code>getLocalizedFilePath(PortalContext,String)</code> method.
+	 * <code>getLocalizedFileStream(PortalContext,String)</code> method.
 	 * </p>
 	 * 
 	 * @param pContext
@@ -694,7 +694,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return An input stream for the best-candidate localized file, or null if
 	 *         none was found.
 	 */
-	public static InputStream getLocalizedFileAsStream(PortalContext pContext,
+	public static InputStream getLocalizedFileStream(PortalContext pContext,
 			String pKey, String pDefault) {
 		if (pContext == null || pKey == null) {
 			return null;

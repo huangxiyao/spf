@@ -460,7 +460,7 @@ public class FileInterpolator extends
 		if (portalContext == null || baseContentFilePath == null) {
 			return null;
 		}
-		return I18nUtility.getLocalizedFileAsStream(portalContext,
+		return I18nUtility.getLocalizedFileStream(portalContext,
 				baseContentFilePath);
 	}
 
