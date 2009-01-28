@@ -20,7 +20,7 @@ secondary support files in this component. --%>
 	String i18nID = portalContext.getCurrentStyle().getUID();
 	// get the proper CSS URL
 	String cssFile = portalContext.getCurrentSite().getDNSName() + "FedLogoutConfirm.css";
-	if (I18nUtility.getLocalizedFileAsStream(portalContext, cssFile, false) == null) 
+	if (I18nUtility.getLocalizedFileStream(portalContext, cssFile, false) == null) 
 		cssFile = "fedLogoutConfirm.css";
 	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile, false);	
 %>
