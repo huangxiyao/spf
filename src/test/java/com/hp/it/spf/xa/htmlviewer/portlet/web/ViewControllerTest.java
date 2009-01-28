@@ -74,14 +74,21 @@ public class ViewControllerTest extends TestCase {
         MockRenderResponse renderResponse = new MockRenderResponse();
         renderRequest.addPreferredLocale(new Locale("zh", "CN"));
         PortletPreferences pp = renderRequest.getPreferences();
-        pp.setValue(Consts.VIEW_FILENAME, "test.html");
+        pp.setValue(Consts.VIEW_FILENAME, "test_basic.html");
         ModelAndView modelAndView = (ModelAndView) viewController
                 .handleRenderRequest(renderRequest, renderResponse);
         assertEquals("view", modelAndView.getViewName());
         Map map = modelAndView.getModel();
         String content = (String) map.get(Consts.VIEW_CONTENT);
-        // System.out.println(content);
+        System.out.println("testHandleRenderRequestInternal.1 got: " + content);
         assertEquals("<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1></body></html>",
                 content);
+        pp.setValue(Consts.VIEW_FILENAME, "test_loc_content_url.html");
+        modelAndView = (ModelAndView) viewController.handleRenderRequest(renderRequest, renderResponse);
+        map = modelAndView.getModel();
+        content = (String) map.get(Consts.VIEW_CONTENT);
+        System.out.println("testHandleRenderRequestInternal.2 got: " + content);
+        assertEquals("<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1></body></html>",
+                content);        
     }
 }
