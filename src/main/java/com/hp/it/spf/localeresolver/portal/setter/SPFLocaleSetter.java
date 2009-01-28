@@ -18,7 +18,7 @@ public class SPFLocaleSetter implements ILocaleSetter {
 	
 	public SPFLocaleSetter() {
 		setters.add(new PortalUserLocaleSetter());
-		setters.add(new HpDomainCookieLocaleSetter(Consts.COOKIE_NAME_LOCALE));
+		setters.add(new HpDomainCookieLocaleSetter(Consts.COOKIE_NAME_SPF_LOCALE));
 	}
 
 	public void setLocale(HttpServletRequest request,
