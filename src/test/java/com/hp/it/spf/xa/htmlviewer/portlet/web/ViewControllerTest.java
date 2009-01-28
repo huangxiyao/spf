@@ -87,6 +87,7 @@ public class ViewControllerTest extends TestCase {
         modelAndView = (ModelAndView) viewController.handleRenderRequest(renderRequest, renderResponse);
         map = modelAndView.getModel();
         content = (String) map.get(Consts.VIEW_CONTENT);
+        System.out.println("testHandleRenderRequestInternal.2 test: " + renderResponse.encodeURL("/images/test.gif"));
         System.out.println("testHandleRenderRequestInternal.2 got: " + content);
         assertEquals("<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1></body></html>",
                 content);        
