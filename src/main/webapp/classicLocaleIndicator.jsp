@@ -26,7 +26,7 @@ Displays the "classic" locale indicator.
 <jsp:scriptlet>
 	// Record page attribute for the proper CSS file URL.
 	String cssFile = portalContext.getCurrentSite().getDNSName() + "ClassicLocaleIndicator.css";
-	if (I18nUtility.getLocalizedFileAsStream(portalContext, cssFile) == null) 
+	if (I18nUtility.getLocalizedFileStream(portalContext, cssFile) == null) 
 		cssFile = "classicLocaleIndicator.css";
 	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile);
 	pageContext.setAttribute("cssURL", cssURL);
