@@ -29,14 +29,15 @@ import com.vignette.portal.website.enduser.components.BaseAction;
  * only one logout page per Web server, this action will typically run under the
  * central SPF-default site, not the actual site the user was using. Thus the
  * site name to redirect cannot be taken from the current request as usual.
- * Instead, it is expected to have been put into the <code>site</code>
- * parameter in the URL by the code which constructed the logout hyperlink which
- * the user clicked to invoke this action. <blockquote> <b>Note:</b> In the
- * standard HPP case, a localized logout-confirmation message string is put into
- * the HTTP session. The portal site home page can choose to read (and erase)
- * and display this message, if desired. The session attribute name is the value
- * of the portal <code>Consts.SESSION_ATTR_STATUS_MSG</code> attribute.
- * </blockquote> </dd>
+ * Instead, it is expected to have been put into a parameter in the URL (named
+ * with the value of the portal <code>Consts.PARAM_LOGOUT_SITE</code>,
+ * currently <code>spfSite</code>) by the code which constructed the logout
+ * hyperlink which the user clicked to invoke this action. <blockquote> <b>Note:</b>
+ * In the standard HPP case, a localized logout-confirmation message string is
+ * put into the HTTP session. The portal site home page can choose to read (and
+ * erase) and display this message, if desired. The session attribute name is
+ * the value of the portal <code>Consts.SESSION_ATTR_STATUS_MSG</code>
+ * attribute. </blockquote> </dd>
  * </p>
  * <p>
  * <dt>AtHP</dt>
@@ -88,8 +89,8 @@ public class LogoutDisplayAction extends BaseAction {
 			LOG.info("LogoutDisplayAction: invoked.");
 
 			// determine which site to redirect to
-			String site = request.getParameter(Consts.LOGOUT_SITE_PARAM) != null ? (String) request
-					.getParameter(Consts.LOGOUT_SITE_PARAM)
+			String site = request.getParameter(Consts.PARAM_LOGOUT_SITE) != null ? (String) request
+					.getParameter(Consts.PARAM_LOGOUT_SITE)
 					: Consts.LOGOUT_DEFAULT_SITE;
 
 			// redirect to AtHP landing page in AtHP case
@@ -117,7 +118,8 @@ public class LogoutDisplayAction extends BaseAction {
 				// home page. Put a localized logout confirmation message into
 				// session, in case the target page chooses to display it. If no
 				// such message resource, then put blank into session.
-				LOG.info("LogoutDisplayAction: user was standard HPP - redirecting to site home page.");
+				LOG
+						.info("LogoutDisplayAction: user was standard HPP - redirecting to site home page.");
 				String msg = I18nUtility.getValue(portalContext
 						.getCurrentSecondaryPage().getUID(),
 						"logout.confirmation.text", "", portalContext);
