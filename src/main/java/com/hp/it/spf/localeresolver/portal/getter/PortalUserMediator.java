@@ -11,7 +11,7 @@ import com.epicentric.entity.ChildEntity;
 import com.epicentric.user.User;
 
 /**
- * Default {@link IUserMediator} implementaion of the user mediatory which
+ * Default {@link IUserMediator} implementation of the user mediator which
  * provides access to user information.
  * @author <link href="marc.derosa@hp.com"></link>
  * @version $Revision 0$ $Date. 01/01/2007$

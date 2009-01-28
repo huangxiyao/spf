@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import com.hp.it.spf.xa.misc.portal.Consts;
 
 /**
  * Abstract base class for HP.com standard locale handling. Subclasses must
@@ -20,12 +21,6 @@ import java.util.Set;
  * @version $Revision: 1.1 $
  */
 public abstract class AbstractLocaleProvider implements LocaleProvider {
-    public static final String LANGUAGE = "lang"; // HP.com standard language
-    // query parameter and
-    // cookie name.
-
-    public static final String COUNTRY = "cc"; // HP.com standard country query
-    // parameter and cookie name.
 
     private static final Set LANGUAGES = new HashSet();
 

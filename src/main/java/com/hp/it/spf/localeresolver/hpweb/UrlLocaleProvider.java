@@ -6,6 +6,7 @@
 package com.hp.it.spf.localeresolver.hpweb;
 
 import javax.servlet.http.HttpServletRequest;
+import com.hp.it.spf.xa.misc.portal.Consts;
 
 /**
  * A locale provider that parses the language and country from HP.com standard
@@ -26,8 +27,8 @@ public class UrlLocaleProvider extends AbstractLocaleProvider {
      *            the servlet request.
      */
     public UrlLocaleProvider(HttpServletRequest request) {
-        language = request.getParameter(LANGUAGE);
-        country = request.getParameter(COUNTRY);
+        language = request.getParameter(Consts.PARAM_HPCOM_LANGUAGE);
+        country = request.getParameter(Consts.PARAM_HPCOM_COUNTRY);
     }
 
     protected String getLanguage() {

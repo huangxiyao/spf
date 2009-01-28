@@ -7,6 +7,7 @@ package com.hp.it.spf.localeresolver.hpweb;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import com.hp.it.spf.xa.misc.portal.Consts;
 
 /**
  * A locale provider that parses the language and country from HP.com standard
@@ -28,8 +29,8 @@ public class CookieLocaleProvider extends AbstractLocaleProvider {
      */
     public CookieLocaleProvider(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        language = getCookieValue(cookies, LANGUAGE);
-        country = getCookieValue(cookies, COUNTRY);
+        language = getCookieValue(cookies, Consts.COOKIE_NAME_HPCOM_LANGUAGE);
+        country = getCookieValue(cookies, Consts.COOKIE_NAME_HPCOM_COUNTRY);
     }
 
     protected String getLanguage() {

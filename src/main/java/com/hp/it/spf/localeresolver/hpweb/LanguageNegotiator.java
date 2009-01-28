@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.hp.it.spf.localeresolver.http.ContentNegotiator;
 import com.hp.it.spf.localeresolver.http.Negotiators;
 import com.hp.it.spf.localeresolver.http.NoAcceptableLanguageException;
+import com.hp.it.spf.xa.misc.portal.Consts;
 
 /**
  * A language negotiator implementation that incorporates all HP.com language
@@ -177,19 +178,17 @@ public class LanguageNegotiator implements ContentNegotiator {
      * @author Quintin May
      */
     static class CookieLocaleSaver {
-        private static final String DOMAIN = ".hp.com";
-        private static final String PATH = "/";
 
         void saveLocale(HttpServletRequest request,
                 HttpServletResponse response, Locale locale) {
             if (locale != null) {
-                addCookie(response, AbstractLocaleProvider.LANGUAGE, locale
+                addCookie(response, Consts.COOKIE_NAME_HPCOM_LANGUAGE, locale
                         .getLanguage());
 
                 if (locale.getCountry() == null) {
-                    deleteCookie(response, AbstractLocaleProvider.COUNTRY);
+                    deleteCookie(response, Consts.COOKIE_NAME_HPCOM_COUNTRY);
                 } else {
-                    addCookie(response, AbstractLocaleProvider.COUNTRY, locale
+                    addCookie(response, Consts.COOKIE_NAME_HPCOM_COUNTRY, locale
                             .getCountry());
                 }
             }
@@ -207,8 +206,8 @@ public class LanguageNegotiator implements ContentNegotiator {
         private Cookie createCookie(String name, String value, int maxAge) {
             Cookie cookie = new Cookie(name, value);
 
-            cookie.setDomain(DOMAIN);
-            cookie.setPath(PATH);
+            cookie.setDomain(Consts.HP_COOKIE_DOMAIN);
+            cookie.setPath(Consts.HP_COOKIE_PATH);
             cookie.setMaxAge(maxAge);
 
             return cookie;
