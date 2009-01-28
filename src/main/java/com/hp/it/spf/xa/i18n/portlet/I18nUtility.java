@@ -35,8 +35,8 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * <li>
  * <p>
  * Wrapper methods for Spring message resources (such as
- * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(javax.portlet.PortletRequest,String)},
- * which include SPF features such as injection of contextual help into
+ * {@link #getMessage(PortletRequest,String)}, which include SPF features such
+ * as injection of contextual help into
  * <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code> markup, and
  * cleanup of <code>&lt;no_localization&gt;...&lt;/no_localization&gt;</code>
  * markup. These methods let you get localized message strings using Spring,
@@ -46,8 +46,8 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * <li>
  * <p>
  * Methods (like
- * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest, PortletResponse, String)}
- * to generate a URL string pointing to a localized static resource, such as an
+ * {@link #getLocalizedFileURL(PortletRequest, PortletResponse, String)} to
+ * generate a URL string pointing to a localized static resource, such as an
  * image. These methods let your portlet use static resource URL's for localized
  * resources - the resources may be kept either inside your portlet WAR, or
  * outside it, in the <i>portlet resource bundle directory (PBD)</i>, or in a
@@ -56,17 +56,16 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * take the return from these methods and express it inside an HTML
  * <code>&lt;IMG SRC="..."&gt;</code> tag. (<b>Note:</b>: your portlet WAR
  * must also include and deploy the file relay servlet (see
- * {@link com.hp.it.spf.xa.i18n.relay.servlet} if your resources are in the PBD,
- * so that the URL's returned by these methods are actually serviced when
- * opened.)
+ * {@link com.hp.it.spf.xa.i18n.relay.servlet.RelayServlet} if your resources
+ * are in the PBD, so that the URL's returned by these methods are actually
+ * serviced when opened.)
  * </p>
  * </li>
  * <li>
  * <p>
- * Methods (like
- * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest, String)}
- * which do the same as the above, except returning an input stream to you
- * instead of a URL string.
+ * Methods (like {@link #getLocalizedFileStream(PortletRequest, String)} which
+ * do the same as the above, except returning an input stream to you instead of
+ * a URL string.
  * </p>
  * </li>
  * <li>
@@ -896,13 +895,17 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * defaulted with the given default message string if not found, and
 	 * HTML-escaped per the given boolean switch. This method uses the Spring
 	 * framework and provides additional useful functionality (such as support
-	 * for embedded contextual help).
+	 * for embedded
+	 * <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>, and
+	 * removal of
+	 * <code>&lt;no_localization&gt;...&lt;/no_localization&gt;</code>
+	 * markup).
 	 * </p>
 	 * <p>
 	 * Selection of the particular localized message properties file is as per
-	 * the Java standard behavior for ResourceBundle. Selection is based on the
-	 * given locale; any locale contained in the given request is only used if
-	 * the given locale is null.
+	 * the Java standard behavior for {@link ResourceBundle}. Selection is
+	 * based on the given locale; any locale contained in the given request is
+	 * only used if the given locale is null.
 	 * </p>
 	 * <p>
 	 * The resource bundles searched are the ones configured for your portlet in
@@ -910,8 +913,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * <code>applicationContext.xml</code>). In your
 	 * <code>applicationContext.xml</code>, we recommend you define your
 	 * message <code>&lt;bean&gt;</code>'s using Spring's
-	 * ReloadableResourceBundleMessageSource class, because then your messages
-	 * will be hot-refreshed at runtime should they change (eg during a
+	 * {@link ReloadableResourceBundleMessageSource} class, because then your
+	 * messages will be hot-refreshed at runtime should they change (eg during a
 	 * localization deployment, no restart will be needed).
 	 * </p>
 	 * <p>
@@ -919,7 +922,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * class loader. For example, you could put them in the usual location,
 	 * inside your portlet WAR. But for ease of administration (eg to permit
 	 * localization by the administrator without having to touch the portlet
-	 * WAR), we recommend you put them in the portlet resource bundle folder
+	 * WAR), you may put them in the <i>portlet resource bundle folder</i>
 	 * dedicated for this purpose. The location of the portlet resource bundle
 	 * folder is configured in the <code>i18n_portlet_config.properties</code>
 	 * file; this folder should also be specified on the classpath so that the
@@ -937,31 +940,38 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * <li>General string parameters are provided via the Object array. The
 	 * objects in this array must implement the toString method. They are
 	 * populated, in order, into any placeholders in the message string, as per
-	 * the Java-standard MessageFormat specification. Any extra parameters are
-	 * ignored; any unfilled placeholders remain.</li>
+	 * the Java-standard {@link java.text.MessageFormat} specification. Any
+	 * extra parameters are ignored; any unfilled placeholders remain.</li>
 	 * </p>
 	 * <p>
 	 * <li>Contextual-help parameters are provided via the
-	 * ContextualHelpProvider array. These ContextualHelpProviders are used to
-	 * populate any special contextual-help tokens (<code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code>)
+	 * {@link ContextualHelpProvider} array. These ContextualHelpProviders are
+	 * used to populate any special contextual-help tokens (<code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>)
 	 * found in the message string. Those tokens can be used to denote parts of
 	 * the message string which are to be linked to contextual help, where the
-	 * contextual help is provided by the corresponding ContextualHelpProvider
-	 * in the array.
+	 * contextual help is provided by the corresponding
+	 * <code>ContextualHelpProvider</code> in the array.
 	 * <ul>
-	 * <li><code>&lt;Contextual_Help&gt;</code> tokens may not be nested.</li>
-	 * <li>Each ContextualHelpProvider in the array, in order, provides the
-	 * logic for populating the corresponding contextual-help token.</li>
+	 * <li><code>&lt;contextual_help&gt;</code> tokens may not be nested.</li>
+	 * <li>Each <code>ContextualHelpProvider</code> in the array, in order,
+	 * provides the logic for populating the corresponding contextual-help
+	 * token.</li>
 	 * <li> The content surrounded by the contextual-help token is used as the
-	 * link content for the ContextualHelpProvider. By the time you pass the
-	 * ContextualHelpProvider to this method, you should already have used the
-	 * other ContextualHelpProvider setters to set the other parameters for
-	 * contextual-help, such as help content.</li>
-	 * <li> Any extra ContextualHelpProviders in the array beyond the number of
-	 * <code>&lt;Contextual_Help&gt;</code> tokens in the string are ignored.</li>
-	 * <li> Any unmated <code>&lt;Contextual_Help&gt;</code> tokens in the
-	 * string beyond the number of ContextualHelpProviders are ignored.</li>
-	 * <li> See the ContextualHelpProvider class hierarchy for more information.</li>
+	 * link content for the <code>ContextualHelpProvider</code>. By the time
+	 * you pass the <code>ContextualHelpProvider</code> to this method, you
+	 * should already have used the other <code>ContextualHelpProvider</code>
+	 * setters to set the other parameters for contextual-help, such as help
+	 * content.</li>
+	 * <li> Any extra <code>ContextualHelpProviders</code> in the array beyond
+	 * the number of <code>&lt;contextual_help&gt;</code> tokens in the string
+	 * are ignored.</li>
+	 * <li> Any unmated <code>&lt;contextual_help&gt;</code> tokens in the
+	 * string beyond the number of <code>ContextualHelpProviders</code> are
+	 * ignored (and the tokens are removed).</li>
+	 * <li> See the {@link ContextualHelpProvider} class hierarchy for more
+	 * information - since that is an abstract class, the objects in your
+	 * <code>ContextualHelpProvider</code> array will actually be concrete
+	 * subclasses of that.</li>
 	 * </ul>
 	 * </p>
 	 * </ul>
@@ -973,7 +983,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * </p>
 	 * <p>
 	 * If the message string contains any special
-	 * <code>&lt;No_Localization&gt;...&lt;/No_Localization&gt;</code> tokens,
+	 * <code>&lt;no_localization&gt;...&lt;/no_localization&gt;</code> tokens,
 	 * those are removed. (You can use these tokens in message properties to
 	 * signal to translators that their contents should be untouched. Since the
 	 * translators may not remove those tokens, they are stripped by this
