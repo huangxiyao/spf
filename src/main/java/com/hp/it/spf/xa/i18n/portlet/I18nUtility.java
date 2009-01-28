@@ -27,8 +27,59 @@ import com.hp.it.spf.xa.help.ContextualHelpUtility;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 
 /**
+ * <p>
  * A class of useful internationalization/localization methods for use by
- * portlets.
+ * portlets. These methods include:
+ * </p>
+ * <ul>
+ * <li>
+ * <p>
+ * Wrapper methods for Spring message resources (such as
+ * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(javax.portlet.PortletRequest,String)},
+ * which include SPF features such as injection of contextual help into
+ * <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code> markup, and
+ * cleanup of <code>&lt;no_localization&gt;...&lt;/no_localization&gt;</code>
+ * markup. These methods let you get localized message strings using Spring,
+ * with the added SPF functionality.
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * Methods (like
+ * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest, PortletResponse, String)}
+ * to generate a URL string pointing to a localized static resource, such as an
+ * image. These methods let your portlet use static resource URL's for localized
+ * resources - the resources may be kept either inside your portlet WAR, or
+ * outside it, in the <i>portlet resource bundle directory (PBD)</i>, or in a
+ * subfolder thereof. In either case, these methods return encoded portlet URLs,
+ * ready to surface in your portlet renderings (eg JSP's) - for example, you can
+ * take the return from these methods and express it inside an HTML
+ * <code>&lt;IMG SRC="..."&gt;</code> tag. (<b>Note:</b>: your portlet WAR
+ * must also include and deploy the file relay servlet (see
+ * {@link com.hp.it.spf.xa.i18n.relay.servlet} if your resources are in the PBD,
+ * so that the URL's returned by these methods are actually serviced when
+ * opened.)
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * Methods (like
+ * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest, String)}
+ * which do the same as the above, except returning an input stream to you
+ * instead of a URL string.
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * And more.
+ * </p>
+ * </li>
+ * </ul>
+ * <p>
+ * In addition, the portlet <code>I18nUtility</code> inherits many useful
+ * methods from its superclass, the common <code>I18nUtility</code> (see
+ * {@link com.hp.it.spf.xa.i18n.I18nUtility}).
+ * </p>
  * 
  * @author <link href="liping.yan@hp.com">Liping Yan</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
@@ -289,9 +340,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * </p>
 	 * <p>
 	 * This method works like
-	 * <code>getLocalizedFileStream(PortletRequest,String)</code>, but
-	 * where the localized filename string is taken from a message resource of
-	 * the portlet, using the given key and default filename. Thus this method
+	 * <code>getLocalizedFileStream(PortletRequest,String)</code>, but where
+	 * the localized filename string is taken from a message resource of the
+	 * portlet, using the given key and default filename. Thus this method
 	 * relies on the best-candidate filename for each locale already existing in
 	 * the localized message properties for that locale, at the given key. (And
 	 * if the key is not found, it applies the given default filename.) Thus the
