@@ -30,7 +30,7 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	/**
 	 * The name of the SPF-wide locale tracking cookie.
 	 */
-	public static final String COOKIE_NAME_LOCALE = "HP_SPF_LOCALE";
+	public static final String COOKIE_NAME_SPF_LOCALE = "HP_SPF_LOCALE";
 
 	/**
 	 * The name of the request attribute containing global help content. Set by
@@ -63,52 +63,6 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 * indicates if the site is available.
 	 */
 	public static final String RESP_HDR_X_SITE_AVAILABLE = "X-Site-Available";
-
-	/**
-	 * The template friendly ID for the SPF-standard system error secondary
-	 * page.
-	 */
-	public static final String PAGE_SYSTEM_ERROR = "ERROR";
-
-	/**
-	 * The template friendly ID for the SPF-standard authorization error
-	 * secondary page.
-	 */
-	public static final String PAGE_AUTH_ERROR = "ANON_SPF_AUTH_ERROR";
-
-	/**
-	 * The template friendly ID for the SPF-standard portal pulse secondary
-	 * page.
-	 */
-	public static final String PAGE_PORTAL_PULSE = "ANON_SPF_PORTAL_PULSE";
-
-	/**
-	 * The template friendly ID for the SPF-standard global help secondary page.
-	 */
-	public static final String PAGE_GLOBAL_HELP = "ANON_SPF_GLOBAL_HELP";
-
-	/**
-	 * The template friendly ID for the SPF-standard federated logout secondary
-	 * page.
-	 */
-	public static final String PAGE_FED_LOGOUT = "ANON_SPF_FED_LOGOUT";
-
-	/**
-	 * The template friendly ID for the SPF-standard federation error secondary
-	 * page.
-	 */
-	public static final String PAGE_FED_ERROR = "ANON_SPF_FED_ERROR";
-
-	/**
-	 * The template friendly ID for the SPF-standard locale selector secondary
-	 * page.
-	 */
-	public static final String PAGE_SELECT_LOCALE = "ANON_SPF_SELECT_LOCALE";
-
-	/**
-	 * The template friendly ID for the SPF-standard logout secondary page.
-	 */
-	public static final String PAGE_LOGOUT = "SPF_LOGOUT";
 
 	/**
 	 * The Vignette User object property for user ID. This is the user ID, not
@@ -286,36 +240,6 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	// - see TODO there.
 
 	/**
-	 * Use this path when setting an HP.com-wide cookie.
-	 */
-	public static final String HP_COOKIE_PATH = "/";
-
-	/**
-	 * Use this domain when setting an HP.com-wide cookie.
-	 */
-	public static final String HP_COOKIE_DOMAIN = ".hp.com";
-
-	/**
-	 * The name of the HP.com standard query parameter for language code.
-	 */
-	public static final String PARAM_HPCOM_LANGUAGE = "lang";
-
-	/**
-	 * The name of the HP.com standard query parameter for country code.
-	 */
-	public static final String PARAM_HPCOM_COUNTRY = "cc";
-
-	/**
-	 * The name of the HP.com standard cookie for language code.
-	 */
-	public static final String COOKIE_NAME_HPCOM_LANGUAGE = "lang";
-
-	/**
-	 * The name of the HP.com standard cookie for country code.
-	 */
-	public static final String COOKIE_NAME_HPCOM_COUNTRY = "cc";
-
-	/**
 	 * Prefix your portal session attribute names with this string, and they
 	 * will be <b>kept</b> after logout from the portal. (This is for portal
 	 * session attributes only, not portlet.)
@@ -333,24 +257,5 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 * The default site name to assume during logout for the redirect target.
 	 */
 	public final static String LOGOUT_DEFAULT_SITE = "spf";
-
-	/**
-	 * The name of the query parameter containing the site name to use for the
-	 * logout redirect target.
-	 */
-	public final static String PARAM_LOGOUT_SITE = "spfSite";
-
-	/**
-	 * The name of the locale selector form parameter (ie this is the form
-	 * parameter containing the chosen locale submitted by the user).
-	 */
-	public final static String PARAM_SELECT_LOCALE = "spfSelectedLocale";
-
-	/**
-	 * The name of the locale selector redirect target form parameter (ie this
-	 * is the form parameter containing the redirect target submitted by the
-	 * user - typically hidden).
-	 */
-	public final static String PARAM_SELECT_LOCALE_TARGET = "spfLocaleSelectorTarget";
 
 }
