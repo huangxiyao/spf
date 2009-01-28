@@ -194,7 +194,7 @@ public class ClassicContextualHelpProvider extends
 			noScriptUrl = noScriptHref;
 		} else if (portalContext != null) {
 			noScriptUrl = portalContext.createDisplayURI(
-					Consts.PAGE_GLOBAL_HELP).toString();
+					Consts.PAGE_FRIENDLY_ID_GLOBAL_HELP).toString();
 			if (noScriptUrl != null) { // should be null if no global help
 				if (noScriptHref != null && noScriptHref.startsWith("#")) {
 					noScriptUrl += noScriptHref;

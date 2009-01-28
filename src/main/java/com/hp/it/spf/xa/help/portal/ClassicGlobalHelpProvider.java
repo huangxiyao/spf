@@ -319,7 +319,7 @@ public class ClassicGlobalHelpProvider extends GlobalHelpProvider {
 		}
 
 		// Make the URI for the global help.
-		String uri = portalContext.createDisplayURI(Consts.PAGE_GLOBAL_HELP)
+		String uri = portalContext.createDisplayURI(Consts.PAGE_FRIENDLY_ID_GLOBAL_HELP)
 				.toString();
 		if (uri != null) { // should be null if no global help
 			if (!this.fragment.equals("")) {

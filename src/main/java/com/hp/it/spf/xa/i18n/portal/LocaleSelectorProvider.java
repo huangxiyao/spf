@@ -140,7 +140,7 @@ public abstract class LocaleSelectorProvider {
 		// Get the form HTML to wrap around it.
 		// Make the form action.
 		String localeSelectorURI = portalContext.createProcessURI(
-				Consts.PAGE_SELECT_LOCALE).toString();
+				Consts.PAGE_FRIENDLY_ID_SELECT_LOCALE).toString();
 		StringBuffer html = new StringBuffer();
 		if (localeSelectorURI != null) {
 			html.append("<form action=\"" + localeSelectorURI

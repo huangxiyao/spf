@@ -74,7 +74,7 @@ public class ExceptionUtil {
 			String errorMessage) {
 
 		PortalURI systemErrorPage = portalContext
-				.createDisplayURI(Consts.PAGE_SYSTEM_ERROR);
+				.createDisplayURI(Consts.PAGE_FRIENDLY_ID_SYSTEM_ERROR);
 
 		// Use map object to store title, error code, and error message to
 		// pass to JSP.
