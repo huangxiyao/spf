@@ -94,7 +94,7 @@ public class ViewControllerTest extends TestCase {
         modelAndView = (ModelAndView) viewController.handleRenderRequest(renderRequest, renderResponse);
         map = modelAndView.getModel();
         content = (String) map.get(Consts.VIEW_CONTENT);
-        System.out.println("testHandleRenderRequestInternal.2 got: " + content);
+        System.out.println("testHandleRenderRequestInternal.3 got: " + content);
         assertEquals("<html><head><title>Hello world!</title></head><body><h1>Hello world!</h1> Here is an image tag: <img src=\"/images/nonexistent.gif\"></body></html>",
                 content);        
     }
