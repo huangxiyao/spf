@@ -162,33 +162,33 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * </p>
 	 * 
 	 * <dl>
-	 * <dt><code>getLocalizedFilePath(request, "html/foo.htm")</code> when
+	 * <dt><code>getLocalizedFileStream(request, "html/foo.htm")</code> when
 	 * <code>request</code> contains Canada French (<code>Locale.CANADA_FRENCH</code>)</dt>
 	 * <dd>returns a file input stream for
 	 * <code><i>portlet-resource-folder</i>/html/foo_fr_CA.htm</code></dd>
 	 * 
-	 * <dt><code>getLocalizedFilePath(request, "/html/foo.htm")</code> when
+	 * <dt><code>getLocalizedFileStream(request, "/html/foo.htm")</code> when
 	 * <code>request</code> contains France French (<code>Locale.FRANCE</code>)</dt>
 	 * <dd>returns a file input stream for
 	 * <code><i>portlet-resource-folder</i>/html/foo_fr.htm</code></dd>
 	 * 
-	 * <dt><code>getLocalizedFilePath(request, "html/foo.htm")</code> when
+	 * <dt><code>getLocalizedFileStream(request, "html/foo.htm")</code> when
 	 * <code>request</code> contains generic Italian (<code>Locale.ITALIAN</code>)</dt>
 	 * <dd>returns a file input stream for
 	 * <code><i>portlet-resource-folder</i>/html/foo.htm</code></dd>
 	 * </dt>
 	 * 
-	 * <dt><code>getLocalizedFilePath(request, "html/bar.htm")</code> when
+	 * <dt><code>getLocalizedFileStream(request, "html/bar.htm")</code> when
 	 * <code>request</code> contains generic Italian (<code>Locale.ITALIAN</code>)</dt>
 	 * <dd>returns an input stream for <code>/html/bar_it.htm</code> in the
 	 * portlet application.</dd>
 	 * 
-	 * <dt><code>getLocalizedFilePath(request, "html/bar.htm")</code> when
+	 * <dt><code>getLocalizedFileStream(request, "html/bar.htm")</code> when
 	 * <code>request</code> contains generic French (<code>Locale.FRENCH</code>)</dt>
 	 * <dd>returns an input stream for <code>/html/bar.htm</code> in the
 	 * portlet application.</dd>
 	 * 
-	 * <dt><code>getLocalizedFilePath(request, "html/foobar.htm")</code></dt>
+	 * <dt><code>getLocalizedFileStream(request, "html/foobar.htm")</code></dt>
 	 * <dd>returns <code>null</code></dd>
 	 * </dl>
 	 * 
@@ -209,9 +209,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *         none was found.
 	 * 
 	 */
-	public static InputStream getLocalizedFileAsStream(PortletRequest pReq,
+	public static InputStream getLocalizedFileStream(PortletRequest pReq,
 			String pBaseFileName) {
-		return getLocalizedFileAsStream(pReq, pBaseFileName, true);
+		return getLocalizedFileStream(pReq, pBaseFileName, true);
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * resource bundle file (ie, localized to best-fit the locale in the given
 	 * request, or not, per the boolean switch). If the boolean switch is set to
 	 * <code>true</code>, this method works exactly like
-	 * <code>getLocalizedFileAsStream(PortletRequest,String)</code> (see). If
+	 * <code>getLocalizedFileStream(PortletRequest,String)</code> (see). If
 	 * the boolean switch is set to <code>false</code>, this method does not
 	 * actually localize the given filename. Instead, the returned input stream
 	 * points to the base filename if it existed, and null otherwise.
@@ -237,7 +237,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *         none was found.
 	 * 
 	 */
-	public static InputStream getLocalizedFileAsStream(PortletRequest pReq,
+	public static InputStream getLocalizedFileStream(PortletRequest pReq,
 			String pBaseFileName, boolean pLocalized) {
 
 		if (resourceBundleDir == null || pReq == null || pBaseFileName == null) {
@@ -289,7 +289,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * </p>
 	 * <p>
 	 * This method works like
-	 * <code>getLocalizedFileAsStream(PortletRequest,String)</code>, but
+	 * <code>getLocalizedFileStream(PortletRequest,String)</code>, but
 	 * where the localized filename string is taken from a message resource of
 	 * the portlet, using the given key and default filename. Thus this method
 	 * relies on the best-candidate filename for each locale already existing in
@@ -310,7 +310,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * each locale. If you would rather not do that, and would rather just have
 	 * the system inspect the available files in the resource bundle
 	 * automatically, use the companion
-	 * <code>getLocalizedFileAsStream(PortletRequest,String)</code> method.
+	 * <code>getLocalizedFileStream(PortletRequest,String)</code> method.
 	 * </p>
 	 * 
 	 * @param pReq
@@ -324,7 +324,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return The absolute pathname of the best-candidate localized file in the
 	 *         portlet bundle folder, or null if no qualifying file was found.
 	 */
-	public static InputStream getLocalizedFileAsStream(PortletRequest pReq,
+	public static InputStream getLocalizedFileStream(PortletRequest pReq,
 			String pKey, String pDefault) {
 		if (resourceBundleDir == null || pReq == null || pKey == null) {
 			return null;

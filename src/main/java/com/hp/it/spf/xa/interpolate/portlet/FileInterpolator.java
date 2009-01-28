@@ -601,7 +601,7 @@ public class FileInterpolator extends
 			return null;
 		}
 		return com.hp.it.spf.xa.i18n.portlet.I18nUtility
-				.getLocalizedFileAsStream(request, baseContentFilePath);
+				.getLocalizedFileStream(request, baseContentFilePath);
 	}
 
 	/**
