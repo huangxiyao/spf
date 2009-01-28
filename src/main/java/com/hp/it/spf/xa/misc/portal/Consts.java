@@ -296,16 +296,24 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String HP_COOKIE_DOMAIN = ".hp.com";
 
 	/**
-	 * The name of the HP.com standard query parameter and cookie for language
-	 * code.
+	 * The name of the HP.com standard query parameter for language code.
 	 */
-	public static final String HPCOM_LANG_PARAM = "lang";
+	public static final String PARAM_HPCOM_LANGUAGE = "lang";
 
 	/**
-	 * The name of the HP.com standard query parameter and cookie for country
-	 * code.
+	 * The name of the HP.com standard query parameter for country code.
 	 */
-	public static final String HPCOM_COUNTRY_PARAM = "cc";
+	public static final String PARAM_HPCOM_COUNTRY = "cc";
+
+	/**
+	 * The name of the HP.com standard cookie for language code.
+	 */
+	public static final String COOKIE_NAME_HPCOM_LANGUAGE = "lang";
+
+	/**
+	 * The name of the HP.com standard cookie for country code.
+	 */
+	public static final String COOKIE_NAME_HPCOM_COUNTRY = "cc";
 
 	/**
 	 * Prefix your portal session attribute names with this string, and they
@@ -330,19 +338,19 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 * The name of the query parameter containing the site name to use for the
 	 * logout redirect target.
 	 */
-	public final static String LOGOUT_SITE_PARAM = "site";
+	public final static String PARAM_LOGOUT_SITE = "spfSite";
 
 	/**
 	 * The name of the locale selector form parameter (ie this is the form
 	 * parameter containing the chosen locale submitted by the user).
 	 */
-	public final static String LOCALE_SELECTOR_INPUT_NAME = "spfSelectedLocale";
+	public final static String PARAM_SELECT_LOCALE = "spfSelectedLocale";
 
 	/**
 	 * The name of the locale selector redirect target form parameter (ie this
 	 * is the form parameter containing the redirect target submitted by the
 	 * user - typically hidden).
 	 */
-	public final static String LOCALE_SELECTOR_TARGET_NAME = "spfLocaleSelectorTarget";
+	public final static String PARAM_SELECT_LOCALE_TARGET = "spfLocaleSelectorTarget";
 
 }

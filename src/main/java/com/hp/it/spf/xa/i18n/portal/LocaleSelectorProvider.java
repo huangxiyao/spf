@@ -35,7 +35,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * the chosen locale will be in the form of an RFC 3066 language tag, contained
  * inside the input element named by the value of
- * <code>Consts.LOCALE_SELECTOR_INPUT_NAME</code>
+ * <code>Consts.PARAM_SELECT_LOCALE</code>
  * </p>
  * </li>
  * <li>
@@ -43,7 +43,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * the redirect target (where the locale selector secondary page should redirect
  * the user after processing the submission) will be in the form of a URL
  * string, contained inside the input element named by the value of
- * <code>Consts.LOCALE_SELECTOR_TARGET_NAME</code>
+ * <code>Consts.PARAM_SELECT_LOCALE_TARGET</code>
  * </p>
  * </li>
  * </ul>
@@ -151,11 +151,11 @@ public abstract class LocaleSelectorProvider {
 		// Make the redirect target.
 		String currentURL = Utils.getRequestURL(request);
 		html.append("<input type=\"hidden\" name=\""
-				+ Consts.LOCALE_SELECTOR_TARGET_NAME + "\" value=\""
+				+ Consts.PARAM_SELECT_LOCALE_TARGET + "\" value=\""
 				+ currentURL + "\">\n");
 
 		// Wrap the widget HTML inside the form HTML and return it.
-		String widget = getWidgetHTML(Consts.LOCALE_SELECTOR_INPUT_NAME,
+		String widget = getWidgetHTML(Consts.PARAM_SELECT_LOCALE,
 				availableLocales, currentLocale, escape, filterSpan);
 		if (widget != null) {
 			html.append(widget);

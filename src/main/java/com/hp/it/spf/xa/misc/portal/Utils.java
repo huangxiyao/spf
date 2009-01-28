@@ -282,7 +282,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 				if (Consts.LOGOUT_DEFAULT_SITE.equals(effectiveSite
 						.getDNSName())) {
 					String alternateSiteName = request
-							.getParameter(Consts.LOGOUT_SITE_PARAM);
+							.getParameter(Consts.PARAM_LOGOUT_SITE);
 					if (alternateSiteName != null) {
 						try {
 							siteManager = SiteManager.getInstance();

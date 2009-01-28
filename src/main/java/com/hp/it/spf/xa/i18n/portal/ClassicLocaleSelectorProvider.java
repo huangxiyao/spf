@@ -279,7 +279,7 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 			widgetName = Utils.escapeXml(widgetName.trim());
 		}
 		if ((widgetName == null) || (widgetName.length() == 0)) {
-			widgetName = Consts.LOCALE_SELECTOR_INPUT_NAME;
+			widgetName = Consts.PARAM_SELECT_LOCALE;
 		}
 
 		// Get the label to use.
