@@ -2,6 +2,9 @@ package com.hp.it.spf.xa.portalurl;
 
 import javax.portlet.WindowState;
 import javax.portlet.PortletMode;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,6 +25,8 @@ abstract class AbstractPortalURL implements PortalURL
 	protected Map<String, PortletParameters> mPortletParameters = new LinkedHashMap<String, PortletParameters>();
 	protected String mActionPortletFriendlyId = null;
 
+	// added attribute for portal parameter support - DSJ 2009/1/28
+	protected Map<String, List<String>> mPortalParameters = new LinkedHashMap<String, List<String>>();
 
 	protected AbstractPortalURL(String siteRootUrl, String anotherSiteName, String pageFriendlyUri, boolean secure)
 	{
@@ -31,6 +36,41 @@ abstract class AbstractPortalURL implements PortalURL
 		mSecure = secure;
 	}
 
+	// added method for portal parameter support - DSJ 2009/1/28
+	public void setParameter(String paramName, String paramValue)
+	{
+		List<String> portalParamValueList = getPortalParamValueList(paramName);
+		portalParamValueList.clear();
+		if (paramValue != null) {
+			portalParamValueList.add(paramValue);
+		}
+	}
+	
+	// added method for portal parameter support - DSJ 2009/1/28
+	public void setParameter(String paramName, String[] paramValues)
+	{
+		List<String> portalParamValueList = getPortalParamValueList(paramName);
+		portalParamValueList.clear();
+		if (paramValues != null) {
+			portalParamValueList.addAll(Arrays.asList(paramValues));
+		}
+	}
+	
+	// added method for portal parameter support - DSJ 2009/1/28
+	public void setParameters(Map params)
+	{
+		for (Iterator it = params.entrySet().iterator(); it.hasNext();) {
+			Map.Entry incomingParam = (Map.Entry) it.next();
+			String incomingParamName = (String) incomingParam.getKey();
+			if (incomingParam.getValue() == null || incomingParam.getValue() instanceof String) {
+				setParameter(incomingParamName, (String) incomingParam.getValue());
+			}
+			else if (incomingParam.getValue() instanceof String[]) {
+				setParameter(incomingParamName, (String[]) incomingParam.getValue());
+			}
+		}		
+	}
+	
 	public void setParameter(String portletFriendlyId, String paramName, String paramValue)
 	{
 		List<String> portletParamValueList = getPortletParamValueList(portletFriendlyId, paramName, false);
@@ -145,6 +185,17 @@ abstract class AbstractPortalURL implements PortalURL
 		return portletPararameters;
 	}
 
+	// added method for portal parameter support - DSJ 2009/1/28
+	private List<String> getPortalParamValueList(String paramName)
+	{
+		List<String> portalParameterValues = mPortalParameters.get(paramName);
+		if (portalParameterValues == null) {
+			portalParameterValues = new ArrayList<String>(1);
+			mPortalParameters.put(paramName, portalParameterValues);
+		}
+		return portalParameterValues;
+	}
+	
 	protected StringBuilder createBaseUrl(boolean isActionUrl)
 	{
 		StringBuilder result = new StringBuilder();
@@ -211,9 +262,36 @@ abstract class AbstractPortalURL implements PortalURL
 			result.append('/');
 		}
 
+		// added following block for portal parameter support - DSJ 2009/1/28
+		boolean portalParametersSpecified = !mPortalParameters.isEmpty();
+		if (portalParametersSpecified) {
+			result.append("?");
+			Iterator<Map.Entry<String, List<String>>> portalParameterEntries = mPortalParameters.entrySet().iterator();
+			while (portalParameterEntries.hasNext()) {
+				Map.Entry<String, List<String>> portalParameters = portalParameterEntries.next();
+				addParameters(result, portalParameters);
+			}
+		}
+
 		return result;
 	}
 
+	// added method for portal parameter support - DSJ 2009/1/28
+	private void addParameters(StringBuilder result, Map.Entry<String, List<String>> parameters)
+	{
+		String paramName = parameters.getKey();
+		for (String paramValue : parameters.getValue()) {
+			try {
+				result.append(URLEncoder.encode(paramName, "UTF-8"));
+				result.append('=');
+				result.append(URLEncoder.encode(paramValue, "UTF-8"));
+			}
+			catch (UnsupportedEncodingException e) {
+				throw new RuntimeException("UTF-8 encoding not supported? " + e, e);
+			}
+		}
+	}
+	
 	class PortletParameters
 	{
 		private Map<String, List<String>> mPrivateParameters = new LinkedHashMap<String, List<String>>();;

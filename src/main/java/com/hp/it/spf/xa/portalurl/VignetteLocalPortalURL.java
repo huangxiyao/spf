@@ -20,23 +20,37 @@ class VignetteLocalPortalURL extends AbstractPortalURL
 		super(siteRootUrl, anotherSiteName, pageFriendlyUri, secure);
 	}
 
-	public String urlToString()
+	@Override
+	public String toString()
 	{
 		boolean isActionUrl = mActionPortletFriendlyId != null;
 		boolean portletParametersSpecified = !mPortletParameters.isEmpty();
 		StringBuilder result = createBaseUrl(isActionUrl);
+		// added following line for portal parameter support - DSJ 2009/1/28
+		boolean queryStarted = result.indexOf("?") >= 0;
 
 		Iterator<Map.Entry<String, PortletParameters>> portletParameterEntries = mPortletParameters.entrySet().iterator();
 
 		if (isActionUrl) {
-			result.append("?javax.portlet.action=true");
+			// added following for portal parameter support - DSJ 2009/1/28
+			if (!queryStarted)
+				result.append('?');
+			result.append("javax.portlet.action=true");
+			// result.append("?javax.portlet.action=true");
+			// end DSJ 2009/1/28
 			result.append('&').append(PARAM_NAME_PREFIX).append(".tpst=").append(mActionPortletFriendlyId);
 		}
 		else if (portletParameterEntries.hasNext()) {
 			Map.Entry<String, PortletParameters> portletParameters = portletParameterEntries.next();
 			String portletFriendlyId = portletParameters.getKey();
 
-			result.append('?').append(PARAM_NAME_PREFIX).append(".tpst=").append(portletFriendlyId);
+			// added following line for portal parameter support - DSJ 2009/1/28
+			// added following for portal parameter support - DSJ 2009/1/28
+			if (!queryStarted)
+				result.append('?');
+			result.append(PARAM_NAME_PREFIX).append(".tpst=").append(portletFriendlyId);
+			// result.append('?').append(PARAM_NAME_PREFIX).append(".tpst=").append(portletFriendlyId);
+			// end DSJ 2009/1/28
 			addStateAndModeToUrlFragment(result, portletParameters.getValue());
 			addParameters(result, portletFriendlyId, portletParameters.getValue().getPublicParameters(), true);
 			addParameters(result, portletFriendlyId, portletParameters.getValue().getPrivateParameters(), false);
@@ -115,8 +129,7 @@ class VignetteLocalPortalURL extends AbstractPortalURL
 		}
 	}
 
-	@Override
-	public String toString() {
-		return urlToString();
+	public String urlToString() {
+		return toString();
 	}
 }

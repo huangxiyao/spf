@@ -15,6 +15,31 @@ import java.util.Map;
 public interface PortalURL {
 
 	/**
+	 * Sets a query parameter targeted to the portal in the portal url.
+	 *
+	 * @param paramName - name of the portal query parameter
+	 * @param paramValue -  value for the portal query parameter
+	 */
+	void setParameter(String paramName, String paramValue);
+
+	/**
+	 * Sets a multi-value query parameter targeted to the portal in the portal url.
+	 *
+	 * @param paramName - name of the portal query parameter
+	 * @param paramValues - values for the portal query parameter
+	 */
+	void setParameter(String paramName, String[] paramValues);
+
+	/**
+	 * Sets query parameters targeted to the portal in the portal url.
+	 *
+	 * @param params - Each map entry represents one portal query parameter. The keys must
+	 * be strings and they are parameter names. The values can be either String or String[] and represent
+	 * parameter values.
+	 */
+	void setParameters(Map params);
+
+	/**
 	 * Sets a portlet render parameter in the portal url.
 	 *
 	 * @param portletFriendlyId - friendly ID of the portlet in Vignette
@@ -113,6 +138,15 @@ public interface PortalURL {
 	 * Returns the url in String form.
 	 *
 	 * @return the url in String form
+	 * @deprecated
 	 */
 	String urlToString();
+	
+	/**
+	 * Returns the url in String form.
+	 *
+	 * @return the url in String form
+	 */
+	String toString();
+
 }
