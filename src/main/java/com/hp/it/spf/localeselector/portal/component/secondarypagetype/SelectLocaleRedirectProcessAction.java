@@ -25,9 +25,9 @@ import com.hp.it.spf.xa.misc.portal.Consts;
  * </p>
  * <p>
  * This class expects the locale selector form to have passed it the target URL
- * in the <code>spfLocaleSelectorTarget</code> form parameter. The value is
- * expected to be a string URL. This is the contract which this action has with
- * the form.
+ * in the form parameter named by the portal
+ * <code>Consts.PARAM_SELECT_LOCALE</code> constant. The value is expected to
+ * be a string URL. This is the contract which this action has with the form.
  * </p>
  * 
  * @author <link href="ying-zhi.wu@hp.com">Oliver</link>
@@ -54,7 +54,7 @@ public class SelectLocaleRedirectProcessAction extends BaseAction {
 					.getResponse();
 
 			String redirectUrl = (String) request
-					.getParameter(Consts.LOCALE_SELECTOR_TARGET_NAME);
+					.getParameter(Consts.PARAM_SELECT_LOCALE_TARGET);
 
 			// if the target url is absent,use the HTTP referer header
 			if (redirectUrl == null || redirectUrl.trim().equals("")) {
@@ -63,12 +63,15 @@ public class SelectLocaleRedirectProcessAction extends BaseAction {
 			// not sure why we need to do this - therefore leaving it in
 			redirectUrl = this.filterUrlLocaleParams(redirectUrl);
 
-			LOG.info("SelectLocaleRedirectProcessAction: redirecting to target URL: "
-					+ redirectUrl);
+			LOG
+					.info("SelectLocaleRedirectProcessAction: redirecting to target URL: "
+							+ redirectUrl);
 			try {
 				response.sendRedirect(redirectUrl);
 			} catch (IOException ex) {
-				LOG.error("SelectLocaleRedirectProcessAction: Redirect failed!  More detail: " + ex);
+				LOG
+						.error("SelectLocaleRedirectProcessAction: Redirect failed!  More detail: "
+								+ ex);
 			}
 
 			// return null so process will continue normally (redirect having

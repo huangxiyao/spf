@@ -35,10 +35,11 @@ import com.vignette.portal.website.enduser.components.BaseAction;
  * finally terminating in the SelectLocaleRedirectProcessAction class.
  * </p>
  * <p>
- * This class expects the locale selector form to have passed it the selected
- * locale in the <code>spfSelectedLocale</code> form parameter. The value is
- * expected to be an RFC 3066 language tag. This is the contract which this
- * action has with the form.
+ * This class expects the locale selector form to have passed the selected
+ * locale in the form parameter named with the value of the portal
+ * <code>Consts.PARAM_SELECT_LOCALE</code> constant, current
+ * <code>spfSelectedLocale</code>. The value is expected to be an RFC 3066
+ * language tag. This is the contract which this action has with the form.
  * </p>
  * 
  * @author <link href="ying-zhi.wu@hp.com">Oliver</link>
@@ -72,7 +73,7 @@ public class SelectLocaleProcessAction extends BaseAction {
 
 			// get locale selected by user from request object
 			String localeStr = (String) request
-					.getParameter(Consts.LOCALE_SELECTOR_INPUT_NAME);
+					.getParameter(Consts.PARAM_SELECT_LOCALE);
 
 			// convert to locale Object
 			Locale plocale = I18nUtility.languageTagToLocale(localeStr);
@@ -93,15 +94,15 @@ public class SelectLocaleProcessAction extends BaseAction {
 				// set locale into the HP.com cookies
 				LOG
 						.info("SelectLocaleProcessAction: Updating user's locale into HP.com standard cookie(s).");
-				addCookie(response, Consts.HPCOM_LANG_PARAM, plocale
+				addCookie(response, Consts.PARAM_HPCOM_LANGUAGE, plocale
 						.getLanguage(), 1 * SECONDS_PER_YEAR);
 				if (hasCountry(plocale)) {
 					// country is not null, set country cookie
-					addCookie(response, Consts.HPCOM_COUNTRY_PARAM, plocale
+					addCookie(response, Consts.PARAM_HPCOM_COUNTRY, plocale
 							.getCountry(), 1 * SECONDS_PER_YEAR);
 				} else {
 					// country is null, delete country cookie
-					delCookie(response, Consts.HPCOM_COUNTRY_PARAM);
+					delCookie(response, Consts.PARAM_HPCOM_COUNTRY);
 				}
 
 				// set locale into HPP
