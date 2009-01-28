@@ -82,56 +82,121 @@ public class Consts {
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_SYSTEM_ERROR = "ERROR";
+	public static final String PAGE_FRIENDLY_ID_SYSTEM_ERROR = "ERROR";
+
+	/**
+	 * The template friendly URI for the SPF-standard system error secondary
+	 * page. This is common because both portal and portlets may want to create
+	 * URLs pointing to this page.
+	 */
+	public static final String PAGE_FRIENDLY_URI_SYSTEM_ERROR = "template."
+			+ PAGE_FRIENDLY_ID_SYSTEM_ERROR + "/";
 
 	/**
 	 * The template friendly ID for the SPF-standard authorization error
 	 * secondary page. This is common because both portal and portlets may want
 	 * to create URLs pointing to this page.
 	 */
-	public static final String PAGE_AUTH_ERROR = "ANON_SPF_AUTH_ERROR";
+	public static final String PAGE_FRIENDLY_ID_AUTH_ERROR = "ANON_SPF_AUTH_ERROR";
+
+	/**
+	 * The template friendly URI for the SPF-standard authorization error
+	 * secondary page. This is common because both portal and portlets may want
+	 * to create URLs pointing to this page.
+	 */
+	public static final String PAGE_FRIENDLY_URI_AUTH_ERROR = "template."
+			+ PAGE_FRIENDLY_ID_AUTH_ERROR + "/";
 
 	/**
 	 * The template friendly ID for the SPF-standard portal pulse secondary
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_PORTAL_PULSE = "ANON_SPF_PORTAL_PULSE";
+	public static final String PAGE_FRIENDLY_ID_PORTAL_PULSE = "ANON_SPF_PORTAL_PULSE";
+
+	/**
+	 * The template friendly URI for the SPF-standard portal pulse secondary
+	 * page. This is common because both portal and portlets may want to create
+	 * URLs pointing to this page.
+	 */
+	public static final String PAGE_FRIENDLY_URI_PORTAL_PULSE = "template."
+			+ PAGE_FRIENDLY_ID_PORTAL_PULSE + "/";
 
 	/**
 	 * The template friendly ID for the SPF-standard global help secondary page.
 	 * This is common because both portal and portlets may want to create URLs
 	 * pointing to this page.
 	 */
-	public static final String PAGE_GLOBAL_HELP = "ANON_SPF_GLOBAL_HELP";
+	public static final String PAGE_FRIENDLY_ID_GLOBAL_HELP = "ANON_SPF_GLOBAL_HELP";
+
+	/**
+	 * The template friendly URI for the SPF-standard global help secondary
+	 * page. This is common because both portal and portlets may want to create
+	 * URLs pointing to this page.
+	 */
+	public static final String PAGE_FRIENDLY_URI_GLOBAL_HELP = "template."
+			+ PAGE_FRIENDLY_ID_GLOBAL_HELP + "/";
 
 	/**
 	 * The template friendly ID for the SPF-standard federated logout secondary
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_FED_LOGOUT = "ANON_SPF_FED_LOGOUT";
+	public static final String PAGE_FRIENDLY_ID_FED_LOGOUT = "ANON_SPF_FED_LOGOUT";
+
+	/**
+	 * The template friendly URI for the SPF-standard federated logout secondary
+	 * page. This is common because both portal and portlets may want to create
+	 * URLs pointing to this page.
+	 */
+	public static final String PAGE_FRIENDLY_URI_FED_LOGOUT = "template."
+			+ PAGE_FRIENDLY_ID_FED_LOGOUT + "/";
 
 	/**
 	 * The template friendly ID for the SPF-standard federation error secondary
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_FED_ERROR = "ANON_SPF_FED_ERROR";
+	public static final String PAGE_FRIENDLY_ID_FED_ERROR = "ANON_SPF_FED_ERROR";
+
+	/**
+	 * The template friendly URI for the SPF-standard federation error secondary
+	 * page. This is common because both portal and portlets may want to create
+	 * URLs pointing to this page.
+	 */
+	public static final String PAGE_FRIENDLY_URI_FED_ERROR = "template."
+			+ PAGE_FRIENDLY_ID_FED_ERROR + "/";
 
 	/**
 	 * The template friendly ID for the SPF-standard locale selector secondary
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_SELECT_LOCALE = "ANON_SPF_SELECT_LOCALE";
+	public static final String PAGE_FRIENDLY_ID_SELECT_LOCALE = "ANON_SPF_SELECT_LOCALE";
+
+	/**
+	 * The template friendly URI for the SPF-standard locale selector secondary
+	 * page. This is a process-action secondary page, so this is a process
+	 * action template friendly URI. This is common because both portal and
+	 * portlets may want to create URLs pointing to this page.
+	 */
+	public static final String PAGE_FRIENDLY_URI_SELECT_LOCALE = "template."
+			+ PAGE_FRIENDLY_ID_SELECT_LOCALE + "/action.process/";
 
 	/**
 	 * The template friendly ID for the SPF-standard logout secondary page. This
 	 * is common because both portal and portlets may want to create URLs
 	 * pointing to this page.
 	 */
-	public static final String PAGE_LOGOUT = "SPF_LOGOUT";
+	public static final String PAGE_FRIENDLY_ID_LOGOUT = "SPF_LOGOUT";
+
+	/**
+	 * The template friendly URI for the SPF-standard logout secondary page.
+	 * This is common because both portal and portlets may want to create URLs
+	 * pointing to this page.
+	 */
+	public static final String PAGE_FRIENDLY_URI_LOGOUT = "template."
+			+ PAGE_FRIENDLY_ID_LOGOUT + "/";
 
 	/**
 	 * Use this path when setting an HP.com-wide cookie. Both portal and
