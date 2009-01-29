@@ -1,11 +1,12 @@
 <html>
 <body>
 <p>This package contains Java utilities for internationalizing
-Shared Portal Framework portlet applications. <a name="I18nUtilities">
-<h3>I18nUtilities</h3>
+Shared Portal Framework portlet applications.</p>
+
+<a name="I18nUtility">
+<h3>I18nUtility</h3>
 </a>
-<p>The {@link com.hp.it.spf.xa.i18n.portlet.I18nUtilities} class
-provides methods for:
+<p>The {@link I18nUtility} class provides methods for:
 <ul>
 	<li>accessing message resources using Spring (augmented with
 	inherent SPF capabilities such as the <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>
@@ -87,10 +88,9 @@ files, PDF's, etc) into your portlet WAR where they traditionally go:</p>
 </ol>
 
 <p>Then when you use the standard Spring message API's, or the SPF
-portlet message API's in {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtilities}, or the tag libraries for
+portlet message API's in {@link I18nUtility}, or the tag libraries for
 either, they will find your message resources inside your portlet WAR.
-And when you use the localized file access API's in <code>I18nUtilities</code>,
+And when you use the localized file access API's in <code>I18nUtility</code>,
 they will find your static resource files there likewise.</p>
 
 <p>However, you may instead put your messages and other resources <i>outside</i>
@@ -162,9 +162,8 @@ filesystem to which the portlet JVM has at least read access.</p>
 	<p>If you chose a non-default location for the portlet bundle
 	folder, configure it in <a href="#i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
 	(see below). The default location is hardcoded in {@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtilities#BUNDLE_DIR_DEFAULT}, which
-	is <code>/opt/sasuapps/spf/globalResources/portlet/i18n</code> (as in
-	the above example) at this time of writing.</p>
+	I18nUtility#BUNDLE_DIR_DEFAULT}, which is <code>/opt/sasuapps/spf/globalResources/portlet/i18n</code>
+	(as in the above example) at this time of writing.</p>
 	</li>
 
 	<li>
@@ -178,20 +177,18 @@ filesystem to which the portlet JVM has at least read access.</p>
 	bundle folder. For example, if you are using local portlets, you could
 	deploy it in your portal application. By default, SPF assumes you have
 	deployed it in your portlet application, mapped under the hardcoded
-	{@link com.hp.it.spf.xa.i18n.portlet.I18nUtilities#RELAY_PATH_DEFAULT}
-	path. See the {@link com.hp.it.spf.xa.relay.servlet.RelayServlet} for
-	more information about deploying this servlet. If you deploy it in a
-	non-default location, you will need to configure that in <a
-		href="#i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>.
+	{@link I18nUtility#RELAY_PATH_DEFAULT} path. See the {@link
+	com.hp.it.spf.xa.relay.servlet.RelayServlet} for more information about
+	deploying this servlet. If you deploy it in a non-default location, you
+	will need to configure that in <a href="#i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>.
 	</p>
 	</li>
 </ol>
 
 <p>Then when you use the standard Spring message API's, or the SPF
-portlet message API's in {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtilities}, or the tag libraries for
+portlet message API's in {@link I18nUtility}, or the tag libraries for
 either, they will find your message resources in your portlet bundle
-folder. And when you use the localized file access API's in <code>I18nUtilities</code>,
+folder. And when you use the localized file access API's in <code>I18nUtility</code>,
 they will find your static resource files there likewise.</p>
 
 <p>Note that you can mix both of these approaches, if you like:</p>
