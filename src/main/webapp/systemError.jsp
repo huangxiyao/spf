@@ -98,7 +98,7 @@ files in this component. --%>
 <%-- Prepare CSS URL --%>
 <%
 	String cssFile = portalContext.getCurrentSite().getDNSName() + "SystemError.css";
-	if (I18nUtility.getLocalizedFileStream(portalContext, cssFile, false) == null) 
+	if (I18nUtility.getLocalizedFileName(portalContext, cssFile, false) == null) 
 		cssFile = "systemError.css";
 	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile, false);
 %>
