@@ -271,6 +271,7 @@ abstract class AbstractPortalURL implements PortalURL
 				Map.Entry<String, List<String>> portalParameters = portalParameterEntries.next();
 				addParameters(result, portalParameters);
 			}
+			result.deleteCharAt(result.length() - 1); // snip off final '&'
 		}
 
 		return result;
@@ -285,6 +286,7 @@ abstract class AbstractPortalURL implements PortalURL
 				result.append(URLEncoder.encode(paramName, "UTF-8"));
 				result.append('=');
 				result.append(URLEncoder.encode(paramValue, "UTF-8"));
+				result.append('&');
 			}
 			catch (UnsupportedEncodingException e) {
 				throw new RuntimeException("UTF-8 encoding not supported? " + e, e);

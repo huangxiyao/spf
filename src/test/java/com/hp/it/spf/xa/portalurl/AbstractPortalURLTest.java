@@ -65,6 +65,19 @@ public class AbstractPortalURLTest extends TestCase
 				url.createBaseUrl(true).toString());
 	}
 
+	public void testCreateBaseUrlWithPortalParameters() throws Exception {
+		AbstractPortalURL url;
+		
+		url = new TestURL("http://my_host:my_port/portal/site/my_site", null, "template.MY_PAGE/action.process/", false);
+		String[] values = new String[]{"one", "two"};
+		url.setParameter("greeting", "hello world");
+		url.setParameter("farewell", "goodbye world");
+		url.setParameter("numbers", values);
+		assertEquals("Portal URL",
+				"http://my_host:my_port/portal/site/my_site/template.MY_PAGE/action.process/?greeting=hello+world&farewell=goodbye+world&numbers=one&numbers=two",
+				url.createBaseUrl(false).toString());
+	}
+	
 	private class TestURL extends AbstractPortalURL {
 
 		protected TestURL(String siteRootUrl, String anotherSiteName, String pageFriendlyUri, boolean secure)

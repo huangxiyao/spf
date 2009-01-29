@@ -33,8 +33,12 @@ class VignetteLocalPortalURL extends AbstractPortalURL
 
 		if (isActionUrl) {
 			// added following for portal parameter support - DSJ 2009/1/28
-			if (!queryStarted)
+			if (!queryStarted) {
 				result.append('?');
+			}
+			else {
+				result.append('&');
+			}
 			result.append("javax.portlet.action=true");
 			// result.append("?javax.portlet.action=true");
 			// end DSJ 2009/1/28
@@ -46,8 +50,12 @@ class VignetteLocalPortalURL extends AbstractPortalURL
 
 			// added following line for portal parameter support - DSJ 2009/1/28
 			// added following for portal parameter support - DSJ 2009/1/28
-			if (!queryStarted)
+			if (!queryStarted) {
 				result.append('?');
+			}
+			else {
+				result.append('&');
+			}
 			result.append(PARAM_NAME_PREFIX).append(".tpst=").append(portletFriendlyId);
 			// result.append('?').append(PARAM_NAME_PREFIX).append(".tpst=").append(portletFriendlyId);
 			// end DSJ 2009/1/28
