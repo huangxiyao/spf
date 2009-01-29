@@ -318,8 +318,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			} catch (FileNotFoundException e) { // should never happen
 			}
 		}
-		fileName = getLocalizedFileName(pReq, pBaseFileName, pReq.getLocale(),
-				pLocalized);
+		fileName = getLocalizedFileName(pReq, pBaseFileName, pLocalized);
 		if (fileName != null) {
 			return pContext.getResourceAsStream(fileName);
 		}
@@ -390,13 +389,15 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		if (pDefault != null) {
 			pDefault = pDefault.trim();
 			if (pDefault.length() == 0) {
-				return null;
+				pDefault = null;
 			}
 		}
 		PortletContext pContext = pReq.getPortletSession().getPortletContext();
 
 		// Get the localized filename from the message resources
 		String fileName = getMessage(pReq, pKey, pDefault);
+		if (fileName != null)
+			fileName = fileName.trim();
 
 		// Check if the localized filename message was found (ie is not null and
 		// not equal to the key). If so, then return an input stream for that.
@@ -596,8 +597,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		if (fileName != null) {
 			return getFileRelayURL(pReq, pResp, fileName);
 		} else {
-			fileName = getLocalizedFileName(pReq, pBaseFileName, pReq
-					.getLocale(), pLocalized);
+			fileName = getLocalizedFileName(pReq, pBaseFileName, pLocalized);
 			if (fileName != null) {
 				return pResp.encodeURL(fileName);
 			} else {
@@ -700,12 +700,14 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		if (pDefault != null) {
 			pDefault = pDefault.trim();
 			if (pDefault.length() == 0) {
-				return null;
+				pDefault = null;
 			}
 		}
 
 		// Get the localized filename from the message resources
 		String fileName = getMessage(pReq, pKey, pDefault);
+		if (fileName != null)
+			fileName = fileName.trim();
 
 		// Check if the localized filename message was found or defaulted (ie is
 		// not null and not equal to the key). If so, then check if that file
@@ -724,6 +726,85 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * <p>
+	 * Looks up the given base filename inside the given request's portlet
+	 * application, and returns the filename of the best-fit localized version
+	 * of that file for the portlet request. The given base filename may include
+	 * some path relative to the context root of the application. If no
+	 * appropriate file for that filename exists in the application, then null
+	 * is returned. This method also returns null if any of its required
+	 * parameters are null.
+	 * </p>
+	 * <p>
+	 * This method works like
+	 * {@link #getLocalizedFileName(PortletRequest,String,boolean)} where the
+	 * boolean switch is set to <code>true</code> (thus enabling localized
+	 * file lookups).
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> This method only looks inside the portlet application (ie
+	 * portlet WAR). To look in the <i>portlet resource bundle folder</i>, use
+	 * the companion {@link #getLocalizedFileName(String, Locale)} method.
+	 * </p>
+	 * 
+	 * @param pReq
+	 *            The portlet request for the application.
+	 * @param pBaseFileName
+	 *            The name of the base file to search (may include some path,
+	 *            which is treated as relative to root of the portlet
+	 *            application).
+	 * @return The proper filename as per the parameters, or null if no
+	 *         qualifying file was found.
+	 */
+	public static String getLocalizedFileName(PortletRequest pReq,
+			String pBaseFileName) {
+		return getLocalizedFileName(pReq, pBaseFileName, true);
+	}
+
+	/**
+	 * <p>
+	 * Looks up the given base filename inside the given request's portlet
+	 * application, and returns as per the boolean switch: either the best-fit
+	 * localized filename for the given locale inside that application, or the
+	 * given base filename. The given base filename may include some path
+	 * relative to the context root of the application. If no appropriate file
+	 * for that filename exists in the application, then null is returned. This
+	 * method also returns null if any of its required parameters are null.
+	 * </p>
+	 * <p>
+	 * This method works like
+	 * {@link #getLocalizedFileName(PortletRequest,String,Locale,boolean)} where
+	 * the current locale from the portlet request is passed.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> This method only looks inside the portlet application (ie
+	 * portlet WAR). To look in the <i>portlet resource bundle folder</i>, use
+	 * the companion {@link #getLocalizedFileName(String,Locale,boolean)}
+	 * method.
+	 * </p>
+	 * 
+	 * @param pReq
+	 *            The portlet request for the application.
+	 * @param pBaseFileName
+	 *            The name of the base file to search (may include some path,
+	 *            which is treated as relative to root of the portlet
+	 *            application).
+	 * @param pLocalized
+	 *            The version of the file for which to search: the base file
+	 *            (false) or the best-fitting localized file (true).
+	 * @return The proper filename as per the parameters, or null if no
+	 *         qualifying file was found.
+	 */
+	public static String getLocalizedFileName(PortletRequest pReq,
+			String pBaseFileName, boolean pLocalized) {
+		if (pReq == null) {
+			return null;
+		}
+		return getLocalizedFileName(pReq, pBaseFileName, pReq.getLocale(),
+				pLocalized);
 	}
 
 	/**
@@ -783,6 +864,14 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * portlet WAR). To look in the <i>portlet resource bundle folder</i>, use
 	 * the companion {@link #getLocalizedFileName(String, Locale, boolean)}
 	 * method.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> On case-sensitive filesystems, lowercase is assumed for the
+	 * langage and variant codes, and uppercase is assumed for the country code.
+	 * Thus in the above examples, different results from the portlet resource
+	 * bundle folder would obtain if <code>foo_fr.htm</code> and/or
+	 * <code>foo_fr_CA.htm</code> were tagged with uppercase language or
+	 * lowercase country. Be sure your resource bundles follow the convention.
 	 * </p>
 	 * 
 	 * @param pReq
@@ -896,6 +985,38 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	/**
 	 * <p>
 	 * Looks up the given base filename in the <i>portlet resource bundle folder</i>,
+	 * and returns the filename of the best-fit localized version of that file
+	 * for the given locale which exists in that folder. The given base filename
+	 * may include some path relative to the portlet bundle folder. If no
+	 * appropriate file for that filename exists in the portlet bundle folder,
+	 * then null is returned. This method also returns null if any of its
+	 * required parameters are null.
+	 * 
+	 * <p>
+	 * <b>Note:</b> This method works the same as
+	 * {@link #getLocalizedFileName(String,Locale,boolean)}, where the boolean
+	 * parameter is set to <code>true</code> (thus enabling localized file
+	 * lookups). Note also that this method only looks at the portlet bundle
+	 * folder. To look inside your portlet application, use the companion
+	 * {@link #getLocalizedFileName(PortletRequest,String, Locale)} method.
+	 * </p>
+	 * 
+	 * @param pBaseFileName
+	 *            The name of the base file to search (may include some path,
+	 *            which is treated as relative to the portlet bundle folder).
+	 * @param pLocale
+	 *            The locale to use for the localized file lookup.
+	 * @return The proper filename as per the parameters, or null if no
+	 *         qualifying file was found.
+	 */
+	public static String getLocalizedFileName(String pBaseFileName,
+			Locale pLocale) {
+		return getLocalizedFileName(pBaseFileName, pLocale, true);
+	}
+
+	/**
+	 * <p>
+	 * Looks up the given base filename in the <i>portlet resource bundle folder</i>,
 	 * and returns the filename as per the boolean switch: either the best-fit
 	 * localized filename for the given locale which exists in that folder, or
 	 * the given base filename. The given base filename may include some path
@@ -905,22 +1026,20 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * 
 	 * <p>
 	 * <b>Note:</b> This method works the same as
-	 * {@link com.hp.it.spf.xa.i18n.I18nUtility.getLocalizedFileURL(String,String,Locale,boolean)},
+	 * {@link com.hp.it.spf.xa.i18n.I18nUtility#getLocalizedFileName(String,String,Locale,boolean)},
 	 * where the portlet bundle folder is passed as the first parameter. (The
 	 * path for the portlet bundle folder is configured in
 	 * <code>i18n_portlet_config.properties</code> and
 	 * {@link #BUNDLE_DIR_DEFAULT} is the default.) Note also that this method
 	 * only looks at the portlet bundle folder. To look inside your portlet
 	 * application, use the companion
-	 * {@link #getLocalizedFileName(String, Locale, boolean)} method.
+	 * {@link #getLocalizedFileName(PortletRequest, String, Locale, boolean)}
+	 * method.
 	 * </p>
 	 * 
-	 * @param pReq
-	 *            The portlet request for the application.
 	 * @param pBaseFileName
 	 *            The name of the base file to search (may include some path,
-	 *            which is treated as relative to root of the portlet
-	 *            application).
+	 *            which is treated as relative to the portlet bundle folder).
 	 * @param pLocale
 	 *            The locale (not required if boolean parameter is false).
 	 * @param pLocalized
@@ -928,10 +1047,6 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            (false) or the best-fitting localized file (true).
 	 * @return The proper filename as per the parameters, or null if no
 	 *         qualifying file was found.
-	 * @param pBaseFileName
-	 * @param pLocale
-	 * @param pLocalized
-	 * @return
 	 */
 	public static String getLocalizedFileName(String pBaseFileName,
 			Locale pLocale, boolean pLocalized) {
@@ -1074,6 +1189,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	public static String getMessage(PortletRequest request, String key,
 			String defaultMsg, Object[] params,
 			ContextualHelpProvider[] cParams, Locale locale, boolean escapeHTML) {
+		if (key != null) {
+			key = key.trim();
+		}
 		if (defaultMsg == null) {
 			defaultMsg = key;
 		}
@@ -1318,9 +1436,12 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * </p>
 	 * <b>Note:</b> This method does not verify that the given file actually
 	 * exists, or where it exists. However, the filename is a required
-	 * parameter; null is returned if you pass a null filename.
+	 * parameter; null is returned if you pass a null or blank filename.
 	 * </p>
 	 * 
+	 * @param request
+	 *            The request for the portlet whose WAR contains the relay
+	 *            service.
 	 * @param response
 	 *            The response for the portlet whose WAR contains the relay
 	 *            service.
