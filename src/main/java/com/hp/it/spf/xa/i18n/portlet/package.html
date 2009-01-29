@@ -1,10 +1,10 @@
 <html>
 <body>
 <p>This package contains Java utilities for internationalizing
-Shared Portal Framework portlet applications.
-<h3><code>I18nUtilities</code></h3>
-<p>The {@link com.hp.it.spf.xa.i18n.portlet.I18nUtilities} class
-provides methods for:
+Shared Portal Framework portlet applications. <a name="I18nUtilities">
+<h3>I18nUtilities</h3>
+</a>
+<p>The {@link I18nUtilities} class provides methods for:
 <ul>
 	<li>accessing message resources using Spring (augmented with
 	inherent SPF capabilities such as the <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>
@@ -16,17 +16,33 @@ provides methods for:
 </ul>
 Please see the class documentation for more information.
 </p>
-<h4>Where you put your resources</h4>
-<p>You may put your message and other static resource files (ie
-message properties and images, HTML files, video files, PDF's, etc) into
-your portlet WAR where they traditionally go:</p>
 
-<ul>
+<a name="Resources">
+<h3>Where you put your resources</h3>
+</a>
+<p>You have a choice. You may put your message and other static
+resource files (ie message properties and images, HTML files, video
+files, PDF's, etc) into your portlet WAR where they traditionally go:</p>
+
+<ol>
 	<li>
 	<p>Your message properties would go into your <code>WEB-INF/classes/</code>,
 	optionally under some additional sub-path (we recommend <code>portlet/i18n/</code>
-	for reasons that will become clear). Be sure to configure Spring
-	properly so it can find them. For example, if you use Spring's {@link
+	for reasons that will become clear). For example:</p>
+
+	<blockquote><pre>
+	<i>&lt;root&gt;</i>
+	    WEB-INF/
+	        classes/
+	        	portlet/
+	        		i18n/
+	        			messages.properties
+	        			messages_fr_FR.properties
+	        			...
+	</pre></blockquote>
+
+	<p>Also, be sure to configure Spring properly so it can find those
+	message properties. For example, if you use Spring's {@link
 	org.springframework.context.support.ReloadableResourceBundleMessageSource}
 	class, you would put this into your application context configuration
 	(eg either your application-wide <code>applicationContext.xml</code> or
@@ -67,24 +83,153 @@ your portlet WAR where they traditionally go:</p>
 	        ...
 	</pre></blockquote>
 	</li>
-</ul>
+</ol>
 
 <p>Then when you use the standard Spring message API's, or the SPF
 portlet message API's in <code>I18nUtilities</code>, or the tag
 libraries for either, they will find your message resources inside your
 portlet WAR. And when you use the localized file access API's in <code>I18nUtilities</code>,
-they will find your statis resource files there likewise.</p>
+they will find your static resource files there likewise.</p>
 
 <p>However, you may instead put your messages and other resources <i>outside</i>
-of your portlet WAR. Doing so may have some advantages - for example, it
-may make for easier administration of the resources. Currently the SPF
-supports you putting them into what is called the <i>portlet
+of your portlet WAR. Why? Doing so may have some advantages - for
+example, it may make for easier administration of the resources.
+Currently the SPF supports you putting them into what is called the <i>portlet
 resource bundle folder</i>, which is any folder on the portlet server's
-filesystem to which the portlet JVM has at least read access. By
-default, <code>/opt/sasuapps/spf/globalResources/portlet/i18n</code> is
-assumed as the path for the portlet bundle folder, but you can override
-that by configuring <code>i18n_portlet_config.properties</code> (see
-below).</p>
+filesystem to which the portlet JVM has at least read access.</p>
+
+<ol>
+	<li>
+	<p>Put the path for your portlet bundle folder into the classpath
+	of your server's JVM. Or, put some parent path for it into the
+	classpath. If you are using an application-hosting service (like SASU),
+	they may already have defined for you a standard path from which to
+	load so-called "global resources" (like externally-administered
+	configuration files), and they may have put that into the classpath
+	already. In any event, we recommend making the portlet bundle folder be
+	a subfolder of your "global resources" classpath folder.</p>
+
+	<p>For example, if you are using SASU, it may be that <code>/opt/sasuapps/spf/globalResources</code>
+	is already your assigned classpath folder for all global resources (eg
+	configuration files). If that is the case, we recommend creating the
+	subfolder <code>portlet/i18n/</code> underneath it, so that <code>/opt/sasuapps/spf/globalResources/portlet/i18n/</code>
+	is your portlet bundle folder. SASU should have put the <code>/opt/sasuapps/spf/globalResources</code>
+	into the classpath for you.</p>
+	</li>
+
+	<li>
+	<p>Put your message properties and other resource files into your
+	portlet bundle folder. We recommend you use subfolders for further
+	organization - for example, putting message properties in the portlet
+	bundle folder proper, images in the <code>images/</code> subfolder,
+	etc. Like this (example):</p>
+
+	<blockquote><pre>
+	/opt/sasuapps/spf/globalResources/     &lt;-- this is in the classpath
+		...                                &lt;-- misc other external config files go here
+		portlet/i18n/                      &lt;-- this is your portlet bundle folder
+			html/                          &lt;-- this is your portlet bundle HTML subfolder
+				text.html
+				text_es_MX.html
+				...
+			images/                        &lt;-- this is your portlet bundle images subfolder
+				picture.jpg
+				picture_ja.jpg
+				...
+			messages.properties
+			messages_fr_FR.properties
+			...
+	</pre></blockquote>
+	</li>
+
+	<li>
+	<p>Configure Spring properly so it can find those externalized
+	message properties relative to the classpath. We recommend you use
+	Spring's {@link
+	org.springframework.context.support.ReloadableResourceBundleMessageSource}
+	class, since that makes your message properties hot-reloadable (ie your
+	administrator can update your message bundles without restarting the
+	JVM). You would use the same application-context configuration shown
+	above (which is why we recommended using <code>portlet/i18n/</code>
+	under <code>WEB-INF/classes/</code> above - so that the Spring
+	configuration for internal resource access is the same as it is for
+	external).</p>
+	</li>
+
+	<li>
+	<p>If you chose a non-default location for the portlet bundle
+	folder, configure it in <a href="#i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
+	(see below). The default location is hardcoded in {@link
+	I18nUtility.#BUNDLE_DIR_DEFAULT}, which is <code>/opt/sasuapps/spf/globalResources/portlet/i18n</code>
+	(as in the above example) at this time of writing.</p>
+	</li>
+
+	<li>
+	<p>Finally, if you have non-message static resources (images, etc)
+	in your portlet bundle folder, and you will be using {@link
+	I18nUtility} to make URL's for them (eg to render in the browser), note
+	that SPF uses a file-relay servlet (see {@link
+	com.hp.it.spf.xa.relay.servlet.RelayServlet}) to service those URL's.
+	Deploy that relay servlet in any Web application which is <i>both</i>
+	accessible to the end-user browser, and has access to the portlet
+	bundle folder. For example, if you are using local portlets, you could
+	deploy it in your portal application. By default, SPF assumes you have
+	deployed it in your portlet application, mapped under the hardcoded
+	{@link I18nUtility.RELAY_PATH_DEFAULT} path. See the {@link
+	com.hp.it.spf.xa.relay.servlet.RelayServlet} for more information about
+	deploying this servlet. If you deploy it in a non-default location, you
+	will need to configure that in <a href="#i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>.
+	</p>
+	</li>
+</ol>
+
+<p>Then when you use the standard Spring message API's, or the SPF
+portlet message API's in <code>I18nUtilities</code>, or the tag
+libraries for either, they will find your message resources in your
+portlet bundle folder. And when you use the localized file access API's
+in <code>I18nUtilities</code>, they will find your static resource files
+there likewise.</p>
+
+<p>Note that you can mix both of these approaches, if you like:</p>
+
+<ul>
+	<li>
+	<p>If you want to put some resource bundles inside your portlet WAR
+	while keeping others external, you can do that. For example, you can
+	keep your message bundles inside the WAR while keeping all your images
+	in the portlet bundle folder.</p>
+	</li>
+	<li>
+	<p>If you want to split a bundle across locations - eg keeping the
+	English (base) files inside the portlet WAR and only keeping your
+	localized versions outside - you can also do that.</p>
+	</li>
+	<li>
+	<p>Finally, you can even have identically-named bundle files in
+	both locations. For example, you can keep a "default" / "fallback" set
+	of bundles inside your portlet WAR, and put "overrides" for them
+	outside. SPF will search the portlet bundle folder first, only
+	falling-back to look inside the portlet WAR if the resource was not
+	found outside.</p>
+
+	<blockquote>
+	<p>There are some caveats to this regarding message properties,
+	however. SPF uses Spring for access to message resources, and Spring
+	searches these in the order set by the system classloader. For the
+	"fallback" approach to work, this classloader needs to check inside
+	your portlet application <i>last</i>, only after having <i>first</i>
+	checked the classpath. You may or may not be able to control the load
+	order used by the system classloader in your application server. Test
+	it.</p>
+	</blockquote>
+	</li>
+</ul>
+
+<a name="i18n_portlet_config">
+<h3>i18n_portlet_config.properties</h3>
+</a>
+
+<p>TBD</p>
 </body>
 </html>
 
