@@ -1,5 +1,97 @@
 <html>
 <body>
+<style type="text/css">
+body {
+	padding:0;
+	font-family: Verdana,Sans-serif;
+	font-size: small;
+}
+h1 {
+	font-family: Georgia,Serif;
+	font-size: 160%;
+	color:#404040;
+	margin-top: 5px;
+}
+h2 {
+	font-family: Georgia,Serif;
+	font-size: 130%;
+	color:#404040;
+	page-break-before: always;
+}
+h3 {
+	font-family: Verdana,Sans-serif;
+	font-size: small;
+	font-weight: bold;
+	color:#404040;	
+	margin-top: 20px;
+}
+h4 {
+	font-family: Verdana,Sans-serif;
+	font-size: small;
+	font-weight: normal;
+	color:#404040;	
+	margin-top: 20px;
+}
+li {
+	margin-left: -10px;
+}
+ol li {
+	margin-bottom: 20px;
+}
+code {
+	color: #990000;
+	font-size: small;	
+}
+pre {
+	color: #990000;	
+	font-size: small;
+}
+.byline {
+	font-style: italic;
+	font-size: 90%;
+	color: gray;
+	margin-top: -10px;
+	border-bottom: solid black 1px;
+}
+.codeSample {
+	color: #990000;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: small;
+	border: solid #990000 1px;
+	padding: 5px;
+}
+.leftFloatingImage {
+	float: left;
+	margin: 0 10px 10px 0;
+}
+.rightFloatingImage {
+	float: right;
+	margin: 0 0 10px 10px;
+}
+.toc {
+	list-style-type: none;
+}
+ul.toc ul {
+	list-style-type: none;
+}
+table.props td, table.props th {
+	padding: 5px;
+	background-color: #F0F0F0
+}
+table.props th {
+	font-size: 11px;
+	font-weight: bold;
+	text-align: right;
+}
+table.props td {
+	font-family: 'Courier New', Courier, monospace;
+}
+.style1 {
+	border-style: solid;
+	border-width: 1px;
+}
+</style>
+
 <p>This artifact contains utilities (Java API's and JSP
 tags) for Java portlets built using the Shared Portal Framework
 (SPF).</p>
@@ -8,7 +100,7 @@ tags) for Java portlets built using the Shared Portal Framework
 
 <a name="toc"><h2>Table of Contents</h2></a>
 
-<ul style="list-style-type: none;">
+<ul class="toc">
 	<li>1. <a href="#overview">Overview</a>
 		<ul>
 			<li>1.1. <a href="#installation">Installation</a></li>
