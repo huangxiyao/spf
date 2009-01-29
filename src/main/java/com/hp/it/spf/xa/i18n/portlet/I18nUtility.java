@@ -191,7 +191,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * filename may include a subfolder relative to the portlet resource bundle
 	 * folder or portlet application root, respectively. (Note that the path to
 	 * the portlet resource bundle folder is configured in
-	 * <code>i18n_portlet_config.properties</code>.)
+	 * <code>i18n_portlet_config.properties</code> and
+	 * {@link #BUNDLE_DIR_DEFAULT} is the default.)
 	 * </p>
 	 * <p>
 	 * This method uses the locale from the given portlet request to find the
@@ -303,8 +304,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 		// Get the localized filename by looking in the portlet resource bundle
 		// folder.
-		String fileName = getLocalizedFileName(resourceBundleDir,
-				pBaseFileName, pReq.getLocale(), pLocalized);
+		String fileName = getLocalizedFileName(pBaseFileName, pReq.getLocale(),
+				pLocalized);
 
 		// If the localized filename was found, make and return an input stream
 		// for it. Otherwise, look for the localized filename inside the portlet
@@ -337,7 +338,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * relative to the <i>portlet resource bundle folder</i> or portlet
 	 * application root, respectively. (Note that the path to the portlet
 	 * resource bundle folder is configured in
-	 * <code>i18n_portlet_config.properties</code>.)
+	 * <code>i18n_portlet_config.properties</code> and
+	 * {@link #BUNDLE_DIR_DEFAULT} is the default.)
 	 * </p>
 	 * <p>
 	 * This method works like
@@ -429,9 +431,10 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * the <i>portlet resource bundle folder</i> on the portlet server. In this
 	 * case, the given filename may include a subfolder relative to that portlet
 	 * resource bundle folder. (The path to the portlet resource bundle folder
-	 * is configured in <code>i18n_portlet_config.properties</code>.) In this
-	 * case, the returned URL will be a file-relay URL pointing to that
-	 * particular localized file in the portlet resource bundle folder.
+	 * is configured in <code>i18n_portlet_config.properties</code>;
+	 * {@link #BUNDLE_DIR_DEFAULT} is the default.) In this case, the returned
+	 * URL will be a file-relay URL pointing to that particular localized file
+	 * in the portlet resource bundle folder.
 	 * </p>
 	 * <p>
 	 * Alternatively, the base and localized files may be located inside your
@@ -581,8 +584,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 		// Get the localized filename by looking in the portlet resource bundle
 		// folder.
-		String fileName = getLocalizedFileName(resourceBundleDir,
-				pBaseFileName, pReq.getLocale(), pLocalized);
+		String fileName = getLocalizedFileName(pBaseFileName, pReq.getLocale(),
+				pLocalized);
 
 		// If the localized filename was found, make and return a file-relay URL
 		// for it. Otherwise, look for the localized filename inside the portlet
@@ -630,9 +633,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * resource bundle folder</i> on the portlet server. The filename from the
 	 * message resource may include a subfolder relative to that portlet
 	 * resource bundle folder. The path to the portlet resource bundle folder is
-	 * configured in <code>i18n_portlet_config.properties</code>. In this
-	 * case, the returned URL is a file-relay URL pointing to that file in the
-	 * portlet resource bundle directory.
+	 * configured in <code>i18n_portlet_config.properties</code> ({@link #BUNDLE_DIR_DEFAULT}
+	 * is the default). In this case, the returned URL is a file-relay URL
+	 * pointing to that file in the portlet resource bundle directory.
 	 * </p>
 	 * <p>
 	 * Alternatively, the file named in the message resource may be located
@@ -775,6 +778,13 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * <dd>returns <code>null</code></dd>
 	 * </dl>
 	 * 
+	 * <p>
+	 * <b>Note:</b> This method only looks inside the portlet application (ie
+	 * portlet WAR). To look in the <i>portlet resource bundle folder</i>, use
+	 * the companion {@link #getLocalizedFileName(String, Locale, boolean)}
+	 * method.
+	 * </p>
+	 * 
 	 * @param pReq
 	 *            The portlet request for the application.
 	 * @param pBaseFileName
@@ -885,6 +895,52 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 	/**
 	 * <p>
+	 * Looks up the given base filename in the <i>portlet resource bundle folder</i>,
+	 * and returns the filename as per the boolean switch: either the best-fit
+	 * localized filename for the given locale which exists in that folder, or
+	 * the given base filename. The given base filename may include some path
+	 * relative to the portlet bundle folder. If no appropriate file for that
+	 * filename exists in the portlet bundle folder, then null is returned. This
+	 * method also returns null if any of its required parameters are null.
+	 * 
+	 * <p>
+	 * <b>Note:</b> This method works the same as
+	 * {@link com.hp.it.spf.xa.i18n.I18nUtility.getLocalizedFileURL(String,String,Locale,boolean)},
+	 * where the portlet bundle folder is passed as the first parameter. (The
+	 * path for the portlet bundle folder is configured in
+	 * <code>i18n_portlet_config.properties</code> and
+	 * {@link #BUNDLE_DIR_DEFAULT} is the default.) Note also that this method
+	 * only looks at the portlet bundle folder. To look inside your portlet
+	 * application, use the companion
+	 * {@link #getLocalizedFileName(String, Locale, boolean)} method.
+	 * </p>
+	 * 
+	 * @param pReq
+	 *            The portlet request for the application.
+	 * @param pBaseFileName
+	 *            The name of the base file to search (may include some path,
+	 *            which is treated as relative to root of the portlet
+	 *            application).
+	 * @param pLocale
+	 *            The locale (not required if boolean parameter is false).
+	 * @param pLocalized
+	 *            The version of the file for which to search: the base file
+	 *            (false) or the best-fitting localized file (true).
+	 * @return The proper filename as per the parameters, or null if no
+	 *         qualifying file was found.
+	 * @param pBaseFileName
+	 * @param pLocale
+	 * @param pLocalized
+	 * @return
+	 */
+	public static String getLocalizedFileName(String pBaseFileName,
+			Locale pLocale, boolean pLocalized) {
+		return getLocalizedFileName(resourceBundleDir, pBaseFileName, pLocale,
+				pLocalized);
+	}
+
+	/**
+	 * <p>
 	 * Returns a message string for the given key from a message properties file
 	 * in any configured portlet resource bundle; the returned string is
 	 * localized for the given locale, interpolated with the given parameters,
@@ -921,8 +977,10 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * WAR), you may put them in the <i>portlet resource bundle folder</i>
 	 * dedicated for this purpose. The location of the portlet resource bundle
 	 * folder is configured in the <code>i18n_portlet_config.properties</code>
-	 * file; this folder should also be specified on the classpath so that the
-	 * class loader can find it.
+	 * file ({@link #BUNDLE_DIR_DEFAULT} is the default); this folder or a
+	 * parent folder should also be specified on the classpath so that the class
+	 * loader can find it (if a parent folder, include the relative path between
+	 * there and your portlet bundle folder in the Spring configuration).
 	 * </p>
 	 * <p>
 	 * Parameter substitution is supported. No parameter substitution is
@@ -1216,9 +1274,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * folder. You can deploy it under any arbitrary location name in your
 	 * portlet WAR, in the portal Web application, or in any other Web
 	 * application which meets those criteria. We currently recommend you deploy
-	 * it under the <code>/relay</code> path in your portlet WAR (this is what
-	 * is assumed by default; to override that, configure the actual location in
-	 * <code>i18n_portlet_config.properties</code>).
+	 * it under the {@link #RELAY_PATH_DEFAULT} path in your portlet WAR (this
+	 * is what is assumed by default; to override that, configure the actual
+	 * location in <code>i18n_portlet_config.properties</code>).
 	 * </p>
 	 * <p>
 	 * The behavior of this method depends on the configuration in
@@ -1248,18 +1306,18 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * <p>
 	 * If you did not configure the relay servlet location in
 	 * <code>i18n_portlet_config.properties</code> at all, then the method
-	 * assumes <code>/relay</code> for the location and proceeds as above.
-	 * Thus if that servlet is actually found in your portlet WAR at that
+	 * assumes {@link #RELAY_PATH_DEFAULT} for the location and proceeds as
+	 * above. Thus if that servlet is actually found in your portlet WAR at that
 	 * location, then the method will return an encoded resource URL for it; and
-	 * if it is not found there, then <code>/relay</code> itself will be
+	 * if it is not found there, then {@link #RELAY_PATH_DEFAULT} itself will be
 	 * returned.
 	 * </ul>
 	 * <p>
-	 * In each case, the given filename is attached as additional-path
-	 * information on the returned URL.
+	 * <b>Note:</b> In each case above, the given filename is attached as
+	 * additional-path information on the returned URL.
 	 * </p>
 	 * <b>Note:</b> This method does not verify that the given file actually
-	 * exists, or where it exists. However, tThe filename is a required
+	 * exists, or where it exists. However, the filename is a required
 	 * parameter; null is returned if you pass a null filename.
 	 * </p>
 	 * 
