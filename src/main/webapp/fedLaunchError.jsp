@@ -20,7 +20,7 @@ secondary support files in this component. --%>
 	String i18nID = portalContext.getCurrentStyle().getUID();
 	// get the proper CSS URL
 	String cssFile = portalContext.getCurrentSite().getDNSName() + "FedLaunchError.css";
-	if (I18nUtility.getLocalizedFileStream(portalContext, cssFile, false) == null) 
+	if (I18nUtility.getLocalizedFileName(portalContext, cssFile, false) == null) 
 		cssFile = "fedLaunchError.css";
 	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile, false);	
 %>
