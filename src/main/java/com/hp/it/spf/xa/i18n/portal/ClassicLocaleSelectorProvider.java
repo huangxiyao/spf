@@ -386,7 +386,7 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	private String getSubmitImageURL() {
 		String url = "/images/" + SUBMIT_BUTTON_IMG_NAME;
 		if (portalContext != null) {
-			if (I18nUtility.getLocalizedFileStream(portalContext,
+			if (I18nUtility.getLocalizedFileName(portalContext,
 					SUBMIT_BUTTON_IMG_NAME) != null) {
 				url = I18nUtility.getLocalizedFileURL(portalContext,
 						SUBMIT_BUTTON_IMG_NAME);
