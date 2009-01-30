@@ -12,21 +12,21 @@ body {
 
 h1 {
 	font-family: Georgia, Serif;
-	font-size: 160%;
+	font-size: 200%;
 	color: #404040;
 	margin-top: 5px;
 }
 
 h2 {
 	font-family: Georgia, Serif;
-	font-size: 130%;
+	font-size: 175%;
 	color: #404040;
 	page-break-before: always;
 }
 
 h3 {
 	font-family: Verdana, Sans-serif;
-	font-size: small;
+	font-size: 150%;
 	font-weight: bold;
 	color: #404040;
 	margin-top: 20px;
@@ -34,8 +34,8 @@ h3 {
 
 h4 {
 	font-family: Verdana, Sans-serif;
-	font-size: small;
-	font-weight: normal;
+	font-size: 125%;
+	font-weight: bold;
 	color: #404040;
 	margin-top: 20px;
 }
@@ -50,7 +50,6 @@ ol li {
 
 code {
 	color: #990000;
-	font-size: small;
 }
 
 pre {
@@ -123,10 +122,28 @@ table.props td {
 <ul class="toc">
 	<li>1. <a href="#overview">Overview</a>
 	<ul>
-		<li>1.1. <a href="#wpap">WPA Portlet Edition and Spring
-		Portlet MVC</a></li>
-		<li>1.2. <a href="#installation">Installation</a></li>
-		<li>1.3. <a href="#dependencies">Dependencies</a></li>
+		<li>1.1. <a href="#overview.installation">Installation</a>
+		<ul>
+			<li>1.1.1 <a href="#overview.installation.jar">Installation
+			of the SPF portlet utilities JAR</a></li>
+			<li>1.1.2 <a href="#overview.installation.config">Installation
+			of the <code>i18n_portlet_config.properties</code></a></li>
+		</ul>
+		</li>
+		<li>1.2. <a href="#overview.dependencies">Dependencies</a></li>
+		<li>1.3. <a href="#overview.other">Other libraries for SPF
+		portlet developers</a>
+		<ul>
+			<li>1.3.1. <a href="#overview.other.wpap">WPA Portlet
+			Edition</a></li>
+			<li>1.3.2. <a href="#overview.other.spring">Spring Portlet
+			MVC</a></li>
+			<li>1.3.3. <a href="#overview.other.spf.common">SPF Common
+			Utilities</a></li>
+			<li>1.3.4. <a href="#overview.other.spf.htmlviewer">SPF <code>html-viewer</code>
+			Portlet</a></li>
+		</ul>
+		</li>
 	</ul>
 	</li>
 	<li>2. <a href="#i18n">Internationalization</a>
@@ -135,20 +152,20 @@ table.props td {
 		<ul>
 			<li>2.1.1. <a href="#i18n.resources.message">Message
 			resources (message properties)</a></li>
-			<li>2.2.2. <a href="#i18n.resources.supporting">Supporting
+			<li>2.1.2. <a href="#i18n.resources.supporting">Supporting
 			resources (images, HTML, PDF, etc)</a></li>
-			<li>2.2.3. <a href="#i18n.resources.bundles">Resource
+			<li>2.1.3. <a href="#i18n.resources.bundles">Resource
 			bundles</a></li>
 		</ul>
 		</li>
 		<li>2.2. <a href="#i18n.location">Where to put your resources</a>
 		<ul>
 			<li>2.2.1. <a href="#i18n.location.internal">Internal
-			resources go in your portlet application</a></li>
+			resources (portlet application)</a></li>
 			<li>2.2.2. <a href="#i18n.location.external">External
-			resources go in the portlet resource bundle folder</a></li>
-			<li>2.2.3. <a href="#i18n.location.both">Using both kinds of
-			resources</a></li>
+			resources (portlet resource bundle folder)</a></li>
+			<li>2.2.3. <a href="#i18n.location.both">Mixing internal and
+			external resources</a></li>
 		</ul>
 		</li>
 		<li>2.3. <a href="#i18n.messages.java">Accessing message
@@ -198,15 +215,17 @@ table.props td {
 			locale</a></li>
 			<li>2.9.2. <a href="#i18n.other.locale.set">Setting the
 			locale</a></li>
-			<li>2.9.3. <a href="#i18n.other.common">Using the common <code>I18nUtility</code></a></li>
-			<li>2.9.4. <a href="#i18n.other.refs">Other references</a></li>
+			<li>2.9.3. <a href="#i18n.other.config">Configuring the
+			portlet <code>I18nUtility</code> (<code>i18n_portlet_config.properties</code>)</a></li>
+			<li>2.9.4. <a href="#i18n.other.common">Using the common <code>I18nUtility</code></a></li>
+			<li>2.9.5. <a href="#i18n.other.refs">Other references</a></li>
 		</ul>
 		</li>
 	</ul>
 	</li>
-	<li>3. <a href="#help">Help</a>
+	<li>3. <a href="#help">Online Help</a>
 	<ul>
-		<li>3.1. <a href="#help.kinds">Kinds of help</a>
+		<li>3.1. <a href="#help.kinds">About online help</a>
 		<ul>
 			<li>3.1.1. <a href="#help.kinds.contextual">Contextual help
 			(classic and other)</a></li>
@@ -216,7 +235,7 @@ table.props td {
 			help)</a></li>
 		</ul>
 		</li>
-		<li>3.2. <a href="help.contextual.java">Producing contextual
+		<li>3.2. <a href="#help.contextual.java">Producing contextual
 		help using Java code </a>
 		<ul>
 			<li>3.2.1. <a
@@ -236,9 +255,8 @@ table.props td {
 			<li>3.3.2. <a
 				href="#help.contextual.jsp.classicContextualHelpProviderParam">Using
 			<code>&lt;spf-i18n-portlet:classicContextualHelpProviderParam&gt;</code></a></li>
-			<li>3.3.2. <a
-				href="#help.contextual.java.contextualhelpprovider">Creating a
-			tag library for your own contextual help style</a></li>
+			<li>3.3.3. <a href="#help.contextual.jsp.contextualHelpProvider">Creating
+			a tag library for your own contextual help style</a></li>
 		</ul>
 		</li>
 		<li>3.4. <a href="#help.portlet.java">Producing portlet help
@@ -259,7 +277,7 @@ table.props td {
 			<li>4.2.3. <a href="#file.display.htmlViewer">Using the <code>html-viewer</code>
 			portlet to display interpolated file content</a></li>
 		</ul>
-		<li>4.3. <a href="#file.author#">Authoring file content and
+		<li>4.3. <a href="#file.author">Authoring file content and
 		using interpolation tokens</a>
 		<ul>
 			<li>4.3.1. <a href="#file.author.token.url">Including URLs
@@ -326,27 +344,178 @@ table.props td {
 
 <hr>
 
-<a name="overview"><h2>Overview</h2></a>
+<a name="overview">
+<h2>1. Overview</h2>
+</a>
 
-<p>This is the developer's guide for the Shared Portal Framework
-portlet utilities. Portlet developers using the SPF should read this
-guide. They should also check out the following additional guides for
-portlet developers in the Shared Portal Framework:</p>
+<p>This is the developer's guide for the <b>Shared Portal
+Framework (SPF) portlet utilities</b>. The SPF portlet utilities are a
+collection of Java classes and JSP tag libraries providing useful
+functionality for SPF Java portlet developers in the following areas:</p>
 
 <ul>
-	<li>Shared Portal Framework - Common Utilities - Developer's Guide</li>
-	<li>Shared Portal Framework - HTML Viewer Portlet -
-	Administrator's Guide</li>
-	<li>Shared Portal Framework - File Relay Servlet - Configuration
-	Guide</li>
+	<li><a href="#i18n">Internationalization</a> - the SPF portlet
+	utilities provide Java classes and JSP tags for handling all kinds of
+	UI resources in your code (messages, images, etc) so that they can be
+	localized</li>
+	<li><a href="#help">Online Help</a> - the SPF portlet utilities
+	provide Java classes and JSP tags which make it easier for you to
+	develop online help</li>
+	<li><a href="#file">File Display</a> - the SPF portlet utilities
+	provide Java classes for interpolating and displaying file content to
+	users (saving you time when developing portlets that mostly display
+	static text)</li>
+	<li><a href="#portal">Portal Data</a> - the SPF portlet utilities
+	provide Java classes for accessing data passed by the SPF (Vignette)
+	portal</li>
+	<li><a href="#error">Error Handling</a> - the SPF portlet
+	utilities provide Java classes to assist you with error handling,
+	especially system error handling (saving you time developing rote
+	handlers for system errors)</li>
 </ul>
 
-<p>Developers of Vignette portal components (not portlets) in the
-Shared Portal Framework should ignore this guide.</p>
+<p>The SPF portlet utilities are just one of several SPF Java
+artifacts for SPF developers. See <a href="#overview.other">other
+libraries</a>.</p>
 
-<a name="Resources">
-<h3>Where you put your resources</h3>
+<hr>
+
+<a name="overview.installation">
+<h3>1.1. Installation</h3>
 </a>
+
+<a name="overview.installation.jar">
+<h4>1.1.1 Installation of the SPF portlet utilities JAR</h4>
+</a>
+
+<p>The SPF portlet utilities are distributed in Java JAR format. The
+base JAR filename is <code>spf-portlet-utilities.jar</code>; typically a
+version number is included (for example, <code>spf-portlet-utilities-1.0.0.jar</code>).
+The SPF portlet utilities are distributed through Maven 2:</p>
+
+<ul>
+	<li>The current Maven 2 repository is <code>http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-utilities/</code>.</li>
+	<li>The group ID is <code>com.hp.it.spf.xa</code>
+	<li>The artifact ID is <code>spf-portlet-utilities</code>
+</ul>
+
+<p>To get the SPF portlet utilities, download the latest released
+version from the repository. As usual with any JAR file, include it in
+your portlet application's <code>/WEB-INF/lib</code> folder.</p>
+
+<a name="overview.installation.config">
+<h4>1.1.2 Installation of the <code>i18n_portlet_config.properties</code></h4>
+</a>
+
+<p>If you use a non-default location for the portlet resource bundle
+folder, or a non-default location mapping for the file relay servlet,
+you will also need to configure those non-default location(s) in a <code>i18n_portlet_config.properties</code>
+file. You can ignore that file otherwise and skip this installation
+step.</p>
+
+<p>To configure and deploy the file:</p>
+
+<ul>
+	<li>
+	<p>Download the template for <code>i18n_portlet_config.properties</code>
+	from <b><font color="blue">TBD</font></b>.</p>
+	</li>
+
+	<li>
+	<p>Customize the properties in the file as needed - see
+	instructions for <a href="#i18n.other.config">configuring the <code>i18n_portlet_config.properties</code></a>.</p>
+	</li>
+
+	<li>
+	<p>Include the customized file, named <code>i18n_portlet_config.properties</code>,
+	with your portlet application. You can put the file anywhere that the
+	system classloader searches: inside your portlet application (eg in <code>/WEB-INF/classes</code>)
+	or in any folder outside of the WAR which is named in the classpath for
+	your JVM. If you need to make the configuration easily performable by
+	an administrator, we recommend the latter; otherwise the former is
+	easier because it is one-time setup.</p>
+
+	<p>If you are interested in externalizing the <code>i18n_portlet_config.properties</code>
+	from the portlet WAR, check how your application server is configured.
+	If you are using an application server hosting environment, like DASH
+	or SASU, they probably will have provided you a "global resources"
+	folder on the server filesystem and in the JVM classpath. You would put
+	the <code>i18n_portlet_config.properties</code> file there, if you
+	wanted it to be external to your portlet WAR (eg so the administrator
+	can easily customize it).</p>
+
+	<blockquote>
+	<p><b>Note:</b> Depending on the search order performed by your
+	system classloader, you may be able to do <b>both</b>: include a <code>i18n_portlet_config.properties</code>
+	inside your application, and also let the administrator optionally
+	override it when needed, by putting an <code>i18n_portlet_config.properties</code>
+	outside of the WAR. For this to work, your classloader must search the
+	external folders in the classpath <b>before</b> searching inside the
+	WAR. If you are interested in this "mixed" deployment of <code>i18n_portlet_config.properties</code>,
+	be sure to test it out first, as actual behavior may vary by
+	environment (application server, etc).</p>
+	</blockquote>
+</ul>
+
+<hr>
+
+<a name="overview.dependencies">
+<h3>1.2. Dependencies</h3>
+</a>
+
+LEFT OFF HERE
+
+<hr>
+
+<a name="overview.other">
+<h3>1.3. Other libraries for SPF portlet developers</h3>
+</a>
+
+<a name="overview.other.wpap">
+<h4>1.3.1 WPA Portlet Edition</h4>
+</a>
+
+<a name="overview.other.spring">
+<h4>1.3.2 Spring Portlet MVC</h4>
+</a>
+
+<a name="overview.other.spf.common">
+<h4>1.3.3 SPF Common Utilities</h4>
+</a>
+
+<a name="overview.other.spf.htmlviewer">
+<h4>1.3.4 SPF <code>html-viewer</code> Portlet</h4>
+</a>
+
+<hr>
+
+<a name="i18n">
+<h2>2. Internationalization</h2>
+</a>
+
+<hr>
+
+<a name="i18n.resources">
+<h3>2.1. Kinds of resources</h3>
+</a>
+
+<a name="i18n.resources.message">
+<h4>2.1.1. Message resources (message properties)</h4>
+</a>
+
+<a name="i18n.resources.supporting">
+<h4>2.1.2. Support resources (images, HTML, PDF, etc)</h4>
+</a>
+
+<a name="i18n.resources.bundles">
+<h4>2.1.3 Resource bundles</h4>
+</a>
+
+<hr>
+<a name="i18n.location">
+<h3>2.2. Where to put your resources</h3>
+</a>
+
 <p>You have a choice. You may put your message and other static
 resource files (ie message properties and images, HTML files, video
 files, PDF's, etc) into your portlet WAR where they traditionally go:</p>
@@ -555,11 +724,314 @@ they will find your static resource files there likewise.</p>
 	</li>
 </ul>
 
-<a name="i18n_portlet_config">
-<h3>i18n_portlet_config.properties</h3>
+<a name="i18n.location.internal">
+<h4>2.2.1. Internal resources (portlet application)</h4>
 </a>
 
-<p>TBD</p>
+<a name="i18n.location.external">
+<h4>2.2.2. External resources (portlet resource bundle folder)</h4>
+</a>
+
+<a name="i18n.location.both">
+<h4>2.2.3. Mixing internal and external resources</h4>
+</a>
+
+<hr>
+<a name="i18n.messages.java">
+<h3>2.3. Accessing message resources using Java code</h3>
+</a>
+
+<a name="i18n.messages.java.spring.getMessage">
+<h4>2.3.1. Using Spring (<code>ApplicationContext.getMessage</code>)</h4>
+</a>
+
+<a name="i18n.messages.java.spf.getMessage">
+<h4>2.3.2. Using SPF (<code>I18nUtility.getMessage</code>)</h4>
+</a>
+
+<hr>
+
+<a name="i18n.messages.tags">
+<h3>2.4. Accessing message resources using JSP tag libraries</h3>
+</a>
+
+<a name="i18n.messages.jsp.spring.message">
+<h4>2.4.1. Using Spring (<code>&lt;spring:message&gt;</code>)</h4>
+</a>
+
+<a name="i18n.messages.jsp.spf.message">
+<h4>2.4.2. Using SPF (<code>&lt;spf-i18n-portlet:message&gt;</code>,
+<code>&lt;spf-i18n-portlet:param&gt;</code>, and <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code>)</h4>
+</a>
+
+<hr>
+
+<a name="i18n.supporting.java">
+<h3>2.5. Accessing supporting resources using Java code</h3>
+</a>
+
+<a name="i18n.supporting.java.getLocalizedFileURL">
+<h4>2.5.1. Using <code>I18nUtility.getLocalizedFileURL</code></h4>
+</a>
+
+<a name="i18n.supporting.java.getLocalizedFileStream">
+<h4>2.5.2. Using <code>I18nUtility.getLocalizedFileStream</code></h4>
+</a>
+
+<a name="i18n.supporting.java.getLocalizedFileName">
+<h4>2.5.3. Using <code>I18nUtility.getLocalizedFileName</code></h4>
+</a>
+
+<hr>
+
+<a name="i18n.supporting.jsp">
+<h3>2.6. Accessing supporting resources using JSP tag libraries</h3>
+</a>
+
+<a name="i18n.supporting.jsp.localizedFileURL">
+<h4>2.6.1. Using <code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></h4>
+</a>
+
+<hr>
+
+<a name="i18n.supporting.relay">
+<h3>2.7. Providing download service for external resources using <code>RelayServlet</code></h3>
+</a>
+
+<hr>
+
+<a name="i18n.l10n">
+<h3>2.8. Localizing your resources</h3>
+</a>
+
+<hr>
+
+<a name="i18n.other">
+<h3>2.9. Other internationalization topics</h3>
+</a>
+
+<a name="i18n.other.locale.get">
+<h4>2.9.1. Getting the locale</h4>
+</a>
+
+<a name="i18n.other.locale.set">
+<h4>2.9.2. Setting the locale</h4>
+</a>
+
+<a name="i18n.other.config">
+<h4>2.9.3. Configuring the portlet <code>I18nUtility</code> (<code>i18n_portlet_config.properties</code>)</h4>
+</a>
+
+<a name="i18n.other.common">
+<h4>2.9.4. Using the common <code>I18nUtility</code></h4>
+</a>
+
+<a name="i18n.other.refs">
+<h4>2.9.5. Other references</h4>
+</a>
+
+<hr>
+
+<a name="help">
+<h2>3. Online Help</h2>
+</a>
+
+<hr>
+
+<a name="help.kinds">
+<h3>3.1. Kinds of online help</h3>
+</a>
+
+<a name="help.kinds.contextual">
+<h4>3.1.1. Contextual help (classic and otherwise)</h4>
+</a>
+
+<a name="help.kinds.portlet">
+<h4>3.1.2. Portlet help (help mode)</h4>
+</a>
+
+<a name="help.kinds.global">
+<h4>3.1.3. Portal help (global help)</h4>
+</a>
+
+<hr>
+
+<a name="help.contextual.java">
+<h3>3.2. Producing contextual help using Java code</h3>
+</a>
+
+<a name="help.contextual.java.classicContextualHelpProvider">
+<h4>3.2.1. Using <code>ClassicContextualHelpProvider</code></h4>
+</a>
+
+<a name="help.contextual.java.contextualHelpProvider">
+<h4>3.2.2. Extending <code>ContextualHelpProvider</code> to create
+your own style</h4>
+</a>
+
+<hr>
+
+<a name="help.contextual.jsp">
+<h3>3.3. Producing contextual help using JSP tag libraries</h3>
+</a>
+
+<a name="help.contextual.jsp.classicContextualHelpProvider">
+<h4>3.3.1. Using <code>&lt;spf-help-portlet:classicContextualHelpProvider&gt;</code></h4>
+</a>
+
+<a name="help.contextual.jsp.classicContextualHelpProviderParam">
+<h4>3.3.2. Using <code>&lt;spf-i18n-portlet:classicContextualHelpProviderParam&gt;</code></h4>
+</a>
+
+<a name="help.contextual.jsp.contextualHelpProvider">
+<h4>3.3.3. Creating a tag library for your own contextual help
+style</h4>
+</a>
+
+<hr>
+
+<a name="help.portlet.java">
+<h3>3.4. Producing portlet help (help mode) using <code>FileDisplayPortletController</code></h3>
+</a>
+
+<hr>
+
+<a name="file">
+<h2>4. File Display</h2>
+</a>
+
+<hr>
+
+<a name="file.about">
+<h3>4.1. About file display</h3>
+</a>
+
+<hr>
+
+<a name="file.display">
+<h3>4.2. Displaying file content using Java code</h3>
+</a>
+
+<a name="file.display.fileInterpolator">
+<h4>4.2.1. Using <code>FileInterpolator</code> to read and
+interpolate file content</h4>
+</a>
+
+<a name="file.display.fileDisplayPortletController">
+<h4>4.2.2. Using <code>FileDisplayPortletController</code> to
+display interpolated file content</h4>
+</a>
+
+<a name="file.display.htmlViewer">
+<h4>4.2.3. Using the <code>html-viewer</code> portlet to display
+interpolated file content</h4>
+</a>
+
+<hr>
+
+<a name="file.author">
+<h3>4.3. Authoring file content and using interpolation tokens</h3>
+</a>
+
+<a name="file.author.token.url">
+<h4>4.3.1. Including URLs for supporting resources like images and
+CSS (<code>&lt;CONTENT-URL:<i>path</i>&gt;</code>, <code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt</code>)</h4>
+</a>
+
+<a name="file.author.token.user">
+<h4>4.3.2. Displaying user information (<code>&lt;NAME&gt;</code>,
+<code>&lt;EMAIL&gt;</code>, <code>&lt;LANGUAGE-CODE&gt;</code>, <code>LANGUAGE-TAG&gt;</code>,
+<code>&lt;USER-PROPERTY:<i>key</i>&gt;</code>)</h4>
+</a>
+
+<a name="file.author.token.auth">
+<h4>4.3.3. Permissioning content for authorized users (<code>&lt;ROLE:<i>role-names</i>&gt;</code>,
+<code>&lt;GROUP:<i>group-names</i>&gt;</code>)</h4>
+</a>
+
+<a name="file.author.token.consolidate">
+<h4>4.3.4. Consolidating content for easier administration (<code>&lt;PORTLET:<i>friendly-ids</i>&gt;</code>,
+<code>&lt;SITE:<i>site-names</i></code>, <code>&lt;TOKEN:<i>key</i>&gt;</code>)</h4>
+</a>
+
+<a name="file.author.token.misc">
+<h4>4.3.5. Miscellaneous (<code>&lt;SITE&gt;</code>)</h4>
+</a>
+
+<hr>
+
+<a name="portal">
+<h2>5. Portal Data</h2>
+</a>
+
+<hr>
+
+<a name="portal.kinds">
+<h3>5.1. Kinds of portal provided data</h3>
+</a>
+<a name="portal.user">
+<h4>5.1.1. User data (profile attributes, groups and roles)</h4>
+</a>
+<a name="portal.prefs">
+<h4>5.1.2. Portlet preferences</h4>
+</a>
+<a name="portal.request">
+<h4>5.1.3. Portal request data (site name, friendly ID, and URLs)</h4>
+</a>
+
+<hr>
+
+<a name="portal.user.get">
+<h3>5.2. Accessing user data using Java code</h3>
+</a>
+<a name="portal.user.props">
+<h4>5.2.1. Accessing user profile attributes (<code>Utils.getUserProperty</code>)</h4>
+</a>
+<a name="portal.user.groups">
+<h4>5.2.2. Accessing user groups (<code>Utils.getGroups</code>)</h4>
+</a>
+
+<hr>
+
+<a name="portal.request.get">
+<h3>5.3. Accessing portal request data</h3>
+</a>
+<a name="portal.request.site">
+<h4>5.3.1. Accessing the portal site name (<code>Utils.getSiteName</code>)</h4>
+</a>
+<a name="portal.request.portlet">
+<h4>5.3.2. Accessing the portlet friendly ID (<code>Utils.getPortletID</code>)</h4>
+</a>
+<a name="portal.request.url">
+<h4>5.3.3. Accessing portal URL's (<code>Utils.getRequestURL</code>,
+<code>Utils.getSiteRootURL</code>)</h4>
+</a>
+
+<hr>
+
+<a name="error">
+<h2>6. Error Handling</h2>
+</a>
+
+<hr>
+
+<a name="error.about">
+<h3>6.1. About error handling</h3>
+</a>
+
+<hr>
+
+<a name="error.categorization">
+<h3>6.2. Categorizing exceptions using the <code>SPFException</code>
+hierarchy</h3>
+</a>
+
+<hr>
+
+<a name="error.handling">
+<h3>6.3. Handling exceptions using <code>ExceptionUtil</code> and <code>SimpleMappingExceptionResolver</code></h3>
+</a>
+
+
 </body>
 </html>
-
