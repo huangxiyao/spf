@@ -69,7 +69,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code> token. Actually the
  * <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code> token works for
  * unlocalized content too, so the <code>&lt;CONTENT-URL:pathname&gt;</code>
- * token is deprecated. It is retained for backward-compatibility.
+ * token isn't really necessary. It is retained for backward-compatibility.
  * </p>
  * 
  * <dt><code>&lt;EMAIL&gt;</code></dt>
