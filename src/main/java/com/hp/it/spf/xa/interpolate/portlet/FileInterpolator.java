@@ -38,10 +38,6 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <dt><code>&lt;CONTENT-URL:pathname&gt;</code></dt>
  * <dd>
  * <p>
- * <b>Deprecated. Use <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code>
- * instead.</b>
- * </p>
- * <p>
  * Use this token to insert a URL for an <b>unlocalized</b> static resource
  * file into the interpolated content. You can put the file into the portlet
  * resource bundle directory on each portlet server (eg, for easy administrator
@@ -76,7 +72,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code> token. Actually the
  * <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code> token works for
  * unlocalized content too, so the <code>&lt;CONTENT-URL:pathname&gt;</code>
- * token is deprecated. It is retained for backward-compatibility.
+ * token is isn't really necessary. It is retained for backward-compatibility.
  * </p>
  * 
  * <dt><code>&lt;EMAIL&gt;</code></dt>

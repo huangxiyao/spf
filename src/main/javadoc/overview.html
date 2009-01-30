@@ -1,55 +1,63 @@
 <html>
 <body>
-<p>This artifact contains utilities (Java API's and JSP
-tags) for Java portlets built using the Shared Portal Framework
-(SPF).</p>
+<p>This artifact contains utilities (Java API's and JSP tags) for
+Java portlets built using the Shared Portal Framework (SPF).</p>
 
 <style type="text/css">
 body {
-	padding:0;
-	font-family: Verdana,Sans-serif;
+	padding: 0;
+	font-family: Verdana, Sans-serif;
 	font-size: small;
 }
+
 h1 {
-	font-family: Georgia,Serif;
+	font-family: Georgia, Serif;
 	font-size: 160%;
-	color:#404040;
+	color: #404040;
 	margin-top: 5px;
 }
+
 h2 {
-	font-family: Georgia,Serif;
+	font-family: Georgia, Serif;
 	font-size: 130%;
-	color:#404040;
+	color: #404040;
 	page-break-before: always;
 }
+
 h3 {
-	font-family: Verdana,Sans-serif;
+	font-family: Verdana, Sans-serif;
 	font-size: small;
 	font-weight: bold;
-	color:#404040;	
+	color: #404040;
 	margin-top: 20px;
 }
+
 h4 {
-	font-family: Verdana,Sans-serif;
+	font-family: Verdana, Sans-serif;
 	font-size: small;
 	font-weight: normal;
-	color:#404040;	
+	color: #404040;
 	margin-top: 20px;
 }
+
 li {
 	margin-left: -10px;
 }
+
 ol li {
 	margin-bottom: 20px;
 }
+
 code {
 	color: #990000;
-	font-size: small;	
-}
-pre {
-	color: #990000;	
 	font-size: small;
 }
+
+pre {
+	color: #990000;
+	font-size: small;
+}
+
 .byline {
 	font-style: italic;
 	font-size: 90%;
@@ -57,6 +65,7 @@ pre {
 	margin-top: -10px;
 	border-bottom: solid black 1px;
 }
+
 .codeSample {
 	color: #990000;
 	font-family: 'Courier New', Courier, monospace;
@@ -64,63 +73,260 @@ pre {
 	border: solid #990000 1px;
 	padding: 5px;
 }
+
 .leftFloatingImage {
 	float: left;
 	margin: 0 10px 10px 0;
 }
+
 .rightFloatingImage {
 	float: right;
 	margin: 0 0 10px 10px;
 }
+
 .toc {
 	list-style-type: none;
 }
+
 ul.toc ul {
 	list-style-type: none;
 }
-table.props td, table.props th {
+
+table.props td,table.props th {
 	padding: 5px;
 	background-color: #F0F0F0
 }
+
 table.props th {
 	font-size: 11px;
 	font-weight: bold;
 	text-align: right;
 }
+
 table.props td {
 	font-family: 'Courier New', Courier, monospace;
 }
+
 .style1 {
 	border-style: solid;
 	border-width: 1px;
 }
 </style>
 
-<h1>Shared Portal Framework - Portlet Utilities - Developer's Guide</h1>
+<h1>Shared Portal Framework - Portlet Utilities - Developer's Guide<br>
+<font color="red">WORK IN PROGRESS</font></h1>
 
-<a name="toc"><h2>Table of Contents</h2></a>
+<a name="toc">
+<h2>Table of Contents</h2>
+</a>
 
 <ul class="toc">
 	<li>1. <a href="#overview">Overview</a>
-		<ul>
-			<li>1.1. <a href="#installation">Installation</a></li>
-			<li>1.2. <a href="#dependencies">Dependencies</a></li>
-		</ul></li>
+	<ul>
+		<li>1.1. <a href="#wpap">WPA Portlet Edition and Spring
+		Portlet MVC</a></li>
+		<li>1.2. <a href="#installation">Installation</a></li>
+		<li>1.3. <a href="#dependencies">Dependencies</a></li>
+	</ul>
+	</li>
 	<li>2. <a href="#i18n">Internationalization</a>
+	<ul>
+		<li>2.1. <a href="#i18n.resources">Kinds of resources</a>
 		<ul>
-			<li>2.1. <a href="#i18n.resources">Where to put your resource files</a>
-				<ul>
-					<li>2.1.1 <a href="#i18n.resources.internal">Internal resources go in your portlet application</a></li>
-					<li>2.1.2 <a href="#i18n.resources.external">External resources go in the portlet resource bundle folder</a></li>
-					<li>2.1.3 <a href="#i18n.resources.both">Using both kinds of resources</a></li>
-				</ul></li>
-			<li>2.2. <a href="#i18n.messages">Accessing message resources</a>
-				<ul>
-					<li>2.2.1 <a href="#i18n.messages.java">Using Java code</a></li>
-					<li>2.2.2 <a href="#i18n.messages.java">Using tag libraries</a></li>
-				</ul></li>
-		</ul></li>
+			<li>2.1.1. <a href="#i18n.resources.message">Message
+			resources (message properties)</a></li>
+			<li>2.2.2. <a href="#i18n.resources.supporting">Supporting
+			resources (images, HTML, PDF, etc)</a></li>
+			<li>2.2.3. <a href="#i18n.resources.bundles">Resource
+			bundles</a></li>
+		</ul>
+		</li>
+		<li>2.2. <a href="#i18n.location">Where to put your resources</a>
+		<ul>
+			<li>2.2.1. <a href="#i18n.location.internal">Internal
+			resources go in your portlet application</a></li>
+			<li>2.2.2. <a href="#i18n.location.external">External
+			resources go in the portlet resource bundle folder</a></li>
+			<li>2.2.3. <a href="#i18n.location.both">Using both kinds of
+			resources</a></li>
+		</ul>
+		</li>
+		<li>2.3. <a href="#i18n.messages.java">Accessing message
+		resources using Java code</a>
+		<ul>
+			<li>2.3.1. <a href="#i18n.messages.java.spring.getMessage">Using
+			Spring (<code>ApplicationContext.getMessage</code>)</a></li>
+			<li>2.3.2. <a href="#i18n.messages.java.spf.getMessage">Using
+			SPF (<code>I18nUtility.getMessage</code>)</a></li>
+		</ul>
+		</li>
+		<li>2.4. <a href="#i18n.messages.tags">Accessing message
+		resources using JSP tag libraries</a>
+		<ul>
+			<li>2.4.1. <a href="#i18n.messages.jsp.spring.message">Using
+			Spring (<code>&lt;spring:message&gt;</code>)</a></li>
+			<li>2.4.2. <a href="#i18n.messages.jsp.spf.message">Using
+			SPF (<code>&lt;spf-i18n-portlet:message&gt;</code>, <code>&lt;spf-i18n-portlet:param&gt;</code>,
+			and <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code>)</a></li>
+		</ul>
+		</li>
+		<li>2.5. <a href="#i18n.supporting.java">Accessing supporting
+		resources using Java code</a>
+		<ul>
+			<li>2.5.1. <a href="#i18n.supporting.java.getLocalizedFileURL">Using
+			<code>I18nUtility.getLocalizedFileURL</code></a></li>
+			<li>2.5.2. <a
+				href="#i18n.supporting.java.getLocalizedFileStream">Using <code>I18nUtility.getLocalizedFileStream</code></a></li>
+			<li>2.5.3. <a href="#i18n.supporting.java.getLocalizedFileName">Using
+			<code>I18nUtility.getLocalizedFileName</code></a></li>
+		</ul>
+		</li>
+		<li>2.6. <a href="#i18n.supporting.jsp">Accessing supporting
+		resources using JSP tag libraries</a>
+		<ul>
+			<li>2.6.1. <a href="#i18n.supporting.jsp.localizedFileURL">Using
+			<code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></a></li>
+		</ul>
+		</li>
+		<li>2.7. <a href="#i18n.supporting.relay">Providing download
+		service for external resources using <code>RelayServlet</code></a></li>
+		<li>2.8. <a href="#i18n.l10n">Localizing your resources</a></li>
+		<li>2.9. <a href="#i18n.other">Other internationalization
+		topics</a>
+		<ul>
+			<li>2.9.1. <a href="#i18n.other.locale.get">Getting the
+			locale</a></li>
+			<li>2.9.2. <a href="#i18n.other.locale.set">Setting the
+			locale</a></li>
+			<li>2.9.3. <a href="#i18n.other.common">Using the common <code>I18nUtility</code></a></li>
+			<li>2.9.4. <a href="#i18n.other.refs">Other references</a></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>3. <a href="#help">Help</a>
+	<ul>
+		<li>3.1. <a href="#help.kinds">Kinds of help</a>
+		<ul>
+			<li>3.1.1. <a href="#help.kinds.contextual">Contextual help
+			(classic and other)</a></li>
+			<li>3.1.2. <a href="#help.kinds.portlet">Portlet help (help
+			mode)</a></li>
+			<li>3.1.3. <a href="#help.kinds.global">Portal help (global
+			help)</a></li>
+		</ul>
+		</li>
+		<li>3.2. <a href="help.contextual.java">Producing contextual
+		help using Java code </a>
+		<ul>
+			<li>3.2.1. <a
+				href="#help.contextual.java.classicContextualHelpProvider">Using
+			<code>ClassicContextualHelpProvider</code></a></li>
+			<li>3.2.2. <a
+				href="#help.contextual.java.contextualHelpProvider">Extending <code>ContextualHelpProvider</code>
+			to create your own contextual help style</a></li>
+		</ul>
+		</li>
+		<li>3.3. <a href="#help.contextual.jsp">Producing contextual
+		help using JSP tag libraries</a>
+		<ul>
+			<li>3.3.1. <a
+				href="#help.contextual.jsp.classicContextualHelpProvider">Using
+			<code>&lt;spf-help-portlet:classicContextualHelpProvider&gt;</code></a></li>
+			<li>3.3.2. <a
+				href="#help.contextual.jsp.classicContextualHelpProviderParam">Using
+			<code>&lt;spf-i18n-portlet:classicContextualHelpProviderParam&gt;</code></a></li>
+			<li>3.3.2. <a
+				href="#help.contextual.java.contextualhelpprovider">Creating a
+			tag library for your own contextual help style</a></li>
+		</ul>
+		</li>
+		<li>3.4. <a href="#help.portlet.java">Producing portlet help
+		(help mode) using <code>FileDisplayPortletController</code></a></li>
+	</ul>
+	</li>
+	<li>4. <a href="#file">File Display</a>
+	<ul>
+		<li>4.1. <a href="#file.about">About file display</a></li>
+		<li>4.2. <a href="#file.display">Displaying file content
+		using Java code</a>
+		<ul>
+			<li>4.2.1. <a href="#file.display.fileInterpolator">Using <code>FileInterpolator</code>
+			to read and interpolate file content</a></li>
+			<li>4.2.2. <a href="#file.display.fileDisplayPortletController">Using
+			<code>FileDisplayPortletController</code> to display interpolated
+			file content</a></li>
+			<li>4.2.3. <a href="#file.display.htmlViewer">Using the <code>html-viewer</code>
+			portlet to display interpolated file content</a></li>
+		</ul>
+		<li>4.3. <a href="#file.author#">Authoring file content and
+		using interpolation tokens</a>
+		<ul>
+			<li>4.3.1. <a href="#file.author.token.url">Including URLs
+			for supporting resources like images and CSS (<code>&lt;CONTENT-URL:<i>path</i>&gt;</code>,
+			<code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt</code>) </a></li>
+			<li>4.3.2. <a href="#file.author.token.user">Displaying user
+			information (<code>&lt;NAME&gt;</code>, <code>&lt;EMAIL&gt;</code>, <code>&lt;LANGUAGE-CODE&gt;</code>,
+			<code>LANGUAGE-TAG&gt;</code>, <code>&lt;USER-PROPERTY:<i>key</i>&gt;</code>)</a></li>
+			<li>4.3.3. <a href="#file.author.token.auth">Permissioning
+			content for authorized users (<code>&lt;ROLE:<i>role-names</i>&gt;</code>,
+			<code>&lt;GROUP:<i>group-names</i>&gt;</code>)</a></li>
+			<li>4.3.4. <a href="#file.author.token.consolidate">Consolidating
+			content for easier administration (<code>&lt;PORTLET:<i>friendly-ids</i>&gt;</code>,
+			<code>&lt;SITE:<i>site-names</i></code>, <code>&lt;TOKEN:<i>key</i>&gt;</code>)</a></li>
+			<li>4.3.5. <a href="#file.author.token.misc">Miscellaneous (<code>&lt;SITE&gt;</code>)</a></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>5. <a href="#portal">Portal Data</a>
+	<ul>
+		<li>5.1. <a href="#portal.kinds">Kinds of portal provided
+		data</a>
+		<ul>
+			<li>5.1.1. <a href="#portal.user">User data (profile
+			attributes, groups and roles)</a></li>
+			<li>5.1.2. <a href="#portal.prefs">Portlet preferences</a></li>
+			<li>5.1.3. <a href="#portal.request">Portal request data
+			(site name, friendly ID, and URLs)</a></li>
+		</ul>
+		</li>
+		<li>5.2. <a href="#portal.user.get">Accessing user data using
+		Java code</a>
+		<ul>
+			<li>5.2.1. <a href="#portal.user.props">Accessing user
+			profile attributes (<code>Utils.getUserProperty</code>)</a></li>
+			<li>5.2.2. <a href="#portal.user.groups">Accessing user
+			groups (<code>Utils.getGroups</code>)</a></li>
+		</ul>
+		</li>
+		<li>5.3. <a href="#portal.request.get">Accessing portal
+		request data</a>
+		<ul>
+			<li>5.3.1. <a href="#portal.request.site">Accessing the
+			portal site name (<code>Utils.getSiteName</code>)</a></li>
+			<li>5.3.2. <a href="#portal.request.portlet">Accessing the
+			portlet friendly ID (<code>Utils.getPortletID</code>)</a></li>
+			<li>5.3.3. <a href="#portal.request.url">Accessing portal
+			URL's (<code>Utils.getRequestURL</code>, <code>Utils.getSiteRootURL</code>)</a></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>6. <a href="#error">Error Handling</a>
+	<ul>
+		<li>6.1. <a href="#error.about">About error handling</a></li>
+		<li>6.2. <a href="#error.categorization">Categorizing
+		exceptions using the <code>SPFException</code> hierarchy</a></li>
+		<li>6.3. <a href="#error.handling">Handling exceptions using
+		<code>ExceptionUtil</code> and <code>SimpleMappingExceptionResolver</code></a></li>
+	</ul>
+	</li>
 </ul>
+
+<hr>
+
+<a name="overview"><h2>Overview</h2></a>
 
 <p>This is the developer's guide for the Shared Portal Framework
 portlet utilities. Portlet developers using the SPF should read this
