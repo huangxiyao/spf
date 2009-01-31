@@ -9,6 +9,7 @@
 package com.hp.it.spf.xa.interpolate.portal;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import java.io.InputStream;
 import com.epicentric.user.User;
@@ -30,19 +31,15 @@ import com.vignette.portal.website.enduser.PortalContext;
  * setup in the constructor.
  * </p>
  * <p>
- * This class uses the portal TokenParser to do most of its work. As of this
- * writing, the following tokens are supported in the input file (note: these
- * are not XML - except where noted, tokens are case-sensitive and do not
- * require a closing tag):
+ * This class uses the portal <code>TokenParser</code> to do most of its work.
+ * As of this writing, the following tokens are supported in the input file
+ * (note: these are not XML - except where noted, tokens are case-sensitive and
+ * do not require a closing tag):
  * </p>
  * 
  * <dl>
  * <dt><code>&lt;CONTENT-URL:<i>pathname</i>&gt;</code></dt>
  * <dd>
- * <p>
- * <b>Deprecated. Use <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code>
- * instead.</b>
- * </p>
  * <p>
  * Use this token to insert a URL for an <b>unlocalized</b> secondary support
  * file (such as an administrator-uploaded image) into the interpolated content.
@@ -51,10 +48,10 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * For example, upload <code>picture.jpg</code> as a secondary support file
- * for a particular component which uses this FileInterpolator. Then put the
- * following markup into an HTML text file to be processed by the
- * FileInterpolator, and upload that text file as another secondary support
- * file:
+ * for a particular component which uses this <code>FileInterpolator</code>.
+ * Then put the following markup into an HTML text file to be processed by the
+ * <code>FileInterpolator</code>, and upload that text file as another
+ * secondary support file:
  * </p>
  * <p>
  * <code>&lt;IMG SRC="&lt;CONTENT-URL:picture.jpg&gt;"&gt;</code>
@@ -66,10 +63,11 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * <b>Note:</b> This token is for <b>unlocalized</b> content only. For
  * <b>localized</b> secondary support files, see the
- * <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code> token. Actually the
- * <code>&lt;LOCALIZED-CONTENT-URL:pathname&gt;</code> token works for
- * unlocalized content too, so the <code>&lt;CONTENT-URL:pathname&gt;</code>
- * token isn't really necessary. It is retained for backward-compatibility.
+ * <code>&lt;LOCALIZED-CONTENT-URL:<i>pathname</i>&gt;</code> token.
+ * Actually the <code>&lt;LOCALIZED-CONTENT-URL:<i>pathname</i>&gt;</code>
+ * token works for unlocalized content too, so the
+ * <code>&lt;CONTENT-URL:<i>pathname</i>&gt;</code> token isn't really
+ * necessary. It is retained for backward-compatibility.
  * </p>
  * 
  * <dt><code>&lt;EMAIL&gt;</code></dt>
@@ -79,7 +77,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * content. The email address is taken from the <code>email</code> property of
  * the portal User object. For example, <code>&lt;EMAIL&gt;</code> is replaced
  * with <code>john.doe@acme.com</code> for that user. (If the email address or
- * User object are null - eg the user is not logged-in - then an empty string is
+ * user object are null - eg the user is not logged-in - then an empty string is
  * inserted.)
  * </p>
  * </dd>
@@ -95,24 +93,26 @@ import com.vignette.portal.website.enduser.PortalContext;
  * content for different user groups.
  * </p>
  * <p>
- * The groups to be checked are provided to the FileInterpolator through the
- * constructor (see). This lets you override the groups contained in the portal
- * context, if necessary (eg to augment them or derive them from elsewhere).
+ * The groups to be checked are provided to the <code>FileInterpolator</code>
+ * through the constructor (see). This lets you override the groups contained in
+ * the portal context, if necessary (eg to augment them or derive them from
+ * elsewhere).
  * </p>
  * <p>
  * In the <code><i>groups</i></code> parameter to the
- * <code>&lt;GROUP:groups&gt;</code> token, you can list just a single group
- * name, or multiple group names (use the <code>|</code> character to delimit
- * them). The content enclosed by the <code>&lt;GROUP:groups&gt;</code> and
- * <code>&lt;/GROUP&gt;</code> tokens is omitted from the returned content
- * unless the groups provided to the constructor match one of those group names.
+ * <code>&lt;GROUP:<i>groups</i>&gt;</code> token, you can list just a
+ * single group name, or multiple group names (use the <code>|</code>
+ * character to delimit them). The content enclosed by the
+ * <code>&lt;GROUP:<i>groups</i>&gt;</code> and <code>&lt;/GROUP&gt;</code>
+ * tokens is omitted from the returned content unless the groups provided to the
+ * constructor match one of those group names.
  * </p>
  * <p>
- * The content enclosed by the <code>&lt;GROUP:groups&gt;</code> and
+ * The content enclosed by the <code>&lt;GROUP:<i>groups</i>&gt;</code> and
  * <code>&lt;/GROUP&gt;</code> tokens can be anything, including any of the
  * special tokens listed here (even other
- * <code>&lt;GROUP:groups&gt;...&lt;/GROUP&gt;</code> sections - ie, you can
- * "nest" them).
+ * <code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code> sections - ie,
+ * you can "nest" them).
  * </p>
  * <p>
  * For example, the following markup selectively includes or omits the content
@@ -164,18 +164,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * some text) into the interpolated content. Upload the secondary support files
  * (both the base file and the localized versions) into the portal component
  * using this FileInterpolator. For the <code><i>pathname</i></code> in the
- * token, use the filename of the base file. The FileInterpolator will replace
- * this token with a URL for the best-fit candidate secondary support file for
- * the locale in the request.
+ * token, use the filename of the base file. The <code>FileInterpolator</code>
+ * will replace this token with a URL for the best-fit candidate secondary
+ * support file for the locale in the request.
  * </p>
  * <p>
  * For example, upload <code>picture.jpg</code> as a secondary support file
- * for a particular component which uses this FileInterpolator. Also upload any
- * localized versions of the file (eg <code>picture_fr.jpg</code> for French,
- * <code>picture_fr_CA.jpg</code> for French (Canada), etc), as additional
- * secondary support files for the same component. Then put the following markup
- * into an HTML text file to be processed by the FileInterpolator, and upload
- * that text file as another secondary support file:
+ * for a particular component which uses this <code>FileInterpolator</code>.
+ * Also upload any localized versions of the file (eg
+ * <code>picture_fr.jpg</code> for French, <code>picture_fr_CA.jpg</code>
+ * for French (Canada), etc), as additional secondary support files for the same
+ * component. Then put the following markup into an HTML text file to be
+ * processed by the <code>FileInterpolator</code>, and upload that text file
+ * as another secondary support file:
  * </p>
  * <p>
  * <code>&lt;IMG SRC="&lt;LOCALIZED-CONTENT-URL:picture.jpg&gt;"&gt;</code>
@@ -186,6 +187,38 @@ import com.vignette.portal.website.enduser.PortalContext;
  * resemble that used by the Java-standard ResourceBundle class (see).
  * </p>
  * <p>
+ * 
+ * <dt><code>&lt;LOGGED-IN&gt;...&lt;/LOGGED-IN&gt;</code><br>
+ * <code>&lt;LoGGED-OUT&gt;...&lt;/LOGGED-OUT&gt;</code></dt>
+ * <dd>
+ * <p>
+ * Use these tokens around sections of content which should only be included in
+ * the interpolated content if the user is logged-in or logged-out,
+ * respectively. The wrapped content will be omitted from the returned content
+ * when the user login status does not match.
+ * </p>
+ * <p>
+ * The content enclosed by the tokens can be anything, including any of the
+ * other special tokens listed here.
+ * </p>
+ * <p>
+ * For example, the following markup selectively includes or omits the content
+ * depending on the user login status as indicated:
+ * </p>
+ * <p>
+ * 
+ * <pre>
+ * This content is for everybody.
+ * &lt;LOGGED-IN&gt;
+ * This content is only for users who are logged-in.
+ * &lt;/LOGGED-IN&gt;
+ * &lt;LOGGED-OUT&gt;
+ * This content is only for users who are logged-out.
+ * &lt;/LOGGED-OUT&gt;
+ * </pre>
+ * 
+ * </p>
+ * </dd>
  * 
  * <dt><code>&lt;NAME&gt;</code></dt>
  * <dd>
@@ -211,6 +244,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
+ * <dt><code>&lt;REQUEST-URL&gt;</code></dt>
+ * <dd>
+ * <p>
+ * Use this token to insert into the content the complete current URL which the
+ * browser used to access the current page. For example,
+ * <code>&lt;REQUEST-URL&gt;</code> is replaced with
+ * <code>http://portal.hp.com/portal/site/itrc/template.MY_ACCOUNT/...</code>
+ * when the <code>template.MY_ACCOUNT</code> secondary page is requested from
+ * the <code>itrc</code> portal site on the <code>portal.hp.com</code>
+ * server using HTTP.
+ * </p>
+ * </dd>
+ * 
  * <dt><code>&lt;SITE&gt;</code></dt>
  * <dd>
  * <p>
@@ -222,7 +268,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;SITE:names&gt;...&lt;/SITE&gt;</code></dt>
+ * <dt><code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -232,21 +278,21 @@ import com.vignette.portal.website.enduser.PortalContext;
  * making administration of the sites easier.
  * </p>
  * <p>
- * In the <code>names</code> parameter to the <code>&lt;SITE:names&gt;</code>
- * token, you can list just a single site name, or multiple (use the
- * <code>|</code> character to delimit them). The content enclosed by the
- * <code>&lt;SITE:names&gt;</code> and <code>&lt;/SITE&gt;</code> tokens is
- * omitted from the returned content unless the site name in the request matches
- * one of those values. The match is case-insensitive. The site name in the
- * request is gotten from the portal context (it is the Vignette "site DNS
- * name").
+ * In the <code><i>names</i></code> parameter to the
+ * <code>&lt;SITE:names&gt;</code> token, you can list just a single site
+ * name, or multiple (use the <code>|</code> character to delimit them). The
+ * content enclosed by the <code>&lt;SITE:<i>names</i>&gt;</code> and
+ * <code>&lt;/SITE&gt;</code> tokens is omitted from the returned content
+ * unless the site name in the request matches one of those values. The match is
+ * case-insensitive. The site name in the request is gotten from the portal
+ * context (it is the Vignette "site DNS name").
  * </p>
  * <p>
- * The content enclosed by the <code>&lt;SITE:names&gt;</code> and
+ * The content enclosed by the <code>&lt;SITE:<i>names</i>&gt;</code> and
  * <code>&lt;/SITE&gt;</code> tokens can be anything, including any of the
  * special tokens supported by this class (including other
- * <code>&lt;SITE:names&gt;...&lt;/SITE&gt;</code> tokens - ie you can "nest"
- * them.
+ * <code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code> tokens - ie you
+ * can "nest" them.
  * </p>
  * <p>
  * For example, the following markup selectively includes or omits the content
@@ -267,16 +313,27 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;TOKEN:key&gt;</code></dt>
+ * <dt><code>&lt;SITE-URL&gt;</code></dt>
+ * <dd>
+ * <p>
+ * Use this token to insert the URL for the home page of the current portal site
+ * into the interpolated content. For example, <code>&lt;SITE-URL&gt;</code>
+ * is replaced with <code>http://portal.hp.com/portal/site/itrc/</code> when
+ * the current portal component is requested from the <code>itrc</code> portal
+ * site on the <code>portal.hp.com</code> server using HTTP.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>&lt;TOKEN:<i>key</i>&gt;</code></dt>
  * <dd>
  * <p>
  * Use this token to lookup a value for the given key in a property file, and
  * insert that value into the interpolated content. The property file, by
  * default, is <code>default_tokens.properties</code>, but you can override
- * that in the FileInterpolator constructor. The property value may itself
- * contain any content including any of the special markup tokens supported by
- * FileInterpolator, <b>except</b> another <code>&lt;TOKEN:key&gt;</code>
- * token.
+ * that in the <code>FileInterpolator</code> constructor. The property value
+ * may itself contain any content including any of the special markup tokens
+ * supported by <code>FileInterpolator</code>, <b>except</b> another
+ * <code>&lt;TOKEN:<i>key</i>&gt;</code> token.
  * </p>
  * <p>
  * Whether you use <code>default_tokens.properties</code> or your own
@@ -326,6 +383,32 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </dl>
  * </p>
  * 
+ * <p>
+ * The above tokens are parsed in the following order (so content included from
+ * the tokens may itself contain references to subsequent tokens - such
+ * references will be interpolated):
+ * </p>
+ * 
+ * <p>
+ * <ul>
+ * <li><code>&lt;TOKEN:<i>key</i>&gt;</code></li>
+ * <li><code>&lt;SITE&gt;</code></li>
+ * <li><code>&lt;SITE-URL&gt;</code></li>
+ * <li><code>&lt;REQUEST-URL&gt;</code></li>
+ * <li><code>&lt;LANGUAGE-CODE&gt;</code></li>
+ * <li><code>&lt;LANGUAGE-TAG&gt;</code></li>
+ * <li><code>&lt;EMAIL&gt;</code></li>
+ * <li><code>&lt;NAME&gt;</code></li>
+ * <li><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></li>
+ * <li><code>&lt;CONTENT-URL:<i>path</i>&gt;</code></li>
+ * <li><code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt;</code></li>
+ * <li><code>&lt;SITE:<i>names</i>&gt;</code></li>
+ * <li><code>&lt;LOGGED-IN&gt;</code></li>
+ * <li><code>&lt;LOGGED-OUT&gt;</code></li>
+ * <li><code>&lt;GROUP:<i>groups</i>&gt;</code></li>
+ * </ul>
+ * </p>
+ * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
@@ -348,8 +431,8 @@ public class FileInterpolator extends
 
 	/**
 	 * <p>
-	 * Constructs a new FileInterpolator for the given base content secondary
-	 * support filename and portal context.
+	 * Constructs a new <code>FileInterpolator</code> for the given base
+	 * content secondary support filename and portal context.
 	 * </p>
 	 * <p>
 	 * The filename provided should be the base name of the secondary support
@@ -358,10 +441,10 @@ public class FileInterpolator extends
 	 * on the locale in the given request.
 	 * </p>
 	 * <b>Note:</b> A token-substitutions property file (to be used with any
-	 * <code>&lt;TOKEN:key&gt;</code> tokens in the file content) is not
-	 * passed in this constructor. Therefore any <code>&lt;TOKEN:key&gt;</code>
-	 * tokens in the file content will be resolved against the default
-	 * token-substitutions property file (<code>default_tokens.properties</code>).
+	 * <code>&lt;TOKEN:<i>key</i>&gt;</code> tokens in the file content) is
+	 * not passed in this constructor. Therefore any
+	 * <code>&lt;TOKEN:<i>key</i>&gt;</code> tokens in the file content will
+	 * be resolved against the default token-substitutions property file (<code>default_tokens.properties</code>).
 	 * </p>
 	 * 
 	 * @param portalContext
@@ -380,8 +463,9 @@ public class FileInterpolator extends
 
 	/**
 	 * <p>
-	 * Constructs a new FileInterpolator for the given base content secondary
-	 * support filename, portal context, and token-substitutions pathname.
+	 * Constructs a new <code>FileInterpolator</code> for the given base
+	 * content secondary support filename, portal context, and
+	 * token-substitutions pathname.
 	 * </p>
 	 * <p>
 	 * The content filename provided should be the base name of the secondary
@@ -391,12 +475,12 @@ public class FileInterpolator extends
 	 * </p>
 	 * <p>
 	 * The token-substitutions pathname provided is to be used with any
-	 * <code>&lt;TOKEN:key&gt;</code> tokens in the file content; they will be
-	 * resolved against the file whose pathname you provide. The pathname should
-	 * include any necessary path (relative to the class loader) followed by the
-	 * filename (the extension <code>.properties</code> is required and
-	 * assumed). If you know there are no such tokens in the file content, you
-	 * can pass null for this parameter.
+	 * <code>&lt;TOKEN:<i>key</i>&gt;</code> tokens in the file content;
+	 * they will be resolved against the file whose pathname you provide. The
+	 * pathname should include any necessary path (relative to the class loader)
+	 * followed by the filename (the extension <code>.properties</code> is
+	 * required and assumed). If you know there are no such tokens in the file
+	 * content, you can pass null for this parameter.
 	 * </p>
 	 * 
 	 * @param portalContext
@@ -407,10 +491,9 @@ public class FileInterpolator extends
 	 * @param subsFilePath
 	 *            The filename and path relative to where the class loader
 	 *            searches for the token-substitutions property file (for
-	 *            purposes of any <code>&lt;TOKEN:key&gt;</code> tokens in the
-	 *            file content)
+	 *            purposes of any <code>&lt;TOKEN:<i>key</i>&gt;</code>
+	 *            tokens in the file content)
 	 */
-	/* Added by CK for 1000790073 */
 	public FileInterpolator(PortalContext portalContext,
 			String relativeFilePath, String subsFileBase) {
 		this.portalContext = portalContext;
@@ -479,10 +562,10 @@ public class FileInterpolator extends
 	}
 
 	/**
-	 * Get the email address from the portal User object in the portal context
-	 * (portal request) provided to the constructor. Returns null if this has
-	 * not been set in the request (eg, when the user is not logged-in), or the
-	 * portal context provided to the constructor was null.
+	 * Get the email address from the portal <code>User</code> object in the
+	 * portal context (portal request) provided to the constructor. Returns null
+	 * if this has not been set in the request (eg, when the user is not
+	 * logged-in), or the portal context provided to the constructor was null.
 	 * 
 	 * @return email
 	 */
@@ -499,9 +582,9 @@ public class FileInterpolator extends
 	}
 
 	/**
-	 * Get the first (given) name from the portal User object in the portal
-	 * context (portal request) provided to the constructor. Returns null if
-	 * this has not been set in the request (eg, when the user is not
+	 * Get the first (given) name from the portal <code>User</code> object in
+	 * the portal context (portal request) provided to the constructor. Returns
+	 * null if this has not been set in the request (eg, when the user is not
 	 * logged-in), or the portal context provided to the constructor was null.
 	 * 
 	 * @return first (given) name
@@ -519,9 +602,9 @@ public class FileInterpolator extends
 	}
 
 	/**
-	 * Get the last (family) name from the portal User object in the portal
-	 * context (portal request) provided to the constructor. Returns null if
-	 * this has not been set in the request (eg, when the user is not
+	 * Get the last (family) name from the portal <code>User</code> object in
+	 * the portal context (portal request) provided to the constructor. Returns
+	 * null if this has not been set in the request (eg, when the user is not
 	 * logged-in), or the portal context provided to the constructor was null.
 	 * 
 	 * @return last (family) name
@@ -545,7 +628,6 @@ public class FileInterpolator extends
 	 * 
 	 * @return site name
 	 */
-	/* Added by CK for 1000790073 */
 	protected String getSite() {
 		if (portalContext == null) {
 			return null;
@@ -553,6 +635,42 @@ public class FileInterpolator extends
 		try {
 			String siteName = portalContext.getCurrentSite().getDNSName();
 			return siteName;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Get the portal site root (ie home page) URL for the current portal site,
+	 * from the portlet request provided to the constructor. Returns null if
+	 * this has not been set in the request, or the request provided to the
+	 * constructor was null.
+	 * 
+	 * @return site URL string
+	 */
+	protected String getSiteURL() {
+		if (portalContext == null) {
+			return null;
+		}
+		return portalContext.getCurrentBasePortalURI();
+	}
+
+	/**
+	 * Get the portal request URL for the current request. This is the URL which
+	 * was opened by the browser in order to invoke this page. It is obtained
+	 * from the portal context provided to the constructor. Returns null if this
+	 * has not been set in the request, or the context provided to the
+	 * constructor was null.
+	 * 
+	 * @return request URL string
+	 */
+	protected String getRequestURL() {
+		if (portalContext == null) {
+			return null;
+		}
+		try {
+			HttpServletRequest request = portalContext.getHttpServletRequest();
+			return Utils.getRequestURL(request);
 		} catch (Exception e) {
 			return null;
 		}
@@ -570,6 +688,27 @@ public class FileInterpolator extends
 			return null;
 		}
 		return Utils.getGroups(portalContext);
+	}
+
+	/**
+	 * Return true if the user is logged-in, false otherwise. The login status
+	 * is indicated in the portal context given to the constructor; false is
+	 * also returned if that context was null.
+	 * 
+	 * @return true if logged-in, false if not logged-in
+	 */
+	protected boolean getLoginStatus() {
+		if (portalContext == null) {
+			return false;
+		}
+		try {
+			HttpSession session = portalContext.getHttpServletRequest()
+					.getSession();
+			User currentUser = SessionUtils.getCurrentUser(session);
+			return !currentUser.isGuestUser();
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	/**
