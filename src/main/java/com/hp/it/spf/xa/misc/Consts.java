@@ -64,8 +64,28 @@ public class Consts {
 	 */
 	// TODO - this is the key name for accessing portal site name in the portlet
 	// request. Check and change this as needed. Also see TODO in the portlet
-	// Utils.getSiteName method.
+	// Utils.getPortalSiteName method.
 	public static final String KEY_PORTLET_SITE_NAME = "com.vignette.portal.site.dns";
+
+	/**
+	 * The key to get the site URL (ie the portal home page URL for the current
+	 * site) from the portlet request. This is non-standard. The SPF portal puts
+	 * the site URL into this request attribute so the portlet can then get it.
+	 */
+	// TODO - this is the key name for accessing portal site name in the portlet
+	// request. Check and change this as needed. Also see TODO in the portlet
+	// Utils.getPortalSiteURL method.
+	public static final String KEY_PORTLET_SITE_URL = "com.vignette.portal.site.url";
+
+	/**
+	 * The key to get the current portal request URL from the portlet request.
+	 * This is non-standard. The SPF portal puts the reuest URL into this
+	 * request attribute so the portlet can then get it.
+	 */
+	// TODO - this is the key name for accessing portal request URL in the portlet
+	// request. Check and change this as needed. Also see TODO in the portlet
+	// Utils.getPortalRequestURL method.
+	public static final String KEY_PORTLET_REQUEST_URL = "com.vignette.portal.site.url";
 
 	/**
 	 * The key to get the authorization groups from the portlet request. This is

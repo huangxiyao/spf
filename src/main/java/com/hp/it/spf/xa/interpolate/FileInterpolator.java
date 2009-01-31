@@ -97,8 +97,24 @@ public abstract class FileInterpolator {
 	 * 
 	 * @return site name
 	 */
-	/* Added by CK for 1000790073 */
 	protected abstract String getSite();
+
+	/**
+	 * Get the portal site root (ie home page) URL for the current portal site.
+	 * Different action by portal and portlet, so therefore this is an abstract
+	 * method.
+	 * 
+	 * @return site URL string
+	 */
+	protected abstract String getSiteURL();
+
+	/**
+	 * Get the current portal request URL. Different action by portal and
+	 * portlet, so therefore this is an abstract method.
+	 * 
+	 * @return request URL string
+	 */
+	protected abstract String getRequestURL();
 
 	/**
 	 * Get the authorization groups for the current request. Different action by
@@ -107,7 +123,15 @@ public abstract class FileInterpolator {
 	 * @return array of groups
 	 */
 	protected abstract String[] getGroups();
-	
+
+	/**
+	 * Return true if the user is logged-in and false otherwise. Different action by
+	 * portal and portlet, so therefore this is an abstract method.
+	 * 
+	 * @return array of groups
+	 */
+	protected abstract boolean getLoginStatus();
+
 	/**
 	 * Log a warning string to the log file. Different action by portal and
 	 * portlet, so therefore this is an abstract method.
@@ -134,15 +158,18 @@ public abstract class FileInterpolator {
 	 * <dd>This token is parsed first, and the substituted content is added to
 	 * the string. So subsequent substitutions operate against the value for the
 	 * <i>key</i> - therefore that value may itself contain other tokens.
+	 * <dt><code>&lt;SITE&gt;</code></dt>
+	 * <dt><code>&lt;SITE-URL&gt;</code></dt>
+	 * <dt><code>&lt;REQUEST-URL&gt;</code></dt>
 	 * <dt><code>&lt;LANGUAGE-CODE&gt;</code></dt>
 	 * <dt><code>&lt;LANGUAGE-TAG&gt;</code></dt>
-	 * <dt><code>&lt;CONTENT-URL:</i>path</i>&gt;</code></dt>
-	 * <dt><code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt;</code></dt>
-	 * <dt><code>&lt;SITE&gt;</code></dt>
 	 * <dt><code>&lt;EMAIL&gt;</code></dt>
 	 * <dt><code>&lt;NAME&gt;</code></dt>
 	 * <dt><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></dt>
 	 * <dt><code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code></dt>
+	 * <dt><code>&lt;LOGGED-IN&gt;...&lt;/LOGGED-IN&gt;</code></dt>
+	 * <dt><code>&lt;LOGGED-OUT&gt;...&lt;/LOGGED-OUT&gt;</code></dt>
+	 * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
 	 * </dl>
 	 * </p>
 	 * 
@@ -172,24 +199,22 @@ public abstract class FileInterpolator {
 		}
 
 		// Start parsing and substituting the tokens:
-		//
-		// Added by CK for 1000790073 for parsing token
 		content = t.parseToken(content);
+
+		// Add current site name
+		content = t.parseSite(content, getSite());
+
+		// Add current site URL
+		content = t.parseSiteURL(content, getSiteURL());
+
+		// Add current request URL
+		content = t.parseRequestURL(content, getRequestURL());
 
 		// Add current ISO language code
 		content = t.parseLanguageCode(content, getLocale());
 
 		// Add current RFC language code
 		content = t.parseLanguageTag(content, getLocale());
-
-		// Transfer tag to localized URL.
-		content = t.parseNoLocalizedContentURL(content);
-
-		// Transfer tag to unlocalized URL
-		content = t.parseLocalizedContentURL(content);
-
-		// Add current site name
-		content = t.parseSite(content, getSite());
 
 		// Add current user email
 		content = t.parseEmail(content, getEmail());
@@ -201,9 +226,19 @@ public abstract class FileInterpolator {
 		// Add other property values for current user
 		content = t.parseUserProperty(content);
 
+		// Transfer tag to localized URL.
+		content = t.parseNoLocalizedContentURL(content);
+
+		// Transfer tag to unlocalized URL
+		content = t.parseLocalizedContentURL(content);
+
 		// Parse site sections
 		content = t.parseSiteContainer(content, getSite());
 
+		// Parse login/logout sections
+		content = t.parseLoggedInContainer(content, getLoginStatus());
+		content = t.parseLoggedOutContainer(content, getLoginStatus());
+		
 		// Parse group sections
 		content = t.parseGroupContainer(content, getGroups());
 

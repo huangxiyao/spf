@@ -31,7 +31,11 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * <dt><code>&lt;CONTENT-URL:</i>path</i>&gt;</code></dt>
  * <dt><code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt;</code></dt>
  * <dt><code>&lt;SITE&gt;</code></dt>
+ * <dt><code>&lt;SITE-URL&gt;</code></dt>
+ * <dt><code>&lt;REQUEST-URL&gt;</code></dt>
  * <dt><code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code></dt>
+ * <dt><code>&lt;LOGGED-IN&gt;...&lt;/LOGGED-IN&gt;</code></dt>
+ * <dt><code>&lt;LOGGED-OUT&gt;...&lt;/LOGGED-OUT&gt;</code></dt>
  * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
  * <dt><code>&lt;EMAIL&gt;</code></dt>
  * <dt><code>&lt;NAME&gt;</code></dt>
@@ -81,7 +85,6 @@ public abstract class TokenParser {
 	 * This class attribute is the token for a keyname to be substituted from
 	 * the token-substitutions file.
 	 */
-	/* Added by CK for 1000790073 */
 	private static final String TOKEN_TOKEN = "<TOKEN:";
 
 	/**
@@ -102,8 +105,17 @@ public abstract class TokenParser {
 	/**
 	 * This class attribute is the token for the current portal site.
 	 */
-	/* Added by CK for 1000790073 */
 	private static final String TOKEN_SITE = "<SITE>";
+
+	/**
+	 * This class attribute is the token for the current portal site URL.
+	 */
+	private static final String TOKEN_SITE_URL = "<SITE-URL>";
+
+	/**
+	 * This class attribute is the token for the current portal request URL.
+	 */
+	private static final String TOKEN_REQUEST_URL = "<REQUEST-URL>";
 
 	/**
 	 * This class attribute is the name of the container token for a site
@@ -116,6 +128,18 @@ public abstract class TokenParser {
 	 * section.
 	 */
 	private static final String TOKEN_GROUP_CONTAINER = "GROUP";
+
+	/**
+	 * This class attribute is the name of the container token for a logged-in
+	 * section.
+	 */
+	private static final String TOKEN_LOGGEDIN_CONTAINER = "LOGGED-IN";
+
+	/**
+	 * This class attribute is the name of the container token for a logged-out
+	 * section.
+	 */
+	private static final String TOKEN_LOGGEDOUT_CONTAINER = "LOGGED-OUT";
 
 	private int containerIndex; // For container parsing.
 	private int containerLevel; // For container parsing.
@@ -457,10 +481,9 @@ public abstract class TokenParser {
 	 * @param content
 	 *            The content string.
 	 * @param siteName
-	 *            The site name
+	 *            The site name.
 	 * @return The interpolated string.
 	 */
-	/* Added by CK for 1000790073 */
 	public String parseSite(String content, String siteName) {
 		if (content == null) {
 			return null;
@@ -469,6 +492,65 @@ public abstract class TokenParser {
 			siteName = "";
 		}
 		return content.replaceAll(TOKEN_SITE, siteName);
+	}
+
+	/**
+	 * <p>
+	 * Parses the given string, substituting the given portal site home-page URL
+	 * for the <code>&lt;SITE-URL&gt;</code> token. For example: <code>&lt;a
+	 * href="&lt;SITE-URL&gt;"&gt;go to home page&lt;/a&gt;</code>
+	 * is changed to
+	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/"&gt;go to
+	 * home page&lt;/a&gt;</code>
+	 * when you provide the site URL "http://portal.hp.com/portal/site/acme/".
+	 * If you provide a null site URL, the token is replaced with blank. If you
+	 * provide null content, null is returned.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @param siteURL
+	 *            The current portal site home-page URL.
+	 * @return The interpolated string.
+	 */
+	public String parseSiteURL(String content, String siteURL) {
+		if (content == null) {
+			return null;
+		}
+		if (siteURL == null) {
+			siteURL = "";
+		}
+		return content.replaceAll(TOKEN_SITE_URL, siteURL);
+	}
+
+	/**
+	 * <p>
+	 * Parses the given string, substituting the given current portal request
+	 * URL for the <code>&lt;REQUEST-URL&gt;</code> token. For example:
+	 * <code>&lt;a
+	 * href="&lt;REQUEST-URL&gt;"&gt;try again&lt;/a&gt;</code> is
+	 * changed to
+	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/template.PAGE/?..."&gt;try again&lt;/a&gt;</code>
+	 * when you provide the request URL
+	 * "http://portal.hp.com/portal/site/acme/template.PAGE/?...". If you
+	 * provide a null request URL, the token is replaced with blank. If you
+	 * provide null content, null is returned.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @param requestURL
+	 *            The current portal request URL.
+	 * @return The interpolated string.
+	 */
+	public String parseRequestURL(String content, String requestURL) {
+		if (content == null) {
+			return null;
+		}
+		if (requestURL == null) {
+			requestURL = "";
+		}
+		return content.replaceAll(TOKEN_REQUEST_URL, requestURL);
 	}
 
 	/**
@@ -540,7 +622,6 @@ public abstract class TokenParser {
 	 *            The content string.
 	 * @return The interpolated string.
 	 */
-	/* Added by CK for 1000790073 */
 	public String parseToken(String content) {
 		if (content == null) {
 			return null;
@@ -656,6 +737,144 @@ public abstract class TokenParser {
 	}
 
 	/**
+	 * ContainerMatcher for logged-in section parsing. The constructor stores
+	 * the login status into the class: true if logged-in, false otherwise. The
+	 * match method just returns the login status. The passed container key is
+	 * not used and is expected to be null.
+	 */
+	protected class LoggedInContainerMatcher extends ContainerMatcher {
+
+		protected LoggedInContainerMatcher(boolean loggedIn) {
+			super(new Boolean(loggedIn));
+		}
+
+		protected boolean match(String containerKey) {
+			return ((Boolean) subjectOfComparison).booleanValue();
+		}
+	}
+
+	/**
+	 * <p>
+	 * Parses the string for any <code>&lt;LOGGED-IN&gt;</code> tokens; such
+	 * content is deleted if the user is not currently logged-in (otherwise only
+	 * the special markup is removed).
+	 * </p>
+	 * 
+	 * <p>
+	 * For example, consider the following content string:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 *  &lt;LOGGED-IN&gt;
+	 *  This content is only for logged-in users.
+	 *  &lt;/LOGGED-IN&gt;
+	 * </pre>
+	 * 
+	 * <p>
+	 * When the user is logged-in, the returned content string is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 *  
+	 *  This content is only for logged-in users.
+	 * </pre>
+	 * 
+	 * <p>
+	 * When the user is logged-out, the returned content string is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 * </pre>
+	 * 
+	 * <p>
+	 * If you provide null content, null is returned.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @param loggedIn
+	 *            True if the user is logged-in, false otherwise.
+	 * @return The interpolated string.
+	 */
+	public String parseLoggedInContainer(String content, boolean loggedIn) {
+
+		return parseContainer(content, TOKEN_LOGGEDIN_CONTAINER,
+				new LoggedInContainerMatcher(loggedIn));
+	}
+
+	/**
+	 * ContainerMatcher for logged-out section parsing. The constructor stores
+	 * the login status into the class: true if logged-in, false otherwise. The
+	 * match method just returns the inverse of this. The passed container key
+	 * is not used and is expected to be null.
+	 */
+	protected class LoggedOutContainerMatcher extends ContainerMatcher {
+
+		protected LoggedOutContainerMatcher(boolean loggedIn) {
+			super(new Boolean(loggedIn));
+		}
+
+		protected boolean match(String containerKey) {
+			return !((Boolean) subjectOfComparison).booleanValue();
+		}
+	}
+
+	/**
+	 * <p>
+	 * Parses the string for any <code>&lt;LOGGED-OUT&gt;</code> tokens; such
+	 * content is deleted if the user is currently logged-in (otherwise only the
+	 * special markup is removed).
+	 * </p>
+	 * 
+	 * <p>
+	 * For example, consider the following content string:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 *  &lt;LOGGED-OUT&gt;
+	 *  This content is only for logged-out users.
+	 *  &lt;/LOGGED-OUT&gt;
+	 * </pre>
+	 * 
+	 * <p>
+	 * When the user is logged-in, the returned content string is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 * </pre>
+	 * 
+	 * <p>
+	 * When the user is logged-out, the returned content string is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 *  
+	 *  This content is only for logged-out users.
+	 * </pre>
+	 * 
+	 * <p>
+	 * If you provide null content, null is returned.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @param loggedIn
+	 *            True if the user is logged-in, false otherwise.
+	 * @return The interpolated string.
+	 */
+	public String parseLoggedOutContainer(String content, boolean loggedIn) {
+
+		return parseContainer(content, TOKEN_LOGGEDOUT_CONTAINER,
+				new LoggedOutContainerMatcher(loggedIn));
+	}
+
+	/**
 	 * <p>
 	 * Parses the string for any <code>&lt;GROUP:<i>groups</i>&gt;</code>
 	 * content; such content is deleted if the given user groups do not qualify
@@ -767,7 +986,6 @@ public abstract class TokenParser {
 	 * @return value
 	 * @see com.hp.it.spf.xa.properties.PropertyResourceBundleManager
 	 */
-	/* Added by CK for 1000790073 */
 	private String getToken(String key) {
 		String tokenValue = null;
 		try {
@@ -832,9 +1050,9 @@ public abstract class TokenParser {
 		containerLevel = 0;
 		newContent = "";
 		oldContent = content;
-		containerStartToken = "<" + tokenName + ":";
-		containerEndToken = "</" + tokenName + ">";
 		containerMatcher = matcher;
+		containerStartToken = "<" + tokenName;
+		containerEndToken = "</" + tokenName + ">";
 
 		// Parse for container tokens using recursive algorithm. Return the
 		// parsed content.
@@ -898,6 +1116,7 @@ public abstract class TokenParser {
 		int j, k;
 		String containerKeyString;
 		String[] containerKeys;
+		boolean containerMatch;
 
 		if (containerIndex >= oldContent.length()) {
 			return FOUND_END;
@@ -937,18 +1156,26 @@ public abstract class TokenParser {
 				containerIndex = oldContent.length();
 				return FOUND_END;
 			}
-			containerKeyString = oldContent.substring(j
-					+ containerStartToken.length(), k);
+			/*
+			 * Find the container key string - if any, it starts after ":"
+			 */
+			containerKeyString = "";
+			if (oldContent.charAt(j + containerStartToken.length()) == ':') {
+				containerKeyString = oldContent.substring(j
+						+ containerStartToken.length() + 1, k);
+			}
 			containerKeyString = containerKeyString.trim();
-			if ((containerKeyString.length() > 0) && (containerMatcher != null)) {
+			containerMatch = false;
+			if (containerMatcher != null) {
 				containerKeys = getContainerKeys(containerKeyString);
 				for (int i = 0; i < containerKeys.length; i++) {
-					isIncluded = isIncluded
-							&& containerMatcher.match(containerKeys[i]);
+					if (containerMatcher.match(containerKeys[i])) {
+						containerMatch = true;
+						break;
+					}
 				}
-			} else {
-				isIncluded = isIncluded && false;
 			}
+			isIncluded = isIncluded && containerMatch;
 			containerIndex = k + 1;
 			return isIncluded ? FOUND_CONTAINER_START_MATCH
 					: FOUND_CONTAINER_START_NOMATCH;
@@ -982,9 +1209,7 @@ public abstract class TokenParser {
 	 * Get container keys by splitting on "|" character.
 	 */
 	private String[] getContainerKeys(String content) {
-		String containerKeys[] = null;
-		containerKeys = content.split("\\" + TOKEN_CONTAINER_OR);
+		String containerKeys[] = content.split("\\" + TOKEN_CONTAINER_OR);
 		return containerKeys;
 	}
-
 }
