@@ -50,7 +50,7 @@ ol li {
 
 code {
 	color: #990000;
-	font-size: 125%
+	font-size: 110%
 }
 
 pre {
@@ -113,8 +113,10 @@ table.props td {
 }
 </style>
 
+<a name="top">
 <h1>Shared Portal Framework - Portlet Utilities - Developer's Guide<br>
 <font color="red">WORK IN PROGRESS</font></h1>
+</a>
 
 <a name="toc">
 <h2>Table of Contents</h2>
@@ -375,8 +377,10 @@ functionality for SPF Java portlet developers in the following areas:</p>
 	handlers for system errors)</li>
 </ul>
 
-<p>The SPF portlet utilities are just one of several SPF Java
-artifacts for SPF developers. See <a href="#overview.other">other
+<p>The SPF portlet utilities augment HP IT's WPAP (Web Presentation
+Architecture - Portlet Edition) framework, which in turn augments the
+Spring consortium's Portlet MVC framework. These are all among the
+several SPF artifacts for SPF developers. See <a href="#overview.other">other
 libraries</a>.</p>
 
 <hr>
@@ -395,7 +399,8 @@ version number is included (for example, <code>spf-portlet-utilities-1.0.0.jar</
 The SPF portlet utilities are distributed through Maven 2:</p>
 
 <ul>
-	<li>The current Maven 2 repository is <code>http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-utilities/</code>.</li>
+	<li>The current Maven 2 repository is <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-utilities/"><code>http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-utilities/</code></a></li>
 	<li>The group ID is <code>com.hp.it.spf.xa</code>
 	<li>The artifact ID is <code>spf-portlet-utilities</code>
 </ul>
@@ -464,7 +469,25 @@ step.</p>
 <h3>1.2. Dependencies</h3>
 </a>
 
-LEFT OFF HERE
+<p>The SPF portlet utilities depend on WPAP and all of the various
+technologies upon which WPAP in turn depends:</p>
+
+<ul>
+	<li>Spring Portlet MVC</li>
+	<li>Java Portlet</li>
+	<li>Java Servlet</li>
+	<li>JSP</li>
+</ul>
+
+<p>In addition, the SPF portlet utilities depend on the SPF commmon
+utilities (common utilities for both portlet and portal components in
+the Shared Portal Framework).</p>
+
+<p>All of these dependencies are managed through Maven. For a list
+of the exact current dependencies, see the Maven POM for the SPF portlet
+utilities. You can download it from the Maven repository mentioned
+above. As usual, all of these JAR dependencies also need to be included
+when you build your portlet application's <code>/WEB-INF/lib</code>.</p>
 
 <hr>
 
@@ -476,17 +499,95 @@ LEFT OFF HERE
 <h4>1.3.1 WPA Portlet Edition</h4>
 </a>
 
+<p>The SPF portlet utilities augment HP IT's WPA Portlet Edition
+framework. Several facilities which SPF portlet developers will use
+(such as Timber for logging) are provided by WPAP. See the developer's
+site for WPA Portlet Edition here: <a
+	href="http://intranet.hp.com/Sites/SOA/TechnicalDocs/WPAPortlet/Pages/framework.aspx"><code>http://intranet.hp.com/Sites/SOA/TechnicalDocs/WPAPortlet/Pages/framework.aspx</code></a></p>
+
+<blockquote>
+<p><b>Note:</b> At this time, only the Portlet 1.0 (JSR-168)
+compliant version of WPAP is available and documented at the above link.
+The Portlet 2.0 (JSR-286) version is <font color="blue"><b>TBD</b></font>.</p>
+</blockquote>
+
 <a name="overview.other.spring">
 <h4>1.3.2 Spring Portlet MVC</h4>
 </a>
+
+<p>WPAP in turn augments the open-source Spring Portlet MVC
+framework. The basic workflow of an SPF portlet, for example, is
+typically provided by Spring Portlet MVC. See the Spring Portlet MVC
+developer's site here: <a
+	href="http://static.springframework.org/spring/docs/2.0.x/reference/portlet.html"><code>http://static.springframework.org/spring/docs/2.0.x/reference/portlet.html</code></a></p>
+
+<blockquote>
+<p><b>Note:</b> The above link is for the Portlet 1.0 (JSR-168)
+version of Spring Portlet MVC. The Portlet 2.0 (JSR-286) Spring Portlet
+MVC documentation is <font color="blue"><b>TBD</b></font>.</p>
+</blockquote>
 
 <a name="overview.other.spf.common">
 <h4>1.3.3 SPF Common Utilities</h4>
 </a>
 
+<p>The SPF common utilities, used both by SPF portlets and portal
+components (ie Vignette components), contain a number of useful API's
+for SPF portlet developers, including:</p>
+
+<ul>
+	<li>building portal page URLs, including portal page URLs which
+	target portlets on those pages and pass them parameters</li>
+	<li>managing your application's configuration properties using
+	hot-reloadable external files</li>
+	<li>performing miscellaneous
+	internationalization/localization-related tasks such as localized
+	display of names (user, locale, timezone) in SPF-standard format, and
+	transformation between locales, HP Passport language codes, and RFC
+	3066 language tags</li>
+	<li>and more</li>
+</ul>
+
+<p>These functionalities are in a separate package so that they can
+be used by SPF's Vignette portal components as well. In some cases they
+are inherited into the SPF portlet utilities (so you get them too when
+you import the SPF portlet utility class), and in other cases you have
+to import them directly.</p>
+
+<p>See the SPF Common Utilities Developer's Guide here: <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html#top"><code>http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html</code></p>
+
 <a name="overview.other.spf.htmlviewer">
 <h4>1.3.4 SPF <code>html-viewer</code> Portlet</h4>
 </a>
+
+<p>The Shared Portal Framework includes a portlet application, <code>html-viewer</code>,
+which you can use with minimal customization. This portlet renders a
+text file, such as an HTML file (containing arbitrary HTML, JavaScript,
+and/or CSS), to the user. The file rendered is the best-fit localized
+version available for the user amongst a bundle of files located inside
+the application WAR, or on the server filesystem outside of it (eg where
+deposited an administrator). The file may also include substitution
+tokens for certain dynamic functionality supported by the SPF portlet
+utilities' {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}
+- for example, you can permission content in the file by group or role,
+include possibly-localized images and other static resources, etc. The <code>html-viewer</code>
+portlet's <code>view</code> mode renders the file, and its <code>config</code>
+mode lets the portlet administrator configure the portlet (eg specify
+which bundle of HTML files to render).</p>
+
+<p>The <code>html-viewer</code> portlet is often a quick and easy
+basis for developing a simple, static or mostly-static portlet for your
+SPF portal site. You don't write any code or configure any Spring or
+portlet XML files; you just supply the text files for it to display.
+Furthermore, the <code>html-viewer</code> code is extensible (it is
+actually included inside the SPF portlet utilities) if you need rather
+to build upon it for your own portlet application.</p>
+
+<p>Although the SPF portlet utilities include the classes for <code>html-viewer</code>,
+it is a separate application with its own SPF HTML Viewer Portlet
+Developer's Guide here: <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html"><code>http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html</code></a></p>
 
 <hr>
 
@@ -494,38 +595,171 @@ LEFT OFF HERE
 <h2>2. Internationalization</h2>
 </a>
 
+<p>Spring Portlet MVC (the basis of the SPF portlet utilities and
+WPAP) provides basic support for internationalizing text strings
+(message resources) in your portlet application. The SPF portlet
+utilities extend the Spring functionality primarily in these directions:</p>
+
+<ul>
+	<li>
+	<p>internationalizing access to other static resources (images,
+	PDF's, etc)</p>
+	</li>
+	<li>
+	<p>injecting contextual help into your message resources</p>
+	</li>
+	<li>
+	<p>miscellaneous useful methods, inherited from the <a
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html">SPF
+	common utilities</a>, for:</p>
+	<ul>
+		<li>localized display of locale names, timezone names, user
+		names, etc, in SPF-standard format</li>
+		<li>transformation between locales, HP Passport languages, and
+		RFC 3066 language tags</li>
+		<li>and more</li>
+		<li><b>note:</b> these inherited methods are documented in the <a
+			href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html#top">SPF
+		Common Utilities Developer's Guide</a> as well as in the JavaDoc for the
+		{@link com.hp.it.spf.xa.i18n.portlet.I18nUtility} class.</li>
+	</ul>
+	</li>
+</ul>
+
 <hr>
 
 <a name="i18n.resources">
 <h3>2.1. Kinds of resources</h3>
 </a>
 
+<p>With the SPF portlet utilities, you can internationalize access
+to your text strings (message resources) and other static resources
+(supporting resources like images, HTML, PDF, etc), so that they can be
+localized.</p>
+
 <a name="i18n.resources.message">
 <h4>2.1.1. Message resources (message properties)</h4>
 </a>
 
+<p><i>Message resources</i> (sometimes just called messages) are
+text strings used in your UI. They are managed in Java message property
+files as per the usual Java {@link ResourceBundle} standard. If your
+application's messages are going to be sourced elsewhere - in a
+database, an XML file, etc - you will have to arrange to export them
+into Java message property format before they can be accessed through
+SPF (or Spring).</p>
+
+<p>SPF has a well-defined process for localizing your message
+resources: translating them from a <i>base locale</i> (typically US
+English) into the various other locales you need. See <a
+	href="#i18n.l10n">localizing your resources</a>, below.</p>
+
 <a name="i18n.resources.supporting">
-<h4>2.1.2. Support resources (images, HTML, PDF, etc)</h4>
+<h4>2.1.2. Supporting resources (images, HTML, PDF, etc)</h4>
 </a>
+
+<p>In addition to message resources, the SPF portlet utilities
+provide a solution for internationalized access to <i>supporting
+resources</i>: static files like images, HTML, PDF, MS Word documents, etc.</p>
+
+<p>SPF's localization process works for these files too, letting you
+get them translated from a <i>base locale</i> (again, typically US
+English) into the various other locales you need. See <a
+	href="#i18n.l10n">localizing your resources</a>, below.</p>
 
 <a name="i18n.resources.bundles">
 <h4>2.1.3 Resource bundles</h4>
 </a>
+
+<p>Whether message property files, or supporting files, in SPF you
+organize them into <i>resource bundles</i>. These are collections of
+files containing identical content, just localized for different
+locales. The <i>base file</i> contains the content for the base locale
+(typically US English). The other files in the bundle each contain a
+translation of that content for another locale. As with the Java
+standard for {@link ResourceBundle}, the base file should <b>not</b>
+have any locale tag, while the other files should be tagged according to
+their locale, as follows:</p>
+
+<blockquote><pre>
+<i>base-filename</i>_<i>lang</i>_<i>CC</i>.<i>extension</i>
+</pre></blockquote>
+
+<ul>
+	<li><i><code>lang</code></i> is the 2-character ISO 639-1 language
+	code for the locale (lowercase)</li>
+	<li><i><code>CC</code></i> is the 2-character ISO 3166 country
+	code for the locale (uppercase)</li>
+</ul>
+
+<p>For example, here is a collection of files constituting a message
+resource bundle, where <code>messages.properties</code> is the <i>base
+filename</i>:</p>
+
+<blockquote><pre>
+messages.properties         &lt;-- the base file
+messages_ja_JP.properties   &lt;-- the same file localized for Japan - Japanese
+messages_zh_CN.properties   &lt;-- the same file localized for China - Chinese
+messages_zh_TW.properties   &lt;-- the same file localized for Taiwan - Chinese
+</pre></blockquote>
+
+<p>Here is a collection of files constituting an image resource
+bundle, where <code>picture.jpg</code> is the base filename:</p>
+
+<blockquote><pre>
+picture.jpg         &lt;-- the base file
+picture_ja_JP.jpg   &lt;-- the same file localized for Japan - Japanese
+picture_zh_CN.jpg   &lt;-- the same file localized for China - Chinese
+picture_zh_TW.jpg   &lt;-- the same file localized for Taiwan - Chinese
+</pre></blockquote>
+
+<p><b>Note:</b> SPF will generally use full (ie language- and
+country-specific) locales. Your resource bundles are encouraged to do
+likewise. However if you want to offer localization at the level of
+language-only, you can do that. For example, while users of your portlet
+may present with both France - French (<code>fr-FR</code>) and France -
+Canada (<code>fr-CA</code>), if there is no difference in those
+translations you could just have one file in your resource bundle for
+them. Just drop the country code from the tagged locale:</p>
+
+<blockquote><pre>
+picture.jpg         &lt;-- the base file
+picture_fr.jpg      &lt;-- the same file localized for country-generic French
+picture_ja_JP.jpg   &lt;-- the same file localized for Japan - Japanese
+picture_zh_CN.jpg   &lt;-- the same file localized for China - Chinese
+picture_zh_TW.jpg   &lt;-- the same file localized for Taiwan - Chinese
+</pre></blockquote>
+
+<p>As with the Java standard for {@link ResourceBundle}, all of the
+SPF (and Spring) internationalization utilities will search for the
+most-specific match for the user's locale first, ultimately falling back
+upon your base file.</p>
 
 <hr>
 <a name="i18n.location">
 <h3>2.2. Where to put your resources</h3>
 </a>
 
-<p>You have a choice. You may put your message and other static
-resource files (ie message properties and images, HTML files, video
-files, PDF's, etc) into your portlet WAR where they traditionally go:</p>
+<p>You have a choice where you put your resource bundles. You may
+put them into your portlet application (WAR) where they would
+traditionally go (we call these <i>internal resources</i>). But you may
+also put them outside, into a well-known folder on the portlet server
+called the <i>portlet resource bundle folder</i> - we call these <i>external
+resources</i>.</p>
+
+<a name="i18n.location.internal">
+<h4>2.2.1. Internal resources (portlet application)</h4>
+</a>
+
+<p>You may put your message properties and supporting resource files
+into your portlet WAR where they traditionally go:</p>
 
 <ol>
 	<li>
 	<p>Your message properties would go into your <code>WEB-INF/classes/</code>,
 	optionally under some additional sub-path (we recommend <code>portlet/i18n/</code>
-	for reasons that will become clear). For example:</p>
+	for reasons that will become clear in the discussion of <a
+		href="#i18n.location.external">external resources</a>). For example:</p>
 
 	<blockquote><pre>
 	<i>&lt;root&gt;</i>
@@ -538,8 +772,9 @@ files, PDF's, etc) into your portlet WAR where they traditionally go:</p>
 	        			...
 	</pre></blockquote>
 
-	<p>Also, be sure to configure Spring properly so it can find those
-	message properties. For example, if you use Spring's {@link
+	<p>Also, be sure to configure Spring properly in your portlet
+	application, so that can find those message properties. For example, if
+	you use Spring's {@link
 	org.springframework.context.support.ReloadableResourceBundleMessageSource}
 	class, you would put this into your application context configuration
 	(eg either your application-wide <code>applicationContext.xml</code> or
@@ -589,7 +824,11 @@ either, they will find your message resources inside your portlet WAR.
 And when you use the localized file access API's in <code>I18nUtility</code>,
 they will find your static resource files there likewise.</p>
 
-<p>However, you may instead put your messages and other resources <i>outside</i>
+<a name="i18n.location.external">
+<h4>2.2.2. External resources (portlet resource bundle folder)</h4>
+</a>
+
+<p>You may instead put your messages and other resources <i>outside</i>
 of your portlet WAR. Why? Doing so may have some advantages - for
 example, it may make for easier administration of the resources.
 Currently the SPF supports you putting them into what is called the <i>portlet
@@ -648,15 +887,17 @@ filesystem to which the portlet JVM has at least read access.</p>
 	class, since that makes your message properties hot-reloadable (ie your
 	administrator can update your message bundles without restarting the
 	JVM). You would use the same application-context configuration shown
-	above (which is why we recommended using <code>portlet/i18n/</code>
+	above, in the discussion of <a href="#i18n.location.internal">internal
+	resources</a> (which is why we recommended using <code>portlet/i18n/</code>
 	under <code>WEB-INF/classes/</code> above - so that the Spring
 	configuration for internal resource access is the same as it is for
-	external).</p>
+	external, so that if you ever change your approach, you will have one
+	less configuration to update).</p>
 	</li>
 
 	<li>
 	<p>If you chose a non-default location for the portlet bundle
-	folder, configure it in <a href="#i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
+	folder, configure it in <a href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>
 	(see below). The default location is hardcoded in {@link
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}, which is
 	<code>/opt/sasuapps/spf/globalResources/portlet/i18n</code> (as in the
@@ -678,7 +919,7 @@ filesystem to which the portlet JVM has at least read access.</p>
 	path. See the {@link com.hp.it.spf.xa.relay.servlet.RelayServlet} for
 	more information about deploying this servlet. If you deploy it in a
 	non-default location, you will need to configure that in <a
-		href="#i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>.
+		href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>.
 	</p>
 	</li>
 </ol>
@@ -690,7 +931,12 @@ either, they will find your message resources in your portlet bundle
 folder. And when you use the localized file access API's in <code>I18nUtility</code>,
 they will find your static resource files there likewise.</p>
 
-<p>Note that you can mix both of these approaches, if you like:</p>
+<a name="i18n.location.both">
+<h4>2.2.3. Mixing internal and external resources</h4>
+</a>
+
+<p>Note that you can mix both the internal and external approaches
+for resource management, if you like:</p>
 
 <ul>
 	<li>
@@ -724,18 +970,6 @@ they will find your static resource files there likewise.</p>
 	</blockquote>
 	</li>
 </ul>
-
-<a name="i18n.location.internal">
-<h4>2.2.1. Internal resources (portlet application)</h4>
-</a>
-
-<a name="i18n.location.external">
-<h4>2.2.2. External resources (portlet resource bundle folder)</h4>
-</a>
-
-<a name="i18n.location.both">
-<h4>2.2.3. Mixing internal and external resources</h4>
-</a>
 
 <hr>
 <a name="i18n.messages.java">
