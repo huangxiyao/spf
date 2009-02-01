@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deployment name="defaultClientConfig"
-   xmlns="http://xml.apache.org/axis/wsdd/"
-   xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+			xmlns="http://xml.apache.org/axis/wsdd/"
+			xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
 
-   <globalConfiguration></globalConfiguration>
+	<globalConfiguration></globalConfiguration>
 
-   <transport name="http" pivot="java:org.apache.axis.transport.http.CommonsHTTPSender">
-      <requestFlow>
-		     <handler type="java:com.vignette.portal.webservices.internal.axis.handlers.CookieHeaderAccessHandler"/>
-         <handler type="java:com.vignette.webservices.toolkit.security.SecurityHandler"/>
-         <handler type="java:com.hp.it.spf.wsrp.injector.context.UserContextInjector"/>
-      </requestFlow>
-	 <responseFlow>
-	   <handler type="java:com.vignette.portal.webservices.internal.axis.handlers.CookieHeaderAccessHandler"/>
-	   <handler type="java:com.vignette.portal.portlet.wsrpconsumer.internal.cookie.SessionCookieSnoopingHandler"/>
-	 </responseFlow>
-   </transport>
-   <%MAPPINGS_PLACEHOLDER%>
+	<transport name="http" pivot="java:org.apache.axis.transport.http.CommonsHTTPSender">
+		<requestFlow>
+			<handler type="java:com.vignette.portal.webservices.internal.axis.handlers.CookieHeaderAccessHandler"/>
+			<handler type="java:com.vignette.webservices.toolkit.security.SecurityHandler"/>
+			<handler type="java:com.hp.it.spf.wsrp.rewriter.WsrpRewriterHandler"/>
+			<handler type="java:com.hp.it.spf.wsrp.injector.context.UserContextInjector"/>
+		</requestFlow>
+		<responseFlow>
+			<handler type="java:com.vignette.portal.webservices.internal.axis.handlers.CookieHeaderAccessHandler"/>
+			<handler type="java:com.vignette.portal.portlet.wsrpconsumer.internal.cookie.SessionCookieSnoopingHandler"/>
+			<handler type="java:com.hp.it.spf.wsrp.rewriter.WsrpRewriterHandler"/>
+		</responseFlow>
+	</transport>
+	<%MAPPINGS_PLACEHOLDER%>
 </deployment>
 
