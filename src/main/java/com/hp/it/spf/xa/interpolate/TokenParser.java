@@ -5,6 +5,7 @@
  */
 package com.hp.it.spf.xa.interpolate;
 
+import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,24 +23,26 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * </p>
  * <p>
  * The following token substitutions are supported. See the method documentation
- * for further description.
+ * for further description. <b>Note:</b> The <code>&lt;</code> and
+ * <code>&gt;</code> symbols may be used in place of <code>{</code> and
+ * <code>}</code>, if you prefer.
  * </p>
  * <dl>
- * <dt><code>&lt;TOKEN:<i>key</i>&gt;</code></dt>
- * <dt><code>&lt;LANGUAGE-CODE&gt;</code></dt>
- * <dt><code>&lt;LANGUAGE-TAG&gt;</code></dt>
- * <dt><code>&lt;CONTENT-URL:</i>path</i>&gt;</code></dt>
- * <dt><code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt;</code></dt>
- * <dt><code>&lt;SITE&gt;</code></dt>
- * <dt><code>&lt;SITE-URL&gt;</code></dt>
- * <dt><code>&lt;REQUEST-URL&gt;</code></dt>
- * <dt><code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code></dt>
- * <dt><code>&lt;LOGGED-IN&gt;...&lt;/LOGGED-IN&gt;</code></dt>
- * <dt><code>&lt;LOGGED-OUT&gt;...&lt;/LOGGED-OUT&gt;</code></dt>
- * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
- * <dt><code>&lt;EMAIL&gt;</code></dt>
- * <dt><code>&lt;NAME&gt;</code></dt>
- * <dt><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></dt>
+ * <dt><code>{TOKEN:<i>key</i>}</code></dt>
+ * <dt><code>{LANGUAGE-CODE}</code></dt>
+ * <dt><code>{LANGUAGE-TAG}</code></dt>
+ * <dt><code>{CONTENT-URL:</i>path</i>}</code></dt>
+ * <dt><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></dt>
+ * <dt><code>{SITE}</code></dt>
+ * <dt><code>{SITE-URL}</code></dt>
+ * <dt><code>{REQUEST-URL}</code></dt>
+ * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+ * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code></dt>
+ * <dt><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
+ * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
+ * <dt><code>{EMAIL}</code></dt>
+ * <dt><code>{NAME}</code></dt>
+ * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
  * </dl>
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
@@ -64,58 +67,58 @@ public abstract class TokenParser {
 	/**
 	 * This class attribute is the token for the user's ISO 639-1 language code.
 	 */
-	private static final String TOKEN_LANGUAGE_CODE = "<LANGUAGE-CODE>";
+	private static final String TOKEN_LANGUAGE_CODE = "LANGUAGE-CODE";
 
 	/**
 	 * This class attribute is the token for the user's RFC 3066 language tag.
 	 */
-	private static final String TOKEN_LANGUAGE_TAG = "<LANGUAGE-TAG>";
+	private static final String TOKEN_LANGUAGE_TAG = "LANGUAGE-TAG";
 
 	/**
 	 * This class attribute is the token for a localized content URL.
 	 */
-	private static final String TOKEN_LOCALIZED_CONTENT_URL = "<LOCALIZED-CONTENT-URL:";
+	private static final String TOKEN_LOCALIZED_CONTENT_URL = "LOCALIZED-CONTENT-URL";
 
 	/**
 	 * This class attribute is the token for an unlocalized content URL.
 	 */
-	private static final String TOKEN_CONTENT_URL = "<CONTENT-URL:";
+	private static final String TOKEN_CONTENT_URL = "CONTENT-URL";
 
 	/**
 	 * This class attribute is the token for a keyname to be substituted from
 	 * the token-substitutions file.
 	 */
-	private static final String TOKEN_TOKEN = "<TOKEN:";
+	private static final String TOKEN_TOKEN = "TOKEN";
 
 	/**
 	 * This class attribute is the token for the user's email address.
 	 */
-	private static final String TOKEN_EMAIL = "<EMAIL>";
+	private static final String TOKEN_EMAIL = "EMAIL";
 
 	/**
 	 * This class attribute is the token for the user's email address.
 	 */
-	private static final String TOKEN_NAME = "<NAME>";
+	private static final String TOKEN_NAME = "NAME";
 
 	/**
 	 * This class attribute is the user property token.
 	 */
-	private static final String TOKEN_USER_PROPERTY = "<USER-PROPERTY:";
+	private static final String TOKEN_USER_PROPERTY = "USER-PROPERTY";
 
 	/**
 	 * This class attribute is the token for the current portal site.
 	 */
-	private static final String TOKEN_SITE = "<SITE>";
+	private static final String TOKEN_SITE = "SITE";
 
 	/**
 	 * This class attribute is the token for the current portal site URL.
 	 */
-	private static final String TOKEN_SITE_URL = "<SITE-URL>";
+	private static final String TOKEN_SITE_URL = "SITE-URL";
 
 	/**
 	 * This class attribute is the token for the current portal request URL.
 	 */
-	private static final String TOKEN_REQUEST_URL = "<REQUEST-URL>";
+	private static final String TOKEN_REQUEST_URL = "REQUEST-URL";
 
 	/**
 	 * This class attribute is the name of the container token for a site
@@ -143,27 +146,26 @@ public abstract class TokenParser {
 
 	private int containerIndex; // For container parsing.
 	private int containerLevel; // For container parsing.
-	private String newContent; // For container parsing.
-	private String oldContent; // For container parsing.
-	private String containerStartToken; // For container parsing.
-	private String containerEndToken; // For container parsing.
+	private String containerNewContent; // For container parsing.
+	private String containerOldContent; // For container parsing.
+	private String containerToken; // For container parsing.
+	private char containerTokenBegin; // For container parsing.
+	private char containerTokenEnd; // For container parsing.
 	private ContainerMatcher containerMatcher; // For container parsing.
 
-	private static final int FOUND_CONTAINER_START_MATCH = 3; // container
-	// parsing
-	private static final int FOUND_CONTAINER_START_NOMATCH = 2; // container
-	// parsing
-	private static final int FOUND_CONTAINER_END = 1; // container parsing
-	private static final int FOUND_END = 0; // container parsing
-	private static final String TOKEN_CONTAINER_OR = "|"; // container parsing
+	private static final int FOUND_CONTAINER_START_MATCH = 3;
+	private static final int FOUND_CONTAINER_START_NOMATCH = 2;
+	private static final int FOUND_CONTAINER_END = 1;
+	private static final int FOUND_END = 0;
+	private static final String TOKEN_CONTAINER_OR = "|";
+	private static char TOKEN_BEGIN = '{';
+	private static char TOKEN_END = '}';
+	private static char DEPRECATED_TOKEN_BEGIN = '<';
+	private static char DEPRECATED_TOKEN_END = '>';
 
-	/* Added by CK for 1000790073 */
-	/*
-	 * This class attribute will hold the base filename of the
-	 * token-substitution file to use. It is initialized with the name of the
-	 * default token-substitution file (not used in R3.1.1, reserved for future
-	 * use). (It may be overwritten by the concrete subclass constructor ?that
-	 * is what will happen when the linkout portlet instantiates it.)
+	/**
+	 * This class attribute holds the base filename of the token-substitution
+	 * file to use.
 	 */
 	protected String subsFilePath = DEFAULT_SUBS_PATHNAME;
 
@@ -239,26 +241,40 @@ public abstract class TokenParser {
 	}
 
 	/**
-	 * Log an error. Different action by portal and portlet, so therefore this
-	 * is an abstract method.
-	 * 
-	 * @param msg
-	 *            log
+	 * An inner class interface for returning the value to substitute for a
+	 * non-container, parameterized token like <code>{TOKEN:key}</code> where
+	 * "key" is the parameter passed to the getValue method.
 	 */
-	protected abstract void logError(String msg);
+	protected abstract class ValueProvider {
+
+		/**
+		 * Return the value to substitute for the given parameter.
+		 * 
+		 * @param param
+		 *            The part of the token between <code>:</code> and the end
+		 *            symbol (<code>}</code> or <code>&gt;</code>).
+		 * @return The value to replace the token with.
+		 */
+		protected abstract String getValue(String param);
+	}
 
 	/**
 	 * <p>
 	 * Parses the given string, substituting the ISO 639-1 language code for the
-	 * given locale in place of the <code>&lt;LANGUAGE-CODE&gt;</code> token.
-	 * For example: <code>&lt;a
-	 * href="https://ovsc.hp.com?lang=&lt;LANGUAGE-CODE&gt;"&gt;go to
+	 * given locale in place of the <code>{LANGUAGE-CODE}</code> token. For
+	 * example: <code>&lt;a
+	 * href="https://ovsc.hp.com?lang={LANGUAGE-CODE}"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
 	 * href="https://ovsc.hp.com?lang=ja"&gt;go to OVSC&lt;/a&gt;</code>
 	 * when you provide a Japanese-language locale. If you provide a null
 	 * locale, the token is replaced with blank. If you provide null content,
 	 * null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param content
@@ -269,32 +285,30 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseLanguageCode(String content, Locale loc) {
-		if (content == null) {
-			return null;
-		}
 		String lang = null;
 		if (loc != null) {
 			lang = loc.getLanguage();
 		}
-		if (lang == null) {
-			lang = "";
-		}
-		lang = lang.trim().toLowerCase(); // By convention, use lowercase
-		return content.replaceAll(TOKEN_LANGUAGE_CODE, lang);
+		return parseUnparameterized(content, TOKEN_LANGUAGE_CODE, lang);
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, substituting the given RFC 3066 language tag for
-	 * the given locale in place of the <code>&lt;LANGUAGE-TAG&gt;</code>
-	 * token. For example: <code>&lt;a
-	 * href="https://ovsc.hp.com?lang=&lt;LANGUAGE-TAG&gt;"&gt;go to
+	 * the given locale in place of the <code>{LANGUAGE-TAG}</code> token. For
+	 * example: <code>&lt;a
+	 * href="https://ovsc.hp.com?lang={LANGUAGE-TAG}"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
 	 * href="https://ovsc.hp.com?lang=zn-CN"&gt;go to OVSC&lt;/a&gt;</code>
 	 * when you provide the Chinese (China) locale. If you provide a null
 	 * locale, the token is replaced with blank. If you provide null content,
 	 * null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param lang
@@ -304,24 +318,18 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseLanguageTag(String content, Locale loc) {
-		if (content == null) {
-			return null;
-		}
 		String lang = I18nUtility.localeToLanguageTag(loc);
-		if (lang == null) {
-			lang = "";
-		}
-		return content.replaceAll(TOKEN_LANGUAGE_TAG, lang);
+		return parseUnparameterized(content, TOKEN_LANGUAGE_TAG, lang);
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, converting the
-	 * <code>&lt;LOCALIZED-CONTENT-URL:<i>pathname</i>&gt;</code> token into
-	 * a URL for the best-candidate localized form of that <i>pathname</i>.
-	 * Actual implementation depends on portal or portlet context (eg for
-	 * getting the locale). For example: <code>&lt;img
-	 * src="&lt;LOCALIZED-CONTENT-URL:/images/done.jpg&gt;"&gt; is returned as:
+	 * <code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code> token into a URL
+	 * for the best-candidate localized form of that <i>pathname</i>. Actual
+	 * implementation depends on portal or portlet context (eg for getting the
+	 * locale). For example: <code>&lt;img
+	 * src="{LOCALIZED-CONTENT-URL:/images/done.jpg}"&gt; is returned as:
 	 * &lt;img src="/<i>implementation-dependent</i>/images/done_fr.jpg"&gt;</code>
 	 * when the user is French and the French version of <code>done.jpg</code>
 	 * (ie <code>done_fr.jpg</code>) exists. If a content URL cannot be
@@ -329,27 +337,42 @@ public abstract class TokenParser {
 	 * token is replaced with blank. If you provide null content, null is
 	 * returned.
 	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
+	 * </p>
 	 * 
 	 * @param content
 	 *            The content string.
 	 * @return The interpolated string.
 	 */
 	public String parseLocalizedContentURL(String content) {
-		return parseContentURL(content, TOKEN_LOCALIZED_CONTENT_URL, true);
+		return parseParameterized(content, TOKEN_LOCALIZED_CONTENT_URL,
+				new ValueProvider() {
+					protected String getValue(String param) {
+						return getContentURL(param, true);
+					}
+				});
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, converting the
-	 * <code>&lt;CONTENT-URL:<i>pathname</i>&gt;</code> token into a URL for
-	 * that <i>pathname</i>. Localization is not performed. Actual
-	 * implementation depends on portal or portlet context. For example:
-	 * <code>&lt;img src="&lt;CONTENT-URL:/images/picture.jpg&gt;"&gt;</code>
-	 * is returned as:
+	 * <code>{CONTENT-URL:<i>pathname</i>}</code> token into a URL for that
+	 * <i>pathname</i>. Localization is not performed. Actual implementation
+	 * depends on portal or portlet context. For example:
+	 * <code>&lt;img src="{CONTENT-URL:/images/picture.jpg}"&gt;</code> is
+	 * returned as:
 	 * <code>&lt;img src="<i>implementation-dependent</i>/images/picture.jpg"&gt;</code>.
 	 * If a content URL cannot be determined (eg the file in the <i>pathname</i>
 	 * is not found), then the token is replaced with blank. If you provide null
 	 * content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param content
@@ -357,60 +380,30 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseNoLocalizedContentURL(String content) {
-		return parseContentURL(content, TOKEN_CONTENT_URL, false);
-	}
-
-	/**
-	 * Parses the given string, converting the given URL token into proper form.
-	 * 
-	 * @param localized
-	 *            the localized
-	 * @param type
-	 *            the type
-	 * @param content
-	 *            the content
-	 * @param request
-	 *            the request
-	 * @return the string
-	 */
-	private String parseContentURL(String content, String type,
-			boolean localized) {
-		if (content == null) {
-			return null;
-		}
-		String regEx = "(" + type + ".*?>)";
-		Pattern p = Pattern.compile(regEx);
-		Matcher m = p.matcher(content);
-		while (m.find()) {
-			String s = m.group();
-			String sub = s.substring(s.indexOf(type) + type.length(), s
-					.length() - 1);
-			try {
-				String path = getContentURL(sub, localized);
-				if (path == null) {
-					content = content.replaceAll(s, "");
-					throw new Exception();
-				}
-				content = content.replaceAll(s, path);
-			} catch (Exception e) {
-				logError("Cannot get the localized content URL for file: "
-						+ sub);
-			}
-		}
-		return content;
+		return parseParameterized(content, TOKEN_CONTENT_URL,
+				new ValueProvider() {
+					protected String getValue(String param) {
+						return getContentURL(param, false);
+					}
+				});
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, substituting the given email address for the
-	 * <code>&lt;EMAIL&gt;</code> token. For example: <code>&lt;a
-	 * href="https://ovsc.hp.com?email=&lt;EMAIL&gt;"&gt;go to OVSC&lt;/a&gt;</code>
+	 * <code>{EMAIL}</code> token. For example: <code>&lt;a
+	 * href="https://ovsc.hp.com?email={EMAIL}"&gt;go to OVSC&lt;/a&gt;</code>
 	 * is changed to
 	 * <code>&lt;a href="https://ovsc.hp.com?email=me@foo.com"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * when you provide the email address "me@foo.com". If you provide a null
 	 * email, the token is replaced with blank. If you provide null content,
 	 * null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param content
@@ -420,27 +413,25 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseEmail(String content, String email) {
-		if (content == null) {
-			return null;
-		}
-		if (email == null) {
-			email = "";
-		}
-		return content.replaceAll(TOKEN_EMAIL, email);
+		return parseUnparameterized(content, TOKEN_EMAIL, email);
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, substituting the given first and last names (in
 	 * proper display order for the given locale) in place of the
-	 * <code>&lt;NAME&gt;</code> token. For example:
-	 * <code>Welcome, &lt;NAME&gt;!</code> is changed to
-	 * <code>Welcome, <i>first</i> <i>last</i>!</code> for most locales (and
-	 * by default - eg if the given locale is null). However in some Asian
-	 * locales (eg Japan, China, etc), it would be changed to
+	 * <code>{NAME}</code> token. For example: <code>Welcome, {NAME}!</code>
+	 * is changed to <code>Welcome, <i>first</i> <i>last</i>!</code> for
+	 * most locales (and by default - eg if the given locale is null). However
+	 * in some Asian locales (eg Japan, China, etc), it would be changed to
 	 * <code>Welcome, <i>last</i> <i>first</i>!</code> If you provide null
 	 * first and last names, the token is replaced with blank. If you provide
 	 * null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param content
@@ -455,27 +446,26 @@ public abstract class TokenParser {
 	 */
 	public String parseName(String content, String firstName, String lastName,
 			Locale loc) {
-		if (content == null) {
-			return null;
-		}
 		String name = I18nUtility.getUserDisplayName(firstName, lastName, loc);
-		if (name == null) {
-			name = "";
-		}
-		return content.replaceAll(TOKEN_NAME, name);
+		return parseUnparameterized(content, TOKEN_NAME, name);
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, substituting the given site name for the
-	 * <code>&lt;SITE&gt;</code> token. The site name is intended to be the
-	 * name for the virtual portal site. For example: <code>&lt;a
-	 * href="https://ovsc.hp.com?site=&lt;SITE&gt;"&gt;go to OVSC&lt;/a&gt;</code>
-	 * is changed to <code>&lt;a href="https://ovsc.hp.com?site=acme"&gt;go to
+	 * <code>{SITE}</code> token. The site name is intended to be the name for
+	 * the virtual portal site. For example: <code>&lt;a
+	 * href="https://ovsc.hp.com?site={SITE}"&gt;go to OVSC&lt;/a&gt;</code>
+	 * is changed to <code>{a href="https://ovsc.hp.com?site=acme"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * when you provide the site name "acme". If you provide a null site name,
 	 * the token is replaced with blank. If you provide null content, null is
 	 * returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param content
@@ -485,26 +475,25 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseSite(String content, String siteName) {
-		if (content == null) {
-			return null;
-		}
-		if (siteName == null) {
-			siteName = "";
-		}
-		return content.replaceAll(TOKEN_SITE, siteName);
+		return parseUnparameterized(content, TOKEN_SITE, siteName);
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, substituting the given portal site home-page URL
-	 * for the <code>&lt;SITE-URL&gt;</code> token. For example: <code>&lt;a
-	 * href="&lt;SITE-URL&gt;"&gt;go to home page&lt;/a&gt;</code>
+	 * for the <code>{SITE-URL}</code> token. For example: <code>&lt;a
+	 * href="{SITE-URL}"&gt;go to home page&lt;/a&gt;</code>
 	 * is changed to
 	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/"&gt;go to
 	 * home page&lt;/a&gt;</code>
 	 * when you provide the site URL "http://portal.hp.com/portal/site/acme/".
 	 * If you provide a null site URL, the token is replaced with blank. If you
 	 * provide null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param content
@@ -514,27 +503,25 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseSiteURL(String content, String siteURL) {
-		if (content == null) {
-			return null;
-		}
-		if (siteURL == null) {
-			siteURL = "";
-		}
-		return content.replaceAll(TOKEN_SITE_URL, siteURL);
+		return parseUnparameterized(content, TOKEN_SITE_URL, siteURL);
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, substituting the given current portal request
-	 * URL for the <code>&lt;REQUEST-URL&gt;</code> token. For example:
-	 * <code>&lt;a
-	 * href="&lt;REQUEST-URL&gt;"&gt;try again&lt;/a&gt;</code> is
-	 * changed to
+	 * URL for the <code>{REQUEST-URL}</code> token. For example: <code>&lt;a
+	 * href="{REQUEST-URL}"&gt;try again&lt;/a&gt;</code>
+	 * is changed to
 	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/template.PAGE/?..."&gt;try again&lt;/a&gt;</code>
 	 * when you provide the request URL
 	 * "http://portal.hp.com/portal/site/acme/template.PAGE/?...". If you
 	 * provide a null request URL, the token is replaced with blank. If you
 	 * provide null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param content
@@ -544,27 +531,21 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseRequestURL(String content, String requestURL) {
-		if (content == null) {
-			return null;
-		}
-		if (requestURL == null) {
-			requestURL = "";
-		}
-		return content.replaceAll(TOKEN_REQUEST_URL, requestURL);
+		return parseUnparameterized(content, TOKEN_REQUEST_URL, requestURL);
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, converting the
-	 * <code>&lt;USER-PROPERTY:<i>key</i>&gt;</code> token into the value
-	 * for that key in the user properties. Actual implementation depends on
-	 * portal or portlet context. For example, in the portal context:
-	 * <code>Your phone number is: &lt;USER-PROPERTY:day_phone&gt;</code> is
+	 * <code>{USER-PROPERTY:<i>key</i>}</code> token into the value for that
+	 * key in the user properties. Actual implementation depends on portal or
+	 * portlet context. For example, in the portal context:
+	 * <code>Your phone number is: {USER-PROPERTY:day_phone}</code> is
 	 * returned as: <code>Your phone number is: 123 456 7890</code> assuming
 	 * the <code>day_phone</code> property in the portal user object is set to
 	 * that value. An example for the portlet context:
-	 * <code>Hello &lt;USER-PROPERTY:user.name.given&gt;!</code> is returned
-	 * as: <code>Hello Scott!</code> assuming the <code>user.name.given</code>
+	 * <code>Hello {USER-PROPERTY:user.name.given}!</code> is returned as:
+	 * <code>Hello Scott!</code> assuming the <code>user.name.given</code>
 	 * property in the portlet request (ie PortletRequest.USER_INFO) is set to
 	 * that value.
 	 * </p>
@@ -577,45 +558,41 @@ public abstract class TokenParser {
 	 * <b>Note:</b> Portal and portlet contexts use different property names
 	 * for the same elements. The list of property names is not provided here.
 	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
+	 * </p>
 	 * 
 	 * @param content
 	 *            The content string.
 	 * @return The interpolated string.
 	 */
 	public String parseUserProperty(String content) {
-		if (content == null) {
-			return null;
-		}
-		String regEx = "(" + TOKEN_USER_PROPERTY + ".*?>)";
-		Pattern p = Pattern.compile(regEx);
-		Matcher m = p.matcher(content);
-		while (m.find()) {
-			String str = m.group();
-			String key = str.substring(str.indexOf(TOKEN_USER_PROPERTY)
-					+ TOKEN_USER_PROPERTY.length(), str.length() - 1);
-			String token = getUserProperty(key.trim());
-			if (token != null) {
-				content = content.replaceAll(str, token);
-			} else {
-				content = content.replaceAll(str, "");
-			}
-		}
-		return content;
-
+		return parseParameterized(content, TOKEN_USER_PROPERTY,
+				new ValueProvider() {
+					protected String getValue(String param) {
+						return getUserProperty(param);
+					}
+				});
 	}
 
 	/**
 	 * <p>
-	 * Parses the given string, converting the
-	 * <code>&lt;TOKEN:<i>key</i>&gt;</code> token into the value for that
-	 * key in the token-substitutions file (<code>default_tokens.properties</code>
+	 * Parses the given string, converting the <code>{TOKEN:<i>key</i>}</code>
+	 * token into the value for that key in the token-substitutions file (<code>default_tokens.properties</code>
 	 * by default, unless overridden in the constructor). For example:
-	 * <code>&lt;img src="&lt;TOKEN:url.image&gt;"&gt;</code> is returned as:
+	 * <code>&lt;img src="{TOKEN:url.image}"&gt;</code> is returned as:
 	 * <code>&lt;img src="http://foo.hp.com/images/picture.jpg"&gt;</code>
 	 * assuming the token-substitutions file contains the following property:
 	 * <code>url.image=http://foo.hp.com/images/picture.jpg</code>. If the
 	 * token key is not found in the file, then the token is replaced with
 	 * blank. If you provide null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param content
@@ -623,36 +600,22 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseToken(String content) {
-		if (content == null) {
-			return null;
-		}
-		String regEx = "(" + TOKEN_TOKEN + ".*?>)";
-		Pattern p = Pattern.compile(regEx);
-		Matcher m = p.matcher(content);
-		while (m.find()) {
-			String str = m.group();
-			String key = str.substring(str.indexOf(TOKEN_TOKEN)
-					+ TOKEN_TOKEN.length(), str.length() - 1);
-			String token = getToken(key.trim());
-			if (token != null) {
-				content = content.replaceAll(str, token);
-			} else {
-				content = content.replaceAll(str, "");
+		return parseParameterized(content, TOKEN_TOKEN, new ValueProvider() {
+			protected String getValue(String param) {
+				return getToken(param);
 			}
-		}
-		return content;
-
+		});
 	}
 
 	/**
 	 * <p>
-	 * Parses the string for any <code>&lt;SITE:<i>names</i>&gt;</code>
-	 * content; such content is deleted if the given site name does not match
-	 * (otherwise only the special markup is removed). The <i>names</i> may
-	 * include one or more site names, delimited by "|" for a logical-or.
-	 * <code>&lt;SITE:<i>names</i>&gt;</code> markup may be nested for
-	 * logical-and (however since any one site has only one site name, the
-	 * desire to logical-and seems unlikely).
+	 * Parses the string for any <code>{SITE:<i>names</i>}</code> content;
+	 * such content is deleted if the given site name does not match (otherwise
+	 * only the special markup is removed). The <i>names</i> may include one or
+	 * more site names, delimited by "|" for a logical-or.
+	 * <code>{SITE:<i>names</i>}</code> markup may be nested for logical-and
+	 * (however since any one site has only one site name, the desire to
+	 * logical-and seems unlikely).
 	 * </p>
 	 * 
 	 * <p>
@@ -667,9 +630,9 @@ public abstract class TokenParser {
 	 * 
 	 * <pre>
 	 *  This content is for all sites to display.
-	 *  &lt;SITE:abc|def&gt;
+	 *  {SITE:abc|def}
 	 *  This content is to be displayed only in the abc or def sites.
-	 *  &lt;/PORTLET&gt;
+	 *  {/SITE}
 	 * </pre>
 	 * 
 	 * <p>
@@ -695,8 +658,13 @@ public abstract class TokenParser {
 	 * 
 	 * <p>
 	 * If you provide null content, null is returned. If you provide null or
-	 * empty site name, all <code>&lt;SITE:names&gt;</code>-enclosed sections
-	 * are removed from the content.
+	 * empty site name, all <code>{SITE:names}</code>-enclosed sections are
+	 * removed from the content.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param content
@@ -755,9 +723,9 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the string for any <code>&lt;LOGGED-IN&gt;</code> tokens; such
-	 * content is deleted if the user is not currently logged-in (otherwise only
-	 * the special markup is removed).
+	 * Parses the string for any <code>{LOGGED-IN}</code> tokens; such content
+	 * is deleted if the user is not currently logged-in (otherwise only the
+	 * special markup is removed).
 	 * </p>
 	 * 
 	 * <p>
@@ -766,9 +734,9 @@ public abstract class TokenParser {
 	 * 
 	 * <pre>
 	 *  This content is for everyone.
-	 *  &lt;LOGGED-IN&gt;
+	 *  {LOGGED-IN}
 	 *  This content is only for logged-in users.
-	 *  &lt;/LOGGED-IN&gt;
+	 *  {/LOGGED-IN}
 	 * </pre>
 	 * 
 	 * <p>
@@ -791,6 +759,11 @@ public abstract class TokenParser {
 	 * 
 	 * <p>
 	 * If you provide null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param content
@@ -824,7 +797,7 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the string for any <code>&lt;LOGGED-OUT&gt;</code> tokens; such
+	 * Parses the string for any <code>{LOGGED-OUT}</code> tokens; such
 	 * content is deleted if the user is currently logged-in (otherwise only the
 	 * special markup is removed).
 	 * </p>
@@ -835,9 +808,9 @@ public abstract class TokenParser {
 	 * 
 	 * <pre>
 	 *  This content is for everyone.
-	 *  &lt;LOGGED-OUT&gt;
+	 *  {LOGGED-OUT}
 	 *  This content is only for logged-out users.
-	 *  &lt;/LOGGED-OUT&gt;
+	 *  {/LOGGED-OUT}
 	 * </pre>
 	 * 
 	 * <p>
@@ -861,6 +834,11 @@ public abstract class TokenParser {
 	 * <p>
 	 * If you provide null content, null is returned.
 	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
+	 * </p>
 	 * 
 	 * @param content
 	 *            The content string.
@@ -876,11 +854,11 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the string for any <code>&lt;GROUP:<i>groups</i>&gt;</code>
-	 * content; such content is deleted if the given user groups do not qualify
+	 * Parses the string for any <code>{GROUP:<i>groups</i>}</code> content;
+	 * such content is deleted if the given user groups do not qualify
 	 * (otherwise only the special markup is removed). The <i>groups</i> may
 	 * include one or more group names, delimited by "|" for a logical-or.
-	 * <code>&lt;GROUP:<i>groups</i>&GT;</code> markup may be nested for
+	 * <code>{GROUP:<i>groups</i>&GT;</code> markup may be nested for
 	 * logical-and.
 	 * </p>
 	 * 
@@ -890,13 +868,13 @@ public abstract class TokenParser {
 	 * 
 	 * <pre>
 	 *  This content is for everyone.
-	 *  &lt;GROUP:abc|def&gt;
+	 *  {GROUP:abc|def}
 	 *  This content is only for members of the abc or def groups.
-	 *    &lt;GROUP:xyz&gt;
+	 *    {GROUP:xyz}
 	 *    This content is only for members of both the xyz group 
 	 *    and the abc or def groups.
-	 *    &lt;/GROUP&gt;
-	 *  &lt;/GROUP&gt;
+	 *    {/GROUP}
+	 *  {/GROUP}
 	 * </pre>
 	 * 
 	 * <p>
@@ -930,8 +908,13 @@ public abstract class TokenParser {
 	 * 
 	 * <p>
 	 * If you provide null content, null is returned. If you provide null or
-	 * empty groups, all <code>&lt;GROUP&gt;</code>-enclosed sections are
-	 * removed from the content.
+	 * empty groups, all <code>{GROUP}</code>-enclosed sections are removed
+	 * from the content.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
 	 * </p>
 	 * 
 	 * @param content
@@ -992,7 +975,7 @@ public abstract class TokenParser {
 			ResourceBundle resBundle = PropertyResourceBundleManager
 					.getBundle(this.subsFilePath);
 			if (resBundle != null) {
-				tokenValue = resBundle.getString(key);
+				tokenValue = resBundle.getString(key.trim());
 			}
 			return tokenValue;
 		} catch (Exception e) {
@@ -1006,9 +989,9 @@ public abstract class TokenParser {
 	 * start and end tokens with the given name; such content is deleted if the
 	 * user does not qualify for it (as determined by the given
 	 * ContainerMatcher). Container content is denoted by a start tag like
-	 * <code>&lt;FOO:keys&gt;</code> and a corresponding end tag like
-	 * <code>&lt;/FOO&gt;</code>, where <code>FOO</code> is the given token
-	 * name, and <code>keys</code> may include one or more attribute values,
+	 * <code>{FOO:keys}</code> and a corresponding end tag like
+	 * <code>{/FOO}</code>, where <code>FOO</code> is the given token name,
+	 * and <code>keys</code> may include one or more attribute values,
 	 * delimited by "|" for a logical-or. The given ContainerMatcher will be
 	 * passed those attribute values to determine whether the user data (ie the
 	 * subject of comparison) matches any of them. Container markup may be
@@ -1023,13 +1006,16 @@ public abstract class TokenParser {
 	 * parsed container start token are null or blank, then that
 	 * container-enclosed section will be removed.
 	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, this method supports both
+	 * <code>&lt;...&gt;</code> and <code>{...}</code> characters.
+	 * </p>
 	 * 
 	 * @param content
 	 *            The content string.
 	 * @param tokenName
 	 *            The name of the container token - eg <code>FOO</code> for
-	 *            <code>&lt;FOO:<i>keys</i>&gt;</code> and
-	 *            <code>&lt;/FOO&gt;</code> start and end tokens.
+	 *            <code>{/FOO}</code> start and end tokens.
 	 * @param matcher
 	 *            The ContainerMatcher.
 	 * @return The interpolated string.
@@ -1045,19 +1031,30 @@ public abstract class TokenParser {
 			return content;
 		}
 
-		// Initialize global variables.
+		// Initialize global variables for "{...}" and "<...>" parsing.
+		containerMatcher = matcher;
+		containerToken = tokenName;
+
+		// Initialize global variables for "{...}" parsing, then parse.
 		containerIndex = 0;
 		containerLevel = 0;
-		newContent = "";
-		oldContent = content;
-		containerMatcher = matcher;
-		containerStartToken = "<" + tokenName;
-		containerEndToken = "</" + tokenName + ">";
-
-		// Parse for container tokens using recursive algorithm. Return the
-		// parsed content.
+		containerOldContent = content;
+		containerNewContent = "";
+		containerTokenBegin = TOKEN_BEGIN;
+		containerTokenEnd = TOKEN_END;
 		parseContainerRecursively(true);
-		return newContent;
+
+		// Initialize global variables for "<...>" parsing (legacy).
+		containerIndex = 0;
+		containerLevel = 0;
+		containerOldContent = containerNewContent;
+		containerNewContent = "";
+		containerTokenBegin = DEPRECATED_TOKEN_BEGIN;
+		containerTokenEnd = DEPRECATED_TOKEN_END;
+		parseContainerRecursively(true);
+
+		// Return the parsed content.
+		return containerNewContent;
 	}
 
 	/**
@@ -1075,12 +1072,12 @@ public abstract class TokenParser {
 		/*
 		 * Get each next container token in turn, until end of content. This has
 		 * the side -effect of buffering the content to display, as appropriate,
-		 * into the newContent global variable. If a start-container token is
-		 * found, recurse a level (setting the display control variable based on
-		 * whether the container match showed the user was qualified for the
-		 * container or not). If an end-container token is found, and we have
-		 * recursed at least a level, return - it means we are done parsing this
-		 * recursion's job.
+		 * into the containerNewContent global variable. If a start-container
+		 * token is found, recurse a level (setting the display control variable
+		 * based on whether the container match showed the user was qualified
+		 * for the container or not). If an end-container token is found, and we
+		 * have recursed at least a level, return - it means we are done parsing
+		 * this recursion's job.
 		 */
 		while ((result = nextContainer((containerLevel == 0) || isIncluded)) != FOUND_END) {
 			if (result == FOUND_CONTAINER_START_MATCH) {
@@ -1105,7 +1102,8 @@ public abstract class TokenParser {
 	 * get the content - ie the ContainerMatch was successful), or
 	 * FOUND_CONTAINER_END_MATCH (found end token and user is not qualified - ie
 	 * the ContainerMatch failed). This method also has the side-effect of
-	 * accumulating the parsed content into the newContent global variable.
+	 * accumulating the parsed content into the containerNewContent global
+	 * variable.
 	 * 
 	 * @param isIncluded
 	 *            Controls whether contained-enclosed content is to be included
@@ -1117,8 +1115,11 @@ public abstract class TokenParser {
 		String containerKeyString;
 		String[] containerKeys;
 		boolean containerMatch;
+		String startToken = containerTokenBegin + containerToken;
+		String endToken = containerTokenBegin + "/" + containerToken
+				+ containerTokenEnd;
 
-		if (containerIndex >= oldContent.length()) {
+		if (containerIndex >= containerOldContent.length()) {
 			return FOUND_END;
 		}
 
@@ -1126,8 +1127,8 @@ public abstract class TokenParser {
 		 * Parse for start and end tokens. Use whichever comes first and ignore
 		 * the other until a later invokation of this method.
 		 */
-		j = oldContent.indexOf(containerStartToken, containerIndex);
-		k = oldContent.indexOf(containerEndToken, containerIndex);
+		j = containerOldContent.indexOf(startToken, containerIndex);
+		k = containerOldContent.indexOf(endToken, containerIndex);
 
 		/*
 		 * If start token found first, parse out the keys string and test the
@@ -1145,24 +1146,25 @@ public abstract class TokenParser {
 			 * start tag.
 			 */
 			if (isIncluded) {
-				newContent += oldContent.substring(containerIndex, j);
+				containerNewContent += containerOldContent.substring(
+						containerIndex, j);
 			}
 			/*
 			 * Find the ending ">" of the container start tag - if not found,
 			 * finish, ignore the rest of the content.
 			 */
-			k = oldContent.indexOf(">", j);
+			k = containerOldContent.indexOf(containerTokenEnd, j);
 			if (k == -1) {
-				containerIndex = oldContent.length();
+				containerIndex = containerOldContent.length();
 				return FOUND_END;
 			}
 			/*
 			 * Find the container key string - if any, it starts after ":"
 			 */
 			containerKeyString = "";
-			if (oldContent.charAt(j + containerStartToken.length()) == ':') {
-				containerKeyString = oldContent.substring(j
-						+ containerStartToken.length() + 1, k);
+			if (containerOldContent.charAt(j + startToken.length()) == ':') {
+				containerKeyString = containerOldContent.substring(j
+						+ startToken.length() + 1, k);
 			}
 			containerKeyString = containerKeyString.trim();
 			containerMatch = false;
@@ -1188,9 +1190,10 @@ public abstract class TokenParser {
 		 */
 		if ((k != -1) && ((k < j) || (j == -1))) {
 			if (isIncluded) {
-				newContent += oldContent.substring(containerIndex, k);
+				containerNewContent += containerOldContent.substring(
+						containerIndex, k);
 			}
-			containerIndex = k + containerEndToken.length();
+			containerIndex = k + endToken.length();
 			return FOUND_CONTAINER_END;
 		}
 
@@ -1199,9 +1202,10 @@ public abstract class TokenParser {
 		 * end of the content, if allowed.
 		 */
 		if (isIncluded) {
-			newContent += oldContent.substring(containerIndex);
+			containerNewContent += containerOldContent
+					.substring(containerIndex);
 		}
-		containerIndex = oldContent.length();
+		containerIndex = containerOldContent.length();
 		return FOUND_END;
 	}
 
@@ -1211,5 +1215,122 @@ public abstract class TokenParser {
 	private String[] getContainerKeys(String content) {
 		String containerKeys[] = content.split("\\" + TOKEN_CONTAINER_OR);
 		return containerKeys;
+	}
+
+	/**
+	 * Parses the given content, searching for all occurrences of the given
+	 * parameterized token (like <code>CONTENT-URL</code> for the
+	 * <code>{CONTENT-URL:<i>pathname</i>}</code> token), and replacing them
+	 * with the value generated by the given <code>ValueProvider</code>. This
+	 * method recognizes both <code>{...}</code> and <code>&lt;...&gt;</code>
+	 * symbols for the token boundaries.
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @param tokenName
+	 *            The name of the parameterized token - eg <code>FOO</code>
+	 *            for the <code>{FOO:<i>param</i>}</code> or
+	 *            <code>{FOO:<i>param</i>}</code> token.
+	 * @param provider
+	 *            Provides the value to substitute.
+	 * @return The interpolated string.
+	 */
+	protected String parseParameterized(String content, String tokenName,
+			ValueProvider provider) {
+		if (content == null || tokenName == null || provider == null) {
+			return content;
+		}
+		tokenName = tokenName.toUpperCase().trim();
+		if (content.equals("") || tokenName.equals("")) {
+			return content;
+		}
+
+		// First parse for "{...}" format.
+		content = parseParameterizedIntl(content, tokenName, TOKEN_BEGIN,
+				TOKEN_END, provider);
+
+		// Second parse for legacy "<...>" format.
+		content = parseParameterizedIntl(content, tokenName,
+				DEPRECATED_TOKEN_BEGIN, DEPRECATED_TOKEN_END, provider);
+
+		// Return the parsed content.
+		return (content);
+	}
+
+	/**
+	 * Parse a parameterized token and replace with the provided value.
+	 */
+	private String parseParameterizedIntl(String content, String tokenName,
+			char tokenBegin, char tokenEnd, ValueProvider provider) {
+		String str, param, value;
+		// This makes a token like: {tokenName:
+		String token = tokenBegin + tokenName + ":";
+		// This makes a regex like: (\{tokenName:.*?\})
+		String regex = "(\\" + token + ".*?\\" + tokenEnd + ")";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(content);
+		while (m.find()) {
+			str = m.group();
+			param = str.substring(str.indexOf(token) + token.length(), str
+					.length() - 1);
+			value = provider.getValue(param.trim());
+			if (value != null) {
+				content = content.replaceAll(str, value);
+			} else {
+				content = content.replaceAll(str, "");
+			}
+		}
+		return (content);
+	}
+
+	/**
+	 * Parses the given content, searching for all occurrences of the given
+	 * unparameterized token (like <code>EMAIL</code> for the
+	 * <code>{EMAIL}</code> or <code>{EMAIL}</code> tokens), and replacing
+	 * them with the given value. This method recognizes both <code>{...}</code>
+	 * and <code>&lt;...&gt;</code> symbols for the token boundaries.
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @param tokenName
+	 *            The name of the unparameterized token - eg <code>FOO</code>
+	 *            for the <code>{FOO}</code> or <code>&lt;FOO&gt;</code>
+	 *            tokens.
+	 * @param value
+	 *            The value to substitute
+	 * @return The interpolated string.
+	 */
+	protected String parseUnparameterized(String content, String tokenName,
+			String value) {
+		if (content == null || tokenName == null) {
+			return content;
+		}
+		tokenName = tokenName.toUpperCase().trim();
+		if (content.equals("") || tokenName.equals("")) {
+			return content;
+		}
+		if (value == null) {
+			value = "";
+		}
+
+		// First parse for "{...}" format.
+		content = parseUnparameterizedIntl(content, tokenName, TOKEN_BEGIN,
+				TOKEN_END, value);
+
+		// Second parse for legacy "<...>" format.
+		content = parseUnparameterizedIntl(content, tokenName,
+				DEPRECATED_TOKEN_BEGIN, DEPRECATED_TOKEN_END, value);
+
+		// Return the parsed content.
+		return (content);
+	}
+
+	/**
+	 * Parse an unparameterized token and replace with the provided value.
+	 */
+	private String parseUnparameterizedIntl(String content, String tokenName,
+			char tokenBegin, char tokenEnd, String value) {
+		String regex = "\\" + tokenBegin + tokenName + "\\" + tokenEnd;
+		return content.replaceAll(regex, value);
 	}
 }

@@ -125,8 +125,8 @@ public abstract class FileInterpolator {
 	protected abstract String[] getGroups();
 
 	/**
-	 * Return true if the user is logged-in and false otherwise. Different action by
-	 * portal and portlet, so therefore this is an abstract method.
+	 * Return true if the user is logged-in and false otherwise. Different
+	 * action by portal and portlet, so therefore this is an abstract method.
 	 * 
 	 * @return array of groups
 	 */
@@ -154,23 +154,28 @@ public abstract class FileInterpolator {
 	 * subclass documentation. This interpolate method is responsible for
 	 * substituting the following tokens, in the following order:
 	 * <dl>
-	 * <dt><code>&lt;TOKEN:<i>key</i>&gt;</code></dt>
+	 * <dt><code>{TOKEN:<i>key</i>}</code></dt>
 	 * <dd>This token is parsed first, and the substituted content is added to
 	 * the string. So subsequent substitutions operate against the value for the
 	 * <i>key</i> - therefore that value may itself contain other tokens.
-	 * <dt><code>&lt;SITE&gt;</code></dt>
-	 * <dt><code>&lt;SITE-URL&gt;</code></dt>
-	 * <dt><code>&lt;REQUEST-URL&gt;</code></dt>
-	 * <dt><code>&lt;LANGUAGE-CODE&gt;</code></dt>
-	 * <dt><code>&lt;LANGUAGE-TAG&gt;</code></dt>
-	 * <dt><code>&lt;EMAIL&gt;</code></dt>
-	 * <dt><code>&lt;NAME&gt;</code></dt>
-	 * <dt><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></dt>
-	 * <dt><code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code></dt>
-	 * <dt><code>&lt;LOGGED-IN&gt;...&lt;/LOGGED-IN&gt;</code></dt>
-	 * <dt><code>&lt;LOGGED-OUT&gt;...&lt;/LOGGED-OUT&gt;</code></dt>
-	 * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
+	 * <dt><code>{SITE}</code></dt>
+	 * <dt><code>{SITE-URL}</code></dt>
+	 * <dt><code>{REQUEST-URL}</code></dt>
+	 * <dt><code>{LANGUAGE-CODE}</code></dt>
+	 * <dt><code>{LANGUAGE-TAG}</code></dt>
+	 * <dt><code>{EMAIL}</code></dt>
+	 * <dt><code>{NAME}</code></dt>
+	 * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
+	 * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+	 * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code></dt>
+	 * <dt><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
+	 * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
 	 * </dl>
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> The <code>&lt;</code> and <code>&gt;</code> symbols are
+	 * also supported for the token boundaries, in place of <code>{</code> and
+	 * <code>}</code>.
 	 * </p>
 	 * 
 	 * @return String the file content (null if file was not found or was empty)
@@ -238,7 +243,7 @@ public abstract class FileInterpolator {
 		// Parse login/logout sections
 		content = t.parseLoggedInContainer(content, getLoginStatus());
 		content = t.parseLoggedOutContainer(content, getLoginStatus());
-		
+
 		// Parse group sections
 		content = t.parseGroupContainer(content, getGroups());
 
