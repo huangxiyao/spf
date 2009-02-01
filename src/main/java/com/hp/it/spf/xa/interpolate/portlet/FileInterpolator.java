@@ -30,12 +30,14 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * This class uses the portlet <code>TokenParser</code> to do most of its
  * work. As of this writing, the following tokens are supported in the input
- * file (note: these are not XML - except where noted, tokens are case-sensitive
- * and do not require a closing tag):
+ * file. <b>Note:</b> Your content may use <code>&lt;</code> and
+ * <code>&gt;</code> instead of <code>{</code> and <code>}</code> as the
+ * token delimiters, if desired. The token names are case-sensitive.
+ * 
  * </p>
  * 
  * <dl>
- * <dt><code>&lt;CONTENT-URL:<i>pathname</i>&gt;</code></dt>
+ * <dt><code>{CONTENT-URL:<i>pathname</i>}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert a URL for an <b>unlocalized</b> static resource
@@ -56,7 +58,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * FileInterpolator:
  * </p>
  * <p>
- * <code>&lt;IMG SRC="&lt;CONTENT-URL:/images/picture.jpg&gt;"&gt;</code>
+ * <code>&lt;IMG SRC="{CONTENT-URL:/images/picture.jpg}"&gt;</code>
  * </p>
  * <p>
  * The returned text string will contain the necessary URL for showing the image
@@ -69,26 +71,26 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * <b>Note:</b> This token is for <b>unlocalized</b> content only. For
  * <b>localized</b> static content, see the
- * <code>&lt;LOCALIZED-CONTENT-URL:<i>pathname</i>&gt;</code> token.
- * Actually the <code>&lt;LOCALIZED-CONTENT-URL:<i>pathname</i>&gt;</code>
+ * <code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code> token.
+ * Actually the <code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code>
  * token works for unlocalized content too, so the
- * <code>&lt;CONTENT-URL:<i>pathname</i>&gt;</code> token is isn't really
+ * <code>{CONTENT-URL:<i>pathname</i>}</code> token is isn't really
  * necessary. It is retained for backward-compatibility.
  * </p>
  * 
- * <dt><code>&lt;EMAIL&gt;</code></dt>
+ * <dt><code>{EMAIL}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the email address of the user into the interpolated
  * content. The email address is taken from the user information passed from the
  * portal into the portlet request by SPF. For example,
- * <code>&lt;EMAIL&gt;</code> is replaced with <code>john.doe@acme.com</code>
+ * <code>{EMAIL}</code> is replaced with <code>john.doe@acme.com</code>
  * for that user. (If the email address in the user profile map is null - eg the
  * user is not logged-in - then an empty string is inserted.)
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
+ * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -104,18 +106,18 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * <p>
  * In the <code><i>groups</i></code> parameter to the
- * <code>&lt;GROUP:<i>groups</i>&gt;</code> token, you can list just a
+ * <code>{GROUP:<i>groups</i>}</code> token, you can list just a
  * single group name, or multiple group names (use the <code>|</code>
  * character to delimit them). The content enclosed by the
- * <code>&lt;GROUP:<i>groups</i>&gt;</code> and <code>&lt;/GROUP&gt;</code>
+ * <code>{GROUP:<i>groups</i>}</code> and <code>{/GROUP}</code>
  * tokens is omitted from the returned content unless the groups provided to the
  * constructor match one of those group names.
  * </p>
  * <p>
- * The content enclosed by the <code>&lt;GROUP:<i>groups</i>&gt;</code> and
- * <code>&lt;/GROUP&gt;</code> tokens can be anything, including any of the
+ * The content enclosed by the <code>{GROUP:<i>groups</i>}</code> and
+ * <code>{/GROUP}</code> tokens can be anything, including any of the
  * special tokens listed here (even other
- * <code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code> sections - ie,
+ * <code>{GROUP:<i>groups</i>}...{/GROUP}</code> sections - ie,
  * you can "nest" them).
  * </p>
  * <p>
@@ -126,40 +128,40 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  * <pre>
  * This content is for everybody.
- * &lt;GROUP:A&gt;
+ * {GROUP:A}
  * This content is only for members of group A.
- * &lt;GROUP:B|C&gt;
+ * {GROUP:B|C}
  * This content is only for members of groups A and B, or A and C.
- * &lt;/GROUP&gt;
- * &lt;/GROUP&gt;
+ * {/GROUP}
+ * {/GROUP}
  * </pre>
  * 
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;LANGUAGE-CODE&gt;</code></dt>
+ * <dt><code>{LANGUAGE-CODE}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the ISO 639-1 language code from the current portlet
  * request (as provided in the locale of the request). Note that the country
  * code is not a part of this. For example, for a Japanese request,
- * <code>&lt;LANGUAGE-CODE&gt;</code> is replaced with <code>ja</code>.
+ * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>.
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;LANGUAGE-TAG&gt;</code></dt>
+ * <dt><code>{LANGUAGE-TAG}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the RFC 3066 language tag from the current portlet
  * request (as provided in the locale of the request). Note that the country
  * code is included in the language tag, if it was set in the locale (otherwise
  * the language tag consists of the language code only). For example, for a
- * French (Canada) request, <code>&lt;LANGUAGE-TAG&gt;</code> is replaced with
+ * French (Canada) request, <code>{LANGUAGE-TAG}</code> is replaced with
  * <code>fr-CA</code>.
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;LOCALIZED-CONTENT-URL:<i>pathname</i>&gt;</code></dt>
+ * <dt><code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert a URL for a (potentially localized) static resource
@@ -187,7 +189,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * text file to be processed by the FileInterpolator:
  * </p>
  * <p>
- * <code>&lt;IMG SRC="&lt;LOCALIZED-CONTENT-URL:/images/picture.jpg&gt;"&gt;</code>
+ * <code>&lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/picture.jpg}"&gt;</code>
  * </p>
  * <p>
  * The returned text string will contain the necessary URL for showing the
@@ -199,8 +201,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * have deployed the file-relay servlet into your portlet application.
  * </p>
  * 
- * <dt><code>&lt;LOGGED-IN&gt;...&lt;/LOGGED-IN&gt;</code><br>
- * <code>&lt;LoGGED-OUT&gt;...&lt;/LOGGED-OUT&gt;</code></dt>
+ * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code><br>
+ * <code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
  * <dd>
  * <p>
  * Use these tokens around sections of content which should only be included in
@@ -221,18 +223,18 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  * <pre>
  * This content is for everybody.
- * &lt;LOGGED-IN&gt;
+ * {LOGGED-IN}
  * This content is only for users who are logged-in.
- * &lt;/LOGGED-IN&gt;
- * &lt;LOGGED-OUT&gt;
+ * {/LOGGED-IN}
+ * {LOGGED-OUT}
  * This content is only for users who are logged-out.
- * &lt;/LOGGED-OUT&gt;
+ * {/LOGGED-OUT}
  * </pre>
  * 
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;NAME&gt;</code></dt>
+ * <dt><code>{NAME}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the full name of the user into the interpolated
@@ -242,7 +244,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * current portlet request.
  * </p>
  * <p>
- * For example, <code>&lt;NAME&gt;</code> is replaced with
+ * For example, <code>{NAME}</code> is replaced with
  * <code>Scott Jorgenson</code> for that user by default (ie, for most
  * locales). For certain Asian locales, where it is customary to use the family
  * name first (eg Japan - the list of such locales is configured in
@@ -256,7 +258,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;PORTLET:<i>portlets</i>&gt;...&lt;/PORTLET&gt;</code></dt>
+ * <dt><code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -267,11 +269,11 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * <p>
  * In the <code><i>portlets</i></code> parameter to the
- * <code>&lt;PORTLET:<i>portlets</i>&gt;</code> token, you can list just a
+ * <code>{PORTLET:<i>portlets</i>}</code> token, you can list just a
  * single portlet friendly ID, or multiple (use the <code>|</code> character
  * to delimit them). The content enclosed by the
- * <code>&lt;PORTLET:<i>portlets</i>&gt;</code> and
- * <code>&lt;/PORTLET&gt;</code> tokens is omitted from the returned content
+ * <code>{PORTLET:<i>portlets</i>}</code> and
+ * <code>{/PORTLET}</code> tokens is omitted from the returned content
  * unless the portlet friendly ID in the request matches one of those values.
  * The match is a case-insensitive substring match.
  * </p>
@@ -281,10 +283,10 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * does this automatically (a non-standard behavior).
  * </p>
  * <p>
- * The content enclosed by the <code>&lt;PORTLET:<i>portlets</i>&gt;</code>
- * and <code>&lt;/PORTLET&gt;</code> tokens can be anything, including any of
+ * The content enclosed by the <code>{PORTLET:<i>portlets</i>}</code>
+ * and <code>{/PORTLET}</code> tokens can be anything, including any of
  * the special tokens supported by this class (including other
- * <code>&lt;PORTLET:<i>portlets</i>&gt;...&lt;/PORTLET&gt;</code> tokens -
+ * <code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code> tokens -
  * ie you can "nest" them.
  * </p>
  * <p>
@@ -295,24 +297,24 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  * <pre>
  * This content is for all portlets using this file to show.
- * &lt;PORTLET:portlet_A|portlet_B&gt;
+ * {PORTLET:portlet_A|portlet_B}
  * This content is only for portlet_A or portlet_B to show.
- * &lt;PORTLET:B&gt;
+ * {PORTLET:B}
  * This content is only for portlet_B to show.
- * &lt;/PORTLET&gt;
- * &lt;/PORTLET&gt;
+ * {/PORTLET}
+ * {/PORTLET}
  * </pre>
  * 
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;REQUEST-URL&gt;</code></dt>
+ * <dt><code>{REQUEST-URL}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert into the content the complete current URL which the
  * browser used to access the current portlet and page. This URL is taken from a
  * non-standard attribute in the request which it is assumed the portal has set
- * (SPF sets this by default). For example, <code>&lt;REQUEST-URL&gt;</code>
+ * (SPF sets this by default). For example, <code>{REQUEST-URL}</code>
  * is replaced with
  * <code>http://portal.hp.com/portal/site/itrc/template.PAGE/...</code> when
  * the portlet is requested from the <code>itrc</code> portal site on the
@@ -320,7 +322,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;ROLE:<i>roles</i>&gt;...&lt;/ROLE&gt;</code></dt>
+ * <dt><code>{ROLE:<i>roles</i>}...{/ROLE}</code></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -335,18 +337,18 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * <p>
  * In the <code>roles</code> parameter to the
- * <code>&lt;ROLE:<i>roles</i>&gt;</code> token, you can list just a single
+ * <code>{ROLE:<i>roles</i>}</code> token, you can list just a single
  * role name, or multiple role names (use the <code>|</code> character to
  * delimit them). The content enclosed by the
- * <code>&lt;ROLE:<i>roles</i>&gt;</code> and <code>&lt;/ROLE&gt;</code>
+ * <code>{ROLE:<i>roles</i>}</code> and <code>{/ROLE}</code>
  * tokens is omitted from the returned content unless the PortletRequest
  * indicates the user is in one of those role(s).
  * </p>
  * <p>
- * The content enclosed by the <code>&lt;ROLE:<i>roles</i>&gt;</code> and
- * <code>&lt;/ROLE&gt;</code> tokens can be anything, including any of the
+ * The content enclosed by the <code>{ROLE:<i>roles</i>}</code> and
+ * <code>{/ROLE}</code> tokens can be anything, including any of the
  * special tokens listed here (even other
- * <code>&lt;ROLE:<i>roles</i>&gt;...&lt;/ROLE&gt;</code> sections - ie, you
+ * <code>{ROLE:<i>roles</i>}...{/ROLE}</code> sections - ie, you
  * can "nest" them).
  * </p>
  * <p>
@@ -357,30 +359,30 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  * <pre>
  * This content is for everybody.
- * &lt;ROLE:A&gt;
+ * {ROLE:A}
  * This content is only for users in role A.
- * &lt;ROLE:B|C&gt;
+ * {ROLE:B|C}
  * This content is only for users in roles A and B, or A and C.
- * &lt;/ROLE&gt;
- * &lt;/ROLE&gt;
+ * {/ROLE}
+ * {/ROLE}
  * </pre>
  * 
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;SITE&gt;</code></dt>
+ * <dt><code>{SITE}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the site name of the current portal site into the
  * interpolated content. The site name is taken from a non-standard attribute in
  * the request which it is assumed the portal has set (SPF sets this by default -
  * the value set is the so-called "site DNS name"). For example,
- * <code>&lt;SITE&gt;</code> is replaced with <code>itrc</code> when the
+ * <code>{SITE}</code> is replaced with <code>itrc</code> when the
  * portlet is requested from the <code>itrc</code> portal site.
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code></dt>
+ * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -391,10 +393,10 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * <p>
  * In the <code><i>names</i></code> parameter to the
- * <code>&lt;SITE:<i>names</i>&gt;</code> token, you can list just a single
+ * <code>{SITE:<i>names</i>}</code> token, you can list just a single
  * site name, or multiple (use the <code>|</code> character to delimit them).
- * The content enclosed by the <code>&lt;SITE:<i>names</i>&gt;</code> and
- * <code>&lt;/SITE&gt;</code> tokens is omitted from the returned content
+ * The content enclosed by the <code>{SITE:<i>names</i>}</code> and
+ * <code>{/SITE}</code> tokens is omitted from the returned content
  * unless the site name in the request matches one of those values. The match is
  * case-insensitive.
  * </p>
@@ -404,10 +406,10 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * automatically (a non-standard behavior).
  * </p>
  * <p>
- * The content enclosed by the <code>&lt;SITE:<i>names</i>&gt;</code> and
- * <code>&lt;/SITE&gt;</code> tokens can be anything, including any of the
+ * The content enclosed by the <code>{SITE:<i>names</i>}</code> and
+ * <code>{/SITE}</code> tokens can be anything, including any of the
  * special tokens supported by this class (including other
- * <code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code> tokens - ie you
+ * <code>{SITE:<i>names</i>}...{/SITE}</code> tokens - ie you
  * can "nest" them.
  * </p>
  * <p>
@@ -418,31 +420,31 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  * <pre>
  * This content is for all portlets using this file to show.
- * &lt;SITE:site_A|site_B&gt;
+ * {SITE:site_A|site_B}
  * This content is only to be shown when the portlet is in site_A or site_B.
- * &lt;SITE:site_B&gt;
+ * {SITE:site_B}
  * This content is only to be shown when the portlet is in site_B.
- * &lt;/SITE&gt;
- * &lt;/SITE&gt;
+ * {/SITE}
+ * {/SITE}
  * </pre>
  * 
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;SITE-URL&gt;</code></dt>
+ * <dt><code>{SITE-URL}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the URL for the home page of the current portal site
  * into the interpolated content. This URL is taken from a non-standard
  * attribute in the request which it is assumed the portal has set (SPF sets
- * this by default). For example, <code>&lt;SITE-URL&gt;</code> is replaced
+ * this by default). For example, <code>{SITE-URL}</code> is replaced
  * with <code>http://portal.hp.com/portal/site/itrc/</code> when the portlet
  * is requested from the <code>itrc</code> portal site on the
  * <code>portal.hp.com</code> server using HTTP.
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;TOKEN:<i>key</i>&gt;</code></dt>
+ * <dt><code>{TOKEN:<i>key</i>}</code></dt>
  * <dd>
  * <p>
  * Use this token to lookup a value for the given key in a property file, and
@@ -451,7 +453,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * that in the FileInterpolator constructor. The property value may itself
  * contain any content including any of the special markup tokens supported by
  * FileInterpolator, <b>except</b> another
- * <code>&lt;TOKEN:<i>key</i>&gt;</code> token.
+ * <code>{TOKEN:<i>key</i>}</code> token.
  * </p>
  * <p>
  * Whether you use <code>default_tokens.properties</code> or your own
@@ -468,7 +470,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * If your input file contains the following:
  * </p>
  * <p>
- * <code>&lt;A HREF="&lt;TOKEN:url.hp-shopping&gt;"&gt;Go to HP shopping.&lt;/A&gt;</code>
+ * <code>&lt;A HREF="{TOKEN:url.hp-shopping}"&gt;Go to HP shopping.&lt;/A&gt;</code>
  * </p>
  * <p>
  * Then the interpolated content will contain a hyperlink taking the user to the
@@ -479,14 +481,14 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></dt>
+ * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert a given string property of the user into the
  * interpolated content. The <code><i>key</i></code> parameter in the token
  * is the name of the user property, and the user properties themselves are
  * taken from the user information placed by SPF in the current portlet request.
- * For example, <code>&lt;USER-PROPERTY:user.name.given&gt;</code> is replaced
+ * For example, <code>{USER-PROPERTY:user.name.given}</code> is replaced
  * with <code>Scott</code> for a user with such a first (given) name. The
  * property name <code><i>key</i></code>'s are not listed here and may vary
  * based on the portal implementation.
@@ -508,23 +510,23 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  * <p>
  * <ul>
- * <li><code>&lt;TOKEN:<i>key</i>&gt;</code></li>
- * <li><code>&lt;SITE&gt;</code></li>
- * <li><code>&lt;SITE-URL&gt;</code></li>
- * <li><code>&lt;REQUEST-URL&gt;</code></li>
- * <li><code>&lt;LANGUAGE-CODE&gt;</code></li>
- * <li><code>&lt;LANGUAGE-TAG&gt;</code></li>
- * <li><code>&lt;EMAIL&gt;</code></li>
- * <li><code>&lt;NAME&gt;</code></li>
- * <li><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></li>
- * <li><code>&lt;CONTENT-URL:<i>path</i>&gt;</code></li>
- * <li><code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt;</code></li>
- * <li><code>&lt;SITE:<i>names</i>&gt;</code></li>
- * <li><code>&lt;LOGGED-IN&gt;</code></li>
- * <li><code>&lt;LOGGED-OUT&gt;</code></li>
- * <li><code>&lt;GROUP:<i>groups</i>&gt;</code></li>
- * <li><code>&lt;PORTLET:<i>portlets</i>&gt;</code></li>
- * <li><code>&lt;ROLE:<i>roles</i>&gt;</code></li>
+ * <li><code>{TOKEN:<i>key</i>}</code></li>
+ * <li><code>{SITE}</code></li>
+ * <li><code>{SITE-URL}</code></li>
+ * <li><code>{REQUEST-URL}</code></li>
+ * <li><code>{LANGUAGE-CODE}</code></li>
+ * <li><code>{LANGUAGE-TAG}</code></li>
+ * <li><code>{EMAIL}</code></li>
+ * <li><code>{NAME}</code></li>
+ * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
+ * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
+ * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
+ * <li><code>{SITE:<i>names</i>}</code></li>
+ * <li><code>{LOGGED-IN}</code></li>
+ * <li><code>{LOGGED-OUT}</code></li>
+ * <li><code>{GROUP:<i>groups</i>}</code></li>
+ * <li><code>{PORTLET:<i>portlets</i>}</code></li>
+ * <li><code>{ROLE:<i>roles</i>}</code></li>
  * </ul>
  * </p>
  * 
@@ -567,7 +569,7 @@ public class FileInterpolator extends
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> No token-substitutions property file is passed in this
-	 * constructor. Therefore any <code>&lt;TOKEN:<i>key</i>&gt;</code>
+	 * constructor. Therefore any <code>{TOKEN:<i>key</i>}</code>
 	 * tokens in the file content will be resolved against the default
 	 * token-substitutions property file (<code>default_tokens.properties</code>).
 	 * </p>
@@ -604,7 +606,7 @@ public class FileInterpolator extends
 	 * </p>
 	 * <p>
 	 * The token-substitutions pathname provided is to be used with any
-	 * <code>&lt;TOKEN:<i>key</i>&gt;</code> tokens in the file content;
+	 * <code>{TOKEN:<i>key</i>}</code> tokens in the file content;
 	 * they will be resolved against the file whose pathname you provide. The
 	 * pathname should include any necessary path (relative to the class loader)
 	 * followed by the filename (the extension <code>.properties</code> is
@@ -622,7 +624,7 @@ public class FileInterpolator extends
 	 * @param subsFilePath
 	 *            The filename and path relative to where the class loader
 	 *            searches for the token-substitutions property file (for
-	 *            purposes of any <code>&lt;TOKEN:key&gt;</code> tokens in the
+	 *            purposes of any <code>{TOKEN:key}</code> tokens in the
 	 *            file content)
 	 */
 	public FileInterpolator(PortletRequest pRequest, PortletResponse pResponse,

@@ -18,12 +18,13 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * the portlet context. This class is used heavily by the portlet
  * FileInterpolator. The following token substitutions are supported by this
  * class (plus those supported by the base class). See the method documentation
- * here (and in the base class) for further description.
+ * here (and in the base class) for further description. <b>Note:</b> The
+ * <code>&lt;</code> and <code>&gt;</code> symbols may be used in place of
+ * <code>{</code> and <code>}</code>, if you prefer.
  * </p>
  * <dl>
- * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
- * <dt><code>&lt;PORTLET:<i>ids</i>&gt;...&lt;/PORTLET&gt;</code></dt>
- * <dt><code>&lt;ROLE:<i>roles</i>^gt;...&lt;/ROLE&gt;</code></dt>
+ * <dt><code>{PORTLET:<i>ids</i>}...{/PORTLET}</code></dt>
+ * <dt><code>{ROLE:<i>roles</i>}...{/ROLE}</code></dt>
  * </dl>
  * 
  * @author <link href="xiao-bing.zuo@hp.com">Zuo Xiaobing</link>
@@ -113,7 +114,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * Constructs a new TokenParser for the given portlet request and response.
 	 * The default token-substitutions property file (<code>default_tokens.properties</code>)
 	 * will be assumed, if subsequent parseToken calls find any
-	 * <code>&lt;TOKEN:key&gt;</code> tokens.
+	 * <code>{TOKEN:key}</code> tokens.
 	 * </p>
 	 * 
 	 * @param pRequest
@@ -132,7 +133,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * and overriding the token-substitutions property file. The given file,
 	 * instead of the default (<code>default_tokens.properties</code>) will
 	 * be assumed, if subsequent parseToken calls find any
-	 * <code>&lt;TOKEN:key&gt;</code> tokens.
+	 * <code>{TOKEN:key}</code> tokens.
 	 * </p>
 	 * 
 	 * @param pRequest
@@ -205,24 +206,12 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	}
 
 	/**
-	 * Log error.
-	 * 
-	 * @param msg
-	 *            log message
-	 */
-	protected void logError(String msg) {
-		if (portletLog.isErrorEnabled()) {
-			portletLog.error(msg);
-		}
-	}
-
-	/**
 	 * <p>
-	 * Parses the string for any <code>&lt;PORTLET:<i>ids</i>&gt;</code>
+	 * Parses the string for any <code>{PORTLET:<i>ids</i>}</code>
 	 * content; such content is deleted if the given portlet ID does not qualify
 	 * (otherwise only the special markup is removed). The <i>ids</i> may
 	 * include one or more portlet IDs, delimited by "|" for a logical-or.
-	 * <code>&lt;PORTLET:<i>ids</i>&gt;</code> markup may be nested for
+	 * <code>{PORTLET:<i>ids</i>}</code> markup may be nested for
 	 * logical-and (however since any one portlet has only one portlet ID, the
 	 * desire to logical-and seems unlikely).
 	 * </p>
@@ -240,9 +229,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * 
 	 * <pre>
 	 *  This content is for all portlets to display.
-	 *  &lt;PORTLET:abc|def&gt;
+	 *  {PORTLET:abc|def}
 	 *  This content is to be displayed only by portlets whose ID's contain abc or def.
-	 *  &lt;/PORTLET&gt;
+	 *  {/PORTLET}
 	 * </pre>
 	 * 
 	 * <p>
@@ -268,7 +257,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * 
 	 * <p>
 	 * If you provide null content, null is returned. If you provide null or
-	 * empty portlet ID, all <code>&lt;PORTLET&gt;</code>-enclosed sections
+	 * empty portlet ID, all <code>{PORTLET}</code>-enclosed sections
 	 * are removed from the content.
 	 * </p>
 	 * 
@@ -286,11 +275,11 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the string for any <code>&lt;ROLE:<i>roles</i>&gt;</code>
+	 * Parses the string for any <code>{ROLE:<i>roles</i>}</code>
 	 * content; such content is deleted if the given role names do not qualify
 	 * (otherwise only the special markup is removed). The <i>roles</i> may
 	 * include one or more role names, delimited by "|" for a logical-or.
-	 * <code>&lt;ROLE:<i>roles</i>&GT;</code> markup may be nested for
+	 * <code>{ROLE:<i>roles</i>&GT;</code> markup may be nested for
 	 * logical-and.
 	 * </p>
 	 * 
@@ -300,13 +289,13 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * 
 	 * <pre>
 	 *  This content is for everyone.
-	 *  &lt;ROLE:abc|def&gt;
+	 *  {ROLE:abc|def}
 	 *  This content is only for users in the abc or def roles.
-	 *    &lt;ROLE:xyz&gt;
+	 *    {ROLE:xyz}
 	 *    This content is only for users in both the xyz role 
 	 *    and the abc or def roles.
-	 *    &lt;/ROLE&gt;
-	 *  &lt;/ROLE&gt;
+	 *    {/ROLE}
+	 *  {/ROLE}
 	 * </pre>
 	 * 
 	 * <p>
@@ -339,7 +328,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * 
 	 * <p>
 	 * If you provide null content, null is returned. If you provide null or
-	 * empty roles, all <code>&lt;ROLE&gt;</code>-enclosed sections are
+	 * empty roles, all <code>{ROLE}</code>-enclosed sections are
 	 * removed from the content.
 	 * </p>
 	 * 
