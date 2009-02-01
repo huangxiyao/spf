@@ -16,9 +16,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * The concrete subclass for parsing strings looking for tokens to substitute in
  * the portal context. This class is used heavily by the portal
- * FileInterpolator. The following token substitutions are supported by this
- * class (plus those supported by the base class). See the method documentation
- * here (and in the base class) for further description.
+ * FileInterpolator. This class supports the exact same token substitutions as the base class - see the base class method
+ * documentation for further description.
  * </p>
  * <dl>
  * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
@@ -129,13 +128,4 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		}
 	}
 
-	/**
-	 * Log error.
-	 * 
-	 * @param msg
-	 *            log
-	 */
-	protected void logError(String msg) {
-		portalLog.error(msg);
-	}
 }

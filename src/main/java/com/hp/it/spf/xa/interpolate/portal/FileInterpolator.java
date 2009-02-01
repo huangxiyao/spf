@@ -32,13 +32,14 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * This class uses the portal <code>TokenParser</code> to do most of its work.
- * As of this writing, the following tokens are supported in the input file
- * (note: these are not XML - except where noted, tokens are case-sensitive and
- * do not require a closing tag):
+ * As of this writing, the following tokens are supported in the input file.
+ * <b>Note:</b> Your content may use <code>&lt;</code> and <code>&gt;</code>
+ * instead of <code>{</code> and <code>}</code> as the token delimiters, if
+ * desired. The token names are case-sensitive.
  * </p>
  * 
  * <dl>
- * <dt><code>&lt;CONTENT-URL:<i>pathname</i>&gt;</code></dt>
+ * <dt><code>{CONTENT-URL:<i>pathname</i>}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert a URL for an <b>unlocalized</b> secondary support
@@ -54,7 +55,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * secondary support file:
  * </p>
  * <p>
- * <code>&lt;IMG SRC="&lt;CONTENT-URL:picture.jpg&gt;"&gt;</code>
+ * <code>&lt;IMG SRC="{CONTENT-URL:picture.jpg}"&gt;</code>
  * </p>
  * <p>
  * The returned text string will contain the necessary URL for showing the image
@@ -63,26 +64,26 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * <b>Note:</b> This token is for <b>unlocalized</b> content only. For
  * <b>localized</b> secondary support files, see the
- * <code>&lt;LOCALIZED-CONTENT-URL:<i>pathname</i>&gt;</code> token.
- * Actually the <code>&lt;LOCALIZED-CONTENT-URL:<i>pathname</i>&gt;</code>
+ * <code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code> token.
+ * Actually the <code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code>
  * token works for unlocalized content too, so the
- * <code>&lt;CONTENT-URL:<i>pathname</i>&gt;</code> token isn't really
+ * <code>{CONTENT-URL:<i>pathname</i>}</code> token isn't really
  * necessary. It is retained for backward-compatibility.
  * </p>
  * 
- * <dt><code>&lt;EMAIL&gt;</code></dt>
+ * <dt><code>{EMAIL}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the email address of the user into the interpolated
  * content. The email address is taken from the <code>email</code> property of
- * the portal User object. For example, <code>&lt;EMAIL&gt;</code> is replaced
+ * the portal User object. For example, <code>{EMAIL}</code> is replaced
  * with <code>john.doe@acme.com</code> for that user. (If the email address or
  * user object are null - eg the user is not logged-in - then an empty string is
  * inserted.)
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
+ * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -100,18 +101,18 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * In the <code><i>groups</i></code> parameter to the
- * <code>&lt;GROUP:<i>groups</i>&gt;</code> token, you can list just a
+ * <code>{GROUP:<i>groups</i>}</code> token, you can list just a
  * single group name, or multiple group names (use the <code>|</code>
  * character to delimit them). The content enclosed by the
- * <code>&lt;GROUP:<i>groups</i>&gt;</code> and <code>&lt;/GROUP&gt;</code>
+ * <code>{GROUP:<i>groups</i>}</code> and <code>{/GROUP}</code>
  * tokens is omitted from the returned content unless the groups provided to the
  * constructor match one of those group names.
  * </p>
  * <p>
- * The content enclosed by the <code>&lt;GROUP:<i>groups</i>&gt;</code> and
- * <code>&lt;/GROUP&gt;</code> tokens can be anything, including any of the
+ * The content enclosed by the <code>{GROUP:<i>groups</i>}</code> and
+ * <code>{/GROUP}</code> tokens can be anything, including any of the
  * special tokens listed here (even other
- * <code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code> sections - ie,
+ * <code>{GROUP:<i>groups</i>}...{/GROUP}</code> sections - ie,
  * you can "nest" them).
  * </p>
  * <p>
@@ -122,41 +123,41 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * <pre>
  * This content is for everybody.
- * &lt;GROUP:A&gt;
+ * {GROUP:A}
  * This content is only for members of group A.
- * &lt;GROUP:B|C&gt;
+ * {GROUP:B|C}
  * This content is only for members of groups A and B, or A and C.
- * &lt;/GROUP&gt;
- * &lt;/GROUP&gt;
+ * {/GROUP}
+ * {/GROUP}
  * </pre>
  * 
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;LANGUAGE-CODE&gt;</code></dt>
+ * <dt><code>{LANGUAGE-CODE}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the ISO 639-1 language code from the current portal
  * context (as provided in the locale of the request). Note that the country
  * code is not a part of this. For example, for a Japanese request,
- * <code>&lt;LANGUAGE-CODE&gt;</code> is replaced with <code>ja</code>.
+ * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>.
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;LANGUAGE-TAG&gt;</code></dt>
+ * <dt><code>{LANGUAGE-TAG}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the RFC 3066 language tag from the current portal
  * context (as provided in the locale of the request). Note that the country
  * code is included in the language tag, if it was set in the locale (otherwise
  * the language tag consists of the language code only). For example, for a
- * French (Canada) request, <code>&lt;LANGUAGE-TAG&gt;</code> is replaced with
+ * French (Canada) request, <code>{LANGUAGE-TAG}</code> is replaced with
  * <code>fr-CA</code>.
  * </p>
  * </dd>
  * 
  * <dl>
- * <dt><code>&lt;LOCALIZED-CONTENT-URL:<i>pathname</i>&gt;</code></dt>
+ * <dt><code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert a URL for a (potentially localzied) secondary
@@ -179,7 +180,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * as another secondary support file:
  * </p>
  * <p>
- * <code>&lt;IMG SRC="&lt;LOCALIZED-CONTENT-URL:picture.jpg&gt;"&gt;</code>
+ * <code>&lt;IMG SRC="{LOCALIZED-CONTENT-URL:picture.jpg}"&gt;</code>
  * </p>
  * <p>
  * The returned text string will contain the necessary URL for showing the
@@ -188,8 +189,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * 
- * <dt><code>&lt;LOGGED-IN&gt;...&lt;/LOGGED-IN&gt;</code><br>
- * <code>&lt;LoGGED-OUT&gt;...&lt;/LOGGED-OUT&gt;</code></dt>
+ * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code><br>
+ * <code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
  * <dd>
  * <p>
  * Use these tokens around sections of content which should only be included in
@@ -209,18 +210,18 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * <pre>
  * This content is for everybody.
- * &lt;LOGGED-IN&gt;
+ * {LOGGED-IN}
  * This content is only for users who are logged-in.
- * &lt;/LOGGED-IN&gt;
- * &lt;LOGGED-OUT&gt;
+ * {/LOGGED-IN}
+ * {LOGGED-OUT}
  * This content is only for users who are logged-out.
- * &lt;/LOGGED-OUT&gt;
+ * {/LOGGED-OUT}
  * </pre>
  * 
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;NAME&gt;</code></dt>
+ * <dt><code>{NAME}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the full name of the user into the interpolated
@@ -230,7 +231,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * user object, and the locale is taken from the current portal request.
  * </p>
  * <p>
- * For example, <code>&lt;NAME&gt;</code> is replaced with
+ * For example, <code>{NAME}</code> is replaced with
  * <code>Scott Jorgenson</code> for that user by default (ie, for most
  * locales). For certain Asian locales, where it is customary to use the family
  * name first (eg Japan - the list of such locales is configured in
@@ -244,12 +245,12 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;REQUEST-URL&gt;</code></dt>
+ * <dt><code>{REQUEST-URL}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert into the content the complete current URL which the
  * browser used to access the current page. For example,
- * <code>&lt;REQUEST-URL&gt;</code> is replaced with
+ * <code>{REQUEST-URL}</code> is replaced with
  * <code>http://portal.hp.com/portal/site/itrc/template.MY_ACCOUNT/...</code>
  * when the <code>template.MY_ACCOUNT</code> secondary page is requested from
  * the <code>itrc</code> portal site on the <code>portal.hp.com</code>
@@ -257,18 +258,18 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;SITE&gt;</code></dt>
+ * <dt><code>{SITE}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the site name of the current portal site into the
  * interpolated content. The site name is taken from the portal context (it is
- * the Vignette "site DNS name" element). For example, <code>&lt;SITE&gt;</code>
+ * the Vignette "site DNS name" element). For example, <code>{SITE}</code>
  * is replaced with <code>itrc</code> when the portal component invoking this
  * FileInterpolator is requested from the <code>itrc</code> portal site.
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code></dt>
+ * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -279,19 +280,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * In the <code><i>names</i></code> parameter to the
- * <code>&lt;SITE:names&gt;</code> token, you can list just a single site
+ * <code>{SITE:names}</code> token, you can list just a single site
  * name, or multiple (use the <code>|</code> character to delimit them). The
- * content enclosed by the <code>&lt;SITE:<i>names</i>&gt;</code> and
- * <code>&lt;/SITE&gt;</code> tokens is omitted from the returned content
+ * content enclosed by the <code>{SITE:<i>names</i>}</code> and
+ * <code>{/SITE}</code> tokens is omitted from the returned content
  * unless the site name in the request matches one of those values. The match is
  * case-insensitive. The site name in the request is gotten from the portal
  * context (it is the Vignette "site DNS name").
  * </p>
  * <p>
- * The content enclosed by the <code>&lt;SITE:<i>names</i>&gt;</code> and
- * <code>&lt;/SITE&gt;</code> tokens can be anything, including any of the
+ * The content enclosed by the <code>{SITE:<i>names</i>}</code> and
+ * <code>{/SITE}</code> tokens can be anything, including any of the
  * special tokens supported by this class (including other
- * <code>&lt;SITE:<i>names</i>&gt;...&lt;/SITE&gt;</code> tokens - ie you
+ * <code>{SITE:<i>names</i>}...{/SITE}</code> tokens - ie you
  * can "nest" them.
  * </p>
  * <p>
@@ -302,29 +303,29 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * <pre>
  * This content is for all sites to show.
- * &lt;SITE:site_A|site_B&gt;
+ * {SITE:site_A|site_B}
  * This content is only to be shown in site_A or site_B.
- * &lt;SITE:site_B&gt;
+ * {SITE:site_B}
  * This content is only to be shown in site_B.
- * &lt;/SITE&gt;
- * &lt;/SITE&gt;
+ * {/SITE}
+ * {/SITE}
  * </pre>
  * 
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;SITE-URL&gt;</code></dt>
+ * <dt><code>{SITE-URL}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the URL for the home page of the current portal site
- * into the interpolated content. For example, <code>&lt;SITE-URL&gt;</code>
+ * into the interpolated content. For example, <code>{SITE-URL}</code>
  * is replaced with <code>http://portal.hp.com/portal/site/itrc/</code> when
  * the current portal component is requested from the <code>itrc</code> portal
  * site on the <code>portal.hp.com</code> server using HTTP.
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;TOKEN:<i>key</i>&gt;</code></dt>
+ * <dt><code>{TOKEN:<i>key</i>}</code></dt>
  * <dd>
  * <p>
  * Use this token to lookup a value for the given key in a property file, and
@@ -333,7 +334,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * that in the <code>FileInterpolator</code> constructor. The property value
  * may itself contain any content including any of the special markup tokens
  * supported by <code>FileInterpolator</code>, <b>except</b> another
- * <code>&lt;TOKEN:<i>key</i>&gt;</code> token.
+ * <code>{TOKEN:<i>key</i>}</code> token.
  * </p>
  * <p>
  * Whether you use <code>default_tokens.properties</code> or your own
@@ -350,7 +351,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * If your input file contains the following:
  * </p>
  * <p>
- * <code>&lt;A HREF="&lt;TOKEN:url.hp-shopping&gt;"&gt;Go to HP shopping.&lt;/A&gt;</code>
+ * <code>&lt;A HREF="{TOKEN:url.hp-shopping}"&gt;Go to HP shopping.&lt;/A&gt;</code>
  * </p>
  * <p>
  * Then the interpolated content will contain a hyperlink taking the user to the
@@ -361,14 +362,14 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></dt>
+ * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert a given string property of the user into the
  * interpolated content. The <code><i>key</i></code> parameter in the token
  * is the name of the user property, and the user properties themselves are
  * taken from the current portal user object. For example,
- * <code>&lt;USER-PROPERTY:day_phone&gt;</code> is replaced with
+ * <code>{USER-PROPERTY:day_phone}</code> is replaced with
  * <code>123 456 7890</code> for a user with such a phone number. The property
  * name <code><i>key</i></code>'s are not listed here and may vary based on
  * the portal implementation.
@@ -391,21 +392,21 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * <p>
  * <ul>
- * <li><code>&lt;TOKEN:<i>key</i>&gt;</code></li>
- * <li><code>&lt;SITE&gt;</code></li>
- * <li><code>&lt;SITE-URL&gt;</code></li>
- * <li><code>&lt;REQUEST-URL&gt;</code></li>
- * <li><code>&lt;LANGUAGE-CODE&gt;</code></li>
- * <li><code>&lt;LANGUAGE-TAG&gt;</code></li>
- * <li><code>&lt;EMAIL&gt;</code></li>
- * <li><code>&lt;NAME&gt;</code></li>
- * <li><code>&lt;USER-PROPERTY:<i>key</i>&gt;</code></li>
- * <li><code>&lt;CONTENT-URL:<i>path</i>&gt;</code></li>
- * <li><code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt;</code></li>
- * <li><code>&lt;SITE:<i>names</i>&gt;</code></li>
- * <li><code>&lt;LOGGED-IN&gt;</code></li>
- * <li><code>&lt;LOGGED-OUT&gt;</code></li>
- * <li><code>&lt;GROUP:<i>groups</i>&gt;</code></li>
+ * <li><code>{TOKEN:<i>key</i>}</code></li>
+ * <li><code>{SITE}</code></li>
+ * <li><code>{SITE-URL}</code></li>
+ * <li><code>{REQUEST-URL}</code></li>
+ * <li><code>{LANGUAGE-CODE}</code></li>
+ * <li><code>{LANGUAGE-TAG}</code></li>
+ * <li><code>{EMAIL}</code></li>
+ * <li><code>{NAME}</code></li>
+ * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
+ * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
+ * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
+ * <li><code>{SITE:<i>names</i>}</code></li>
+ * <li><code>{LOGGED-IN}</code></li>
+ * <li><code>{LOGGED-OUT}</code></li>
+ * <li><code>{GROUP:<i>groups</i>}</code></li>
  * </ul>
  * </p>
  * 
@@ -441,9 +442,9 @@ public class FileInterpolator extends
 	 * on the locale in the given request.
 	 * </p>
 	 * <b>Note:</b> A token-substitutions property file (to be used with any
-	 * <code>&lt;TOKEN:<i>key</i>&gt;</code> tokens in the file content) is
+	 * <code>{TOKEN:<i>key</i>}</code> tokens in the file content) is
 	 * not passed in this constructor. Therefore any
-	 * <code>&lt;TOKEN:<i>key</i>&gt;</code> tokens in the file content will
+	 * <code>{TOKEN:<i>key</i>}</code> tokens in the file content will
 	 * be resolved against the default token-substitutions property file (<code>default_tokens.properties</code>).
 	 * </p>
 	 * 
@@ -475,7 +476,7 @@ public class FileInterpolator extends
 	 * </p>
 	 * <p>
 	 * The token-substitutions pathname provided is to be used with any
-	 * <code>&lt;TOKEN:<i>key</i>&gt;</code> tokens in the file content;
+	 * <code>{TOKEN:<i>key</i>}</code> tokens in the file content;
 	 * they will be resolved against the file whose pathname you provide. The
 	 * pathname should include any necessary path (relative to the class loader)
 	 * followed by the filename (the extension <code>.properties</code> is
@@ -491,7 +492,7 @@ public class FileInterpolator extends
 	 * @param subsFilePath
 	 *            The filename and path relative to where the class loader
 	 *            searches for the token-substitutions property file (for
-	 *            purposes of any <code>&lt;TOKEN:<i>key</i>&gt;</code>
+	 *            purposes of any <code>{TOKEN:<i>key</i>}</code>
 	 *            tokens in the file content)
 	 */
 	public FileInterpolator(PortalContext portalContext,
