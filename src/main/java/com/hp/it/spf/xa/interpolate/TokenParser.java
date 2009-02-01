@@ -1274,10 +1274,12 @@ public abstract class TokenParser {
 			param = str.substring(str.indexOf(token) + token.length(), str
 					.length() - 1);
 			value = provider.getValue(param.trim());
+			// This makes a regex like: (\{tokenName:\Qparam\E\})
+			regex = "(\\" + token + "\\Q" + param + "\\E\\" + tokenEnd + ")";
 			if (value != null) {
-				content = content.replaceAll(str, value);
+				content = content.replaceAll(regex, value);
 			} else {
-				content = content.replaceAll(str, "");
+				content = content.replaceAll(regex, "");
 			}
 		}
 		return (content);
