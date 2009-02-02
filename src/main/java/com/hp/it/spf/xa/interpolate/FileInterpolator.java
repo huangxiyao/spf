@@ -25,9 +25,9 @@ import java.util.Locale;
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see {@link TokenParser}<br>
- *      {@link com.hp.it.spf.xa.interpolate.portal.FileInterpolator}<br>
- *      {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}
+ * @see com.hp.it.spf.xa.interpolate.TokenParser<br>
+ *      com.hp.it.spf.xa.interpolate.portal.FileInterpolator<br>
+ *      com.hp.it.spf.xa.interpolate.portlet.FileInterpolator
  */
 public abstract class FileInterpolator {
 
@@ -142,16 +142,18 @@ public abstract class FileInterpolator {
 
 	/**
 	 * <p>
-	 * Gets the localized text file pathname, reads it into a string, and
+	 * Gets the localized text file as an input stream (using
+	 * {@link #getLocalizedContentFileAsStream()}), reads it into a string, and
 	 * substitutes the tokens found in the string with the proper dynamic
-	 * values. The final string is returned. Returns null if there was a problem
-	 * with the interpolation (eg the file was not found, or the base content
-	 * file path provided earlier was null).
+	 * values. The final string is returned. Returns null and logs a warning if
+	 * there was a problem with the interpolation (eg the file was not found, or
+	 * the base content file path provided earlier was null).
 	 * </p>
 	 * <p>
 	 * For a list and description of all the supported tokens, see the concrete
-	 * subclass documentation. This interpolate method is responsible for
-	 * substituting the following tokens, in the following order:
+	 * subclass documentation. This <code>interpolate</code> method is
+	 * responsible for substituting the following tokens, in the following
+	 * order:
 	 * <dl>
 	 * <dt><code>{TOKEN:<i>key</i>}</code></dt>
 	 * <dd>This token is parsed first, and the substituted content is added to
@@ -185,6 +187,7 @@ public abstract class FileInterpolator {
 	public String interpolate() throws Exception {
 
 		if (this.baseContentFilePath == null) {
+			logWarning("Base file path was null.");
 			return null;
 		}
 		// Get localized file input stream
@@ -220,7 +223,7 @@ public abstract class FileInterpolator {
 
 		// Add current ISO country code
 		content = t.parseCountryCode(content, getLocale());
-		
+
 		// Add current RFC language code
 		content = t.parseLanguageTag(content, getLocale());
 

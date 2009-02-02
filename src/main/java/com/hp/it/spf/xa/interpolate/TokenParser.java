@@ -50,11 +50,11 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see {@link com.hp.it.spf.xa.interpolate.portal.TokenParser}<br>
- *      {@link com.hp.it.spf.xa.interpolate.portlet.TokenParser}</br>
- *      {@link com.hp.it.spf.xa.interpolate.FileInterpolator}<br>
- *      {@link com.hp.it.spf.xa.interpolate.portal.FileInterpolator}<br>
- *      {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}<br>
+ * @see com.hp.it.spf.xa.interpolate.portal.TokenParser<br>
+ *      com.hp.it.spf.xa.interpolate.portlet.TokenParser</br>
+ *      com.hp.it.spf.xa.interpolate.FileInterpolator<br>
+ *      com.hp.it.spf.xa.interpolate.portal.FileInterpolator<br>
+ *      com.hp.it.spf.xa.interpolate.portlet.FileInterpolator<br>
  * 
  */
 public abstract class TokenParser {
