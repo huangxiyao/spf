@@ -55,7 +55,7 @@ code {
 
 pre {
 	color: #990000;
-	font-size: 120%;
+	font-size: 110%;
 }
 
 .byline {
@@ -990,8 +990,9 @@ resources are external to your portlet WAR) be sure you have configured
 the <i>portlet resource bundle folder</i> where you put them, in your
 JVM classpath.</p>
 
-<p><b>Note:</b> In both cases, JSP tag libraries are available for you to use instead of the
-raw Java API's. See the <a href="#i18n.messages.tags">discussion on this</a> below.</p>
+<p><b>Note:</b> In both cases, JSP tag libraries are available for
+you to use instead of the raw Java API's. See the <a
+	href="#i18n.messages.tags">discussion on this</a> below.</p>
 
 <a name="i18n.messages.java.spring.getMessage">
 <h4>2.3.1. Using Spring (eg <code>MessageSource.getMessage</code>)</h4>
@@ -1094,7 +1095,21 @@ these. See the method documentation for more information.</p>
 	<li>
 	<p>An <code>Object[]</code> array containing any objects whose <code>toString</code>
 	values should be inserted into any {@link MessageFormat} placeholders
-	in the message.</p>
+	in the message. For example, in your message properties you can have:</p>
+	
+	<blockquote><pre>
+	key=Your user ID is {0}.
+	</pre></blockquote>
+	
+	<p>Then in your Java code, where <code>request</code> is the <code>PortletRequest</code>
+	and <code>userID</code> is the user ID:</p>
+	
+	<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+...
+String[] args = new String[] { userID };
+String msg = I18nUtility.getMessage(request, "key", args);
+	</pre></blockquote>
 	</li>
 
 	<li>
@@ -1105,7 +1120,7 @@ these. See the method documentation for more information.</p>
 	this (where the word "secure" links to some contextual help not shown
 	yet):</p>
 
-	<img src="contextualHelpLink.jpg">
+	<img src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelpLink.jpg">
 
 	<p>Using the SPF <code>I18nUtility.getMessage</code> API's, you can
 	have the following in your message properties:</p>
@@ -1157,18 +1172,22 @@ cchp.setHelpContent(helpContent);
 // Now get the main message, with the contextual help embedded automatically
 // inside it.
 ClassicContextualHelpProvider[] cchps = new ClassicContextualHelpProvider[] {cchp};
-String message = I18nUtility.getMessage(request, "key", cchps);
+String msg = I18nUtility.getMessage(request, "key", cchps);
 		</pre></blockquote>
 
-	<p>So then you could output the <code>message</code> string to the
-	user - it would look like above. And when the user clicked on the
-	"secure" hyperlink, it would look like this:</p>
+	<p>So then you could output the <code>msg</code> string to the user
+	- it would look like above when rendered in the user's browser. And
+	when the user clicked on the "secure" hyperlink, it would look like
+	this:</p>
 
-	<img src="contextualHelp.jpg"></li>
+	<img src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelp.jpg"></li>
 
-	<p>Please see the <code>I18nUtility.getMessage</code> method documentation for more details.  (Also see
-	the discussion on <a href="#help.kinds.contextual">contextual help</a> later in this guide and in the 
-	JavaDocs - eg see the {@link com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} documentation.)</p>
+	<p>Please see the <code>I18nUtility.getMessage</code> method
+	documentation for more details. (Also see the discussion on <a
+		href="#help.kinds.contextual">contextual help</a> later in this guide
+	and in the JavaDocs - eg see the {@link
+	com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider}
+	documentation.)</p>
 
 	<li>
 	<p>A <code>Locale</code> for which to find the best-fitting message
@@ -1179,14 +1198,14 @@ String message = I18nUtility.getMessage(request, "key", cchps);
 	<li>
 	<p>A <code>boolean</code> switch which controls whether to escape
 	any HTML meta-characters, like <code>&lt;</code> and <code>&gt;</code>,
-	found in the message string. For example, if you message property is
+	found in the message string. For example, if your message property is
 	this:</p>
 
 	<blockquote><pre>
 key=This is an HTML &lt;head&gt; tag.
 </pre></blockquote>
 
-	<p>then the following code would escape the HTML inside the message
+	<p>Then the following code would escape the HTML inside the message
 	string (where <code>request</code> is your current {@link
 	PortletRequest}:</p>
 
