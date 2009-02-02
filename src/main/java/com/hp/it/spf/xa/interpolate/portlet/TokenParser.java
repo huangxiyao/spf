@@ -16,11 +16,11 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * The concrete subclass for parsing strings looking for tokens to substitute in
  * the portlet context. This class is used heavily by the portlet
- * FileInterpolator. The following token substitutions are supported by this
- * class (plus those supported by the base class). See the method documentation
- * here (and in the base class) for further description. <b>Note:</b> The
- * <code>&lt;</code> and <code>&gt;</code> symbols may be used in place of
- * <code>{</code> and <code>}</code>, if you prefer.
+ * {@link FileInterpolator}. The following token substitutions are supported by
+ * this class (plus those supported by the base class). See the method
+ * documentation here (and in the base class) for further description. <b>Note:</b>
+ * The <code>&lt;</code> and <code>&gt;</code> symbols may be used in place
+ * of <code>{</code> and <code>}</code>, if you prefer.
  * </p>
  * <dl>
  * <dt><code>{PORTLET:<i>ids</i>}...{/PORTLET}</code></dt>
@@ -30,8 +30,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * @author <link href="xiao-bing.zuo@hp.com">Zuo Xiaobing</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.spf.xa.interpolate.TokenParser
- *      com.hp.it.spf.xa.interpolate.portlet.FileInterpolator
+ * @see {@link FileInterpolator}<br>
+ *      {@link com.hp.it.spf.xa.interpolate.TokenParser}
  */
 public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
@@ -63,9 +63,10 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	private Log portletLog = LogFactory.getLog(FileInterpolator.class);
 
 	/**
-	 * ContainerMatcher for portlet parsing. The constructor stores a portlet ID
-	 * into the class. The match method returns true if the given portlet ID is
-	 * a substring (case-insensitive) of the stored portlet ID.
+	 * <code>ContainerMatcher</code> for portlet parsing. The constructor
+	 * stores a portlet ID into the class. The match method returns true if the
+	 * given portlet ID is a substring (case-insensitive) of the stored portlet
+	 * ID.
 	 */
 	protected class PortletContainerMatcher extends ContainerMatcher {
 
@@ -88,9 +89,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	}
 
 	/**
-	 * ContainerMatcher for role parsing. The constructor stores a portlet
-	 * request into the class. The match method returns true if the stored
-	 * portlet request is in the role indicated by the given role name.
+	 * <code>ContainerMatcher</code> for role parsing. The constructor stores
+	 * a portlet request into the class. The match method returns true if the
+	 * stored portlet request is in the role indicated by the given role name.
 	 */
 	protected class RoleContainerMatcher extends ContainerMatcher {
 
@@ -111,9 +112,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * <p>
-	 * Constructs a new TokenParser for the given portlet request and response.
-	 * The default token-substitutions property file (<code>default_tokens.properties</code>)
-	 * will be assumed, if subsequent parseToken calls find any
+	 * Constructs a new <code>TokenParser</code> for the given portlet request
+	 * and response. The default token-substitutions property file (<code>default_tokens.properties</code>)
+	 * will be assumed, if subsequent {@link #parseToken(String)} calls find any
 	 * <code>{TOKEN:key}</code> tokens.
 	 * </p>
 	 * 
@@ -129,10 +130,10 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * <p>
-	 * Constructs a new TokenParser for the given portlet request and response,
-	 * and overriding the token-substitutions property file. The given file,
-	 * instead of the default (<code>default_tokens.properties</code>) will
-	 * be assumed, if subsequent parseToken calls find any
+	 * Constructs a new <code>TokenParser</code> for the given portlet request
+	 * and response, and overriding the token-substitutions property file. The
+	 * given file, instead of the default (<code>default_tokens.properties</code>)
+	 * will be assumed, if subsequent {@link #parseToken(String)} calls find any
 	 * <code>{TOKEN:key}</code> tokens.
 	 * </p>
 	 * 
@@ -159,7 +160,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * Get a URL for the given file pathname, localized (or not) depending on
 	 * the boolean parameter (if true, the URL is for the best-candidate
 	 * localized version of that file, otherwise it is just for the file
-	 * itself). This method is implemented using I18nUtility getLocalizedFileURL
+	 * itself). This method is implemented using
+	 * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest, PortletResponse, String, boolean)}
 	 * (see).
 	 * </p>
 	 * <p>
@@ -188,7 +190,10 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * information contained in the portlet request given to the constructor.
 	 * Returns null if the given key is not found in the user information, or
 	 * the value it references is not a string. Also returns null if the user
-	 * information is null or guest (ie the user is not logged-in).
+	 * information is null or guest (ie the user is not logged-in). This method
+	 * is implemented using
+	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getUserProperty(PortletRequest, String)}
+	 * (see).
 	 * 
 	 * @param key
 	 *            The user property name
@@ -207,8 +212,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the string for any <code>{PORTLET:<i>ids</i>}</code>
-	 * content; such content is deleted if the given portlet ID does not qualify
+	 * Parses the string for any <code>{PORTLET:<i>ids</i>}</code> content;
+	 * such content is deleted if the given portlet ID does not qualify
 	 * (otherwise only the special markup is removed). The <i>ids</i> may
 	 * include one or more portlet IDs, delimited by "|" for a logical-or.
 	 * <code>{PORTLET:<i>ids</i>}</code> markup may be nested for
@@ -257,8 +262,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * 
 	 * <p>
 	 * If you provide null content, null is returned. If you provide null or
-	 * empty portlet ID, all <code>{PORTLET}</code>-enclosed sections
-	 * are removed from the content.
+	 * empty portlet ID, all <code>{PORTLET}</code>-enclosed sections are
+	 * removed from the content.
 	 * </p>
 	 * 
 	 * @param content
@@ -275,10 +280,10 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the string for any <code>{ROLE:<i>roles</i>}</code>
-	 * content; such content is deleted if the given role names do not qualify
-	 * (otherwise only the special markup is removed). The <i>roles</i> may
-	 * include one or more role names, delimited by "|" for a logical-or.
+	 * Parses the string for any <code>{ROLE:<i>roles</i>}</code> content;
+	 * such content is deleted if the given role names do not qualify (otherwise
+	 * only the special markup is removed). The <i>roles</i> may include one or
+	 * more role names, delimited by "|" for a logical-or.
 	 * <code>{ROLE:<i>roles</i>&GT;</code> markup may be nested for
 	 * logical-and.
 	 * </p>
@@ -328,8 +333,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * 
 	 * <p>
 	 * If you provide null content, null is returned. If you provide null or
-	 * empty roles, all <code>{ROLE}</code>-enclosed sections are
-	 * removed from the content.
+	 * empty roles, all <code>{ROLE}</code>-enclosed sections are removed
+	 * from the content.
 	 * </p>
 	 * 
 	 * @param content
