@@ -25,12 +25,20 @@
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities</url>
+		<url>
+			http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities
+		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-utilities</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-utilities</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-utilities</url>
+		<connection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-utilities
+		</connection>
+		<developerConnection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-utilities
+		</developerConnection>
+		<url>
+			http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-utilities
+		</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
@@ -51,11 +59,11 @@
 			<artifactId>portlet-api</artifactId>
 			<version>2.0</version>
 		</dependency>
- 		<dependency>
+		<!-- 	<dependency>
 			<groupId>com.hp.websat</groupId>
 			<artifactId>timber</artifactId>
 			<version>1.2.5</version> 
-		</dependency>
+			</dependency> -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-mock</artifactId>
@@ -81,12 +89,12 @@
 			<artifactId>spf-common-utilities</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
- 		<dependency>
+		<!-- 	<dependency>
 			<groupId>com.hp.websat</groupId>
 			<artifactId>wpap-core</artifactId>
 			<version>2.2.0</version>
-		</dependency>
-<!-- 		<dependency>
+			</dependency> -->
+		<dependency>
 			<groupId>com.hp.frameworks</groupId>
 			<artifactId>timber-core</artifactId>
 			<version>2.1.1</version>
@@ -95,7 +103,7 @@
 			<groupId>com.hp.frameworks</groupId>
 			<artifactId>wpa-portlet-core</artifactId>
 			<version>3.0.1</version>
-		</dependency> -->
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies></dependencies>

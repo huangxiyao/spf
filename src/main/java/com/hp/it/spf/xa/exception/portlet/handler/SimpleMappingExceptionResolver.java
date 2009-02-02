@@ -9,21 +9,21 @@ import javax.portlet.RenderResponse;
 
 import org.springframework.web.portlet.ModelAndView;
 
-import com.hp.frameworks.wpa.portlet.handler.WPASimpleMappingExceptionResolver;
 import com.hp.it.spf.xa.exception.portlet.ExceptionUtil;
 
 /**
  * <p>
- * This class is a subclass of the WPAP framework's
- * <code>WPASimpleMappingExceptionResolver</code>, and includes logic to
- * store the exception object in a request attribute for JSP's to access. This
- * uses the portlet <code>ExceptionUtil</code> class to do so.
+ * This class is a subclass of the Spring framework's
+ * <code>SimpleMappingExceptionResolver</code>, and includes logic to store
+ * the exception object in a request attribute for JSP's to access, before
+ * calling the Spring class to resolve the view for the exception. This uses the
+ * portlet {@link ExceptionUtil} class to store the exception object.
  * 
  * @author sunnyee, Scott Jorgenson
  * @version TBD
  */
 public class SimpleMappingExceptionResolver extends
-		WPASimpleMappingExceptionResolver {
+		org.springframework.web.portlet.handler.SimpleMappingExceptionResolver {
 
 	// ------------------------------------------------------------- Constants
 
