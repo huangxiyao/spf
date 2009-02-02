@@ -4,7 +4,7 @@
 	<tlibversion>1.0</tlibversion>
 	<jspversion>1.2</jspversion>
 	<shortname>spf-i18n-portlet</shortname>
-	<uri>http://www.hp.com/spf/i18n/portlet</uri>
+	<uri>/spf-i18n-portlet.tld</uri>
 	<info>
 		Tag library for Shared Portal Framework portlet
 		internationalization tags.
@@ -18,8 +18,8 @@
 		<bodycontent>empty</bodycontent>
 		<info>
 			Expresses a URL for a proper best-fit localized version of
-			the given external file reference in the portlet resource
-			bundle folder.
+			the given file, which may be found in the portlet resource
+			bundle folder or inside the portlet application WAR.
 		</info>
 		<attribute>
 			<name>file</name>

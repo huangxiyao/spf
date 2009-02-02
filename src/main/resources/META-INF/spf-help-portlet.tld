@@ -6,7 +6,7 @@
 	<tlibversion>1.0</tlibversion>
 	<jspversion>1.2</jspversion>
 	<shortname>spf-help-portlet</shortname>
-	<uri>http://www.hp.com/spf/portlet/help</uri>
+	<uri>/spf-help-portlet.tld</uri>
 	<info>
 		Tag library for Shared Portal Framework portlet help tags.
 	</info>

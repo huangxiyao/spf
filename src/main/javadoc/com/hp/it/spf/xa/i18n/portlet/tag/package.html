@@ -1,0 +1,155 @@
+<html>
+<body>
+<p>This package contains JSP tag classes and tag documentation for
+internationalizing Shared Portal Framework portlet applications.</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portlet developers should never need to use the
+Java classes in this package directly. Use the respective JSP tags
+instead.</p>
+</blockquote>
+
+<a name="TLD">
+<h3>spf-i18n-portlet.tld</h3>
+</a>
+<p>The TLD file is <code>spf-i18n-portlet.tld</code> and it is
+contained inside the SPF portlet utilities JAR, in the <code>META-INF/</code>
+folder. Its URI is <code>/spf-i18n-portlet.tld</code> so that is the URI
+you should refer to it with, in your portlet application JSP's. Although
+you can use whatever JSP tag prefix you like, the documentation here
+will use the prefix <code>spf-i18n-portlet</code>.</p>
+
+<a name="message">
+<h3>&lt;spf-i18n-portlet:message&gt;</h3>
+</a>
+<p>Usage:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:message
+	key=<i>message-key</i>
+	defaultValue=<i>default-value</i>
+	escape=<i>true-or-false</i>
+	/&gt;
+</pre></blockquote>
+
+<p>This tag expresses the message for the given key from a portlet
+resource bundle, localized to best-fit the user's locale.</p>
+
+<p>All of the message resources configured in your portlet's Spring
+application context (both your main <code>applicationContext.xml</code>
+and your portlet-specific one, if any) are searched for the given <i>message-key</i>.
+These message resources include internal message property files (ie,
+those found by the classloader inside your portlet WAR) and external
+ones (ie, those found by the classloader in your <i>portlet resource
+bundle folder</i>). We recommend you define your message resources using the
+Spring {@link
+org.springframework.context.support.ReloadableResourceBundleMessageSource}
+class, for hot deployment of message changes (especially for external
+files, for which the portlet application does not need to be rebuilt and
+restarted if there is a change in the messages). The message property
+files themselves should (except for the base file) be tagged by locale
+according to the Java-standard for {@link ResourceBundle}, and the
+folder where they are located (or a parent folder thereof) should be
+configured in the JVM classpath so the classloader can find them.</p>
+
+<blockquote>
+<p><b>Note:</b> For more about where you put your message resources,
+how you localize them, and how you configure them in Spring, see the
+discussion in the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#i18n.location">SPF
+Portlet Utilities Developer's Guide</a>.</p>
+</blockquote>
+
+<p>Here are the tag attributes:</p>
+
+<dl>
+	<dt><code>key=<i>message-key</i></code></dt>
+	<dd>
+	<p>The <code>key</code> attribute is used to specify the message to
+	retrieve. It is required.</p>
+	</dd>
+	<dt><code>defaultValue=<i>default-value</i></code></dt>
+	<dd>
+	<p>The <code>defaultValue</code> attribute is used to specify a
+	default value to express, in case the given message key is not found.
+	This is an optional attribute; the message key itself is expressed if
+	no explicit (ie non-null and non-blank) <code>defaultValue</code>
+	attribute is provided.</p>
+	</dd>
+	<dt><code>escape=<i>true-or-false</i></code></dt>
+	<dd>
+	<p>The <code>escape</code> attribute is used as a switch to control
+	the HTML-escaping policy for the returned message. By default, the
+	expressed message string does not escape any HTML special characters it
+	may contain, such as <code>&lt;</code>. This lets you put HTML markup
+	in your messages and have it render as such in the browser. If you need
+	the HTML special characters to be converted into their corresponding
+	character entities, so that they display literally in the browser
+	instead, use the <code>escape="true"</code> attribute on the tag.</p>
+	</dd>
+</dl>
+
+<p>Note that <code>&lt;spf-i18n-portlet:message&gt;</code> may also
+contain the following SPF tags:</p>
+
+<dl>
+	<dt><a href="#param"><code>&lt;spf-i18n-portlet:param&gt;</code></a></dt>
+	<dd>
+	<p>If your message value includes general string parameters as per
+	the Java standard for {@link MessageFormat}, use the <code>&lt;spf-i18n-portlet:param&gt;</code>
+	tag inside the <code>&lt;spf-i18n-portlet:message&gt;</code> tag body,
+	in order, for each such parameter. See the <a href="#param"><code>&lt;spf-i18n-portlet:param&gt;</code></a>
+	tag documentation below.</p>
+	</dd>
+
+	<dt><a href="#classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a></dt>
+	<dd>
+	<p>If your message value includes the special markup for
+	contextual-help injection (<code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>),
+	use the <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code>
+	tag inside the <code>&lt;spf-i18n-portlet:message&gt;</code> tag body,
+	in order, for each such markup pair. See the <a
+		href="#classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a>
+	tag documentation below.</p>
+	</dd>
+</dl>
+
+<a name="param">
+<h3>&lt;spf-i18n-portlet:param&gt;</h3>
+</a>
+<p>You use this tag inside the <a href="#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>
+tag body, to pass a string parameter into any {@link MessageFormat}
+placeholders in the message value. For example, if your message is like
+this:</p>
+
+<blockquote><pre>
+key=Your name is {0} and your age is {1}.
+</pre></blockquote>
+
+<p>Then use the following in your JSP (where <code>name</code>
+contains the user name, and <code>age</code> contains the age):</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:message key="key"&gt;
+	&lt;spf-i18n-portlet:param value="&lt;%= name %&gt;" /&gt;
+	&lt;spf-i18n-portlet:param value="&lt;%= age %&gt;" /&gt;
+&lt;/spf-i18n-portlet:message&gt;
+</pre></blockquote>
+</p>
+
+<a name="classicContextualHelpParam">
+<h3>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</h3>
+</a>
+<p></p>
+
+<a name="localizedFileURL">
+<h3>&lt;spf-i18n-portlet:localizedFileURL&gt;</h3>
+</a>
+<p></p>
+</body>
+</html>
+
