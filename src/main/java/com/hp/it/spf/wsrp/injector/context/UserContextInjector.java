@@ -37,6 +37,7 @@ import com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter;
 import com.hp.it.spf.wsrp.injector.profile.Constants;
 import com.hp.it.spf.wsrp.injector.profile.ProfileHelper;
 import com.vignette.portal.log.LogWrapper;
+import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.website.enduser.PortalContext;
 
 /**
@@ -70,8 +71,7 @@ public class UserContextInjector extends BasicHandler {
 	 * Retrieve user profile map from session and Injcet user profile map into
 	 * soap. Add UserContextKeys and UserProfile to soap header section .
 	 * 
-	 * @param MessageContext
-	 *            messageContext
+	 * @param messageContext this web service call message context
 	 */
 	public void invoke(MessageContext messageContext) throws AxisFault {
 		// We are only interested in getMarkup and performBlockingInteraction.
@@ -84,15 +84,16 @@ public class UserContextInjector extends BasicHandler {
 		// handle only the request messages, i.e. before the pivot
 		if (!messageContext.getPastPivot()) {
 			HttpServletRequest request = null;
-			LOG.info("UserContextInjector invoke first try");
+			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+				LOG.debug("UserContextInjector invoke first try");
+			}
 			try {
 				SOAPMessage message = messageContext.getMessage();
 				SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
 
 				request = retrieveRequest(envelope);
 				if (request == null) {
-					LOG
-							.error("Unable to find request! User context will not be injected");
+					LOG.error("Unable to find request! User context will not be injected");
 					return;
 				}
 
@@ -101,17 +102,21 @@ public class UserContextInjector extends BasicHandler {
 				// with the thread running this WSRP call - for getMarkup calls
 				// this is a
 				// Vignette thread pool's thread
-				LOG
-						.info("Request thread is '"
-								+ request
-										.getAttribute(RequestBindingFilter.THREAD_NAME_REQUEST_KEY));
+				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+					LOG.debug("Request thread is '" +
+							request.getAttribute(RequestBindingFilter.THREAD_NAME_REQUEST_KEY));
+				}
 
 				Map userContextKeys = retrieveUserContextKeys(request);
-				LOG.info("User context keys: " + userContextKeys);
+				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+					LOG.debug("User context keys: " + userContextKeys);
+				}
 
 				// Using new way of serializing user profile and context keys
 				Map userProfile = getUserProfileMap(request);
-				LOG.info("user profile: " + userProfile);
+				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+					LOG.debug("user profile: " + userProfile);
+				}
 				injectUserContext(envelope, userContextKeys, userProfile);
 			} catch (Throwable t) {
 				LOG.error("Error occured while injecting user context", t);
@@ -127,19 +132,17 @@ public class UserContextInjector extends BasicHandler {
 	}
 
 	/**
-	 * @param MessageContext
-	 *            messageContext
-	 * @return if it is supported wsrp version, for now v1 and v2 are supported
-	 *         *
+	 * @param messageContext this web service call message context
+	 * @return <tt>true</tt> if it is supported wsrp version, for now v1 and v2 are supported
 	 */
 	static boolean isWsrpBaseCall(MessageContext messageContext) {
 		String actionURI = messageContext.getSOAPActionURI();
-		return "urn:oasis:names:tc:wsrp:v1:getMarkup".equals(actionURI)
-				|| "urn:oasis:names:tc:wsrp:v1:performBlockingInteraction"
-						.equals(actionURI)
-				|| "urn:oasis:names:tc:wsrp:v2:getMarkup".equals(actionURI)
-				|| "urn:oasis:names:tc:wsrp:v2:performBlockingInteraction"
-						.equals(actionURI);
+		return actionURI != null &&
+				actionURI.startsWith("urn:oasis:names:tc:wsrp:") &&
+				(actionURI.endsWith(":getMarkup") ||
+						actionURI.endsWith(":performBlockingInteraction") ||
+						actionURI.endsWith(":handleEvents") ||
+						actionURI.endsWith(":getResource"));
 	}
 
 	/**
@@ -192,7 +195,7 @@ public class UserContextInjector extends BasicHandler {
 	 * @throws SOAPException
 	 *             If an error occurs while manipulating the header
 	 * 
-	 * @see ProfileHelper#profileFromString(String) for more information of the
+	 * @see com.hp.it.spf.wsrp.injector.profile.ProfileHelper for more information of the
 	 *      string encoding of the profile
 	 */
 	private void injectUserContext(SOAPEnvelope envelope, Map userContextKeys,
@@ -200,16 +203,18 @@ public class UserContextInjector extends BasicHandler {
 		Map userContext = new HashMap();
 		userContext.put("com.hp.spp.UserContextKeys", userContextKeys);
 		userContext.put("com.hp.spp.UserProfile", userProfile);
-		LOG.info("UserContextInjector userProfile ", userProfile);
+		if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+			LOG.debug("UserContextInjector userProfile ", userProfile);
+		}
 		SOAPHeader header = envelope.getHeader();
 		Name userContextHeaderName = envelope.createName("UserContext", "spp",
 				"http://www.hp.com/spp");
 		SOAPHeaderElement userContextElement = header
 				.addHeaderElement(userContextHeaderName);
-		LOG.info("UserContextInjector userProfile "
-				+ PROFILE_HELPER.profileToString(userContext));
-		userContextElement.addTextNode(PROFILE_HELPER
-				.profileToString(userContext));
+		if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+			LOG.debug("UserContextInjector userProfile " + PROFILE_HELPER.profileToString(userContext));
+		}
+		userContextElement.addTextNode(PROFILE_HELPER.profileToString(userContext));
 	}
 
 	/**
@@ -226,13 +231,14 @@ public class UserContextInjector extends BasicHandler {
 			PortalContext portalContext = (PortalContext) request
 					.getAttribute("portalContext");
 			if (portalContext == null) {
-				LOG
-						.info("Unable to find PortalContext object - this happens when called from Vignette Console");
+				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+					LOG.debug("Unable to find PortalContext object - this happens when called from Vignette Console");
+				}
 				return "";
 			}
 			Site currentSite = portalContext.getCurrentSite();
 			if (currentSite == null) {
-				LOG.info("No site for current request");
+				LOG.warning("No site for current request");
 				return "";
 			}
 			return currentSite.getDNSName();
@@ -334,14 +340,14 @@ public class UserContextInjector extends BasicHandler {
 			PortalContext portalContext = (PortalContext) request
 					.getAttribute("portalContext");
 			if (portalContext == null) {
-				LOG
-						.info("Unable to find PortalContext object - this happens when called from Vignette Console");
+				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+					LOG.debug("Unable to find PortalContext object - this happens when called from Vignette Console");
+				}
 				return "";
 			}
-			MenuItemNode node = MenuItemUtils
-					.getSelectedMenuItemNode(portalContext);
+			MenuItemNode node = MenuItemUtils.getSelectedMenuItemNode(portalContext);
 			if (node == null) {
-				LOG.info("Unable to find current menu item");
+				LOG.warning("Unable to find current menu item");
 				return "";
 			}
 			if (node.getMenuItem() != null) {
