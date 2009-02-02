@@ -729,7 +729,7 @@ public abstract class TokenParser {
 	}
 
 	/**
-	 * ContainerMatcher for site section parsing. The constructor stores a site
+	 * <code>ContainerMatcher</code> for site section parsing. The constructor stores a site
 	 * name into the class. The match method returns true if the given site name
 	 * is an exact match (case-insensitive) of the stored site name.
 	 */
@@ -754,7 +754,7 @@ public abstract class TokenParser {
 	}
 
 	/**
-	 * ContainerMatcher for logged-in section parsing. The constructor stores
+	 * <code>ContainerMatcher</code> for logged-in section parsing. The constructor stores
 	 * the login status into the class: true if logged-in, false otherwise. The
 	 * match method just returns the login status. The passed container key is
 	 * not used and is expected to be null.
@@ -828,7 +828,7 @@ public abstract class TokenParser {
 	}
 
 	/**
-	 * ContainerMatcher for logged-out section parsing. The constructor stores
+	 * <code>ContainerMatcher</code> for logged-out section parsing. The constructor stores
 	 * the login status into the class: true if logged-in, false otherwise. The
 	 * match method just returns the inverse of this. The passed container key
 	 * is not used and is expected to be null.
@@ -979,7 +979,7 @@ public abstract class TokenParser {
 	}
 
 	/**
-	 * ContainerMatcher for group parsing. The constructor stores an array of
+	 * <code>ContainerMatcher</code> for group parsing. The constructor stores an array of
 	 * group names into the class. The match method returns true if the given
 	 * group name exactly matches (case-insensitive) any of the stored group
 	 * names.
@@ -1066,7 +1066,7 @@ public abstract class TokenParser {
 	 *            The name of the container token - eg <code>FOO</code> for
 	 *            <code>{/FOO}</code> start and end tokens.
 	 * @param matcher
-	 *            The ContainerMatcher.
+	 *            The <code>ContainerMatcher</code>.
 	 * @return The interpolated string.
 	 */
 	protected String parseContainer(String content, String tokenName,
