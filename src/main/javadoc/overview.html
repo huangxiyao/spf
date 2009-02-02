@@ -555,7 +555,7 @@ you import the SPF portlet utility class), and in other cases you have
 to import them directly.</p>
 
 <p>See the SPF Common Utilities Developer's Guide here: <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html#top"><code>http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html</code></p>
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#top"><code>http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html</code></p>
 
 <a name="overview.other.spf.htmlviewer">
 <h4>1.3.4 SPF <code>html-viewer</code> Portlet</h4>
@@ -587,7 +587,7 @@ to build upon it for your own portlet application.</p>
 <p>Although the SPF portlet utilities include the classes for <code>html-viewer</code>,
 it is a separate application with its own SPF HTML Viewer Portlet
 Developer's Guide here: <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html"><code>http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html</code></a></p>
+	href="http://samson.atl.hp.com:8080/hudson/job/html-viewer/site/apidocs/overview-summary.html"><code>http://samson.atl.hp.com:8080/hudson/job/html-viewer/site/apidocs/overview-summary.html</code></a></p>
 
 <hr>
 
@@ -610,7 +610,7 @@ utilities extend the Spring functionality primarily in these directions:</p>
 	</li>
 	<li>
 	<p>miscellaneous useful methods, inherited from the <a
-		href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html">SPF
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html">SPF
 	common utilities</a>, for:</p>
 	<ul>
 		<li>localized display of locale names, timezone names, user
@@ -619,7 +619,7 @@ utilities extend the Spring functionality primarily in these directions:</p>
 		RFC 3066 language tags</li>
 		<li>and more</li>
 		<li><b>note:</b> these inherited methods are documented in the <a
-			href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/index.html#top">SPF
+			href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#top">SPF
 		Common Utilities Developer's Guide</a> as well as in the JavaDoc for the
 		{@link com.hp.it.spf.xa.i18n.portlet.I18nUtility} class.</li>
 	</ul>
@@ -976,9 +976,32 @@ for resource management, if you like:</p>
 <h3>2.3. Accessing message resources using Java code</h3>
 </a>
 
+<p>Once your message resources have been created and placed <a
+	href="#i18n.location">as discussed above</a>, you can begin to access
+best-fit localized text strings for your user from them in your Java
+code. You may use either the standard Spring API's for doing this, or
+(recommended) the SPF API's.</p>
+
+<p><b>Note:</b> In either case, be sure you have configured Spring
+to load your message resource, as described above. And (if your message
+resources are external to your portlet WAR) be sure you have configured
+the <i>portlet resource bundle folder</i> where you put them, in your
+JVM classpath.</p>
+
 <a name="i18n.messages.java.spring.getMessage">
-<h4>2.3.1. Using Spring (<code>ApplicationContext.getMessage</code>)</h4>
+<h4>2.3.1. Using Spring (eg <code>MessageSource.getMessage</code>)</h4>
 </a>
+
+<p>See the Spring documentation for any class implementing {@link
+org.springframework.context.MessageSource} - for example, {@link
+org.springframework.context.ApplicationContext}. You use one of the <code>getMessage</code>
+API's, such as {@link
+org.springframework.context.ApplicationContext#getMessage(String,Object[],String,Locale)}.</p>
+
+<p><b>Note:</b> If you use the Spring API's, you will not benefit
+from any of the <a href="#i18n.messages.java.spf.getMessage">enhanced
+message capabilities</a> supported by the SPF portlet utilities' {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility} class.</p>
 
 <a name="i18n.messages.java.spf.getMessage">
 <h4>2.3.2. Using SPF (<code>I18nUtility.getMessage</code>)</h4>
