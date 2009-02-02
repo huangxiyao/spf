@@ -254,10 +254,12 @@ table.props td {
 		<ul>
 			<li>3.3.1. <a
 				href="#help.contextual.jsp.classicContextualHelpProvider">Using
-			<code>&lt;spf-help-portlet:classicContextualHelpProvider&gt;</code></a></li>
+			<code>&lt;spf-help-portlet:classicContextualHelpProvider&gt;</code></a>
+			for standalone contextual help</li>
 			<li>3.3.2. <a
 				href="#help.contextual.jsp.classicContextualHelpProviderParam">Using
-			<code>&lt;spf-i18n-portlet:classicContextualHelpProviderParam&gt;</code></a></li>
+			<code>&lt;spf-i18n-portlet:classicContextualHelpProviderParam&gt;</code></a>
+			for injected contextual help</li>
 			<li>3.3.3. <a href="#help.contextual.jsp.contextualHelpProvider">Creating
 			a tag library for your own contextual help style</a></li>
 		</ul>
@@ -988,6 +990,9 @@ resources are external to your portlet WAR) be sure you have configured
 the <i>portlet resource bundle folder</i> where you put them, in your
 JVM classpath.</p>
 
+<p><b>Note:</b> In both cases, JSP tag libraries are available for you to use instead of the
+raw Java API's. See the <a href="#i18n.messages.tags">discussion on this</a> below.</p>
+
 <a name="i18n.messages.java.spring.getMessage">
 <h4>2.3.1. Using Spring (eg <code>MessageSource.getMessage</code>)</h4>
 </a>
@@ -1006,6 +1011,197 @@ com.hp.it.spf.xa.i18n.portlet.I18nUtility} class.</p>
 <a name="i18n.messages.java.spf.getMessage">
 <h4>2.3.2. Using SPF (<code>I18nUtility.getMessage</code>)</h4>
 </a>
+
+<p>SPF' <code>I18nUtility.getMessage</code> API's wrap around Spring
+and provide the following extra capability:</p>
+
+<ul>
+	<li>
+	<p>In the SPF <a href="#i18n.l10n">localization process</a>, you
+	can mark sections of your messages which you do <b>not</b> want the
+	translators to localize, using the special <code>&lt;no_localization&gt;...&lt;/no_localization&gt;</code>
+	tags. The SPF <code>I18nUtility.getMessage</code> API's automatically
+	remove these for you; Spring does not.</p>
+	<p>For example, in your message properties you can have:</p>
+	<blockquote><pre>
+key=This part should be translated &lt;no_localization&gt;but this part should not&lt;/no_localization&gt;.
+</pre></blockquote>
+	<p>SPF's <code>I18nUtility.getMessage</code> API's will
+	automatically remove the special <code>&lt;no_localization&gt;...&lt;/no_localization&gt;</code>
+	markup from this, if the translator did not do so already.</p>
+	</li>
+	<li>
+	<p>The SPF <code>I18nUtility.getMessage</code> API's let you <i>inject</i>
+	<a href="#help.kinds.contextual">contextual help</a> into the middle of
+	a message. This can be very useful when you need to use contextual
+	help, because by definition contextual help is typically help content
+	that is embedded inline with broader text. If you break such text
+	apart, so that you can generate standalone contextual help around just
+	the text unit needing it, the broader text might become difficult to
+	translate correctly. Leaving the text intact, and injecting the
+	contextual help into it, is the proper way to do it, and is supported
+	by the SPF <code>I18nUtility.getMessage</code> API's.</p>
+	<p>For example, you can have the following in your message
+	properties:</p>
+	<blockquote><pre>
+key=Here is some &lt;contextual_help&gt;help&lt;/contextual_help&gt; for you.
+</pre></blockquote>
+	<p>The SPF <code>I18nUtility.getMessage</code> API's will
+	automatically inject the contextual help which you provide around the
+	content surrounded by the special <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>
+	markup ("help" in this example). More on this below.</p>
+	</li>
+</ul>
+
+<p>The <code>I18nUtility.getMessage</code> API's are:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,boolean)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,ContextualHelpProvider[])}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,Object[])}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,String,Object[],ContextualHelpProvider[],Locale,boolean)}</dt>
+</dl>
+
+<p>The last one is the core API which all the others feed into. Here
+is a summary of the parameters it takes; the others take a subset of
+these. See the method documentation for more information.</p>
+<ul>
+	<li>
+	<p>The current {@link PortletRequest} (required).</p>
+	</li>
+
+	<li>
+	<p>The desired message key (required).</p>
+	</li>
+
+	<li>
+	<p>A <code>String</code> default message value, to be returned
+	automatically to you if the given message key is not found. (If no
+	explicit default value is provided, then the message key itself is
+	returned in that case.)</p>
+	</li>
+
+	<li>
+	<p>An <code>Object[]</code> array containing any objects whose <code>toString</code>
+	values should be inserted into any {@link MessageFormat} placeholders
+	in the message.</p>
+	</li>
+
+	<li>
+	<p>A <code>ContextualHelpProvider[]</code> array containing any
+	contextual help you wish to inject into the message.</p>
+
+	<p>For example, let's say you need to produce a UI message like
+	this (where the word "secure" links to some contextual help not shown
+	yet):</p>
+
+	<img src="contextualHelpLink.jpg">
+
+	<p>Using the SPF <code>I18nUtility.getMessage</code> API's, you can
+	have the following in your message properties:</p>
+
+	<blockquote><pre>
+key=Your sign-in is &lt;contextual_help&gt;secure&lt;/contextual_help&gt;
+</pre></blockquote>
+
+	<p>Then, in your Java code, you can create a <a
+		href="#help.contextual.java"><code>ContextualHelpProvider</code></a>
+	(such as a <a
+		href="#help.contextual.java.classicContextualHelpProvider"><code>ClassicContextualHelpProvider</code></a>)
+	and pass it in this array. The <code>I18nUtility.getMessage</code>
+	method will wrap the contextual-help HTML which that <code>ContextualHelpProvider</code>
+	yields, around the part of the message surrounded by the special
+	&lt;contextual_help&gt;...&lt;/contextual_help&gt; markup - ie the word
+	"secure". So then you can just output that message and it will contain
+	the embedded contextual help, too.</p>
+
+	<p>Returning to the example, your message properties could look
+	like this:</p>
+
+	<blockquote><pre>
+key=Your sign-in is &lt;contextual_help&gt;secure&lt;/contextual_help&gt;
+key.help.title=Service Portal and your security
+key.help.content=Internet security is important to us...
+		</pre></blockquote>
+
+	<p>And your code would look like this, where <code>request</code>
+	and <code>response</code> are your {@link PortletRequest} and {@link
+	PortletResponse}, respectively. <b>Note:</b> this demonstration uses a
+	<a href="#help.contextual.java.classicContextualHelpProvider"><code>ClassicContextualHelpProvider</code></a>
+	and does not override any of the default style.</p>
+
+	<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+import com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider;
+...
+// First get the title for the contextual help.
+String helpTitle = I18nUtility.getMessage(request, "key.help.title");
+// Now get the main content for the contextual help.
+String helpContent = I18nUtility.getMessage(request, "key.help.content");
+// Now make the classic contextual help object.  Note we don't have to set
+// the link content, as I18nUtility will infer that from the special markup
+// in the message.
+ClassicContextualHelpProvider cchp = new ClassicContextualHelpProvider(request, response);
+cchp.setTitleContent(helpTitle);
+cchp.setHelpContent(helpContent);
+// Now get the main message, with the contextual help embedded automatically
+// inside it.
+ClassicContextualHelpProvider[] cchps = new ClassicContextualHelpProvider[] {cchp};
+String message = I18nUtility.getMessage(request, "key", cchps);
+		</pre></blockquote>
+
+	<p>So then you could output the <code>message</code> string to the
+	user - it would look like above. And when the user clicked on the
+	"secure" hyperlink, it would look like this:</p>
+
+	<img src="contextualHelp.jpg"></li>
+
+	<p>Please see the <code>I18nUtility.getMessage</code> method documentation for more details.  (Also see
+	the discussion on <a href="#help.kinds.contextual">contextual help</a> later in this guide and in the 
+	JavaDocs - eg see the {@link com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} documentation.)</p>
+
+	<li>
+	<p>A <code>Locale</code> for which to find the best-fitting message
+	resource. (By default, the method uses the locale contained inside your
+	<code>PortletRequest</code>.)</p>
+	</li>
+
+	<li>
+	<p>A <code>boolean</code> switch which controls whether to escape
+	any HTML meta-characters, like <code>&lt;</code> and <code>&gt;</code>,
+	found in the message string. For example, if you message property is
+	this:</p>
+
+	<blockquote><pre>
+key=This is an HTML &lt;head&gt; tag.
+</pre></blockquote>
+
+	<p>then the following code would escape the HTML inside the message
+	string (where <code>request</code> is your current {@link
+	PortletRequest}:</p>
+
+	<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+...
+String msg = I18nUtility.getMessage(request, "key", true);
+// Now msg is: This is an HTML&amp;lt;head&amp;gt; tag.
+	</pre></blockquote>
+
+	<p>If you use this with a message string that contains contextual
+	help, note that this policy will apply to the contextual help's title
+	and content as well.</p>
+	</li>
+</ul>
 
 <hr>
 
@@ -1134,11 +1330,13 @@ your own style</h4>
 </a>
 
 <a name="help.contextual.jsp.classicContextualHelpProvider">
-<h4>3.3.1. Using <code>&lt;spf-help-portlet:classicContextualHelpProvider&gt;</code></h4>
+<h4>3.3.1. Using <code>&lt;spf-help-portlet:classicContextualHelpProvider&gt;</code>
+for standalone contextual help</h4>
 </a>
 
 <a name="help.contextual.jsp.classicContextualHelpProviderParam">
-<h4>3.3.2. Using <code>&lt;spf-i18n-portlet:classicContextualHelpProviderParam&gt;</code></h4>
+<h4>3.3.2. Using <code>&lt;spf-i18n-portlet:classicContextualHelpProviderParam&gt;</code>
+for injected contextual help</h4>
 </a>
 
 <a name="help.contextual.jsp.contextualHelpProvider">
