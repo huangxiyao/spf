@@ -27,8 +27,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * substituting dynamic values for various tokens, and returning the
  * interpolated content to the calling class. Note that the base text filename
  * you provide is used to find a best-fit file for the current portlet request's
- * locale. This is all done in the {@link #interpolate()} method, based on
- * parameters you setup in the constructor.
+ * locale, in the manner of the Java standard for {@link ResourceBundle}. This
+ * is all done in the {@link #interpolate()} method, based on parameters you
+ * setup in the constructor.
  * </p>
  * <p>
  * This class uses the portal {@link TokenParser} to do most of its work. As of
@@ -429,9 +430,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see {@link com.hp.it.spf.xa.interpolate.FileInterpolator}<br>
- *      {@link com.hp.it.spf.xa.interpolate.portal.TokenParser}<br>
- *      {@link com.hp.it.spf.xa.interpolate.TokenParser}
+ * @see com.hp.it.spf.xa.interpolate.FileInterpolator<br>
+ *      com.hp.it.spf.xa.interpolate.portal.TokenParser<br>
+ *      com.hp.it.spf.xa.interpolate.TokenParser
  */
 public class FileInterpolator extends
 		com.hp.it.spf.xa.interpolate.FileInterpolator {
@@ -522,17 +523,17 @@ public class FileInterpolator extends
 
 	/**
 	 * <p>
-	 * Gets the best-fit localized version of the secondary support content
-	 * file, reads it into a string, and substitutes the tokens found in the
-	 * string with the proper dynamic values, returning the interpolated
-	 * content. The filename of the secondary support content file, the locale
-	 * for which to find the best-candidate, and the proper substitution values
-	 * for the tokens are all based on the information you provided when calling
-	 * the constructor. Null is returned if there are problems interpolating (eg
-	 * the file is not found or was empty, or the portal context or content file
-	 * you provided when calling the constructor were null). See class
-	 * documentation for more information about the tokens which are
-	 * substituted.
+	 * Gets the best-fit localized version of the secondary support file (using
+	 * {@link #getLocalizedContentFileAsStream()}, reads it into a string, and
+	 * substitutes the tokens found in the string with the proper dynamic
+	 * values, returning the interpolated content. The filename of the secondary
+	 * support content file, the locale for which to find the best-candidate,
+	 * and the proper substitution values for the tokens are all based on the
+	 * information you provided when calling the constructor. Null is returned
+	 * if there are problems interpolating (eg the file is not found or was
+	 * empty, or the portal context or content file you provided when calling
+	 * the constructor were null). See class documentation for more information
+	 * about the tokens which are substituted.
 	 * </p>
 	 * 
 	 * @return The interpolated file content
@@ -541,7 +542,8 @@ public class FileInterpolator extends
 	 */
 	public String interpolate() throws Exception {
 
-		if (portalContext == null || baseContentFilePath == null) {
+		if (portalContext == null) {
+			logWarning("Portal context was null.");
 			return null;
 		}
 		return super.interpolate();
@@ -552,7 +554,10 @@ public class FileInterpolator extends
 	 * available among the secondary support files of the current portal
 	 * component, based on the request locale and base content filename provided
 	 * to the constructor. Null is returned if the file is not found or the
-	 * portal context or content file provided to the constructor was null.
+	 * portal context or content file provided to the constructor was null. This
+	 * method uses
+	 * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocalizedFileStream(PortalContext, String)}
+	 * (see).
 	 * 
 	 * @return The input stream for the file
 	 */

@@ -26,8 +26,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @version TBD
- * @see {@link FileInterpolator}<br>
- *      {@link com.hp.it.spf.xa.interpolate.TokenParser}
+ * @see com.hp.it.spf.xa.interpolate.portal.FileInterpolator<br>
+ *      com.hp.it.spf.xa.interpolate.TokenParser
  */
 public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
