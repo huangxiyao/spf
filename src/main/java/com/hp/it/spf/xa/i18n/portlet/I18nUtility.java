@@ -84,7 +84,7 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * @author <link href="liping.yan@hp.com">Liping Yan</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see {@link com.hp.it.spf.xa.i18n.I18nUtility}
+ * @see com.hp.it.spf.xa.i18n.I18nUtility
  */
 
 public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {

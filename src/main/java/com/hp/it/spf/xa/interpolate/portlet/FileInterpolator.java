@@ -22,10 +22,23 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * This portlet utility class reads a file of text (eg an HTML file) from the
  * class loader, substituting dynamic values for various tokens, and returning
- * the interpolated content to the calling class. Note that the base text
- * filename you provide is used to find a best-fit file for the current portlet
- * request's locale. This is all done in the {@link #interpolate()} method,
- * based on parameters you setup in the constructor.
+ * the interpolated content to the calling class. Note that:
+ * </p>
+ * 
+ * <ul>
+ * <li> The base text filename you provide is used to find a best-fit file for
+ * the current portlet request's locale, in the fashion of the Java standard for
+ * {@link ResourceBundle}.</li>
+ * <li> The base text filename may be for an internal resource (ie contained
+ * inside your portlet WAR), or an external resource (ie contained outside your
+ * portlet WAR in the <i>portlet resource bundle folder</i>).</li>
+ * </ul>
+ * 
+ * <p>
+ * The selection and loading of the proper localized text file, from the proper
+ * location, and subsequent interpolation of its content, is all done in the
+ * {@link #interpolate()} method, based on parameters you setup in the
+ * constructor.
  * </p>
  * <p>
  * This class uses the {@link TokenParser} to do most of its work. As of this
@@ -543,9 +556,9 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see {@link com.hp.it.spf.xa.interpolate.FileInterpolator}<br>
- *      {@link com.hp.it.spf.xa.interpolate.portlet.TokenParser}<br>
- *      {@link com.hp.it.spf.xa.interpolate.TokenParser}
+ * @see com.hp.it.spf.xa.interpolate.FileInterpolator<br>
+ *      com.hp.it.spf.xa.interpolate.portlet.TokenParser<br>
+ *      com.hp.it.spf.xa.interpolate.TokenParser
  */
 public class FileInterpolator extends
 		com.hp.it.spf.xa.interpolate.FileInterpolator {
@@ -649,14 +662,15 @@ public class FileInterpolator extends
 
 	/**
 	 * <p>
-	 * Gets the best-fit localized version of the content file, reads it into a
-	 * string, and substitutes the tokens found in the string with the proper
-	 * dynamic values, returning the interpolated content. The content filename
-	 * and location, the locale for which to find the best-candidate, and the
-	 * proper substitution values for the tokens are all based on the
-	 * information you provided when calling the constructor. Null is returned
-	 * if there are problems interpolating (eg the file is not found or was
-	 * empty, or the request or content file you provided when calling the
+	 * Gets the best-fit localized version of the content file (using
+	 * {@link #getLocalizedContentFileAsStream()}, reads it into a string, and
+	 * substitutes the tokens found in the string with the proper dynamic
+	 * values, returning the interpolated content. The content filename and
+	 * location, the locale for which to find the best-candidate, and the proper
+	 * substitution values for the tokens are all based on the information you
+	 * provided when calling the constructor. Null is returned (and a warning is
+	 * logged) if there are problems interpolating (eg the file is not found or
+	 * was empty, or the request or content file you provided when calling the
 	 * constructor were null). See class documentation for more information
 	 * about the tokens which are substituted.
 	 * </p>
@@ -667,7 +681,8 @@ public class FileInterpolator extends
 	 */
 	public String interpolate() throws Exception {
 
-		if (request == null || baseContentFilePath == null) {
+		if (request == null) {
+			logWarning("Portlet request was null.");
 			return null;
 		}
 		String content = super.interpolate();
@@ -686,10 +701,13 @@ public class FileInterpolator extends
 
 	/**
 	 * Get an input stream for the best-candidate localized content file
-	 * available in the portlet bundle directory or portlet application, based
-	 * on the request locale and base content pathname provided to the
-	 * constructor. Null is returned if the file is not found or the request or
-	 * content file provided to the constructor were null.
+	 * available from the <i>portlet resource bundle directory</i> or inside
+	 * the portlet application, based on the request locale and base content
+	 * pathname provided to the constructor. Null is returned if the file is not
+	 * found or the request or content file provided to the constructor were
+	 * null. This method uses
+	 * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest, String)}
+	 * to select and open the file (see).
 	 * 
 	 * @return The input stream for the file
 	 */

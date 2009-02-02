@@ -1,0 +1,100 @@
+<html>
+<body>
+<p>This package contains Java utilities for interpolating dynamic
+tokens in text. The interpolation tokens supported in this package are:</p>
+<p>
+<dl>
+	<dt><code>{CONTENT-URL:<i>path</i>}</code></dt>
+	<dd>Replaced with the properly-encoded URL for the external or
+	internal static resource file named <code><i>path</i></code>.</dd>
+	<dt><code>{COUNTRY-CODE}</code></dt>
+	<dd>Replaced with the <a
+		href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+	3166-1</a> country code for the current portlet request.</dd>
+	<dt><code>{EMAIL}</code></dt>
+	<dd>Replaced with the email address for the user in the current
+	portlet request.</dd>
+	<dt><code>{GROUP:<i>groups</i>}</code></dt>
+	<dd>Includes the surrounded content if the user in the current
+	portlet request is a member of one of the named <code><i>groups</i></code>.
+	Otherwise suppresses the surrounded content.</dd>
+	<dt><code>{LANGUAGE-CODE}</code></dt>
+	<dd>Replaced with the <a
+		href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+	639-1</a> language code for the current portlet request.</dd>
+	<dt><code>{LANGUAGE-TAG}</code></dt>
+	<dd>Replaced with the <a
+		href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag
+	for the current portlet request.</dd>
+	<dt><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></dt>
+	<dd>Replaced with the properly-encoded URL for the (possibly
+	localized) external or internal static resource file, the base name of
+	which is <code><i>path</i></code>.</dd>
+	<dt><code>{LOGGED-IN}</code></dt>
+	<dd>Includes the surrounded content if the user in the current
+	portlet request is logged-in (ie, not anonymous). Otherwise suppresses
+	the surrounded content.</dd>
+	<dt><code>{LOGGED-OUT}</code></dt>
+	<dd>Includes the surrounded content if the user in the current
+	portlet request is not logged-in (ie, is anonymous). Otherwise
+	suppresses the surrounded content.</dd>
+	<dt><code>{NAME}</code></dt>
+	<dd>Replaced with the full name for the user in the current
+	portlet request, displayed in customary order for the locale.</dd>
+	<dt><code>{PORTLET:<i>portlets</i>}</code></dt>
+	<dd>Includes the surrounded content if the current portlet is one
+	of the named <code><i>portlets</i></code>. Otherwise suppresses the
+	surrounded content.</dd>
+	<dt><code>{REQUEST-URL}</code></dt>
+	<dd>Replaced with the complete URL for the current portal request
+	which targeted this portlet.</dd>
+	<dt><code>{ROLE:<i>roles</i>}</code></dt>
+	<dd>Includes the surrounded content if the user in the current
+	portlet request is in one of the named <code><i>roles</i></code>.
+	Otherwise suppresses the surrounded content.</dd>
+	<dt><code>{SITE}</code></dt>
+	<dd>Replaced with the name of the current portal site which
+	includes this portlet.</dd>
+	<dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+	<dd>Includes the surrounded content if the current request is for
+	one of the portal site <code><i>names</i></code>. Otherwise suppresses
+	the surrounded content.</dd>
+	<dt><code>{SITE-URL}</code></dt>
+	<dd>Replaced with the home-page URL for the current portal site
+	which includes this portlet.</dd>
+	<dt><code>{TOKEN:<i>key</i>}</code></dt>
+	<dd>Replaced with the value for the <code><i>key</i></code>
+	property as found in the token substitutions file (eg <code>default_token_subs.properties</code>).</dd>
+	<dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
+	<dd>Replaced with the named user property <code><i>key</i></code>
+	in the current portlet request.</dd>
+</dl>
+</p>
+
+<a name="FileInterpolator">
+<h3>FileInterpolator</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}
+class lets you read and interpolate the content of a text file. The file
+may be stored as either an external or internal resource file. (External
+files are in the <i>portlet resource bundle directory</i> while internal
+files are inside your portlet WAR. See the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/index.html#i18n.location">SPF
+Portlet Utilities Developer's Guide</a> for more discussion about external
+versus internal resources.) The file may be localized; the class looks
+for the best-fit localized version of the file when loading it. Please
+see the class documentation for more information.</p>
+
+<a name="TokenParser">
+<h3>TokenParser</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.interpolate.portlet.TokenParser}
+provides parsing methods for strings, for each of the above listed token
+types. This class is used by the {@link
+com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} and if you just
+use the <code>FileInterpolator</code> you will never need to use the <code>TokenParser</code>
+directly. Please see the class documentation for more information.</p>
+
+</body>
+</html>
+

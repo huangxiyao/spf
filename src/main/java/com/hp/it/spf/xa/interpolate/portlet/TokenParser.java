@@ -30,8 +30,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * @author <link href="xiao-bing.zuo@hp.com">Zuo Xiaobing</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see {@link FileInterpolator}<br>
- *      {@link com.hp.it.spf.xa.interpolate.TokenParser}
+ * @see com.hp.it.spf.xa.interpolate.portlet.FileInterpolator<br>
+ *      com.hp.it.spf.xa.interpolate.TokenParser
  */
 public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
