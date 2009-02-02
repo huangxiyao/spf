@@ -7,7 +7,7 @@ files in this component. --%>
 <%@ page import="com.epicentric.common.website.SessionUtils"%>
 <%@ page import="com.hp.it.spf.xa.i18n.portal.I18nUtility"%>
 
-<%@ taglib uri="http://www.hp.com/spf/i18n/portal" prefix="spf-i18n-portal"%>
+<%@ taglib uri="/spf-i18n-portal.tld" prefix="spf-i18n-portal"%>
 <%@ taglib uri="vgn-tags" prefix="vgn-portal"%>
 
 <vgn-portal:defineObjects />
