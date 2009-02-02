@@ -18,7 +18,7 @@ If only one locale is available, displays the "classic" locale indicator.
 <%----------------------------------------------------------- TAG LIBRARIES--%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
-<%@ taglib prefix="spf-i18n-portal" uri="http://www.hp.com/spf/i18n/portal" %>
+<%@ taglib prefix="spf-i18n-portal" uri="/spf-i18n-portal.tld" %>
 
 <vgn-portal:defineObjects/>
 
