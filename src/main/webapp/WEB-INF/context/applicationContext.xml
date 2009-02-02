@@ -2,7 +2,6 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "../dtd/spring-beans.dtd">
 
 <beans>
-
 	<!-- Default View Resolver -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -16,7 +15,7 @@
 		</property>
 	</bean>
 
-	<!-- Abstract Default Exception Handler Bean -->
+	<!-- Exception handling -->
 	<bean id="defaultExceptionHandlerTemplate"
 		class="com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver"
 		abstract="true">
@@ -37,4 +36,15 @@
 		</property>
 	</bean>
 
+	<!-- WPAP logging interceptor -->
+	<bean id="transactionLoggingInterceptor"
+		class="com.hp.frameworks.wpa.portlet.handler.TransactionLoggingInterceptor" />
+	<bean id="annotationHandlerMapping"
+		class="org.springframework.web.portlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="transactionLoggingInterceptor" />
+			</list>
+		</property>
+	</bean>
 </beans>

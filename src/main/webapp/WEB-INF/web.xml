@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+
 <web-app>
 
 	<display-name>HTMLViewer</display-name>
@@ -22,23 +23,16 @@
 		</listener-class>
 	</listener>
 
-	<!-- The WPAP log configuration servlet -->
-	<servlet>
-		<servlet-name>LogConfigServlet</servlet-name>
-		<servlet-class>
-			com.hp.frameworks.wpa.portlet.logging.WPALogConfigServlet
-		</servlet-class>
-		<!-- logRoot should be the realpath,For windows,should be C:/...,
-			For Unix should be /rootpath/...-->
-		<init-param>
-			<param-name>logRoot</param-name>
-			<param-value>/var/sasuapps/spf/logs/htmlviewer</param-value>
-			<description>
-				The root path for the HTMLViewer portlet log files.
-			</description>
-		</init-param>
-		<load-on-startup>0</load-on-startup>
-	</servlet>
+	<!-- The WPAP log configuration listener -->
+	<context-param>
+		<param-name>timberLogRoot</param-name>
+		<param-value>/var/sasuapps/spf/logs/htmlviewer</param-value>
+	</context-param>
+	<listener>
+		<listener-class>
+			com.hp.frameworks.wpa.portlet.logging.LoggingConfigListener
+		</listener-class>
+	</listener>
 
 	<!-- The Spring view renderer servlet, for helping Spring portlet render views (eg JSP) -->
 	<servlet>
