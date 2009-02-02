@@ -4,7 +4,7 @@
 	<tlibversion>1.0</tlibversion>
 	<jspversion>1.2</jspversion>
 	<shortname>spf-i18n-portal</shortname>
-	<uri>http://www.hp.com/spf/i18n/portal</uri>
+	<uri>/spf-i18n-portal.tld</uri>
 	<info>
 		Tag library for Shared Portal Framework portal
 		internationalization tags.

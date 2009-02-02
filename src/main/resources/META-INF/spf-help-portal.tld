@@ -6,7 +6,7 @@
 	<tlibversion>1.0</tlibversion>
 	<jspversion>1.1</jspversion>
 	<shortname>spf-help-portal</shortname>
-	<uri>http://serviceportal.hp.com/framework/portal/help</uri>
+	<uri>/spf-help-portal.tld</uri>
 	<!-- Tag: <spf-help-portal:classicContextualHelp -->
 	<tag>
 		<name>classicContextualHelp</name>
