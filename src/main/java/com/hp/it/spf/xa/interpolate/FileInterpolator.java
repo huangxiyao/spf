@@ -19,16 +19,15 @@ import java.util.Locale;
  * An abstract base class for performing file interpolation (reading and
  * substitution) in portal and portlet frameworks. See the portal and portlet
  * concrete subclasses for more information. This class uses the base
- * TokenParser heavily to do its work.
+ * {@link TokenParser} heavily to do its work.
  * </p>
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.spf.xa.interpolate.portal.FileInterpolator
- *      com.hp.it.spf.xa.interpolate.portlet.FileInterpolator
- *      com.hp.it.spf.xa.interpolate.TokenParser
- * 
+ * @see {@link TokenParser}<br>
+ *      {@link com.hp.it.spf.xa.interpolate.portal.FileInterpolator}<br>
+ *      {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}
  */
 public abstract class FileInterpolator {
 
@@ -162,6 +161,7 @@ public abstract class FileInterpolator {
 	 * <dt><code>{SITE-URL}</code></dt>
 	 * <dt><code>{REQUEST-URL}</code></dt>
 	 * <dt><code>{LANGUAGE-CODE}</code></dt>
+	 * <dt><code>{COUNTRY-CODE}</code></dt>
 	 * <dt><code>{LANGUAGE-TAG}</code></dt>
 	 * <dt><code>{EMAIL}</code></dt>
 	 * <dt><code>{NAME}</code></dt>
@@ -218,6 +218,9 @@ public abstract class FileInterpolator {
 		// Add current ISO language code
 		content = t.parseLanguageCode(content, getLocale());
 
+		// Add current ISO country code
+		content = t.parseCountryCode(content, getLocale());
+		
 		// Add current RFC language code
 		content = t.parseLanguageTag(content, getLocale());
 

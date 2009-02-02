@@ -19,7 +19,8 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * An abstract base class for parsing strings looking for tokens to substitute
  * in portal and portlet contexts. See the concrete portal and portlet
  * subclasses for further information. This base class and its subclasses are
- * used heavily by the base, portal and portlet FileInterpolator classes.
+ * used heavily by the base, portal and portlet <code>FileInterpolator</code>
+ * classes.
  * </p>
  * <p>
  * The following token substitutions are supported. See the method documentation
@@ -30,6 +31,7 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * <dl>
  * <dt><code>{TOKEN:<i>key</i>}</code></dt>
  * <dt><code>{LANGUAGE-CODE}</code></dt>
+ * <dt><code>{COUNTRY-CODE}</code></dt>
  * <dt><code>{LANGUAGE-TAG}</code></dt>
  * <dt><code>{CONTENT-URL:</i>path</i>}</code></dt>
  * <dt><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></dt>
@@ -48,11 +50,11 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.spf.xa.interpolate.portal.TokenParser
- *      com.hp.it.spf.xa.interpolate.portlet.TokenParser
- *      com.hp.it.spf.xa.interpolate.FileInterpolator
- *      com.hp.it.spf.xa.interpolate.portal.FileInterpolator
- *      com.hp.it.spf.xa.interpolate.portlet.FileInterpolator
+ * @see {@link com.hp.it.spf.xa.interpolate.portal.TokenParser}<br>
+ *      {@link com.hp.it.spf.xa.interpolate.portlet.TokenParser}</br>
+ *      {@link com.hp.it.spf.xa.interpolate.FileInterpolator}<br>
+ *      {@link com.hp.it.spf.xa.interpolate.portal.FileInterpolator}<br>
+ *      {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}<br>
  * 
  */
 public abstract class TokenParser {
@@ -65,12 +67,22 @@ public abstract class TokenParser {
 	private static final String DEFAULT_SUBS_PATHNAME = "default_tokens";
 
 	/**
-	 * This class attribute is the token for the user's ISO 639-1 language code.
+	 * This class attribute is the token for the user's <a
+	 * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+	 * 639-1</a> language code.
 	 */
 	private static final String TOKEN_LANGUAGE_CODE = "LANGUAGE-CODE";
 
 	/**
-	 * This class attribute is the token for the user's RFC 3066 language tag.
+	 * This class attribute is the token for the user's <a
+	 * href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+	 * 3166-1</a> country code.
+	 */
+	private static final String TOKEN_COUNTRY_CODE = "COUNTRY-CODE";
+
+	/**
+	 * This class attribute is the token for the user's <a
+	 * href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag.
 	 */
 	private static final String TOKEN_LANGUAGE_TAG = "LANGUAGE-TAG";
 
@@ -260,9 +272,10 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the given string, substituting the ISO 639-1 language code for the
-	 * given locale in place of the <code>{LANGUAGE-CODE}</code> token. For
-	 * example: <code>&lt;a
+	 * Parses the given string, substituting the <a
+	 * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+	 * 639-1</a> language code for the given locale in place of the
+	 * <code>{LANGUAGE-CODE}</code> token. For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?lang={LANGUAGE-CODE}"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
@@ -294,9 +307,45 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the given string, substituting the given RFC 3066 language tag for
-	 * the given locale in place of the <code>{LANGUAGE-TAG}</code> token. For
-	 * example: <code>&lt;a
+	 * Parses the given string, substituting the <a
+	 * href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+	 * 3166-1</a> country code for the given locale in place of the
+	 * <code>{COUNTRY-CODE}</code> token. For example: <code>&lt;a
+	 * href="https://ovsc.hp.com?cc={COUNTRY-CODE}"&gt;go to
+	 * OVSC&lt;/a&gt;</code>
+	 * is changed to <code>&lt;a
+	 * href="https://ovsc.hp.com?cc=JP"&gt;go to OVSC&lt;/a&gt;</code>
+	 * when you provide a Japan-country locale. If you provide a null locale, or
+	 * a locale in which country is not specified, the token is replaced with
+	 * blank. If you provide null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @param loc
+	 *            The locale.
+	 * 
+	 * @return The interpolated string.
+	 */
+	public String parseCountryCode(String content, Locale loc) {
+		String cc = null;
+		if (loc != null) {
+			cc = loc.getCountry();
+		}
+		return parseUnparameterized(content, TOKEN_COUNTRY_CODE, cc);
+	}
+
+	/**
+	 * <p>
+	 * Parses the given string, substituting the given <a
+	 * href="href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language
+	 * tag for the given locale in place of the <code>{LANGUAGE-TAG}</code>
+	 * token. For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?lang={LANGUAGE-TAG}"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
@@ -961,13 +1010,13 @@ public abstract class TokenParser {
 
 	/**
 	 * Get token key value from token substitutions file, using the
-	 * PropertyResourceBundleManager to hot-load the properties file from
-	 * anywhere searched by the class loader.
+	 * {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager} to
+	 * hot-load the properties file from anywhere searched by the class loader.
 	 * 
 	 * @param key
 	 *            token key
 	 * @return value
-	 * @see com.hp.it.spf.xa.properties.PropertyResourceBundleManager
+	 * @see {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager}
 	 */
 	private String getToken(String key) {
 		String tokenValue = null;
@@ -988,8 +1037,8 @@ public abstract class TokenParser {
 	 * Parses the given content string for any container content denoted by
 	 * start and end tokens with the given name; such content is deleted if the
 	 * user does not qualify for it (as determined by the given
-	 * ContainerMatcher). Container content is denoted by a start tag like
-	 * <code>{FOO:keys}</code> and a corresponding end tag like
+	 * <code>ContainerMatcher</code>). Container content is denoted by a
+	 * start tag like <code>{FOO:keys}</code> and a corresponding end tag like
 	 * <code>{/FOO}</code>, where <code>FOO</code> is the given token name,
 	 * and <code>keys</code> may include one or more attribute values,
 	 * delimited by "|" for a logical-or. The given ContainerMatcher will be
@@ -1000,11 +1049,11 @@ public abstract class TokenParser {
 	 * </p>
 	 * <p>
 	 * If you provide null or blank content or token name, then the provided
-	 * content is simply returned. If you provide a null ContainerMatcher, then
-	 * all sections of content enclosed by the particular container tokens are
-	 * removed from the content. Likewise, if the <code>keys</code> in the
-	 * parsed container start token are null or blank, then that
-	 * container-enclosed section will be removed.
+	 * content is simply returned. If you provide a null
+	 * <code>ContainerMatcher</code>, then all sections of content enclosed
+	 * by the particular container tokens are removed from the content.
+	 * Likewise, if the <code>keys</code> in the parsed container start token
+	 * are null or blank, then that container-enclosed section will be removed.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, this method supports both
