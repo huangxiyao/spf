@@ -16,8 +16,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * The concrete subclass for parsing strings looking for tokens to substitute in
  * the portal context. This class is used heavily by the portal
- * FileInterpolator. This class supports the exact same token substitutions as the base class - see the base class method
- * documentation for further description.
+ * {@link FileInterpolator}. This class supports the exact same token
+ * substitutions as the base class - see the base class method documentation for
+ * further description.
  * </p>
  * <dl>
  * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
@@ -25,8 +26,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @version TBD
- * @see com.hp.it.spf.xa.interpolate.TokenParser
- *      com.hp.it.spf.xa.interpolate.portal.FileInterpolator
+ * @see {@link FileInterpolator}<br>
+ *      {@link com.hp.it.spf.xa.interpolate.TokenParser}
  */
 public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
@@ -42,9 +43,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * <p>
-	 * Constructs a new TokenParser for the given portal context. The default
-	 * token-substitutions property file (<code>default_tokens.properties</code>)
-	 * will be assumed, if subsequent parseToken calls find any
+	 * Constructs a new <code>TokenParser</code> for the given portal context.
+	 * The default token-substitutions property file (<code>default_tokens.properties</code>)
+	 * will be assumed, if subsequent {@link #parseToken(String)} calls find any
 	 * <code>&lt;TOKEN:key&gt;</code> tokens.
 	 * </p>
 	 * 
@@ -57,10 +58,10 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * <p>
-	 * Constructs a new TokenParser for the given portlet request, and
-	 * overriding the token-substitutions property file. The given file, instead
-	 * of the default (<code>default_tokens.properties</code>) will be
-	 * assumed, if subsequent parseToken calls find any
+	 * Constructs a new <code>TokenParser</code> for the given portlet
+	 * request, and overriding the token-substitutions property file. The given
+	 * file, instead of the default (<code>default_tokens.properties</code>)
+	 * will be assumed, if subsequent {@link #parseToken(String)} calls find any
 	 * <code>&lt;TOKEN:key&gt;</code> tokens.
 	 * </p>
 	 * 
@@ -83,8 +84,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * depending on the boolean parameter (if true, the URL is for the
 	 * best-candidate localized version of that file, otherwise it is just for
 	 * the file itself). This should return null if the URL cannot be built (eg
-	 * the file is not found). This method is implemented using I18nUtility
-	 * getLocalizedFileURL (see).
+	 * the file is not found). This method is implemented using
+	 * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocalizedFileURL(PortalContext, String, boolean)}
+	 * (see).
 	 * </p>
 	 * <p>
 	 * The given file pathname should be a base filename of a file that has been
@@ -111,7 +113,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * object contained in the current portal context. Returns null if the given
 	 * key is not found in the user object or the value it references is not a
 	 * string. Also returns null if the user object is null or guest (ie the
-	 * user is not logged-in).
+	 * user is not logged-in). This method is implemented using
+	 * {@link com.hp.it.spf.xa.misc.portal.Utils#getUserProperty(PortalContext, String)}
+	 * (see).
 	 * 
 	 * @param key
 	 *            The user property name
