@@ -1228,6 +1228,22 @@ String msg = I18nUtility.getMessage(request, "key", true);
 <h3>2.4. Accessing message resources using JSP tag libraries</h3>
 </a>
 
+<p>Once your message resources have been created and placed <a
+	href="#i18n.location">as discussed above</a>, you can begin to access
+best-fit localized text strings for your user from them in your JSP's.
+You may use either the standard Spring JSP tag libraries for doing this, or
+(recommended) the SPF ones.</p>
+
+<p><b>Note:</b> In either case, be sure you have configured Spring
+to load your message resource, as described above. And (if your message
+resources are external to your portlet WAR) be sure you have configured
+the <i>portlet resource bundle folder</i> where you put them, in your
+JVM classpath. See the <a href="#i18n.location">discussion above</a>.</p>
+
+<p><b>Note:</b> In both cases, raw Java API's are available for you to use if you prefer,
+instead of the JSP tag libraries. See the <a
+	href="#i18n.messages.java">API descriptions</a> above.</p>
+
 <a name="i18n.messages.jsp.spring.message">
 <h4>2.4.1. Using Spring (<code>&lt;spring:message&gt;</code>)</h4>
 </a>
