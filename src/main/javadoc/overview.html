@@ -1013,8 +1013,8 @@ com.hp.it.spf.xa.i18n.portlet.I18nUtility} class.</p>
 <h4>2.3.2. Using SPF (<code>I18nUtility.getMessage</code>)</h4>
 </a>
 
-<p>SPF' <code>I18nUtility.getMessage</code> API's wrap around Spring
-and provide the following extra capability:</p>
+<p>SPF's <code>I18nUtility.getMessage</code> API's wrap around
+Spring and provide the following extra capability:</p>
 
 <ul>
 	<li>
@@ -1096,14 +1096,14 @@ these. See the method documentation for more information.</p>
 	<p>An <code>Object[]</code> array containing any objects whose <code>toString</code>
 	values should be inserted into any {@link MessageFormat} placeholders
 	in the message. For example, in your message properties you can have:</p>
-	
+
 	<blockquote><pre>
 	key=Your user ID is {0}.
 	</pre></blockquote>
-	
+
 	<p>Then in your Java code, where <code>request</code> is the <code>PortletRequest</code>
 	and <code>userID</code> is the user ID:</p>
-	
+
 	<blockquote><pre>
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 ...
@@ -1120,7 +1120,8 @@ String msg = I18nUtility.getMessage(request, "key", args);
 	this (where the word "secure" links to some contextual help not shown
 	yet):</p>
 
-	<img src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelpLink.jpg">
+	<img
+		src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelpLink.jpg">
 
 	<p>Using the SPF <code>I18nUtility.getMessage</code> API's, you can
 	have the following in your message properties:</p>
@@ -1231,8 +1232,8 @@ String msg = I18nUtility.getMessage(request, "key", true);
 <p>Once your message resources have been created and placed <a
 	href="#i18n.location">as discussed above</a>, you can begin to access
 best-fit localized text strings for your user from them in your JSP's.
-You may use either the standard Spring JSP tag libraries for doing this, or
-(recommended) the SPF ones.</p>
+You may use either the standard Spring JSP tag libraries for doing this,
+or (recommended) the SPF ones.</p>
 
 <p><b>Note:</b> In either case, be sure you have configured Spring
 to load your message resource, as described above. And (if your message
@@ -1240,24 +1241,235 @@ resources are external to your portlet WAR) be sure you have configured
 the <i>portlet resource bundle folder</i> where you put them, in your
 JVM classpath. See the <a href="#i18n.location">discussion above</a>.</p>
 
-<p><b>Note:</b> In both cases, raw Java API's are available for you to use if you prefer,
-instead of the JSP tag libraries. See the <a
+<p><b>Note:</b> In both cases, raw Java API's are available for you
+to use if you prefer, instead of the JSP tag libraries. See the <a
 	href="#i18n.messages.java">API descriptions</a> above.</p>
 
 <a name="i18n.messages.jsp.spring.message">
 <h4>2.4.1. Using Spring (<code>&lt;spring:message&gt;</code>)</h4>
 </a>
 
+<p>See the Spring documentation for any Spring JSP tag interface for
+{@link org.springframework.context.MessageSource} - for example, <a
+	href="http://static.springframework.org/spring/docs/1.1.5/taglib/tag/MessageTag.html"><code>&lt;spring:message&gt;</code></a>.
+</p>
+
+<p><b>Note:</b> If you use the Spring tags, you will not benefit
+from any of the <a href="#i18n.messages.jsp.spf.message">enhanced
+message capabilities</a> supported by the SPF portlet utility tags.</p>
+
 <a name="i18n.messages.jsp.spf.message">
 <h4>2.4.2. Using SPF (<code>&lt;spf-i18n-portlet:message&gt;</code>,
 <code>&lt;spf-i18n-portlet:param&gt;</code>, and <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code>)</h4>
 </a>
+
+<p>The SPF portlet utilities provide a JSP tag library which wraps
+around <a href="#i18n.java.spf.getMessage"><code>I18nUtility.getMessage</code></a>
+to offer the same extended message-handling capabilities. Just as with <code>I18nUtility.getMessage</code>,
+with the SPF portlet utilities' message-handling JSP tags, you can:</p>
+
+<ul>
+	<li>
+	<p>Use <code>&lt;no_localization&gt;...&lt;/no_localization&gt;</code>
+	in your message values to signal to translators that they should leave
+	the contents untranslated - the SPF will automatically remove that
+	markup if the translator did not do so already.</p>
+	</li>
+
+	<li>
+	<p>Use <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>
+	in your message values to inject contextual help into the middle of a
+	message (thus avoiding possible translation problems which could occur
+	if you broke the message into pieces and used standalone contextual
+	help).</p>
+	</li>
+</ul>
+
+<p>The SPF message-handling tags are thoroughly documented in the <a
+	href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#message">package
+description</a>. Briefly, they are:</p>
+
+<dl>
+	<dt>
+	<p><a href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a></p>
+	</dt>
+
+	<dd>
+	<p>This tag is the main message tag for the SPF. It takes a message
+	key and (optionally) a default value and a boolean switch for
+	HTML-escaping the message value. The usage is:</p>
+
+	<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:message
+	key="<i>message-key</i>"
+	defaultValue="<i>default-value</i>"
+	escape="<i>true-or-false</i>"
+	/&gt;
+</pre></blockquote>
+	</dd>
+
+	<p>For example, consider this message property in your resource
+	bundle:</p>
+
+	<blockquote><pre>
+key=This is an HTML &lt;head&gt; tag.
+</pre></blockquote>
+
+	<p>If you wanted the HTML embedded inside the message value to
+	render literally, you would use this:</p>
+
+	<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:message key="key" escape="true" /&gt;
+</pre></blockquote>
+
+	<p>In addition, the body of the <code>&lt;spf-i18n-portlet:message&gt;</code>
+	tag may contain either or both of the following tags, zero or more
+	times.</p>
+
+	<dt>
+	<p><a href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#param"><code>&lt;spf-i18n-portlet:param&gt;</code></a></p>
+	</dt>
+	<dd>
+	<p>This tag is only used inside the tag body of <code>&lt;spf-i18n-portlet:message&gt;</code>.
+	You use it to pass a string into a {@link MessageFormat} placeholder in
+	the message value. The usage is:</p>
+
+	<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:param value="<i>string</i>" /&gt;
+</pre></blockquote>
+
+	<p>For example, if your message properties contain this:</p>
+
+	<blockquote><pre>
+key=Your name is {0} and your age is {1}.
+</pre></blockquote>
+
+	<p>Then you would populate the parameters with the <code>name</code>
+	and <code>age</code> variables as follows:</p>
+
+	<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:message key="key"&gt;
+	&lt;spf-i18n-portlet:param value="&lt;%= name %&gt;" /&gt;
+	&lt;spf-i18n-portlet:param value="&lt;%= age %&gt;" /&gt;
+&lt;/spf-i18n-portlet:message&gt;
+</pre></blockquote>
+	</dd>
+
+	<dt>
+	<p><a
+		href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a></p>
+	</dt>
+	<dd>
+	<p>This tag is only used inside the tag body of <code>&lt;spf-i18n-portlet:message&gt;</code>.
+	You use it to inject contextual help into the message value, where the
+	special <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>
+	markup is found. The format of contextual help which is injected is the
+	"classic" version. The usage is:</p>
+
+	<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:classicContextualHelpParam
+	title="<i>help-title</i>"
+	titleKey="<i>help-title-message-key</i>"
+	content="<i>help-content</i>"
+	contentKey="<i>help-content-message-key</i>"
+	noScriptHref="<i>uri</i>"
+	width="<i>pixels</i>"
+	borderStyle="<i>inline-style</i>'
+	borderClass="<i>css-classname</i>"
+	titleStyle="<i>inline-style</i>"
+	titleClass="<i>css-classname</i>"
+	contentStyle="<i>inline-style</i>"
+	contentClass="<i>css-classname</i>"
+	/&gt;
+</pre></blockquote>
+
+	<p>Most of the tag attributes are optional. For example, if your
+	message properties contain this:</p>
+
+	<blockquote><pre>
+key=Your sign-in is &lt;contextual_help&gt;secure&lt;/contextual_help&gt;
+key.help.title=Service Portal and your security
+key.help.content=Internet security is important to us...
+</pre></blockquote>
+
+	<p>Then you could generate the message, with classic contextual
+	help injected, in your JSP like this:</p>
+
+	<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:message key="key"&gt;
+	&lt;spf-i18n-portlet:classicContextualHelpParam titleKey="key.help.title" contentKey="key.help.content" /&gt;
+&lt;/spf-i18n-portlet:message&gt;
+</pre></blockquote>
+
+	<p>This JSP would generate a message looking in the user's browser
+	like this:</p>
+
+	<img
+		src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelpLink.jpg">
+
+	<p>When the user clicked on the link, then the classic-format
+	contextual help would pop open:</p>
+
+	<img src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelp.jpg">
+
+	<p>Most of the other tag attributes can be used to change the style
+	(color, font, size) of the classic contextual help popup.</p>
+	</dd>
+</dl>
+
+<p>The SPF message-handling tags are thoroughly documented in the <a
+	href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#message">package
+description</a>. Please see that documentation for more information.</p>
 
 <hr>
 
 <a name="i18n.supporting.java">
 <h3>2.5. Accessing supporting resources using Java code</h3>
 </a>
+
+<p>Once your supporting resources have been created and placed <a
+	href="#i18n.location">as discussed above</a>, you can begin to access
+them using the SPF portlet <code>I18nUtility</code>. There are 3 ways of
+access supported:</p>
+
+<ul>
+	<li>
+	<p>You can get a URL pointing to the particular supporting resource
+	file in a bundle which best-fits the user's locale. You can then output
+	that URL to the user - for example, inside an HTML <code>&lt;IMG&gt;</code>
+	tag as the <code>SRC</code> attribute, to display the proper localized
+	version of any image to the user. Use the <a
+		href="#i18n.supporting.java.getLocalizedFileURL"><code>I18nUtility.getLocalizedFileURL</code></a>
+	methods for this.</p>
+	</li>
+
+	<li>
+	<p>If you need to process the file server-side instead, you can get
+	an {@link InputStream} for the particular one which best-fits the
+	user's locale. Use the <a
+		href="#i18n.supporting.java.getLocalizedFileStream"><code>I18nUtility.getLocalizedFileStream</code></a>
+	methods for this.</p>
+	</li>
+
+	<li>
+	<p>If you need to just check what the best-fit localized file in a
+	particular supporting resource would be, and whether it exists, then
+	you can use the <a href="#i18n.supporting.java.getLocalizedFileName"><code>I18nUtility.getLocalizedFileName</code></a>
+	methods for this.</p>
+	</li>
+</ul>
 
 <a name="i18n.supporting.java.getLocalizedFileURL">
 <h4>2.5.1. Using <code>I18nUtility.getLocalizedFileURL</code></h4>
