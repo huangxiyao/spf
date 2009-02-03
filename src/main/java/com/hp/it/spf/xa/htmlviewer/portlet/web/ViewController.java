@@ -18,15 +18,21 @@ import com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController;
 import com.hp.websat.timber.logging.Log;
 
 /**
- * The controller class for view mode of the HTMLViewer portlet. HTMLViewer is a
- * JSR-168 portlet which displays the proper localized version of a configured
- * HTML file, as interpolated by the portlet FileInterpolator.
+ * The controller class for <code>view</code> mode of the
+ * <code>html-viewer</code> portlet. <code>html-viewer</code> is a JSR-168
+ * portlet. Its <code>view</code> mode displays the proper localized version
+ * of a configured HTML file, interpolated by the portlet
+ * {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} via the
+ * {@link com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController}.
+ * In <code>config</code mode, the portlet administrator is able to specify
+ * the HTML file to display, as well as an option to rewrite hyperlinks in the
+ * HTML file so that they launch a buttonless child window.
  * 
  * @author <link href="xiao-bing.zuo@hp.com">Zuo Xiaobing</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController
- *      com.hp.it.spf.xa.interpolate.portlet.FileInterpolator
+ * @see <code>com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController</code>
+ * <code>com.hp.it.spf.xa.interpolate.portlet.FileInterpolator</code>
  */
 public class ViewController extends FileInterpolatorController {
 
@@ -56,8 +62,11 @@ public class ViewController extends FileInterpolatorController {
 	 * <p>
 	 * Gets the base filename of the file resource bundle to interpolate and
 	 * display, from the portlet preferences where the portlet config mode
-	 * stored it. Throws an <code>InternalErrorException</code> if the
-	 * filename cannot be found.
+	 * stored it (in the preference element named
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#VIEW_FILENAME}).
+	 * Throws an
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.exception.InternalErrorException}
+	 * if the filename cannot be found.
 	 * </p>
 	 * <p>
 	 * The render-phase controller in the abstract superclass calls this method
@@ -77,8 +86,7 @@ public class ViewController extends FileInterpolatorController {
 		if (viewFileName == null || viewFileName.length() == 0) {
 			Log.logError(this,
 					"ViewController: view filename is not found or empty.");
-			throw new InternalErrorException(
-					Consts.ERROR_CODE_FILE_NULL);
+			throw new InternalErrorException(Consts.ERROR_CODE_FILE_NULL);
 		}
 		return Utils.slashify(Consts.HTML_FILE_FOLD + viewFileName);
 	}

@@ -6,7 +6,7 @@ package com.hp.it.spf.xa.htmlviewer.portlet.util;
 
 /**
  * Container class for common constants shared across multiple artifacts in the
- * HTMLViewer portlet.
+ * <code>html-viewer</code> portlet.
  * 
  * @author <link href="xiao-bing.zuo@hp.com">Zuo Xiaobing</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link

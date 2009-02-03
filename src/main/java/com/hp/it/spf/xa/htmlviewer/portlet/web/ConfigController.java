@@ -20,15 +20,19 @@ import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 import com.hp.websat.timber.logging.Log;
 
 /**
- * The controller class for config mode of the HTMLViewer portlet. HTMLViewer is
- * a JSR-168 portlet which displays the proper localized version of a configured
- * HTML file, as interpolated by the portlet FileInterpolator.
+ * The controller class for <code>config</code> mode of the
+ * <code>html-viewer</code> portlet. <code>html-viewer</code> is a JSR-168
+ * portlet. Its <code>view</code> mode displays the proper localized version
+ * of a configured HTML file, interpolated by the portlet
+ * {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} via the
+ * {@link com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController}.
+ * In <code>config</code mode, the portlet administrator is able to specify
+ * the HTML file to display, as well as an option to rewrite hyperlinks in the
+ * HTML file so that they launch a buttonless child window.
  * 
  * @author <link href="xiao-bing.zuo@hp.com">Zuo Xiaobing</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController
- *      com.hp.it.spf.xa.interpolate.portlet.FileInterpolator
  */
 public class ConfigController extends AbstractController {
 
@@ -64,32 +68,39 @@ public class ConfigController extends AbstractController {
 	 * <p>
 	 * <dt>The view filename.</dt>
 	 * <dd>Its value is set into the model element named
-	 * <code>viewFilename</code>. If no view filename has yet been set in the
-	 * preferences, then the default value put into the model is blank.</dd>
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#VIEW_FILENAME}
+	 * (taken from the portlet preference element of the same name). If no view
+	 * filename has yet been set in the preferences, then the default value put
+	 * into the model is blank.</dd>
 	 * </p>
 	 * <p>
 	 * <dt>The launch-buttonless option.</dt>
 	 * <dd>Its value is set into the model element named
-	 * <code>launchButtonless</code> and will be either <code>true</code> or
-	 * <code>false</code>. If the option has not yet been set in the
-	 * preferences, then the default value put into the model is
-	 * <code>false</code>.</dd>
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#LAUNCH_BUTTONLESS}
+	 * (taken from the portlet preference element of the same name) and will be
+	 * either <code>true</code> or <code>false</code>. If the option has
+	 * not yet been set in the preferences, then the default value put into the
+	 * model is <code>false</code>.</dd>
 	 * </p>
 	 * <p>
 	 * <dt>Any error message from a preceding action process.</dt>
 	 * <dd>If there was such an error, the action process will have set the
-	 * particular error code into the <code>errorCode</code> render parameter.
-	 * So if that parameter exists, this method gets a localized error message
-	 * for it and copies it into the model under the <code>errorMessage</code>
+	 * particular error code into the
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#ERROR_CODE} render
+	 * parameter. So if that parameter exists, this method gets a localized
+	 * error message for it and copies it into the model under the
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#ERROR_MESSAGE}
 	 * element name. </dd>
 	 * </p>
 	 * <p>
 	 * <dt>Any other status message from a preceding action process.</dt>
 	 * <dd>If there was any other (ie non-error) status to report from the
 	 * preceding action (if any), the action process will have set the
-	 * particular status code into the <code>infoCode</code> render parameter.
-	 * So if that parameter exists, this method gets a localized status message
-	 * for it and copies it into the model under the <code>infoMessage</code>
+	 * particular status code into the
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#INFO_CODE} render
+	 * parameter. So if that parameter exists, this method gets a localized
+	 * status message for it and copies it into the model under the
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#INFO_MESSAGE}
 	 * element name.</dd>
 	 * </p>
 	 * </dl>
@@ -129,21 +140,31 @@ public class ConfigController extends AbstractController {
 	/**
 	 * <p>
 	 * Invoked during the action phase, this method updates the submitted
-	 * configuration information into the portlet preferences.
+	 * configuration information into the portlet preferences. The new view
+	 * filename is expected to be in the
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#VIEW_FILENAME}
+	 * request parameter, and the new launch-buttonless option is expected to be
+	 * in the
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#LAUNCH_BUTTONLESS}
+	 * request parameter. They are persisted into portlet preference elements of
+	 * the same name.
 	 * </p>
 	 * <p>
-	 * If any error occurs, this method throws an appropriate exception, which
+	 * If any error occurs, this method throws an appropriate exception which
 	 * Spring can forward to the appropriate error-handling JSP (if configured).
-	 * However, an input-error exception on the part of the administrator is
-	 * caught, not thrown, by this method. In that case, the particular error
-	 * code is set into the <code>errorCode</code> render parameter and the
-	 * method simply returns, allowing Spring to proceed into the render phase
-	 * as usual.
+	 * However, an
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.exception.InputErrorException}
+	 * on the part of the administrator is caught, not thrown, by this method.
+	 * In that case, the particular error code is set into the
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#ERROR_CODE} render
+	 * parameter and the method simply returns, allowing Spring to proceed into
+	 * the render phase as usual.
 	 * </p>
 	 * <p>
 	 * Upon successfully storing the input parameters, this method sets the
-	 * <code>infoCode</code> render parameter with any relevant information
-	 * and returns, allowing Spring to proceed into the render phase as usual.
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#INFO_CODE} render
+	 * parameter with any relevant information and returns, allowing Spring to
+	 * proceed into the render phase as usual.
 	 * </p>
 	 * 
 	 * @param request

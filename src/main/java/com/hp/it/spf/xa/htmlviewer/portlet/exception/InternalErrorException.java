@@ -7,12 +7,14 @@ package com.hp.it.spf.xa.htmlviewer.portlet.exception;
 import com.hp.it.spf.xa.exception.portlet.SystemException;
 
 /**
- * Exception used in view mode of the HTMLViewer portlet when no view file
- * content exists to display.
+ * A system exception used by the <code>html-viewer</code> portlet code
+ * whenever a system error has occurred. For example, when no view filename is
+ * configured by the time that the
+ * {@link com.hp.it.spf.xa.htmlviewer.portlet.web.ViewController} executes.
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @version TBD
- * @see com.hp.it.spf.xa.exception.portlet.BusinessException
+ * @see <code>com.hp.it.spf.xa.exception.portlet.SystemException</code>
  */
 public class InternalErrorException extends SystemException {
 

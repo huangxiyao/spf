@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 import javax.portlet.PortletResponse;
 
 /**
- * Container class for common utility methods used within the HTMLViewer
- * portlet.
+ * Container class for common utility methods used within the
+ * <code>html-viewer</code> portlet.
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @version TBD
@@ -24,16 +24,15 @@ public class Utils {
 	}
 
 	/**
-	 * Add onclick="..." to HREF to open link in new browser without button.
+	 * Rewrite all <code>&lt;A&gt;</code> tag <code>HREF</code> attributes
+	 * in the given content, adding <code>onclick="..."</code> code to open
+	 * the link in a new child window without buttons.
 	 * 
+	 * @param response
+	 *            The portlet response
 	 * @param content
 	 *            old HTML content
-	 * 
-	 * @param onclickString
-	 *            like onclick="callButtonlessWindow_<portletnamespace>(this);return
-	 *            false;"
-	 * 
-	 * @return String new content after parsing
+	 * @return String new HTML content after parsing
 	 */
 	public static String addButtonlessChildLauncher(PortletResponse response,
 			String content) {
@@ -70,15 +69,12 @@ public class Utils {
 	}
 
 	/**
-	 * Add class="..." to HREF and make link look according to desired style. No
-	 * longer used.
+	 * No longer used.
 	 * 
 	 * @param content
 	 *            old HTML content
-	 * 
 	 * @param className
 	 *            name of the style, to use in the class="..." attribute
-	 * 
 	 * @return String new content after parsing
 	 * @deprecated
 	 */
@@ -151,12 +147,11 @@ public class Utils {
 		return javascript;
 
 	}
-	
+
 	/**
 	 * <p>
 	 * Returns the given path, with any consecutive file separators ("/" for
-	 * Java) reduced to just one.  The given path is also trimmed of
-	 * whitespace.
+	 * Java) reduced to just one. The given path is also trimmed of whitespace.
 	 * </p>
 	 * 
 	 * @param pPath

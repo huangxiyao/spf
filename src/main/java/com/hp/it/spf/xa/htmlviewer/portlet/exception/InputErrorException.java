@@ -7,12 +7,12 @@ package com.hp.it.spf.xa.htmlviewer.portlet.exception;
 import com.hp.it.spf.xa.exception.portlet.BusinessException;
 
 /**
- * Exception used in config mode of the HTMLViewer portlet when there has been a
- * user data-entry error.
+ * A business exception used in <code>config</code> mode of the <code>html-viewer</code> portlet when there has been an
+ * administrator data-entry error.
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @version TBD
- * @see com.hp.it.spf.xa.exception.portlet.BusinessException
+ * @see <code>com.hp.it.spf.xa.exception.portlet.BusinessException</code>
  */
 public class InputErrorException extends BusinessException {
 
