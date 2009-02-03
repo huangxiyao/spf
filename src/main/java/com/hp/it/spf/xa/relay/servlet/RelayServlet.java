@@ -24,8 +24,9 @@ import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 
 /**
  * <p>
- * Servlet for handling download requests for files from the portlet resource
- * bundle folder on the local system.
+ * Servlet for handling download requests for files from the <i>portlet resource
+ * bundle folder</i> on the local system. If you are not using the portlet
+ * resource bundle folder, you do not need this servlet.
  * </p>
  * <p>
  * The relay servlet is the means by which portlets in SPF can give clients
@@ -34,11 +35,12 @@ import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
  * application, in the resource bundle folder, for content administration
  * purposes (such as localization administration). When a portlet needs to
  * display one of those files to the user, it uses the SPF portlet framework's
- * I18nUtility (or similar tags) to generate a file URL for downloading those
- * files, and presents that file URL in the response to the user (for example,
- * as the <code>src</code> attribute in an <code>&lt;img&gt;</code> tag).
- * That file URL points to this relay servlet, so when the client then opens
- * that URL, it is this servlet which is invoked.
+ * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(javax.portlet.PortletRequest, javax.portlet.PortletResponse, String)}
+ * (or a JSP tag like <code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code>)
+ * to generate a URL for downloading those files, and presents that URL in the
+ * response to the user (for example, as the <code>SRC</code> attribute in an
+ * <code>&lt;IMG&gt;</code> tag). That URL points to this relay servlet, so
+ * when the client then opens that URL, it is this servlet which is invoked.
  * </p>
  * <p>
  * Therefore the operation of the relay servlet is as follows:
@@ -62,7 +64,8 @@ public class RelayServlet extends HttpServlet {
 
 	/**
 	 * The name of the relay servlet configuration file. (The .properties
-	 * extension is assumed by the PropertyResourceBundleManager.)
+	 * extension is assumed by the
+	 * {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager}.)
 	 */
 	private static final String RELAY_SERVLET_INIT_FILE = "init_relay";
 
