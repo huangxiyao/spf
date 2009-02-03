@@ -25,7 +25,35 @@ import com.hp.it.spf.tools.maven.car.packaging.ICarPackagingContext;
 import com.hp.it.spf.tools.maven.car.packaging.ICarPackagingTask;
 import com.hp.it.spf.tools.maven.car.packaging.WebAppPackagingTask;
 
+
 /**
+ * A Maven plugin for the <em>package</em> life-cycle phase which will assemble
+ * the necessary source files and generate a Vignette Component Archive (CAR).
+ * 
+ * <p>
+ * This plugin performs two main tasks:
+ * </p>
+ * 
+ * <ol>
+ * <li>Assemble CAR resources</li>
+ * <li>Archive CAR resources</li>
+ * </ol>
+ * 
+ * <p>When assembling the CAR resources, there are three activities which are performed:</p>
+ * 
+ * <ol>
+ * <li>Web application resources (JSPs, XML files, etc.) are copied to the staging directory</li>
+ * <li>Java class files are copied to the staging directory (either as loose .class files copied 
+ * to the <em>WEB-INF/classes/</em> directory or as a JAR file copied to the <em>WEB-INF/lib/</em>
+ * directory)
+ * <li>Project dependencies are copied to staging directory</li>
+ * </ol>
+ * 
+ * <p>Once all of the necessary files have been staged, the resulting directory structure
+ * is archived into a file with a <em>.car</em> extension.
+ * 
+ * @since 1.0
+ * @author bdehamer
  * 
  * @goal car
  * @phase package
@@ -36,6 +64,7 @@ public class CarMojo extends AbstractMojo
     // -------------------------------------------------------------- Constants
     
     
+    // Empty string array used for List.toArray() call
     private static final String[] EMPTY_STRING_ARRAY = {};
     
             
@@ -170,6 +199,10 @@ public class CarMojo extends AbstractMojo
    // ---------------------------------------------------------- Public Methods
    
       
+    /**
+     * Stages all of the necessary resources and archives them into a
+     * <em>.car</em> file.
+     */
     public void execute() 
     {
         if (this.project.getResources().size() < 1)

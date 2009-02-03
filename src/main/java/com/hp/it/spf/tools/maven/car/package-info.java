@@ -1,8 +1,7 @@
 /**
- * Provides the classes and configuration files necessary to implement the Maven
- * CAR plugin. The CAR plugin defines a completely new packaging lifecycle that
- * supports the creation of artifacts that conform to the Vignette Component
- * Archive (CAR) standards.
+ * Provides classes necessary to implement the Maven CAR plugin. The CAR plugin 
+ * defines a completely new packaging lifecycle that supports the creation of 
+ * artifacts that conform to the Vignette Component Archive (CAR) standards.
  * 
  * <p>
  * For the most part the CAR packaging lifecycle is identical to the standard
