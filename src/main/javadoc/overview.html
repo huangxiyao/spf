@@ -911,14 +911,14 @@ filesystem to which the portlet JVM has at least read access.</p>
 	in your portlet bundle folder, and you will be using {@link
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility} to make URL's for them (eg
 	to render in the browser), note that SPF uses a file-relay servlet (see
-	{@link com.hp.it.spf.xa.relay.servlet.RelayServlet}) to service those
+	<a href="#i18n.supporting.relay">discussion below</a>) to service those
 	URL's. Deploy that relay servlet in any Web application which is <i>both</i>
 	accessible to the end-user browser, and has access to the portlet
 	bundle folder. For example, if you are using local portlets, you could
 	deploy it in your portal application. By default, SPF assumes you have
 	deployed it in your portlet application, mapped under the hardcoded
 	{@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT}
-	path. See the {@link com.hp.it.spf.xa.relay.servlet.RelayServlet} for
+	path. See the <a href="#i18n.supporting.relay">discussion below</a> for
 	more information about deploying this servlet. If you deploy it in a
 	non-default location, you will need to configure that in <a
 		href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>.
@@ -1440,9 +1440,9 @@ description</a>. Please see that documentation for more information.</p>
 </a>
 
 <p>Once your supporting resources have been created and placed <a
-	href="#i18n.location">as discussed above</a>, you can begin to access
-them using the SPF portlet <code>I18nUtility</code>. There are 3 ways of
-access supported:</p>
+	href="#i18n.location.supporting">as discussed above</a>, you can begin
+to access them using the SPF portlet <code>I18nUtility</code>. There are
+3 ways of access supported:</p>
 
 <ul>
 	<li>
@@ -1471,17 +1471,229 @@ access supported:</p>
 	</li>
 </ul>
 
+<p><b>Note:</b> In all of these cases, if you are putting your
+supporting resource files in the portlet bundle folder outside of the
+WAR, you will need to configure <a href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>
+properly if your portlet bundle folder is not in the default location
+(indicated in {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}).</p>
+
 <a name="i18n.supporting.java.getLocalizedFileURL">
 <h4>2.5.1. Using <code>I18nUtility.getLocalizedFileURL</code></h4>
 </a>
+
+<p><b>Note:</b> There is an SPF-provided JSP tag library for this
+method - see <a href="#i18n.supporting.jsp.localizedFileURL"><code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></a>
+description below.</p>
+
+<p>These methods return a URL string which the user's browser can
+use to access the proper localized version of a supporting resource, for
+the user's locale. The <code>I18nUtility.getLocalizedFileURL</code>
+methods use the Java-standard {@link ResourceBundle} sequence for
+finding the best-fit file in your bundle for the user's locale. Your
+bundle of supporting resource files can be located inside your portlet
+WAR, or in the <i>portlet resource bundle directory</i> outside of the
+WAR, or in both locations, <a href="#i18n.location.supporting">as
+discussed above</a>.</p>
+
+<p>The returned URL string will be properly encoded for the portlet
+(taking into account WSRP and the portal as needed), and thus ready to
+output to the user (eg, in the <code>SRC</code> attribute of an HTML <code>&lt;IMG&gt;</code>
+tag).</p>
+
+<ul>
+	<li>
+	<p>If the best-fit localized file is found in the portlet bundle
+	folder outside of the WAR, then the returned URL string will be a relay
+	servlet URL pointing to that file. This URL will be built pointing to
+	the URL for the relay servlet which you configured in <a
+		href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>
+	(or, by default, it will be assumed to be deployed under the {@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} in the
+	current portlet application). Be sure you have deployed the relay
+	servlet properly at that URL. See the <a href="#i18n.supporting.relay">discussion
+	below</a> for more information.</p>
+	</li>
+	<li>
+	<p>If the best-fit localized file is found inside the portlet WAR
+	itself, then the returned URL string will be a static resource string
+	pointing to that file.</p>
+	</li>
+</ul>
+
+<p>The <code>I18nUtility.getLocalizedFileURL</code> methods are:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String,boolean)}</dt>
+	<dd>
+	<p>These methods take the base filename of the supporting resource
+	bundle. That filename may include any subfolder (relative to the
+	portlet bundle directory / portlet WAR root) where the bundle is
+	located.</p>
+
+	<p>For example, to get the best-fit localized URL for the <code>picture.jpg</code>
+	image, where the bundle is stored in the <code>images/</code> subfolder
+	(and where <code>request</code> and <code>response</code> are the
+	{@link PortletRequest} and {@link PortletResponse} respectively):</p>
+
+	<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+...
+String url = I18nUtility.getLocalizedFileURL(request, response, "/images/picture.jpg");
+	</pre></blockquote>
+
+	<p>If the best-fit localized version of <code>picture.jpg</code>
+	was found in the portlet bundle folder, then <code>url</code> in this
+	example would be a file-relay servlet URL pointing to that file. For
+	example, if <code>picture_pt_BR.jpg</code> (ie the Brazil Portuguese
+	version of the file) was the best candidate, then <code>url</code>
+	would get a URL string containing the portlet-encoded form of <code>/relay/images/picture_pt_BR.jpg</code>
+	(assuming the default setup of the relay servlet, which is under the <code>/relay</code>
+	location mapping in the current portlet application).</p>
+
+	<p>On the other hand, if the best-fit localized version of <code>picture.jpg</code>
+	was found inside the portlet WAR, then <code>url</code> in this example
+	would be a static resource URL pointing to it. For example, it would be
+	the portlet-encoded form of <code>/images/picture_pt_BR.jpg</code>.</p>
+
+	<p>If the resource bundle for the given base name simply is not
+	found, then a static resource URL pointing to the basename (eg <code>/images/picture.jpg</code>)
+	would be returned by default. (This will cause a 404 error if later
+	opened by the browser, making a missing resource obvious and detectable
+	during testing.)</p>
+
+	<p>The boolean switch, set to <code>false</code>, lets you just
+	lookup the given base file itself, without attempting to find the best
+	candidate. Please see the method documentation for more information.</p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String,String)}</dt>
+	<dd>
+	<p>This method gets the localized file differently. You give it a
+	message key (with an optional default value) and it looks up that
+	message in your message resource bundles. (This message lookup proceeds
+	as described for the <a href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getMessage</code></a>
+	API's above. If the message is not found, then your default value is
+	used as the message value.)</p>
+
+	<p>The message value is then treated as the name of the localized
+	(not base) file. The subfolder relative to the portlet bundle folder or
+	portlet WAR, where the file is located, may be part of that value. If
+	no actual file exists matching that value, then a static resource URL
+	pointing to it anyway will be returned. (As above, this will
+	intentionally cause a 404 error should the browser open it.)</p>
+
+	<p>Using this method offers no real advantage over the others, and
+	is more cumbersome to setup (you need to make sure that the proper
+	localized filenames for each locale, get into the message properties
+	file for that locale). Therefore we recommend using the other methods.</p>
+	</dd>
+</dl>
 
 <a name="i18n.supporting.java.getLocalizedFileStream">
 <h4>2.5.2. Using <code>I18nUtility.getLocalizedFileStream</code></h4>
 </a>
 
+<p>Instead of returning a URL string, these methods return an {@link
+InputStream} for the proper localized version of a supporting resource,
+given the user's locale. If no appropriate file could be found, then
+they return <code>null</code>. Otherwise they operate the same as the <a
+	href="#i18n.supporting.java.getLocalizedFileURL"><code>I18nUtility.getLocalizedFileURL</code></a>
+methods (see above).
+<p>The <code>I18nUtility.getLocalizedFileStream</code> methods are:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest,String,boolean)}</dt>
+	<dd>
+	<p>These methods take the base filename of the supporting resource
+	bundle. Building on the above example, here is how we get an <code>InputStream</code>
+	for the <code>something.xml</code> file. This file (and its localized
+	versions) in this example are stored in the <code>xml/</code> subfolder
+	of either the portlet WAR or the <i>portlet resource bundle folder</i>.</p>
+
+	<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+...
+InputStream file = I18nUtility.getLocalizedFileStream(request, "/xml/something.xml");
+	</pre></blockquote>
+
+	<p>So, if the best-fit localized file in the <code>something.xml</code>
+	bundle was <code>something_ja_JP.xml</code>, then that is the <code>InputStream</code>
+	that will be returned. <code>null</code> is returned if no good
+	candidate exists.</p>
+
+	<p>The boolean switch, set to <code>false</code>, lets you just
+	lookup the given base file itself, without attempting to find the best
+	candidate. Please see the method documentation for more information.</p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest,String,String)}</dt>
+	<dd>
+	<p>This method gets the localized file differently. You give it a
+	message key (with an optional default value) and it looks up that
+	message in your message resource bundles. (If the message is not found,
+	then your default value is used as the message value.) The message
+	value is then treated as the name of the localized (not base) file, and
+	an <code>InputStream</code> is returned for it (or <code>null</code> if
+	it does not exist).</p>
+
+	<p>Using this method offers no real advantage over the others, and
+	is more cumbersome to setup (you need to make sure that the proper
+	localized filenames for each locale, get into the message properties
+	file for that locale). Therefore we recommend using the other methods.</p>
+	</dd>
+</dl>
+
 <a name="i18n.supporting.java.getLocalizedFileName">
 <h4>2.5.3. Using <code>I18nUtility.getLocalizedFileName</code></h4>
 </a>
+
+<p>Instead of returning either a URL string or an <code>InputStream</code>,
+these methods just lookup the best-fit localized version of the file for
+the user's locale, and return its filename. The filename is returned
+relative to the location where the file was found (ie, relative to the <i>portlet
+resource bundle folder</i> or portlet WAR root). The methods return <code>null</code>
+if no good candidate was found. These methods are most useful as a test
+of whether a particular resource exists, and where it exists (is it
+internal or external).</p>
+
+<p>The <code>I18nUtility.getLocalizedFileName</code> methods are:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileName(PortletRequest,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileName(PortletRequest,String,boolean)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileName(PortletRequest,String,Locale,boolean)}</dt>
+	<dd>
+	<p>These methods take the base filename of the supporting resource
+	bundle, and <b>only</b> look inside the portlet application WAR.
+	Building on the above example, here is how we check whether any
+	good-candidate localized version of <code>something.xml</code> exists
+	in the portlet WAR (in the <code>xml/</code> subfolder):</p>
+
+	<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+...
+if (I18nUtility.getLocalizedFileName(request, "/xml/something.xml") != null) {
+... // exists in portlet WAR
+}
+	</pre></blockquote>
+
+	<p>The boolean switch, set to <code>false</code>, lets you just
+	lookup the given base file itself, without attempting to find the best
+	candidate. Please see the method documentation for more information.</p>
+	</dd>
+</dl>
 
 <hr>
 
@@ -1489,9 +1701,88 @@ access supported:</p>
 <h3>2.6. Accessing supporting resources using JSP tag libraries</h3>
 </a>
 
+<p>Once your supporting resources have been created and placed <a
+	href="#i18n.location.supporting">as discussed above</a>, you can begin
+to generate best-fit localized URL's for them in your JSP's. For
+example, you can stick them into HTML <code>&lt;IMG&gt;</code> tag <code>SRC</code>
+attributes.</p>
+
+<p><b>Note:</b> Remember, if you are putting your supporting
+resource files in the portlet bundle folder outside of the WAR, you will
+need to configure <a href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>
+properly if your portlet bundle folder is at a non-default location (the
+default is indicated in {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}). You will
+likewise need to configure <a href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>
+with the URL for the relay servlet, if that is at a non-default location
+(the default is indicated in {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_SERVLET_PATH}). And
+finally, you will need to configure and deploy that servlet at that
+location - see <a href="#i18n.supporting.relay">discussion below</a>.</p>
+
 <a name="i18n.supporting.jsp.localizedFileURL">
 <h4>2.6.1. Using <code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></h4>
 </a>
+
+<p>The SPF portlet utilities provide a JSP tag, <code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code>,
+which wraps around <a href="#i18n.java.spf.getLocalizedFileURL"><code>I18nUtility.getLocalizedFileURL</code></a>
+to offer most of the same capabilities. It is thoroughly documented in
+the <a href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#message">package
+description</a>. Briefly:</p>
+
+<dl>
+	<dt>
+	<p><a
+		href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#localizedFileURL"><code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></a></p>
+	</dt>
+
+	<dd>
+	<p>This tag takes the base filename (including any subfolder path
+	relative to the portlet resource bundle folder / portlet WAR root), or
+	(optionally) a message key for a message resource which indicates the
+	localized file name. The usage is:</p>
+
+	<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:localizedFileURL
+	file="<i>base-file</i>"
+	fileKey="<i>localized-file-message-key</i>"
+	/&gt;
+</pre></blockquote>
+
+	<p>The <code>file</code> attribute lets you provide the base
+	filename (same as the {@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility.getLocalizedFileURL(PortletRequest,PortletResponse,String)}
+	method). The <code>fileKey</code> attribute lets you alternatively
+	provide a message key pointing to the localized filename (same as the
+	{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility.getLocalizedFileURL(PortletRequest,PortletResponse,String,String)}
+	method). The <code>file</code> attribute takes priority. As mentioned
+	above, there usually is no reason to prefer doing this using the <code>fileKey</code>
+	attribute.</p>
+
+	<p>For example, imagine we have the <code>picture.jpg</code> bundle
+	of images in our <code>images/</code> folder. The following JSP code
+	displays the proper localized version of that image in the browser:</p>
+
+	<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;img src='&lt;spf-i18n-portlet:localizedFileURL file="/images/picture.jpg" /&gt;'&gt;
+</pre></blockquote>
+
+	<p>If you put the localized file into the <i>portlet resource
+	bundle folder</i>, this URL will be a relay servlet URL (properly
+	portlet-encoded for WSRP and the portal, as needed). Otherwise (ie you
+	put the localized file into your portlet application), this URL will be
+	a static resource URL for your application (again, properly-encoded).</p>
+
+	<p>See the tag documentation, in the <a
+		href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#localizedFileURL">package
+	description</a>, for more information.</p>
+	</dd>
+</dl>
 
 <hr>
 
@@ -1734,7 +2025,5 @@ hierarchy</h3>
 <a name="error.handling">
 <h3>6.3. Handling exceptions using <code>ExceptionUtil</code> and <code>SimpleMappingExceptionResolver</code></h3>
 </a>
-
-
 </body>
 </html>
