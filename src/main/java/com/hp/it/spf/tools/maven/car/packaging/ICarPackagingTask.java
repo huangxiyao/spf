@@ -20,7 +20,7 @@ public interface ICarPackagingTask
 
     /**
      * Process the packaging request. This will almost always result in one or
-     * more files being copied to the target/ directory of the Maven project.
+     * more files being copied to the <em>target/</em> directory of the Maven project.
      * There is nothing to return.
      * 
      * @param context

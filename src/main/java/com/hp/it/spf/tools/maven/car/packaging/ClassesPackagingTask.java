@@ -15,14 +15,15 @@ import org.codehaus.plexus.interpolation.InterpolationException;
 
 
 /**
- * The <tt>ClassesPackagingTask</tt> is responsible for gathering any compiled
- * Java classes that need to be included as part of the CAR. The compiled
- * classes will either be copied to the WEB-INF/classes directory of the CAR, or
- * combined into a JAR and copied to the WEB-INF/lib directory of the CAR. The
- * behavior is driven by the
- * {@link com.hp.it.spf.tools.maven.car.packaging.ICarPackagingContext#isClassArchivingEnabled()}
- * property.
+ * Packaging task responsible for gathering any compiled Java classes that need
+ * to be included as part of the CAR. The compiled classes will either be copied
+ * to the <em>WEB-INF/classes/</em> directory of the CAR, or combined into a JAR
+ * and copied to the <em>WEB-INF/lib/</em> directory of the CAR. The behavior is
+ * driven by the
+ * {@link com.hp.it.spf.tools.maven.car.packaging.ICarPackagingContext#isClassArchivingEnabled()
+ * ICarPackagingContext.isClassArchivingEnabled()} property.
  * 
+ * @since 1.0
  * @author bdehamer
  */
 public class ClassesPackagingTask extends AbstractCarPackagingTask
@@ -43,9 +44,15 @@ public class ClassesPackagingTask extends AbstractCarPackagingTask
     
     
     /**
-     * Prepares any compiled Java classes for inclusion in the CAR. Classes
-     * are eithered copied to the WEB-INF/classes directory or JARed-up and
-     * placed in the WEB-INF/lib directory.
+     * Prepares any compiled Java classes for inclusion in the CAR. Classes are
+     * eithered copied to the <em>WEB-INF/classes/</em> directory or JARed-up
+     * and placed in the <em>WEB-INF/lib/</em> directory.
+     * 
+     * @param context
+     * the packaging context containing the necessary configuration data
+     * 
+     * @throws MojoExecutionException
+     * in case of any errors during the packaging process
      */
     @Override
     public void doPackaging(ICarPackagingContext context) throws MojoExecutionException
@@ -86,8 +93,14 @@ public class ClassesPackagingTask extends AbstractCarPackagingTask
     
     
     /**
-     * Copies Java class files to the WEB-INF/classes subdirectory of the CAR
-     * staging directory.
+     * Copies compiled Java class files to the <em>WEB-INF/classes/</em>
+     * subdirectory of the CAR staging directory.
+     * 
+     * @param context
+     * the packaging context containing the necessary configuration data
+     * 
+     * @throws MojoExecutionException
+     * in case of any errors during the packaging process
      */
     protected void copyClassFiles(ICarPackagingContext context) throws MojoExecutionException
     {
@@ -111,8 +124,14 @@ public class ClassesPackagingTask extends AbstractCarPackagingTask
     
     
     /**
-     * Assembles Java class files into a JAR located in the WEB-INF/lib
-     * subdirectory of the CAR staging directory.
+     * Assembles Java class files into a JAR located in the
+     * <em>WEB-INF/lib/</em> subdirectory of the CAR staging directory.
+     * 
+     * @param context
+     * the packaging context containing the necessary configuration data
+     * 
+     * @throws MojoExecutionException
+     * in case of any errors during the packaging process
      */
     protected void generateJarArchive(ICarPackagingContext context) throws MojoExecutionException
     {        
@@ -140,7 +159,14 @@ public class ClassesPackagingTask extends AbstractCarPackagingTask
     }    
     
     
-    protected String getArchiveTargetName(ICarPackagingContext context)
+    // -------------------------------------------------------- Private Methods
+    
+    
+    /**
+     * Returns the name of the JAR file that should be used for archiving
+     * the project's class files.
+     */
+    private String getArchiveTargetName(ICarPackagingContext context)
             throws InterpolationException
     {
         MavenProject project = context.getProject();
@@ -159,8 +185,9 @@ public class ClassesPackagingTask extends AbstractCarPackagingTask
                 null,
                 new DefaultArtifactHandler("jar"));
 
-        return this.getArtifactTargetlName(context, artifact);
+        return this.getArtifactTargetlName(
+                context.getOutputFileNameMapping(),
+                artifact);
     }
-    
-    
+        
 }

@@ -12,6 +12,14 @@ import org.codehaus.plexus.interpolation.InterpolationException;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 
+
+/**
+ * Abstract base class for implementations of the {@link ICarPackagingTask}
+ * interface which provides support methods for common file copy operations.
+ * 
+ * @since 1.0
+ * @author bdehamer
+ */
 public abstract class AbstractCarPackagingTask implements ICarPackagingTask
 {
         
@@ -22,42 +30,55 @@ public abstract class AbstractCarPackagingTask implements ICarPackagingTask
     private static final String DEFAULT_FILE_NAME_MAPPING = 
         "@{artifactId}@-@{version}@.@{extension}@";
     
-    
+        
+    // Default include pattern for the DirectoryScanner
     private static final String[] DEFAULT_INCLUDES = {"**/**"};
         
     
     // ------------------------------------------------------ Public Methods
     
     
-    /* (non-Javadoc)
+    /**
+     * Process the packaging request. This will almost always result in one or
+     * more files being copied to the <em>target/</em> directory of the Maven
+     * project. There is nothing to return.
+     * 
+     * @param context
+     * the packaging context containing the necessary configuration data
+     * 
+     * @throws MojoExecutionException
+     * in case of any errors during the packaging process
+     * 
      * @see com.hp.frameworks.maven.car.packaging.IPackagingTask#doPackaging()
      */
     public abstract void doPackaging(ICarPackagingContext context) throws MojoExecutionException;
     
     
     // ------------------------------------------------------ Protected Methods
-    
+
     
     /**
      * Calculates the target name for the given artifact. The default naming
-     * pattern will be {artifactId}-{version}.{extension} if the packaging
-     * context doesn't include an alternate name mapping pattern.
+     * pattern will be {artifactId}-{version}.{extension} if the
+     * <tt>fileNameMapping</tt> parameter is null.
      * 
-     * @param context
-     * the current packaging context
+     * @param fileNameMapping
+     * the file name mapping pattern to be applied
      * @param artifact
      * the artifact to be processed
+     * 
      * @return the target name of the specified artifact
+     * 
      * @throws InterpolationException
+     * in the event that the target name cannot be resolved from the given
+     * naming pattern.
      */
-    protected String getArtifactTargetlName(ICarPackagingContext context,
+    protected String getArtifactTargetlName(String fileNameMapping,
             Artifact artifact) throws InterpolationException
     {
-        String outputFileNameMapping = context.getOutputFileNameMapping();
-
-        if (outputFileNameMapping != null)
+        if (fileNameMapping != null)
         {
-            return MappingUtils.evaluateFileNameMapping(outputFileNameMapping,
+            return MappingUtils.evaluateFileNameMapping(fileNameMapping,
                     artifact);
         }
         else
@@ -79,6 +100,7 @@ public abstract class AbstractCarPackagingTask implements ICarPackagingTask
      * the includes
      * @param excludes
      * the excludes
+     * 
      * @return the files to copy
      */
     protected PathSet getFileSet(File baseDir, String[] includes, String[] excludes)
@@ -121,6 +143,7 @@ public abstract class AbstractCarPackagingTask implements ICarPackagingTask
      * the files to be copied
      * @param targetPrefix
      * the prefix to add to the target file name
+     * 
      * @throws IOException
      * if an error occurred while copying the files
      */
@@ -161,6 +184,7 @@ public abstract class AbstractCarPackagingTask implements ICarPackagingTask
      * the file to copy
      * @param targetFilename
      * the relative path according to the root of the webapp
+     * 
      * @throws IOException
      * if an error occurred while copying
      */
