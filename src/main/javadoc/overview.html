@@ -1785,6 +1785,32 @@ description</a>. Briefly:</p>
 <h3>2.7. Providing download service for external resources using <code>RelayServlet</code></h3>
 </a>
 
+<p>The <i>file relay servlet</i> is an SPF-provided servlet which services download requests for supporting resource files
+in the <i>portlet resource bundle folder</i>. If you are using <a href="#i18n.location.external">external resources</a>
+for supporting files like images, video, etc, then when you use
+<a href="#i18n.supporting.java.getLocalizedFileURL"><code>I18nUtility.getLocalizedFileURL</code></a> (or the 
+<a href="#i18n.supporting.jsp.localizedFileURL"><code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></a> tag) you will
+get a URL pointing to this servlet (with the actual filename as a parameter in the URL).  So if you give that URL to a browser
+to open, it will be the relay servlet which services that request.</p>
+
+<p>The relay servlet itself is provided with the SPF portlet utilities, {@link com.hp.it.spf.xa.relay.servlet.RelayServlet}.
+All you need to do is configure and deploy it somewhere.  We recommend you deploy it as part of your portlet application WAR.
+Alternatively, you can deploy it in another Web application (such as your portal application, if your portal server has access
+to the portlet bundle folder - as in the case of local portlets).  The basic requirements are that, if you do deploy it elsewhere,
+that Web application must have access to the portlet bundle folder, and must in turn be accessible from the user browser.</p>
+
+<p>The basic steps for configuring and deploying the relay servlet are documented fully in the 
+<a href="com/hp/hp/it/spf/xa/relay/servlet/package-summary.html">package description</a>.  Briefly, they are:</p>
+
+<ol>
+<li><a href="com/hp/hp/it/spf/xa/relay/servlet/package-summary.html#web.xml">Configure <code>web.xml</code></a></li>
+<li><a href="com/hp/hp/it/spf/xa/relay/servlet/package-summary.html#init_relay.properties">Configure <code>init_relay.properties</code> (optional)</a></li>
+<li><a href="com/hp/hp/it/spf/xa/relay/servlet/package-summary.html#i18n_portlet_config.properties">Configure <code>i18n_portlet_config.properties</code> (optional)</a></li>
+<li><a href="com/hp/hp/it/spf/xa/relay/servlet/package-summary.html#deployment">Deploying the servlet</a></li>
+</ol>
+
+<p>Please see the above-referenced documentation for more information.</p>
+
 <hr>
 
 <a name="i18n.l10n">

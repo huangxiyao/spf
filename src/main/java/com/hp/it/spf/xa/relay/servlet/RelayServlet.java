@@ -47,12 +47,15 @@ import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
  * <ol>
  * <li>Get the filename to download from the URL.</li>
  * <li>Security-check the filename to make sure it is permitted to be
- * downloaded. This uses the <code>init_relay.properties</code> file.</li>
+ * downloaded. This uses the <code>init_relay.properties</code> file if it
+ * exists; otherwise it uses the <code>init_relay_default.properties</code>
+ * file.</li>
  * <li>Open the file and stream it into the response.</li>
  * </ol>
  * </p>
  * 
  * @author <link href="kuang.cheng@hp.com"> Cheng Kuang </link>
+ * @author <link href="scott.jorgenson@hp.com"> Scott Jorgenson </link>
  * @version TBD
  */
 public class RelayServlet extends HttpServlet {
@@ -68,6 +71,13 @@ public class RelayServlet extends HttpServlet {
 	 * {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager}.)
 	 */
 	private static final String RELAY_SERVLET_INIT_FILE = "init_relay";
+
+	/**
+	 * The name of the default relay servlet configuration file. (The
+	 * .properties extension is assumed by the
+	 * {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager}.)
+	 */
+	private static final String RELAY_SERVLET_DEFAULT_INIT_FILE = "init_relay_default";
 
 	/**
 	 * The key name prefix for the content type property in relay servlet
@@ -201,7 +211,8 @@ public class RelayServlet extends HttpServlet {
 	/**
 	 * Check that the file exists within the portlet resource bundle directory,
 	 * and is a permissible file to download. Permitted files are identified by
-	 * extension, configured in <code>init_relay.properties</code>.
+	 * extension, configured in <code>init_relay.properties</code> (or
+	 * <code>init_relay_default.properties</code> by default).
 	 * 
 	 * @param fileName
 	 *            File name to check.
@@ -250,10 +261,11 @@ public class RelayServlet extends HttpServlet {
 
 	/**
 	 * Check that the requested file extension matches one of the permitted file
-	 * extensions configured in <code>init_relay.properties</code>. This is
-	 * done by comparing the given file extension with the class attribute,
-	 * which was previously loaded from the configuration file (such that it is
-	 * non-null if permitted, and null if not permitted).
+	 * extensions configured in <code>init_relay.properties</code> (or
+	 * <code>init_relay_default.properties</code> by default). This is done by
+	 * comparing the given file extension with the class attribute, which was
+	 * previously loaded from the configuration file (such that it is non-null
+	 * if permitted, and null if not permitted).
 	 * 
 	 * @param fileContentType
 	 *            The file extension.
@@ -310,11 +322,12 @@ public class RelayServlet extends HttpServlet {
 	 * this file extension, into the respective class attributes. The portlet
 	 * resource bundle folder is taken from the
 	 * <code>i18n_portlet_config.properties</code>, and the content type
-	 * information is taken from the <code>init_relay.properties</code>. To
-	 * read these files, we use PropertyResourceBundleManager which provides a
-	 * hot-reloadable caching capability. If for some reason the files are not
-	 * found, we quietly assume null for this information.
-	 * 
+	 * information is taken from the <code>init_relay.properties</code> (or
+	 * <code>init_relay_default.properties</code> if the former does not
+	 * exist). To read these files, we use
+	 * {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager} which
+	 * provides a hot-reloadable caching capability. If for some reason the
+	 * files are not found, we quietly assume null for this information.
 	 */
 	private void getConfig(String fileName) {
 		ResourceBundle portletI18nConfig = PropertyResourceBundleManager
@@ -327,6 +340,10 @@ public class RelayServlet extends HttpServlet {
 		}
 		ResourceBundle relayServletConfig = PropertyResourceBundleManager
 				.getBundle(RELAY_SERVLET_INIT_FILE);
+		if (relayServletConfig == null) {
+			relayServletConfig = PropertyResourceBundleManager
+					.getBundle(RELAY_SERVLET_DEFAULT_INIT_FILE);
+		}
 		String fileExt = getFileExt(fileName);
 		fileContentType = getProperty(RELAY_SERVLET_INIT_KEY_CONTENTTYPE_FOR
 				+ fileExt, relayServletConfig);
@@ -354,10 +371,10 @@ public class RelayServlet extends HttpServlet {
 	/**
 	 * Send HTTP success message back to the client. In the response, we mark it
 	 * is cacheable and expiring in 1 year. We also set the content type from
-	 * the information mapped in <code>init_relay.properties</code>
-	 * (previously cached into the class attributes), and we set the content
-	 * length from the file size (also previously set into the class
-	 * attributes).
+	 * the information mapped in <code>init_relay.properties</code> or
+	 * <code>init_relay_default.properties</code> (previously cached into the
+	 * class attributes), and we set the content length from the file size (also
+	 * previously set into the class attributes).
 	 * 
 	 * @param response
 	 *            The HTTP response.
