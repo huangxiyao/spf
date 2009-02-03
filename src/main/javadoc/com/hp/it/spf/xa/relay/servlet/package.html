@@ -18,23 +18,23 @@ deployment descriptor for the servlet into your application's <code>web.xml</cod
 file. The deployment descriptor just looks like this:</p>
 
 <blockquote><pre>
-	<servlet>
-		<servlet-name>FileRelayServlet</servlet-name>
-		<servlet-class>
+	&lt;servlet&gt;
+		&lt;servlet-name&gt;FileRelayServlet&lt;/servlet-name&gt;
+		&lt;servlet-class&gt;
 			com.hp.it.spf.xa.relay.servlet.RelayServlet
-		</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>FileRelayServlet</servlet-name>
-		<!-- You can use a different mapping if desired -->
-		<url-pattern>/relay/*</url-pattern>
-	</servlet-mapping>
+		&lt;/servlet-class&gt;
+	&lt;/servlet&gt;
+	&lt;servlet-mapping&gt;
+		&lt;servlet-name&gt;FileRelayServlet&lt;/servlet-name&gt;
+		&lt;!-- You can use a different mapping if desired --&gt;
+		&lt;url-pattern&gt;/relay/*&lt;/url-pattern&gt;
+	&lt;/servlet-mapping&gt;
 </pre></blockquote>
 
 <p>As noted in the above comment, you can use a different path for
 the relay servlet mapping. But we recommend you use <code>/relay</code>
 (ie the current value of {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility.RELAY_SERVLET_PATH}) since
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_SERVLET_PATH} since
 that is the default path for the relay servlet. If you provide a
 different one, you will have to do extra configuration in <a
 	href="#i18n_portlet_config.properties"><code>i18n_portlet_config.properties</code></a>
@@ -93,7 +93,7 @@ below</a>.</p>
 resource bundle folder</i>, unless you are using the default location {@link
 com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}. Also, if
 you mapped it under anything but the {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility.RELAY_SERVLET_PATH} path, the
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_SERVLET_PATH} path, the
 SPF portlet utilities need to know that (for example, so that {@link
 com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String)}
 can build a proper URL pointing at it).</p>
