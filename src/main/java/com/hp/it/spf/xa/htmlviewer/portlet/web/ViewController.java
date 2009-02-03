@@ -24,7 +24,7 @@ import com.hp.websat.timber.logging.Log;
  * of a configured HTML file, interpolated by the portlet
  * {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} via the
  * {@link com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController}.
- * In <code>config</code mode, the portlet administrator is able to specify
+ * In <code>config</code> mode, the portlet administrator is able to specify
  * the HTML file to display, as well as an option to rewrite hyperlinks in the
  * HTML file so that they launch a buttonless child window.
  * 
