@@ -2174,6 +2174,109 @@ numerous sources:</p>
 <h4>2.9.2. Setting the locale</h4>
 </a>
 
+<p>Generally there is no need for you to be concerned with setting
+the locale. Typically you will just use the locale you get. It is the
+SPF portal's responsibility to set the locale (including providing the
+user with a locale selector widget with which the user can set his/her
+own locale). In fact, in the Java portlet API's there are no standard
+methods for setting the locale in the response, since that is delegated
+to the portal.</p>
+
+<p>If you have a use case where your portlet must set the locale,
+the only way you can do this is by calling the portal. The locale
+setting will only take effect on subsequent request lifecycles (ie <code>PortletRequest.getLocale</code>
+will not start returning the new locale until subsequent requests in the
+session) and it will take effect throughout the portal, not just in your
+portlet. Consider this carefully before embarking.</p>
+
+<p>To call the portal to set a new locale, you must make a {@link
+com.hp.it.spf.xa.portalurl.PortalURL} with the new locale set as a
+parameter in the URL. Then convert that <code>PortalURL</code> into a
+string, and cause the user browser to open that URL string. (For
+example, redirect to that URL, or present it as a link or form action to
+submit.)</p>
+
+<p>Depending on the type of portal page, and the parameters you
+pass, your setting will take effect with varying degrees of persistence:</p>
+
+<ul>
+	<li>
+	<p>To make the setting last for the rest of the session (until the
+	user restarts his/her browser):</p>
+	<ol>
+		<li>
+		<p>Create a {@link com.hp.it.spf.xa.portalurl.PortalURL} for any
+		page at your portal site. This is the page where you want the user to
+		go after the new locale has been set.</p>
+		</li>
+		<li>
+		<p>Set the HP.com-standard <code>lang</code> and <code>cc</code>
+		parameters as portal parameters on that <code>PortalURL</code>, using
+		{@link
+		com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String)}.</p>
+		<ul>
+			<li>The <code>lang</code> parameter should be the ISO 639-1
+			language code for the new locale (use {@link
+			java.util.Locale#getLanguage()}.</li>
+			<li>The <code>cc</code> should be the ISO 3166-1 country code
+			(use {@link java.util.Locale#getCountry()} (or can be omitted if the
+			locale does not include a country).</li>
+		</ul>
+		</li>
+		<li>
+		<p>When the user's browser opens this <code>PortalURL</code>, the
+		SPF portal's locale resolver will resolve that new locale (see <a
+			href="#i18n.other.locale.get">discussion above</a>) for the rest of
+		the session, until the browser is restarted.</p>
+		</li>
+	</ol>
+	</li>
+	<li>
+	<p>To make the setting last persistently (ie set it remains even
+	after browser restart), just as if the user had chosen it with the SPF
+	locale selector in the portal:</p>
+	<ol>
+		<li>
+		<p>Create a {@link com.hp.it.spf.xa.portalurl.PortalURL} for any
+		page at your portal site. This is the page where you want the user to
+		go after the new locale has been set.</p>
+		</li>
+		<li>
+		<p>Create another <code>PortalURL</code> for the SPF locale
+		selector secondary page process-action. The friendly URI for this is
+		the value of {@link
+		com.hp.it.spf.xa.misc.Consts#PAGE_FRIENDLY_URI_SELECT_LOCALE}.</p>
+		</li>
+		<li>
+		<p>In the SPF locale selector <code>PortalURL</code>, set the
+		following parameters using the {@link
+		com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String)}
+		method:</p>
+		<ul>
+			<li>The value of the first parameter should be the RFC 3066
+			language tag for the new locale (use {@link
+			com.hp.it.spf.xa.i18n.I18nUtility#localeToLanguageTag(Locale)}). The
+			name of this parameter should be the value of {@link
+			com.hp.it.spf.xa.misc.Consts#PARAM_SELECT_LOCALE}.</li>
+			<li>The value of the second parameter should be the string of
+			the first URL (ie where you want the user to be taken after the new
+			locale has been set). The name of this parameter should be the value
+			of {@link com.hp.it.spf.xa.misc.Consts#PARAM_SELECT_LOCALE_TARGET}.</li>
+		</ul>
+		</li>
+		<li>
+		<p>When the user's browser opens this SPF locale selector <code>PortalURL</code>,
+		the SPF locale selector secondary page will set that new locale
+		persistently.</p>
+		</li>
+	</ol>
+	<li>
+	<p><b>Note:</b> Neither of the above techniques works-around the
+	fact that you can only set locales which are configured as available in
+	the portal site.</p>
+	</li>
+</ul>
+
 <a name="i18n.other.config">
 <h4>2.9.3. Configuring the portlet <code>I18nUtility</code> (<code>i18n_portlet_config.properties</code>)</h4>
 </a>
