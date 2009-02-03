@@ -39,7 +39,7 @@ file. The deployment descriptor just looks like this:</p>
 <p>As noted in the above comment, you can use a different path for
 the relay servlet mapping. But we recommend you use <code>/relay</code>
 (ie the current value of {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_SERVLET_PATH} since that
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT}) since that
 is the default path for the relay servlet. If you provide a different
 one, you will have to do extra configuration in <a
 	href="#i18n_portlet_config.properties"><code>i18n_portlet_config.properties</code></a>
@@ -98,7 +98,7 @@ below</a>.</p>
 resource bundle folder</i>, unless you are using the default location {@link
 com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}. Also, if
 you mapped it under anything but the {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_SERVLET_PATH} path, the
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} path, the
 SPF portlet utilities need to know that (for example, so that {@link
 com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String)}
 can build a proper URL pointing at it).</p>
