@@ -237,7 +237,7 @@ would look like this:</p>
 	is a message key for the title - the tag looks inside your configured
 	message resources to retrieve the title (using the key itself as the
 	default, if the message is not found). The message lookup proceeds as
-	described <a href="#message">above</a>.
+	described <a href="#message">above</a>.</p>
 	</dd>
 
 	<dt><code>content="<i>help-content</i>"</code><br>
@@ -252,7 +252,7 @@ would look like this:</p>
 	needed). The <code>contentKey</code> is a message key for that - the
 	tag looks inside your configured message resources to retrieve the main
 	help content (using the key itself as the default, if the message is
-	not found). The message lookup proceeds as described <a href="#message">above</a>.
+	not found). The message lookup proceeds as described <a href="#message">above</a>.</p>
 	</dd>
 
 	<dt><code>noScriptHref="<i>uri</i>"</code></dt>
@@ -274,9 +274,11 @@ would look like this:</p>
 	</dd>
 
 	<dt><code>width="<i>pixels</i>"</code></dt>
-	<dd>The classic version of contextual help is a DHTML popup table
+	<dd>
+	<p>The classic version of contextual help is a DHTML popup table
 	with a 300-pixel width by default. You can override that width with
-	this attribute.</dd>
+	this attribute.</p>
+	</dd>
 
 	<dt><code>borderStyle="<i>inline-style</i>"</code><br>
 	<code>borderClass="<i>css-classname</i>"</code></dt>
@@ -302,7 +304,7 @@ would look like this:</p>
 	tag). For example, here is what the classic-format contextual help
 	popup looks like with <code>borderStyle="border-color:blue;border-width:3px;border-style:solid"</code>:</p>
 
-	<img src=../"doc-files/contextualHelpBlueBorder.jpg">
+	<img src="../doc-files/contextualHelpBlueBorder.jpg">
 
 	<p>You can set <code>borderStyle=""</code> to cancel the default
 	border style.</p>
@@ -379,12 +381,130 @@ standalone contextual help approach, instead of contextual help
 injection. For example, <code>&lt;spf-help-portlet:classicContextualHelp&gt;</code>
 is an SPF JSP tag for expressing standalone contextual help in the
 "classic" style. See the documentation for <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#help.contextual.jsp.classicContextualHelpProvider"><code>&lt;spf-help-portlet:classicContextualHelp&gt;</code></a>.</p>
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#help.contextual.jsp.classicContextualHelpProvider"><code>&lt;spf-help-portlet:classicContextualHelp&gt;</code></a>.</p>
 
 <a name="localizedFileURL">
 <h3>&lt;spf-i18n-portlet:localizedFileURL&gt;</h3>
 </a>
-<p></p>
+<p>Usage:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:localizedFileURL
+	file="<i>base-file</i>"
+	fileKey="<i>localized-file-message-key</i>"
+	/&gt;
+</pre></blockquote>
+
+<p>You use this tag to express a URL for a supporting static
+resource file (image, HTML, PDF, etc), where the URL is automatically
+adjusted to point to the best-fit localized version of that resource.
+The resulting URL is properly encoded and ready to present to the user's
+browser, such as in the <code>SRC</code> attribute of an HTML <code>&lt;IMG&gt;</code>
+tag.</p>
+
+<p>The resource file may be an external resource (ie, found in your
+<i>portlet resource bundle folder</i>) or an internal resource (ie,
+found inside your portlet application WAR). The files may be any static
+resource, such as an image, video, PDF, etc. All the localized files in
+the bundle should share the same base filename, and should (except for
+the base file itself) be tagged by locale according to the Java-standard
+for {@link ResourceBundle}. If you use external resourcing (ie, put them
+in the <i>portlet resource bundle folder</i>) then:</p>
+
+<ul>
+	<li>The location of the portlet bundle folder must be configured
+	in <code>i18n_portlet_config.properties</code> and</li>
+	<li>The file-relay servlet must be deployed in your portlet WAR or
+	in some other location accessible to the browser and configured in <code>i18n_portlet_config.properties</code></li>
+</ul>
+
+<blockquote>
+<p><b>Note:</b> For more about where you put your supporting
+resource files, how you localize them, and how you configure <code>i18n_portlet_config.properties</code>
+and/or the file relay servlet, see the discussion in the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.location">SPF
+Portlet Utilities Developer's Guide</a>.</p>
+</blockquote>
+
+<p>For example, say you have a bundle of <code>picture.jpg</code>
+files (including the base file, <code>picture.jpg</code>, and some
+localized copies of it: <code>picture_es_MX.jpg</code>, <code>picture_zh_CN.jpg</code>,
+etc). Imagine you have put them into the <code>images/</code> subfolder
+(of either your portlet WAR or the external portlet resource bundle
+directory). Then to display that image in the browser, use the following
+in your JSP:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;img src='&lt;spf-i18n-portlet:localizedFileURL file="/images/picture.jpg" /&gt;'&gt;
+</pre></blockquote>
+
+<ul>
+	<li>
+	<p>If you put the bundle of files in the portlet resource bundle
+	folder (actually in the <code>images/</code> subfolder thereof), then
+	the best-fitting candidate for the user's locale would be resolved from
+	there. A file-relay servlet URL pointing to it (and properly
+	portlet-encoded for WSRP and the portal) would be expressed. Assuming
+	you have configured and deployed the file-relay servlet properly (see
+	the discussion on the relay servlet, in the <a href="href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.supporting.relay">SPF
+	Portlet Utilities Developer's Guide</a>), the image would be fetched by the
+	browser from the servlet, and displayed in the browser.</p>
+	</li>
+	<li>
+	<p>If you put the bundle of files inside your portlet WAR (actually
+	in its <code>images/</code> subfolder), then the best-fitting candidate
+	for the user's locale would be resolved from there. A portlet static
+	resource URL (properly portlet-encoded for WSRP and the portal) would
+	be expressed. The image would be fetched by the browser from the
+	portlet WAR, and displayed in the browser.</p>
+	</li>
+</ul>
+
+<p>Here are the tag attributes:</p>
+
+<dl>
+	<dt><code>file="<i>base-file</i>"</code><br>
+	<code>fileKey="<i>localized-file-message-key</i>"</code></dt>
+	<dd>
+	<p>Use one of these attributes to identity the file for which to
+	build the URL. The <code>file</code> attribute gives the base filename
+	to look for (including any subfolder relative to where you put the
+	bundle: ie, relative to the <i>portlet resource bundle folder</i> if
+	you set the bundle up outside your WAR, or relative to the root of the
+	portlet application if you included the bundle inside the WAR. When you
+	give the <code>file</code> attribute, the tag will search the portlet
+	bundle folder first, and inside your WAR second. If no bundle for that
+	base file is found, then a URL pointing to the base file inside your
+	portlet WAR will be built and returned anyway. (This will generate a
+	404 error when opened by the browser, so that during testing, any
+	missing resources will be obvious.)
+	
+	<p>The <code>fileKey</code> attribute works differently: with that
+	attribute, you give the key for a message property whose value is the
+	actual localized file name. (This message lookup proceeds as described
+	<a href="#message">above</a>. If the message is not found, this tag
+	just expresses an empty string.) Once the value is retrieved, it is
+	treated as the name of the actual localized file to use (including any
+	subfolder relative to where you put the bundle). The tag searches for
+	that file in the portlet bundle folder first, and inside your WAR
+	second. If the file is not found, then a URL pointing to it inside the
+	portlet WAR will be built and returned anyway. (This will generate a
+	404 error when opened by the browser, so that during testing, any
+	missing resources will be obvious.)</p>
+
+	<p>Using <code>fileKey</code> requires you and the translators to
+	setup all the values for this message key, in all the localized
+	versions of the message properties file, to point to the proper
+	filename. This can be rather error-prone, so we recommend using the <code>file</code>
+	attribute instead.</p>
+
+	<p>You must provide one of these attributes, or there will be an
+	error. If you provide both, the <code>file</code> attribute takes
+	precedence.</p>
 </body>
 </html>
 
