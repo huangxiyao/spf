@@ -397,6 +397,20 @@ is an SPF JSP tag for expressing standalone contextual help in the
 "classic" style. See the documentation for <a
 	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#help.contextual.jsp.classicContextualHelpProvider"><code>&lt;spf-help-portlet:classicContextualHelp&gt;</code></a>.</p>
 
+<blockquote>
+<p><b>Note:</b> The classic format of contextual help utilizes an
+"X" image on which the user can click to close the window. This is a GIF
+image which you must supply (either inside your portlet application, or
+in the external resource bundle folder). You can localize the image if
+desired. Name the base file for the image <code>btn_close.gif</code> and
+put it in the <code>images/</code> subfolder (of your portlet WAR or the
+external folder). Management of this image is the same as for any other
+supporting resource file.</p>
+
+<p>The SPF portlet utilities JAR contains a sample <code>btn_close.gif</code>.
+(It is the same one shown in the examples above.)</p>
+</blockquote>
+
 <a name="localizedFileURL">
 <h3>&lt;spf-i18n-portlet:localizedFileURL&gt;</h3>
 </a>

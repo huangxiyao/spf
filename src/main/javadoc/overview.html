@@ -1184,11 +1184,25 @@ String msg = I18nUtility.getMessage(request, "key", cchps);
 	<img src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelp.jpg"></li>
 
 	<p>Please see the <code>I18nUtility.getMessage</code> method
-	documentation for more details. (Also see the discussion on <a
-		href="#help.kinds.contextual">contextual help</a> later in this guide
-	and in the JavaDocs - eg see the {@link
+	documentation for more details about passing contextual help providers.
+	(Also see the discussion on <a href="#help.kinds.contextual">contextual
+	help</a> later in this guide and in the JavaDocs - eg see the {@link
 	com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider}
 	documentation.)</p>
+
+	<blockquote>
+	<p><b>Note:</b> The classic format of contextual help utilizes an
+	"X" image on which the user can click to close the window. This is a
+	GIF image which you must supply (either inside your portlet
+	application, or in the external resource bundle folder). You can
+	localize the image if desired. Name the base file for the image <code>btn_close.gif</code>
+	and put it in the <code>images/</code> subfolder (of your portlet WAR
+	or the external folder). Management of this image is the same as for
+	any other supporting resource file.</p>
+
+	<p>The SPF portlet utilities JAR contains a sample <code>btn_close.gif</code>.
+	(It is the same one shown in the example above.)</p>
+	</blockquote>
 
 	<li>
 	<p>A <code>Locale</code> for which to find the best-fitting message
@@ -1286,12 +1300,12 @@ with the SPF portlet utilities' message-handling JSP tags, you can:</p>
 </ul>
 
 <p>The SPF message-handling tags are thoroughly documented in the <a
-	href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#message">package
+	href="com/hp/it/spf/xa/i18n/portlet/tag/package-summary.html#message">package
 description</a>. Briefly, they are:</p>
 
 <dl>
 	<dt>
-	<p><a href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a></p>
+	<p><a href="com/hp/it/spf/xa/i18n/portlet/tag/package-summary.html#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a></p>
 	</dt>
 
 	<dd>
@@ -1331,7 +1345,7 @@ key=This is an HTML &lt;head&gt; tag.
 	times.</p>
 
 	<dt>
-	<p><a href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#param"><code>&lt;spf-i18n-portlet:param&gt;</code></a></p>
+	<p><a href="com/hp/it/spf/xa/i18n/portlet/tag/package-summary.html#param"><code>&lt;spf-i18n-portlet:param&gt;</code></a></p>
 	</dt>
 	<dd>
 	<p>This tag is only used inside the tag body of <code>&lt;spf-i18n-portlet:message&gt;</code>.
@@ -1365,7 +1379,7 @@ key=Your name is {0} and your age is {1}.
 
 	<dt>
 	<p><a
-		href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a></p>
+		href="com/hp/it/spf/xa/i18n/portlet/tag/package-summary.html#classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a></p>
 	</dt>
 	<dd>
 	<p>This tag is only used inside the tag body of <code>&lt;spf-i18n-portlet:message&gt;</code>.
@@ -1425,12 +1439,29 @@ key.help.content=Internet security is important to us...
 	<img src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelp.jpg">
 
 	<p>Most of the other tag attributes can be used to change the style
-	(color, font, size) of the classic contextual help popup.</p>
+	(color, font, size) of the classic contextual help popup. See the tag
+	documentation, in the <a
+		hef="com/hp/it/spf/xa/i18n/portlet/tag/package-summary.html#classicContextualHelpParam">package
+	description</a>, for more information.</p>
+
+	<blockquote>
+	<p><b>Note:</b> The classic format of contextual help utilizes an
+	"X" image on which the user can click to close the window. This is a
+	GIF image which you must supply (either inside your portlet
+	application, or in the external resource bundle folder). You can
+	localize the image if desired. Name the base file for the image <code>btn_close.gif</code>
+	and put it in the <code>images/</code> subfolder (of your portlet WAR
+	or the external folder). Management of this image is the same as for
+	any other supporting resource file.</p>
+
+	<p>The SPF portlet utilities JAR contains a sample <code>btn_close.gif</code>.
+	(It is the same one shown in the example above.)</p>
+	</blockquote>
 	</dd>
 </dl>
 
 <p>The SPF message-handling tags are thoroughly documented in the <a
-	href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#message">package
+	href="com/hp/it/spf/xa/i18n/portlet/tag/package-summary.html#message">package
 description</a>. Please see that documentation for more information.</p>
 
 <hr>
@@ -1727,13 +1758,13 @@ location - see <a href="#i18n.supporting.relay">discussion below</a>.</p>
 <p>The SPF portlet utilities provide a JSP tag, <code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code>,
 which wraps around <a href="#i18n.java.spf.getLocalizedFileURL"><code>I18nUtility.getLocalizedFileURL</code></a>
 to offer most of the same capabilities. It is thoroughly documented in
-the <a href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#message">package
+the <a href="com/hp/it/spf/xa/i18n/portlet/tag/package-summary.html#getLocalizedFileURL">package
 description</a>. Briefly:</p>
 
 <dl>
 	<dt>
 	<p><a
-		href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#localizedFileURL"><code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></a></p>
+		href="com/hp/it/spf/xa/i18n/portlet/tag/package-summary.html#localizedFileURL"><code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></a></p>
 	</dt>
 
 	<dd>
@@ -1779,7 +1810,7 @@ description</a>. Briefly:</p>
 	a static resource URL for your application (again, properly-encoded).</p>
 
 	<p>See the tag documentation, in the <a
-		href="com/hp/it/spf/xa/i18n/portlet/tag/package.html#localizedFileURL">package
+		href="com/hp/it/spf/xa/i18n/portlet/tag/package-summary.html#localizedFileURL">package
 	description</a>, for more information.</p>
 	</dd>
 </dl>
