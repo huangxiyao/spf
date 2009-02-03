@@ -6,7 +6,20 @@ internationalizing Shared Portal Framework portlet applications.</p>
 <blockquote>
 <p><b>Note:</b> SPF portlet developers should never need to use the
 Java classes in this package directly. Use the respective JSP tags
-instead.</p>
+instead. For your reference, the tag classes and their respective JSP
+tags are listed below:</p>
+
+<dl>
+	<dt>{@link com.hp.it.spf.xa.i18n.portlet.tag.MessageTag} - Tag
+	class for <a href="#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a></dt>
+	<dt>{@link com.hp.it.spf.xa.i18n.portlet.tag.ParamTag} - Tag class
+	for <a href="#param"><code>&lt;spf-i18n-portlet:param&gt;</code></a></dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.tag.ClassicContextualHelpParamTag} - Tag
+	class for <a href="#classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a></dt>
+	<dt>{@link com.hp.it.spf.xa.i18n.portlet.tag.LocalizedFileURLTag}
+	- Tag class for <a href="#localizedFileURL"><code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></a></dt>
+</dl>
 </blockquote>
 
 <a name="TLD">
@@ -189,15 +202,15 @@ provide a <code>&lt;spf-i18n-portlet:param&gt;</code>, remain.</p>
 </pre></blockquote>
 
 <p>You use this tag inside the <a href="#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>
-tag body, to inject "classic"-format contextual help into the message
-value. (If you don't know what is meant by "contextual help" or the
-"classic" format, see the discussion in the <a
+tag body, to inject the "classic" rendition of contextual help into the
+message value. (If you don't know what is meant by "contextual help" or
+the "classic" rendition, see the discussion in the <a
 	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#help.kinds.contextual">SPF
 Portlet Utilities Developer's Guide</a>.)</p>
 
 <p>For example, let's say you need to produce a UI message like this
-(where the word "secure" links to some classic-format contextual help
-not shown yet):</p>
+(where the word "secure" links to some classic contextual help not shown
+yet):</p>
 
 <img src="../doc-files/contextualHelpLink.jpg">
 
@@ -268,21 +281,22 @@ would look like this:</p>
 	to offer the browser to use in case JavaScript is disabled. For a
 	script-enabled browser, this attribute has no effect.</p>
 
-	<p>Because the classic version of contextual help requires
+	<p>Because the classic rendition of contextual help requires
 	JavaScript, it will not work if JavaScript is not enabled in the
-	browser. So by default, the classic version of contextual help includes
-	a no-script URL pointing to your portlet's help mode (if your portlet
-	supports help mode - if not, then there is no no-script URL provided by
-	default). But you can specify any other URL to be used in the no-script
-	case instead, via this attribute. If your portlet supports help mode,
-	you can even set this attribute to a document fragment like <code>noScriptHref="#go_here"</code>
-	so that, in the no-script case, the user will be taken to that fragment
-	of the document displayed by your portlet's help mode.</p>
+	browser. So by default, the classic rendition of contextual help
+	includes a no-script URL pointing to your portlet's help mode (if your
+	portlet supports help mode - if not, then there is no no-script URL
+	provided by default). But you can specify any other URL to be used in
+	the no-script case instead, via this attribute. If your portlet
+	supports help mode, you can even set this attribute to a document
+	fragment like <code>noScriptHref="#go_here"</code> so that, in the
+	no-script case, the user will be taken to that fragment of the document
+	displayed by your portlet's help mode.</p>
 	</dd>
 
 	<dt><code>width="<i>pixels</i>"</code></dt>
 	<dd>
-	<p>The classic version of contextual help is a DHTML popup table
+	<p>The classic rendition of contextual help is a DHTML popup table
 	with a 300-pixel width by default. You can override that width with
 	this attribute.</p>
 	</dd>
@@ -290,7 +304,7 @@ would look like this:</p>
 	<dt><code>borderStyle="<i>inline-style</i>"</code><br>
 	<code>borderClass="<i>css-classname</i>"</code></dt>
 	<dd>
-	<p>The classic version of contextual help is a DHTML popup table
+	<p>The classic rendition of contextual help is a DHTML popup table
 	with a thin solid black border by default. You can use either of these
 	attributes to style the border differently.</p>
 
@@ -308,8 +322,8 @@ would look like this:</p>
 
 	<p>The CSS properties you can define are the ones which are
 	relevant to table borders (ie CSS properties for the HTML <code>&lt;TABLE&gt;</code>
-	tag). For example, here is what the classic-format contextual help
-	popup looks like with <code>borderStyle="border-color:blue;border-width:3px;border-style:solid"</code>:</p>
+	tag). For example, here is what the classic contextual help popup looks
+	like with <code>borderStyle="border-color:blue;border-width:3px;border-style:solid"</code>:</p>
 
 	<img src="../doc-files/contextualHelpBlueBorder.jpg">
 
@@ -320,7 +334,7 @@ would look like this:</p>
 	<dt><code>titleStyle="<i>inline-style</i>"</code><br>
 	<code>titleClass="<i>css-classname</i>"</code></dt>
 	<dd>
-	<p>The classic version of contextual help is a DHTML popup table
+	<p>The classic rendition of contextual help is a DHTML popup table
 	where the top row contains the title for the contextual help. By
 	default, that title is displayed using bold white font on a blue
 	background. You can use either of these attributes to style the title
@@ -340,8 +354,8 @@ would look like this:</p>
 
 	<p>The CSS properties you can define are the ones which are
 	relevant to table cells (ie CSS properties for the HTML <code>&lt;TD&gt;</code>
-	tag). For example, here is what the classic-format contextual help
-	popup looks like with <code>titleStyle="background-color:gray;font-style:italic;color:black;font-weight:bold"</code>:</p>
+	tag). For example, here is what the classic contextual help popup looks
+	like with <code>titleStyle="background-color:gray;font-style:italic;color:black;font-weight:bold"</code>:</p>
 
 	<img src="../doc-files/contextualHelpGrayTitle.jpg">
 
@@ -352,7 +366,7 @@ would look like this:</p>
 	<dt><code>contentStyle="<i>inline-style</i>"</code><br>
 	<code>contentClass="<i>css-classname</i>"</code></dt>
 	<dd>
-	<p>The classic version of contextual help is a DHTML popup table
+	<p>The classic rendition of contextual help is a DHTML popup table
 	where the second row contains the main content for the contextual help.
 	By default, that content is displayed using normal black font on a
 	white background. You can use either of these attributes to style the
@@ -394,11 +408,11 @@ element, like an image), then you may be more interested in using the
 standalone contextual help approach, instead of contextual help
 injection. For example, <code>&lt;spf-help-portlet:classicContextualHelp&gt;</code>
 is an SPF JSP tag for expressing standalone contextual help in the
-"classic" style. See the documentation for <a
+"classic" manner. See the documentation for <a
 	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#help.contextual.jsp.classicContextualHelpProvider"><code>&lt;spf-help-portlet:classicContextualHelp&gt;</code></a>.</p>
 
 <blockquote>
-<p><b>Note:</b> The classic format of contextual help utilizes an
+<p><b>Note:</b> The classic rendition of contextual help utilizes an
 "X" image on which the user can click to close the window. This is a GIF
 image which you must supply (either inside your portlet application, or
 in the external resource bundle folder). You can localize the image if
