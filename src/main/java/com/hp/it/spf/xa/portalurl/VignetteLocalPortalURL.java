@@ -15,7 +15,7 @@ class VignetteLocalPortalURL extends AbstractPortalURL
 {
 	private static final String PARAM_NAME_PREFIX = "spf_p";
 
-	public VignetteLocalPortalURL(String siteRootUrl, String anotherSiteName, String pageFriendlyUri, boolean secure)
+	VignetteLocalPortalURL(String siteRootUrl, String anotherSiteName, String pageFriendlyUri, boolean secure)
 	{
 		super(siteRootUrl, anotherSiteName, pageFriendlyUri, secure);
 	}

@@ -1,4 +1,4 @@
-package com.hp.it.spf.xa.portalurl;
+package com.hp.it.spf.xa.portalurl.example;
 
 import java.io.FileWriter;
 import java.io.IOException;
