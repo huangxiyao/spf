@@ -42,7 +42,7 @@
 	<table>
 		<tr>
 			<td nowrap>
-				<spf-help-portlet:contextualHelp anchorKey="config.viewfilename" titleKey="config.viewfilename.help.title" contentKey="config.viewfilename.help.content" width="450"/>&nbsp;&nbsp;
+				<spf-help-portlet:classicContextualHelp anchorKey="config.viewfilename" titleKey="config.viewfilename.help.title" contentKey="config.viewfilename.help.content" width="450"/>&nbsp;&nbsp;
 			</td>					
 			<td>
 				<input type="text" name="<%= Consts.VIEW_FILENAME %>" value="<%= renderRequest.getAttribute(Consts.VIEW_FILENAME) %>">
@@ -51,7 +51,7 @@
 		<tr>	
 			<td colspan=2>
 				<spf-i18n-portlet:message key="config.launchbuttonless">
-					<spf-i18n-portlet:contextualHelpParam titleKey="config.launchbuttonless.help.title" contentKey="config.launchbuttonless.help.content"/>
+					<spf-i18n-portlet:classicContextualHelpParam titleKey="config.launchbuttonless.help.title" contentKey="config.launchbuttonless.help.content"/>
 				</spf-i18n-portlet:message>&nbsp;&nbsp;
 				<c:choose>
 					<c:when test="${! empty launchButtonless && launchButtonless == 'true' }">
