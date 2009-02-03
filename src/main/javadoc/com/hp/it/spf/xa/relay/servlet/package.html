@@ -8,6 +8,11 @@ classes directly. However, if they are going to have external supporting
 resources, they will need to properly configure and deploy this servlet.
 The steps are as follows:</p>
 
+<blockquote>
+<p><b>Note:</b> SPF portlet developers who will not have external
+supporting resources can completely disregard all of this.</p>
+</blockquote>
+
 <a name="web.xml">
 <h3>1. Configuring <code>web.xml</code></h3>
 </a>
@@ -34,9 +39,9 @@ file. The deployment descriptor just looks like this:</p>
 <p>As noted in the above comment, you can use a different path for
 the relay servlet mapping. But we recommend you use <code>/relay</code>
 (ie the current value of {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_SERVLET_PATH} since
-that is the default path for the relay servlet. If you provide a
-different one, you will have to do extra configuration in <a
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_SERVLET_PATH} since that
+is the default path for the relay servlet. If you provide a different
+one, you will have to do extra configuration in <a
 	href="#i18n_portlet_config.properties"><code>i18n_portlet_config.properties</code></a>
 (see below).</p>
 
@@ -52,7 +57,7 @@ relay servlet will use for the <code>Content-Type:</code> HTTP response
 header during the download.</p>
 
 <blockquote>
-<p>A file inside the SPF portlet utilities JAR, <code>init_relay_default.properties</code>,
+<p><b>Note:</b> A file inside the SPF portlet utilities JAR, <code>init_relay_default.properties</code>,
 defines a default set of these file extensions and MIME types. You
 should find that most general-purpose file extensions are listed there
 (for popular image formats like GIF and JPEG, popular video formats like
@@ -115,7 +120,7 @@ inside your application, where the classloader will find it. See the <a
 	href="#deployment">deployment discussion below</a>.</p>
 
 <a name="deployment">
-<h3>4. Deploying the servlet</h3>
+<h3>4. Assembling the application</h3>
 </a>
 
 <p>We recommend including the relay servlet as part of your portlet
