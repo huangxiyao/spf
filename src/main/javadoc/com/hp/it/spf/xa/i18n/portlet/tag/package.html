@@ -28,9 +28,9 @@ will use the prefix <code>spf-i18n-portlet</code>.</p>
 &lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
 ...
 &lt;spf-i18n-portlet:message
-	key=<i>message-key</i>
-	defaultValue=<i>default-value</i>
-	escape=<i>true-or-false</i>
+	key="<i>message-key</i>"
+	defaultValue="<i>default-value</i>"
+	escape="<i>true-or-false</i>"
 	/&gt;
 </pre></blockquote>
 
@@ -58,19 +58,19 @@ configured in the JVM classpath so the classloader can find them.</p>
 <p><b>Note:</b> For more about where you put your message resources,
 how you localize them, and how you configure them in Spring, see the
 discussion in the <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#i18n.location">SPF
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.location">SPF
 Portlet Utilities Developer's Guide</a>.</p>
 </blockquote>
 
 <p>Here are the tag attributes:</p>
 
 <dl>
-	<dt><code>key=<i>message-key</i></code></dt>
+	<dt><code>key="<i>message-key</i>"</code></dt>
 	<dd>
 	<p>The <code>key</code> attribute is used to specify the message to
 	retrieve. It is required.</p>
 	</dd>
-	<dt><code>defaultValue=<i>default-value</i></code></dt>
+	<dt><code>defaultValue="<i>default-value</i>"</code></dt>
 	<dd>
 	<p>The <code>defaultValue</code> attribute is used to specify a
 	default value to express, in case the given message key is not found.
@@ -78,7 +78,7 @@ Portlet Utilities Developer's Guide</a>.</p>
 	no explicit (ie non-null and non-blank) <code>defaultValue</code>
 	attribute is provided.</p>
 	</dd>
-	<dt><code>escape=<i>true-or-false</i></code></dt>
+	<dt><code>escape="<i>true-or-false</i>"</code></dt>
 	<dd>
 	<p>The <code>escape</code> attribute is used as a switch to control
 	the HTML-escaping policy for the returned message. By default, the
@@ -119,6 +119,14 @@ contain the following SPF tags:</p>
 <a name="param">
 <h3>&lt;spf-i18n-portlet:param&gt;</h3>
 </a>
+<p>Usage:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:param value="<i>string</i>" /&gt;
+</pre></blockquote>
+
 <p>You use this tag inside the <a href="#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>
 tag body, to pass a string parameter into any {@link MessageFormat}
 placeholders in the message value. For example, if your message is like
@@ -139,12 +147,239 @@ contains the user name, and <code>age</code> contains the age):</p>
 	&lt;spf-i18n-portlet:param value="&lt;%= age %&gt;" /&gt;
 &lt;/spf-i18n-portlet:message&gt;
 </pre></blockquote>
-</p>
+
+<p>Here are the tag attributes:</p>
+
+<dl>
+	<dt><code>value="<i>string</i>"</code></dt>
+	<dd>
+	<p>The string to substitute for this position in the message.</p>
+	</dd>
+</dl>
 
 <a name="classicContextualHelpParam">
 <h3>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</h3>
 </a>
-<p></p>
+<p>Usage:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:classicContextualHelpParam
+	title="<i>help-title</i>"
+	titleKey="<i>help-title-message-key</i>"
+	content="<i>help-content</i>"
+	contentKey="<i>help-content-message-key</i>"
+	noScriptHref="<i>uri</i>"
+	width="<i>pixels</i>"
+	borderStyle="<i>inline-style</i>'
+	borderClass="<i>css-classname</i>"
+	titleStyle="<i>inline-style</i>"
+	titleClass="<i>css-classname</i>"
+	contentStyle="<i>inline-style</i>"
+	contentClass="<i>css-classname</i>"
+	/&gt;
+</pre></blockquote>
+
+<p>You use this tag inside the <a href="#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>
+tag body, to inject "classic"-format contextual help into the message
+value. (If you don't know what is meant by "contextual help" or the
+"classic" format, see the discussion in the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#help.kinds.contextual">SPF
+Portlet Utilities Developer's Guide</a>.)</p>
+
+<p>For example, let's say you need to produce a UI message like this
+(where the word "secure" links to some classic-format contextual help
+not shown yet):</p>
+
+<img src="../doc-files/contextualHelpLink.jpg">
+
+<p>Using contextual help injection, you can have the following in
+your message properties:</p>
+
+<blockquote><pre>
+key=Your sign-in is &lt;contextual_help&gt;secure&lt;/contextual_help&gt;
+key.help.title=Service Portal and your security
+key.help.content=Internet security is important to us...
+</pre></blockquote>
+
+<p>Then use the following in your JSP to express this message with
+the appropriate contextual help markup (text, HTML, CSS and JavaScript)
+injected into it. Note: this demonstration expresses the contextual help
+using the built-in "default" style; see the discussion on tag attributes
+for how to override that and provide your own style.</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
+...
+&lt;spf-i18n-portlet:message key="key"&gt;
+	&lt;spf-i18n-portlet:classicContextualHelpParam titleKey="key.help.title" contentKey="key.help.content" /&gt;
+&lt;/spf-i18n-portlet:message&gt;
+</pre></blockquote>
+
+<p>So then, when the user clicked on the "secure" hyperlink, it
+would look like this:</p>
+
+<img src="../doc-files/contextualHelp.jpg">
+
+<p>Here are the tag attributes:</p>
+
+<dl>
+	<dt><code>title="<i>help-title</i>"</code><br>
+	<code>titleKey="<i>help-title-message-key</i>"</code></dt>
+	<dd>
+	<p>Use one of these attributes to provide the title for the
+	contextual help (it is an error if you do not use one of these with a
+	non-null, non-blank value; if you use both, the <code>title</code>
+	attribute takes precedence). The <code>title</code> attribute provides
+	the literal string to use for the title (so it is your responsibility
+	to have already generated that string, localized as needed). The <code>titleKey</code>
+	is a message key for the title - the tag looks inside your configured
+	message resources to retrieve the title (using the key itself as the
+	default, if the message is not found). The message lookup proceeds as
+	described <a href="#message">above</a>.
+	</dd>
+
+	<dt><code>content="<i>help-content</i>"</code><br>
+	<code>titleKey="<i>help-content-message-key</i>"</code></dt>
+	<dd>
+	<p>Use one of these attributes to provide the title for the
+	contextual help (it is an error if you do not use one of these with a
+	non-null, non-blank value; if you use both, the <code>content</code>
+	attribute takes precedence). The <code>content</code> attribute
+	provides the literal string to use for the main help content (so it is
+	your responsibility to have already generated that string, localized as
+	needed). The <code>contentKey</code> is a message key for that - the
+	tag looks inside your configured message resources to retrieve the main
+	help content (using the key itself as the default, if the message is
+	not found). The message lookup proceeds as described <a href="#message">above</a>.
+	</dd>
+
+	<dt><code>noScriptHref="<i>uri</i>"</code></dt>
+	<dd>
+	<p>The <code>noScriptHref</code> attribute gives an alternative URL
+	to offer the browser to use in case JavaScript is disabled. For a
+	script-enabled browser, this attribute has no effect.</p>
+
+	<p>Because the classic version of contextual help requires
+	JavaScript, it will not work if JavaScript is not enabled in the
+	browser. So by default, the classic version of contextual help includes
+	a no-script URL pointing to your portlet's help mode (if your portlet
+	supports help mode - if not, then there is no no-script URL provided by
+	default). But you can specify any other URL to be used in the no-script
+	case instead, via this attribute. If your portlet supports help mode,
+	you can even set this attribute to a document fragment like <code>noScriptHref="#go_here"</code>
+	so that, in the no-script case, the user will be taken to that fragment
+	of the document displayed by your portlet's help mode.</p>
+	</dd>
+
+	<dt><code>width="<i>pixels</i>"</code></dt>
+	<dd>The classic version of contextual help is a DHTML popup table
+	with a 300-pixel width by default. You can override that width with
+	this attribute.</dd>
+
+	<dt><code>borderStyle="<i>inline-style</i>"</code><br>
+	<code>borderClass="<i>css-classname</i>"</code></dt>
+	<dd>
+	<p>The classic version of contextual help is a DHTML popup table
+	with a thin solid black border by default. You can use either of these
+	attributes to style the border differently.</p>
+
+	<p>The <code>borderStyle</code> attribute works like the <code>style</code>
+	attribute of most HTML tags - it lets you provide a set of CSS
+	properties inline with your tag. The <code>borderClass</code> attribute
+	works like the <code>class</code> attribute of most HTML tags - it lets
+	you refer to a CSS class defined elsewhere in your JSP or in an
+	included CSS sheet. Typically you would use only one or the other,
+	though the tag will let you provide both. If you do use both, then CSS
+	properties defined in <code>borderStyle</code> override the same
+	properties defined in the <code>borderClass</code> class, as usual with
+	CSS. Similarly, CSS properties defined in either override any defined
+	elsewhere on the page for tables.</p>
+
+	<p>The CSS properties you can define are the ones which are
+	relevant to table borders (ie CSS properties for the HTML <code>&lt;TABLE&gt;</code>
+	tag). For example, here is what the classic-format contextual help
+	popup looks like with <code>borderStyle="border-color:blue;border-width:3px;border-style:solid"</code>:</p>
+
+	<img src=../"doc-files/contextualHelpBlueBorder.jpg">
+
+	<p>You can set <code>borderStyle=""</code> to cancel the default
+	border style.</p>
+	</dd>
+
+	<dt><code>titleStyle="<i>inline-style</i>"</code><br>
+	<code>titleClass="<i>css-classname</i>"</code></dt>
+	<dd>
+	<p>The classic version of contextual help is a DHTML popup table
+	where the top row contains the title for the contextual help. By
+	default, that title is displayed using bold white font on a blue
+	background. You can use either of these attributes to style the title
+	differently.</p>
+
+	<p>The <code>titleStyle</code> attribute works like the <code>style</code>
+	attribute of most HTML tags - it lets you provide a set of CSS
+	properties inline with your tag. The <code>titleClass</code> attribute
+	works like the <code>class</code> attribute of most HTML tags - it lets
+	you refer to a CSS class defined elsewhere in your JSP or in an
+	included CSS sheet. Typically you would use only one or the other,
+	though the tag will let you provide both. If you do use both, then CSS
+	properties defined in <code>titleStyle</code> override the same
+	properties defined in the <code>titleClass</code> class, as usual with
+	CSS. Similarly, CSS properties defined in either override any defined
+	elsewhere on the page for tables.</p>
+
+	<p>The CSS properties you can define are the ones which are
+	relevant to table cells (ie CSS properties for the HTML <code>&lt;TD&gt;</code>
+	tag). For example, here is what the classic-format contextual help
+	popup looks like with <code>titleStyle="background-color:gray;font-style:italic;color:black;font-weight:bold"</code>:</p>
+
+	<img src="../doc-files/contextualHelpGrayTitle.jpg">
+
+	<p>You can set <code>titleStyle=""</code> to cancel the default
+	title style.</p>
+	</dd>
+
+	<dt><code>contentStyle="<i>inline-style</i>"</code><br>
+	<code>contentClass="<i>css-classname</i>"</code></dt>
+	<dd>
+	<p>The classic version of contextual help is a DHTML popup table
+	where the second row contains the main content for the contextual help.
+	By default, that content is displayed using normal black font on a
+	white background. You can use either of these attributes to style the
+	main help content differently.</p>
+
+	<p>The <code>contentStyle</code> attribute works like the <code>style</code>
+	attribute of most HTML tags - it lets you provide a set of CSS
+	properties inline with your tag. The <code>contentClass</code>
+	attribute works like the <code>class</code> attribute of most HTML tags
+	- it lets you refer to a CSS class defined elsewhere in your JSP or in
+	an included CSS sheet. Typically you would use only one or the other,
+	though the tag will let you provide both. If you do use both, then CSS
+	properties defined in <code>contentStyle</code> override the same
+	properties defined in the <code>contentClass</code> class, as usual
+	with CSS. Similarly, CSS properties defined in either override any
+	defined elsewhere on the page for tables.</p>
+
+	<p>The CSS properties you can define are the ones which are
+	relevant to table cells (ie CSS properties for the HTML <code>&lt;TD&gt;</code>
+	tag). See the above example (for styling the title) for the general
+	idea. You can set <code>contentStyle=""</code> to cancel the default
+	style.</p>
+	</dd>
+</dl>
+
+<p>Injecting contextual help into a message is useful because it
+lets you embed contextual help in the middle of a message (ie in the
+middle of a phrase or sentence), without having to break the message
+apart and risk making it untranslatable. Note that if you do have
+contextual help to wrap around a whole message (or around some other
+element, like an image), then you may be more interested in using the
+standalone contextual help approach, instead of contextual help
+injection. For example, <code>&lt;spf-help-portlet:classicContextualHelp&gt;</code>
+is an SPF JSP tag for expressing standalone contextual help in the
+"classic" style. See the documentation for <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#help.contextual.jsp.classicContextualHelpProvider"><code>&lt;spf-help-portlet:classicContextualHelp&gt;</code></a>.</p>
 
 <a name="localizedFileURL">
 <h3>&lt;spf-i18n-portlet:localizedFileURL&gt;</h3>
