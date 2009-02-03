@@ -1482,8 +1482,8 @@ com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}).</p>
 <h4>2.5.1. Using <code>I18nUtility.getLocalizedFileURL</code></h4>
 </a>
 
-<p><b>Note:</b> There is an SPF-provided JSP tag library for this
-method - see <a href="#i18n.supporting.jsp.localizedFileURL"><code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></a>
+<p><b>Note:</b> There is an SPF-provided JSP tag library for this -
+see <a href="#i18n.supporting.jsp.localizedFileURL"><code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></a>
 description below.</p>
 
 <p>These methods return a URL string which the user's browser can
@@ -1510,9 +1510,10 @@ tag).</p>
 		href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>
 	(or, by default, it will be assumed to be deployed under the {@link
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} in the
-	current portlet application). Be sure you have deployed the relay
-	servlet properly at that URL. See the <a href="#i18n.supporting.relay">discussion
-	below</a> for more information.</p>
+	current portlet application). Be sure you have configured and deployed
+	the relay servlet properly at that URL. See the <a
+		href="#i18n.supporting.relay">discussion below</a> for more
+	information.</p>
 	</li>
 	<li>
 	<p>If the best-fit localized file is found inside the portlet WAR
@@ -1528,6 +1529,8 @@ tag).</p>
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String)}</dt>
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String,boolean)}</dt>
+	<dt>{@ link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String,Locale,boolean)}</dt>
 	<dd>
 	<p>These methods take the base filename of the supporting resource
 	bundle. That filename may include any subfolder (relative to the
@@ -1566,32 +1569,86 @@ String url = I18nUtility.getLocalizedFileURL(request, response, "/images/picture
 	opened by the browser, making a missing resource obvious and detectable
 	during testing.)</p>
 
-	<p>The boolean switch, set to <code>false</code>, lets you just
-	lookup the given base file itself, without attempting to find the best
-	candidate. Please see the method documentation for more information.</p>
+	<p>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String,Locale,boolean)}
+	is the core API which all the others feed into. Here is a summary of
+	the parameters it takes; the others take a subset of these. See the
+	method documentation for more information.</p>
+
+	<ul>
+		<li>
+		<p>The current {@link javax.portlet.PortletRequest} (required).</p>
+		</li>
+		<li>
+		<p>The current {@link javax.portlet.PortletResponse} (required).</p>
+		</li>
+		<li>
+		<p>The base filename (required).</p>
+		</li>
+		<li>
+		<p>The {@link java.util.Locale} to use when searching for the
+		best-fit candidate file. By default, the locale inside the <code>PortletRequest</code>
+		is used.</p>
+		</li>
+		<li>
+		<p>The boolean switch, set to <code>false</code>, lets you just
+		lookup the given base file itself, without attempting to find the best
+		candidate. By default, this switch is <code>true</code> (enabling the
+		best-localized-candidate search).</p>
+		</li>
+	</ul>
 	</dd>
 
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String,String,Locale)}</dt>
 	<dd>
-	<p>This method gets the localized file differently. You give it a
-	message key (with an optional default value) and it looks up that
-	message in your message resource bundles. (This message lookup proceeds
-	as described for the <a href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getMessage</code></a>
-	API's above. If the message is not found, then your default value is
-	used as the message value.)</p>
+	<p>These methods get the localized file differently. You give them
+	a message key and they lookup that message in your message resource
+	bundles. This message lookup proceeds as described for the <a
+		href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getMessage</code></a>
+	API's above. The message value is then treated as the name of the
+	localized (not base) file. The subfolder relative to the portlet bundle
+	folder or portlet WAR, where the file is located, may be part of that
+	value. If no actual file exists (as either an external or internal
+	resource) matching that value, then a static resource URL pointing to
+	it anyway will be returned. (As above, this will intentionally cause a
+	404 error should the browser open it.)</p>
 
-	<p>The message value is then treated as the name of the localized
-	(not base) file. The subfolder relative to the portlet bundle folder or
-	portlet WAR, where the file is located, may be part of that value. If
-	no actual file exists matching that value, then a static resource URL
-	pointing to it anyway will be returned. (As above, this will
-	intentionally cause a 404 error should the browser open it.)</p>
+	<blockquote>
+	<p><b>Note:</b>These methods offer no real advantage over the
+	others, since they are more cumbersome to setup (you need to make sure
+	that the proper localized filenames for each locale get put - eg by the
+	translators - into the message properties file for that locale).
+	Therefore we recommend using the other methods.</p>
+	</blockquote>
 
-	<p>Using this method offers no real advantage over the others, and
-	is more cumbersome to setup (you need to make sure that the proper
-	localized filenames for each locale, get into the message properties
-	file for that locale). Therefore we recommend using the other methods.</p>
+	<p>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String,String,Locale)}
+	is the core API which the other method feeds into. Here is a summary of
+	the parameters it takes; the other method takes a subset of these. See
+	the method documentation for more information.</p>
+
+	<ul>
+		<li>
+		<p>The current {@link javax.portlet.PortletRequest} (required).</p>
+		</li>
+		<li>
+		<p>The current {@link javax.portlet.PortletResponse} (required).</p>
+		</li>
+		<li>
+		<p>The message key string for the localized filename (required).</p>
+		</li>
+		<li>
+		<p>The default value string to use for the localized filename, if
+		the message is not found.</p>
+		<li>
+		<p>The {@link java.util.Locale} to use when searching for the
+		best-fit candidate file. By default, the locale inside the <code>PortletRequest</code>
+		is used.</p>
+		</li>
+	</ul>
 	</dd>
 </dl>
 
@@ -1612,6 +1669,8 @@ methods (see above).
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest,String)}</dt>
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest,String,boolean)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest,String,Locale,boolean)}</dt>
 	<dd>
 	<p>These methods take the base filename of the supporting resource
 	bundle. Building on the above example, here is how we get an <code>InputStream</code>
@@ -1630,26 +1689,72 @@ InputStream file = I18nUtility.getLocalizedFileStream(request, "/xml/something.x
 	that will be returned. <code>null</code> is returned if no good
 	candidate exists.</p>
 
-	<p>The boolean switch, set to <code>false</code>, lets you just
-	lookup the given base file itself, without attempting to find the best
-	candidate. Please see the method documentation for more information.</p>
+	<p>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest,String,Locale,boolean)}
+	is the core API which the others feed into. Here is a summary of the
+	parameters it takes; the others take a subset of these. See the method
+	documentation for more information.</p>
+
+	<ul>
+		<li>
+		<p>The current {@link javax.portlet.PortletRequest} (required).</p>
+		</li>
+		<li>
+		<p>The base filename (required).</p>
+		</li>
+		<li>
+		<p>The {@link java.util.Locale} to use when searching for the
+		best-fit candidate file. By default, the locale inside the <code>PortletRequest</code>
+		is used.</p>
+		</li>
+		<li>
+		<p>The boolean switch, set to <code>false</code>, lets you just
+		lookup the given base file itself, without attempting to find the best
+		candidate. By default, this switch is <code>true</code> (enabling the
+		best-localized-candidate search).</p>
+		</li>
+	</ul>
 	</dd>
 
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest,String,String)}</dt>
 	<dd>
 	<p>This method gets the localized file differently. You give it a
-	message key (with an optional default value) and it looks up that
-	message in your message resource bundles. (If the message is not found,
-	then your default value is used as the message value.) The message
-	value is then treated as the name of the localized (not base) file, and
-	an <code>InputStream</code> is returned for it (or <code>null</code> if
-	it does not exist).</p>
+	message key and it looks up that message in your message resource
+	bundles. The message value is then treated as the name of the localized
+	(not base) file, and an <code>InputStream</code> is returned for it (or
+	<code>null</code> if it does not exist).</p>
 
-	<p>Using this method offers no real advantage over the others, and
-	is more cumbersome to setup (you need to make sure that the proper
-	localized filenames for each locale, get into the message properties
-	file for that locale). Therefore we recommend using the other methods.</p>
+	<blockquote>
+	<p><b>Note:</b>Using this method offers no real advantage over the
+	others, and is more cumbersome to setup (you need to make sure that the
+	proper localized filenames for each locale, get into the message
+	properties file for that locale). Therefore we recommend using the
+	other methods.</p>
+	</blockquote>
+
+	<p>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest,String,String,Locale)}
+	is the core API which the other method feeds into. Here is a summary of
+	the parameters it takes; the other method takes a subset of these. See
+	the method documentation for more information.</p>
+
+	<ul>
+		<li>
+		<p>The current {@link javax.portlet.PortletRequest} (required).</p>
+		</li>
+		<li>
+		<p>The message key string for the localized filename (required).</p>
+		</li>
+		<li>
+		<p>The default value string to use for the localized filename, if
+		the message is not found.</p>
+		<li>
+		<p>The {@link java.util.Locale} to use when searching for the
+		best-fit candidate file. By default, the locale inside the <code>PortletRequest</code>
+		is used.</p>
+		</li>
+	</ul>
 	</dd>
 </dl>
 
@@ -1690,9 +1795,31 @@ if (I18nUtility.getLocalizedFileName(request, "/xml/something.xml") != null) {
 }
 	</pre></blockquote>
 
-	<p>The boolean switch, set to <code>false</code>, lets you just
-	lookup the given base file itself, without attempting to find the best
-	candidate. Please see the method documentation for more information.</p>
+	<p>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileName(PortletRequest,String,Locale,boolean)}
+	is the core API which the others feed into. Here is a summary of the
+	parameters it takes; the others take a subset of these. See the method
+	documentation for more information.</p>
+
+	<ul>
+		<li>
+		<p>The current {@link javax.portlet.PortletRequest} (required).</p>
+		</li>
+		<li>
+		<p>The base filename (required).</p>
+		</li>
+		<li>
+		<p>The {@link java.util.Locale} to use when searching for the
+		best-fit candidate file. By default, the locale inside the <code>PortletRequest</code>
+		is used.</p>
+		</li>
+		<li>
+		<p>The boolean switch, set to <code>false</code>, lets you just
+		lookup the given base file itself, without attempting to find the best
+		candidate. By default, this switch is <code>true</code> (enabling the
+		best-localized-candidate search).</p>
+		</li>
+	</ul>
 	</dd>
 
 	<dt>{@link
@@ -1714,9 +1841,27 @@ if (I18nUtility.getLocalizedFileName("/xml/something.xml", request.getLocale()) 
 }
 	</pre></blockquote>
 
-	<p>The boolean switch, set to <code>false</code>, lets you just
-	lookup the given base file itself, without attempting to find the best
-	candidate. Please see the method documentation for more information.</p>
+	<p>{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileName(String,Locale,boolean)}
+	is the core API which the other method feeds into. Here is a summary of
+	the parameters it takes; the other method takes a subset of these. See
+	the method documentation for more information.</p>
+
+	<ul>
+		<li>
+		<p>The base filename (required).</p>
+		</li>
+		<li>
+		<p>The {@link java.util.Locale} to use when searching for the
+		best-fit candidate file (required)</p>
+		</li>
+		<li>
+		<p>The boolean switch, set to <code>false</code>, lets you just
+		lookup the given base file itself, without attempting to find the best
+		candidate. By default, this switch is <code>true</code> (enabling the
+		best-localized-candidate search).</p>
+		</li>
+	</ul>
 	</dd>
 </dl>
 
@@ -1987,11 +2132,10 @@ portlet request. Many of the internationalization API's and tags
 documented above assume this locale (but the API's all provide
 signatures letting you pass another locale if needed).</p>
 
-LEFT OFF HERE
-
-<p>In SPF, for simplicity, the user is considered to have one
-preferred locale at any given time. The SPF portal framework manages
-resolving that locale from numerous sources:</p>
+<p>Where does the locale come from? In SPF, for simplicity, the user
+is considered to have one preferred locale at any given time. The SPF
+portal framework has the responsibility of resolving that locale from
+numerous sources:</p>
 
 <ol>
 	<li>The SPF locale resolver accepts desired locales from the user
@@ -2009,10 +2153,19 @@ resolving that locale from numerous sources:</p>
 		header.</li>
 	</ol>
 	</li>
-	<li>The SPF locale resolver filters the above inputs by the
-	available locales for your portal site. (When you configure your portal
-	site in the SPF portal, you can specify the default locale to use at
-	your site, as well as any additional locales to support at the site.)</li>
+	<li>The SPF locale resolver filters the above inputs by the <i>available
+	locales</i> for your portal site. (When you configure your portal site in
+	the SPF portal, you can specify the <i>default locale</i> to use at
+	your site, as well as any <i>additional locales</i> to support at the
+	site.)
+	<ul>
+		<li>The locale from the first input found to match one of the
+		available locale(s) for the portal site, is the one resolved.</li>
+		<li>If none of the inputs provide locale(s) that match the
+		available ones, then the default locale for the portal site is
+		resolved.</li>
+	</ul>
+	</li>
 </ol>
 
 <a name="i18n.other.locale.set">
