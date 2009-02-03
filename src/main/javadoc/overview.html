@@ -2175,10 +2175,11 @@ numerous sources:</p>
 </a>
 
 <p>Generally there is no need for you to be concerned with setting
-the locale. Typically you will just use the locale you get. It is the
-SPF portal's responsibility to set the locale (including providing the
-user with a locale selector widget with which the user can set his/her
-own locale). In fact, in the Java portlet API's there are no standard
+the locale. Typically you will just use the <a
+	href="#i18n.other.locale.get">locale you get</a>. It is the SPF
+portal's responsibility to set the locale (including providing the user
+with a locale selector widget with which the user can set his/her own
+locale). In fact, in the Java portlet API's there are no standard
 methods for setting the locale in the response, since that is delegated
 to the portal.</p>
 
@@ -2187,7 +2188,8 @@ the only way you can do this is by calling the portal. The locale
 setting will only take effect on subsequent request lifecycles (ie <code>PortletRequest.getLocale</code>
 will not start returning the new locale until subsequent requests in the
 session) and it will take effect throughout the portal, not just in your
-portlet. Consider this carefully before embarking.</p>
+portlet. Consider this carefully before deciding to implement such a use
+case.</p>
 
 <p>To call the portal to set a new locale, you must make a {@link
 com.hp.it.spf.xa.portalurl.PortalURL} with the new locale set as a
@@ -2213,11 +2215,11 @@ pass, your setting will take effect with varying degrees of persistence:</p>
 		<p>Set the HP.com-standard <code>lang</code> and <code>cc</code>
 		parameters as portal parameters on that <code>PortalURL</code>, using
 		{@link
-		com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String)}.</p>
+		com.hp.it.spf.xa.portalurl.PortalURL#setParameter(java.lang.String, java.lang.String)}.</p>
 		<ul>
 			<li>The <code>lang</code> parameter should be the ISO 639-1
 			language code for the new locale (use {@link
-			java.util.Locale#getLanguage()}.</li>
+			java.util.Locale#getLanguage()}).</li>
 			<li>The <code>cc</code> should be the ISO 3166-1 country code
 			(use {@link java.util.Locale#getCountry()} (or can be omitted if the
 			locale does not include a country).</li>
@@ -2250,7 +2252,7 @@ pass, your setting will take effect with varying degrees of persistence:</p>
 		<li>
 		<p>In the SPF locale selector <code>PortalURL</code>, set the
 		following parameters using the {@link
-		com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String)}
+		com.hp.it.spf.xa.portalurl.PortalURL#setParameter(java.lang.String, java.lang.String)}
 		method:</p>
 		<ul>
 			<li>The value of the first parameter should be the RFC 3066
