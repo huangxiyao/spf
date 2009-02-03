@@ -399,11 +399,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static String getLocalizedFileName(PortalContext pContext,
 			String pBaseFileName, boolean pLocalized) {
-		if (pContext == null) {
-			return null;
-		}
-		Locale locale = getLocale(pContext.getPortalRequest().getRequest());
-		return getLocalizedFileName(pContext, pBaseFileName, locale, pLocalized);
+		return getLocalizedFileName(pContext, pBaseFileName, null, pLocalized);
 	}
 
 	/**
@@ -420,12 +416,14 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * If you set the boolean parameter to false, this method will just verify
 	 * that the given base filename exists as a secondary support file inside
 	 * the component (returning the given filename if so, otherwise returning
-	 * null). You do not need to specify the locale parameter in this case; you
-	 * can set that to null. The base filename parameter is required.
+	 * null). You do not need to specify the locale parameter in this case; it
+	 * is not used and you can set it to null. The base filename parameter is
+	 * required.
 	 * </p>
 	 * <p>
-	 * If you set the boolean parameter to true, both the base filename and
-	 * locale parameters are required. This method will treat the given filename
+	 * If you set the boolean parameter to true, the base filename parameter is
+	 * required and the locale parameter (if set to null) is defaulted to the
+	 * one in the given portal context. The method will treat the given filename
 	 * as a resource bundle base, and look for the secondary support file which
 	 * best-fits that base and locale inside the current component for the
 	 * portal context. The method follows the standard Java sequence in this
@@ -483,8 +481,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	public static String getLocalizedFileName(PortalContext pContext,
 			String pBaseFileName, Locale pLocale, boolean pLocalized) {
 
-		if (pContext == null || pBaseFileName == null
-				|| (pLocalized == true && pLocale == null)) {
+		if (pContext == null || pBaseFileName == null) {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
@@ -494,6 +491,10 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		}
 
 		try {
+			if (pLocale == null) {
+				pLocale = getLocale(pContext.getHttpServletRequest());
+			}
+
 			// get the relative path for the current portal component
 			Style thisStyleObject = getCurrentComponent(pContext);
 			String relPath = thisStyleObject.getUrlSafeRelativePath();
@@ -614,6 +615,39 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static InputStream getLocalizedFileStream(PortalContext pContext,
 			String pBaseFileName, boolean pLocalized) {
+		return getLocalizedFileStream(pContext, pBaseFileName, null, pLocalized);
+	}
+
+	/**
+	 * <p>
+	 * Returns an input stream for a proper localized version for the given
+	 * locale of the given base filename in the indicated portal component. The
+	 * given filename must be a base filename for a static resource bundle
+	 * comprised of secondary support files, stored against the portal component
+	 * indicated in the given portal context.
+	 * <p>
+	 * This method works exactly like
+	 * <code>getLocalizedFileStream(PortalContext,String,boolean)</code> (see)
+	 * where the given locale is used instead of the one inside the portal
+	 * context. (But if the given locale is null, then the one inside the portal
+	 * context is used.)
+	 * </p>
+	 * 
+	 * @param pContext
+	 *            The portal context.
+	 * @param pBaseFileName
+	 *            The name of the base file to search.
+	 * @param pLocale
+	 *            The locale to use (if null, uses the one in the portal
+	 *            context).
+	 * @param pLocalized
+	 *            The version of the file for which to search: the base file
+	 *            (false) or the best-fitting localized file (true).
+	 * @return An input stream for the best-candidate localized file, or null if
+	 *         none was found.
+	 */
+	public static InputStream getLocalizedFileStream(PortalContext pContext,
+			String pBaseFileName, Locale pLocale, boolean pLocalized) {
 
 		if (pContext == null || pBaseFileName == null) {
 			return null;
@@ -626,7 +660,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 		// get the localized file name
 		String fileName = getLocalizedFileName(pContext, pBaseFileName,
-				pLocalized);
+				pLocale, pLocalized);
 
 		// file path is just the absolute path + the filename (if not null -
 		// otherwise return null)
@@ -772,6 +806,41 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static String getLocalizedFileURL(PortalContext pContext,
 			String pBaseFileName, boolean pLocalized) {
+		return getLocalizedFileURL(pContext, pBaseFileName, null, pLocalized);
+	}
+
+	/**
+	 * <p>
+	 * Returns a URL (suitable for presentation to the user) for downloading
+	 * from the indicated portal component a proper localized version of the
+	 * given base filename. The returned URL is a relative URL (ie relative to
+	 * the scheme, hostname, and port used in the current request) and is ready
+	 * for presentation to the user in the portal response. For example, you can
+	 * take the return from this method, and express it as the <code>SRC=</code>
+	 * attribute in an <code>&lt;IMG&gt;</code> tag.
+	 * </p>
+	 * <p>
+	 * This method works exactly like
+	 * <code>getLocalizedFileURL(PortalContext,String,boolean)</code> (see)
+	 * except that the locale used is the given locale. (If the given locale is
+	 * null, then the locale inside the portal context is used.)
+	 * </p>
+	 * 
+	 * @param pContext
+	 *            The portal context.
+	 * @param pBaseFileName
+	 *            The name of the base file to search.
+	 * @param pLocale
+	 *            The locale to use (if null, defaults to the locale in the
+	 *            portal context).
+	 * @param pLocalized
+	 *            The version of the file for which to search: the base file
+	 *            (false) or the best-fitting localized file (true).
+	 * @return A URL for downloading the best-fit localized version of the base
+	 *         file from the portal component.
+	 */
+	public static String getLocalizedFileURL(PortalContext pContext,
+			String pBaseFileName, Locale pLocale, boolean pLocalized) {
 		if (pContext == null || pBaseFileName == null) {
 			return null;
 		}
@@ -783,7 +852,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 		// get the localized file name
 		String fileName = getLocalizedFileName(pContext, pBaseFileName,
-				pLocalized);
+				pLocale, pLocalized);
 
 		// make the URL from the returned file name
 		// relative URL is just the portal context root path + the relative
@@ -863,6 +932,40 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static InputStream getLocalizedFileStream(PortalContext pContext,
 			String pKey, String pDefault) {
+		return getLocalizedFileStream(pContext, pKey, pDefault, null);
+	}
+
+	/**
+	 * <p>
+	 * Returns an input stream for a localized file in the indicated portal
+	 * component, where the filename is retrieved (properly localized) from the
+	 * component's message resources using the given key, default, and locale.
+	 * The filename in the message resource must be that of a secondary support
+	 * file for the same portal component.
+	 * </p>
+	 * <p>
+	 * This method works exactly like
+	 * <code>getLocalizedFileStream(PortalContext,String,String)</code> except
+	 * that the locale used is the given locale. (If the given locale is null,
+	 * then the locale from the portal context is used.)
+	 * </p>
+	 * 
+	 * @param pContext
+	 *            The portal context.
+	 * @param pKey
+	 *            The key for a message property containing the localized
+	 *            filename.
+	 * @param pDefault
+	 *            The default filename to use if the message property does not
+	 *            exist.
+	 * @param pLocale
+	 *            The locale to use (if null, uses the locale inside the portal
+	 *            context).
+	 * @return An input stream for the best-candidate localized file, or null if
+	 *         none was found.
+	 */
+	public static InputStream getLocalizedFileStream(PortalContext pContext,
+			String pKey, String pDefault, Locale pLocale) {
 		if (pContext == null || pKey == null) {
 			return null;
 		}
@@ -876,21 +979,28 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 				pDefault = null;
 			}
 		}
-
-		// get the filename from the message resources
-		String fileName = getValue(pKey, pDefault, pContext);
-		if (fileName != null)
-			fileName = fileName.trim();
-
-		// file path is just the absolute path + the filename (if not null -
-		// otherwise return null - also return null if file doesn't exist)
 		try {
+			// get the default locale
+			if (pLocale == null) {
+				pLocale = getLocale(pContext.getHttpServletRequest());
+			}
+
+			// get the current portal component
+			Style thisStyleObject = getCurrentComponent(pContext);
+			String uid = thisStyleObject.getUID();
+
+			// get the filename from the message resources
+			String fileName = getValue(uid, pKey, pDefault, pLocale);
+			if (fileName != null)
+				fileName = fileName.trim();
+
+			// file path is just the absolute path + the filename (if not null -
+			// otherwise return null - also return null if file doesn't exist)
 			if (fileName != null && !fileName.equals(pKey)
 					&& (fileName.length() > 0)) {
 				fileName = slashify(fileName);
 
 				// get the relative path for the current portal component
-				Style thisStyleObject = getCurrentComponent(pContext);
 				String relPath = thisStyleObject.getUrlSafeRelativePath();
 
 				// get the absolute path for the current portal component - this
@@ -963,6 +1073,43 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 */
 	public static String getLocalizedFileURL(PortalContext pContext,
 			String pKey, String pDefault) {
+		return getLocalizedFileURL(pContext, pKey, pDefault, null);
+	}
+
+	/**
+	 * <p>
+	 * Returns a URL (suitable for presentation to the user) for downloading a
+	 * localized file from the indicated portal component, where the filename is
+	 * retrieved (properly localized) from the component's message resources
+	 * using the given key and default. The returned URL is a relative URL (ie
+	 * relative to the scheme, hostname, and port used in the current request)
+	 * and is ready for presentation to the user in the portal response. For
+	 * example, you can take the return from this method, and express it as the
+	 * <code>SRC=</code> attribute in an <code>&lt;IMG&gt;</code> tag.
+	 * </p>
+	 * <p>
+	 * This method works exactly like
+	 * <code>getLocalizedFileURL(PortalContext,String,String)</code> (see)
+	 * where the locale used is the given locale. (If the given locale is null,
+	 * then the locale inside the portal context is used.)
+	 * </p>
+	 * 
+	 * @param pContext
+	 *            The portal context.
+	 * @param pKey
+	 *            The key for a message property containing the localized
+	 *            filename.
+	 * @param pDefault
+	 *            The default filename to use if the message property does not
+	 *            exist.
+	 * @param pLocale
+	 *            The locale to use (if null, defaults to the locale in the
+	 *            portal context).
+	 * @return A URL for downloading the best-fit localized version of the base
+	 *         file from the portal component.
+	 */
+	public static String getLocalizedFileURL(PortalContext pContext,
+			String pKey, String pDefault, Locale pLocale) {
 		if (pContext == null || pKey == null) {
 			return null;
 		}
@@ -976,23 +1123,31 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 				pDefault = null;
 			}
 		}
-
-		// get the localized filename from the message resources
-		String fileName = I18nUtility.getValue(pKey, pDefault, pContext);
-		if (fileName != null)
-			fileName = fileName.trim();
-
-		// check if the file exists - if not, return its url anyway unless
-		// message was not found or blank.
-		// relative URL is just the portal context root path + the relative
-		// path to the component + the localized filename (if not null)
 		try {
+			// get the default locale
+			if (pLocale == null) {
+				pLocale = getLocale(pContext.getHttpServletRequest());
+			}
+
+			// get the current portal component
+			Style thisStyleObject = getCurrentComponent(pContext);
+			String uid = thisStyleObject.getUID();
+
+			// get the localized filename from the message resources
+			String fileName = I18nUtility
+					.getValue(uid, pKey, pDefault, pLocale);
+			if (fileName != null)
+				fileName = fileName.trim();
+
+			// check if the file exists - if not, return its url anyway unless
+			// message was not found or blank.
+			// relative URL is just the portal context root path + the relative
+			// path to the component + the localized filename (if not null)
 			if (fileName != null && !fileName.equals(pKey)
 					&& (fileName.length() > 0)) {
 				fileName = slashify(fileName);
 
 				// get the relative path for the current portal component
-				Style thisStyleObject = getCurrentComponent(pContext);
 				String relPath = thisStyleObject.getUrlSafeRelativePath();
 
 				// get the absolute path for the current portal component - this
