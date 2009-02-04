@@ -68,11 +68,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 */
 	public static Object getUserProperty(PortletRequest request, String key) {
 		if (request != null && key != null) {
-			// TODO: Check that this logic integrates correctly with new
-			// authentication module. May need to change this method to get user
-			// attributes from different location in the request. Also see the
-			// property key name constants, defined in the common Consts class -
-			// they are marked TODO as well.
+			// See the property key name constants, defined in the common Consts class.
 			Object o = request.getAttribute(PortletRequest.USER_INFO);
 			if (o != null) {
 				Map userMap = (Map) o;
@@ -96,9 +92,14 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 */
 	public static boolean isAuthenticatedUser(PortletRequest request) {
 		if (request != null) {
-			// TODO: Finish this logic so it integrates correctly with new
-			// authentication module. Check the proper attribute(s) and return
-			// true or false accordingly.
+			Object o = request.getAttribute(PortletRequest.USER_INFO);
+			if (o != null) {
+				Map userMap = (Map) o;
+				String username = (String) userMap.get(Consts.KEY_USER_NAME);
+				if (username != null && !username.startsWith(Consts.ANON_USER_NAME_PREFIX)) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -119,10 +120,11 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	public static String[] getGroups(PortletRequest request) {
 		String[] groups = null;
 		if (request != null) {
-			// TODO: Finish this logic. Get groups from request using new
-			// authentication module. If no groups found in request, return
-			// null. A key name for this is defined in the common Consts class -
-			// see TODO there.
+			Object o = request.getAttribute(PortletRequest.USER_INFO);
+			if (o != null) {
+				Map userMap = (Map) o;
+				return (String[]) userMap.get(Consts.KEY_USER_GROUPS);
+			}
 		}
 		return groups;
 	}
@@ -144,10 +146,11 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	public static String getPortalSiteName(PortletRequest request) {
 		String siteName = null;
 		if (request != null) {
-			// TODO: Finish this logic. Get portal site name from request using
-			// new authentication module. If not found in request, return null.
-			// A key name for this is defined in the common Consts class - see
-			// TODO there.
+			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
+			if (o != null) {
+				Map contextMap = (Map) o;
+				return (String)contextMap.get(Consts.KEY_PORTAL_SITE_NAME);
+			}
 		}
 		return siteName;
 	}
@@ -175,10 +178,11 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	public static String getPortalSiteURL(PortletRequest request) {
 		String siteURL = null;
 		if (request != null) {
-			// TODO: Finish this logic. Get portal site URL from request using
-			// new authentication module. If not found in request, return null.
-			// A key name for this is defined in the common Consts class - see
-			// TODO there.
+			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
+			if (o != null) {
+				Map contextMap = (Map) o;
+				return (String)contextMap.get(Consts.KEY_PORTAL_SITE_URL);
+			}
 		}
 		return siteURL;
 	}
@@ -206,10 +210,11 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	public static String getPortalRequestURL(PortletRequest request) {
 		String requestURL = null;
 		if (request != null) {
-			// TODO: Finish this logic. Get portal request URL from request
-			// using new authentication module. If not found in request, return
-			// null. A key name for this is defined in the common Consts class -
-			// see TODO there.
+			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
+			if (o != null) {
+				Map contextMap = (Map) o;
+				return (String)contextMap.get(Consts.KEY_PORTAL_REQUEST_URL);
+			}
 		}
 		return requestURL;
 	}
