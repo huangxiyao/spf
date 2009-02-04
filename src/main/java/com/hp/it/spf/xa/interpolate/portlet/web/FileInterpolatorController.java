@@ -17,24 +17,27 @@ import com.hp.websat.timber.logging.Log;
 /**
  * <p>
  * An abstract base class for a Spring portlet controller which performs file
- * display with interpolation, using the portlet FileInterpolator. The file you
- * display must be loadable by the class loader from anywhere in the class path.
- * It may contain any of the special markup tokens supported by the portlet
- * FileInterpolator (see).
+ * display with interpolation, using the portlet
+ * {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}. The file you
+ * display must be loadable by the class loader from anywhere in the class path
+ * (ie the portlet resource bundle folder) or your portlet WAR. It may contain
+ * any of the special markup tokens supported by the portlet
+ * <code>FileInterpolator</code> (see).
  * </p>
  * 
  * <p>
- * You can use this as the base class for a help-mode controller for your
- * portlet. You just need to implement:
+ * You can use this as the base class for a controller for your portlet (eg, a
+ * controller for <code>help</code> mode). You just need to implement:
  * 
  * <ul>
- * <li>The getFilename method, to return the filename of the text (eg HTML)
- * file you want to interpolate and display.</li>
- * <li>The execute method, to take the interpolated content of your file (input
- * to the method as a string automatically by this class) and render it.</li>
+ * <li>The {@link #getFilename(RenderRequest)} method, to return the filename
+ * of the text (eg HTML) file you want to interpolate and display.</li>
+ * <li>The {@link #execute(RenderRequest, RenderResponse, String)} method, to
+ * take the interpolated content of your file (input to the method as a string
+ * automatically by this class) and render it.</li>
  * <li>If you want to specify a custom token-substitutions file (ie for the
- * <code>&lt;TOKEN:key&gt;</code> token), set the subsFileBase attribute
- * before calling the execute method.</li>
+ * <code>{TOKEN:<i>key</i>}</code> token), set the
+ * {@link #subsFileName attribute before calling the execute method.</li>
  * </ul>
  * </p>
  * 
@@ -48,8 +51,8 @@ public abstract class FileInterpolatorController extends AbstractController {
 	/**
 	 * Stores the name of the token-substitutions file to use for any file-based
 	 * token substitutions. The default is null, which causes the
-	 * <code>default_tokens.properties</code> file to be assumed. You can override this
-	 * in your constructor.
+	 * <code>default_tokens.properties</code> file to be assumed. You can
+	 * override this in your constructor.
 	 */
 	protected String subsFileName = null;
 
@@ -57,7 +60,7 @@ public abstract class FileInterpolatorController extends AbstractController {
 	 * <p>
 	 * Implement this method to return the base filename of the text (eg HTML)
 	 * file you want to interpolate for display. The returned filename should
-	 * include sufficient path information that the file can be found using the
+	 * include sufficient relative-path that the file can be found using the
 	 * standard system class loader.
 	 * </p>
 	 * <p>
@@ -66,7 +69,8 @@ public abstract class FileInterpolatorController extends AbstractController {
 	 * be propagated to Spring (which will forward to your proper error-handling
 	 * JSP, or otherwise a default error-handling JSP, if you have configured
 	 * Spring correctly - eg using the SPF
-	 * <code>SimpleMappingExceptionResolver</code>).
+	 * {@link com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver}
+	 * (see).
 	 * </p>
 	 * 
 	 * @param request
@@ -90,7 +94,8 @@ public abstract class FileInterpolatorController extends AbstractController {
 	 * be propagated to Spring (which will forward to your proper error-handling
 	 * JSP, or otherwise a default error-handling JSP, if you have configured
 	 * Spring correctly - eg using the SPF
-	 * <code>SimpleMappingExceptionResolver</code>).
+	 * {@link com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver}
+	 * (see).
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> The concrete implementation of this method should expect
@@ -106,7 +111,7 @@ public abstract class FileInterpolatorController extends AbstractController {
 	 *            The response
 	 * @param fileContent
 	 *            The file content (already interpolated)
-	 * @return ModelAndView ModelAndView
+	 * @return ModelAndView The Spring model and view
 	 * @throws Exception
 	 *             An exception
 	 */
@@ -116,17 +121,21 @@ public abstract class FileInterpolatorController extends AbstractController {
 	/**
 	 * <p>
 	 * Invoked during the render phase, this method gets the filename from the
-	 * request (using the concrete getFilename method you implement), uses the
-	 * portlet FileInterpolator to get a string of text content from the file
-	 * (interpolated with all of the proper dynamic values), and finishes by
-	 * calling the concrete execute method you implement.
+	 * request (using the concrete {@link #getFilename(RenderRequest)} method
+	 * you implement), uses the portlet
+	 * {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} to get a
+	 * string of text content from the file (interpolated with all of the proper
+	 * dynamic values), and finishes by calling the concrete
+	 * {@link #execute(RenderRequest, RenderResponse, String)} method you
+	 * implement.
 	 * </p>
 	 * <p>
-	 * If your concrete getFilename or execute methods throw an exception, this
-	 * method allows that to propagate back to Spring. If you have configured
-	 * Spring correctly - eg using the SPF
-	 * <code>SimpleMappingExceptionResolver</code> - then Spring will forward
-	 * to the proper JSP for that exception automatically.
+	 * If your concrete methods throw an exception, this method allows that to
+	 * propagate back to Spring. If you have configured Spring correctly - eg
+	 * using the SPF
+	 * {@link com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver} -
+	 * then Spring will forward to the proper JSP for that exception
+	 * automatically.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> This method does not consider it an error if the
@@ -137,12 +146,12 @@ public abstract class FileInterpolatorController extends AbstractController {
 	 * </p>
 	 * 
 	 * @param request
-	 *            RenderRequest
+	 *            The render request.
 	 * @param response
-	 *            RenderResponse
-	 * @return ModelAndView ModelAndView
+	 *            The render response.
+	 * @return ModelAndView The Spring model and view.
 	 * @throws Exception
-	 *             Exception
+	 *             Some exception.
 	 */
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {

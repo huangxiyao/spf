@@ -3173,8 +3173,8 @@ interpolated file content</h4>
 com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController} is
 an abstract instance of Spring's {@link
 org.springframework.web.portlet.mvc.AbstractController}, which
-implements file interpolation during the <i>render phase</i>. The render-phase
-handler for this controller:</p>
+implements file interpolation during the <i>render phase</i>. The
+render-phase handler for this controller:</p>
 
 <ol>
 	<li>gets the base filename to display (an abstract method you
@@ -3248,9 +3248,9 @@ you have setup for your Spring portlet.</p>
 	key-value pairs which {@link
 	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} will substitute
 	for any special <code>{TOKEN:<i>key</i>}</code> tokens found in the
-	file content. (Please see the class documentation for how that works.)
-	By default, a file named <code>default_tokens.properties</code> will be
-	assumed. If your file to interpolate does not contain any <code>{TOKEN:<i>key</i>}</code>
+	file content. (Please see the <code>FileInterpolator</code> class
+	documentation for how that works.) By default, a file named <code>default_tokens.properties</code>
+	will be assumed. If your file to interpolate does not contain any <code>{TOKEN:<i>key</i>}</code>
 	tokens, or you are willing to use the default file, you do not need to
 	set this attribute.</p>
 
@@ -3309,13 +3309,17 @@ public class MyFileInterpolatorController extends FileInterpolatorController {
 }
 </pre></blockquote>
 
+<p>For more information on extending/implementing {@link
+com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController},
+please see the class documentation.</p>
+
 <p>After you have extended/implemented <code>FileInterpolatorController</code>,
 remember that you need to configure it in your Spring application
 context so that it is invoked for your desired portlet mode. Also,
 presumably, you will want it to forward to some JSP or other view
 resolver - don't forget that you need to configure that, too. (For an
 example of this, for portlet <code>help</code> mode, see the <a
-	href="help.portlet.java.fileInterpolatorController">discussion
+	href="#help.portlet.java.fileInterpolatorController">discussion
 above</a>.)</p>
 
 <a name="file.display.java.htmlViewer">
