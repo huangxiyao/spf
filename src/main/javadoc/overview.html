@@ -127,10 +127,12 @@ table.props td {
 	<ul>
 		<li>1.1. <a href="#overview.installation">Installation</a>
 		<ul>
-			<li>1.1.1 <a href="#overview.installation.jar">Installation
+			<li>1.1.1. <a href="#overview.installation.jar">Installation
 			of the SPF portlet utilities JAR</a></li>
-			<li>1.1.2 <a href="#overview.installation.config">Installation
-			of the <code>i18n_portlet_config.properties</code></a></li>
+			<li>1.1.2. <a href="#overview.installation.i18n_portlet_config">Installation
+			of <code>i18n_portlet_config.properties</code> (optional)</a></li>
+			<li>1.1.3. <a href="#overview.installation.init_relay">Installation
+			of <code>init_relay.properties</code> (optional)</a></li>
 		</ul>
 		</li>
 		<li>1.2. <a href="#overview.dependencies">Dependencies</a></li>
@@ -223,10 +225,12 @@ table.props td {
 			locale</a></li>
 			<li>2.9.2. <a href="#i18n.other.locale.set">Setting the
 			locale</a></li>
-			<li>2.9.3. <a href="#i18n.other.config">Configuring the
-			portlet <code>I18nUtility</code> (<code>i18n_portlet_config.properties</code>)</a></li>
-			<li>2.9.4. <a href="#i18n.other.common">Using the common <code>I18nUtility</code></a></li>
-			<li>2.9.5. <a href="#i18n.other.refs">Other references</a></li>
+			<li>2.9.3. <a href="#i18n.other.i18n_portlet_config">Configuring
+			<code>i18n_portlet_config.properties</code> (optional)</a></li>
+			<li>2.9.4. <a href="#i18n.other.init_relay">Configuring <code>init_relay.properties</code>
+			(optional)</a></li>
+			<li>2.9.5. <a href="#i18n.other.common">Using the common <code>I18nUtility</code></a></li>
+			<li>2.9.6. <a href="#i18n.other.refs">Other references</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -416,17 +420,20 @@ The SPF portlet utilities are distributed through Maven 2:</p>
 version from the repository. As usual with any JAR file, include it in
 your portlet application's <code>/WEB-INF/lib</code> folder.</p>
 
-<a name="overview.installation.config">
-<h4>1.1.2 Installation of the <code>i18n_portlet_config.properties</code></h4>
+<a name="overview.installation.i18n_portlet_config">
+<h4>1.1.2 Installation of <code>i18n_portlet_config.properties</code>
+(optional)</h4>
 </a>
 
-<p>If you use a non-default location for the portlet resource bundle
-folder, or a non-default location mapping for the file relay servlet,
-you will also need to configure those non-default location(s) in a <code>i18n_portlet_config.properties</code>
-file. You can ignore that file otherwise and skip this installation
-step.</p>
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>i18n_portlet_config.properties</code>
+if you have <a href="#i18n.location.external">external supporting
+resources</a> <b>and</b> you are either putting the <i>portlet resource
+bundle folder</i> in a non-default location, <b>or</b> you are deploying the
+<i>file relay servlet</i> in a non-default location.</p>
+</blockquote>
 
-<p>To configure and deploy the file:</p>
+<p>To install this file:</p>
 
 <ul>
 	<li>
@@ -436,7 +443,8 @@ step.</p>
 
 	<li>
 	<p>Customize the properties in the file as needed - see
-	instructions for <a href="#i18n.other.config">configuring the <code>i18n_portlet_config.properties</code></a>.</p>
+	instructions for <a href="#i18n.other.i18n_portlet_config">configuring
+	the <code>i18n_portlet_config.properties</code></a>.</p>
 	</li>
 
 	<li>
@@ -468,6 +476,48 @@ step.</p>
 	be sure to test it out first, as actual behavior may vary by
 	environment (application server, etc).</p>
 	</blockquote>
+	</li>
+</ul>
+
+<a name="overview.installation.init_relay">
+<h4>1.1.3 Installation of <code>init_relay.properties</code>
+(optional)</h4>
+</a>
+
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>init_relay.properties</code>
+if you have <a href="#i18n.location.external">external supporting
+resources</a> <b>and</b> you are dis-satisfied with the configuration in <code>init_relay_default.properties</code>
+(which is delivered inside the SPF portlet utilities JAR). See the
+discussion in the <a
+	href="com/hp/it/spf/xa/relay/servlet/package-summary.html#init_relay.properties">package
+description</a> for the relay servlet.</p>
+</blockquote>
+
+<p>To install this file:</p>
+
+<ul>
+	<li>
+	<p>Download the template for <code>init_relay.properties</code>
+	from <b><font color="blue">TBD</font></b>.</p>
+	</li>
+
+	<li>
+	<p>Customize the properties in the file as needed - see
+	instructions for <a href="#i18n.other.init_relay">configuring the <code>init_relay.properties</code></a>.</p>
+	</li>
+
+	<li>
+	<p>Include the customized file, named <code>init_relay.properties</code>,
+	with your relay servlet application (eg, your portlet application, if
+	that is where you are deploying the relay servlet). You can put the
+	file anywhere that the system classloader searches: inside your portlet
+	application (eg in <code>/WEB-INF/classes</code>) or in any folder
+	outside of the WAR which is named in the classpath for your JVM. See
+	the discussion on this point above, in regard to <a
+		href="#overview.installation.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
+	- the same comments apply to <code>init_relay.properties</code>.</p>
+	</li>
 </ul>
 
 <hr>
@@ -693,10 +743,12 @@ their locale, as follows:</p>
 </pre></blockquote>
 
 <ul>
-	<li><i><code>lang</code></i> is the 2-character ISO 639-1 language
-	code for the locale (lowercase)</li>
-	<li><i><code>CC</code></i> is the 2-character ISO 3166 country
-	code for the locale (uppercase)</li>
+	<li><i><code>lang</code></i> is the 2-character <a
+		href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+	639-1</a> language code for the locale (lowercase)</li>
+	<li><i><code>CC</code></i> is the 2-character <a
+		href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+	3166-1</a> country code for the locale (uppercase)</li>
 </ul>
 
 <p>For example, here is a collection of files constituting a message
@@ -904,7 +956,7 @@ filesystem to which the portlet JVM has at least read access.</p>
 
 	<li>
 	<p>If you chose a non-default location for the portlet bundle
-	folder, configure it in <a href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>
+	folder, configure it in <a href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
 	(see below). The default location is hardcoded in {@link
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}, which is
 	<code>/opt/sasuapps/spf/globalResources/portlet/i18n</code> (as in the
@@ -926,7 +978,7 @@ filesystem to which the portlet JVM has at least read access.</p>
 	path. See the <a href="#i18n.supporting.relay">discussion below</a> for
 	more information about deploying this servlet. If you deploy it in a
 	non-default location, you will need to configure that in <a
-		href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>.
+		href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>.
 	</p>
 	</li>
 </ol>
@@ -1473,7 +1525,8 @@ to access them using the SPF portlet <code>I18nUtility</code>. There are
 
 <p><b>Note:</b> In all of these cases, if you are putting your
 supporting resource files in the portlet bundle folder outside of the
-WAR, you will need to configure <a href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>
+WAR, you will need to configure <a
+	href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
 properly if your portlet bundle folder is not in the default location
 (indicated in {@link
 com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}).</p>
@@ -1507,7 +1560,7 @@ tag).</p>
 	folder outside of the WAR, then the returned URL string will be a relay
 	servlet URL pointing to that file. This URL will be built pointing to
 	the URL for the relay servlet which you configured in <a
-		href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>
+		href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
 	(or, by default, it will be assumed to be deployed under the {@link
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} in the
 	current portlet application). Be sure you have configured and deployed
@@ -1881,11 +1934,11 @@ attributes.</p>
 
 <p><b>Note:</b> Remember, if you are putting your supporting
 resource files in the portlet bundle folder outside of the WAR, you will
-need to configure <a href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>
+need to configure <a href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
 properly if your portlet bundle folder is at a non-default location (the
 default is indicated in {@link
 com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}). You will
-likewise need to configure <a href="#i18n.other.config"><code>i18n_portlet_config.properties</code></a>
+likewise need to configure <a href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
 with the URL for the relay servlet, if that is at a non-default location
 (the default is indicated in {@link
 com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_SERVLET_PATH}). And
@@ -2215,14 +2268,17 @@ pass, your setting will take effect with varying degrees of persistence:</p>
 		<p>Set the HP.com-standard <code>lang</code> and <code>cc</code>
 		parameters as portal parameters on that <code>PortalURL</code>, using
 		{@link
-		com.hp.it.spf.xa.portalurl.PortalURL#setParameter(java.lang.String, java.lang.String)}.</p>
+		com.hp.it.spf.xa.portalurl.PortalURL#setParameter(java.lang.String,
+		java.lang.String)}.</p>
 		<ul>
-			<li>The <code>lang</code> parameter should be the ISO 639-1
-			language code for the new locale (use {@link
+			<li>The <code>lang</code> parameter should be the <a
+				href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+			639-1</a> language code for the new locale (use {@link
 			java.util.Locale#getLanguage()}).</li>
-			<li>The <code>cc</code> should be the ISO 3166-1 country code
-			(use {@link java.util.Locale#getCountry()} (or can be omitted if the
-			locale does not include a country).</li>
+			<li>The <code>cc</code> should be the <a
+				href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+			3166-1</a> country code (use {@link java.util.Locale#getCountry()} (or
+			can be omitted if the locale does not include a country).</li>
 		</ul>
 		</li>
 		<li>
@@ -2252,11 +2308,12 @@ pass, your setting will take effect with varying degrees of persistence:</p>
 		<li>
 		<p>In the SPF locale selector <code>PortalURL</code>, set the
 		following parameters using the {@link
-		com.hp.it.spf.xa.portalurl.PortalURL#setParameter(java.lang.String, java.lang.String)}
-		method:</p>
+		com.hp.it.spf.xa.portalurl.PortalURL#setParameter(java.lang.String,
+		java.lang.String)} method:</p>
 		<ul>
-			<li>The value of the first parameter should be the RFC 3066
-			language tag for the new locale (use {@link
+			<li>The value of the first parameter should be the <a
+				href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language
+			tag for the new locale (use {@link
 			com.hp.it.spf.xa.i18n.I18nUtility#localeToLanguageTag(Locale)}). The
 			name of this parameter should be the value of {@link
 			com.hp.it.spf.xa.misc.Consts#PARAM_SELECT_LOCALE}.</li>
@@ -2279,16 +2336,62 @@ pass, your setting will take effect with varying degrees of persistence:</p>
 	</li>
 </ul>
 
-<a name="i18n.other.config">
-<h4>2.9.3. Configuring the portlet <code>I18nUtility</code> (<code>i18n_portlet_config.properties</code>)</h4>
+<a name="i18n.other.i18n_portlet_config">
+<h4>2.9.3. Configuring <code>i18n_portlet_config.properties</code>
+(optional)</h4>
 </a>
 
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>i18n_portlet_config.properties</code>
+if you have <a href="#i18n.location.external">external supporting
+resources</a> <b>and</b> you are either putting the <i>portlet resource
+bundle folder</i> in a non-default location, <b>or</b> you are deploying the
+<i>file relay servlet</i> in a non-default location.</p>
+</blockquote>
+
+<a name="i18n.other.init_relay">
+<h4>2.9.4. Configuring <code>init_relay.properties</code>
+(optional)</h4>
+</a>
+
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>init_relay.properties</code>
+if you have <a href="#i18n.location.external">external supporting
+resources</a> <b>and</b> you are dis-satisfied with the configuration in <code>init_relay_default.properties</code>
+(which is delivered inside the SPF portlet utilities JAR). See the
+discussion in the <a
+	href="com/hp/it/spf/xa/relay/servlet/package-summary.html#init_relay.properties">package
+description</a> for the relay servlet.</p>
+</blockquote>
+
+<p>The properties in <code>init_relay.properties</code> list all of
+the allowed file extensions which the relay servlet will permit to be
+downloaded from anywhere underneath the <i>portlet resource bundle
+folder</i>. They also map to the MIME type which the servlet should specify
+(on the HTTP <code>Content-Type:</code> response header) when
+downloading that particular type of file to the user. The properties use
+the following format:</p>
+
+<blockquote><pre>
+contentType.<i>file-extension</i>=<i>mime-type</i>
+</pre></blockquote>
+
+<p>For example:</p>
+
+<blockquote><pre>
+contentType.mov=video/quicktime # For Apple quicktime format using .mov extension
+</pre></blockquote>
+
+<p>This means that all <code>*.mov</code> files in the portlet
+bundle folder will be permissible for download, and <code>Content-Type:
+video/quicktime</code> will be used in the download.</p>
+
 <a name="i18n.other.common">
-<h4>2.9.4. Using the common <code>I18nUtility</code></h4>
+<h4>2.9.5. Using the common <code>I18nUtility</code></h4>
 </a>
 
 <a name="i18n.other.refs">
-<h4>2.9.5. Other references</h4>
+<h4>2.9.6. Other references</h4>
 </a>
 
 <hr>

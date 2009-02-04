@@ -39,9 +39,9 @@ file. The deployment descriptor just looks like this:</p>
 <p>As noted in the above comment, you can use a different path for
 the relay servlet mapping. But we recommend you use <code>/relay</code>
 (ie the current value of {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT}) since that
-is the default path for the relay servlet. If you provide a different
-one, you will have to do extra configuration in <a
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT}) since
+that is the default path for the relay servlet. If you provide a
+different one, you will have to do extra configuration in <a
 	href="#i18n_portlet_config.properties"><code>i18n_portlet_config.properties</code></a>
 (see below).</p>
 
@@ -71,23 +71,20 @@ you can skip this step - there is nothing you need to do.</p>
 
 <p>If you need to override the <code>init_relay_default.properties</code>,
 you can get a template for <code>init_relay.properties</code> from <b><font
-	color="blue">TBD</font></b>. Update the properties in the template using
-the following format:</p>
+	color="blue">TBD</font></b>. Follow the instructions in the property file
+to set the desired file extensions and their MIME types. (You can also
+see the instructions for <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.other.init_relay">configuring
+<code>init_relay.properties</code></a> in the SPF Portlet Utilities
+Developers Guide.)</p>
 
-<blockquote><pre>
-contentType.<i>file-extension</i>=<i>mime-type</i>
-</pre></blockquote>
-
-<p>For example:</p>
-
-<blockquote><pre>
-contentType.mov=video/quicktime # For Apple quicktime format using .mov extension
-</pre></blockquote>
-
-<p>Then deploy your <code>init_relay.properties</code> inside your
+<p>Then deploy your <code>init_relay.properties</code> with your
 application, where the classloader will find it. This will override <code>init_relay_default.properties</code>
 in its entirety. See the <a href="#deployment">deployment discussion
-below</a>.</p>
+below</a>. (You can also see the instructions for <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#overview.installation.init_relay">installing
+<code>init_relay.properties</code></a> in the SPF Portlet Utilities
+Developer's Guide.)</p>
 
 <a name="i18n_portlet_config.properties">
 <h3>3. Configuring <code>i18n_portlet_config.properties</code>
@@ -111,13 +108,18 @@ bundle folder and the relay servlet path, you can skip configuring <code>i18n_po
 <p>You can get a default copy of <code>i18n_portlet_config.properties</code>
 from <b><font color="blue">TBD</font></b>. Follow the instructions in
 the property file to set the portlet bundle folder and relay servlet
-path as needed. (You can also see the instructions in the <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.other.config">SPF
-Portlet Utilities Developer's Guide</a>.)</p>
+path as needed. (You can also see the instructions for <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.other.i18n_portlet_config">configuring
+<code>i18n_portlet_config.properties</code></a> in the SPF Portlet Utilities
+Developers Guide.)</p>
 
-<p>Then deploy your <code>i18n_portlet_config.properties</code>
-inside your application, where the classloader will find it. See the <a
-	href="#deployment">deployment discussion below</a>.</p>
+<p>Then deploy your <code>i18n_portlet_config.properties</code> with
+your application, where the classloader will find it. See the <a
+	href="#deployment">deployment discussion below</a>. (You can also see
+the instructions for <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#overview.installation.i18n_portlet_config">installing
+<code>i18n_portlet_config.properties</code></a> in the SPF Portlet Utilities
+Developer's Guide.)</p>
 
 <a name="deployment">
 <h3>4. Assembling the application</h3>
@@ -128,10 +130,15 @@ application. In other words, you would do all the above steps for <a
 	href="#web.xml"><code>web.xml</code></a>, <a
 	href="#i18n_portlet_config.properties"><code>i18n_portlet_config.properties</code></a>,
 and <a href="#init_relay.properties"><code>init_relay.properties</code></a>
-inside your portlet WAR. (The relay servlet will function as a portlet
-resource, over WSRP and through the portal as with other portlet
-application resources. Relay servlet URLs returned from the <code>I18nUtility</code>
-will already be portlet-encoded for this.)</p>
+with your portlet WAR. Note that the properties files may be deployed
+inside your WAR, or in a "global resources" folder outside the WAR, as
+discussed in the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#overview.installation.i18n_portlet_config">SPF
+Portlet Utilities Developer's Guide</a>. Deployed inside the portlet
+application, the relay servlet will then function as a portlet resource,
+over WSRP and through the portal as with other portlet application
+resources. Relay servlet URLs returned from the <code>I18nUtility</code>
+will already be portlet-encoded for this.</p>
 
 <p>However you can deploy the relay servlet inside a different Web
 application instead. The requirements are:</p>
