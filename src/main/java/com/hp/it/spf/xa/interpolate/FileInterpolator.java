@@ -59,6 +59,16 @@ public abstract class FileInterpolator {
 	protected abstract InputStream getLocalizedContentFileAsStream();
 
 	/**
+	 * Get the input stream for the file to interpolate, already localized to
+	 * the best-fitting file for the given locale. Different
+	 * action by portal and portlet, so therefore this is an abstract method.
+	 * 
+	 * @param pLocale the locale to use
+	 * @return input stream for the localized file to interpolate
+	 */
+	protected abstract InputStream getLocalizedContentFileAsStream(Locale pLocale);
+
+	/**
 	 * Get the locale for the user. Different action by portal and portlet, so
 	 * therefore this is an abstract method.
 	 * 
@@ -185,13 +195,38 @@ public abstract class FileInterpolator {
 	 *             exception during parsing
 	 */
 	public String interpolate() throws Exception {
+		return interpolate(null);
+	}
+
+	/**
+	 * <p>
+	 * Gets the localized text file as an input stream (using
+	 * {@link #getLocalizedContentFileAsStream(Locale)}), reads it into a
+	 * string, and substitutes the tokens found in the string with the proper
+	 * dynamic values. The final string is returned. Returns null and logs a
+	 * warning if there was a problem with the interpolation (eg the file was
+	 * not found, or the base content file path provided earlier was null).
+	 * </p>
+	 * <p>
+	 * This method works the same as {@link #interpolate()} except it uses the
+	 * given locale instead of the one in the current request. If null is given
+	 * for the locale, then the one from the current request is used.
+	 * </p>
+	 * 
+	 * @param pLocale
+	 *            the locale to assume
+	 * @return String the file content (null if file was not found or was empty)
+	 * @throws Exception
+	 *             exception during parsing
+	 */
+	public String interpolate(Locale pLocale) throws Exception {
 
 		if (this.baseContentFilePath == null) {
 			logWarning("Base file path was null.");
 			return null;
 		}
 		// Get localized file input stream
-		InputStream fileStream = getLocalizedContentFileAsStream();
+		InputStream fileStream = getLocalizedContentFileAsStream(pLocale);
 		if (fileStream == null) {
 			logWarning("Localized text file is not found for base file: "
 					+ this.baseContentFilePath);
