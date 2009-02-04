@@ -50,7 +50,7 @@ public class PortletRegistryUtils {
 				map.put(collection.getSubElementName(), collection.getSubElementValue());
 			}
 		}
-		return map.size()>0 ? map : null;
+		return map;
 	}
 	
 	/**
@@ -174,6 +174,32 @@ public class PortletRegistryUtils {
             }
         }
         return list;
+    }
+	
+	/**
+     * Get supported portlet modes as <tt>Map&lt;String, List&lt;String&gt;&gt;</tt>
+     * <br>
+     * e.g SUPPORTS_MAP_KEY -- 'text/html'(key) : 'VIEW,HELP,CONFIG'(list)
+     * 
+     * @param portletApp
+     * @param portletName
+     * @return
+     * @throws PortletRegistryException
+     */
+    public static Map<String, List<String>> getSupportedModes(PortletApp portletApp, String portletName) 
+                                                       throws PortletRegistryException {    
+        Map<String, String> map = PortletRegistryUtils.getCollectionProperty(portletApp, PortletRegistryTags.SUPPORTS_MAP_KEY);        
+        Map<String, List<String>> result = new HashMap<String, List<String>>();
+        
+        Set<Map.Entry<String, String>> entries = map.entrySet();
+        for(Map.Entry<String, String> mapEntry : entries) {
+            List<String> list = new ArrayList<String>();
+            for(String s: mapEntry.getValue().split("[,]")) {
+                list.add(s);
+            }
+            result.put(mapEntry.getKey(), list);
+        }
+        return result;
     }
 	//------------------------------------//PortletApp-------------------------------------------
 	

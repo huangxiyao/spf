@@ -1,9 +1,11 @@
 package com.sun.portal.portletcontainer.admin.registry.database;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.portal.container.ChannelMode;
 import com.sun.portal.portletcontainer.admin.registry.PortletAppRegistryContext;
 import com.sun.portal.portletcontainer.admin.registry.PortletRegistryTags;
 import com.sun.portal.portletcontainer.admin.registry.database.dao.PortletAppRegistryDao;
@@ -32,7 +34,7 @@ public class PortletAppRegistryContextDBImpl implements PortletAppRegistryContex
 		PortletApp portletApp = portletAppRegistryDao.getPortlet(portletName);
 		Map<String, String> map = PortletRegistryUtils.getCollectionProperty(portletApp, PortletRegistryTags.DESCRIPTION_MAP_KEY);
         String description = null;
-        if(map != null)
+        if (map != null && map.size() > 0)
             description = (String)map.get(desiredLocale);
         return description;
 	}
@@ -41,7 +43,7 @@ public class PortletAppRegistryContextDBImpl implements PortletAppRegistryContex
 		PortletApp portletApp = portletAppRegistryDao.getPortlet(portletName);
 		Map<String, String> map = PortletRegistryUtils.getCollectionProperty(portletApp, PortletRegistryTags.DISPLAY_NAME_MAP_KEY);
         String displayName = null;
-        if(map != null)
+        if (map != null && map.size() > 0)
             displayName = (String)map.get(desiredLocale);
         return displayName;
 	}
@@ -50,7 +52,7 @@ public class PortletAppRegistryContextDBImpl implements PortletAppRegistryContex
 		PortletApp portletApp = portletAppRegistryDao.getPortlet(portletName);
 		Map<String, String> map = PortletRegistryUtils.getCollectionProperty(portletApp, PortletRegistryTags.KEYWORDS_KEY);
 		List<String> keywords = null;
-		if (map != null)
+		if (map != null && map.size() > 0)
 			keywords = PortletRegistryUtils.mapValuesToList(map);
 		return keywords;
 	}
@@ -59,7 +61,7 @@ public class PortletAppRegistryContextDBImpl implements PortletAppRegistryContex
 		PortletApp portletApp = portletAppRegistryDao.getPortlet(portletName);
 		Map<String, String> map = PortletRegistryUtils.getCollectionProperty(portletApp, PortletRegistryTags.SUPPORTED_CONTENT_TYPES_KEY);
 		List<String> markupTypes = null;
-        if(map != null)
+		if (map != null && map.size() > 0)
             markupTypes = PortletRegistryUtils.mapValuesToList(map);
         return markupTypes;
 	}
@@ -109,5 +111,23 @@ public class PortletAppRegistryContextDBImpl implements PortletAppRegistryContex
 	 */
 	public void removePortlet(String portletName) throws PortletRegistryException {
 		portletAppRegistryDao.removePortlet(portletName);		
+	}
+	
+	public Map<String, List<ChannelMode>> getSupportedModes(String portletName) throws PortletRegistryException {
+	    PortletApp portletApp = portletAppRegistryDao.getPortlet(portletName);        
+        Map<String, List<String>> declaredPortletModes = PortletRegistryUtils.getSupportedModes(portletApp, PortletRegistryTags.SUPPORTS_MAP_KEY);
+	    Map<String, List<ChannelMode>> wrappedPortletModes =
+            new HashMap<String, List<ChannelMode>>(declaredPortletModes.size());
+	    for (Map.Entry<String, List<String>> entry : declaredPortletModes.entrySet()) {
+
+            List<ChannelMode> portletModes = new ArrayList<ChannelMode>();
+            for (String mode : entry.getValue()) {
+                portletModes.add(new ChannelMode(mode));
+            }
+
+            wrappedPortletModes.put(entry.getKey(), portletModes);
+        }
+
+        return wrappedPortletModes;    
 	}
 }

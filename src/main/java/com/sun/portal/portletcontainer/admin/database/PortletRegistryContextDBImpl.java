@@ -54,6 +54,10 @@ public class PortletRegistryContextDBImpl implements PortletRegistryContext {
         return portletAppRegistryContext.getDescription(portletName, desiredLocale);
     }
     
+    public Map getSupportedModes(String portletName) throws PortletRegistryException {
+        return portletAppRegistryContext.getSupportedModes(portletName);
+    }
+    
     public String getShortTitle(String portletName, String desiredLocale) throws PortletRegistryException {
         return portletAppRegistryContext.getShortTitle(portletName, desiredLocale);
     }
