@@ -14,7 +14,7 @@ import com.hp.it.spf.xa.misc.Utils;
 
 /**
  * <p>
- * An abstract contextual help provider, which produces a "classic"-style
+ * An abstract contextual help provider, which produces a "classic"-rendition
  * contextual help popup window. Although this class is abstract, it does most
  * of the work in producing the markup for that popup window. It delegates to
  * the concrete subclass only the work of state tracking (since the
@@ -49,9 +49,10 @@ import com.hp.it.spf.xa.misc.Utils;
  * a message containing this style of contextual-help popup.
  * </p>
  * <p>
- * If you are not happy with the "classic" contextual-help popup style, you can
- * implement your own. Just extend the abstract base class like this one does.
- * You can even implement a tag for it, similar to the ones mentioned above.
+ * If you are not happy with the "classic" contextual-help popup rendition, you
+ * can implement your own. Just extend the abstract base class like this one
+ * does. You can even implement a tag for it, similar to the ones mentioned
+ * above.
  * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
@@ -418,7 +419,7 @@ public abstract class ClassicContextualHelpProvider extends
 
 	/**
 	 * Setter for the title content string: any string of text or HTML which you
-	 * want to display as the title of the "classic"-style contextual-help
+	 * want to display as the title of the "classic"-rendition contextual-help
 	 * popup. Depending on how the contextual help is invoked, your title
 	 * content may or may not later be escaped (ie conversion of HTML special
 	 * characters like <code>&lt;</code> inside the title content to their
@@ -439,9 +440,9 @@ public abstract class ClassicContextualHelpProvider extends
 	/**
 	 * Setter for the noscript URL: any URL you want to be opened instead of the
 	 * contextual-help popup in a non-JavaScript-enabled browser.
-	 * "Classic"-style contextual help requires the use of JavaScript, so this
-	 * lets you provide an alternative experience for non-JavaScript-enabled
-	 * browsers.
+	 * "Classic"-rendition contextual help requires the use of JavaScript, so
+	 * this lets you provide an alternative experience for
+	 * non-JavaScript-enabled browsers.
 	 * 
 	 * @param pNoScriptHref
 	 *            A URL to fallback upon in the noscript case.
@@ -455,9 +456,9 @@ public abstract class ClassicContextualHelpProvider extends
 	}
 
 	/**
-	 * Setter for the pixel width of the "classic"-style contextual help popup.
-	 * If you never call this method, or you pass a non-positive number to it,
-	 * the default width will be assumed (300 pixels).
+	 * Setter for the pixel width of the "classic"-rendition contextual help
+	 * popup. If you never call this method, or you pass a non-positive number
+	 * to it, the default width will be assumed (300 pixels).
 	 * 
 	 * @param pWidth
 	 *            The width of the popup, in pixels.
@@ -467,7 +468,7 @@ public abstract class ClassicContextualHelpProvider extends
 	}
 
 	/**
-	 * Setter for the table border CSS style to use for the "classic"-style
+	 * Setter for the table border CSS style to use for the "classic"-rendition
 	 * contextual help popup. Provide a CSS string of properties as you would
 	 * for a standard inline HTML <code>style</code> attribute. The properties
 	 * should be CSS border properties like <code>border-width</code> and
@@ -490,7 +491,7 @@ public abstract class ClassicContextualHelpProvider extends
 	}
 
 	/**
-	 * Setter for the table border CSS class to use for the "classic"-style
+	 * Setter for the table border CSS class to use for the "classic"-rendition
 	 * contextual help popup. Provide the name of a CSS class as you would for a
 	 * standard HTML <code>class</code> attribute. This should be a class
 	 * which you are planning to include in the same page as the HTML from this
@@ -513,7 +514,7 @@ public abstract class ClassicContextualHelpProvider extends
 	}
 
 	/**
-	 * Setter for the CSS style to use for the title in the "classic"-style
+	 * Setter for the CSS style to use for the title in the "classic"-rendition
 	 * contextual help popup. Provide a CSS string of properties as you would
 	 * for a standard inline HTML <code>style</code> attribute. The properties
 	 * should be CSS properties like <code>background-color</code> and
@@ -536,7 +537,7 @@ public abstract class ClassicContextualHelpProvider extends
 	}
 
 	/**
-	 * Setter for the CSS class to use for the title in the "classic"-style
+	 * Setter for the CSS class to use for the title in the "classic"-rendition
 	 * contextual help popup. Provide the name of a CSS class as you would for a
 	 * standard HTML <code>class</code> attribute. This should be a class
 	 * which you are planning to include in the same page as the HTML from this
@@ -560,9 +561,9 @@ public abstract class ClassicContextualHelpProvider extends
 
 	/**
 	 * Setter for the CSS style to use for the help content in the
-	 * "classic"-style contextual help popup. Provide a CSS string of properties
-	 * as you would for a standard inline HTML <code>style</code> attribute.
-	 * The properties should be CSS properties like
+	 * "classic"-rendition contextual help popup. Provide a CSS string of
+	 * properties as you would for a standard inline HTML <code>style</code>
+	 * attribute. The properties should be CSS properties like
 	 * <code>background-color</code> and <code>color</code>, valid for
 	 * styling the contents of an HTML <code>&lt;TD&gt;</code> tag. If you
 	 * never call this method, or pass null, and you never call the
@@ -583,16 +584,16 @@ public abstract class ClassicContextualHelpProvider extends
 
 	/**
 	 * Setter for the CSS class to use for the help content in the
-	 * "classic"-style contextual help popup. Provide the name of a CSS class as
-	 * you would for a standard HTML <code>class</code> attribute. This should
-	 * be a class which you are planning to include in the same page as the HTML
-	 * from this ClassicContextualHelpProvider. That class can define any CSS
-	 * properties valid for the contents of an HTML <code>&lt;TD&gt;</code>
-	 * tag, like <code>background-color</code>. If you never call this
-	 * method, or pass null, and you never call the <code>setContentStyle</code>
-	 * method, or pass null, then the default style will be used (normal black
-	 * font on a white background). You can pass a blank string if you just want
-	 * to clear that default.
+	 * "classic"-rendition contextual help popup. Provide the name of a CSS
+	 * class as you would for a standard HTML <code>class</code> attribute.
+	 * This should be a class which you are planning to include in the same page
+	 * as the HTML from this ClassicContextualHelpProvider. That class can
+	 * define any CSS properties valid for the contents of an HTML
+	 * <code>&lt;TD&gt;</code> tag, like <code>background-color</code>. If
+	 * you never call this method, or pass null, and you never call the
+	 * <code>setContentStyle</code> method, or pass null, then the default
+	 * style will be used (normal black font on a white background). You can
+	 * pass a blank string if you just want to clear that default.
 	 * 
 	 * @param pHelpClass
 	 *            The name of the CSS class for the popup help content. Pass
@@ -606,16 +607,33 @@ public abstract class ClassicContextualHelpProvider extends
 
 	/**
 	 * <p>
-	 * Returns the HTML string for the "classic"-style contextual help,
+	 * Returns the HTML string for the "classic"-rendition contextual help,
 	 * including the link content surrounded by a hyperlink which, if clicked,
-	 * will reveal the help content in an appropriately-formed DHTML popup
-	 * layer.
+	 * will reveal the help title and content in an appropriately-formed DHTML
+	 * popup layer. The link, title, and content are taken from the attributes
+	 * previously set via the respective methods (like
+	 * {@link #setTitleContent(String)}. The popup displays with the width and
+	 * style/class attributes which were previously set via methods like
+	 * {@link #setWidth(int)} and {@link #setHelpStyle(String)}.
 	 * </p>
 	 * <p>
 	 * The boolean parameter controls whether or not to escape any HTML special
 	 * characters like <code>&lt;</code> (ie convert them to corresponding
 	 * HTML character entities so that they display literally) found in the
 	 * content.
+	 * </p>
+	 * <p>
+	 * The DHTML click-and-drag JavaScript will only be included the first time
+	 * you invoke this method for this request. To reset that, use the
+	 * {@link #resetHTML()} method. (Actually, tracking this depends on proper
+	 * implementation of the counter methods like
+	 * {@link #getClassicContextualHelpCounter()}.)
+	 * </p>
+	 * <p>
+	 * The close image for the popup; its <code>ALT</code> text, if any; and
+	 * the no-script URL for the contextual help link, if any, are provided via
+	 * implementation of the respective abstract methods (like
+	 * {@link #getCloseImageURL()}).
 	 * </p>
 	 * 
 	 * @param escape
@@ -705,8 +723,8 @@ public abstract class ClassicContextualHelpProvider extends
 			helpStyleAttr += "class=\"" + Utils.escapeXml(this.helpClass)
 					+ "\" ";
 		if ("".equals(helpStyleAttr) && (DEFAULT_HELP_STYLE != null))
-			helpStyleAttr += "style=\""
-					+ Utils.escapeXml(DEFAULT_HELP_STYLE) + "\" ";
+			helpStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_HELP_STYLE)
+					+ "\" ";
 
 		// Generate the main HTML and event-handling code by assembling the
 		// pieces. First, assemble the event-handler script.
@@ -798,8 +816,8 @@ public abstract class ClassicContextualHelpProvider extends
 	/**
 	 * <p>
 	 * Use this method at any time during the request lifecycle, if for some
-	 * reason you need the next getHTML invocation to return the common
-	 * JavaScript again. This generally is not recommended.
+	 * reason you need the next {@link #getHTML(boolean)} invocation to return
+	 * the common JavaScript again. This generally is not recommended.
 	 * </p>
 	 * 
 	 */
@@ -810,8 +828,8 @@ public abstract class ClassicContextualHelpProvider extends
 	/**
 	 * An abstract method to get a counter of how many times in this request
 	 * lifecycle a classic contextual help provider has been generated (ie its
-	 * getHTML method has been invoked). Different action for portal and
-	 * portlet, so this is an abstract method.
+	 * {@link #getHTML(boolean)} method has been invoked). Different action for
+	 * portal and portlet, so this is an abstract method.
 	 * 
 	 * @return The counter.
 	 */
@@ -820,22 +838,22 @@ public abstract class ClassicContextualHelpProvider extends
 	/**
 	 * An abstract method to increment the counter of how many times in this
 	 * request lifecycle a classic contextual help provider has been generated
-	 * (ie its getHTML method has been invoked). Different action for portal and
-	 * portlet, so this is an abstract method.
+	 * (ie its {@link #getHTML(boolean)} method has been invoked). Different
+	 * action for portal and portlet, so this is an abstract method.
 	 */
 	protected abstract void bumpClassicContextualHelpCounter();
 
 	/**
 	 * An abstract method to reset the counter of how many times in this request
 	 * lifecycle a classic contextual help provider has been generated (ie its
-	 * getHTML method has been invoked). Different action for portal and
-	 * portlet, so this is an abstract method.
+	 * {@link #getHTML(boolean)} method has been invoked). Different action for
+	 * portal and portlet, so this is an abstract method.
 	 */
 	protected abstract void resetClassicContextualHelpCounter();
 
 	/**
 	 * An abstract method to generate the hyperlink URL to use for contextual
-	 * help in the noscript case. Different action for portal and portlet, so
+	 * help in the no-script case. Different action for portal and portlet, so
 	 * this is an abstract method.
 	 */
 	protected abstract String getNoScriptURL();
