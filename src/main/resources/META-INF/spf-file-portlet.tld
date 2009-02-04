@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+<taglib>
+	<tlibversion>1.0</tlibversion>
+	<jspversion>1.2</jspversion>
+	<shortname>spf-file-portlet</shortname>
+	<uri>/spf-file-portlet.tld</uri>
+	<info>
+		Tag library for Shared Portal Framework portlet file
+		manipulation tags.
+	</info>
+	<!-- Tag: <spf-file-portlet:interpolate> -->
+	<tag>
+		<name>interpolate</name>
+		<tagclass>
+			com.hp.it.spf.xa.interpolate.portlet.tag.FileInterpolatorTag
+		</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Expresses interpolated and localized file content for the
+			given base file, where the interpolation includes dynamic
+			token substitution as supported by the FileInterpolator
+			class. This tag is for use by SPF portlets.
+		</info>
+		<attribute>
+			<name>file</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>tokenFile</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>

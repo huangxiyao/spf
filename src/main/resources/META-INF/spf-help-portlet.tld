@@ -20,7 +20,7 @@
 		<info>
 			Expresses a "classic"-style contextual-help hyperlink with
 			the given parameters. There are too many parameters to
-			describe here.
+			describe here. This tag is for SPF portlets.
 		</info>
 		<attribute>
 			<name>anchorKey</name>

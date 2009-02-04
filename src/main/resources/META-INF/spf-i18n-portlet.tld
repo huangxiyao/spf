@@ -19,7 +19,8 @@
 		<info>
 			Expresses a URL for a proper best-fit localized version of
 			the given file, which may be found in the portlet resource
-			bundle folder or inside the portlet application WAR.
+			bundle folder or inside the portlet application WAR. This
+			tag is for SPF portlets.
 		</info>
 		<attribute>
 			<name>file</name>
@@ -48,7 +49,7 @@
 			&lt;spf-i18n-portlet:param&gt; tags inside the tag body. To
 			insert contextual-help parameters into the message, put
 			&lt;spf-i18n-portlet:contextualHelpParam&gt; tags inside the
-			tag body.
+			tag body. This tag is for SPF portlets.
 		</info>
 		<attribute>
 			<name>key</name>
@@ -76,7 +77,8 @@
 			&lt;spf-i18n-portlet:message&gt; tag. The given value will
 			be treated as a general string parameter to substitute into
 			the message string where it is formatted as per the
-			Java-standard MessageFormat specification.
+			Java-standard MessageFormat specification. This tag is for
+			SPF portlets.
 		</info>
 		<attribute>
 			<name>value</name>
@@ -96,7 +98,8 @@
 			&lt;spf-i18n-portlet:message&gt; tag. These parameters are
 			used to populate a "classic"-style contextual-help hyperlink
 			corresponding to any special &lt;Contextual_Help&gt; token
-			found inside the message string.
+			found inside the message string. This tag is for SPF
+			portlets.
 		</info>
 		<attribute>
 			<name>title</name>
