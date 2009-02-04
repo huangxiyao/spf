@@ -659,22 +659,16 @@ com.hp.it.spf.xa.i18n.portlet.I18nUtility} class) extend the Spring
 functionality primarily in these directions:</p>
 
 <ul>
-	<li>
-	<p>internationalizing access to other static resources (images,
-	PDF's, etc)</p>
-	</li>
-	<li>
-	<p>injecting contextual help into your message resources</p>
-	</li>
-	<li>
-	<p>placing no-localization reminders into your message resources</p>
-	</li>
-	<li>
-	<p>miscellaneous useful methods, inherited from the {@link
+	<li>internationalizing access to other static resources (images,
+	PDF's, etc)</li>
+	<li>injecting contextual help into your message resources</li>
+	<li>placing no-localization reminders into your message resources</li>
+	<li>supporting placement of all of these resources both internal
+	and external to your portlet application</li>
+	<li>miscellaneous useful methods, inherited from the common {@link
 	com.hp.it.spf.xa.i18n.I18nUtility} class (see <a
 		href="#i18n.other.common">using the common <code>I18nUtility</code></a>
-	at the end of this section)</p>
-	</li>
+	at the end of this section)</li>
 </ul>
 
 <hr>
@@ -694,8 +688,8 @@ localized.</p>
 
 <p><i>Message resources</i> (sometimes just called messages) are
 text strings used in your UI. They are managed in Java message property
-files as per the usual Java {@link ResourceBundle} standard. If your
-application's messages are going to be sourced elsewhere - in a
+files as per the usual Java {@lnk java.util.ResourceBundle} standard. If
+your application's messages are going to be sourced elsewhere - in a
 database, an XML file, etc - you will have to arrange to export them
 into Java message property format before they can be accessed through
 SPF (or Spring).</p>
@@ -728,7 +722,7 @@ files containing identical content, just localized for different
 locales. The <i>base file</i> contains the content for the base locale
 (typically US English). The other files in the bundle each contain a
 translation of that content for another locale. As with the Java
-standard for {@link ResourceBundle}, the base file should <b>not</b>
+standard for {@lnk java.util.ResourceBundle}, the base file should <b>not</b>
 have any locale tag, while the other files should be tagged according to
 their locale, as follows:</p>
 
@@ -783,10 +777,10 @@ picture_zh_CN.jpg   &lt;-- the same file localized for China - Chinese
 picture_zh_TW.jpg   &lt;-- the same file localized for Taiwan - Chinese
 </pre></blockquote>
 
-<p>As with the Java standard for {@link ResourceBundle}, all of the
-SPF (and Spring) internationalization utilities will search for the
-most-specific match for the user's locale first, ultimately falling back
-upon your base file.</p>
+<p>As with the Java standard for {@lnk java.util.ResourceBundle},
+all of the SPF (and Spring) internationalization utilities will search
+for the most-specific match for the user's locale first, ultimately
+falling back upon your base file.</p>
 
 <hr>
 <a name="i18n.location">
@@ -1530,19 +1524,18 @@ com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}).</p>
 <h4>2.5.1. Using <code>I18nUtility.getLocalizedFileURL</code></h4>
 </a>
 
+<blockquote>
 <p><b>Note:</b> There is an SPF-provided JSP tag library for this -
 see <a href="#i18n.supporting.jsp.localizedFileURL"><code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></a>
 description below.</p>
+</blockquote>
 
 <p>These methods return a URL string which the user's browser can
-use to access the proper localized version of a supporting resource, for
-the user's locale. The <code>I18nUtility.getLocalizedFileURL</code>
-methods use the Java-standard {@link ResourceBundle} sequence for
-finding the best-fit file in your bundle for the user's locale. Your
-bundle of supporting resource files can be located inside your portlet
-WAR, or in the <i>portlet resource bundle directory</i> outside of the
-WAR, or in both locations, <a href="#i18n.location.supporting">as
-discussed above</a>.</p>
+use to access the proper localized version of a supporting resource for
+the user's locale. Your bundle of supporting resource files can be
+located inside your portlet WAR, or in the <i>portlet resource
+bundle directory</i> outside of the WAR, or in both locations, <a
+	href="#i18n.location.supporting">as discussed above</a>.</p>
 
 <p>The returned URL string will be properly encoded for the portlet
 (taking into account WSRP and the portal as needed), and thus ready to
@@ -1583,12 +1576,15 @@ tag).</p>
 	<p>These methods take the base filename of the supporting resource
 	bundle. That filename may include any subfolder (relative to the
 	portlet bundle directory / portlet WAR root) where the bundle is
-	located.</p>
+	located. The methods use the Java-standard {@link
+	java.util.ResourceBundle} sequence for finding the best-fit file in
+	your bundle for the user's locale, looking across first your external
+	resources, then your internal resources.</p>
 
 	<p>For example, to get the best-fit localized URL for the <code>picture.jpg</code>
-	image, where the bundle is stored in the <code>images/</code> subfolder
-	(and where <code>request</code> and <code>response</code> are the
-	{@link javax.portlet.PortletRequest} and {@link
+	image, where the bundle is stored (externally or internally) in the <code>images/</code>
+	subfolder (and where <code>request</code> and <code>response</code> are
+	the {@link javax.portlet.PortletRequest} and {@link
 	javax.portlet.PortletResponse} respectively):</p>
 
 	<blockquote><pre>
@@ -1705,10 +1701,10 @@ String url = I18nUtility.getLocalizedFileURL(request, response, "/images/picture
 </a>
 
 <p>Instead of returning a URL string, these methods return an {@link
-InputStream} for the proper localized version of a supporting resource,
-given the user's locale. If no appropriate file could be found, then
-they return <code>null</code>. Otherwise they operate the same as the <a
-	href="#i18n.supporting.java.getLocalizedFileURL"><code>I18nUtility.getLocalizedFileURL</code></a>
+java.io.InputStream} for the proper localized version of a supporting
+resource, given the user's locale. If no appropriate file could be
+found, then they return <code>null</code>. Otherwise they operate the
+same as the <a href="#i18n.supporting.java.getLocalizedFileURL"><code>I18nUtility.getLocalizedFileURL</code></a>
 methods (see above).
 <p>The <code>I18nUtility.getLocalizedFileStream</code> methods are:</p>
 
@@ -1812,7 +1808,7 @@ InputStream file = I18nUtility.getLocalizedFileStream(request, "/xml/something.x
 <h4>2.5.3. Using <code>I18nUtility.getLocalizedFileName</code></h4>
 </a>
 
-<p>Instead of returning either a URL string or an <code>InputStream</code>,
+<p>Instead of returning either a URL string or an {@link java.io.InputStream},
 these methods just lookup the best-fit localized version of the file for
 the user's locale, and return its filename. The filename is returned
 relative to the location where the file was found (ie, relative to the <i>portlet
