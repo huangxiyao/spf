@@ -14,152 +14,157 @@ package com.hp.it.spf.xa.misc;
  * @see com.hp.it.spf.xa.misc.portal.Consts com.hp.it.spf.xa.misc.portlet.Consts
  */
 public class Consts {
-	
+
 	/**
-	 * The user profile map contains all user attributes from HPP/ATHP, Persona and etc.
-	 * On portal side, it can be retrieved from the http session;
-	 * On portlet side, it can be retrieved with the method (Map)PortletRequest.getAttribute(PortletRequest.USER_INFO).
+	 * The user profile map contains all user attributes from HPP/ATHP, Persona
+	 * and etc. On portal side, it can be retrieved from the http session; on
+	 * portlet side, it can be retrieved with the method
+	 * <code>(Map)PortletRequest.getAttribute(PortletRequest.USER_INFO)</code>.
 	 */
 	public static final String USER_PROFILE_KEY = "userProfile";
-	
+
 	/**
 	 * The key to get profile id from user profile map.
 	 */
 	public static final String KEY_PROFILE_ID = "ProfileId";
-    
+
 	/**
 	 * The key to get user name from user profile map.
 	 */
 	public static final String KEY_USER_NAME = "LoginId";
-    
+
 	/**
 	 * The key to get first name from user profile map.
 	 */
 	public static final String KEY_FIRST_NAME = "FirstName";
-    
+
 	/**
 	 * The key to get last name from user profile map.
 	 */
 	public static final String KEY_LAST_NAME = "LastName";
-    
+
 	/**
 	 * The key to get email from user profile map.
 	 */
 	public static final String KEY_EMAIL = "Email";
-    
+
 	/**
 	 * The key to get language from user profile map.
 	 */
 	public static final String KEY_LANGUAGE = "Language";
-    
+
 	/**
 	 * The key to get country from user profile map.
 	 */
 	public static final String KEY_COUNTRY = "Country";
-    
+
 	/**
 	 * The key to get last login date from user profile map.
 	 */
 	public static final String KEY_LAST_LOGIN_DATE = "LastLoginDate";
-    
+
 	/**
 	 * The key to get timezone (java object) from user profile map.
 	 */
 	public static final String KEY_SP_TIMEZONE = "Timezone";
-    
+
 	/**
 	 * The key to get last change date from user profile map.
 	 */
 	public static final String KEY_LAST_CHANGE_DATE = "LastChangeDate";
-    
+
 	/**
 	 * The key to get email contact preference (from HPP) from user profile map.
 	 */
 	public static final String KEY_EMAIL_PREF = "EmailContactPref";
-    
+
 	/**
 	 * The key to get phone contact preference (from HPP) from user profile map.
 	 */
 	public static final String KEY_PHONE_PREF = "PhoneContactPref";
-    
+
 	/**
-	 * The key to get postal contact preference  (from HPP) from user profile map.
+	 * The key to get postal contact preference (from HPP) from user profile
+	 * map.
 	 */
 	public static final String KEY_POSTAL_PREF = "PostalContactPref";
-    
+
 	/**
 	 * The key to get security level from user profile map.
 	 */
 	public static final String KEY_SECURITY_LEVEL = "SecurityLevel";
-    
+
 	/**
 	 * The key to get phone number from user profile map.
 	 */
 	public static final String KEY_PHONE_NUMBER = "PhoneNumber";
-    
+
 	/**
 	 * The key to get phone number extension from user profile map.
 	 */
 	public static final String KEY_PHONE_NUMBER_EXT = "PhoneNumberExt";
-    
+
 	/**
 	 * The key to get mail stop extension from user profile map.
 	 */
 	public static final String KEY_MAIL_STOP = "MailStop";
-    
+
 	/**
 	 * The key to get street extension from user profile map.
 	 */
 	public static final String KEY_STREET = "Street";
-    
+
 	/**
 	 * The key to get city from user profile map.
 	 */
 	public static final String KEY_CITY = "City";
-    
+
 	/**
 	 * The key to get zip code from user profile map.
 	 */
 	public static final String KEY_ZIP = "Zip";
-    
+
 	/**
 	 * The key to get state from user profile map.
 	 */
 	public static final String KEY_STATE = "State";
-	
+
 	/**
 	 * The key to get user groups from user profile map.
 	 */
 	public static final String KEY_USER_GROUPS = "Groups";
-	
+
 	/**
-	 * The portal context map contains some useful portal information as portlet need.
-	 * On portal side, this map will be injected into SOAP message with spf-portal-wsrp project;
-	 * On portlet side, it can be retrieved with the method (Map)PortletRequest.getAttribute("PORTAL_CONTEXT_KEY").
+	 * The portal context map contains some useful portal information which they
+	 * portlet needs. On portal side, this map will be injected into SOAP
+	 * message by the spf-portal-wsrp project; on portlet side, it can be
+	 * retrieved with the method
+	 * <code>(Map)PortletRequest.getAttribute(Consts.PORTAL_CONTEXT_KEY)</code>.
 	 */
 	public static final String PORTAL_CONTEXT_KEY = "ContextMap";
-	
+
 	/**
-	 * The key to get the site name (ie what Vignette calls the "site DNS name") from portal context map.
+	 * The key to get the site name (ie what Vignette calls the "site DNS name")
+	 * from portal context map.
 	 */
 	public static final String KEY_PORTAL_SITE_NAME = "PortalSite";
-	
+
 	/**
 	 * The key to get the site URL (ie the portal home page URL for the current
 	 * site) from portal context map.
 	 */
 	public static final String KEY_PORTAL_SITE_URL = "PortalSiteURL";
-	
+
 	/**
 	 * The key to get the current portal request URL from portal context map.
 	 */
 	public static final String KEY_PORTAL_REQUEST_URL = "PortalRequestURL";
-	
+
 	/**
 	 * The prefix of the anonymous user name.
 	 */
 	public static final String ANON_USER_NAME_PREFIX = "sso_guest_user";
-	
+
 	/**
 	 * The key for the portlet friendly id in the portlet request. This is
 	 * non-standard. The SPF portal puts the friendly ID into this request
