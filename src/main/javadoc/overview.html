@@ -2605,6 +2605,14 @@ SPF contextual help framework to do so, by extending any class in the
 <h4>3.2.1. Using <code>ClassicContextualHelpProvider</code></h4>
 </a>
 
+<blockquote>
+<p><b>Note:</b> There is an SPF-provided JSP tag library for this -
+see the <a href="#help.contextual.jsp.classicContextualHelp"><code>&lt;spf-help-portlet:classicContextualHelp&gt;</code></a>
+description below for standalone help, and the <a
+	href="#help.contextual.jsp.classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a>
+description below for injected help.</p>
+</blockquote>
+
 <p>{@link
 com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} is a Java
 class in the SPF portlet utilities which knows how to render-out the
@@ -2879,7 +2887,9 @@ for standalone classic contextual help</h4>
 </a>
 
 <p>You use this tag to express standalone contextual help with a
-"classic" rendering. The usage is:</p>
+"classic" rendering. It wraps around the {@link
+com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} to provide
+the same capabilities for standalone help. The usage is:</p>
 
 <blockquote><pre>
 &lt;%@ taglib prefix="spf-help-portlet" uri="/spf-help-portlet.tld" %&gt;
@@ -2976,8 +2986,10 @@ for injected classic contextual help</h4>
 
 <p>This tag is only used inside the tag body of <a
 	href="#i18n.messages.jsp.spf.message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>.
-You use it to inject contextual help into the message value, where the
-special <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>
+It wraps around the {@link
+com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} to provide
+the same capabilities for injected help. You use it to inject contextual
+help into the message value, where the special <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>
 markup is found. The format of contextual help which is injected is the
 "classic" rendition. The usage is:</p>
 
