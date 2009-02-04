@@ -66,7 +66,7 @@ import com.hp.it.spf.xa.interpolate.FileInterpolator;
  * property file. The {@link com.hp.it.spf.xa.interpolate.FileInterpolator}
  * supports substitution from this file for the <code>{TOKEN:<i>key</i>}</code>
  * token. Please see the documentation for more information on how that token
- * works. By default, a file named <code>default_token_subs.properties</code>
+ * works. By default, a file named <code>default_tokens.properties</code>
  * is assumed for your token-substitution properties, but you can override that
  * with this tag attribute. Whether you override or accept the default, the
  * actual token-substitution file may be located anywhere that is loadable by
