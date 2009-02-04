@@ -3067,6 +3067,46 @@ which you can copy. (It is the same one shown in the example above.)</p>
 <h4>3.3.3. Creating a tag library for a custom rendition</h4>
 </a>
 
+<p>If you need to create a custom version of contextual help, you
+can create a tag class to reference it. First, develop your custom
+contextual help provider as described above, by <a
+	href="#help.contextual.java.contextualHelpProvider">extending a <code>ContextualHelpProvider</code>
+class</a> of your choosing.</p>
+
+<p>Then create a tag class for it. Just as the SPF provides a class
+hierarchy for the provider classes themselves, it provides a class
+hierarchy for their tag classes.</p>
+
+<ul>
+	<li>If you extend {@link
+	com.hp.it.spf.xa.help.ClassicContextualHelpProvider} then the tag class
+	to extend is {@link
+	com.hp.it.spf.xa.help.tag.ClassicContextualHelpBaseTag} (for a tag for
+	standalone help) or {@link
+	com.hp.it.spf.xa.i18n.tag.ClassicContextualHelpParamBaseTag} (for a tag
+	for injected help).</li>
+	<li>If you extend {@link
+	com.hp.it.spf.xa.help.ContextualHelpProvider} then the tag class to
+	extend is {@link com.hp.it.spf.xa.help.tag.ContextualHelpBaseTag} (for
+	a tag for standalone help) or {@link
+	com.hp.it.spf.xa.i18n.tag.ContextualHelpParamBaseTag} (for a tag for
+	injected help).</li>
+</ul>
+
+<p>As you would expect, the <code>ClassicContextualHelpBaseTag</code>
+and <code>ClassicContextualHelpParamBaseTag</code> provide behavior very
+close to the <a href="#help.contextual.jsp.classicContextualHelp"><code>&lt;spf-help-portlet:classicContextualHelp&gt;</code></a>
+and <a href="#help.contextual.jsp.classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a>
+tags discussed above. The <code>ContextualHelpBaseTag</code> and <code>ContextualHelpParamBaseTag</code>
+are much more generic. Basically, in each case you need to implement the
+abstract methods, and potentially override any other methods to impose
+your desired functionality. You also need to create your TLD file.</p>
+
+<p>Please read the class and method documentation for each class, in
+order to familiarize yourself with their provided and abstract
+functionality, so that you can decide which would be best for you to
+extend.</p>
+
 <hr>
 
 <a name="help.portlet.java">
