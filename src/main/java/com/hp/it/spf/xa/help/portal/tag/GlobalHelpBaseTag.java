@@ -159,6 +159,7 @@ public abstract class GlobalHelpBaseTag extends HelpBaseTag {
 		}
 		// Get and return the global help hyperlink HTML
 		GlobalHelpProvider g = getGlobalHelpProvider(linkContent);
+		g.setLinkContent(linkContent);
 		return g.getHTML(escapeEnabled, filterSpanEnabled);
 	}
 
