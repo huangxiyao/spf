@@ -549,15 +549,37 @@ public class FileInterpolator extends
 	 * 
 	 * @return The interpolated file content
 	 * @throws Exception
-	 *             exception
+	 *             Some exception
 	 */
 	public String interpolate() throws Exception {
+		return this.interpolate(null);
+	}
+
+	/**
+	 * <p>
+	 * Gets the best-fit localized version of the secondary support file (using
+	 * {@link #getLocalizedContentFileAsStream(Locale)}, reads it into a
+	 * string, and substitutes the tokens found in the string with the proper
+	 * dynamic values, returning the interpolated content. This method works the
+	 * same as {@link #interpolate()} except that it uses the given locale
+	 * instead of the one in the portal context provided to the constructor.
+	 * (But if the given locale is null, then it uses the one from the portal
+	 * context.)
+	 * </p>
+	 * 
+	 * @param The
+	 *            locale to use
+	 * @return The interpolated file content
+	 * @throws Exception
+	 *             Some exception
+	 */
+	public String interpolate(Locale pLocale) throws Exception {
 
 		if (portalContext == null) {
 			logWarning("Portal context was null.");
 			return null;
 		}
-		return super.interpolate();
+		return super.interpolate(pLocale);
 	}
 
 	/**
@@ -573,11 +595,28 @@ public class FileInterpolator extends
 	 * @return The input stream for the file
 	 */
 	protected InputStream getLocalizedContentFileAsStream() {
+		return getLocalizedContentFileAsStream(null);
+	}
+
+	/**
+	 * Get an input stream for the best-candidate localized content file
+	 * available among the secondary support files of the current portal
+	 * component, based on the given locale and base content filename provided
+	 * to the constructor. This works the same as the
+	 * {@link getLocalizedContentFileAsStream()} method, except it uses the
+	 * given locale instead of the one from the portal context. (But if the
+	 * given locale is null, it uses the one in the portal context by default.)
+	 * 
+	 * @param The
+	 *            locale to use
+	 * @return The input stream for the file
+	 */
+	protected InputStream getLocalizedContentFileAsStream(Locale pLocale) {
 		if (portalContext == null || baseContentFilePath == null) {
 			return null;
 		}
 		return I18nUtility.getLocalizedFileStream(portalContext,
-				baseContentFilePath);
+				baseContentFilePath, pLocale, true);
 	}
 
 	/**
