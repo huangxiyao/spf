@@ -59,7 +59,7 @@ public class PortletWindowPreferenceRegistryContextDBImpl implements
 
     public Map getPreferencesReadOnly(String portletWindowName, String userName)
             throws PortletRegistryException {
-        return getPreDefinedPreferences(portletWindowName, userName, true);
+        return getPreDefinedPreferences(portletWindowName, getDefaultUserName(), true);
     }
 
     public Map getPreferences(String portletWindowName, String userName)
