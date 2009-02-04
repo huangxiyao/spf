@@ -42,8 +42,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * The selection and loading of the proper localized text file, from the proper
  * location, and subsequent interpolation of its content, is all done in the
- * {@link #interpolate()} method, based on parameters you setup in the
- * constructor.
+ * {@link #interpolate()} or {@link #interpolate(Locale)} methods, based on
+ * parameters you setup in the constructor.
  * </p>
  * <p>
  * This class uses the {@link TokenParser} to do most of its work. As of this
@@ -687,15 +687,36 @@ public class FileInterpolator extends
 	 * 
 	 * @return The interpolated file content
 	 * @throws Exception
-	 *             exception
+	 *             Some exception
 	 */
 	public String interpolate() throws Exception {
+		return this.interpolate(null);
+	}
+
+	/**
+	 * <p>
+	 * Gets the best-fit localized version of the content file (using
+	 * {@link #getLocalizedContentFileAsStream(Locale)}, reads it into a
+	 * string, and substitutes the tokens found in the string with the proper
+	 * dynamic values, returning the interpolated content. This method is the
+	 * same as {@link #interpolate()} except it uses the given locale instead of
+	 * the one in the current request. (But if the given locale is null, then
+	 * the one from the request is used.)
+	 * </p>
+	 * 
+	 * @param pLocale
+	 *            The locale to use
+	 * @return The interpolated file content
+	 * @throws Exception
+	 *             Some exception
+	 */
+	public String interpolate(Locale pLocale) throws Exception {
 
 		if (request == null) {
 			logWarning("Portlet request was null.");
 			return null;
 		}
-		String content = super.interpolate();
+		String content = super.interpolate(pLocale);
 		TokenParser t = (TokenParser) this.t;
 
 		// parse the portlet token
@@ -722,11 +743,29 @@ public class FileInterpolator extends
 	 * @return The input stream for the file
 	 */
 	protected InputStream getLocalizedContentFileAsStream() {
+		return getLocalizedContentFileAsStream(null);
+	}
+
+	/**
+	 * Get an input stream for the best-candidate localized content file
+	 * available from the <i>portlet resource bundle directory</i> or inside
+	 * the portlet application, based on the given locale and base content
+	 * pathname provided to the constructor. This works the same as the
+	 * {@link getLocalizedContentFileAsStream()} method, except it uses the
+	 * given locale instead of the one from the request. (But if the given
+	 * locale is null, it uses the one in the request by default.)
+	 * 
+	 * @param pLocale
+	 *            The locale to use
+	 * @return The input stream for the file
+	 */
+	protected InputStream getLocalizedContentFileAsStream(Locale pLocale) {
 		if (request == null || baseContentFilePath == null) {
 			return null;
 		}
 		return com.hp.it.spf.xa.i18n.portlet.I18nUtility
-				.getLocalizedFileStream(request, baseContentFilePath);
+				.getLocalizedFileStream(request, baseContentFilePath, pLocale,
+						true);
 	}
 
 	/**
