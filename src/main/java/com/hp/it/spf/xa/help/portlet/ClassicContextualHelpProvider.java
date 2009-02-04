@@ -15,8 +15,8 @@ import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 
 /**
  * <p>
- * A concrete contextual help provider, which produces the "classic"-style
- * contextual help popup window in a portlet.
+ * A concrete contextual help provider, which produces the "classic"-rendition
+ * of a contextual help popup window (table) in a portlet.
  * </p>
  * <p>
  * This is the style of contextual-help popup which is rendered by the portlet
@@ -29,7 +29,9 @@ import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
  * <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code> tag
  * instantiates this class.) You can also instantiate this class directly and
  * pass it to the <code>I18nUtility.getMessage</code> methods of the portlet
- * framework to produce this classic-style contextual-help popup.
+ * framework (such as
+ * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest, String, com.hp.it.spf.xa.help.ContextualHelpProvider[])})
+ * to produce this classic-style contextual-help popup.
  * </p>
  * <p>
  * This class just implements some portlet-specific concrete methods which the
@@ -56,8 +58,8 @@ public class ClassicContextualHelpProvider extends
 	/**
 	 * <p>
 	 * Constructor for the "classic"-style contextual help provider for a
-	 * particular request. If a null parameter is provided, the getHTML methods
-	 * of this class may not work.
+	 * particular request. If a null parameter is provided, the
+	 * <code>getHTML</code> method of this class may not work.
 	 * </p>
 	 */
 	public ClassicContextualHelpProvider(PortletRequest pRequest,
@@ -69,8 +71,9 @@ public class ClassicContextualHelpProvider extends
 	/**
 	 * A concrete implementation, to get a counter of how many times in this
 	 * request lifecycle a classic contextual help provider has been generated
-	 * (ie its getHTML method has been invoked). If a null portlet request was
-	 * given to the constructor, this method always returns 0.
+	 * (ie its <code>getHTML</code> method has been invoked). If a null
+	 * portlet request was given to the constructor, this method always returns
+	 * 0.
 	 * 
 	 * @return The counter.
 	 */
@@ -96,8 +99,9 @@ public class ClassicContextualHelpProvider extends
 	/**
 	 * A concrete implementation, to increment the counter of how many times in
 	 * this request lifecycle a classic contextual help provider has been
-	 * generated (ie its getHTML method has been invoked). If a null portlet
-	 * request was given to the constructor, this method does nothing.
+	 * generated (ie its <code>getHTML</code> method has been invoked). If a
+	 * null portlet request was given to the constructor, this method does
+	 * nothing.
 	 */
 	protected void bumpClassicContextualHelpCounter() {
 
@@ -112,9 +116,9 @@ public class ClassicContextualHelpProvider extends
 	/**
 	 * A concrete implementation, to reset the counter of how many times in this
 	 * request lifecycle a classic contextual help provider has been generated
-	 * (ie its getHTML method has been invoked). Different action for portal and
-	 * portlet, so this is an abstract method. If a null portlet request was
-	 * given to the constructor, this method does nothing.
+	 * (ie its <code>getHTML</code> method has been invoked). Different action
+	 * for portal and portlet, so this is an abstract method. If a null portlet
+	 * request was given to the constructor, this method does nothing.
 	 */
 	protected void resetClassicContextualHelpCounter() {
 		if (request != null) {
@@ -124,15 +128,14 @@ public class ClassicContextualHelpProvider extends
 
 	/**
 	 * A concrete method to generate the hyperlink URL to use for contextual
-	 * help in the noscript case. If there was a <code>noscriptHref</code>
-	 * attribute, which is not a document fragment (ie does not begin with
-	 * <code>#</code>), then the <code>noscriptHref</code> is used as the
-	 * noscript URL. Otherwise, if the portlet supports help mode, the noscript
-	 * URL is a render URL pointing to that mode (and if the
-	 * <code>noscriptHref</code> is a document fragment (ie does begin with
-	 * <code>#</code>), then that fragment is passed as a parameter).
-	 * Finally, if the portlet does not support help mode, the noscript URL is
-	 * null.
+	 * help in the no-script case. If a no-script HREF was set to the class,
+	 * which is not a document fragment (ie does not begin with <code>#</code>),
+	 * then that no-script HREF is used as the no-script URL. Otherwise, if the
+	 * portlet supports help mode, the no-script URL is a render URL pointing to
+	 * that mode (and if the no-script HREF is a document fragment - ie does
+	 * begin with <code>#</code> - then that fragment name is passed as a
+	 * parameter). Finally, if the portlet does not support help mode, the
+	 * no-script URL is null.
 	 */
 	protected String getNoScriptURL() {
 

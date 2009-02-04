@@ -42,16 +42,42 @@ the DHTML in that link produces a popup table looking like this:</p>
 <img src="doc-files/contextualHelp.jpg">
 
 <p>The table is draggable and can be closed by clicking on the "X"
-image.</p>
+image. You may configure some <code>ALT</code> text for the "X" image in
+your message properties, using the <code>contextualHelp.close.alt</code>
+message key. For example, if you have the following message in your
+resource bundles:</p>
 
-<p>The style of the table shown above is the default style (which
-results when none of the style or width setters are specified in the
-class to override it).</p>
+<blockquote><pre>
+contextualHelp.close.alt=Close
+</pre></blockquote>
+
+<p>Then when the user mouses-over the "X" image in the contextual
+help popup, it looks like this:</p>
+
+<img src="doc-files/contextualHelpAlt.jpg">
+
+<p><b>Note:</b> The style of the table shown above is the default
+style (which results when none of the style or width setters are
+specified in the class to override it). Use the class setters (like
+{@link
+com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider#setWidth(int)})
+to apply a different size or style.</p>
 
 <p><b>Note:</b> The class assumes that your portlet application
 includes the "X" image in a GIF file named <code>btn_close.gif</code>,
 in the <code>images/</code> subfolder of either your external <i>portlet
 resource bundle folder</i>, or your portlet WAR.</p>
+
+<p><b>Note:</b> The returned HTML from this class can include
+no-script markup for the unscripted case (ie JavaScript disabled in the
+browser). Use the class setter {@link
+com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider#setNoScriptHref(java.lang.String)}
+to specify a no-script HREF - this can be an entire URL, or just a
+document fragment name (beginning with <code>#</code>). If your portlet
+supports <code>help</code> mode, that is where the no-script markup will
+point by default (and if you set a document fragment name as the
+no-script HREF, that will be passed as a render parameter in that
+no-script URL).</p>
 
 <p>Please see the class documentation for more information.</p>
 
