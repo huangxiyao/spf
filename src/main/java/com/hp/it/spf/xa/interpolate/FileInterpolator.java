@@ -257,7 +257,7 @@ public abstract class FileInterpolator {
 	}
 
 	/**
-	 * Gets the file content.
+	 * Gets the file content, which is expected to be UTF-8 encoded.
 	 * 
 	 * @param fileStream
 	 *            the input stream
