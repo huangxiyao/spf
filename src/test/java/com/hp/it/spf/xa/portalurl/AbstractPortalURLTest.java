@@ -1,8 +1,8 @@
 package com.hp.it.spf.xa.portalurl;
 
-import com.hp.it.spf.xa.portalurl.AbstractPortalURL;
-
 import junit.framework.TestCase;
+
+import java.util.Map;
 
 /**
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
@@ -88,6 +88,12 @@ public class AbstractPortalURLTest extends TestCase
 		public String urlToString()
 		{
 			return null;
+		}
+
+		protected void addPrivateParameters(StringBuilder result, Map.Entry<String, PortletParameters> portletParameters, String portletFriendlyId) {
+		}
+
+		protected void addPublicParameters(StringBuilder result, Map.Entry<String, PortletParameters> portletParameters, String portletFriendlyId) {
 		}
 	}
 }

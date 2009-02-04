@@ -13,10 +13,16 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
+ * Abstract class capturing all the {@link PortalURL} characteristics and providing a template
+ * method for the URL rendering. This class will create Vignette-specific URLs as the classes
+ * inherit from it. It reproduces the URL format as expected by Vignette.
+ * 
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  */
 abstract class AbstractPortalURL implements PortalURL
 {
+	protected static final String PARAM_NAME_PREFIX = "spf_p";
+
 	protected String mSiteRootUrl = null;
 	protected String mAnotherSiteName = null;
 	protected String mPageFriendlyUri = null;
@@ -30,6 +36,13 @@ abstract class AbstractPortalURL implements PortalURL
 
 	protected AbstractPortalURL(String siteRootUrl, String anotherSiteName, String pageFriendlyUri, boolean secure)
 	{
+		if (siteRootUrl == null || siteRootUrl.trim().equals("")) {
+			throw new IllegalArgumentException("siteRootUrl parameter cannot be null or empty: " + siteRootUrl);
+		}
+		if (pageFriendlyUri == null || pageFriendlyUri.trim().equals("")) {
+			throw new IllegalArgumentException("pageFriendlyUri parameter cannot be null or empty: " + pageFriendlyUri);
+		}
+
 		mSiteRootUrl = siteRootUrl;
 		mAnotherSiteName = anotherSiteName;
 		mPageFriendlyUri = pageFriendlyUri;
@@ -293,7 +306,129 @@ abstract class AbstractPortalURL implements PortalURL
 			}
 		}
 	}
-	
+
+	public String urlToString() {
+		return toString();
+	}
+
+	protected abstract void addPrivateParameters(StringBuilder result, Map.Entry<String, PortletParameters> portletParameters, String portletFriendlyId);
+
+	protected abstract void addPublicParameters(StringBuilder result, Map.Entry<String, PortletParameters> portletParameters, String portletFriendlyId);
+
+	protected void addWindowStateAndPortletMode(StringBuilder result, String portletFriendlyId, PortletParameters portletParameters) {
+		if (!WindowState.NORMAL.equals(portletParameters.getWindowState()) ||
+				!PortletMode.VIEW.equals(portletParameters.getPortletMode()))
+		{
+			result.append('&').append(PARAM_NAME_PREFIX).append(".pst=");
+			result.append(portletFriendlyId);
+			addStateAndModeToUrlFragment(result, portletParameters);
+		}
+	}
+
+	protected void addStateAndModeToUrlFragment(StringBuilder result, PortletParameters portletParameters) {
+		appendWindowStateToUrlFragment(portletParameters.getWindowState(), result);
+		appendPortletModeToUrlFragment(portletParameters.getPortletMode(), result);
+	}
+
+	//FIXME (slawek) - how to implement custom window states ???
+	private void appendWindowStateToUrlFragment(WindowState windowState, StringBuilder buf) {
+		// NORMAL window state is not present in the URL as it's default
+		if (WindowState.MAXIMIZED.equals(windowState)) {
+			buf.append("_ws_MX");
+		}
+		else if (WindowState.MINIMIZED.equals(windowState)) {
+			buf.append("_ws_MN");
+		}
+	}
+
+	//FIXME (slawek) - how to implement custom portlet modes ???
+	private void appendPortletModeToUrlFragment(PortletMode portletMode, StringBuilder buf) {
+		// VIEW portlet mode is not present in the URL as it's default
+		if (PortletMode.EDIT.equals(portletMode)) {
+			buf.append("_pm_ED");
+		}
+		else if (PortletMode.HELP.equals(portletMode)) {
+			buf.append("_pm_HP");
+		}
+	}
+
+	@Override
+	public String toString()
+	{
+		boolean isActionUrl = mActionPortletFriendlyId != null;
+		boolean portletParametersSpecified = !mPortletParameters.isEmpty();
+		StringBuilder result = createBaseUrl(isActionUrl);
+		// added following line for portal parameter support - DSJ 2009/1/28
+		boolean queryStarted = result.indexOf("?") >= 0;
+
+		Iterator<Map.Entry<String, PortletParameters>> portletParameterEntries = mPortletParameters.entrySet().iterator();
+
+		if (isActionUrl) {
+			// if this is an action URL we mark it with javax.portlet.action parameter and we have
+			// to specify the target portlet for the action (there is always only one) with ".tpst" parameter
+
+			// added following for portal parameter support - DSJ 2009/1/28
+			if (!queryStarted) {
+				result.append('?');
+			}
+			else {
+				result.append('&');
+			}
+			result.append("javax.portlet.action=true");
+			// result.append("?javax.portlet.action=true");
+			// end DSJ 2009/1/28
+			result.append('&').append(PARAM_NAME_PREFIX).append(".tpst=").append(mActionPortletFriendlyId);
+		}
+		else if (portletParameterEntries.hasNext()) {
+
+			// If this is not an action URL we take the first portlet from the list and make it
+			// as the target for this request using ".tpst" parameter
+
+			Map.Entry<String, PortletParameters> portletParameters = portletParameterEntries.next();
+			String portletFriendlyId = portletParameters.getKey();
+
+			// added following line for portal parameter support - DSJ 2009/1/28
+			// added following for portal parameter support - DSJ 2009/1/28
+			if (!queryStarted) {
+				result.append('?');
+			}
+			else {
+				result.append('&');
+			}
+			result.append(PARAM_NAME_PREFIX).append(".tpst=").append(portletFriendlyId);
+			// result.append('?').append(PARAM_NAME_PREFIX).append(".tpst=").append(portletFriendlyId);
+			// end DSJ 2009/1/28
+
+			// once we have the target we add the rest for this portlet (state, mode, public and private parameters)
+
+			addStateAndModeToUrlFragment(result, portletParameters.getValue());
+			addPublicParameters(result, portletParameters, portletFriendlyId);
+			addPrivateParameters(result, portletParameters, portletFriendlyId);
+		}
+
+		if (portletParametersSpecified || isActionUrl) {
+			result.append("&javax.portlet.begCacheTok=com.vignette.cachetoken");
+
+			// If we have more than one portlet in this URL we now have to add its information
+			// (state, mode, public and private parameters) between VAP's marker parameters
+
+			while (portletParameterEntries.hasNext()) {
+				Map.Entry<String, PortletParameters> portletParameters = portletParameterEntries.next();
+				String portletFriendlyId = portletParameters.getKey();
+				addWindowStateAndPortletMode(result, portletFriendlyId, portletParameters.getValue());
+				addPublicParameters(result, portletParameters, portletFriendlyId);
+				addPrivateParameters(result, portletParameters, portletFriendlyId);
+			}
+			result.append("&javax.portlet.endCacheTok=com.vignette.cachetoken");
+		}
+
+		return result.toString();
+	}
+
+	/**
+	 * Captures the information such as private and public parameters, window state and mode for
+	 * a single portlet.
+	 */
 	class PortletParameters
 	{
 		private Map<String, List<String>> mPrivateParameters = new LinkedHashMap<String, List<String>>();;

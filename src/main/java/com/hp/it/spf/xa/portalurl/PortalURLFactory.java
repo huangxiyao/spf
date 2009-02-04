@@ -1,5 +1,9 @@
 package com.hp.it.spf.xa.portalurl;
 
+import java.io.InputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 //import org.apache.log4j.Logger;
 
 /**
@@ -12,22 +16,11 @@ package com.hp.it.spf.xa.portalurl;
  */
 public class PortalURLFactory {
 
+	static final String PROPERTY_FILE_RESOURCE_PATH = "/portalurl.properties";
+	static final String PROPERTY_NAME = "PortalURLFactory.remote";
+	
 //	private static Logger mLog = Logger.getLogger(PortalURLFactory.class);
-//	private static boolean mIsLocalPortlet;
-//
-//	static {
-//		try {
-//			String classVignette = "com.vignette.portal.portlet.jsrcontainer.PortletCommandServlet";
-//			Class.forName(classVignette);
-//			mIsLocalPortlet = true;
-//		} catch (ClassNotFoundException e) {
-//			mIsLocalPortlet = false;
-//		}
-//		if (mLog.isInfoEnabled()) {
-//			mLog.info("Factory will create the PortalURL for the following type of portlet: " +
-//				(mIsLocalPortlet ? "local" : "remote"));
-//		}
-//	}
+	private static boolean mCreatesRemoteUrls = createsRemoteUrls(PROPERTY_FILE_RESOURCE_PATH);
 
 	/**
 	 * Private constructor to prevent creation of this factory instances knowing that all the methods
@@ -51,8 +44,12 @@ public class PortalURLFactory {
 	 * @return new portal URL to the specified site and page.
 	 */
 	public static PortalURL createPageURL(String siteRootUrl, String anotherSite, String pageFriendlyUri, boolean secure) {
-		//FIXME (slawek) - implement the remote URLs and URL type selection logic
-		return new VignetteLocalPortalURL(siteRootUrl, anotherSite, pageFriendlyUri, secure);
+		if (mCreatesRemoteUrls) {
+			return new VignetteRemotePortalURL(siteRootUrl, anotherSite, pageFriendlyUri, secure);
+		}
+		else {
+			return new VignetteLocalPortalURL(siteRootUrl, anotherSite, pageFriendlyUri, secure);
+		}
 	}
 
 	/**
@@ -102,4 +99,43 @@ public class PortalURLFactory {
 		return createPageURL(siteRootUrl, null, pageFriendlyUri, siteRootUrl.toLowerCase().startsWith("https:"));
 	}
 
+	/**
+	 * Returns <tt>true</tt> if this factory create URLs for remote portlets. This method is called
+	 * only once during class initialization.
+	 * <p>
+	 * It checks first whether a system property <tt>PortalURLFactory.remote</tt> exists
+	 * and if yes, it uses its boolean value. Then a property file <tt>portalurl.properties</tt> is
+	 * checked and if yes the boolean value of <tt>PortalURLFactory.remote</tt> property is used.
+	 * If none of the above is defined, by default it creates remote portlet URLs.
+	 *
+	 * @param propertyFileResourcePath resource path of the optional property file
+	 * @return <tt>true</tt> if this class creates remote portlet URLs;
+	 */
+	static boolean createsRemoteUrls(String propertyFileResourcePath) {
+		// first check system property
+		if (System.getProperty(PROPERTY_NAME) != null) {
+			return Boolean.valueOf(System.getProperty(PROPERTY_NAME));
+		}
+
+		// then check property file
+		InputStream is = PortalURLFactory.class.getResourceAsStream(propertyFileResourcePath);
+		try {
+			if (is != null) {
+				try {
+					Properties props = new Properties();
+					props.load(is);
+					return Boolean.valueOf(props.getProperty(PROPERTY_NAME));
+				}
+				finally {
+					is.close();
+				}
+			}
+		}
+		catch (IOException e) {
+			throw new RuntimeException("Error loading property file: " + propertyFileResourcePath, e);
+		}
+
+		// finally return default value
+		return true;
+	}
 }
