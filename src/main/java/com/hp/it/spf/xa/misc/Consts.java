@@ -142,7 +142,7 @@ public class Consts {
 	/**
 	 * The key to get the site name (ie what Vignette calls the "site DNS name") from portal context map.
 	 */
-	public static final String KEY_PORTLET_SITE_NAME = "PortalSite";
+	public static final String KEY_PORTAL_SITE_NAME = "PortalSite";
 	
 	/**
 	 * The key to get the site URL (ie the portal home page URL for the current
