@@ -172,6 +172,8 @@ class AuthenticationConsts {
     
     static final String KEY_SP_TIMEZONE = "Timezone";
     
+    static final String KEY_CURRENT_SITE = "CurrentSite";
+    
     static final String KEY_LAST_CHANGE_DATE = "LastChangeDate";
     
     static final String KEY_EMAIL_PREF = "EmailContactPref";
