@@ -204,7 +204,7 @@ provide a <code>&lt;spf-i18n-portlet:param&gt;</code>, remain.</p>
 <p>You use this tag inside the <a href="#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>
 tag body, to inject the "classic" rendition of contextual help into the
 message value. (If you don't know what is meant by "contextual help" or
-the "classic" rendition, see the discussion in the <a
+the "classic" rendition or "inject", see the discussion in the <a
 	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#help.kinds.contextual">SPF
 Portlet Utilities Developer's Guide</a>.)</p>
 
@@ -242,6 +242,12 @@ would look like this:</p>
 
 <img src="../doc-files/contextualHelp.jpg">
 
+<p>If the browser was unscripted, though, clicking on the link would
+open your portlet's <code>help</code> mode. If your portlet has no <code>help</code>
+mode, then the link would be inoperable (ie just the image would
+display, with no contextual-help link around it at all).</p>
+
+L
 <p>Here are the tag attributes:</p>
 
 <dl>
@@ -290,8 +296,8 @@ would look like this:</p>
 	the no-script case instead, via this attribute. If your portlet
 	supports help mode, you can even set this attribute to a document
 	fragment like <code>noScriptHref="#go_here"</code> so that, in the
-	no-script case, the user will be taken to that fragment of the document
-	displayed by your portlet's help mode.</p>
+	no-script case, your <code>help</code> mode can receive the fragment as
+	a render parameter.</p>
 	</dd>
 
 	<dt><code>width="<i>pixels</i>"</code></dt>
@@ -409,7 +415,7 @@ standalone contextual help approach, instead of contextual help
 injection. For example, <code>&lt;spf-help-portlet:classicContextualHelp&gt;</code>
 is an SPF JSP tag for expressing standalone contextual help in the
 "classic" manner. See the documentation for <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#help.contextual.jsp.classicContextualHelpProvider"><code>&lt;spf-help-portlet:classicContextualHelp&gt;</code></a>.</p>
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#help.contextual.jsp.classicContextualHelp"><code>&lt;spf-help-portlet:classicContextualHelp&gt;</code></a>.</p>
 
 <blockquote>
 <p><b>Note:</b> The classic rendition of contextual help utilizes an
