@@ -5,10 +5,7 @@
  */
 package com.hp.it.spf.sso.portal;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,7 +37,10 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
     public AtHPAuthenticator(HttpServletRequest request) {
         super(request);
     }
-
+    
+    /**
+     * @see AbstractAuthenticator#mapHeaderToUserProfileMap()
+     */
     @SuppressWarnings("unchecked")
     protected void mapHeaderToUserProfileMap() {
         super.mapHeaderToUserProfileMap();
@@ -51,33 +51,6 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
             userProfile.put(AuthenticationConsts.KEY_PROFILE_ID,
                             userProfile.get(AuthenticationConsts.KEY_EMAIL));
         }
-    }
-
-    /**
-     * This method is used to retrieve group info for AtHP users It will get the
-     * group info from the request header and analyse. Only the group starting
-     * with "cn=sp_" will be retrieved
-     * 
-     * @return retrived groups
-     */
-    @SuppressWarnings("unchecked")
-    protected Set getUserGroup() {
-        Set groups = new HashSet();
-        String groupstring = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
-        // groups are divided by ,
-        if (groupstring != null) {
-            StringTokenizer st = new StringTokenizer(groupstring, "^");
-            while (st.hasMoreElements()) {
-                String temp = (String)st.nextElement();
-                if (temp.toLowerCase()
-                        .startsWith(AuthenticationConsts.ATHP_GROUP_PREFIX)) {
-                    String group = temp.substring(3, temp.indexOf(','));
-                    LOG.info("Get UserGroup = " + group);
-                    groups.add(group);
-                }
-            }
-        }
-        return groups;
     }
 
     /**

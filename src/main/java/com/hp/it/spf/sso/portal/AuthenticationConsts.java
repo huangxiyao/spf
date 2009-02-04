@@ -11,6 +11,8 @@ class AuthenticationConsts {
 
 	static final String SSO_USERNAME = "SP_SSO_USERNAME";
 	
+	static final String SSO_USER_LOCALE = "SP_USER_LOCALE";	
+	
 	static final String USER_PROFILE_KEY = "userProfile";
 
     static final String HEADER_CONSTS_FILE_BASE = "SharedPortalSSO";

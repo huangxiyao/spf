@@ -5,15 +5,12 @@
  */
 package com.hp.it.spf.sso.portal;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.hp.globalops.hppcbl.passport.manager.PassportParametersManager;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.vignette.portal.log.LogWrapper;
 
 /**
  * This authenticator is for HPP users.
@@ -29,7 +26,7 @@ import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 public class HPPAuthenticator extends AbstractAuthenticator {
     private static final long serialVersionUID = 1L;
 
-    private static final com.vignette.portal.log.LogWrapper LOG = AuthenticatorHelper.getLog(HPPAuthenticator.class);
+    private static final LogWrapper LOG = AuthenticatorHelper.getLog(HPPAuthenticator.class);
 
     private static String clHeaderList = null;
 
@@ -58,33 +55,13 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     }    
 
     /**
-     * This method is used to get HPP groups. It will call HPP web service to
-     * get groups. If failed to call web service, it will return a default group
-     * for this user. The default group is constructed with user's current site.
-     * 
-     * @see com.hp.globalops.hppcbl.passport.PassportService
-     *      #getUserGroups(jan.lang.String,
-     *      com.hp.globalops.hppcbl.webservice.ProfileIdentity)
-     * @return retrieved HPP groups
+     * @see AbstractAuthenticator#mapHeaderToUserProfileMap()
      */
-    @SuppressWarnings("unchecked")
-	protected Set getUserGroup() {
-        String groupString = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
-        LOG.info("The groups string got from HPP request header is: " + groupString);
-
-        Set group = new HashSet();
-        StringTokenizer st = new StringTokenizer(groupString, "|");
-        while(st.hasMoreTokens()) {
-            group.add(st.nextToken());
-        }
-        return group;
-    }
-
     @SuppressWarnings("unchecked")
     protected void mapHeaderToUserProfileMap() {
     	super.mapHeaderToUserProfileMap();    	
     	
-    	// Set lanuage into SSOUser, if null, set to default EN
+    	// Set lanuage, change language from HPP format to ISO standard
 		String language = (String)userProfile.get(AuthenticationConsts.KEY_LANGUAGE);
 		userProfile.put(AuthenticationConsts.KEY_LANGUAGE, 
 						I18nUtility.hppLanguageToISOLanguage(language));

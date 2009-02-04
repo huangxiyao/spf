@@ -5,13 +5,11 @@
  */
 package com.hp.it.spf.sso.portal;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -29,6 +27,7 @@ import com.epicentric.common.website.SessionUtils;
 import com.epicentric.entity.EntityNotFoundException;
 import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.UniquePropertyValueConflictException;
+import com.epicentric.site.Site;
 import com.epicentric.user.User;
 import com.epicentric.user.UserGroup;
 import com.epicentric.user.UserGroupManager;
@@ -105,6 +104,9 @@ public class AuthenticatorHelper {
             userProperties.put(AuthenticationConsts.PROPERTY_LAST_LOGIN_DATE_ID,
                                ssoUser.getLastLoginDate());
         }
+        if (ssoUser.getCurrentSite() != null) {
+            userProperties.put(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID, ssoUser.getCurrentSite());
+        }
         
         try {
             User user = UserManager.getInstance().createUser(userProperties);
@@ -159,7 +161,10 @@ public class AuthenticatorHelper {
                 user.setProperty(AuthenticationConsts.PROPERTY_LAST_LOGIN_DATE_ID,
                                  ssoUser.getLastLoginDate());
             }
-
+            if (ssoUser.getCurrentSite() != null) {
+                user.setProperty(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID, ssoUser.getCurrentSite());
+            }
+            
             // updateUserGroup(user, ssoUser.getGroups());
             LOG.info("Updated user:" + ssoUser.getUserName());
         } catch (UniquePropertyValueConflictException e) {
@@ -216,6 +221,15 @@ public class AuthenticatorHelper {
     }
 
     /**
+     * This method is used to return the current site object in session
+     */
+    static Site getCurrentSite(HttpServletRequest request) {
+        SessionInfo sessionInfo = (SessionInfo)request.getSession()
+                                                      .getAttribute(SessionInfo.SESSION_INFO_NAME);
+        return sessionInfo != null ? sessionInfo.getSite() : null;
+    }
+    
+    /**
      * This method is used to judge whether the group need to be updated
      * 
      * @param userGroups
@@ -244,6 +258,24 @@ public class AuthenticatorHelper {
         return !newGroups.equals(withoutLocal);
     }
 
+    /**
+     * This method is used to judge whether user's primary site needs to be
+     * updated. If current site is different with user's primary site, then need
+     * to update!
+     * 
+     * @param su
+     *            SSOUser
+     * @param user
+     *            User from Vignette
+     * @return true if need to update user's primary site, otherwise false
+     */
+    static boolean needUpdatePrimarySite(HttpServletRequest request) {
+        Site currentSite = getCurrentSite(request);
+        User user = SessionUtils.getCurrentUser(request.getSession());
+                                                                  
+        return (currentSite != null && user != null && !currentSite.getUID().equals(user.getProperty(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID)));
+    }    
+    
     /**
      * This method is used to get the group title set based on user's group
      * 

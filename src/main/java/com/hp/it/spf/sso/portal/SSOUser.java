@@ -9,6 +9,18 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+/**
+ * This is a POJO class which store the user information.
+ * <p>
+ * This object is a simple copy of vignette user, that means each individual attribute
+ * refer to related attribute of vignette user object.
+ * 
+ * @author <link href="kaijian.ding@hp.com">dingk</link>
+ * @author <link href="ye.liu@hp.com">liuye</link>
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * 
+ * @version TBD 
+ */
 class SSOUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +43,9 @@ class SSOUser implements Serializable {
     private Date lastChangeDate = null;
     
     private Date lastLoginDate = null;
-
+    
+    private String currentSite = null;
+    
     private Set groups = null;
 
     Set getGroups() {
@@ -197,5 +211,13 @@ class SSOUser implements Serializable {
 
     public void setLastLoginDate(Date lastLoginDate) {
         this.lastLoginDate = lastLoginDate;
+    }
+
+    public String getCurrentSite() {
+        return this.currentSite;
+    }
+
+    public void setCurrentSite(String currentSite) {
+        this.currentSite = currentSite;
     }
 }
