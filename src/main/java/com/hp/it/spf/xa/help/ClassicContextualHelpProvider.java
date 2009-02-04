@@ -637,7 +637,9 @@ public abstract class ClassicContextualHelpProvider extends
 	 * </p>
 	 * 
 	 * @param escape
-	 * @return
+	 *            Whether to escape the HTML in the link content (and any other
+	 *            content contained in the returned HTML)
+	 * @return A string containing all of the HTML for the help hyperlink.
 	 */
 	public String getHTML(boolean escape) {
 
