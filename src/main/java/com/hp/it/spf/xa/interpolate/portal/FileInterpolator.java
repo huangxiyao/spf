@@ -382,6 +382,11 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * <code>&lt;A HREF="http://shopping.hp.com"&gt;Go to HP shopping.&lt;/A&gt;</code>
  * </p>
+ * <p>
+ * A template for the token substitution property file, also named
+ * <code>default_tokens.properties</code> (you should rename your copy), is
+ * available with the SPF.
+ * </p>
  * </dd>
  * 
  * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>

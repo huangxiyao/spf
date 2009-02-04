@@ -42,8 +42,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * {@link com.hp.it.spf.xa.interpolate.portal.FileInterpolator} supports
  * substitution from this file for the <code>{TOKEN:<i>key</i>}</code>
  * token. Please see the class documentation for more information on how that
- * token works. By default, a file named
- * <code>default_token_subs.properties</code> is assumed for your
+ * works. By default, a file named
+ * <code>default_tokens.properties</code> is assumed for your
  * token-substitution properties, but you can override that with this tag
  * attribute. Whether you override or accept the default, the actual
  * token-substitution file may be located anywhere that is loadable by the
@@ -61,7 +61,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * class hierarchy will have been substituted with their dynamic values
  * (including <code>{TOKEN:<i>key</i>}</code> replacement with the property
  * values from the given token file or from
- * <code>default_token_subs.properties</code> by default). If no proper file
+ * <code>default_tokens.properties</code> by default). If no proper file
  * existed, or the file was empty, then an empty string is expressed.
  * </p>
  * 
