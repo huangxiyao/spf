@@ -271,39 +271,55 @@ table.props td {
 		</ul>
 		</li>
 		<li>3.4. <a href="#help.portlet.java">Producing portlet help
-		(help mode) using <code>FileDisplayPortletController</code></a></li>
+		(help mode) using Java code</a>
+		<ul>
+			<li>3.4.1. <a
+				href="#help.portlet.java.fileInterpolatorController">Using <code>FileInterpolatorController</code></a></li>
+		</ul>
+		</li>
+		<li>3.5. <a href="#help.portlet.jsp">Producing portlet help
+		(help mode) using JSP tag libraries</a>
+		<ul>
+			<li>3.5.1. <a href="#help.portlet.jsp.interpolate">Using <code>&lt;spf-file-portlet:interpolate&gt;</code></a>
+			</li>
+		</ul>
 	</ul>
 	</li>
 	<li>4. <a href="#file">File Display</a>
 	<ul>
 		<li>4.1. <a href="#file.about">About file display</a></li>
-		<li>4.2. <a href="#file.display">Displaying file content
+		<li>4.2. <a href="#file.display.java">Displaying file content
 		using Java code</a>
 		<ul>
-			<li>4.2.1. <a href="#file.display.fileInterpolator">Using <code>FileInterpolator</code>
-			to read and interpolate file content</a></li>
-			<li>4.2.2. <a href="#file.display.fileDisplayPortletController">Using
-			<code>FileDisplayPortletController</code> to display interpolated
-			file content</a></li>
-			<li>4.2.3. <a href="#file.display.htmlViewer">Using the <code>html-viewer</code>
-			portlet to display interpolated file content</a></li>
+			<li>4.2.1. <a href="#file.display.java.fileInterpolator">Using
+			<code>FileInterpolator</code> to interpolate file content</a></li>
+			<li>4.2.2. <a
+				href="#file.display.java.fileInterpolatorController">Using <code>FileInterpolatorController</code>
+			to display interpolated file content</a></li>
+			<li>4.2.3. <a href="#file.display.java.htmlViewer">Using the
+			<code>html-viewer</code> portlet to display interpolated file content</a></li>
 		</ul>
-		<li>4.3. <a href="#file.author">Authoring file content and
+		<li>4.3. <a href="#file.display.jsp">Displaying file content
+		using JSP tag libraries</a>
+		<ul>
+			<li>4.3.1. <a href="#file.display.jsp.interpolate">Using <code>&lt;spf-file-portlet:interpolate&gt;</code></a></li>
+		</ul>
+		<li>4.4. <a href="#file.author">Authoring file content and
 		using interpolation tokens</a>
 		<ul>
-			<li>4.3.1. <a href="#file.author.token.url">Including URLs
+			<li>4.4.1. <a href="#file.author.token.url">Including URLs
 			for supporting resources like images and CSS (<code>&lt;CONTENT-URL:<i>path</i>&gt;</code>,
 			<code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt</code>) </a></li>
-			<li>4.3.2. <a href="#file.author.token.user">Displaying user
+			<li>4.4.2. <a href="#file.author.token.user">Displaying user
 			information (<code>&lt;NAME&gt;</code>, <code>&lt;EMAIL&gt;</code>, <code>&lt;LANGUAGE-CODE&gt;</code>,
 			<code>LANGUAGE-TAG&gt;</code>, <code>&lt;USER-PROPERTY:<i>key</i>&gt;</code>)</a></li>
-			<li>4.3.3. <a href="#file.author.token.auth">Permissioning
+			<li>4.4.3. <a href="#file.author.token.auth">Permissioning
 			content for authorized users (<code>&lt;ROLE:<i>role-names</i>&gt;</code>,
 			<code>&lt;GROUP:<i>group-names</i>&gt;</code>)</a></li>
-			<li>4.3.4. <a href="#file.author.token.consolidate">Consolidating
+			<li>4.4.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>&lt;PORTLET:<i>friendly-ids</i>&gt;</code>,
 			<code>&lt;SITE:<i>site-names</i></code>, <code>&lt;TOKEN:<i>key</i>&gt;</code>)</a></li>
-			<li>4.3.5. <a href="#file.author.token.misc">Miscellaneous (<code>&lt;SITE&gt;</code>)</a></li>
+			<li>4.4.5. <a href="#file.author.token.misc">Miscellaneous (<code>&lt;SITE&gt;</code>)</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -3110,7 +3126,19 @@ extend.</p>
 <hr>
 
 <a name="help.portlet.java">
-<h3>3.4. Producing portlet help (help mode) using <code>FileDisplayPortletController</code></h3>
+<h3>3.4. Producing portlet help (help mode) using Java code</h3>
+</a>
+
+<a name="help.portlet.java.fileInterpolatorController">
+<h4>3.4.1. Using <code>FileInterpolatorController</code></h4>
+</a>
+
+<a name="help.portlet.jsp">
+<h3>3.5. Producing portlet help (help mode) using JSP tag libraries</h3>
+</a>
+
+<a name="help.portlet.jsp.interpolate">
+<h4>3.5.1. Using <code>&lt;spf-file-portlet:interpolate&gt;</code></h4>
 </a>
 
 <hr>
@@ -3127,54 +3155,127 @@ extend.</p>
 
 <hr>
 
-<a name="file.display">
+<a name="file.display.java">
 <h3>4.2. Displaying file content using Java code</h3>
 </a>
 
-<a name="file.display.fileInterpolator">
-<h4>4.2.1. Using <code>FileInterpolator</code> to read and
-interpolate file content</h4>
+<a name="file.display.java.fileInterpolator">
+<h4>4.2.1. Using <code>FileInterpolator</code> to interpolate file
+content</h4>
 </a>
 
-<a name="file.display.fileDisplayPortletController">
-<h4>4.2.2. Using <code>FileDisplayPortletController</code> to
-display interpolated file content</h4>
+<a name="file.display.java.fileInterpolatorController">
+<h4>4.2.2. Using <code>FileInterpolatorController</code> to display
+interpolated file content</h4>
 </a>
 
-<a name="file.display.htmlViewer">
+<p>The {@link
+com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController} is
+an abstract instance of Spring's {@link
+org.springframework.web.portlet.mvc.AbstractController}, which
+implements file interpolation during the render phase. The render-phase
+handler for this controller:</p>
+
+<ol>
+	<li>gets the base filename to display (an abstract method you
+	implement),</li>
+	<li>interpolates its content using the portlet {@link
+	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator},</li>
+	<li>then passes the interpolated content to a custom <code>execute</code>
+	method (and returns the <code>ModelAndView</code> from that method)
+	(another abstract method you implement).</li>
+</ol>
+
+<p>There are 2 abstract methods for you to implement:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#getFilename(javax.portlet.PortletRequest)}</dt>
+	<dd>
+	<p>Implement this method to return the base filename for the file
+	to interpolate. It may be for any bundle of localized supporting text
+	files contained either inside or outside (ie in the <i>portlet
+	resource bundle folder</i>) your portlet WAR. The base filename may include
+	any needed relative path (eg a subfolder) to help the system
+	classloader find the file. The localized files must be tagged with
+	locale properly. See the <a href="#i18n.location">discussion above</a>
+	for more information about external versus internal resources.</p>
+	
+	<p>Depending on your use case and desired business logic, you may
+	hardcode this method to return the desired filename; get the desired
+	filename from {@link javax.portlet.PortletPreferences}; etc. However
+	you get it, just return it from this method.</p>
+
+	<blockquote>
+	<p><b>Important:</b> Only interpolation of UTF-8 encoded file
+	content is supported.</p>
+	</blockquote>
+	</dd>
+
+	<dt>{@linkcom.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#execute(javax.portlet.PortletRequest,javax.portlet.PortletResponse,String)}</dt>
+	<dd>
+	<p>This method, which you implement, is given the string of
+	interpolated content from the file, and is expected to return the
+	Spring {@link org.springframework.web.portlet.ModelAndView} for Spring
+	to forward for view processing. For example, in this method you could
+	just copy the interpolated string into an attribute of that model. Or
+	you could do whatever custom logic you need.</p>
+	</dd>
+</dl>
+
+<p>After you have extended and implemented this class, remember that
+you need to configure it in your Spring application context so that it
+is invoked for your desired portlet mode. Also, presumably, you will
+want it to forward to some JSP or other view resolver - don't forget
+that you need to configure that, too. (For an example of this, for
+portlet <code>help</code> mode, see the <a
+	href="help.portlet.java.fileInterpolatorController">discussion
+above</a>.)</p>
+
+<a name="file.display.java.htmlViewer">
 <h4>4.2.3. Using the <code>html-viewer</code> portlet to display
 interpolated file content</h4>
 </a>
 
 <hr>
 
+<a name="file.display.jsp">
+<h3>4.2. Displaying file content using JSP tag libraries</h3>
+</a>
+
+<a name="file.display.jsp.interpolate">
+<h4>4.2.1. Using <code>&lt;spf-file-portlet:interpolate&gt;</code></h4>
+</a>
+
+<hr>
+
 <a name="file.author">
-<h3>4.3. Authoring file content and using interpolation tokens</h3>
+<h3>4.4. Authoring file content and using interpolation tokens</h3>
 </a>
 
 <a name="file.author.token.url">
-<h4>4.3.1. Including URLs for supporting resources like images and
+<h4>4.4.1. Including URLs for supporting resources like images and
 CSS (<code>&lt;CONTENT-URL:<i>path</i>&gt;</code>, <code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt</code>)</h4>
 </a>
 
 <a name="file.author.token.user">
-<h4>4.3.2. Displaying user information (<code>&lt;NAME&gt;</code>,
+<h4>4.4.2. Displaying user information (<code>&lt;NAME&gt;</code>,
 <code>&lt;EMAIL&gt;</code>, <code>&lt;LANGUAGE-CODE&gt;</code>, <code>LANGUAGE-TAG&gt;</code>,
 <code>&lt;USER-PROPERTY:<i>key</i>&gt;</code>)</h4>
 </a>
 
 <a name="file.author.token.auth">
-<h4>4.3.3. Permissioning content for authorized users (<code>&lt;ROLE:<i>role-names</i>&gt;</code>,
+<h4>4.4.3. Permissioning content for authorized users (<code>&lt;ROLE:<i>role-names</i>&gt;</code>,
 <code>&lt;GROUP:<i>group-names</i>&gt;</code>)</h4>
 </a>
 
 <a name="file.author.token.consolidate">
-<h4>4.3.4. Consolidating content for easier administration (<code>&lt;PORTLET:<i>friendly-ids</i>&gt;</code>,
+<h4>4.4.4. Consolidating content for easier administration (<code>&lt;PORTLET:<i>friendly-ids</i>&gt;</code>,
 <code>&lt;SITE:<i>site-names</i></code>, <code>&lt;TOKEN:<i>key</i>&gt;</code>)</h4>
 </a>
 
 <a name="file.author.token.misc">
-<h4>4.3.5. Miscellaneous (<code>&lt;SITE&gt;</code>)</h4>
+<h4>4.4.5. Miscellaneous (<code>&lt;SITE&gt;</code>)</h4>
 </a>
 
 <hr>

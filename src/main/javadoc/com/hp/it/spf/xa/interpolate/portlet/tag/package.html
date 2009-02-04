@@ -1,0 +1,124 @@
+<html>
+<body>
+<p>This package contains JSP tag classes and tag documentation for
+interpolating file content in Shared Portal Framework portlet
+applications.</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portlet developers should never need to use the
+Java classes in this package directly. Use the respective JSP tags
+instead. For your reference, the tag classes and their respective JSP
+tags are listed below:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.interpolate.portlet.tag.FileInterpolatorTag} - Tag
+	class for <a href="#interpolate"><code>&lt;spf-file-portlet:interpolate&gt;</code></a></dt>
+</dl>
+</blockquote>
+
+<a name="TLD">
+<h3>spf-file-portlet.tld</h3>
+</a>
+<p>The TLD file is <code>spf-file-portlet.tld</code> and it is
+contained inside the SPF portlet utilities JAR, in the <code>META-INF/</code>
+folder. Its URI is <code>/spf-file-portlet.tld</code> so that is the URI
+you should refer to it with, in your portlet application JSP's. Although
+you can use whatever JSP tag prefix you like, the documentation here
+will use the prefix <code>spf-file-portlet</code>.</p>
+
+<a name="interpolate">
+<h3>&lt;spf-file-portlet:interpolate&gt;</h3>
+</a>
+<p>Usage:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-file-portlet" uri="/spf-file-portlet.tld" %&gt;
+...
+&lt;spf-file-portlet:interpolate
+	file="<i>base-file</i>"
+	tokenFile="<i>token-substitutions-file</i>"
+	/&gt;
+</pre></blockquote>
+
+<p>You use this tag to interpolate a (possibly localized) file,
+which may include some of the special markup tokens supported by {@link
+com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}, and express the
+interpolated content.</p>
+
+<p>The file to be interpolated may be an external resource (ie,
+found in your <i>portlet resource bundle folder</i>) or an internal
+resource (ie, found inside your portlet application WAR). The file may
+be any static text (not binary) file: HTML, JavaScript, plain text, etc.
+The file encoding <b>must</b> by UTF-8.</p>
+
+<p>The file to be interpolated may be part of a resource bundle of
+localized versions of that file; all the localized files in the bundle
+should share the same base filename, be UTF-8 encoded, and (except for
+the base file itself) be tagged by locale according to the Java-standard
+for {@link java.util.ResourceBundle}. If you use external resourcing
+(ie, put them in the <i>portlet resource bundle folder</i>) then the
+location of the portlet bundle folder must be configured in <code>i18n_portlet_config.properties</code>.</p>
+
+<blockquote>
+<p><b>Note:</b> For more about where you put your supporting
+resource files, how you localize them, and how you configure <code>i18n_portlet_config.properties</code>,
+see the discussion in the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.location">SPF
+Portlet Utilities Developer's Guide</a>.</p>
+</blockquote>
+
+<p>For example, say you have a bundle of <code>text.html</code>
+files (including the base file, <code>text.html</code>, and some
+localized copies of it: <code>text_zh_TW.html</code>, <code>text_zh_CN.html</code>,
+etc). Imagine you have put them into the <code>html/</code> subfolder
+(of either your portlet WAR or the external portlet resource bundle
+directory). Then to display in the browser the interpolated content of
+the best-fit (for the current locale) file, use the following in your
+JSP:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-file-portlet" uri="/spf-file-portlet.tld" %&gt;
+...
+&lt;spf-file-portlet:interpolate file="/html/text.html" /&gt;
+</pre></blockquote>
+
+<p>Here are the tag attributes:</p>
+
+<dl>
+	<dt><code>file="<i>base-file</i>"</code></dt>
+	<dd>
+	<p>The <code>file</code> attribute gives the base filename to look
+	for (including any subfolder relative to where you put the bundle: ie,
+	relative to the <i>portlet resource bundle folder</i> if you set the
+	bundle up outside your WAR, or relative to the root of the portlet
+	application if you included the bundle inside the WAR). When you give
+	the <code>file</code> attribute, the tag will search the portlet bundle
+	folder first, and inside your WAR second, searching for the best-fit
+	file for the current locale, in the manner of {@link
+	java.util.ResourceBundle}. If no bundle for that base file is found,
+	then an empty string will be expressed. The <code>file</code> attribute
+	is required, and there will be an error if you do not provide it.</p>
+	</dd>
+	<dt><code>tokenFile="<i>token-substitutions-file</i>"</code></dt>
+	<dd>
+	<p>The <code>tokenFile</code> attribute is optional. It gives the
+	name of a token substitutions property file to use when processing any
+	special <code>{TOKEN:<i>key</i>}</code> tokens in the file content. By
+	default, a token substitutions propery file named <code>default_token_subs.properties</code>
+	will be assumed. You do not need to specify this attribute unless you
+	are using <code>{TOKEN:<i>key</i>}</code> tokens in your file content.</p>
+
+	<p>If you do have a token substitutions file, put it anywhere the
+	system classloader will look. For example, if your runtime environment
+	has a special dedicated "global resources" folder (eg SASU does this),
+	you can put it there. Or, you can put it inside your portlet
+	application WAR (eg in <code>/WEB-INF/classes</code>) though that could
+	make administration of the file harder. Your <code>tokenFile</code>
+	attribute value can include some path (eg a subfolder) relative to
+	where the classloader searches.</p>
+	</dd>
+</dl>
+</body>
+</html>
+

@@ -32,6 +32,11 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <li> The base text filename may be for an internal resource (ie contained
  * inside your portlet WAR), or an external resource (ie contained outside your
  * portlet WAR in the <i>portlet resource bundle folder</i>).</li>
+ * <li> The base text filename may be a base filename for a bundle of localized
+ * files, as per {@link ResourceBundle}. All of the localized files (except for
+ * the the base file itself) must be tagged with the locale, as per
+ * <code>ResourceBundle</code>.</li>
+ * <li> <b>Important:</b> The files must by UTF-8 encoded.</li>
  * </ul>
  * 
  * <p>
