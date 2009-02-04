@@ -14,9 +14,9 @@ import javax.servlet.jsp.tagext.TagSupport;
  * <code>&lt;spf-i18n-portal:localizedFileURL&gt;</code> and
  * <code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code> tags. These tags
  * express a URL pointing to a particular file, localized to best-fit the user's
- * locale. In the portlet case, this is a file in the portlet resource bundle
- * folder. In the portal case, it is a secondary support file for the current
- * portal component.
+ * locale. In the portlet case, this is a file in either the portlet resource
+ * bundle folder or the portlet WAR. In the portal case, it is a secondary
+ * support file for the current portal component.
  * </p>
  * <p>
  * Both portal and portlet tags have 2 alternative attributes, stored in this
@@ -53,7 +53,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * </ul>
  * <p>
  * In either case, the resource files in the bundle should be tagged by locale
- * according to the Java-standard for ResourceBundle.
+ * according to the Java-standard for {@link ResourceBundle}.
  * </p>
  * </li>
  * <li>
