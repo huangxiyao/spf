@@ -137,7 +137,16 @@ import com.hp.it.spf.tools.maven.car.packaging.WebAppPackagingTask;
  * <td>composite</td>
  * <td><code>boolean</code></td>
  * <td>-</td>
- * <td>Blah blah blah</td>
+ * <td>Flag indicating whether or not the CAR being assembled is a composite
+ * CAR. A composite CAR, is a Component Archive which contains only other CAR
+ * files. The composite CAR makes it easy to bundle-up and deploy into Vignette
+ * a number of CAR artifacts at the same time. When this flag is set to
+ * <code>true</code>, the packaging process will process <em>only</em> other CAR
+ * artifacts that are listed as dependencies of the current project. When this
+ * flag is set to <code>false</code>, the packaging process behaves like the WAR
+ * packaging process where webapp resources, Java classes and project
+ * dependencies are all copied to the appropriate locations in the CAR staging
+ * directory. The default value is: <code>false</code>.</td>
  * </tr>
  * <tr>
  * <td>outputFileNameMapping</td>

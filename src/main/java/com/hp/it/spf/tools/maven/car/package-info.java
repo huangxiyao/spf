@@ -63,6 +63,21 @@
  * provided as part of this plugin.
  * </p>
  * 
+ * <p>
+ * For the most, the CAR plugin functions very similarly to the Maven-provided 
+ * WAR plugin. The CAR plugin only supports a subset of the configuration 
+ * options that are exposed by the WAR plugin, but the most significant 
+ * difference between the two is that the CAR plugin generates an artifact with 
+ * a <em>.car</em> extension instead of a <em>.war</em> extenstion.
+ * </p>
+ * 
+ * <p>
+ * Much like the WAR plugin, any webapp resources (things like JSP files or
+ * the <em>component.xml</em> descriptor) that simply need to be included in
+ * the final CAR should be placed in the <em>src/main/webapp/</em> directory
+ * of the Maven project.
+ * </p>
+ * 
  * <h3>Usage</h3>
  * 
  * <p>
@@ -90,7 +105,7 @@
  * 
  * <p>
  * For information about configuring the plugin repository via the
- * <em>settings.xml</em> file, please see the Maven <a
+ * <em>settings.xml</em> file instead please see the Maven <a
  * href="http://maven.apache.org/settings.html">Settings Reference</a>
  * documentation.
  * </p>
@@ -107,11 +122,11 @@
  *   ...
  *   &lt;build&gt;
  *     &lt;plugins&gt;
- *       <strong>&lt;plugin&gt;
+ *       &lt;plugin&gt;
  *         &lt;groupId&gt;com.hp.it.spf.tools&lt;/groupId&gt;
  *         &lt;artifactId&gt;spf-maven-car-plugin&lt;/artifactId&gt;
  *         &lt;extensions&gt;true&lt;/extensions&gt;
- *       &lt;/plugin&gt;</strong>
+ *       &lt;/plugin&gt;
  *     &lt;/plugins&gt;
  *   &lt;/build&gt;
  *   ...
