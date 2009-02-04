@@ -97,6 +97,7 @@
  *   ...
  *   &lt;pluginRepositories&gt;
  *     &lt;pluginRepository&gt;
+ *         &lt;id&gt;<em>enter_repository_id_here</em>&lt;/id&gt;
  *         &lt;url&gt;<em>enter_repository_url_here</em>&lt;/url&gt;
  *     &lt;/pluginRepository&gt;
  *   &lt;/pluginRepositories&gt;
