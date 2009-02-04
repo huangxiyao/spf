@@ -25,11 +25,17 @@ import com.vignette.portal.website.enduser.PortalContext;
  * This portal utility class reads a text secondary support file (eg an HTML
  * file loaded to the current portal component as a secondary support file),
  * substituting dynamic values for various tokens, and returning the
- * interpolated content to the calling class. Note that the base text filename
- * you provide is used to find a best-fit file for the current portlet request's
- * locale, in the manner of the Java standard for {@link ResourceBundle}. This
- * is all done in the {@link #interpolate()} method, based on parameters you
- * setup in the constructor.
+ * interpolated content to the calling class. This is all done in the
+ * {@link #interpolate()} method, based on parameters you setup in the
+ * constructor.
+ * </p>
+ * <p>
+ * Note that the base text filename you provide is used to find a best-fit file
+ * for the current request's locale, among all the files for that basename in a
+ * bundle of files (each tagged with locale), in the manner of the Java standard
+ * for {@link ResourceBundle}. All of the files in the bundle must be loaded as
+ * secondary support files against the current portal component. <b>Important:</b>
+ * Your files must be UTF-8 encoded.
  * </p>
  * <p>
  * This class uses the portal {@link TokenParser} to do most of its work. As of
