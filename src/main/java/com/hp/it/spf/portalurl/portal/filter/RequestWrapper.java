@@ -88,6 +88,14 @@ class RequestWrapper extends HttpServletRequestWrapper
 			result = result.replaceAll(
 					"spf_p\\.pst=" + portletFriendlyId,
 					"javax\\.portlet\\.pst=" + portletUid);
+			// parameters starting with javax.portlet.prp= contain portlet-specific values
+			result = result.replaceAll(
+					"spf_p\\.prp_" + portletFriendlyId + "=",
+					"javax\\.portlet\\.prp_" + portletUid + "=");
+			// parameters starting with javax.portlet.pbp= contain portlet-specific values
+			result = result.replaceAll(
+					"spf_p\\.pbp_" + portletFriendlyId + "=",
+					"javax\\.portlet\\.pbp_" + portletUid + "=");
 			// parameters starting with javax.portlet.prp_ contain portlet-specific values
 			result = result.replaceAll(
 					"spf_p\\.prp_" + portletFriendlyId + "_",
@@ -154,11 +162,11 @@ class RequestWrapper extends HttpServletRequestWrapper
 					Map.Entry<String, String> entry = it2.next();
 					String friendlyId = entry.getKey();
 					String uid = entry.getValue();
-					String namePrefix = (isPublicRenderParameter ? "spf_p.pbp_" : "spf_p.prp_") + friendlyId + "_";
+					String namePrefix = (isPublicRenderParameter ? "spf_p.pbp_" : "spf_p.prp_") + friendlyId;
 					if (paramName.startsWith(namePrefix)) {
 						newParamName =
-								(isPublicRenderParameter ? "javax.portlet.pbp_" : "javax.portlet.prp_") +
-								uid + "_" + paramName.substring(namePrefix.length());
+								(isPublicRenderParameter ? "javax.portlet.pbp_" : "javax.portlet.prp_") + 
+								uid + paramName.substring(namePrefix.length());
 						break;
 					}
 				}

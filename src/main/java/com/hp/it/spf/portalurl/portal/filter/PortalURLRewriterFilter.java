@@ -115,7 +115,10 @@ public class PortalURLRewriterFilter implements Filter
 		while (portletPrefixedParamNames.hasMoreElements()) {
 			String paramName = (String) portletPrefixedParamNames.nextElement();
 			int posUnderscore = paramName.indexOf('_', paramNamePrefix.length());
-			if (posUnderscore != -1) {
+			if (posUnderscore == -1) {
+				portletFriendlyIds.add(paramName.substring(paramNamePrefix.length()));
+			}
+			else {
 				portletFriendlyIds.add(paramName.substring(paramNamePrefix.length(), posUnderscore));
 			}
 		}
