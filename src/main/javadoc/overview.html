@@ -967,16 +967,17 @@ filesystem to which the portlet JVM has at least read access.</p>
 	<p>Finally, if you have non-message static resources (images, etc)
 	in your portlet bundle folder, and you will be using {@link
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility} to make URL's for them (eg
-	to render in the browser), note that SPF uses a file-relay servlet (see
-	<a href="#i18n.supporting.relay">discussion below</a>) to service those
-	URL's. Deploy that relay servlet in any Web application which is <i>both</i>
-	accessible to the end-user browser, and has access to the portlet
-	bundle folder. For example, if you are using local portlets, you could
-	deploy it in your portal application. By default, SPF assumes you have
-	deployed it in your portlet application, mapped under the hardcoded
-	{@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT}
-	path. See the <a href="#i18n.supporting.relay">discussion below</a> for
-	more information about deploying this servlet. If you deploy it in a
+	to render in the browser), note that SPF uses a <i>file relay
+	servlet</i> (see <a href="#i18n.supporting.relay">discussion below</a>) to
+	service those URL's. Deploy that relay servlet in any Web application
+	which is <i>both</i> accessible to the end-user browser, and has access
+	to the portlet bundle folder. For example, if you are using local
+	portlets, you could deploy it in your portal application. By default,
+	SPF assumes you have deployed it in your portlet application, mapped
+	under the hardcoded {@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} path. See
+	the <a href="#i18n.supporting.relay">discussion below</a> for more
+	information about deploying this servlet. If you deploy it in a
 	non-default location, you will need to configure that in <a
 		href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>.
 	</p>
@@ -2348,6 +2349,47 @@ resources</a> <b>and</b> you are either putting the <i>portlet resource
 bundle folder</i> in a non-default location, <b>or</b> you are deploying the
 <i>file relay servlet</i> in a non-default location.</p>
 </blockquote>
+
+<p>The <code>i18n_portlet_config.properties</code> lets you
+configure the location of the portlet resource bundle folder, on the
+portlet server, and the URI for the file relay servlet.</p>
+
+<dl>
+	<dt><code>portlet.bundleDirectory</code></dt>
+	<dd>
+	<p>This property gives the fully-qualified pathname of the <i>portlet
+	resource bundle folder</i> on the portlet server. For example:</p>
+	<blockquote><pre>
+portlet.bundleDirectory=/var/my_portlet/my_resources
+</pre></blockquote>
+	<p>The default value for this property is {@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT} and you
+	do not need to configure this property if you accept the default.</p>
+	</dd>
+	<dt><code>servlet.fileRelay.url</code></dt>
+	<dd>
+	<p>This property gives the URI of the <i>file relay servlet</i>.
+	For example, if you are deploying the relay servlet inside your portlet
+	application (as is recommended), put your servlet mapping path here,
+	like this (eg where you have used <code>&lt;servlet-mapping&gt;/getFile/*</code>
+	in your deployment descriptor for the servlet):</p>
+	<blockquote><pre>
+servlet.fileRelay.url=/getFile
+	</pre></blockquote>
+	<p>As another example, if you are deploying the relay servlet in
+	the SPF portal application (but remember it must have access to the
+	portlet bundle folder, so this typically only works with a
+	local-portlet architecture), then likewise put your servlet mapping
+	path here, like this (eg where the SPF portal application is deployed
+	under <code>/portal</code> and the relay servlet is under <code>&lt;servlet-mapping&gt;/relay/*</code>):</p>
+	<blockquote><pre>
+servlet.fileRelay.url=/portal/relay
+	</pre></blockquote>
+	<p>The default value for this property is {@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} and you
+	do not need to configure it if you accept that default.</p>
+	</dd>
+</dl>
 
 <a name="i18n.other.init_relay">
 <h4>2.9.4. Configuring <code>init_relay.properties</code>
