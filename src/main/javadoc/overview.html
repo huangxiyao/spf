@@ -230,7 +230,6 @@ table.props td {
 			<li>2.9.4. <a href="#i18n.other.init_relay">Configuring <code>init_relay.properties</code>
 			(optional)</a></li>
 			<li>2.9.5. <a href="#i18n.other.common">Using the common <code>I18nUtility</code></a></li>
-			<li>2.9.6. <a href="#i18n.other.refs">Other references</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -655,7 +654,9 @@ Developer's Guide here: <a
 <p>Spring Portlet MVC (the basis of the SPF portlet utilities and
 WPAP) provides basic support for internationalizing text strings
 (message resources) in your portlet application. The SPF portlet
-utilities extend the Spring functionality primarily in these directions:</p>
+utilities (primarily the {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility} class) extend the Spring
+functionality primarily in these directions:</p>
 
 <ul>
 	<li>
@@ -666,20 +667,13 @@ utilities extend the Spring functionality primarily in these directions:</p>
 	<p>injecting contextual help into your message resources</p>
 	</li>
 	<li>
-	<p>miscellaneous useful methods, inherited from the <a
-		href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html">SPF
-	common utilities</a>, for:</p>
-	<ul>
-		<li>localized display of locale names, timezone names, user
-		names, etc, in SPF-standard format</li>
-		<li>transformation between locales, HP Passport languages, and
-		RFC 3066 language tags</li>
-		<li>and more</li>
-		<li><b>note:</b> these inherited methods are documented in the <a
-			href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#top">SPF
-		Common Utilities Developer's Guide</a> as well as in the JavaDoc for the
-		{@link com.hp.it.spf.xa.i18n.portlet.I18nUtility} class.</li>
-	</ul>
+	<p>placing no-localization reminders into your message resources</p>
+	</li>
+	<li>
+	<p>miscellaneous useful methods, inherited from the {@link
+	com.hp.it.spf.xa.i18n.I18nUtility} class (see <a
+		href="#i18n.other.common">using the common <code>I18nUtility</code></a>
+	at the end of this section)</p>
 	</li>
 </ul>
 
@@ -2432,9 +2426,27 @@ video/quicktime</code> will be used in the download.</p>
 <h4>2.9.5. Using the common <code>I18nUtility</code></h4>
 </a>
 
-<a name="i18n.other.refs">
-<h4>2.9.6. Other references</h4>
-</a>
+<p>Above we have seen the various internationalization API's and
+tags provided by the SPF portlet utilities, primarily in the {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility} class. Be aware that class
+inherits from the common {@link com.hp.it.spf.xa.i18n.I18nUtility}, part
+of the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html">SPF
+common utilities</a>. And the common <code>I18nUtility</code> provides
+numerous miscellaneous methods related to internationalization,
+encompassing:</p>
+
+<ul>
+	<li>Localized display of locale names, timezone names, user names,
+	etc, in SPF-standard format</li>
+	<li>Transformation between locales, HP Passport languages, and RFC
+	3066 language tags</li>
+	<li>And more.</li>
+	<li><b>Note:</b> these inherited methods are documented in the <a
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#top">SPF
+	Common Utilities Developer's Guide</a> as well as in the JavaDoc for the
+	{@link com.hp.it.spf.xa.i18n.portlet.I18nUtility} class.</li>
+</ul>
 
 <hr>
 
