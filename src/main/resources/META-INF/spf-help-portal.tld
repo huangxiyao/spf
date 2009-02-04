@@ -17,7 +17,7 @@
 		<info>
 			Expresses a "classic"-style contextual-help hyperlink with
 			the given parameters. There are too many parameters to
-			describe here.
+			describe here. This tag is for use by SPF portal components.
 		</info>
 		<attribute>
 			<name>anchorKey</name>
@@ -130,7 +130,7 @@
 		<info>
 			Expresses a "classic"-style global-help hyperlink with the
 			given parameters. There are too many parameters to describe
-			here.
+			here. This tag is for use by SPF portal components.
 		</info>
 		<attribute>
 			<name>anchorKey</name>

@@ -19,7 +19,8 @@
 		<info>
 			Expresses a URL for a proper best-fit localized version of
 			the given external file reference in the portal secondary
-			support files for the current component.
+			support files for the current component. This tag is for SPF
+			portal components.
 		</info>
 		<attribute>
 			<name>file</name>
@@ -52,7 +53,7 @@
 			&lt;spf-i18n-portal:i18nContextualHelpParam&gt; tags inside
 			the tag body. To insert global-help into the message, put
 			&lt;spf-i18n-portal:i18nGlobalHelpParam&gt; tags inside the
-			tag body.
+			tag body. This tag is for SPF portal components.
 		</info>
 		<attribute>
 			<name>stringID</name>
@@ -90,7 +91,8 @@
 			&lt;spf-i18n-portal:i18nValue&gt; tag. The given value will
 			be treated as a general string parameter to substitute into
 			the message string where it is formatted as per the
-			Java-standard MessageFormat specification.
+			Java-standard MessageFormat specification. This tag is for
+			SPF portal components.
 		</info>
 		<attribute>
 			<name>value</name>
@@ -110,7 +112,9 @@
 			&lt;spf-i18n-portal:i18nValue&gt; tag. These parameters are
 			used to populate a classic-style contextual-help hyperlink
 			corresponding to any special &lt;Contextual_Help&gt; token
-			found inside the message string.
+			found inside the message string. There are too many tag
+			attributes to describe here. This tag is for SPF portal
+			components.
 		</info>
 		<attribute>
 			<name>title</name>
@@ -185,13 +189,17 @@
 			&lt;spf-i18n-portal:i18nValue&gt; tag. These parameters are
 			used to populate a classic-style global-help hyperlink
 			corresponding to any special &lt;Global_Help&gt; token found
-			inside the message string.
+			inside the message string. You can provide a document
+			fragment name for the global help page to scroll to, and you
+			can provide a set of Javascript window.open() window
+			features to use for the child window. This tag is for SPF
+			portal components.
 		</info>
-    	<attribute>
-     		<name>fragment</name>
-       		<required>false</required>
-       		<rtexprvalue>true</rtexprvalue>
-      	</attribute>
+		<attribute>
+			<name>fragment</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 		<attribute>
 			<name>windowFeatures</name>
 			<required>false</required>
@@ -210,7 +218,8 @@
 			drop-down list of the names and values for the available
 			locales, with the current locale pre-chosen, and including a
 			label message for prompting the user to make a selection, as
-			well as a submit button image.
+			well as a submit button image. This tag is for SPF portal
+			components.
 		</info>
 		<attribute>
 			<name>label</name>
@@ -263,6 +272,7 @@
 		<info>
 			Expresses the "classic"-style locale indicator widget: a
 			simple string displaying the name of the current locale.
+			This tag is for SPF portal components.
 		</info>
 	</tag>
 </taglib>
