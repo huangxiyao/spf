@@ -4,10 +4,10 @@
  * artifacts that conform to the Vignette Component Archive (CAR) standards.
  * 
  * <p>
- * For the most part the CAR packaging lifecycle is identical to the standard
- * WAR lifecycle except the final artifact is named with a .car extension
- * instead of a .war extension. The 'car' packaging definition assigns the
- * following life-cycle phase bindings:
+ * For the most part, the CAR packaging lifecycle is identical to the standard
+ * WAR lifecycle except that the war mojo typically bound to the 
+ * <em>package</em> life-cycle phase is replaced by the car mojo. The 'car' 
+ * packaging definition assigns the following life-cycle phase bindings:
  * </p>
  * 
  * <table border="1">
@@ -64,11 +64,12 @@
  * </p>
  * 
  * <p>
- * For the most, the CAR plugin functions very similarly to the Maven-provided 
- * WAR plugin. The CAR plugin only supports a subset of the configuration 
- * options that are exposed by the WAR plugin, but the most significant 
- * difference between the two is that the CAR plugin generates an artifact with 
- * a <em>.car</em> extension instead of a <em>.war</em> extenstion.
+ * The <code>CarMojo</code> functions very similarly to the Maven-provided 
+ * <code>WarMojo</code>. The <code>CarMojo</code> only supports a subset of the 
+ * configuration options that are exposed by the WAR plugin, but the most 
+ * significant difference between the two is that the CAR plugin generates an 
+ * artifact with a <em>.car</em> extension instead of a <em>.war</em> 
+ * extenstion.
  * </p>
  * 
  * <p>
