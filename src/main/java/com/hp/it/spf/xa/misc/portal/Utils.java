@@ -30,7 +30,7 @@ import com.vignette.portal.website.enduser.PortalContext;
 
 /**
  * A container class for miscellaneous utility methods for Vignette portal
- * components. *
+ * components.
  * 
  * @author <link href="ye.liu@hp.com">Liu Ye</link>
  * @version TBD
@@ -299,11 +299,11 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
-	 * Get the value for the given user property from the portal User object in
-	 * the given portal context. Returns null if this property has not been set
-	 * in the user object, or if the user object itself is null or guest (eg,
-	 * when the user is not logged-in), or the portal context or key provided
-	 * were null.
+	 * Get the value for the given user property from the SPF <i>user profile
+	 * map</i> in the given portal context. Returns null if this property has
+	 * not been set in the user object, or if the user object itself is null or
+	 * guest (eg, when the user is not logged-in), or the portal context or key
+	 * provided were null.
 	 * 
 	 * @param portalContext
 	 *            The portal context.
@@ -313,7 +313,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 */
 	public static Object getUserProperty(PortalContext portalContext, String key) {
 		Map userProfile = getUserProfileMap(portalContext);
-		if  (userProfile == null) {
+		if (userProfile == null) {
 			return null;
 		} else {
 			return userProfile.get(key);
@@ -321,7 +321,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
-	 * Get the user profile map from http session.
+	 * Get the SPF <i>user profile map</i> from the given portal context. The user profile
+	 * map contains all of the SPF user attributes.
 	 * 
 	 * @param portalContext
 	 *            The portal context.
@@ -333,9 +334,9 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		}
 		HttpSession session = portalContext.getPortalRequest().getRequest()
 				.getSession();
-		return (Map)session.getAttribute(Consts.USER_PROFILE_KEY);
+		return (Map) session.getAttribute(Consts.USER_PROFILE_KEY);
 	}
-	
+
 	/**
 	 * Get the user groups from the given portal context. These are the
 	 * authorization groups defined for the current request in the portal. The
@@ -348,8 +349,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	public static String[] getGroups(PortalContext portalContext) {
 		Map userProfile = getUserProfileMap(portalContext);
 		String[] groups = null;
-		if  (userProfile != null) {
-			return (String[])userProfile.get(Consts.KEY_USER_GROUPS);
+		if (userProfile != null) {
+			return (String[]) userProfile.get(Consts.KEY_USER_GROUPS);
 		}
 		return groups;
 	}
