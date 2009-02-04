@@ -8,6 +8,7 @@ package com.hp.it.spf.xa.misc.portal;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -311,23 +312,30 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @return The user property value.
 	 */
 	public static Object getUserProperty(PortalContext portalContext, String key) {
-		if (portalContext == null || key == null) {
+		Map userProfile = getUserProfileMap(portalContext);
+		if  (userProfile == null) {
+			return null;
+		} else {
+			return userProfile.get(key);
+		}
+	}
+
+	/**
+	 * Get the user profile map from http session.
+	 * 
+	 * @param portalContext
+	 *            The portal context.
+	 * @return The user profile map.
+	 */
+	public static Map getUserProfileMap(PortalContext portalContext) {
+		if (portalContext == null) {
 			return null;
 		}
 		HttpSession session = portalContext.getPortalRequest().getRequest()
 				.getSession();
-		User currentUser = SessionUtils.getCurrentUser(session);
-		// TODO: Get user property from the current user object, if not a guest
-		// user. If a guest (or null) user, or the property does not exist in
-		// the user, return null. Also see the property key name constants,
-		// defined in the portal Consts class - they are marked TODO as well.
-		if (currentUser != null && !currentUser.isGuestUser()) {
-			return currentUser.getProperty(key.trim());
-		} else {
-			return null;
-		}
+		return (Map)session.getAttribute(Consts.USER_PROFILE_KEY);
 	}
-
+	
 	/**
 	 * Get the user groups from the given portal context. These are the
 	 * authorization groups defined for the current request in the portal. The
@@ -338,10 +346,10 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @return The list of groups (null if none).
 	 */
 	public static String[] getGroups(PortalContext portalContext) {
+		Map userProfile = getUserProfileMap(portalContext);
 		String[] groups = null;
-		if (portalContext != null) {
-			// TODO: Get groups from request using new authentication module. If
-			// no groups found in request, return null.
+		if  (userProfile != null) {
+			return (String[])userProfile.get(Consts.KEY_USER_GROUPS);
 		}
 		return groups;
 	}
