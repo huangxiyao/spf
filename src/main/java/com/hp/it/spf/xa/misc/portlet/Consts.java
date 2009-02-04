@@ -15,4 +15,10 @@ package com.hp.it.spf.xa.misc.portlet;
  */
 public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 
+	/**
+	 * The name of the render parameter containing the document fragment name to use in
+	 * your <code>help</code> mode, passed by a contextual-help no-script hyperlink.
+	 */
+	public final static String PARAM_FRAGMENT = "fragment";
+
 }

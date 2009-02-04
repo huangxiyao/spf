@@ -12,6 +12,7 @@ import javax.portlet.RenderResponse;
 import javax.portlet.PortletURL;
 
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+import com.hp.it.spf.xa.misc.portlet.Consts;
 
 /**
  * <p>
@@ -160,7 +161,7 @@ public class ClassicContextualHelpProvider extends
 					// pass fragment name
 					if (noScriptHref != null && noScriptHref.startsWith("#")) {
 						String fragmentName = noScriptHref.substring(1);
-						url.setParameter("fragment", fragmentName);
+						url.setParameter(Consts.PARAM_FRAGMENT, fragmentName);
 					}
 					noscriptUrl = url.toString();
 				}
