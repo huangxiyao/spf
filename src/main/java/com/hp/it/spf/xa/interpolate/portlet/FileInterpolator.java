@@ -105,7 +105,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <dd>
  * <p>
  * Use this token to insert the email address of the user into the interpolated
- * content. The email address is taken from the user information passed from the
+ * content. The email address is taken from the user profile map passed from the
  * portal into the portlet request by SPF. For example, <code>{EMAIL}</code>
  * is replaced with <code>john.doe@acme.com</code> for that user. (If the
  * email address in the user profile map is null - eg the user is not logged-in -
@@ -263,7 +263,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * Use this token to insert the full name of the user into the interpolated
  * content, where the given (first) and family (last) names are in the customary
- * order for the user's locale. The name is taken from the user information
+ * order for the user's locale. The name is taken from the user profile map
  * placed in the portlet request by SPF. The locale is also taken from the
  * current portlet request.
  * </p>
@@ -509,7 +509,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * Use this token to insert a given string property of the user into the
  * interpolated content. The <code><i>key</i></code> parameter in the token
  * is the name of the user property, and the user properties themselves are
- * taken from the user information placed by SPF in the current portlet request.
+ * taken from the user profile map placed by SPF in the current portlet request.
  * For example, <code>{USER-PROPERTY:user.name.given}</code> is replaced with
  * <code>Scott</code> for a user with such a first (given) name. The property
  * name <code><i>key</i></code>'s are not listed here and may vary based on
@@ -734,7 +734,7 @@ public class FileInterpolator extends
 	}
 
 	/**
-	 * Get the email address from the user information (<code>PortletRequest.USER_INFO</code>)
+	 * Get the email address from the user profile map (<code>PortletRequest.USER_INFO</code>)
 	 * in the portlet request provided to the constructor. Returns null if this
 	 * has not been set in the request (eg, when the user is not logged-in), or
 	 * the request provided to the constructor was null.
@@ -746,15 +746,14 @@ public class FileInterpolator extends
 			return null;
 		}
 		try {
-			return (String) Utils.getUserProperty(request,
-					Consts.KEY_USER_INFO_EMAIL);
+			return (String) Utils.getUserProperty(request, Consts.KEY_EMAIL);
 		} catch (ClassCastException e) {
 			return null;
 		}
 	}
 
 	/**
-	 * Get the first (given) name from the user information (<code>PortletRequest.USER_INFO</code>)
+	 * Get the first (given) name from the user profile map (<code>PortletRequest.USER_INFO</code>)
 	 * in the portlet request provided to the constructor. Returns null if this
 	 * has not been set in the request (eg, when the user is not logged-in), or
 	 * the request provided to the constructor was null.
@@ -767,14 +766,14 @@ public class FileInterpolator extends
 		}
 		try {
 			return (String) Utils.getUserProperty(request,
-					Consts.KEY_USER_INFO_GIVEN_NAME);
+					Consts.KEY_FIRST_NAME);
 		} catch (ClassCastException e) {
 			return null;
 		}
 	}
 
 	/**
-	 * Get the last (family) name from the user information (<code>PortletRequest.USER_INFO</code>)
+	 * Get the last (family) name from the user profile map (<code>PortletRequest.USER_INFO</code>)
 	 * in the portlet request provided to the constructor. Returns null if this
 	 * has not been set in the request (eg, when the user is not logged-in), or
 	 * the request provided to the constructor was null.
@@ -786,8 +785,8 @@ public class FileInterpolator extends
 			return null;
 		}
 		try {
-			return (String) Utils.getUserProperty(request,
-					Consts.KEY_USER_INFO_FAMILY_NAME);
+			return (String) Utils
+					.getUserProperty(request, Consts.KEY_LAST_NAME);
 		} catch (ClassCastException e) {
 			return null;
 		}

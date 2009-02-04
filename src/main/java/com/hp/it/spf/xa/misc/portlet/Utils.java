@@ -35,8 +35,9 @@ import org.springframework.web.portlet.context.PortletApplicationContextUtils;
 public class Utils extends com.hp.it.spf.xa.misc.Utils {
 
 	/**
-	 * Returns the Spring ApplicationContext object from the given portlet
-	 * request. Returns null if a null request was provided.
+	 * Returns the Spring {@link org.springframework.context.ApplicationContext}
+	 * object from the given portlet request. Returns null if a null request was
+	 * provided.
 	 * 
 	 * @param request
 	 *            The portlet request.
@@ -53,22 +54,38 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
-	 * Get the current value for the given user property from the P3P user
-	 * information in the given portlet request. The user information is
-	 * obtained from the standard location (PortletRequest.USER_INFO). Returns
-	 * null if this property has not been set in the user information, or if the
-	 * user information itself is null or guest (eg, when the user is not
-	 * logged-in), or the portlet request or key provided were null.
+	 * <p>
+	 * Get the current value for the given user property from the SPF <i>user
+	 * profile map</i> in the given portlet request. The map is obtained from
+	 * the Java-standard attribute named
+	 * {@link javax.portlet.PortletRequest#USER_INFO}. The method returns null
+	 * if this property has not been set in the user profile map, or if the user
+	 * profile map itself is null (which should never happen), or the portlet
+	 * request or key provided were null.
+	 * </p>
+	 * <p>
+	 * If the user is not logged-in, this method returns the value from the map
+	 * for the given property for an anonymous (ie guest) user. In many cases,
+	 * that means null will be returned, but not necessarily (for example, the
+	 * {@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_USER_NAME} attribute has
+	 * a particular non-null value for an anonymous user. To tell whether the
+	 * user is anonymous or authenticated, use the
+	 * {@link #isAuthenticatedUser(PortletRequest)} method.
+	 * </p>
 	 * 
 	 * @param request
 	 *            The portlet request.
 	 * @param key
-	 *            The user property name.
+	 *            The user property name. See the property key name constants
+	 *            (ie class attributes starting with <code>KEY_</code>) in
+	 *            {@link com.hp.it.spf.xa.misc.portlet.Consts}, such as
+	 *            {@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_EMAIL}.
 	 * @return The user property value.
 	 */
 	public static Object getUserProperty(PortletRequest request, String key) {
 		if (request != null && key != null) {
-			// See the property key name constants, defined in the common Consts class.
+			// See the property key name constants, defined in the common Consts
+			// class.
 			Object o = request.getAttribute(PortletRequest.USER_INFO);
 			if (o != null) {
 				Map userMap = (Map) o;
@@ -81,8 +98,9 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	/**
 	 * Return true if the given portlet request indicates the user is logged-in
 	 * (ie authenticated), or false if it indicates the user is not logged-in
-	 * (ie anonymous). This is based on the user information present in the
-	 * standard location (PortletRequest.USER_INFO) - eg, when that information
+	 * (ie anonymous). This is based on the SPF <i>user profile map</i> present
+	 * in the Java-standard attribute named
+	 * {@link javax.portlet.PortletRequest#USER_INFO}. When that information
 	 * indicates an authenticated user, this method returns true, but when it
 	 * indicates a guest or null user, it returns false.
 	 * 
@@ -96,7 +114,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 			if (o != null) {
 				Map userMap = (Map) o;
 				String username = (String) userMap.get(Consts.KEY_USER_NAME);
-				if (username != null && !username.startsWith(Consts.ANON_USER_NAME_PREFIX)) {
+				if (username != null
+						&& !username.startsWith(Consts.ANON_USER_NAME_PREFIX)) {
 					return true;
 				}
 			}
@@ -109,9 +128,9 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * authorization groups defined for the current request in the portal (thus
 	 * they are portal elements, not part of the portlet application itself).
 	 * The SPF framework propagates the user groups from the portal to the
-	 * portlet where they are made accessible in the request, so this method
-	 * just returns them from the request. The method returns null if there were
-	 * no groups in the request.
+	 * portlet where they are made accessible in the SPF <i>user profile map</i>
+	 * in the request, so this method just returns them from the request. The
+	 * method returns null if there were no groups in the request.
 	 * 
 	 * @param request
 	 *            The portlet request.
@@ -149,7 +168,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
 			if (o != null) {
 				Map contextMap = (Map) o;
-				return (String)contextMap.get(Consts.KEY_PORTAL_SITE_NAME);
+				return (String) contextMap.get(Consts.KEY_PORTAL_SITE_NAME);
 			}
 		}
 		return siteName;
@@ -181,7 +200,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
 			if (o != null) {
 				Map contextMap = (Map) o;
-				return (String)contextMap.get(Consts.KEY_PORTAL_SITE_URL);
+				return (String) contextMap.get(Consts.KEY_PORTAL_SITE_URL);
 			}
 		}
 		return siteURL;
@@ -213,7 +232,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
 			if (o != null) {
 				Map contextMap = (Map) o;
-				return (String)contextMap.get(Consts.KEY_PORTAL_REQUEST_URL);
+				return (String) contextMap.get(Consts.KEY_PORTAL_REQUEST_URL);
 			}
 		}
 		return requestURL;
