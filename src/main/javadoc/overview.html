@@ -3179,18 +3179,19 @@ handler for this controller:</p>
 <ol>
 	<li>gets the base filename to display (an abstract method you
 	implement),</li>
-	<li>interpolates its content using the portlet {@link
+	<li>interpolates the proper localized file for the given base
+	filename, using the portlet {@link
 	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator},</li>
 	<li>then passes the interpolated content to a custom <code>execute</code>
-	method (and returns the <code>ModelAndView</code> from that method)
-	(another abstract method you implement).</li>
+	method (and returns the Spring <code>ModelAndView</code> from that
+	method) (another abstract method you implement).</li>
 </ol>
 
 <p>There are 2 abstract methods for you to implement:</p>
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#getFilename(javax.portlet.PortletRequest)}</dt>
+	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#getFilename(PortletRequest)}</dt>
 	<dd>
 	<p>Implement this method to return the base filename for the file
 	to interpolate. It may be for any bundle of localized supporting text
@@ -3200,11 +3201,13 @@ handler for this controller:</p>
 	classloader find the file. The localized files must be tagged with
 	locale properly. See the <a href="#i18n.location">discussion above</a>
 	for more information about external versus internal resources.</p>
-	
+
 	<p>Depending on your use case and desired business logic, you may
 	hardcode this method to return the desired filename; get the desired
 	filename from {@link javax.portlet.PortletPreferences}; etc. However
-	you get it, just return it from this method.</p>
+	you get it, just return it from this method. If you return null or a
+	non-existent or empty file, then the interpolated file content will be
+	null.</p>
 
 	<blockquote>
 	<p><b>Important:</b> Only interpolation of UTF-8 encoded file
@@ -3212,23 +3215,104 @@ handler for this controller:</p>
 	</blockquote>
 	</dd>
 
-	<dt>{@linkcom.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#execute(javax.portlet.PortletRequest,javax.portlet.PortletResponse,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#execute(PortletRequest,PortletResponse,String)}</dt>
 	<dd>
 	<p>This method, which you implement, is given the string of
 	interpolated content from the file, and is expected to return the
 	Spring {@link org.springframework.web.portlet.ModelAndView} for Spring
-	to forward for view processing. For example, in this method you could
-	just copy the interpolated string into an attribute of that model. Or
-	you could do whatever custom logic you need.</p>
+	to forward for view processing. If there was a problem interpolating
+	your file content (eg the file was non-existent or empty), the given
+	string will be null.</p>
+
+	<p>For example, in this method you could just copy the interpolated
+	string into an attribute of that model. Or you could do whatever custom
+	logic you need. If you encounter an error, you can throw an exception
+	from this method; it will be thrown by <code>FileInterpolatorController</code>
+	back to Spring, which will handle it according to the exception
+	handling you have setup for your Spring portlet.</p>
 	</dd>
 </dl>
 
-<p>After you have extended and implemented this class, remember that
-you need to configure it in your Spring application context so that it
-is invoked for your desired portlet mode. Also, presumably, you will
-want it to forward to some JSP or other view resolver - don't forget
-that you need to configure that, too. (For an example of this, for
-portlet <code>help</code> mode, see the <a
+<p>There is also one class attribute you may wish to override:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#subsFileName}</dt>
+	<dd>
+	<p>If desired, override this attribute (inside your constructor)
+	and set it to the name of the token substitution property file to use
+	during the interpolation. This is the property file containing
+	key-value pairs which {@link
+	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} will substitute
+	for any special <code>{TOKEN:<i>key</i>}</code> tokens found in the
+	file content. (Please see the class documentation for how that works.)
+	By default, a file named <code>default_tokens.properties</code> will be
+	assumed. If your file to interpolate does not contain any <code>{TOKEN:<i>key</i>}</code>
+	tokens, or you are willing to use the default file, you do not need to
+	set this attribute.</p>
+
+	<p>If you do set this attribute, set it to the filename (and any
+	needed relative path) for the property file, which the system
+	classloader can use to find the file. Put the file anywhere the system
+	classloader will look. For example, if your runtime environment has a
+	special dedicated "global resources" folder (eg SASU does this), you
+	can put it there. Or, you can put it inside your portlet application
+	WAR (eg in <code>/WEB-INF/classes</code>) though that could make
+	administration of the file harder. You can put it in a subfolder
+	thereof, so long as you set that subfolder as relative path with the
+	filename in the {@link
+	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#subsFileName}.</p>
+
+	<p>A template for the token substitutions file, also named <code>default_tokens.properties</code>,
+	is provided in the SPF common utilities. You can download it from <b><font
+		color="blue">TBD</font></b>.</p>
+	</p>
+	</dd>
+</dl>
+
+<p>For example, here is a simple extension/implementation of the <code>FileInterpolatorController</code>,
+which just interpolates the <code>text.html</code> file (ie the proper
+localized version thereof, for the current locale, considering the
+available files in that bundle, either in the portlet resource bundle or
+portlet WAR's <code>html/</code> subfolder). After interpolating, it
+sets the content as an element named <code>fileContent</code> in the <code>ModelAndView</code>
+for the <code>fileDisplay</code> view, where the JSP for that view will
+later be able to find it. The token substitutions file is set to <code>my_tokens.properties</code>
+for purposes of the interpolation (that properties file should also be
+deployed where the system classloader can find it).</p>
+
+<blockquote><pre>
+package com.hp.it.my.package;
+...
+import com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController;
+...
+public class MyFileInterpolatorController extends FileInterpolatorController {
+
+    public MyFileInterpolatorController() {
+        subsFileName = "my_tokens.properties";    
+    }
+    
+	public String getFilename(PortletRequest request) {
+		return ("html/text.html");
+	}
+	
+	public ModelAndView execute(PortletRequest request,
+	                            PortletResponse response,
+	                            String content) throws Exception {
+	    ModelAndView modelView = new ModelAndView("fileDisplay");
+		modelView.addObject("fileContent", fileContent);
+		return modelView;
+	} 
+}
+</pre></blockquote>
+
+<p>After you have extended/implemented <code>FileInterpolatorController</code>,
+remember that you need to configure it in your Spring application
+context so that it is invoked for your desired portlet mode. Also,
+presumably, you will want it to forward to some JSP or other view
+resolver - don't forget that you need to configure that, too. (For an
+example of this, for portlet <code>help</code> mode, see the <a
 	href="help.portlet.java.fileInterpolatorController">discussion
 above</a>.)</p>
 

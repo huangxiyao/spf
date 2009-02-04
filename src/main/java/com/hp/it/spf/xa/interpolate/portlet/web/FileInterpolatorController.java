@@ -48,7 +48,7 @@ public abstract class FileInterpolatorController extends AbstractController {
 	/**
 	 * Stores the name of the token-substitutions file to use for any file-based
 	 * token substitutions. The default is null, which causes the
-	 * default_token_subs.properties file to be assumed. You can override this
+	 * <code>default_tokens.properties</code> file to be assumed. You can override this
 	 * in your constructor.
 	 */
 	protected String subsFileName = null;

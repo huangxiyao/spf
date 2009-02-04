@@ -46,7 +46,7 @@ public class ViewController extends FileInterpolatorController {
 	}
 
 	/** The view name. */
-	private String viewName;
+	private String viewName = "view";
 
 	/**
 	 * Sets the view name.
