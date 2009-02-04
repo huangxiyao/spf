@@ -140,8 +140,17 @@ public abstract class ContextualHelpBaseTag extends HelpBaseTag {
 			logError(this, msg);
 			throw new JspException(msg);
 		}
+		// Get the help content (exception if none was defined or found)
+		String helpContent = getHelpContent();
+		if (helpContent == null) {
+			String msg = "ContextualHelpBaseTag error: either the content or contentKey are required attributes.";
+			logError(this, msg);
+			throw new JspException(msg);
+		}
 		// Get and return the contextual help hyperlink HTML
 		ContextualHelpProvider c = getContextualHelpProvider(linkContent);
+		c.setLinkContent(linkContent);
+		c.setHelpContent(helpContent);
 		return c.getHTML(escapeEnabled);
 	}
 
