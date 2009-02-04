@@ -10,7 +10,7 @@
  * following life-cycle phase bindings:
  * </p>
  * 
- * <table>
+ * <table border="1">
  * <tr>
  * <th>Life-cycle Phase</th>
  * <th>Mojo</th>
@@ -137,6 +137,14 @@
  * <p>
  * Note that the <code>&lt;packaging&gt;</code> element is where you might have
  * specified a value like 'jar' or 'war' in the past projects.
+ * </p>
+ * 
+ * <h3>Configuration</h3>
+ * 
+ * <p>
+ * For configuration options related to the CAR plugin, see the documentation
+ * for the {@link com.hp.it.spf.tools.maven.car.CarMojo CarMojo} class.
+ * </p>
  * 
  * @since 1.0
  */

@@ -30,6 +30,17 @@ import com.hp.it.spf.tools.maven.car.packaging.WebAppPackagingTask;
  * A Maven plugin for the <em>package</em> life-cycle phase which will assemble
  * the necessary source files and generate a Vignette Component Archive (CAR).
  * 
+ * <h3>Short name:</h3>
+ * <p>
+ * spfcar:car
+ * </p>
+ * 
+ * <h3>Full name:</h3>
+ * <p>
+ * com.hp.it.spf.tools:spf-maven-car-plugin:car
+ * </p>
+ * 
+ * <h3>Description:</h3>
  * <p>
  * This plugin performs two main tasks:
  * </p>
@@ -39,18 +50,117 @@ import com.hp.it.spf.tools.maven.car.packaging.WebAppPackagingTask;
  * <li>Archive CAR resources</li>
  * </ol>
  * 
- * <p>When assembling the CAR resources, there are three activities which are performed:</p>
+ * <p>
+ * The assembly task if further decomposed into three separate activities:
+ * </p>
  * 
  * <ol>
- * <li>Web application resources (JSPs, XML files, etc.) are copied to the staging directory</li>
- * <li>Java class files are copied to the staging directory (either as loose .class files copied 
- * to the <em>WEB-INF/classes/</em> directory or as a JAR file copied to the <em>WEB-INF/lib/</em>
- * directory)
+ * <li>Web application resources (JSPs, XML files, etc.) are copied to the
+ * staging directory</li>
+ * <li>Java class files are copied to the staging directory (either as loose
+ * .class files copied to the <em>WEB-INF/classes/</em> directory or as a JAR
+ * file copied to the <em>WEB-INF/lib/</em> directory)
  * <li>Project dependencies are copied to staging directory</li>
  * </ol>
  * 
- * <p>Once all of the necessary files have been staged, the resulting directory structure
- * is archived into a file with a <em>.car</em> extension.
+ * <p>
+ * Once all of the necessary files have been staged, the resulting directory
+ * structure is archived into a file with a <em>.car</em> extension.
+ * 
+ * <h3>Attributes:</h3>
+ * <ul>
+ * <li>Requires a Maven 2.0 project to be executed.</li>
+ * <li>Requires dependency resolution of artifacts in scope:
+ * <code>runtime</code>.</li>
+ * <li>Binds by default to the lifecycle phase: <code>package</code>.</li>
+ * </ul>
+ * 
+ * <h3>Required parameters:</h3>
+ * 
+ * <table border="1">
+ * <tr>
+ * <th>Name</th>
+ * <th>Type</th>
+ * <th>Since</th>
+ * <th>Description</th>
+ * </tr>
+ * <tr>
+ * <td>carName</td>
+ * <td><code>String</code></td>
+ * <td>-</td>
+ * <td>The name of the generated CAR. Defaults to
+ * <code>${project.build.finalName}</code></td>
+ * </tr>
+ * <tr>
+ * <td>warSourceDirectory</td>
+ * <td><code>File</code></td>
+ * <td>-</td>
+ * <td>Directory containing extra files to be included in CAR. Defaults to
+ * <code>${basedir}/src/main/webapp</code></td>
+ * </tr>
+ * <tr>
+ * <td>webappDirectory</td>
+ * <td><code>File</code></td>
+ * <td>-</td>
+ * <td>The directory where the webapp is built. Defaults to
+ * <code>${project.build.directory}/${project.build.finalName}</code></td>
+ * </tr>
+ * </table>
+ * 
+ * <h3>Optional parameters:</h3>
+ * 
+ * <table border="1">
+ * <tr>
+ * <th>Name</th>
+ * <th>Type</th>
+ * <th>Since</th>
+ * <th>Description</th>
+ * </tr>
+ * <tr>
+ * <td>archive</td>
+ * <td><code>MavenArchiveConfiguration</code></td>
+ * <td>-</td>
+ * <td>The archive configuration to use. See <a
+ * href="http://maven.apache.org/shared/maven-archiver/index.html">Maven
+ * Archiver Reference</a></td>
+ * </tr>
+ * <tr>
+ * <td>archiveClasses</td>
+ * <td><code>boolean</code></td>
+ * <td>-</td>
+ * <td>Whether a JAR file will be created for the classes in the webapp. Using
+ * this optional configuration parameter will cause generated classes to be
+ * archived into a jar file and the <em>WEB-INF/classes/</em> directory to be
+ * excluded from the webapp. Default value is: <code>false</code>.</td>
+ * </tr>
+ * <tr>
+ * <td>composite</td>
+ * <td><code>boolean</code></td>
+ * <td>-</td>
+ * <td>Blah blah blah</td>
+ * </tr>
+ * <tr>
+ * <td>outputFileNameMapping</td>
+ * <td><code>String</code></td>
+ * <td>-</td>
+ * <td>The file name mapping to use to copy libraries. If no file mapping is set
+ * (default) the file is copied with its standard name.</td>
+ * </tr>
+ * <tr>
+ * <td>warSourceExcludes</td>
+ * <td><code>String</code></td>
+ * <td>-</td>
+ * <td>The comma separated list of tokens to exclude when copying content of the
+ * warSourceDirectory.</td>
+ * </tr>
+ * <tr>
+ * <td>warSourceIncludes</td>
+ * <td><code>String</code></td>
+ * <td>-</td>
+ * <td>The comma separated list of tokens to include when copying content of the
+ * warSourceDirectory. Default is '**'.</td>
+ * </tr>
+ * </table>
  * 
  * @since 1.0
  * @author bdehamer

@@ -49,7 +49,7 @@ public abstract class AbstractCarPackagingTask implements ICarPackagingTask
      * @throws MojoExecutionException
      * in case of any errors during the packaging process
      * 
-     * @see com.hp.frameworks.maven.car.packaging.IPackagingTask#doPackaging()
+     * @see ICarPackagingTask#doPackaging(ICarPackagingContext)
      */
     public abstract void doPackaging(ICarPackagingContext context) throws MojoExecutionException;
     
@@ -180,9 +180,9 @@ public abstract class AbstractCarPackagingTask implements ICarPackagingTask
      * Copy the specified file. The <tt>targetFileName</tt> is the relative path
      * according to the root of the generated artifact.
      * 
-     * @param file
+     * @param source
      * the file to copy
-     * @param targetFilename
+     * @param destination
      * the relative path according to the root of the webapp
      * 
      * @throws IOException
