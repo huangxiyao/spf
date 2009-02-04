@@ -253,23 +253,21 @@ table.props td {
 				href="#help.contextual.java.classicContextualHelpProvider">Using
 			<code>ClassicContextualHelpProvider</code></a></li>
 			<li>3.2.2. <a
-				href="#help.contextual.java.contextualHelpProvider">Extending <code>ContextualHelpProvider</code>
-			to create a custom rendition</a></li>
+				href="#help.contextual.java.contextualHelpProvider">Extending a
+			<code>ContextualHelpProvider</code> to create a custom rendition</a></li>
 		</ul>
 		</li>
 		<li>3.3. <a href="#help.contextual.jsp">Producing contextual
 		help using JSP tag libraries</a>
 		<ul>
-			<li>3.3.1. <a
-				href="#help.contextual.jsp.classicContextualHelpProvider">Using
-			<code>&lt;spf-help-portlet:classicContextualHelpProvider&gt;</code>
-			for standalone classic contextual help</a></li>
+			<li>3.3.1. <a href="#help.contextual.jsp.classicContextualHelp">Using
+			<code>&lt;spf-help-portlet:classicContextualHelp&gt;</code> for
+			standalone classic contextual help</a></li>
 			<li>3.3.2. <a
-				href="#help.contextual.jsp.classicContextualHelpProviderParam">Using
-			<code>&lt;spf-i18n-portlet:classicContextualHelpProviderParam&gt;</code>
+				href="#help.contextual.jsp.classicContextualHelpParam">Using <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code>
 			for injected classic contextual help</a></li>
 			<li>3.3.3. <a href="#help.contextual.jsp.contextualHelpProvider">Creating
-			a tag library for a custom contextual help rendition</a></li>
+			a tag library for a custom rendition</a></li>
 		</ul>
 		</li>
 		<li>3.4. <a href="#help.portlet.java">Producing portlet help
@@ -1439,8 +1437,7 @@ key=Your name is {0} and your age is {1}.
 	</dd>
 
 	<dt>
-	<p><a
-		href="#help.contextual.jsp.classicContextualHelpProviderParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a></p>
+	<p><a href="#help.contextual.jsp.classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a></p>
 	</dt>
 	<dd>
 	<p>This tag is only used inside the tag body of <code>&lt;spf-i18n-portlet:message&gt;</code>.
@@ -1451,7 +1448,7 @@ key=Your name is {0} and your age is {1}.
 
 	<p>This tag is documented in the <a href="#help">Online Help</a>
 	section in this guide. Please see the <a
-		href="#help.contextual.jsp.classicContextualHelpProviderParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a>
+		href="#help.contextual.jsp.classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a>
 	documentation there.</p>
 	</dd>
 
@@ -2508,8 +2505,9 @@ the no-script URL (or document fragment), window size, and style
 
 <p>What if you are not satisfied with the "classic" rendering of
 contextual help? The SPF contextual help framework is extensible; you
-can implement your own (ie custom) rendition of contextual help. This is
-explained further later in this section.</p>
+can implement your own (ie custom) rendition of contextual help. (This
+is explained in the section about <a
+	href="#help.contextual.java.contextualHelpProvider">extending a <code>ContextualHelpProvider</code></a>.)</p>
 
 <p>In any case, regardless of whether you are using classic or
 custom contextual help, SPF lets you use it "standalone" around a screen
@@ -2600,8 +2598,8 @@ themselves to <a href="#help.kinds.contextual">contextual help</a> and <a
 the "classic" rendering of contextual help for you, {@link
 com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider}. Or, if you
 need to create your own rendition of contextual help, you can extend the
-SPF contextual help framework to do so, by extending {@link
-com.hp.it.spf.xa.help.ContextualHelpProvider}.</p>
+SPF contextual help framework to do so, by extending any class in the
+{@link com.hp.it.spf.xa.help.ContextualHelpProvider} hierarchy.</p>
 
 <a name="help.contextual.java.classicContextualHelpProvider">
 <h4>3.2.1. Using <code>ClassicContextualHelpProvider</code></h4>
@@ -2780,10 +2778,11 @@ key.help.content=Internet security is important to us...
 </pre></blockquote>
 
 <p>To provide that content as standalone classic contextual help
-around an image name <code>question_mark.gif</code>, with a gray title
-bar with heavy black font, your code might look like this (where <code>request</code>
-is your {@link javax.portlet.PortletRequest} and <code>response</code>
-is your {@link javax.portlet.PortletResponse}):</p>
+around an image (possibly localized) whose base name was <code>question_mark.gif</code>,
+with a gray title bar with heavy black font, your code might look like
+this (where <code>request</code> is your {@link
+javax.portlet.PortletRequest} and <code>response</code> is your {@link
+javax.portlet.PortletResponse}):</p>
 
 <blockquote><pre>
 import com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider;
@@ -2807,29 +2806,58 @@ cchp.setTitleStyle("background-color:gray;color:black;font-weight:bold;font-styl
 String html = cchp.getHTML(false);
 </pre></blockquote>
 
-<p>The resulting contextual help popup (when the user clicks on the question-mark image) looks like this:</p>
+<p>The resulting contextual help popup (when the user clicks on the
+question-mark image) looks like this:</p>
 
-<img src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelpGrayTitle.jpg">
+<img
+	src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelpGrayTitle.jpg">
 
-<p>Note that the classic contextual help popup includes an "X" image on which the user can click to close the 
-popup.  Your portlet application is expected to be deployed with that image (either as an external resource,
-in the <i>portlet resource bundle folder</i>, or inside the portlet WAR).  The image must be named
-<code>btn_close.gif</code> and must be in the <code>images/</code> subfolder.  The SPF portlet utilities JAR
-contains a sample <code>btn_close.gif</code> which you can copy, if desired (it is the image seen in the
-examples here).</p>
+<p>If the browser was unscripted, though, clicking on the link would
+open your portlet's <code>help</code> mode. If your portlet has no <code>help</code>
+mode, then the link would be inoperable (ie just the question-mark image
+would display, with no contextual-help link around it at all).</p>
 
-<p>Your "X" image can optionally have an <code>ALT</code> text string displayed with it when the user hovers
-the mouse over it.  Put your desired <code>ALT</code> message into one of your message resource bundles,
-using the <code>contextualHelp.close.alt</code> message key.</p>
+<p>Note that the classic contextual help popup includes an "X" image
+on which the user can click to close the popup. Your portlet application
+is expected to be deployed with that image (either as an external
+resource, in the <i>portlet resource bundle folder</i>, or inside the
+portlet WAR). The image must be named <code>btn_close.gif</code> and
+must be in the <code>images/</code> subfolder. The SPF portlet utilities
+JAR contains a sample <code>btn_close.gif</code> which you can copy, if
+desired (it is the image seen in the examples here).</p>
 
-<p>See the {@link com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} class documentation, and
-the <a href="com/hp/it/spf/xa/i18n/portlet/package-summary.html">package description</a>, for more
-information.</p>
+<p>Your "X" image can optionally have an <code>ALT</code> text
+string displayed with it when the user hovers the mouse over it. Put
+your desired <code>ALT</code> message into one of your message resource
+bundles, using the <code>contextualHelp.close.alt</code> message key.</p>
+
+<p>See the {@link
+com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} class
+documentation, and the <a
+	href="com/hp/it/spf/xa/i18n/portlet/package-summary.html">package
+description</a>, for more information.</p>
 
 <a name="help.contextual.java.contextualHelpProvider">
-<h4>3.2.2. Extending <code>ContextualHelpProvider</code> to create
-a custom rendition</h4>
+<h4>3.2.2. Extending a <code>ContextualHelpProvider</code> to
+create a custom rendition</h4>
 </a>
+
+<p>If you need to create a custom version of contextual help, you
+should extend either of these classes in the SPF common utilities:
+{@link com.hp.it.spf.xa.help.ClassicContextualHelpProvider} or {@link
+com.hp.it.spf.xa.help.ContextualHelpProvider}. The common {@link
+com.hp.it.spf.xa.help.ClassicContextualHelpProvider} provides behavior
+very close to the one <a
+	href="#help.contextual.java.classicContextualHelpProvider">discussed
+above</a>. The {@link com.hp.it.spf.xa.help.ContextualHelpProvider} is much
+more generic. Basically, in each case you need to implement the abstract
+methods, and potentially override any other methods to impose your
+desired functionality.</p>
+
+<p>Please read the class and method documentation for each class, in
+order to familiarize yourself with their provided and abstract
+functionality, so that you can decide which would be best for you to
+extend.</p>
 
 <hr>
 
@@ -2837,18 +2865,117 @@ a custom rendition</h4>
 <h3>3.3. Producing contextual help using JSP tag libraries</h3>
 </a>
 
-<a name="help.contextual.jsp.classicContextualHelpProvider">
-<h4>3.3.1. Using <code>&lt;spf-help-portlet:classicContextualHelpProvider&gt;</code>
+<p>The SPF portlet utilities include two JSP tags which implements
+the "classic" rendering of contextual help for you. One is for
+standalone classic contextual help (<code>&lt;spf-help-portlet:classicContextualHelp&gt;</code>)
+and the other is for injecting classic contextual help into a
+surrounding message (<code>&lt;spf-help-portlet:classicContextualHelpParam&gt;</code>.
+Or, if you have created a custom contextual help provider, you can
+create your own JSP tag to wrap around it.</p>
+
+<a name="help.contextual.jsp.classicContextualHelp">
+<h4>3.3.1. Using <code>&lt;spf-help-portlet:classicContextualHelp&gt;</code>
 for standalone classic contextual help</h4>
 </a>
 
-<a name="help.contextual.jsp.classicContextualHelpProviderParam">
+<p>You use this tag to express standalone contextual help with a
+"classic" rendering. The usage is:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-help-portlet" uri="/spf-help-portlet.tld" %&gt;
+...
+&lt;spf-help-portlet:classicContextualHelp
+	anchor="<i>link-content</i>"
+	anchorKey="<i>link-content-message-key</i>"
+	anchorImg="<i>link-image-url</i>"
+	anchorImgKey="<i>link-image-base-file</i>"
+	anchorImgAlt="<i>link-image-alt-text</i>"
+	anchorImgAltKey="<i>link-image-alt-text-message-key</i>"
+	title="<i>help-title</i>"
+	titleKey="<i>help-title-message-key</i>"
+	content="<i>help-content</i>"
+	contentKey="<i>help-content-message-key</i>"
+	noScriptHref="<i>uri</i>"
+	width="<i>pixels</i>"
+	borderStyle="<i>inline-style</i>'
+	borderClass="<i>css-classname</i>"
+	titleStyle="<i>inline-style</i>"
+	titleClass="<i>css-classname</i>"
+	contentStyle="<i>inline-style</i>"
+	contentClass="<i>css-classname</i>"
+	/&gt;
+</pre></blockquote>
+
+<p>Most of the tag attributes are optional. For example, suppose
+your message properties contain this:</p>
+
+<blockquote><pre>
+key.help.title=Service Portal and your security
+key.help.content=Internet security is important to us...
+key.help.image.alt=Click for help
+</pre></blockquote>
+
+<p>And suppose you need to generate some standalone contextual help
+with that content, linked from an image (possibly localized) whose base
+name is <code>question_mark.gif</code>. Suppose that the contextual help
+title bar should use a gray background with heavy black font. Then you
+could generate the image, link, and (initially hidden) classic
+contextual help popup, using JSP like this:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-help-portlet" uri="/spf-help-portlet.tld" %&gt;
+...
+&lt;spf-help-portlet:classicContextualHelp 
+	anchorImgKey="question_mark.gif"
+	anchorImgAltKey="key.help.image.alt"
+	titleKey="key.help.title"
+	contentKey="key.help.content"
+	titleStyle="background-color:gray;color:black;font-weight:bold;font-style:italic"
+	/&gt;
+</pre></blockquote>
+
+<p>This JSP would generate an HTML &lt;IMG&gt; tag, with the <code>SRC</code>
+pointing at the properly-localized and portlet-encoded <code>question_mark.gif</code>
+URL, and with the <code>ALT</code> showing the properly-localized
+version of the <code>Click for help</code> message. When the user
+clicked on the image, the resulting contextual help popup would look
+like this:</p>
+
+<img
+	src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelpGrayTitle.jpg">
+
+<p>If the browser was unscripted, though, clicking on the link would
+open your portlet's <code>help</code> mode. If your portlet has no <code>help</code>
+mode, then the link would be inoperable (ie just the image would
+display, with no contextual-help link around it at all).</p>
+
+<p>For more detailed description of this tag, see the tag
+documentation, in the <a
+	href="com/hp/it/spf/xa/help/portlet/tag/package-summary.html#classicContextualHelp">package
+description</a>, for more information.</p>
+
+<blockquote>
+<p><b>Note:</b> The classic rendition of contextual help utilizes an
+"X" image on which the user can click to close the window. This is a GIF
+image which you must supply (either inside your portlet application, or
+in the external resource bundle folder). You can localize the image if
+desired. Name the base file for the image <code>btn_close.gif</code> and
+put it in the <code>images/</code> subfolder (of your portlet WAR or the
+external folder). Management of this image is the same as for any other
+supporting resource file.</p>
+
+<p>The SPF portlet utilities JAR contains a sample <code>btn_close.gif</code>
+which you can copy. (It is the same one shown in the example above.)</p>
+</blockquote>
+
+<a name="help.contextual.jsp.classicContextualHelpParam">
 <h4>3.3.2. Using <a
-	href="com/hp/it/spf/xa/i18n/portlet/tag/package-summary.html#classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpProviderParam&gt;</code></a>
+	href="com/hp/it/spf/xa/i18n/portlet/tag/package-summary.html#classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a>
 for injected classic contextual help</h4>
 </a>
 
-<p>This tag is only used inside the tag body of <code>&lt;spf-i18n-portlet:message&gt;</code>.
+<p>This tag is only used inside the tag body of <a
+	href="#i18n.messages.jsp.spf.message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>.
 You use it to inject contextual help into the message value, where the
 special <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>
 markup is found. The format of contextual help which is injected is the
@@ -2920,13 +3047,12 @@ put it in the <code>images/</code> subfolder (of your portlet WAR or the
 external folder). Management of this image is the same as for any other
 supporting resource file.</p>
 
-<p>The SPF portlet utilities JAR contains a sample <code>btn_close.gif</code>.
-(It is the same one shown in the example above.)</p>
+<p>The SPF portlet utilities JAR contains a sample <code>btn_close.gif</code>
+which you can copy. (It is the same one shown in the example above.)</p>
 </blockquote>
 
 <a name="help.contextual.jsp.contextualHelpProvider">
-<h4>3.3.3. Creating a tag library for a custom contextual help
-rendition</h4>
+<h4>3.3.3. Creating a tag library for a custom rendition</h4>
 </a>
 
 <hr>
