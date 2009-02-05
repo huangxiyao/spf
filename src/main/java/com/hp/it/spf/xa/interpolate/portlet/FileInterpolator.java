@@ -15,6 +15,7 @@ import java.util.Locale;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 import com.hp.it.spf.xa.misc.portlet.Consts;
 import com.hp.it.spf.xa.misc.portlet.Utils;
 
@@ -27,8 +28,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  * <ul>
  * <li> The base text filename you provide is used to find a best-fit file for
- * the current portlet request's locale, in the fashion of the Java standard for
- * {@link ResourceBundle}.</li>
+ * the locale you provide (by default, the locale in the portlet request you
+ * provide), in the fashion of the Java standard for {@link ResourceBundle}.</li>
  * <li> The base text filename may be for an internal resource (ie contained
  * inside your portlet WAR), or an external resource (ie contained outside your
  * portlet WAR in the <i>portlet resource bundle folder</i>).</li>
@@ -42,8 +43,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * The selection and loading of the proper localized text file, from the proper
  * location, and subsequent interpolation of its content, is all done in the
- * {@link #interpolate()} or {@link #interpolate(Locale)} methods, based on
- * parameters you setup in the constructor.
+ * {@link #interpolate()} method, based on parameters you setup in the
+ * constructor.
  * </p>
  * <p>
  * This class uses the {@link TokenParser} to do most of its work. As of this
@@ -100,9 +101,9 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * Use this token to insert the <a
  * href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
- * 3166-1</a> country code from the locale in the current portlet request. Note
- * that the language code is not a part of this. For example, for a Japanese
- * request, <code>{COUNTRY-CODE}</code> is replaced with <code>JP</code>.
+ * 3166-1</a> country code from the current locale. Note that the language code
+ * is not a part of this. For example, for a Japanese request,
+ * <code>{COUNTRY-CODE}</code> is replaced with <code>JP</code>.
  * </p>
  * </dd>
  * 
@@ -170,10 +171,9 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * Use this token to insert the <a
  * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO 639-1</a>
- * language code from the current portlet request (as provided in the locale of
- * the request). Note that the country code is not a part of this. For example,
- * for a Japanese request, <code>{LANGUAGE-CODE}</code> is replaced with
- * <code>ja</code>.
+ * language code from the current locale. Note that the country code is not a
+ * part of this. For example, for a Japanese request,
+ * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>.
  * </p>
  * </dd>
  * 
@@ -182,11 +182,10 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * Use this token to insert the <a
  * href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag from
- * the current portlet request (as provided in the locale of the request). Note
- * that the country code is included in the language tag, if it was set in the
- * locale (otherwise the language tag consists of the language code only). For
- * example, for a French (Canada) request, <code>{LANGUAGE-TAG}</code> is
- * replaced with <code>fr-CA</code>.
+ * the current locale. Note that the country code is included in the language
+ * tag, if it was set in the locale (otherwise the language tag consists of the
+ * language code only). For example, for a French (Canada) request,
+ * <code>{LANGUAGE-TAG}</code> is replaced with <code>fr-CA</code>.
  * </p>
  * </dd>
  * 
@@ -197,7 +196,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * file into the interpolated content. This token lets you indicate the base
  * filename of the resource you want to display, via the
  * <code><i>pathname</i></code>. It will then find the best-candidate
- * localized version of that file for the user's locale which you have made
+ * localized version of that file for the current locale which you have made
  * available. (For an unlocalized resource, the base file is used.) You can put
  * the base file and its localized variants into the portlet resource bundle
  * directory on each portlet server (eg, for easy administrator access). Or you
@@ -268,9 +267,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * Use this token to insert the full name of the user into the interpolated
  * content, where the given (first) and family (last) names are in the customary
- * order for the user's locale. The name is taken from the user profile map
- * placed in the portlet request by SPF. The locale is also taken from the
- * current portlet request.
+ * order for the current locale. The name is taken from the user profile map
+ * placed in the portlet request by SPF.
  * </p>
  * <p>
  * For example, <code>{NAME}</code> is replaced with
@@ -566,9 +564,9 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.spf.xa.interpolate.FileInterpolator<br>
- *      com.hp.it.spf.xa.interpolate.portlet.TokenParser<br>
- *      com.hp.it.spf.xa.interpolate.TokenParser
+ * @see <code>com.hp.it.spf.xa.interpolate.FileInterpolator</code><br>
+ *      <code>com.hp.it.spf.xa.interpolate.portlet.TokenParser</code><br>
+ *      <code>com.hp.it.spf.xa.interpolate.TokenParser</code>
  */
 public class FileInterpolator extends
 		com.hp.it.spf.xa.interpolate.FileInterpolator {
@@ -621,7 +619,7 @@ public class FileInterpolator extends
 		this.response = pResponse;
 		this.baseContentFilePath = pBaseContentFilePath;
 		if (pRequest != null && pResponse != null) {
-			this.t = new TokenParser(pRequest, pResponse);
+			this.parser = new TokenParser(pRequest, pResponse);
 		}
 	}
 
@@ -631,14 +629,10 @@ public class FileInterpolator extends
 	 * content pathname, request, response, and token-substitutions pathname.
 	 * </p>
 	 * <p>
-	 * The base content pathname provided should include any necessary path
-	 * (relative to the class loader) followed by the base filename (including
-	 * extension) for a resource bundle of one or more localized files. The
-	 * interpolate method will open the best-fit localized file based on the
-	 * locale in the given request.
-	 * </p>
-	 * <p>
-	 * The token-substitutions pathname provided is to be used with any
+	 * This constructor works like
+	 * {@link #FileInterpolator(PortletRequest, PortletResponse, String)} and
+	 * allows a token-substitutions file to be specified as well. The
+	 * token-substitutions pathname provided is to be used with any
 	 * <code>{TOKEN:<i>key</i>}</code> tokens in the file content; they will
 	 * be resolved against the file whose pathname you provide. The pathname
 	 * should include any necessary path (relative to the class loader) followed
@@ -666,7 +660,48 @@ public class FileInterpolator extends
 		this.response = pResponse;
 		this.baseContentFilePath = pBaseContentFilePath;
 		if (pRequest != null && pResponse != null) {
-			this.t = new TokenParser(pRequest, pResponse, subsFilePath);
+			this.parser = new TokenParser(pRequest, pResponse, subsFilePath);
+		}
+	}
+
+	/**
+	 * <p>
+	 * Constructs a new <code>FileInterpolator</code> for the given base
+	 * content pathname, request, response, token-substitutions pathname, and
+	 * locale.
+	 * </p>
+	 * <p>
+	 * This constructor works like
+	 * {@link #FileInterpolator(PortletRequest, PortletResponse, String, String)}
+	 * except that the given locale is used instead of the one in the request.
+	 * However if the given locale is null, then the one in the request will be
+	 * used.
+	 * </p>
+	 * 
+	 * @param pRequest
+	 *            The portlet request
+	 * @param pResponse
+	 *            The portlet response
+	 * @param Locale
+	 *            The locale to use (if null, uses the one in the request)
+	 * @param pBaseContentFilePath
+	 *            The base filename and path relative to where the class loader
+	 *            searches for the file content to interpolate
+	 * @param subsFilePath
+	 *            The filename and path relative to where the class loader
+	 *            searches for the token-substitutions property file (for
+	 *            purposes of any <code>{TOKEN:key}</code> tokens in the file
+	 *            content)
+	 */
+	public FileInterpolator(PortletRequest pRequest, PortletResponse pResponse,
+			Locale pLocale, String pBaseContentFilePath, String subsFilePath) {
+		this.request = pRequest;
+		this.response = pResponse;
+		this.baseContentFilePath = pBaseContentFilePath;
+		this.locale = pLocale;
+		if (pRequest != null && pResponse != null) {
+			this.parser = new TokenParser(pRequest, pResponse, pLocale,
+					subsFilePath);
 		}
 	}
 
@@ -674,15 +709,16 @@ public class FileInterpolator extends
 	 * <p>
 	 * Gets the best-fit localized version of the content file (using
 	 * {@link #getLocalizedContentFileAsStream()}, reads it into a string, and
-	 * substitutes the tokens found in the string with the proper dynamic
-	 * values, returning the interpolated content. The content filename and
-	 * location, the locale for which to find the best-candidate, and the proper
-	 * substitution values for the tokens are all based on the information you
-	 * provided when calling the constructor. Null is returned (and a warning is
-	 * logged) if there are problems interpolating (eg the file is not found or
-	 * was empty, or the request or content file you provided when calling the
-	 * constructor were null). See class documentation for more information
-	 * about the tokens which are substituted.
+	 * substitutes the tokens found in the string with the proper dynamic values
+	 * (using {@link TokenParser#parse(String)}, returning the interpolated
+	 * content. The content filename and location, the locale for which to find
+	 * the best-candidate, and the proper substitution values for the tokens are
+	 * all based on the information you provided when calling the constructor.
+	 * Null is returned (and a warning is logged) if there are problems
+	 * interpolating (eg the file is not found or was empty, or the request or
+	 * content file you provided when calling the constructor were null). See
+	 * class documentation for more information about the tokens which are
+	 * substituted.
 	 * </p>
 	 * 
 	 * @return The interpolated file content
@@ -690,42 +726,26 @@ public class FileInterpolator extends
 	 *             Some exception
 	 */
 	public String interpolate() throws Exception {
-		return this.interpolate(null);
-	}
 
-	/**
-	 * <p>
-	 * Gets the best-fit localized version of the content file (using
-	 * {@link #getLocalizedContentFileAsStream(Locale)}, reads it into a
-	 * string, and substitutes the tokens found in the string with the proper
-	 * dynamic values, returning the interpolated content. This method is the
-	 * same as {@link #interpolate()} except it uses the given locale instead of
-	 * the one in the current request. (But if the given locale is null, then
-	 * the one from the request is used.)
-	 * </p>
-	 * 
-	 * @param pLocale
-	 *            The locale to use
-	 * @return The interpolated file content
-	 * @throws Exception
-	 *             Some exception
-	 */
-	public String interpolate(Locale pLocale) throws Exception {
-
-		if (request == null) {
-			logWarning("Portlet request was null.");
+		if ((request == null) || (response == null)) {
+			logWarning("Portlet request or response was null.");
 			return null;
 		}
-		String content = super.interpolate(pLocale);
-		TokenParser t = (TokenParser) this.t;
+		// open and read the file and interpolate the common portal/portlet
+		// tokens, all in the superclass interpolate method
+		String content = super.interpolate();
+		TokenParser portletParser = (TokenParser) this.parser;
 
+		// parse the portlet-specific tokens last - we call them out
+		// here, rather than use the portlet token parser's parse method,
+		// because that would repeat (harmless but wasteful) the common parsing
+		// just finished
+		//
 		// parse the portlet token
-		// added by ck for cr 1000790086
-		content = t.parsePortletContainer(content, getPortletID());
-		// parse the portlet token ---end
+		content = portletParser.parsePortletContainer(content);
 
 		// parse the role token
-		content = t.parseRoleContainer(content);
+		content = portletParser.parseRoleContainer(content);
 
 		return content;
 	}
@@ -733,199 +753,22 @@ public class FileInterpolator extends
 	/**
 	 * Get an input stream for the best-candidate localized content file
 	 * available from the <i>portlet resource bundle directory</i> or inside
-	 * the portlet application, based on the request locale and base content
-	 * pathname provided to the constructor. Null is returned if the file is not
-	 * found or the request or content file provided to the constructor were
-	 * null. This method uses
-	 * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest, String)}
+	 * the portlet application, based on the locale and base content pathname
+	 * provided to the constructor. If no specific locale was provided to the
+	 * constructor, then the one in the request is used. Null is returned if the
+	 * file is not found or the request or content file provided to the
+	 * constructor were null. This method uses
+	 * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest, String, Locale, boolean)}
 	 * to select and open the file (see).
 	 * 
 	 * @return The input stream for the file
 	 */
 	protected InputStream getLocalizedContentFileAsStream() {
-		return getLocalizedContentFileAsStream(null);
-	}
-
-	/**
-	 * Get an input stream for the best-candidate localized content file
-	 * available from the <i>portlet resource bundle directory</i> or inside
-	 * the portlet application, based on the given locale and base content
-	 * pathname provided to the constructor. This works the same as the
-	 * {@link getLocalizedContentFileAsStream()} method, except it uses the
-	 * given locale instead of the one from the request. (But if the given
-	 * locale is null, it uses the one in the request by default.)
-	 * 
-	 * @param pLocale
-	 *            The locale to use
-	 * @return The input stream for the file
-	 */
-	protected InputStream getLocalizedContentFileAsStream(Locale pLocale) {
 		if (request == null || baseContentFilePath == null) {
 			return null;
 		}
-		return com.hp.it.spf.xa.i18n.portlet.I18nUtility
-				.getLocalizedFileStream(request, baseContentFilePath, pLocale,
-						true);
-	}
-
-	/**
-	 * Get the locale from the portal request in the portal context provided to
-	 * the constructor. Returns null if the portal context provided to the
-	 * constructor was null.
-	 * 
-	 * @return The current preferred locale for the user
-	 */
-	protected Locale getLocale() {
-		if (request == null) {
-			return null;
-		}
-		return request.getLocale();
-	}
-
-	/**
-	 * Get the email address from the user profile map (<code>PortletRequest.USER_INFO</code>)
-	 * in the portlet request provided to the constructor. Returns null if this
-	 * has not been set in the request (eg, when the user is not logged-in), or
-	 * the request provided to the constructor was null.
-	 * 
-	 * @return email
-	 */
-	protected String getEmail() {
-		if (request == null) {
-			return null;
-		}
-		try {
-			return (String) Utils.getUserProperty(request, Consts.KEY_EMAIL);
-		} catch (ClassCastException e) {
-			return null;
-		}
-	}
-
-	/**
-	 * Get the first (given) name from the user profile map (<code>PortletRequest.USER_INFO</code>)
-	 * in the portlet request provided to the constructor. Returns null if this
-	 * has not been set in the request (eg, when the user is not logged-in), or
-	 * the request provided to the constructor was null.
-	 * 
-	 * @return first (given) name
-	 */
-	protected String getFirstName() {
-		if (request == null) {
-			return null;
-		}
-		try {
-			return (String) Utils.getUserProperty(request,
-					Consts.KEY_FIRST_NAME);
-		} catch (ClassCastException e) {
-			return null;
-		}
-	}
-
-	/**
-	 * Get the last (family) name from the user profile map (<code>PortletRequest.USER_INFO</code>)
-	 * in the portlet request provided to the constructor. Returns null if this
-	 * has not been set in the request (eg, when the user is not logged-in), or
-	 * the request provided to the constructor was null.
-	 * 
-	 * @return last (family) name
-	 */
-	protected String getLastName() {
-		if (request == null) {
-			return null;
-		}
-		try {
-			return (String) Utils
-					.getUserProperty(request, Consts.KEY_LAST_NAME);
-		} catch (ClassCastException e) {
-			return null;
-		}
-	}
-
-	/**
-	 * Get the site name from the portlet request provided to the constructor.
-	 * Returns null if this has not been set in the request, or the request
-	 * provided to the constructor was null.
-	 * 
-	 * @return site name
-	 */
-	protected String getSite() {
-		if (request == null) {
-			return null;
-		}
-		return Utils.getPortalSiteName(request);
-	}
-
-	/**
-	 * Get the portal site root (ie home page) URL for the current portal site,
-	 * from the portlet request provided to the constructor. Returns null if
-	 * this has not been set in the request, or the request provided to the
-	 * constructor was null.
-	 * 
-	 * @return site URL string
-	 */
-	protected String getSiteURL() {
-		if (request == null) {
-			return null;
-		}
-		return Utils.getPortalSiteURL(request);
-	}
-
-	/**
-	 * Get the portal request URL for the current request. This is the URL which
-	 * was opened by the browser in order to invoke this portlet. It is obtained
-	 * from the portlet request provided to the constructor. Returns null if
-	 * this has not been set in the request, or the request provided to the
-	 * constructor was null.
-	 * 
-	 * @return request URL string
-	 */
-	protected String getRequestURL() {
-		if (request == null) {
-			return null;
-		}
-		return Utils.getPortalRequestURL(request);
-	}
-
-	/**
-	 * Get the authorization groups from the portlet request provided to the
-	 * constructor. Returns null if these have not been set in the request, or
-	 * the request provided to the constructor was null.
-	 * 
-	 * @return list of groups
-	 */
-	protected String[] getGroups() {
-		if (request == null) {
-			return null;
-		}
-		return Utils.getGroups(request);
-	}
-
-	/**
-	 * Return true if the user is logged-in, false otherwise. The login status
-	 * is indicated in the portlet request provided to the constructor; false is
-	 * also returned if that request was null.
-	 * 
-	 * @return true if logged-in, false if not logged-in
-	 */
-	protected boolean getLoginStatus() {
-		if (request == null) {
-			return false;
-		}
-		return Utils.isAuthenticatedUser(request);
-	}
-
-	/**
-	 * Get the portlet ID (ie the Vignette portlet friendly ID) from the portlet
-	 * request provided to the constructor. Returns null if this has not been
-	 * set in the request, or the request provided to the constructor was null.
-	 * 
-	 * @return portlet ID
-	 */
-	protected String getPortletID() {
-		if (request == null) {
-			return null;
-		}
-		return Utils.getPortletID(request);
+		return I18nUtility.getLocalizedFileStream(request, baseContentFilePath,
+				locale, true);
 	}
 
 	/**

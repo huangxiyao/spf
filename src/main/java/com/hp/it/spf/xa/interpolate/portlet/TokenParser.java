@@ -6,10 +6,12 @@ package com.hp.it.spf.xa.interpolate.portlet;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+import java.util.Locale;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+import com.hp.it.spf.xa.misc.portlet.Consts;
 import com.hp.it.spf.xa.misc.portlet.Utils;
 
 /**
@@ -17,10 +19,10 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * The concrete subclass for parsing strings looking for tokens to substitute in
  * the portlet context. This class is used heavily by the portlet
  * {@link FileInterpolator}. The following token substitutions are supported by
- * this class (plus those supported by the base class). See the method
- * documentation here (and in the base class) for further description. <b>Note:</b>
- * The <code>&lt;</code> and <code>&gt;</code> symbols may be used in place
- * of <code>{</code> and <code>}</code>, if you prefer.
+ * this class (plus those supported by the parent class). See the method
+ * documentation here (and in the parent class) for further description.
+ * <b>Note:</b> The <code>&lt;</code> and <code>&gt;</code> symbols may be
+ * used in place of <code>{</code> and <code>}</code>, if you prefer.
  * </p>
  * <dl>
  * <dt><code>{PORTLET:<i>ids</i>}...{/PORTLET}</code></dt>
@@ -30,8 +32,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * @author <link href="xiao-bing.zuo@hp.com">Zuo Xiaobing</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.spf.xa.interpolate.portlet.FileInterpolator<br>
- *      com.hp.it.spf.xa.interpolate.TokenParser
+ * @see <code>com.hp.it.spf.xa.interpolate.portlet.FileInterpolator</code><br>
+ *      <code>com.hp.it.spf.xa.interpolate.TokenParser</code>
  */
 public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
@@ -56,11 +58,6 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * Portlet response.
 	 */
 	private PortletResponse response = null;
-
-	/**
-	 * Portlet logging.
-	 */
-	private Log portletLog = LogFactory.getLog(FileInterpolator.class);
 
 	/**
 	 * <code>ContainerMatcher</code> for portlet parsing. The constructor
@@ -145,7 +142,6 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 *            The token-substitution filename and path (relative to the
 	 *            class loader)
 	 */
-	/* Added by CK for 1000790073 */
 	public TokenParser(PortletRequest pRequest, PortletResponse pResponse,
 			String pSubsFilePath) {
 		this.request = pRequest;
@@ -157,12 +153,46 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * <p>
-	 * Get a URL for the given file pathname, localized (or not) depending on
-	 * the boolean parameter (if true, the URL is for the best-candidate
-	 * localized version of that file, otherwise it is just for the file
-	 * itself). This method is implemented using
-	 * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest, PortletResponse, String, boolean)}
-	 * (see).
+	 * Constructs a new <code>TokenParser</code> for the given portlet
+	 * request, response, and locale, and overriding the token-substitutions
+	 * property file. The given file, instead of the default (<code>default_tokens.properties</code>)
+	 * will be assumed, if subsequent {@link #parseToken(String)} calls find any
+	 * <code>{TOKEN:key}</code> tokens. In addition, the given locale will be
+	 * used instead of the one in the portlet request during the parsing (but if
+	 * the given locale is null, then the one in the portlet request will be
+	 * used).
+	 * </p>
+	 * 
+	 * @param pRequest
+	 *            The portlet request
+	 * @param pResponse
+	 *            The portlet response
+	 * @param pLocale
+	 *            The locale to use (if null, uses the one in the portlet
+	 *            request)
+	 * @param pSubsFilePath
+	 *            The token-substitution filename and path (relative to the
+	 *            class loader)
+	 */
+	public TokenParser(PortletRequest pRequest, PortletResponse pResponse,
+			Locale pLocale, String pSubsFilePath) {
+		this.request = pRequest;
+		this.response = pResponse;
+		this.locale = pLocale;
+		if (pSubsFilePath != null) {
+			this.subsFilePath = pSubsFilePath;
+		}
+	}
+
+	/**
+	 * <p>
+	 * Get a URL for the given file pathname, localized (or not) for the current
+	 * locale depending on the boolean parameter (if true, the URL is for the
+	 * best-candidate localized version of that file, otherwise it is just for
+	 * the file itself). This method is implemented using
+	 * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest, PortletResponse, String, Locale, boolean)}
+	 * (see). The current locale is the one provided to the constructor (or the
+	 * one in the portlet request if that was null).
 	 * </p>
 	 * <p>
 	 * The given file pathname should be a base filename and path relative to
@@ -182,7 +212,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 			return null;
 		}
 		return I18nUtility.getLocalizedFileURL(request, response, baseFilePath,
-				localized);
+				locale, localized);
 	}
 
 	/**
@@ -211,9 +241,229 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	}
 
 	/**
+	 * Get the locale from the one provided to the constructor, or if that is
+	 * null, then from the one in the portlet request provided to the
+	 * constructor. Returns null if both the locale and portlet request were
+	 * null.
+	 * 
+	 * @return The current preferred locale for the user
+	 */
+	protected Locale getLocale() {
+		if ((locale == null) && (request != null)) {
+			return request.getLocale();
+		}
+		return locale;
+	}
+
+	/**
+	 * Get the email address from the user profile map (<code>PortletRequest.USER_INFO</code>)
+	 * in the portlet request provided to the constructor. Returns null if this
+	 * has not been set in the request (eg, when the user is not logged-in), or
+	 * the request provided to the constructor was null.
+	 * 
+	 * @return email
+	 */
+	protected String getEmail() {
+		if (request == null) {
+			return null;
+		}
+		try {
+			return (String) Utils.getUserProperty(request, Consts.KEY_EMAIL);
+		} catch (ClassCastException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Get the first (given) name from the user profile map (<code>PortletRequest.USER_INFO</code>)
+	 * in the portlet request provided to the constructor. Returns null if this
+	 * has not been set in the request (eg, when the user is not logged-in), or
+	 * the request provided to the constructor was null.
+	 * 
+	 * @return first (given) name
+	 */
+	protected String getFirstName() {
+		if (request == null) {
+			return null;
+		}
+		try {
+			return (String) Utils.getUserProperty(request,
+					Consts.KEY_FIRST_NAME);
+		} catch (ClassCastException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Get the last (family) name from the user profile map (<code>PortletRequest.USER_INFO</code>)
+	 * in the portlet request provided to the constructor. Returns null if this
+	 * has not been set in the request (eg, when the user is not logged-in), or
+	 * the request provided to the constructor was null.
+	 * 
+	 * @return last (family) name
+	 */
+	protected String getLastName() {
+		if (request == null) {
+			return null;
+		}
+		try {
+			return (String) Utils
+					.getUserProperty(request, Consts.KEY_LAST_NAME);
+		} catch (ClassCastException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Get the site name from the portlet request provided to the constructor.
+	 * Returns null if this has not been set in the request, or the request
+	 * provided to the constructor was null.
+	 * 
+	 * @return site name
+	 */
+	protected String getSite() {
+		if (request == null) {
+			return null;
+		}
+		return Utils.getPortalSiteName(request);
+	}
+
+	/**
+	 * Get the portal site root (ie home page) URL for the current portal site,
+	 * from the portlet request provided to the constructor. Returns null if
+	 * this has not been set in the request, or the request provided to the
+	 * constructor was null.
+	 * 
+	 * @return site URL string
+	 */
+	protected String getSiteURL() {
+		if (request == null) {
+			return null;
+		}
+		return Utils.getPortalSiteURL(request);
+	}
+
+	/**
+	 * Get the portal request URL for the current request. This is the URL which
+	 * was opened by the browser in order to invoke this portlet. It is obtained
+	 * from the portlet request provided to the constructor. Returns null if
+	 * this has not been set in the request, or the request provided to the
+	 * constructor was null.
+	 * 
+	 * @return request URL string
+	 */
+	protected String getRequestURL() {
+		if (request == null) {
+			return null;
+		}
+		return Utils.getPortalRequestURL(request);
+	}
+
+	/**
+	 * Get the authorization groups from the portlet request provided to the
+	 * constructor. Returns null if these have not been set in the request, or
+	 * the request provided to the constructor was null.
+	 * 
+	 * @return list of groups
+	 */
+	protected String[] getGroups() {
+		if (request == null) {
+			return null;
+		}
+		return Utils.getGroups(request);
+	}
+
+	/**
+	 * Return true if the user is logged-in, false otherwise. The login status
+	 * is indicated in the portlet request provided to the constructor; false is
+	 * also returned if that request was null.
+	 * 
+	 * @return true if logged-in, false if not logged-in
+	 */
+	protected boolean getLoginStatus() {
+		if (request == null) {
+			return false;
+		}
+		return Utils.isAuthenticatedUser(request);
+	}
+
+	/**
+	 * Get the portlet ID (ie the Vignette portlet friendly ID) from the portlet
+	 * request provided to the constructor. Returns null if this has not been
+	 * set in the request, or the request provided to the constructor was null.
+	 * 
+	 * @return portlet ID
+	 */
+	protected String getPortletID() {
+		if (request == null) {
+			return null;
+		}
+		return Utils.getPortletID(request);
+	}
+
+	/**
+	 * <p>
+	 * Parses the given string, performing all of the token substitutions and
+	 * interpolations supported by this class and the parent class. For a list
+	 * and description of all the supported tokens, see the other parse methods -
+	 * this method calls all of them in series. The order of token evaluation is
+	 * as follows:
+	 * </p>
+	 * <dl>
+	 * <dt><code>{TOKEN:<i>key</i>}</code></dt>
+	 * <dd>This token is parsed first, and the substituted content is added to
+	 * the string. So subsequent substitutions operate against the value for the
+	 * <i>key</i> - therefore that value may itself contain other tokens.
+	 * <dt><code>{SITE}</code></dt>
+	 * <dt><code>{SITE-URL}</code></dt>
+	 * <dt><code>{REQUEST-URL}</code></dt>
+	 * <dt><code>{LANGUAGE-CODE}</code></dt>
+	 * <dt><code>{COUNTRY-CODE}</code></dt>
+	 * <dt><code>{LANGUAGE-TAG}</code></dt>
+	 * <dt><code>{EMAIL}</code></dt>
+	 * <dt><code>{NAME}</code></dt>
+	 * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
+	 * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+	 * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code></dt>
+	 * <dt><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
+	 * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
+	 * <dt><code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></dt>
+	 * <dt><code>{ROLE:<i>roles</i>}...{/ROLE}</code></dt>
+	 * </dl>
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> The <code>&lt;</code> and <code>&gt;</code> symbols are
+	 * also supported for the token boundaries, in place of <code>{</code> and
+	 * <code>}</code>.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parse(String content) {
+
+		if (content == null) {
+			return null;
+		}
+
+		// start parsing and substituting the tokens, using the superclass
+		content = super.parse(content);
+
+		// parse the portlet token
+		content = parsePortletContainer(content);
+
+		// parse the role token
+		content = parseRoleContainer(content);
+
+		// Done.
+		return (content);
+	}
+
+	/**
 	 * <p>
 	 * Parses the string for any <code>{PORTLET:<i>ids</i>}</code> content;
-	 * such content is deleted if the given portlet ID does not qualify
+	 * such content is deleted if the current portlet ID does not qualify
 	 * (otherwise only the special markup is removed). The <i>ids</i> may
 	 * include one or more portlet IDs, delimited by "|" for a logical-or.
 	 * <code>{PORTLET:<i>ids</i>}</code> markup may be nested for
@@ -240,7 +490,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * </pre>
 	 * 
 	 * <p>
-	 * If the given portlet ID is AbcXyz, the returned content string is:
+	 * If the given portlet ID is <code>AbcXyz</code>, the returned content
+	 * string is:
 	 * </p>
 	 * 
 	 * <pre>
@@ -251,7 +502,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * </pre>
 	 * 
 	 * <p>
-	 * But if the given portlet ID is just xyz, the returned content string is:
+	 * But if the given portlet ID is just <code>xyz</code>, the returned
+	 * content string is:
 	 * </p>
 	 * 
 	 * <pre>
@@ -261,21 +513,20 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * </pre>
 	 * 
 	 * <p>
-	 * If you provide null content, null is returned. If you provide null or
-	 * empty portlet ID, all <code>{PORTLET}</code>-enclosed sections are
+	 * If you provide null content, null is returned. The current portlet ID is
+	 * obtained from the {@link #getPortletID()} method - if it returns a null
+	 * or empty portlet ID, all <code>{PORTLET}</code>-enclosed sections are
 	 * removed from the content.
 	 * </p>
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param portletIds
-	 *            The portlet friendly ID.
 	 * @return The interpolated string.
 	 */
-	public String parsePortletContainer(String content, String portletID) {
+	public String parsePortletContainer(String content) {
 
 		return super.parseContainer(content, TOKEN_PORTLET_CONTAINER,
-				new PortletContainerMatcher(portletID));
+				new PortletContainerMatcher(getPortletID()));
 	}
 
 	/**

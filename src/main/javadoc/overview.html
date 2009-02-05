@@ -3176,14 +3176,16 @@ object which implements file interpolation. All of the other file
 interpolation artifacts in the SPF portlet utilities wrap around this
 one.</p>
 
-<p>To use this class, first you construct it, then you call one of
-its <code>interpolate</code> methods. Here are the relevant methods:</p>
+<p>To use this class, first you construct it, then you call its <code>interpolate</code>
+method. Here are the relevant methods:</p>
 
 <dl>
 	<dt>{@link
 	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#FileInterpolator(PortletRequest,PortletResponse,String)}</dt>
 	<dt>{@link
 	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#FileInterpolator(PortletRequest,PortletResponse,String,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#FileInterpolator(PortletRequest,PortletResponse,Locale,String,String)}</dt>
 	<dd>
 	<p>Use one of these constructors to instantiate the class. The
 	arguments are:</p>
@@ -3194,6 +3196,13 @@ its <code>interpolate</code> methods. Here are the relevant methods:</p>
 		</li>
 		<li>
 		<p>Your current {@link javax.portlet.PortletResponse} object.</p>
+		</li>
+		<li>
+		<p>The {@link java.util.Locale} you want to use during the file
+		interpolation (ie to find the proper localized file, as well as to
+		perform locale-dependent token substitutions within it). By default
+		(ie if you do not specify this, or leave it null) the locale inside
+		the portlet request is assumed.</p>
 		</li>
 		<li>
 		<p>A string giving the base filename for the text file to
@@ -3236,11 +3245,10 @@ its <code>interpolate</code> methods. Here are the relevant methods:</p>
 
 	<dt>{@link
 	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#interpolate()}</dt>
-	<dt>{@link
-	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#interpolate(Locale)}</dt>
 	<dd>
-	<p>You use either of these methods to open the file and get its
-	interpolated content.</p>
+	<p>You use this method to open the file and get its interpolated
+	content. If you did not provide the {@link java.util.Locale}, then the
+	one inside the portlet request is assumed.</p>
 
 	<ol>
 		<li>
@@ -3248,8 +3256,7 @@ its <code>interpolate</code> methods. Here are the relevant methods:</p>
 		base filename that was provided to the constructor. This proceeds as
 		discussed for the <a
 			href="#i18n.supporting.java.getLocalizedFileStream"><code>I18nUtility.getLocalizedFileStream</code></a>
-		methods above. If you did not provide the {@link java.util.Locale},
-		then the one inside the portlet request is assumed.</p>
+		methods above.</p>
 		</li>
 		<li>
 		<p>Then, the method parses the file content and performs all of
@@ -3305,10 +3312,11 @@ somewhere accessible to the classloader. And consider that the 2 files
 in the <code>text.html</code> bundle have been installed in the <code>html/</code>
 subfolder of either the portlet bundle folder, or the portlet WAR.</p>
 
-<p>To interpolate this bundle for the current user, using the
-portlet <code>FileInterpolator</code>, we use the following code (where
-<code>request</code> is our {@link javax.portlet.PortletRequest} and <code>response</code>
-is our {@link javax.portlet.PortletResponse}):</p>
+<p>To interpolate this bundle for the current user in his/her
+current locale, using the portlet <code>FileInterpolator</code>, we use
+the following code (where <code>request</code> is our {@link
+javax.portlet.PortletRequest} and <code>response</code> is our {@link
+javax.portlet.PortletResponse}):</p>
 
 <blockquote><pre>
 import com.hp.it.spf.xa.interpolate.portlet.FileInterpolator;
@@ -3373,7 +3381,7 @@ render-phase handler for this controller:</p>
 	<li>gets the base filename to display (an abstract method you
 	implement),</li>
 	<li>interpolates the proper localized file for the given base
-	filename, using the portlet <a
+	filename and current locale, using the portlet <a
 		href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>,</li>
 	<li>then passes the interpolated content to a custom <code>execute</code>
 	method (and returns the Spring <code>ModelAndView</code> from that
@@ -3397,6 +3405,8 @@ render-phase handler for this controller:</p>
 	However you get it, just return it from this method. If you return null
 	or a non-existent or empty file, then the interpolated file content
 	will be null.</p>
+	</dd>
+
 	<dt>{@link
 	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#execute(RenderRequest,RenderResponse,String)}</dt>
 	<dd>
