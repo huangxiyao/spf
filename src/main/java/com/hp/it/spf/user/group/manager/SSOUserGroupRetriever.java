@@ -90,8 +90,8 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
         } catch (MalformedURLException e) {
             String msg = "Invoking UGS webservice with a malformed URL";
             throw new UserGroupsException(msg, e);
-        } catch (UserGroupsException e) {
-            throw e;
+        } catch (IllegalArgumentException e) {
+            throw new UserGroupsException(e);
         } catch (Exception e) {
             throw new UserGroupsException(e);
         }
@@ -111,7 +111,7 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
             || userProfile == null
             || siteName.trim().equals("")
             || userProfile.isEmpty()) {
-            throw new UserGroupsException("Create GroupRequest failed, site name or user profile map is not defined.");
+            throw new IllegalArgumentException("Create GroupRequest failed, site name or user profile map is not defined.");
         }
 
         // Populate request object
