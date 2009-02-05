@@ -359,6 +359,10 @@ public abstract class TokenParser {
 	 * <dd>This token is parsed first, and the substituted content is added to
 	 * the string. So subsequent substitutions operate against the value for the
 	 * <i>key</i> - therefore that value may itself contain other tokens.
+	 * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+	 * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code></dt>
+	 * <dt><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
+	 * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
 	 * <dt><code>{SITE}</code></dt>
 	 * <dt><code>{SITE-URL}</code></dt>
 	 * <dt><code>{REQUEST-URL}</code></dt>
@@ -368,10 +372,6 @@ public abstract class TokenParser {
 	 * <dt><code>{EMAIL}</code></dt>
 	 * <dt><code>{NAME}</code></dt>
 	 * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
-	 * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
-	 * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code></dt>
-	 * <dt><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
-	 * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
 	 * </dl>
 	 * </p>
 	 * <p>
@@ -392,6 +392,16 @@ public abstract class TokenParser {
 
 		// Start parsing and substituting the tokens:
 		content = parseToken(content);
+
+		// Parse site sections
+		content = parseSiteContainer(content);
+
+		// Parse login/logout sections
+		content = parseLoggedInContainer(content);
+		content = parseLoggedOutContainer(content);
+
+		// Parse group sections
+		content = parseGroupContainer(content);
 
 		// Add current site name
 		content = parseSite(content);
@@ -425,16 +435,6 @@ public abstract class TokenParser {
 
 		// Transfer tag to unlocalized URL
 		content = parseLocalizedContentURL(content);
-
-		// Parse site sections
-		content = parseSiteContainer(content);
-
-		// Parse login/logout sections
-		content = parseLoggedInContainer(content);
-		content = parseLoggedOutContainer(content);
-
-		// Parse group sections
-		content = parseGroupContainer(content);
 
 		// Done.
 		return (content);
