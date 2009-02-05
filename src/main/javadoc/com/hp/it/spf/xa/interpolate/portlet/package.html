@@ -1,7 +1,8 @@
 <html>
 <body>
-<p>This package contains plain Java classes for interpolating dynamic
-tokens in text. The interpolation tokens supported in this package are:</p>
+<p>This package contains plain Java classes for interpolating
+dynamic tokens in text. The interpolation tokens supported in this
+package are:</p>
 <p>
 <dl>
 	<dt><code>{CONTENT-URL:<i>path</i>}</code></dt>
@@ -60,11 +61,15 @@ tokens in text. The interpolation tokens supported in this package are:</p>
 	one of the portal site <code><i>names</i></code>. Otherwise suppresses
 	the surrounded content.</dd>
 	<dt><code>{SITE-URL}</code></dt>
-	<dd>Replaced with the home-page URL for the current portal site
-	which includes this portlet.</dd>
+	<dd>Replaced with the home-page URL for this portlet's portal
+	site.</dd>
+	<dt><code>{SITE-URL:<i>uri</i>}</code></dt>
+	<dd>Replaced with the page URL for the given friendly URI at this
+	portlet's portal site.</dd>
 	<dt><code>{TOKEN:<i>key</i>}</code></dt>
 	<dd>Replaced with the value for the <code><i>key</i></code>
-	property as found in the token substitutions file (eg <code>default_tokens.properties</code> by default).</dd>
+	property as found in the token substitutions file (eg <code>default_tokens.properties</code>
+	by default).</dd>
 	<dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
 	<dd>Replaced with the named user property <code><i>key</i></code>
 	in the current portlet request.</dd>

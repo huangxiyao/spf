@@ -637,24 +637,32 @@ to import them directly.</p>
 <p>The Shared Portal Framework includes a portlet application, <code>html-viewer</code>,
 which you can use with minimal customization. This portlet renders a
 text file, such as an HTML file (containing arbitrary HTML, JavaScript,
-and/or CSS), to the user. The file rendered is the best-fit localized
-version available for the user amongst a bundle of files located inside
-the application WAR, or on the server filesystem outside of it (eg where
-deposited an administrator). The file may also include substitution
-tokens for certain dynamic functionality supported by the SPF portlet
-utilities' {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}
-- for example, you can permission content in the file by group or role,
-include possibly-localized images and other static resources, etc. The <code>html-viewer</code>
-portlet's <code>view</code> mode renders the file, and its <code>config</code>
-mode lets the portlet administrator configure the portlet (eg specify
-which bundle of HTML files to render).</p>
+and/or CSS), to the user.</p>
+
+<ul>
+	<li>The file rendered is the best-fit localized version available
+	for the user amongst a bundle of files located inside the application
+	WAR, or on the server filesystem outside of it (eg where deposited an
+	administrator).</li>
+
+	<li>The file may also include <i>special markup tokens</i> for
+	certain dynamic functionality, as per the SPF portlet utilities' <a
+		href="#file.display">text interpolation</a> capabilities. For example,
+	you can permission content in the file by group or role; include
+	possibly-localized images and other static resources; etc.</li>
+
+	<li>The <code>html-viewer</code> portlet's <code>view</code> mode
+	renders the file, and its <code>config</code> mode lets the portlet
+	administrator configure the portlet (eg specify which bundle of HTML
+	files to render).</li>
+</ul>
 
 <p>The <code>html-viewer</code> portlet is often a quick and easy
 basis for developing a simple, static or mostly-static portlet for your
 SPF portal site. You don't write any code or configure any Spring or
 portlet XML files; you just supply the text files for it to display.
 Furthermore, the <code>html-viewer</code> code is extensible (it is
-actually included inside the SPF portlet utilities) if you need rather
+actually included inside the SPF portlet utilities) if you rather need
 to build upon it for your own portlet application.</p>
 
 <p>Although the SPF portlet utilities include the classes for <code>html-viewer</code>,
@@ -3151,17 +3159,67 @@ extend.</p>
 <h2>4. Text Interpolation</h2>
 </a>
 
+<p>The SPF portlet utilities' text interpolation capabilities are
+discussed in this chapter.</p>
 <hr>
 
 <a name="file.about">
 <h3>4.1. About text interpolation</h3>
 </a>
 
+<blockquote>
+<p><i><b>interpolate</b> (verb) - <b>1 a:</b> to alter ... (as a
+text) by inserting new or foreign matter; <b>1 b:</b> to insert (words)
+into a text... (ref: <a
+	href="http://www.merriam-webster.com/dictionary/interpolate">http://www.merriam-webster.com/dictionary/interpolate</a>)</i>
+</p>
+</blockquote>
+
+<p>The SPF portlet utilities include an engine for interpolating
+text: parsing text strings for <i>special markup tokens</i> and
+dynamically substituting, inserting, or deleting content accordingly.
+The token language supports the following basic capabilities:</p>
+
+<ul>
+	<li><a href="#file.author.token.user">inserting user
+	information</a>, such as name, email, language, or any other user property</li>
+	<li><a href="#file.author.token.url">inserting dynamic URL's</a>
+	for portal/portlet artifacts, such as the portal site home page URL,
+	and URLs for <a href="#i18n.resources.supporting">supporting
+	resources</a> like localized images (<a href="#i18n.location">external
+	or internal</a>)
+	<li><a href="#file.author.token.auth">permissioning content</a> so
+	it is included only for authorized users (based on groups, roles, or
+	logged-in status)</li>
+	<li><a href="#file.author.token.consolidate">consolidating
+	content</a> for ease of management (eg offloading common content into a
+	separate properties file)</li>
+	<li><a href="#file.author.token.misc">miscellaneous</a></li>
+</ul>
+
+<p>The SPF portlet utilities give you Java and JSP interfaces for
+accessing this engine. You can access with raw strings, or you can
+access and interpolate whole files (where those files too can be
+localized and managed as external or internal supporting resources /
+bundles).</p>
+
 <hr>
 
 <a name="file.display.java">
 <h3>4.2. Interpolating text using Java code</h3>
 </a>
+
+<p>The SPF portlet utilities include a Java class for interpolating
+text already loaded into a string (<a
+	href="#file.display.java.tokenParser"><code>TokenParser</code></a>). Or
+you can use <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>
+to load your text first from a (possibly localized file). A Spring
+Portlet MVC controller, <a
+	href="#file.display.java.fileInterpolatorController"><code>FileInterpolatorController</code></a>,
+is also provided, which wraps-around that and which you can easily
+bolt-into your portlet application (eg for implementing any portlet mode
+which basically just displays text or whose dynamic behavior is within
+the bounds of the <a href="#file.author">token language</a>).</p>
 
 <a name="file.display.java.fileInterpolator">
 <h4>4.2.1. Using <code>FileInterpolator</code> to interpolate text
@@ -3373,7 +3431,13 @@ an abstract instance of Spring's {@link
 org.springframework.web.portlet.mvc.AbstractController}, which
 implements file interpolation during the <i>render phase</i>, using the
 portlet <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>.
-The render-phase handler for this controller:</p>
+Many portal sites have at least a few portlets, or at least a few
+portlet modes, which just basically display static text - or text with
+some minor dynamic behavior. The <code>FileInterpolatorController</code>
+lets you implement those use cases with the SPF text interpolation
+capabilities integrated directly into Spring Portlet MVC.</p>
+
+<p>The render-phase handler for this controller:</p>
 
 <ol>
 	<li>gets the base filename to display (an abstract method you
@@ -3439,8 +3503,8 @@ you have setup for your Spring portlet.</p>
 	more information. If your file to interpolate does not contain any <code>{TOKEN:<i>key</i>}</code>
 	tokens, or you are willing to use the default property file, you do not
 	need to set this attribute.</p>
-	</p>
-	</dd>
+</p>
+</dd>
 </dl>
 
 <p>For example, here is a simple extension/implementation of the <code>FileInterpolatorController</code>.
@@ -3643,16 +3707,29 @@ below about <a href="#file.author">authoring text</a>.</p>
 <h3>4.3. Interpolating text using JSP tag libraries</h3>
 </a>
 
+<p>The SPF portlet utilities include a JSP tag which wraps-around
+the <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>
+for you: <code>&lt;spf-file-portlet:interpolate&gt;</code>.</p>
+
 <a name="file.display.jsp.interpolate">
 <h4>4.3.1. Using <code>&lt;spf-file-portlet:interpolate&gt;</code></h4>
 </a>
 
 <p>The SPF portlet utilities provide a JSP tag, <code>&lt;spf-file-portlet:interpolate&gt;</code>,
 which wraps around <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>
-to offer most of the same capabilities. It is thoroughly documented in
-the <a
+to offer most of the same capabilities. If you are authoring a portlet
+mode which just needs to display some interpolated text from a file,
+with dynamic behaviors limited to the bounds of the <a
+	href="#file.author">supported token language</a>, then using this tag
+is the the easiest way: you don't even need a controller class, just
+write a JSP which calls this tag, and configure it into Spring.</p>
+
+The tag is thoroughly documented in the
+<a
 	href="com/hp/it/spf/xa/interpolate/portlet/tag/package-summary.html#interpolate">package
-description</a>. Briefly:</p>
+description</a>
+. Briefly:
+</p>
 
 <dl>
 	<dt>
@@ -3708,18 +3785,49 @@ description</a>. Briefly:</p>
 	</dd>
 </dl>
 
+<p>For an example of how you would configure your JSP which calls
+this tag, directly into Spring without any controller class or other
+Java code needed, see the the <a href="#help.portlet.jsp.interpolate">discussion
+above</a> about portlet <code>help</code> mode.</p>
+
 <hr>
 
 <a name="file.display.htmlViewer">
-<h4>4.4. Using the <code>html-viewer</code> portlet to display
-interpolated text from files</h4>
+<h3>4.4. Using the <code>html-viewer</code> portlet to display
+interpolated text from files</h3>
 </a>
+
+<p>The Shared Portal Framework includes a portlet application, <code>html-viewer</code>,
+which you can use with minimal customization. This portlet basically
+wraps-around the file interpolation framework discussed above, at the
+highest possible level: the portlet application.</p>
+
+<p>If you have a portlet which needs to do nothing more than display
+some basic text, with dynamic behaviors within the capabilities of the <a
+	href="#file.author">text interpolation tokens</a>, then using <code>html-viewer</code>
+is the easiest way to inmplement. You write no Java code, no JSP, and no
+Spring configuration. You just write the needed text file(s), and use
+the Vignette site console to instantiate the needed portlet instance(s)
+and configure them via the portlet's <code>config</code> mode so that
+they use those file(s).</p>
+
+<p>The <code>html-viewer</code> portlet is covered in a separate
+document, the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/html-viewer/site/apidocs/overview-summary.html">SPF
+HTML Viewer Portlet Developer's Guide</code></a> (see).</p>
 
 <hr>
 
 <a name="file.author">
 <h3>4.5. Authoring text using interpolation tokens</h3>
 </a>
+
+<p>The text interpolation tokens supported by the SPF portlet
+utilities are described here. Detailed information on each token is also
+provided in the class documentation for the {@link
+com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}.</p>
+
+LEFT OFF HERE
 
 <blockquote>
 <p><b>Important:</b> Only interpolation of UTF-8 encoded file

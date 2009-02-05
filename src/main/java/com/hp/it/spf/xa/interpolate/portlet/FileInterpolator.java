@@ -457,15 +457,28 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </dd>
  * 
  * <dt><code>{SITE-URL}</code></dt>
+ * <dt><code>{SITE-URL:<i>uri</i>}</code></dt>
  * <dd>
  * <p>
- * Use this token to insert the URL for the home page of the current portal site
- * into the interpolated content. This URL is taken from a non-standard
- * attribute in the request which it is assumed the portal has set (SPF sets
- * this by default). For example, <code>{SITE-URL}</code> is replaced with
+ * Use these related tokens to insert URL's for pages at the current portal site
+ * into the interpolated content. The <code>{SITE-URL}</code> token inserts
+ * the site home page URL; the <code>{SITE-URL:<i>uri</i>}</code> token
+ * inserts a URL for a page at that site, identified by the given URI (ie a
+ * friendly URI for the page in Vignette, or a secondary page template name, or
+ * etc - this can include query data if you like). The portal site URL is taken
+ * from a non-standard attribute in the request which it is assumed the portal
+ * has set (SPF sets this by default).
+ * </p>
+ * <p>
+ * For example, <code>{SITE-URL}</code> is replaced with
  * <code>http://portal.hp.com/portal/site/itrc/</code> when the portlet is
  * requested from the <code>itrc</code> portal site on the
- * <code>portal.hp.com</code> server using HTTP.
+ * <code>portal.hp.com</code> server using HTTP. Similarly,
+ * <code>{SITE-URL:/forums}</code> is replaced with
+ * <code>http://portal.hp.com/portal/site/itrc/forums</code>,
+ * <code>{SITE-URL:/template.ANON_SPF_GLOBAL_HELP}</code> is replaced with
+ * <code>http://portal.hp.com/portal/site/itrc/template.ANON_SPF_GLOBAL_HELP</code>
+ * (the global help secondary page), etc.
  * </p>
  * </dd>
  * 
@@ -547,6 +560,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <li><code>{GROUP:<i>groups</i>}</code></li>
  * <li><code>{SITE}</code></li>
  * <li><code>{SITE-URL}</code></li>
+ * <li><code>{SITE-URL:<i>uri</i>}</code></li>
  * <li><code>{REQUEST-URL}</code></li>
  * <li><code>{LANGUAGE-CODE}</code></li>
  * <li><code>{COUNTRY-CODE}</code></li>
