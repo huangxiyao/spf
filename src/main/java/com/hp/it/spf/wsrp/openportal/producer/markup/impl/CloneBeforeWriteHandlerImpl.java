@@ -23,6 +23,10 @@ import java.util.Map;
  * Implements <tt>cloneBeforeWrite</tt> portlet state change behavior.
  * This class clones the portlet and updates its preferences only if the portlet made any
  * preference updates and if the portlet is not already a clone.
+ * <p>
+ * <b>Note: </b> In order to use this implementation you need to add to <tt>wsrpconfig.properties</tt>
+ * file the following property:<br />
+ * com.sun.portal.wsrp.producer.markup.clonebeforewritehandler.classname=com.hp.it.spf.wsrp.openportal.producer.markup.impl.CloneBeforeWriteHandlerImpl
  *  
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  */
