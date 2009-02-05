@@ -228,11 +228,11 @@ public class ClassicContextualHelpProvider extends
 				String contextPath = portalContext.getPortalRequest()
 						.getContextPath();
 				if (!url.startsWith(contextPath)) {
-					return slashify(contextPath + "/" + url);
+					return Utils.slashify(contextPath + "/" + url);
 				}
 			}
 		}
-		return slashify(url);
+		return Utils.slashify(url);
 	}
 
 	/**

@@ -397,28 +397,11 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 				String contextPath = portalContext.getPortalRequest()
 						.getContextPath();
 				if (!url.startsWith(contextPath)) {
-					return slashify(contextPath + "/" + url);
+					return Utils.slashify(contextPath + "/" + url);
 				}
 			}
 		}
-		return slashify(url);
+		return Utils.slashify(url);
 	}
 
-	/**
-	 * <p>
-	 * Returns the given path, with any consecutive file separators ("/" for
-	 * Java) reduced to just one. The given path is also trimmed of whitespace.
-	 * </p>
-	 * 
-	 * @param pPath
-	 *            The file path to clean-up.
-	 * @return The cleaned-up file path.
-	 */
-	private String slashify(String pPath) {
-		if (pPath == null) {
-			return null;
-		}
-		pPath = pPath.trim();
-		return pPath.replaceAll("/+", "/");
-	}
 }

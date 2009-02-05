@@ -13,7 +13,7 @@ package com.hp.it.spf.xa.misc.portal;
  * @author <link href="ye.liu@hp.com">Liu Ye</link>
  * @version TBD
  */
-public final class Consts extends com.hp.it.spf.xa.misc.Consts {
+public class Consts extends com.hp.it.spf.xa.misc.Consts {
 
 	/**
 	 * The name of the session attribute containing transient status message.

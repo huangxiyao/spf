@@ -485,7 +485,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
-		pBaseFileName = slashify(pBaseFileName);
+		pBaseFileName = Utils.slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
@@ -653,7 +653,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
-		pBaseFileName = slashify(pBaseFileName);
+		pBaseFileName = Utils.slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
@@ -676,7 +676,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 				String absPath = pContext.getPortalRequest().getSession()
 						.getServletContext().getRealPath(relPath)
 						+ "/";
-				fileName = slashify(absPath + "/" + fileName);
+				fileName = Utils.slashify(absPath + "/" + fileName);
 				return new FileInputStream(fileName);
 			} catch (Exception e) { // should never happen
 			}
@@ -845,7 +845,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
-		pBaseFileName = slashify(pBaseFileName);
+		pBaseFileName = Utils.slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
@@ -864,17 +864,17 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 			String url = null;
 			if (fileName != null) {
-				url = slashify(pContext.getPortalHttpRoot() + "/" + relPath
+				url = Utils.slashify(pContext.getPortalHttpRoot() + "/" + relPath
 						+ "/" + fileName);
 			} else {
-				url = slashify(pContext.getPortalHttpRoot() + "/" + relPath
+				url = Utils.slashify(pContext.getPortalHttpRoot() + "/" + relPath
 						+ "/" + pBaseFileName);
 			}
 
 			// make sure the URL includes the portal application context root
 			String contextPath = pContext.getPortalRequest().getContextPath();
 			if (!url.startsWith(contextPath)) {
-				return contextPath + "/" + url;
+				return Utils.slashify(contextPath + "/" + url);
 			} else {
 				return url;
 			}
@@ -998,7 +998,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			// otherwise return null - also return null if file doesn't exist)
 			if (fileName != null && !fileName.equals(pKey)
 					&& (fileName.length() > 0)) {
-				fileName = slashify(fileName);
+				fileName = Utils.slashify(fileName);
 
 				// get the relative path for the current portal component
 				String relPath = thisStyleObject.getUrlSafeRelativePath();
@@ -1010,7 +1010,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 						+ "/";
 
 				if (fileExists(absPath, fileName)) {
-					fileName = slashify(absPath + "/" + fileName);
+					fileName = Utils.slashify(absPath + "/" + fileName);
 					return new FileInputStream(fileName);
 				}
 			}
@@ -1145,7 +1145,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			// path to the component + the localized filename (if not null)
 			if (fileName != null && !fileName.equals(pKey)
 					&& (fileName.length() > 0)) {
-				fileName = slashify(fileName);
+				fileName = Utils.slashify(fileName);
 
 				// get the relative path for the current portal component
 				String relPath = thisStyleObject.getUrlSafeRelativePath();
@@ -1158,10 +1158,10 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 				String url = null;
 				if (fileExists(absPath, fileName)) {
-					url = slashify(pContext.getPortalHttpRoot() + "/" + relPath
+					url = Utils.slashify(pContext.getPortalHttpRoot() + "/" + relPath
 							+ "/" + fileName);
 				} else {
-					url = slashify(pContext.getPortalHttpRoot() + "/" + relPath
+					url = Utils.slashify(pContext.getPortalHttpRoot() + "/" + relPath
 							+ "/" + fileName);
 				}
 
@@ -1170,7 +1170,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 				String contextPath = pContext.getPortalRequest()
 						.getContextPath();
 				if (!url.startsWith(contextPath)) {
-					return slashify(contextPath + "/" + url);
+					return Utils.slashify(contextPath + "/" + url);
 				} else {
 					return url;
 				}
