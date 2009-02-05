@@ -8,6 +8,8 @@
  */
 package com.hp.it.spf.xa.interpolate.portal;
 
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
@@ -15,6 +17,7 @@ import java.io.InputStream;
 import com.epicentric.user.User;
 import com.epicentric.common.website.SessionUtils;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.interpolate.portal.TokenParser;
 import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogWrapper;
@@ -31,9 +34,10 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * Note that the base text filename you provide is used to find a best-fit file
- * for the current request's locale, among all the files for that basename in a
- * bundle of files (each tagged with locale), in the manner of the Java standard
- * for {@link ResourceBundle}. All of the files in the bundle must be loaded as
+ * for the locale you provide (by default, the locale in the portal context you
+ * provide), among all the files for that basename in a bundle of files (each
+ * tagged with locale), in the manner of the Java standard for
+ * {@link ResourceBundle}. All of the files in the bundle must be loaded as
  * secondary support files against the current portal component. <b>Important:</b>
  * Your files must be UTF-8 encoded.
  * </p>
@@ -82,10 +86,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * Use this token to insert the <a
  * href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
- * 3166-1</a> country code from the current portal context (as provided in the
- * locale of the request). Note that the language code is not a part of this.
- * For example, for a Japanese request, <code>{COUNTRY-CODE}</code> is
- * replaced with <code>JP</code>.
+ * 3166-1</a> country code from the current locale. Note that the language code
+ * is not a part of this. For example, for a Japanese request,
+ * <code>{COUNTRY-CODE}</code> is replaced with <code>JP</code>.
  * </p>
  * </dd>
  * 
@@ -155,10 +158,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * Use this token to insert the <a
  * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO 639-1</a>
- * language code from the current portal context (as provided in the locale of
- * the request). Note that the country code is not a part of this. For example,
- * for a Japanese request, <code>{LANGUAGE-CODE}</code> is replaced with
- * <code>ja</code>.
+ * language code from the current locale. Note that the country code is not a
+ * part of this. For example, for a Japanese request,
+ * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>.
  * </p>
  * </dd>
  * 
@@ -167,11 +169,10 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * Use this token to insert the <a
  * href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag from
- * the current portal context (as provided in the locale of the request). Note
- * that the country code is included in the language tag, if it was set in the
- * locale (otherwise the language tag consists of the language code only). For
- * example, for a French (Canada) request, <code>{LANGUAGE-TAG}</code> is
- * replaced with <code>fr-CA</code>.
+ * the current locale. Note that the country code is included in the language
+ * tag, if it was set in the locale (otherwise the language tag consists of the
+ * language code only). For example, for a French (Canada) request,
+ * <code>{LANGUAGE-TAG}</code> is replaced with <code>fr-CA</code>.
  * </p>
  * </dd>
  * 
@@ -186,8 +187,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * that uses this <code>FileInterpolator</code>. For the
  * <code><i>pathname</i></code> in the token, use the filename of the base
  * file. The <code>FileInterpolator</code> will replace this token with a URL
- * for the best-fit candidate secondary support file for the locale in the
- * request.
+ * for the best-fit candidate secondary support file for the current locale.
  * </p>
  * <p>
  * For example, upload <code>picture.jpg</code> as a secondary support file
@@ -246,7 +246,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * Use this token to insert the full name of the user into the interpolated
  * content, where the given (first) and family (last) names are in the customary
- * order for the user's locale. The name is taken from the
+ * order for the current locale. The name is taken from the
  * <code>firstname</code> and <code>lastname</code> properties of the portal
  * <code>User</code> object, and the locale is taken from the current portal
  * request.
@@ -441,9 +441,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.spf.xa.interpolate.FileInterpolator<br>
- *      com.hp.it.spf.xa.interpolate.portal.TokenParser<br>
- *      com.hp.it.spf.xa.interpolate.TokenParser
+ * @see <code>com.hp.it.spf.xa.interpolate.FileInterpolator</code><br>
+ *      <code>com.hp.it.spf.xa.interpolate.portal.TokenParser</code><br>
+ *      <code>com.hp.it.spf.xa.interpolate.TokenParser</code>
  */
 public class FileInterpolator extends
 		com.hp.it.spf.xa.interpolate.FileInterpolator {
@@ -486,7 +486,7 @@ public class FileInterpolator extends
 		this.portalContext = portalContext;
 		this.baseContentFilePath = baseContentFile;
 		if (portalContext != null) {
-			this.t = new TokenParser(portalContext);
+			this.parser = new TokenParser(portalContext);
 		}
 	}
 
@@ -497,19 +497,16 @@ public class FileInterpolator extends
 	 * token-substitutions pathname.
 	 * </p>
 	 * <p>
-	 * The content filename provided should be the base name of the secondary
-	 * support file containing the content to interpolate. The interpolate
-	 * method will open the best-fit localized version of that secondary support
-	 * file, based on the locale in the given request.
-	 * </p>
-	 * <p>
-	 * The token-substitutions pathname provided is to be used with any
-	 * <code>{TOKEN:<i>key</i>}</code> tokens in the file content; they will
-	 * be resolved against the file whose pathname you provide. The pathname
-	 * should include any necessary path (relative to the class loader) followed
-	 * by the filename (the extension <code>.properties</code> is required and
-	 * assumed). If you know there are no such tokens in the file content, you
-	 * can pass null for this parameter.
+	 * This constructor works like
+	 * {@link #FileInterpolator(PortalContext, String)} and allows a
+	 * token-substitutions file to be specified as well. The token-substitutions
+	 * pathname provided is to be used with any <code>{TOKEN:<i>key</i>}</code>
+	 * tokens in the file content; they will be resolved against the file whose
+	 * pathname you provide. The pathname should include any necessary path
+	 * (relative to the class loader) followed by the filename (the extension
+	 * <code>.properties</code> is required and assumed). If you know there
+	 * are no such tokens in the file content, you can pass null for this
+	 * parameter.
 	 * </p>
 	 * 
 	 * @param portalContext
@@ -528,7 +525,45 @@ public class FileInterpolator extends
 		this.portalContext = portalContext;
 		this.baseContentFilePath = relativeFilePath;
 		if (portalContext != null) {
-			this.t = new TokenParser(portalContext, subsFileBase);
+			this.parser = new TokenParser(portalContext, subsFileBase);
+		}
+	}
+
+	/**
+	 * <p>
+	 * Constructs a new <code>FileInterpolator</code> for the given base
+	 * content secondary support filename, portal context, locale, and
+	 * token-substitutions pathname.
+	 * </p>
+	 * <p>
+	 * This constructor works like
+	 * {@link #FileInterpolator(PortalContext, String, String)} except that the
+	 * given locale is used instead of the one in the request in the portal
+	 * context. However if the given locale is null, then the one in the request
+	 * will be used.
+	 * </p>
+	 * 
+	 * @param portalContext
+	 *            The portal context
+	 * @param pLocale
+	 *            The locale to use (if null, uses the one in the portal context
+	 *            instead)
+	 * @param baseContentFile
+	 *            The base filename of the text secondary support file to
+	 *            interpolate
+	 * @param subsFilePath
+	 *            The filename and path relative to where the class loader
+	 *            searches for the token-substitutions property file (for
+	 *            purposes of any <code>{TOKEN:<i>key</i>}</code> tokens in
+	 *            the file content)
+	 */
+	public FileInterpolator(PortalContext portalContext, Locale pLocale,
+			String relativeFilePath, String subsFileBase) {
+		this.portalContext = portalContext;
+		this.baseContentFilePath = relativeFilePath;
+		this.locale = pLocale;
+		if (portalContext != null) {
+			this.parser = new TokenParser(portalContext, pLocale, subsFileBase);
 		}
 	}
 
@@ -536,39 +571,18 @@ public class FileInterpolator extends
 	 * <p>
 	 * Gets the best-fit localized version of the secondary support file (using
 	 * {@link #getLocalizedContentFileAsStream()}, reads it into a string, and
-	 * substitutes the tokens found in the string with the proper dynamic
-	 * values, returning the interpolated content. The filename of the secondary
-	 * support content file, the locale for which to find the best-candidate,
-	 * and the proper substitution values for the tokens are all based on the
-	 * information you provided when calling the constructor. Null is returned
-	 * if there are problems interpolating (eg the file is not found or was
-	 * empty, or the portal context or content file you provided when calling
-	 * the constructor were null). See class documentation for more information
-	 * about the tokens which are substituted.
+	 * substitutes the tokens found in the string with the proper dynamic values
+	 * (using {@link TokenParser#parse(String)}, returning the interpolated
+	 * content. The filename of the secondary support content file, the locale
+	 * for which to find the best-candidate, and the proper substitution values
+	 * for the tokens are all based on the information you provided when calling
+	 * the constructor. Null is returned if there are problems interpolating (eg
+	 * the file is not found or was empty, or the portal context or content file
+	 * you provided when calling the constructor were null). See class
+	 * documentation for more information about the tokens which are
+	 * substituted.
 	 * </p>
 	 * 
-	 * @return The interpolated file content
-	 * @throws Exception
-	 *             Some exception
-	 */
-	public String interpolate() throws Exception {
-		return this.interpolate(null);
-	}
-
-	/**
-	 * <p>
-	 * Gets the best-fit localized version of the secondary support file (using
-	 * {@link #getLocalizedContentFileAsStream(Locale)}, reads it into a
-	 * string, and substitutes the tokens found in the string with the proper
-	 * dynamic values, returning the interpolated content. This method works the
-	 * same as {@link #interpolate()} except that it uses the given locale
-	 * instead of the one in the portal context provided to the constructor.
-	 * (But if the given locale is null, then it uses the one from the portal
-	 * context.)
-	 * </p>
-	 * 
-	 * @param The
-	 *            locale to use
 	 * @return The interpolated file content
 	 * @throws Exception
 	 *             Some exception
@@ -579,208 +593,28 @@ public class FileInterpolator extends
 			logWarning("Portal context was null.");
 			return null;
 		}
-		return super.interpolate(pLocale);
+		return super.interpolate();
 	}
 
 	/**
 	 * Get an input stream for the best-candidate localized content file
 	 * available among the secondary support files of the current portal
-	 * component, based on the request locale and base content filename provided
-	 * to the constructor. Null is returned if the file is not found or the
-	 * portal context or content file provided to the constructor was null. This
-	 * method uses
-	 * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocalizedFileStream(PortalContext, String)}
+	 * component, based on the locale and base content filename provided to the
+	 * constructor. If no specific locale was provided to the constructor, then
+	 * the one in the portal context is used. Null is returned if the file is
+	 * not found or the portal context or content file provided to the
+	 * constructor was null. This method uses
+	 * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocalizedFileStream(PortalContext, String, Locale, boolean)}
 	 * (see).
 	 * 
 	 * @return The input stream for the file
 	 */
 	protected InputStream getLocalizedContentFileAsStream() {
-		return getLocalizedContentFileAsStream(null);
-	}
-
-	/**
-	 * Get an input stream for the best-candidate localized content file
-	 * available among the secondary support files of the current portal
-	 * component, based on the given locale and base content filename provided
-	 * to the constructor. This works the same as the
-	 * {@link getLocalizedContentFileAsStream()} method, except it uses the
-	 * given locale instead of the one from the portal context. (But if the
-	 * given locale is null, it uses the one in the portal context by default.)
-	 * 
-	 * @param The
-	 *            locale to use
-	 * @return The input stream for the file
-	 */
-	protected InputStream getLocalizedContentFileAsStream(Locale pLocale) {
 		if (portalContext == null || baseContentFilePath == null) {
 			return null;
 		}
 		return I18nUtility.getLocalizedFileStream(portalContext,
-				baseContentFilePath, pLocale, true);
-	}
-
-	/**
-	 * Get the locale from the portal request in the portal context provided to
-	 * the constructor. Returns null if the portal context provided to the
-	 * constructor was null.
-	 * 
-	 * @return The current preferred locale for the user
-	 */
-	protected Locale getLocale() {
-		if (portalContext == null) {
-			return null;
-		}
-		return portalContext.getPortalRequest().getLocale();
-	}
-
-	/**
-	 * Get the email address from the portal <code>User</code> object in the
-	 * portal context (portal request) provided to the constructor. Returns null
-	 * if this has not been set in the request (eg, when the user is not
-	 * logged-in), or the portal context provided to the constructor was null.
-	 * 
-	 * @return email
-	 */
-	protected String getEmail() {
-		if (portalContext == null) {
-			return null;
-		}
-		try {
-			return (String) Utils.getUserProperty(portalContext,
-					Consts.PROPERTY_EMAIL_ID);
-		} catch (ClassCastException e) {
-			return null;
-		}
-	}
-
-	/**
-	 * Get the first (given) name from the portal <code>User</code> object in
-	 * the portal context (portal request) provided to the constructor. Returns
-	 * null if this has not been set in the request (eg, when the user is not
-	 * logged-in), or the portal context provided to the constructor was null.
-	 * 
-	 * @return first (given) name
-	 */
-	protected String getFirstName() {
-		if (portalContext == null) {
-			return null;
-		}
-		try {
-			return (String) Utils.getUserProperty(portalContext,
-					Consts.PROPERTY_FIRSTNAME_ID);
-		} catch (ClassCastException e) {
-			return null;
-		}
-	}
-
-	/**
-	 * Get the last (family) name from the portal <code>User</code> object in
-	 * the portal context (portal request) provided to the constructor. Returns
-	 * null if this has not been set in the request (eg, when the user is not
-	 * logged-in), or the portal context provided to the constructor was null.
-	 * 
-	 * @return last (family) name
-	 */
-	protected String getLastName() {
-		if (portalContext == null) {
-			return null;
-		}
-		try {
-			return (String) Utils.getUserProperty(portalContext,
-					Consts.PROPERTY_LASTNAME_ID);
-		} catch (ClassCastException e) {
-			return null;
-		}
-	}
-
-	/**
-	 * Get the site name for the current portal request from the portal context
-	 * provided to the constructor. Returns null if this has not been set in the
-	 * request, or the portal context provided to the constructor was null.
-	 * 
-	 * @return site name
-	 */
-	protected String getSite() {
-		if (portalContext == null) {
-			return null;
-		}
-		try {
-			String siteName = portalContext.getCurrentSite().getDNSName();
-			return siteName;
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	/**
-	 * Get the portal site root (ie home page) URL for the current portal site,
-	 * from the portlet request provided to the constructor. Returns null if
-	 * this has not been set in the request, or the request provided to the
-	 * constructor was null.
-	 * 
-	 * @return site URL string
-	 */
-	protected String getSiteURL() {
-		if (portalContext == null) {
-			return null;
-		}
-		return portalContext.getCurrentBasePortalURI();
-	}
-
-	/**
-	 * Get the portal request URL for the current request. This is the URL which
-	 * was opened by the browser in order to invoke this page. It is obtained
-	 * from the portal context provided to the constructor. Returns null if this
-	 * has not been set in the request, or the context provided to the
-	 * constructor was null.
-	 * 
-	 * @return request URL string
-	 */
-	protected String getRequestURL() {
-		if (portalContext == null) {
-			return null;
-		}
-		try {
-			HttpServletRequest request = portalContext.getHttpServletRequest();
-			return Utils.getRequestURL(request);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	/**
-	 * Get the authorization groups from the portlet request provided to the
-	 * constructor. Returns null if these have not been set in the request, or
-	 * the request provided to the constructor was null.
-	 * 
-	 * @return list of groups
-	 */
-	protected String[] getGroups() {
-		if (portalContext == null) {
-			return null;
-		}
-		return Utils.getGroups(portalContext);
-	}
-
-	/**
-	 * Return true if the user is logged-in, false otherwise. The login status
-	 * is indicated in the portal context given to the constructor; false is
-	 * also returned if that context was null.
-	 * 
-	 * @return true if logged-in, false if not logged-in
-	 */
-	protected boolean getLoginStatus() {
-		if (portalContext == null) {
-			return false;
-		}
-		try {
-			HttpSession session = portalContext.getHttpServletRequest()
-					.getSession();
-			User currentUser = SessionUtils.getCurrentUser(session);
-			return !currentUser.isGuestUser();
-		} catch (Exception e) {
-			return false;
-		}
+				baseContentFilePath, locale, true);
 	}
 
 	/**
