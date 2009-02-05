@@ -37,6 +37,7 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * <dt><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></dt>
  * <dt><code>{SITE}</code></dt>
  * <dt><code>{SITE-URL}</code></dt>
+ * <dt><code>{SITE-URL:<i>uri</i>}</code></dt>
  * <dt><code>{REQUEST-URL}</code></dt>
  * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
  * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code></dt>
@@ -54,7 +55,7 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  *      <code>com.hp.it.spf.xa.interpolate.portlet.TokenParser</code></br>
  *      <code>com.hp.it.spf.xa.interpolate.FileInterpolator</code><br>
  *      <code>com.hp.it.spf.xa.interpolate.portal.FileInterpolator</code><br>
- *      <code>com.hp.it.spf.xa.interpolate.portlet.FileInterpolator</code> 
+ *      <code>com.hp.it.spf.xa.interpolate.portlet.FileInterpolator</code>
  */
 public abstract class TokenParser {
 
@@ -171,6 +172,7 @@ public abstract class TokenParser {
 	private static final String TOKEN_CONTAINER_OR = "|";
 	private static char TOKEN_BEGIN = '{';
 	private static char TOKEN_END = '}';
+	private static char TOKEN_BEGIN_PARAM = ':';
 	private static char DEPRECATED_TOKEN_BEGIN = '<';
 	private static char DEPRECATED_TOKEN_END = '>';
 
@@ -365,6 +367,7 @@ public abstract class TokenParser {
 	 * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
 	 * <dt><code>{SITE}</code></dt>
 	 * <dt><code>{SITE-URL}</code></dt>
+	 * <dt><code>{SITE-URL:<i>uri</i>}</code></dt>
 	 * <dt><code>{REQUEST-URL}</code></dt>
 	 * <dt><code>{LANGUAGE-CODE}</code></dt>
 	 * <dt><code>{COUNTRY-CODE}</code></dt>
@@ -694,15 +697,34 @@ public abstract class TokenParser {
 	/**
 	 * <p>
 	 * Parses the given string, substituting the current portal site home-page
-	 * URL for the <code>{SITE-URL}</code> token. For example: <code>&lt;a
+	 * URL for the <code>{SITE-URL}</code> token, and the respective page URL
+	 * for the <code>{SITE-URL:<i>uri</i>}</code> token.
+	 * </p>
+	 * 
+	 * <p>
+	 * For example: <code>&lt;a
 	 * href="{SITE-URL}"&gt;go to home page&lt;/a&gt;</code>
 	 * is changed to
 	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/"&gt;go to
 	 * home page&lt;/a&gt;</code>
 	 * when the current site home-page URL is
-	 * "http://portal.hp.com/portal/site/acme/". The URL is obtained from the
-	 * {@link #getSiteURL()} method - if that method returns null, the token is
-	 * replaced with blank. If you provide null content, null is returned.
+	 * "http://portal.hp.com/portal/site/acme/".
+	 * </p>
+	 * 
+	 * <p>
+	 * Another example:
+	 * <code>&lt;a href="{SITE-URL:forums}"&gt;go to forums&lt;/a&gt;</code>
+	 * is changed to
+	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/forums/"&gt;go to
+	 * forums&lt;/a&gt;</code>
+	 * when the current site home-page URL is as above. The <i>uri</i> can be
+	 * whatever string comes after (ie relative to) the site root URL (ie the
+	 * home-page URL), including additional path, query string, etc.
+	 * </p>
+	 * 
+	 * The site root URL is obtained from the {@link #getSiteURL()} method - if
+	 * that method returns null, the token is replaced with just the <i>uri</i>.
+	 * If you provide null content, null is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -715,7 +737,17 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseSiteURL(String content) {
-		return parseUnparameterized(content, TOKEN_SITE_URL, getSiteURL());
+		content = parseUnparameterized(content, TOKEN_SITE_URL, getSiteURL());
+		content = parseParameterized(content, TOKEN_SITE_URL,
+				new ValueProvider() {
+					protected String getValue(String param) {
+						String siteURL = getSiteURL();
+						if (siteURL == null)
+							siteURL = "";
+						return (slashify(siteURL + "/" + param));
+					}
+				});
+		return (content);
 	}
 
 	/**
@@ -1322,7 +1354,7 @@ public abstract class TokenParser {
 	 */
 	private int nextContainer(boolean isIncluded) {
 
-		int j, k;
+		int j, k, n;
 		String containerKeyString;
 		String[] containerKeys;
 		boolean containerMatch;
@@ -1336,10 +1368,29 @@ public abstract class TokenParser {
 
 		/*
 		 * Parse for start and end tokens. Use whichever comes first and ignore
-		 * the other until a later invokation of this method.
+		 * the other until a later invokation of this method. Start token is
+		 * like <FOO and end token is like </FOO> at this point.
 		 */
-		j = containerOldContent.indexOf(startToken, containerIndex);
-		k = containerOldContent.indexOf(endToken, containerIndex);
+		j = k = containerIndex;
+		n = -1;
+		do {
+			j = containerOldContent.indexOf(startToken, j);
+			if (j == -1) // if not found, bail - no match
+				break;
+			n = j + startToken.length();
+			if (n >= containerOldContent.length()) {
+				j = -1;
+				break; // if found at very end, bail - no match
+			}
+			if (containerOldContent.charAt(n) == containerTokenEnd)
+				break; // if <FOO> found, match
+			if ((containerOldContent.charAt(n) == TOKEN_BEGIN_PARAM) &&
+					((n + 1) < containerOldContent.length()))
+				break; // if <FOO:...> found, match
+			// if <FOO... not <FOO> or <FOO:...> found, try again
+			j = n;
+		} while (true);
+		k = containerOldContent.indexOf(endToken, k);
 
 		/*
 		 * If start token found first, parse out the keys string and test the
@@ -1370,13 +1421,19 @@ public abstract class TokenParser {
 				return FOUND_END;
 			}
 			/*
-			 * Find the container key string - if any, it starts after ":"
+			 * Two cases: either the ending ">" of the start tag was found in
+			 * the next char (meaning no key string - continue), or ":" was
+			 * found in the next char (meaning what follows up to ">" is the key
+			 * string - get it).
 			 */
 			containerKeyString = "";
-			if (containerOldContent.charAt(j + startToken.length()) == ':') {
-				containerKeyString = containerOldContent.substring(j
-						+ startToken.length() + 1, k);
+			if (containerOldContent.charAt(n) == TOKEN_BEGIN_PARAM) {
+				containerKeyString = containerOldContent.substring(n + 1, k);
 			}
+			/*
+			 * Now we have the key string (or no key string), so evaluate the
+			 * container - ie determine whether to include it or not.
+			 */
 			containerKeyString = containerKeyString.trim();
 			containerMatch = false;
 			if (containerMatcher != null) {
@@ -1475,7 +1532,7 @@ public abstract class TokenParser {
 			char tokenBegin, char tokenEnd, ValueProvider provider) {
 		String str, param, value;
 		// This makes a token like: {tokenName:
-		String token = tokenBegin + tokenName + ":";
+		String token = tokenBegin + tokenName + TOKEN_BEGIN_PARAM;
 		// This makes a regex like: (\{tokenName:.*?\})
 		String regex = "(\\" + token + ".*?\\" + tokenEnd + ")";
 		Pattern p = Pattern.compile(regex);
@@ -1545,5 +1602,23 @@ public abstract class TokenParser {
 			char tokenBegin, char tokenEnd, String value) {
 		String regex = "\\" + tokenBegin + tokenName + "\\" + tokenEnd;
 		return content.replaceAll(regex, value);
+	}
+
+	/**
+	 * <p>
+	 * Returns the given path, with any consecutive file separators ("/" for
+	 * Java) reduced to just one. The given path is also trimmed of whitespace.
+	 * </p>
+	 * 
+	 * @param pPath
+	 *            The file path to clean-up.
+	 * @return The cleaned-up file path.
+	 */
+	protected static String slashify(String pPath) {
+		if (pPath == null) {
+			return null;
+		}
+		pPath = pPath.trim();
+		return pPath.replaceAll("/+", "/");
 	}
 }
