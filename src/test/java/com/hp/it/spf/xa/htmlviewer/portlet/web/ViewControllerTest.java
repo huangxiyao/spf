@@ -87,7 +87,7 @@ public class ViewControllerTest extends TestCase {
 		String content = (String) map.get(Consts.VIEW_CONTENT);
 		System.out.println("testHandleRenderRequestInternal.1 got: " + content);
 		assertEquals(
-				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p></body></html>",
+				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Hello world!</p></body></html>",
 				content);
 		pp.setValue(Consts.VIEW_FILENAME, "test_loc_content_url_1.html");
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(

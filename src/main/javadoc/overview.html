@@ -1986,11 +1986,11 @@ description</a>. Briefly:</p>
 
 	<p>The <code>file</code> attribute lets you provide the base
 	filename (same as the {@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility.getLocalizedFileURL(PortletRequest,PortletResponse,String)}
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String)}
 	method). The <code>fileKey</code> attribute lets you alternatively
 	provide a message key pointing to the localized filename (same as the
 	{@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility.getLocalizedFileURL(PortletRequest,PortletResponse,String,String)}
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String,String)}
 	method). The <code>file</code> attribute takes priority. As mentioned
 	above, there usually is no reason to prefer doing this using the <code>fileKey</code>
 	attribute.</p>
@@ -3164,16 +3164,20 @@ extend.</p>
 content</h4>
 </a>
 
+<blockquote>
+<p><b>Note:</b> There is an SPF-provided JSP tag library for this -
+see <a href="#file.display.jsp.interpolate"><code>&lt;spf-file-portlet:interpolate&gt;</code></a>
+description below.</p>
+</blockquote>
+
 <p>The portlet {@link
 com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} is a plain Java
 object which implements file interpolation. All of the other file
 interpolation artifacts in the SPF portlet utilities wrap around this
 one.</p>
 
-<p>To use this class, first you construct it, then you call its
-{@link
-com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#interpolate()}
-method. Here are the relevant methods:</p>
+<p>To use this class, first you construct it, then you call one of
+its <code>interpolate</code> methods. Here are the relevant methods:</p>
 
 <dl>
 	<dt>{@link
@@ -3181,7 +3185,7 @@ method. Here are the relevant methods:</p>
 	<dt>{@link
 	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#FileInterpolator(PortletRequest,PortletResponse,String,String)}</dt>
 	<dd>
-	<p>Use one of these construtors to instantiate the class. The
+	<p>Use one of these constructors to instantiate the class. The
 	arguments are:</p>
 
 	<ul>
@@ -3192,7 +3196,7 @@ method. Here are the relevant methods:</p>
 		<p>Your current {@link javax.portlet.PortletResponse} object.</p>
 		</li>
 		<li>
-		<p>A string given the base filename for the text file to
+		<p>A string giving the base filename for the text file to
 		interpolate. This is a base name for a bundle of one or more external
 		or internal supporting resource files, potentially localized, as
 		described in the <a href="#i18n.resources.bundles">resource bundle</a>
@@ -3428,13 +3432,13 @@ you have setup for your Spring portlet.</p>
 	more information. If your file to interpolate does not contain any <code>{TOKEN:<i>key</i>}</code>
 	tokens, or you are willing to use the default property file, you do not
 	need to set this attribute.</p>
-</p>
-</dd>
+	</p>
+	</dd>
 </dl>
 
 <p>For example, here is a simple extension/implementation of the <code>FileInterpolatorController</code>.
-This example class is for the same scenario as discussed for <code>FileInterpolator</code> above. After
-interpolating, it sets the content as an element named <code>fileContent</code>
+This example class is for the same scenario as discussed for <code>FileInterpolator</code>
+above. After interpolating, it sets the content as an element named <code>fileContent</code>
 in the <code>ModelAndView</code> for the <code>fileDisplay</code> view,
 where the JSP for that view will later be able to find it.</p>
 
@@ -3485,6 +3489,63 @@ above</a>.)</p>
 <a name="file.display.jsp.interpolate">
 <h4>4.3.1. Using <code>&lt;spf-file-portlet:interpolate&gt;</code></h4>
 </a>
+
+<p>The SPF portlet utilities provide a JSP tag, <code>&lt;spf-file-portlet:interpolate&gt;</code>,
+which wraps around <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>
+to offer most of the same capabilities. It is thoroughly documented in
+the <a
+	href="com/hp/it/spf/xa/interpolate/portlet/tag/package-summary.html#interpolate">package
+description</a>. Briefly:</p>
+
+<dl>
+	<dt>
+	<p><a
+		href="com/hp/it/spf/xa/interpolate/portlet/tag/package-summary.html#interpolate"><code>&lt;spf-file-portlet:interpolate&gt;</code></a></p>
+	</dt>
+
+	<dd>
+	<p>This tag takes the base filename (including any subfolder path
+	relative to the portlet resource bundle folder / portlet WAR root), and
+	(optionally) a filename for the <i>token substitutions</i> file. The
+	usage is:</p>
+
+	<blockquote><pre>
+&lt;%@ taglib prefix="spf-file-portlet" uri="/spf-file-portlet.tld" %&gt;
+...
+&lt;spf-file-portlet:interpolate
+	file="<i>base-file</i>"
+	tokenFile="<i>token-substitutions-file</i>"
+	/&gt;
+</pre></blockquote>
+
+	<p>The <code>file</code> attribute lets you provide the base
+	filename for the file to interpolate and display (same as the {@link
+	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} constructors).
+	<p>The <code>tokenFile</code> attribute lets you provide an
+	override for the default token substitutions file, same as the {@link
+	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#FileInterpolator(PortletRequest,PortletResponse,String,String)}
+	constructor. This is used for any special <code>{TOKEN:<i>key</i>}</code>
+	tokens that might be found in the file content. (See the discussion on
+	<a href="#file.author">authoring content</a> below, for a description
+	of this and other dynamic tokens which the <code>FileInterpolator</code>
+	supports.)</p>
+
+	<p>For example, consider the sample scenario first described above,
+	in the discussion around <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>.
+	Here is how we would express the interpolated content for that same
+	file in JSP, using this tag:</p>
+
+	<blockquote><pre>
+&lt;%@ taglib prefix="spf-file-portlet" uri="/spf-file-portlet.tld" %&gt;
+...
+&lt;spf-file-portlet:interpolate file="/html/text.html" tokenFile="my_tokens.properties" /&gt;
+</pre></blockquote>
+
+	<p>See the tag documentation, in the <a
+		href="com/hp/it/spf/xa/interpolate/portlet/tag/package-summary.html#interpolate">package
+	description</a>, for more information.</p>
+	</dd>
+</dl>
 
 <hr>
 
