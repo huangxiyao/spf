@@ -16,25 +16,25 @@ import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
 /**
- * ANONAuthenticator is extended from AbstractAuthenticator.
- * This antenticator will called for anonymous users.
+ * ANONAuthenticator is extended from AbstractAuthenticator. This antenticator
+ * will called for anonymous users.
  * <p>
  * Anonymous user is the user whose username start with sso_guest_user_
  * 
  * @author <link href="kaijian.ding@hp.com">dingk</link>
  * @author <link href="ye.liu@hp.com">liuye</link>
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
- * 
  * @version TBD
  */
 public class ANONAuthenticator extends AbstractAuthenticator {
     private static final long serialVersionUID = 1L;
-    
+
     private static final LogWrapper LOG = AuthenticatorHelper.getLog(ANONAuthenticator.class);
-    
+
     /**
-     * This is the constructor for ANON Authenticator,
-     * It will set the user name as null which means the guest user for Vignette
+     * This is the constructor for ANON Authenticator, It will set the user name
+     * as null which means the guest user for Vignette
+     * 
      * @param request HttpServletRequest object
      */
     public ANONAuthenticator(HttpServletRequest request) {
@@ -55,11 +55,11 @@ public class ANONAuthenticator extends AbstractAuthenticator {
     public void execute() {
         User currentUser = SessionUtils.getCurrentUser(request.getSession());
         Locale reqLocale = (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE);
-        
+
         if (currentUser != null) {
             String currUserName = (String)currentUser.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID);
             if (currUserName.startsWith(AuthenticationConsts.ANON_USER_NAME_PREFIX)) {
-                Locale userLocale = I18nUtils.getUserLocale(currentUser);   
+                Locale userLocale = I18nUtils.getUserLocale(currentUser);
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("Retrieve loacle from session user," + userLocale);
                 }
@@ -67,43 +67,101 @@ public class ANONAuthenticator extends AbstractAuthenticator {
                     userName = currUserName;
                     return;
                 }
-            }            
+            }
             AuthenticatorHelper.cleanupSession(request);
-        } 
-        
+        }
+
         String language = reqLocale.getLanguage();
-        String country  = reqLocale.getCountry();
+        String country = reqLocale.getCountry();
         language = (language != null) ? language.trim() : "";
         country = (country != null) ? country.trim() : "";
-        
+
         String ssousername = null;
-        
+
         // search sso_guest_user_<locale> user
-        ssousername = AuthenticationConsts.ANON_USER_NAME_PREFIX + language + "-" + country;
+        ssousername = AuthenticationConsts.ANON_USER_NAME_PREFIX
+                      + language
+                      + "-"
+                      + country;
         User vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID,
                                                                   ssousername);
         if (vapUser != null) {
             userName = ssousername;
+            saveUserProfile2Session(vapUser);
             return;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("User" + ssousername + "not found.");
         }
-        
+
         // search sso_guest_user_<language_from_locale> user
         ssousername = AuthenticationConsts.ANON_USER_NAME_PREFIX + language;
         vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID,
                                                              ssousername);
         if (vapUser != null) {
             userName = ssousername;
+            saveUserProfile2Session(vapUser);
             return;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("User" + ssousername + "not found.");
         }
-        
+
         // for default user
-        userName = AuthenticationConsts.ANON_USER_NAME_PREFIX + AuthenticationConsts.DEFAULT_LANGUAGE;
-        return;
-    }    
+        ssousername = AuthenticationConsts.ANON_USER_NAME_PREFIX
+                      + AuthenticationConsts.DEFAULT_LANGUAGE;
+        vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID,
+                                                             ssousername);
+        if (vapUser != null) {
+            userName = ssousername;
+            saveUserProfile2Session(vapUser);
+            return;
+        }
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("User" + ssousername + "not found.");
+        }
+
+        if (LOG.willLogAtLevel(LogConfiguration.INFO)) {
+            LOG.info("No anonymous user according to loacle is found, Vignette Guest User will be used.");
+        }
+    }
+
+    /**
+     * Map user profile information and group information retrieved from vap
+     * user into session as a map
+     * 
+     * @param vapUser vignette user
+     */
+    @SuppressWarnings("unchecked")
+    protected void saveUserProfile2Session(User vapUser) {
+        if (vapUser == null) {
+            throw new IllegalArgumentException("Vignette user is not specified.");
+        }
+
+        // Retrieve user profiles
+        userProfile.put(AuthenticationConsts.PROPERTY_PROFILE_ID,
+                        vapUser.getProperty(AuthenticationConsts.KEY_PROFILE_ID));
+        userProfile.put(AuthenticationConsts.PROPERTY_USER_NAME_ID,
+                        vapUser.getProperty(AuthenticationConsts.KEY_USER_NAME));
+        userProfile.put(AuthenticationConsts.PROPERTY_EMAIL_ID,
+                        vapUser.getProperty(AuthenticationConsts.KEY_EMAIL));
+        userProfile.put(AuthenticationConsts.PROPERTY_FIRSTNAME_ID,
+                        vapUser.getProperty(AuthenticationConsts.KEY_FIRST_NAME));
+        userProfile.put(AuthenticationConsts.PROPERTY_LASTNAME_ID,
+                        vapUser.getProperty(AuthenticationConsts.KEY_LAST_NAME));
+        userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID,
+                        vapUser.getProperty(AuthenticationConsts.KEY_LANGUAGE));
+        userProfile.put(AuthenticationConsts.PROPERTY_COUNTRY_ID,
+                        vapUser.getProperty(AuthenticationConsts.KEY_COUNTRY));
+        userProfile.put(AuthenticationConsts.PROPERTY_SP_TIMEZONE_ID,
+                        vapUser.getProperty(AuthenticationConsts.KEY_SP_TIMEZONE));
+
+        // Retrieve user group
+        userProfile.put(AuthenticationConsts.HEADER_GROUP_NAME,
+                        (String[])AuthenticatorHelper.getUserGroupSet(vapUser)
+                                                     .toArray(new String[0]));
+
+        request.getSession()
+               .setAttribute(AuthenticationConsts.USER_PROFILE_KEY, userProfile);
+    }
 }
