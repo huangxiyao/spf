@@ -1,3 +1,7 @@
+/*
+ * Project: Shared Portal Framework 
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.user.group.manager;
 
 import java.net.MalformedURLException;
@@ -22,17 +26,32 @@ import com.hp.it.spf.user.group.stub.UGSRuntimeServiceXfireImplLocator;
 import com.hp.it.spf.user.group.stub.UserContext;
 import com.hp.it.spf.user.group.utils.UGSParametersManager;
 
+/**
+ * This is the implimentation class of <tt>IUserGroupRetriever</tt>.
+ * 
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * @version 1.0
+ */
 public class SSOUserGroupRetriever implements IUserGroupRetriever {
     private static final Logger LOG = Logger.getLogger(SSOUserGroupRetriever.class.toString());
 
     private UGSParametersManager ugsParametersManager = null;
 
+    /**
+     * Retrieve user groups by site name and user profiles.
+     * 
+     * @param siteName site name
+     * @param userProfile user profiles
+     * @return user group set
+     * @throws UserGroupsException if any exception occurs, an
+     *             UserGroupsException will be thrown.
+     */
     public Set<String> getGroups(String siteName,
-                                 Map<String, String> userProfile) throws UserGroupsException {
+                                 Map<String, Object> userProfile) throws UserGroupsException {
         Set<String> groupSet = new HashSet<String>();
         try {
             GroupRequest serviceRequest = getServiceRequest(siteName,
-                                                            new HashMap<String, String>(userProfile));
+                                                            new HashMap<String, Object>(userProfile));
             if (LOG.isLoggable(Level.FINEST)) {
                 LOG.finest("UGS invokeService");
             }
@@ -72,21 +91,28 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
         } catch (MalformedURLException e) {
             String msg = "Invoking UGS webservice with a malformed URL";
             throw new UserGroupsException(msg, e);
+        } catch (UserGroupsException e) {
+            throw e;
         } catch (Exception e) {
             throw new UserGroupsException(e);
         }
     }
 
-    /*
-     * This method creates a GroupRequest object and return it
+    /**
+     * This method creates a GroupRequest object according to site name and user
+     * profiles.
+     * 
+     * @param siteName site name
+     * @param userProfile user profile map
+     * @return GroupRequest object
      */
     private GroupRequest getServiceRequest(String siteName,
-                                           HashMap<String, String> userProfile) {
+                                           HashMap<String, Object> userProfile) throws UserGroupsException {
         if (siteName == null
             || userProfile == null
             || siteName.trim().equals("")
             || userProfile.isEmpty()) {
-            return null;
+            throw new UserGroupsException("Create GroupRequest failed, site name or user profile map is not defined.");
         }
 
         // Populate request object
@@ -96,15 +122,21 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
 
         if (LOG.isLoggable(Level.FINEST)) {
             LOG.finest("UGS request object: SiteName="
-                      + siteName
-                      + " User Profile="
-                      + userProfile.toString());
+                       + siteName
+                       + " User Profile="
+                       + userProfile.toString());
         }
 
         return groupRequest;
     }
 
-    public synchronized static UserContext[] convertToUserContext(Map<String, String> map) {
+    /**
+     * Convert user profile map to <tt>UserContext</tt> array.
+     * 
+     * @param map user profile map
+     * @return <tt>UserContext</tt> array
+     */
+    private UserContext[] convertToUserContext(Map<String, Object> map) {
         UserContext[] context = null;
         if (map != null) {
             context = new UserContext[map.size()];
@@ -112,15 +144,21 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
             for (String key : map.keySet()) {
                 context[x] = new UserContext();
                 context[x].setKey(key);
-                context[x].setValue(map.get(key));
+                context[x].setValue(map.get(key).toString());
+
                 x++;
             }
         }
         return context;
     }
 
-    /*
+    /**
      * This method calls UGS web service to get group listing
+     * 
+     * @param groupRequest GroupRequest object
+     * @throws RemoteException if remote server is not avaliable
+     * @throws MalformedURLException if URL is malformed
+     * @throws ServiceException if webservice is failed
      */
     private GroupResponse invokeService(GroupRequest groupRequest) throws RemoteException,
                                                                   MalformedURLException,

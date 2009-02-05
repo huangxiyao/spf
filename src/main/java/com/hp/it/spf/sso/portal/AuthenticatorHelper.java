@@ -28,12 +28,15 @@ import com.epicentric.entity.EntityNotFoundException;
 import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.UniquePropertyValueConflictException;
 import com.epicentric.site.Site;
+import com.epicentric.site.SiteException;
+import com.epicentric.site.SiteManager;
 import com.epicentric.user.User;
 import com.epicentric.user.UserGroup;
 import com.epicentric.user.UserGroupManager;
 import com.epicentric.user.UserManager;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
 /**
@@ -841,6 +844,43 @@ public class AuthenticatorHelper {
             LOG.error(e);
             return null;
         }
+    }
+    
+    /**
+     * Retreive user primary site uid.
+     * if currect site does not exist, then get custom default site, otherwise
+     * get vignette server default site
+     * 
+     * @param request HttpServletRequest
+     * @return site uid, if site uid cannot be retrieved, return <tt>null</tt>
+     */
+    static String getPrimarySiteUID(HttpServletRequest request) {
+        Site currentSite = AuthenticatorHelper.getCurrentSite(request);
+        String siteUID = null;
+        if (currentSite != null) {
+            siteUID = currentSite.getUID();
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("Retrieve site UID," + siteUID);
+            }
+        } else {
+            try {
+                Site defaultSite = SiteManager.getInstance()
+                                              .getSiteFromDNSName(AuthenticationConsts.DEFAULT_PRIMARY_SITE_NAME);
+                siteUID = defaultSite.getUID();
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug("Retrieve site UID," + siteUID);
+                }
+            } catch (SiteException ex) {
+                Site defaultSite = SiteManager.getInstance().getDefaultSite();
+                if (defaultSite != null) {
+                    siteUID = defaultSite.getUID();
+                }
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug("Retrieve site UID," + siteUID);
+                }
+            }
+        }
+        return siteUID;
     }
     
     /**

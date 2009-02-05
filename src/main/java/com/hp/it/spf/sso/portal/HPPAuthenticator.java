@@ -65,6 +65,8 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 		String language = (String)userProfile.get(AuthenticationConsts.KEY_LANGUAGE);
 		userProfile.put(AuthenticationConsts.KEY_LANGUAGE, 
 						I18nUtility.hppLanguageToISOLanguage(language));
+		
+		// TODO retrieve HPP specific attributes. e.g. email pref, phone, etc.
 	}
     
     /**

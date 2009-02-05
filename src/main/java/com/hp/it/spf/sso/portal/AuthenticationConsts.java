@@ -10,8 +10,10 @@ import com.hp.it.spf.xa.misc.portal.Consts;
 class AuthenticationConsts {
 
 	static final String SSO_USERNAME = "SP_SSO_USERNAME";
-	
+		
 	static final String SSO_USER_LOCALE = "SP_USER_LOCALE";	
+	
+	static final String DEFAULT_PRIMARY_SITE_NAME = "spf";
 	
 	static final String USER_PROFILE_KEY = "userProfile";
 
@@ -29,8 +31,6 @@ class AuthenticationConsts {
     
     static final String AUTH_SOURCE_TAGE = "AuthSource";
     
-    static final String PHONE_EXT_SPLIT = "ext.";
-
     /**
      * Following are property id that represents custom attributes added in
      * entity_management.xml
@@ -41,17 +41,7 @@ class AuthenticationConsts {
     static final String PROPERTY_DOMAIN_ID = Consts.PROPERTY_DOMAIN_ID;
 
     static final String PROPERTY_PROFILE_ID = Consts.PROPERTY_PROFILE_ID;
-
-    static final String PROPERTY_CUSTOMER_ID = Consts.PROPERTY_CUSTOMER_ID;
-
-    static final String PROPERTY_EMAIL_PREF_ID = Consts.PROPERTY_EMAIL_PREF_ID;
-
-    static final String PROPERTY_PHONE_PREF_ID = Consts.PROPERTY_PHONE_PREF_ID;
-
-    static final String PROPERTY_POSTAL_PREF_ID = Consts.PROPERTY_POSTAL_PREF_ID;
-
-    static final String PROPERTY_SECURITYLEVEL_ID = Consts.PROPERTY_SECURITYLEVEL_ID;
-
+    
     static final String PROPERTY_LAST_CHANGE_DATE_ID = Consts.PROPERTY_LAST_CHANGE_DATE_ID;
     
     static final String PROPERTY_SP_TIMEZONE_ID = Consts.PROPERTY_SP_TIMEZONE_ID;
@@ -68,30 +58,10 @@ class AuthenticationConsts {
 
     static final String PROPERTY_EMAIL_ID = Consts.PROPERTY_EMAIL_ID;
 
-    static final String PROPERTY_PHONE_ID = Consts.PROPERTY_PHONE_ID;
-    
-    static final String PROPERTY_PHONE_EXT_ID = Consts.PROPERTY_PHONE_EXT_ID;
-
-    static final String PROPERTY_ZIP_ID = "zip";
-
-    static final String PROPERTY_STREET_ID = "address2";
-
-    static final String PROPERTY_MAIL_STOP_ID = "address1";
-
-    static final String PROPERTY_STATE_ID = "state";
-
-    static final String PROPERTY_CITY_ID = "city";
-    
     static final String PROPERTY_LAST_LOGIN_DATE_ID = "lastlogindate";
 
     static final String PROPERTY_PRIMARY_SITE_ID = Consts.PROPERTY_PRIMARY_SITE_ID;
     
-    static final String PROPERTY_RECENT_ACCESS_HOST = Consts.PROPERTY_RECENT_ACCESS_HOST;
-
-    static final String DATASOURCE = "datasource";
-
-    static final String RESOURCEBUDDLE = "resourcebuddle";
-
     /**
      * Property names for those attributes in http headers
      */
@@ -156,49 +126,47 @@ class AuthenticationConsts {
     /**
      * keys for those attributes in userProfile map in http session
      */
-    static final String KEY_PROFILE_ID = "ProfileId";
+    static final String KEY_PROFILE_ID = Consts.KEY_PROFILE_ID;
     
-    static final String KEY_USER_NAME = "LoginId";
+    static final String KEY_USER_NAME = Consts.KEY_USER_NAME;
     
-    static final String KEY_FIRST_NAME = "FirstName";
+    static final String KEY_FIRST_NAME = Consts.KEY_FIRST_NAME;
     
-    static final String KEY_LAST_NAME = "LastName";
+    static final String KEY_LAST_NAME = Consts.KEY_LAST_NAME;
     
-    static final String KEY_EMAIL = "Email";
+    static final String KEY_EMAIL = Consts.KEY_EMAIL;
     
-    static final String KEY_LANGUAGE = "Language";
+    static final String KEY_LANGUAGE = Consts.KEY_LANGUAGE;
     
-    static final String KEY_COUNTRY = "Country";
+    static final String KEY_COUNTRY = Consts.KEY_COUNTRY;
     
-    static final String KEY_LAST_LOGIN_DATE = "LastLoginDate";
+    static final String KEY_LAST_LOGIN_DATE = Consts.KEY_LAST_LOGIN_DATE;
     
-    static final String KEY_SP_TIMEZONE = "Timezone";
+    static final String KEY_SP_TIMEZONE = Consts.KEY_SP_TIMEZONE;
     
-    static final String KEY_CURRENT_SITE = "CurrentSite";
+    static final String KEY_LAST_CHANGE_DATE = Consts.KEY_LAST_CHANGE_DATE;
     
-    static final String KEY_LAST_CHANGE_DATE = "LastChangeDate";
+    static final String KEY_EMAIL_PREF = Consts.KEY_EMAIL_PREF;
     
-    static final String KEY_EMAIL_PREF = "EmailContactPref";
+    static final String KEY_PHONE_PREF = Consts.KEY_PHONE_PREF;
     
-    static final String KEY_PHONE_PREF = "PhoneContactPref";
+    static final String KEY_POSTAL_PREF = Consts.KEY_POSTAL_PREF;
     
-    static final String KEY_POSTAL_PREF = "PostalContactPref";
+    static final String KEY_SECURITY_LEVEL = Consts.KEY_SECURITY_LEVEL;
     
-    static final String KEY_SECURITY_LEVEL = "SecurityLevel";
+    static final String KEY_PHONE_NUMBER = Consts.KEY_PHONE_NUMBER;
     
-    static final String KEY_PHONE_NUMBER = "PhoneNumber";
+    static final String KEY_PHONE_NUMBER_EXT = Consts.KEY_PHONE_NUMBER_EXT;
     
-    static final String KEY_PHONE_NUMBER_EXT = "PhoneNumberExt";
+    static final String KEY_MAIL_STOP = Consts.KEY_MAIL_STOP;
     
-    static final String KEY_MAIL_STOP = "MailStop";
+    static final String KEY_STREET = Consts.KEY_STREET;
     
-    static final String KEY_STREET = "Street";
+    static final String KEY_CITY = Consts.KEY_CITY;
     
-    static final String KEY_CITY = "City";
+    static final String KEY_ZIP = Consts.KEY_ZIP;
     
-    static final String KEY_ZIP = "Zip";
-    
-    static final String KEY_STATE = "State";
+    static final String KEY_STATE = Consts.KEY_STATE;
 
     /**
      * SharedPortal session attributes prefix

@@ -18,10 +18,13 @@ import com.epicentric.common.website.SessionUtils;
 import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.UniquePropertyValueConflictException;
 import com.epicentric.site.Site;
+import com.epicentric.site.SiteException;
+import com.epicentric.site.SiteManager;
 import com.epicentric.user.User;
 import com.hp.it.spf.user.exception.UserGroupsException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
+import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
 /**
@@ -216,14 +219,6 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         } else {
             userProfile.put(AuthenticationConsts.KEY_SP_TIMEZONE, tz);
         }
-
-        // Set current site, it will be used to update user's
-        // primary site
-        Site currentSite = AuthenticatorHelper.getCurrentSite(request);
-        if (currentSite != null) {
-            LOG.info("current site is:" + currentSite.getDNSName());
-            userProfile.put(AuthenticationConsts.KEY_CURRENT_SITE, currentSite.getUID());          
-        }
     }
 
     /**
@@ -241,7 +236,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         ssoUser.setTimeZone((String)userProfile.get(AuthenticationConsts.KEY_SP_TIMEZONE));
         ssoUser.setLastChangeDate((Date)userProfile.get(AuthenticationConsts.KEY_LAST_CHANGE_DATE));
         ssoUser.setLastLoginDate((Date)userProfile.get(AuthenticationConsts.KEY_LAST_LOGIN_DATE));
-        ssoUser.setCurrentSite((String)userProfile.get(AuthenticationConsts.KEY_CURRENT_SITE));        
+        // Set current site, it will be used to update user's primary site   
+        ssoUser.setCurrentSite(AuthenticatorHelper.getPrimarySiteUID(request));        
     }
 
     /**
@@ -375,12 +371,17 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * The method is used to update VAP user's primary site
      */
     protected void updatePrimarySite() {
+        // Update user's info if needed
+        LOG.info("update primary site.");
+        String siteUID = AuthenticatorHelper.getPrimarySiteUID(request);
+        if (siteUID == null) {
+            return;
+        }
         try {
-            // Update user's info if needed
-            LOG.info("update primary site.");
             User user = SessionUtils.getCurrentUser(request.getSession());
-            user.setProperty(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID, 
-                             (String)userProfile.get(AuthenticationConsts.KEY_CURRENT_SITE));
+            user.setProperty(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID,
+                             siteUID);
+
             user.save();
 
         } catch (UniquePropertyValueConflictException e) {
@@ -389,7 +390,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         } catch (EntityPersistenceException e) {
             LOG.error("Entity persistence exception when updating user"
                       + e.getMessage());
-        }        
+        }
     }
     
     /**
@@ -522,7 +523,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     protected Set getUserGroup() throws UserGroupsException {
         Site site = AuthenticatorHelper.getCurrentSite(request);        
         if (site != null) {
-            IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl();
+            IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(null);
             
             Set<String> group = retriever.getGroups(site.getDNSName(), userProfile);
             return group;            

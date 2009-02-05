@@ -1,9 +1,19 @@
+/*
+ * Project: Shared Portal Framework 
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.user.group.utils;
 
 import java.util.ResourceBundle;
 
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 
+/**
+ * UGS webservice parameters management class
+ * 
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * @version 1.0
+ */
 public class UGSParametersManager {
 
     private static UGSParametersManager m_UGSParamManager = new UGSParametersManager();
@@ -26,6 +36,11 @@ public class UGSParametersManager {
         init();
     }
 
+    /**
+     * Retrieve a singleton UGSParametersManager class
+     * 
+     * @return a singleton UGSParametersManager
+     */
     public static UGSParametersManager getInstance() {
         if(needRefresh()) {
             m_UGSParamManager = new UGSParametersManager();
@@ -33,12 +48,20 @@ public class UGSParametersManager {
         return m_UGSParamManager;
     }    
     
+    /**
+     * Check if the resourcebundle file is updated.
+     * 
+     * @return <tt>true</tt> if the file is modified, otherwise, <tt>false</tt>
+     */
     private static boolean needRefresh(){
         ResourceBundle currRS = PropertyResourceBundleManager.getBundle(IUGSConstant.UGSPARAMETERSFILENAME);
         // if properties is modified
         return (parameters != currRS) ? true : false;
     }
     
+    /**
+     * Retrieve parameters from resourcebundle.
+     */
     private void init() {        
         parameters = PropertyResourceBundleManager.getBundle(IUGSConstant.UGSPARAMETERSFILENAME);
         try {

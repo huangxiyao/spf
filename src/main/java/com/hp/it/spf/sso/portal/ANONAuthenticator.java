@@ -102,7 +102,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
         }
         
         // for default user
-        userName = SSO_GUEST_USER_PREFIX + "en";
+        userName = SSO_GUEST_USER_PREFIX + AuthenticationConsts.DEFAULT_LANGUAGE;
         return;
     }    
 }
