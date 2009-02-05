@@ -539,8 +539,12 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * 
  * <p>
- * <ul>
+ * <ol>
  * <li><code>{TOKEN:<i>key</i>}</code></li>
+ * <li><code>{SITE:<i>names</i>}</code></li>
+ * <li><code>{LOGGED-IN}</code></li>
+ * <li><code>{LOGGED-OUT}</code></li>
+ * <li><code>{GROUP:<i>groups</i>}</code></li>
  * <li><code>{SITE}</code></li>
  * <li><code>{SITE-URL}</code></li>
  * <li><code>{REQUEST-URL}</code></li>
@@ -552,13 +556,9 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
  * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
  * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
- * <li><code>{SITE:<i>names</i>}</code></li>
- * <li><code>{LOGGED-IN}</code></li>
- * <li><code>{LOGGED-OUT}</code></li>
- * <li><code>{GROUP:<i>groups</i>}</code></li>
  * <li><code>{PORTLET:<i>portlets</i>}</code></li>
  * <li><code>{ROLE:<i>roles</i>}</code></li>
- * </ul>
+ * </ol>
  * </p>
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>

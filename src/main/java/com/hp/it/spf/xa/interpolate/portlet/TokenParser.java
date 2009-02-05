@@ -410,25 +410,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * as follows:
 	 * </p>
 	 * <dl>
-	 * <dt><code>{TOKEN:<i>key</i>}</code></dt>
-	 * <dd>This token is parsed first, and the substituted content is added to
-	 * the string. So subsequent substitutions operate against the value for the
-	 * <i>key</i> - therefore that value may itself contain other tokens.
-	 * <dt><code>{SITE}</code></dt>
-	 * <dt><code>{SITE-URL}</code></dt>
-	 * <dt><code>{REQUEST-URL}</code></dt>
-	 * <dt><code>{LANGUAGE-CODE}</code></dt>
-	 * <dt><code>{COUNTRY-CODE}</code></dt>
-	 * <dt><code>{LANGUAGE-TAG}</code></dt>
-	 * <dt><code>{EMAIL}</code></dt>
-	 * <dt><code>{NAME}</code></dt>
-	 * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
-	 * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
-	 * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code></dt>
-	 * <dt><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
-	 * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
-	 * <dt><code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></dt>
-	 * <dt><code>{ROLE:<i>roles</i>}...{/ROLE}</code></dt>
+	 * <dt>First, all the tokens parsed by the superclass {@link super#parse(String)}</dt>
+	 * <dt>Then <code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></dt>
+	 * <dt>Then <code>{ROLE:<i>roles</i>}...{/ROLE}</code></dt>
 	 * </dl>
 	 * </p>
 	 * <p>

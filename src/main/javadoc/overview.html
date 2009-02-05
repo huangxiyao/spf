@@ -285,41 +285,43 @@ table.props td {
 		</ul>
 	</ul>
 	</li>
-	<li>4. <a href="#file">File Display</a>
+	<li>4. <a href="#file">Text Interpolation</a>
 	<ul>
-		<li>4.1. <a href="#file.about">About file display</a></li>
-		<li>4.2. <a href="#file.display.java">Displaying file content
+		<li>4.1. <a href="#file.about">About text interpolation</a></li>
+		<li>4.2. <a href="#file.display.java">Interpolating text
 		using Java code</a>
 		<ul>
 			<li>4.2.1. <a href="#file.display.java.fileInterpolator">Using
-			<code>FileInterpolator</code> to interpolate file content</a></li>
+			<code>FileInterpolator</code> to interpolate text from files</a></li>
 			<li>4.2.2. <a
 				href="#file.display.java.fileInterpolatorController">Using <code>FileInterpolatorController</code>
-			to display interpolated file content</a></li>
+			to display interpolated text from files</a></li>
+			<li>4.2.3. <a href="#file.display.java.tokenParser">Using <code>TokenParser</code>
+			to interpolate strings</a></li>
 		</ul>
-		<li>4.3. <a href="#file.display.jsp">Displaying file content
-		using JSP tag libraries</a>
+		<li>4.3. <a href="#file.display.jsp">Interpolating text using
+		JSP tag libraries</a>
 		<ul>
 			<li>4.3.1. <a href="#file.display.jsp.interpolate">Using <code>&lt;spf-file-portlet:interpolate&gt;</code></a></li>
 		</ul>
 		<li>4.4. <a href="#file.display.htmlViewer">Using the <code>html-viewer</code>
-		portlet to display interpolated file content</a></li>
-		<li>4.5. <a href="#file.author">Authoring file content and
-		using interpolation tokens</a>
+		portlet to display interpolated text from files</a></li>
+		<li>4.5. <a href="#file.author">Authoring text using
+		interpolation tokens</a>
 		<ul>
-			<li>4.5.1. <a href="#file.author.token.url">Including URLs
-			for supporting resources like images and CSS (<code>&lt;CONTENT-URL:<i>path</i>&gt;</code>,
-			<code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt</code>) </a></li>
+			<li>4.5.1. <a href="#file.author.token.url">Referencing URLs
+			(<code>{CONTENT-URL:<i>path</i>}</code>, <code>{LOCALIZED-CONTENT-URL:<i>path</i>&gt</code>,
+			<code>{SITE-URL}</code>, <code>{REQUEST-URL}</code>) </a></li>
 			<li>4.5.2. <a href="#file.author.token.user">Displaying user
-			information (<code>&lt;NAME&gt;</code>, <code>&lt;EMAIL&gt;</code>, <code>&lt;LANGUAGE-CODE&gt;</code>,
-			<code>LANGUAGE-TAG&gt;</code>, <code>&lt;USER-PROPERTY:<i>key</i>&gt;</code>)</a></li>
+			information (<code>{NAME}</code>, <code>{EMAIL}</code>, <code>{LANGUAGE-CODE}</code>,
+			<code>LANGUAGE-TAG}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</a></li>
 			<li>4.5.3. <a href="#file.author.token.auth">Permissioning
-			content for authorized users (<code>&lt;ROLE:<i>role-names</i>&gt;</code>,
-			<code>&lt;GROUP:<i>group-names</i>&gt;</code>)</a></li>
+			content for authorized users (<code>{LOGGED-IN}</code>, <code>{LOGGED-OUT}</code>,
+			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</a></li>
 			<li>4.5.4. <a href="#file.author.token.consolidate">Consolidating
-			content for easier administration (<code>&lt;PORTLET:<i>friendly-ids</i>&gt;</code>,
-			<code>&lt;SITE:<i>site-names</i></code>, <code>&lt;TOKEN:<i>key</i>&gt;</code>)</a></li>
-			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>&lt;SITE&gt;</code>)</a></li>
+			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
+			<code>{SITE:<i>site-names</i></code>, <code>{TOKEN:<i>key</i>}</code>)</a></li>
+			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>{SITE}</code>)</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -388,10 +390,11 @@ functionality for SPF Java portlet developers in the following areas:</p>
 	<li><a href="#help">Online Help</a> - the SPF portlet utilities
 	provide Java classes and JSP tags which make it easier for you to
 	develop online help</li>
-	<li><a href="#file">File Display</a> - the SPF portlet utilities
-	provide Java classes for interpolating and displaying file content to
-	users (saving you time when developing portlets that mostly display
-	static text)</li>
+	<li><a href="#file">Text Interpolation</a> - the SPF portlet
+	utilities provide Java classes for interpolating and displaying text
+	(including special markup tokens) from files or strings to users
+	(saving you time when developing portlets that mostly display static
+	text)</li>
 	<li><a href="#portal">Portal Data</a> - the SPF portlet utilities
 	provide Java classes for accessing data passed by the SPF (Vignette)
 	portal</li>
@@ -702,8 +705,8 @@ localized.</p>
 
 <p><i>Message resources</i> (sometimes just called messages) are
 text strings used in your UI. They are managed in Java message property
-files as per the usual Java {@lnk java.util.ResourceBundle} standard. If
-your application's messages are going to be sourced elsewhere - in a
+files as per the usual Java {@link java.util.ResourceBundle} standard.
+If your application's messages are going to be sourced elsewhere - in a
 database, an XML file, etc - you will have to arrange to export them
 into Java message property format before they can be accessed through
 SPF (or Spring).</p>
@@ -736,7 +739,7 @@ files containing identical content, just localized for different
 locales. The <i>base file</i> contains the content for the base locale
 (typically US English). The other files in the bundle each contain a
 translation of that content for another locale. As with the Java
-standard for {@lnk java.util.ResourceBundle}, the base file should <b>not</b>
+standard for {@link java.util.ResourceBundle}, the base file should <b>not</b>
 have any locale tag, while the other files should be tagged according to
 their locale, as follows:</p>
 
@@ -791,7 +794,7 @@ picture_zh_CN.jpg   &lt;-- the same file localized for China - Chinese
 picture_zh_TW.jpg   &lt;-- the same file localized for Taiwan - Chinese
 </pre></blockquote>
 
-<p>As with the Java standard for {@lnk java.util.ResourceBundle},
+<p>As with the Java standard for {@link java.util.ResourceBundle},
 all of the SPF (and Spring) internationalization utilities will search
 for the most-specific match for the user's locale first, ultimately
 falling back upon your base file.</p>
@@ -1154,8 +1157,9 @@ these. See the method documentation for more information.</p>
 
 	<li>
 	<p>An <code>Object[]</code> array containing any objects whose <code>toString</code>
-	values should be inserted into any {@link MessageFormat} placeholders
-	in the message. For example, in your message properties you can have:</p>
+	values should be inserted into any {@link java.text.MessageFormat}
+	placeholders in the message. For example, in your message properties
+	you can have:</p>
 
 	<blockquote><pre>
 	key=Your user ID is {0}.
@@ -1424,8 +1428,8 @@ key=This is an HTML &lt;head&gt; tag.
 	</dt>
 	<dd>
 	<p>This tag is only used inside the tag body of <code>&lt;spf-i18n-portlet:message&gt;</code>.
-	You use it to pass a string into a {@link MessageFormat} placeholder in
-	the message value. The usage is:</p>
+	You use it to pass a string into a {@link java.test.MessageFormat}
+	placeholder in the message value. The usage is:</p>
 
 	<blockquote><pre>
 &lt;%@ taglib prefix="spf-i18n-portlet" uri="/spf-i18n-portlet.tld" %&gt;
@@ -1514,8 +1518,8 @@ to access them using the SPF portlet <code>I18nUtility</code>. There are
 
 	<li>
 	<p>If you need to process the file server-side instead, you can get
-	an {@link InputStream} for the particular one which best-fits the
-	user's locale. Use the <a
+	an {@link java.io.InputStream} for the particular one which best-fits
+	the user's locale. Use the <a
 		href="#i18n.supporting.java.getLocalizedFileStream"><code>I18nUtility.getLocalizedFileStream</code></a>
 	methods for this.</p>
 	</li>
@@ -1948,7 +1952,7 @@ com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}). You will
 likewise need to configure <a href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
 with the URL for the relay servlet, if that is at a non-default location
 (the default is indicated in {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_SERVLET_PATH}). And
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT}). And
 finally, you will need to configure and deploy that servlet at that
 location - see <a href="#i18n.supporting.relay">discussion below</a>.</p>
 
@@ -3144,24 +3148,24 @@ extend.</p>
 <hr>
 
 <a name="file">
-<h2>4. File Display</h2>
+<h2>4. Text Interpolation</h2>
 </a>
 
 <hr>
 
 <a name="file.about">
-<h3>4.1. About file display</h3>
+<h3>4.1. About text interpolation</h3>
 </a>
 
 <hr>
 
 <a name="file.display.java">
-<h3>4.2. Displaying file content using Java code</h3>
+<h3>4.2. Interpolating text using Java code</h3>
 </a>
 
 <a name="file.display.java.fileInterpolator">
-<h4>4.2.1. Using <code>FileInterpolator</code> to interpolate file
-content</h4>
+<h4>4.2.1. Using <code>FileInterpolator</code> to interpolate text
+from files</h4>
 </a>
 
 <blockquote>
@@ -3172,12 +3176,15 @@ description below.</p>
 
 <p>The portlet {@link
 com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} is a plain Java
-object which implements file interpolation. All of the other file
-interpolation artifacts in the SPF portlet utilities wrap around this
-one.</p>
+object which implements text interpolation for files. All of the other
+file interpolation artifacts in the SPF portlet utilities wrap around
+this one. (In turn, the <code>FileInterpolator</code> wraps around the <a
+	href="#file.display.java.tokenParser"><code>TokenParser</code></a>
+which interpolates text in strings.)</p>
 
-<p>To use this class, first you construct it, then you call its <code>interpolate</code>
-method. Here are the relevant methods:</p>
+<p>To use the <code>FileInterpolator</code>, first you construct it,
+then you call its <code>interpolate</code> method. Here are the relevant
+methods:</p>
 
 <dl>
 	<dt>{@link
@@ -3210,8 +3217,8 @@ method. Here are the relevant methods:</p>
 		or internal supporting resource files, potentially localized, as
 		described in the <a href="#i18n.resources.bundles">resource bundle</a>
 		discussion in this document. The files <b>must</b> be UTF-8 encoded
-		and may contain any of the special markup tokens supported by <code>FileInterpolator</code>
-		- see the discussion on <a href="#file.author">authoring content</a>
+		and may contain any of the special markup tokens supported by <code>TokenParser</code>
+		- see the discussion on <a href="#file.author">authoring text</a>
 		below.</p>
 
 		<p>If your files are contained in a subfolder of the <i>portlet
@@ -3220,25 +3227,14 @@ method. Here are the relevant methods:</p>
 		</li>
 		<li>
 		<p>An optional string for a <i>token substitutions</i> property
-		file. As discussed in the section about <a href="#file.author">authoring
-		content</a>, one of the special markup tokens (<code>{TOKEN:<i>key</i>}</code>)
-		substitutes values from this property file. By default, the name of
-		the property file is considered to be <code>default_tokens.properties</code>,
-		but you can override it with this parameter. If you will not be using
-		the special <code>{TOKEN:<i>key</i>}</code> or will use the default
+		file. As discussed in the section about <a
+			href="#file.author.token.consolidate">authoring text</a>, one of the
+		special markup tokens (<code>{TOKEN:<i>key</i>}</code>) substitutes
+		values from this property file. By default, the name of the property
+		file is considered to be <code>default_tokens.properties</code>, but
+		you can override it with this parameter. If you will not be using the
+		special <code>{TOKEN:<i>key</i>}</code> or will use the default
 		filename, you can ignore this parameter.</p>
-
-		<p>Your token substitutions property file may be located anywhere
-		accessible to the system classloader. For example, if you are using
-		SASU, you can put it in the "global resources" external folder
-		configured on the JVM classpath. (Of course, you can always put it
-		inside your portlet WAR, in <code>/WEB-INF/classes</code>.) If it is
-		in a subfolder, be sure this string parameter includes that subfolder
-		as relative path.</p>
-
-		<p>A template for the token substitutions file, also named <code>default_tokens.properties</code>,
-		is provided in the SPF common utilities. You can download it from <b><font
-			color="blue">TBD</font></b>, then modify and rename it.</p>
 		</li>
 	</ul>
 	</dd>
@@ -3259,18 +3255,19 @@ method. Here are the relevant methods:</p>
 		methods above.</p>
 		</li>
 		<li>
-		<p>Then, the method parses the file content and performs all of
-		the special markup processing described in the section about <a
-			href="#file.author">authoring content</a>. If the file could not be
-		found or read, or was empty, then null is returned (and a warning is
-		logged).</p>
+		<p>Then, the method parses the file content (using the <a
+			href="#file.display.java.tokenParser"><code>TokenParser</code></a>)
+		and performs all of the special markup processing described in the
+		section about <a href="#file.author">authoring text</a>. If the file
+		could not be found or read, or was empty, then null is returned (and a
+		warning is logged).</p>
 		</li>
 	</ol>
 	</dd>
 </dl>
 
 <p>For example, consider a <code>text.html</code> file with the
-following content:</p>
+following content and special markup tokens:</p>
 
 <blockquote><pre>
 &lt;h1&gt;This is the base version&lt;/h1&gt;
@@ -3362,7 +3359,7 @@ string is:</p>
 <blockquote>
 <p><b>Note:</b> These examples demonstrated only some of the special
 markup tokens. For a good overview of all of them, see the discussion
-below about <a href="#file.author">authoring content</a>.</p>
+below about <a href="#file.author">authoring text</a>.</p>
 </blockquote>
 
 <a name="file.display.java.fileInterpolatorController">
@@ -3374,15 +3371,15 @@ interpolated file content</h4>
 com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController} is
 an abstract instance of Spring's {@link
 org.springframework.web.portlet.mvc.AbstractController}, which
-implements file interpolation during the <i>render phase</i>. The
-render-phase handler for this controller:</p>
+implements file interpolation during the <i>render phase</i>, using the
+portlet <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>.
+The render-phase handler for this controller:</p>
 
 <ol>
 	<li>gets the base filename to display (an abstract method you
 	implement),</li>
 	<li>interpolates the proper localized file for the given base
-	filename and current locale, using the portlet <a
-		href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>,</li>
+	filename and the current request (locale, user attributes, etc),</li>
 	<li>then passes the interpolated content to a custom <code>execute</code>
 	method (and returns the Spring <code>ModelAndView</code> from that
 	method) (another abstract method you implement).</li>
@@ -3490,10 +3487,160 @@ example of this, for portlet <code>help</code> mode, see the <a
 	href="#help.portlet.java.fileInterpolatorController">discussion
 above</a>.)</p>
 
+<a name="file.display.java.tokenParser">
+<h4>4.2.3. Using <code>TokenParser</code> to interpolate strings</h4>
+</a>
+
+<p>The portlet {@link
+com.hp.it.spf.xa.interpolate.portlet.TokenParser} is the engine at the
+heart of text interpolation in the SPF portlet utilities. All of the
+other classes and JSP tags perform text interpolation via this class.</p>
+
+<p>With <code>TokenParser</code> you can perform text interpolation
+against Java strings which you have already populated with content,
+including any of the special markup tokens described in the <a
+	href="#file.author">authoring discussion</a> below. First, you
+construct your <code>TokenParser</code>, then you use any of its <code>parse</code>
+methods to perform the desired interpolations.</p>
+
+Here are the relevant methods:
+</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.interpolate.portlet.TokenParser#TokenParser(PortletRequest,PortletResponse)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#FileInterpolator(PortletRequest,PortletResponse,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#FileInterpolator(PortletRequest,PortletResponse,Locale,String)}</dt>
+	<dd>
+	<p>Use one of these constructors to instantiate the class. The
+	arguments are:</p>
+
+	<ul>
+		<li>
+		<p>Your current {@link javax.portlet.PortletRequest} object.</p>
+		</li>
+		<li>
+		<p>Your current {@link javax.portlet.PortletResponse} object.</p>
+		</li>
+		<li>
+		<p>The {@link java.util.Locale} you want to use during the string
+		interpolation (ie when performing locale-dependent token substitutions
+		within it). By default (ie if you do not specify this, or leave it
+		null) the locale inside the portlet request is assumed.</p>
+		</li>
+		<li>
+		<p>An optional string for a <i>token substitutions</i> property
+		file. As discussed in the section about <a
+			href="#file.author.token.consolidate">authoring text</a>, one of the
+		special markup tokens (<code>{TOKEN:<i>key</i>}</code>) substitutes
+		values from this property file. By default, the name of the property
+		file is considered to be <code>default_tokens.properties</code>, but
+		you can override it with this parameter. If you will not be using the
+		special <code>{TOKEN:<i>key</i>}</code> or will use the default
+		filename, you can ignore this parameter.</p>
+		</li>
+	</ul>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.interpolate.portlet.TokenParser#parse(String)}</dt>
+	<dd>
+	<p>You use this method to interpolate any string you provide. The
+	parameters you gave the constructor will be used as the data sources
+	for the inserted material. The <code>TokenParser.parse(String)</code>
+	method performs all of the special markup processing described in the
+	section about <a href="#file.author">authoring text</a>.</p>
+
+	<p>Besides the <code>TokenParser.parse(String)</code> method, each
+	individual token has its own parser method. For example, {@link
+	com.hp.it.spf.xa.interpolate.portlet.TokenParser#parseEmail(String)} to
+	just parse the given string for the <code>{EMAIL}</code> token. See the
+	class documentation for a list of all the available methods. Generally
+	you will want to use the full <code>TokenParser.parse(String)</code>
+	method instead.</p>
+	</dd>
+</dl>
+
+<p>For example, consider a string with the following content and
+special markup tokens:</p>
+
+<blockquote><pre>
+&lt;ul&gt;
+  &lt;li&gt;Your language:  {LANGUAGE-TAG}&lt;/li&gt;
+  &lt;li&gt;The HP.com URL: {TOKEN:url.hp}&lt;/li&gt;
+{LOGGED-IN}
+  &lt;li&gt;Your phone:     {USER-PROPERTY:PhoneNumber}&lt;/li&gt;
+{/LOGGED-IN}
+&lt;/ul&gt;
+</pre></blockquote>
+
+<p>(<code>PhoneNumber</code> is the defined user property key for
+the phone number. See the authoring text discussion below, for how to
+learn the names of the available user properties.)</p>
+
+<p>Also consider that we have put the HP.com homepage URL into a
+token substitutions file named <code>my_tokens.properties</code>, as
+follows:</p>
+
+<blockquote><pre>
+url.hp=http://www.hp.com
+</pre></blockquote>
+
+<p>Finally, consider that we have installed <code>my_tokens.properties</code>
+somewhere accessible to the classloader.</p>
+
+<p>To interpolate this string for the current user in his/her
+current locale, using the portlet <code>TokenParse</code>, we use the
+following code (where <code>request</code> is our {@link
+javax.portlet.PortletRequest}, <code>response</code> is our {@link
+javax.portlet.PortletResponse}, and <code>raw</code> is the above string
+of text):</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.interpolate.portlet.TokenParser;
+...
+TokenParser parser = new TokenParser(request, response, "my_tokens.properties");
+String interpolated = parser.parse(raw);
+</pre></blockquote>
+
+<p>For a logged-in French (Canada) user (with phone number <code>12345</code>),
+the <code>interpolated</code> string is:</p>
+
+<blockquote><pre>
+&lt;ul&gt;
+  &lt;li&gt;Your language:  fr-CA&lt;/li&gt;
+  &lt;li&gt;The HP.com URL: http://www.hp.com&lt;/li&gt;
+
+  &lt;li&gt;Your phone:     12345&lt;/li&gt;
+
+&lt;/ul&gt;
+</pre></blockquote>
+
+<p>For a logged-out Italian (generic) user, the <code>interpolated</code>
+string is:</p>
+
+<blockquote><pre>
+&lt;ul&gt;
+  &lt;li&gt;Your language:  it&lt;/li&gt;
+  &lt;li&gt;The HP.com URL: http://www.hp.com&lt;/li&gt;
+
+&lt;/ul&gt;
+</pre></blockquote>
+
+<p>Please see the class documentation for more information.</p>
+
+<blockquote>
+<p><b>Note:</b> These examples demonstrated only some of the special
+markup tokens. For a good overview of all of them, see the discussion
+below about <a href="#file.author">authoring text</a>.</p>
+</blockquote>
+
 <hr>
 
 <a name="file.display.jsp">
-<h3>4.3. Displaying file content using JSP tag libraries</h3>
+<h3>4.3. Interpolating text using JSP tag libraries</h3>
 </a>
 
 <a name="file.display.jsp.interpolate">
@@ -3530,7 +3677,8 @@ description</a>. Briefly:</p>
 
 	<p>The <code>file</code> attribute lets you provide the base
 	filename for the file to interpolate and display (same as the {@link
-	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} constructors).
+	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} constructors).</p>
+
 	<p>The <code>tokenFile</code> attribute lets you provide an
 	override for the default token substitutions file, same as the {@link
 	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#FileInterpolator(PortletRequest,PortletResponse,String,String)}
@@ -3551,7 +3699,10 @@ description</a>. Briefly:</p>
 &lt;spf-file-portlet:interpolate file="/html/text.html" tokenFile="my_tokens.properties" /&gt;
 </pre></blockquote>
 
-	<p>See the tag documentation, in the <a
+	<p>The selection of the proper localized file, and the subsequent
+	interpolation, are performed using the attributes of the current
+	request (its locale, user attributes, etc). See the tag documentation,
+	in the <a
 		href="com/hp/it/spf/xa/interpolate/portlet/tag/package-summary.html#interpolate">package
 	description</a>, for more information.</p>
 	</dd>
@@ -3561,13 +3712,13 @@ description</a>. Briefly:</p>
 
 <a name="file.display.htmlViewer">
 <h4>4.4. Using the <code>html-viewer</code> portlet to display
-interpolated file content</h4>
+interpolated text from files</h4>
 </a>
 
 <hr>
 
 <a name="file.author">
-<h3>4.5. Authoring file content and using interpolation tokens</h3>
+<h3>4.5. Authoring text using interpolation tokens</h3>
 </a>
 
 <blockquote>
@@ -3577,28 +3728,40 @@ content is supported.</p>
 </dd>
 
 <a name="file.author.token.url">
-<h4>4.5.1. Including URLs for supporting resources like images and
-CSS (<code>&lt;CONTENT-URL:<i>path</i>&gt;</code>, <code>&lt;LOCALIZED-CONTENT-URL:<i>path</i>&gt</code>)</h4>
+<h4>4.5.1. Referencing URLs (<code>{CONTENT-URL:<i>path</i>}</code>,
+<code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code>, <code>{SITE-URL}</code>,
+<code>{REQUEST-URL}</code>)</h4>
 </a>
 
 <a name="file.author.token.user">
-<h4>4.5.2. Displaying user information (<code>&lt;NAME&gt;</code>,
-<code>&lt;EMAIL&gt;</code>, <code>&lt;LANGUAGE-CODE&gt;</code>, <code>LANGUAGE-TAG&gt;</code>,
-<code>&lt;USER-PROPERTY:<i>key</i>&gt;</code>)</h4>
+<h4>4.5.2. Displaying user information (<code>{NAME}</code>, <code>{EMAIL}</code>,
+<code>{LANGUAGE-CODE}</code>, <code>LANGUAGE-TAG}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</h4>
 </a>
 
 <a name="file.author.token.auth">
-<h4>4.5.3. Permissioning content for authorized users (<code>&lt;ROLE:<i>role-names</i>&gt;</code>,
-<code>&lt;GROUP:<i>group-names</i>&gt;</code>)</h4>
+<h4>4.5.3. Permissioning content for authorized users (<code>{LOGGED-IN}</code>,
+<code>{LOGGED-OUT}</code>, <code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</h4>
 </a>
 
 <a name="file.author.token.consolidate">
-<h4>4.5.4. Consolidating content for easier administration (<code>&lt;PORTLET:<i>friendly-ids</i>&gt;</code>,
-<code>&lt;SITE:<i>site-names</i></code>, <code>&lt;TOKEN:<i>key</i>&gt;</code>)</h4>
+<h4>4.5.4. Consolidating content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
+<code>{SITE:<i>site-names</i></code>, <code>{TOKEN:<i>key</i>}</code>)</h4>
 </a>
 
+<p>Your token substitutions property file may be located anywhere
+accessible to the system classloader. For example, if you are using
+SASU, you can put it in the "global resources" external folder
+configured on the JVM classpath. (Of course, you can always put it
+inside your portlet WAR, in <code>/WEB-INF/classes</code>.) If it is in
+a subfolder, be sure this string parameter includes that subfolder as
+relative path.</p>
+
+<p>A template for the token substitutions file, also named <code>default_tokens.properties</code>,
+is provided in the SPF common utilities. You can download it from <b><font
+	color="blue">TBD</font></b>, then modify and rename it.</p>
+
 <a name="file.author.token.misc">
-<h4>4.5.5. Miscellaneous (<code>&lt;SITE&gt;</code>)</h4>
+<h4>4.5.5. Miscellaneous (<code>{SITE}</code>)</h4>
 </a>
 
 <hr>

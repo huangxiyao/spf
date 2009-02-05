@@ -111,7 +111,7 @@ contain the following SPF tags:</p>
 	<dt><a href="#param"><code>&lt;spf-i18n-portlet:param&gt;</code></a></dt>
 	<dd>
 	<p>If your message value includes general string parameters as per
-	the Java standard for {@link MessageFormat}, use the <code>&lt;spf-i18n-portlet:param&gt;</code>
+	the Java standard for {@link java.text.MessageFormat}, use the <code>&lt;spf-i18n-portlet:param&gt;</code>
 	tag inside the <code>&lt;spf-i18n-portlet:message&gt;</code> tag body,
 	in order, for each such parameter. See the <a href="#param"><code>&lt;spf-i18n-portlet:param&gt;</code></a>
 	tag documentation below.</p>
@@ -141,7 +141,7 @@ contain the following SPF tags:</p>
 </pre></blockquote>
 
 <p>You use this tag inside the <a href="#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>
-tag body, to pass a string parameter into any {@link MessageFormat}
+tag body, to pass a string parameter into any {@link java.text.MessageFormat}
 placeholders in the message value. For example, if your message is like
 this:</p>
 
@@ -170,7 +170,7 @@ contains the user name, and <code>age</code> contains the age):</p>
 	</dd>
 </dl>
 
-<p>A single message may contain multiple {@link MessageFormat}
+<p>A single message may contain multiple {@link java.text.MessageFormat}
 parameter placeholders, labeled <code>{0}</code>, <code>{1}</code>, etc
 as shown in the above example. You just provide one <code>&lt;spf-i18n-portlet:param&gt;</code>
 tag for each one, in order. Any extra tags you provide go unused.
