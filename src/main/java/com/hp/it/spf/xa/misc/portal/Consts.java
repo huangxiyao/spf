@@ -68,176 +68,63 @@ public final class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 * The Vignette User object property for user ID. This is the user ID, not
 	 * the user person name.
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_USER_NAME_ID = "username";
 
 	/**
 	 * The Vignette User object property for domain.
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_DOMAIN_ID = "domain";
 
 	/**
 	 * The Vignette User object property for profile ID.
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_PROFILE_ID = "profileid";
-
-	/**
-	 * The Vignette User object property for customer ID.
-	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
-	public static final String PROPERTY_CUSTOMER_ID = "customerid";
-
-	/**
-	 * The Vignette User object property for email contact preference.
-	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
-	public static final String PROPERTY_EMAIL_PREF_ID = "emailcontactpref";
-
-	/**
-	 * The Vignette User object property for phone contact preference.
-	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
-	public static final String PROPERTY_PHONE_PREF_ID = "phonecontactpref";
-
-	/**
-	 * The Vignette User object property for postal contact preference.
-	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
-	public static final String PROPERTY_POSTAL_PREF_ID = "postalcontactpref";
-
-	/**
-	 * The Vignette User object property for security level.
-	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
-	public static final String PROPERTY_SECURITYLEVEL_ID = "securitylevel";
 
 	/**
 	 * The Vignette User object property for last change timestamp.
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_LAST_CHANGE_DATE_ID = "lastchangedate";
 
 	/**
 	 * The Vignette User object property for SPF-standard timezone.
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_SP_TIMEZONE_ID = "sp_timezone";
 
 	/**
 	 * The Vignette User object property for Vignette-standard timezone (which
 	 * is really just a GMT offset, not a timezone).
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_TIMEZONE_ID = "timezone";
 
 	/**
 	 * The Vignette User object property for first (given) name.
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_FIRSTNAME_ID = "firstname";
 
 	/**
 	 * The Vignette User object property for last (family) name.
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_LASTNAME_ID = "lastname";
 
 	/**
 	 * The Vignette User object property for language code.
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_LANGUAGE_ID = "language";
 
 	/**
 	 * The Vignette User object property for country code.
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_COUNTRY_ID = "country";
 
 	/**
 	 * The Vignette User object property for email address.
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_EMAIL_ID = "email";
 
 	/**
 	 * The Vignette User object property for last used site DNS name.
 	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
 	public static final String PROPERTY_PRIMARY_SITE_ID = "primary_site_id";
-
-	/**
-	 * The Vignette User object property for logon. I do not know what this is.
-	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
-	public static final String PROPERTY_LOGON_ID = "logon";
-
-	/**
-	 * The Vignette User object property for user phone number.
-	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
-	public static final String PROPERTY_PHONE_ID = "day_phone";
-
-	/**
-	 * The Vignette User object property for user phone extension.
-	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
-	public static final String PROPERTY_PHONE_EXT_ID = "day_phone_ext";
-
-	/**
-	 * The Vignette User object property for last used portal hostname.
-	 */
-	// TODO - check this is still correct in new authentication solution. This
-	// property key is used with the portal Utils.getUserProperty method - see
-	// TODO there.
-	public static final String PROPERTY_RECENT_ACCESS_HOST = "recent_access_host";
-
-	// TODO - many user properties are listed above - add any ones which are
-	// missing, so that they will be defined for portal component developers.
-	// These property keys are used with the portal Utils.getUserProperty method
-	// - see TODO there.
 
 	/**
 	 * Prefix your portal session attribute names with this string, and they
