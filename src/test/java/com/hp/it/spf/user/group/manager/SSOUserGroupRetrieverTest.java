@@ -4,26 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.hp.it.spf.user.exception.UserGroupsException;
 
 public class SSOUserGroupRetrieverTest {
-
+    String siteName = null;
+    Map<String, Object> userProfile = new HashMap<String, Object>();
+    
+    /**
+     * Init siteName parameter and userProfile map for test
+     * 
+     * @throws Exception if setUp operation failed.
+     */
     @Before
     public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
-
-    @Test
-    public void testGetGroups() throws UserGroupsException{
-        String siteName = "smartportal";
-        Map<String, String> userProfile = new HashMap<String, String>();
+        siteName = "smartportal";
         userProfile.put("Accreditations", "EU-02pp-Q530;EU-02pp-N342;EU-02pp-O138");
         userProfile.put("AgreementNos", "");
         userProfile.put("AgreementSubTypes", "");
@@ -150,7 +147,15 @@ public class SSOUserGroupRetrieverTest {
         userProfile.put("UserId", "1-3WDLKG");
         userProfile.put("UserPhone", "");
         userProfile.put("UserRights", "LOCAL_SECURITY_Simulation;LOCAL_SECURITY_SmartQuote");
-        userProfile.put("UserType", ""); 
+        userProfile.put("UserType", "");
+    }
+
+    /**
+     * Test 
+     * @throws UserGroupsException
+     */
+    @Test
+    public void testGetGroups() throws UserGroupsException{
         IUserGroupRetriever retriever =new SSOUserGroupRetriever();
         Set<String> groupSet = retriever.getGroups(siteName, userProfile);  
         for(String group : groupSet) {
