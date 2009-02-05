@@ -1,3 +1,7 @@
+/*
+ * Project: Shared Portal Framework 
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.user.group.utils;
 
 import static org.junit.Assert.assertEquals;
@@ -11,6 +15,13 @@ import java.util.Properties;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * This is the test class for UGSParametersManager class.
+ * 
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * @version 1.0
+ * @see com.hp.it.spf.user.group.utils.UGSParametersManager
+ */
 public class UGSParametersManagerTest {
     private static Properties ps = new Properties();
     private static UGSParametersManager manager = null;
