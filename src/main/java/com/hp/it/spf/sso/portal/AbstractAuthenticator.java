@@ -168,8 +168,11 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     protected void mapHeaderToUserProfileMap() {
         userProfile.put(AuthenticationConsts.KEY_PROFILE_ID,
                         getValue(AuthenticationConsts.HEADER_PROFILE_ID_PROPERTY_NAME));
+        LOG.info("userProfile.PROFILE_ID=" + userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
+        
         userProfile.put(AuthenticationConsts.KEY_USER_NAME,
                         getValue(AuthenticationConsts.HEADER_USER_NAME_PROPERTY_NAME));
+        LOG.info("userProfile.USERNAME=" + userProfile.get(AuthenticationConsts.KEY_USER_NAME));
 
         // set email
         String email = getValue(AuthenticationConsts.HEADER_EMAIL_ADDRESS_PROPERTY_NAME);
@@ -413,7 +416,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         // If profile ID is different, return true
         if (!profileIdVap.equals(userProfile.get(AuthenticationConsts.KEY_PROFILE_ID))) {
             LOG.info("profile_id_vap:" + profileIdVap);
-            LOG.info("profileid:" + ssoUser.getProfileId());
+            LOG.info("profileid:" + userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
             return true;
         }
         LOG.info("same user in session: " + profileIdVap);
@@ -475,8 +478,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      */
     @SuppressWarnings("unchecked")
     protected User syncVAPUser() throws UniquePropertyValueConflictException,
-                                EntityPersistenceException,
-                                UserGroupsException {
+                                EntityPersistenceException {
         // append all external user profile retrieved from UPS/Persona
         Map upMap = getUserProfile();
         if (upMap != null) {
@@ -520,12 +522,15 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * @return retrieved groups set
      */
     @SuppressWarnings("unchecked")
-    protected Set getUserGroup() throws UserGroupsException {
+    protected Set getUserGroup() {
         Site site = AuthenticatorHelper.getCurrentSite(request);        
         if (site != null) {
             IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(null);
             
-            Set<String> group = retriever.getGroups(site.getDNSName(), userProfile);
+            Set<String> group = null;
+            try {
+				group = retriever.getGroups(site.getDNSName(), userProfile);
+			} catch (UserGroupsException e) {}
             return group;            
         }
         return null;
