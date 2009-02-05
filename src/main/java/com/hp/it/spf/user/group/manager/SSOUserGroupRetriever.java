@@ -41,7 +41,8 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
      * 
      * @param siteName site name
      * @param userProfile user profiles
-     * @return user group set
+     * @return user groups set, if user has no groups, an empty Set will be
+     *         returned.
      * @throws UserGroupsException if any exception occurs, an
      *             UserGroupsException will be thrown.
      */

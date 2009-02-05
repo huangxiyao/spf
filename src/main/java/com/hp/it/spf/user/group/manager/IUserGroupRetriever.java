@@ -22,7 +22,8 @@ public interface IUserGroupRetriever {
      * 
      * @param siteName current site's DNS name in session
      * @param userProfile user profile map
-     * @return user groups set
+     * @return user groups set, if user has no groups, an empty Set will be
+     *         returned.
      * @throws UserGroupsException if any exception occurs, an
      *             UserGroupsException will be thrown.
      */
