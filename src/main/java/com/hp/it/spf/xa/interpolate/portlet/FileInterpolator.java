@@ -74,18 +74,29 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * on each server, in the <code>images/</code> subdirectory. Or, put it into
  * the <code>images</code> subdirectory of your portlet WAR. Then put the
  * following markup into an HTML text file to be processed by the
- * FileInterpolator:
+ * <code>FileInterpolator</code>:
  * </p>
  * <p>
  * <code>&lt;IMG SRC="{CONTENT-URL:/images/picture.jpg}"&gt;</code>
  * </p>
  * <p>
  * The returned text string will contain the necessary URL for showing the image
- * to the user.
+ * to the user: either a file-relay servlet URL (if the file was found in the
+ * portlet resource bundle folder) or a static resource URL (if the file was
+ * found inside your WAR). In either case, the URL will be properly
+ * portlet-encoded and ready for presentation to the browser. If the file was
+ * not found, a URL pointing to that filename inside your WAR will be expressed
+ * anyway. (This of course will cause an HTTP 404 error if the browser
+ * subsequently opens the URL - this is intentional and will help you detect the
+ * missing file.)
  * </p>
  * <p>
  * <b>Note:</b> For the portlet resource bundle directory to work, you must
- * have deployed the file-relay servlet into your portlet application.
+ * have properly configured and deployed the file-relay servlet somewhere
+ * accessible to the browser and the portlet bundle folder (eg, in your portlet
+ * application). And you must have configured
+ * <code>i18n_portlet_config.properties</code> with any non-default portlet
+ * bundle folder or relay servlet URL. This is documented elsewhere.
  * </p>
  * <p>
  * <b>Note:</b> This token is for <b>unlocalized</b> content only. For
@@ -222,12 +233,24 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * The returned text string will contain the necessary URL for showing the
  * best-fit image to the user. The logic for determining the best-fit resembles
- * that used by the Java-standard {@link ResourceBundle} class (see).
+ * that used by the Java-standard {@link ResourceBundle} class (see). The URL
+ * will be either a file-relay servlet URL (if the file was found in the portlet
+ * resource bundle folder) or a static resource URL (if the file was found
+ * inside your WAR). In either case, the URL will be properly portlet-encoded
+ * and ready for presentation to the browser. If the file was not found, a URL
+ * pointing to the base filename inside your WAR will be expressed anyway. (This of
+ * course will cause an HTTP 404 error if the browser subsequently opens the URL -
+ * this is intentional and will help you detect the missing file.)
  * </p>
  * <p>
  * <b>Note:</b> For the portlet resource bundle directory to work, you must
- * have deployed the file-relay servlet into your portlet application.
+ * have properly configured and deployed the file-relay servlet somewhere
+ * accessible to the browser and the portlet bundle folder (eg, in your portlet
+ * application). And you must have configured
+ * <code>i18n_portlet_config.properties</code> with any non-default portlet
+ * bundle folder or relay servlet URL. This is documented elsewhere.
  * </p>
+ * </dd>
  * 
  * <dt><a name="logged-in"><code>{LOGGED-IN}...{/LOGGED-IN}</code></a></dt>
  * <dt><a name="logged-out"><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></a></dt>

@@ -3824,10 +3824,10 @@ HTML Viewer Portlet Developer's Guide</code></a> (see).</p>
 </a>
 
 <p>The text interpolation tokens supported by the SPF portlet
-utilities are described briefly here. Each token is delimited by braces <code>{...}</code>
-(although you can use angle-brackets instead of braces, if you prefer <code>&lt;...&gt;</code>).
-Detailed information on each token is provided in the class
-documentation for the {@link
+utilities are described briefly here. Each token is delimited by braces
+<code>{...}</code> (although you can use angle-brackets instead of
+braces, if you prefer <code>&lt;...&gt;</code>). Detailed information on
+each token is provided in the class documentation for the {@link
 com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}.</p>
 
 <blockquote>
@@ -3844,8 +3844,7 @@ UTF-8 encoding.</p>
 </a>
 
 <p>The following tokens can be used to interpolate URL's into your
-text. Please click on the links for more documentation for each
-token.</p>
+text. Please click on the links for more documentation for each token.</p>
 
 <dl>
 	<dt><a
@@ -3868,6 +3867,43 @@ token.</p>
 
 	<blockquote><pre>
 &lt;IMG SRC="{CONTENT-URL:/images/picture.jpg}"&gt;
+</pre></blockquote>
+
+	<p><b>Note:</b> If you are placing your resource files outside of
+	the WAR, you must have <a href="#i18n.supporting.relay">configured
+	and deployed</a> the relay servlet accordingly. You also must have <a
+		href="#i18n.other.i18n_portlet_config">configured your <code>i18n_portlet_config.properties</code></a>
+	with the locations of the portlet bundle folder and the relay servlet,
+	if you are not using the defaults. See the previous discussion in this
+	document.</p>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator#localized-content-url"><code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code></a></dt>
+	<dd>
+	<p>Use this token to insert a URL for an <b>possibly localized</b>
+	supporting resource file into the interpolated content. The file can be
+	an <a href="#i18n.location">external or internal</a> <a
+		href="#i18n.resources.supporting">supporting resource</a>, of any file
+	type (for example, an image). If it is external, you will get a URL for
+	the <i>file relay servlet</i>; if it is internal, you will get a static
+	resource URL for your portlet application. In either case, the URL will
+	be properly portlet-encoded for presentation to the user.</p>
+
+	<p>The <code><i>pathname</i></code> in the token should give the
+	base name of the <a href="#i18n.resources.bundles">resource bundle</a>
+	containing the desired file. This name should include any subfolder(s)
+	where the bundle files are located, relative to the <i>portlet
+	resource bundle folder</i> (for an external resource) or the portlet WAR
+	root (for an internal resource). The token will find the best-fit
+	localized file in that bundle for the user's locale, and include that
+	filename in the expressed URL.</p>
+
+	<p>Here is some example HTML text using this token to help build an HTML
+	&lt;IMG&gt; tag:</p>
+
+	<blockquote><pre>
+&lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/picture.jpg}"&gt;
 </pre></blockquote>
 
 	<p><b>Note:</b> If you are placing your resource files outside of
