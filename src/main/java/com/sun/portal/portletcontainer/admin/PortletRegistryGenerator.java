@@ -255,6 +255,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             // fill PortletWindowPreference
             portletWindowPreference.setPortletName(portletIDValue);
             portletWindowPreference.setWindowName(portletIDValue);
+            portletWindowPreference.setUserName(PortletRegistryContext.USER_NAME_DEFAULT);
             
             EntityID entityID = new EntityID(portletID);
             String entityIDPrefix = entityID.getPrefix();
