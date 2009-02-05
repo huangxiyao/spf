@@ -50,12 +50,11 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.spf.xa.interpolate.portal.TokenParser<br>
- *      com.hp.it.spf.xa.interpolate.portlet.TokenParser</br>
- *      com.hp.it.spf.xa.interpolate.FileInterpolator<br>
- *      com.hp.it.spf.xa.interpolate.portal.FileInterpolator<br>
- *      com.hp.it.spf.xa.interpolate.portlet.FileInterpolator<br>
- * 
+ * @see <code>com.hp.it.spf.xa.interpolate.portal.TokenParser</code><br>
+ *      <code>com.hp.it.spf.xa.interpolate.portlet.TokenParser</code></br>
+ *      <code>com.hp.it.spf.xa.interpolate.FileInterpolator</code><br>
+ *      <code>com.hp.it.spf.xa.interpolate.portal.FileInterpolator</code><br>
+ *      <code>com.hp.it.spf.xa.interpolate.portlet.FileInterpolator</code> 
  */
 public abstract class TokenParser {
 
@@ -182,6 +181,11 @@ public abstract class TokenParser {
 	protected String subsFilePath = DEFAULT_SUBS_PATHNAME;
 
 	/**
+	 * The locale to use instead of the one in the current request.
+	 */
+	protected Locale locale = null;
+
+	/**
 	 * <p>
 	 * Get a URL for the given file pathname, localized (or not) depending on
 	 * the boolean parameter (if true, the URL is for the best-candidate
@@ -218,6 +222,79 @@ public abstract class TokenParser {
 	 * @return The property value
 	 */
 	protected abstract String getUserProperty(String key);
+
+	/**
+	 * Get the locale to use. Different action by portal and portlet, so
+	 * therefore this is an abstract method.
+	 * 
+	 * @return locale
+	 */
+	protected abstract Locale getLocale();
+
+	/**
+	 * Get the email address for the user. Different action by portal and
+	 * portlet, so therefore this is an abstract method.
+	 * 
+	 * @return email
+	 */
+	protected abstract String getEmail();
+
+	/**
+	 * Get the first name for the user. Different action by portal and portlet,
+	 * so therefore this is an abstract method.
+	 * 
+	 * @return first name
+	 */
+	protected abstract String getFirstName();
+
+	/**
+	 * Get the last name for the user. Different action by portal and portlet,
+	 * so therefore this is an abstract method.
+	 * 
+	 * @return last name
+	 */
+	protected abstract String getLastName();
+
+	/**
+	 * Get the portal site name for the current portal site. Different action by
+	 * portal and portlet, so therefore this is an abstract method.
+	 * 
+	 * @return site name
+	 */
+	protected abstract String getSite();
+
+	/**
+	 * Get the portal site root (ie home page) URL for the current portal site.
+	 * Different action by portal and portlet, so therefore this is an abstract
+	 * method.
+	 * 
+	 * @return site URL string
+	 */
+	protected abstract String getSiteURL();
+
+	/**
+	 * Get the current portal request URL. Different action by portal and
+	 * portlet, so therefore this is an abstract method.
+	 * 
+	 * @return request URL string
+	 */
+	protected abstract String getRequestURL();
+
+	/**
+	 * Get the authorization groups for the current request. Different action by
+	 * portal and portlet, so therefore this is an abstract method.
+	 * 
+	 * @return array of groups
+	 */
+	protected abstract String[] getGroups();
+
+	/**
+	 * Return true if the user is logged-in and false otherwise. Different
+	 * action by portal and portlet, so therefore this is an abstract method.
+	 * 
+	 * @return array of groups
+	 */
+	protected abstract boolean getLoginStatus();
 
 	/**
 	 * An inner class interface for deciding whether a content section enclosed
@@ -272,17 +349,111 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
+	 * Parses the given string, performing all of the token substitutions and
+	 * interpolations supported by this class. For a list and description of all
+	 * the supported tokens, see the other parse methods - this method calls all
+	 * of them in series. The order of token evaluation is as follows:
+	 * </p>
+	 * <dl>
+	 * <dt><code>{TOKEN:<i>key</i>}</code></dt>
+	 * <dd>This token is parsed first, and the substituted content is added to
+	 * the string. So subsequent substitutions operate against the value for the
+	 * <i>key</i> - therefore that value may itself contain other tokens.
+	 * <dt><code>{SITE}</code></dt>
+	 * <dt><code>{SITE-URL}</code></dt>
+	 * <dt><code>{REQUEST-URL}</code></dt>
+	 * <dt><code>{LANGUAGE-CODE}</code></dt>
+	 * <dt><code>{COUNTRY-CODE}</code></dt>
+	 * <dt><code>{LANGUAGE-TAG}</code></dt>
+	 * <dt><code>{EMAIL}</code></dt>
+	 * <dt><code>{NAME}</code></dt>
+	 * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
+	 * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+	 * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code></dt>
+	 * <dt><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
+	 * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
+	 * </dl>
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> The <code>&lt;</code> and <code>&gt;</code> symbols are
+	 * also supported for the token boundaries, in place of <code>{</code> and
+	 * <code>}</code>.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parse(String content) {
+
+		if (content == null) {
+			return null;
+		}
+
+		// Start parsing and substituting the tokens:
+		content = parseToken(content);
+
+		// Add current site name
+		content = parseSite(content);
+
+		// Add current site URL
+		content = parseSiteURL(content);
+
+		// Add current request URL
+		content = parseRequestURL(content);
+
+		// Add current ISO language code
+		content = parseLanguageCode(content);
+
+		// Add current ISO country code
+		content = parseCountryCode(content);
+
+		// Add current RFC language code
+		content = parseLanguageTag(content);
+
+		// Add current user email
+		content = parseEmail(content);
+
+		// Add current user display name
+		content = parseName(content);
+
+		// Add other property values for current user
+		content = parseUserProperty(content);
+
+		// Transfer tag to localized URL.
+		content = parseNoLocalizedContentURL(content);
+
+		// Transfer tag to unlocalized URL
+		content = parseLocalizedContentURL(content);
+
+		// Parse site sections
+		content = parseSiteContainer(content);
+
+		// Parse login/logout sections
+		content = parseLoggedInContainer(content);
+		content = parseLoggedOutContainer(content);
+
+		// Parse group sections
+		content = parseGroupContainer(content);
+
+		// Done.
+		return (content);
+	}
+
+	/**
+	 * <p>
 	 * Parses the given string, substituting the <a
 	 * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
-	 * 639-1</a> language code for the given locale in place of the
+	 * 639-1</a> language code for the current locale in place of the
 	 * <code>{LANGUAGE-CODE}</code> token. For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?lang={LANGUAGE-CODE}"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
 	 * href="https://ovsc.hp.com?lang=ja"&gt;go to OVSC&lt;/a&gt;</code>
-	 * when you provide a Japanese-language locale. If you provide a null
-	 * locale, the token is replaced with blank. If you provide null content,
-	 * null is returned.
+	 * when the locale is for Japan. The locale is determined from the concrete
+	 * subclass {@link #getLocale()} method. If the locale is null, or one in
+	 * which a language code is not specified, the token is replaced with blank.
+	 * If you provide null content, null is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -292,13 +463,11 @@ public abstract class TokenParser {
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param loc
-	 *            The locale.
-	 * 
 	 * @return The interpolated string.
 	 */
-	public String parseLanguageCode(String content, Locale loc) {
+	public String parseLanguageCode(String content) {
 		String lang = null;
+		Locale loc = getLocale();
 		if (loc != null) {
 			lang = loc.getLanguage();
 		}
@@ -309,15 +478,16 @@ public abstract class TokenParser {
 	 * <p>
 	 * Parses the given string, substituting the <a
 	 * href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
-	 * 3166-1</a> country code for the given locale in place of the
+	 * 3166-1</a> country code for the current locale in place of the
 	 * <code>{COUNTRY-CODE}</code> token. For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?cc={COUNTRY-CODE}"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
 	 * href="https://ovsc.hp.com?cc=JP"&gt;go to OVSC&lt;/a&gt;</code>
-	 * when you provide a Japan-country locale. If you provide a null locale, or
-	 * a locale in which country is not specified, the token is replaced with
-	 * blank. If you provide null content, null is returned.
+	 * when the locale is for Japan. The locale is determined from the concrete
+	 * subclass {@link #getLocale()} method. If the locale is null, or one in
+	 * which a country is not specified, the token is replaced with blank. If
+	 * you provide null content, null is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -327,13 +497,11 @@ public abstract class TokenParser {
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param loc
-	 *            The locale.
-	 * 
 	 * @return The interpolated string.
 	 */
-	public String parseCountryCode(String content, Locale loc) {
+	public String parseCountryCode(String content) {
 		String cc = null;
+		Locale loc = getLocale();
 		if (loc != null) {
 			cc = loc.getCountry();
 		}
@@ -344,15 +512,16 @@ public abstract class TokenParser {
 	 * <p>
 	 * Parses the given string, substituting the given <a
 	 * href="href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language
-	 * tag for the given locale in place of the <code>{LANGUAGE-TAG}</code>
+	 * tag for the current locale in place of the <code>{LANGUAGE-TAG}</code>
 	 * token. For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?lang={LANGUAGE-TAG}"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
 	 * href="https://ovsc.hp.com?lang=zn-CN"&gt;go to OVSC&lt;/a&gt;</code>
-	 * when you provide the Chinese (China) locale. If you provide a null
-	 * locale, the token is replaced with blank. If you provide null content,
-	 * null is returned.
+	 * when the locale is Chinese (China). The locale is determined from the
+	 * concrete subclass {@link #getLocale()} method. If the locale is null, the
+	 * token is replaced with blank. If you provide null content, null is
+	 * returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -360,13 +529,12 @@ public abstract class TokenParser {
 	 * you prefer.
 	 * </p>
 	 * 
-	 * @param lang
-	 *            The RFC 3066 language tag.
 	 * @param content
 	 *            The content string.
 	 * @return The interpolated string.
 	 */
-	public String parseLanguageTag(String content, Locale loc) {
+	public String parseLanguageTag(String content) {
+		Locale loc = getLocale();
 		String lang = I18nUtility.localeToLanguageTag(loc);
 		return parseUnparameterized(content, TOKEN_LANGUAGE_TAG, lang);
 	}
@@ -439,15 +607,16 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the given string, substituting the given email address for the
+	 * Parses the given string, substituting the current email address for the
 	 * <code>{EMAIL}</code> token. For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?email={EMAIL}"&gt;go to OVSC&lt;/a&gt;</code>
 	 * is changed to
 	 * <code>&lt;a href="https://ovsc.hp.com?email=me@foo.com"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
-	 * when you provide the email address "me@foo.com". If you provide a null
-	 * email, the token is replaced with blank. If you provide null content,
-	 * null is returned.
+	 * when the email address is "me@foo.com". The email address is obtained
+	 * from the {@link #getEmail()} method. If it returns a null email, the
+	 * token is replaced with blank. If you provide null content, null is
+	 * returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -457,57 +626,26 @@ public abstract class TokenParser {
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param email
-	 *            The email address.
 	 * @return The interpolated string.
 	 */
-	public String parseEmail(String content, String email) {
-		return parseUnparameterized(content, TOKEN_EMAIL, email);
+	public String parseEmail(String content) {
+		return parseUnparameterized(content, TOKEN_EMAIL, getEmail());
 	}
 
 	/**
 	 * <p>
-	 * Parses the given string, substituting the given first and last names (in
-	 * proper display order for the given locale) in place of the
+	 * Parses the given string, substituting the current first and last names
+	 * (in proper display order for the current locale) in place of the
 	 * <code>{NAME}</code> token. For example: <code>Welcome, {NAME}!</code>
 	 * is changed to <code>Welcome, <i>first</i> <i>last</i>!</code> for
-	 * most locales (and by default - eg if the given locale is null). However
+	 * most locales (and by default - eg if the current locale is null). However
 	 * in some Asian locales (eg Japan, China, etc), it would be changed to
-	 * <code>Welcome, <i>last</i> <i>first</i>!</code> If you provide null
-	 * first and last names, the token is replaced with blank. If you provide
-	 * null content, null is returned.
+	 * <code>Welcome, <i>last</i> <i>first</i>!</code>.
 	 * </p>
 	 * <p>
-	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
-	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
-	 * you prefer.
-	 * </p>
-	 * 
-	 * @param content
-	 *            The content string.
-	 * @param firstName
-	 *            The first (given) name.
-	 * @param lastName
-	 *            The last (family) name.
-	 * @param locale
-	 *            The locale.
-	 * @return The interpolated string.
-	 */
-	public String parseName(String content, String firstName, String lastName,
-			Locale loc) {
-		String name = I18nUtility.getUserDisplayName(firstName, lastName, loc);
-		return parseUnparameterized(content, TOKEN_NAME, name);
-	}
-
-	/**
-	 * <p>
-	 * Parses the given string, substituting the given site name for the
-	 * <code>{SITE}</code> token. The site name is intended to be the name for
-	 * the virtual portal site. For example: <code>&lt;a
-	 * href="https://ovsc.hp.com?site={SITE}"&gt;go to OVSC&lt;/a&gt;</code>
-	 * is changed to <code>{a href="https://ovsc.hp.com?site=acme"&gt;go to
-	 * OVSC&lt;/a&gt;</code>
-	 * when you provide the site name "acme". If you provide a null site name,
+	 * The current names and locale are obtained from the
+	 * {@link #getFirstName()}, {@link #getLastName()}, and
+	 * {@link #getLocale()} methods. If they provide null first and last names,
 	 * the token is replaced with blank. If you provide null content, null is
 	 * returned.
 	 * </p>
@@ -519,25 +657,52 @@ public abstract class TokenParser {
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param siteName
-	 *            The site name.
 	 * @return The interpolated string.
 	 */
-	public String parseSite(String content, String siteName) {
-		return parseUnparameterized(content, TOKEN_SITE, siteName);
+	public String parseName(String content) {
+		String name = I18nUtility.getUserDisplayName(getFirstName(),
+				getLastName(), getLocale());
+		return parseUnparameterized(content, TOKEN_NAME, name);
 	}
 
 	/**
 	 * <p>
-	 * Parses the given string, substituting the given portal site home-page URL
-	 * for the <code>{SITE-URL}</code> token. For example: <code>&lt;a
+	 * Parses the given string, substituting the current portal site name for
+	 * the <code>{SITE}</code> token. The site name is the unique name in the
+	 * portal URL for the virtual portal site. For example: <code>&lt;a
+	 * href="https://ovsc.hp.com?site={SITE}"&gt;go to OVSC&lt;/a&gt;</code>
+	 * is changed to <code>{a href="https://ovsc.hp.com?site=acme"&gt;go to
+	 * OVSC&lt;/a&gt;</code>
+	 * when the site name is "acme". The site name is obtained from
+	 * {@link #getSite()} - if that method returns a null site name, the token
+	 * is replaced with blank. If you provide null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parseSite(String content) {
+		return parseUnparameterized(content, TOKEN_SITE, getSite());
+	}
+
+	/**
+	 * <p>
+	 * Parses the given string, substituting the current portal site home-page
+	 * URL for the <code>{SITE-URL}</code> token. For example: <code>&lt;a
 	 * href="{SITE-URL}"&gt;go to home page&lt;/a&gt;</code>
 	 * is changed to
 	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/"&gt;go to
 	 * home page&lt;/a&gt;</code>
-	 * when you provide the site URL "http://portal.hp.com/portal/site/acme/".
-	 * If you provide a null site URL, the token is replaced with blank. If you
-	 * provide null content, null is returned.
+	 * when the current site home-page URL is
+	 * "http://portal.hp.com/portal/site/acme/". The URL is obtained from the
+	 * {@link #getSiteURL()} method - if that method returns null, the token is
+	 * replaced with blank. If you provide null content, null is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -547,25 +712,24 @@ public abstract class TokenParser {
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param siteURL
-	 *            The current portal site home-page URL.
 	 * @return The interpolated string.
 	 */
-	public String parseSiteURL(String content, String siteURL) {
-		return parseUnparameterized(content, TOKEN_SITE_URL, siteURL);
+	public String parseSiteURL(String content) {
+		return parseUnparameterized(content, TOKEN_SITE_URL, getSiteURL());
 	}
 
 	/**
 	 * <p>
-	 * Parses the given string, substituting the given current portal request
-	 * URL for the <code>{REQUEST-URL}</code> token. For example: <code>&lt;a
+	 * Parses the given string, substituting the current portal request URL for
+	 * the <code>{REQUEST-URL}</code> token. For example: <code>&lt;a
 	 * href="{REQUEST-URL}"&gt;try again&lt;/a&gt;</code>
 	 * is changed to
 	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/template.PAGE/?..."&gt;try again&lt;/a&gt;</code>
-	 * when you provide the request URL
-	 * "http://portal.hp.com/portal/site/acme/template.PAGE/?...". If you
-	 * provide a null request URL, the token is replaced with blank. If you
-	 * provide null content, null is returned.
+	 * when the current request URL is
+	 * "http://portal.hp.com/portal/site/acme/template.PAGE/?...". The
+	 * {@link #getRequestURL()} method is used to obtain the request URL; if it
+	 * is null, the token is replaced with blank. If you provide null content,
+	 * null is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -575,12 +739,10 @@ public abstract class TokenParser {
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param requestURL
-	 *            The current portal request URL.
 	 * @return The interpolated string.
 	 */
-	public String parseRequestURL(String content, String requestURL) {
-		return parseUnparameterized(content, TOKEN_REQUEST_URL, requestURL);
+	public String parseRequestURL(String content) {
+		return parseUnparameterized(content, TOKEN_REQUEST_URL, getRequestURL());
 	}
 
 	/**
@@ -659,9 +821,10 @@ public abstract class TokenParser {
 	/**
 	 * <p>
 	 * Parses the string for any <code>{SITE:<i>names</i>}</code> content;
-	 * such content is deleted if the given site name does not match (otherwise
-	 * only the special markup is removed). The <i>names</i> may include one or
-	 * more site names, delimited by "|" for a logical-or.
+	 * such content is deleted if the current portal site name does not match
+	 * (otherwise only the special markup is removed). The site name is the
+	 * unique name in the portal URL for the virtual portal site. The <i>names</i>
+	 * may include one or more site names, delimited by "|" for a logical-or.
 	 * <code>{SITE:<i>names</i>}</code> markup may be nested for logical-and
 	 * (however since any one site has only one site name, the desire to
 	 * logical-and seems unlikely).
@@ -706,9 +869,10 @@ public abstract class TokenParser {
 	 * </pre>
 	 * 
 	 * <p>
-	 * If you provide null content, null is returned. If you provide null or
-	 * empty site name, all <code>{SITE:names}</code>-enclosed sections are
-	 * removed from the content.
+	 * If you provide null content, null is returned. The site name is obtained
+	 * from the {@link #getSite()} method - if it returns null or an empty site
+	 * name, all <code>{SITE:names}</code>-enclosed sections are removed from
+	 * the content.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -718,20 +882,19 @@ public abstract class TokenParser {
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param siteName
-	 *            The portal site name.
 	 * @return The interpolated string.
 	 */
-	public String parseSiteContainer(String content, String siteName) {
+	public String parseSiteContainer(String content) {
 
 		return parseContainer(content, TOKEN_SITE_CONTAINER,
-				new SiteContainerMatcher(siteName));
+				new SiteContainerMatcher(getSite()));
 	}
 
 	/**
-	 * <code>ContainerMatcher</code> for site section parsing. The constructor stores a site
-	 * name into the class. The match method returns true if the given site name
-	 * is an exact match (case-insensitive) of the stored site name.
+	 * <code>ContainerMatcher</code> for site section parsing. The constructor
+	 * stores a site name into the class. The match method returns true if the
+	 * given site name is an exact match (case-insensitive) of the stored site
+	 * name.
 	 */
 	protected class SiteContainerMatcher extends ContainerMatcher {
 
@@ -754,10 +917,10 @@ public abstract class TokenParser {
 	}
 
 	/**
-	 * <code>ContainerMatcher</code> for logged-in section parsing. The constructor stores
-	 * the login status into the class: true if logged-in, false otherwise. The
-	 * match method just returns the login status. The passed container key is
-	 * not used and is expected to be null.
+	 * <code>ContainerMatcher</code> for logged-in section parsing. The
+	 * constructor stores the login status into the class: true if logged-in,
+	 * false otherwise. The match method just returns the login status. The
+	 * passed container key is not used and is expected to be null.
 	 */
 	protected class LoggedInContainerMatcher extends ContainerMatcher {
 
@@ -807,7 +970,9 @@ public abstract class TokenParser {
 	 * </pre>
 	 * 
 	 * <p>
-	 * If you provide null content, null is returned.
+	 * If you provide null content, null is returned. The
+	 * {@link #getLoginStatus()} method is used to determine if the user is
+	 * logged-in or not.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -817,21 +982,19 @@ public abstract class TokenParser {
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param loggedIn
-	 *            True if the user is logged-in, false otherwise.
 	 * @return The interpolated string.
 	 */
-	public String parseLoggedInContainer(String content, boolean loggedIn) {
+	public String parseLoggedInContainer(String content) {
 
 		return parseContainer(content, TOKEN_LOGGEDIN_CONTAINER,
-				new LoggedInContainerMatcher(loggedIn));
+				new LoggedInContainerMatcher(getLoginStatus()));
 	}
 
 	/**
-	 * <code>ContainerMatcher</code> for logged-out section parsing. The constructor stores
-	 * the login status into the class: true if logged-in, false otherwise. The
-	 * match method just returns the inverse of this. The passed container key
-	 * is not used and is expected to be null.
+	 * <code>ContainerMatcher</code> for logged-out section parsing. The
+	 * constructor stores the login status into the class: true if logged-in,
+	 * false otherwise. The match method just returns the inverse of this. The
+	 * passed container key is not used and is expected to be null.
 	 */
 	protected class LoggedOutContainerMatcher extends ContainerMatcher {
 
@@ -881,7 +1044,9 @@ public abstract class TokenParser {
 	 * </pre>
 	 * 
 	 * <p>
-	 * If you provide null content, null is returned.
+	 * If you provide null content, null is returned. The
+	 * {@link #getLoginStatus()} method is used to determine if the user is
+	 * logged-in or not.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -891,20 +1056,18 @@ public abstract class TokenParser {
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param loggedIn
-	 *            True if the user is logged-in, false otherwise.
 	 * @return The interpolated string.
 	 */
-	public String parseLoggedOutContainer(String content, boolean loggedIn) {
+	public String parseLoggedOutContainer(String content) {
 
 		return parseContainer(content, TOKEN_LOGGEDOUT_CONTAINER,
-				new LoggedOutContainerMatcher(loggedIn));
+				new LoggedOutContainerMatcher(getLoginStatus()));
 	}
 
 	/**
 	 * <p>
 	 * Parses the string for any <code>{GROUP:<i>groups</i>}</code> content;
-	 * such content is deleted if the given user groups do not qualify
+	 * such content is deleted if the current user groups do not qualify
 	 * (otherwise only the special markup is removed). The <i>groups</i> may
 	 * include one or more group names, delimited by "|" for a logical-or.
 	 * <code>{GROUP:<i>groups</i>&GT;</code> markup may be nested for
@@ -927,8 +1090,8 @@ public abstract class TokenParser {
 	 * </pre>
 	 * 
 	 * <p>
-	 * If the given user groups include abc, def, and xyz, the returned content
-	 * string is:
+	 * If the current user groups include <code>abc</code>, <code>def</code>,
+	 * and <code>xyz</code>, the returned content string is:
 	 * </p>
 	 * 
 	 * <pre>
@@ -943,8 +1106,8 @@ public abstract class TokenParser {
 	 * </pre>
 	 * 
 	 * <p>
-	 * But if the given user groups include only abc, the returned content
-	 * string is:
+	 * But if the current user groups include only <code>abc</code>, the
+	 * returned content string is:
 	 * </p>
 	 * 
 	 * <pre>
@@ -956,7 +1119,8 @@ public abstract class TokenParser {
 	 * </pre>
 	 * 
 	 * <p>
-	 * If you provide null content, null is returned. If you provide null or
+	 * If you provide null content, null is returned. The current groups are
+	 * obtained from the {@link #getGroups()} method; if it returns null or
 	 * empty groups, all <code>{GROUP}</code>-enclosed sections are removed
 	 * from the content.
 	 * </p>
@@ -968,21 +1132,19 @@ public abstract class TokenParser {
 	 * 
 	 * @param content
 	 *            The content string.
-	 * @param userGroups
-	 *            The user groups.
 	 * @return The interpolated string.
 	 */
-	public String parseGroupContainer(String content, String[] userGroups) {
+	public String parseGroupContainer(String content) {
 
 		return parseContainer(content, TOKEN_GROUP_CONTAINER,
-				new GroupContainerMatcher(userGroups));
+				new GroupContainerMatcher(getGroups()));
 	}
 
 	/**
-	 * <code>ContainerMatcher</code> for group parsing. The constructor stores an array of
-	 * group names into the class. The match method returns true if the given
-	 * group name exactly matches (case-insensitive) any of the stored group
-	 * names.
+	 * <code>ContainerMatcher</code> for group parsing. The constructor stores
+	 * an array of group names into the class. The match method returns true if
+	 * the given group name exactly matches (case-insensitive) any of the stored
+	 * group names.
 	 */
 	protected class GroupContainerMatcher extends ContainerMatcher {
 
