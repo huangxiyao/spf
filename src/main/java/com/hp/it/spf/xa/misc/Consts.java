@@ -163,7 +163,7 @@ public class Consts {
 	/**
 	 * The prefix of the anonymous user name.
 	 */
-	public static final String ANON_USER_NAME_PREFIX = "sso_guest_user";
+	public static final String ANON_USER_NAME_PREFIX = "sso_guest_user_";
 
 	/**
 	 * The key for the portlet friendly id in the portlet request. This is
