@@ -409,11 +409,12 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * this method calls all of them in series. The order of token evaluation is
 	 * as follows:
 	 * </p>
-	 * <dl>
-	 * <dt>First, all the tokens parsed by the superclass {@link super#parse(String)}</dt>
-	 * <dt>Then <code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></dt>
-	 * <dt>Then <code>{ROLE:<i>roles</i>}...{/ROLE}</code></dt>
-	 * </dl>
+	 * <ol>
+	 * <li>First, all the tokens parsed by the superclass
+	 * {@link com.hp.it.spf.xa.interpolate.TokenParser#parse(String)}</li>
+	 * <li>Then <code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></li>
+	 * <li>Then <code>{ROLE:<i>roles</i>}...{/ROLE}</code></li>
+	 * </ol>
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> The <code>&lt;</code> and <code>&gt;</code> symbols are
