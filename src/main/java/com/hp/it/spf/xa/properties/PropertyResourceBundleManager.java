@@ -349,7 +349,8 @@ public class PropertyResourceBundleManager {
 		try {
 			file = getFile(filename);
 		} catch (Exception e) {
-			LOG.warn("Cannot load properties file from classpath: " + filename);
+			LOG.warn("Cannot find properties file with system classloader: "
+					+ filename);
 			return null;
 		}
 		if (file != null) {
@@ -375,7 +376,8 @@ public class PropertyResourceBundleManager {
 				return null;
 			}
 		} else {
-			LOG.warn("Cannot load properties file from classpath: " + filename);
+			LOG.warn("Cannot find properties file with system classloader: "
+					+ filename);
 			return null;
 		}
 	}
