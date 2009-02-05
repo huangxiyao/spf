@@ -878,6 +878,8 @@ public class AuthenticatorHelper {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("Retrieve site UID," + siteUID);
                 }
+            } catch (Exception ex) {
+                return null;
             }
         }
         return siteUID;
