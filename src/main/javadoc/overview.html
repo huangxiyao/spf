@@ -311,10 +311,11 @@ table.props td {
 		<ul>
 			<li>4.5.1. <a href="#file.author.token.url">Referencing URLs
 			(<code>{CONTENT-URL:<i>path</i>}</code>, <code>{LOCALIZED-CONTENT-URL:<i>path</i>&gt</code>,
-			<code>{SITE-URL}</code>, <code>{REQUEST-URL}</code>) </a></li>
+			<code>{SITE-URL}</code>, <code>{SITE-URL:<i>uri</i>}</code>, <code>{REQUEST-URL}</code>)
+			</a></li>
 			<li>4.5.2. <a href="#file.author.token.user">Displaying user
 			information (<code>{NAME}</code>, <code>{EMAIL}</code>, <code>{LANGUAGE-CODE}</code>,
-			<code>LANGUAGE-TAG}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</a></li>
+			<code>{COUNTRY-CODE}</code>, <code>{LANGUAGE-TAG}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</a></li>
 			<li>4.5.3. <a href="#file.author.token.auth">Permissioning
 			content for authorized users (<code>{LOGGED-IN}</code>, <code>{LOGGED-OUT}</code>,
 			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</a></li>
@@ -3503,8 +3504,8 @@ you have setup for your Spring portlet.</p>
 	more information. If your file to interpolate does not contain any <code>{TOKEN:<i>key</i>}</code>
 	tokens, or you are willing to use the default property file, you do not
 	need to set this attribute.</p>
-</p>
-</dd>
+	</p>
+	</dd>
 </dl>
 
 <p>For example, here is a simple extension/implementation of the <code>FileInterpolatorController</code>.
@@ -3827,23 +3828,27 @@ utilities are described here. Detailed information on each token is also
 provided in the class documentation for the {@link
 com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}.</p>
 
-LEFT OFF HERE
-
 <blockquote>
-<p><b>Important:</b> Only interpolation of UTF-8 encoded file
-content is supported.</p>
+<p><b>Important:</b> File interpolation only supports UTF-8 encoded
+file content. If you are authoring your text in a file, be sure to use
+UTF-8 encoding.</p>
 </blockquote>
 </dd>
 
 <a name="file.author.token.url">
 <h4>4.5.1. Referencing URLs (<code>{CONTENT-URL:<i>path</i>}</code>,
 <code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code>, <code>{SITE-URL}</code>,
-<code>{REQUEST-URL}</code>)</h4>
+<code>{SITE-URL:<i>uri</i>}</code>, <code>{REQUEST-URL}</code>)</h4>
 </a>
+
+<dl>
+
+</dl>
 
 <a name="file.author.token.user">
 <h4>4.5.2. Displaying user information (<code>{NAME}</code>, <code>{EMAIL}</code>,
-<code>{LANGUAGE-CODE}</code>, <code>LANGUAGE-TAG}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</h4>
+<code>{LANGUAGE-CODE}</code>, <code>{COUNTRY-CODE}</code>, <code>LANGUAGE-TAG}</code>,
+<code>{USER-PROPERTY:<i>key</i>}</code>)</h4>
 </a>
 
 <a name="file.author.token.auth">

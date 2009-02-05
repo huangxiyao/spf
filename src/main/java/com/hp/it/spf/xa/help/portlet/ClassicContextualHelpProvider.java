@@ -13,6 +13,7 @@ import javax.portlet.PortletURL;
 
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 import com.hp.it.spf.xa.misc.portlet.Consts;
+import com.hp.it.spf.xa.misc.portlet.Utils;
 
 /**
  * <p>
@@ -180,7 +181,7 @@ public class ClassicContextualHelpProvider extends
 	 * file which is the best-candidate given the current locale.
 	 */
 	protected String getCloseImageURL() {
-		String url = slashify("/images/" + CLOSE_BUTTON_IMG_NAME);
+		String url = Utils.slashify("/images/" + CLOSE_BUTTON_IMG_NAME);
 		return I18nUtility.getLocalizedFileURL(request, response, url);
 	}
 

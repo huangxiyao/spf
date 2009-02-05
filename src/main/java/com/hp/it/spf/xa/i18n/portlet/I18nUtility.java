@@ -160,7 +160,6 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 				relayServletURL = "/"
 						+ bundle.getString(PORTLET_I18N_CONFIG_PROP_RELAY_URL)
 						+ "/";
-				relayServletURL = slashify(relayServletURL);
 			} catch (Exception ex) {
 				logger.warn("I18nUtility: property "
 						+ PORTLET_I18N_CONFIG_PROP_RELAY_URL + " not found in "
@@ -169,8 +168,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 				relayServletURL = RELAY_PATH_DEFAULT;
 			}
 		}
-		resourceBundleDir = slashify(resourceBundleDir);
-		relayServletURL = slashify(relayServletURL);
+		resourceBundleDir = Utils.slashify(resourceBundleDir);
+		relayServletURL = Utils.slashify(relayServletURL);
 	}
 
 	/**
@@ -323,7 +322,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
-		pBaseFileName = slashify(pBaseFileName);
+		pBaseFileName = Utils.slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
@@ -342,13 +341,14 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		// application. If we find it there, make and return an input stream for
 		// it. Finally, return null if still it was not found.
 		if (fileName != null) {
-			fileName = slashify(resourceBundleDir + "/" + fileName);
+			fileName = Utils.slashify(resourceBundleDir + "/" + fileName);
 			try {
 				return new FileInputStream(fileName);
 			} catch (FileNotFoundException e) { // should never happen
 			}
 		}
-		fileName = getLocalizedFileName(pReq, pBaseFileName, pLocalized);
+		fileName = getLocalizedFileName(pReq, pBaseFileName, pLocale,
+				pLocalized);
 		if (fileName != null) {
 			return pContext.getResourceAsStream(fileName);
 		}
@@ -472,7 +472,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		// will return null if the file still was not found.
 		if (fileName != null && !fileName.equals(pKey)
 				&& (fileName.length() > 0)) {
-			fileName = slashify(resourceBundleDir + "/" + fileName);
+			fileName = Utils.slashify(resourceBundleDir + "/" + fileName);
 			try {
 				return new FileInputStream(fileName);
 			} catch (FileNotFoundException e) {
@@ -685,7 +685,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
-		pBaseFileName = slashify(pBaseFileName);
+		pBaseFileName = Utils.slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
@@ -706,7 +706,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		if (fileName != null) {
 			return getFileRelayURL(pReq, pResp, fileName);
 		} else {
-			fileName = getLocalizedFileName(pReq, pBaseFileName, pLocalized);
+			fileName = getLocalizedFileName(pReq, pBaseFileName, pLoc,
+					pLocalized);
 			if (fileName != null) {
 				return pResp.encodeURL(fileName);
 			} else {
@@ -872,7 +873,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		// though, return null.
 		if (fileName != null && !fileName.equals(pKey)
 				&& (fileName.length() > 0)) {
-			fileName = slashify(fileName);
+			fileName = Utils.slashify(fileName);
 			if (fileExists(resourceBundleDir, fileName)) {
 				return getFileRelayURL(pReq, pResp, fileName);
 			} else {
@@ -1041,7 +1042,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
-		pBaseFileName = slashify(pBaseFileName);
+		pBaseFileName = Utils.slashify(pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
@@ -1616,11 +1617,11 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		try {
 			if ((relayServletURL.startsWith("/"))
 					&& (context.getResource(relayServletURL) != null)) {
-				return response.encodeURL(slashify(relayServletURL + "/"
+				return response.encodeURL(Utils.slashify(relayServletURL + "/"
 						+ fileName));
 			}
 		} catch (MalformedURLException e) {
 		}
-		return (slashify(relayServletURL + "/" + fileName));
+		return (Utils.slashify(relayServletURL + "/" + fileName));
 	}
 }

@@ -12,7 +12,7 @@ package com.hp.it.spf.xa.htmlviewer.portlet.util;
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link
  * @version TBD
  */
-public class Consts {
+public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 
 	/** View filename portlet preference, request parameter, and model attribute. */
 	public static final String VIEW_FILENAME = "viewFilename";

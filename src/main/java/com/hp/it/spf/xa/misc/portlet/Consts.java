@@ -13,7 +13,7 @@ package com.hp.it.spf.xa.misc.portlet;
  * @author <link href="wei.teng@hp.com">Teng Wei</link>
  * @version TBD
  */
-public final class Consts extends com.hp.it.spf.xa.misc.Consts {
+public class Consts extends com.hp.it.spf.xa.misc.Consts {
 
 	/**
 	 * The name of the render parameter containing the document fragment name to use in
