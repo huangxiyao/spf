@@ -56,7 +56,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * 
  * <dl>
- * <dt><code>{CONTENT-URL:<i>pathname</i>}</code></dt>
+ * <dt><a name="content-url"><code>{CONTENT-URL:<i>pathname</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert a URL for an <b>unlocalized</b> static resource
@@ -96,7 +96,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * token is isn't really necessary. It is retained for backward-compatibility.
  * </p>
  * 
- * <dt><code>{COUNTRY-CODE}</code></dt>
+ * <dt><a name="country-code"><code>{COUNTRY-CODE}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert the <a
@@ -107,7 +107,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{EMAIL}</code></dt>
+ * <dt><a name="email"><code>{EMAIL}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert the email address of the user into the interpolated
@@ -119,7 +119,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
+ * <dt><a name="group"><code>{GROUP:<i>groups</i>}...{/GROUP}</code></a></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -166,7 +166,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{LANGUAGE-CODE}</code></dt>
+ * <dt><a name="language-code"><code>{LANGUAGE-CODE}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert the <a
@@ -177,7 +177,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{LANGUAGE-TAG}</code></dt>
+ * <dt><a name="language-tag"><code>{LANGUAGE-TAG}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert the <a
@@ -189,7 +189,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code></dt>
+ * <dt><a name="localized-content-url"><code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert a URL for a (potentially localized) static resource
@@ -229,8 +229,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * have deployed the file-relay servlet into your portlet application.
  * </p>
  * 
- * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code><br>
- * <code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
+ * <dt><a name="logged-in"><code>{LOGGED-IN}...{/LOGGED-IN}</code></a></dt>
+ * <dt><a name="logged-out"><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></a></dt>
  * <dd>
  * <p>
  * Use these tokens around sections of content which should only be included in
@@ -262,7 +262,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{NAME}</code></dt>
+ * <dt><a name="name"><code>{NAME}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert the full name of the user into the interpolated
@@ -285,7 +285,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></dt>
+ * <dt><a name="portlet"><code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></a></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -335,7 +335,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{REQUEST-URL}</code></dt>
+ * <dt><a name="request-url"><code>{REQUEST-URL}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert into the content the complete current URL which the
@@ -349,7 +349,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{ROLE:<i>roles</i>}...{/ROLE}</code></dt>
+ * <dt><a name="role"><code>{ROLE:<i>roles</i>}...{/ROLE}</code></a></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -395,7 +395,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{SITE}</code></dt>
+ * <dt><a name="site"><code>{SITE}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert the site name of the current portal site into the
@@ -407,7 +407,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+ * <dt><a name="site_c"><code>{SITE:<i>names</i>}...{/SITE}</code></a></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -456,8 +456,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{SITE-URL}</code></dt>
- * <dt><code>{SITE-URL:<i>uri</i>}</code></dt>
+ * <dt><a name="site-url"><code>{SITE-URL}</code></a></dt>
+ * <dt><a name="site-url_p"><code>{SITE-URL:<i>uri</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use these related tokens to insert URL's for pages at the current portal site
@@ -482,7 +482,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{TOKEN:<i>key</i>}</code></dt>
+ * <dt><a name="token"><code>{TOKEN:<i>key</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to lookup a value for the given key in a property file, and
@@ -524,7 +524,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
+ * <dt><a name="user-property"><code>{USER-PROPERTY:<i>key</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert a given string property of the user into the
