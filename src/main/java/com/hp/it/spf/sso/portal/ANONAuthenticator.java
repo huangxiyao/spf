@@ -31,8 +31,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
     private static final long serialVersionUID = 1L;
     
     private static final LogWrapper LOG = AuthenticatorHelper.getLog(ANONAuthenticator.class);
-
-    private static final String SSO_GUEST_USER_PREFIX = "sso_guest_user_";
+    
     /**
      * This is the constructor for ANON Authenticator,
      * It will set the user name as null which means the guest user for Vignette
@@ -59,7 +58,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
         
         if (currentUser != null) {
             String currUserName = (String)currentUser.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID);
-            if (currUserName.startsWith(SSO_GUEST_USER_PREFIX)) {
+            if (currUserName.startsWith(AuthenticationConsts.ANON_USER_NAME_PREFIX)) {
                 Locale userLocale = I18nUtils.getUserLocale(currentUser);   
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("Retrieve loacle from session user," + userLocale);
@@ -74,11 +73,13 @@ public class ANONAuthenticator extends AbstractAuthenticator {
         
         String language = reqLocale.getLanguage();
         String country  = reqLocale.getCountry();
+        language = (language != null) ? language.trim() : "";
+        country = (country != null) ? country.trim() : "";
         
         String ssousername = null;
         
         // search sso_guest_user_<locale> user
-        ssousername = SSO_GUEST_USER_PREFIX + language + "-" + country;
+        ssousername = AuthenticationConsts.ANON_USER_NAME_PREFIX + language + "-" + country;
         User vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID,
                                                                   ssousername);
         if (vapUser != null) {
@@ -90,7 +91,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
         }
         
         // search sso_guest_user_<language_from_locale> user
-        ssousername = SSO_GUEST_USER_PREFIX + language;
+        ssousername = AuthenticationConsts.ANON_USER_NAME_PREFIX + language;
         vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID,
                                                              ssousername);
         if (vapUser != null) {
@@ -102,7 +103,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
         }
         
         // for default user
-        userName = SSO_GUEST_USER_PREFIX + AuthenticationConsts.DEFAULT_LANGUAGE;
+        userName = AuthenticationConsts.ANON_USER_NAME_PREFIX + AuthenticationConsts.DEFAULT_LANGUAGE;
         return;
     }    
 }

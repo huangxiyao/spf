@@ -1,4 +1,13 @@
+/*
+ * Project: Shared Portal Framework 
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.user.group.manager;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +18,13 @@ import org.junit.Test;
 
 import com.hp.it.spf.user.exception.UserGroupsException;
 
+/**
+ * This is the test class for SSOUserGroupRetriever class.
+ * 
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * @version 1.0
+ * @see com.hp.it.spf.user.group.manager.SSOUserGroupRetriever
+ */
 public class SSOUserGroupRetrieverTest {
     String siteName = null;
     Map<String, Object> userProfile = new HashMap<String, Object>();
@@ -151,16 +167,81 @@ public class SSOUserGroupRetrieverTest {
     }
 
     /**
-     * Test 
-     * @throws UserGroupsException
+     * Test GetGroups method and check the return value.
+     * 
+     * @see SSOUserGroupRetriever#getGroups(String, Map)
      */
     @Test
-    public void testGetGroups() throws UserGroupsException{
-        IUserGroupRetriever retriever =new SSOUserGroupRetriever();
-        Set<String> groupSet = retriever.getGroups(siteName, userProfile);  
-        for(String group : groupSet) {
-            System.out.println(group);
-        }        
+    public void testGetGroups() {
+        IUserGroupRetriever retriever = new SSOUserGroupRetriever();
+        Set<String> groupSet;
+        // siteName, userProfile both assigned.
+        try {
+            groupSet = retriever.getGroups(siteName, userProfile);
+            assertNotNull("Result group set shouldn't be null.", groupSet);
+        } catch (UserGroupsException ex) {
+            assertFalse(ex.getMessage(), true);
+        }  
+     
+        // siteName is assigned, userProfile is null
+        try {
+            groupSet = retriever.getGroups(siteName, null);            
+        } catch (UserGroupsException ex) {
+            assertTrue(ex.getMessage(), true);
+        }  
+        
+        // siteName is null, userProfile is assigned
+        try {
+            groupSet = retriever.getGroups(null, userProfile);            
+        } catch (UserGroupsException ex) {
+            assertTrue(ex.getMessage(), true);
+        }  
+        
+        // siteName is null, userProfile is an empty map
+        try {
+            groupSet = retriever.getGroups(null, new HashMap<String, Object>());            
+        } catch (UserGroupsException ex) {
+            assertTrue(ex.getMessage(), true);
+        }  
+        
+        // siteName is "", userProfile is assigned
+        try {
+            groupSet = retriever.getGroups("", userProfile);            
+        } catch (UserGroupsException ex) {
+            assertTrue(ex.getMessage(), true);
+        } 
+        
+        // both are null
+        try {
+            groupSet = retriever.getGroups(null, null);            
+        } catch (UserGroupsException ex) {
+            assertTrue(ex.getMessage(), true);
+        }  
+        
+        // siteName is "", userProfile is an empty map
+        try {
+            groupSet = retriever.getGroups("", new HashMap<String, Object>());            
+        } catch (UserGroupsException ex) {
+            assertTrue(ex.getMessage(), true);
+        } 
+        
+        // siteName refer to a invaild site, userProfile is assigned.
+        try {
+            groupSet = retriever.getGroups("donotexist", userProfile);            
+        } catch (UserGroupsException ex) {
+            assertTrue(ex.getMessage(), true);
+        }
+        
+        // siteName is assigned, userProfile is an invaild map.
+        try {
+            Map<String, Object> profiles = new HashMap<String, Object>();
+            profiles.put("test", "test");            
+            groupSet = retriever.getGroups(siteName, profiles);
+            // should be an empty set
+            assertEquals(groupSet.size(), 0);
+        } catch (UserGroupsException ex) {
+            assertFalse(ex.getMessage(), true);
+        }
     }
 
 }

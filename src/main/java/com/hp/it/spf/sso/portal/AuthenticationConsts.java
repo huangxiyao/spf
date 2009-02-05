@@ -13,7 +13,9 @@ class AuthenticationConsts {
 		
 	static final String SSO_USER_LOCALE = "SP_USER_LOCALE";	
 	
-	static final String DEFAULT_PRIMARY_SITE_NAME = "spf";
+	static final String DEFAULT_PRIMARY_SITE_NAME = Consts.LOGOUT_DEFAULT_SITE;
+	
+	static final String ANON_USER_NAME_PREFIX = Consts.ANON_USER_NAME_PREFIX;	
 	
 	static final String USER_PROFILE_KEY = "userProfile";
 

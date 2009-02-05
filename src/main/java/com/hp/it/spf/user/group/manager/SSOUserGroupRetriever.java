@@ -7,7 +7,6 @@ package com.hp.it.spf.user.group.manager;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -50,8 +49,7 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
                                  Map<String, Object> userProfile) throws UserGroupsException {
         Set<String> groupSet = new HashSet<String>();
         try {
-            GroupRequest serviceRequest = getServiceRequest(siteName,
-                                                            new HashMap<String, Object>(userProfile));
+            GroupRequest serviceRequest = getServiceRequest(siteName, userProfile);
             if (LOG.isLoggable(Level.FINEST)) {
                 LOG.finest("UGS invokeService");
             }
@@ -107,7 +105,7 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
      * @return GroupRequest object
      */
     private GroupRequest getServiceRequest(String siteName,
-                                           HashMap<String, Object> userProfile) throws UserGroupsException {
+                                           Map<String, Object> userProfile) throws UserGroupsException {
         if (siteName == null
             || userProfile == null
             || siteName.trim().equals("")
