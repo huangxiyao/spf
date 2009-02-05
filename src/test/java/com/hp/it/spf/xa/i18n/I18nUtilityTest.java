@@ -132,12 +132,6 @@ public class I18nUtilityTest extends TestCase {
         assertEquals(tempLocale, new Locale("th"));
     }
 
-    /* public void testSlashify() {
-        String result = I18nUtility.slashify("abc//ddd//f/fi///");
-        assertEquals(result, "abc/ddd/f/fi/");
-    }
-    */
-
     public void testGetLocaleDisplayName() {
         Locale locale = new Locale("de", "DE");
         String name = I18nUtility.getLocaleDisplayName(locale);

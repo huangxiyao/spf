@@ -872,20 +872,4 @@ public abstract class ClassicContextualHelpProvider extends
 	 */
 	protected abstract String getCloseImageAlt();
 
-	/**
-	 * <p>
-	 * Returns the given path, with any consecutive file separators ("/" for
-	 * Java) reduced to just one.
-	 * </p>
-	 * 
-	 * @param pPath
-	 *            The file path to clean-up.
-	 * @return The cleaned-up file path.
-	 */
-	protected String slashify(String pPath) {
-		if (pPath == null) {
-			return null;
-		}
-		return pPath.replaceAll("/+", "/");
-	}
 }

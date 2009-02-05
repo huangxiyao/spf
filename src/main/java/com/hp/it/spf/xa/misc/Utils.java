@@ -172,4 +172,31 @@ public class Utils {
 		}
 		return stream;
 	}
+
+	/**
+	 * <p>
+	 * Returns the given path, with any consecutive file separators (<code>/</code>
+	 * for Java) reduced to just one. The given path is also trimmed of
+	 * whitespace. URL delimiters (ie first <code>://</code> found in the
+	 * string) are exempt from this.
+	 * </p>
+	 * 
+	 * @param pPath
+	 *            The file path to clean-up.
+	 * @return The cleaned-up file path.
+	 */
+	public static String slashify(String pPath) {
+		if (pPath == null) {
+			return null;
+		}
+		String p = pPath.trim();
+		String b = "";
+		int i = p.indexOf("://");
+		if (i != -1) {
+			b = p.substring(0, i + 2);
+			p = p.substring(i + 2);
+		}
+		return (b + p.replaceAll("/+", "/"));
+	}
+
 }

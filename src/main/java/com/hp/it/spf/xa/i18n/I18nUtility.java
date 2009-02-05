@@ -23,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+import com.hp.it.spf.xa.misc.Utils;
 
 /**
  * A concrete base class including methods for internationalization/localization
@@ -616,12 +617,12 @@ public class I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
-		pBaseFileName = slashify(pBaseFileName);
+		pBaseFileName = Utils.slashify(pBaseFileName);
 		if (pPath == null) {
 			pPath = "";
 		}
 		pPath = pPath.trim();
-		pPath = slashify(pPath);
+		pPath = Utils.slashify(pPath);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
@@ -719,7 +720,7 @@ public class I18nUtility {
 		pPath = pPath.trim();
 		pFileName = pFileName.trim();
 		try {
-			File file = new File(slashify(pPath + "/" + pFileName));
+			File file = new File(Utils.slashify(pPath + "/" + pFileName));
 			if (file.exists()) {
 				result = true;
 			}
@@ -727,24 +728,6 @@ public class I18nUtility {
 			// Exception (eg file not found) - ignore and return false.
 		}
 		return result;
-	}
-
-	/**
-	 * <p>
-	 * Returns the given path, with any consecutive file separators ("/" for
-	 * Java) reduced to just one. The given path is also trimmed of whitespace.
-	 * </p>
-	 * 
-	 * @param pPath
-	 *            The file path to clean-up.
-	 * @return The cleaned-up file path.
-	 */
-	protected static String slashify(String pPath) {
-		if (pPath == null) {
-			return null;
-		}
-		pPath = pPath.trim();
-		return pPath.replaceAll("/+", "/");
 	}
 
 	/**

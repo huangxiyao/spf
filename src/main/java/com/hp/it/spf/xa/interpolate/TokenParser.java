@@ -13,6 +13,7 @@ import java.util.Locale;
 
 import com.hp.it.spf.xa.i18n.I18nUtility;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+import com.hp.it.spf.xa.misc.Utils;
 
 /**
  * <p>
@@ -744,7 +745,7 @@ public abstract class TokenParser {
 						String siteURL = getSiteURL();
 						if (siteURL == null)
 							siteURL = "";
-						return (slashify(siteURL + "/" + param));
+						return (Utils.slashify(siteURL + "/" + param));
 					}
 				});
 		return (content);
@@ -1602,23 +1603,5 @@ public abstract class TokenParser {
 			char tokenBegin, char tokenEnd, String value) {
 		String regex = "\\" + tokenBegin + tokenName + "\\" + tokenEnd;
 		return content.replaceAll(regex, value);
-	}
-
-	/**
-	 * <p>
-	 * Returns the given path, with any consecutive file separators ("/" for
-	 * Java) reduced to just one. The given path is also trimmed of whitespace.
-	 * </p>
-	 * 
-	 * @param pPath
-	 *            The file path to clean-up.
-	 * @return The cleaned-up file path.
-	 */
-	protected static String slashify(String pPath) {
-		if (pPath == null) {
-			return null;
-		}
-		pPath = pPath.trim();
-		return pPath.replaceAll("/+", "/");
 	}
 }
