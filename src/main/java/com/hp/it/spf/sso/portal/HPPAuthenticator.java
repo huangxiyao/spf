@@ -91,16 +91,18 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      *      java.lang.String, boolean)
      */
     protected String getValue(String fieldName) {
-        LOG.info("HPP getValue: " + fieldName);
+        
         String temp = getProperty(fieldName);
+        String value = null;
         if (temp != null) {
             if (clHeaderList.indexOf(temp) != -1) {
                 // Return field value from CL Header
-                return AuthenticatorHelper.getValuesFromCLHeader(clHeaderHpp, temp);
+            	value = AuthenticatorHelper.getValuesFromCLHeader(clHeaderHpp, temp);
             } else {
-                return AuthenticatorHelper.getRequestHeader(request, temp, true);
+            	value = AuthenticatorHelper.getRequestHeader(request, temp, true);
             }
         }
-        return null;
+        LOG.info("HPP getValue: " + fieldName + "=" + value);
+        return value;
     }
 }
