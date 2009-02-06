@@ -2,13 +2,13 @@
  * GroupResponse.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis 1.3 Oct 05, 2005 (05:23:37 EDT) WSDL2Java emitter.
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
 package com.hp.it.spf.user.group.stub;
 
 public class GroupResponse  implements java.io.Serializable {
-    private java.lang.String[] groupList;
+    private com.hp.it.spf.user.group.stub.ArrayOfString groupList;
 
     private java.lang.Long transactionTime;
 
@@ -16,7 +16,7 @@ public class GroupResponse  implements java.io.Serializable {
     }
 
     public GroupResponse(
-           java.lang.String[] groupList,
+           com.hp.it.spf.user.group.stub.ArrayOfString groupList,
            java.lang.Long transactionTime) {
            this.groupList = groupList;
            this.transactionTime = transactionTime;
@@ -28,7 +28,7 @@ public class GroupResponse  implements java.io.Serializable {
      * 
      * @return groupList
      */
-    public java.lang.String[] getGroupList() {
+    public com.hp.it.spf.user.group.stub.ArrayOfString getGroupList() {
         return groupList;
     }
 
@@ -38,7 +38,7 @@ public class GroupResponse  implements java.io.Serializable {
      * 
      * @param groupList
      */
-    public void setGroupList(java.lang.String[] groupList) {
+    public void setGroupList(com.hp.it.spf.user.group.stub.ArrayOfString groupList) {
         this.groupList = groupList;
     }
 
@@ -76,7 +76,7 @@ public class GroupResponse  implements java.io.Serializable {
         _equals = true && 
             ((this.groupList==null && other.getGroupList()==null) || 
              (this.groupList!=null &&
-              java.util.Arrays.equals(this.groupList, other.getGroupList()))) &&
+              this.groupList.equals(other.getGroupList()))) &&
             ((this.transactionTime==null && other.getTransactionTime()==null) || 
              (this.transactionTime!=null &&
               this.transactionTime.equals(other.getTransactionTime())));
@@ -92,15 +92,7 @@ public class GroupResponse  implements java.io.Serializable {
         __hashCodeCalc = true;
         int _hashCode = 1;
         if (getGroupList() != null) {
-            for (int i=0;
-                 i<java.lang.reflect.Array.getLength(getGroupList());
-                 i++) {
-                java.lang.Object obj = java.lang.reflect.Array.get(getGroupList(), i);
-                if (obj != null &&
-                    !obj.getClass().isArray()) {
-                    _hashCode += obj.hashCode();
-                }
-            }
+            _hashCode += getGroupList().hashCode();
         }
         if (getTransactionTime() != null) {
             _hashCode += getTransactionTime().hashCode();
@@ -118,10 +110,9 @@ public class GroupResponse  implements java.io.Serializable {
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("groupList");
         elemField.setXmlName(new javax.xml.namespace.QName("http://shared.ugs.hp.com", "groupList"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "ArrayOfString"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
-        elemField.setItemQName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "string"));
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("transactionTime");

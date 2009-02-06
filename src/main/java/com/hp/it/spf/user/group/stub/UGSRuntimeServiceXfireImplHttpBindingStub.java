@@ -2,7 +2,7 @@
  * UGSRuntimeServiceXfireImplHttpBindingStub.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis 1.3 Oct 05, 2005 (05:23:37 EDT) WSDL2Java emitter.
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
 package com.hp.it.spf.user.group.stub;
@@ -25,22 +25,23 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("instanceHealthCheck");
-        oper.setReturnType(new javax.xml.namespace.QName("http://util.ssa.frameworks.hp.com", "SSAHealth"));
-        oper.setReturnClass(com.hp.it.spf.user.group.stub.SSAHealth.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "out"));
-        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "instanceHealthCheck"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", ">instanceHealthCheck"), com.hp.it.spf.user.group.stub.InstanceHealthCheck.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", ">instanceHealthCheckResponse"));
+        oper.setReturnClass(com.hp.it.spf.user.group.stub.InstanceHealthCheckResponse.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "instanceHealthCheckResponse"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         _operations[0] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getUsersForGroup");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "groupRequest"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://shared.ugs.hp.com", "GroupRequest"), com.hp.it.spf.user.group.stub.GroupRequest.class, false, false);
-        param.setNillable(true);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "getUsersForGroup"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", ">getUsersForGroup"), com.hp.it.spf.user.group.stub.GetUsersForGroup.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://shared.ugs.hp.com", "GroupResponse"));
-        oper.setReturnClass(com.hp.it.spf.user.group.stub.GroupResponse.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "out"));
-        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setReturnType(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", ">getUsersForGroupResponse"));
+        oper.setReturnClass(com.hp.it.spf.user.group.stub.GetUsersForGroupResponse.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "getUsersForGroupResponse"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "SiteDoesNotExistException"),
@@ -70,13 +71,12 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getGroups");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "groupRequest"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://shared.ugs.hp.com", "GroupRequest"), com.hp.it.spf.user.group.stub.GroupRequest.class, false, false);
-        param.setNillable(true);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "getGroups"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", ">getGroups"), com.hp.it.spf.user.group.stub.GetGroups.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://shared.ugs.hp.com", "GroupResponse"));
-        oper.setReturnClass(com.hp.it.spf.user.group.stub.GroupResponse.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "out"));
-        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setReturnType(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", ">getGroupsResponse"));
+        oper.setReturnClass(com.hp.it.spf.user.group.stub.GetGroupsResponse.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "getGroupsResponse"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         oper.addFault(new org.apache.axis.description.FaultDesc(
                       new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "SiteDoesNotExistException"),
@@ -106,10 +106,12 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("helloUGSRuntime");
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "out"));
-        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "helloUGSRuntime"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", ">helloUGSRuntime"), com.hp.it.spf.user.group.stub.HelloUGSRuntime.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", ">helloUGSRuntimeResponse"));
+        oper.setReturnClass(com.hp.it.spf.user.group.stub.HelloUGSRuntimeResponse.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "helloUGSRuntimeResponse"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         _operations[3] = oper;
 
@@ -237,30 +239,24 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
 
             qName = new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "anyType2anyTypeMap");
             cachedSerQNames.add(qName);
-            cls = com.hp.it.spf.user.group.stub.AnyType2AnyTypeMapEntry[].class;
+            cls = com.hp.it.spf.user.group.stub.AnyType2AnyTypeMap.class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", ">anyType2anyTypeMap>entry");
-            qName2 = new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "entry");
-            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
-            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "ArrayOfString");
             cachedSerQNames.add(qName);
-            cls = java.lang.String[].class;
+            cls = com.hp.it.spf.user.group.stub.ArrayOfString.class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string");
-            qName2 = new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "string");
-            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
-            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("http://shared.ugs.hp.com", "ArrayOfUserContext");
             cachedSerQNames.add(qName);
-            cls = com.hp.it.spf.user.group.stub.UserContext[].class;
+            cls = com.hp.it.spf.user.group.stub.ArrayOfUserContext.class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("http://shared.ugs.hp.com", "UserContext");
-            qName2 = new javax.xml.namespace.QName("http://shared.ugs.hp.com", "UserContext");
-            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
-            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("http://shared.ugs.hp.com", "GroupRequest");
             cachedSerQNames.add(qName);
@@ -370,7 +366,7 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
         }
     }
 
-    public com.hp.it.spf.user.group.stub.SSAHealth instanceHealthCheck() throws java.rmi.RemoteException {
+    public com.hp.it.spf.user.group.stub.InstanceHealthCheckResponse instanceHealthCheck(com.hp.it.spf.user.group.stub.InstanceHealthCheck parameters) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -382,11 +378,11 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "instanceHealthCheck"));
+        _call.setOperationName(new javax.xml.namespace.QName("", "instanceHealthCheck"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {parameters});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -394,9 +390,9 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
         else {
             extractAttachments(_call);
             try {
-                return (com.hp.it.spf.user.group.stub.SSAHealth) _resp;
+                return (com.hp.it.spf.user.group.stub.InstanceHealthCheckResponse) _resp;
             } catch (java.lang.Exception _exception) {
-                return (com.hp.it.spf.user.group.stub.SSAHealth) org.apache.axis.utils.JavaUtils.convert(_resp, com.hp.it.spf.user.group.stub.SSAHealth.class);
+                return (com.hp.it.spf.user.group.stub.InstanceHealthCheckResponse) org.apache.axis.utils.JavaUtils.convert(_resp, com.hp.it.spf.user.group.stub.InstanceHealthCheckResponse.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -404,7 +400,7 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
 }
     }
 
-    public com.hp.it.spf.user.group.stub.GroupResponse getUsersForGroup(com.hp.it.spf.user.group.stub.GroupRequest groupRequest) throws java.rmi.RemoteException, com.hp.it.spf.user.group.stub.SiteDoesNotExistException, com.hp.it.spf.user.group.stub.NoRulesOrGroupsForSiteException, com.hp.it.spf.user.group.stub.UGSSystemException, com.hp.it.spf.user.group.stub.InvalidGroupRequestException {
+    public com.hp.it.spf.user.group.stub.GetUsersForGroupResponse getUsersForGroup(com.hp.it.spf.user.group.stub.GetUsersForGroup parameters) throws java.rmi.RemoteException, com.hp.it.spf.user.group.stub.SiteDoesNotExistException, com.hp.it.spf.user.group.stub.NoRulesOrGroupsForSiteException, com.hp.it.spf.user.group.stub.UGSSystemException, com.hp.it.spf.user.group.stub.InvalidGroupRequestException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -416,11 +412,11 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "getUsersForGroup"));
+        _call.setOperationName(new javax.xml.namespace.QName("", "getUsersForGroup"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {groupRequest});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {parameters});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -428,9 +424,9 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
         else {
             extractAttachments(_call);
             try {
-                return (com.hp.it.spf.user.group.stub.GroupResponse) _resp;
+                return (com.hp.it.spf.user.group.stub.GetUsersForGroupResponse) _resp;
             } catch (java.lang.Exception _exception) {
-                return (com.hp.it.spf.user.group.stub.GroupResponse) org.apache.axis.utils.JavaUtils.convert(_resp, com.hp.it.spf.user.group.stub.GroupResponse.class);
+                return (com.hp.it.spf.user.group.stub.GetUsersForGroupResponse) org.apache.axis.utils.JavaUtils.convert(_resp, com.hp.it.spf.user.group.stub.GetUsersForGroupResponse.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -455,7 +451,7 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
 }
     }
 
-    public com.hp.it.spf.user.group.stub.GroupResponse getGroups(com.hp.it.spf.user.group.stub.GroupRequest groupRequest) throws java.rmi.RemoteException, com.hp.it.spf.user.group.stub.SiteDoesNotExistException, com.hp.it.spf.user.group.stub.NoRulesOrGroupsForSiteException, com.hp.it.spf.user.group.stub.UGSSystemException, com.hp.it.spf.user.group.stub.InvalidGroupRequestException {
+    public com.hp.it.spf.user.group.stub.GetGroupsResponse getGroups(com.hp.it.spf.user.group.stub.GetGroups parameters) throws java.rmi.RemoteException, com.hp.it.spf.user.group.stub.SiteDoesNotExistException, com.hp.it.spf.user.group.stub.NoRulesOrGroupsForSiteException, com.hp.it.spf.user.group.stub.UGSSystemException, com.hp.it.spf.user.group.stub.InvalidGroupRequestException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -467,11 +463,11 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "getGroups"));
+        _call.setOperationName(new javax.xml.namespace.QName("", "getGroups"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {groupRequest});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {parameters});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -479,9 +475,9 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
         else {
             extractAttachments(_call);
             try {
-                return (com.hp.it.spf.user.group.stub.GroupResponse) _resp;
+                return (com.hp.it.spf.user.group.stub.GetGroupsResponse) _resp;
             } catch (java.lang.Exception _exception) {
-                return (com.hp.it.spf.user.group.stub.GroupResponse) org.apache.axis.utils.JavaUtils.convert(_resp, com.hp.it.spf.user.group.stub.GroupResponse.class);
+                return (com.hp.it.spf.user.group.stub.GetGroupsResponse) org.apache.axis.utils.JavaUtils.convert(_resp, com.hp.it.spf.user.group.stub.GetGroupsResponse.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -506,7 +502,7 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
 }
     }
 
-    public java.lang.String helloUGSRuntime() throws java.rmi.RemoteException {
+    public com.hp.it.spf.user.group.stub.HelloUGSRuntimeResponse helloUGSRuntime(com.hp.it.spf.user.group.stub.HelloUGSRuntime parameters) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -518,11 +514,11 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "helloUGSRuntime"));
+        _call.setOperationName(new javax.xml.namespace.QName("", "helloUGSRuntime"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {parameters});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -530,9 +526,9 @@ public class UGSRuntimeServiceXfireImplHttpBindingStub extends org.apache.axis.c
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.String) _resp;
+                return (com.hp.it.spf.user.group.stub.HelloUGSRuntimeResponse) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.String) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String.class);
+                return (com.hp.it.spf.user.group.stub.HelloUGSRuntimeResponse) org.apache.axis.utils.JavaUtils.convert(_resp, com.hp.it.spf.user.group.stub.HelloUGSRuntimeResponse.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

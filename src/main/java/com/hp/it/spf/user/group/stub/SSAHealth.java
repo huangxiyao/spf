@@ -2,13 +2,13 @@
  * SSAHealth.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis 1.3 Oct 05, 2005 (05:23:37 EDT) WSDL2Java emitter.
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
 package com.hp.it.spf.user.group.stub;
 
 public class SSAHealth  implements java.io.Serializable {
-    private com.hp.it.spf.user.group.stub.AnyType2AnyTypeMapEntry[] allStatus;
+    private com.hp.it.spf.user.group.stub.AnyType2AnyTypeMap allStatus;
 
     private java.lang.Boolean health;
 
@@ -18,7 +18,7 @@ public class SSAHealth  implements java.io.Serializable {
     }
 
     public SSAHealth(
-           com.hp.it.spf.user.group.stub.AnyType2AnyTypeMapEntry[] allStatus,
+           com.hp.it.spf.user.group.stub.AnyType2AnyTypeMap allStatus,
            java.lang.Boolean health,
            com.hp.it.spf.user.group.stub.Instance instance) {
            this.allStatus = allStatus;
@@ -32,7 +32,7 @@ public class SSAHealth  implements java.io.Serializable {
      * 
      * @return allStatus
      */
-    public com.hp.it.spf.user.group.stub.AnyType2AnyTypeMapEntry[] getAllStatus() {
+    public com.hp.it.spf.user.group.stub.AnyType2AnyTypeMap getAllStatus() {
         return allStatus;
     }
 
@@ -42,7 +42,7 @@ public class SSAHealth  implements java.io.Serializable {
      * 
      * @param allStatus
      */
-    public void setAllStatus(com.hp.it.spf.user.group.stub.AnyType2AnyTypeMapEntry[] allStatus) {
+    public void setAllStatus(com.hp.it.spf.user.group.stub.AnyType2AnyTypeMap allStatus) {
         this.allStatus = allStatus;
     }
 
@@ -100,7 +100,7 @@ public class SSAHealth  implements java.io.Serializable {
         _equals = true && 
             ((this.allStatus==null && other.getAllStatus()==null) || 
              (this.allStatus!=null &&
-              java.util.Arrays.equals(this.allStatus, other.getAllStatus()))) &&
+              this.allStatus.equals(other.getAllStatus()))) &&
             ((this.health==null && other.getHealth()==null) || 
              (this.health!=null &&
               this.health.equals(other.getHealth()))) &&
@@ -119,15 +119,7 @@ public class SSAHealth  implements java.io.Serializable {
         __hashCodeCalc = true;
         int _hashCode = 1;
         if (getAllStatus() != null) {
-            for (int i=0;
-                 i<java.lang.reflect.Array.getLength(getAllStatus());
-                 i++) {
-                java.lang.Object obj = java.lang.reflect.Array.get(getAllStatus(), i);
-                if (obj != null &&
-                    !obj.getClass().isArray()) {
-                    _hashCode += obj.hashCode();
-                }
-            }
+            _hashCode += getAllStatus().hashCode();
         }
         if (getHealth() != null) {
             _hashCode += getHealth().hashCode();
@@ -148,10 +140,9 @@ public class SSAHealth  implements java.io.Serializable {
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("allStatus");
         elemField.setXmlName(new javax.xml.namespace.QName("http://util.ssa.frameworks.hp.com", "allStatus"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", ">anyType2anyTypeMap>entry"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "anyType2anyTypeMap"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
-        elemField.setItemQName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "entry"));
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("health");

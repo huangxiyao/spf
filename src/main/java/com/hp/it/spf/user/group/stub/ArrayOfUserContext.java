@@ -1,5 +1,5 @@
 /**
- * GroupRequest.java
+ * ArrayOfUserContext.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
@@ -7,65 +7,49 @@
 
 package com.hp.it.spf.user.group.stub;
 
-public class GroupRequest  implements java.io.Serializable {
-    private java.lang.String siteName;
+public class ArrayOfUserContext  implements java.io.Serializable {
+    private com.hp.it.spf.user.group.stub.UserContext[] userContext;
 
-    private com.hp.it.spf.user.group.stub.ArrayOfUserContext userContext;
-
-    public GroupRequest() {
+    public ArrayOfUserContext() {
     }
 
-    public GroupRequest(
-           java.lang.String siteName,
-           com.hp.it.spf.user.group.stub.ArrayOfUserContext userContext) {
-           this.siteName = siteName;
+    public ArrayOfUserContext(
+           com.hp.it.spf.user.group.stub.UserContext[] userContext) {
            this.userContext = userContext;
     }
 
 
     /**
-     * Gets the siteName value for this GroupRequest.
-     * 
-     * @return siteName
-     */
-    public java.lang.String getSiteName() {
-        return siteName;
-    }
-
-
-    /**
-     * Sets the siteName value for this GroupRequest.
-     * 
-     * @param siteName
-     */
-    public void setSiteName(java.lang.String siteName) {
-        this.siteName = siteName;
-    }
-
-
-    /**
-     * Gets the userContext value for this GroupRequest.
+     * Gets the userContext value for this ArrayOfUserContext.
      * 
      * @return userContext
      */
-    public com.hp.it.spf.user.group.stub.ArrayOfUserContext getUserContext() {
+    public com.hp.it.spf.user.group.stub.UserContext[] getUserContext() {
         return userContext;
     }
 
 
     /**
-     * Sets the userContext value for this GroupRequest.
+     * Sets the userContext value for this ArrayOfUserContext.
      * 
      * @param userContext
      */
-    public void setUserContext(com.hp.it.spf.user.group.stub.ArrayOfUserContext userContext) {
+    public void setUserContext(com.hp.it.spf.user.group.stub.UserContext[] userContext) {
         this.userContext = userContext;
+    }
+
+    public com.hp.it.spf.user.group.stub.UserContext getUserContext(int i) {
+        return this.userContext[i];
+    }
+
+    public void setUserContext(int i, com.hp.it.spf.user.group.stub.UserContext _value) {
+        this.userContext[i] = _value;
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof GroupRequest)) return false;
-        GroupRequest other = (GroupRequest) obj;
+        if (!(obj instanceof ArrayOfUserContext)) return false;
+        ArrayOfUserContext other = (ArrayOfUserContext) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -74,12 +58,9 @@ public class GroupRequest  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            ((this.siteName==null && other.getSiteName()==null) || 
-             (this.siteName!=null &&
-              this.siteName.equals(other.getSiteName()))) &&
             ((this.userContext==null && other.getUserContext()==null) || 
              (this.userContext!=null &&
-              this.userContext.equals(other.getUserContext())));
+              java.util.Arrays.equals(this.userContext, other.getUserContext())));
         __equalsCalc = null;
         return _equals;
     }
@@ -91,11 +72,16 @@ public class GroupRequest  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        if (getSiteName() != null) {
-            _hashCode += getSiteName().hashCode();
-        }
         if (getUserContext() != null) {
-            _hashCode += getUserContext().hashCode();
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getUserContext());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getUserContext(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -103,23 +89,17 @@ public class GroupRequest  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(GroupRequest.class, true);
+        new org.apache.axis.description.TypeDesc(ArrayOfUserContext.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://shared.ugs.hp.com", "GroupRequest"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://shared.ugs.hp.com", "ArrayOfUserContext"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("siteName");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://shared.ugs.hp.com", "siteName"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(true);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("userContext");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://shared.ugs.hp.com", "userContext"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://shared.ugs.hp.com", "ArrayOfUserContext"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://shared.ugs.hp.com", "UserContext"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://shared.ugs.hp.com", "UserContext"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
+        elemField.setMaxOccursUnbounded(true);
         typeDesc.addFieldDesc(elemField);
     }
 

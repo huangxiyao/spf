@@ -1,5 +1,5 @@
 /**
- * GetUsersForGroup.java
+ * ArrayOfString.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
@@ -7,41 +7,49 @@
 
 package com.hp.it.spf.user.group.stub;
 
-public class GetUsersForGroup  implements java.io.Serializable {
-    private com.hp.it.spf.user.group.stub.GroupRequest groupRequest;
+public class ArrayOfString  implements java.io.Serializable {
+    private java.lang.String[] string;
 
-    public GetUsersForGroup() {
+    public ArrayOfString() {
     }
 
-    public GetUsersForGroup(
-           com.hp.it.spf.user.group.stub.GroupRequest groupRequest) {
-           this.groupRequest = groupRequest;
-    }
-
-
-    /**
-     * Gets the groupRequest value for this GetUsersForGroup.
-     * 
-     * @return groupRequest
-     */
-    public com.hp.it.spf.user.group.stub.GroupRequest getGroupRequest() {
-        return groupRequest;
+    public ArrayOfString(
+           java.lang.String[] string) {
+           this.string = string;
     }
 
 
     /**
-     * Sets the groupRequest value for this GetUsersForGroup.
+     * Gets the string value for this ArrayOfString.
      * 
-     * @param groupRequest
+     * @return string
      */
-    public void setGroupRequest(com.hp.it.spf.user.group.stub.GroupRequest groupRequest) {
-        this.groupRequest = groupRequest;
+    public java.lang.String[] getString() {
+        return string;
+    }
+
+
+    /**
+     * Sets the string value for this ArrayOfString.
+     * 
+     * @param string
+     */
+    public void setString(java.lang.String[] string) {
+        this.string = string;
+    }
+
+    public java.lang.String getString(int i) {
+        return this.string[i];
+    }
+
+    public void setString(int i, java.lang.String _value) {
+        this.string[i] = _value;
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof GetUsersForGroup)) return false;
-        GetUsersForGroup other = (GetUsersForGroup) obj;
+        if (!(obj instanceof ArrayOfString)) return false;
+        ArrayOfString other = (ArrayOfString) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -50,9 +58,9 @@ public class GetUsersForGroup  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            ((this.groupRequest==null && other.getGroupRequest()==null) || 
-             (this.groupRequest!=null &&
-              this.groupRequest.equals(other.getGroupRequest())));
+            ((this.string==null && other.getString()==null) || 
+             (this.string!=null &&
+              java.util.Arrays.equals(this.string, other.getString())));
         __equalsCalc = null;
         return _equals;
     }
@@ -64,8 +72,16 @@ public class GetUsersForGroup  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        if (getGroupRequest() != null) {
-            _hashCode += getGroupRequest().hashCode();
+        if (getString() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getString());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getString(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -73,15 +89,17 @@ public class GetUsersForGroup  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(GetUsersForGroup.class, true);
+        new org.apache.axis.description.TypeDesc(ArrayOfString.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", ">getUsersForGroup"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "ArrayOfString"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("groupRequest");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "groupRequest"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://shared.ugs.hp.com", "GroupRequest"));
+        elemField.setFieldName("string");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://service.asl.ugs.runtime.hp.com", "string"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
         elemField.setNillable(true);
+        elemField.setMaxOccursUnbounded(true);
         typeDesc.addFieldDesc(elemField);
     }
 

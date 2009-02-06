@@ -16,6 +16,9 @@ import java.util.logging.Logger;
 import javax.xml.rpc.ServiceException;
 
 import com.hp.it.spf.user.exception.UserGroupsException;
+import com.hp.it.spf.user.group.stub.ArrayOfString;
+import com.hp.it.spf.user.group.stub.ArrayOfUserContext;
+import com.hp.it.spf.user.group.stub.GetGroups;
 import com.hp.it.spf.user.group.stub.GroupRequest;
 import com.hp.it.spf.user.group.stub.GroupResponse;
 import com.hp.it.spf.user.group.stub.SiteDoesNotExistException;
@@ -56,22 +59,23 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
             }
 
             GroupResponse serviceResponse = invokeService(serviceRequest);
-            String[] groupList = serviceResponse.getGroupList();
+            ArrayOfString groupListAS = serviceResponse.getGroupList();
 
-            if (LOG.isLoggable(Level.FINEST)) {
-                StringBuffer groupStr = new StringBuffer();
-                if (groupList.length > 0) {
-                    for (int i = 0; i < groupList.length; i++) {
-                        groupStr.append(groupList[i]);
-                        groupStr.append(",");
-                    }
-                    LOG.finest("Output group listing: " + groupStr);
-                }
-            }
-
-            if (groupList != null) {
+            if (groupListAS != null) {
+                String[] groupList = groupListAS.getString();
                 for (String group : groupList) {
                     groupSet.add(group);
+                }
+                
+                if (LOG.isLoggable(Level.FINEST)) {
+                    StringBuffer groupStr = new StringBuffer();
+                    if (groupList.length > 0) {
+                        for (int i = 0; i < groupList.length; i++) {
+                            groupStr.append(groupList[i]);
+                            groupStr.append(",");
+                        }
+                        LOG.finest("Output group listing: " + groupStr);
+                    }
                 }
             }
             return groupSet;
@@ -104,9 +108,10 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
      * @param siteName site name
      * @param userProfile user profile map
      * @return GroupRequest object
+     * @throws IllegalArgumentException if method parameters are invaild
      */
     private GroupRequest getServiceRequest(String siteName,
-                                           Map<String, Object> userProfile) throws UserGroupsException {
+                                           Map<String, Object> userProfile) {
         if (siteName == null
             || userProfile == null
             || siteName.trim().equals("")
@@ -117,7 +122,7 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
         // Populate request object
         GroupRequest groupRequest = new GroupRequest();
         groupRequest.setSiteName(siteName);
-        groupRequest.setUserContext(convertToUserContext(userProfile));
+        groupRequest.setUserContext(new ArrayOfUserContext(convertToUserContext(userProfile)));
 
         if (LOG.isLoggable(Level.FINEST)) {
             LOG.finest("UGS request object: SiteName="
@@ -178,7 +183,7 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
             LOG.finest("UGS Timeout after setting: " + binding.getTimeout());
         }
         // Invoke the service
-        return binding.getGroups(groupRequest);
+        return binding.getGroups(new GetGroups(groupRequest)).getOut();
     }
 
 }
