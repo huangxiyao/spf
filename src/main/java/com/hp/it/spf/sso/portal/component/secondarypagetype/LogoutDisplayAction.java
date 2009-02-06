@@ -7,6 +7,7 @@ package com.hp.it.spf.sso.portal.component.secondarypagetype;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.hp.it.spf.sso.portal.AuthenticationUtility;
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.misc.portal.Consts;
@@ -94,9 +95,7 @@ public class LogoutDisplayAction extends BaseAction {
 					: Consts.LOGOUT_DEFAULT_SITE;
 
 			// redirect to AtHP landing page in AtHP case
-			// TODO: Need to call the new authentication utility in the new SSO
-			// package for this. Replace the following line accordingly.
-			if ( /* AuthenticationUtility.isFromAtHP(request) */false) {
+			if (AuthenticationUtility.isFromAtHP(request)) {
 				LOG
 						.info("LogoutDisplayAction: user was accessing from @HP - redirecting to @HP logout confirmation page.");
 				url = ATHP_LOGOUT_URL;
