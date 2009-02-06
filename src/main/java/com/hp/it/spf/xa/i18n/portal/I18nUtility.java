@@ -5,17 +5,15 @@
 
 package com.hp.it.spf.xa.i18n.portal;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
-import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -26,14 +24,17 @@ import com.epicentric.common.website.SessionUtils;
 import com.epicentric.i18n.LocalizedBundle;
 import com.epicentric.i18n.LocalizedBundleManager;
 import com.epicentric.site.Site;
+import com.epicentric.site.SiteException;
+import com.epicentric.site.SiteManager;
 import com.epicentric.template.Style;
 import com.epicentric.user.User;
 import com.hp.it.spf.xa.help.ContextualHelpProvider;
 import com.hp.it.spf.xa.help.ContextualHelpUtility;
+import com.hp.it.spf.xa.help.portal.GlobalHelpProvider;
+import com.hp.it.spf.xa.help.portal.GlobalHelpUtility;
+import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
-import com.hp.it.spf.xa.help.portal.GlobalHelpUtility;
-import com.hp.it.spf.xa.help.portal.GlobalHelpProvider;
 import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
 
@@ -174,17 +175,49 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return The locales enabled for the portal site indicated in the request.
 	 */
 	public static Collection getAvailableLocales(HttpServletRequest request) {
-		Collection availableLocales = new HashSet();
-		if (request != null) {
-			SessionInfo sessionInfo = (SessionInfo) request.getSession()
-					.getAttribute(SessionInfo.SESSION_INFO_NAME);
-			if (sessionInfo != null) {
-				Site currentSite = Utils.getEffectiveSite(request);
-				availableLocales = getAvailableLocales(currentSite);
-			}
-		}
-		return availableLocales;
-	}
+        Collection availableLocales = new HashSet();
+        if (request != null) {
+            SessionInfo sessionInfo = (SessionInfo) request.getSession()
+                    .getAttribute(SessionInfo.SESSION_INFO_NAME);
+            if (sessionInfo != null) {
+                Site currentSite = Utils.getEffectiveSite(request);
+                availableLocales = getAvailableLocales(currentSite);
+            } else {
+                // This scenario is for the end user who has a new session when openning an browser to 
+                // visit this site, and then end user has not been authenticated by 
+                // the Vignette SSO(SessionInfo is null).
+                // Site name will be retrieved from request URI.
+                // @author <link href="ying-zhiw@hp.com">Oliver</link>
+                
+                String requestURI = request.getRequestURI();
+                String siteName = null;
+                String[] str = requestURI.split("[/]");
+                if (str != null && str.length > 3 && str[2].equals("site")) {
+                    // retrieve the site name for which end user request
+                    siteName = str[3];
+                    try {
+                        Site currentSite = null;
+                        
+                        // request site is the logout default site
+                        if (Consts.LOGOUT_DEFAULT_SITE.equals(siteName)) {
+                            String alternateSiteName = request.getParameter(Consts.PARAM_LOGOUT_SITE);
+                            if (alternateSiteName != null) {
+                                currentSite = SiteManager.getInstance()
+                                                         .getSiteFromDNSName(alternateSiteName);
+                            }
+                        } else {
+                            currentSite = SiteManager.getInstance()
+                                                     .getSiteFromDNSName(siteName);
+                        }
+                        availableLocales = getAvailableLocales(currentSite);
+                    } catch (SiteException ex) {
+                    }
+                }
+            }
+            
+        }
+        return availableLocales;
+    }
 
 	/**
 	 * <p>
