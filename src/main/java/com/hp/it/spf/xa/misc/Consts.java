@@ -335,11 +335,36 @@ public class Consts {
 	public static final String COOKIE_NAME_HPCOM_COUNTRY = "cc";
 
 	/**
+	 * SPF has several activities that may need to occur under a "core" Vignette
+	 * site (eg logout for the time being since SiteMinder can accept only one
+	 * logout URL per physical Web site) - this variables holds the name of that
+	 * site. This is the "site DNS name" in Vignette for that core site.
+	 */
+	public final static String SPF_CORE_SITE = "spf";
+
+	/**
+	 * SPF sometimes needs to perform activities under the {@link #SPF_CORE_SITE} Vignette site,
+	 * but which are meant to be effective for an actual portal site.  In that case, the
+	 * site name (ie Vignette "site DNS name") for the actual portal site is carried in a query parameter
+	 * with this name.
+	 */
+	public final static String PARAM_EFFECTIVE_SITE = "spfSite";
+	
+	/**
+	 * The default site name to assume during logout for the redirect target.
+	 * This is also the site name under which the logout process runs. It is
+	 * located in the common utilities so that both portals and portlets have
+	 * access to it (eg so they can make logout URLs if needed). This is the
+	 * "site DNS name" in Vignette for the logout site.
+	 */
+	public final static String LOGOUT_DEFAULT_SITE = SPF_CORE_SITE;
+
+	/**
 	 * The name of the query parameter containing the site name to use for the
 	 * logout redirect target. Both portal and portlets may want to point to the
 	 * logout process and pass a redirect target, so this is common.
 	 */
-	public final static String PARAM_LOGOUT_SITE = "spfSite";
+	public final static String PARAM_LOGOUT_SITE = PARAM_EFFECTIVE_SITE;
 
 	/**
 	 * The name of the locale selector form parameter (ie this is the form
