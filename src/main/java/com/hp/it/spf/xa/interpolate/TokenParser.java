@@ -30,23 +30,23 @@ import com.hp.it.spf.xa.misc.Utils;
  * <code>}</code>, if you prefer.
  * </p>
  * <dl>
- * <dt><code>{TOKEN:<i>key</i>}</code></dt>
- * <dt><code>{LANGUAGE-CODE}</code></dt>
- * <dt><code>{COUNTRY-CODE}</code></dt>
- * <dt><code>{LANGUAGE-TAG}</code></dt>
- * <dt><code>{CONTENT-URL:</i>path</i>}</code></dt>
- * <dt><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></dt>
- * <dt><code>{SITE}</code></dt>
- * <dt><code>{SITE-URL}</code></dt>
- * <dt><code>{SITE-URL:<i>uri</i>}</code></dt>
- * <dt><code>{REQUEST-URL}</code></dt>
- * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
- * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code></dt>
- * <dt><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
- * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
- * <dt><code>{EMAIL}</code></dt>
- * <dt><code>{NAME}</code></dt>
- * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
+ * <li><code>{TOKEN:<i>key</i>}</code></li>
+ * <li><code>{LOGGED-IN}</code></li>
+ * <li><code>{LOGGED-OUT}</code></li>
+ * <li><code>{LANGUAGE-CODE}</code></li>
+ * <li><code>{COUNTRY-CODE}</code></li>
+ * <li><code>{LANGUAGE-TAG}</code></li>
+ * <li><code>{REQUEST-URL}</code></li>
+ * <li><code>{EMAIL}</code></li>
+ * <li><code>{NAME}</code></li>
+ * <li><code>{SITE}</code></li>
+ * <li><code>{SITE-URL}</code></li>
+ * <li><code>{SITE:<i>names</i>}</code></li>
+ * <li><code>{GROUP:<i>groups</i>}</code></li>
+ * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
+ * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
+ * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
+ * <li><code>{SITE-URL:<i>uri</i>}</code></li>
  * </dl>
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
@@ -361,21 +361,35 @@ public abstract class TokenParser {
 	 * <dt><code>{TOKEN:<i>key</i>}</code></dt>
 	 * <dd>This token is parsed first, and the substituted content is added to
 	 * the string. So subsequent substitutions operate against the value for the
-	 * <i>key</i> - therefore that value may itself contain other tokens.
-	 * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+	 * <i>key</i> - therefore that value may itself contain other tokens, and
+	 * other tokens' parameters may contain that value.</dd>
 	 * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code></dt>
 	 * <dt><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
-	 * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
-	 * <dt><code>{SITE}</code></dt>
-	 * <dt><code>{SITE-URL}</code></dt>
-	 * <dt><code>{SITE-URL:<i>uri</i>}</code></dt>
-	 * <dt><code>{REQUEST-URL}</code></dt>
+	 * <dd>The unparameterized container tokens are parsed next, to eliminate
+	 * as much content as possible. The other container tokens can't be parsed
+	 * yet because they are parameterized.</dd>
 	 * <dt><code>{LANGUAGE-CODE}</code></dt>
 	 * <dt><code>{COUNTRY-CODE}</code></dt>
 	 * <dt><code>{LANGUAGE-TAG}</code></dt>
+	 * <dt><code>{REQUEST-URL}</code></dt>
 	 * <dt><code>{EMAIL}</code></dt>
 	 * <dt><code>{NAME}</code></dt>
+	 * <dt><code>{SITE}</code></dt>
+	 * <dt><code>{SITE-URL}</code></dt>
+	 * <dd>All of the unparameterized non-container tokens are parsed next, so
+	 * that their values can be substituted into the parameterized ones below if
+	 * necessary.</dd>
+	 * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+	 * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
+	 * <dd>The parameterized container tokens are parsed, to eliminate as much
+	 * content as possible. Their parameters may include values from above.</dd>
 	 * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
+	 * <dt><code>{CONTENT-URL:<i>path</i>}</code></dt>
+	 * <dt><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></dt>
+	 * <dt><code>{SITE-URL:<i>uri</i>}</code></dt>
+	 * <dd>Finally the remaining parameterized tokens are parsed last, so that
+	 * the unparameterized ones (and also <code>{TOKEN:<i>key</i>}</code>)
+	 * can include values in their parameters.</dd>
 	 * </dl>
 	 * </p>
 	 * <p>
@@ -395,50 +409,32 @@ public abstract class TokenParser {
 		}
 
 		// Start parsing and substituting the tokens:
+		// Always do {TOKEN:key} first.
 		content = parseToken(content);
 
-		// Parse site sections
-		content = parseSiteContainer(content);
-
-		// Parse login/logout sections
+		// Always do unparameterized containers second:
 		content = parseLoggedInContainer(content);
 		content = parseLoggedOutContainer(content);
 
-		// Parse group sections
-		content = parseGroupContainer(content);
-
-		// Add current site name
+		// Always do unparameterized non-containers third:
+		content = parseLanguageCode(content);
+		content = parseCountryCode(content);
+		content = parseLanguageTag(content);
+		content = parseRequestURL(content);
+		content = parseEmail(content);
+		content = parseName(content);
 		content = parseSite(content);
-
-		// Add current site URL
 		content = parseSiteURL(content);
 
-		// Add current request URL
-		content = parseRequestURL(content);
+		// Always do parameterized containers fourth:
+		content = parseSiteContainer(content);
+		content = parseGroupContainer(content);
 
-		// Add current ISO language code
-		content = parseLanguageCode(content);
-
-		// Add current ISO country code
-		content = parseCountryCode(content);
-
-		// Add current RFC language code
-		content = parseLanguageTag(content);
-
-		// Add current user email
-		content = parseEmail(content);
-
-		// Add current user display name
-		content = parseName(content);
-
-		// Add other property values for current user
+		// Always finish with parameterized non-containers:
 		content = parseUserProperty(content);
-
-		// Transfer tag to localized URL.
 		content = parseNoLocalizedContentURL(content);
-
-		// Transfer tag to unlocalized URL
 		content = parseLocalizedContentURL(content);
+		content = parseSiteURLParameterized(content);
 
 		// Done.
 		return (content);
@@ -698,8 +694,7 @@ public abstract class TokenParser {
 	/**
 	 * <p>
 	 * Parses the given string, substituting the current portal site home-page
-	 * URL for the <code>{SITE-URL}</code> token, and the respective page URL
-	 * for the <code>{SITE-URL:<i>uri</i>}</code> token.
+	 * URL for the <code>{SITE-URL}</code> token.
 	 * </p>
 	 * 
 	 * <p>
@@ -711,18 +706,43 @@ public abstract class TokenParser {
 	 * when the current site home-page URL is
 	 * "http://portal.hp.com/portal/site/acme/".
 	 * </p>
-	 * 
 	 * <p>
-	 * Another example:
+	 * The site root URL is obtained from the {@link #getSiteURL()} method - if
+	 * that method returns null, the token is replaced with blank. If you
+	 * provide null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parseSiteURL(String content) {
+		content = parseUnparameterized(content, TOKEN_SITE_URL, getSiteURL());
+		return (content);
+	}
+
+	/**
+	 * <p>
+	 * Parses the given string, substituting the respective portal site page URL
+	 * for the <code>{SITE-URL:<i>uri</i>}</code> token.
+	 * </p>
+	 * <p>
+	 * For example:
 	 * <code>&lt;a href="{SITE-URL:forums}"&gt;go to forums&lt;/a&gt;</code>
 	 * is changed to
 	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/forums/"&gt;go to
 	 * forums&lt;/a&gt;</code>
-	 * when the current site home-page URL is as above. The <i>uri</i> can be
-	 * whatever string comes after (ie relative to) the site root URL (ie the
-	 * home-page URL), including additional path, query string, etc.
+	 * when the current site home-page URL is
+	 * "http://portal.hp.com/portal/site/acme/". The <i>uri</i> can be whatever
+	 * string comes after (ie relative to) the site root URL (ie the home-page
+	 * URL), including additional path, query string, etc.
 	 * </p>
-	 * 
+	 * <p>
 	 * The site root URL is obtained from the {@link #getSiteURL()} method - if
 	 * that method returns null, the token is replaced with just the <i>uri</i>.
 	 * If you provide null content, null is returned.
@@ -737,8 +757,7 @@ public abstract class TokenParser {
 	 *            The content string.
 	 * @return The interpolated string.
 	 */
-	public String parseSiteURL(String content) {
-		content = parseUnparameterized(content, TOKEN_SITE_URL, getSiteURL());
+	public String parseSiteURLParameterized(String content) {
 		content = parseParameterized(content, TOKEN_SITE_URL,
 				new ValueProvider() {
 					protected String getValue(String param) {
@@ -1385,8 +1404,8 @@ public abstract class TokenParser {
 			}
 			if (containerOldContent.charAt(n) == containerTokenEnd)
 				break; // if <FOO> found, match
-			if ((containerOldContent.charAt(n) == TOKEN_BEGIN_PARAM) &&
-					((n + 1) < containerOldContent.length()))
+			if ((containerOldContent.charAt(n) == TOKEN_BEGIN_PARAM)
+					&& ((n + 1) < containerOldContent.length()))
 				break; // if <FOO:...> found, match
 			// if <FOO... not <FOO> or <FOO:...> found, try again
 			j = n;
