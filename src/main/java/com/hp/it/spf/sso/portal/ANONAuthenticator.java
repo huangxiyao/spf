@@ -56,9 +56,10 @@ public class ANONAuthenticator extends AbstractAuthenticator {
         User currentUser = SessionUtils.getCurrentUser(request.getSession());
         Locale reqLocale = (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE);
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("Retrieve loacle from request defined by LocaleFilter," + reqLocale);
+            LOG.debug("Retrieve loacle from request defined by LocaleFilter,"
+                      + reqLocale);
         }
-        
+
         if (currentUser != null) {
             String currUserName = (String)currentUser.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID);
             if (currUserName.startsWith(AuthenticationConsts.ANON_USER_NAME_PREFIX)) {
@@ -161,7 +162,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
 
         // Retrieve user group
         userProfile.put(AuthenticationConsts.HEADER_GROUP_NAME,
-                        (String[])AuthenticatorHelper.getUserGroupSet(vapUser)
+                        (String[])AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser))
                                                      .toArray(new String[0]));
 
         request.getSession()
