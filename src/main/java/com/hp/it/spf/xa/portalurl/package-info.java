@@ -20,5 +20,8 @@
  * <li>Generate a URL to a portlet requesting a window state change</li>
  * <li>Generate a URL to a portlet requesting a portlet mode change</li>
  * </ul>
+ * <p>
+ * <b>Important:</b> The classes from this package can be used by portlet and portal components.
+ * They do not depend on any Vignette Portal classes.
  */
 package com.hp.it.spf.xa.portalurl;
