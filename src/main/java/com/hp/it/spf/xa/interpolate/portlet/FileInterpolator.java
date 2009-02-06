@@ -238,9 +238,9 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * resource bundle folder) or a static resource URL (if the file was found
  * inside your WAR). In either case, the URL will be properly portlet-encoded
  * and ready for presentation to the browser. If the file was not found, a URL
- * pointing to the base filename inside your WAR will be expressed anyway. (This of
- * course will cause an HTTP 404 error if the browser subsequently opens the URL -
- * this is intentional and will help you detect the missing file.)
+ * pointing to the base filename inside your WAR will be expressed anyway. (This
+ * of course will cause an HTTP 404 error if the browser subsequently opens the
+ * URL - this is intentional and will help you detect the missing file.)
  * </p>
  * <p>
  * <b>Note:</b> For the portlet resource bundle directory to work, you must
@@ -511,15 +511,10 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * Use this token to lookup a value for the given key in a property file, and
  * insert that value into the interpolated content. The property file, by
  * default, is <code>default_tokens.properties</code>, but you can override
- * that in the <code>FileInterpolator</code> constructor. The property value
- * may itself contain any content including any of the special markup tokens
- * supported by <code>FileInterpolator</code>, <b>except</b> another
- * <code>{TOKEN:<i>key</i>}</code> token.
- * </p>
- * <p>
- * Whether you use <code>default_tokens.properties</code> or your own
- * token-substitution property file, the file should be loaded into a location
- * accessible to the class loader.
+ * that in the <code>FileInterpolator</code> constructor. Whether you use
+ * <code>default_tokens.properties</code> or your own token-substitution
+ * property file, the file should be loaded into a location accessible to the
+ * class loader. The property values may include any text content.
  * </p>
  * <p>
  * For example, assume you have put this key/value pair into your property file:
@@ -540,6 +535,67 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * <code>&lt;A HREF="http://shopping.hp.com"&gt;Go to HP shopping.&lt;/A&gt;</code>
  * </p>
+ * <p>
+ * Additionally, this token supports nesting with other tokens. As follows:
+ * </p>
+ * <ul>
+ * <li>
+ * <p>
+ * The property value for this token may contain <b>any</b> of the other
+ * special markup tokens supported by <code>FileInterpolator</code>,
+ * <b>except</b> another <code>{TOKEN:<i>key</i>}</code> token. In other
+ * words, you can "nest" other tokens inside the propery values expressed by
+ * this token.
+ * </p>
+ * <p>
+ * For example, assume we have this in our property file:
+ * </p>
+ * <p>
+ * <code>url.hp-shopping=http://shopping.hp.com?lang={LANGUAGE-CODE}&cc={COUNTRY-CODE}</code>
+ * </p>
+ * <p>
+ * If your input file is as above, then the interpolated content will include
+ * the user's language and country code in the URL from the property file. For
+ * example, for a Brazil Portuguese user:
+ * </p>
+ * <p>
+ * <code>&lt;A HREF="http://shopping.hp.com?lang=pt&cc=BR"&gt;Go to HP shopping.&lt;/A&gt;</code>
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * Vice-versa, the <code>{TOKEN:<i>key</i>{</code> token can itself be used
+ * within the parameter to <b>any</b> of the other tokens, except another
+ * <code>{TOKEN:<i>key</i>}</code> token. So you can "nest" this token
+ * inside the parameter values to other tokens.
+ * </p>
+ * <p>
+ * For example, assume we now have this in our property file:
+ * </p>
+ * <p>
+ * <code>image.current-promo=december_sale.gif</code>
+ * </p>
+ * <p>
+ * Also imagine the <code>december_sale.gif</code> is setup properly, as an
+ * external (possibly localized) image serviced by the file relay servlet (see
+ * discussion elsewhere). If your input file contains the following:
+ * </p>
+ * <p>
+ * <code>&lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/{TOKEN:image.current-promo}}"&gt;</code>
+ * </p>
+ * <p>
+ * Then the interpolated content will display the <code>december_sale.gif</code>
+ * image to the user, like this:
+ * </p>
+ * <p>
+ * <code>&lt;IMG SRC="/relay/images/december_sale.gif"&gt;</code>
+ * </p>
+ * <p>
+ * (In actuality, the URL would be portlet-encoded for the SPF portal; the
+ * <i>unencoded</i> URL is shown above for simplicity.)
+ * </p>
+ * </li>
+ * </ul>
  * <p>
  * A template for the token substitution property file, also named
  * <code>default_tokens.properties</code> (you should rename your copy), is

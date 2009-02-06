@@ -3848,7 +3848,7 @@ text. Please click on the links for more documentation for each token.</p>
 
 <dl>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator#content-url"><code>{CONTENT-URL:<i>pathname</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#content-url"><code>{CONTENT-URL:<i>pathname</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert a URL for an <b>unlocalized</b>
 	supporting resource file into the interpolated content. The file can be
@@ -3879,7 +3879,7 @@ text. Please click on the links for more documentation for each token.</p>
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator#localized-content-url"><code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#localized-content-url"><code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert a URL for an <b>possibly localized</b>
 	supporting resource file into the interpolated content. The file can be
@@ -3896,11 +3896,11 @@ text. Please click on the links for more documentation for each token.</p>
 	where the bundle files are located, relative to the <i>portlet
 	resource bundle folder</i> (for an external resource) or the portlet WAR
 	root (for an internal resource). The token will find the best-fit
-	localized file in that bundle for the user's locale, and include that
-	filename in the expressed URL.</p>
+	localized file in that bundle for the user's current locale, and
+	include that filename in the expressed URL.</p>
 
-	<p>Here is some example HTML text using this token to help build an HTML
-	&lt;IMG&gt; tag:</p>
+	<p>Here is some example HTML text using this token to help build an
+	HTML &lt;IMG&gt; tag:</p>
 
 	<blockquote><pre>
 &lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/picture.jpg}"&gt;
@@ -3915,6 +3915,49 @@ text. Please click on the links for more documentation for each token.</p>
 	document.</p>
 	</dd>
 
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#request-url"><code>{REQUEST-URL}</code></a></dt>
+	<dd>
+	<p>Use this token to insert the current portal request URL into the
+	interpolated content. This is a reconstruction of the URL which, if
+	opened by the browser, would re-request the current portal page and
+	portlet (including any form arguments). Here is some sample HTML text,
+	using this token to help build a hidden form input element containing
+	the request URL as a return URL for the form handler:</p>
+
+	<blockquote><pre>
+&lt;INPUT TYPE="hidden" NAME="returnURL" VALUE="{REQUEST-URL}"&gt;
+</pre></blockquote>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site-url"><code>{SITE-URL}</code></a></dt>
+	<dd>
+	<p>Use this token to insert the portal home page URL into the
+	interpolated content. Here is some sample HTML text, using this token
+	to help build a hyperlink pointing to the home page:</p>
+
+	<blockquote><pre>
+Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
+</pre></blockquote>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site-url+p"><code>{SITE-URL:<i>uri</i>}</code></a></dt>
+	<dd>
+	<p>Use this token to insert a URL pointing to any page in the
+	portal site, by the site-relative URI for that page. For example, your
+	<code><i>uri</i></code> could be a Vignette "friendly URI" for the
+	desired page. It could be a template name, for a secondary page. Your <code><i>uri</i></code>
+	can also include any additional path or query string you might need.
+	Here is some sample HTML text, using this token to help build a
+	hyperlink pointing to the site Forums page (which in this example has a
+	"friendly URI" of <code>/forums</code>):</p>
+
+	<blockquote><pre>
+Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
+</pre></blockquote>
+	</dd>
 </dl>
 
 <a name="file.author.token.user">
