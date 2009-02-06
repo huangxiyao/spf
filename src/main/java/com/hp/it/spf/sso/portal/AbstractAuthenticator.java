@@ -499,8 +499,14 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 
         // If user has not been created in Vignette, then create this user
         if (vapUser == null) {
-            // TODO employee number doesn't exist at the beginning, email will
-            // be instead of profileid
+            // If employee number doesn't exist at the beginning, email will
+            // be instead of profileid, so later, when employee number is assigned,
+            // the previous email based user should be removed from vignette.
+            User emailUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_PROFILE_ID,
+                                                                        ssoUser.getEmail());
+            if (emailUser != null) {
+                emailUser.delete();
+            }
             LOG.info("Not found this user in SP, now creating this user"
                      + ssoUser.getUserName());
             vapUser = createVAPUser();
