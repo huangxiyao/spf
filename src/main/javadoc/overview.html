@@ -3975,42 +3975,122 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 <code>{USER-PROPERTY:<i>key</i>}</code>)</h4>
 </a>
 
-<p>The following tokens can be used to interpolate information about the user into your
-text. Please click on the links for more documentation for each token.</p>
+<p>The following tokens can be used to interpolate information about
+the user into your text. Please click on the links for more
+documentation for each token.</p>
 
 <dl>
 	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#country-code"><code>{COUNTRY-CODE}</code></a></dt>
 	<dd>
-	<p></p>
+	<p>Use this token to insert the <a
+		href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+	3166-1</a> country code for the current user into the interpolated content.
+	If the user's locale is not a country-specific locale (eg is simply
+	French instead of France French, for example), then blank will be
+	substituted. Here is some sample HTML text, using this token to help
+	build a URL pointing to the another HP Web site, passing the country
+	(and language) codes in the URL as per the <a
+		href="https://h10014.www1.hp.com/hpweb/buildguide/locale_codes.html">HP.com
+	standards</a>:</p>
+
+	<blockquote><pre>
+&lt;A HREF="http://other.hp.com/path?lang={LANGUAGE-CODE}&cc={COUNTRY-CODE}"&gt;...&lt;/A&gt;
+</pre></blockquote>
 	</dd>
 
 	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#email"><code>{EMAIL}</code></a></dt>
 	<dd>
-	<p></p>
+	<p>Use this token to insert the email address for the user into the
+	interpolated content. The email is taken from the SPF-generated <i>user
+	profile map</i>. An email address is only available when the user is
+	logged-in; when the email is not available, blank will be substituted.
+	For example:</p>
+	<blockquote><pre>
+The email address we have on record for you is: {EMAIL}
+	</pre></blockquote>
+	<p>(This is best used when wrapped inside the <code>{LOGGED-IN}</code>
+	container token - <a href="#file.author.token.auth">see below</a>.)</p>
 	</dd>
+
 	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-code"><code>{LANGUAGE-CODE}</code></a></dt>
 	<dd>
-	<p></p>
+	<p>Use this token to insert the <a
+		href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+	639-1</a> language code for the current user into the interpolated content.
+	Here is some sample HTML text, using this token to help build a URL
+	pointing to the another HP Web site, passing the language (and country)
+	codes in the URL as per the <a
+		href="https://h10014.www1.hp.com/hpweb/buildguide/locale_codes.html">HP.com
+	standards</a>:</p>
+
+	<blockquote><pre>
+&lt;A HREF="http://other.hp.com/path?lang={LANGUAGE-CODE}&cc={COUNTRY-CODE}"&gt;...&lt;/A&gt;
+</pre></blockquote>
 	</dd>
 
 	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-tag"><code>{LANGUAGE-TAG}</code></a></dt>
 	<dd>
-	<p></p>
+	<p>Use this token to insert the <a
+		href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag
+	for the current user into the interpolated content. For a user with a
+	country-specific locale, this will be a full language-country value (eg
+	<code>es-MX</code> for Spanish in Mexico). For a user with a generic
+	locale (ie no country indicated), this will be just the language code
+	(eg <code>es</code> for generic Spanish). Here is some sample HTML
+	text, using this token to help build a URL pointing to the another HP
+	Web site, passing the language tag:</p>
+
+	<blockquote><pre>
+&lt;A HREF="http://other.hp.com/path?lang={LANGUAGE-TAG}"&gt;...&lt;/A&gt;
+</pre></blockquote>
 	</dd>
 
 	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#name"><code>{NAME}</code></a></dt>
 	<dd>
-	<p></p>
+	<p>Use this token to insert the full name (both given and family
+	names) for the user into the interpolated content. The given and family
+	names are taken from the SPF-generated <i>user profile map</i>. The
+	name is inserted in the customary order for the user's current locale:
+	family-name-first in certain East Asian locales (eg <code>Smith
+	Bob</code>) and the Western custom of given-name-first otherwise (eg <code>Bob
+	Smith</code>). The name is only available when the user is logged-in; when the
+	name is not available, blank will be substituted. For example:</p>
+	<blockquote><pre>
+Welcome, {NAME}!
+	</pre></blockquote>
+	<p>(This is best used when wrapped inside the <code>{LOGGED-IN}</code>
+	container token - <a href="#file.author.token.auth">see below</a>. The
+	display order is based on the configuration in the SPF common
+	utilities' <code>i18n_config.properties</code> file; this is an
+	internal file in the SPF common utilities JAR which you should not need
+	to change.)</p>
 	</dd>
 
 	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#user-property"><code>{USER-PROPERTY:<i>key</i>}</code></a></dt>
 	<dd>
+	<p>Use this token to insert any property in the SPF-generated <i>user
+	profile map</i> for the user into the interpolated content. The <code><i>key</i></code>
+	is the name of the property. For a complete list of property names, see
+	the class attributes for {@link com.hp.it.spf.xa.misc.portal.Consts} -
+	the ones beginning with <code>KEY_*</code>, such as {@link
+	com.hp.it.spf.xa.misc.portal.Consts#KEY_EMAIL}, are the user property
+	names. You must lookup and use their values with this token - you
+	cannot use the {@link com.hp.it.spf.xa.misc.portal.Consts} class
+	attribute names in this token.</p>
+	<p>For example:</p>
+	<blockquote><pre>
+The phone number we have on record for you is: {USER-PROPERTY:PhoneNumber}
+	</pre></blockquote>
+	<p>(When the user is not logged-in, the user properties are set to
+	generic or blank values, depending on the particular property. So this
+	token is probably best used when wrapped inside the <code>{LOGGED-IN}</code>
+	container token - <a href="#file.author.token.auth">see below</a>.)</p>
 	<p></p>
 	</dd>
 
