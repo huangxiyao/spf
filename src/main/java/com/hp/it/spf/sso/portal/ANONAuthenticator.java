@@ -55,7 +55,10 @@ public class ANONAuthenticator extends AbstractAuthenticator {
     public void execute() {
         User currentUser = SessionUtils.getCurrentUser(request.getSession());
         Locale reqLocale = (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE);
-
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Retrieve loacle from request defined by LocaleFilter," + reqLocale);
+        }
+        
         if (currentUser != null) {
             String currUserName = (String)currentUser.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID);
             if (currUserName.startsWith(AuthenticationConsts.ANON_USER_NAME_PREFIX)) {
@@ -139,22 +142,22 @@ public class ANONAuthenticator extends AbstractAuthenticator {
         }
 
         // Retrieve user profiles
-        userProfile.put(AuthenticationConsts.PROPERTY_PROFILE_ID,
-                        vapUser.getProperty(AuthenticationConsts.KEY_PROFILE_ID));
-        userProfile.put(AuthenticationConsts.PROPERTY_USER_NAME_ID,
-                        vapUser.getProperty(AuthenticationConsts.KEY_USER_NAME));
-        userProfile.put(AuthenticationConsts.PROPERTY_EMAIL_ID,
-                        vapUser.getProperty(AuthenticationConsts.KEY_EMAIL));
-        userProfile.put(AuthenticationConsts.PROPERTY_FIRSTNAME_ID,
-                        vapUser.getProperty(AuthenticationConsts.KEY_FIRST_NAME));
-        userProfile.put(AuthenticationConsts.PROPERTY_LASTNAME_ID,
-                        vapUser.getProperty(AuthenticationConsts.KEY_LAST_NAME));
-        userProfile.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID,
-                        vapUser.getProperty(AuthenticationConsts.KEY_LANGUAGE));
-        userProfile.put(AuthenticationConsts.PROPERTY_COUNTRY_ID,
-                        vapUser.getProperty(AuthenticationConsts.KEY_COUNTRY));
-        userProfile.put(AuthenticationConsts.PROPERTY_SP_TIMEZONE_ID,
-                        vapUser.getProperty(AuthenticationConsts.KEY_SP_TIMEZONE));
+        userProfile.put(AuthenticationConsts.KEY_PROFILE_ID,
+                        vapUser.getProperty(AuthenticationConsts.PROPERTY_PROFILE_ID));
+        userProfile.put(AuthenticationConsts.KEY_USER_NAME,
+                        vapUser.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID));
+        userProfile.put(AuthenticationConsts.KEY_EMAIL,
+                        vapUser.getProperty(AuthenticationConsts.PROPERTY_EMAIL_ID));
+        userProfile.put(AuthenticationConsts.KEY_FIRST_NAME,
+                        vapUser.getProperty(AuthenticationConsts.PROPERTY_FIRSTNAME_ID));
+        userProfile.put(AuthenticationConsts.KEY_LAST_NAME,
+                        vapUser.getProperty(AuthenticationConsts.PROPERTY_LASTNAME_ID));
+        userProfile.put(AuthenticationConsts.KEY_LANGUAGE,
+                        vapUser.getProperty(AuthenticationConsts.PROPERTY_LANGUAGE_ID));
+        userProfile.put(AuthenticationConsts.KEY_COUNTRY,
+                        vapUser.getProperty(AuthenticationConsts.PROPERTY_COUNTRY_ID));
+        userProfile.put(AuthenticationConsts.KEY_SP_TIMEZONE,
+                        vapUser.getProperty(AuthenticationConsts.PROPERTY_SP_TIMEZONE_ID));
 
         // Retrieve user group
         userProfile.put(AuthenticationConsts.HEADER_GROUP_NAME,
