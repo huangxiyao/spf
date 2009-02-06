@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  */
-public class VignetteRemotePortalURL extends AbstractPortalURL {
+class VignetteRemotePortalURL extends AbstractPortalURL {
 	private static final char NAV_STATE_KEY_DELIMITER = '=';
 	private static final char NAV_STATE_ARRAY_DELIMITER = ';';
 	private static final char NAV_STATE_PARAM_DELIMITER = '|';
