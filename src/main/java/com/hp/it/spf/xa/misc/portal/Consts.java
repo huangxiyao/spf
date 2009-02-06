@@ -140,9 +140,4 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 */
 	public final static String UNSTICKY_SESSION_ATTR_PREFIX = "SPF_";
 
-	/**
-	 * The default site name to assume during logout for the redirect target.
-	 */
-	public final static String LOGOUT_DEFAULT_SITE = "spf";
-
 }

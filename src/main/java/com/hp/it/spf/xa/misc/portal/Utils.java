@@ -16,12 +16,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.epicentric.common.website.SessionInfo;
-import com.epicentric.common.website.SessionUtils;
 import com.epicentric.site.Site;
 import com.epicentric.site.SiteException;
 import com.epicentric.site.SiteManager;
-import com.epicentric.user.User;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 import com.vignette.portal.log.LogWrapper;
@@ -224,7 +221,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		String servletPath = request.getServletPath();
 
 		if (servletPath.equals("/site")) {
-			return isFederatedSite(getSiteDNS(pathInfo));
+			return isFederatedSite(getEffectiveSiteDNS(request));
 		} else {
 			return false;
 		}
@@ -232,40 +229,126 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
-	 * Get the site name from the given portal path, according to the Vignette
-	 * portal standard for "site DNS name". The portal path is the path relative
-	 * to the portal root path - for example, in the URL
+	 * <p>
+	 * Get the site name from the given request, according to the Vignette
+	 * portal standard for "site DNS name". This method always returns the "site
+	 * DNS name" for the URL in the given request; this may not be the same as
+	 * the effective site, however (see
+	 * {@link #getEffectiveSiteDNS(HttpServletRequest)}).
+	 * </p>
+	 * <p>
+	 * The "site DNS name" in a Vignette URL is the second element in the
+	 * portal-root-relative path (ie the first element in the additional-path or
+	 * path info). For example, in the URL
 	 * <code>http://host.hp.com/portal/site/abc/template.SOMETHING</code>,
-	 * the portal path is <code>/site/abc/template.SOMETHING</code>. This
-	 * method returns the given path if the site name cannot be parsed from the
-	 * given path.
+	 * the portal-root-relative path is
+	 * <code>/site/abc/template.SOMETHING</code>, and so the site name is
+	 * <code>site</code>.
+	 * <p>
+	 * <p>
+	 * This method returns null if the site cannot be determined from the given
+	 * request. <b>Note:</b> This method does not use Vignette's
+	 * <code>SessionInfo</code> in case it is null (that is the case before
+	 * the Vignette session initialization module runs, and sometimes this code
+	 * may need to run before then). It just parses the URL.
+	 * </p>
 	 * 
-	 * @param pathInfo
-	 *            The path to parse.
-	 * @return The site name (ie "site DNS name").
+	 * @param request
+	 *            The current HTTP servlet request.
+	 * @return The actual site name (ie "site DNS name").
 	 */
-	public static String getSiteDNS(String pathInfo) {
+	public static String getSiteDNS(HttpServletRequest request) {
 
-		if (StringUtils.isEmpty(pathInfo))
-			return pathInfo;
+		if (request == null) {
+			return null;
+		}
+		String pathInfo = request.getPathInfo();
+		String servletPath = request.getServletPath();
 		String siteDNS = null;
-		if (pathInfo.startsWith("/"))
-			pathInfo = pathInfo.substring(1);
-		int index = pathInfo.indexOf("/");
-		if (index == -1)
-			siteDNS = pathInfo;
-		else
-			siteDNS = pathInfo.substring(0, index);
+
+		if (servletPath.equals("/site")) {
+			if (StringUtils.isEmpty(pathInfo))
+				return siteDNS;
+			if (pathInfo.startsWith("/"))
+				pathInfo = pathInfo.substring(1);
+			int index = pathInfo.indexOf("/");
+			if (index == -1)
+				siteDNS = pathInfo;
+			else
+				siteDNS = pathInfo.substring(0, index);
+			siteDNS = siteDNS.trim();
+		}
 		return siteDNS;
 	}
 
 	/**
-	 * Get the effective Site object for the request. Normally this is just the
-	 * Site corresponding to the site name (ie "site DNS name", as Vignette
-	 * calls it) in the current request, as determined by Vignette. But if the
-	 * current site is the "sp" site, and a "site" parameter exists on the
-	 * request (eg this is the case with the logout URL), the current site is
-	 * defined to be the one whose DNS name is in that "site" parameter.
+	 * <p>
+	 * Get the effective site name from the given request, according to the
+	 * Vignette portal and SPF standards.
+	 * </p>
+	 * <ul>
+	 * <li> Generally, this method returns the Vignette "site DNS name", using
+	 * {@link #getSiteDNS(HttpServletRequest)}.</li>
+	 * <li> However, this method also takes into account the SPF standard for
+	 * overriding the "site DNS name". In SPF, any URL for the "core" SPF site
+	 * {@link Consts#CORE_SPF_SITE} may contain the effective Vignette "site DNS
+	 * name" in a query parameter named {@link Consts#PARAM_EFFECTIVE_SITE}. If
+	 * the current request is for the core site, and it contains an
+	 * effective-site parameter, then that is the site name returned from this
+	 * method.</li>
+	 * </ul>
+	 * <p>
+	 * This method returns null if the site cannot be determined from the given
+	 * request. <b>Note:</b> This method does not use Vignette's
+	 * <code>SessionInfo</code> in case it is null (that is the case before
+	 * the Vignette session initialization module runs, and sometimes this code
+	 * may need to run before then). It just parses the URL.
+	 * </p>
+	 * 
+	 * @param request
+	 *            The current HTTP servlet request.
+	 * @return The site name (ie "site DNS name").
+	 */
+	public static String getEffectiveSiteDNS(HttpServletRequest request) {
+
+		if (request == null)
+			return null;
+		String siteDNS = getSiteDNS(request);
+
+		// check if current request site is the core site - if so, look for
+		// effective site and return it instead - note in Vignette, site DNS is
+		// case-sensitive
+		if (Consts.SPF_CORE_SITE.equals(siteDNS)) {
+			String alternateSiteDNS = request
+					.getParameter(Consts.PARAM_EFFECTIVE_SITE);
+			if (alternateSiteDNS != null) {
+				siteDNS = alternateSiteDNS;
+			}
+			siteDNS = siteDNS.trim();
+		}
+		return (siteDNS);
+	}
+
+	/**
+	 * <p>
+	 * Get the effective Vignette <code>Site</code> object for the request,
+	 * using {@link #getEffectiveSiteDNS(HttpServletRequest)} to determine the
+	 * proper site. Normally this is just the <code>Site</code> corresponding
+	 * to the site name (ie "site DNS name", as Vignette calls it) in the
+	 * current request. But if the current site is the core SPF site whose name
+	 * is {@link Consts#CORE_SPF_SITE}, and an effective-site parameter (named
+	 * {@link Consts#PARAM_EFFECTIVE_SITE} exists on the request, that is the
+	 * effective site and its <code>Site</code> is returned.
+	 * </p>
+	 * <p>
+	 * This method returns null if the site cannot be determined from the given
+	 * request. <b>Note:</b> This method does not use Vignette's
+	 * <code>SessionInfo</code> in case it is null (that is the case before
+	 * the Vignette session initialization module runs, and sometimes this code
+	 * may need to run before then). It just parses the URL for the site, then
+	 * uses Vignette's static <code>SiteManager</code> singleton to
+	 * instantiate the <code>Site</code>.
+	 * </p>
 	 * 
 	 * @param HttpServletRequest
 	 *            The current portal request.
@@ -273,29 +356,19 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 */
 	public static Site getEffectiveSite(HttpServletRequest request) {
 
+		if (request == null)
+			return null;
+		String effectiveSiteDNS = getEffectiveSiteDNS(request);
 		Site effectiveSite = null;
-		SiteManager siteManager;
-		SessionInfo sessionInfo = (SessionInfo) request.getSession()
-				.getAttribute(SessionInfo.SESSION_INFO_NAME);
-		if (sessionInfo != null) {
-			effectiveSite = sessionInfo.getSite();
-			if (effectiveSite != null) {
-				if (Consts.LOGOUT_DEFAULT_SITE.equals(effectiveSite
-						.getDNSName())) {
-					String alternateSiteName = request
-							.getParameter(Consts.PARAM_LOGOUT_SITE);
-					if (alternateSiteName != null) {
-						try {
-							siteManager = SiteManager.getInstance();
-							effectiveSite = siteManager
-									.getSiteFromDNSName(alternateSiteName);
-						} catch (SiteException ex) {
-						}
-					}
-				}
+		if (effectiveSiteDNS != null) {
+			try {
+				SiteManager siteManager = SiteManager.getInstance();
+				effectiveSite = siteManager
+						.getSiteFromDNSName(effectiveSiteDNS);
+			} catch (SiteException ex) { // should never happen
 			}
 		}
-		return effectiveSite;
+		return (effectiveSite);
 	}
 
 	/**
@@ -321,8 +394,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
-	 * Get the SPF <i>user profile map</i> from the given portal context. The user profile
-	 * map contains all of the SPF user attributes.
+	 * Get the SPF <i>user profile map</i> from the given portal context. The
+	 * user profile map contains all of the SPF user attributes.
 	 * 
 	 * @param portalContext
 	 *            The portal context.
