@@ -106,6 +106,14 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * unlocalized content too, so the <code>{CONTENT-URL:<i>pathname</i>}</code>
  * token is isn't really necessary. It is retained for backward-compatibility.
  * </p>
+ * <p>
+ * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>pathname</i></code>.
+ * </p>
+ * </dd>
  * 
  * <dt><a name="country-code"><code>{COUNTRY-CODE}</code></a></dt>
  * <dd>
@@ -174,6 +182,13 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * {/GROUP}
  * </pre>
  * 
+ * </p>
+ * <p>
+ * Your <code><i>groups</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>groups</i></code>.
  * </p>
  * </dd>
  * 
@@ -249,6 +264,13 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * application). And you must have configured
  * <code>i18n_portlet_config.properties</code> with any non-default portlet
  * bundle folder or relay servlet URL. This is documented elsewhere.
+ * </p>
+ * <p>
+ * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the
+ * other <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>pathname</i></code>.
  * </p>
  * </dd>
  * 
@@ -356,6 +378,13 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </pre>
  * 
  * </p>
+ * <p>
+ * Your <code><i>portlets</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>portlets</i></code>.
+ * </p>
  * </dd>
  * 
  * <dt><a name="request-url"><code>{REQUEST-URL}</code></a></dt>
@@ -415,6 +444,13 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * {/ROLE}
  * </pre>
  * 
+ * </p>
+ * <p>
+ * Your <code><i>roles</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>roles</i></code>.
  * </p>
  * </dd>
  * 
@@ -477,6 +513,13 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </pre>
  * 
  * </p>
+ * <p>
+ * Your <code><i>names</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>names</i></code>.
+ * </p>
  * </dd>
  * 
  * <dt><a name="site-url"><code>{SITE-URL}</code></a></dt>
@@ -502,6 +545,13 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <code>{SITE-URL:/template.ANON_SPF_GLOBAL_HELP}</code> is replaced with
  * <code>http://portal.hp.com/portal/site/itrc/template.ANON_SPF_GLOBAL_HELP</code>
  * (the global help secondary page), etc.
+ * </p>
+ * <p>
+ * Your <code><i>uri</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>uri</i></code>.
  * </p>
  * </dd>
  * 
@@ -595,7 +645,15 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * (In actuality, the URL would be portlet-encoded for the SPF portal; the
  * <i>unencoded</i> URL is shown above for simplicity.)
  * </p>
- * </li>
+ * <blockquote>
+ * <p>
+ * <b>Note:</b> Although you can "nest" <code>{TOKEN:<i>key</i>}</code>
+ * within other token's parameters, you cannot nest other token parameters of
+ * any kind inside the <code><i>key</i></code> parameter for
+ * <code>{TOKEN:<i>key</i>}</code>. In other words, the
+ * <code><i>key</i></code> is always treated as a literal.
+ * </p>
+ * </blockquote> </li>
  * </ul>
  * <p>
  * A template for the token substitution property file, also named
@@ -610,46 +668,59 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * Use this token to insert a given string property of the user into the
  * interpolated content. The <code><i>key</i></code> parameter in the token
  * is the name of the user property, and the user properties themselves are
- * taken from the user profile map placed by SPF in the current portlet request.
- * For example, <code>{USER-PROPERTY:user.name.given}</code> is replaced with
- * <code>Scott</code> for a user with such a first (given) name. The property
- * name <code><i>key</i></code>'s are not listed here and may vary based on
- * the portal implementation.
+ * taken from the <i>user profile map</i> created by SPF.
+ * For example, <code>{USER-PROPERTY:PhoneNumber}</code> is replaced with
+ * <code>123 456 7890</code> for a user with such a phone number.
+ * </p>
+ * <p>
+ * The property name <code><i>key</i></code>'s are not listed here; you can
+ * lookup their values in the {@link com.hp.it.spf.xa.misc.portlet.Consts} class.
+ * (They are the values of the <code>Consts</code> class attributes whose
+ * names begin with <code>KEY_*</code> - for example,
+ * {@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_EMAIL}. Note you must use the
+ * value - you cannot use the name of one of those <code>KEY_*</code>
+ * attributes in your <code><i>key</i></code> for the
+ * <code>{USER-PROPERTY:<i>key</i>}</code> token.
  * </p>
  * <p>
  * If the property is not found in the user object, or is not a string, then an
  * empty string will be inserted. Similarly, if the user object itself is guest
  * or null (ie the user is not logged-in), then an empty string is inserted.
  * </p>
+ * <p>
+ * Your <code><i>key</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>key</i></code>.
+ * </p>
  * </dd>
  * </dl>
  * </p>
  * 
  * <p>
- * The above tokens are parsed in the following order (so content included from
- * the tokens may itself contain references to subsequent tokens - such
- * references will be interpolated):
+ * The above tokens are parsed in the following order:
  * </p>
  * 
  * <p>
  * <ol>
  * <li><code>{TOKEN:<i>key</i>}</code></li>
- * <li><code>{SITE:<i>names</i>}</code></li>
  * <li><code>{LOGGED-IN}</code></li>
  * <li><code>{LOGGED-OUT}</code></li>
- * <li><code>{GROUP:<i>groups</i>}</code></li>
- * <li><code>{SITE}</code></li>
- * <li><code>{SITE-URL}</code></li>
- * <li><code>{SITE-URL:<i>uri</i>}</code></li>
- * <li><code>{REQUEST-URL}</code></li>
  * <li><code>{LANGUAGE-CODE}</code></li>
  * <li><code>{COUNTRY-CODE}</code></li>
  * <li><code>{LANGUAGE-TAG}</code></li>
+ * <li><code>{REQUEST-URL}</code></li>
  * <li><code>{EMAIL}</code></li>
  * <li><code>{NAME}</code></li>
+ * <li><code>{SITE}</code></li>
+ * <li><code>{SITE-URL}</code></li>
+ * <li><code>{SITE:<i>names</i>}</code></li>
+ * <li><code>{GROUP:<i>groups</i>}</code></li>
  * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
  * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
  * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
+ * <li><code>{SITE-URL:<i>uri</i>}</code></li>
  * <li><code>{PORTLET:<i>portlets</i>}</code></li>
  * <li><code>{ROLE:<i>roles</i>}</code></li>
  * </ol>

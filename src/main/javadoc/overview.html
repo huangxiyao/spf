@@ -829,20 +829,17 @@ into your portlet WAR where they traditionally go:</p>
 
 <ol>
 	<li>
-	<p>Your message properties would go into your <code>WEB-INF/classes/</code>,
-	optionally under some additional sub-path (we recommend <code>portlet/i18n/</code>
-	for reasons that will become clear in the discussion of <a
-		href="#i18n.location.external">external resources</a>). For example:</p>
+	<p>Your message properties would go into your <code>WEB-INF/</code>
+	folder, under some appropriate sub-path accessible to your Spring
+	configuration. For example:</p>
 
 	<blockquote><pre>
 	<i>&lt;root&gt;</i>
 	    WEB-INF/
-	        classes/
-	        	portlet/
-	        		i18n/
-	        			messages.properties
-	        			messages_fr_FR.properties
-	        			...
+	        i18n/
+       	        messages.properties
+       	        messages_fr_FR.properties
+       			...
 	</pre></blockquote>
 
 	<p>Also, be sure to configure Spring properly in your portlet
@@ -861,8 +858,9 @@ into your portlet WAR where they traditionally go:</p>
 		&lt;property name="basenames"&gt;
 			&lt;list&gt;
 				&lt;value&gt;
-					classpath:portlet/i18n/messages
+					WEB-INF/i18n/messages
 				&lt;/value&gt;
+				...  &lt;-- other message bundles in the basenames list go here
 			&lt;/list&gt;
 		&lt;/property&gt;
 	&lt;/bean&gt;
@@ -923,32 +921,32 @@ filesystem to which the portlet JVM has at least read access.</p>
 	is already your assigned classpath folder for all global resources (eg
 	configuration files). If that is the case, we recommend creating the
 	subfolder <code>portlet/i18n/</code> underneath it, so that <code>/opt/sasuapps/spf/globalResources/portlet/i18n/</code>
-	is your portlet bundle folder. SASU should have put the <code>/opt/sasuapps/spf/globalResources</code>
-	into the classpath for you.</p>
+	is your portlet bundle folder (which matches the default assumed by the
+	SPF portlet utilities, see point 3 below).</p>
 	</li>
 
 	<li>
 	<p>Put your message properties and other resource files into your
 	portlet bundle folder. We recommend you use subfolders for further
-	organization - for example, putting message properties in the portlet
-	bundle folder proper, images in the <code>images/</code> subfolder,
-	etc. Like this (example):</p>
+	organization - for example, you could put message properties in the
+	portlet bundle folder proper; images in its <code>images/</code>
+	subfolder; etc. Like this (example):</p>
 
 	<blockquote><pre>
-	/opt/sasuapps/spf/globalResources/     &lt;-- this is in the classpath
-		...                                &lt;-- misc other external config files go here
-		portlet/i18n/                      &lt;-- this is your portlet bundle folder
-			html/                          &lt;-- this is your portlet bundle HTML subfolder
-				text.html
-				text_es_MX.html
-				...
-			images/                        &lt;-- this is your portlet bundle images subfolder
-				picture.jpg
-				picture_ja.jpg
-				...
-			messages.properties
-			messages_fr_FR.properties
-			...
+    /opt/sasuapps/spf/globalResources/ &lt;-- this is in the classpath
+        ...                            &lt;-- misc other external config files can go here, like i18n_portlet_config.properties
+        portlet/i18n/                  &lt;-- this is your portlet bundle folder
+            html/                      &lt;-- this is your portlet bundle HTML subfolder
+                text.html
+                text_es_MX.html
+                ...
+            images/                    &lt;-- this is your portlet bundle images subfolder
+                picture.jpg
+                picture_ja.jpg
+                ...
+            messages.properties
+            messages_fr_FR.properties
+            ...
 	</pre></blockquote>
 	</li>
 
@@ -959,13 +957,24 @@ filesystem to which the portlet JVM has at least read access.</p>
 	org.springframework.context.support.ReloadableResourceBundleMessageSource}
 	class, since that makes your message properties hot-reloadable (ie your
 	administrator can update your message bundles without restarting the
-	JVM). You would use the same application-context configuration shown
-	above, in the discussion of <a href="#i18n.location.internal">internal
-	resources</a> (which is why we recommended using <code>portlet/i18n/</code>
-	under <code>WEB-INF/classes/</code> above - so that the Spring
-	configuration for internal resource access is the same as it is for
-	external, so that if you ever change your approach, you will have one
-	less configuration to update).</p>
+	JVM). Your Spring application context configuration would look similar
+	to the one for <a href="#i18n.location.internal">internal resources</a>
+	- but be sure to specify loading from the <code>classpath:</code> like
+	this:</p>
+
+	<blockquote><pre>
+	&lt;bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource"&gt;
+		&lt;property name="basenames"&gt;
+			&lt;list&gt;
+				&lt;value&gt;
+					classpath:portlet/i18n/messages
+				&lt;/value&gt;
+				...  &lt;-- other message bundles in the basenames list go here
+			&lt;/list&gt;
+		&lt;/property&gt;
+	&lt;/bean&gt;
+	</pre></blockquote>
 	</li>
 
 	<li>
@@ -993,8 +1002,8 @@ filesystem to which the portlet JVM has at least read access.</p>
 	the <a href="#i18n.supporting.relay">discussion below</a> for more
 	information about deploying this servlet. If you deploy it in a
 	non-default location, you will need to configure that in <a
-		href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>.
-	</p>
+		href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>,
+	too.</p>
 	</li>
 </ol>
 
@@ -3965,6 +3974,47 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 <code>{LANGUAGE-CODE}</code>, <code>{COUNTRY-CODE}</code>, <code>LANGUAGE-TAG}</code>,
 <code>{USER-PROPERTY:<i>key</i>}</code>)</h4>
 </a>
+
+<p>The following tokens can be used to interpolate information about the user into your
+text. Please click on the links for more documentation for each token.</p>
+
+<dl>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#country-code"><code>{COUNTRY-CODE}</code></a></dt>
+	<dd>
+	<p></p>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#email"><code>{EMAIL}</code></a></dt>
+	<dd>
+	<p></p>
+	</dd>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-code"><code>{LANGUAGE-CODE}</code></a></dt>
+	<dd>
+	<p></p>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-tag"><code>{LANGUAGE-TAG}</code></a></dt>
+	<dd>
+	<p></p>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#name"><code>{NAME}</code></a></dt>
+	<dd>
+	<p></p>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#user-property"><code>{USER-PROPERTY:<i>key</i>}</code></a></dt>
+	<dd>
+	<p></p>
+	</dd>
+
+</dl>
 
 <a name="file.author.token.auth">
 <h4>4.5.3. Permissioning content for authorized users (<code>{LOGGED-IN}</code>,
