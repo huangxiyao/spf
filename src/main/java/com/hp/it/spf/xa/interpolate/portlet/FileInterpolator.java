@@ -564,7 +564,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </li>
  * <li>
  * <p>
- * Vice-versa, the <code>{TOKEN:<i>key</i>{</code> token can itself be used
+ * Vice-versa, the <code>{TOKEN:<i>key</i>}</code> token can itself be used
  * within the parameter to <b>any</b> of the other tokens, except another
  * <code>{TOKEN:<i>key</i>}</code> token. So you can "nest" this token
  * inside the parameter values to other tokens.
@@ -584,11 +584,12 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <code>&lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/{TOKEN:image.current-promo}}"&gt;</code>
  * </p>
  * <p>
- * Then the interpolated content will display the <code>december_sale.gif</code>
- * image to the user, like this:
+ * Then the interpolated content will display the proper localized version of
+ * the <code>december_sale.gif</code> image to the user; like this, for
+ * example, for a Japanese (Japan) user:
  * </p>
  * <p>
- * <code>&lt;IMG SRC="/relay/images/december_sale.gif"&gt;</code>
+ * <code>&lt;IMG SRC="/relay/images/december_sale_ja_JP.gif"&gt;</code>
  * </p>
  * <p>
  * (In actuality, the URL would be portlet-encoded for the SPF portal; the
