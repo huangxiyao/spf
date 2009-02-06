@@ -321,7 +321,7 @@ table.props td {
 			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</a></li>
 			<li>4.5.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-			<code>{SITE:<i>site-names</i></code>, <code>{TOKEN:<i>key</i>}</code>)</a></li>
+			<code>{SITE:<i>site-names</i></code>}, <code>{TOKEN:<i>key</i>}</code>)</a></li>
 			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>{SITE}</code>)</a></li>
 		</ul>
 		</li>
@@ -4101,9 +4101,125 @@ The phone number we have on record for you is: {USER-PROPERTY:PhoneNumber}
 <code>{LOGGED-OUT}</code>, <code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</h4>
 </a>
 
+<p>The following tokens may be used to permission content against
+the user. With these tokens, you specify various conditions the user
+must satisfy in order for the content to pass-through the interpolation.
+If the user does not safisfy the various conditions, the content is
+removed during interpolation. Please click on the links for more
+documentation for each token.</p>
+
+<blockquote>
+<p><b>Note:</b> The SPF lets you "nest" container tokens. Nested
+containers form a "logical-AND" between their respective conditions. So,
+for example, <code>{LOGGED-IN}{ROLE:abc}{ROLE:xyz}...{/ROLE}{/ROLE}{/LOGGED-IN}</code>
+means the user must be logged-in <b>and</b> must be in roles <code>abc</code>
+<b>and</b> <code>xyz</code> in order to see the <code>...</code> wrapped
+content.
+</blockquote>
+
+<dl>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#group"><code>{GROUP:<i>groups</i>}...{/GROUP}</code></a></dt>
+	<dd>
+	<p>Use this container token to permission the content inside the
+	container based on the user's current set of groups.</p>
+
+	<p><b>Background:</b> The SPF has 2 related concepts for
+	authorization: groups and roles. Groups are portal-level constructs and
+	are not JSR portlet standard; roles are portlet-level constructs which
+	are JSR-standard. The SPF portal both forwards the user's groups as
+	part of the {@link javax.portlet.PortletRequest}, and maps the groups
+	into roles which are likewise part of the <code>PortletRequest</code>.
+	The group-to-role mapping is specified when provisioning the portlet
+	inside the portal. In SPF, groups themselves are generally mapped from
+	other characteristics, either in the portal itself, or in UGS. Both
+	groups and roles can exist apart from authentication; ie anonymous
+	users can still be in groups/roles. This SPF authorization design is
+	documented elsewhere.</p>
+
+	<p><b>About the token:</b> Use the <code><i>groups</i></code>
+	parameter to list the names of the group(s) for which the wrapped
+	content is permissioned. The user must be a member of at least one of
+	the <code><i>groups</i></code> in order for the wrapped content to be
+	included in the output. Group names are case-insensitive and are
+	delimited with the <code>|</code> character. For example:</p>
+
+	<blockquote><pre>
+This text is for everybody.&lt;BR&gt;
+{GROUP:abc|xyz}This text is only for members of the "abc" or "xyz" groups.{/GROUP}
+	</pre></blockquote>
+
+	<p>The actual group names will vary by application, over time, and
+	according to the mappings which initially derive them. They actual
+	group names are not documented here.</p>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#logged-in"><code>{LOGGED-IN}...{/LOGGED-IN}</code></a></dt>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#logged-out"><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></a></dt>
+	<dd>
+	<p>Use these container tokens to permission the content inside the
+	container based on the user's current authentication status. The <code>{LOGGED-IN}...{/LOGGED-IN}</code>
+	token will cause the wrapped content to be <b>included</b> in the
+	interpolated content if the user is logged-in, and <b>omitted</b> if
+	the user is not logged-in. The <code>{LOGGED-OUT}...{/LOGGED-OUT}</code>
+	token will do the opposite. Here is some example HTML text using these
+	tokens:</p>
+	<blockquote><pre>
+This text is for everybody.&lt;BR&gt;
+{LOGGED-IN}This text is for logged-in users only.{/LOGGED-IN}
+{LOGGED-OUT}This text is for logged-out users only.{/LOGGED-OUT}
+	</pre></blockquote>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#role"><code>{ROLE:<i>roles</i>}...{/ROLE}</code></a></dt>
+	<dd>
+	<p>Use this container token to permission the content inside the
+	container based on the user's current roles.</p>
+
+	<p><b>Background:</b> For basic information about groups and roles,
+	see the discussion for the <code>{GROUP:<i>groups</i>}</code> token
+	above. Remember that even if the portal has mapped groups into roles,
+	your portlet will not see those roles unless you have defined them in
+	your application descriptors, per the JSR specification. At minimum,
+	you need to define your role names in your portlet application's <code>web.xml</code>,
+	like this for the role named <code>abc</code>:</p>
+
+	<blockquote><pre>
+&lt;security-role&gt;
+    &lt;role-name&gt;abc&lt;/role-name&gt;
+&lt;/security-role&gt;
+	</pre></blockquote>
+
+	<p>(You can additionally define <code>&lt;security-role-ref&gt;</code>
+	elements in <code>portlet.xml</code> for a level of indirection - not
+	discussed here - which allows your role names to remain constant over
+	time. Please see the JSR portlet specification for more information.)</p>
+
+	<p><b>About the token:</b> Use the <code><i>roles</i></code>
+	parameter to list the names of the role(s) for which the wrapped
+	content is permissioned. The user must be a member of at least one of
+	the <code><i>roles</i></code> in order for the wrapped content to be
+	included in the output. Role names are case-insensitive and are
+	delimited with the <code>|</code> character. For example:</p>
+
+	<blockquote><pre>
+This text is for everybody.&lt;BR&gt;
+{ROLE:abc|xyz}This text is only for members of the "abc" or "xyz" groups.{/ROLE}
+	</pre></blockquote>
+
+	<p>The actual role names will vary by application, over time, and
+	according to the mappings which initially derive them in the portal
+	from the groups. They are not documented here.</p>
+	</dd>
+
+</dl>
+
 <a name="file.author.token.consolidate">
 <h4>4.5.4. Consolidating content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-<code>{SITE:<i>site-names</i></code>, <code>{TOKEN:<i>key</i>}</code>)</h4>
+<code>{SITE:<i>site-names</i></code>}, <code>{TOKEN:<i>key</i>}</code>)</h4>
 </a>
 
 <p>Your token substitutions property file may be located anywhere
