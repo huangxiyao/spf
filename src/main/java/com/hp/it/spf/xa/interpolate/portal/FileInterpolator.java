@@ -80,6 +80,14 @@ import com.vignette.portal.website.enduser.PortalContext;
  * unlocalized content too, so the <code>{CONTENT-URL:<i>pathname</i>}</code>
  * token isn't really necessary. It is retained for backward-compatibility.
  * </p>
+ * <p>
+ * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>pathname</i></code>.
+ * </p>
+ * </dd>
  * 
  * <dt><code>{COUNTRY-CODE}</code></dt>
  * <dd>
@@ -151,6 +159,13 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </pre>
  * 
  * </p>
+ * <p>
+ * Your <code><i>groups</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>groups</i></code>.
+ * </p>
  * </dd>
  * 
  * <dt><code>{LANGUAGE-CODE}</code></dt>
@@ -206,6 +221,17 @@ import com.vignette.portal.website.enduser.PortalContext;
  * The returned text string will contain the necessary URL for showing the
  * best-fit image to the user. The logic for determining the best-fit will
  * resemble that used by the Java-standard {@link ResourceBundle} class (see).
+ * If the file was not found, a URL pointing to the base filename inside your
+ * portal component's support files will be expressed anyway. (This of course
+ * will cause an HTTP 404 error if the browser subsequently opens the URL - this
+ * is intentional and will help you detect the missing file.)
+ * </p>
+ * <p>
+ * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the
+ * other <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>pathname</i></code>.
  * </p>
  * <p>
  * 
@@ -334,10 +360,17 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </pre>
  * 
  * </p>
+ * <p>
+ * Your <code><i>names</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>names</i></code>.
+ * </p>
  * </dd>
  * 
- * <dt><code>{SITE-URL}</code></dt>
- * <dt><code>{SITE-URL:<i>uri</i>}</code></dt>
+ * <dt><a name="site-url"><code>{SITE-URL}</code></a></dt>
+ * <dt><a name="site-url_p"><code>{SITE-URL:<i>uri</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use these related tokens to insert URL's for pages at the current portal site
@@ -345,12 +378,14 @@ import com.vignette.portal.website.enduser.PortalContext;
  * the site home page URL; the <code>{SITE-URL:<i>uri</i>}</code> token
  * inserts a URL for a page at that site, identified by the given URI (ie a
  * friendly URI for the page in Vignette, or a secondary page template name, or
- * etc - this can include query data if you like).
+ * etc - this can include query data if you like). The portal site URL is taken
+ * from a non-standard attribute in the request which it is assumed the portal
+ * has set (SPF sets this by default).
  * </p>
  * <p>
  * For example, <code>{SITE-URL}</code> is replaced with
- * <code>http://portal.hp.com/portal/site/itrc/</code> when the current portal component is
- * requested from the <code>itrc</code> portal site on the
+ * <code>http://portal.hp.com/portal/site/itrc/</code> when the current portal
+ * component is requested from the <code>itrc</code> portal site on the
  * <code>portal.hp.com</code> server using HTTP. Similarly,
  * <code>{SITE-URL:/forums}</code> is replaced with
  * <code>http://portal.hp.com/portal/site/itrc/forums</code>,
@@ -358,23 +393,25 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <code>http://portal.hp.com/portal/site/itrc/template.ANON_SPF_GLOBAL_HELP</code>
  * (the global help secondary page), etc.
  * </p>
+ * <p>
+ * Your <code><i>uri</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>uri</i></code>.
+ * </p>
  * </dd>
  * 
- * <dt><code>{TOKEN:<i>key</i>}</code></dt>
+ * <dt><a name="token"><code>{TOKEN:<i>key</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to lookup a value for the given key in a property file, and
  * insert that value into the interpolated content. The property file, by
  * default, is <code>default_tokens.properties</code>, but you can override
- * that in the <code>FileInterpolator</code> constructor. The property value
- * may itself contain any content including any of the special markup tokens
- * supported by <code>FileInterpolator</code>, <b>except</b> another
- * <code>{TOKEN:<i>key</i>}</code> token.
- * </p>
- * <p>
- * Whether you use <code>default_tokens.properties</code> or your own
- * token-substitution property file, the file should be loaded into a location
- * accessible to the class loader.
+ * that in the <code>FileInterpolator</code> constructor. Whether you use
+ * <code>default_tokens.properties</code> or your own token-substitution
+ * property file, the file should be loaded into a location accessible to the
+ * class loader. The property values may include any text content.
  * </p>
  * <p>
  * For example, assume you have put this key/value pair into your property file:
@@ -396,28 +433,113 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <code>&lt;A HREF="http://shopping.hp.com"&gt;Go to HP shopping.&lt;/A&gt;</code>
  * </p>
  * <p>
+ * Additionally, this token supports nesting with other tokens. As follows:
+ * </p>
+ * <ul>
+ * <li>
+ * <p>
+ * The property value for this token may contain <b>any</b> of the other
+ * special markup tokens supported by <code>FileInterpolator</code>,
+ * <b>except</b> another <code>{TOKEN:<i>key</i>}</code> token. In other
+ * words, you can "nest" other tokens inside the propery values expressed by
+ * this token.
+ * </p>
+ * <p>
+ * For example, assume we have this in our property file:
+ * </p>
+ * <p>
+ * <code>url.hp-shopping=http://shopping.hp.com?lang={LANGUAGE-CODE}&cc={COUNTRY-CODE}</code>
+ * </p>
+ * <p>
+ * If your input file is as above, then the interpolated content will include
+ * the user's language and country code in the URL from the property file. For
+ * example, for a Brazil Portuguese user:
+ * </p>
+ * <p>
+ * <code>&lt;A HREF="http://shopping.hp.com?lang=pt&cc=BR"&gt;Go to HP shopping.&lt;/A&gt;</code>
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * Vice-versa, the <code>{TOKEN:<i>key</i>}</code> token can itself be used
+ * within the parameter to <b>any</b> of the other tokens, except another
+ * <code>{TOKEN:<i>key</i>}</code> token. So you can "nest" this token
+ * inside the parameter values to other tokens.
+ * </p>
+ * <p>
+ * For example, assume we now have this in our property file:
+ * </p>
+ * <p>
+ * <code>image.current-promo=december_sale.gif</code>
+ * </p>
+ * <p>
+ * Also imagine the <code>december_sale.gif</code> is setup properly, as a
+ * secondary support file for the current portal component. If your input file
+ * contains the following:
+ * </p>
+ * <p>
+ * <code>&lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/{TOKEN:image.current-promo}}"&gt;</code>
+ * </p>
+ * <p>
+ * Then the interpolated content will display the proper localized version of
+ * the <code>december_sale.gif</code> image to the user; like this, for
+ * example, for a Japanese (Japan) user:
+ * </p>
+ * <p>
+ * <code>&lt;IMG SRC="/.../december_sale_ja_JP.gif"&gt;</code>
+ * </p>
+ * <p>
+ * (In actuality, the URL would be a portal component secondary-support-file
+ * URL; just the filename is shown above for simplicity.)
+ * </p>
+ * <blockquote>
+ * <p>
+ * <b>Note:</b> Although you can "nest" <code>{TOKEN:<i>key</i>}</code>
+ * within other token's parameters, you cannot nest other token parameters of
+ * any kind inside the <code><i>key</i></code> parameter for
+ * <code>{TOKEN:<i>key</i>}</code>. In other words, the
+ * <code><i>key</i></code> is always treated as a literal.
+ * </p>
+ * </blockquote> </li>
+ * </ul>
+ * <p>
  * A template for the token substitution property file, also named
  * <code>default_tokens.properties</code> (you should rename your copy), is
  * available with the SPF.
  * </p>
  * </dd>
  * 
- * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
+ * <dt><a name="user-property"><code>{USER-PROPERTY:<i>key</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert a given string property of the user into the
  * interpolated content. The <code><i>key</i></code> parameter in the token
  * is the name of the user property, and the user properties themselves are
- * taken from the current portal <code>User</code> object. For example,
- * <code>{USER-PROPERTY:day_phone}</code> is replaced with
- * <code>123 456 7890</code> for a user with such a phone number. The property
- * name <code><i>key</i></code>'s are not listed here and may vary based on
- * the portal implementation.
+ * taken from the <i>user profile map</i> created by SPF. For example,
+ * <code>{USER-PROPERTY:PhoneNumber}</code> is replaced with
+ * <code>123 456 7890</code> for a user with such a phone number.
+ * </p>
+ * <p>
+ * The property name <code><i>key</i></code>'s are not listed here; you can
+ * lookup their values in the {@link com.hp.it.spf.xa.misc.portal.Consts} class.
+ * (They are the values of the <code>Consts</code> class attributes whose
+ * names begin with <code>KEY_*</code> - for example,
+ * {@link com.hp.it.spf.xa.misc.portal.Consts#KEY_EMAIL}. Note you must use the
+ * value - you cannot use the name of one of those <code>KEY_*</code>
+ * attributes in your <code><i>key</i></code> for the
+ * <code>{USER-PROPERTY:<i>key</i>}</code> token.
  * </p>
  * <p>
  * If the property is not found in the user object, or is not a string, then an
  * empty string will be inserted. Similarly, if the user object itself is guest
  * or null (ie the user is not logged-in), then an empty string is inserted.
+ * </p>
+ * <p>
+ * Your <code><i>key</i></code> can "nest" any of the other
+ * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <code>{LANGUAGE-CODE}</code>, etc. Except for
+ * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
+ * tokens inside your <code><i>key</i></code>.
  * </p>
  * </dd>
  * 
@@ -425,30 +547,28 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * 
  * <p>
- * The above tokens are parsed in the following order (so content included from
- * the tokens may itself contain references to subsequent tokens - such
- * references will be interpolated):
+ * The above tokens are parsed in the following order:
  * </p>
  * 
  * <p>
  * <ol>
  * <li><code>{TOKEN:<i>key</i>}</code></li>
- * <li><code>{SITE:<i>names</i>}</code></li>
  * <li><code>{LOGGED-IN}</code></li>
  * <li><code>{LOGGED-OUT}</code></li>
- * <li><code>{GROUP:<i>groups</i>}</code></li>
- * <li><code>{SITE}</code></li>
- * <li><code>{SITE-URL}</code></li>
- * <li><code>{SITE-URL:<i>uri</i>}</code></li>
- * <li><code>{REQUEST-URL}</code></li>
  * <li><code>{LANGUAGE-CODE}</code></li>
  * <li><code>{COUNTRY-CODE}</code></li>
  * <li><code>{LANGUAGE-TAG}</code></li>
+ * <li><code>{REQUEST-URL}</code></li>
  * <li><code>{EMAIL}</code></li>
  * <li><code>{NAME}</code></li>
+ * <li><code>{SITE}</code></li>
+ * <li><code>{SITE-URL}</code></li>
+ * <li><code>{SITE:<i>names</i>}</code></li>
+ * <li><code>{GROUP:<i>groups</i>}</code></li>
  * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
  * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
  * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
+ * <li><code>{SITE-URL:<i>uri</i>}</code></li>
  * </ol>
  * </p>
  * 
