@@ -16,6 +16,7 @@ import com.hp.globalops.hppcbl.passport.PassportService;
 import com.hp.globalops.hppcbl.passport.PassportServiceException;
 import com.hp.globalops.hppcbl.passport.beans.Fault;
 import com.hp.globalops.hppcbl.webservice.ProfileCore;
+import com.hp.it.spf.sso.portal.AuthenticationUtility;
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.misc.portal.Consts;
@@ -169,15 +170,10 @@ public class SelectLocaleProcessAction extends BaseAction {
 	/**
 	 * Check if the user is authenticated against HPP.
 	 */
-	// TODO: This is currently stubbed-out since the new authentication utility
-	// is not ready yet. Need to call the new authentication utility here, when
-	// the code is ready.
 	private boolean isAuthenticatedByHPP(HttpServletRequest request) {
-		/*
-		 * return AuthenticationUtility.loggedIntoHPP(request) ||
-		 * AuthenticationUtility.loggedIntoFed(request);
-		 */
-		return false; // TODO: remove this
+		
+		 return AuthenticationUtility.loggedIntoHPP(request)
+				|| AuthenticationUtility.loggedIntoFed(request);
 	}
 
 	/**
