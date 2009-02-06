@@ -18,8 +18,6 @@ import com.epicentric.common.website.SessionUtils;
 import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.UniquePropertyValueConflictException;
 import com.epicentric.site.Site;
-import com.epicentric.site.SiteException;
-import com.epicentric.site.SiteManager;
 import com.epicentric.user.User;
 import com.hp.it.spf.user.exception.UserGroupsException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
@@ -130,8 +128,14 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                                 new Date());
                 AuthenticatorHelper.cleanupSession(request);
             } else if (isUserRecentUpdated()) {
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug("User is updated.");
+                }
                 AuthenticatorHelper.cleanupSession(request);
             } else if (AuthenticatorHelper.isForceInitSession(request)) {
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug("Force initSession tag found.");
+                }
                 AuthenticatorHelper.cleanupSession(request);
             } else {
                 if (AuthenticatorHelper.needUpdatePrimarySite(request)) {
@@ -438,7 +442,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 
         // Retrieve current user from session
         User currUser = SessionUtils.getCurrentUser(request.getSession());
-
+        
         Date lastChangeDateVap = null;
         Integer tzVap = null;
         // Retrieve user's current timezone offset and last change date
