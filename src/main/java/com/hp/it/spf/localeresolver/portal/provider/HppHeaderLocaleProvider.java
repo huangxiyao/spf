@@ -59,7 +59,7 @@ public class HppHeaderLocaleProvider extends AbstractLocaleProvider implements L
         }
         String preferredLanguage;
         if (this.preferredLanguageExtractor == null) {
-            String decodedHeaderInfo = Utils.getRequestHeader(request, CL_HEADER);
+            String decodedHeaderInfo = Utils.getRequestHeader(request, CL_HEADER, true);
             preferredLanguage = Utils.getValueFromCLHeader(decodedHeaderInfo,
                     PREFERRED_LANG);
         } else {
@@ -83,7 +83,7 @@ public class HppHeaderLocaleProvider extends AbstractLocaleProvider implements L
         String preferredCountry = "";
         String preferredLanguage = "";
         if (this.preferredLanguageExtractor == null) {
-            String decodedHeaderInfo = Utils.getRequestHeader(request, CL_HEADER);
+            String decodedHeaderInfo = Utils.getRequestHeader(request, CL_HEADER, true);
             preferredLanguage = Utils.getValueFromCLHeader(decodedHeaderInfo,
                     PREFERRED_LANG);
             preferredCountry = Utils.getValueFromCLHeader(decodedHeaderInfo,
