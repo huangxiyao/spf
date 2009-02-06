@@ -6,6 +6,7 @@ package com.hp.it.spf.sso.portal.component.secondarypagetype;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.hp.it.spf.sso.portal.AuthenticationUtility;
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.misc.portal.Consts;
 import com.vignette.portal.log.LogWrapper;
@@ -49,9 +50,7 @@ public class FedLogoutConfirmationDisplayAction extends BaseAction {
 			// assumed to send a redirect (eg to the portal site home page) if
 			// the user is not federated. So if the user indicates not
 			// federated, then just return.
-			// TODO: Update the following line to use the new authentication
-			// utility.
-			if (/* !AuthenticationUtility.ensureFromFed(portalContext) */true) {
+			if (!AuthenticationUtility.ensureFromFed(portalContext)) {
 				LOG
 						.info("FedLogoutConfirmationDisplayAction: user is not federated and has been redirected.");
 				return null;
