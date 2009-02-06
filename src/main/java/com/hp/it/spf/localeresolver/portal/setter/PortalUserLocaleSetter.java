@@ -15,6 +15,7 @@ import com.epicentric.site.Site;
 import com.hp.it.spf.localeresolver.hpweb.LanguageNegotiator;
 import com.hp.it.spf.localeresolver.portal.getter.IUserMediator;
 import com.hp.it.spf.localeresolver.portal.getter.PortalUserMediator;
+import com.hp.it.spf.xa.misc.portal.Utils;
 
 /**
  * @author <link href="marc.derosa@hp.com"></link>
@@ -91,11 +92,9 @@ public class PortalUserLocaleSetter implements ILocaleSetter {
     }
     
     private String userAndSiteCompositeUid(ChildEntity user, HttpServletRequest request) {
-        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(SessionInfo.SESSION_INFO_NAME);
-        Site currentSite = sessionInfo.getSite();
-        String dnsName = "";
-        if (currentSite != null) {
-               dnsName = currentSite.getDNSName();
+        String dnsName = Utils.getEffectiveSiteDNS(request);
+        if (dnsName == null) {
+               dnsName = "";
         }
         return user.getUID() + dnsName;
     }
