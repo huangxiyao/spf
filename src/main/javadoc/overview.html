@@ -4130,22 +4130,7 @@ content.
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#group"><code>{GROUP:<i>groups</i>}...{/GROUP}</code></a></dt>
 	<dd>
 	<p>Use this container token to permission the content inside the
-	container based on the user's current set of groups.</p>
-
-	<p><b>Background:</b> The SPF has 2 related concepts for
-	authorization: groups and roles. Groups are portal-level constructs and
-	are not JSR portlet standard; roles are portlet-level constructs which
-	are JSR-standard. The SPF portal both forwards the user's groups as
-	part of the {@link javax.portlet.PortletRequest}, and maps the groups
-	into roles which are likewise part of the <code>PortletRequest</code>.
-	The group-to-role mapping is specified when provisioning the portlet
-	inside the portal. In SPF, groups themselves are generally mapped from
-	other characteristics, either in the portal itself, or in UGS. Both
-	groups and roles can exist apart from authentication; ie anonymous
-	users can still be in groups/roles. This SPF authorization design is
-	documented elsewhere.</p>
-
-	<p><b>About the token:</b> Use the <code><i>groups</i></code>
+	container based on the user's current set of groups. Use the <code><i>groups</i></code>
 	parameter to list the names of the group(s) for which the wrapped
 	content is permissioned. The user must be a member of at least one of
 	the <code><i>groups</i></code> in order for the wrapped content to be
@@ -4160,6 +4145,19 @@ This text is for everybody.&lt;BR&gt;
 	<p>The actual group names will vary by application, over time, and
 	according to the mappings which initially derive them. They actual
 	group names are not documented here.</p>
+
+	<p><b>Background:</b> The SPF has 2 related concepts for
+	authorization: groups and roles. Groups are portal-level constructs and
+	are not JSR portlet standard; roles are portlet-level constructs which
+	are JSR-standard. The SPF portal both forwards the user's groups as
+	part of the {@link javax.portlet.PortletRequest}, and maps the groups
+	into roles which are likewise part of the <code>PortletRequest</code>.
+	The group-to-role mapping is specified when provisioning the portlet
+	inside the portal. In SPF, groups themselves are generally mapped from
+	other characteristics, either in the portal itself, or in UGS. Both
+	groups and roles can exist apart from authentication; ie anonymous
+	users can still be in groups/roles. This SPF authorization design is
+	documented elsewhere.</p>
 	</dd>
 
 	<dt><a
@@ -4185,28 +4183,7 @@ This text is for everybody.&lt;BR&gt;
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#role"><code>{ROLE:<i>roles</i>}...{/ROLE}</code></a></dt>
 	<dd>
 	<p>Use this container token to permission the content inside the
-	container based on the user's current roles.</p>
-
-	<p><b>Background:</b> For basic information about groups and roles,
-	see the discussion for the <code>{GROUP:<i>groups</i>}</code> token
-	above. Remember that even if the portal has mapped groups into roles,
-	your portlet will not see those roles unless you have defined them in
-	your application descriptors, per the JSR specification. At minimum,
-	you need to define your role names in your portlet application's <code>web.xml</code>,
-	like this for the role named <code>abc</code>:</p>
-
-	<blockquote><pre>
-&lt;security-role&gt;
-    &lt;role-name&gt;abc&lt;/role-name&gt;
-&lt;/security-role&gt;
-	</pre></blockquote>
-
-	<p>(You can additionally define <code>&lt;security-role-ref&gt;</code>
-	elements in <code>portlet.xml</code> for a level of indirection - not
-	discussed here - which allows your role names to remain constant over
-	time. Please see the JSR portlet specification for more information.)</p>
-
-	<p><b>About the token:</b> Use the <code><i>roles</i></code>
+	container based on the user's current roles. Use the <code><i>roles</i></code>
 	parameter to list the names of the role(s) for which the wrapped
 	content is permissioned. The user must be a member of at least one of
 	the <code><i>roles</i></code> in order for the wrapped content to be
@@ -4221,6 +4198,41 @@ This text is for everybody.&lt;BR&gt;
 	<p>The actual role names will vary by application, over time, and
 	according to the mappings which initially derive them in the portal
 	from the groups. They are not documented here.</p>
+
+	<p><b>Background:</b> For basic information about groups and roles,
+	see the discussion for the <code>{GROUP:<i>groups</i>}</code> token
+	above. Remember that even if the portal has mapped groups into roles,
+	your portlet will not see those roles unless you have defined them in
+	your application descriptors, per the JSR specification for <i>programmatic
+	security</i>. At minimum:</p>
+
+	<ol>
+		<li>
+		<p>You need to define your role names in your portlet
+		application's <code>web.xml</code>, like this for the role named <code>abc</code>:</p>
+
+		<blockquote><pre>
+&lt;security-role&gt;
+    &lt;role-name&gt;abc&lt;/role-name&gt;
+&lt;/security-role&gt;
+	</pre></blockquote>
+		</li>
+		<li>
+		<p>And you need to reference those roles from your portlet
+		application's <code>portlet.xml</code>, like this:</p>
+		<blockquote><pre>
+&lt;security-role-ref&gt;
+    &lt;role-name&gt;abc&lt;/role-name&gt;
+&lt;/security-role-ref&gt;
+	</pre></blockquote>
+		</li>
+	</ol>
+
+	<p>(You can additionally define optional <code>&lt;role-link&gt;</code>
+	elements in <code>portlet.xml</code>, to introduce a level of
+	indirection which lets the role names in <code>web.xml</code> and <code>portlet.xml</code>
+	be different. Please see the JSR portlet specification for more
+	information.)</p>
 	</dd>
 
 </dl>
