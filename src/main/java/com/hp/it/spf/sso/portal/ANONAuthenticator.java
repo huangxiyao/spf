@@ -161,7 +161,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
                         vapUser.getProperty(AuthenticationConsts.PROPERTY_SP_TIMEZONE_ID));
 
         // Retrieve user group
-        userProfile.put(AuthenticationConsts.HEADER_GROUP_NAME,
+        userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
                         (String[])AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser))
                                                      .toArray(new String[0]));
 
