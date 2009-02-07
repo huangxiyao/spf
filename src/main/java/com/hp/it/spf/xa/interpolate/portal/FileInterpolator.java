@@ -482,23 +482,31 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * Use these related tokens to insert URL's for pages at the current portal site
  * into the interpolated content. The <code>{SITE-URL}</code> token inserts
- * the site home page URL; the <code>{SITE-URL:<i>uri</i>}</code> token
- * inserts a URL for a page at that site, identified by the given URI (ie a
- * friendly URI for the page in Vignette, or a secondary page template name, or
- * etc - this can include query data if you like). The portal site URL is taken
- * from a non-standard attribute in the request which it is assumed the portal
- * has set (SPF sets this by default).
+ * the current site home page URL; the <code>{SITE-URL:<i>uri</i>}</code>
+ * token inserts a URL for a page at the current site, or another site. The
+ * <code><i>uri</i></code> identifies the particular page within the current
+ * site, if the <code><i>uri</i></code> starts with <code>/</code> - it it
+ * does not start with <code>/</code> then the first part of the
+ * <code><i>uri</i></code> is taken to be the new site name, and the
+ * remainder is used as the particular page within that site. The URI can
+ * include a friendly URI for the page in Vignette, a secondary page template
+ * name, or etc - this can even include query data.
  * </p>
  * <p>
  * For example, <code>{SITE-URL}</code> is replaced with
- * <code>http://portal.hp.com/portal/site/itrc/</code> when the current portal
- * component is requested from the <code>itrc</code> portal site on the
+ * <code>http://portal.hp.com/portal/site/itrc/</code> when the portlet is
+ * requested from the <code>itrc</code> portal site on the
  * <code>portal.hp.com</code> server using HTTP. Similarly,
  * <code>{SITE-URL:/forums}</code> is replaced with
  * <code>http://portal.hp.com/portal/site/itrc/forums</code>,
  * <code>{SITE-URL:/template.ANON_SPF_GLOBAL_HELP}</code> is replaced with
  * <code>http://portal.hp.com/portal/site/itrc/template.ANON_SPF_GLOBAL_HELP</code>
  * (the global help secondary page), etc.
+ * </p>
+ * <p>
+ * To repeat the above examples, but switch the site to <code>acme</code>:
+ * use <code>{SITE-URL:acme}</code>, <code>{SITE-URL:acme/forums}</code>,
+ * <code>{SITE-URL:acme/template.ANON_SPF_GLOBAL_HELP}</code>, etc.
  * </p>
  * <p>
  * Your <code><i>uri</i></code> can "nest" any of the other
