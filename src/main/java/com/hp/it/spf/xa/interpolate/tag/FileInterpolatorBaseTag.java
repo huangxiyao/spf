@@ -61,12 +61,12 @@ import com.hp.it.spf.xa.interpolate.FileInterpolator;
  * </li>
  * <li>
  * <p>
- * The <code>tokenFile="<i>token-filename</i>"</code> attribute can
+ * The <code>includeFile="<i>token-filename</i>"</code> attribute can
  * optionally be used to provide the name of a specific token-substitutions
  * property file. The {@link com.hp.it.spf.xa.interpolate.FileInterpolator}
- * supports substitution from this file for the <code>{TOKEN:<i>key</i>}</code>
+ * supports substitution from this file for the <code>{INCLUDE:<i>key</i>}</code>
  * token. Please see the documentation for more information on how that token
- * works. By default, a file named <code>default_tokens.properties</code>
+ * works. By default, a file named <code>default_includes.properties</code>
  * is assumed for your token-substitution properties, but you can override that
  * with this tag attribute. Whether you override or accept the default, the
  * actual token-substitution file may be located anywhere that is loadable by
@@ -102,16 +102,16 @@ public abstract class FileInterpolatorBaseTag extends TagSupport {
 	protected String file;
 
 	/**
-	 * The value of the <code>tokenFile</code> attribute from the tag.
+	 * The value of the <code>includeFile</code> attribute from the tag.
 	 */
-	protected String tokenFile;
+	protected String includeFile;
 
 	/**
 	 * Initialize tag attribute values.
 	 */
 	public FileInterpolatorBaseTag() {
 		file = null;
-		tokenFile = null;
+		includeFile = null;
 	}
 
 	/**
@@ -165,22 +165,22 @@ public abstract class FileInterpolatorBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set token file from <code>tokenFile</code> tag attribute.
+	 * Set token file from <code>includeFile</code> tag attribute.
 	 * 
 	 * @param string
-	 *            Value from the <code>tokenFile</code> tag attribute.
+	 *            Value from the <code>includeFile</code> tag attribute.
 	 */
-	public void setTokenFile(String string) {
-		tokenFile = normalize(string);
+	public void setIncludeFile(String string) {
+		includeFile = normalize(string);
 	}
 
 	/**
-	 * Get value of the <code>tokenFile</code> attribute.
+	 * Get value of the <code>includeFile</code> attribute.
 	 * 
-	 * @return Value of the <code>tokenFile</code> attribute.
+	 * @return Value of the <code>includeFile</code> attribute.
 	 */
-	public String getTokenFile() {
-		return tokenFile;
+	public String getIncludeFile() {
+		return includeFile;
 	}
 
 	/**

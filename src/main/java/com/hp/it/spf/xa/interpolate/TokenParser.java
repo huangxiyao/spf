@@ -30,7 +30,7 @@ import com.hp.it.spf.xa.misc.Utils;
  * <code>}</code>, if you prefer.
  * </p>
  * <dl>
- * <li><code>{TOKEN:<i>key</i>}</code></li>
+ * <li><code>{INCLUDE:<i>key</i>}</code></li>
  * <li><code>{LOGGED-IN}</code></li>
  * <li><code>{LOGGED-OUT}</code></li>
  * <li><code>{LANGUAGE-CODE}</code></li>
@@ -65,7 +65,7 @@ public abstract class TokenParser {
 	 * loader) of the token-substitution file to use by default. The file
 	 * extension <code>.properties</code> is required and assumed.
 	 */
-	private static final String DEFAULT_SUBS_PATHNAME = "default_tokens";
+	private static final String DEFAULT_SUBS_PATHNAME = "default_includes";
 
 	/**
 	 * This class attribute is the token for the user's <a
@@ -100,6 +100,13 @@ public abstract class TokenParser {
 	/**
 	 * This class attribute is the token for a keyname to be substituted from
 	 * the token-substitutions file.
+	 */
+	private static final String TOKEN_INCLUDE = "INCLUDE";
+
+	/**
+	 * This class attribute is the legacy name for the include token.
+	 * 
+	 * @deprecated
 	 */
 	private static final String TOKEN_TOKEN = "TOKEN";
 
@@ -334,8 +341,8 @@ public abstract class TokenParser {
 
 	/**
 	 * An inner class interface for returning the value to substitute for a
-	 * non-container, parameterized token like <code>{TOKEN:key}</code> where
-	 * "key" is the parameter passed to the getValue method.
+	 * non-container, parameterized token like <code>{INCLUDE:key}</code>
+	 * where "key" is the parameter passed to the getValue method.
 	 */
 	protected abstract class ValueProvider {
 
@@ -358,7 +365,7 @@ public abstract class TokenParser {
 	 * of them in series. The order of token evaluation is as follows:
 	 * </p>
 	 * <dl>
-	 * <dt><code>{TOKEN:<i>key</i>}</code></dt>
+	 * <dt><code>{INCLUDE:<i>key</i>}</code></dt>
 	 * <dd>This token is parsed first, and the substituted content is added to
 	 * the string. So subsequent substitutions operate against the value for the
 	 * <i>key</i> - therefore that value may itself contain other tokens, and
@@ -388,7 +395,7 @@ public abstract class TokenParser {
 	 * <dt><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></dt>
 	 * <dt><code>{SITE-URL:<i>uri</i>}</code></dt>
 	 * <dd>Finally the remaining parameterized tokens are parsed last, so that
-	 * the unparameterized ones (and also <code>{TOKEN:<i>key</i>}</code>)
+	 * the unparameterized ones (and also <code>{INCLUDE:<i>key</i>}</code>)
 	 * can include values in their parameters.</dd>
 	 * </dl>
 	 * </p>
@@ -409,8 +416,8 @@ public abstract class TokenParser {
 		}
 
 		// Start parsing and substituting the tokens:
-		// Always do {TOKEN:key} first.
-		content = parseToken(content);
+		// Always do {INCLUDE:key} first.
+		content = parseInclude(content);
 
 		// Always do unparameterized containers second:
 		content = parseLoggedInContainer(content);
@@ -842,10 +849,10 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the given string, converting the <code>{TOKEN:<i>key</i>}</code>
-	 * token into the value for that key in the token-substitutions file (<code>default_tokens.properties</code>
+	 * Parses the given string, converting the <code>{INCLUDE:<i>key</i>}</code>
+	 * token into the value for that key in the token-substitutions file (<code>default_includes.properties</code>
 	 * by default, unless overridden in the constructor). For example:
-	 * <code>&lt;img src="{TOKEN:url.image}"&gt;</code> is returned as:
+	 * <code>&lt;img src="{INCLUDE:url.image}"&gt;</code> is returned as:
 	 * <code>&lt;img src="http://foo.hp.com/images/picture.jpg"&gt;</code>
 	 * assuming the token-substitutions file contains the following property:
 	 * <code>url.image=http://foo.hp.com/images/picture.jpg</code>. If the
@@ -855,19 +862,27 @@ public abstract class TokenParser {
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
 	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
-	 * you prefer.
+	 * you prefer. You may also use the <code>{INCLUDE:<i>key</i>}</code>
+	 * token as a synonym for this one, but this is deprecated.
 	 * </p>
 	 * 
 	 * @param content
 	 *            The content string.
 	 * @return The interpolated string.
 	 */
-	public String parseToken(String content) {
-		return parseParameterized(content, TOKEN_TOKEN, new ValueProvider() {
+	public String parseInclude(String content) {
+		content = parseParameterized(content, TOKEN_TOKEN, new ValueProvider() {
 			protected String getValue(String param) {
-				return getToken(param);
+				return getIncludeValue(param);
 			}
 		});
+		content = parseParameterized(content, TOKEN_INCLUDE,
+				new ValueProvider() {
+					protected String getValue(String param) {
+						return getIncludeValue(param);
+					}
+				});
+		return (content);
 	}
 
 	/**
@@ -1232,7 +1247,7 @@ public abstract class TokenParser {
 	 * @return value
 	 * @see {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager}
 	 */
-	private String getToken(String key) {
+	private String getIncludeValue(String key) {
 		String tokenValue = null;
 		try {
 			ResourceBundle resBundle = PropertyResourceBundleManager
