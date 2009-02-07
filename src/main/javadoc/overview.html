@@ -3959,13 +3959,21 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 	<code><i>uri</i></code> could be a Vignette "friendly URI" for the
 	desired page. It could be a template name, for a secondary page. Your <code><i>uri</i></code>
 	can also include any additional path or query string you might need.
-	Here is some sample HTML text, using this token to help build a
-	hyperlink pointing to the site Forums page (which in this example has a
-	"friendly URI" of <code>/forums</code>):</p>
+	You can also use the <code><i>uri</i></code> to switch to another
+	portal site: if your <code><i>uri</i></code> begins with <code>/</code>,
+	it is considered relative to the current site, but otherwise the first
+	part of the <code><i>uri</i></code> is considered to be the new "site
+	DNS name" to use.</p>
+	<p>Here is some sample HTML text, using this token to help build a
+	hyperlink pointing to the current site's Forums page (which in this
+	example has a "friendly URI" of <code>/forums</code>):</p>
 
 	<blockquote><pre>
 Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 </pre></blockquote>
+
+	<p>To repeat the above example, but switch to the <code>itrc</code>
+	site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
 	</dd>
 </dl>
 
@@ -4267,9 +4275,9 @@ url.hp=http://www.hp.com
 	</pre></blockquote>
 
 	<p>Your substitution property <code><i>value</i></code> can contain
-	any content valid in a Java {@java.util.Properties} file. It can even
-	contain any of the other special markup tokens described in this guide
-	(however it cannot contain other <code>{INCLUDE:<i>key</i>}</code>
+	any content valid in a Java {@link java.util.Properties} file. It can
+	even contain any of the other special markup tokens described in this
+	guide (however it cannot contain other <code>{INCLUDE:<i>key</i>}</code>
 	tokens).</p>
 
 	<p>Your token substitutions property file may be located anywhere
@@ -4370,6 +4378,35 @@ This text is for everybody.&lt;BR&gt;
 <a name="file.author.token.misc">
 <h4>4.5.5. Miscellaneous (<code>{SITE}</code>)</h4>
 </a>
+
+<p>These are miscellaneous tokens. Please click on the links for
+more documentation on each token.</p>
+
+<dl>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site"><code>{SITE}</code></a></dt>
+	<dd>
+	<p>Use this token to insert the portal site name into the
+	interpolated content. In SPF, the portal site name is the Vignette
+	"site DNS name", which the portal administrator assigns when creating
+	the site. It is the part of the portal URL which uniquely identifies
+	the portal site: <code>http://host.hp.com/portal/site/&lt;site-DNS-name&gt;/...</code>.
+	Here is some sample HTML text, using this token (as well as the <code>{SITE-URL:<i>key</i>}</code>
+	token) to present a logout hyperlink (in SPF, the logout process runs
+	in the <code>spf</code> portal site, uses the Vignette secondary page
+	whose template ID is <code>SPF_LOGOUT</code>, and expects the effective
+	site DNS name to be in the <code>spfSite</code> query parameter):</p>
+
+	<blockquote><pre>
+&lt;A HREF="{SITE-URL:spf/template.SPF_LOGOUT?spfSite={SITE}}"&gt;Sign out&lt;/A&gt;
+</pre></blockquote>
+
+	<p>(Incidentally, notice from this example how <code>{SITE}</code>
+	is nested inside the <code><i>uri</i></code> parameter for <code>{SITE-URL:<i>uri</i>}</code>.
+	In general, any of the unparameterized tokens can be used inside the
+	parameter-values for any of the parameterized tokens.)</p>
+	</dd>
+</dl>
 
 <hr>
 
