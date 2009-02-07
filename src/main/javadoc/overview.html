@@ -270,19 +270,16 @@ table.props td {
 			a tag library for a custom rendition</a></li>
 		</ul>
 		</li>
-		<li>3.4. <a href="#help.portlet.java">Producing portlet help
-		(help mode) using Java code</a>
+		<li>3.4. <a href="#help.portlet">Producing portlet help (help
+		mode)</a>
 		<ul>
-			<li>3.4.1. <a
-				href="#help.portlet.java.fileInterpolatorController">Using <code>FileInterpolatorController</code></a></li>
+			<li>3.4.1. <a href="#help.portlet.jsp.interpolate">Using <code>&lt;spf-file-portlet:interpolate&gt;</code>
+			for portlet help</a></li>
+			<li>3.4.2. <a
+				href="#help.portlet.java.fileInterpolatorController">Using <code>FileInterpolatorController</code>
+			for portlet help</a></li>
 		</ul>
 		</li>
-		<li>3.5. <a href="#help.portlet.jsp">Producing portlet help
-		(help mode) using JSP tag libraries</a>
-		<ul>
-			<li>3.5.1. <a href="#help.portlet.jsp.interpolate">Using <code>&lt;spf-file-portlet:interpolate&gt;</code></a>
-			</li>
-		</ul>
 	</ul>
 	</li>
 	<li>4. <a href="#file">Text Interpolation</a>
@@ -648,8 +645,8 @@ and/or CSS), to the user.</p>
 
 	<li>The file may also include <i>special markup tokens</i> for
 	certain dynamic functionality, as per the SPF portlet utilities' <a
-		href="#file.display">text interpolation</a> capabilities. For example,
-	you can permission content in the file by group or role; include
+		href="#file">text interpolation</a> capabilities. For example, you can
+	permission content in the file by group or role; include
 	possibly-localized images and other static resources; etc.</li>
 
 	<li>The <code>html-viewer</code> portlet's <code>view</code> mode
@@ -2590,12 +2587,11 @@ controllers and views for <code>help</code> mode to meet your needs.</p>
 simply be to display some largely-static help content to the user. SPF
 assists you with this by letting you just author your help content as a
 mostly-static HTML file, in which you can put text, image references,
-CSS, JavaScript, and special markup tokens for certain dynamic
-server-side behaviors. You just write this content, and then extend
-SPF's {@link
-com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController} to
-implement your <code>help</code> mode. See the <a
-	href="#help.portlet.java">discussion below</a>.</p>
+CSS, JavaScript, and <i>special markup tokens</i> for certain dynamic
+server-side behaviors. You just write this content, and then use one of
+the SPF's <a href="#file">text interpolation</a> utilities to render it
+for the user for <code>help</code> mode. See the <a href="#help.portlet">discussion
+below</a>.</p>
 
 <a name="help.kinds.global">
 <h4>3.1.3. Portal help (global help)</h4>
@@ -3147,21 +3143,271 @@ extend.</p>
 
 <hr>
 
-<a name="help.portlet.java">
-<h3>3.4. Producing portlet help (help mode) using Java code</h3>
+<a name="help.portlet">
+<h3>3.4. Producing portlet help (help mode)</h3>
 </a>
 
-<a name="help.portlet.java.fileInterpolatorController">
-<h4>3.4.1. Using <code>FileInterpolatorController</code></h4>
-</a>
+<p>For portlet-wide help, SPF portlet developers simply build a <code>help</code>
+mode for their portlet as per the JSR portlet specification. First, in
+your <code>portlet.xml</code> you add:</p>
 
-<a name="help.portlet.jsp">
-<h3>3.5. Producing portlet help (help mode) using JSP tag libraries</h3>
-</a>
+<blockquote><pre>
+&lt;supports&gt;
+    ...    &lt;-- other "supports" configuration for your portlet
+    &lt;portlet-mode&gt;help&lt;/portlet-mode&gt;
+&lt;/supports&gt;
+</pre></blockquote>
+
+<p>Then you use Spring Portlet MVC, WPAP, and the SPF portlet
+utilities to write your <code>help</code> mode artifacts (eg JSP,
+possibly a controller, etc) and configure them in your application
+context as you would for any other portlet mode. Finally, you use the
+JSR-standard {@javax.portlet.MimeResponse#createRenderURL()} and
+{@javax.portlet.PortletURL#setPortletMode(javax.portlet.PortletMode)} to
+then make a hyperlink URL pointing to your <code>help</code> mode.</p>
+
+<p>What specific to portlet <code>help</code> mode does the SPF
+offer? We realize that the job of <code>help</code> mode across many
+portlets is often quite similar: to simply display some largely-static
+localized text, possibly with images, video or other <a
+	href="#i18n.resources.supporting">supporting resources</a> (themselves
+potentially localized), to the user. Dynamic behaviors in the text are
+often limited to displaying different help content based on what the
+user is authorized to see or do in the portlet.</p>
+
+<p>If that description fits your portlet help, we advise you to use
+SPF's <a href="#file">text interpolation</a> framework as the basis for
+implementing your portlet help! It will save you some work.</p>
+
+<ol>
+	<li>
+	<p>First, create an HTML file containing your help content. Also
+	create any supporting resources (images, CSS files, video, etc) that go
+	with it. In your HTML file, include whatever literal text, HTML tags,
+	CSS style, JavaScript, etc your help content requires. Use the <a
+		href="#file.author">special markup tokens</a> supported by the SPF
+	file interpolator for dynamic behaviors such as:</p>
+
+	<ul>
+		<li><a href="#file.author.token.url">referencing proper
+		localized URLs</a> for supporting resources in your <code>&lt;IMG&gt;</code>,
+		<code>&lt;LINK&gt;</code>, etc tags
+		<li><a href="#file.author.token.auth">limiting content to
+		applicable users</a> - those who are authenticated (or not), who are in
+		certain roles, etc</li>
+	</ul>
+
+	<p>For example, consider a portlet which is accessible to anonymous
+	users, but has additional features only available to authenticated
+	users. It also has a button (image) labeled "Go get it!" which, when
+	clicked, performs some action. Here is an HTML file for portlet <code>help</code>
+	mode for this. We have assumed that the "Go get it!" image is
+	potentially localized, with a base name of <code>goGetIt.gif</code>, in
+	the <code>images/</code> subfolder. We have also used the special
+	tokens <code>{LOGGED-OUT}...{/LOGGED-OUT}</code> and <code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code>
+	which you can <a href="#file.author">read about below</a>. (As usual
+	when writing HTML markup for a portlet, do not include the <code>&lt;HTML&gt;</code>,
+	<code>&lt;HEAD&gt;</code>, or <code>&lt;BODY&gt;</code> tags.)</p>
+
+	<blockquote><pre>
+&lt;h1&gt;About this portlet&lt;/h1&gt;
+
+{LOGGED-OUT}
+&lt;blockquote&gt;
+    &lt;font color="red"&gt;&lt;b&gt;You should login to have access to all features.&lt;/b&gt;&lt;/font&gt;
+&lt;/blockquote&gt;
+{/LOGGED-OUT}
+
+&lt;p&gt;
+    Here is how to use the 
+    &lt;img src="{LOCALIZED-CONTENT-URL:/images/goGetIt.gif}" alt="Go get it!"&gt;
+    button: ...
+&lt;/p&gt;
+</pre></blockquote>
+	</li>
+
+	<li>
+	<p>Next you can localize your HTML file (and other supporting
+	resources, like the <code>goGetIt.gif</code> image in the above
+	example), resulting in a <a href="#i18n.resources.bundles">resource
+	bundle</a> for it (and for the other supporting resources, as discussed
+	earlier). Put your resource bundles (the base and localized files) into
+	either the external <i>portlet resource bundle folder</i>, or inside
+	your portlet WAR, also <a href="#i18n.location">as discussed
+	earlier</a>.</p>
+	</li>
+
+	<li>
+	<p>Now write and configure your code to render that interpolated
+	HTML file when the user requests <code>help</code> mode. The steps here
+	vary and are covered in the next sections. Remember that in any case,
+	you have to configure your <code>portlet.xml</code> as discussed at the
+	top of this section. (Likewise, to make a URL for a hyperlink pointing
+	to <code>help</code> mode, use the Java-standard portlet API's
+	mentioned at the top of this section.)</p>
+	</li>
+</ol>
 
 <a name="help.portlet.jsp.interpolate">
-<h4>3.5.1. Using <code>&lt;spf-file-portlet:interpolate&gt;</code></h4>
+<h4>3.4.1. Using <code>&lt;spf-file-portlet:interpolate&gt;</code>
+for portlet help</h4>
 </a>
+
+<p>The easiest way to render an interpolated HTML file for your <code>help</code>
+mode is using the <a href="#file.display.jsp.interpolate"><code>&lt;spf-file-portlet:interpolate&gt;</code></a>
+JSP tag, provided in the SPF portlet utilities. Using this tag, you just
+write a JSP wrapper around it, then configure Spring to map to that JSP
+when <code>help</code> mode is invoked, and you're done.</p>
+
+<p>Let's continue the example from above. Say that the basename for
+the HTML file is <code>my_help.html</code>, and you put that HTML bundle
+(eg <code>my_help.html</code>, <code>my_help_zh_CN.html</code>, etc)
+into your <code>html/</code> subfolder (of your portlet application root
+in the portlet WAR, or your external portlet bundle folder). Recall that
+file referenced an image bundle, with base filename <code>goGetIt.gif</code>
+in the <code>images/</code> subfolder - so assume that bundle (eg <code>goGetIt.gif</code>,
+<code>goGetIt_zh_CN.gif</code>, etc) has also been put there, into the <code>images/</code>
+subfolder.</p>
+
+<p>Your JSP would then look like this:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-file-portlet" uri="/spf-file-portlet.tld" %&gt;
+
+&lt;spf-file-portlet:interpolate file="/html/my_help.html" /&gt;
+</pre></blockquote>
+
+<p>Then, to render that JSP directly through Spring Portlet MVC when
+<code>help</code> mode is invoked in the render phase (eg by the user
+clicking on your <code>help</code> mode hyperlink), just configure 2
+Spring artifacts in your application context. (This could go in the main
+<code>applicationContext.xml</code>, or in a portlet-specific one as is
+commonly practiced when your application contains multiple portlets.)</p>
+
+<ol>
+	<li>
+	<p>First, configure an instance of Spring's <code>ParameterizableViewController</code>
+	so that it returns your JSP name (minus the file extension) as the view
+	name. For example, assuming that your JSP (above) was named <code>my_help.jsp</code>:</p>
+
+	<blockquote><pre>
+&lt;bean id="myHelpForwarder"                       &lt;-- "id" is any value you choose
+         class="org.springframework.web.portlet.mvc.ParameterizableViewController"&gt;
+    &lt;property name="viewName" value="my_help"/&gt;  &lt;-- "value" attribute is your JSP name
+&lt;/bean&gt;</pre></blockquote>
+
+	<p><b>Note:</b> This is assuming you have already configured a
+	JSP-capable view resolver for your portlet application. This is basic
+	Spring Portlet MVC and is not shown here.</p>
+	</li>
+
+	<li>
+	<p>Then, use Spring's <code>PortletModeHandlerMapping</code> to map
+	<code>help</code> mode requests into your <code>ParameterizableViewController</code>
+	instance:</p>
+
+	<blockquote><pre>
+&lt;bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping"&gt;
+    &lt;property name="portletModeMap"&gt;
+        &lt;map&gt;
+            ...                                  &lt;-- other entries for other modes go here
+            &lt;entry key="help"&gt;
+                &lt;ref bean="myHelpForwarder"/&gt;    &lt;-- "bean" is your "id" from above
+            &lt;/entry&gt;
+        &lt;/map&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</pre></blockquote>
+	</li>
+</ol>
+
+<p>For more general information about using the <a
+	href="#file.display.jsp.interpolate"><code>&lt;spf-file-portlet:interpolate&gt;</code></a>
+tag, see the discussion later in this document.</p>
+
+<a name="help.portlet.java.fileInterpolatorController">
+<h4>3.4.2. Using <code>FileInterpolatorController</code> for
+portlet help</h4>
+</a>
+
+<p>Another way to render an interpolated help HTML file for your <code>help</code>
+mode is using the <a
+	href="#file.display.java.fileInterpolatorController"><code>FileInterpolatorController</code></a>
+base class, part of the SPF portlet utilities. You extend this base
+class to implement your own controller. In your class, you implement at
+least the following:</p>
+
+<ul>
+	<li>
+	<p>One method ({@link
+	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#getFilename(RenderRequest)})
+	invoked during the render phase to return the base filename for the
+	localized bundle of HTML help files.</p>
+	</li>
+
+	<li>
+	<p>Another method ({@link
+	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#execute(RenderRequest,RenderResponse,String)}),
+	invoked after interpolating that file during the render phase. This
+	method is passed the already-localized and interpolated content from
+	the bundle, and is supposed to return a Spring <code>ModelAndView</code>
+	for the dispatcher to forward. You can further manipulate the
+	interpolated content in this method, or perform whatever other business
+	logic your portlet help might require. You would set the interpolated
+	content as a model element in the <code>ModelAndView</code> before
+	returning.
+	</li>
+</ul>
+
+<p>You would also implement the JSP (or other view artifact) which
+finally presents the content.</p>
+
+<p>This approach is more work for you to code than using <a
+	href="#help.portlet.jsp.interpolate"><code>&lt;spf-file-portlet:interpolate&gt;</code></a>
+(see above), so you would probably only use it when your portlet help
+requirements involve additional business logic.</p>
+
+<p>For more information on how to extend and implement <code>FileInterpolatorController</code>,
+see the <a href="#file.display.java.fileInterpolatorController">discussion
+in the next chapter</a>. Once you have your controller and view artifact (eg
+JSP) ready, you would configure them in your Spring application context
+as usual:</p>
+
+<ol>
+	<li>
+	<p>First, configure an instance of your help controller class
+	(named <code>com.hp.my.helpController</code> in this example).
+	Depending on your actual implementation, you would probably set your
+	JSP file name (minus the extension) as your <code>viewName</code>
+	property, as usual. (This is assuming you have already configured a
+	JSP-capable view resolver for your portlet application - that is basic
+	Spring Portlet MVC and is not shown here.) For example, assuming that
+	your JSP was named <code>my_help.jsp</code>:</p>
+
+	<blockquote><pre>
+&lt;bean id="myHelpController"                      &lt;-- "id" is any value you choose
+      class="com.hp.my.helpController"&gt;          &lt;-- "class" is your controller (subclass of FileInterpolatorController)
+    &lt;property name="viewName" value="my_help"/&gt;  &lt;-- "value" is your JSP name
+&lt;/bean&gt;</pre></blockquote>
+	</li>
+
+	<li>
+	<p>Then, use Spring's <code>PortletModeHandlerMapping</code> to map
+	<code>help</code> mode requests into that instance of your help
+	controller class:</p>
+
+	<blockquote><pre>
+&lt;bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping"&gt;
+    &lt;property name="portletModeMap"&gt;
+        &lt;map&gt;
+            ...                                  &lt;-- other entries for other modes go here
+            &lt;entry key="help"&gt;
+                &lt;ref bean="myHelpController"/&gt;   &lt;-- "bean" is your "id" from above
+            &lt;/entry&gt;
+        &lt;/map&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</pre></blockquote>
+	</li>
+</ol>
 
 <hr>
 
@@ -3513,8 +3759,8 @@ you have setup for your Spring portlet.</p>
 	more information. If your file to interpolate does not contain any <code>{INCLUDE:<i>key</i>}</code>
 	tokens, or you are willing to use the default property file, you do not
 	need to set this attribute.</p>
-	</p>
-	</dd>
+</p>
+</dd>
 </dl>
 
 <p>For example, here is a simple extension/implementation of the <code>FileInterpolatorController</code>.
