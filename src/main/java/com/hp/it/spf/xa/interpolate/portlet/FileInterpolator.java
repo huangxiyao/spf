@@ -107,11 +107,11 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * token is isn't really necessary. It is retained for backward-compatibility.
  * </p>
  * <p>
- * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the
+ * other <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>pathname</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>pathname</i></code>.
  * </p>
  * </dd>
  * 
@@ -187,8 +187,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * Your <code><i>groups</i></code> can "nest" any of the other
  * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>groups</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>groups</i></code>.
  * </p>
  * </dd>
  * 
@@ -200,6 +200,113 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * language code from the current locale. Note that the country code is not a
  * part of this. For example, for a Japanese request,
  * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>.
+ * </p>
+ * </dd>
+ * 
+ * <dt><a name="token"><code>{INCLUDE:<i>key</i>}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use this token to lookup a value for the given key in a property file, and
+ * insert that value into the interpolated content. The property file, by
+ * default, is <code>default_includes.properties</code>, but you can override
+ * that in the <code>FileInterpolator</code> constructor. Whether you use
+ * <code>default_includes.properties</code> or your own token-substitution
+ * property file, the file should be loaded into a location accessible to the
+ * class loader. The property values may include any text content.
+ * </p>
+ * <p>
+ * For example, assume you have put this key/value pair into your property file:
+ * </p>
+ * <p>
+ * <code>url.hp-shopping=http://shopping.hp.com</code>
+ * </p>
+ * <p>
+ * If your input file contains the following:
+ * </p>
+ * <p>
+ * <code>&lt;A HREF="{INCLUDE:url.hp-shopping}"&gt;Go to HP shopping.&lt;/A&gt;</code>
+ * </p>
+ * <p>
+ * Then the interpolated content will contain a hyperlink taking the user to the
+ * URL value given in your property file:
+ * </p>
+ * <p>
+ * <code>&lt;A HREF="http://shopping.hp.com"&gt;Go to HP shopping.&lt;/A&gt;</code>
+ * </p>
+ * <p>
+ * Additionally, this token supports nesting with other tokens. As follows:
+ * </p>
+ * <ul>
+ * <li>
+ * <p>
+ * The property value for this token may contain <b>any</b> of the other
+ * special markup tokens supported by <code>FileInterpolator</code>,
+ * <b>except</b> another <code>{INCLUDE:<i>key</i>}</code> token. In other
+ * words, you can "nest" other tokens inside the propery values expressed by
+ * this token.
+ * </p>
+ * <p>
+ * For example, assume we have this in our property file:
+ * </p>
+ * <p>
+ * <code>url.hp-shopping=http://shopping.hp.com?lang={LANGUAGE-CODE}&cc={COUNTRY-CODE}</code>
+ * </p>
+ * <p>
+ * If your input file is as above, then the interpolated content will include
+ * the user's language and country code in the URL from the property file. For
+ * example, for a Brazil Portuguese user:
+ * </p>
+ * <p>
+ * <code>&lt;A HREF="http://shopping.hp.com?lang=pt&cc=BR"&gt;Go to HP shopping.&lt;/A&gt;</code>
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * Vice-versa, the <code>{INCLUDE:<i>key</i>}</code> token can itself be
+ * used within the parameter to <b>any</b> of the other tokens, except another
+ * <code>{INCLUDE:<i>key</i>}</code> token. So you can "nest" this token
+ * inside the parameter values to other tokens.
+ * </p>
+ * <p>
+ * For example, assume we now have this in our property file:
+ * </p>
+ * <p>
+ * <code>image.current-promo=december_sale.gif</code>
+ * </p>
+ * <p>
+ * Also imagine the <code>december_sale.gif</code> is setup properly, as an
+ * external (possibly localized) image serviced by the file relay servlet (see
+ * discussion elsewhere). If your input file contains the following:
+ * </p>
+ * <p>
+ * <code>&lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/{INCLUDE:image.current-promo}}"&gt;</code>
+ * </p>
+ * <p>
+ * Then the interpolated content will display the proper localized version of
+ * the <code>december_sale.gif</code> image to the user; like this, for
+ * example, for a Japanese (Japan) user:
+ * </p>
+ * <p>
+ * <code>&lt;IMG SRC="/relay/images/december_sale_ja_JP.gif"&gt;</code>
+ * </p>
+ * <p>
+ * (In actuality, the URL would be portlet-encoded for the SPF portal; the
+ * <i>unencoded</i> URL is shown above for simplicity.)
+ * </p>
+ * <blockquote>
+ * <p>
+ * <b>Note:</b> Although you can "nest" <code>{INCLUDE:<i>key</i>}</code>
+ * within other token's parameters, you cannot nest other token parameters of
+ * any kind inside the <code><i>key</i></code> parameter for
+ * <code>{INCLUDE:<i>key</i>}</code>. In other words, the
+ * <code><i>key</i></code> is always treated as a literal.
+ * </p>
+ * </blockquote> </li>
+ * </ul>
+ * <p>
+ * A template for the token substitution property file, also named
+ * <code>default_includes.properties</code> (you should rename your copy), is
+ * available with the SPF.
  * </p>
  * </dd>
  * 
@@ -269,8 +376,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the
  * other <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>pathname</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>pathname</i></code>.
  * </p>
  * </dd>
  * 
@@ -382,8 +489,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * Your <code><i>portlets</i></code> can "nest" any of the other
  * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>portlets</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>portlets</i></code>.
  * </p>
  * </dd>
  * 
@@ -449,8 +556,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * Your <code><i>roles</i></code> can "nest" any of the other
  * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>roles</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>roles</i></code>.
  * </p>
  * </dd>
  * 
@@ -517,8 +624,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * Your <code><i>names</i></code> can "nest" any of the other
  * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>names</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>names</i></code>.
  * </p>
  * </dd>
  * 
@@ -550,115 +657,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * Your <code><i>uri</i></code> can "nest" any of the other
  * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>uri</i></code>.
- * </p>
- * </dd>
- * 
- * <dt><a name="token"><code>{TOKEN:<i>key</i>}</code></a></dt>
- * <dd>
- * <p>
- * Use this token to lookup a value for the given key in a property file, and
- * insert that value into the interpolated content. The property file, by
- * default, is <code>default_tokens.properties</code>, but you can override
- * that in the <code>FileInterpolator</code> constructor. Whether you use
- * <code>default_tokens.properties</code> or your own token-substitution
- * property file, the file should be loaded into a location accessible to the
- * class loader. The property values may include any text content.
- * </p>
- * <p>
- * For example, assume you have put this key/value pair into your property file:
- * </p>
- * <p>
- * <code>url.hp-shopping=http://shopping.hp.com</code>
- * </p>
- * <p>
- * If your input file contains the following:
- * </p>
- * <p>
- * <code>&lt;A HREF="{TOKEN:url.hp-shopping}"&gt;Go to HP shopping.&lt;/A&gt;</code>
- * </p>
- * <p>
- * Then the interpolated content will contain a hyperlink taking the user to the
- * URL value given in your property file:
- * </p>
- * <p>
- * <code>&lt;A HREF="http://shopping.hp.com"&gt;Go to HP shopping.&lt;/A&gt;</code>
- * </p>
- * <p>
- * Additionally, this token supports nesting with other tokens. As follows:
- * </p>
- * <ul>
- * <li>
- * <p>
- * The property value for this token may contain <b>any</b> of the other
- * special markup tokens supported by <code>FileInterpolator</code>,
- * <b>except</b> another <code>{TOKEN:<i>key</i>}</code> token. In other
- * words, you can "nest" other tokens inside the propery values expressed by
- * this token.
- * </p>
- * <p>
- * For example, assume we have this in our property file:
- * </p>
- * <p>
- * <code>url.hp-shopping=http://shopping.hp.com?lang={LANGUAGE-CODE}&cc={COUNTRY-CODE}</code>
- * </p>
- * <p>
- * If your input file is as above, then the interpolated content will include
- * the user's language and country code in the URL from the property file. For
- * example, for a Brazil Portuguese user:
- * </p>
- * <p>
- * <code>&lt;A HREF="http://shopping.hp.com?lang=pt&cc=BR"&gt;Go to HP shopping.&lt;/A&gt;</code>
- * </p>
- * </li>
- * <li>
- * <p>
- * Vice-versa, the <code>{TOKEN:<i>key</i>}</code> token can itself be used
- * within the parameter to <b>any</b> of the other tokens, except another
- * <code>{TOKEN:<i>key</i>}</code> token. So you can "nest" this token
- * inside the parameter values to other tokens.
- * </p>
- * <p>
- * For example, assume we now have this in our property file:
- * </p>
- * <p>
- * <code>image.current-promo=december_sale.gif</code>
- * </p>
- * <p>
- * Also imagine the <code>december_sale.gif</code> is setup properly, as an
- * external (possibly localized) image serviced by the file relay servlet (see
- * discussion elsewhere). If your input file contains the following:
- * </p>
- * <p>
- * <code>&lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/{TOKEN:image.current-promo}}"&gt;</code>
- * </p>
- * <p>
- * Then the interpolated content will display the proper localized version of
- * the <code>december_sale.gif</code> image to the user; like this, for
- * example, for a Japanese (Japan) user:
- * </p>
- * <p>
- * <code>&lt;IMG SRC="/relay/images/december_sale_ja_JP.gif"&gt;</code>
- * </p>
- * <p>
- * (In actuality, the URL would be portlet-encoded for the SPF portal; the
- * <i>unencoded</i> URL is shown above for simplicity.)
- * </p>
- * <blockquote>
- * <p>
- * <b>Note:</b> Although you can "nest" <code>{TOKEN:<i>key</i>}</code>
- * within other token's parameters, you cannot nest other token parameters of
- * any kind inside the <code><i>key</i></code> parameter for
- * <code>{TOKEN:<i>key</i>}</code>. In other words, the
- * <code><i>key</i></code> is always treated as a literal.
- * </p>
- * </blockquote> </li>
- * </ul>
- * <p>
- * A template for the token substitution property file, also named
- * <code>default_tokens.properties</code> (you should rename your copy), is
- * available with the SPF.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>uri</i></code>.
  * </p>
  * </dd>
  * 
@@ -668,17 +668,17 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * Use this token to insert a given string property of the user into the
  * interpolated content. The <code><i>key</i></code> parameter in the token
  * is the name of the user property, and the user properties themselves are
- * taken from the <i>user profile map</i> created by SPF.
- * For example, <code>{USER-PROPERTY:PhoneNumber}</code> is replaced with
+ * taken from the <i>user profile map</i> created by SPF. For example,
+ * <code>{USER-PROPERTY:PhoneNumber}</code> is replaced with
  * <code>123 456 7890</code> for a user with such a phone number.
  * </p>
  * <p>
  * The property name <code><i>key</i></code>'s are not listed here; you can
- * lookup their values in the {@link com.hp.it.spf.xa.misc.portlet.Consts} class.
- * (They are the values of the <code>Consts</code> class attributes whose
- * names begin with <code>KEY_*</code> - for example,
- * {@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_EMAIL}. Note you must use the
- * value - you cannot use the name of one of those <code>KEY_*</code>
+ * lookup their values in the {@link com.hp.it.spf.xa.misc.portlet.Consts}
+ * class. (They are the values of the <code>Consts</code> class attributes
+ * whose names begin with <code>KEY_*</code> - for example,
+ * {@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_EMAIL}. Note you must use
+ * the value - you cannot use the name of one of those <code>KEY_*</code>
  * attributes in your <code><i>key</i></code> for the
  * <code>{USER-PROPERTY:<i>key</i>}</code> token.
  * </p>
@@ -691,8 +691,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * Your <code><i>key</i></code> can "nest" any of the other
  * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>key</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>key</i></code>.
  * </p>
  * </dd>
  * </dl>
@@ -704,7 +704,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  * <p>
  * <ol>
- * <li><code>{TOKEN:<i>key</i>}</code></li>
+ * <li><code>{INCLUDE:<i>key</i>}</code></li>
  * <li><code>{LOGGED-IN}</code></li>
  * <li><code>{LOGGED-OUT}</code></li>
  * <li><code>{LANGUAGE-CODE}</code></li>
@@ -765,9 +765,9 @@ public class FileInterpolator extends
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> No token-substitutions property file is passed in this
-	 * constructor. Therefore any <code>{TOKEN:<i>key</i>}</code> tokens in
-	 * the file content will be resolved against the default token-substitutions
-	 * property file (<code>default_tokens.properties</code>).
+	 * constructor. Therefore any <code>{INCLUDE:<i>key</i>}</code> tokens
+	 * in the file content will be resolved against the default
+	 * token-substitutions property file (<code>default_includes.properties</code>).
 	 * </p>
 	 * 
 	 * @param pRequest
@@ -798,12 +798,12 @@ public class FileInterpolator extends
 	 * {@link #FileInterpolator(PortletRequest, PortletResponse, String)} and
 	 * allows a token-substitutions file to be specified as well. The
 	 * token-substitutions pathname provided is to be used with any
-	 * <code>{TOKEN:<i>key</i>}</code> tokens in the file content; they will
-	 * be resolved against the file whose pathname you provide. The pathname
-	 * should include any necessary path (relative to the class loader) followed
-	 * by the filename (the extension <code>.properties</code> is required and
-	 * assumed). If you know there are no such tokens in the file content, you
-	 * can pass null for this parameter.
+	 * <code>{INCLUDE:<i>key</i>}</code> tokens in the file content; they
+	 * will be resolved against the file whose pathname you provide. The
+	 * pathname should include any necessary path (relative to the class loader)
+	 * followed by the filename (the extension <code>.properties</code> is
+	 * required and assumed). If you know there are no such tokens in the file
+	 * content, you can pass null for this parameter.
 	 * </p>
 	 * 
 	 * @param pRequest
@@ -816,8 +816,8 @@ public class FileInterpolator extends
 	 * @param subsFilePath
 	 *            The filename and path relative to where the class loader
 	 *            searches for the token-substitutions property file (for
-	 *            purposes of any <code>{TOKEN:key}</code> tokens in the file
-	 *            content)
+	 *            purposes of any <code>{INCLUDE:key}</code> tokens in the
+	 *            file content)
 	 */
 	public FileInterpolator(PortletRequest pRequest, PortletResponse pResponse,
 			String pBaseContentFilePath, String subsFilePath) {
@@ -855,8 +855,8 @@ public class FileInterpolator extends
 	 * @param subsFilePath
 	 *            The filename and path relative to where the class loader
 	 *            searches for the token-substitutions property file (for
-	 *            purposes of any <code>{TOKEN:key}</code> tokens in the file
-	 *            content)
+	 *            purposes of any <code>{INCLUDE:key}</code> tokens in the
+	 *            file content)
 	 */
 	public FileInterpolator(PortletRequest pRequest, PortletResponse pResponse,
 			Locale pLocale, String pBaseContentFilePath, String subsFilePath) {

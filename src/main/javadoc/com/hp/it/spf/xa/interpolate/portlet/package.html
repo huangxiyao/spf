@@ -19,6 +19,10 @@ package are:</p>
 	<dd>Includes the surrounded content if the user in the current
 	portlet request is a member of one of the named <code><i>groups</i></code>.
 	Otherwise suppresses the surrounded content.</dd>
+	<dt><code>{INCLUDE:<i>key</i>}</code></dt>
+	<dd>Replaced with the value for the <code><i>key</i></code>
+	property as found in the token substitutions file (eg <code>default_includes.properties</code>
+	by default).</dd>
 	<dt><code>{LANGUAGE-CODE}</code></dt>
 	<dd>Replaced with the <a
 		href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
@@ -66,10 +70,6 @@ package are:</p>
 	<dt><code>{SITE-URL:<i>uri</i>}</code></dt>
 	<dd>Replaced with the page URL for the given friendly URI at this
 	portlet's portal site.</dd>
-	<dt><code>{TOKEN:<i>key</i>}</code></dt>
-	<dd>Replaced with the value for the <code><i>key</i></code>
-	property as found in the token substitutions file (eg <code>default_tokens.properties</code>
-	by default).</dd>
 	<dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
 	<dd>Replaced with the named user property <code><i>key</i></code>
 	in the current portlet request.</dd>

@@ -321,7 +321,7 @@ table.props td {
 			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</a></li>
 			<li>4.5.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-			<code>{SITE:<i>site-names</i></code>}, <code>{TOKEN:<i>key</i>}</code>)</a></li>
+			<code>{SITE:<i>site-names</i></code>}, <code>{INCLUDE:<i>key</i>}</code>)</a></li>
 			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>{SITE}</code>)</a></li>
 		</ul>
 		</li>
@@ -3297,11 +3297,11 @@ methods:</p>
 		<p>An optional string for a <i>token substitutions</i> property
 		file. As discussed in the section about <a
 			href="#file.author.token.consolidate">authoring text</a>, one of the
-		special markup tokens (<code>{TOKEN:<i>key</i>}</code>) substitutes
+		special markup tokens (<code>{INCLUDE:<i>key</i>}</code>) substitutes
 		values from this property file. By default, the name of the property
-		file is considered to be <code>default_tokens.properties</code>, but
+		file is considered to be <code>default_includes.properties</code>, but
 		you can override it with this parameter. If you will not be using the
-		special <code>{TOKEN:<i>key</i>}</code> or will use the default
+		special <code>{INCLUDE:<i>key</i>}</code> or will use the default
 		filename, you can ignore this parameter.</p>
 		</li>
 	</ul>
@@ -3341,7 +3341,7 @@ following content and special markup tokens:</p>
 &lt;h1&gt;This is the base version&lt;/h1&gt;
 &lt;ul&gt;
   &lt;li&gt;Your language:  {LANGUAGE-TAG}&lt;/li&gt;
-  &lt;li&gt;The HP.com URL: {TOKEN:url.hp}&lt;/li&gt;
+  &lt;li&gt;The HP.com URL: {INCLUDE:url.hp}&lt;/li&gt;
 {LOGGED-IN}
   &lt;li&gt;Your name:      {NAME}&lt;/li&gt;
 {/LOGGED-IN}
@@ -3357,7 +3357,7 @@ for readability):</p>
 &lt;h1&gt;This is the Japanese version&lt;/h1&gt;
 &lt;ul&gt;
   &lt;li&gt;Your language:  {LANGUAGE-TAG}&lt;/li&gt;
-  &lt;li&gt;The HP.com URL: {TOKEN:url.hp}&lt;/li&gt;
+  &lt;li&gt;The HP.com URL: {INCLUDE:url.hp}&lt;/li&gt;
 {LOGGED-IN}
   &lt;li&gt;Your name:      {NAME}&lt;/li&gt;
 {/LOGGED-IN}
@@ -3503,14 +3503,14 @@ you have setup for your Spring portlet.</p>
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#subsFileName}</dt>
+	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#includeFileName}</dt>
 	<dd>
 	<p>If desired, override this attribute (inside your constructor)
 	and set it to the name (plus any needed relative path) of the <i>token
 	substitution</i> property file to use during the interpolation. This is
 	used as a parameter to the <code>FileInterpolator</code>. See the <a
 		href="#file.display.java.fileInterpolator">above discussion</a> for
-	more information. If your file to interpolate does not contain any <code>{TOKEN:<i>key</i>}</code>
+	more information. If your file to interpolate does not contain any <code>{INCLUDE:<i>key</i>}</code>
 	tokens, or you are willing to use the default property file, you do not
 	need to set this attribute.</p>
 	</p>
@@ -3531,7 +3531,7 @@ import com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController;
 public class MyFileInterpolatorController extends FileInterpolatorController {
 
 	public MyFileInterpolatorController() {
-	    subsFileName = "my_tokens.properties";    
+	    includeFileName = "my_tokens.properties";    
 	}
     
 	public String getFilename(PortletRequest request) {
@@ -3608,11 +3608,11 @@ Here are the relevant methods:
 		<p>An optional string for a <i>token substitutions</i> property
 		file. As discussed in the section about <a
 			href="#file.author.token.consolidate">authoring text</a>, one of the
-		special markup tokens (<code>{TOKEN:<i>key</i>}</code>) substitutes
+		special markup tokens (<code>{INCLUDE:<i>key</i>}</code>) substitutes
 		values from this property file. By default, the name of the property
-		file is considered to be <code>default_tokens.properties</code>, but
+		file is considered to be <code>default_includes.properties</code>, but
 		you can override it with this parameter. If you will not be using the
-		special <code>{TOKEN:<i>key</i>}</code> or will use the default
+		special <code>{INCLUDE:<i>key</i>}</code> or will use the default
 		filename, you can ignore this parameter.</p>
 		</li>
 	</ul>
@@ -3643,7 +3643,7 @@ special markup tokens:</p>
 <blockquote><pre>
 &lt;ul&gt;
   &lt;li&gt;Your language:  {LANGUAGE-TAG}&lt;/li&gt;
-  &lt;li&gt;The HP.com URL: {TOKEN:url.hp}&lt;/li&gt;
+  &lt;li&gt;The HP.com URL: {INCLUDE:url.hp}&lt;/li&gt;
 {LOGGED-IN}
   &lt;li&gt;Your phone:     {USER-PROPERTY:PhoneNumber}&lt;/li&gt;
 {/LOGGED-IN}
@@ -3758,7 +3758,7 @@ description</a>
 ...
 &lt;spf-file-portlet:interpolate
 	file="<i>base-file</i>"
-	tokenFile="<i>token-substitutions-file</i>"
+	includeFile="<i>token-substitutions-file</i>"
 	/&gt;
 </pre></blockquote>
 
@@ -3766,10 +3766,10 @@ description</a>
 	filename for the file to interpolate and display (same as the {@link
 	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} constructors).</p>
 
-	<p>The <code>tokenFile</code> attribute lets you provide an
+	<p>The <code>includeFile</code> attribute lets you provide an
 	override for the default token substitutions file, same as the {@link
 	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#FileInterpolator(PortletRequest,PortletResponse,String,String)}
-	constructor. This is used for any special <code>{TOKEN:<i>key</i>}</code>
+	constructor. This is used for any special <code>{INCLUDE:<i>key</i>}</code>
 	tokens that might be found in the file content. (See the discussion on
 	<a href="#file.author">authoring content</a> below, for a description
 	of this and other dynamic tokens which the <code>FileInterpolator</code>
@@ -3783,7 +3783,7 @@ description</a>
 	<blockquote><pre>
 &lt;%@ taglib prefix="spf-file-portlet" uri="/spf-file-portlet.tld" %&gt;
 ...
-&lt;spf-file-portlet:interpolate file="/html/text.html" tokenFile="my_tokens.properties" /&gt;
+&lt;spf-file-portlet:interpolate file="/html/text.html" includeFile="my_tokens.properties" /&gt;
 </pre></blockquote>
 
 	<p>The selection of the proper localized file, and the subsequent
@@ -4207,7 +4207,7 @@ This text is for everybody.&lt;BR&gt;
 
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{ROLE:abc|xyz}This text is only for members of the "abc" or "xyz" groups.{/ROLE}
+{ROLE:abc|xyz}This text is only for users in the "abc" or "xyz" roles.{/ROLE}
 	</pre></blockquote>
 
 	<p>The actual role names will vary by application, over time, and
@@ -4219,20 +4219,153 @@ This text is for everybody.&lt;BR&gt;
 
 <a name="file.author.token.consolidate">
 <h4>4.5.4. Consolidating content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-<code>{SITE:<i>site-names</i></code>}, <code>{TOKEN:<i>key</i>}</code>)</h4>
+<code>{SITE:<i>site-names</i></code>}, <code>{INCLUDE:<i>key</i>}</code>)</h4>
 </a>
 
-<p>Your token substitutions property file may be located anywhere
-accessible to the system classloader. For example, if you are using
-SASU, you can put it in the "global resources" external folder
-configured on the JVM classpath. (Of course, you can always put it
-inside your portlet WAR, in <code>/WEB-INF/classes</code>.) If it is in
-a subfolder, be sure this string parameter includes that subfolder as
-relative path.</p>
+<p>The following tokens may be used to consolidate content, either
+to reduce the number of files storing content for different portlets or
+portal sites, or to provide referential integrity for content shared
+between multiple files. Please click on the links for more documentation
+for each token.</p>
 
-<p>A template for the token substitutions file, also named <code>default_tokens.properties</code>,
-is provided in the SPF common utilities. You can download it from <b><font
-	color="blue">TBD</font></b>, then modify and rename it.</p>
+<blockquote>
+<p><b>Note:</b> The SPF lets you "nest" container tokens. Nested
+containers form a "logical-AND" between their respective conditions. So,
+for example, <code>{PORTLET:forums}{SITE:itrc}...{/SITE}{/PORTLET}</code>
+means the current request must be for the <code>forums</code> portlet
+instance in the portal site named <code>itrc</code>, in order to get the
+<code>...</code> wrapped content.
+</blockquote>
+
+<dl>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#token"><code>{INCLUDE:<i>key</i>}...{/INCLUDE}</code></a></dt>
+	<dd>
+	<p>Use this token to consolidate shared content into a separate
+	properties file, and then include it into the interpolated content.
+	First, you create a token substitutions property file with a simple
+	key-value format:</p>
+
+	<blockquote><pre>
+<i>key</i>=<i>value</i>
+</pre></blockquote>
+
+	<p>Then you reference the <code><i>key</i></code> in your <code>{INCLUDE:<i>key</i>}</code>
+	token. The interpolation engine substitutes the <code><i>value</i></code>
+	from the properties file into your interpolated content. For example,
+	assume you have the following in your property file:</p>
+
+	<blockquote><pre>
+url.hp=http://www.hp.com
+	</pre></blockquote>
+
+	<p>Then you can substitute <code>http://www.hp.com</code> into the
+	content like this:</p>
+
+	<blockquote><pre>
+&lt;A HREF="{INCLUDE:url.hp}"&gt;Go to HP home page&lt;/A&gt;
+	</pre></blockquote>
+
+	<p>Your substitution property <code><i>value</i></code> can contain
+	any content valid in a Java {@java.util.Properties} file. It can even
+	contain any of the other special markup tokens described in this guide
+	(however it cannot contain other <code>{INCLUDE:<i>key</i>}</code>
+	tokens).</p>
+
+	<p>Your token substitutions property file may be located anywhere
+	accessible to the system classloader. For example, if you are using
+	SASU, you can put it in the "global resources" external folder
+	configured on the JVM classpath. (Of course, you can always put it
+	inside your portlet WAR, in <code>/WEB-INF/classes</code>.)</p>
+
+	<p>The name of the token substitutions property file is assumed by
+	the interpolator to be <code>default_includes.properties</code> unless
+	otherwise specified. You can specify a different name (including any
+	subfolders relative to the location where you put it - see previous
+	paragraph) in different ways, depending on how you invoke the
+	interpolator:</p>
+
+	<ul>
+		<li>If you invoke <a href="#file.display.java.tokenParser"><code>TokenParser</code></a>
+		to interpolate from a string, you pass the token substitutions
+		filename to the constructor.</li>
+		<li>If you invoke <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>
+		to interpolate from a file, you also pass the filename to the
+		constructor.</li>
+		<li>If you use <a
+			href="#file.display.java.fileInterpolatorController"><code>FileInterpolatorController</code></a>,
+		you set the {@link
+		com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#includeFileName}
+		class attribute.</li>
+		<li>If you use the <a href="#file.display.jsp.interpolate"><code>&lt;spf-file-portlet:interpolate&gt;</code></a>
+		JSP tag, set use the <code>includeFile</code> tag attribute.</li>
+		<li>If you use the <a href="#file.display.htmlViewer"><code>html-viewer</code></a>
+		portlet, the file must be named <code>html_viewer_includes.properties</code>.</li>
+	</ul>
+
+	<p>A template for the token substitutions file, also named <code>default_includes.properties</code>,
+	is provided in the SPF common utilities. You can download it from <b><font
+		color="blue">TBD</font></b>, then modify and rename it.</p>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#portlet"><code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></a></dt>
+	<dd>
+	<p>Use this container token to put content for multiple instances
+	of one (or more) portlets into the same uninterpolated content string
+	(eg file). When it is interpolated, only the section for the current
+	portlet will be included.</p>
+
+	<p>The <code><i>portlets</i></code> parameter lists the portlet ID
+	<i>substrings</i> for the portlet instances that should get the wrapped
+	content. The portlet ID for the current portlet instance must <i>contain</i>
+	(case-insensitive) at least one of the listed portlet ID's. Use the <code>|</code>
+	character to delimit multiple portlet ID's in the <code><i>portlets</i></code>
+	parameter. (In the SPF portal, the portlet ID is the Vignette <i>friendly
+	ID</i> assigned to the portlet instance when the administrator provisions
+	the portlet on a portal page. The SPF transmits this to the portlet
+	where it can be accessed.)</p>
+
+	<p>For example:</p>
+	<blockquote><pre>
+This text is for everybody.&lt;BR&gt;
+{PORTLET:abc|def}This text is only for the "abc" or "def" portlets.{/PORTLET}
+{PORTLET:xyz}This text is only for the "xyz" portlet.{/PORTLET}
+</pre></blockquote>
+
+	<p>The actual portlet ID's will vary by portal and portlet
+	instance; they are setup by the administrator. They are not listed
+	here.</p>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site_c"><code>{SITE:<i>sites</i>}...{/SITE}</code></a></dt>
+	<dd>
+	<p>Use this container token to put content for multiple portal
+	sites into the same uninterpolated content string (eg file). When it is
+	interpolated, only the section for the current portal site will be
+	included.</p>
+
+	<p>The <code><i>sites</i></code> parameter lists the <i>site
+	name(s)</i> of the portal site(s) which should get the wrapped content. The
+	site name for the current portlet must match (case-insensitive) at
+	least one of the listed site names. Use the <code>|</code> character to
+	delimit multiple site names in the <code><i>sites</i></code> parameter.
+	(In the SPF portal, the site name is the Vignette "site DNS name"
+	assigned to the portal site when it is created by the administrator.
+	The SPF transmits this to the portlet where it can be accessed.)</p>
+
+	<p>For example:</p>
+	<blockquote><pre>
+This text is for everybody.&lt;BR&gt;
+{SITE:abc|def}This text is only for portlets in the the "abc" or "def" portal sites.{/SITE}
+{SITE:xyz}This text is only for portlets in the "xyz" portal site.{/SITE}
+</pre></blockquote>
+
+	<p>The actual site names will vary by portal site; they are setup
+	by the administrator. They are not listed here.</p>
+	</dd>
+</dl>
 
 <a name="file.author.token.misc">
 <h4>4.5.5. Miscellaneous (<code>{SITE}</code>)</h4>

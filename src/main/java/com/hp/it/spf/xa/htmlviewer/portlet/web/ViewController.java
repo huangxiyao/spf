@@ -38,11 +38,11 @@ public class ViewController extends FileInterpolatorController {
 
 	/**
 	 * Constructor which sets the token-substitutions filename to
-	 * html_viewer_tokens.properties.
+	 * html_viewer_includes.properties.
 	 */
 	public ViewController() {
 		// Override the default token-substitutions filename.
-		this.subsFileName = "html_viewer_tokens";
+		this.includeFileName = "html_viewer_includes";
 	}
 
 	/** The view name. */

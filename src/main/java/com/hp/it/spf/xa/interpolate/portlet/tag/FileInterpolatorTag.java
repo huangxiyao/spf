@@ -52,14 +52,14 @@ import com.hp.websat.timber.logging.Log;
  * </li>
  * <li>
  * <p>
- * The <code>tokenFile="<i>token-filename</i>"</code> attribute can
+ * The <code>includeFile="<i>token-filename</i>"</code> attribute can
  * optionally be used to provide the name of a specific token-substitutions
  * property file. The
  * {@link com.hp.it.spf.xa.interpolate.portal.FileInterpolator} supports
- * substitution from this file for the <code>{TOKEN:<i>key</i>}</code>
+ * substitution from this file for the <code>{INCLUDE:<i>key</i>}</code>
  * token. Please see the class documentation for more information on how that
  * works. By default, a file named
- * <code>default_tokens.properties</code> is assumed for your
+ * <code>default_includes.properties</code> is assumed for your
  * token-substitution properties, but you can override that with this tag
  * attribute. Whether you override or accept the default, the actual
  * token-substitution file may be located anywhere that is loadable by the
@@ -75,8 +75,8 @@ import com.hp.websat.timber.logging.Log;
  * proper file for the given base filename. Furthermore, any special tokens
  * supported by the {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} class
  * hierarchy will have been substituted with their dynamic values (including
- * <code>{TOKEN:<i>key</i>}</code> replacement with the property values from
- * the given token file or from <code>default_tokens.properties</code> by
+ * <code>{INCLUDE:<i>key</i>}</code> replacement with the property values from
+ * the given token file or from <code>default_includes.properties</code> by
  * default). If no proper file existed, or the file was empty, then an empty
  * string is expressed.
  * </p>
@@ -103,8 +103,8 @@ public class FileInterpolatorTag extends FileInterpolatorBaseTag {
 				.getRequest().getAttribute("javax.portlet.request");
 		PortletResponse portletResponse = (PortletResponse) pageContext
 				.getRequest().getAttribute("javax.portlet.response");
-		if (tokenFile != null) {
-			return new FileInterpolator(portletRequest, portletResponse, file, tokenFile);
+		if (includeFile != null) {
+			return new FileInterpolator(portletRequest, portletResponse, file, includeFile);
 		} else {
 			return new FileInterpolator(portletRequest, portletResponse, file);
 		}

@@ -36,8 +36,8 @@ import com.hp.websat.timber.logging.Log;
  * take the interpolated content of your file (input to the method as a string
  * automatically by this class) and render it.</li>
  * <li>If you want to specify a custom token-substitutions file (ie for the
- * <code>{TOKEN:<i>key</i>}</code> token), set the
- * {@link #subsFileName attribute before calling the execute method.</li>
+ * <code>{INCLUDE:<i>key</i>}</code> token), set the
+ * {@link #includeFileName attribute before calling the execute method.</li>
  * </ul>
  * </p>
  * 
@@ -51,10 +51,10 @@ public abstract class FileInterpolatorController extends AbstractController {
 	/**
 	 * Stores the name of the token-substitutions file to use for any file-based
 	 * token substitutions. The default is null, which causes the
-	 * <code>default_tokens.properties</code> file to be assumed. You can
+	 * <code>default_includes.properties</code> file to be assumed. You can
 	 * override this in your constructor.
 	 */
-	protected String subsFileName = null;
+	protected String includeFileName = null;
 
 	/**
 	 * <p>
@@ -164,7 +164,7 @@ public abstract class FileInterpolatorController extends AbstractController {
 						"FileInterpolatorController: rendering file content from proper localized version of base file: "
 								+ relativeName);
 		FileInterpolator f = new FileInterpolator(request, response,
-				relativeName, this.subsFileName);
+				relativeName, this.includeFileName);
 		String fileContent = f.interpolate();
 		return this.execute(request, response, fileContent);
 	}

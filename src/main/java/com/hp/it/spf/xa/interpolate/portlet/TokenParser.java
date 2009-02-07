@@ -110,9 +110,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	/**
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portlet request
-	 * and response. The default token-substitutions property file (<code>default_tokens.properties</code>)
-	 * will be assumed, if subsequent {@link #parseToken(String)} calls find any
-	 * <code>{TOKEN:key}</code> tokens.
+	 * and response. The default token-substitutions property file (<code>default_includes.properties</code>)
+	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find any
+	 * <code>{INCLUDE:key}</code> tokens.
 	 * </p>
 	 * 
 	 * @param pRequest
@@ -129,9 +129,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portlet request
 	 * and response, and overriding the token-substitutions property file. The
-	 * given file, instead of the default (<code>default_tokens.properties</code>)
-	 * will be assumed, if subsequent {@link #parseToken(String)} calls find any
-	 * <code>{TOKEN:key}</code> tokens.
+	 * given file, instead of the default (<code>default_includes.properties</code>)
+	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find any
+	 * <code>{INCLUDE:key}</code> tokens.
 	 * </p>
 	 * 
 	 * @param pRequest
@@ -155,9 +155,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portlet
 	 * request, response, and locale, and overriding the token-substitutions
-	 * property file. The given file, instead of the default (<code>default_tokens.properties</code>)
-	 * will be assumed, if subsequent {@link #parseToken(String)} calls find any
-	 * <code>{TOKEN:key}</code> tokens. In addition, the given locale will be
+	 * property file. The given file, instead of the default (<code>default_includes.properties</code>)
+	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find any
+	 * <code>{INCLUDE:key}</code> tokens. In addition, the given locale will be
 	 * used instead of the one in the portlet request during the parsing (but if
 	 * the given locale is null, then the one in the portlet request will be
 	 * used).

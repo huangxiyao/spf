@@ -28,7 +28,7 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>tokenFile</name>
+			<name>includeFile</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
