@@ -46,9 +46,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	/**
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portal context.
-	 * The default token-substitutions property file (<code>default_tokens.properties</code>)
-	 * will be assumed, if subsequent {@link #parseToken(String)} calls find any
-	 * <code>&lt;TOKEN:key&gt;</code> tokens.
+	 * The default token-substitutions property file (<code>default_includes.properties</code>)
+	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find any
+	 * <code>&lt;INCLUDE:key&gt;</code> tokens.
 	 * </p>
 	 * 
 	 * @param portalContext
@@ -62,9 +62,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portal context,
 	 * and overriding the token-substitutions property file. The given file,
-	 * instead of the default (<code>default_tokens.properties</code>) will
-	 * be assumed, if subsequent {@link #parseToken(String)} calls find any
-	 * <code>&lt;TOKEN:key&gt;</code> tokens.
+	 * instead of the default (<code>default_includes.properties</code>) will
+	 * be assumed, if subsequent {@link #parseInclude(String)} calls find any
+	 * <code>&lt;INCLUDE:key&gt;</code> tokens.
 	 * </p>
 	 * 
 	 * @param portalContext
@@ -84,12 +84,12 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portal context
 	 * and locale, and overriding the token-substitutions property file. The
-	 * given file, instead of the default (<code>default_tokens.properties</code>)
-	 * will be assumed, if subsequent {@link #parseToken(String)} calls find any
-	 * <code>&lt;TOKEN:key&gt;</code> tokens. In addition, the given locale
-	 * will be used instead of the one in the portal context during the parsing
-	 * (but if the given locale is null, then the one in the portal context will
-	 * be used).
+	 * given file, instead of the default (<code>default_includes.properties</code>)
+	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find
+	 * any <code>&lt;INCLUDE:key&gt;</code> tokens. In addition, the given
+	 * locale will be used instead of the one in the portal context during the
+	 * parsing (but if the given locale is null, then the one in the portal
+	 * context will be used).
 	 * </p>
 	 * 
 	 * @param portalContext

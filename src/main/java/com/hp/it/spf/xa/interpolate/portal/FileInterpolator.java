@@ -81,11 +81,11 @@ import com.vignette.portal.website.enduser.PortalContext;
  * token isn't really necessary. It is retained for backward-compatibility.
  * </p>
  * <p>
- * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
+ * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the
+ * other <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>pathname</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>pathname</i></code>.
  * </p>
  * </dd>
  * 
@@ -163,8 +163,115 @@ import com.vignette.portal.website.enduser.PortalContext;
  * Your <code><i>groups</i></code> can "nest" any of the other
  * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>groups</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>groups</i></code>.
+ * </p>
+ * </dd>
+ * 
+ * <dt><a name="include"><code>{INCLUDE:<i>key</i>}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use this token to lookup a value for the given key in a property file, and
+ * insert that value into the interpolated content. The property file, by
+ * default, is <code>default_includes.properties</code>, but you can override
+ * that in the <code>FileInterpolator</code> constructor. Whether you use
+ * <code>default_includes.properties</code> or your own token-substitution
+ * property file, the file should be loaded into a location accessible to the
+ * class loader. The property values may include any text content.
+ * </p>
+ * <p>
+ * For example, assume you have put this key/value pair into your property file:
+ * </p>
+ * <p>
+ * <code>url.hp-shopping=http://shopping.hp.com</code>
+ * </p>
+ * <p>
+ * If your input file contains the following:
+ * </p>
+ * <p>
+ * <code>&lt;A HREF="{INCLUDE:url.hp-shopping}"&gt;Go to HP shopping.&lt;/A&gt;</code>
+ * </p>
+ * <p>
+ * Then the interpolated content will contain a hyperlink taking the user to the
+ * URL value given in your property file:
+ * </p>
+ * <p>
+ * <code>&lt;A HREF="http://shopping.hp.com"&gt;Go to HP shopping.&lt;/A&gt;</code>
+ * </p>
+ * <p>
+ * Additionally, this token supports nesting with other tokens. As follows:
+ * </p>
+ * <ul>
+ * <li>
+ * <p>
+ * The property value for this token may contain <b>any</b> of the other
+ * special markup tokens supported by <code>FileInterpolator</code>,
+ * <b>except</b> another <code>{INCLUDE:<i>key</i>}</code> token. In other
+ * words, you can "nest" other tokens inside the propery values expressed by
+ * this token.
+ * </p>
+ * <p>
+ * For example, assume we have this in our property file:
+ * </p>
+ * <p>
+ * <code>url.hp-shopping=http://shopping.hp.com?lang={LANGUAGE-CODE}&cc={COUNTRY-CODE}</code>
+ * </p>
+ * <p>
+ * If your input file is as above, then the interpolated content will include
+ * the user's language and country code in the URL from the property file. For
+ * example, for a Brazil Portuguese user:
+ * </p>
+ * <p>
+ * <code>&lt;A HREF="http://shopping.hp.com?lang=pt&cc=BR"&gt;Go to HP shopping.&lt;/A&gt;</code>
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * Vice-versa, the <code>{INCLUDE:<i>key</i>}</code> token can itself be
+ * used within the parameter to <b>any</b> of the other tokens, except another
+ * <code>{INCLUDE:<i>key</i>}</code> token. So you can "nest" this token
+ * inside the parameter values to other tokens.
+ * </p>
+ * <p>
+ * For example, assume we now have this in our property file:
+ * </p>
+ * <p>
+ * <code>image.current-promo=december_sale.gif</code>
+ * </p>
+ * <p>
+ * Also imagine the <code>december_sale.gif</code> is setup properly, as a
+ * secondary support file for the current portal component. If your input file
+ * contains the following:
+ * </p>
+ * <p>
+ * <code>&lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/{INCLUDE:image.current-promo}}"&gt;</code>
+ * </p>
+ * <p>
+ * Then the interpolated content will display the proper localized version of
+ * the <code>december_sale.gif</code> image to the user; like this, for
+ * example, for a Japanese (Japan) user:
+ * </p>
+ * <p>
+ * <code>&lt;IMG SRC="/.../december_sale_ja_JP.gif"&gt;</code>
+ * </p>
+ * <p>
+ * (In actuality, the URL would be a portal component secondary-support-file
+ * URL; just the filename is shown above for simplicity.)
+ * </p>
+ * <blockquote>
+ * <p>
+ * <b>Note:</b> Although you can "nest" <code>{INCLUDE:<i>key</i>}</code>
+ * within other token's parameters, you cannot nest other token parameters of
+ * any kind inside the <code><i>key</i></code> parameter for
+ * <code>{INCLUDE:<i>key</i>}</code>. In other words, the
+ * <code><i>key</i></code> is always treated as a literal.
+ * </p>
+ * </blockquote> </li>
+ * </ul>
+ * <p>
+ * A template for the token substitution property file, also named
+ * <code>default_includes.properties</code> (you should rename your copy), is
+ * available with the SPF.
  * </p>
  * </dd>
  * 
@@ -230,8 +337,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the
  * other <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>pathname</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>pathname</i></code>.
  * </p>
  * <p>
  * 
@@ -364,8 +471,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * Your <code><i>names</i></code> can "nest" any of the other
  * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>names</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>names</i></code>.
  * </p>
  * </dd>
  * 
@@ -397,115 +504,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * Your <code><i>uri</i></code> can "nest" any of the other
  * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>uri</i></code>.
- * </p>
- * </dd>
- * 
- * <dt><a name="token"><code>{TOKEN:<i>key</i>}</code></a></dt>
- * <dd>
- * <p>
- * Use this token to lookup a value for the given key in a property file, and
- * insert that value into the interpolated content. The property file, by
- * default, is <code>default_tokens.properties</code>, but you can override
- * that in the <code>FileInterpolator</code> constructor. Whether you use
- * <code>default_tokens.properties</code> or your own token-substitution
- * property file, the file should be loaded into a location accessible to the
- * class loader. The property values may include any text content.
- * </p>
- * <p>
- * For example, assume you have put this key/value pair into your property file:
- * </p>
- * <p>
- * <code>url.hp-shopping=http://shopping.hp.com</code>
- * </p>
- * <p>
- * If your input file contains the following:
- * </p>
- * <p>
- * <code>&lt;A HREF="{TOKEN:url.hp-shopping}"&gt;Go to HP shopping.&lt;/A&gt;</code>
- * </p>
- * <p>
- * Then the interpolated content will contain a hyperlink taking the user to the
- * URL value given in your property file:
- * </p>
- * <p>
- * <code>&lt;A HREF="http://shopping.hp.com"&gt;Go to HP shopping.&lt;/A&gt;</code>
- * </p>
- * <p>
- * Additionally, this token supports nesting with other tokens. As follows:
- * </p>
- * <ul>
- * <li>
- * <p>
- * The property value for this token may contain <b>any</b> of the other
- * special markup tokens supported by <code>FileInterpolator</code>,
- * <b>except</b> another <code>{TOKEN:<i>key</i>}</code> token. In other
- * words, you can "nest" other tokens inside the propery values expressed by
- * this token.
- * </p>
- * <p>
- * For example, assume we have this in our property file:
- * </p>
- * <p>
- * <code>url.hp-shopping=http://shopping.hp.com?lang={LANGUAGE-CODE}&cc={COUNTRY-CODE}</code>
- * </p>
- * <p>
- * If your input file is as above, then the interpolated content will include
- * the user's language and country code in the URL from the property file. For
- * example, for a Brazil Portuguese user:
- * </p>
- * <p>
- * <code>&lt;A HREF="http://shopping.hp.com?lang=pt&cc=BR"&gt;Go to HP shopping.&lt;/A&gt;</code>
- * </p>
- * </li>
- * <li>
- * <p>
- * Vice-versa, the <code>{TOKEN:<i>key</i>}</code> token can itself be used
- * within the parameter to <b>any</b> of the other tokens, except another
- * <code>{TOKEN:<i>key</i>}</code> token. So you can "nest" this token
- * inside the parameter values to other tokens.
- * </p>
- * <p>
- * For example, assume we now have this in our property file:
- * </p>
- * <p>
- * <code>image.current-promo=december_sale.gif</code>
- * </p>
- * <p>
- * Also imagine the <code>december_sale.gif</code> is setup properly, as a
- * secondary support file for the current portal component. If your input file
- * contains the following:
- * </p>
- * <p>
- * <code>&lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/{TOKEN:image.current-promo}}"&gt;</code>
- * </p>
- * <p>
- * Then the interpolated content will display the proper localized version of
- * the <code>december_sale.gif</code> image to the user; like this, for
- * example, for a Japanese (Japan) user:
- * </p>
- * <p>
- * <code>&lt;IMG SRC="/.../december_sale_ja_JP.gif"&gt;</code>
- * </p>
- * <p>
- * (In actuality, the URL would be a portal component secondary-support-file
- * URL; just the filename is shown above for simplicity.)
- * </p>
- * <blockquote>
- * <p>
- * <b>Note:</b> Although you can "nest" <code>{TOKEN:<i>key</i>}</code>
- * within other token's parameters, you cannot nest other token parameters of
- * any kind inside the <code><i>key</i></code> parameter for
- * <code>{TOKEN:<i>key</i>}</code>. In other words, the
- * <code><i>key</i></code> is always treated as a literal.
- * </p>
- * </blockquote> </li>
- * </ul>
- * <p>
- * A template for the token substitution property file, also named
- * <code>default_tokens.properties</code> (you should rename your copy), is
- * available with the SPF.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>uri</i></code>.
  * </p>
  * </dd>
  * 
@@ -538,8 +538,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * Your <code><i>key</i></code> can "nest" any of the other
  * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{TOKEN:<i>key</i>}</code>, you cannot "nest" any <i>parameterized</i>
- * tokens inside your <code><i>key</i></code>.
+ * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
+ * <i>parameterized</i> tokens inside your <code><i>key</i></code>.
  * </p>
  * </dd>
  * 
@@ -552,7 +552,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * <p>
  * <ol>
- * <li><code>{TOKEN:<i>key</i>}</code></li>
+ * <li><code>{INCLUDE:<i>key</i>}</code></li>
  * <li><code>{LOGGED-IN}</code></li>
  * <li><code>{LOGGED-OUT}</code></li>
  * <li><code>{LANGUAGE-CODE}</code></li>
@@ -604,10 +604,10 @@ public class FileInterpolator extends
 	 * on the locale in the given request.
 	 * </p>
 	 * <b>Note:</b> A token-substitutions property file (to be used with any
-	 * <code>{TOKEN:<i>key</i>}</code> tokens in the file content) is not
-	 * passed in this constructor. Therefore any <code>{TOKEN:<i>key</i>}</code>
-	 * tokens in the file content will be resolved against the default
-	 * token-substitutions property file (<code>default_tokens.properties</code>).
+	 * <code>{INCLUDE:<i>key</i>}</code> tokens in the file content) is not
+	 * passed in this constructor. Therefore any
+	 * <code>{INCLUDE:<i>key</i>}</code> tokens in the file content will be
+	 * resolved against the default token-substitutions property file (<code>default_includes.properties</code>).
 	 * </p>
 	 * 
 	 * @param portalContext
@@ -634,13 +634,13 @@ public class FileInterpolator extends
 	 * This constructor works like
 	 * {@link #FileInterpolator(PortalContext, String)} and allows a
 	 * token-substitutions file to be specified as well. The token-substitutions
-	 * pathname provided is to be used with any <code>{TOKEN:<i>key</i>}</code>
-	 * tokens in the file content; they will be resolved against the file whose
-	 * pathname you provide. The pathname should include any necessary path
-	 * (relative to the class loader) followed by the filename (the extension
-	 * <code>.properties</code> is required and assumed). If you know there
-	 * are no such tokens in the file content, you can pass null for this
-	 * parameter.
+	 * pathname provided is to be used with any
+	 * <code>{INCLUDE:<i>key</i>}</code> tokens in the file content; they
+	 * will be resolved against the file whose pathname you provide. The
+	 * pathname should include any necessary path (relative to the class loader)
+	 * followed by the filename (the extension <code>.properties</code> is
+	 * required and assumed). If you know there are no such tokens in the file
+	 * content, you can pass null for this parameter.
 	 * </p>
 	 * 
 	 * @param portalContext
@@ -651,8 +651,8 @@ public class FileInterpolator extends
 	 * @param subsFilePath
 	 *            The filename and path relative to where the class loader
 	 *            searches for the token-substitutions property file (for
-	 *            purposes of any <code>{TOKEN:<i>key</i>}</code> tokens in
-	 *            the file content)
+	 *            purposes of any <code>{INCLUDE:<i>key</i>}</code> tokens
+	 *            in the file content)
 	 */
 	public FileInterpolator(PortalContext portalContext,
 			String relativeFilePath, String subsFileBase) {
@@ -688,8 +688,8 @@ public class FileInterpolator extends
 	 * @param subsFilePath
 	 *            The filename and path relative to where the class loader
 	 *            searches for the token-substitutions property file (for
-	 *            purposes of any <code>{TOKEN:<i>key</i>}</code> tokens in
-	 *            the file content)
+	 *            purposes of any <code>{INCLUDE:<i>key</i>}</code> tokens
+	 *            in the file content)
 	 */
 	public FileInterpolator(PortalContext portalContext, Locale pLocale,
 			String relativeFilePath, String subsFileBase) {
