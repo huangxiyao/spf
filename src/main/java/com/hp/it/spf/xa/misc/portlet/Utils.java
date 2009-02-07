@@ -24,12 +24,26 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.portlet.context.PortletApplicationContextUtils;
 
 /**
- * A container class for miscellaneous utility methods for portlets.
+ * <p>
+ * A container class for miscellaneous utility methods for portlets. Many of the
+ * methods in this class let you access data passed from the SPF portal,
+ * including:
+ * </p>
+ * <ul>
+ * <li>user data (eg see {@link #getUserProperty(PortletRequest, String)} and
+ * {@link #isAuthenticatedUser(PortletRequest)}</li>
+ * <li>portal request data (eg see {@link #getPortalRequestURL(PortletRequest)}
+ * and {@link #getPortalSiteURL(PortletRequest)}</li>
+ * </ul>
+ * <p>
+ * Others are general-purpose utility Web programming utilities, many inherited
+ * from {@link com.hp.it.spf.xa.misc.Utils} (see) in the SPF common utilities.
+ * </p>
  * 
  * @author <link href="wei.teng@hp.com">Teng Wei</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.spf.xa.misc.Utils
+ * @see <code>com.hp.it.spf.xa.misc.Utils</code>
  */
 
 public class Utils extends com.hp.it.spf.xa.misc.Utils {
@@ -66,10 +80,10 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * <p>
 	 * If the user is not logged-in, this method returns the value from the map
 	 * for the given property for an anonymous (ie guest) user. In many cases,
-	 * that means null will be returned, but not necessarily (for example, the
-	 * {@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_USER_NAME} attribute has
-	 * a particular non-null value for an anonymous user. To tell whether the
-	 * user is anonymous or authenticated, use the
+	 * that means null or blank will be returned, but not necessarily - some
+	 * default attributes may be returned. Which is the case for any given
+	 * attribute, is not documented here. If it matters, you should first check
+	 * whether the user is anonymous or authenticated, using the
 	 * {@link #isAuthenticatedUser(PortletRequest)} method.
 	 * </p>
 	 * 
@@ -261,7 +275,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @param request
 	 * @return
 	 */
-	public static String getPortletID(PortletRequest request) {
+	public static String getPortalPortletID(PortletRequest request) {
 		String portletId = null;
 		if (request != null) {
 			// TODO: Finish this logic. Get portlet ID (currently, the Vignette
@@ -271,5 +285,14 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 			// TODO there.
 		}
 		return portletId;
+	}
+
+	/**
+	 * Use {@link #getPortalPortletID(PortletRequest)} instead.
+	 * 
+	 * @deprecated
+	 */
+	public static String getPortletID(PortletRequest request) {
+		return getPortalPortletID(request);
 	}
 }

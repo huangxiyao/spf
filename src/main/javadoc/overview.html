@@ -330,18 +330,18 @@ table.props td {
 		data</a>
 		<ul>
 			<li>5.1.1. <a href="#portal.user">User data (profile
-			attributes, groups and roles)</a></li>
-			<li>5.1.2. <a href="#portal.prefs">Portlet preferences</a></li>
-			<li>5.1.3. <a href="#portal.request">Portal request data
-			(site name, friendly ID, and URLs)</a></li>
+			attributes, groups and roles, etc)</a></li>
+			<li>5.1.2. <a href="#portal.request">Portal request data
+			(site name, portlet ID, URLs, etc)</a></li>
 		</ul>
 		</li>
-		<li>5.2. <a href="#portal.user.get">Accessing user data using
-		Java code</a>
+		<li>5.2. <a href="#portal.user.get">Accessing user data</a>
 		<ul>
-			<li>5.2.1. <a href="#portal.user.props">Accessing user
+			<li>5.2.1. <a href="#portal.user.loginStatus">Checking user authentication status
+			(<code>Utils.isAuthenticatedUser</code>)</a></li>
+			<li>5.2.2. <a href="#portal.user.props">Accessing user
 			profile attributes (<code>Utils.getUserProperty</code>)</a></li>
-			<li>5.2.2. <a href="#portal.user.groups">Accessing user
+			<li>5.2.3. <a href="#portal.user.groups">Accessing user
 			groups (<code>Utils.getGroups</code>)</a></li>
 		</ul>
 		</li>
@@ -349,11 +349,11 @@ table.props td {
 		request data</a>
 		<ul>
 			<li>5.3.1. <a href="#portal.request.site">Accessing the
-			portal site name (<code>Utils.getSiteName</code>)</a></li>
+			portal site name (<code>Utils.getPortalSiteName</code>)</a></li>
 			<li>5.3.2. <a href="#portal.request.portlet">Accessing the
-			portlet friendly ID (<code>Utils.getPortletID</code>)</a></li>
+			portlet ID (<code>Utils.getPortalPortletID</code>)</a></li>
 			<li>5.3.3. <a href="#portal.request.url">Accessing portal
-			URL's (<code>Utils.getRequestURL</code>, <code>Utils.getSiteRootURL</code>)</a></li>
+			URL's (<code>Utils.getPortalRequestURL</code>, <code>Utils.getPortalSiteURL</code>)</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -4678,26 +4678,30 @@ more documentation on each token.</p>
 <a name="portal.kinds">
 <h3>5.1. Kinds of portal provided data</h3>
 </a>
+
 <a name="portal.user">
-<h4>5.1.1. User data (profile attributes, groups and roles)</h4>
+<h4>5.1.1. User data (profile attributes, groups and roles, etc)</h4>
 </a>
-<a name="portal.prefs">
-<h4>5.1.2. Portlet preferences</h4>
-</a>
+
 <a name="portal.request">
-<h4>5.1.3. Portal request data (site name, friendly ID, and URLs)</h4>
+<h4>5.1.2. Portal request data (site name, portlet ID, URLs, etc)</h4>
 </a>
 
 <hr>
 
 <a name="portal.user.get">
-<h3>5.2. Accessing user data using Java code</h3>
+<h3>5.2. Accessing user data</h3>
 </a>
+
+<a name="portal.user.loginStatus">
+<h4>5.2.2. Checking user authentication status (<code>Utils.isAuthenticatedUser</code>)</h4>
+</a>
+
 <a name="portal.user.props">
-<h4>5.2.1. Accessing user profile attributes (<code>Utils.getUserProperty</code>)</h4>
+<h4>5.2.2. Accessing user profile attributes (<code>Utils.getUserProperty</code>)</h4>
 </a>
 <a name="portal.user.groups">
-<h4>5.2.2. Accessing user groups (<code>Utils.getGroups</code>)</h4>
+<h4>5.2.3. Accessing user groups (<code>Utils.getGroups</code>)</h4>
 </a>
 
 <hr>
@@ -4706,14 +4710,14 @@ more documentation on each token.</p>
 <h3>5.3. Accessing portal request data</h3>
 </a>
 <a name="portal.request.site">
-<h4>5.3.1. Accessing the portal site name (<code>Utils.getSiteName</code>)</h4>
+<h4>5.3.1. Accessing the portal site name (<code>Utils.getPortalSiteName</code>)</h4>
 </a>
 <a name="portal.request.portlet">
-<h4>5.3.2. Accessing the portlet friendly ID (<code>Utils.getPortletID</code>)</h4>
+<h4>5.3.2. Accessing the portlet ID (<code>Utils.getPortalPortletID</code>)</h4>
 </a>
 <a name="portal.request.url">
-<h4>5.3.3. Accessing portal URL's (<code>Utils.getRequestURL</code>,
-<code>Utils.getSiteRootURL</code>)</h4>
+<h4>5.3.3. Accessing portal URL's (<code>Utils.getPortalRequestURL</code>,
+<code>Utils.getPortalSiteURL</code>)</h4>
 </a>
 
 <hr>
