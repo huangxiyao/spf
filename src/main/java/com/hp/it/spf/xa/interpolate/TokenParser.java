@@ -736,18 +736,28 @@ public abstract class TokenParser {
 	/**
 	 * <p>
 	 * Parses the given string, substituting the respective portal site page URL
-	 * for the <code>{SITE-URL:<i>uri</i>}</code> token.
+	 * for the <code>{SITE-URL:<i>uri</i>}</code> token. The <i>uri</i>
+	 * specifies the particular page. It can be whatever string comes after (ie
+	 * relative to) the site root URL (ie the home-page URL), including
+	 * additional path, query string, etc. If the <i>uri</i> value begins with
+	 * <code>/</code>, the page URL is built for this current portal site,
+	 * with the <i>uri</i> used to identify the page at that current site. If
+	 * it does not, then the first element in the <i>uri</i> is taken as the
+	 * new portal site (so this lets you switch the site) and the rest is taken
+	 * used for the page at that site.
 	 * </p>
 	 * <p>
 	 * For example:
-	 * <code>&lt;a href="{SITE-URL:forums}"&gt;go to forums&lt;/a&gt;</code>
+	 * <code>&lt;a href="{SITE-URL:/forums}"&gt;go to forums&lt;/a&gt;</code>
 	 * is changed to
-	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/forums/"&gt;go to
+	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/forums"&gt;go to
 	 * forums&lt;/a&gt;</code>
 	 * when the current site home-page URL is
-	 * "http://portal.hp.com/portal/site/acme/". The <i>uri</i> can be whatever
-	 * string comes after (ie relative to) the site root URL (ie the home-page
-	 * URL), including additional path, query string, etc.
+	 * "http://portal.hp.com/portal/site/acme/". In contrast,
+	 * <code>&lt;a href="{SITE-URL:itrc/forums}"&gt;go to ITRC forums&lt;/a&gt;</code>
+	 * is changed to
+	 * <code>&lt;a href="http://portal.hp.com/portal/site/itrc/forums"&gt;go to
+	 * ITRC forums&lt;/a&gt;</code>.
 	 * </p>
 	 * <p>
 	 * The site root URL is obtained from the {@link #getSiteURL()} method - if
@@ -771,7 +781,17 @@ public abstract class TokenParser {
 						String siteURL = getSiteURL();
 						if (siteURL == null)
 							siteURL = "";
-						return (Utils.slashify(siteURL + "/" + param));
+						if (param.startsWith("/"))
+							siteURL += param;
+						else {
+							int j = siteURL.indexOf("/site/");
+							if (j == -1)
+								siteURL += param;
+							else
+								siteURL = siteURL.substring(0, j) + "/site/"
+										+ param;
+						}
+						return (Utils.slashify(siteURL));
 					}
 				});
 		return (content);
