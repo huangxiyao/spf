@@ -330,15 +330,15 @@ table.props td {
 		data</a>
 		<ul>
 			<li>5.1.1. <a href="#portal.user">User data (profile
-			attributes, groups and roles, etc)</a></li>
+			attributes, groups, etc)</a></li>
 			<li>5.1.2. <a href="#portal.request">Portal request data
 			(site name, portlet ID, URLs, etc)</a></li>
 		</ul>
 		</li>
 		<li>5.2. <a href="#portal.user.get">Accessing user data</a>
 		<ul>
-			<li>5.2.1. <a href="#portal.user.loginStatus">Checking user authentication status
-			(<code>Utils.isAuthenticatedUser</code>)</a></li>
+			<li>5.2.1. <a href="#portal.user.loginStatus">Checking user
+			authentication status (<code>Utils.isAuthenticatedUser</code>)</a></li>
 			<li>5.2.2. <a href="#portal.user.props">Accessing user
 			profile attributes (<code>Utils.getUserProperty</code>)</a></li>
 			<li>5.2.3. <a href="#portal.user.groups">Accessing user
@@ -4673,6 +4673,10 @@ more documentation on each token.</p>
 <h2>5. Portal Data</h2>
 </a>
 
+<p>The Shared Portal Framework provides portlets with access to data
+from the SPF portal, including user data and portal request data. This
+chapter describes how to access these elements.</p>
+
 <hr>
 
 <a name="portal.kinds">
@@ -4680,12 +4684,33 @@ more documentation on each token.</p>
 </a>
 
 <a name="portal.user">
-<h4>5.1.1. User data (profile attributes, groups and roles, etc)</h4>
+<h4>5.1.1. User data (profile attributes, groups, etc)</h4>
 </a>
+
+<p>SPF provides a {@java.util.Map} of user attributes aggregated
+from numerous sources including HP Passport (when the user has logged-in
+via HPP), HP Enterprise Directory (when the user has logged-in via the
+@HP employee portal), Persona, and UGS. This map, called the <i>SPF
+user profile map</i>, is set in {@javax.portlet.PortletRequest#USER_INFO} as
+per the Java standard. When the user is not logged-in, this map is still
+provided - however its properties are set to default values for the
+user's current locale.</p>
+
+<p>The SPF portlet {@link com.hp.it.spf.xa.misc.portlet.Utils} class
+provides access to the properties in the user profile map. You can get
+user attributes, groups, and check whether or not the user is logged-in.</p>
 
 <a name="portal.request">
 <h4>5.1.2. Portal request data (site name, portlet ID, URLs, etc)</h4>
 </a>
+
+<p>SPF provides another {@java.util.Map} containing data about the
+portal request and context. In that map is recorded information like the
+current portal site name and URL, and the current portlet ID assigned to
+the portlet in the portal.</p>
+
+<p>The SPF portlet {@link com.hp.it.spf.xa.misc.portlet.Utils} class
+provides access to these data elements as well.</p>
 
 <hr>
 
