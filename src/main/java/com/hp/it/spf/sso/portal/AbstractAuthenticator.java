@@ -259,7 +259,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     @SuppressWarnings("unchecked")
     protected void saveUserProfile2Session(User vapUser) {
         if (vapUser != null) {
-            userProfile.put(AuthenticationConsts.HEADER_GROUP_NAME,
+            userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
                             (String[])AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser))
                                                          .toArray(new String[0]));
         }

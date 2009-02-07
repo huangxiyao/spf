@@ -169,6 +169,8 @@ class AuthenticationConsts {
     static final String KEY_ZIP = Consts.KEY_ZIP;
     
     static final String KEY_STATE = Consts.KEY_STATE;
+    
+    static final String KEY_USER_GROUPS = Consts.KEY_USER_GROUPS;    
 
     /**
      * SharedPortal session attributes prefix
