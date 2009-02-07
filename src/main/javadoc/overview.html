@@ -3162,8 +3162,9 @@ your <code>portlet.xml</code> you add:</p>
 utilities to write your <code>help</code> mode artifacts (eg JSP,
 possibly a controller, etc) and configure them in your application
 context as you would for any other portlet mode. Finally, you use the
-JSR-standard {@javax.portlet.MimeResponse#createRenderURL()} and
-{@javax.portlet.PortletURL#setPortletMode(javax.portlet.PortletMode)} to
+JSR-standard {@link javax.portlet.MimeResponse#createRenderURL()} and
+{@link
+javax.portlet.PortletURL#setPortletMode(javax.portlet.PortletMode)} to
 then make a hyperlink URL pointing to your <code>help</code> mode.</p>
 
 <p>What specific to portlet <code>help</code> mode does the SPF
@@ -3172,8 +3173,8 @@ portlets is often quite similar: to simply display some largely-static
 localized text, possibly with images, video or other <a
 	href="#i18n.resources.supporting">supporting resources</a> (themselves
 potentially localized), to the user. Dynamic behaviors in the text are
-often limited to displaying different help content based on what the
-user is authorized to see or do in the portlet.</p>
+often limited to displaying different help content corresponding to what
+the user is authorized to see or do in the portlet.</p>
 
 <p>If that description fits your portlet help, we advise you to use
 SPF's <a href="#file">text interpolation</a> framework as the basis for
@@ -3297,8 +3298,8 @@ commonly practiced when your application contains multiple portlets.)</p>
 &lt;/bean&gt;</pre></blockquote>
 
 	<p><b>Note:</b> This is assuming you have already configured a
-	JSP-capable view resolver for your portlet application. This is basic
-	Spring Portlet MVC and is not shown here.</p>
+	JSP-capable view resolver for your portlet application. Doing so is
+	basic Spring Portlet MVC and is not shown here.</p>
 	</li>
 
 	<li>
@@ -3379,9 +3380,9 @@ as usual:</p>
 	Depending on your actual implementation, you would probably set your
 	JSP file name (minus the extension) as your <code>viewName</code>
 	property, as usual. (This is assuming you have already configured a
-	JSP-capable view resolver for your portlet application - that is basic
-	Spring Portlet MVC and is not shown here.) For example, assuming that
-	your JSP was named <code>my_help.jsp</code>:</p>
+	JSP-capable view resolver for your portlet application - doing so is
+	basic Spring Portlet MVC and is not shown here.) For example, assuming
+	that your JSP was named <code>my_help.jsp</code>:</p>
 
 	<blockquote><pre>
 &lt;bean id="myHelpController"                      &lt;-- "id" is any value you choose
