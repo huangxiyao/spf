@@ -4711,7 +4711,7 @@ chapter describes how to access these elements.</p>
 <p>SPF provides a {@java.util.Map} of user attributes aggregated
 from numerous sources including HP Passport (when the user has logged-in
 via HPP), HP Enterprise Directory (when the user has logged-in via the
-@HP employee portal), Persona, UPS, and UGS. This map, called the <i>SPF
+&#64;HP employee portal), Persona, UPS, and UGS. This map, called the <i>SPF
 user profile map</i>, is set in {@javax.portlet.PortletRequest#USER_INFO} as
 per the Java standard. When the user is not logged-in, this map is still
 provided - however its properties are set to default values for the
@@ -4783,7 +4783,7 @@ type of property. The method takes the following arguments:</p>
 	</li>
 	<li>
 	<p>The string name of the property to lookup. This could be the
-	name of a user property from HP Passport or the @HP employeee portal -
+	name of a user property from HP Passport or the &#64;HP employeee portal -
 	these are the core user-identity systems in SPF - or it could be the
 	name of an extended user property from Persona or UPS.</p>
 
@@ -4799,7 +4799,7 @@ type of property. The method takes the following arguments:</p>
 		<dd>
 		<p>When you use this argument with an authenticated user, <code>Utils.getUserProperty</code>
 		returns the ID which the user used to login to HP Passport (or, in the
-		case of a user accessing SPF via @HP, this is the HP SEA). This user
+		case of a user accessing SPF via &#64;HP, this is the HP SEA). This user
 		ID is unique, but please note that it may change over time, since both
 		HP Passport and HP ED allow it to change.</p>
 
@@ -4817,7 +4817,7 @@ type of property. The method takes the following arguments:</p>
 		This is an internal principal for the user, not known to the user,
 		which is both unique to the user account and static over time. This is
 		an ASCII string, but its exact format is internal and differs for HPP
-		and @HP users accounts.</p>
+		and &#64;HP users accounts.</p>
 
 		<p>For an anonymous user, this is a non-null, non-blank, reserved
 		ASCII string indicating the kind of default user profile that the user
@@ -4843,7 +4843,7 @@ type of property. The method takes the following arguments:</p>
 		previous discussion about <a href="#i18n.other.locale.get">how SPF
 		gets the locale</a>). Rather it is the language of record in the user
 		account.</p>
-		<p>For an authenticated @HP user, this will always be <code>en</code>.
+		<p>For an authenticated &#64;HP user, this will always be <code>en</code>.
 		</p>
 		<p>For an authenticated HP Passport user, this is the HPP <code>langCode</code>
 		core profile attribute. It looks like an <a
@@ -4871,7 +4871,7 @@ type of property. The method takes the following arguments:</p>
 		previous discussion about <a href="#i18n.other.locale.get">how SPF
 		gets the locale</a>). Rather it is the country of record in the user
 		account.</p>
-		<p>For an authenticated @HP user, this will be the country of
+		<p>For an authenticated &#64;HP user, this will be the country of
 		record for the user in the HP Enterprise Directory.</p>
 		<p>For an authenticated HP Passport user, this is the HPP <code>residentCountryCode</code>
 		core profile attribute.</p>
@@ -4886,7 +4886,7 @@ type of property. The method takes the following arguments:</p>
 		<p>When you use this argument with an authenticated user, it
 		returns the first (ie given) person name for the user, as taken from
 		the HP Passport or HP Enterprise Directory information for the user
-		(depending on whether the user logged-in via HPP or the @HP employee
+		(depending on whether the user logged-in via HPP or the &#64;HP employee
 		portal).</p>
 		<p>For an anonymous user, this returns null</p>
 
@@ -4898,7 +4898,7 @@ type of property. The method takes the following arguments:</p>
 		<p>When you use this argument with an authenticated user, it
 		returns the last (ie family or surname) person name for the user, as
 		taken from the HP Passport or HP Enterprise Directory information for
-		the user (depending on whether the user logged-in via HPP or the @HP
+		the user (depending on whether the user logged-in via HPP or the &#64;HP
 		employee portal).</p>
 		<p>For an anonymous user, this returns null</p>
 
@@ -4910,7 +4910,7 @@ type of property. The method takes the following arguments:</p>
 		<p>When you use this argument with an authenticated user, it
 		returns the timezone for the user, as taken from the HP Passport or HP
 		Enterprise Directory information for the user (depending on whether
-		the user logged-in via HPP or the @HP employee portal).</p>
+		the user logged-in via HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this is a null object.</p>
 
 		<p><i>Returns type:</i> {@link java.util.TimeZone}</p>
@@ -4923,7 +4923,7 @@ type of property. The method takes the following arguments:</p>
 		returns the date and time of the most recent successful authentication
 		for the user account. This is taken from the HP Passport or HP
 		Enterprise Directory information for the user (depending on whether
-		the user logged-in via HPP or the @HP employee portal).</p>
+		the user logged-in via HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this is a null object.</p>
 		<p><i>Returns type:</i> {@link java.util.Date}</p>
 		</dd>
@@ -4935,7 +4935,7 @@ type of property. The method takes the following arguments:</p>
 		returns the date and time of the most recent change to any of the
 		profile attributes in the user account. This is taken from the HP
 		Passport or HP Enterprise Directory information for the user
-		(depending on whether the user logged-in via HPP or the @HP employee
+		(depending on whether the user logged-in via HPP or the &#64;HP employee
 		portal).</p>
 		<p>For an anonymous user, this is a null object.</p>
 		<p><i>Returns type:</i> {@link java.util.Date}</p>
@@ -4946,7 +4946,7 @@ type of property. The method takes the following arguments:</p>
 		<p>When you use this argument with an authenticated user, it
 		returns the telephone number on record for the user. This is taken
 		from the HP Passport or HP Enterprise Directory information for the
-		user (depending on whether the user logged-in via HPP or the @HP
+		user (depending on whether the user logged-in via HPP or the &#64;HP
 		employee portal). Whether the telephone number already includes
 		international dialing information depends on those systems.</p>
 		<p>For an anonymous user, this returns null.</p>
@@ -4959,7 +4959,7 @@ type of property. The method takes the following arguments:</p>
 		<p>When you use this argument with an authenticated user, it
 		returns the telephone extension on record for the user. This is taken
 		from the HP Passport or HP Enterprise Directory information for the
-		user (depending on whether the user logged-in via HPP or the @HP
+		user (depending on whether the user logged-in via HPP or the &#64;HP
 		employee portal).</p>
 		<p>For an anonymous user, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
@@ -4971,7 +4971,7 @@ type of property. The method takes the following arguments:</p>
 		returns the "street" field from the postal address on record for the
 		user. This is taken from the HP Passport or HP Enterprise Directory
 		information for the user (depending on whether the user logged-in via
-		HPP or the @HP employee portal).</p>
+		HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -4982,7 +4982,7 @@ type of property. The method takes the following arguments:</p>
 		returns the "mail stop" field from the postal address on record for
 		the user. This is taken from the HP Passport or HP Enterprise
 		Directory information for the user (depending on whether the user
-		logged-in via HPP or the @HP employee portal).</p>
+		logged-in via HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -4993,7 +4993,7 @@ type of property. The method takes the following arguments:</p>
 		returns the "city" field from the postal address on record for the
 		user. This is taken from the HP Passport or HP Enterprise Directory
 		information for the user (depending on whether the user logged-in via
-		HPP or the @HP employee portal).</p>
+		HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -5004,7 +5004,7 @@ type of property. The method takes the following arguments:</p>
 		returns the "state or province" field from the postal address on
 		record for the user. This is taken from the HP Passport or HP
 		Enterprise Directory information for the user (depending on whether
-		the user logged-in via HPP or the @HP employee portal).</p>
+		the user logged-in via HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -5015,7 +5015,7 @@ type of property. The method takes the following arguments:</p>
 		returns the "postal code" field from the postal address on record for
 		the user. This is taken from the HP Passport or HP Enterprise
 		Directory information for the user (depending on whether the user
-		logged-in via HPP or the @HP employee portal).</p>
+		logged-in via HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this is a null or blank string.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -5027,7 +5027,7 @@ type of property. The method takes the following arguments:</p>
 		HP. A value of <code>Y</code> means the user is willing to be
 		contacted via email. Any other value (eg, <code>N</code>) means the
 		user wishes not to be contacted via email.</p>
-		<p>For @HP and anonymous users, this returns null.</p>
+		<p>For &#64;HP and anonymous users, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
 
@@ -5038,7 +5038,7 @@ type of property. The method takes the following arguments:</p>
 		from HP. A value of <code>Y</code> means the user is willing to be
 		contacted via telephone. Any other value (eg, <code>N</code>) means
 		the user wishes not to be contacted by telephone.</p>
-		<p>For @HP and anonymous users, this returns null.</p>
+		<p>For &#64;HP and anonymous users, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
 
@@ -5049,7 +5049,7 @@ type of property. The method takes the following arguments:</p>
 		from HP. A value of <code>Y</code> means the user is willing to be
 		contacted via postal mail. Any other value (eg, <code>N</code>) means
 		the user wishes not to be contacted by postal mail.</p>
-		<p>For @HP and anonymous users, this returns null.</p>
+		<p>For &#64;HP and anonymous users, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
 
@@ -5062,8 +5062,8 @@ type of property. The method takes the following arguments:</p>
 		validating the user's credentials. The lower the number, the lesser
 		the security constraints imposed (eg password complexity, password
 		expiry policy, etc).</p>
-		<p>When you use this argument with an authenticated @HP user, it
-		returns the user's @HP security level. This also is an integer,
+		<p>When you use this argument with an authenticated &#64;HP user, it
+		returns the user's &#64;HP security level. This also is an integer,
 		corresponding to the kind of login which the user used (SEA or
 		DigitalBadge).</p>
 		<p>For anonymous users, this returns null.</p>
@@ -5147,10 +5147,10 @@ to them:</p>
 
 	<dt><code>LOCAL_ATHP</code></dt>
 	<dd>
-	<p>Indicates the user is a member of the @HP employee portal, not
+	<p>Indicates the user is a member of the &#64;HP employee portal, not
 	HP Passport. Whether the user is currently logged-into his/her HP
 	Enterprise Directory account is irrelevant; this group indicates the
-	user is accessing via the HP Intranet and the @HP authentication
+	user is accessing via the HP Intranet and the &#64;HP authentication
 	system.</p>
 	</dd>
 
