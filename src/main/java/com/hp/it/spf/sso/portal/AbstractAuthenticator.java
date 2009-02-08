@@ -224,10 +224,10 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         // Set timezone, default value if timezone not found
         String tz = getProperty(getValue(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
         if (tz == null || ("").equals(tz.trim())) {
-            userProfile.put(AuthenticationConsts.KEY_SP_TIMEZONE,
+            userProfile.put(AuthenticationConsts.KEY_TIMEZONE,
                             AuthenticationConsts.DEFAULT_TIMEZONE);
         } else {
-            userProfile.put(AuthenticationConsts.KEY_SP_TIMEZONE, tz);
+            userProfile.put(AuthenticationConsts.KEY_TIMEZONE, tz);
         }
     }
 
@@ -243,7 +243,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         ssoUser.setLastName((String)userProfile.get(AuthenticationConsts.KEY_LAST_NAME));
         ssoUser.setCountry((String)userProfile.get(AuthenticationConsts.KEY_COUNTRY));
         ssoUser.setLanguage((String)userProfile.get(AuthenticationConsts.KEY_LANGUAGE));
-        ssoUser.setTimeZone((String)userProfile.get(AuthenticationConsts.KEY_SP_TIMEZONE));
+        ssoUser.setTimeZone((String)userProfile.get(AuthenticationConsts.KEY_TIMEZONE));
         ssoUser.setLastChangeDate((Date)userProfile.get(AuthenticationConsts.KEY_LAST_CHANGE_DATE));
         ssoUser.setLastLoginDate((Date)userProfile.get(AuthenticationConsts.KEY_LAST_LOGIN_DATE));
         // Set current site, it will be used to update user's primary site
@@ -437,7 +437,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      */
     protected boolean isUserRecentUpdated() {
         // Retrieve timeZone, lastChangeDate from userProfile map
-        String timeZone = (String)userProfile.get(AuthenticationConsts.KEY_SP_TIMEZONE);
+        String timeZone = (String)userProfile.get(AuthenticationConsts.KEY_TIMEZONE);
         Date lastChangeDate = (Date)userProfile.get(AuthenticationConsts.KEY_LAST_CHANGE_DATE);
 
         // Retrieve current user from session

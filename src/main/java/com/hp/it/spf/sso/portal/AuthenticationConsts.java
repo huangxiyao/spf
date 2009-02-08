@@ -144,7 +144,7 @@ class AuthenticationConsts {
     
     static final String KEY_LAST_LOGIN_DATE = Consts.KEY_LAST_LOGIN_DATE;
     
-    static final String KEY_SP_TIMEZONE = Consts.KEY_SP_TIMEZONE;
+    static final String KEY_TIMEZONE = Consts.KEY_TIMEZONE;
     
     static final String KEY_LAST_CHANGE_DATE = Consts.KEY_LAST_CHANGE_DATE;
     
