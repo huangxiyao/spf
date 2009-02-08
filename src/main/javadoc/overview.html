@@ -2885,7 +2885,7 @@ create a custom rendition</h4>
 </a>
 
 <p>If you need to create a custom version of contextual help, you
-should extend either of these classes in the SPF common utilities:
+should extend either of these classes in the <a href="#overview.other.spf.common">SPF common utilities</a>:
 {@link com.hp.it.spf.xa.help.ClassicContextualHelpProvider} or {@link
 com.hp.it.spf.xa.help.ContextualHelpProvider}. The common {@link
 com.hp.it.spf.xa.help.ClassicContextualHelpProvider} provides behavior
@@ -4322,7 +4322,7 @@ Welcome, {NAME}!
 	container token - <a href="#file.author.token.auth">see below</a>. The
 	display order is based on the configuration in the SPF common
 	utilities' <code>i18n_config.properties</code> file; this is an
-	internal file in the SPF common utilities JAR which you should not need
+	internal file in the <a href="#overview.other.spf.common">SPF common utilities</a> JAR which you should not need
 	to change.)</p>
 	</dd>
 
@@ -4331,14 +4331,20 @@ Welcome, {NAME}!
 	<dd>
 	<p>Use this token to insert any property in the SPF-generated <i>user
 	profile map</i> for the user into the interpolated content. The <code><i>key</i></code>
-	is the name of the property. For a complete list of property names, see
-	the class attributes for {@link com.hp.it.spf.xa.misc.portal.Consts} -
-	the ones beginning with <code>KEY_*</code>, such as {@link
-	com.hp.it.spf.xa.misc.portal.Consts#KEY_EMAIL}, are the user property
-	names. You must lookup and use their values with this token - you
-	cannot use the {@link com.hp.it.spf.xa.misc.portal.Consts} class
-	attribute names in this token.</p>
-	<p>For example:</p>
+	is the name of the property, as you would pass it to the SPF portlet
+	utilities' <a href="#portal.user.props"><code>Utils.getUserProperty</code></a>
+	method (see). For a complete list of property names, see the class
+	attributes for {@link com.hp.it.spf.xa.misc.portal.Consts} - the ones
+	beginning with <code>KEY_*</code> but <b>not</b> <code>KEY_PORTAL_*</code>,
+	such as {@link com.hp.it.spf.xa.misc.portal.Consts#KEY_EMAIL}, are the
+	user property names. You must lookup and use their values with this
+	token - you cannot use the {@link com.hp.it.spf.xa.misc.portal.Consts}
+	class attribute names themselves in this token.</p>
+
+	<p>For example, from {@link
+	com.hp.it.spf.xa.misc.portal.Consts#KEY_PHONE_NUMBER} we see that the
+	value of this user property key is <code>PhoneNumber</code>. So we can
+	reference the phone number in our interpolated text as follows:</p>
 	<blockquote><pre>
 The phone number we have on record for you is: {USER-PROPERTY:PhoneNumber}
 	</pre></blockquote>
@@ -4571,7 +4577,7 @@ url.hp=http://www.hp.com
 	</ul>
 
 	<p>A template for the token substitutions file, also named <code>default_includes.properties</code>,
-	is provided in the SPF common utilities. You can download it from <b><font
+	is provided in the <a href="#overview.other.spf.common">SPF common utilities</a>. You can download it from <b><font
 		color="blue">TBD</font></b>, then modify and rename it.</p>
 	</dd>
 
@@ -4718,32 +4724,480 @@ provides access to these data elements as well.</p>
 <h3>5.2. Accessing user data</h3>
 </a>
 
+<p>Use {@link com.hp.it.spf.xa.misc.portlet.Utils} to access user
+data, including profile attributes, groups, and current authentication
+status.</p>
+
 <a name="portal.user.loginStatus">
 <h4>5.2.2. Checking user authentication status (<code>Utils.isAuthenticatedUser</code>)</h4>
 </a>
 
+<p>Use {@link
+com.hp.it.spf.xa.misc.portlet.Utils#isAuthenticatedUser(PortletRequest)}
+to determine whether the user is currently logged-in or not. This method
+takes one parameter, the current {@link javax.portlet.PortletRequest}.
+For example (where <code>request</code> is your <code>PortletRequest</code>):</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+if (Utils.isAuthenticatedUser(request)) {
+    // user is logged-in
+    ...
+} else {
+    // user is not logged-in
+    ...
+}
+</pre></blockquote>
+
+<p>Please see the method documentation for more information.</p>
+
 <a name="portal.user.props">
 <h4>5.2.2. Accessing user profile attributes (<code>Utils.getUserProperty</code>)</h4>
 </a>
+
+<p>Use {@link
+com.hp.it.spf.xa.misc.portlet.Utils.#getUserProperty(PortletRequest,String)}
+to obtain user attributes from the SPF <i>user profile map</i>. The
+method returns an {@link java.lang.Object} whose type depends on the
+type of property. The method takes the following arguments:</p>
+
+<ul>
+	<li>
+	<p>The current {@link javax.portlet.PortletRequest} object.</p>
+	</li>
+	<li>
+	<p>The string name of the property to lookup. The current property
+	names each have constants defined for them in the {@link
+	com.hp.it.spf.xa.misc.portlet.Consts} class. They are the <code>Consts</code>
+	class attributes whose names begin with <code>KEY_*</code> but <b>note</b>
+	<code>KEY_PORTAL_*</code>. Here are some of them (<b>note:</b> this is
+	not necessarily a complete list; please check the class definition for
+	more):</p>
+	<dl>
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_USER_NAME}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, <code>Utils.getUserProperty</code>
+		returns the ID which the user used to login to HP Passport (or, in the
+		case of a user accessing SPF via @HP, this is the HP SEA). This user
+		ID is unique, but please note that it may change over time, since both
+		HP Passport and HP ED allow it to change.</p>
+
+		<p>For an anonymous user, this is a non-null, non-blank, reserved
+		ASCII string indicating the kind of default user profile that the user
+		has been assigned. It should not be considered user-visible or unique.</p>
+
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_PROFILE_ID}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, <code>Utils.getUserProperty</code>
+		returns the internal ID (called the <i>profile ID</i>) for the user.
+		This is an internal principal for the user, not known to the user,
+		which is both unique to the user account and static over time. This is
+		an ASCII string, but its exact format is internal and differs for HPP
+		and @HP users accounts.</p>
+
+		<p>For an anonymous user, this is a non-null, non-blank, reserved
+		ASCII string indicating the kind of default user profile that the user
+		has been assigned. It should not be considered user-visible or unique.</p>
+
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_EMAIL}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, <code>Utils.getUserProperty</code>
+		returns the email address for the user. This is taken from the HPP or
+		HP ED user account.</p>
+		<p>For an anonymous user, this is null or blank.</p>
+
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_LANGUAGE}</dt>
+		<dd>
+		<p>When you use this argument, <code>Utils.getUserProperty</code>
+		returns a code for the language of the user. Note this is <b>not</b>
+		necessarily the same as the language in the current locale (see the
+		previous discussion about <a href="#i18n.other.locale.get">how SPF
+		gets the locale</a>). Rather it is the language of record in the user
+		account.</p>
+		<p>For an authenticated @HP user, this will always be <code>en</code>.
+		</p>
+		<p>For an authenticated HP Passport user, this is the HPP <code>langCode</code>
+		core profile attribute. It looks like an <a
+			href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+		639-1</a> language code, but there are exceptions for Simplified and
+		Traditional Chinese (you can use one of the SPF-provided converter
+		methods, like {@link
+		com.hp.it.spf.xa.i18n.portlet.I18nUtility.hppLanguageToLocale(String)},
+		to normalize it).</p>
+		<p>For an anonymous user, this is the <a
+			href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+		639-1</a> language code of record for the default profile the user has
+		been assigned.</p>
+
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_COUNTRY}</dt>
+		<dd>
+		<p>When you use this argument, <code>Utils.getUserProperty</code>
+		returns an <a
+			href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+		3166-1</a> country code for the country of the user. Note this is <b>not</b>
+		necessarily the same as the country in the current locale (see the
+		previous discussion about <a href="#i18n.other.locale.get">how SPF
+		gets the locale</a>). Rather it is the country of record in the user
+		account.</p>
+		<p>For an authenticated @HP user, this will be the country of
+		record for the user in the HP Enterprise Directory.</p>
+		<p>For an authenticated HP Passport user, this is the HPP <code>residentCountryCode</code>
+		core profile attribute.</p>
+		<p>For an anonymous user, this is the country of record for the
+		default profile the user has been assigned.</p>
+
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_FIRST_NAME}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the first (ie given) person name for the user, as taken from
+		the HP Passport or HP Enterprise Directory information for the user
+		(depending on whether the user logged-in via HPP or the @HP employee
+		portal).</p>
+		<p>For an anonymous user, this is a non-null, non-blank, reserved
+		value from the default profile to which the user was assigned. It
+		should not be considered customer-visible.</p>
+
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_LAST_NAME}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the last (ie family or surname) person name for the user, as
+		taken from the HP Passport or HP Enterprise Directory information for
+		the user (depending on whether the user logged-in via HPP or the @HP
+		employee portal).</p>
+		<p>For an anonymous user, this is a non-null, non-blank, reserved
+		value from the default profile to which the user was assigned. It
+		should not be considered customer-visible.</p>
+
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_SP_TIMEZONE}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the timezone for the user, as taken from the HP Passport or HP
+		Enterprise Directory information for the user (depending on whether
+		the user logged-in via HPP or the @HP employee portal).</p>
+		<p>For an anonymous user, this is a null object.</p>
+
+		<p><i>Returns type:</i> {@link java.util.TimeZone}</p>
+		</dd>
+
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#KEY_LAST_LOGIN_DATE}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the date and time of the most recent successful authentication
+		for the user account. This is taken from the HP Passport or HP
+		Enterprise Directory information for the user (depending on whether
+		the user logged-in via HPP or the @HP employee portal).</p>
+		<p>For an anonymous user, this is a null object.</p>
+		<p><i>Returns type:</i> {@link java.util.Date}</p>
+		</dd>
+
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#KEY_LAST_CHANGE_DATE}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the date and time of the most recent change to any of the
+		profile attributes in the user account. This is taken from the HP
+		Passport or HP Enterprise Directory information for the user
+		(depending on whether the user logged-in via HPP or the @HP employee
+		portal).</p>
+		<p>For an anonymous user, this is a null object.</p>
+		<p><i>Returns type:</i> {@link java.util.Date}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_PHONE_NUMBER}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the telephone number on record for the user. This is taken
+		from the HP Passport or HP Enterprise Directory information for the
+		user (depending on whether the user logged-in via HPP or the @HP
+		employee portal). Whether the telephone number already includes
+		international dialing information depends on those systems.</p>
+		<p>For an anonymous user, this is null or blank.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#KEY_PHONE_NUMBER_EXT}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the telephone extension on record for the user. This is taken
+		from the HP Passport or HP Enterprise Directory information for the
+		user (depending on whether the user logged-in via HPP or the @HP
+		employee portal).</p>
+		<p>For an anonymous user, this is null or blank.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_STREET}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the "street" field from the postal address on record for the
+		user. This is taken from the HP Passport or HP Enterprise Directory
+		information for the user (depending on whether the user logged-in via
+		HPP or the @HP employee portal).</p>
+		<p>For an anonymous user, this is a null or blank string.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_MAIL_STOP}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the "mail stop" field from the postal address on record for
+		the user. This is taken from the HP Passport or HP Enterprise
+		Directory information for the user (depending on whether the user
+		logged-in via HPP or the @HP employee portal).</p>
+		<p>For an anonymous user, this is a null or blank string.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_CITY}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the "city" field from the postal address on record for the
+		user. This is taken from the HP Passport or HP Enterprise Directory
+		information for the user (depending on whether the user logged-in via
+		HPP or the @HP employee portal).</p>
+		<p>For an anonymous user, this is a null or blank string.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_STATE}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the "state or province" field from the postal address on
+		record for the user. This is taken from the HP Passport or HP
+		Enterprise Directory information for the user (depending on whether
+		the user logged-in via HPP or the @HP employee portal).</p>
+		<p>For an anonymous user, this is a null or blank string.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_ZIP}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the "postal code" field from the postal address on record for
+		the user. This is taken from the HP Passport or HP Enterprise
+		Directory information for the user (depending on whether the user
+		logged-in via HPP or the @HP employee portal).</p>
+		<p>For an anonymous user, this is a null or blank string.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_EMAIL_PREF}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated HP Passport
+		user, it returns the user's opt-in preference for email contact from
+		HP. A value of <code>Y</code> means the user is willing to be
+		contacted via email. Any other value (eg, <code>N</code>) means the
+		user wishes not to be contacted via email.</p>
+		<p>For @HP and anonymous users, this is defaulted to <code>N</code>.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_PHONE_PREF}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated HP Passport
+		user, it returns the user's opt-in preference for telephone contact
+		from HP. A value of <code>Y</code> means the user is willing to be
+		contacted via telephone. Any other value (eg, <code>N</code>) means
+		the user wishes not to be contacted by telephone.</p>
+		<p>For @HP and anonymous users, this is defaulted to <code>N</code>.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_POSTAL_PREF}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated HP Passport
+		user, it returns the user's opt-in preference for postal mail contact
+		from HP. A value of <code>Y</code> means the user is willing to be
+		contacted via postal mail. Any other value (eg, <code>N</code>) means
+		the user wishes not to be contacted by postal mail.</p>
+		<p>For @HP and anonymous users, this is defaulted to <code>N</code>.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#KEY_SECURITY_LEVEL}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated HP Passport
+		user, it returns the user's HPP security level. This is an integer
+		indicating the level of authentication stringency applied by HPP when
+		validating the user's credentials. The lower the number, the lesser
+		the security constraints imposed (eg password complexity, password
+		expiry policy, etc).</p>
+		<p>For @HP and anonymous users, this is defaulted to <code>0</code>.</p>
+		<p><i>Returns type:</i> {@link java.lang.Integer}</p>
+		</dd>
+	</dl>
+</ul>
+
+<p>For example, here is how we can use <code>Utils.getUserProperty</code>,
+along with the <a href="#overview.other.spf.common">SPF common utilities</a> {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#getUserDisplayName(String,String,Locale)}
+method, to get the full name for the user (in customary order of given
+and family name). In this example, <code>request</code> is the <code>PortletRequest</code>:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+import com.hp.it.spf.xa.misc.portlet.Utils;
+import com.hp.it.spf.xa.misc.portlet.Consts;
+...
+String fn = (String) Utils.getUserProperty(request, Consts.KEY_FIRST_NAME);
+String ln = (String) Utils.getUserProperty(request, Consts.KEY_LAST_NAME);
+String fullName = I18nUtility.getUserDisplayName(fn, ln, request.getLocale());
+...
+// Tip: if you are going to display this fullName in the UI, you should also
+// escape it in case for some reason there are HTML metacharacters in it (eg
+// an XSS attack):
+String escapedFullName = Utils.escapeXml(fullName);
+</pre></blockquote>
+
 <a name="portal.user.groups">
 <h4>5.2.3. Accessing user groups (<code>Utils.getGroups</code>)</h4>
 </a>
+
+<p>Use {@link
+com.hp.it.spf.xa.misc.portlet.Utils#getGroups(PortletRequest)} to obtain
+an array of names of the security groups to which the user belongs. The
+method takes the current {@link javax.portlet.PortletRequest} for the
+user. Note this method is operable for anonymous as well as
+authenticated users. For example (where <code>request</code> is the
+{@link javax.portlet.PortletRequest}):</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+String[] groups = Utils.getGroups(request);
+</pre></blockquote>
+
+<p>Please see the method documentation for more information.</p>
+
+<p><b>Background:</b> The SPF has 2 related concepts for
+authorization: groups and roles. Groups are portal-level constructs and
+are not JSR portlet standard; roles are portlet-level constructs which
+are JSR-standard. The SPF portal both forwards the user's groups as part
+of the {@link javax.portlet.PortletRequest}, and maps the groups into
+roles which are likewise part of the <code>PortletRequest</code>. The
+group-to-role mapping is specified when provisioning the portlet inside
+the portal. In SPF, groups themselves are generally mapped from other
+characteristics, either in the portal itself, or in UGS. Both groups and
+roles can exist apart from authentication; ie anonymous users can still
+be in groups/roles. This SPF authorization design is documented
+elsewhere.</p>
 
 <hr>
 
 <a name="portal.request.get">
 <h3>5.3. Accessing portal request data</h3>
 </a>
+
+<p>Use {@link com.hp.it.spf.xa.misc.portlet.Utils} to access portal
+request data, including the portal site name, the portlet ID, and the
+URL's for the current portal request and the portal site home page.</p>
+
 <a name="portal.request.site">
 <h4>5.3.1. Accessing the portal site name (<code>Utils.getPortalSiteName</code>)</h4>
 </a>
+
+<p>Use {@link
+com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteName(PortletRequest)}
+to get the name of the current portal site. SPF is a portal-hosting
+platform for hosting numerous individual portal sites - this method will
+return the name of your site, as assigned by the portal administrator.
+Note that in Vignette, this is the "site DNS name". For example (where <code>request</code>
+is the {@link com.hp.it.spf.xa.misc.portlet.PortletRequest}):</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+String siteName = Utils.getPortalSiteName(request);
+</pre></blockquote>
+
+<p>Please see the method documentation for more information.</p>
+
 <a name="portal.request.portlet">
 <h4>5.3.2. Accessing the portlet ID (<code>Utils.getPortalPortletID</code>)</h4>
 </a>
+
+<p>Use {@link
+com.hp.it.spf.xa.misc.portlet.Utils#getPortalPortletID(PortletRequest)}
+to get the ID for your portlet as it is known to your portal site. This
+portlet ID is assigned to the instance of your portlet when it is
+created by the portal administrator. Note that in Vignette, this is the
+"portlet friendly ID". For example (where <code>request</code> is the
+{@link javax.portlet.PortletRequest}):</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+String portletID = Utils.getPortalPortletID(request);
+</pre></blockquote>
+
+<p>Please see the method documentation for more information.</p>
+
 <a name="portal.request.url">
 <h4>5.3.3. Accessing portal URL's (<code>Utils.getPortalRequestURL</code>,
 <code>Utils.getPortalSiteURL</code>)</h4>
 </a>
+
+<p>Use these methods to get portal URL's for the portal site containing your portlet.</p>
+
+<dl>
+<dt>{@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(PortletRequest)}</dt>
+<dd><p>This method returns a URL which reconstructs the current portal request from the user's browser.
+The URL contains the same scheme, hostname and port which the browser used, with the path for the current portal page and site.
+Its query string (if any) contains all of the form parameters for the current page as well (including parameters targeted
+to your portlet, if any). It does not matter whether the form parameters were submitted via HTTP <code>GET</code> or 
+<code>POST</code> - they are included in the query string of the URL returned by this method.</p>
+<p>For example (where <code>request</code> is the {@link javax.portlet.PortletRequest}):</p>
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+String url = Utils.getPortalRequestURL(request);
+</pre></blockquote>
+</dd>
+
+<dt>{@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest)}</dt>
+<dd><p>This method returns the URL for the current portal site's home page.  The URL contains the same scheme, hostname, and port
+which the browser used for the current portal page. The URL can be used with the <a href="#overview.other.spf.common">SPF common utilities</a>
+{@link com.hp.it.spf.xa.portalurl.PortalURL} interface when constructing portal URL objects for arbitrary sites, pages and portlets.</p>
+
+<p>For example, consider that we wish to build a <code>PortalURL</code> for the current portal site's Forums page, where
+<code>forums</code> is the friendly URI.  Here is the code (where <code>request</code> is the {@link javax.portlet.PortletRequest} - and note
+that {@link com.hp.it.spf.xa.portalurl.PortalURL} and {@link com.hp.it.spf.xa.portalurl.PortalURLFactory} are artifacts inside the
+<a href="#overview.other.spf.common">SPF common utilities</a>):</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+import com.hp.it.spf.xa.portalurl.PortalURL;
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+...
+String home = Utils.getPortalSiteURL(request);
+PortalURL url = PortalURLFactory.createPageURL(home, "forums");
+</pre></blockquote>
+</dl>
+
+<p>Please refer to the method documentation for more information.</p>
 
 <hr>
 
