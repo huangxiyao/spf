@@ -88,7 +88,7 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	/**
 	 * The Vignette User object property for SPF-standard timezone.
 	 */
-	public static final String PROPERTY_SP_TIMEZONE_ID = "sp_timezone";
+	public static final String PROPERTY_SPF_TIMEZONE_ID = "spf_timezone";
 
 	/**
 	 * The Vignette User object property for Vignette-standard timezone (which
