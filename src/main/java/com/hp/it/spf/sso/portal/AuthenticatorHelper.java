@@ -98,7 +98,7 @@ public class AuthenticatorHelper {
         userProperties.put(AuthenticationConsts.PROPERTY_LASTNAME_ID, ssoUser.getLastName());
         userProperties.put(AuthenticationConsts.PROPERTY_LANGUAGE_ID, ssoUser.getLanguage());
         userProperties.put(AuthenticationConsts.PROPERTY_COUNTRY_ID, ssoUser.getCountry());
-        userProperties.put(AuthenticationConsts.PROPERTY_SP_TIMEZONE_ID, ssoUser.getTimeZone());
+        userProperties.put(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID, ssoUser.getTimeZone());
         userProperties.put(AuthenticationConsts.PROPERTY_TIMEZONE_ID,
                            AuthenticatorHelper.getTimeZoneOffset(ssoUser.getTimeZone()));
         userProperties.put(AuthenticationConsts.PROPERTY_LAST_CHANGE_DATE_ID,
@@ -155,7 +155,7 @@ public class AuthenticatorHelper {
             user.setProperty(AuthenticationConsts.PROPERTY_LASTNAME_ID, ssoUser.getLastName());
             user.setProperty(AuthenticationConsts.PROPERTY_LANGUAGE_ID, ssoUser.getLanguage());
             user.setProperty(AuthenticationConsts.PROPERTY_COUNTRY_ID, ssoUser.getCountry());
-            user.setProperty(AuthenticationConsts.PROPERTY_SP_TIMEZONE_ID, ssoUser.getTimeZone());
+            user.setProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID, ssoUser.getTimeZone());
             user.setProperty(AuthenticationConsts.PROPERTY_TIMEZONE_ID, 
                              AuthenticatorHelper.getTimeZoneOffset(ssoUser.getTimeZone()));
             user.setProperty(AuthenticationConsts.PROPERTY_LAST_CHANGE_DATE_ID,

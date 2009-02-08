@@ -46,7 +46,7 @@ class AuthenticationConsts {
     
     static final String PROPERTY_LAST_CHANGE_DATE_ID = Consts.PROPERTY_LAST_CHANGE_DATE_ID;
     
-    static final String PROPERTY_SP_TIMEZONE_ID = Consts.PROPERTY_SP_TIMEZONE_ID;
+    static final String PROPERTY_SPF_TIMEZONE_ID = Consts.PROPERTY_SPF_TIMEZONE_ID;
 
     static final String PROPERTY_TIMEZONE_ID = Consts.PROPERTY_TIMEZONE_ID;
 

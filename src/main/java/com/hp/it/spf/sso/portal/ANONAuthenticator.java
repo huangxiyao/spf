@@ -158,7 +158,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
         userProfile.put(AuthenticationConsts.KEY_COUNTRY,
                         vapUser.getProperty(AuthenticationConsts.PROPERTY_COUNTRY_ID));
         userProfile.put(AuthenticationConsts.KEY_TIMEZONE,
-                        vapUser.getProperty(AuthenticationConsts.PROPERTY_SP_TIMEZONE_ID));
+                        vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID));
 
         // Retrieve user group
         userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
