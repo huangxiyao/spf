@@ -4795,42 +4795,66 @@ type of property. The method takes the following arguments:</p>
 	necessarily a complete list; please check the class definition for
 	more):</p>
 	<dl>
-		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_USER_NAME}</dt>
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_CITY}</dt>
 		<dd>
-		<p>When you use this argument with an authenticated user, <code>Utils.getUserProperty</code>
-		returns the ID which the user used to login to HP Passport (or, in the
-		case of a user accessing SPF via &#64;HP, this is the HP SEA). This user
-		ID is unique, but please note that it may change over time, since both
-		HP Passport and HP ED allow it to change.</p>
+		<p>When you use this argument with an authenticated user, it
+		returns the "city" field from the postal address on record for the
+		user. This is taken from the HP Passport or HP Enterprise Directory
+		information for the user (depending on whether the user logged-in via
+		HPP or the &#64;HP employee portal).</p>
+		<p>For an anonymous user, this returns null.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
 
-		<p>For an anonymous user, this is a non-null, non-blank, reserved
-		ASCII string indicating the kind of default user profile that the user
-		has been assigned. It should not be considered user-visible or unique.</p>
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_COUNTRY}</dt>
+		<dd>
+		<p>When you use this argument, <code>Utils.getUserProperty</code>
+		returns an <a
+			href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+		3166-1</a> country code for the country of the user. Note this is <b>not</b>
+		necessarily the same as the country in the current locale (see the
+		previous discussion about <a href="#i18n.other.locale.get">how SPF
+		gets the locale</a>). Rather it is the country of record in the user
+		account.</p>
+		<p>For an authenticated &#64;HP user, this will be the country of
+		record for the user in the HP Enterprise Directory.</p>
+		<p>For an authenticated HP Passport user, this is the HPP <code>residentCountryCode</code>
+		core profile attribute.</p>
+		<p>For an anonymous user, this is the country of record for the
+		default profile the user has been assigned.</p>
 
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
 
-		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_PROFILE_ID}</dt>
-		<dd>
-		<p>When you use this argument with an authenticated user, <code>Utils.getUserProperty</code>
-		returns the internal ID (called the <i>profile ID</i>) for the user.
-		This is an internal principal for the user, not known to the user,
-		which is both unique to the user account and static over time. This is
-		an ASCII string, but its exact format is internal and differs for HPP
-		and &#64;HP users accounts.</p>
-
-		<p>For an anonymous user, this is a non-null, non-blank, reserved
-		ASCII string indicating the kind of default user profile that the user
-		has been assigned. It should not be considered user-visible or unique.</p>
-
-		<p><i>Returns type:</i> {@link java.lang.String}</p>
-		
 		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_EMAIL}</dt>
 		<dd>
 		<p>When you use this argument with an authenticated user, <code>Utils.getUserProperty</code>
 		returns the email address for the user. This is taken from the HPP or
 		HP ED user account.</p>
 		<p>For an anonymous user, this returns null.</p>
+
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_EMAIL_PREF}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated HP Passport
+		user, it returns the user's opt-in preference for email contact from
+		HP. A value of <code>Y</code> means the user is willing to be
+		contacted via email. Any other value (eg, <code>N</code>) means the
+		user wishes not to be contacted via email.</p>
+		<p>For &#64;HP and anonymous users, this returns null.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_FIRST_NAME}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the first (ie given) person name for the user, as taken from
+		the HP Passport or HP Enterprise Directory information for the user
+		(depending on whether the user logged-in via HPP or the &#64;HP employee
+		portal).</p>
+		<p>For an anonymous user, this returns null</p>
 
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -4861,36 +4885,29 @@ type of property. The method takes the following arguments:</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
 
-		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_COUNTRY}</dt>
-		<dd>
-		<p>When you use this argument, <code>Utils.getUserProperty</code>
-		returns an <a
-			href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
-		3166-1</a> country code for the country of the user. Note this is <b>not</b>
-		necessarily the same as the country in the current locale (see the
-		previous discussion about <a href="#i18n.other.locale.get">how SPF
-		gets the locale</a>). Rather it is the country of record in the user
-		account.</p>
-		<p>For an authenticated &#64;HP user, this will be the country of
-		record for the user in the HP Enterprise Directory.</p>
-		<p>For an authenticated HP Passport user, this is the HPP <code>residentCountryCode</code>
-		core profile attribute.</p>
-		<p>For an anonymous user, this is the country of record for the
-		default profile the user has been assigned.</p>
-
-		<p><i>Returns type:</i> {@link java.lang.String}</p>
-		</dd>
-
-		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_FIRST_NAME}</dt>
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#KEY_LAST_CHANGE_DATE}</dt>
 		<dd>
 		<p>When you use this argument with an authenticated user, it
-		returns the first (ie given) person name for the user, as taken from
-		the HP Passport or HP Enterprise Directory information for the user
+		returns the date and time of the most recent change to any of the
+		profile attributes in the user account. This is taken from the HP
+		Passport or HP Enterprise Directory information for the user
 		(depending on whether the user logged-in via HPP or the &#64;HP employee
 		portal).</p>
-		<p>For an anonymous user, this returns null</p>
-
-		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		<p>For an anonymous user, this is a null object.</p>
+		<p><i>Returns type:</i> {@link java.util.Date}</p>
+		</dd>
+		
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#KEY_LAST_LOGIN_DATE}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the date and time of the most recent successful authentication
+		for the user account. This is taken from the HP Passport or HP
+		Enterprise Directory information for the user (depending on whether
+		the user logged-in via HPP or the &#64;HP employee portal).</p>
+		<p>For an anonymous user, this is a null object.</p>
+		<p><i>Returns type:</i> {@link java.util.Date}</p>
 		</dd>
 
 		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_LAST_NAME}</dt>
@@ -4905,40 +4922,15 @@ type of property. The method takes the following arguments:</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
 
-		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_TIMEZONE}</dt>
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_MAIL_STOP}</dt>
 		<dd>
 		<p>When you use this argument with an authenticated user, it
-		returns the timezone for the user, as taken from the HP Passport or HP
-		Enterprise Directory information for the user (depending on whether
-		the user logged-in via HPP or the &#64;HP employee portal).</p>
-		<p>For an anonymous user, this is a null object.</p>
-
-		<p><i>Returns type:</i> {@link java.util.TimeZone}</p>
-		</dd>
-
-		<dt>{@link
-		com.hp.it.spf.xa.misc.portlet.Consts#KEY_LAST_LOGIN_DATE}</dt>
-		<dd>
-		<p>When you use this argument with an authenticated user, it
-		returns the date and time of the most recent successful authentication
-		for the user account. This is taken from the HP Passport or HP
-		Enterprise Directory information for the user (depending on whether
-		the user logged-in via HPP or the &#64;HP employee portal).</p>
-		<p>For an anonymous user, this is a null object.</p>
-		<p><i>Returns type:</i> {@link java.util.Date}</p>
-		</dd>
-
-		<dt>{@link
-		com.hp.it.spf.xa.misc.portlet.Consts#KEY_LAST_CHANGE_DATE}</dt>
-		<dd>
-		<p>When you use this argument with an authenticated user, it
-		returns the date and time of the most recent change to any of the
-		profile attributes in the user account. This is taken from the HP
-		Passport or HP Enterprise Directory information for the user
-		(depending on whether the user logged-in via HPP or the &#64;HP employee
-		portal).</p>
-		<p>For an anonymous user, this is a null object.</p>
-		<p><i>Returns type:</i> {@link java.util.Date}</p>
+		returns the "mail stop" field from the postal address on record for
+		the user. This is taken from the HP Passport or HP Enterprise
+		Directory information for the user (depending on whether the user
+		logged-in via HPP or the &#64;HP employee portal).</p>
+		<p>For an anonymous user, this returns null.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
 
 		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_PHONE_NUMBER}</dt>
@@ -4965,72 +4957,6 @@ type of property. The method takes the following arguments:</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
 
-		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_STREET}</dt>
-		<dd>
-		<p>When you use this argument with an authenticated user, it
-		returns the "street" field from the postal address on record for the
-		user. This is taken from the HP Passport or HP Enterprise Directory
-		information for the user (depending on whether the user logged-in via
-		HPP or the &#64;HP employee portal).</p>
-		<p>For an anonymous user, this returns null.</p>
-		<p><i>Returns type:</i> {@link java.lang.String}</p>
-		</dd>
-
-		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_MAIL_STOP}</dt>
-		<dd>
-		<p>When you use this argument with an authenticated user, it
-		returns the "mail stop" field from the postal address on record for
-		the user. This is taken from the HP Passport or HP Enterprise
-		Directory information for the user (depending on whether the user
-		logged-in via HPP or the &#64;HP employee portal).</p>
-		<p>For an anonymous user, this returns null.</p>
-		<p><i>Returns type:</i> {@link java.lang.String}</p>
-		</dd>
-
-		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_CITY}</dt>
-		<dd>
-		<p>When you use this argument with an authenticated user, it
-		returns the "city" field from the postal address on record for the
-		user. This is taken from the HP Passport or HP Enterprise Directory
-		information for the user (depending on whether the user logged-in via
-		HPP or the &#64;HP employee portal).</p>
-		<p>For an anonymous user, this returns null.</p>
-		<p><i>Returns type:</i> {@link java.lang.String}</p>
-		</dd>
-
-		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_STATE}</dt>
-		<dd>
-		<p>When you use this argument with an authenticated user, it
-		returns the "state or province" field from the postal address on
-		record for the user. This is taken from the HP Passport or HP
-		Enterprise Directory information for the user (depending on whether
-		the user logged-in via HPP or the &#64;HP employee portal).</p>
-		<p>For an anonymous user, this returns null.</p>
-		<p><i>Returns type:</i> {@link java.lang.String}</p>
-		</dd>
-
-		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_ZIP}</dt>
-		<dd>
-		<p>When you use this argument with an authenticated user, it
-		returns the "postal code" field from the postal address on record for
-		the user. This is taken from the HP Passport or HP Enterprise
-		Directory information for the user (depending on whether the user
-		logged-in via HPP or the &#64;HP employee portal).</p>
-		<p>For an anonymous user, this is a null or blank string.</p>
-		<p><i>Returns type:</i> {@link java.lang.String}</p>
-		</dd>
-
-		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_EMAIL_PREF}</dt>
-		<dd>
-		<p>When you use this argument with an authenticated HP Passport
-		user, it returns the user's opt-in preference for email contact from
-		HP. A value of <code>Y</code> means the user is willing to be
-		contacted via email. Any other value (eg, <code>N</code>) means the
-		user wishes not to be contacted via email.</p>
-		<p>For &#64;HP and anonymous users, this returns null.</p>
-		<p><i>Returns type:</i> {@link java.lang.String}</p>
-		</dd>
-
 		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_PHONE_PREF}</dt>
 		<dd>
 		<p>When you use this argument with an authenticated HP Passport
@@ -5053,6 +4979,21 @@ type of property. The method takes the following arguments:</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
 
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_PROFILE_ID}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, <code>Utils.getUserProperty</code>
+		returns the internal ID (called the <i>profile ID</i>) for the user.
+		This is an internal principal for the user, not known to the user,
+		which is both unique to the user account and static over time. This is
+		an ASCII string, but its exact format is internal and differs for HPP
+		and &#64;HP users accounts.</p>
+
+		<p>For an anonymous user, this is a non-null, non-blank, reserved
+		ASCII string indicating the kind of default user profile that the user
+		has been assigned. It should not be considered user-visible or unique.</p>
+
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		
 		<dt>{@link
 		com.hp.it.spf.xa.misc.portlet.Consts#KEY_SECURITY_LEVEL}</dt>
 		<dd>
@@ -5069,6 +5010,66 @@ type of property. The method takes the following arguments:</p>
 		<p>For anonymous users, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.Integer}</p>
 		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_STATE}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the "state or province" field from the postal address on
+		record for the user. This is taken from the HP Passport or HP
+		Enterprise Directory information for the user (depending on whether
+		the user logged-in via HPP or the &#64;HP employee portal).</p>
+		<p>For an anonymous user, this returns null.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_STREET}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the "street" field from the postal address on record for the
+		user. This is taken from the HP Passport or HP Enterprise Directory
+		information for the user (depending on whether the user logged-in via
+		HPP or the &#64;HP employee portal).</p>
+		<p>For an anonymous user, this returns null.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_TIMEZONE}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the timezone for the user, as taken from the HP Passport or HP
+		Enterprise Directory information for the user (depending on whether
+		the user logged-in via HPP or the &#64;HP employee portal).</p>
+		<p>For an anonymous user, this is a null object.</p>
+
+		<p><i>Returns type:</i> {@link java.util.TimeZone}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_USER_NAME}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, <code>Utils.getUserProperty</code>
+		returns the ID which the user used to login to HP Passport (or, in the
+		case of a user accessing SPF via &#64;HP, this is the HP SEA). This user
+		ID is unique, but please note that it may change over time, since both
+		HP Passport and HP ED allow it to change.</p>
+
+		<p>For an anonymous user, this is a non-null, non-blank, reserved
+		ASCII string indicating the kind of default user profile that the user
+		has been assigned. It should not be considered user-visible or unique.</p>
+
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
+		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_ZIP}</dt>
+		<dd>
+		<p>When you use this argument with an authenticated user, it
+		returns the "postal code" field from the postal address on record for
+		the user. This is taken from the HP Passport or HP Enterprise
+		Directory information for the user (depending on whether the user
+		logged-in via HPP or the &#64;HP employee portal).</p>
+		<p>For an anonymous user, this is a null or blank string.</p>
+		<p><i>Returns type:</i> {@link java.lang.String}</p>
+		</dd>
+
 	</dl>
 	<p>The extended user properties, from Persona or UPS, are not
 	well-defined within the SPF framework and so they are not listed here.</p>
