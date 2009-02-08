@@ -487,12 +487,12 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
-	 * Returns an absolute URL for the given request. This includes the hostname
-	 * and port used by the browser, the path (including context root path,
-	 * context relative path, and any additional path) and the form parameters
-	 * (attached as a query string regardless of whether they were submitted in
-	 * a query string via GET, or in the request body via POST). This method
-	 * returns null given a null request.
+	 * Returns an absolute URL for the given request. This includes the scheme,
+	 * hostname and port used by the browser, the path (including context root
+	 * path, context relative path, and any additional path) and the form
+	 * parameters (attached as a query string regardless of whether they were
+	 * submitted in a query string via GET, or in the request body via POST).
+	 * This method returns null given a null request.
 	 * 
 	 * @param request
 	 *            The current request.
@@ -601,4 +601,76 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		url = scheme + "://" + hostAndPort + context + path + info + query;
 		return url;
 	}
+
+	/**
+	 * Returns an absolute URL for the the current portal site root (ie portal
+	 * site home page) for the given request. This includes the scheme, hostname
+	 * and port used by the browser. This method returns null given a null
+	 * request.
+	 * 
+	 * @param request
+	 *            The current request.
+	 * @return The URL for the current site, in string form. This is an absolute
+	 *         URL.
+	 */
+	public static String getSiteURL(HttpServletRequest request) {
+		return getSiteURL(request, null);
+	}
+
+	/**
+	 * Returns an absolute URL for the the portal site root (ie portal site home
+	 * page) for the effective site in the given request. This includes the
+	 * scheme, hostname and port used by the browser. The effective site is
+	 * determined by using the {@link #getEffectiveSite(HttpServletRequest)}
+	 * method. This method returns null given a null request.
+	 * 
+	 * @param request
+	 *            The current request.
+	 * @return The URL for the current site, in string form. This is an absolute
+	 *         URL.
+	 */
+	public static String getEffectiveSiteURL(HttpServletRequest request) {
+		return getSiteURL(request, getEffectiveSiteDNS(request));
+	}
+
+	/**
+	 * <p>
+	 * Returns an absolute URL for the the portal site root (ie portal site home
+	 * page) for the given request and site name. This includes the scheme,
+	 * hostname and port used by the browser. The given site name should be the
+	 * "site DNS name" for the portal site in Vignette; if it is null, then the
+	 * one from the request will be used. This method returns null given a null
+	 * request.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> This method does not check if the given site name actually
+	 * exists in the portal; it just makes a URL of the proper format for it.
+	 * </p>
+	 * 
+	 * @param request
+	 *            The current request.
+	 * @param siteDNS
+	 *            The site name (ie "site DNS name").
+	 * @return The URL for the given site, in string form. This is an absolute
+	 *         URL.
+	 */
+	public static String getSiteURL(HttpServletRequest request, String siteDNS) {
+		String siteURL = null;
+		String requestURL = getRequestURL(request);
+		if (siteDNS == null) {
+			siteDNS = getSiteDNS(request);
+		}
+
+		if ((requestURL != null) && (siteDNS != null)) {
+			siteDNS = siteDNS.trim();
+			int j = requestURL.indexOf("/site/");
+			if (j == -1)
+				siteURL = requestURL;
+			else
+				siteURL = requestURL.substring(0, j) + "/site/" + siteDNS + "/";
+			siteURL = slashify(siteURL);
+		}
+		return (siteURL);
+	}
+
 }
