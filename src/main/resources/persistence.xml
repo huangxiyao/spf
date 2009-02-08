@@ -34,8 +34,10 @@
 
 			<property name="eclipselink.target-database" value="Oracle" />
 			<property name="eclipselink.target-server" value="WebLogic_10" />
-			<!-- <property name="eclipselink.cache.type.default" value="NONE"/> -->
+			<!-- 
+			<property name="eclipselink.cache.type.default" value="NONE"/>
 			<property name="eclipselink.session.customizer" value="com.sun.portal.portletcontainer.context.registry.database.JMSCacheCoordinator"/>
+			 -->
 		</properties>
 	</persistence-unit>
 </persistence>
