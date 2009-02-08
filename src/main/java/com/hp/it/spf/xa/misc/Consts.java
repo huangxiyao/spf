@@ -66,7 +66,7 @@ public class Consts {
 	/**
 	 * The key to get timezone (java object) from user profile map.
 	 */
-	public static final String KEY_SP_TIMEZONE = "Timezone";
+	public static final String KEY_TIMEZONE = "Timezone";
 
 	/**
 	 * The key to get last change date from user profile map.
