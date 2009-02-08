@@ -77,8 +77,8 @@ public class ANONAuthenticator extends AbstractAuthenticator {
 
         String language = reqLocale.getLanguage();
         String country = reqLocale.getCountry();
-        language = (language != null) ? language.trim() : "";
-        country = (country != null) ? country.trim() : "";
+        language = (language != null) ? language.trim().toLowerCase() : "";
+        country = (country != null) ? country.trim().toLowerCase() : "";
 
         String ssousername = null;
 
