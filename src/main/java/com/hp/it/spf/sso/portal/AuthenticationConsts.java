@@ -231,10 +231,10 @@ class AuthenticationConsts {
     static final String ATHP_GROUP_PREFIX = "cn=sp_";
     
     /**
-     * Groups when user does not login.
+     * Groups stands for the user is from HPP/FED/@HP.
      */
-    public final static String SP_FN_ATHP_NAME = "SP_FN_ATHP";
-    public final static String SP_FN_FED_NAME = "SP_FN_FED";
-    public final static String SP_FN_HPP_NAME = "SP_FN_HPP";
+    public final static String LOCAL_ATHP_NAME = "LOCAL_ATHP";
+    public final static String LOCAL_FED_NAME = "LOCAL_FED";
+    public final static String LOCAL_HPP_NAME = "LOCAL_HPP";
 }
 

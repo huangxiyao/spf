@@ -226,11 +226,11 @@ public class AuthenticationUtility {
                 // SP_FN_FED, SP_FN_ATHP, and SP_FN_HPP
                 userGroups = new String[1];
                 if (AuthenticationUtility.isFromAtHP(request)) {
-                    userGroups[0] = AuthenticationConsts.SP_FN_ATHP_NAME;
+                    userGroups[0] = AuthenticationConsts.LOCAL_ATHP_NAME;
                 } else if (AuthenticationUtility.isFromFed(request)) {
-                    userGroups[0] = AuthenticationConsts.SP_FN_FED_NAME;
+                    userGroups[0] = AuthenticationConsts.LOCAL_FED_NAME;
                 } else if (AuthenticationUtility.isFromHPP(request)) {
-                    userGroups[0] = AuthenticationConsts.SP_FN_HPP_NAME;
+                    userGroups[0] = AuthenticationConsts.LOCAL_HPP_NAME;
                 } else {
                     userGroups = null;
                 }
