@@ -173,7 +173,7 @@ public class Consts {
 	// TODO - this is the key name for accessing portlet friendly ID in the
 	// portlet request. Check and change this as needed. Also see TODO in the
 	// portlet Utils.getPortletID method.
-	public static final String KEY_PORTLET_FRIENDLY_ID = "com.vignette.portal.portlet.friendlyid";
+	public static final String KEY_PORTAL_PORTLET_ID = "com.vignette.portal.portlet.friendlyid";
 
 	/**
 	 * The template friendly ID for the SPF-standard system error secondary
