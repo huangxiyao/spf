@@ -276,24 +276,26 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * <code>http://host.hp.com/portal/site/abc/template.ABC</code></li>
 	 * <li> when the given URI is <code>xyz</code>, the returned URL is for
 	 * the <code>xyz</code> portal site home page:
-	 * <code>http://host.hp.com/portal/site/xyz</code></li>
+	 * <code>http://host.hp.com/portal/site/xyz/</code></li>
 	 * <li> when the given URI is <code>xyz/template.ABC</code>, the returned
 	 * URL is for that page at the the <code>xyz</code> portal site:
-	 * <code>http://host.hp.com/portal/site/xyz/template.ABC</li>
+	 * <code>http://host.hp.com/portal/site/xyz/template.ABC</code></li>
 	 * </ul>
 	 * <p>
 	 * This method returns null given a null request.
 	 * </p>
 	 * <p>
-	 * <b>Note:</b> This method does not check if the given URI actually exists /
-	 * is valid in the portal; it just makes a URL of the proper format for it.
+	 * <b>Note:</b> This method does not check if the given URI actually exists
+	 * or is valid in the portal; it just makes a URL of the proper format for
+	 * it.
 	 * </p>
 	 * 
 	 * @param request
 	 *            The current request.
 	 * @param uri
-	 *            The site name (ie "site DNS name") and/or additional path (eg a friendly URI or template friendly ID).
-	 *            (The part before the first <code>/</code> is considered the site name.)
+	 *            The site name (ie "site DNS name") and/or additional path (eg
+	 *            a friendly URI or template friendly ID). (The part before the
+	 *            first <code>/</code> is considered the site name.)
 	 * @return The URL for the given site, in string form. This is an absolute
 	 *         URL.
 	 */
