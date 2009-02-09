@@ -33,8 +33,9 @@ import org.apache.axis.message.RPCParam;
 import com.epicentric.common.website.MenuItemNode;
 import com.epicentric.common.website.MenuItemUtils;
 import com.epicentric.site.Site;
-import com.hp.it.spf.xa.misc.portal.Utils;
+import com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter;
 import com.hp.it.spf.xa.misc.Consts;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.hp.it.spf.xa.wsrp.ProfileHelper;
 import com.hp.it.spf.xa.wsrp.RequestMap;
 import com.vignette.portal.log.LogConfiguration;
@@ -105,7 +106,7 @@ public class UserContextInjector extends BasicHandler {
 				// Vignette thread pool's thread
 				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 					LOG.debug("Request thread is '" +
-							request.getAttribute(Consts.INJECTION_THREAD_NAME));
+							request.getAttribute(RequestBindingFilter.THREAD_NAME_REQUEST_KEY));
 				}
 
 				Map userContextKeys = retrieveUserContextKeys(request);
@@ -337,12 +338,12 @@ public class UserContextInjector extends BasicHandler {
 		String userAgentValue = findUserAgentValue(envelope);
 		if (userAgentValue != null) {
 			int pos = userAgentValue
-					.lastIndexOf(Consts.INJECTION_KEY_PREFIX);
+					.lastIndexOf(RequestBindingFilter.KEY_PREFIX);
 			if (pos != -1) {
 				// this extraction should be done somehow by RequestWrapper
 				// as it's the only class that know how this was encoded
 				String requestKey = userAgentValue.substring(pos
-						+ Consts.INJECTION_KEY_PREFIX.length());
+						+ RequestBindingFilter.KEY_PREFIX.length());
 				return RequestMap.getInstance().get(requestKey);
 			} else {
 				LOG.error("SPF request key not found!");
