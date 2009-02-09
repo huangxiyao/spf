@@ -16,16 +16,6 @@ package com.hp.it.spf.xa.misc;
 public class Consts {
 
 	/**
-	 * The key to identify which request needs injection and extract action.
-	 */
-	public static final String INJECTION_KEY_PREFIX = "__SPF";
-	
-	/**
-	 * The key to identify which request needs injection and extract action.
-	 */
-	public static final String INJECTION_THREAD_NAME = "RequestBinding.ThreadName";
-
-	/**
 	 * The user profile map contains all user attributes from HPP/ATHP, Persona
 	 * and etc. On portal side, it can be retrieved from the http session; on
 	 * portlet side, it can be retrieved with the method
