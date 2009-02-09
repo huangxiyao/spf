@@ -5,7 +5,6 @@
 package com.hp.it.spf.wsrp.extractor.context;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.soap.Name;
-import javax.xml.soap.Node;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
@@ -24,7 +22,8 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 import org.apache.log4j.Logger;
 
-import com.hp.it.spf.wsrp.extractor.profile.ProfileHelper;
+import com.hp.it.spf.xa.misc.Consts;
+import com.hp.it.spf.xa.wsrp.ProfileHelper;
 
 /**
  * Extracts user context data from the appropriate SOAP header elements and make them available to portlets
@@ -45,12 +44,12 @@ public class UserContextExtractor implements SOAPHandler {
 	/*
 	 * UserContextKeys object's key value, use this key to retrieve the UserContextKeys object
 	 */
-	public static final String USER_CONTEXT_KEYS_KEY = "com.hp.spp.UserContextKeys";
+	public static final String USER_CONTEXT_KEYS_KEY = Consts.PORTAL_CONTEXT_KEY;
 	
 	/*
 	 * UserProfile object's key value, use this key to retrieve the UserProfile object
 	 */
-	public static final String USER_PROFILE_KEY = "com.hp.spp.UserProfile";
+	public static final String USER_PROFILE_KEY = Consts.USER_PROFILE_KEY;
 	
 	/*
 	 * the signature of the soap method that need to be handled
@@ -131,13 +130,8 @@ public class UserContextExtractor implements SOAPHandler {
 		try {
 			Map userContext = extractUserContext(messageContext.getMessage().getSOAPPart().getEnvelope());
 			if (userContext != null) {
-				userContextKeys = (Map) userContext.get("com.hp.spp.UserContextKeys");
-				userProfile = (Map) userContext.get("com.hp.spp.UserProfile");
-			}
-			else {
-				// SPP continues to send data in SPP 2.0 compatibility mode
-				userContextKeys = extractUserContextKeys(messageContext.getMessage().getSOAPPart().getEnvelope());
-				userProfile = extractUserProfile(messageContext.getMessage().getSOAPPart().getEnvelope());
+				userContextKeys = (Map) userContext.get(USER_CONTEXT_KEYS_KEY);
+				userProfile = (Map) userContext.get(USER_PROFILE_KEY);
 			}
 			if (mLog.isDebugEnabled()) {
 				mLog.debug("User context keys: " + userContextKeys);
@@ -164,7 +158,7 @@ public class UserContextExtractor implements SOAPHandler {
 	 * @throws SOAPException
 	 */
 	private Map extractUserContext(SOAPEnvelope envelope) throws SOAPException {
-		Name headerName = envelope.createName("UserContext", "spp", "http://www.hp.com/spp");
+		Name headerName = envelope.createName("UserContext", "spf", "http://www.hp.com/spf");
 		SOAPHeader header = envelope.getHeader();
 		Iterator it = header.getChildElements(headerName);
 		if (it.hasNext()) {
@@ -182,71 +176,6 @@ public class UserContextExtractor implements SOAPHandler {
 		// if you get here this means that we didn't find the node
 		if (mLog.isDebugEnabled()) {
 			mLog.debug("UserContext node not found in the header");
-		}
-		return null;
-	}
-
-	/**
-	 * Extracts user context keys from SOAP header and returns them as map. The map keys are the
-	 * same as the element names within <code>UserContextKeys</code> tag.
-	 * @param envelope parent envelope for the SOAP header
-	 * @return map containing user context key (String) names and their values
-	 * @throws SOAPException If an error occurs during envelope processing
-	 */
-	private Map extractUserContextKeys(SOAPEnvelope envelope) throws SOAPException {
-		Name headerName = envelope.createName("UserContextKeys", "spp", "http://www.hp.com/spp");
-		SOAPHeader header = envelope.getHeader();
-		Iterator it = header.getChildElements(headerName);
-		if (it != null && it.hasNext()) {
-			SOAPElement headerElement = (SOAPElement) it.next();
-			Map userContextKeys = new HashMap();
-			for (Iterator it2 = headerElement.getChildElements(); it2.hasNext();) {
-				SOAPElement keyEl = (SOAPElement) it2.next();
-				Iterator it3 = keyEl.getChildElements();
-				if (it3.hasNext()) {
-					userContextKeys.put(keyEl.getElementName().getLocalName(), ((Node) it3.next()).getValue());
-				}
-				else {
-					String key = keyEl.getElementName().getLocalName();
-					userContextKeys.put(key, "");
-				}
-			}
-			return userContextKeys;
-		}
-		else {
-			mLog.error("No elements in the header");
-		}
-		return null;
-	}
-
-	/**
-	 * Extracts user profile from the SOAP header and returns it as a Map. The profile is encoded
-	 * as a string in <tt>UserProfile</tt> tag.
-	 * @param envelope parent envelope of the SOAP header
-	 * @return profile map
-	 * @throws SOAPException If an error occurs when manipulating SOAP elements.
-	 * @see ProfileHelperff#profileFromString(String) for details about how the profile is encoded.
-	 */
-	private Map extractUserProfile(SOAPEnvelope envelope) throws SOAPException {
-		Name headerName = envelope.createName("UserProfile", "spp", "http://www.hp.com/spp");
-		SOAPHeader header = envelope.getHeader();
-		Iterator it = header.getChildElements(headerName);
-		if (it.hasNext()) {
-			SOAPElement headerElement = (SOAPElement) it.next();
-			if (headerElement.hasChildNodes()) {
-				String userProfileString = headerElement.getFirstChild().getNodeValue();
-				try {
-					return PROFILE_HELPER.profileFromString(userProfileString);
-				}
-				catch (IllegalArgumentException e) {
-					mLog.error("Error parsing profile", e);
-				}
-			}
-		}
-
-		// if you get here this means that we didn't find the node
-		if (mLog.isDebugEnabled()) {
-			mLog.debug("UserProfile node not found in the header");
 		}
 		return null;
 	}
