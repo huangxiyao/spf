@@ -1,0 +1,1279 @@
+<?xml version="1.0"?>
+
+<!--
+*
+* Copyright 1999-2007 Vignette Corporation.
+* All rights reserved.
+*
+* THIS PROGRAM IS CONFIDENTIAL AND AN UNPUBLISHED WORK AND TRADE
+* SECRET OF THE COPYRIGHT HOLDER, AND DISTRIBUTED ONLY UNDER RESTRICTION.
+*
+* EXCEPT AS EXPLICITLY STATED IN A WRITTEN AGREEMENT BETWEEN THE PARTIES,
+* THE SOFTWARE IS PROVIDED AS-IS, WITHOUT WARRANTIES OF ANY KIND, EXPRESS
+* OR IMPLIED, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT,
+* PERFORMANCE, AND QUALITY.
+*
+-->
+
+<!--
+* This is the configuration file for the Portal Entity Management subsystem,
+* which supports management and persistence of Users and Groups in Portal.
+* It declares all entity types-each representing a particular user or
+* user group category-available in Portal.
+*
+* Only certain portions of this file, as explicitly noted, should be
+* modified. Any other modifications made to this file can cause 
+* unpredictable results and is not supported.
+*
+* As of Portal 4.5, you should modify this file only to support the addition
+* of custom columns to the Portal Users table. Editing this file constitutes
+* part of the process of adding columns to the Users table. Refer to Portal
+* Configuration Guide for detailed instructions on adding columns to the 
+* Users table.
+*
+* NOTE: To jump to the editable portion of this file, search for
+* "Sample Custom Property" (without the quotation marks).
+* 
+* Changes to this file take effect on restart of Portal.
+-->
+
+<!DOCTYPE entity-management
+    [
+        <!ELEMENT entity-management (entity-manager*)>
+        <!ELEMENT entity-manager (entity-type+)>
+        <!ELEMENT entity-type (entity-relationships?, entity-property-descriptors, entity-property-aliases?, entity-search?)>
+        <!ELEMENT entity-search (search-operator+, search-results)>
+        <!ELEMENT entity-relationships (parent-relationship | child-relationship)*>
+        <!ELEMENT parent-relationship EMPTY>
+        <!ELEMENT child-relationship EMPTY>
+        <!ELEMENT entity-property-aliases (entity-property-alias+)>
+        <!ELEMENT entity-property-alias EMPTY>
+        <!ELEMENT entity-property-descriptors (entity-property-descriptor+)>
+        <!ELEMENT entity-property-descriptor EMPTY>
+        <!ELEMENT search-operator (data-type+)>
+        <!ELEMENT data-type EMPTY>
+        <!ELEMENT search-results EMPTY>
+
+        <!ATTLIST entity-manager
+        classname           CDATA                 #REQUIRED
+        config-file         CDATA                #IMPLIED
+        >
+
+        <!ATTLIST entity-type
+        id                CDATA              #REQUIRED
+        classname         CDATA              #IMPLIED
+        can-create        (true|false)        "true"
+        can-delete        (true|false)        "true"
+        can-search        (true|false)        "true"
+        >
+
+        <!ATTLIST parent-relationship
+        entity-type      CDATA               #REQUIRED
+        can-add         (true|false)          "true"
+        can-remove      (true|false)          "true"
+        can-search      (true|false)          "false"
+        >
+
+        <!ATTLIST child-relationship
+        entity-type      CDATA               #REQUIRED
+        can-add          (true|false)         "true"
+        can-remove        (true|false)        "true"
+        >
+
+        <!ATTLIST entity-property-alias
+        alias              CDATA                 #REQUIRED
+        property-id      CDATA               #REQUIRED
+        >
+
+        <!ATTLIST entity-property-descriptor
+        id                CDATA                #REQUIRED
+        title              CDATA                   #REQUIRED
+        description      CDATA                 #IMPLIED
+        type                (java.lang.String|
+                             java.lang.Integer|
+                             java.lang.Long|
+                             java.lang.Float|
+                             java.lang.Double|
+                             java.lang.Boolean|
+                             java.util.Date)        #REQUIRED
+        field-length         CDATA                #REQUIRED
+        editable             (true|false)          "true"
+        searchable         (true|false)        #REQUIRED
+        displayable       (true|false)         "true"
+        required             (true|false)          "false"
+        unique             (true|false)        "false"
+        default             CDATA           #IMPLIED
+        >
+
+        <!ATTLIST search-operator
+        id                 CDATA                  #REQUIRED
+        >
+
+        <!ATTLIST data-type
+        id                 (java.lang.String|
+                              java.lang.Integer|
+                              java.lang.Long|
+                              java.lang.Float|
+                              java.lang.Double|
+                              java.lang.Boolean|
+                              java.util.Date)      #REQUIRED
+        >
+
+        <!ATTLIST search-results
+        descending-order-enabled    (true|false)             "true"
+        results-per-page            CDATA                   #REQUIRED
+        max-results              CDATA                  #REQUIRED
+        property-to-sort-by      CDATA                  #REQUIRED
+        sort-order                (ascending|descending)   "ascending"
+        >
+]>
+
+<entity-management>
+
+<!--The EntityManager for users.  Contains the standard user and guest user entity types. -->
+<entity-manager classname="com.epicentric.entity.implementations.datasource.DataSourceEntityManager"
+                config-file="entity_datasource.xml">
+
+    <!--The standard user entity type-->
+    <entity-type id="epi:user.standard"
+                 can-create="true"
+                 can-delete="true" 
+                 can-search="true">
+
+        <!-- Entity relationship declarations for the standard user-->   
+        <entity-relationships>
+
+            <!-- Standard Group -->
+            <parent-relationship entity-type="epi:usergroup.standard" 
+                    can-add="true" 
+                    can-remove="true"
+                    can-search="true"/>
+
+            <!--  System Group -->
+            <parent-relationship entity-type="epi:usergroup.system.standard" 
+                    can-add="true" 
+                    can-remove="true"
+                    can-search="true"/>
+
+            <!--  Admin System Group -->
+            <parent-relationship entity-type="epi:usergroup.system.admin"
+            	    can-add="true" 
+            	    can-remove="true"
+            	    can-search="true"/>
+
+            <!-- Registered Users Group -->
+            <parent-relationship entity-type="epi:usergroup.system.registered" can-add="false" can-remove="false"/>
+        </entity-relationships>
+
+        <!-- Property Declarations for the standard user -->
+        <entity-property-descriptors>
+            <entity-property-descriptor id="id"
+                title="ID"
+                description="The local unique ID of a user entity."
+                type="java.lang.Integer"
+                field-length="4"
+                editable="false"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="uid"
+                title="UID"
+                description="The unique ID of a user entity."
+                type="java.lang.String"
+                field-length="64"
+                editable="false"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="username"
+                title="User Name"
+                description="A user's alias."
+                type="java.lang.String"
+                field-length="64"
+                editable="false"
+                searchable="true"
+                displayable="true"
+                required="true"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="email"
+                title="E-mail"
+                description="A user's e-mail address."
+                type="java.lang.String"
+                field-length="250"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="true"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="firstname"
+                title="First Name"
+                description="A user's first name"
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="true"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="middlename"
+                title="Middle Name"
+                description="A user's middle name."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="lastname"
+                title="Last Name"
+                description="A user's surname."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="true"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="domain"
+                title="Realm ID"
+                description="The id of the realm to which a user belongs"
+                type="java.lang.String"
+                field-length="128"
+                editable="false"
+                searchable="true"
+                displayable="true"
+                required="true"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="language"
+                title="Language"
+                description="The user's prefered language."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="gender"
+                title="Gender"
+                description="The user's gender"
+                type="java.lang.String"
+                field-length="16"
+                editable="true"
+                searchable="false"
+                displayable="true"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="dob"
+                title="Date of Birth"
+                description="The user's birthdate."
+                type="java.lang.String"
+                field-length="15"
+                editable="true"
+                searchable="false"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="address1"
+                title="Address"
+                description="The first line of a user's address."
+                type="java.lang.String"
+                field-length="64"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="address2"
+                title="Address (cont.)"
+                description="The second line of a user's address."
+                type="java.lang.String"
+                field-length="64"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="city"
+                title="City"
+                description="The city of the user's address."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="state"
+                title="State"
+                description="The state or province of the user's address."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="zip"
+                title="Zip"
+                description="The zip or postal code of the user's address."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="country"
+                title="Country"
+                description="The country of the user's address."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="employer"
+                title="Employer"
+                description="The user's employer."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="day_phone"
+                title="Daytime Phone"
+                description="The user's daytime telephone number."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="night_phone"
+                title="Nighttime Phone"
+                description="The user's nighttime telephone number."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="mobile_phone"
+                title="Mobile Phone"
+                description="The user's mobile telephone number."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="fax"
+                title="Fax"
+                description="The user's fax number."
+                type="java.lang.String"
+                field-length="32"
+                editable="true"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="timezone"
+                title="Time Zone"
+                description="The user's prefered timezone."
+                type="java.lang.Integer"
+                field-length="4"
+                editable="true"
+                searchable="false"
+                displayable="true"
+                required="false"
+                unique="false"
+                default="0"
+                />
+
+            <entity-property-descriptor id="created_date"
+                title="Created Date"
+                description="The date the user profile was first created."
+                type="java.util.Date"
+                field-length="10"
+                editable="false"
+                searchable="true"
+                displayable="true"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="primary_site_id"
+                title="Primary Site ID"
+                description="The user will be taken to this site upon login."
+                type="java.lang.String"
+                field-length="64"
+                editable="true"
+                searchable="false"
+                displayable="true"
+                required="false"
+                unique="false"
+                />
+
+<!--    Sample Custom Property
+**************************************************************************
+* To add a custom column to the Users table, copy this sample property, 
+* then edit its attribute values as necessary. Add custom properties
+* in the space provided below. (The properties must be added before
+* the closing </entity-property-descriptors> tag.)
+* 
+* As noted earlier, editing this file is only part of the process of adding
+* columns to the Users table. Refer to Portal Configuration Guide for details.
+* 
+* Following is a list of the attributes of the entity-property-descriptor
+* element:
+*   id - Uniquely identifies the SQL column. Example, id="customstring".
+*
+*   title - Provides the column's title in administration consoles. 
+*      The title does not appear in the console unless the attribute
+*      is also displayable. (See displayable attribute below.) 
+*      Example, title="Custom String".
+*
+*   description - Identifies the property to system administrators. 
+*      This string does not appear in the administration consoles.
+*      Example, description="A custom string".
+*
+*   type - Identifies the Java data type used to validate the user
+*      entries for editable properties. (See editable attribute below.)
+*      Example, type="java.lang.String".
+*
+*   field-length - Sets the length of displayable fields.
+*      Example, field-length="32".
+*
+*   editable - Indicates whether values in an editable property can
+*      be edited once they are set.
+*
+*   searchable - Indicates whether the property can be used to search 
+*      for a user or user group. Custom properties are not searchable;
+*      this attribute must always be set to "false" for custom 
+*      properties.
+*
+*   displayable - Indicates whether a property appears on pages that
+*      display user and user group properties, such as the Basics
+*      page for users or user groups.
+*
+*   required - Indicates whether users are required to enter a value
+*      for the property.
+*
+*   unique - Indicates whether the property must have a unique value.
+*      For example, an employee_id property might require employee
+*      ID values that are unique to each employee.
+
+            <entity-property-descriptor id="custom_property"
+                title="title"
+                description="description"
+                type="java.lang.String"
+                field-length="32"
+                editable="false"
+                searchable="false"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+* Note: Changes to this file take effect on restart of VAP.
+**************************************************************************
+-->
+<!-- Start custom user properties -->
+<entity-property-descriptor id="profileid"
+	title="Profile ID"
+	description="Profile ID as defined by SPF"
+	type="java.lang.String"
+	field-length="64"
+	editable="true"
+	searchable="true"
+	displayable="true"
+	required="false"
+	unique="true"
+/>
+	
+<entity-property-descriptor id="lastchangedate"
+	title="Last Change Date"
+	description="Last date and time when user made changes to their profile in SPF"
+	type="java.util.Date"
+	field-length="10"
+	editable="true"
+	searchable="false"
+	displayable="true"
+	required="false"
+	unique="false"
+/>
+
+<entity-property-descriptor id="lastlogindate"
+	title="Last Login Date"
+	description="Last date and time when user login in SPF"
+	type="java.util.Date"
+	field-length="10"
+	editable="true"
+	searchable="false"
+	displayable="true"
+	required="false"
+	unique="false"
+/>
+
+<entity-property-descriptor id="spf_timezone"
+	title="Shared Portal Time Zone"
+	description="Shared Portal Time Zone"
+	type="java.lang.String"
+	field-length="64"
+	editable="true"
+	searchable="false"
+	displayable="true"
+	required="false"
+	unique="false"
+/>
+<!-- End custom user properties -->
+
+        </entity-property-descriptors>
+
+        <!-- Property aliases for the standard user -->
+        <entity-property-aliases>
+            <entity-property-alias alias="logon" property-id="username"/>
+            
+            <!-- property aliases for sorting in admin UI -->
+            <entity-property-alias alias="sort_by_logon" property-id="username"/>
+            <entity-property-alias alias="sort_by_first_name" property-id="firstname"/>
+            <entity-property-alias alias="sort_by_last_name" property-id="lastname"/>
+            <entity-property-alias alias="sort_by_email_address" property-id="email"/>
+            <entity-property-alias alias="sort_by_creation_date" property-id="created_date"/>
+
+            <!-- Property aliases for JSR 168 and P3P -->
+            <entity-property-alias alias="user.business-info.online.email" property-id="email"/>
+            <entity-property-alias alias="user.name.given" property-id="firstname"/>
+            <entity-property-alias alias="user.name.middle" property-id="middlename"/>
+            <entity-property-alias alias="user.name.family" property-id="lastname"/>
+            <entity-property-alias alias="user.gender" property-id="gender"/>
+            <entity-property-alias alias="user.home-info.postal.street" property-id="address1"/>
+            <entity-property-alias alias="user.home-info.postal.city" property-id="city"/>
+            <entity-property-alias alias="user.home-info.postal.stateprov" property-id="state"/>
+            <entity-property-alias alias="user.home-info.postal.postalcode" property-id="zip"/>
+            <entity-property-alias alias="user.home-info.postal.country" property-id="country"/>
+            <entity-property-alias alias="user.employer" property-id="employer"/>
+            <entity-property-alias alias="user.business-info.telecom.telephone.number" 
+                                   property-id="day_phone"/>
+            <entity-property-alias alias="user.home-info.telecom.telephone.number" 
+                                   property-id="night_phone"/>
+            <entity-property-alias alias="user.home-info.telecom.mobile.number" property-id="mobile_phone"/>
+            <entity-property-alias alias="user.business-info.telecom.fax.number" property-id="fax"/>
+
+            <!-- Property aliases for WSRP -->
+            <entity-property-alias alias="vignette/realm" property-id="domain"/>
+            <entity-property-alias alias="businessInfo/online/email" property-id="email"/>
+            <entity-property-alias alias="name/given" property-id="firstname"/>
+            <entity-property-alias alias="name/middle" property-id="middlename"/>
+            <entity-property-alias alias="name/family" property-id="lastname"/>
+            <entity-property-alias alias="gender" property-id="gender"/>
+            <entity-property-alias alias="homeInfo/postal/street" property-id="address1"/>
+            <entity-property-alias alias="homeInfo/postal/city" property-id="city"/>
+            <entity-property-alias alias="homeInfo/postal/stateprov" property-id="state"/>
+            <entity-property-alias alias="homeInfo/postal/postalcode" property-id="zip"/>
+            <entity-property-alias alias="homeInfo/postal/country" property-id="country"/>
+            <entity-property-alias alias="employerInfo/employer" property-id="employer"/>
+            <entity-property-alias alias="businessInfo/telecom/telephone/number"
+                                   property-id="day_phone"/>
+            <entity-property-alias alias="homeInfo/telecom/telephone/number"
+                                   property-id="night_phone"/>
+            <entity-property-alias alias="homeInfo/telecom/mobile/number" property-id="mobile_phone"/>
+            <entity-property-alias alias="businessInfo/telecom/fax.number" property-id="fax"/>
+
+        </entity-property-aliases>
+
+        <!-- Search configuration for standard user -->
+        <entity-search>
+            <search-operator id="equals">
+                <data-type id="java.lang.String"/>
+                <data-type id="java.util.Date"/>
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+                <data-type id="java.lang.Boolean"/>
+            </search-operator>
+
+            <search-operator id="does-not-equal">
+                <data-type id="java.lang.String"/>
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+                <data-type id="java.lang.Boolean"/>
+            </search-operator>
+
+            <search-operator id="like">
+                <data-type id="java.lang.String"/>
+            </search-operator>
+
+            <search-operator id="start-with">
+                <data-type id="java.lang.String"/>
+            </search-operator>
+
+            <search-operator id="before">
+                <data-type id="java.util.Date"/>
+            </search-operator>
+
+            <search-operator id="after">
+                <data-type id="java.util.Date"/>
+            </search-operator>
+
+            <search-operator id="greater-than">
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+            </search-operator>
+
+            <search-operator id="less-than">
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+            </search-operator>
+
+            <search-results  descending-order-enabled="true"
+                results-per-page="10"
+                max-results="-1"
+                property-to-sort-by="username"
+                sort-order="ascending"/>
+        </entity-search>
+    </entity-type>
+
+    <!-- guest user entity type -->
+    <entity-type id="epi:user.guest"
+                 can-create="true"
+                 can-delete="false" 
+                 can-search="true">
+
+        <!-- Entity relationship declarations for the guest user-->  
+        <entity-relationships>
+
+            <!-- Everyone Group -->
+            <parent-relationship entity-type="epi:usergroup.system.everyone" can-add="true" can-remove="false"/>
+        </entity-relationships>
+
+        <!-- Property Declarations for the guest user -->
+        <entity-property-descriptors>
+        
+            <entity-property-descriptor id="id"
+                title="ID"
+                description="The local unique ID of a guest user entity."
+                type="java.lang.Integer"
+                field-length="4"
+                editable="false"
+                searchable="false"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+                
+            <entity-property-descriptor id="uid"
+                title="UID"
+                description="The unique ID of a guest user entity."
+                type="java.lang.String"
+                field-length="64"
+                editable="false"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="username"
+                title="User Name"
+                description="The guest user's alias."
+                type="java.lang.String"
+                field-length="64"
+                editable="false"
+                searchable="false"
+                displayable="false"
+                required="true"
+                unique="false"
+                default="guest user"
+                />
+
+            <entity-property-descriptor id="firstname"
+                title="First Name"
+                description="The guest user's first name"
+                type="java.lang.String"
+                field-length="32"
+                editable="false"
+                searchable="false"
+                displayable="true"
+                required="true"
+                unique="false"
+                default="Guest"
+                />
+
+            <entity-property-descriptor id="lastname"
+                title="Last Name"
+                description="The guest user's surname."
+                type="java.lang.String"
+                field-length="32"
+                editable="false"
+                searchable="false"
+                displayable="true"
+                required="true"
+                unique="false"
+                default="User"
+                />
+        </entity-property-descriptors>
+
+        <entity-search>
+            <search-operator id="equals">
+                <data-type id="java.lang.String"/>
+            </search-operator>
+            <search-results  descending-order-enabled="true"
+                results-per-page="10"
+                max-results="-1"
+                property-to-sort-by="username"
+                sort-order="ascending"/>
+        </entity-search>
+    </entity-type>
+
+    <!-- The standard group entity type -->
+    <entity-type id="epi:usergroup.standard"
+                 can-create="true"
+                 can-delete="true"
+                 can-search="true">
+
+        <!-- Entity relationship declarations for the standard group-->
+        <entity-relationships>
+        
+            <!-- Standard Group -->
+            <parent-relationship entity-type="epi:usergroup.standard" can-add="true" can-remove="true"/>
+            <child-relationship entity-type="epi:usergroup.standard" can-add="true" can-remove="true"/>
+
+            <!-- Standard User -->
+            <child-relationship entity-type="epi:user.standard" can-add="true" can-remove="true"/>
+        </entity-relationships>
+
+        <!-- Property Declarations for the standard group -->
+        <entity-property-descriptors>
+            <entity-property-descriptor id="id"
+                title="ID"
+                description="The local unique ID of the user group."
+                type="java.lang.Integer"
+                field-length="4"
+                editable="false"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="uid"
+                title="UID"
+                description="The unique ID of the user group."
+                type="java.lang.String"
+                field-length="64"
+                editable="false"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="title"
+                title="Name"
+                description="The name of the user group."
+                type="java.lang.String"
+                field-length="255"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="true"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="description"
+                title="Description"
+                description="A description of the user group and it's responsibilities."
+                type="java.lang.String"
+                field-length="255"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="created_date"
+                title="Created Date"
+                description="The date the user group was first created."
+                type="java.util.Date"
+                field-length="10"
+                editable="false"
+                searchable="true"
+                displayable="true"
+                required="false"
+                unique="false"
+                />
+
+        </entity-property-descriptors>
+
+        <!-- Property aliases for the standard group -->
+        <entity-property-aliases>
+            <!-- property aliases for sorting in admin UI -->
+            <entity-property-alias alias="sort_by_title" property-id="title"/>
+            <entity-property-alias alias="sort_by_creation_date" property-id="created_date"/>
+        </entity-property-aliases>
+
+        <!-- Search configuration for standard group -->
+        <entity-search>
+            <search-operator id="equals">
+                <data-type id="java.lang.String"/>
+                <data-type id="java.util.Date"/>
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+                <data-type id="java.lang.Boolean"/>
+            </search-operator>
+
+            <search-operator id="does-not-equal">
+                <data-type id="java.lang.String"/>
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+                <data-type id="java.lang.Boolean"/>
+            </search-operator>
+
+            <search-operator id="like">
+                <data-type id="java.lang.String"/>
+            </search-operator>
+
+            <search-operator id="before">
+                <data-type id="java.util.Date"/>
+            </search-operator>
+
+            <search-operator id="after">
+                <data-type id="java.util.Date"/>
+            </search-operator>
+
+            <search-operator id="greater-than">
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+            </search-operator>
+
+            <search-operator id="less-than">
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+            </search-operator>
+
+            <search-results  descending-order-enabled="true"
+                results-per-page="10"
+                max-results="-1"
+                property-to-sort-by="title"
+                sort-order="ascending"/>
+        </entity-search>
+    </entity-type>
+
+    <!--The system group entity type-->
+    <entity-type id="epi:usergroup.system.standard"
+                 can-create="true"
+                 can-delete="true" 
+                 can-search="true">
+
+         <!-- Entity relationship declarations for the system group --> 
+        <entity-relationships>
+
+            <!-- System Group -->
+            <parent-relationship entity-type="epi:usergroup.system.standard" can-add="true" can-remove="true"/>
+            <child-relationship entity-type="epi:usergroup.system.standard" can-add="true" can-remove="true"/>
+            <!-- Standard User -->
+            <child-relationship entity-type="epi:user.standard" can-add="true" can-remove="true"/>
+        </entity-relationships>
+
+        <!-- Property Declarations for the system group -->
+        <entity-property-descriptors>
+            <entity-property-descriptor id="id"
+                title="ID"
+                description="The local unique ID of the system user group."
+                type="java.lang.Integer"
+                field-length="4"
+                editable="false"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="uid"
+                title="UID"
+                description="The unique ID of the system user group."
+                type="java.lang.String"
+                field-length="64"
+                editable="false"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="title"
+                title="Title"
+                description="The name of the system user group."
+                type="java.lang.String"
+                field-length="255"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="true"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="description"
+                title="Description"
+                description="A description of the system user group and it's responsibilities."
+                type="java.lang.String"
+                field-length="255"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="false"
+                unique="false"
+                />
+
+            <entity-property-descriptor id="created_date"
+                title="Created Date"
+                description="The date the system user group was first created."
+                type="java.util.Date"
+                field-length="10"
+                editable="false"
+                searchable="true"
+                displayable="true"
+                required="false"
+                unique="false"
+                />
+        </entity-property-descriptors>
+
+        <!-- Property aliases for the system group -->
+        <entity-property-aliases>
+            <!-- property aliases for sorting in admin UI -->
+            <entity-property-alias alias="sort_by_title" property-id="title"/>
+            <entity-property-alias alias="sort_by_creation_date" property-id="created_date"/>
+        </entity-property-aliases>
+
+        <!-- Search configuration for the system group -->
+        <entity-search>
+            <search-operator id="equals">
+                <data-type id="java.lang.String"/>
+                <data-type id="java.util.Date"/>
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+                <data-type id="java.lang.Boolean"/>
+            </search-operator>
+
+            <search-operator id="does-not-equal">
+                <data-type id="java.lang.String"/>
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+                <data-type id="java.lang.Boolean"/>
+            </search-operator>
+
+            <search-operator id="like">
+                <data-type id="java.lang.String"/>
+            </search-operator>
+
+            <search-operator id="before">
+                <data-type id="java.util.Date"/>
+            </search-operator>
+
+            <search-operator id="after">
+                <data-type id="java.util.Date"/>
+            </search-operator>
+
+            <search-operator id="greater-than">
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+            </search-operator>
+
+            <search-operator id="less-than">
+                <data-type id="java.lang.Integer"/>
+                <data-type id="java.lang.Long"/>
+                <data-type id="java.lang.Float"/>
+                <data-type id="java.lang.Double"/>
+            </search-operator>
+
+            <search-results  descending-order-enabled="true"
+                results-per-page="10"
+                max-results="-1"
+                property-to-sort-by="title"
+                sort-order="ascending"/>
+        </entity-search>
+    </entity-type>
+
+    <!--The admin system group entity type-->
+    <entity-type id="epi:usergroup.system.admin"
+                 can-create="true"
+                 can-delete="false" 
+                 can-search="true">
+
+        <!-- Entity relationship declarations for the admin system group-->
+        <entity-relationships>
+            <!-- Standard User -->
+            <child-relationship entity-type="epi:user.standard" can-add="true" can-remove="true"/>
+        </entity-relationships>
+
+        <!-- Property Declarations for the admin system group -->
+        <entity-property-descriptors>
+            <entity-property-descriptor id="id"
+                title="ID"
+                description="The local unique ID of the system user group."
+                type="java.lang.Integer"
+                field-length="4"
+                editable="false"
+                searchable="false"
+                displayable="false"
+                required="false"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="uid"
+                title="UID"
+                description="The unique ID of the system user group."
+                type="java.lang.String"
+                field-length="64"
+                editable="false"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="title"
+                title="Title"
+                description="The name of the system user group."
+                type="java.lang.String"
+                field-length="255"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="true"
+                unique="false"
+                default="Admin System User Group"
+                />
+
+            <entity-property-descriptor id="description"
+                title="Description"
+                description="A description of the system user group and it's responsibilities."
+                type="java.lang.String"
+                field-length="255"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="false"
+                unique="false"
+                default="A group of all Portal Uber Admins"
+                />
+
+            <entity-property-descriptor id="created_date"
+                title="Created Date"
+                description="The date the user profile was first created."
+                type="java.util.Date"
+                field-length="10"
+                editable="false"
+                searchable="true"
+                displayable="true"
+                required="false"
+                unique="false"
+                />
+        </entity-property-descriptors>
+
+        <entity-search>
+            <search-operator id="equals">
+                <data-type id="java.lang.String"/>
+            </search-operator>
+            <search-results  descending-order-enabled="true"
+                results-per-page="10"
+                max-results="-1"
+                property-to-sort-by="title"
+                sort-order="ascending"/>
+        </entity-search>
+    </entity-type>
+
+    <!--The registered users system group entity type-->
+    <entity-type id="epi:usergroup.system.registered"
+                 can-create="true"
+                 can-delete="false" 
+                 can-search="false">
+
+        <entity-relationships>
+            <parent-relationship entity-type="epi:usergroup.system.everyone" 
+                    can-add="true" can-remove="false" />
+            <child-relationship entity-type="epi:user.standard" 
+                    can-add="true" can-remove="false" />
+        </entity-relationships>
+
+        <!-- Property Declarations for the registerd users system group -->
+        <entity-property-descriptors>
+            <entity-property-descriptor id="uid"
+                title="UID"
+                description="The unique ID of the system user group."
+                type="java.lang.String"
+                field-length="64"
+                editable="false"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="title"
+                title="Title"
+                description="The name of the system user group."
+                type="java.lang.String"
+                field-length="255"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="true"
+                unique="false"
+                default="Registered Users Group"
+                />
+
+            <entity-property-descriptor id="description"
+                title="Description"
+                description="A description of the system user group and it's responsibilities."
+                type="java.lang.String"
+                field-length="255"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="false"
+                unique="false"
+                />
+        </entity-property-descriptors>
+    </entity-type>
+
+    <!--The everyons system group entity type-->
+    <entity-type id="epi:usergroup.system.everyone"
+                 can-create="true"
+                 can-delete="false" 
+                 can-search="false">
+
+        <!-- Entity relationship declarations for the everyone system group-->
+        <entity-relationships>
+
+            <!-- Registered Users System Group -->
+            <child-relationship entity-type="epi:usergroup.system.registered" can-add="true" can-remove="false"/>
+
+            <!-- Standard User -->
+            <child-relationship entity-type="epi:user.guest" can-add="true" can-remove="false"/>
+        </entity-relationships>
+
+        <!-- Property Declarations for the everyone system group -->
+        <entity-property-descriptors>
+            <entity-property-descriptor id="uid"
+                title="UID"
+                description="The unique ID of the system user group."
+                type="java.lang.String"
+                field-length="64"
+                editable="false"
+                searchable="true"
+                displayable="false"
+                required="false"
+                unique="true"
+                />
+
+            <entity-property-descriptor id="title"
+                title="Title"
+                description="The name of the system user group."
+                type="java.lang.String"
+                field-length="255"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="true"
+                unique="false"
+                default="Everyone Group"
+                />
+
+            <entity-property-descriptor id="description"
+                title="Description"
+                description="A description of the system user group and it's responsibilities."
+                type="java.lang.String"
+                field-length="255"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="false"
+                unique="false"
+                />
+        </entity-property-descriptors>
+    </entity-type>
+
+</entity-manager>
+
+</entity-management>
+
+
+
