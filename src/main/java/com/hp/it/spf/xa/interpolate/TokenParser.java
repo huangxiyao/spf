@@ -283,6 +283,19 @@ public abstract class TokenParser {
 	protected abstract String getSiteURL();
 
 	/**
+	 * Get the portal site URL for the portal site and page indicated by the
+	 * given param. Different action by portal and portlet, so therefore this is
+	 * an abstract method.
+	 * 
+	 * @param uri
+	 *            The site name (ie "site DNS name") and/or additional path (eg
+	 *            a friendly URI or template friendly ID). (The part before the
+	 *            first <code>/</code> is considered the site name.)
+	 * @return site URL string
+	 */
+	protected abstract String getSiteURL(String param);
+
+	/**
 	 * Get the current portal request URL. Different action by portal and
 	 * portlet, so therefore this is an abstract method.
 	 * 
@@ -778,20 +791,7 @@ public abstract class TokenParser {
 		content = parseParameterized(content, TOKEN_SITE_URL,
 				new ValueProvider() {
 					protected String getValue(String param) {
-						String siteURL = getSiteURL();
-						if (siteURL == null)
-							siteURL = "";
-						if (param.startsWith("/"))
-							siteURL += param;
-						else {
-							int j = siteURL.indexOf("/site/");
-							if (j == -1)
-								siteURL += param;
-							else
-								siteURL = siteURL.substring(0, j) + "/site/"
-										+ param;
-						}
-						return (Utils.slashify(siteURL));
+						return getSiteURL(param);
 					}
 				});
 		return (content);
@@ -1240,20 +1240,8 @@ public abstract class TokenParser {
 		}
 
 		protected boolean match(String containerKey) {
-			String[] groups = (String[]) subjectOfComparison;
-			if (groups != null && containerKey != null) {
-				containerKey = containerKey.trim();
-				if (!containerKey.equals("")) {
-					for (int i = 0; i < groups.length; i++) {
-						if (groups[i] != null) {
-							if (groups[i].trim().equalsIgnoreCase(containerKey)) {
-								return true;
-							}
-						}
-					}
-				}
-			}
-			return false;
+			return Utils.groupMatch((String[]) subjectOfComparison,
+					containerKey);
 		}
 	}
 

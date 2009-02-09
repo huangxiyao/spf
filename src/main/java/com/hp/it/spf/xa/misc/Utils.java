@@ -199,4 +199,124 @@ public class Utils {
 		return (b + p.replaceAll("/+", "/"));
 	}
 
+	/**
+	 * <p>
+	 * This method returns the given portal URL, modified to refer to the portal
+	 * site name and path provided in the given URI. The given portal URL is
+	 * expected to be of the standard format for the Vignette portal:
+	 * <code>/portal/site/<i>&lt;site-name&gt;</i></code> and may be
+	 * followed by additional path and query string; this URL may be a relative
+	 * URL as shown here, or an absolute URL. In any case, the returned URL is
+	 * as follows:
+	 * </p>
+	 * <ul>
+	 * <li> if the given URI starts with <code>/</code> then the returned URL
+	 * is for the same portal site as in the given portal URL, but any
+	 * additional path/query is replaced with the given URL.</li>
+	 * <li> otherwise the first part of the given URI (up to the first
+	 * <code>/</code>) is used as the replacement site name (ie the Vignette
+	 * "site DNS name") in the returned URL, and the remainder of the given URI
+	 * is used as additional path/query for it</li>
+	 * </ul>
+	 * <p>
+	 * For example, say that the given portal URL is
+	 * <code>/portal/site/abc/template.PAGE/?something=...</code>. Then:
+	 * </p>
+	 * <ul>
+	 * <li> when the given URI is null, the returned URL is
+	 * <code>/portal/site/abc/</code></li>
+	 * <li> when the given URI is <code>/template.ABC</code>, the returned
+	 * URL is <code>/portal/site/abc/template.ABC</code></li>
+	 * <li> when the given URI is <code>xyz</code>, the returned URL is
+	 * <code>/portal/site/xyz/</code></li>
+	 * <li> when the given URI is <code>xyz/template.ABC</code>, the returned
+	 * URL is <code>http://host.hp.com/portal/site/xyz/template.ABC</code></li>
+	 * </ul>
+	 * <p>
+	 * This method just returns the given URI if given a null portal URL.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> This method does not check if the given URI actually exists /
+	 * is valid in the portal; it just makes a URL of the proper format for it.
+	 * </p>
+	 * 
+	 * @param portalURL
+	 *            An absolute or server-relative portal URL string.
+	 * @param uri
+	 *            The site name (ie "site DNS name") and/or additional path (eg
+	 *            a friendly URI or template friendly ID). (The part before the
+	 *            first <code>/</code> is considered the site name.)
+	 * @return The modified portal URL.
+	 */
+	public static String getPortalSiteURL(String portalURL, String uri) {
+		// TODO: Change this class to use PortalURL API's instead, after fixing
+		// those API's to deal with null parameters.
+		String siteURL = uri;
+		if (portalURL != null) {
+			int j = portalURL.indexOf("/site/");
+			if (j == -1) {
+				siteURL = portalURL.trim(); // should never happen
+			} else {
+				String siteDNS = "";
+				String path = "";
+				if (uri != null) {
+					int i = uri.indexOf('/');
+					if (i == -1) {
+						siteDNS = uri;
+					} else {
+						siteDNS = uri.substring(0, i);
+						path = uri.substring(i);
+					}
+				}
+				if (siteDNS.equals("")) {
+					if ((j + 6) < portalURL.length()) {
+						int k = portalURL.indexOf("/", j + 6);
+						siteDNS = portalURL.substring(j + 6, k);
+					} else {
+						siteDNS = ""; // should never happen
+					}
+				}
+				siteURL = portalURL.substring(0, j).trim() + "/site/"
+						+ siteDNS.trim() + "/" + path.trim();
+			}
+		}
+		siteURL = slashify(siteURL);
+		return (siteURL);
+	}
+
+	/**
+	 * Use {@link #getPortalSiteURL(String,String)} instead.
+	 * 
+	 * @deprecated
+	 */
+	public static String getSiteURL(String siteURL, String uri) {
+		return getPortalSiteURL(siteURL, uri);
+	}
+
+	/**
+	 * Returns true if the given group matches one in the given array of groups.
+	 * Group matching is defined to be case-insensitive and disregards leading
+	 * or trailing whitespace, nulls, or empty strings.
+	 * 
+	 * @param groups
+	 *            An array of group names.
+	 * @param group
+	 *            The group name for which to search.
+	 * @return True if the given group matches one in the given array.
+	 */
+	public static boolean groupMatch(String[] groups, String group) {
+		if (groups != null && group != null) {
+			group = group.trim();
+			if (!group.equals("")) {
+				for (int i = 0; i < groups.length; i++) {
+					if (groups[i] != null) {
+						if (groups[i].trim().equalsIgnoreCase(group)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 }
