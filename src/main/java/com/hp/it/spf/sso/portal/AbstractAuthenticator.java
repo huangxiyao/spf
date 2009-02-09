@@ -6,6 +6,7 @@ package com.hp.it.spf.sso.portal;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -279,8 +280,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     protected void saveUserProfile2Session(User vapUser) {
         if (vapUser != null) {
             userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
-                            (String[])AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser))
-                                                         .toArray(new String[0]));
+                            Collections.list(Collections.enumeration(AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser)))));
         }
         request.getSession()
                .setAttribute(AuthenticationConsts.USER_PROFILE_KEY, userProfile);

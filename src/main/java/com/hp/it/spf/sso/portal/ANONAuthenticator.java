@@ -5,6 +5,7 @@
  */
 package com.hp.it.spf.sso.portal;
 
+import java.util.Collections;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -144,8 +145,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
 
         // Retrieve user group
         userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
-                        (String[])AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser))
-                                                     .toArray(new String[0]));
+                        Collections.list(Collections.enumeration(AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser)))));
 
         request.getSession()
                .setAttribute(AuthenticationConsts.USER_PROFILE_KEY, userProfile);
