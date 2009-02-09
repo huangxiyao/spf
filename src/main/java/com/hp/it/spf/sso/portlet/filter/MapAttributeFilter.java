@@ -28,26 +28,34 @@ import javax.portlet.filter.RenderFilter;
 import javax.portlet.filter.ResourceFilter;
 import javax.servlet.http.HttpServletRequest;
 
+import com.hp.it.spf.xa.misc.Consts;
+
+
 /**
  * <p>
  * A filter transfers user profile map from http request to portlet request.
  * </p>
  * <p>
- * Vignette Portal does not allow sending different sets of profile attributes 
- * for different sites, and the profile structure supported by Vignette Portal 
- * must be predefined. In SPF, this issue was addressed by injecting user profile 
- * information into the WSRP SOAP request. The injection occurred in the consumer 
- * by a project called wsrp-injector. On the producer side, the profile was 
- * extracted from WSRP SOAP request by another project called wsrp-extractor. 
- * This project provides a filter to transfer the user profile from http request 
- * to portlet request and made available to the portlets as a map.
+ * Vignette Portal does not allow sending different sets of profile attributes
+ * for different sites, and the profile structure supported by Vignette Portal
+ * must be predefined. In SPF, this issue was addressed by injecting user
+ * profile information into the WSRP SOAP request. The injection occurred in the
+ * consumer by a project called wsrp-injector. On the producer side, the profile
+ * was extracted from WSRP SOAP request by another project called
+ * wsrp-extractor. This project provides a filter to transfer the user profile
+ * from http request to portlet request and made available to the portlets as a
+ * map.
  * </p>
  * 
  * @author Oliver, Kaijian Ding, Ye Liu
  * @version TBD
  */
-public class MapAttributeFilter implements ActionFilter, RenderFilter,
-        EventFilter, ResourceFilter {
+public class MapAttributeFilter
+                               implements
+                               ActionFilter,
+                               RenderFilter,
+                               EventFilter,
+                               ResourceFilter {
     private FilterConfig filterConfig;
 
     private static boolean mIsLocalPortlet = false;
@@ -80,19 +88,20 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
      * map Atttribute from portal To portlet for action request
      */
     public void doFilter(ActionRequest actionRequest,
-            ActionResponse actionResponse, FilterChain filterChain)
-            throws IOException, PortletException {
+                         ActionResponse actionResponse,
+                         FilterChain filterChain) throws IOException,
+                                                 PortletException {
         mapAtttributeFromPortalToPortlet(actionRequest);
         filterChain.doFilter(actionRequest, actionResponse);
     }
-
 
     /**
      * map Atttribute from portal To portlet for render request
      */
     public void doFilter(RenderRequest renderRequest,
-            RenderResponse renderResponse, FilterChain filterChain)
-            throws IOException, PortletException {
+                         RenderResponse renderResponse,
+                         FilterChain filterChain) throws IOException,
+                                                 PortletException {
         mapAtttributeFromPortalToPortlet(renderRequest);
         filterChain.doFilter(renderRequest, renderResponse);
     }
@@ -101,8 +110,9 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
      * map Atttribute from portal To portlet for resource request
      */
     public void doFilter(ResourceRequest resourceRequest,
-            ResourceResponse resourceResponse, FilterChain filterChain)
-            throws IOException, PortletException {
+                         ResourceResponse resourceResponse,
+                         FilterChain filterChain) throws IOException,
+                                                 PortletException {
         mapAtttributeFromPortalToPortlet(resourceRequest);
         filterChain.doFilter(resourceRequest, resourceResponse);
     }
@@ -111,8 +121,9 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
      * map Atttribute from portal To portlet for event request
      */
     public void doFilter(EventRequest eventRequest,
-            EventResponse eventResponse, FilterChain filterChain)
-            throws IOException, PortletException {
+                         EventResponse eventResponse,
+                         FilterChain filterChain) throws IOException,
+                                                 PortletException {
         mapAtttributeFromPortalToPortlet(eventRequest);
         filterChain.doFilter(eventRequest, eventResponse);
     }
@@ -122,8 +133,7 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
      * attributes to the related destination portlets, So each individual
      * portlet will receive its own attributes
      * 
-     * @param PortletRequest
-     *            ActionRequest, RenderRequest
+     * @param PortletRequest ActionRequest, RenderRequest
      */
     private void mapAtttributeFromPortalToPortlet(PortletRequest request) {
 
@@ -137,13 +147,12 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
     /**
      * map all attribute passed by Portal to portlet in vignette
      * 
-     * @param PortletRequest
-     *            ActionRequest, RenderRequest
+     * @param PortletRequest ActionRequest, RenderRequest
      */
     private void forVAP(PortletRequest request) {
         // retrieve all attribute names start with VIGNETTE_PREFIX
         Enumeration enums = request.getAttributeNames();
-        while(enums.hasMoreElements()) {
+        while (enums.hasMoreElements()) {
             String attKey = (String)enums.nextElement();
             if (attKey.startsWith(VIGNETTE_PREFIX)) {
                 String localKey = attKey.replaceFirst(VIGNETTE_PREFIX, "");
@@ -160,27 +169,34 @@ public class MapAttributeFilter implements ActionFilter, RenderFilter,
     /**
      * map all attribute passed by Portal to portlet in OpenPortal
      * 
-     * @param PortletRequest
-     *            ActionRequest, RenderRequest
+     * @param PortletRequest ActionRequest, RenderRequest
      */
     private void forOpenPortal(PortletRequest request) {
-        HttpServletRequest rq = (HttpServletRequest)request
-                .getAttribute("javax.portlet.portletc.httpServletRequest");
+        HttpServletRequest rq = (HttpServletRequest)request.getAttribute("javax.portlet.portletc.httpServletRequest");
         if (rq.getAttribute("com.hp.spp.UserProfile") instanceof Map) {
-            Object obj = rq.getAttribute("portlet_container_request");
+            Object obj = rq.getAttribute("com.sun.portal.portletcontainer.portlet_container_request");
             if (obj != null) {
                 try {
-                    Method method = obj.getClass().getMethod("setUserInfo",
-                            new Class[] { Map.class });
-                    method.invoke(obj, new Object[] { (Map)rq
-                            .getAttribute("com.hp.spp.UserProfile") });
+                    Method method = obj.getClass()
+                                       .getMethod("setUserInfo",
+                                                  new Class[] {Map.class});
+                    method.invoke(obj,
+                                  new Object[] {(Map)rq.getAttribute("com.hp.spp.UserProfile")});
                 } catch (SecurityException e) {
+                    System.out.println(e.getMessage());
                 } catch (NoSuchMethodException e) {
+                    System.out.println(e.getMessage());
                 } catch (IllegalArgumentException e) {
+                    System.out.println(e.getMessage());
                 } catch (IllegalAccessException e) {
+                    System.out.println(e.getMessage());
                 } catch (InvocationTargetException e) {
+                    System.out.println(e.getMessage());
                 }
             }
         }
+        // set UserContextKeys into PortletRequest with PORTAL_CONTEXT_KEY key
+        request.setAttribute(Consts.PORTAL_CONTEXT_KEY,
+                             rq.getAttribute("com.hp.spp.UserContextKeys"));
     }
 }
