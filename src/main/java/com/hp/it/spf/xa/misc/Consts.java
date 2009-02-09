@@ -16,6 +16,16 @@ package com.hp.it.spf.xa.misc;
 public class Consts {
 
 	/**
+	 * The key to identify which request needs injection and extract action.
+	 */
+	public static final String INJECTION_KEY_PREFIX = "__SPF";
+	
+	/**
+	 * The key to identify which request needs injection and extract action.
+	 */
+	public static final String INJECTION_THREAD_NAME = "RequestBinding.ThreadName";
+
+	/**
 	 * The user profile map contains all user attributes from HPP/ATHP, Persona
 	 * and etc. On portal side, it can be retrieved from the http session; on
 	 * portlet side, it can be retrieved with the method
@@ -144,6 +154,11 @@ public class Consts {
 	public static final String PORTAL_CONTEXT_KEY = "ContextMap";
 
 	/**
+	 * The key to get the portal session id from portal context map.
+	 */
+	public static final String KEY_PORTAL_SESSION_ID = "PortalSessionId";
+
+	/**
 	 * The key to get the site name (ie what Vignette calls the "site DNS name")
 	 * from portal context map.
 	 */
@@ -159,6 +174,16 @@ public class Consts {
 	 * The key to get the current portal request URL from portal context map.
 	 */
 	public static final String KEY_PORTAL_REQUEST_URL = "PortalRequestURL";
+
+	/**
+	 * The key to get the Session Token from portal context map.
+	 */
+	public static final String KEY_SESSION_TOKEN = "SessionToken";
+
+	/**
+	 * The key to get the Navigation Item Name from portal context map.
+	 */
+	public static final String KEY_NAVIGATION_ITEM_NAME = "NavigationItemName";
 
 	/**
 	 * The prefix of the anonymous user name.
