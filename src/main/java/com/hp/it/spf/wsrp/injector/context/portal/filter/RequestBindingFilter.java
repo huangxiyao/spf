@@ -15,7 +15,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import com.hp.it.spf.xa.wsrp.Constants;
+import com.hp.it.spf.xa.misc.Consts;
 import com.hp.it.spf.xa.wsrp.RequestMap;
 import com.hp.it.spf.xa.wsrp.RequestWrapper;
 import com.vignette.portal.log.LogWrapper;
@@ -34,9 +34,9 @@ public class RequestBindingFilter implements Filter {
      * Prefix of the request key that will be used in <code>user-agent</code>
      * value.
      */
-    public static final String KEY_PREFIX = Constants.INJECTION_KEY_PREFIX;
+    public static final String KEY_PREFIX = Consts.INJECTION_KEY_PREFIX;
 
-    public static final String THREAD_NAME_REQUEST_KEY = Constants.INJECTION_THREAD_NAME;
+    public static final String THREAD_NAME_REQUEST_KEY = Consts.INJECTION_THREAD_NAME;
 
     /**
      * @param config
