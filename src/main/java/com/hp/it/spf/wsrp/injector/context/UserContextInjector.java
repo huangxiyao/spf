@@ -33,11 +33,12 @@ import org.apache.axis.message.RPCParam;
 import com.epicentric.common.website.MenuItemNode;
 import com.epicentric.common.website.MenuItemUtils;
 import com.epicentric.site.Site;
-import com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter;
-import com.hp.it.spf.wsrp.injector.profile.Constants;
-import com.hp.it.spf.wsrp.injector.profile.ProfileHelper;
-import com.vignette.portal.log.LogWrapper;
+import com.hp.it.spf.xa.misc.portal.Utils;
+import com.hp.it.spf.xa.misc.Consts;
+import com.hp.it.spf.xa.wsrp.ProfileHelper;
+import com.hp.it.spf.xa.wsrp.RequestMap;
 import com.vignette.portal.log.LogConfiguration;
+import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
 
 /**
@@ -104,7 +105,7 @@ public class UserContextInjector extends BasicHandler {
 				// Vignette thread pool's thread
 				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 					LOG.debug("Request thread is '" +
-							request.getAttribute(RequestBindingFilter.THREAD_NAME_REQUEST_KEY));
+							request.getAttribute(Consts.INJECTION_THREAD_NAME));
 				}
 
 				Map userContextKeys = retrieveUserContextKeys(request);
@@ -152,22 +153,13 @@ public class UserContextInjector extends BasicHandler {
 	 */
 	private Map retrieveUserContextKeys(HttpServletRequest request) {
 		Map userContext = new HashMap();
-		userContext.put("PortalSite", getPortalSiteName(request));
-		userContext.put("PortalSessionId", getPortalSessionId(request));
-		userContext.put("HppUserId", getHppUserId(request));
-		userContext.put("HppUserName", getHppUserName(request));
-		userContext.put("HppSessionToken", getHppSessionToken(request));
-		userContext.put("UserContextUpdateTimestamp",
-				getUserContextUpdateTimestamp(request));
-		userContext.put("NavigationItemName", getNavigationItemName(request));
-		String httpPort = getHttpPortIfCustom();
-		if (httpPort != null) {
-			userContext.put("HttpPort", httpPort);
-		}
-		String httpsPort = getHttpsPortIfCustom();
-		if (httpsPort != null) {
-			userContext.put("HttpsPort", httpsPort);
-		}
+
+		userContext.put(Consts.KEY_PORTAL_SITE_URL, Utils.getSiteURL(request));
+		userContext.put(Consts.KEY_PORTAL_REQUEST_URL, Utils.getRequestURL(request));
+		userContext.put(Consts.KEY_PORTAL_SITE_NAME, getPortalSiteName(request));
+		userContext.put(Consts.KEY_PORTAL_SESSION_ID, getPortalSessionId(request));
+		userContext.put(Consts.KEY_SESSION_TOKEN, getHppSessionToken(request));
+		userContext.put(Consts.KEY_NAVIGATION_ITEM_NAME, getNavigationItemName(request));
 		return userContext;
 	}
 
@@ -176,9 +168,9 @@ public class UserContextInjector extends BasicHandler {
 	 * name of the header is <tt>UserContext</tt>. The header is a map
 	 * serialized to string user
 	 * {@link ProfileHelper#profileToString(java.util.Map)}. It's a 2-element
-	 * map: <tt>com.hp.spp.UserContextKeys</tt> entry contains a map provided in
+	 * map: <tt>UserContextKeys</tt> entry contains a map provided in
 	 * <tt>userContextKeys</tt> method parameter, and
-	 * <tt>com.hp.spp.UserProfile</tt> is a map provided int
+	 * <tt>UserProfile</tt> is a map provided int
 	 * <tt>userProfile</tt> method parameter. Storing this data as string in
 	 * SOAP header is much more efficient than XML or direct SOAP header
 	 * elements. Based on the conducted tests we confirmed that the using SOAP
@@ -201,14 +193,14 @@ public class UserContextInjector extends BasicHandler {
 	private void injectUserContext(SOAPEnvelope envelope, Map userContextKeys,
 			Map userProfile) throws SOAPException {
 		Map userContext = new HashMap();
-		userContext.put("com.hp.spp.UserContextKeys", userContextKeys);
-		userContext.put("com.hp.spp.UserProfile", userProfile);
+		userContext.put(Consts.PORTAL_CONTEXT_KEY, userContextKeys);
+		userContext.put(Consts.USER_PROFILE_KEY, userProfile);
 		if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 			LOG.debug("UserContextInjector userProfile ", userProfile);
 		}
 		SOAPHeader header = envelope.getHeader();
-		Name userContextHeaderName = envelope.createName("UserContext", "spp",
-				"http://www.hp.com/spp");
+		Name userContextHeaderName = envelope.createName("UserContext", "spf",
+				"http://www.hp.com/spf");
 		SOAPHeaderElement userContextElement = header
 				.addHeaderElement(userContextHeaderName);
 		if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
@@ -262,36 +254,6 @@ public class UserContextInjector extends BasicHandler {
 	/**
 	 * @param request
 	 *            incoming user request
-	 * @return internal HPP id (GUID) of the incoming user or empty string if
-	 *         non could be found
-	 */
-	private String getHppUserId(HttpServletRequest request) {
-		String userId = null;
-		Map userProfile = getUserProfileMap(request);
-		if (userProfile != null) {
-			userId = (String) userProfile.get(Constants.MAP_HPPID);
-		}
-		return (userId != null ? userId : "");
-	}
-
-	/**
-	 * @param request
-	 *            incoming user request
-	 * @return incoming user name; this is the name used by the user to login or
-	 *         empty string if none could be found
-	 */
-	private String getHppUserName(HttpServletRequest request) {
-		String userName = null;
-		Map userProfile = getUserProfileMap(request);
-		if (userProfile != null) {
-			userName = (String) userProfile.get(Constants.MAP_USERNAME);
-		}
-		return (userName != null ? userName : "");
-	}
-
-	/**
-	 * @param request
-	 *            incoming user request
 	 * @return value of <code>SMSESSION</code> cookie set by HPP or empty string
 	 *         if non could be found
 	 */
@@ -312,26 +274,6 @@ public class UserContextInjector extends BasicHandler {
 			}
 		}
 		return "";
-	}
-
-	/**
-	 * @param request
-	 *            incoming user request
-	 * @return Last profile update timestamp (long value) as String or empty
-	 *         string if non could be found
-	 */
-	private String getUserContextUpdateTimestamp(HttpServletRequest request) {
-		Map userProfile = getUserProfileMap(request);
-		if (userProfile != null
-				&& userProfile.containsKey(Constants.MAP_UPDATEDDATE)) {
-			return String.valueOf(userProfile.get(Constants.MAP_UPDATEDDATE));
-		} else {
-			if (userProfile == null) {
-				LOG.warning("User profile not found in session under "
-						+ Constants.PROFILE_MAP);
-			}
-			return "";
-		}
 	}
 
 	private String getNavigationItemName(HttpServletRequest request) {
@@ -358,28 +300,6 @@ public class UserContextInjector extends BasicHandler {
 	}
 
 	/**
-	 * @return HTTP port if it was defined in SPP configuration variable
-	 *         <tt>SPP.port.http</tt> and it is different from 80; <tt>null</tt>
-	 *         otherwise.
-	 */
-	private String getHttpPortIfCustom() {
-		String port = "80";
-		// String port = Config.getValue("SPP.port.http", "80");
-		return ("80".equals(port) ? null : port);
-	}
-
-	/**
-	 * @return HTTPS port if it was defined in SPP configuration variable
-	 *         <tt>SPP.port.https</tt> and it's different from 443;
-	 *         <tt>null</tt> otherwise.
-	 */
-	private String getHttpsPortIfCustom() {
-		String port = "443";
-		// String port = Config.getValue("SPP.port.https", "443");
-		return ("443".equals(port) ? null : port);
-	}
-
-	/**
 	 * Get user profile map from session by defined key
 	 * 
 	 * @param request
@@ -391,7 +311,7 @@ public class UserContextInjector extends BasicHandler {
 		// know the underlying request implemenation
 		synchronized (request) {
 			HttpSession session = request.getSession(true);
-			Map userProfile = (Map) session.getAttribute(Constants.PROFILE_MAP);
+			Map userProfile = (Map) session.getAttribute(Consts.USER_PROFILE_KEY);
 			// profile not found in the standard attribute; try legacy name
 			if (userProfile == null) {
 				userProfile = (Map) session.getAttribute("StandardParameters");
@@ -417,15 +337,15 @@ public class UserContextInjector extends BasicHandler {
 		String userAgentValue = findUserAgentValue(envelope);
 		if (userAgentValue != null) {
 			int pos = userAgentValue
-					.lastIndexOf(RequestBindingFilter.KEY_PREFIX);
+					.lastIndexOf(Consts.INJECTION_KEY_PREFIX);
 			if (pos != -1) {
 				// this extraction should be done somehow by RequestWrapper
 				// as it's the only class that know how this was encoded
 				String requestKey = userAgentValue.substring(pos
-						+ RequestBindingFilter.KEY_PREFIX.length());
+						+ Consts.INJECTION_KEY_PREFIX.length());
 				return RequestMap.getInstance().get(requestKey);
 			} else {
-				LOG.error("SPP request key not found!");
+				LOG.error("SPF request key not found!");
 			}
 		} else {
 			LOG.error("User-agent value not found!");
