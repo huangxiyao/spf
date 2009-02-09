@@ -262,7 +262,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * Get the portal site root (ie home page) URL for the current portal site,
-	 * from the portlet request provided to the constructor. Returns null if
+	 * from the portal context provided to the constructor. Returns null if
 	 * this has not been set in the request, or the request provided to the
 	 * constructor was null.
 	 * 
@@ -272,8 +272,28 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		if (portalContext == null) {
 			return null;
 		}
-		return portalContext.getCurrentBasePortalURI();
+		return Utils.getSiteURL(portalContext.getHttpServletRequest());
 	}
+
+	/**
+	 * Get the portal site URL for the portal site and page indicated by the
+	 * given param, from the portal context provided to the constructor. Returns null if
+	 * this has not been set in the request, or the request provided to the
+	 * constructor was null.
+	 * 
+	 * @param uri
+	 *            The site name (ie "site DNS name") and/or additional path (eg
+	 *            a friendly URI or template friendly ID). (The part before the
+	 *            first <code>/</code> is considered the site name.)
+	 * @return site URL string
+	 */
+	protected String getSiteURL(String param) {
+		if (portalContext == null) {
+			return null;
+		}
+		return Utils.getSiteURL(portalContext.getHttpServletRequest(), param);
+	}
+	
 
 	/**
 	 * Get the portal request URL for the current request. This is the URL which

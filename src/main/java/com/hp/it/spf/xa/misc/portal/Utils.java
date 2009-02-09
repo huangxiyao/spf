@@ -283,8 +283,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 
 	/**
 	 * <p>
-	 * Get the effective site name from the given request, according to the
-	 * Vignette portal and SPF standards.
+	 * Get the <i>effective</i> site name from the given request, according to
+	 * the Vignette portal and SPF standards.
 	 * </p>
 	 * <ul>
 	 * <li> Generally, this method returns the Vignette "site DNS name", using
@@ -405,9 +405,13 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		if (portalContext == null) {
 			return null;
 		}
-		HttpSession session = portalContext.getPortalRequest().getRequest()
-				.getSession();
-		return (Map) session.getAttribute(Consts.USER_PROFILE_KEY);
+		try {
+			HttpSession session = portalContext.getPortalRequest().getRequest()
+					.getSession();
+			return (Map) session.getAttribute(Consts.USER_PROFILE_KEY);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	/**
@@ -423,9 +427,28 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		Map userProfile = getUserProfileMap(portalContext);
 		String[] groups = null;
 		if (userProfile != null) {
-			return (String[]) userProfile.get(Consts.KEY_USER_GROUPS);
+			try {
+				groups = (String[]) userProfile.get(Consts.KEY_USER_GROUPS);
+			} catch (ClassCastException e) { // should never happen
+			}
 		}
 		return groups;
+	}
+
+	/**
+	 * Returns true if the given group is among the user groups found in the
+	 * given portal context. These groups are the authorization groups defined
+	 * for the current request in the portal. The group comparison is
+	 * case-insensitive.
+	 * 
+	 * @param portalContext
+	 *            The portal context.
+	 * @return True if the given group is among the user groups, otherwise
+	 *         false.
+	 */
+	public static boolean isUserInGroup(PortalContext portalContext,
+			String group) {
+		return Utils.groupMatch(getGroups(portalContext), group);
 	}
 
 	/**
@@ -613,14 +636,23 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @return The URL for the current site, in string form. This is an absolute
 	 *         URL.
 	 */
+	public static String getPortalSiteURL(HttpServletRequest request) {
+		return getPortalSiteURL(request, null);
+	}
+
+	/**
+	 * Use {@link #getPortalSiteURL(HttpServletRequest)} instead.
+	 * 
+	 * @deprecated
+	 */
 	public static String getSiteURL(HttpServletRequest request) {
-		return getSiteURL(request, null);
+		return getPortalSiteURL(request);
 	}
 
 	/**
 	 * Returns an absolute URL for the the portal site root (ie portal site home
-	 * page) for the effective site in the given request. This includes the
-	 * scheme, hostname and port used by the browser. The effective site is
+	 * page) for the <i>effective</i> site in the given request. This includes
+	 * the scheme, hostname and port used by the browser. The effective site is
 	 * determined by using the {@link #getEffectiveSite(HttpServletRequest)}
 	 * method. This method returns null given a null request.
 	 * 
@@ -630,47 +662,97 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 *         URL.
 	 */
 	public static String getEffectiveSiteURL(HttpServletRequest request) {
-		return getSiteURL(request, getEffectiveSiteDNS(request));
+		return getEffectiveSiteURL(request, null);
+	}
+
+	/**
+	 * Returns an absolute URL for a page at the <i>effective</i> portal site,
+	 * based on the given request and site URI. This method is the same as the
+	 * {@link #getSiteURL(HttpServletRequest, String)} method - except that if
+	 * the given URI does not indicate a specific portal site, this method
+	 * defaults to using the <i>effective</i> site (from the
+	 * {@link #getEffectiveSiteDNS(HttpServletRequest)} method) instead of the
+	 * current site.
+	 * 
+	 * @param request
+	 *            The current request.
+	 * @return The URL for the current site, in string form. This is an absolute
+	 *         URL.
+	 */
+	public static String getEffectiveSiteURL(HttpServletRequest request,
+			String uri) {
+		String effectiveSiteDNS = getEffectiveSiteDNS(request);
+		if (effectiveSiteDNS != null) {
+			if (uri == null) {
+				uri = effectiveSiteDNS;
+			} else if (uri.startsWith("/")) {
+				uri = effectiveSiteDNS + uri;
+			}
+		}
+		return getPortalSiteURL(request, uri);
 	}
 
 	/**
 	 * <p>
-	 * Returns an absolute URL for the the portal site root (ie portal site home
-	 * page) for the given request and site name. This includes the scheme,
-	 * hostname and port used by the browser. The given site name should be the
-	 * "site DNS name" for the portal site in Vignette; if it is null, then the
-	 * one from the request will be used. This method returns null given a null
-	 * request.
+	 * Returns an absolute URL for a page at a portal site, based on the given
+	 * request and site URI. The returned URL includes the scheme, hostname and
+	 * port used by the browser in the current request. The portal site name,
+	 * and any additional path (eg a friendly URI, a template friendly ID, a
+	 * query string, etc) are taken from the given URI as follows:
+	 * </p>
+	 * <ul>
+	 * <li> if the given URI starts with <code>/</code> then the returned URL
+	 * is for the current portal site (ie the one in the request), and the given
+	 * URI is used as additional path for it</li>
+	 * <li> otherwise the first part of the given URI (up to the first
+	 * <code>/</code>) is used as the site name (ie the Vignette "site DNS
+	 * name") in the returned URL, and the remainder of the given URI is used as
+	 * additional path for it</li>
+	 * </ul>
+	 * <p>
+	 * For example, say that the current portal request is for the
+	 * <code>abc</code> site at <code>http://host.hp.com</code>. Then:
+	 * </p>
+	 * <ul>
+	 * <li> when the given URI is null, the returned URL is for the current
+	 * portal site home page: <code>http://host.hp.com/portal/site/abc/</code></li>
+	 * <li> when the given URI is <code>/template.ABC</code>, the returned
+	 * URL is for that page at the current portal site:
+	 * <code>http://host.hp.com/portal/site/abc/template.ABC</code></li>
+	 * <li> when the given URI is <code>xyz</code>, the returned URL is for
+	 * the <code>xyz</code> portal site home page:
+	 * <code>http://host.hp.com/portal/site/xyz</code></li>
+	 * <li> when the given URI is <code>xyz/template.ABC</code>, the returned
+	 * URL is for that page at the the <code>xyz</code> portal site:
+	 * <code>http://host.hp.com/portal/site/xyz/template.ABC</li>
+	 * </ul>
+	 * <p>
+	 * This method returns null given a null request.
 	 * </p>
 	 * <p>
-	 * <b>Note:</b> This method does not check if the given site name actually
-	 * exists in the portal; it just makes a URL of the proper format for it.
+	 * <b>Note:</b> This method does not check if the given URI actually exists /
+	 * is valid in the portal; it just makes a URL of the proper format for it.
 	 * </p>
 	 * 
 	 * @param request
 	 *            The current request.
-	 * @param siteDNS
-	 *            The site name (ie "site DNS name").
+	 * @param uri
+	 *            The site name (ie "site DNS name") and/or additional path (eg a friendly URI or template friendly ID).
+	 *            (The part before the first <code>/</code> is considered the site name.)
 	 * @return The URL for the given site, in string form. This is an absolute
 	 *         URL.
 	 */
-	public static String getSiteURL(HttpServletRequest request, String siteDNS) {
-		String siteURL = null;
-		String requestURL = getRequestURL(request);
-		if (siteDNS == null) {
-			siteDNS = getSiteDNS(request);
-		}
-
-		if ((requestURL != null) && (siteDNS != null)) {
-			siteDNS = siteDNS.trim();
-			int j = requestURL.indexOf("/site/");
-			if (j == -1)
-				siteURL = requestURL;
-			else
-				siteURL = requestURL.substring(0, j) + "/site/" + siteDNS + "/";
-			siteURL = slashify(siteURL);
-		}
-		return (siteURL);
+	public static String getPortalSiteURL(HttpServletRequest request, String uri) {
+		// TODO: This method should use the PortalURL API's instead.
+		return getPortalSiteURL(getRequestURL(request), uri);
 	}
 
+	/**
+	 * Use {@link #getPortalSiteURL(HttpServletRequest, String)} instead.
+	 * 
+	 * @deprecated
+	 */
+	public static String getSiteURL(HttpServletRequest request, String uri) {
+		return getPortalSiteURL(request, uri);
+	}
 }
