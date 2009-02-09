@@ -1,7 +1,6 @@
 /*
  * Project: Shared Portal Framework
  * Copyright (c) 2008 HP. All Rights Reserved.
- *
  */
 package com.hp.it.spf.sso.portal;
 
@@ -66,7 +65,17 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 		userProfile.put(AuthenticationConsts.KEY_LANGUAGE, 
 						I18nUtility.hppLanguageToISOLanguage(language));
 		
-		// TODO retrieve HPP specific attributes. e.g. email pref, phone, etc.
+		// retrieve HPP specific attributes. e.g. email pref, phone, etc.
+		userProfile.put(AuthenticationConsts.KEY_EMAIL_PREF, 
+		                getValue(AuthenticationConsts.HEADER_EMAIL_CONTACT_PREF_PROPERTY_NAME));		
+		userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, 
+                        getValue(AuthenticationConsts.HEADER_PHONE_EXT));
+		userProfile.put(AuthenticationConsts.KEY_PHONE_PREF, 
+                        getValue(AuthenticationConsts.HEADER_PHONE_CONTACT_PREF_PROPERTY_NAME));
+		userProfile.put(AuthenticationConsts.KEY_POSTAL_PREF, 
+                        getValue(AuthenticationConsts.HEADER_POSTAL_CONTACT_PREF_PROPERTY_NAME));
+		
+		setPhone();
 	}
     
     /**
@@ -104,5 +113,39 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         }
         LOG.info("HPP getValue: " + fieldName + "=" + value);
         return value;
+    }
+    
+    /**
+     * This method is used to map the 4 http headers include phone info to
+     * userProfile map. Construct phone number with country code, number and area code
+     * from headers. Construct extension with the one from header.
+     */
+    @SuppressWarnings("unchecked")
+    private void setPhone() {
+        if (this.ssoUser != null) {
+            String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);
+            String country = getValue(AuthenticationConsts.HEADER_PHONE_COUNTRY_CODE);
+            String area = getValue(AuthenticationConsts.HEADER_PHONE_AREA_CODE);
+            String ext = getValue(AuthenticationConsts.HEADER_PHONE_EXT);
+
+            StringBuffer phone = new StringBuffer("");
+            if ((country != null) && !("".equals(country.trim()))) {
+                phone.append("+").append(country.trim()).append(" ");
+            }
+            if ((area != null) && !("".equals(area.trim()))) {
+                phone.append(area.trim()).append(" ");
+            }
+            if ((number != null) && !("".equals(number.trim()))) {
+                phone.append(number.trim());
+            }
+            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, 
+                            phone.toString());           
+
+            if ((ext != null) && !("".equals(ext.trim()))) {
+                userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext.trim());
+            } else {
+                userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, "");
+            }
+        }
     }
 }

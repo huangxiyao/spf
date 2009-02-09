@@ -33,6 +33,8 @@ class AuthenticationConsts {
     
     static final String AUTH_SOURCE_TAGE = "AuthSource";
     
+    static final String PHONE_EXT_SPLIT = "ext.";
+    
     /**
      * Following are property id that represents custom attributes added in
      * entity_management.xml

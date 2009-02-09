@@ -142,24 +142,6 @@ public class ANONAuthenticator extends AbstractAuthenticator {
             throw new IllegalArgumentException("Vignette user is not specified.");
         }
 
-        // Retrieve user profiles
-        userProfile.put(AuthenticationConsts.KEY_PROFILE_ID,
-                        vapUser.getProperty(AuthenticationConsts.PROPERTY_PROFILE_ID));
-        userProfile.put(AuthenticationConsts.KEY_USER_NAME,
-                        vapUser.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID));
-        userProfile.put(AuthenticationConsts.KEY_EMAIL,
-                        vapUser.getProperty(AuthenticationConsts.PROPERTY_EMAIL_ID));
-        userProfile.put(AuthenticationConsts.KEY_FIRST_NAME,
-                        vapUser.getProperty(AuthenticationConsts.PROPERTY_FIRSTNAME_ID));
-        userProfile.put(AuthenticationConsts.KEY_LAST_NAME,
-                        vapUser.getProperty(AuthenticationConsts.PROPERTY_LASTNAME_ID));
-        userProfile.put(AuthenticationConsts.KEY_LANGUAGE,
-                        vapUser.getProperty(AuthenticationConsts.PROPERTY_LANGUAGE_ID));
-        userProfile.put(AuthenticationConsts.KEY_COUNTRY,
-                        vapUser.getProperty(AuthenticationConsts.PROPERTY_COUNTRY_ID));
-        userProfile.put(AuthenticationConsts.KEY_TIMEZONE,
-                        vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID));
-
         // Retrieve user group
         userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
                         (String[])AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser))

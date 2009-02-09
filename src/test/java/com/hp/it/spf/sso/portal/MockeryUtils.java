@@ -9,13 +9,11 @@ import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 
-import com.epicentric.common.website.SessionInfo;
 import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.EntityType;
 import com.epicentric.entity.implementations.generic.ChildEntityWrapper;

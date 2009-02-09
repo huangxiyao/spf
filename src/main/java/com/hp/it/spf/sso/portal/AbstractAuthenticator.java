@@ -197,6 +197,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                         getValue(AuthenticationConsts.HEADER_LAST_NAME_PROPERTY_NAME));
         userProfile.put(AuthenticationConsts.KEY_COUNTRY,
                         getValue(AuthenticationConsts.HEADER_COUNTRY_PROPERTY_NAME));
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, 
+                        getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME));
 
         // Set lanuage, if null, set to default EN
         String language = getValue(AuthenticationConsts.HEADER_LANGUAGE_PROPERTY_NAME);
@@ -228,6 +230,23 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                             AuthenticationConsts.DEFAULT_TIMEZONE);
         } else {
             userProfile.put(AuthenticationConsts.KEY_TIMEZONE, tz);
+        }
+        
+        // Set security level, if null, set as default 0
+        String securitylevel = getValue(AuthenticationConsts.HEADER_SECURITY_LEVEL_PROPERTY_NAME);
+        if (securitylevel != null && (!("").equals(securitylevel.trim()))) {
+            try {
+                userProfile.put(AuthenticationConsts.KEY_SECURITY_LEVEL,
+                                Float.valueOf(securitylevel));                
+            } catch (NumberFormatException ne) {
+                LOG.error("Can't change security level " + securitylevel
+                        + " to float value. Will set default value as 0");
+                userProfile.put(AuthenticationConsts.KEY_SECURITY_LEVEL, 
+                                AuthenticationConsts.DEFAULT_SECURITY_LEVEL);
+            }
+        } else {
+            userProfile.put(AuthenticationConsts.KEY_SECURITY_LEVEL, 
+                            AuthenticationConsts.DEFAULT_SECURITY_LEVEL);
         }
     }
 
