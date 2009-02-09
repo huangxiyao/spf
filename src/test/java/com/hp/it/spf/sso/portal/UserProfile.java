@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This is the util class to maintain the user profiles for test
+ * This is the util class to maintain the user profiles for test.
  * 
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @version 1.0
@@ -36,7 +36,12 @@ public class UserProfile {
         userProfile.put(AuthenticationConsts.KEY_USER_GROUPS, group);
     }
     
-    // Retrieve property from userProfile map with key
+    /**
+     * Retrieve property from userProfile map with key.
+     * 
+     * @param property user profile map key
+     * @return user profile value defined in the map
+     */
     public static Object get(String property) {
         return userProfile.get(property);
     }
