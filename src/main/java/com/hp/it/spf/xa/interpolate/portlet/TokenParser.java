@@ -111,8 +111,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portlet request
 	 * and response. The default token-substitutions property file (<code>default_includes.properties</code>)
-	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find any
-	 * <code>{INCLUDE:key}</code> tokens.
+	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find
+	 * any <code>{INCLUDE:key}</code> tokens.
 	 * </p>
 	 * 
 	 * @param pRequest
@@ -130,8 +130,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * Constructs a new <code>TokenParser</code> for the given portlet request
 	 * and response, and overriding the token-substitutions property file. The
 	 * given file, instead of the default (<code>default_includes.properties</code>)
-	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find any
-	 * <code>{INCLUDE:key}</code> tokens.
+	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find
+	 * any <code>{INCLUDE:key}</code> tokens.
 	 * </p>
 	 * 
 	 * @param pRequest
@@ -156,11 +156,11 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * Constructs a new <code>TokenParser</code> for the given portlet
 	 * request, response, and locale, and overriding the token-substitutions
 	 * property file. The given file, instead of the default (<code>default_includes.properties</code>)
-	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find any
-	 * <code>{INCLUDE:key}</code> tokens. In addition, the given locale will be
-	 * used instead of the one in the portlet request during the parsing (but if
-	 * the given locale is null, then the one in the portlet request will be
-	 * used).
+	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find
+	 * any <code>{INCLUDE:key}</code> tokens. In addition, the given locale
+	 * will be used instead of the one in the portlet request during the parsing
+	 * (but if the given locale is null, then the one in the portlet request
+	 * will be used).
 	 * </p>
 	 * 
 	 * @param pRequest
@@ -342,6 +342,25 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		}
 		return Utils.getPortalSiteURL(request);
 	}
+
+	/**
+	 * Get the portal site URL for the portal site and page indicated by the
+	 * given param, from the portlet request provided to the constructor.
+	 * Returns null if this has not been set in the request, or the request
+	 * provided to the constructor was null.
+	 * 
+	 * @param uri
+	 *            The site name (ie "site DNS name") and/or additional path (eg
+	 *            a friendly URI or template friendly ID). (The part before the
+	 *            first <code>/</code> is considered the site name.)
+	 * @return site URL string
+	 */
+	protected String getSiteURL(String param) {
+		if (request == null) {
+			return null;
+		}
+		return Utils.getPortalSiteURL(request, param);
+	}	
 
 	/**
 	 * Get the portal request URL for the current request. This is the URL which

@@ -342,7 +342,7 @@ table.props td {
 			<li>5.2.2. <a href="#portal.user.props">Accessing user
 			profile attributes (<code>Utils.getUserProperty</code>)</a></li>
 			<li>5.2.3. <a href="#portal.user.groups">Accessing user
-			groups (<code>Utils.getGroups</code>)</a></li>
+			groups (<code>Utils.getGroups</code>, <code>Utils.isUserInGroup</code>)</a></li>
 		</ul>
 		</li>
 		<li>5.3. <a href="#portal.request.get">Accessing portal
@@ -4783,9 +4783,9 @@ type of property. The method takes the following arguments:</p>
 	</li>
 	<li>
 	<p>The string name of the property to lookup. This could be the
-	name of a user property from HP Passport or the &#64;HP employeee portal -
-	these are the core user-identity systems in SPF - or it could be the
-	name of an extended user property from Persona or UPS.</p>
+	name of a user property from HP Passport or the &#64;HP employeee
+	portal - these are the core user-identity systems in SPF - or it could
+	be the name of an extended user property from Persona or UPS.</p>
 
 	<p>The core user-identity properties' names names each have
 	constants defined for them in the {@link
@@ -4852,8 +4852,8 @@ type of property. The method takes the following arguments:</p>
 		<p>When you use this argument with an authenticated user, it
 		returns the first (ie given) person name for the user, as taken from
 		the HP Passport or HP Enterprise Directory information for the user
-		(depending on whether the user logged-in via HPP or the &#64;HP employee
-		portal).</p>
+		(depending on whether the user logged-in via HPP or the &#64;HP
+		employee portal).</p>
 		<p>For an anonymous user, this returns null</p>
 
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
@@ -4892,12 +4892,12 @@ type of property. The method takes the following arguments:</p>
 		returns the date and time of the most recent change to any of the
 		profile attributes in the user account. This is taken from the HP
 		Passport or HP Enterprise Directory information for the user
-		(depending on whether the user logged-in via HPP or the &#64;HP employee
-		portal).</p>
+		(depending on whether the user logged-in via HPP or the &#64;HP
+		employee portal).</p>
 		<p>For an anonymous user, this is a null object.</p>
 		<p><i>Returns type:</i> {@link java.util.Date}</p>
 		</dd>
-		
+
 		<dt>{@link
 		com.hp.it.spf.xa.misc.portlet.Consts#KEY_LAST_LOGIN_DATE}</dt>
 		<dd>
@@ -4915,8 +4915,8 @@ type of property. The method takes the following arguments:</p>
 		<p>When you use this argument with an authenticated user, it
 		returns the last (ie family or surname) person name for the user, as
 		taken from the HP Passport or HP Enterprise Directory information for
-		the user (depending on whether the user logged-in via HPP or the &#64;HP
-		employee portal).</p>
+		the user (depending on whether the user logged-in via HPP or the
+		&#64;HP employee portal).</p>
 		<p>For an anonymous user, this returns null</p>
 
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
@@ -4993,7 +4993,6 @@ type of property. The method takes the following arguments:</p>
 		has been assigned. It should not be considered user-visible or unique.</p>
 
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
-		
 		<dt>{@link
 		com.hp.it.spf.xa.misc.portlet.Consts#KEY_SECURITY_LEVEL}</dt>
 		<dd>
@@ -5003,8 +5002,8 @@ type of property. The method takes the following arguments:</p>
 		validating the user's credentials. The lower the number, the lesser
 		the security constraints imposed (eg password complexity, password
 		expiry policy, etc).</p>
-		<p>When you use this argument with an authenticated &#64;HP user, it
-		returns the user's &#64;HP security level. This also is an integer,
+		<p>When you use this argument with an authenticated &#64;HP user,
+		it returns the user's &#64;HP security level. This also is an integer,
 		corresponding to the kind of login which the user used (SEA or
 		DigitalBadge).</p>
 		<p>For anonymous users, this returns null.</p>
@@ -5048,9 +5047,9 @@ type of property. The method takes the following arguments:</p>
 		<dd>
 		<p>When you use this argument with an authenticated user, <code>Utils.getUserProperty</code>
 		returns the ID which the user used to login to HP Passport (or, in the
-		case of a user accessing SPF via &#64;HP, this is the HP SEA). This user
-		ID is unique, but please note that it may change over time, since both
-		HP Passport and HP ED allow it to change.</p>
+		case of a user accessing SPF via &#64;HP, this is the HP SEA). This
+		user ID is unique, but please note that it may change over time, since
+		both HP Passport and HP ED allow it to change.</p>
 
 		<p>For an anonymous user, this is a non-null, non-blank, reserved
 		ASCII string indicating the kind of default user profile that the user
@@ -5098,22 +5097,51 @@ String escapedFullName = Utils.escapeXml(fullName);
 </pre></blockquote>
 
 <a name="portal.user.groups">
-<h4>5.2.3. Accessing user groups (<code>Utils.getGroups</code>)</h4>
+<h4>5.2.3. Accessing user groups (<code>Utils.getGroups</code>, <code>Utils.isUserInGroup</code>)</h4>
 </a>
 
-<p>Use {@link
-com.hp.it.spf.xa.misc.portlet.Utils#getGroups(PortletRequest)} to obtain
-an array of names of the security groups to which the user belongs. The
-method takes the current {@link javax.portlet.PortletRequest} for the
-user. Note this method is operable for anonymous as well as
-authenticated users. For example (where <code>request</code> is the
-{@link javax.portlet.PortletRequest}):</p>
+<p>Use these methods to access and test the user's security groups
+(see <b>Background</b> below for more information about groups). These
+methods work for anonymous as well as authenticated users.</p>
 
-<blockquote><pre>
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.misc.portlet.Utils#getGroups(PortletRequest)}</dt>
+	<dd>Use this method to obtain an array of names of the security
+	groups to which the user belongs. The method takes the current {@link
+	javax.portlet.PortletRequest} for the user. For example (where <code>request</code>
+	is the current <code>PortletRequest</code>):
+	</p>
+
+	<blockquote><pre>
 import com.hp.it.spf.xa.misc.portlet.Utils;
 ...
 String[] groups = Utils.getGroups(request);
 </pre></blockquote>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.misc.portlet.Utils#isUserInGroup(PortletRequest,String)}</dt>
+	<dd>Use this method to check whether the the user belongs to a
+	certain security group. The method takes the current {@link
+	javax.portlet.PortletRequest} for the user, as well as a name (string)
+	for the group to check. For example, to check if the user is in the <code>ABC</code>
+	group (and where <code>request</code> is the current <code>PortletRequest</code>):
+	</p>
+
+	<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+if (Utils.isUserInGroup(request, "ABC")) {
+    // user is in the group
+    ...
+} else {
+    // user is not in the group
+    ...
+}
+</pre></blockquote>
+	</dd>
+</dl>
 
 <p>Please see the method documentation for more information.</p>
 
@@ -5148,8 +5176,8 @@ to them:</p>
 
 	<dt><code>LOCAL_ATHP</code></dt>
 	<dd>
-	<p>Indicates the user is a member of the &#64;HP employee portal, not
-	HP Passport. Whether the user is currently logged-into his/her HP
+	<p>Indicates the user is a member of the &#64;HP employee portal,
+	not HP Passport. Whether the user is currently logged-into his/her HP
 	Enterprise Directory account is irrelevant; this group indicates the
 	user is accessing via the HP Intranet and the &#64;HP authentication
 	system.</p>
@@ -5272,8 +5300,63 @@ import com.hp.it.spf.xa.portalurl.PortalURL;
 import com.hp.it.spf.xa.portalurl.PortalURLFactory;
 ...
 String home = Utils.getPortalSiteURL(request);
-PortalURL url = PortalURLFactory.createPageURL(home, "forums");
+PortalURL portalURL = PortalURLFactory.createPageURL(home, "forums");
+...
+// We could then continue with the portalURL, to target a particular portlet
+// on that page, setting its mode, parameters, etc.  Please see the
+// PortalURL documentation.
+...
+String url = portalURL.toString();
 </pre></blockquote>
+
+	<p>We could then continue with the <code>PortalURL</code> to target
+	a particular portlet on that page, setting its mode, parameters, etc.
+	Please see the <code>PortalURL</code> documentation.</p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest,String)}</dt>
+	<dd>
+	<p>This method returns the URL for a page at a portal site. The URL
+	contains the same scheme, hostname, and port which the browser used for
+	the current portal page. The portal site name and additional
+	page-specific path (such as a friendly URI, template ID, query string,
+	etc) are specified in the <code>String</code> (a URI) as follows:</p>
+
+	<ul>
+		<li>If the URI string starts with <code>/</code> then the
+		returned portal URL will be for the current portal site. The URI
+		string specifies the particular page at that site (plus any additional
+		path and/or query parameters).</li>
+		<li>Otherwise the first part of the URI string is considered to
+		be the site name for the desired portal site. Anything after the first
+		<code>/</code> in the URI string is considered to specify the
+		particular page, as above.</li>
+		<li>If the URI string is null, the current portal site is
+		assumed, and a home page URL for it is returned (same as with {@link
+		com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest)}).</li>
+	</ul>
+
+	<p>Let's repeat the above example, but this time without using <code>PortalURL</code>.
+	It can all be done through this method instead. Here is the code:</p>
+
+	<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+String url = Utils.getPortalSiteURL(request, "/forums");
+</pre></blockquote>
+
+	<blockquote>
+	<p><b>Note:</b> If you are trying to build a portal URL that
+	targets a particular portlet on that page, then you must use the
+	approach with <code>PortalURL</code> instead, since only that API
+	contains methods for targeting portlets and setting their modes,
+	parameters, etc. Please see the documentation for {@link
+	com.hp.it.spf.xa.portalurl.PortalURL} and {@link
+	com.hp.it.spf.xa.portalurl.PortalURLFactory} - they are part of the <a
+		href="#overview.other.spf.common">SPF common utilities</a></p>
+	</blockquote>
+	</dd>
 </dl>
 
 <p>Please refer to the method documentation for more information.</p>

@@ -93,8 +93,11 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 			// class.
 			Object o = request.getAttribute(PortletRequest.USER_INFO);
 			if (o != null) {
-				Map userMap = (Map) o;
-				return (String) userMap.get(key.trim());
+				try {
+					Map userMap = (Map) o;
+					return (String) userMap.get(key.trim());
+				} catch (ClassCastException e) {
+				}
 			}
 		}
 		return null;
@@ -117,11 +120,16 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		if (request != null) {
 			Object o = request.getAttribute(PortletRequest.USER_INFO);
 			if (o != null) {
-				Map userMap = (Map) o;
-				String username = (String) userMap.get(Consts.KEY_USER_NAME);
-				if (username != null
-						&& !username.startsWith(Consts.ANON_USER_NAME_PREFIX)) {
-					return true;
+				try {
+					Map userMap = (Map) o;
+					String username = (String) userMap
+							.get(Consts.KEY_USER_NAME);
+					if (username != null
+							&& !username
+									.startsWith(Consts.ANON_USER_NAME_PREFIX)) {
+						return true;
+					}
+				} catch (ClassCastException e) {
 				}
 			}
 		}
@@ -141,19 +149,38 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 *            The portlet request.
 	 * @return The list of groups (null if none).
 	 */
-    public static String[] getGroups(PortletRequest request) {
+	public static String[] getGroups(PortletRequest request) {
 		String[] groups = null;
 		if (request != null) {
 			Object o = request.getAttribute(PortletRequest.USER_INFO);
 			if (o != null) {
-				Map userMap = (Map) o;
-				Object grouplist = userMap.get(Consts.KEY_USER_GROUPS);
-				if (grouplist instanceof List) {
-				    return (String[]) ((List)grouplist).toArray(new String[0]);
+				try {
+					Map userMap = (Map) o;
+					Object groupList = userMap.get(Consts.KEY_USER_GROUPS);
+					if (groupList instanceof List) {
+						return (String[]) ((List) groupList)
+								.toArray(new String[0]);
+					}
+				} catch (ClassCastException e) {
 				}
 			}
 		}
 		return groups;
+	}
+
+	/**
+	 * Returns true if the given group is among the user groups found in the
+	 * given portlet request. These groups are the ones returned by
+	 * {@link #getGroups(PortletRequest)}. The group comparison is
+	 * case-insensitive.
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @return True if the given group is among the user groups, otherwise
+	 *         false.
+	 */
+	public static boolean isUserInGroup(PortletRequest request, String group) {
+		return Utils.groupMatch(getGroups(request), group);
 	}
 
 	/**
@@ -175,8 +202,11 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		if (request != null) {
 			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
 			if (o != null) {
-				Map contextMap = (Map) o;
-				return (String) contextMap.get(Consts.KEY_PORTAL_SITE_NAME);
+				try {
+					Map contextMap = (Map) o;
+					return (String) contextMap.get(Consts.KEY_PORTAL_SITE_NAME);
+				} catch (ClassCastException e) {
+				}
 			}
 		}
 		return siteName;
@@ -203,15 +233,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @return The portal site home page URL.
 	 */
 	public static String getPortalSiteURL(PortletRequest request) {
-		String siteURL = null;
-		if (request != null) {
-			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
-			if (o != null) {
-				Map contextMap = (Map) o;
-				return (String) contextMap.get(Consts.KEY_PORTAL_SITE_URL);
-			}
-		}
-		return siteURL;
+		return getPortalSiteURL(request, null);
 	}
 
 	/**
@@ -221,6 +243,83 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 */
 	public static String getSiteURL(PortletRequest request) {
 		return getPortalSiteURL(request);
+	}
+
+	/**
+	 * <p>
+	 * Returns a URL for a page at a portal site, based on the current portal
+	 * site URL in the given portlet request, and the given URI. The SPF
+	 * framework propagates the current portal site URL from the portal to the
+	 * portlet, where it is made accessible in the request. So this method just
+	 * gets that URL from the given request. Then it returns an adjusted portal
+	 * site URL based on that current portal site URL and the given URI. As
+	 * follows:
+	 * </p>
+	 * <ul>
+	 * <li> if the given URI starts with <code>/</code> then the returned URL
+	 * is for the current portal site (ie the one in the request), and the given
+	 * URI is used as additional path for it</li>
+	 * <li> otherwise the first part of the given URI (up to the first
+	 * <code>/</code>) is used as the site name (ie the Vignette "site DNS
+	 * name") in the returned URL, and the remainder of the given URI is used as
+	 * additional path for it</li>
+	 * </ul>
+	 * <p>
+	 * For example, say that the current portal request is for the
+	 * <code>abc</code> site at <code>http://host.hp.com</code>. Then:
+	 * </p>
+	 * <ul>
+	 * <li> when the given URI is null, the returned URL is for the current
+	 * portal site home page: <code>http://host.hp.com/portal/site/abc/</code></li>
+	 * <li> when the given URI is <code>/template.ABC</code>, the returned
+	 * URL is for that page at the current portal site:
+	 * <code>http://host.hp.com/portal/site/abc/template.ABC</code></li>
+	 * <li> when the given URI is <code>xyz</code>, the returned URL is for
+	 * the <code>xyz</code> portal site home page:
+	 * <code>http://host.hp.com/portal/site/xyz</code></li>
+	 * <li> when the given URI is <code>xyz/template.ABC</code>, the returned
+	 * URL is for that page at the the <code>xyz</code> portal site:
+	 * <code>http://host.hp.com/portal/site/xyz/template.ABC</li>
+	 * </ul>
+	 * <p>
+	 * This method returns null given a null request.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> This method does not check if the given URI actually exists /
+	 * is valid in the portal; it just makes a URL of the proper format for it.
+	 * </p>
+	 * 
+	 * @param request
+	 *            The current request.
+	 * @param uri
+	 *            The site name (ie "site DNS name") and/or additional path (eg a friendly URI or template friendly ID).
+	 *            (The part before the first <code>/</code> is considered the site name.)
+	 * @return The URL for the given site, in string form. This is an absolute
+	 *         URL.
+	 */
+	public static String getPortalSiteURL(PortletRequest request, String uri) {
+		String siteRootURL = null;
+		if (request != null) {
+			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
+			if (o != null) {
+				try {
+					Map contextMap = (Map) o;
+					siteRootURL = (String) contextMap
+							.get(Consts.KEY_PORTAL_SITE_URL);
+				} catch (ClassCastException e) { // should never happen
+				}
+			}
+		}
+		return getPortalSiteURL(siteRootURL, uri);
+	}
+
+	/**
+	 * Use {@link #getPortalSiteURL(PortletRequest,String)} instead.
+	 * 
+	 * @deprecated
+	 */
+	public static String getSiteURL(PortletRequest request, String uri) {
+		return getPortalSiteURL(request, uri);
 	}
 
 	/**
@@ -239,8 +338,12 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		if (request != null) {
 			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
 			if (o != null) {
-				Map contextMap = (Map) o;
-				return (String) contextMap.get(Consts.KEY_PORTAL_REQUEST_URL);
+				try {
+					Map contextMap = (Map) o;
+					return (String) contextMap
+							.get(Consts.KEY_PORTAL_REQUEST_URL);
+				} catch (ClassCastException e) { // should never happen
+				}
 			}
 		}
 		return requestURL;
