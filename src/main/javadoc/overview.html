@@ -360,11 +360,20 @@ table.props td {
 	</li>
 	<li>6. <a href="#error">Error Handling</a>
 	<ul>
-		<li>6.1. <a href="#error.about">About error handling</a></li>
-		<li>6.2. <a href="#error.categorization">Categorizing
-		exceptions using the <code>SPFException</code> hierarchy</a></li>
-		<li>6.3. <a href="#error.handling">Handling exceptions using
-		<code>ExceptionUtil</code> and <code>SimpleMappingExceptionResolver</code></a></li>
+		<li>6.1. <a href="#error.about">About error handling and the
+		Shared Portal Framework</a>
+		<ul>
+			<li>6.1.1. <a href="#error.about.other">Error handling with
+			WPA Portlet Edition and Spring Portlet MVC</a></li>
+			<li>6.1.2. <a href="#error.about.spf">Error handling
+			extensions in SPF</a></li>
+		</ul>
+		</li>
+		<li>6.2. <a href="#error.spf.exceptions">Categorizing
+		exceptions using the <code>SPFException</code> hierarchy (<code>SPFException</code>,
+		<code>BusinessException</code>, <code>SystemException</code>)</a></li>
+		<li>6.3. <a href="#error.spf.resolving">Handling exceptions
+		using <code>ExceptionUtil</code> and <code>SimpleMappingExceptionResolver</code></a></li>
 	</ul>
 	</li>
 </ul>
@@ -693,6 +702,8 @@ functionality primarily in these directions:</p>
 		href="#i18n.other.common">using the common <code>I18nUtility</code></a>
 	at the end of this section)</li>
 </ul>
+
+<p>This chapter describes these extensions.</p>
 
 <hr>
 
@@ -5367,22 +5378,87 @@ String url = Utils.getPortalSiteURL(request, "/forums");
 <h2>6. Error Handling</h2>
 </a>
 
+<p>For error handling in your portlet, you will generally rely on
+the core technologies provided by WPAP, Spring Portlet MVC, and
+J2EE/Java. However the Shared Portal Framework does provide some
+extensions to assist with your error handling. This chapter describes
+those extensions.</p>
+
 <hr>
 
 <a name="error.about">
-<h3>6.1. About error handling</h3>
+<h3>6.1. About error handling and the Shared Portal Framework</h3>
+</a>
+
+<a name="error.about.other">
+<h4>6.1.1. Error handling with WPA Portlet Edition and Spring
+Portlet MVC</h4>
+</a>
+
+<p>Generally, when coding a portlet, you use the standard WPAP,
+Spring Portlet MVC, and J2EE/Java technologies to perform your error
+handling:</p>
+
+<ol>
+	<li>
+	<p>With Java, you can of course create various subclasses of {@link
+	java.lang.Exception} which represent different error conditions in your
+	portlet.</p>
+	</li>
+
+	<li>
+	<p>With Spring Portlet MVC, you can instantiate those exceptions in
+	your controllers and, if desired, throw them back to the Spring
+	dispatcher. You can configure different possible resolvers to then
+	resolve appropriate views for those exceptions, such as {@link
+	org.springframework.web.portlet.handler.SimpleMappingExceptionResolver}.
+	Please see the Spring Portlet MVC documentation for more information on
+	this. For example, for Spring Web MVC - which is the same as Spring
+	Portlet MVC in this regard - see <a
+		href="http://static.springframework.org/spring/docs/2.0.x/reference/mvc.html#mvc-exceptionhandlers">section
+	13.10</a> of the Spring Framework Reference Documentation.</p>
+	</li>
+
+	<li>
+	<p>And with J2EE (JSP) and Spring's JSP view engine, you can create
+	JSP's for those views, to display appropriate information about the
+	exception. For some exceptions, you might have dedicated JSP's (ie to
+	render dead-end error pages). With other exceptions, you might map to
+	the same JSP you used for an initial view (ie to render form-submittion
+	errors in the form page itself). (The exact rendering of the error will
+	of course vary based on your portlet's UI design, so the SPF, WPAP and
+	Spring do not provide any particular technology here.)</p>
+	</li>
+
+	<li>
+	<p>Finally, with WPA Portlet Edition, you can automatically inject
+	logging of the thrown exception, using WPAP's {@link
+	com.hp.frameworks.wpa.portlet.handler.TransactionLoggingInterceptor}.
+	This way, when the Spring Portlet dispatcher catches the exception
+	you've thrown, information about the exception is captured and logged
+	automatically to the WPAP error and error trace logs. The WPAP business
+	log will also record the fact that an exception occurred, in its status
+	summary column. Please see the WPAP documentation for how to set this
+	up. For example, for WPAP version 3.0.1, see <a
+		href="http://dl.frameworks.hp.com/websat/websat/docs/wpap/core_3.0.1/javadoc/com/hp/frameworks/wpa/portlet/logging/package-summary.html#installation">Installation
+	and Configuration</a> in the WPAP Transaction Logging Guide.</p>
+	</li>
+</ol>
+
+<a name="error.about.spf">
+<h4>6.1.2. Error handling extensions in SPF</h4>
 </a>
 
 <hr>
 
-<a name="error.categorization">
+<a name="error.spf.exceptions">
 <h3>6.2. Categorizing exceptions using the <code>SPFException</code>
-hierarchy</h3>
+hierarchy (<code>SPFException</code>, <code>BusinessException</code>, <code>SystemException</code>)</h3>
 </a>
 
 <hr>
 
-<a name="error.handling">
+<a name="error.spf.resolving">
 <h3>6.3. Handling exceptions using <code>ExceptionUtil</code> and <code>SimpleMappingExceptionResolver</code></h3>
 </a>
 </body>
