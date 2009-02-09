@@ -34,9 +34,9 @@ public class RequestBindingFilter implements Filter {
      * Prefix of the request key that will be used in <code>user-agent</code>
      * value.
      */
-    public static final String KEY_PREFIX = Consts.INJECTION_KEY_PREFIX;
+    public static final String KEY_PREFIX = "__SPF";
 
-    public static final String THREAD_NAME_REQUEST_KEY = Consts.INJECTION_THREAD_NAME;
+    public static final String THREAD_NAME_REQUEST_KEY = RequestBindingFilter.class.getName()+".ThreadName";
 
     /**
      * @param config
