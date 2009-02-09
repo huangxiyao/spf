@@ -372,8 +372,17 @@ table.props td {
 		<li>6.2. <a href="#error.spf.exceptions">Categorizing
 		exceptions using the <code>SPFException</code> hierarchy (<code>SPFException</code>,
 		<code>BusinessException</code>, <code>SystemException</code>)</a></li>
-		<li>6.3. <a href="#error.spf.resolving">Handling exceptions
-		using <code>ExceptionUtil</code> and <code>SimpleMappingExceptionResolver</code></a></li>
+		<li>6.3. <a href="#error.spf.handling">Handling exceptions
+		using <code>ExceptionUtil</code> and <code>SimpleMappingExceptionResolver</code></a>
+		<ul>
+			<li>6.3.1. <a
+				href="#error.spf.handling.simpleMappingExceptionResolver">Using
+			<code>SimpleMappingExceptionResolver</code> to resolve a view for
+			your exception</a></li>
+			<li>6.3.2. <a href="#error.spf.handling.exceptionUtil">Using
+			<code>ExceptionUtil</code> to access exception data from your view</a></li>
+		</ul>
+		</li>
 	</ul>
 	</li>
 </ul>
@@ -5449,6 +5458,33 @@ handling:</p>
 <h4>6.1.2. Error handling extensions in SPF</h4>
 </a>
 
+<p>Shared Portal Framework only offers a few technologies to augment
+what is already provided by WPAP and Spring Portlet MVC:</p>
+
+<ol>
+	<li>The SPF portlet utilities provide an {@link
+	com.hp.it.spf.xa.exception.portlet.SPFException} hierarchy from which
+	you can extend. This hierarchy supports the notion of error codes as
+	well as error messages, and distinguishes <i>business exceptions</i>
+	from <i>system exceptions</i>. We encourage you to subclass your
+	exceptions from this hierarchy, but it is not required.</li>
+
+	<li>The SPF portlet utilities provide an extension to {@link
+	org.springframework.web.portlet.handler.SimpleMappingExceptionResolver},
+	also named {@link
+	com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver},
+	which stores the caught exception into the {@link
+	javax.portlet.PortletRequest}, so you can access it in your view.</li>
+
+	<li>Finally, the SPF portlet utilities provide utility methods (in
+	{@link com.hp.it.spf.xa.exception.portlet.ExceptionUtil}) for accessing
+	the stored exception. And, if you subclassed from the SPF exception
+	hierarchy, your error code is automatically used as a message key, so
+	you can conveniently fetch a user-displayable, localized message for
+	that from your message resources.</li>
+	</li>
+</ol>
+
 <hr>
 
 <a name="error.spf.exceptions">
@@ -5458,8 +5494,19 @@ hierarchy (<code>SPFException</code>, <code>BusinessException</code>, <code>Syst
 
 <hr>
 
-<a name="error.spf.resolving">
+<a name="error.spf.handling">
 <h3>6.3. Handling exceptions using <code>ExceptionUtil</code> and <code>SimpleMappingExceptionResolver</code></h3>
 </a>
+
+<a name="error.spf.handling.simpleMappingExceptionResolver">
+<h4>6.3.1. Using <code>SimpleMappingExceptionResolver</code> to
+resolve a view for your exception</h4>
+</a>
+
+<a name="error.spf.handling.exceptionUtil">
+<h4>6.3.2 Using <code>ExceptionUtil</code> to access exception data
+from your view</h4>
+</a>
+
 </body>
 </html>
