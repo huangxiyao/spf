@@ -5,20 +5,11 @@
 
 package com.hp.it.spf.xa.misc.portlet;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.portlet.PortletContext;
-import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-import javax.portlet.PortletURL;
-import javax.portlet.RenderResponse;
-import javax.portlet.WindowState;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.portlet.context.PortletApplicationContextUtils;
@@ -150,13 +141,16 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 *            The portlet request.
 	 * @return The list of groups (null if none).
 	 */
-	public static String[] getGroups(PortletRequest request) {
+    public static String[] getGroups(PortletRequest request) {
 		String[] groups = null;
 		if (request != null) {
 			Object o = request.getAttribute(PortletRequest.USER_INFO);
 			if (o != null) {
 				Map userMap = (Map) o;
-				return (String[]) userMap.get(Consts.KEY_USER_GROUPS);
+				Object grouplist = userMap.get(Consts.KEY_USER_GROUPS);
+				if (grouplist instanceof List) {
+				    return (String[]) ((List)grouplist).toArray(new String[0]);
+				}
 			}
 		}
 		return groups;
