@@ -217,8 +217,7 @@ public class AuthenticatorHelper {
                 }
             }
         } catch (EntityPersistenceException exception) {
-            LOG
-                    .error("Entity Persistence Exception when adding user to groups");
+            LOG.error("Entity Persistence Exception when adding user to groups");
             LOG.error(exception);
         }
     }
@@ -273,7 +272,7 @@ public class AuthenticatorHelper {
      * @return true if need to update user's primary site, otherwise false
      */
     static boolean needUpdatePrimarySite(HttpServletRequest request) {
-        Site currentSite = getCurrentSite(request);
+        Site currentSite = Utils.getEffectiveSite(request);
         User user = SessionUtils.getCurrentUser(request.getSession());
                                                                   
         return (currentSite != null && user != null && !currentSite.getUID().equals(user.getProperty(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID)));
@@ -529,107 +528,7 @@ public class AuthenticatorHelper {
         return AuthenticationConsts.YES
                 .equalsIgnoreCase(getProperty(AuthenticationConsts.SANDBOX_MODE));
     }
-
-    /**
-     * Assign user to authentication groups: loggedIntoHPP -> SP_FN_HPP Vignette
-     * group loggedIntoAtHP -> SP_FN_ATHP Vignette group loggedIntoFed ->
-     * SP_FN_FED Vignette group
-     * 
-     * @param request
-     * @param user
-     */
-    static boolean assignUserToAuthenticationGroup(HttpServletRequest request,
-            User user) {
-
-        // return if it is a guest user
-        if (user == null || user.isGuestUser()) {
-            return false;
-        }
-
-        boolean needToUpdate = false;
-
-        // calculate the group name to assign
-        /*
-        String groupToAssign = null;
-        if (loggedIntoFed(request)) {
-            groupToAssign = AuthenticationConsts.SP_FN_FED_NAME;
-        } else if (loggedIntoAtHP(request)) {
-            groupToAssign = AuthenticationConsts.SP_FN_ATHP_NAME;
-        } else if (loggedIntoHPP(request)) {
-            groupToAssign = AuthenticationConsts.SP_FN_HPP_NAME;
-        }
-
-        // return at once
-        if (groupToAssign == null) {
-            return false;
-        }
-
-        // Get a list of groups
-        List authGroups = Arrays.asList(new String[] {
-                AuthenticationConsts.SP_FN_FED_NAME,
-                AuthenticationConsts.SP_FN_ATHP_NAME,
-                AuthenticationConsts.SP_FN_HPP_NAME });
-
-        UserGroupManager userGroupManager = UserGroupManager.getInstance();
-        // update groups
-        try {
-            boolean bContainToAssign = false;
-            // remove user from other authentication groups
-            Set userGroups = getUserGroupSet(user);
-            // if group is empty, return at once.
-            if (userGroups == null) {
-                return false;
-            }
-
-            boolean bValidUser = true;
-            Object objGroup = null;
-            for (Iterator iter = userGroups.iterator(); iter.hasNext();) {
-                objGroup = iter.next();
-                if (objGroup == null || !(objGroup instanceof UserGroup)) {
-                    // mark the user not valid
-                    bValidUser = false;
-                    LOG.warning("Invalid group value: " + objGroup);
-                    break;
-                }
-
-                UserGroup group = (UserGroup)objGroup;
-                String groupTitle = (String)group
-                        .getProperty(AuthenticationConsts.GROUP_TITLE);
-
-                // Remove the user from other authentication groups.
-                if (authGroups.contains(groupTitle)
-                        && !groupToAssign.equals(groupTitle)) {
-                    needToUpdate = true;
-                    LOG.info("Remove user " + user.getDisplayName()
-                            + " from group " + groupTitle);
-                    user.removeParent(group);
-                }
-
-                // Check if containing the group to assign
-                if (groupToAssign.equals(groupTitle)) {
-                    bContainToAssign = true;
-                }
-            }
-
-            // assign user to the proper group
-            if (!bContainToAssign && bValidUser) {
-                needToUpdate = true;
-                UserGroup ug = userGroupManager.getUserGroup(
-                        AuthenticationConsts.GROUP_TITLE, groupToAssign);
-                LOG.info("Assign user " + user.getDisplayName() + " to group "
-                        + groupToAssign);
-                user.addParent(ug);
-            }
-
-        } catch (Exception e) {
-            LOG.error("Fail to assign user to authentication group: "
-                    + groupToAssign);
-            LOG.error(e);
-        }*/
-
-        return needToUpdate;
-    }
-
+   
     /**
      * Session cleanup when doing implicit logout. Only remove service portal
      * session attributes that does not start with SP_RETAIN. After cleaning, a
@@ -855,7 +754,7 @@ public class AuthenticatorHelper {
      * @return site uid, if site uid cannot be retrieved, return <tt>null</tt>
      */
     static String getPrimarySiteUID(HttpServletRequest request) {
-        Site currentSite = AuthenticatorHelper.getCurrentSite(request);
+        Site currentSite = Utils.getEffectiveSite(request);
         String siteUID = null;
         if (currentSite != null) {
             siteUID = currentSite.getUID();

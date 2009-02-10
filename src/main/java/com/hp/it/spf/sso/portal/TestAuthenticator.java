@@ -23,6 +23,7 @@ import com.epicentric.common.website.Localizer;
 import com.epicentric.common.website.SessionUtils;
 import com.epicentric.site.Site;
 import com.epicentric.user.User;
+import com.hp.it.spf.xa.misc.portal.Utils;
 
 /**
  * This is the Authenticator for SandBox Mode. This authenticator can be run
@@ -87,7 +88,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 			LOG.info("No Resource Bundle File = " + rbFile);
 		}
 		Site currentSite = AuthenticatorHelper.getCurrentSite(request);
-		String currentSiteName = currentSite != null ? currentSite.getDNSName()
+		String currentSiteName = currentSite != null ? Utils.getEffectiveSite(request).getDNSName()
 				: "console";
 		return currentSiteName + "_" + currentUser;
 	}

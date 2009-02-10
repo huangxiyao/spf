@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -23,6 +24,7 @@ import com.epicentric.user.User;
 import com.hp.it.spf.user.exception.UserGroupsException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
@@ -139,6 +141,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 }
                 AuthenticatorHelper.cleanupSession(request);
             } else {
+                // TODO 1. need to determine if should cleanup session
+                // TODO 2. if site is spf, that means logout action, only return userName, no other operations?
                 if (AuthenticatorHelper.needUpdatePrimarySite(request)) {
                     updatePrimarySite();
                 }
@@ -339,10 +343,6 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             // check if the user's group need to update
             // Get current user's groups
             updateVAPUserGroups(vapUser);
-
-            // Update user to the appropriate authentication groups.
-            AuthenticatorHelper.assignUserToAuthenticationGroup(request,
-                                                                vapUser);
 
             // If user's info need to update, save this user
             vapUser.save();
@@ -554,18 +554,29 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      */
     @SuppressWarnings("unchecked")
     protected Set getUserGroup() {
-        Site site = AuthenticatorHelper.getCurrentSite(request);
+        /**
+         *  if (loggedIntoFed(request)) {
+            groupToAssign = AuthenticationConsts.SP_FN_FED_NAME;
+        } else if (loggedIntoAtHP(request)) {
+            groupToAssign = AuthenticationConsts.SP_FN_ATHP_NAME;
+        } else if (loggedIntoHPP(request)) {
+            groupToAssign = AuthenticationConsts.SP_FN_HPP_NAME;
+        }
+         */
+        //TODO need to fulfill the logic of retrieve user groups
+        Set<String> group = new HashSet<String>();
+        Site site = Utils.getEffectiveSite(request);
         if (site != null) {
             IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(null);
 
-            Set<String> group = null;
+            
             try {
                 group = retriever.getGroups(site.getDNSName(), userProfile);
             } catch (UserGroupsException e) {
             }
-            return group;
+            
         }
-        return null;
+        return group;
     }
 
     /**
