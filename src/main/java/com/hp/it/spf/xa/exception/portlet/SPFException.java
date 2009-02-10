@@ -113,9 +113,15 @@ public abstract class SPFException extends Exception {
 	 * <p>
 	 * Construct an SPF exception containing just an error code. This
 	 * constructor assumes the error message and root-cause are null, and uses
-	 * the error code itself for the localized message (therefore probably not
-	 * fully localized and suitable for display to the user). See the class
-	 * documentation above, for description of these attributes.
+	 * the error code in subsequent {@link #getMessage()} and
+	 * {@link #getLocalizedMessage()} calls. Generally these strings are not
+	 * fully localized and suitable for display to the user; use the
+	 * {@link #SPFException(PortletRequest, String)} constructor to populate the
+	 * exception with an appropriate localized message.
+	 * </p>
+	 * <p>
+	 * See the class documentation above, for more description of these
+	 * attributes.
 	 * </p>
 	 * 
 	 * @param pErrorCode
@@ -133,9 +139,15 @@ public abstract class SPFException extends Exception {
 	 * <p>
 	 * Construct an SPF exception containing an error code and an error message.
 	 * This constructor assumes the root-cause is null, and uses the error code
-	 * and error message for the localized message (therefore probably not fully
-	 * localized and suitable for display to the user). See the class
-	 * documentation above, for description of these attributes.
+	 * and error message in subsequent {@link #getMessage()} and
+	 * {@link #getLocalizedMessage()} calls. Generally these strings are not
+	 * fully localized and suitable for display to the user; use the
+	 * {@link #SPFException(PortletRequest, String, String)} constructor to
+	 * populate the exception with an appropriate localized message.
+	 * </p>
+	 * <p>
+	 * See the class documentation above, for more description of these
+	 * attributes.
 	 * </p>
 	 * 
 	 * @param pErrorCode
@@ -156,9 +168,17 @@ public abstract class SPFException extends Exception {
 	 * <p>
 	 * Construct an SPF exception containing an error code, error message, and
 	 * some kind of root-cause {@link java.lang.Throwable}. This constructor
-	 * uses the error code and error message for the localized message
-	 * (therefore probably not fully localized and suitable for display to the
-	 * user). See the class documentation above, for description of these
+	 * uses the error code, error message, and the root-cause message (ie value
+	 * of {@link java.lang.Throwable#getMessage()} in subsequent
+	 * {@link #getMessage()} and {@link #getLocalizedMessage()} calls. Generally
+	 * these strings are not fully localized and suitable for display to the
+	 * user; use the
+	 * {@link #SPFException(PortletRequest, String, Throwable, String)}
+	 * constructor to populate the exception with an appropriate localized
+	 * message.
+	 * </p>
+	 * <p>
+	 * See the class documentation above, for more description of these
 	 * attributes.
 	 * </p>
 	 * 
@@ -186,8 +206,13 @@ public abstract class SPFException extends Exception {
 	 * Construct an SPF exception containing an error code, as well as a
 	 * localized message for that error code which is retrieved from your
 	 * portlet's message resources. This constructor assumes the root-cause and
-	 * error message are null. See the class documentation above, for
-	 * description of these attributes.
+	 * error message are null. Subsequent calls to
+	 * {@link #getLocalizedMessage()} will return the localized message, while
+	 * calls to {@link #getMessage()} will return a non-localized string
+	 * (generally not suitable for the end-user) comprised of the error code.
+	 * </p>
+	 * <p>
+	 * See the class documentation above, for description of these attributes.
 	 * </p>
 	 * 
 	 * @param pRequest
@@ -213,8 +238,13 @@ public abstract class SPFException extends Exception {
 	 * Construct an SPF exception containing an error code and an error message,
 	 * as well as a localized message for that error code which is retrieved
 	 * from your portlet's message resources. This constructor assumes the
-	 * root-cause is null. See the class documentation above, for description of
-	 * these attributes.
+	 * root-cause is null. Subsequent calls to {@link #getLocalizedMessage()}
+	 * will return the localized message, while calls to {@link #getMessage()}
+	 * will return a non-localized string (generally not suitable for the
+	 * end-user) comprised of the error code and error message.
+	 * </p>
+	 * <p>
+	 * See the class documentation above, for description of these attributes.
 	 * </p>
 	 * 
 	 * @param pRequest
@@ -244,8 +274,15 @@ public abstract class SPFException extends Exception {
 	 * Construct an SPF exception containing an error code, error message, some
 	 * kind of root-cause {@link java.lang.Throwable}, and a localized message
 	 * for that error code which is retrieved from your portlet's message
-	 * resources. See the class documentation above, for description of these
-	 * attributes.
+	 * resources. Subsequent calls to {@link #getLocalizedMessage()} will return
+	 * the localized message, while calls to {@link #getMessage()} will return a
+	 * non-localized string (generally not suitable for the end-user) comprised
+	 * of the error code, error message, and the throwable's message (ie its
+	 * {@link java.lang.Throwable#getMessage()} output).
+	 * </p>
+	 * <p>
+	 * See the class documentation above, for description of these attributes.
+	 * </p>
 	 * 
 	 * @param pRequest
 	 *            The portlet request
@@ -305,10 +342,11 @@ public abstract class SPFException extends Exception {
 	/**
 	 * Returns the localized error message determined by the constructor: either
 	 * the one from your message resources corresponding to the error code, or a
-	 * default comprised of the error code and error message (see
+	 * default comprised of the error code, error message, and/or throwable
+	 * message (this default is also the same as the return value of
 	 * {@link #getMessage()}). This method overrides the default method in
 	 * {@link java.lang.Throwable}. Please see the constructor and class
-	 * documentation for how this message is derived.
+	 * documentation for more information.
 	 * 
 	 * @return
 	 */
@@ -317,9 +355,10 @@ public abstract class SPFException extends Exception {
 	}
 
 	/**
-	 * Returns a default message combining the error code, error message, and
-	 * root-cause throwable provided to the constructor. Generally speaking,
-	 * this message is not localized and not suitable for display to the user.
+	 * Returns a default message combining the error code, error message, and/or
+	 * root-cause throwable message provided to the constructor. Generally
+	 * speaking, this message is not localized and not suitable for display to
+	 * the user.
 	 */
 	public String getMessage() {
 		return super.getMessage();

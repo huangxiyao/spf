@@ -5431,33 +5431,26 @@ handling:</p>
 
 <ol>
 	<li>
-	<p>With Java, you can of course create various subclasses of {@link
-	java.lang.Exception} which represent different error conditions in your
-	portlet.</p>
-	</li>
-
-	<li>
-	<p>With Spring Portlet MVC, you can instantiate those exceptions in
-	your controllers and, if desired, throw them back to the Spring
-	dispatcher. You can configure different possible resolvers to then
-	resolve appropriate views for those exceptions, such as {@link
-	org.springframework.web.portlet.handler.SimpleMappingExceptionResolver}.
-	Please see the Spring Portlet MVC documentation for more information on
-	this. For example, for Spring Web MVC - which is the same as Spring
-	Portlet MVC in this regard - see <a
+	<p>With Spring Portlet MVC, you can instantiate exceptions in your
+	render controllers and, if desired, throw them back to the Spring
+	dispatcher. You can then configure Spring's {@link
+	org.springframework.web.portlet.handler.SimpleMappingExceptionResolver}
+	to catch them and forward to an appropriate view based on the
+	particular exception class. Please see the Spring documentation for
+	more information on this. Spring Web MVC - which is the same as Spring
+	Portlet MVC in this regard - also has the <code>SimpleMappingExceptionResolver</code>
+	and it is covered in section <a
 		href="http://static.springframework.org/spring/docs/2.0.x/reference/mvc.html#mvc-exceptionhandlers">section
 	13.10</a> of the Spring Framework Reference Documentation.</p>
 	</li>
 
 	<li>
-	<p>And with J2EE (JSP) and Spring's JSP view engine, you can create
-	JSP's for those views, to display appropriate information about the
-	exception. For some exceptions, you might have dedicated JSP's (ie to
-	render dead-end error pages). With other exceptions, you might map to
-	the same JSP you used for an initial view (ie to render form-submittion
-	errors in the form page itself). (The exact rendering of the error will
-	of course vary based on your portlet's UI design, so the SPF, WPAP and
-	Spring do not provide any particular technology here.)</p>
+	<p>And with J2EE (JSP) and Spring's JSP view resolver, you can
+	create JSP's for those views, to display appropriate information about
+	the exception. For some exceptions, you might have dedicated JSP's (ie
+	to render dead-end error pages). With other exceptions, you might map
+	to the same JSP you used for an initial view (eg, to render
+	form-submission errors in the form page itself).</p>
 	</li>
 
 	<li>
@@ -5509,6 +5502,8 @@ is already provided by WPAP and Spring Portlet MVC:</p>
 	user.</li>
 </li>
 </ol>
+
+<p>The rest of this chapter is about those technologies.</p>
 
 <hr>
 
@@ -5622,17 +5617,17 @@ either {@link com.hp.it.spf.xa.exception.portlet.BusinessException} or
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(String)</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(String,String)</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(String,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(String,Throwable,String)</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(String,Throwable,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(String)</dt>
+	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(String,String)</dt>
+	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(String,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(String,Throwable,String)</dt>
+	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(String,Throwable,String)}</dt>
 	<dd>In these methods, you provide your error code, error message,
 	and/or root-cause throwable. The localized message is not available,
 	and defaults to the error code, error message, and throwable message.</dd>
@@ -5640,17 +5635,17 @@ either {@link com.hp.it.spf.xa.exception.portlet.BusinessException} or
 	<br>
 
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(PortletRequest,String)</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(PortletRequest,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(PortletRequest,String,String)</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(PortletRequest,String,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(PortletRequest,String,Throwable,String)</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#BusinessException(PortletRequest,String,Throwable,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(PortletRequest,String)</dt>
+	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(PortletRequest,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(PortletRequest,String,String)</dt>
+	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(PortletRequest,String,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(PortletRequest,String,Throwable,String)</dt>
+	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(PortletRequest,String,Throwable,String)}</dt>
 	<dd>In these methods, you provide your portlet request as well.
 	This allows your localized message to be looked-up from your message
 	resources by error code. Note the portlet request is just used for this
@@ -5702,8 +5697,10 @@ and <code>SimpleMappingExceptionResolver</code>) are introduced.</p>
 <h3>6.3. Handling exceptions using <code>ExceptionUtil</code> and <code>SimpleMappingExceptionResolver</code></h3>
 </a>
 
-<p>Once your exceptions are constructed, you can use {@link com.hp.it.spf.xa.exception.portlet.ExceptionUtil} and
-{@link com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver} to work with them.</p>
+<p>Once your exceptions are constructed, you can use {@link
+com.hp.it.spf.xa.exception.portlet.ExceptionUtil} and {@link
+com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver}
+to work with them.</p>
 
 <a name="error.spf.handling.exceptionUtil">
 <h4>6.3.1 Using <code>ExceptionUtil</code> to access exception data
