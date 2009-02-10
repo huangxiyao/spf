@@ -325,6 +325,7 @@ public class ExceptionUtil {
 			String defaultKey) {
 
 		String defaultMessage = null;
+		String message = null;
 		if (defaultKey != null) {
 			defaultMessage = I18nUtility.getMessage(request, defaultKey,
 					(String) null);
@@ -336,7 +337,7 @@ public class ExceptionUtil {
 		while (t != null) {
 			if (t instanceof SPFException) {
 				SPFException e = (SPFException) t;
-				String message = e.getLocalizedMessage();
+				message = e.getLocalizedMessage();
 				if ((message == null) || (message.equals(e.getMessage()))) {
 					String errorCode = e.getErrorCode();
 					message = I18nUtility.getMessage(request, errorCode,
@@ -344,10 +345,12 @@ public class ExceptionUtil {
 					if (message == null)
 						message = defaultMessage;
 				}
-				messages.add(message);
 			} else {
-				messages.add(defaultMessage);
+				message = t.getLocalizedMessage();
+				if ((message == null) || (message.equals(t.getMessage()))) 
+					message = defaultMessage;
 			}
+			messages.add(message);
 			if (t.equals(t.getCause()))
 				break;
 			t = t.getCause();
