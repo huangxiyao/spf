@@ -5737,9 +5737,9 @@ their localized message(s) for display.</p>
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.setException(PortletRequest,Exception)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#setException(PortletRequest,Exception)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getException(PortletRequest)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getException(PortletRequest)}</dt>
 	<dd>
 	<p>Use these methods to set your exception into your <code>PortletRequest</code>,
 	and get it later (returning null if none was set). It does not have to
@@ -5756,11 +5756,11 @@ their localized message(s) for display.</p>
 	</dd>
 
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.containsBusinessException(PortletRequest)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#containsBusinessException(PortletRequest)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.containsSystemException(PortletRequest)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#containsSystemException(PortletRequest)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.containsOtherException(PortletRequest)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#containsOtherException(PortletRequest)}</dt>
 	<dd>
 	<p>Use these methods to check what kind of exception you have (if
 	any) in your current request. Since the exception may itself contain
@@ -5773,9 +5773,9 @@ their localized message(s) for display.</p>
 	</dd>
 
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getErrorCode(PortletRequest)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getErrorCode(PortletRequest)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getErrorCode(PortletRequest,String)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getErrorCode(PortletRequest,String)}</dt>
 	<dd>
 	<p>Use these methods to get the error code of the SPF exception (if
 	any) in your current request. The string argument is an optional
@@ -5787,9 +5787,9 @@ their localized message(s) for display.</p>
 	</dd>
 
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getErrorCodes(PortletRequest)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getErrorCodes(PortletRequest)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getErrorCodes(PortletRequest,String)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getErrorCodes(PortletRequest,String)}</dt>
 	<dd>
 	<p>Since the exception in your request may itself contain another
 	{@link java.lang.Throwable} - such as another exception - there could
@@ -5802,9 +5802,9 @@ their localized message(s) for display.</p>
 	</dd>
 
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getLocalizedMessage(PortletRequest)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getLocalizedMessage(PortletRequest)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getLocalizedMessage(PortletRequest,String)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getLocalizedMessage(PortletRequest,String)}</dt>
 	<dd>
 	<p>Use these methods to get the localized, user-suitable message
 	for the exception (if any) in your current request. This uses the
@@ -5841,9 +5841,9 @@ their localized message(s) for display.</p>
 	</dd>
 
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getLocalizedMessages(PortletRequest)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getLocalizedMessages(PortletRequest)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getLocalizedMessages(PortletRequest,String)}</dt>
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getLocalizedMessages(PortletRequest,String)}</dt>
 	<dd>
 	<p>Since the exception in your request may itself contain another
 	{@link java.lang.Throwable} - such as another exception - there could
@@ -5875,7 +5875,7 @@ can throw exceptions from your render controller, then use {@link
 com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getException(PortletRequest)},
 {@link
 com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getLocalizedMessage(PortletRequest,String)},
-and other <code>ExceptionUtil</code> methods to inspect the exception
+or other <code>ExceptionUtil</code> methods to inspect the exception
 data in your view (eg your JSP).</p>
 
 <p>To enable the SPF <code>SimpleMappingExceptionResolver</code>,
@@ -6026,7 +6026,9 @@ triggered a single exception. What about when multiple business-logic
 errors are detected - for example, the user has submitted a blank Forums
 article, and also submitted it with a blank signature line. Exceptions
 can be chained together - just nest the previous exception inside the
-new one. For example:</p>
+new one. For example (here, <code>BlankSignatureException</code> is
+presumed to have been defined like <code>BlankArticleException</code>,
+above):</p>
 
 <blockquote><pre>
 import com.hp.it.spf.xa.exception.portlet.ExceptionUtil;
