@@ -20,7 +20,7 @@
 <portlet:defineObjects />
 <jsp:scriptlet>
 	String errorCode = ExceptionUtil.getErrorCode(renderRequest, Consts.ERROR_CODE_INTERNAL);
-	String errorMessage = ExceptionUtil.getDisplayMessage(renderRequest, Consts.ERROR_CODE_INTERNAL);
+	String errorMessage = ExceptionUtil.getLocalizedMessage(renderRequest, Consts.ERROR_CODE_INTERNAL);
 </jsp:scriptlet>
 
 <%---------------------------------------------------------------- MARKUP ---%>
