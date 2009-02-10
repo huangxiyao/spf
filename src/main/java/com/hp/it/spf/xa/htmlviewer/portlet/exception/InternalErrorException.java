@@ -4,6 +4,8 @@
  **/
 package com.hp.it.spf.xa.htmlviewer.portlet.exception;
 
+import javax.portlet.PortletRequest;
+import com.hp.it.spf.xa.htmlviewer.portlet.util.Consts;
 import com.hp.it.spf.xa.exception.portlet.SystemException;
 
 /**
@@ -26,57 +28,25 @@ public class InternalErrorException extends SystemException {
 	/**
 	 * Default error code
 	 */
-	public static final String DEFAULT_ERROR = "error.internal";
+	public static final String DEFAULT_ERROR = Consts.ERROR_CODE_INTERNAL;
 
 	/**
-	 * Default error message for debug
-	 */
-	public static final String DEFAULT_MSG = "A system problem has occurred. The user should try again later.";
-
-	/**
-	 * Construction method which provides default error code and message.
+	 * Construction method which provides default error code.
 	 * 
 	 */
-	public InternalErrorException() {
-		super(DEFAULT_ERROR, DEFAULT_MSG);
+	public InternalErrorException(PortletRequest pRequest) {
+		super(pRequest, DEFAULT_ERROR);
 	}
 
 	/**
-	 * Construction method.
+	 * Construction method which provides the given error code.
 	 * 
 	 * @param errorCode -
 	 *            Error code
 	 * @param errorMsg -
 	 *            Error message
 	 */
-	public InternalErrorException(String errorCode) {
+	public InternalErrorException(PortletRequest pRequest, String errorCode) {
 		super(errorCode);
-	}
-
-	/**
-	 * Construction method.
-	 * 
-	 * @param errorCode -
-	 *            Error code
-	 * @param errorMsg -
-	 *            Error message
-	 */
-	public InternalErrorException(String errorCode, String errorMsg) {
-		super(errorCode, errorMsg);
-	}
-
-	/**
-	 * Construction method.
-	 * 
-	 * @param errorCode -
-	 *            Error code
-	 * @param exception -
-	 *            Cause exception
-	 * @param errorMsg -
-	 *            Error message
-	 */
-	public InternalErrorException(String errorCode, Exception exception,
-			String errorMsg) {
-		super(errorCode, exception, errorMsg);
 	}
 }

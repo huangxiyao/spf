@@ -188,7 +188,7 @@ public class ConfigController extends AbstractController {
 				Log
 						.logInfo(this,
 								"ConfigController: view filename from form is null or empty.");
-				throw new InputErrorException(
+				throw new InputErrorException(request,
 						Consts.ERROR_CODE_VIEW_FILENAME_NULL);
 			}
 			if ((viewFile.indexOf("../") != -1)
@@ -198,7 +198,7 @@ public class ConfigController extends AbstractController {
 				Log
 						.logInfo(this,
 								"ConfigController: view filename from form contains outside path information.");
-				throw new InputErrorException(
+				throw new InputErrorException(request,
 						Consts.ERROR_CODE_VIEW_FILENAME_PATH);
 			}
 

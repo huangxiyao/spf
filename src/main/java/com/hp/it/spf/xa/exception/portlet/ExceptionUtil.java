@@ -5,6 +5,7 @@
  */
 package com.hp.it.spf.xa.exception.portlet;
 
+import java.util.ArrayList;
 import javax.portlet.PortletRequest;
 import com.hp.it.spf.xa.misc.portlet.Consts;
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
@@ -14,10 +15,17 @@ import com.hp.it.spf.xa.exception.portlet.BusinessException;
 
 /**
  * <p>
- * This class provides exception utility methods for portlets using the SPF
- * <code>SimpleMappingExceptionResolver</code> and the
- * <code>SPFException</code> class hierarchy.
+ * This class provides exception utility methods for portlets that are using the
+ * SPF
+ * {@link com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver}
+ * and the {@link SPFException} class hierarchy. Currently the class provides:
  * </p>
+ * <ul>
+ * <li> Methods to access the exception that was saved by the
+ * <code>SimpleMappingExceptionResolver</code></li>
+ * <li> Methods to get user-displayable, localized messages for that exception
+ * from your message resources.</li>
+ * </ul>
  * 
  * @author Scott Jorgenson
  * @version TBD
@@ -36,7 +44,9 @@ public class ExceptionUtil {
 	// ------------------------------------------------------------- Methods
 
 	/**
-	 * Stores the given exception into the given request.
+	 * Stores the given exception into the given request. If you need to store
+	 * multiple exceptions, chain them one inside the other, and then call this
+	 * method to just store the outermost exception.
 	 * 
 	 * @param request
 	 *            The portlet request.
@@ -51,7 +61,10 @@ public class ExceptionUtil {
 
 	/**
 	 * Gets the stored exception from the given request. This method returns
-	 * null if there is none.
+	 * null if there is none. If there are multiple exceptions in the request,
+	 * this method returns the outermost one, you can get the chained
+	 * exception(s) by calling each one's <code>getCause</code> method to get
+	 * the next.
 	 * 
 	 * @param request
 	 *            The portlet request.
@@ -66,64 +79,142 @@ public class ExceptionUtil {
 
 	/**
 	 * Returns true if the given request contains an SPF
-	 * <code>SystemException</code>, false otherwise.
+	 * <code>SystemException</code>, false otherwise. If multiple exceptions
+	 * have been chained, then all of them are checked.
 	 * 
 	 * @param request
 	 *            The portlet request.
 	 * @return True if the request contains an SPF <code>SystemException</code>
 	 *         or false otherwise.
 	 */
-	public static boolean systemException(PortletRequest request) {
-		Exception e = getException(request);
-		if ((e != null) && (e instanceof SystemException))
-			return true;
-		else
-			return false;
+	public static boolean containsSystemException(PortletRequest request) {
+		Throwable e = getException(request);
+		while (e != null) {
+			if (e instanceof SystemException) {
+				return true;
+			}
+			if (e.equals(e.getCause()))
+				break;
+			e = e.getCause();
+		}
+		return false;
 	}
 
 	/**
 	 * Returns true if the given request contains an SPF
-	 * <code>BusinessException</code>, false otherwise.
+	 * <code>BusinessException</code>, false otherwise. If multiple
+	 * exceptions have been chained, then all of them are checked.
 	 * 
 	 * @param request
 	 *            The portlet request.
 	 * @return True if the request contains an SPF
 	 *         <code>BusinessException</code> or false otherwise.
 	 */
-	public static boolean businessException(PortletRequest request) {
-		Exception e = getException(request);
-		if ((e != null) && (e instanceof BusinessException))
-			return true;
-		else
-			return false;
+	public static boolean containsBusinessException(PortletRequest request) {
+		Throwable e = getException(request);
+		while (e != null) {
+			if (e instanceof BusinessException) {
+				return true;
+			}
+			if (e.equals(e.getCause()))
+				break;
+			e = e.getCause();
+		}
+		return false;
 	}
 
 	/**
 	 * Returns true if the given request contains some other exception (not an
-	 * <code>SPFException</code>), false otherwise.
+	 * <code>SPFException</code>), false otherwise. If multiple exceptions
+	 * have been chained, then all of them are checked.
 	 * 
 	 * @param request
 	 *            The portlet request.
 	 * @return True if the request contains some kind of exception besides an
 	 *         <code>SPFException</code> or false otherwise.
 	 */
-	public static boolean otherException(PortletRequest request) {
-		Exception e = getException(request);
-		if ((e != null) && !(e instanceof SPFException))
-			return true;
-		else
-			return false;
+	public static boolean containsOtherException(PortletRequest request) {
+		Throwable e = getException(request);
+		while (e != null) {
+			if (!(e instanceof SPFException)) {
+				return true;
+			}
+			if (e.equals(e.getCause()))
+				break;
+			e = e.getCause();
+		}
+		return false;
 	}
 
 	/**
 	 * <p>
-	 * Returns the error code of any <code>SPFException</code> contained in
-	 * the given request, or returns the given default if there is no
-	 * <code>SPFException</code> in the request. For example, if there is no
-	 * exception in the request, or if the exception in the request is not an
-	 * <code>SPFException</code>, the given default is returned. Similarly,
-	 * if there is an <code>SPFException</code> in the request, but it has a
-	 * null error code, the default is also returned in that case.
+	 * Returns all of the error code(s) of any {@link SPFException}(s)
+	 * contained in the given request, substituting the given default for any
+	 * non-<code>SPFException</code>(s) in the request. This method looks
+	 * into the request at where the
+	 * {@link #setException(PortletRequest,Exception)} method stores the
+	 * exception, and checks all the chained exceptions it finds there. If none
+	 * are found, then an empty array is returned.
+	 * </p>
+	 * <p>
+	 * For example, if there is no exception in the request, then an empty array
+	 * is returned. If there are exception(s) in the request, then the error
+	 * code for each one is returned, in order, in an array. Each element in the
+	 * array is either the error code if that one was an
+	 * <code>SPFException</code> (or the default if the error code for that
+	 * <code>SPFException</code> was null), or it is the default if that one
+	 * was not an <code>SPFException</code>.
+	 * </p>
+	 * <p>
+	 * Note that null is permissible as a default value.
+	 * </p>
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @param defaultValue
+	 *            A default value.
+	 * @return The error codes as described above.
+	 */
+	public static String[] getErrorCodes(PortletRequest request,
+			String defaultValue) {
+
+		ArrayList<String> errorCodes = new ArrayList<String>();
+		Throwable t = getException(request);
+		while (t != null) {
+			if (t instanceof SPFException) {
+				SPFException e = (SPFException) t;
+				String errorCode = e.getErrorCode();
+				if (errorCode == null)
+					errorCode = defaultValue;
+				errorCodes.add(errorCode);
+			} else {
+				errorCodes.add(defaultValue);
+			}
+			if (t.equals(t.getCause()))
+				break;
+			t = t.getCause();
+		}
+		return (String[]) errorCodes.toArray();
+	}
+
+	/**
+	 * <p>
+	 * Returns the error code of the outermost {@link SPFException} contained in
+	 * the given request, substituting the given default for any non-<code>SPFException</code>
+	 * found there. This method looks into the request at where the
+	 * {@link #setException(PortletRequest,Exception)} method stores the
+	 * exception, and checks the exception it finds there. If none is found,
+	 * then the given default is returned.
+	 * </p>
+	 * <p>
+	 * For example, if there is no exception in the request, then the default is
+	 * returned. If there are exception(s) in the request, then the error code
+	 * of the outermost one in the chain is returned: which is the error code
+	 * from <code>SPFException</code> (or the default if that error code is
+	 * null), or the default if it is not an <code>SPFException</code>.
+	 * </p>
+	 * <p>
+	 * Note that null is permissible as a default value.
 	 * </p>
 	 * 
 	 * @param request
@@ -134,28 +225,47 @@ public class ExceptionUtil {
 	 */
 	public static String getErrorCode(PortletRequest request,
 			String defaultValue) {
-
-		if (defaultValue != null)
-			defaultValue = defaultValue.trim();
-		if (request == null)
+		String[] errorCodes = getErrorCodes(request, defaultValue);
+		if ((errorCodes != null) && (errorCodes.length > 0))
+			return errorCodes[0];
+		else
 			return defaultValue;
-		String errorCode = null;
-
-		// check for an SPF exception first
-		if (systemException(request) || businessException(request)) {
-			SPFException e = (SPFException) getException(request);
-			errorCode = e.getErrorCode();
-		}
-		if (errorCode == null)
-			errorCode = defaultValue;
-		return errorCode;
 	}
 
 	/**
 	 * <p>
-	 * Returns the error code of any <code>SPFException</code> contained in
-	 * the given request. If there is no <code>SPFException</code> in the
-	 * request, or it has a null error code, then null is returned.
+	 * Returns all of the error code(s) of any {@link SPFException}(s)
+	 * contained in the given request, substituting null for any non-<code>SPFException</code>(s)
+	 * in the request. This method looks into the request at where the
+	 * {@link #setException(PortletRequest,Exception)} method stores the
+	 * exception, and checks all the chained exceptions it finds there. If none
+	 * are found, then an empty array is returned.
+	 * </p>
+	 * <p>
+	 * For example, if there is no exception in the request, then an empty array
+	 * is returned. If there are exception(s) in the request, then the error
+	 * code for each one is returned, in order, in an array. Each element in the
+	 * array is either the error code from an <code>SPFException</code>, or
+	 * null if that one was not an <code>SPFException</code>.
+	 * </p>
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @param defaultValue
+	 *            A default value.
+	 * @return The error codes as described above.
+	 */
+	public static String[] getErrorCodes(PortletRequest request) {
+		return getErrorCodes(request, null);
+	}
+
+	/**
+	 * <p>
+	 * Returns the error code of the outermost {@link SPFException} contained in
+	 * the given request. This method looks into the request at where the
+	 * {@link #setException(PortletRequest,Exception)} method stores the
+	 * exception, and returns the error code of the outermost
+	 * <code>SPFException</code> it finds there. Otherwise, null is returned.
 	 * </p>
 	 * 
 	 * @param request
@@ -168,215 +278,171 @@ public class ExceptionUtil {
 
 	/**
 	 * <p>
-	 * Returns the error message for any exception contained in the given
-	 * request, or returns the given default if there is no exception in the
-	 * request. Similarly, if there is an exception in the request, but it has a
-	 * null error message, the default is also returned in that case.
+	 * Returns all of the real localized error message(s) of any
+	 * {@link SPFException}(s) and/or other {@link java.lang.Throwable}(s)
+	 * contained in the given request, substituting a default message for any
+	 * that are not real. This method looks into the request at where the
+	 * {@link #setException(PortletRequest,Exception)} method stores the
+	 * exception, and returns the real (or default) localized error messages for
+	 * each one found in that chain. An empty array is returned if there was no
+	 * exception in the request.
 	 * </p>
 	 * <p>
-	 * The returned value is the internal message string for the exception, not
-	 * the localized error message appropriate for display to the user. Use
-	 * <code>getDisplayMessage(PortletRequest request, String defaultValue)</code>
-	 * for that.
+	 * For this purpose, a "real" localized error message is one that is not
+	 * null and not equal to the throwable's message itself (ie not equal to the
+	 * {@link java.lang.Throwable#getMessage()} value of the throwable). That
+	 * message is typically not localized or suitable for display to a user, yet
+	 * it is used by default when the <code>SPFException</code> (or any other
+	 * throwable) was not provided with a real localized message. So this method
+	 * discards those non-real values and substitutes the default for them
+	 * instead.
+	 * </p>
+	 * <p>
+	 * The default is either a message from your resource bundles for error code
+	 * found inside the <code>SPFException</code> (if applicable); or a
+	 * message from your resource bundles for the given default key; or finally
+	 * the default key itself if such a message is not found.
+	 * </p>
+	 * <p>
+	 * For example, if there is no exception in the request, then an empty array
+	 * is returned. If there are exception(s) in the request, then the localized
+	 * message for each one is returned, in order, in an array: where each
+	 * element of the array is the value of <code>getLocalizedMessage()</code>
+	 * for that throwable, unless that matches the value of
+	 * <code>getMessage</code> (in which case the default is used instead).
+	 * </p>
+	 * <p>
+	 * Note that null is permissible as a default value.
 	 * </p>
 	 * 
 	 * @param request
 	 *            The portlet request.
-	 * @param defaultValue
-	 *            A default value.
-	 * @return The error message as described above.
+	 * @param defaultKey
+	 *            A default value: either a message key or a literal value.
+	 * @return The localized messages as described above.
 	 */
-	public static String getErrorMessage(PortletRequest request,
-			String defaultValue) {
+	public static String[] getLocalizedMessages(PortletRequest request,
+			String defaultKey) {
 
-		if (defaultValue != null)
-			defaultValue = defaultValue.trim();
-		if (request == null)
-			return defaultValue;
-		String errorMessage = null;
-
-		// check for an SPF exception first
-		if (systemException(request) || businessException(request)) {
-			SPFException e = (SPFException) getException(request);
-			errorMessage = e.getErrorMessage();
-			if (errorMessage == null)
-				errorMessage = e.getMessage();
-		} else if (otherException(request)) {
-			Exception e = (Exception) getException(request);
-			errorMessage = e.getMessage();
+		String defaultMessage = null;
+		if (defaultKey != null) {
+			defaultMessage = I18nUtility.getMessage(request, defaultKey,
+					(String) null);
+			if (defaultMessage != null)
+				defaultMessage = defaultKey;
 		}
-		if (errorMessage == null)
-			errorMessage = defaultValue;
-		return errorMessage;
+		ArrayList<String> messages = new ArrayList<String>();
+		Throwable t = getException(request);
+		while (t != null) {
+			if (t instanceof SPFException) {
+				SPFException e = (SPFException) t;
+				String message = e.getLocalizedMessage();
+				if ((message == null) || (message.equals(e.getMessage()))) {
+					String errorCode = e.getErrorCode();
+					message = I18nUtility.getMessage(request, errorCode,
+							(String) null);
+					if (message == null)
+						message = defaultMessage;
+				}
+				messages.add(message);
+			} else {
+				messages.add(defaultMessage);
+			}
+			if (t.equals(t.getCause()))
+				break;
+			t = t.getCause();
+		}
+		return (String[]) messages.toArray();
 	}
 
 	/**
 	 * <p>
-	 * Returns the error message of any exception contained in the given
-	 * request. If there is no exception in the request, or it has a null error
-	 * message, then null is returned.
+	 * Returns all of the real localized error message(s) of any
+	 * {@link SPFException}(s) and/or other {@link java.lang.Throwable}(s)
+	 * contained in the given request, using null for any that are not real.
 	 * </p>
 	 * <p>
-	 * The returned value is the internal message string for the exception, not
-	 * the localized error message appropriate for display to the user. Use
-	 * <code>getDisplayMessage(PortletRequest request, String defaultValue)</code>
-	 * for that.
+	 * This method works like
+	 * {@link #getLocalizedMessages(PortletRequest, String)} where null is the
+	 * default given.
 	 * </p>
-	 * 
 	 * 
 	 * @param request
 	 *            The portlet request.
-	 * @return The error message as described above.
+	 * @return The localized messages as described above.
 	 */
-	public static String getErrorMessage(PortletRequest request) {
-		return getErrorMessage(request, null);
+	public static String[] getLocalizedMessages(PortletRequest request) {
+		return getLocalizedMessages(request, null);
 	}
 
 	/**
 	 * <p>
-	 * Returns the message to display to the user for any
-	 * <code>SPFException</code> contained in the given request, or returns a
-	 * message based upon the given default when there is no
-	 * <code>SPFException</code> in the request or the message cannot be
-	 * obtained.
+	 * Returns the real localized error message for the outermost
+	 * {@link SPFException} or other {@link java.lang.Throwable} contained in
+	 * the given request, substituting a default message if it is not real. This
+	 * method looks into the request at where the
+	 * {@link #setException(PortletRequest,Exception)} method stores the
+	 * exception, and returns the real (or default) localized message of the
+	 * outermost exception there.
 	 * </p>
 	 * <p>
-	 * If the given request contains an <code>SPFException</code> with a
-	 * non-null error code, then this method uses that error code as a message
-	 * key, to retrieve a localized message, appropriate for display to the
-	 * user, from your portlet's resource bundles:
+	 * For this purpose, a "real" localized error message is one that is not
+	 * null and not equal to the throwable's message itself (ie the
+	 * {@link java.lang.Throwable#getMessage()} value of the throwable). That
+	 * message is typically not localized or suitable for display to a user, yet
+	 * it is used by default when the <code>SPFException</code> (or any other
+	 * throwable) was not provided with a real localized message. So this method
+	 * discards that non-real value and substitutes a default for it instead.
 	 * </p>
-	 * <ul>
-	 * <li>
 	 * <p>
-	 * Selection of the particular localized message properties file is as per
-	 * the Java standard behavior for ResourceBundle. Selection is based on the
-	 * current locale (indicated in the given portlet request).
+	 * The default is either a message from your resource bundles for error code
+	 * found inside the <code>SPFException</code> (if applicable); or a
+	 * message from your resource bundles for the given default key; or finally
+	 * the default key itself if such a message is not found.
 	 * </p>
-	 * </li>
-	 * <li>
 	 * <p>
-	 * The resource bundles searched are the ones configured for your portlet in
-	 * the Spring application context (ie in your portlet's
-	 * <code>applicationContext.xml</code>). In your
-	 * <code>applicationContext.xml</code>, we recommend you define your
-	 * message <code>&lt;bean&gt;</code>'s using Spring's
-	 * ReloadableResourceBundleMessageSource class, because then your messages
-	 * will be hot-refreshed at runtime should they change (eg during a
-	 * localization deployment, no restart will be needed).
+	 * For example, if there is no exception in the request, then the default is
+	 * returned. If there are exception(s) in the request, then the localized
+	 * message for the outermost one is returned: either the value of
+	 * <code>getLocalizedMessage()</code>, or the default if
+	 * <code>getLocalizedMessage</code> matched <code>getMessage</code>.
 	 * </p>
-	 * </li>
-	 * <li>
 	 * <p>
-	 * Your resource bundle files must be located somewhere findable by the
-	 * class loader. For example, you could put them in the usual location,
-	 * inside your portlet WAR. But for ease of administration (eg to permit
-	 * localization by the administrator without having to touch the portlet
-	 * WAR), we recommend you put them in the portlet resource bundle folder
-	 * dedicated for this purpose. The location of the portlet resource bundle
-	 * folder is configured in the <code>i18n_portlet_config.properties</code>
-	 * file; this folder should also be specified on the classpath so that the
-	 * class loader can find it.
-	 * </p>
-	 * </li>
-	 * <li>
-	 * <p>
-	 * This method assumes the message string it returns does not need any
-	 * parameter substitution, escaping HTML meta-characters, etc. If your
-	 * message string does require these things, you should use
-	 * <code>getException</code> to get the exception directly. Then you can
-	 * use the portlet I18nUtility <code>getMessage</code> methods directly
-	 * with it.
-	 * </p>
-	 * </li>
-	 * </ul>
-	 * <p>
-	 * If your resource bundles do not contain any message string for the error
-	 * code in the <code>SPFException</code> - or if the given request does
-	 * not contain any <code>SPFException</code> with a non-null error code -
-	 * then this method attempts to obtain a default message string as follows:
-	 * </p>
-	 * <ul>
-	 * <li>
-	 * <p>
-	 * First, your given default value (if it is not null) is used as a default
-	 * message key. The method looks into your portlet's message resources once
-	 * more, using that key this time. All the above stipulations about the
-	 * message retrieval apply.
-	 * </p>
-	 * </li>
-	 * <li>
-	 * <p>
-	 * If, after this, still no message string has been found, then your given
-	 * default is returned.
-	 * </p>
-	 * </li>
-	 * </ul>
-	 * <p>
-	 * <b>Note:</b> This method is supposed to return a message appropriate for
-	 * display to the user. You might wonder why we don't return the value of
-	 * <code>Exception.getLocalizedMessage()</code> for that. The reason is
-	 * that we cannot be sure that value is appropriate for the user - it might
-	 * be a localized version of the internal error message, for example. If you
-	 * need to have access to the <code>getLocalizedMessage</code> value
-	 * anyway, use <code>getException</code> and then call
-	 * <code>getLocalizedMessage</code> directly.
+	 * Note that null is permissible as a default value.
 	 * </p>
 	 * 
 	 * @param request
 	 *            The portlet request.
-	 * @param defaultValue
-	 *            A default value.
-	 * @return The error message as described above.
+	 * @param defaultKey
+	 *            A default value: either a message key or a literal value.
+	 * @return The localized messages as described above.
 	 */
-	public static String getDisplayMessage(PortletRequest request,
-			String defaultValue) {
-
-		if (defaultValue != null)
-			defaultValue = defaultValue.trim();
-		if (request == null)
-			return defaultValue;
-		String displayMessage = null;
-
-		// check for an SPF exception first
-		if (systemException(request) || businessException(request)) {
-			SPFException e = (SPFException) getException(request);
-			String errorCode = e.getErrorCode();
-			if (errorCode != null)
-				displayMessage = I18nUtility.getMessage(request, errorCode,
-						(String) null);
-		}
-		if (displayMessage == null) {
-			String errorCode = defaultValue;
-			if (errorCode != null)
-				displayMessage = I18nUtility.getMessage(request, errorCode,
-						(String) null);
-		}
-		if (displayMessage == null)
-			displayMessage = defaultValue;
-		return displayMessage;
+	public static String getLocalizedMessage(PortletRequest request,
+			String defaultKey) {
+		String[] messages = getLocalizedMessages(request, defaultKey);
+		if ((messages != null) && (messages.length > 0))
+			return messages[0];
+		else
+			return defaultKey;
 	}
 
 	/**
 	 * <p>
-	 * Returns the message to display to the user for any
-	 * <code>SPFException</code> contained in the given request, or returns
-	 * null if there is no <code>SPFException</code> in the request or no
-	 * message can be found for its error code.
+	 * Returns the real localized error message for the outermost
+	 * {@link SPFException} or other {@link java.lang.Throwable} contained in
+	 * the given request. Null is returned if there is none.
 	 * </p>
 	 * <p>
-	 * This method works the same as
-	 * <code>getDisplayMessage(PortletRequest,String,String)</code> (see) with
-	 * a null default value.
+	 * This method works like
+	 * {@link #getLocalizedMessage(PortletRequest, String)} where null is the
+	 * default given.
 	 * </p>
 	 * 
 	 * @param request
 	 *            The portlet request.
-	 * @param defaultValue
-	 *            A default value.
-	 * @return The error message as described above.
+	 * @return The localized messages as described above.
 	 */
-	public static String getDisplayMessage(PortletRequest request) {
-		return getDisplayMessage(request, null);
+	public static String getLocalizedMessage(PortletRequest request) {
+		return getLocalizedMessage(request, null);
 	}
 }

@@ -86,7 +86,7 @@ public class ViewController extends FileInterpolatorController {
 		if (viewFileName == null || viewFileName.length() == 0) {
 			Log.logError(this,
 					"ViewController: view filename is not found or empty.");
-			throw new InternalErrorException(Consts.ERROR_CODE_FILE_NULL);
+			throw new InternalErrorException(request, Consts.ERROR_CODE_FILE_NULL);
 		}
 		return Utils.slashify(Consts.HTML_FILE_FOLD + viewFileName);
 	}
@@ -128,7 +128,7 @@ public class ViewController extends FileInterpolatorController {
 			Log
 					.logError(this,
 							"ViewController: content is not found or empty.");
-			throw new InternalErrorException(Consts.ERROR_CODE_FILE_NULL);
+			throw new InternalErrorException(request, Consts.ERROR_CODE_FILE_NULL);
 		}
 
 		// If launch-buttonless, update the file content accordingly.
@@ -150,5 +150,4 @@ public class ViewController extends FileInterpolatorController {
 
 		return modelView;
 	}
-
 }
