@@ -22,10 +22,10 @@ import com.hp.it.spf.xa.exception.portlet.SPFException;
  * </p>
  * <p>
  * An SPF <code>SystemException</code> contains an error code, an error
- * message, and optionally some other {@link java.lang.Throwable} object which
- * is the root cause, and/or a localized error message for the user. Please see
- * the class documentation for the superclass, {@link SPFException}, for more
- * information about these attributes.
+ * message, and optionally some other {@link java.lang.Throwable} object and/or
+ * a localized error message for the user. Please see the class documentation
+ * for the superclass, {@link SPFException}, for more information about these
+ * attributes.
  * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
@@ -58,7 +58,7 @@ public class SystemException extends SPFException {
 	 * </p>
 	 * 
 	 * @param pErrorCode
-	 *            The error code (eg <code>forums.addNote.blank</code>)
+	 *            The error code (eg <code>forums.dbUnavailable</code>)
 	 */
 	public SystemException(String pErrorCode) {
 		super(pErrorCode);
@@ -66,16 +66,17 @@ public class SystemException extends SPFException {
 
 	/**
 	 * <p>
-	 * Construct a system exception containing an error code and an error message.
-	 * See the {@link SPFException#SPFException(String,String)} documentation
-	 * for more information about how the class attributes are set.
+	 * Construct a system exception containing an error code and an error
+	 * message. See the {@link SPFException#SPFException(String,String)}
+	 * documentation for more information about how the class attributes are
+	 * set.
 	 * </p>
 	 * 
 	 * @param pErrorCode
-	 *            The error code (eg <code>forums.addNote.blank</code>)
+	 *            The error code (eg <code>forums.dbUnavailable</code>)
 	 * @param pErrorMessage
 	 *            The error message - eg:
-	 *            <code>New note text for forums thread cannot be blank.</code>
+	 *            <code>The Forums database is down.</code>
 	 */
 	public SystemException(String pErrorCode, String pErrorMessage) {
 		super(pErrorCode, pErrorMessage);
@@ -83,30 +84,30 @@ public class SystemException extends SPFException {
 
 	/**
 	 * <p>
-	 * Construct a system exception containing an error code and an error message.
-	 * See the {@link SPFException#SPFException(String,Throwable,String)}
-	 * documentation for more information about how the class attributes are
-	 * set.
+	 * Construct a system exception containing an error code, an error message,
+	 * and a next-in-chain {@link java.lang.Throwable}. See the
+	 * {@link SPFException#SPFException(String,Throwable,String)} documentation
+	 * for more information about how the class attributes are set.
 	 * </p>
 	 * 
 	 * @param pErrorCode
-	 *            The error code (eg <code>forums.addNote.blank</code>)
-	 * @param pCause
-	 *            Some throwable (eg exception) which is the root cause of this
-	 *            one
+	 *            The error code (eg <code>forums.dbUnavailable</code>)
+	 * @param pNext
+	 *            Some throwable (eg exception) which is next in the chain (eg
+	 *            the root cause, or a related exception)
 	 * @param pErrorMessage
 	 *            The error message - eg:
-	 *            <code>New note text for forums thread cannot be blank.</code>
+	 *            <code>The Forums database is down.</code>
 	 */
-	public SystemException(String pErrorCode, Throwable pCause,
+	public SystemException(String pErrorCode, Throwable pNext,
 			String pErrorMessage) {
-		super(pErrorCode, pCause, pErrorMessage);
+		super(pErrorCode, pNext, pErrorMessage);
 	}
 
 	/**
 	 * <p>
-	 * Construct a system exception containing an error code and an error message.
-	 * See the {@link SPFException#SPFException(PortletRequest,String)}
+	 * Construct a system exception containing an error code and its localized
+	 * message. See the {@link SPFException#SPFException(PortletRequest,String)}
 	 * documentation for more information about how the class attributes are
 	 * set.
 	 * </p>
@@ -114,7 +115,8 @@ public class SystemException extends SPFException {
 	 * @param pRequest
 	 *            The portlet request
 	 * @param pErrorCode
-	 *            The error code (eg <code>forums.addNote.blank</code>)
+	 *            The error code (eg <code>forums.dbUnavailable</code>) -
+	 *            also the message key for the localized message
 	 */
 	public SystemException(PortletRequest pRequest, String pErrorCode) {
 		super(pRequest, pErrorCode);
@@ -122,8 +124,9 @@ public class SystemException extends SPFException {
 
 	/**
 	 * <p>
-	 * Construct a system exception containing an error code and an error message.
-	 * See the {@link SPFException#SPFException(PortletRequest,String,String)}
+	 * Construct a system exception containing an error code, an error message,
+	 * and their localized message. See the
+	 * {@link SPFException#SPFException(PortletRequest,String,String)}
 	 * documentation for more information about how the class attributes are
 	 * set.
 	 * </p>
@@ -131,10 +134,11 @@ public class SystemException extends SPFException {
 	 * @param pRequest
 	 *            The portlet request
 	 * @param pErrorCode
-	 *            The error code (eg <code>forums.addNote.blank</code>)
+	 *            The error code (eg <code>forums.dbUnavailable</code>) -
+	 *            also the message key for the localized message
 	 * @param pErrorMessage
 	 *            The error message - eg:
-	 *            <code>New note text for forums thread cannot be blank.</code>
+	 *            <code>The Forums database is down.</code>
 	 */
 	public SystemException(PortletRequest pRequest, String pErrorCode,
 			String pErrorMessage) {
@@ -143,8 +147,8 @@ public class SystemException extends SPFException {
 
 	/**
 	 * <p>
-	 * Construct a system exception containing an error code and an error message.
-	 * See the
+	 * Construct a system exception containing an error code, an error message,
+	 * and a next-in-chain {@link java.lang.Throwable}. See the
 	 * {@link SPFException#SPFException(PortletRequest,String,Throwable,String)}
 	 * documentation for more information about how the class attributes are
 	 * set.
@@ -153,15 +157,16 @@ public class SystemException extends SPFException {
 	 * @param pRequest
 	 *            The portlet request
 	 * @param pErrorCode
-	 *            The error code (eg <code>forums.addNote.blank</code>)
-	 * @param pCause
+	 *            The error code (eg <code>forums.dbUnavailable</code>) -
+	 *            also the message key for the localized message
+	 * @param pNext
 	 *            Some throwable (exception) which is the root cause of this one
 	 * @param pErrorMessage
 	 *            The error message - eg:
-	 *            <code>New note text for forums thread cannot be blank.</code>
+	 *            <code>The Forums database is down.</code>
 	 */
 	public SystemException(PortletRequest pRequest, String pErrorCode,
-			Throwable pCause, String pErrorMessage) {
-		super(pRequest, pErrorCode, pCause, pErrorMessage);
+			Throwable pNext, String pErrorMessage) {
+		super(pRequest, pErrorCode, pNext, pErrorMessage);
 	}
 }

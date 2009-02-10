@@ -24,9 +24,9 @@ import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
  * <p>
  * All SPF exceptions contain an <i>error code</i>, <i>error message</i>, and
  * optionally another {@link java.lang.Throwable} object (representing a
- * <i>root-cause error</i>) and/or a <i>localized message</i> (suitable for
- * display to the user). You provide these when you construct the SPF exception.
- * As follows:
+ * <i>root-cause error</i> or a <i>chained error</i>) and/or a <i>localized
+ * message</i> (suitable for display to the user). You provide these when you
+ * construct the SPF exception. As follows:
  * </p>
  * 
  * <ul>
@@ -55,11 +55,10 @@ import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
  * </li>
  * <li>
  * <p>
- * The <i>root-cause</i> {@link java.lang.Throwable} you provide should
- * represent the root-cause of the particular error condition. Using this, you
- * can chain SPF exceptions (and other exceptions) together. The root-cause
- * throwable can itself be another SPF exception, or any other kind of Java
- * exception or throwable.
+ * The {@link java.lang.Throwable} you provide represents the <i>next in chain</i>.
+ * It could represent the root-cause of the particular error condition; or it
+ * could represent another exception in a series of related ones. It can itself
+ * be another SPF exception, or any other kind of Java exception or throwable.
  * </p>
  * </li>
  * <li>
@@ -90,7 +89,7 @@ public abstract class SPFException extends Exception {
 	// -------------------------------------------------------- Private members
 
 	private String errorCode = null;
-	private Throwable cause = null;
+	private Throwable next = null;
 	private String errorMessage = null;
 	private String localizedMessage = null;
 
@@ -106,14 +105,14 @@ public abstract class SPFException extends Exception {
 		this.errorCode = null;
 		this.errorMessage = null;
 		this.localizedMessage = getMessage();
-		this.cause = null;
+		this.next = null;
 	}
 
 	/**
 	 * <p>
 	 * Construct an SPF exception containing just an error code. This
-	 * constructor assumes the error message and root-cause are null, and uses
-	 * the error code in subsequent {@link #getMessage()} and
+	 * constructor assumes the error message and next-in-chain are null, and
+	 * uses the error code in subsequent {@link #getMessage()} and
 	 * {@link #getLocalizedMessage()} calls. Generally these strings are not
 	 * fully localized and suitable for display to the user; use the
 	 * {@link #SPFException(PortletRequest, String)} constructor to populate the
@@ -132,14 +131,14 @@ public abstract class SPFException extends Exception {
 		this.errorCode = pErrorCode;
 		this.errorMessage = null;
 		this.localizedMessage = getMessage();
-		this.cause = null;
+		this.next = null;
 	}
 
 	/**
 	 * <p>
 	 * Construct an SPF exception containing an error code and an error message.
-	 * This constructor assumes the root-cause is null, and uses the error code
-	 * and error message in subsequent {@link #getMessage()} and
+	 * This constructor assumes the next-in-chain is null, and uses the error
+	 * code and error message in subsequent {@link #getMessage()} and
 	 * {@link #getLocalizedMessage()} calls. Generally these strings are not
 	 * fully localized and suitable for display to the user; use the
 	 * {@link #SPFException(PortletRequest, String, String)} constructor to
@@ -161,15 +160,15 @@ public abstract class SPFException extends Exception {
 		this.errorCode = pErrorCode;
 		this.errorMessage = pErrorMessage;
 		this.localizedMessage = getMessage();
-		this.cause = null;
+		this.next = null;
 	}
 
 	/**
 	 * <p>
 	 * Construct an SPF exception containing an error code, error message, and
-	 * some kind of root-cause {@link java.lang.Throwable}. This constructor
-	 * uses the error code, error message, and the root-cause message (ie value
-	 * of {@link java.lang.Throwable#getMessage()} in subsequent
+	 * some kind of next-in-chain {@link java.lang.Throwable}. This constructor
+	 * uses the error code, error message, and the next-in-chain message (ie
+	 * value of {@link java.lang.Throwable#getMessage()} in subsequent
 	 * {@link #getMessage()} and {@link #getLocalizedMessage()} calls. Generally
 	 * these strings are not fully localized and suitable for display to the
 	 * user; use the
@@ -184,29 +183,28 @@ public abstract class SPFException extends Exception {
 	 * 
 	 * @param pErrorCode
 	 *            The error code (eg <code>forums.addNote.blank</code>)
-	 * @param pCause
-	 *            Some throwable (eg exception) which is the root cause of this
-	 *            one
+	 * @param pNext
+	 *            Some throwable (eg exception) which is the next in the chain
+	 *            (eg the root cause, or a related exception)
 	 * @param pErrorMessage
 	 *            The error message - eg:
 	 *            <code>New note text for forums thread cannot be blank.</code>
 	 */
-	public SPFException(String pErrorCode, Throwable pCause,
-			String pErrorMessage) {
+	public SPFException(String pErrorCode, Throwable pNext, String pErrorMessage) {
 		super("Error code: " + pErrorCode + "; Error message: " + pErrorMessage
-				+ "; Cause: " + pCause, pCause);
+				+ "; Next: " + pNext, pNext);
 		this.errorCode = pErrorCode;
 		this.errorMessage = pErrorMessage;
 		this.localizedMessage = getMessage();
-		this.cause = pCause;
+		this.next = pNext;
 	}
 
 	/**
 	 * <p>
 	 * Construct an SPF exception containing an error code, as well as a
 	 * localized message for that error code which is retrieved from your
-	 * portlet's message resources. This constructor assumes the root-cause and
-	 * error message are null. Subsequent calls to
+	 * portlet's message resources. This constructor assumes the next-in-chain
+	 * and error message are null. Subsequent calls to
 	 * {@link #getLocalizedMessage()} will return the localized message, while
 	 * calls to {@link #getMessage()} will return a non-localized string
 	 * (generally not suitable for the end-user) comprised of the error code.
@@ -218,7 +216,8 @@ public abstract class SPFException extends Exception {
 	 * @param pRequest
 	 *            The portlet request
 	 * @param pErrorCode
-	 *            The error code (eg <code>forums.addNote.blank</code>)
+	 *            The error code (eg <code>forums.addNote.blank</code>) -
+	 *            also the message key for the localized message
 	 */
 	public SPFException(PortletRequest pRequest, String pErrorCode) {
 		super("Error code: " + pErrorCode);
@@ -230,7 +229,7 @@ public abstract class SPFException extends Exception {
 		if ((this.localizedMessage == null)
 				|| this.localizedMessage.equals(pErrorCode))
 			this.localizedMessage = getMessage();
-		this.cause = null;
+		this.next = null;
 	}
 
 	/**
@@ -238,7 +237,7 @@ public abstract class SPFException extends Exception {
 	 * Construct an SPF exception containing an error code and an error message,
 	 * as well as a localized message for that error code which is retrieved
 	 * from your portlet's message resources. This constructor assumes the
-	 * root-cause is null. Subsequent calls to {@link #getLocalizedMessage()}
+	 * next-in-chain is null. Subsequent calls to {@link #getLocalizedMessage()}
 	 * will return the localized message, while calls to {@link #getMessage()}
 	 * will return a non-localized string (generally not suitable for the
 	 * end-user) comprised of the error code and error message.
@@ -250,7 +249,8 @@ public abstract class SPFException extends Exception {
 	 * @param pRequest
 	 *            The portlet request
 	 * @param pErrorCode
-	 *            The error code (eg <code>forums.addNote.blank</code>)
+	 *            The error code (eg <code>forums.addNote.blank</code>) -
+	 *            also the message key for the localized message
 	 * @param pErrorMessage
 	 *            The error message - eg:
 	 *            <code>New note text for forums thread cannot be blank.</code>
@@ -266,19 +266,19 @@ public abstract class SPFException extends Exception {
 		if ((this.localizedMessage == null)
 				|| this.localizedMessage.equals(pErrorCode))
 			this.localizedMessage = getMessage();
-		this.cause = null;
+		this.next = null;
 	}
 
 	/**
 	 * <p>
 	 * Construct an SPF exception containing an error code, error message, some
-	 * kind of root-cause {@link java.lang.Throwable}, and a localized message
-	 * for that error code which is retrieved from your portlet's message
-	 * resources. Subsequent calls to {@link #getLocalizedMessage()} will return
-	 * the localized message, while calls to {@link #getMessage()} will return a
-	 * non-localized string (generally not suitable for the end-user) comprised
-	 * of the error code, error message, and the throwable's message (ie its
-	 * {@link java.lang.Throwable#getMessage()} output).
+	 * kind of next-in-chain {@link java.lang.Throwable}, and a localized
+	 * message for that error code which is retrieved from your portlet's
+	 * message resources. Subsequent calls to {@link #getLocalizedMessage()}
+	 * will return the localized message, while calls to {@link #getMessage()}
+	 * will return a non-localized string (generally not suitable for the
+	 * end-user) comprised of the error code, error message, and the throwable's
+	 * message (ie its {@link java.lang.Throwable#getMessage()} output).
 	 * </p>
 	 * <p>
 	 * See the class documentation above, for description of these attributes.
@@ -287,17 +287,19 @@ public abstract class SPFException extends Exception {
 	 * @param pRequest
 	 *            The portlet request
 	 * @param pErrorCode
-	 *            The error code (eg <code>forums.addNote.blank</code>)
-	 * @param pCause
-	 *            Some throwable (exception) which is the root cause of this one
+	 *            The error code (eg <code>forums.addNote.blank</code>) -
+	 *            also the message key for the localized message
+	 * @param pNext
+	 *            Some throwable (exception) which is the next in the chain (eg
+	 *            the root cause, or a related exception)
 	 * @param pErrorMessage
 	 *            The error message - eg:
 	 *            <code>New note text for forums thread cannot be blank.</code>
 	 */
 	public SPFException(PortletRequest pRequest, String pErrorCode,
-			Throwable pCause, String pErrorMessage) {
+			Throwable pNext, String pErrorMessage) {
 		super("Error code: " + pErrorCode + "; Error message: " + pErrorMessage
-				+ "; Cause: " + pCause, pCause);
+				+ "; Next: " + pNext, pNext);
 		this.errorCode = pErrorCode;
 		this.errorMessage = pErrorMessage;
 		if (pErrorCode != null)
@@ -306,7 +308,7 @@ public abstract class SPFException extends Exception {
 		if ((this.localizedMessage == null)
 				|| this.localizedMessage.equals(pErrorCode))
 			this.localizedMessage = getMessage();
-		this.cause = pCause;
+		this.next = pNext;
 	}
 
 	// --------------------------------------------------------- Public methods
@@ -322,12 +324,32 @@ public abstract class SPFException extends Exception {
 
 	/**
 	 * Returns the root-cause throwable (eg, exception) provided to the
-	 * constructor (null if none).
+	 * constructor (null if none). This is the same action as the
+	 * {@link #getNext()} method since there is no distinction between a
+	 * throwable which was given to the constructor because it was a root-cause,
+	 * versus one which was given to the constructor because it is a related
+	 * exception. This method is provided since it is part of the Java standard
+	 * API for an exception.
 	 * 
 	 * @return The root-cause for this SPF exception.
 	 */
 	public Throwable getCause() {
-		return this.cause;
+		return getNext();
+	}
+
+	/**
+	 * Returns the next throwable (eg exception) in the chain of exceptions -
+	 * this is the same throwable that was provided to the constructor (null if
+	 * none). This is the same action as the {@link #getCause()} method since
+	 * there is no distinction between a throwable which was given to the
+	 * constructor because it was a root-cause, versus one which was given to
+	 * the constructor because it is a related exception - in both cases, the
+	 * throwable is simply the next one in the chain.
+	 * 
+	 * @return The root-cause for this SPF exception.
+	 */
+	public Throwable getNext() {
+		return this.next;
 	}
 
 	/**

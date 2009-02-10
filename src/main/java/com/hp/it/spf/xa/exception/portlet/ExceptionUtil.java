@@ -169,7 +169,10 @@ public class ExceptionUtil {
 	 * was not an <code>SPFException</code>.
 	 * </p>
 	 * <p>
-	 * Note that null is permissible as a default value.
+	 * Note that null is permissible as a default value. Null default error
+	 * codes are not included in the returned array; only non-null elements will
+	 * be in the returned array. Thus, if null was passed as the default, there
+	 * may be fewer elements in the array than there are in the actual chain.
 	 * </p>
 	 * 
 	 * @param request
@@ -183,16 +186,18 @@ public class ExceptionUtil {
 
 		ArrayList<String> errorCodes = new ArrayList<String>();
 		Throwable t = getException(request);
+		String errorCode = null;
 		while (t != null) {
 			if (t instanceof SPFException) {
 				SPFException e = (SPFException) t;
-				String errorCode = e.getErrorCode();
+				errorCode = e.getErrorCode();
 				if (errorCode == null)
 					errorCode = defaultValue;
-				errorCodes.add(errorCode);
 			} else {
-				errorCodes.add(defaultValue);
+				errorCode = defaultValue;
 			}
+			if (errorCode != null)
+				errorCodes.add(errorCode);
 			if (t.equals(t.getCause()))
 				break;
 			t = t.getCause();
@@ -238,18 +243,20 @@ public class ExceptionUtil {
 	/**
 	 * <p>
 	 * Returns all of the error code(s) of any {@link SPFException}(s)
-	 * contained in the given request, substituting null for any non-<code>SPFException</code>(s)
-	 * in the request. This method looks into the request at where the
+	 * contained in the given request, omitting any that are undefined (such as
+	 * with any non-<code>SPFException</code>(s) in the chain). This method
+	 * looks into the request at where the
 	 * {@link #setException(PortletRequest,Exception)} method stores the
 	 * exception, and checks all the chained exceptions it finds there. If none
 	 * are found, then an empty array is returned.
 	 * </p>
 	 * <p>
 	 * For example, if there is no exception in the request, then an empty array
-	 * is returned. If there are exception(s) in the request, then the error
-	 * code for each one is returned, in order, in an array. Each element in the
-	 * array is either the error code from an <code>SPFException</code>, or
-	 * null if that one was not an <code>SPFException</code>.
+	 * is returned. If there are exception(s) in the request, then each
+	 * non-null, defined error found in the chain is returned, in order, in an
+	 * array. There will be fewer elements in the array than there are in the
+	 * exception chain, if any in the chain are not
+	 * <code>SPFException<code> or have a null error code.
 	 * </p>
 	 * 
 	 * @param request
@@ -315,7 +322,10 @@ public class ExceptionUtil {
 	 * <code>getMessage</code> (in which case the default is used instead).
 	 * </p>
 	 * <p>
-	 * Note that null is permissible as a default value.
+	 * Note that null is permissible as a default value. Null default messages
+	 * are not included in the returned array; only non-null elements will be in
+	 * the returned array. Thus, if null was passed as the default, there may be
+	 * fewer messages in the array than there are in the actual chain.
 	 * </p>
 	 * 
 	 * @param request
@@ -349,7 +359,8 @@ public class ExceptionUtil {
 				if ((message == null) || (message.equals(t.getMessage())))
 					message = defaultMessage;
 			}
-			messages.add(message);
+			if (message != null)
+				messages.add(message);
 			if (t.equals(t.getCause()))
 				break;
 			t = t.getCause();
@@ -361,7 +372,7 @@ public class ExceptionUtil {
 	 * <p>
 	 * Returns all of the real localized error message(s) of any
 	 * {@link SPFException}(s) and/or other {@link java.lang.Throwable}(s)
-	 * contained in the given request, using null for any that are not real.
+	 * contained in the given request, omitting any that are not real.
 	 * </p>
 	 * <p>
 	 * This method works like

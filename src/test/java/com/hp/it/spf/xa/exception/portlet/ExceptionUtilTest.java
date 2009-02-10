@@ -27,7 +27,7 @@ public class ExceptionUtilTest extends TestCase {
 		BusinessException e = (BusinessException) ExceptionUtil.getException(request);
 		assertEquals("errorCode", e.getErrorCode());
 		assertEquals("errorMessage", e.getErrorMessage());
-		assertEquals("Error code: errorCode; Error message: errorMessage; Cause: java.lang.Exception: Nested exception",
+		assertEquals("Error code: errorCode; Error message: errorMessage; Next: java.lang.Exception: Nested exception",
 				e.getLocalizedMessage());
 		assertEquals(true, ExceptionUtil.containsBusinessException(request));
 		assertEquals(false, ExceptionUtil.containsSystemException(request));
@@ -41,13 +41,10 @@ public class ExceptionUtilTest extends TestCase {
 		assertEquals("defaultMessage", messages[0]);
 		assertEquals("defaultMessage", messages[1]);
 		errorCodes = ExceptionUtil.getErrorCodes(request);
-		assertEquals(2, errorCodes.length);
+		assertEquals(1, errorCodes.length);
 		assertEquals("errorCode", errorCodes[0]);
-		assertEquals(null, errorCodes[1]);
 		messages = ExceptionUtil.getLocalizedMessages(request);
-		assertEquals(2, messages.length);
-		assertEquals(null, messages[0]);
-		assertEquals(null, messages[1]);
+		assertEquals(0, messages.length);
 		String errorCode = ExceptionUtil.getErrorCode(request, "defaultCode");
 		assertEquals("errorCode", errorCode);
 		String message = ExceptionUtil.getLocalizedMessage(request, "defaultMessage");

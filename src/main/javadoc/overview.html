@@ -5561,8 +5561,8 @@ portlet's exceptions. With this class hierarchy:</p>
 	<li>
 	<p>Your SPF exceptions (business and system exceptions) can be
 	characterized with an internal error code and message, and an external
-	(ie user-suitable) localized message. You can also nest root-cause
-	exceptions (and other throwables) inside them.</p>
+	(ie user-suitable) localized message. You can also nest exceptions (and
+	other throwables) inside them.</p>
 	<ul>
 		<li>
 		<p>The <i>error code</i> is a short internal string which you
@@ -5578,15 +5578,16 @@ portlet's exceptions. With this class hierarchy:</p>
 		forums thread (id: 1879A2) can no longer be found</code>).</p>
 		</li>
 		<li>
-		<p>The <i>root cause</i> {@link java.lang.Throwable} object, if
-		any, which provoked the error condition. This may be another SPF
-		exception, or any other kind of Java throwable.</p>
+		<p>The <i>next-in-chain</i> {@link java.lang.Throwable} object, if
+		any. This could be the root-cause for this exception, or it could be a
+		related exception in a series. It may be another SPF exception, or any
+		other kind of Java throwable.</p>
 		</li>
 	</ul>
-	<p>Together the error code, error message, and the root-cause
+	<p>Together the error code, error message, and the next-in-chain
 	message (ie value of {@link java.lang.Throwable#getMessage()} from the
-	root cause object, if any) are included in the overall message for the
-	SPF exception (ie in the value returned by the Java-standard {@link
+	next-in-chain object, if any) are included in the overall message for
+	the SPF exception (ie in the value returned by the Java-standard {@link
 	java.lang.Exception#getMessage()} method on an SPF exception). So if
 	you have enabled WPAP error logging, these data elements will all
 	appear in the logs if your SPF exception is thrown back to the
@@ -5629,7 +5630,7 @@ either {@link com.hp.it.spf.xa.exception.portlet.BusinessException} or
 	<dt>{@link
 	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(String,Throwable,String)}</dt>
 	<dd>In these constructors, you provide your error code, error
-	message, and/or root-cause throwable. The localized message is not
+	message, and/or next-in-chain throwable. The localized message is not
 	available, and defaults to the error code, error message, and throwable
 	message.</dd>
 	<br>
@@ -5662,13 +5663,13 @@ inside the exception:</p>
 	<dt>{@link
 	com.hp.it.spf.xa.exception.portlet.BusinessException#getErrorMessage()}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.BusinessException#getCause()}</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#getNext()}</dt>
 	<dt>{@link
 	com.hp.it.spf.xa.exception.portlet.SystemException#getErrorCode()}</dt>
 	<dt>{@link
 	com.hp.it.spf.xa.exception.portlet.SystemException#getErrorMessage()}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SystemException#getCause()}</dt>
+	com.hp.it.spf.xa.exception.portlet.SystemException#getNext()}</dt>
 	<dd>These return the individual data elements as described above.</dd>
 	<br>
 	<br>
@@ -5689,7 +5690,18 @@ inside the exception:</p>
 	<dt>{@link
 	com.hp.it.spf.xa.exception.portlet.SystemException#getMessage()}</dt>
 	<dd>This returns a string comprised of your error code, error
-	message, and/or your throwable's message.</dd>
+	message, and/or your throwable's message. Typically it is not suitable
+	for display to the end-user.</dd>
+	<br>
+	<br>
+
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.BusinessException#getCause()}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.SystemException#getCause()}</dt>
+	<dd>This returns a the next-in-chain throwable, same as the <code>getNext</code>
+	methods. They are provided for compliance with the Java-standard
+	exception class.</dd>
 </dl>
 
 <p>Please see the method and class documentation for more
@@ -5718,10 +5730,158 @@ to work with them.</p>
 from your view</h4>
 </a>
 
+<p>Use this class to set an exception into your {@link
+javax.portlet.PortletRequest} and/or fetch it later. You can also
+inspect what kind of exception(s) you have in your request, and get
+their localized message(s) for display.</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.setException(PortletRequest,Exception)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getException(PortletRequest)}</dt>
+	<dd>
+	<p>Use these methods to set your exception into your <code>PortletRequest</code>,
+	and get it later (returning null if none was set). It does not have to
+	be an exception which is using the {@link
+	com.hp.it.spf.xa.exception.portlet.SPFException} hierarchy.</p>
+	<blockquote>
+	<p><b>Note:</b> Remember that in Java portlets, if you want your
+	request attributes (like this exception) to persist from the action
+	phase into the render phase, you need to enable <i>action-scoped
+	request attributes</i> in your portlet container. See the <a
+		href="#error.spf.examples.business">example below</a> for more about
+	this.</p>
+	</blockquote>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.containsBusinessException(PortletRequest)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.containsSystemException(PortletRequest)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.containsOtherException(PortletRequest)}</dt>
+	<dd>
+	<p>Use these methods to check what kind of exception you have (if
+	any) in your current request. Since the exception may itself contain
+	another {@link java.lang.Throwable} - such as another exception - there
+	could therefore be a chain of throwables in the request. These methods
+	check all of the object(s) in the chain to see if any one of them is of
+	the indicated type (eg, <code>ExceptionUtil.containsBusinessException</code>
+	returns true if any one of the throwables in the exception chain is a
+	{@link com.hp.it.spf.xa.exception.portlet.BusinessException}).</p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getErrorCode(PortletRequest)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getErrorCode(PortletRequest,String)}</dt>
+	<dd>
+	<p>Use these methods to get the error code of the SPF exception (if
+	any) in your current request. The string argument is an optional
+	default error code. The method will return the given default (instead
+	of null) if the exception in the request does not have an error code
+	defined (eg, because it is a non-<code>SPFException</code>). If there
+	is no exception in the request, the given default (instead of null)
+	likewise will be returned.</p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getErrorCodes(PortletRequest)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getErrorCodes(PortletRequest,String)}</dt>
+	<dd>
+	<p>Since the exception in your request may itself contain another
+	{@link java.lang.Throwable} - such as another exception - there could
+	therefore be a chain of throwables in the request. The <code>ExceptionUtils.getErrorCodes</code>
+	methods get an array of all the error code(s) in the chain (an empty
+	array is returned if there is no exception in the request). The string
+	argument is an optional default error code; the method will insert this
+	default (instead of null) into the array for any throwable which does
+	not have an error code defined (such as a non-<code>SPFException</code>).</p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getLocalizedMessage(PortletRequest)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getLocalizedMessage(PortletRequest,String)}</dt>
+	<dd>
+	<p>Use these methods to get the localized, user-suitable message
+	for the exception (if any) in your current request. This uses the
+	exception's <code>getLocalizedMessage()</code> method to get its
+	localized message. In the case of an {@link
+	com.hp.it.spf.xa.exception.portlet.SPFException}, that localized
+	message may have been populated from your application's message
+	resources at the time the exception was created (see above). If it was
+	not, then a localized message for the error code is looked-up when you
+	call this method, using <a href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getMessage</code></a>,
+	and it is used as the <code>getLocalizedMessage()</code> value for the
+	purposes of this method.</p>
+
+	<p>This method then compares the exception's <code>getLocalizedMessage()</code>
+	value with its <code>getMessage()</code> value. If they are not the
+	same, then the <code>getLocalizedMessage()</code> is presumed to be
+	user-suitable - a "real" localized message - and returned. But if they
+	are the same, then the <code>getLocalizedMessage()</code> value is
+	presumed to not be a "real", user-suitable message, and it is not
+	returned. Instead, if a default was given (this is the optional string
+	argument), a default message for that is returned instead (if no
+	default was given, null is returned).</p>
+
+	<p>The default may be either a message key for a default message in
+	your application's resource bundles default error code; or it can be
+	the default message itself. First the method tries to lookup a message
+	for that given default, treating it as a key (this uses <a
+		href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getMessage</code></a>);
+	if found, that message is returned, otherwise the given default itself
+	is returned.</p>
+
+	<p>The default is also returned if there was no exception in the
+	request.</p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getLocalizedMessages(PortletRequest)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.ExceptionUtil.getLocalizedMessages(PortletRequest,String)}</dt>
+	<dd>
+	<p>Since the exception in your request may itself contain another
+	{@link java.lang.Throwable} - such as another exception - there could
+	therefore be a chain of throwables in the request. Use these methods to
+	get the localized, user-suitable message(s) for all of the ones in the
+	chain (returning an empty array if there was no exception in the
+	request). The procedure for getting a "real" localized message for each
+	one, is the same as with the <code>ExceptionUtil.getLocalizedMessage</code>
+	methods (see above).</p>
+	</dd>
+</dl>
+
+<p>See the class and method documentation for more information. Also
+see the <a href="#error.spf.examples">examples below</a>.</p>
+
 <a name="error.spf.handling.simpleMappingExceptionResolver">
 <h4>6.3.2. Using <code>SimpleMappingExceptionResolver</code> to
 resolve a view for your exception</h4>
 </a>
+
+<p>The SPF provides a Spring handler for a thrown exception, called
+{@link
+com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver}.
+This is identical to the Spring-standard {@link
+org.springframework.web.portlet.handler.SimpleMappingExceptionResolver},
+except that it also uses the <a href="#error.spf.handling.exceptionUtil"><code>ExceptionUtil</code></a>
+to set the thrown exception into your request. Using this handler, you
+can throw exceptions from your render controller, then use {@link
+com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getException(PortletRequest)},
+{@link
+com.hp.it.spf.xa.exception.portlet.ExceptionUtil#getLocalizedMessage(PortletRequest,String)},
+and other <code>ExceptionUtil</code> methods to inspect the exception
+data in your view (eg your JSP).</p>
+
+<p>To enable the SPF <code>SimpleMappingExceptionResolver</code>,
+you configure it in your Spring application context like you would the
+Spring <code>SimpleMappingExceptionResolver</code>. See the <a
+	href="#error.spf.examples">examples below</a>.</p>
 
 <hr>
 
@@ -5763,6 +5923,9 @@ import com.hp.it.spf.xa.exception.portlet.BusinessException;
 public class BlankArticleException extends BusinessException {
     public BlankArticleException(PortletRequest request) {
         super(request, "error.forums.blankArticle");
+    }
+    public BlankArticleException(PortletRequest request, throwable next) {
+        super(request, "error.forums.blankArticle", next, null);
     }
 }
 </pre></blockquote>
@@ -5823,21 +5986,13 @@ diverting the flow to another view; we just want it to proceed into the
 normal view. In this case, we just get and display the localized message
 for the exception in our view, using one of the <code>ExceptionUtil.getLocalizedMessage</code>
 methods. For example, assuming our view is a JSP, we could just have
-this (here we display the localized message to the user with a yellow
-warning background):</p>
+this (since this is our normal view, we prepare for the case where there
+was no exception, by using an empty string as the default):</p>
 
 <blockquote><pre>
 ...
-&lt;% String errorMessage = ExceptionUtil.getLocalizedMessage(request);
-   if (errorMessage != null) { %&gt;
-   &lt;table border="0" bgcolor="yellow"&gt;
-     &lt;tr&gt;
-       &lt;th&gt;
-         &lt;%= errorMessage %&gt;
-       &lt;/th&gt;
-     &lt;/tr&gt;
-   &lt;/table&gt;
-&lt;% } %&gt;
+&lt;% String errorMessage = ExceptionUtil.getLocalizedMessage(request, ""); %&gt;
+&lt;%= errorMessage %&gt;
 ...
 </pre></blockquote>
 
@@ -5865,6 +6020,36 @@ error.forums.blankArticle=Please enter some text for your new posting, then subm
 
 <p>So that message (localized) will be what the user sees when you
 get and express the localized message as above.</p>
+
+<p>The above example considered a use case in which the user
+triggered a single exception. What about when multiple business-logic
+errors are detected - for example, the user has submitted a blank Forums
+article, and also submitted it with a blank signature line. Exceptions
+can be chained together - just nest the previous exception inside the
+new one. For example:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.exception.portlet.ExceptionUtil;
+...
+BlankArticleException e1 = new BlankArticleException(request, ExceptionUtil.getException(request));
+ExceptionUtil.setException(request, e1);
+...
+BlankSignatureException e2 = new BlankSignatureException(request, ExceptionUtil.getException(request));
+ExceptionUtil.setException(request, e2);
+</pre></blockquote>
+
+<p>In your view (eg JSP), you could then get all of their localized
+messages for the user, with or without defaults, using either of the <code>ExceptionUtil.getLocalizedMessages</code>
+methods. Here we do it without defaults:</p>
+
+<blockquote><pre>
+...
+&lt;% String[] errorMessages = ExceptionUtil.getLocalizedMessages(request);
+   for (int i = 0; i < errorMessages.length; i++) {  %&gt;
+&lt;%= errorMessages[i] %&gt;
+&lt;% } %&gt;
+...
+</pre></blockquote>
 
 <a name="error.spf.examples.system">
 <h4>6.4.2. An example of system error handling</h4>
@@ -5903,7 +6088,8 @@ public class ForumsDbUnavailableException extends SystemException {
                                         SQLException sqlException) {
         super(request, 
               "error.forums.dbUnavailable",
-              sqlException);
+              sqlException,
+              errorMessage);
     }
 }
 </pre></blockquote>

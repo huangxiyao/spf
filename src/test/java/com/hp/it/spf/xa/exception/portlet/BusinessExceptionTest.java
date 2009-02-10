@@ -37,7 +37,7 @@ public class BusinessExceptionTest extends TestCase {
 		assertEquals("Nested exception", e.getCause().getMessage());
 		assertEquals(e.getMessage(), e.getLocalizedMessage());
 		assertEquals(
-				"Error code: errorCode; Error message: errorMessage; Cause: java.lang.Exception: Nested exception",
+				"Error code: errorCode; Error message: errorMessage; Next: java.lang.Exception: Nested exception",
 				e.getLocalizedMessage());
 
 		e = new BusinessException(renderRequest, "errorCode");
@@ -61,7 +61,7 @@ public class BusinessExceptionTest extends TestCase {
 		assertEquals("Nested exception", e.getCause().getMessage());
 		assertEquals(e.getMessage(), e.getLocalizedMessage());
 		assertEquals(
-				"Error code: errorCode; Error message: errorMessage; Cause: java.lang.Exception: Nested exception",
+				"Error code: errorCode; Error message: errorMessage; Next: java.lang.Exception: Nested exception",
 				e.getLocalizedMessage());
 
 		e = new BusinessException("errorCode");
