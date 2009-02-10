@@ -97,7 +97,9 @@ public abstract class SPFException extends Exception {
 	// ----------------------------------------------------------- Constructors
 
 	/**
-	 * <p>Construct an empty SPF exception. All class attributes are null or empty.</p>
+	 * <p>
+	 * Construct an empty SPF exception. All class attributes are null or empty.
+	 * </p>
 	 */
 	public SPFException() {
 		super();
@@ -106,7 +108,7 @@ public abstract class SPFException extends Exception {
 		this.localizedMessage = getMessage();
 		this.cause = null;
 	}
-	
+
 	/**
 	 * <p>
 	 * Construct an SPF exception containing just an error code. This
@@ -198,9 +200,10 @@ public abstract class SPFException extends Exception {
 		this.errorCode = pErrorCode;
 		this.errorMessage = null;
 		if (pErrorCode != null)
-			this.localizedMessage = I18nUtility.getMessage(pRequest,
-					pErrorCode, (String) null);
-		if (this.localizedMessage == null)
+			this.localizedMessage = I18nUtility
+					.getMessage(pRequest, pErrorCode);
+		if ((this.localizedMessage == null)
+				|| this.localizedMessage.equals(pErrorCode))
 			this.localizedMessage = getMessage();
 		this.cause = null;
 	}
@@ -228,9 +231,10 @@ public abstract class SPFException extends Exception {
 		this.errorCode = pErrorCode;
 		this.errorMessage = pErrorMessage;
 		if (pErrorCode != null)
-			this.localizedMessage = I18nUtility.getMessage(pRequest,
-					pErrorCode, (String) null);
-		if (this.localizedMessage == null)
+			this.localizedMessage = I18nUtility
+					.getMessage(pRequest, pErrorCode);
+		if ((this.localizedMessage == null)
+				|| this.localizedMessage.equals(pErrorCode))
 			this.localizedMessage = getMessage();
 		this.cause = null;
 	}
@@ -260,9 +264,10 @@ public abstract class SPFException extends Exception {
 		this.errorCode = pErrorCode;
 		this.errorMessage = pErrorMessage;
 		if (pErrorCode != null)
-			this.localizedMessage = I18nUtility.getMessage(pRequest,
-					pErrorCode, (String) null);
-		if (this.localizedMessage == null)
+			this.localizedMessage = I18nUtility
+					.getMessage(pRequest, pErrorCode);
+		if ((this.localizedMessage == null)
+				|| this.localizedMessage.equals(pErrorCode))
 			this.localizedMessage = getMessage();
 		this.cause = pCause;
 	}
@@ -308,7 +313,7 @@ public abstract class SPFException extends Exception {
 	 * @return
 	 */
 	public String getLocalizedMessage() {
-		return this.errorMessage;
+		return this.localizedMessage;
 	}
 
 	/**

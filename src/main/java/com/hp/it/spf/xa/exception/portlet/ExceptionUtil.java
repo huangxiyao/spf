@@ -23,7 +23,8 @@ import com.hp.it.spf.xa.exception.portlet.BusinessException;
  * <ul>
  * <li> Methods to access the exception that was saved by the
  * <code>SimpleMappingExceptionResolver</code></li>
- * <li> Methods to inspect what kind of exception(s) are in that exception (there could be a chain)</li>
+ * <li> Methods to inspect what kind of exception(s) are in that exception
+ * (there could be a chain)</li>
  * <li> Methods to return the error code(s) for each exception in that chain</li>
  * <li> Methods to get user-displayable, localized messages for that exception
  * from your message resources for each exception in that chain</li>
@@ -196,7 +197,7 @@ public class ExceptionUtil {
 				break;
 			t = t.getCause();
 		}
-		return (String[]) errorCodes.toArray();
+		return (String[]) errorCodes.toArray(new String[0]);
 	}
 
 	/**
@@ -329,10 +330,7 @@ public class ExceptionUtil {
 		String defaultMessage = null;
 		String message = null;
 		if (defaultKey != null) {
-			defaultMessage = I18nUtility.getMessage(request, defaultKey,
-					(String) null);
-			if (defaultMessage != null)
-				defaultMessage = defaultKey;
+			defaultMessage = I18nUtility.getMessage(request, defaultKey);
 		}
 		ArrayList<String> messages = new ArrayList<String>();
 		Throwable t = getException(request);
@@ -342,14 +340,13 @@ public class ExceptionUtil {
 				message = e.getLocalizedMessage();
 				if ((message == null) || (message.equals(e.getMessage()))) {
 					String errorCode = e.getErrorCode();
-					message = I18nUtility.getMessage(request, errorCode,
-							(String) null);
-					if (message == null)
+					message = I18nUtility.getMessage(request, errorCode);
+					if ((message == null) || (message.equals(errorCode)))
 						message = defaultMessage;
 				}
 			} else {
 				message = t.getLocalizedMessage();
-				if ((message == null) || (message.equals(t.getMessage()))) 
+				if ((message == null) || (message.equals(t.getMessage())))
 					message = defaultMessage;
 			}
 			messages.add(message);
@@ -357,7 +354,7 @@ public class ExceptionUtil {
 				break;
 			t = t.getCause();
 		}
-		return (String[]) messages.toArray();
+		return (String[]) messages.toArray(new String[0]);
 	}
 
 	/**

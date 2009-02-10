@@ -15,6 +15,7 @@ import com.hp.it.spf.xa.htmlviewer.portlet.web.ConfigController;
 
 import javax.portlet.PortletPreferences;
 import junit.framework.TestCase;
+import java.util.Map;
 
 /**
  * The Class ConfigControllerTest.
@@ -25,46 +26,89 @@ import junit.framework.TestCase;
  */
 public class ConfigControllerTest extends TestCase {
 
-    private ConfigController viewController;
+	private ConfigController configController;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {        
-        viewController = new ConfigController();
-        viewController.setViewName("config");
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		configController = new ConfigController();
+		configController.setViewName("config");
+	}
 
-    /**
-     * Test handle render request internal.
-     * 
-     * @throws Exception the exception
-     */
-    public void testHandleRenderRequestInternal() throws Exception {
-        MockRenderRequest renderRequest = new MockRenderRequest();
-        MockRenderResponse renderResponse = new MockRenderResponse();
-        PortletPreferences pp = renderRequest.getPreferences();
-        pp.setValue(Consts.VIEW_FILENAME, "view.htm");
-        ModelAndView modelAndView = (ModelAndView) viewController
-                .handleRenderRequest(renderRequest, renderResponse);
-        assertEquals(modelAndView.getViewName(), "config");
-        assertEquals(pp.getValue(Consts.VIEW_FILENAME, ""), "view.htm");
-     }
+	/**
+	 * Test handle render request internal.
+	 * 
+	 * @throws Exception
+	 *             the exception
+	 */
+	public void testHandleRenderRequestInternal() throws Exception {
+		MockRenderRequest renderRequest = new MockRenderRequest();
+		MockRenderResponse renderResponse = new MockRenderResponse();
+		PortletPreferences pp = renderRequest.getPreferences();
+		pp.setValue(Consts.VIEW_FILENAME, "view.htm");
+		pp.setValue(Consts.LAUNCH_BUTTONLESS, "true");
+		ModelAndView modelAndView = (ModelAndView) configController
+				.handleRenderRequest(renderRequest, renderResponse);
+		assertEquals("config", modelAndView.getViewName());
+		assertEquals("view.htm", pp.getValue(Consts.VIEW_FILENAME, ""));
+		assertEquals("true", pp.getValue(Consts.LAUNCH_BUTTONLESS, ""));
+	}
 
-    /**
-     * Test handle action request internal.
-     * 
-     * @throws Exception the exception
-     */
-    public void testHandleActionRequestInternal() throws Exception {
-        MockActionRequest actionRequest = new MockActionRequest();
-        MockActionResponse actionResponse = new MockActionResponse();
-        PortletPreferences pp = actionRequest.getPreferences();
-        actionRequest.addParameter(Consts.VIEW_FILENAME, "1.htm");
-        viewController.handleActionRequestInternal(actionRequest,
-                actionResponse);
-        assertEquals(pp.getValue(Consts.VIEW_FILENAME, ""), "1.htm");
-    }
+	/**
+	 * Test handle action request internal.
+	 * 
+	 * @throws Exception
+	 *             the exception
+	 */
+	public void testHandleActionRequestInternal() throws Exception {
+		MockActionRequest actionRequest = new MockActionRequest();
+		MockActionResponse actionResponse = new MockActionResponse();
+		PortletPreferences pp = actionRequest.getPreferences();
+		actionRequest.addParameter(Consts.VIEW_FILENAME, "file.htm");
+		actionRequest.addParameter(Consts.LAUNCH_BUTTONLESS,
+				Consts.LAUNCH_BUTTONLESS);
+		configController.handleActionRequestInternal(actionRequest,
+				actionResponse);
+		assertEquals("file.htm", pp.getValue(Consts.VIEW_FILENAME, ""));
+		assertEquals("true", pp.getValue(Consts.LAUNCH_BUTTONLESS, ""));
+		assertEquals(Consts.INFO_CODE_PREFS_SAVED, actionResponse.getRenderParameter(Consts.INFO_CODE));
+		MockRenderRequest renderRequest = new MockRenderRequest();
+		MockRenderResponse renderResponse = new MockRenderResponse();
+		renderRequest.setParameter(Consts.INFO_CODE, Consts.INFO_CODE_PREFS_SAVED);
+		ModelAndView model = (ModelAndView) configController.handleRenderRequest(
+				renderRequest, renderResponse);
+		Map map = model.getModel();
+		assertEquals(Consts.INFO_CODE_PREFS_SAVED, (String) map.get(Consts.INFO_MESSAGE));
+		
+		actionRequest = new MockActionRequest();
+		actionResponse = new MockActionResponse();
+		actionRequest.setParameter(Consts.VIEW_FILENAME, "");
+		configController.handleActionRequestInternal(actionRequest,
+				actionResponse);
+		assertEquals(Consts.ERROR_CODE_VIEW_FILENAME_NULL, actionResponse.getRenderParameter(Consts.ERROR_CODE));
+		renderRequest = new MockRenderRequest();
+		renderResponse = new MockRenderResponse();
+		renderRequest.setParameter(Consts.ERROR_CODE, Consts.ERROR_CODE_VIEW_FILENAME_NULL);
+		model = (ModelAndView) configController.handleRenderRequest(
+				renderRequest, renderResponse);
+		map = model.getModel();
+		assertEquals(Consts.ERROR_CODE_VIEW_FILENAME_NULL, (String) map.get(Consts.ERROR_MESSAGE));
+
+		actionRequest = new MockActionRequest();
+		actionResponse = new MockActionResponse();
+		actionRequest.setParameter(Consts.VIEW_FILENAME, "/some/../invalid/path");
+		configController.handleActionRequestInternal(actionRequest,
+				actionResponse);
+		assertEquals(Consts.ERROR_CODE_VIEW_FILENAME_PATH, actionResponse.getRenderParameter(Consts.ERROR_CODE));
+		renderRequest = new MockRenderRequest();
+		renderResponse = new MockRenderResponse();
+		renderRequest.setParameter(Consts.ERROR_CODE, Consts.ERROR_CODE_VIEW_FILENAME_PATH);
+		model = (ModelAndView) configController.handleRenderRequest(
+				renderRequest, renderResponse);
+		map = model.getModel();
+		assertEquals(Consts.ERROR_CODE_VIEW_FILENAME_PATH, (String) map.get(Consts.ERROR_MESSAGE));
+	}
 }

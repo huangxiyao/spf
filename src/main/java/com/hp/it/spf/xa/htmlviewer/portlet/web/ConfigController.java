@@ -191,8 +191,7 @@ public class ConfigController extends AbstractController {
 				throw new InputErrorException(request,
 						Consts.ERROR_CODE_VIEW_FILENAME_NULL);
 			}
-			if ((viewFile.indexOf("../") != -1)
-					|| (viewFile.indexOf("..\\")) != -1) {
+			if (viewFile.indexOf("..") != -1) {
 				// use info logging as this is a user error only, not a system
 				// error
 				Log

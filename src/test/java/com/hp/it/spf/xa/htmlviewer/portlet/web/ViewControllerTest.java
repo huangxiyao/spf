@@ -89,6 +89,7 @@ public class ViewControllerTest extends TestCase {
 		assertEquals(
 				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Hello world!</p></body></html>",
 				content);
+		
 		pp.setValue(Consts.VIEW_FILENAME, "test_url_1.html");
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(
 				renderRequest, renderResponse);
@@ -98,6 +99,7 @@ public class ViewControllerTest extends TestCase {
 		assertEquals(
 				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1> Here is an image tag: <img src=\"/images/test_zh.gif\"></body></html>",
 				content);
+		
 		pp.setValue(Consts.VIEW_FILENAME, "test_url_2.html");
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(
 				renderRequest, renderResponse);
@@ -107,6 +109,7 @@ public class ViewControllerTest extends TestCase {
 		assertEquals(
 				"<html><head><title>Hello world!</title></head><body><h1>Hello world!</h1> Here is an image tag: <img src=\"/images/nonexistent.gif\"><br>Here is the site URL: <br>Here is a site page URL: test/template.PAGE<br></body></html>",
 				content);
+		
 		pp.setValue(Consts.VIEW_FILENAME, "test_login_container.html");
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(
 				renderRequest, renderResponse);
@@ -116,6 +119,7 @@ public class ViewControllerTest extends TestCase {
 		assertEquals(
 				"<html><body>Everybody sees this part.  Only logged-out users see this.</body></html>",
 				content);
+		
 		pp.setValue(Consts.VIEW_FILENAME, "test_nested_token.html");
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(
 				renderRequest, renderResponse);
@@ -126,6 +130,7 @@ public class ViewControllerTest extends TestCase {
 		assertEquals(
 				"<html><body>Template ID: FRIENDLY_ID<br>Portal URL: /template.FRIENDLY_ID?lang=zh&cc=CN<br></body></html>",
 				content);
+		
 		if (fileExists("/opt/sasuapps/spf/globalResources/portlet/i18n/html/test_loc_content_url_ext_zh_CN.html")
 				&& fileExists("/opt/sasuapps/spf/globalResources/portlet/i18n/images/test_ext_zh_CN.gif")) {
 			pp.setValue(Consts.VIEW_FILENAME, "test_loc_content_url_ext.html");
