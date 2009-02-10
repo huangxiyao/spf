@@ -5628,9 +5628,10 @@ either {@link com.hp.it.spf.xa.exception.portlet.BusinessException} or
 	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(String,String)}</dt>
 	<dt>{@link
 	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(String,Throwable,String)}</dt>
-	<dd>In these methods, you provide your error code, error message,
-	and/or root-cause throwable. The localized message is not available,
-	and defaults to the error code, error message, and throwable message.</dd>
+	<dd>In these constructors, you provide your error code, error
+	message, and/or root-cause throwable. The localized message is not
+	available, and defaults to the error code, error message, and throwable
+	message.</dd>
 	<br>
 	<br>
 
@@ -5646,28 +5647,36 @@ either {@link com.hp.it.spf.xa.exception.portlet.BusinessException} or
 	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(PortletRequest,String,String)}</dt>
 	<dt>{@link
 	com.hp.it.spf.xa.exception.portlet.SystemException#SystemException(PortletRequest,String,Throwable,String)}</dt>
-	<dd>In these methods, you provide your portlet request as well.
-	This allows your localized message to be looked-up from your message
-	resources by error code. Note the portlet request is just used for this
-	lookup; it is not stored inside the exception.</dd>
+	<dd>In these constructors, you provide your portlet request as
+	well. This allows your localized message to be looked-up from your
+	message resources by error code. Note the portlet request is just used
+	for this lookup; it is not stored inside the exception.</dd>
 </dl>
 
-<p>On either kind of <code>SPFException</code> you can then use the
-following methods to get access to the data inside the exception:</p>
+<p>You can then use the following methods to get access to the data
+inside the exception:</p>
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SPFException#getErrorCode()}</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#getErrorCode()}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SPFException#getErrorMessage()}</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#getErrorMessage()}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SPFException#getCause()}</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#getCause()}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.SystemException#getErrorCode()}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.SystemException#getErrorMessage()}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.SystemException#getCause()}</dt>
 	<dd>These return the individual data elements as described above.</dd>
 	<br>
 	<br>
 
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SPFException#getLocalizedMessage()}</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#getLocalizedMessage()}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.SystemException#getLocalizedMessage()}</dt>
 	<dd>This returns your localized message, looked-up by the
 	constructor from your resource bundles; or by default it returns the
 	value of <code>getMessage</code> as per the Java standard behavior for
@@ -5676,7 +5685,9 @@ following methods to get access to the data inside the exception:</p>
 	<br>
 
 	<dt>{@link
-	com.hp.it.spf.xa.exception.portlet.SPFException#getMessage()}</dt>
+	com.hp.it.spf.xa.exception.portlet.BusinessException#getMessage()}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portlet.SystemException#getMessage()}</dt>
 	<dd>This returns a string comprised of your error code, error
 	message, and/or your throwable's message.</dd>
 </dl>
@@ -5750,8 +5761,8 @@ instead. For example:</p>
 import com.hp.it.spf.xa.exception.portlet.BusinessException;
 ...
 public class BlankArticleException extends BusinessException {
-    public BlankArticleException(request) {
-        super(request,"error.forums.blankArticle");
+    public BlankArticleException(PortletRequest request) {
+        super(request, "error.forums.blankArticle");
     }
 }
 </pre></blockquote>
@@ -5762,7 +5773,7 @@ public class BlankArticleException extends BusinessException {
 import com.hp.it.spf.xa.exception.portlet.ExceptionUtil;
 ...
 BlankArticleException e = new BlankArticleException(request);
-ExceptionUtil.setException(request, e); // see ExceptionUtil discussion later
+ExceptionUtil.setException(request, e);
 </pre></blockquote>
 </blockquote>
 
@@ -5779,12 +5790,12 @@ request attributes, to propagate the exception from the action phase to
 the render phase you must use some alternate technique: for example,
 setting its attributes as render parameters, so that it can be
 reconstructed during the render phase. Or setting the exception into
-{@javax.servlet.HttpSession} during the action phase, from where the
-render phase can access it. <code>ExceptionUtil</code> does not provide
-API's to help with either of those alternate techiques. We recommend
-just using JSR 286 (Portlet 2.0), which is what the SPF portlet
-utilities are built upon, by enabling action-scoped request attributes;
-this is the cleanest way.</p>
+{@link javax.servlet.HttpSession} during the action phase, from where
+the render phase can access it. <code>ExceptionUtil</code> does not
+provide API's to help with either of those alternate techiques. We
+recommend just using JSR 286 (Portlet 2.0), which is what the SPF
+portlet utilities are built upon, by enabling action-scoped request
+attributes; this is the cleanest way.</p>
 
 <p>To enable action-scoped request attributes, just add the
 following to your <code>portlet.xml</code> (either for your particular
@@ -5819,7 +5830,7 @@ warning background):</p>
 ...
 &lt;% String errorMessage = ExceptionUtil.getLocalizedMessage(request);
    if (errorMessage != null) { %&gt;
-   &lt;table bgcolor="yellow"&gt;
+   &lt;table border="0" bgcolor="yellow"&gt;
      &lt;tr&gt;
        &lt;th&gt;
          &lt;%= errorMessage %&gt;
@@ -5881,32 +5892,57 @@ ExceptionUtil.setException(request, e);
 <blockquote>
 <p><b>Note:</b> Alternately, we could define our own subclass of <code>SystemException</code>
 for this case - eg <code>ForumsDbUnavailableException extends
-SystemException</code> - and instantiate that here. This is similar to what was
-shown for the business exception above.</p>
-</blockquote>
-
-<p>After the exception is instantiated, we need to consider
-flow-of-control - where should the use case proceed next? In the <a
-	href="#error.spf.examples.business">business error handling example
-above</a>, we mentioned diverting the flow of control away from the normal
-view, by throwing an exception. Since this is a system exception, that
-might be just what we want to do in this case, in order to display a
-general-purpose system error page to the user.</p>
-
-<p>To arrange for that, we throw the exception from the render
-controller (ie during the render phase) back to the dispatcher (note we
-do not need to bother with setting the exception ourselves in this case
-- the SPF {@link
-com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver}
-will do that, see below):</p>
+SystemException</code> - and instantiate that here. Like in this class:</p>
 
 <blockquote><pre>
 import com.hp.it.spf.xa.exception.portlet.SystemException;
 ...
-SystemException e = new SystemException(request,
-                            "error.forums.dbUnavailable",
-                            "The Forums database was unavailable - discovered while posting a new article",
-                            sqlException);
+public class ForumsDbUnavailableException extends SystemException {
+    public ForumsDbUnavailableException(PortletRequest request,
+                                        String errorMessage,
+                                        SQLException sqlException) {
+        super(request, 
+              "error.forums.dbUnavailable",
+              sqlException);
+    }
+}
+</pre></blockquote>
+
+<p>Then we would instantiate that one in our code instead:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.exception.portlet.ExceptionUtil;
+...
+ForumsDbUnavailableException e = new ForumsDbUnavailableException(request,
+                                    "The Forums database was unavailable - discovered while posting a new article",
+                                    sqlException);
+ExceptionUtil.setException(request, e);
+</pre></blockquote>
+</blockquote>
+
+<p>In any event, after the exception is instantiated, we need to
+consider flow-of-control - where should the use case proceed next? In
+the <a href="#error.spf.examples.business">business error handling
+example above</a>, we mentioned the options of 1) allowing the flow to
+proceed into the normal view for the page (and presenting the user
+message for the exception there, as well as 2) diverting the flow of
+control away from the normal view, by throwing an exception. Since this
+is a system exception, the latter might be just what we want to do in
+this case, in order to display a general-purpose system error page to
+the user.</p>
+
+<p>To arrange for that, we first throw the exception from the render
+controller (ie during the render phase) back to the dispatcher. Here is
+the code, assuming we use our <code>ForumsDbUnavailableException</code>
+from above. (Note we do not need to bother with setting the exception
+ourselves in this case - the SPF {@link
+com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver}
+will do that.)</p>
+
+<blockquote><pre>
+ForumsDbUnavailableException e = new ForumsDbUnavailableException(request,
+                                    "The Forums database was unavailable - discovered while posting a new article",
+                                    sqlException);
 throw(e);
 </pre></blockquote>
 
@@ -5921,17 +5957,17 @@ portlet-specific one as is often customary):</p>
     &lt;property name="defaultErrorView" value="systemError" /&gt;
     &lt;property name="exceptionMappings"&gt;
         &lt;props&gt;
-            &lt;prop key="com.hp.it.spf.xa.exception.portlet.SystemException"&gt;
+            &lt;prop key="com.hp....<i>my-package</i>...ForumsDbUnavailableException"&gt;
                 systemError
             &lt;/prop&gt;
+            ...               &lt;-- others go here
         &lt;/props&gt;
     &lt;/property&gt;
 &lt;/bean&gt;
 </pre></blockquote>
 
-<p>Whenever any {@link
-com.hp.it.spf.xa.exception.portlet.SystemException} is thrown back from
-the render controller, the SPF's <code>SimpleMappingExceptionResolver</code>
+<p>Whenever any <code>ForumsDbUnavailableException</code> is thrown
+back from the render controller, the SPF's <code>SimpleMappingExceptionResolver</code>
 now will automatically catch it, set the exception into the request for
 you (using {@link
 com.hp.it.spf.xa.exception.portlet.ExceptionUtil#setException(PortletRequest,Exception)}),
@@ -5943,14 +5979,17 @@ Spring Portlet MVC and not shown here).</p>
 <blockquote>
 <p><b>Note:</b> In the above example, we are using the same view for
 our default error handling. That is what Spring dispatches to, if it
-catches any other kind of exception besides a <code>SystemException</code>.</p>
+catches any other kind of exception besides a <code>ForumsDbUnavailableException</code>.</p>
 </blockquote>
 
 <blockquote>
-<p><b>Note:</b> In the above example, we mapped from <code>SystemException</code>.
-If we had created specific exception classes, like <code>ForumsDbUnavailableException</code>
-as in the note above, we might rather set up several mappings based on
-these specific classes rather than the generic class.</p>
+<p><b>Note:</b> In the above example, we mapped from <code>ForumsDbUnavailableException</code>,
+and presumably would setup similar mappings for other case-specific
+exception classes we create. If we wanted all our various kinds of
+{@link com.hp.it.spf.xa.exception.portlet.SystemException} to go to the
+same system error page, though, we could just deal with them all in one
+configuration, with a single property mapping for <code>com.hp.it.spf.xa.exception.portlet.SystemException</code>
+instead.
 </blockquote>
 
 <p>Finally, in the JSP for that view (eg our <code>systemError.jsp</code>),
