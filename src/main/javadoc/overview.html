@@ -3459,13 +3459,13 @@ dynamically substituting, inserting, or deleting content accordingly.
 The token language supports the following basic capabilities:</p>
 
 <ul>
-	<li><a href="#file.author.token.user">inserting user
-	information</a>, such as name, email, language, or any other user property</li>
 	<li><a href="#file.author.token.url">inserting dynamic URL's</a>
 	for portal/portlet artifacts, such as the portal site home page URL,
 	and URLs for <a href="#i18n.resources.supporting">supporting
 	resources</a> like localized images (<a href="#i18n.location">external
 	or internal</a>)
+	<li><a href="#file.author.token.user">inserting user
+	information</a>, such as name, email, language, or any other user property</li>
 	<li><a href="#file.author.token.auth">permissioning content</a> so
 	it is included only for authorized users (based on groups, roles, or
 	logged-in status)</li>
@@ -4247,7 +4247,7 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 
 <a name="file.author.token.user">
 <h4>4.5.2. Displaying user information (<code>{NAME}</code>, <code>{EMAIL}</code>,
-<code>{LANGUAGE-CODE}</code>, <code>{COUNTRY-CODE}</code>, <code>LANGUAGE-TAG}</code>,
+<code>{LANGUAGE-CODE}</code>, <code>{COUNTRY-CODE}</code>, <code>{LANGUAGE-TAG}</code>,
 <code>{USER-PROPERTY:<i>key</i>}</code>)</h4>
 </a>
 
@@ -4526,7 +4526,7 @@ This text is for everybody.&lt;BR&gt;
 
 <a name="file.author.token.consolidate">
 <h4>4.5.4. Consolidating content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-<code>{SITE:<i>site-names</i></code>}, <code>{INCLUDE:<i>key</i>}</code>)</h4>
+<code>{SITE:<i>site-names</i>}</code>, <code>{INCLUDE:<i>key</i>}</code>)</h4>
 </a>
 
 <p>The following tokens may be used to consolidate content, either
