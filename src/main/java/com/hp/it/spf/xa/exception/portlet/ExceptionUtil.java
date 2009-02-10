@@ -23,8 +23,10 @@ import com.hp.it.spf.xa.exception.portlet.BusinessException;
  * <ul>
  * <li> Methods to access the exception that was saved by the
  * <code>SimpleMappingExceptionResolver</code></li>
+ * <li> Methods to inspect what kind of exception(s) are in that exception (there could be a chain)</li>
+ * <li> Methods to return the error code(s) for each exception in that chain</li>
  * <li> Methods to get user-displayable, localized messages for that exception
- * from your message resources.</li>
+ * from your message resources for each exception in that chain</li>
  * </ul>
  * 
  * @author Scott Jorgenson
