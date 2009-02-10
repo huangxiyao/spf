@@ -14,10 +14,11 @@ import com.hp.it.spf.xa.exception.portlet.ExceptionUtil;
 /**
  * <p>
  * This class is a subclass of the Spring framework's
- * <code>SimpleMappingExceptionResolver</code>, and includes logic to store
- * the exception object in a request attribute for JSP's to access, before
- * calling the Spring class to resolve the view for the exception. This uses the
- * portlet {@link ExceptionUtil} class to store the exception object.
+ * {@link org.springframework.web.portlet.handler.SimpleMappingExceptionResolver},
+ * and includes logic to store the exception object in a request attribute for
+ * JSP's to access, before calling the Spring class to resolve the view for the
+ * exception. This uses the portlet {@link ExceptionUtil} class to store the
+ * exception object.
  * 
  * @author sunnyee, Scott Jorgenson
  * @version TBD
