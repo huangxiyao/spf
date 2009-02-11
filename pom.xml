@@ -4,6 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-global-help-secondarypage</artifactId>
+	<packaging>car</packaging>
 	<name>SPF global help secondary page</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>
@@ -37,11 +38,13 @@
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-global-help-secondarypagetype</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>
