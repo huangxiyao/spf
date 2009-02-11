@@ -4,6 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-logout-secondarypagetype</artifactId>
+	<packaging>car</packaging>
 	<name>SPF logout secondary page type</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>
