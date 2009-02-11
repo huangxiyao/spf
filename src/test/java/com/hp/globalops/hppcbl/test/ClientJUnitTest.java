@@ -37,7 +37,7 @@ public class ClientJUnitTest extends BaseJUnitTestCase {
 
     }*/
 
-    public void testChangePassword() throws Exception {
+    /*public void testChangePassword() throws Exception {
         try {
 
             // ws.setSystemLangCode(langCode);
@@ -62,6 +62,6 @@ public class ClientJUnitTest extends BaseJUnitTestCase {
             assertTrue(false);
         }
 
-    }
+    }*/
 
 }
