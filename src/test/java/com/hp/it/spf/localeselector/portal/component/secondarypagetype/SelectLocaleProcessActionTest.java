@@ -12,6 +12,7 @@ public class SelectLocaleProcessActionTest extends TestCase {
 	}
 	
 	public void testFilterUrlLocaleParams() {
+		System.out.println("perform testFilterUrlLocaleParams");
 		String expected = "/portal/site/test?aparam=dd";
 		String actual = action.filterUrlLocaleParams("/portal/site/test?aparam=dd&lang=en&cc=US");
 		System.out.println("testFilterUrlLocaleParams.1 got: " + actual);
@@ -25,10 +26,10 @@ public class SelectLocaleProcessActionTest extends TestCase {
 	}
 	
 	public void testFilterUrlLocaleParamsWhenNoParams() {
+		System.out.println("perform testFilterUrlLocaleParamsWhenNoParams");
 		String expected = "/portal/site/test";
 		String actual = action.filterUrlLocaleParams("/portal/site/test");
 		System.out.println("testFilterUrlLocaleParamsWhenNoParams.1 got: " + actual);
 		assertEquals(expected, actual);
 	}
-
 }

@@ -113,6 +113,7 @@ public class SelectLocaleRedirectProcessAction extends BaseAction {
 	 * @return yes or no
 	 */
 	private boolean isALangOrCcParameter(String param) {
-		return (param.indexOf("lang=") == 0 || param.indexOf("cc=") == 0);
+		return (param.indexOf(Consts.PARAM_HPCOM_LANGUAGE + "=") == 0 || param
+				.indexOf(Consts.PARAM_HPCOM_COUNTRY + "=") == 0);
 	}
 }
