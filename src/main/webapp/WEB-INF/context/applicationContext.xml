@@ -30,7 +30,7 @@
 		<property name="basenames">
 			<list>
 				<value>
-					classpath:portlet/i18n/html_viewer_messages
+					WEB-INF/classes/html_viewer_messages
 				</value>
 			</list>
 		</property>
