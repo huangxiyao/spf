@@ -4,6 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-auth-error-secondarypagetype</artifactId>
+	<packaging>car</packaging>
 	<name>SPF authorization error secondary page type</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>
