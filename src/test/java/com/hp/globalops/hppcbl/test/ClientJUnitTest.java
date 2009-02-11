@@ -8,7 +8,28 @@ import com.hp.globalops.hppcbl.passport.PassportServiceException;
 import com.hp.globalops.hppcbl.passport.beans.Fault;
 import com.hp.globalops.hppcbl.webservice.*;
 
-public class ClientJUnitTest extends BaseJUnitTestCase {
+import com.hp.globalops.hppcbl.passport.PassportService;
+import junit.framework.TestCase;
+
+public class ClientJUnitTest extends TestCase {
+	
+    protected PassportService ws = null;
+    
+	public ClientJUnitTest() {
+
+    	ws = new PassportService();
+    }
+	
+	protected void setUp() throws Exception {
+        super.setUp();
+        
+    }
+
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        
+    }
+
 /*
     public void testRecoverUserId() throws Exception {
         try {
@@ -64,4 +85,7 @@ public class ClientJUnitTest extends BaseJUnitTestCase {
 
     }*/
 
+	public void testStub() throws Exception {
+		
+	}
 }
