@@ -31,9 +31,8 @@
 		<supported-locale>en</supported-locale>
 
 		<portlet-info>
-			<title>Content</title>
-			<short-title>Content</short-title>
-			<keywords>content</keywords>
+			<title>HTML Viewer Portlet</title>
+			<short-title>HTML Viewer</short-title>
 		</portlet-info>
 
 		<portlet-preferences>
@@ -47,6 +46,7 @@
 			</preference>
 		</portlet-preferences>
 	</portlet>
+	
 	<custom-portlet-mode>
 		<portlet-mode>config</portlet-mode>
 	</custom-portlet-mode>
@@ -61,6 +61,7 @@
 		<lifecycle>ACTION_PHASE</lifecycle>
 		<lifecycle>RENDER_PHASE</lifecycle>
 	</filter>
+	
 	<!-- SPF attribute map filter -->
 	<filter>
 		<display-name>SPF Map Attribute Filter</display-name>
@@ -71,11 +72,13 @@
 		<lifecycle>ACTION_PHASE</lifecycle>
 		<lifecycle>RENDER_PHASE</lifecycle>
 	</filter>
+	
 	<!-- WPAP logging filter mapping -->
 	<filter-mapping>
 		<filter-name>TransactionLoggingFilter</filter-name>
 		<portlet-name>*</portlet-name>
 	</filter-mapping>
+	
 	<!-- SPF attribute map filter mapping -->
 	<filter-mapping>
 		<filter-name>MapAttributeFilter</filter-name>
