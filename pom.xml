@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.tools</groupId>
@@ -6,7 +7,10 @@
 	<name>Shared Portal Framework Super POM</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<description>This POM encapsulates all the reporting features of the shared portal framework.</description>
+	<description>
+		This POM encapsulates all the reporting features of the shared
+		portal framework.
+	</description>
 	<ciManagement>
 		<system>Hudson</system>
 		<url>http://samson.atl.hp.com:8080/hudson</url>
@@ -20,13 +24,17 @@
 		<repository>
 			<id>releases</id>
 			<name>Internal Releases</name>
-			<url>http://samson.atl.hp.com:8081/nexus/content/repositories/releases</url>
+			<url>
+				http://samson.atl.hp.com:8081/nexus/content/repositories/releases
+			</url>
 		</repository>
 
 		<snapshotRepository>
 			<id>snapshots</id>
 			<name>Internal Snapshots</name>
-			<url>http://samson.atl.hp.com:8081/nexus/content/repositories/snapshots</url>
+			<url>
+				http://samson.atl.hp.com:8081/nexus/content/repositories/snapshots
+			</url>
 		</snapshotRepository>
 
 		<site>
@@ -35,7 +43,9 @@
 			<!--
 				<url>scp://samson.atl.hp.com:/var/www/sdk/${project.artifactId}/${project.version}</url>
 			-->
-			<url>file:/var/www/sdk/${project.artifactId}/${project.version}</url>
+			<url>
+				file:/var/www/sdk/${project.artifactId}/${project.version}
+			</url>
 		</site>
 	</distributionManagement>
 
@@ -47,6 +57,11 @@
 					<source>1.5</source>
 					<target>1.5</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.hp.it.spf.tools</groupId>
+				<artifactId>spf-maven-car-plugin</artifactId>
+				<extensions>true</extensions>
 			</plugin>
 		</plugins>
 	</build>
@@ -60,12 +75,24 @@
 				<configuration>
 					<docfilessubdirs>true</docfilessubdirs>
 					<links>
-						<link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
-						<link>http://static.springframework.org/spring/docs/2.5.x/api/</link>
-						<link>http://www.bluesunrise.com/portlet-api/</link>
-						<link>http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/</link>
-						<link>http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/</link>
-						<link>http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/</link>
+						<link>
+							http://java.sun.com/j2se/1.5.0/docs/api/
+						</link>
+						<link>
+							http://static.springframework.org/spring/docs/2.5.x/api/
+						</link>
+						<link>
+							http://www.bluesunrise.com/portlet-api/
+						</link>
+						<link>
+							http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/
+						</link>
+						<link>
+							http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/
+						</link>
+						<link>
+							http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/
+						</link>
 					</links>
 				</configuration>
 			</plugin>
@@ -87,7 +114,7 @@
 				<artifactId>jdepend-maven-plugin</artifactId>
 				<version>2.0-beta-2</version>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
