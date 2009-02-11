@@ -4,6 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-auth-error-secondarypage</artifactId>
+	<packaging>car</packaging>
 	<name>SPF authorization error secondary page</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>
@@ -35,11 +36,13 @@
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-auth-error-secondarypagetype</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>
