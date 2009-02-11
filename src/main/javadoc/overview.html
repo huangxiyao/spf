@@ -2290,6 +2290,15 @@ numerous sources:</p>
 	</li>
 </ol>
 
+<p>Once the SPF portal has resolved the locale, that is the locale
+which is passed to your portlet inside the <code>PortletRequest</code>.</p>
+
+<blockquote>
+<p><b>Note:</b> Your <code>portlet.xml</code> does not need to
+specify the JSR-standard <code>&lt;supported-locale&gt;...&lt;/supported-locale&gt;</code>
+elements in order to have visibility to this locale.</p>
+</blockquote>
+
 <a name="i18n.other.locale.set">
 <h4>2.9.2. Setting the locale</h4>
 </a>
@@ -3802,8 +3811,8 @@ you have setup for your Spring portlet.</p>
 	more information. If your file to interpolate does not contain any <code>{INCLUDE:<i>key</i>}</code>
 	tokens, or you are willing to use the default property file, you do not
 	need to set this attribute.</p>
-	</p>
-	</dd>
+</p>
+</dd>
 </dl>
 
 <p>For example, here is a simple extension/implementation of the <code>FileInterpolatorController</code>.
@@ -4749,8 +4758,8 @@ chapter describes how to access these elements.</p>
 the portlet.</p>
 
 <blockquote>
-<p><b>Important:</b> You must have configured the SPF
-{@link com.hp.it.spf.sso.portlet.filter.MapAttributeFilter} as a filter for
+<p><b>Important:</b> You must have configured the SPF {@link
+com.hp.it.spf.sso.portlet.filter.MapAttributeFilter} as a filter for
 your portlet, for any of this data to be visible to you. Here is how you
 configure the filter, in your <code>portlet.xml</code>:</p>
 
@@ -4769,6 +4778,13 @@ configure the filter, in your <code>portlet.xml</code>:</p>
     &lt;portlet-name&gt;*&lt;/portlet-name&gt; 
 &lt;/filter-mapping&gt;
 </pre></blockquote>
+</blockquote>
+
+<blockquote>
+<p><b>Note:</b> Your <code>portlet.xml</code> does not need to
+specify the JSR-standard <code>&lt;user-attribute&gt;...&lt;/user-attribute&gt;</code>
+elements in order for your portlet to have visibility to this data.
+Similarly, this data is not accessible via the JSR-standard P3P map.</p>
 </blockquote>
 
 <a name="portal.user">
