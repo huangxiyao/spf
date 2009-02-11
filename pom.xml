@@ -4,6 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-system-error-secondarypage</artifactId>
+	<packaging>car</packaging>
 	<name>SPF system error secondary page</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>
@@ -35,31 +36,37 @@
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-jsr-container-taglib</artifactId>
 			<version>7.4.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-base</artifactId>
 			<version>7.4.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-core</artifactId>
 			<version>7.4.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-linking</artifactId>
 			<version>7.4.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-log</artifactId>
 			<version>7.4.2</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>
