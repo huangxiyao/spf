@@ -4,6 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-locale-selector-classic-style</artifactId>
+	<packaging>car</packaging>
 	<name>SPF classic locale selector style</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<description>
@@ -34,11 +35,13 @@
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-locale-widget-styletype</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>
