@@ -27,24 +27,26 @@ import com.hp.it.spf.xa.misc.Utils;
 
 /**
  * A concrete base class including methods for internationalization/localization
- * held in common by both portal and portlet frameworks. The portal and portlet
- * I18nUtility classes extend this one. Portal and portlet code should not
- * import this class, but import the portal or portlet I18nUtility class
- * instead.
+ * held in common by both portal and portlet frameworks. The portal
+ * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility} and portlet
+ * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility} both extend this one.
+ * Portal and portlet code should not import or try to instantiate this class,
+ * but use the portal or portlet <code>I18nUtility</code> class instead, as
+ * appropriate.
  * 
  * @author <link href="liping.yan@hp.com">Liping Yan</link>
  * @author <link href="ying-zhi.wu@hp.com">Oliver</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.cas.spf.portal.common.utils.I18nUtility
- *      com.hp.it.cas.spf.portlet.common.utils.I18nUtility
+ * @see <code>com.hp.it.spf.xa.i18n.portal.I18nUtility</code>
+ * <code>com.hp.it.spf.xa.i18n.portlet.I18nUtility</code>
  */
-
 public class I18nUtility {
 
 	/**
 	 * The name of the internationalization configuration file. (The file
-	 * extension .properties is assumed by the PropertyResourceBundleManager.)
+	 * extension <code>.properties</code> is assumed by the
+	 * {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager}.)
 	 */
 	protected static final String I18N_CONFIG_FILE = "i18n_config";
 
@@ -66,13 +68,13 @@ public class I18nUtility {
 	public static final String HPP_SIMP_CHINESE_LANG = "13";
 
 	/**
-	 * A control flag for the locale methods, to sort/display country first and
-	 * language second.
+	 * A control flag for the <code>sortLocales</code> methods, to
+	 * sort/display country first and language second.
 	 */
 	public static final int LOCALE_BY_COUNTRY = 1;
 
 	/**
-	 * A control flag for the <code>sortLocales</code> method, to sort
+	 * A control flag for the <code>sortLocales</code> methods, to sort
 	 * descending.
 	 */
 	public static final int LOCALE_DESCENDING = 2;
@@ -89,11 +91,12 @@ public class I18nUtility {
 	private static final Log LOG = LogFactory.getLog(I18nUtility.class);
 
 	/**
-	 * Protected to prevent external construction except by subclasses. Use the
-	 * portal or portlet I18nUtility class instead.
+	 * The constructor is protected in order to discourage instantiation of this
+	 * class by outside classes - they should use the portal
+	 * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility} or
+	 * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility} instead.
 	 */
 	protected I18nUtility() {
-
 	}
 
 	/**
@@ -101,18 +104,19 @@ public class I18nUtility {
 	 * Get time zone display name localized in long format. If the timezone is
 	 * one which supports daylight (summer) time offsets, the display name will
 	 * indicate whether the time zone is currently in standard or daylight
-	 * (summer) time. This is based on the current time. Returns null when given
-	 * null parameters.
+	 * (summer) time. This is based on the current time, using the translations
+	 * built into the JVM for the {@link java.util.TimeZone} class. Returns null
+	 * when given null parameters.
 	 * </p>
 	 * 
-	 * @param pTz
+	 * @param timezone
 	 *            A time zone.
-	 * @param pLocale
+	 * @param inLocale
 	 *            A locale.
 	 * @return The current localized timezone display name.
 	 */
-	public static String getLongTimezoneDisplayName(TimeZone pTz, Locale pLocale) {
-		return getLongTimezoneDisplayName(null, pTz, pLocale);
+	public static String getLongTimezoneDisplayName(TimeZone timezone, Locale inLocale) {
+		return getLongTimezoneDisplayName(null, timezone, inLocale);
 	}
 
 	/**
@@ -122,29 +126,30 @@ public class I18nUtility {
 	 * indicate whether the time zone is in standard or daylight (summer) time
 	 * at the given time. Returns null when given null parameters (except if the
 	 * given time is null, the method assumes the current time for purposes of
-	 * the daylight calculation).
+	 * the daylight calculation). This uses the translations built into the JVM
+	 * for the {@link java.util.TimeZone} class.
 	 * </p>
 	 * 
-	 * @param pDate
+	 * @param datetime
 	 *            Time to use for deciding whether it is daylight time.
-	 * @param pTz
+	 * @param timezone
 	 *            A time zone.
-	 * @param pLocale
+	 * @param inLocale
 	 *            A Locale.
 	 * @return The localized timezone display name at that date and time.
 	 */
-	public static String getLongTimezoneDisplayName(Date pDate, TimeZone pTz,
-			Locale pLocale) {
-		if (pDate == null) {
-			if (pTz == null || pLocale == null) {
+	public static String getLongTimezoneDisplayName(Date datetime, TimeZone timezone,
+			Locale inLocale) {
+		if (datetime == null) {
+			if (timezone == null || inLocale == null) {
 				return null;
 			} else {
-				return pTz.getDisplayName(pTz.inDaylightTime(new Date()),
-						TimeZone.LONG, pLocale);
+				return timezone.getDisplayName(timezone.inDaylightTime(new Date()),
+						TimeZone.LONG, inLocale);
 			}
 		}
-		return pTz.getDisplayName(pTz.inDaylightTime(pDate), TimeZone.LONG,
-				pLocale);
+		return timezone.getDisplayName(timezone.inDaylightTime(datetime), TimeZone.LONG,
+				inLocale);
 	}
 
 	/**
@@ -152,19 +157,20 @@ public class I18nUtility {
 	 * Get time zone display name localized in short format. If the timezone is
 	 * one which supports daylight (summer) time offsets, the display name will
 	 * indicate whether the time zone is currently in standard or daylight
-	 * (summer) time. This is based on the current time. Returns null when given
-	 * null parameters.
+	 * (summer) time. This is based on the current time, using the translations
+	 * built into the JVM for the {@link java.util.TimeZone} class. Returns null
+	 * when given null parameters.
 	 * </p>
 	 * 
-	 * @param pTz
+	 * @param timezone
 	 *            A time zone.
-	 * @param pLocale
+	 * @param inLocale
 	 *            A locale.
 	 * @return The current localized timezone display name.
 	 */
-	public static String getShortTimezoneDisplayName(TimeZone pTz,
-			Locale pLocale) {
-		return getShortTimezoneDisplayName(null, pTz, pLocale);
+	public static String getShortTimezoneDisplayName(TimeZone timezone,
+			Locale inLocale) {
+		return getShortTimezoneDisplayName(null, timezone, inLocale);
 	}
 
 	/**
@@ -174,29 +180,30 @@ public class I18nUtility {
 	 * indicate whether the time zone is in standard or daylight (summer) time
 	 * at the given time. Returns null when given null parameters (except if the
 	 * given time is null, the method assumes the current time for purposes of
-	 * the daylight calculation).
+	 * the daylight calculation). This uses the translations built into the JVM
+	 * for the {@link java.util.TimeZone} class.
 	 * </p>
 	 * 
-	 * @param pDate
+	 * @param datetime
 	 *            Time to use for deciding whether it is daylight time.
-	 * @param pTz
+	 * @param timezone
 	 *            A time zone.
-	 * @param pLocale
+	 * @param inLocale
 	 *            A locale.
 	 * @return The localized timezone display name at that date and time.
 	 */
-	public static String getShortTimezoneDisplayName(Date pDate, TimeZone pTz,
-			Locale pLocale) {
-		if (pDate == null) {
-			if (pTz == null || pLocale == null) {
+	public static String getShortTimezoneDisplayName(Date datetime, TimeZone timezone,
+			Locale inLocale) {
+		if (datetime == null) {
+			if (timezone == null || inLocale == null) {
 				return null;
 			} else {
-				return pTz.getDisplayName(pTz.inDaylightTime(new Date()),
-						TimeZone.SHORT, pLocale);
+				return timezone.getDisplayName(timezone.inDaylightTime(new Date()),
+						TimeZone.SHORT, inLocale);
 			}
 		}
-		return pTz.getDisplayName(pTz.inDaylightTime(pDate), TimeZone.SHORT,
-				pLocale);
+		return timezone.getDisplayName(timezone.inDaylightTime(datetime), TimeZone.SHORT,
+				inLocale);
 	}
 
 	/**
@@ -207,8 +214,10 @@ public class I18nUtility {
 	 * with the given language and country codes. However if the country code is
 	 * null, a generic (ie language-only) locale is returned. And if the HPP
 	 * proprietary language codes for Traditional or Simplified Chinese are
-	 * provided ("12" or "13"), the returned locale must assume Taiwan Chinese
-	 * or China Chinese respectively, regardless of the given country code.
+	 * provided (see {@link #HPP_TRAD_CHINESE_LANG} and
+	 * {@link #HPP_TRAD_CHINESE_LANG}), the returned locale must assume Taiwan
+	 * Chinese ({@link java.util.Locale#TAIWAN}) or China Chinese ({@link java.util.Locale#CHINA})
+	 * respectively, regardless of the given country code.
 	 * </p>
 	 * 
 	 * @param pHppLangCode
@@ -225,9 +234,9 @@ public class I18nUtility {
 		pHppLangCode = pHppLangCode.trim().toLowerCase();
 		Locale locale = null;
 		if (HPP_TRAD_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
-			locale = new Locale("zh", "TW");
+			locale = Locale.TAIWAN;
 		} else if (HPP_SIMP_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
-			locale = new Locale("zh", "CN");
+			locale = Locale.CHINA;
 		} else {
 			if (pHppCountryCode != null) {
 				pHppCountryCode = pHppCountryCode.trim().toUpperCase();
@@ -245,8 +254,10 @@ public class I18nUtility {
 	 * null language code. The returned locale generally is a generic (ie
 	 * language-only) locale corresponding directly with the given language
 	 * code. However, if the HPP proprietary language codes for Traditional or
-	 * Simplified Chinese ("12" or "13") are provided, the returned locale must
-	 * assume Taiwan Chinese or China Chinese respectively.
+	 * Simplified Chinese (see {@link #HPP_TRAD_CHINESE_LANG} and
+	 * {@link #HPP_TRAD_CHINESE_LANG}) are provided, the returned locale must
+	 * assume Taiwan Chinese ({@link java.util.Locale#TAIWAN}) or China
+	 * Chinese ({@link java.util.Locale#CHINA}) respectively.
 	 * </p>
 	 * 
 	 * @param pHppLangCode
@@ -262,9 +273,11 @@ public class I18nUtility {
 	 * Transform a locale into the HP Passport language code. Returns null if
 	 * given a null locale. Generally the returned HPP language code corresponds
 	 * directly with the ISO language code inside the locale. However if the
-	 * locale is Taiwan Chinese or China Chinese, the returned HPP language code
-	 * will be the HPP proprietary value for Traditional or Simplified Chinese
-	 * respectively ("12" or "13").
+	 * locale is Taiwan Chinese ({@link java.util.Locale#TAIWAN}) or China
+	 * Chinese ({@link java.util.Locale#CHINA}), the returned HPP language
+	 * code will be the HPP proprietary value for Traditional or Simplified
+	 * Chinese respectively (see {@link #HPP_TRAD_CHINESE_LANG} and
+	 * {@link #HPP_TRAD_CHINESE_LANG}).
 	 * </p>
 	 * 
 	 * @param pLocale
@@ -277,24 +290,25 @@ public class I18nUtility {
 		}
 		String language = pLocale.getLanguage().trim().toLowerCase();
 		String country = pLocale.getCountry().trim().toUpperCase();
-		if ("zh".equalsIgnoreCase(language)) {
-			if ("TW".equalsIgnoreCase(country)) {
-				return HPP_TRAD_CHINESE_LANG;
-			} else if ("CN".equalsIgnoreCase(country)) {
-				return HPP_SIMP_CHINESE_LANG;
-			}
-		}
+		if ((Locale.TAIWAN.getLanguage().equalsIgnoreCase(language))
+				&& (Locale.TAIWAN.getCountry().equalsIgnoreCase(country)))
+			return HPP_TRAD_CHINESE_LANG;
+		if ((Locale.CHINA.getLanguage().equalsIgnoreCase(language))
+				&& (Locale.CHINA.getCountry().equalsIgnoreCase(country)))
+			return HPP_SIMP_CHINESE_LANG;
 		return language;
 	}
 
 	/**
 	 * <p>
-	 * Transform an HP Passport language code into the equivalent ISO 639-1
-	 * language code. Returns null if given a null parameter. Generally the
-	 * returned ISO language code corresponds directly with the given HPP
-	 * language code. Note that if the HPP language code is for Traditional or
-	 * Simplified Chinese (ie "12" or "13"), then the ISO language code for
-	 * Chinese ("zh") must be returned without distinction.
+	 * Transform an HP Passport language code into the equivalent <a
+	 * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+	 * 639-1</a> language code. Returns null if given a null parameter.
+	 * Generally the returned ISO language code corresponds directly with the
+	 * given HPP language code. Note that if the HPP language code is for
+	 * Traditional or Simplified Chinese (see {@link #HPP_TRAD_CHINESE_LANG} and
+	 * {@link #HPP_TRAD_CHINESE_LANG}), then the ISO language code for Chinese ({@link java.util.Locale#CHINESE})
+	 * must be returned without distinction.
 	 * </p>
 	 * 
 	 * @param pHppLangCode
@@ -308,21 +322,22 @@ public class I18nUtility {
 		pHppLangCode = pHppLangCode.trim().toLowerCase();
 		if (HPP_TRAD_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)
 				|| HPP_SIMP_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
-			return "zh";
+			return Locale.CHINESE.getLanguage();
 		}
 		return pHppLangCode;
 	}
 
 	/**
 	 * <p>
-	 * Transform a locale into the equivalent RFC 3066 language tag. Returns
-	 * null if the given parameter is null.
+	 * Transform a locale into the equivalent <a
+	 * href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag.
+	 * Returns null if the given parameter is null.
 	 * </p>
 	 * 
 	 * @param pLocale
 	 *            A locale.
-	 * @return The equivalent RFC 3066 language tag, such as "fr-CA" for Canada
-	 *         French, or "fr" for generic French.
+	 * @return The equivalent RFC 3066 language tag, such as <code>fr-CA</code>
+	 *         for Canada French, or <code>fr</code> for generic French.
 	 */
 	public static String localeToLanguageTag(Locale pLocale) {
 		if (pLocale == null) {
@@ -346,13 +361,14 @@ public class I18nUtility {
 
 	/**
 	 * <p>
-	 * Transform an RFC 3066 language tag into the equivalent locale. Returns
-	 * null if the given parameter is null.
+	 * Transform an <a href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a>
+	 * language tag into the equivalent locale. Returns null if the given
+	 * parameter is null.
 	 * </p>
 	 * 
 	 * @param pLangTag
-	 *            The RFC 3066 language tag, such as "fr-CA" for Canada French
-	 *            or "fr" for generic French.
+	 *            The RFC 3066 language tag, such as <code>fr-CA</code> for
+	 *            Canada French or <code>fr</code> for generic French.
 	 * @return The equivalent locale.
 	 */
 	public static Locale languageTagToLocale(String pLangTag) {
@@ -382,17 +398,18 @@ public class I18nUtility {
 	 * Sort the given collection of locales alphabetically. The sort is in
 	 * ascending order by language first, country second, and variant third.
 	 * They are sorted alphabetically according to the display names for those
-	 * elements in the system default locale. The method returns the collection
-	 * in the form of an ArrayList. If the collection did not purely contain
-	 * locales, it is returned unsorted.
+	 * elements in the system default locale (ie,
+	 * {@link java.util.Locale#getDefault()}). The method returns the
+	 * collection in the form of an {@link java.util.ArrayList}. If the
+	 * collection did not purely contain locales, it is returned unsorted.
 	 * </p>
 	 * 
-	 * @param pLocales
+	 * @param locales
 	 *            Collection of locales.
-	 * @return Sorted locales, in the form of an ArrayList.
+	 * @return Sorted locales, in the form of an {@link java.util.ArrayList}.
 	 */
-	public static Collection sortLocales(Collection pLocales) {
-		return sortLocales(pLocales, null, 0);
+	public static Collection<Locale> sortLocales(Collection<Locale> locales) {
+		return sortLocales(locales, null, 0);
 	}
 
 	/**
@@ -400,19 +417,22 @@ public class I18nUtility {
 	 * Sort the given collection of locales alphabetically according to the
 	 * given locale. The sort is in ascending order by language first, country
 	 * second, and variant third. They are sorted alphabetically according to
-	 * the display names for those elements in the given locale. The method
-	 * returns the collection in the form of an ArrayList. If the collection did
-	 * not purely contain locales, it is returned unsorted.
+	 * the display names for those elements in the given locale (or the system
+	 * default locale, {@link java.util.Locale#getDefault()}, if the given
+	 * locale is null). The method returns the collection in the form of an
+	 * {@link java.util.ArrayList}. If there is a problem during the sort, the
+	 * list is returned unsorted.
 	 * </p>
 	 * 
-	 * @param pLocales
+	 * @param locales
 	 *            Collection of locales.
 	 * @param Locale
 	 *            The locale in which to alphabetize the collection.
-	 * @return Sorted locales, in the form of an ArrayList.
+	 * @return Sorted locales, in the form of an {@link java.util.ArrayList}.
 	 */
-	public static Collection sortLocales(Collection pLocales, Locale loc) {
-		return sortLocales(pLocales, loc, 0);
+	public static Collection<Locale> sortLocales(Collection<Locale> locales,
+			Locale inLocale) {
+		return sortLocales(locales, inLocale, 0);
 	}
 
 	/**
@@ -424,104 +444,103 @@ public class I18nUtility {
 	 * <ul>
 	 * <li>
 	 * <p>
-	 * If the flags include the <code>LOCALE_BY_COUNTRY</code> bit, then the
-	 * sort is by country first and language second. Otherwise it is by language
-	 * first and country second. (In both cases, any variant is third.)
+	 * If the flags include the {@link #LOCALE_BY_COUNTRY} bit, then the sort is
+	 * by country first and language second. Otherwise it is by language first
+	 * and country second. (In both cases, any variant is third.)
 	 * </p>
 	 * </li>
 	 * <li>
 	 * <p>
-	 * If the flags include the <code>LOCALE_DESCENDING</code> bit, then the
-	 * sort is in descending order. Otherwise it is ascending.
+	 * If the flags include the {@link #LOCALE_DESCENDING} bit, then the sort is
+	 * in descending order. Otherwise it is ascending.
 	 * </p>
 	 * </li>
 	 * </ul>
 	 * <p>
-	 * The method returns the collection in the form of an ArrayList. If the
-	 * collection did not purely contain locales, it is returned unsorted.
+	 * The sort is performed in the given locale (the system default locale,
+	 * {@link java.util.Locale#getDefault()}, is used if the given locale is
+	 * null). The method returns the collection in the form of an
+	 * {@link java.util.ArrayList}. If there was an unexpected problem during
+	 * the sort, the list is returned unsorted.
 	 * </p>
 	 * 
-	 * @param pLocales
+	 * @param locales
 	 *            Collection of locales.
-	 * @param locale
+	 * @param inLocale
 	 *            The locale in which to alphabetize the collection.
 	 * @param flags
 	 *            A bitmask of control flags (see description above).
-	 * @return Sorted locales, in the form of an ArrayList.
+	 * @return Sorted locales, in the form of an {@link java.util.ArrayList}.
 	 */
-	public static Collection sortLocales(Collection pLocales, Locale loc,
-			int flags) {
-		if (pLocales == null) {
+	public static Collection<Locale> sortLocales(Collection<Locale> locales,
+			Locale inLocale, int flags) {
+
+		/**
+		 * The comparator class for the <code>sortLocales</code> methods.
+		 * 
+		 * @author djorgen
+		 */
+		class LocaleComparator implements Comparator<Locale> {
+			int flags = 0;
+			Locale inLocale = Locale.getDefault();
+
+			public void setFlags(int pFlags) {
+				flags = pFlags;
+			}
+
+			public void setInLocale(Locale pInLocale) {
+				inLocale = pInLocale;
+			}
+
+			public int compare(Locale loc1, Locale loc2) {
+				String s1 = "";
+				String s2 = "";
+				int outcome = 0;
+				if (loc1 != null) {
+					if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
+						s1 = loc1.getDisplayCountry(inLocale)
+								+ loc1.getDisplayLanguage(inLocale)
+								+ loc1.getDisplayVariant(inLocale);
+					else
+						s1 = loc1.getDisplayLanguage(inLocale)
+								+ loc1.getDisplayCountry(inLocale)
+								+ loc1.getDisplayVariant(inLocale);
+				}
+				if (loc2 != null) {
+					if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
+						s2 = loc2.getDisplayCountry(inLocale)
+								+ loc2.getDisplayLanguage(inLocale)
+								+ loc2.getDisplayVariant(inLocale);
+					else
+						s2 = loc2.getDisplayLanguage(inLocale)
+								+ loc2.getDisplayCountry(inLocale)
+								+ loc2.getDisplayVariant(inLocale);
+				}
+				if ((flags & LOCALE_DESCENDING) == LOCALE_DESCENDING)
+					outcome = s2.compareTo(s1);
+				else
+					outcome = s1.compareTo(s2);
+				return (outcome);
+			}
+		}
+
+		if (locales == null) {
 			return null;
 		}
-		if (loc == null) {
-			loc = Locale.getDefault();
+		if (inLocale == null) {
+			inLocale = Locale.getDefault();
 		}
-		final Locale fLoc = loc;
-		List list = new ArrayList();
-		list.addAll(pLocales);
+
+		// Make the locale comparator.
+		LocaleComparator comp = new LocaleComparator();
+		comp.setFlags(flags);
+		comp.setInLocale(inLocale);
+
+		// Sort the collection.
+		List<Locale> list = new ArrayList<Locale>();
+		list.addAll(locales);
 		try {
-			if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY) {
-				if ((flags & LOCALE_DESCENDING) == LOCALE_DESCENDING) {
-					// Sort by country, descending
-					Collections.sort(list, new Comparator() {
-						public int compare(Object o2, Object o1) {
-							Locale loc1 = (Locale) o1;
-							Locale loc2 = (Locale) o2;
-							return (loc1.getDisplayCountry(fLoc)
-									+ loc1.getDisplayLanguage(fLoc) + loc1
-									.getDisplayVariant(fLoc)).compareTo(loc2
-									.getDisplayCountry(fLoc)
-									+ loc2.getDisplayLanguage(fLoc)
-									+ loc2.getDisplayVariant(fLoc));
-						}
-					});
-				} else {
-					// Sort by country, ascending
-					Collections.sort(list, new Comparator() {
-						public int compare(Object o1, Object o2) {
-							Locale loc1 = (Locale) o1;
-							Locale loc2 = (Locale) o2;
-							return (loc1.getDisplayCountry(fLoc)
-									+ loc1.getDisplayLanguage(fLoc) + loc1
-									.getDisplayVariant(fLoc)).compareTo(loc2
-									.getDisplayCountry(fLoc)
-									+ loc2.getDisplayLanguage(fLoc)
-									+ loc2.getDisplayVariant(fLoc));
-						}
-					});
-				}
-			} else {
-				if ((flags & LOCALE_DESCENDING) == LOCALE_DESCENDING) {
-					// Sort by language, descending
-					Collections.sort(list, new Comparator() {
-						public int compare(Object o2, Object o1) {
-							Locale loc1 = (Locale) o1;
-							Locale loc2 = (Locale) o2;
-							return (loc1.getDisplayLanguage(fLoc)
-									+ loc1.getDisplayCountry(fLoc) + loc1
-									.getDisplayVariant(fLoc)).compareTo(loc2
-									.getDisplayLanguage(fLoc)
-									+ loc2.getDisplayCountry(fLoc)
-									+ loc2.getDisplayVariant(fLoc));
-						}
-					});
-				} else {
-					// Default - sort by language, ascending
-					Collections.sort(list, new Comparator() {
-						public int compare(Object o1, Object o2) {
-							Locale loc1 = (Locale) o1;
-							Locale loc2 = (Locale) o2;
-							return (loc1.getDisplayLanguage(fLoc)
-									+ loc1.getDisplayCountry(fLoc) + loc1
-									.getDisplayVariant(fLoc)).compareTo(loc2
-									.getDisplayLanguage(fLoc)
-									+ loc2.getDisplayCountry(fLoc)
-									+ loc2.getDisplayVariant(fLoc));
-						}
-					});
-				}
-			}
+			Collections.sort(list, comp);
 		} catch (Exception e) {
 			// Ignore exception and return unsorted list.
 		}
@@ -529,6 +548,14 @@ public class I18nUtility {
 	}
 
 	/**
+	 * <p>
+	 * This is a protected method - portal components should use one of the
+	 * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility}
+	 * <code>getLocalizedFile*</code> methods, and portlets should use one of
+	 * the {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility}
+	 * <code>getLocalizedFile*</code> methods.
+	 * </p>
+	 * 
 	 * <p>
 	 * Looks up the given base filename in the given path, and returns the
 	 * filename as per the boolean switch: either the best-fit localized
@@ -611,7 +638,7 @@ public class I18nUtility {
 	 *         qualifying file was found.
 	 * 
 	 */
-	public static String getLocalizedFileName(String pPath,
+	protected static String getLocalizedFileName(String pPath,
 			String pBaseFileName, Locale pLocale, boolean pLocalized) {
 		if (pBaseFileName == null || (pLocalized == true && pLocale == null)) {
 			return null;
@@ -733,42 +760,42 @@ public class I18nUtility {
 	/**
 	 * <p>
 	 * Return the locale display name, localized for that same locale. For a
-	 * country-specific locale, this will be in the format "language - country".
+	 * country-specific locale, this will be in the format <i>language - country</i>.
 	 * For a generic locale (ie language only, no country), this will be in the
-	 * format "language". In either case, if there is a variant in the locale,
-	 * it will be included parenthetically at the end: "language - country
-	 * (variant)" or "language (variant)". Returns null if the parameter is
-	 * null.
+	 * format <i>language</i>. In either case, if there is a variant in the
+	 * locale, it will be included parenthetically at the end: <i>language -
+	 * country (variant)</i> or <i>language (variant)</i>. Returns null if the
+	 * parameter is null.
 	 * </p>
 	 * 
-	 * @param pLocale
+	 * @param locale
 	 *            A locale.
 	 * @return The localized display name for the locale.
 	 */
-	public static String getLocaleDisplayName(Locale pLocale) {
-		return getLocaleDisplayName(pLocale, pLocale, 0);
+	public static String getLocaleDisplayName(Locale locale) {
+		return getLocaleDisplayName(locale, locale, 0);
 	}
 
 	/**
 	 * <p>
 	 * Return the display name of one locale, localized for another locale. For
-	 * a country-specific locale, this will be in the format "language -
-	 * country". For a generic locale (ie language only, no country), this will
-	 * be in the format "language". In either case, if there is a variant in the
-	 * locale, it will be included parenthetically at the end: "language -
-	 * country (variant)" or "language (variant)". Returns null if the parameter
-	 * is null.
+	 * a country-specific locale, this will be in the format <i>language -
+	 * country</i>. For a generic locale (ie language only, no country), this
+	 * will be in the format <i>language</i>. In either case, if there is a
+	 * variant in the locale, it will be included parenthetically at the end:
+	 * <i>language - country (variant)</i> or <i>language (variant)</i>.
+	 * Returns null if the parameter is null.
 	 * </p>
 	 * 
-	 * @param pLocale1
+	 * @param locale
 	 *            A locale.
-	 * @param pLocale2
+	 * @param inLocale
 	 *            The locale in which to render the display name.
 	 * @return The display name for the first locale, localized by the second
 	 *         locale.
 	 */
-	public static String getLocaleDisplayName(Locale pLocale1, Locale pLocale2) {
-		return getLocaleDisplayName(pLocale1, pLocale2, 0);
+	public static String getLocaleDisplayName(Locale locale, Locale inLocale) {
+		return getLocaleDisplayName(locale, inLocale, 0);
 	}
 
 	/**
@@ -781,45 +808,45 @@ public class I18nUtility {
 	 * <p>
 	 * By default (ie, when the flags are <code>0</code>), the language is
 	 * given priority in the display name. For a country-specific locale, this
-	 * will be in the format "language - country". For a generic locale (ie
-	 * language only, no country), this will be in the format "language".
+	 * will be in the format <i>language - country<i>. For a generic locale (ie
+	 * language only, no country), this will be in the format <i>language</i>.
 	 * </p>
 	 * </li>
 	 * <li>
 	 * <p>
-	 * When the flags (a bitmask) include the <code>LOCALE_BY_COUNTRY</code>
-	 * bit, the country is given priority. For a country-specific locale, it
-	 * will be in the format "country - language". For a generic locale, it will
-	 * be just "language". Note this is the current HPWeb standard.
+	 * When the flags (a bitmask) include the {@link #LOCALE_BY_COUNTRY} bit,
+	 * the country is given priority. For a country-specific locale, it will be
+	 * in the format <i>country - language</i>. For a generic locale, it will
+	 * be just <i>language</i>. Note this is the current HPWeb standard.
 	 * </p>
 	 * </li>
 	 * </ul>
 	 * <p>
 	 * In either case, if there is a variant in the locale, it will be included
-	 * parenthetically at the end: "language - country (variant)" or "language
-	 * (variant)". Returns null if the parameter is null.
+	 * parenthetically at the end: <i>language - country (variant)</i> or
+	 * <i>language (variant)</i>. Returns null if the parameter is null.
 	 * </p>
 	 * 
-	 * @param pLocale1
+	 * @param locale
 	 *            A locale.
-	 * @param pLocale2
+	 * @param inLocale
 	 *            A locale in which to render the display name.
 	 * @param flags
 	 *            Control bits, see description above.
 	 * @return The display name for the first locale, localized by the second
 	 *         locale.
 	 */
-	public static String getLocaleDisplayName(Locale pLocale1, Locale pLocale2,
+	public static String getLocaleDisplayName(Locale locale, Locale inLocale,
 			int flags) {
-		if (pLocale1 == null) {
+		if (locale == null) {
 			return null;
 		}
-		if (pLocale2 == null) {
-			pLocale2 = Locale.getDefault();
+		if (inLocale == null) {
+			inLocale = Locale.getDefault();
 		}
-		String displayLanguage = pLocale1.getDisplayLanguage(pLocale2);
-		String displayCountry = pLocale1.getDisplayCountry(pLocale2);
-		String displayVariant = pLocale1.getDisplayVariant(pLocale2);
+		String displayLanguage = locale.getDisplayLanguage(inLocale);
+		String displayCountry = locale.getDisplayCountry(inLocale);
+		String displayVariant = locale.getDisplayVariant(inLocale);
 		if (displayLanguage != null)
 			displayLanguage = displayLanguage.trim();
 		if (displayCountry != null)
@@ -854,35 +881,35 @@ public class I18nUtility {
 	 * 
 	 * @param givenName
 	 *            Given name.
-	 * @param surName
+	 * @param familyName
 	 *            Surname (ie family name).
-	 * @param locale
+	 * @param inLocale
 	 *            A locale.
 	 * @return The whole user name in correct order.
 	 */
-	public static String getUserDisplayName(String fn, String ln, Locale locale) {
-		if (fn == null && ln == null) {
+	public static String getUserDisplayName(String givenName, String familyName, Locale inLocale) {
+		if (givenName == null && familyName == null) {
 			return null;
 		}
-		fn = fn.trim();
-		ln = ln.trim();
+		givenName = givenName.trim();
+		familyName = familyName.trim();
 
 		// In some locales, only one name may be used.
-		if (fn.length() == 0) {
-			return ln;
+		if (givenName.length() == 0) {
+			return familyName;
 		}
-		if (ln.length() == 0) {
-			return fn;
+		if (familyName.length() == 0) {
+			return givenName;
 		}
 		// Use Western order by default.
-		if (locale == null) {
-			return fn + " " + ln;
+		if (inLocale == null) {
+			return givenName + " " + familyName;
 		}
 
 		// Display name according to language, not country.
-		String lang = locale.getLanguage().trim().toLowerCase();
+		String lang = inLocale.getLanguage().trim().toLowerCase();
 		if (lang.length() == 0) {
-			return fn + " " + ln;
+			return givenName + " " + familyName;
 		}
 
 		// the flag whether the order of the name need to be reversed
@@ -915,7 +942,7 @@ public class I18nUtility {
 					.contains(lang);
 		}
 
-		return reverseFlag ? (ln + " " + fn) : (fn + " " + ln);
+		return reverseFlag ? (familyName + " " + givenName) : (givenName + " " + familyName);
 	}
 
 	/**
