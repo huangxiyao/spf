@@ -38,8 +38,8 @@ import com.hp.it.spf.xa.misc.Utils;
  * @author <link href="ying-zhi.wu@hp.com">Oliver</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see <code>com.hp.it.spf.xa.i18n.portal.I18nUtility</code>
- * <code>com.hp.it.spf.xa.i18n.portlet.I18nUtility</code>
+ * @see <code>com.hp.it.spf.xa.i18n.portal.I18nUtility</code><br>
+ *      <code>com.hp.it.spf.xa.i18n.portlet.I18nUtility</code>
  */
 public class I18nUtility {
 
@@ -51,10 +51,16 @@ public class I18nUtility {
 	protected static final String I18N_CONFIG_FILE = "i18n_config";
 
 	/**
-	 * Various properties in the internationalization configuration file. See
-	 * file for definition.
+	 * In the internationalization configuration file, this is the property
+	 * keyname for the language codes of locales with family-name-first display
+	 * convention. See {@link #getUserDisplayName(String, String, Locale)} for
+	 * how this is used.
 	 */
 	protected static final String I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS = "userDisplayName.reverse.lang";
+
+	/**
+	 * Not currently used.
+	 */
 	protected static final String I18N_CONFIG_KEY_EMAIL_ENCODING_FOR = "emailTemplate.encoding";
 
 	/**
@@ -115,7 +121,8 @@ public class I18nUtility {
 	 *            A locale.
 	 * @return The current localized timezone display name.
 	 */
-	public static String getLongTimezoneDisplayName(TimeZone timezone, Locale inLocale) {
+	public static String getLongTimezoneDisplayName(TimeZone timezone,
+			Locale inLocale) {
 		return getLongTimezoneDisplayName(null, timezone, inLocale);
 	}
 
@@ -138,18 +145,18 @@ public class I18nUtility {
 	 *            A Locale.
 	 * @return The localized timezone display name at that date and time.
 	 */
-	public static String getLongTimezoneDisplayName(Date datetime, TimeZone timezone,
-			Locale inLocale) {
+	public static String getLongTimezoneDisplayName(Date datetime,
+			TimeZone timezone, Locale inLocale) {
 		if (datetime == null) {
 			if (timezone == null || inLocale == null) {
 				return null;
 			} else {
-				return timezone.getDisplayName(timezone.inDaylightTime(new Date()),
-						TimeZone.LONG, inLocale);
+				return timezone.getDisplayName(timezone
+						.inDaylightTime(new Date()), TimeZone.LONG, inLocale);
 			}
 		}
-		return timezone.getDisplayName(timezone.inDaylightTime(datetime), TimeZone.LONG,
-				inLocale);
+		return timezone.getDisplayName(timezone.inDaylightTime(datetime),
+				TimeZone.LONG, inLocale);
 	}
 
 	/**
@@ -192,18 +199,18 @@ public class I18nUtility {
 	 *            A locale.
 	 * @return The localized timezone display name at that date and time.
 	 */
-	public static String getShortTimezoneDisplayName(Date datetime, TimeZone timezone,
-			Locale inLocale) {
+	public static String getShortTimezoneDisplayName(Date datetime,
+			TimeZone timezone, Locale inLocale) {
 		if (datetime == null) {
 			if (timezone == null || inLocale == null) {
 				return null;
 			} else {
-				return timezone.getDisplayName(timezone.inDaylightTime(new Date()),
-						TimeZone.SHORT, inLocale);
+				return timezone.getDisplayName(timezone
+						.inDaylightTime(new Date()), TimeZone.SHORT, inLocale);
 			}
 		}
-		return timezone.getDisplayName(timezone.inDaylightTime(datetime), TimeZone.SHORT,
-				inLocale);
+		return timezone.getDisplayName(timezone.inDaylightTime(datetime),
+				TimeZone.SHORT, inLocale);
 	}
 
 	/**
@@ -215,7 +222,7 @@ public class I18nUtility {
 	 * null, a generic (ie language-only) locale is returned. And if the HPP
 	 * proprietary language codes for Traditional or Simplified Chinese are
 	 * provided (see {@link #HPP_TRAD_CHINESE_LANG} and
-	 * {@link #HPP_TRAD_CHINESE_LANG}), the returned locale must assume Taiwan
+	 * {@link #HPP_SIMP_CHINESE_LANG}), the returned locale must assume Taiwan
 	 * Chinese ({@link java.util.Locale#TAIWAN}) or China Chinese ({@link java.util.Locale#CHINA})
 	 * respectively, regardless of the given country code.
 	 * </p>
@@ -255,7 +262,7 @@ public class I18nUtility {
 	 * language-only) locale corresponding directly with the given language
 	 * code. However, if the HPP proprietary language codes for Traditional or
 	 * Simplified Chinese (see {@link #HPP_TRAD_CHINESE_LANG} and
-	 * {@link #HPP_TRAD_CHINESE_LANG}) are provided, the returned locale must
+	 * {@link #HPP_SIMP_CHINESE_LANG}) are provided, the returned locale must
 	 * assume Taiwan Chinese ({@link java.util.Locale#TAIWAN}) or China
 	 * Chinese ({@link java.util.Locale#CHINA}) respectively.
 	 * </p>
@@ -277,7 +284,7 @@ public class I18nUtility {
 	 * Chinese ({@link java.util.Locale#CHINA}), the returned HPP language
 	 * code will be the HPP proprietary value for Traditional or Simplified
 	 * Chinese respectively (see {@link #HPP_TRAD_CHINESE_LANG} and
-	 * {@link #HPP_TRAD_CHINESE_LANG}).
+	 * {@link #HPP_SIMP_CHINESE_LANG}).
 	 * </p>
 	 * 
 	 * @param pLocale
@@ -307,7 +314,7 @@ public class I18nUtility {
 	 * Generally the returned ISO language code corresponds directly with the
 	 * given HPP language code. Note that if the HPP language code is for
 	 * Traditional or Simplified Chinese (see {@link #HPP_TRAD_CHINESE_LANG} and
-	 * {@link #HPP_TRAD_CHINESE_LANG}), then the ISO language code for Chinese ({@link java.util.Locale#CHINESE})
+	 * {@link #HPP_SIMP_CHINESE_LANG}), then the ISO language code for Chinese ({@link java.util.Locale#CHINESE})
 	 * must be returned without distinction.
 	 * </p>
 	 * 
@@ -722,6 +729,14 @@ public class I18nUtility {
 
 	/**
 	 * <p>
+	 * This is a protected method - portal components should use one of the
+	 * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility}
+	 * <code>getLocalizedFile*</code> methods, and portlets should use one of
+	 * the {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility}
+	 * <code>getLocalizedFile*</code> methods.
+	 * </p>
+	 * 
+	 * <p>
 	 * Returns true if the given file exists at the given location, otherwise
 	 * false. Returns null if given a null filename. The given path should be an
 	 * absolute path, or a path relative to the current working directory (to
@@ -765,7 +780,8 @@ public class I18nUtility {
 	 * format <i>language</i>. In either case, if there is a variant in the
 	 * locale, it will be included parenthetically at the end: <i>language -
 	 * country (variant)</i> or <i>language (variant)</i>. Returns null if the
-	 * parameter is null.
+	 * parameter is null. This uses the translations built into the JVM for the
+	 * {@link java.util.Locale} class.
 	 * </p>
 	 * 
 	 * @param locale
@@ -784,7 +800,8 @@ public class I18nUtility {
 	 * will be in the format <i>language</i>. In either case, if there is a
 	 * variant in the locale, it will be included parenthetically at the end:
 	 * <i>language - country (variant)</i> or <i>language (variant)</i>.
-	 * Returns null if the parameter is null.
+	 * Returns null if the parameter is null. This uses the translations built
+	 * into the JVM for the {@link java.util.Locale} class.
 	 * </p>
 	 * 
 	 * @param locale
@@ -808,7 +825,7 @@ public class I18nUtility {
 	 * <p>
 	 * By default (ie, when the flags are <code>0</code>), the language is
 	 * given priority in the display name. For a country-specific locale, this
-	 * will be in the format <i>language - country<i>. For a generic locale (ie
+	 * will be in the format <i>language - country</i>. For a generic locale (ie
 	 * language only, no country), this will be in the format <i>language</i>.
 	 * </p>
 	 * </li>
@@ -824,7 +841,9 @@ public class I18nUtility {
 	 * <p>
 	 * In either case, if there is a variant in the locale, it will be included
 	 * parenthetically at the end: <i>language - country (variant)</i> or
-	 * <i>language (variant)</i>. Returns null if the parameter is null.
+	 * <i>language (variant)</i>. Returns null if the parameter is null. This
+	 * uses the translations built into the JVM for the {@link java.util.Locale}
+	 * class.
 	 * </p>
 	 * 
 	 * @param locale
@@ -876,7 +895,17 @@ public class I18nUtility {
 	 * Return the whole user name (given name and surname) in the customary
 	 * order according to the given locale. Returns null if both of the name
 	 * parameters are null. Defaults to the customary Western order (given name
-	 * then surname).
+	 * first, then family name). In locales whose language codes are configured
+	 * in the <code>i18n_config.properties</code> file, the East Asian order
+	 * is used (family name first, then given name).
+	 * </p>
+	 * <p>
+	 * The <code>i18n_config.properties</code> file can be located anywhere
+	 * accessible to the system classloader. The property within that file which
+	 * is used by this method is {@link #I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS}.
+	 * For configuring the property file, please see the file itself - it is
+	 * contained inside the SPF common utilities JAR, and generally should never
+	 * need to be customized by application developers or administrators.
 	 * </p>
 	 * 
 	 * @param givenName
@@ -887,7 +916,8 @@ public class I18nUtility {
 	 *            A locale.
 	 * @return The whole user name in correct order.
 	 */
-	public static String getUserDisplayName(String givenName, String familyName, Locale inLocale) {
+	public static String getUserDisplayName(String givenName,
+			String familyName, Locale inLocale) {
 		if (givenName == null && familyName == null) {
 			return null;
 		}
@@ -942,7 +972,8 @@ public class I18nUtility {
 					.contains(lang);
 		}
 
-		return reverseFlag ? (familyName + " " + givenName) : (givenName + " " + familyName);
+		return reverseFlag ? (familyName + " " + givenName)
+				: (givenName + " " + familyName);
 	}
 
 	/**
