@@ -49,10 +49,10 @@ if (s_region == null) {
     s_region = "unknown";
 }
     
-String s_company = "unknown";
+String s_site = "unknown";
 Site currentSite = portalContext.getCurrentSite();
 if (currentSite != null) {
-    s_company = currentSite.getDNSName();
+    s_site = currentSite.getDNSName();
 }
 
 String s_accessType =(String)request.getHeader("AccessType");
@@ -63,7 +63,7 @@ if (s_accessType == null || s_accessType.trim().length() == 0) {
 %>
 
 <script language="JavaScript">
-var s_prop26= "<%= s_userType %>|<%= s_company %>|<%= s_accessType %>|<%= s_region %>";
+var s_prop26= "<%= s_userType %>|<%= s_site %>|<%= s_accessType %>|<%= s_region %>";
 var s_pageName = document.title;
 </script>
 
