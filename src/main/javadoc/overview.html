@@ -2870,11 +2870,11 @@ key.help.content=Internet security is important to us...
 </pre></blockquote>
 
 <p>To provide that content as standalone classic contextual help
-around an image (possibly localized) whose base name was <code>question_mark.gif</code>,
-with a gray title bar with heavy black font, your code might look like
-this (where <code>request</code> is your {@link
-javax.portlet.PortletRequest} and <code>response</code> is your {@link
-javax.portlet.PortletResponse}):</p>
+around an image (possibly localized) whose base name was <code>question_mark.gif</code>
+(in the <code>images/</code> subfolder), with a gray title bar with
+heavy black font, your code might look like this (where <code>request</code>
+is your {@link javax.portlet.PortletRequest} and <code>response</code>
+is your {@link javax.portlet.PortletResponse}):</p>
 
 <blockquote><pre>
 import com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider;
@@ -2884,7 +2884,7 @@ String helpTitle = I18nUtility.getMessage(request, "key.help.title");
 // Now get the main content for the contextual help.
 String helpContent = I18nUtility.getMessage(request, "key.help.content");
 // Now make the HTML &lt;img&gt; tag for the link content.
-String imgURL = I18nUtility.getLocalizedFileURL(request, response, "question_mark.gif");
+String imgURL = I18nUtility.getLocalizedFileURL(request, response, "/images/question_mark.gif");
 String imgTag = "&lt;IMG SRC='" + imgURL + "'&gt;"; 
 // Now make the classic contextual help object and set its contents.
 ClassicContextualHelpProvider cchp = new ClassicContextualHelpProvider(request, response);
@@ -3012,16 +3012,17 @@ key.help.image.alt=Click for help
 
 <p>And suppose you need to generate some standalone contextual help
 with that content, linked from an image (possibly localized) whose base
-name is <code>question_mark.gif</code>. Suppose that the contextual help
-title bar should use a gray background with heavy black font. Then you
-could generate the image, link, and (initially hidden) classic
-contextual help popup, using JSP like this:</p>
+name is <code>question_mark.gif</code> (in the <code>images/</code>
+subfolder). Suppose that the contextual help title bar should use a gray
+background with heavy black font. Then you could generate the image,
+link, and (initially hidden) classic contextual help popup, using JSP
+like this:</p>
 
 <blockquote><pre>
 &lt;%@ taglib prefix="spf-help-portlet" uri="/spf-help-portlet.tld" %&gt;
 ...
 &lt;spf-help-portlet:classicContextualHelp 
-	anchorImgKey="question_mark.gif"
+	anchorImgKey="/images/question_mark.gif"
 	anchorImgAltKey="key.help.image.alt"
 	titleKey="key.help.title"
 	contentKey="key.help.content"
