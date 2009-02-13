@@ -265,10 +265,12 @@ public class MessageTag extends MessageBaseTag {
 			pArray = params.toArray();
 		}
 		if (cProviders != null) {
-			cArray = (ContextualHelpProvider[]) cProviders.toArray();
+			cArray = (ContextualHelpProvider[]) cProviders
+					.toArray(new ContextualHelpProvider[] {});
 		}
 		if (gProviders != null) {
-			gArray = (GlobalHelpProvider[]) gProviders.toArray();
+			gArray = (GlobalHelpProvider[]) gProviders
+					.toArray(new GlobalHelpProvider[] {});
 		}
 		if (stringID == null) {
 			return I18nUtility.getValue(key, defaultValue, portalContext,
