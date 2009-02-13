@@ -98,10 +98,17 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	public static final String PORTLET_I18N_CONFIG_FILE = "i18n_portlet_config";
 
 	/**
-	 * Various properties in the portlet internationalization configuration
-	 * file. See file for definition.
+	 * The property in the portlet internationalization configuration file which
+	 * stores the portlet bundle folder. See the file for a complete description
+	 * of this property.
 	 */
 	public static final String PORTLET_I18N_CONFIG_PROP_BUNDLE_DIR = "portlet.bundleDirectory";
+
+	/**
+	 * The property in the portlet internationalization configuration file which
+	 * stores the relay servlet location. See the file for a complete
+	 * description of this property.
+	 */
 	public static final String PORTLET_I18N_CONFIG_PROP_RELAY_URL = "servlet.fileRelay.url";
 
 	/**
@@ -466,17 +473,21 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			fileName = fileName.trim();
 
 		// Check if the localized filename message was found (ie is not null and
-		// not equal to the key). If so, then return an input stream for that.
-		// But if the file was not found, or the message was not found, return
-		// an input stream for the file inside the portlet application. This
-		// will return null if the file still was not found.
+		// not equal to the key). If so, then return an input stream for that,
+		// looking in the portlet bundle directory. But if the file was not
+		// found there, or the message was not found, return an input stream for
+		// the file inside the portlet application. This will return null if the
+		// file still was not found. (Before trying inside the portlet
+		// application, make sure "/" exists at the beginning of the filename to
+		// ensure that the lookup is relative to the application root.)
 		if (fileName != null && !fileName.equals(pKey)
 				&& (fileName.length() > 0)) {
-			fileName = Utils.slashify(resourceBundleDir + "/" + fileName);
 			try {
-				return new FileInputStream(fileName);
+				return new FileInputStream(Utils.slashify(resourceBundleDir
+						+ "/" + fileName));
 			} catch (FileNotFoundException e) {
-				return pContext.getResourceAsStream(fileName);
+				return pContext.getResourceAsStream(Utils.slashify("/"
+						+ fileName));
 			}
 		}
 		return null;
@@ -709,9 +720,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			fileName = getLocalizedFileName(pReq, pBaseFileName, pLoc,
 					pLocalized);
 			if (fileName != null) {
-				return pResp.encodeURL(fileName);
+				return encodeURL(pReq, pResp, fileName);
 			} else {
-				return pResp.encodeURL(pBaseFileName);
+				return encodeURL(pReq, pResp, pBaseFileName);
 			}
 		}
 	}
@@ -877,7 +888,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			if (fileExists(resourceBundleDir, fileName)) {
 				return getFileRelayURL(pReq, pResp, fileName);
 			} else {
-				return pResp.encodeURL(fileName);
+				return encodeURL(pReq, pResp, fileName);
 			}
 		}
 		return null;
@@ -982,25 +993,32 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * filename). Otherwise null is returned.
 	 * </p>
 	 * <p>
+	 * <b>Note:</b> This method prepends "/" to the given base filename
+	 * parameter if it was not already there. This is to ensure that the lookup
+	 * is relative to the application root. Thus if a non-null filename is
+	 * returned, that too will always begin with "/" and be relative to the
+	 * application root.
+	 * </p>
+	 * <p>
 	 * For example: in <code>html/</code> under the root of our application,
 	 * consider that we have the files <code>foo.htm</code>,
 	 * <code>foo_fr_CA.htm</code>, and <code>foo_fr.htm</code>. Then:
 	 * </p>
 	 * <dl>
-	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", Locale.FRENCH, true)</code></dt>
-	 * <dd>returns <code>html/foo_fr.htm</code></dd>
-	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", Locale.FRANCE, true)</code></dt>
-	 * <dd>returns <code>html/foo_fr.htm</code></dd>
-	 * <dt><code>getLocalizedFileName("/files", "/html/foo.htm", Locale.CANADA_FRENCH,
+	 * <dt><code>getLocalizedFileName(request, "html/foo.htm", Locale.FRENCH, true)</code></dt>
+	 * <dd>returns <code>/html/foo_fr.htm</code></dd>
+	 * <dt><code>getLocalizedFileName(request, "html/foo.htm", Locale.FRANCE, true)</code></dt>
+	 * <dd>returns <code>/html/foo_fr.htm</code></dd>
+	 * <dt><code>getLocalizedFileName(request, "/html/foo.htm", Locale.CANADA_FRENCH,
 	 * true)</code></dt>
 	 * <dd>returns <code>/html/foo_fr_CA.htm</code></dd>
-	 * <dt><code>getLocalizedFileName("/files", "/html/foo.htm", Locale.ITALIAN, true)</code></dt>
+	 * <dt><code>getLocalizedFileName(request, "/html/foo.htm", Locale.ITALIAN, true)</code></dt>
 	 * <dd>returns <code>/html/foo.htm</code></dd>
-	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", null, false)</code></dt>
-	 * <dd>returns <code>html/foo.htm</code></dd>
-	 * <dt><code>getLocalizedFileName("/files", "html/bar.htm", Locale.FRENCH, true)</code></dt>
+	 * <dt><code>getLocalizedFileName(request, "html/foo.htm", null, false)</code></dt>
+	 * <dd>returns <code>/html/foo.htm</code></dd>
+	 * <dt><code>getLocalizedFileName(request, "html/bar.htm", Locale.FRENCH, true)</code></dt>
 	 * <dd>returns <code>null</code></dd>
-	 * <dt><code>getLocalizedFileName("/files", "foo.htm", null, false)</code></dt>
+	 * <dt><code>getLocalizedFileName(request, "foo.htm", null, false)</code></dt>
 	 * <dd>returns <code>null</code></dd>
 	 * </dl>
 	 * 
@@ -1042,7 +1060,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return null;
 		}
 		pBaseFileName = pBaseFileName.trim();
-		pBaseFileName = Utils.slashify(pBaseFileName);
+		// Make sure the base filename begins with "/" char - since we will be
+		// looking it up from the portlet root.
+		pBaseFileName = Utils.slashify("/" + pBaseFileName);
 		if (pBaseFileName.length() == 0) {
 			return null;
 		}
@@ -1617,11 +1637,54 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		try {
 			if ((relayServletURL.startsWith("/"))
 					&& (context.getResource(relayServletURL) != null)) {
-				return response.encodeURL(Utils.slashify(relayServletURL + "/"
-						+ fileName));
+				return encodeURL(request, response, Utils
+						.slashify(relayServletURL + "/" + fileName));
 			}
 		} catch (MalformedURLException e) {
 		}
 		return (Utils.slashify(relayServletURL + "/" + fileName));
+	}
+
+	/**
+	 * Encodes the given resource URL so that is is a valid portlet resource URL
+	 * for the current portlet.
+	 */
+	private static String encodeURL(PortletRequest request,
+			PortletResponse response, String url) {
+		if (request == null || response == null || url == null) {
+			return url;
+		}
+		String encodedURL;
+
+		// Normalize the URL - remove any duplicate slashes and ensure if it is
+		// not an absolute URL that it is in proper relative form (ie begins
+		// with "/" char).
+		if (url.indexOf("://") == -1) {
+			url = "/" + url;
+		}
+		encodedURL = url = Utils.slashify(url);
+
+		// First portlet-encode the URL.
+		try {
+			encodedURL = response.encodeURL(url);
+		} catch (IllegalArgumentException e) {
+			// leave url untouched in this case
+		}
+
+		// Check if the encoded URL is different than the original one. If it
+		// is, return it. If it is unchanged, though, then if it is a relative
+		// URL, make sure the portlet application context root path has been
+		// prepended to it. Here is why: when the current portlet is remote,
+		// encodeURL() will return an encoded value. When it is local, it may
+		// not. If it does not, that is because the container is expecting that
+		// the portlet application will include the root path itself. So make
+		// sure that has been taken care of.
+		if (url.equals(encodedURL) && url.startsWith("/")) {
+			String contextPath = request.getContextPath();
+			if (!url.startsWith(contextPath)) {
+				encodedURL = Utils.slashify(contextPath + "/" + url);
+			}
+		}
+		return (encodedURL);
 	}
 }

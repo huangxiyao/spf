@@ -94,7 +94,7 @@ public class MessageTag extends MessageBaseTag {
 			pArray = params.toArray();
 		}
 		if (cProviders != null) {
-			cArray = (ContextualHelpProvider[]) cProviders.toArray();
+			cArray = (ContextualHelpProvider[]) cProviders.toArray(new ContextualHelpProvider[] {});
 		}
 		return I18nUtility.getMessage(portletRequest, key, defaultValue, pArray, cArray, null, escapeEnabled);
 	}
