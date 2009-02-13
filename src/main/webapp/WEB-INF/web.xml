@@ -37,7 +37,7 @@
 		<load-on-startup>1</load-on-startup>
 		<init-param>
 			<param-name>logRoot</param-name>
-			<param-value>/var/sasuapps/spf/logs/healthcheck</param-value>
+			<param-value>/opt/sasuapps/sp/logs/healthcheck</param-value>
 		</init-param>
 		<!-- Even though the healthcheck application does not refer to this,
 			hostAddress init-param, WPA itself seems to need it when
