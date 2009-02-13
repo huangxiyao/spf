@@ -973,51 +973,34 @@ public abstract class TokenParser {
 	 */
 	public String parseSiteContainer(String content) {
 
+		/**
+		 * <code>ContainerMatcher</code> for site section parsing. The constructor
+		 * stores a site name into the class. The match method returns true if the
+		 * given site name is an exact match (case-insensitive) of the stored site
+		 * name.
+		 */
+		class SiteContainerMatcher extends ContainerMatcher {
+
+			protected SiteContainerMatcher(String siteName) {
+				super(siteName);
+			}
+
+			protected boolean match(String containerKey) {
+				String siteName = (String) subjectOfComparison;
+				if (siteName != null && containerKey != null) {
+					containerKey = containerKey.trim().toUpperCase();
+					siteName = siteName.trim().toUpperCase();
+					if (!siteName.equals("") && !containerKey.equals("")) {
+						if (siteName.equalsIgnoreCase(containerKey))
+							return true;
+					}
+				}
+				return false;
+			}
+		}
+
 		return parseContainer(content, TOKEN_SITE_CONTAINER,
 				new SiteContainerMatcher(getSite()));
-	}
-
-	/**
-	 * <code>ContainerMatcher</code> for site section parsing. The constructor
-	 * stores a site name into the class. The match method returns true if the
-	 * given site name is an exact match (case-insensitive) of the stored site
-	 * name.
-	 */
-	protected class SiteContainerMatcher extends ContainerMatcher {
-
-		protected SiteContainerMatcher(String siteName) {
-			super(siteName);
-		}
-
-		protected boolean match(String containerKey) {
-			String siteName = (String) subjectOfComparison;
-			if (siteName != null && containerKey != null) {
-				containerKey = containerKey.trim().toUpperCase();
-				siteName = siteName.trim().toUpperCase();
-				if (!siteName.equals("") && !containerKey.equals("")) {
-					if (siteName.equalsIgnoreCase(containerKey))
-						return true;
-				}
-			}
-			return false;
-		}
-	}
-
-	/**
-	 * <code>ContainerMatcher</code> for logged-in section parsing. The
-	 * constructor stores the login status into the class: true if logged-in,
-	 * false otherwise. The match method just returns the login status. The
-	 * passed container key is not used and is expected to be null.
-	 */
-	protected class LoggedInContainerMatcher extends ContainerMatcher {
-
-		protected LoggedInContainerMatcher(boolean loggedIn) {
-			super(new Boolean(loggedIn));
-		}
-
-		protected boolean match(String containerKey) {
-			return ((Boolean) subjectOfComparison).booleanValue();
-		}
 	}
 
 	/**
@@ -1073,25 +1056,25 @@ public abstract class TokenParser {
 	 */
 	public String parseLoggedInContainer(String content) {
 
+		/**
+		 * <code>ContainerMatcher</code> for logged-in section parsing. The
+		 * constructor stores the login status into the class: true if logged-in,
+		 * false otherwise. The match method just returns the login status. The
+		 * passed container key is not used and is expected to be null.
+		 */
+		class LoggedInContainerMatcher extends ContainerMatcher {
+
+			protected LoggedInContainerMatcher(boolean loggedIn) {
+				super(new Boolean(loggedIn));
+			}
+
+			protected boolean match(String containerKey) {
+				return ((Boolean) subjectOfComparison).booleanValue();
+			}
+		}
+
 		return parseContainer(content, TOKEN_LOGGEDIN_CONTAINER,
 				new LoggedInContainerMatcher(getLoginStatus()));
-	}
-
-	/**
-	 * <code>ContainerMatcher</code> for logged-out section parsing. The
-	 * constructor stores the login status into the class: true if logged-in,
-	 * false otherwise. The match method just returns the inverse of this. The
-	 * passed container key is not used and is expected to be null.
-	 */
-	protected class LoggedOutContainerMatcher extends ContainerMatcher {
-
-		protected LoggedOutContainerMatcher(boolean loggedIn) {
-			super(new Boolean(loggedIn));
-		}
-
-		protected boolean match(String containerKey) {
-			return !((Boolean) subjectOfComparison).booleanValue();
-		}
 	}
 
 	/**
@@ -1146,6 +1129,23 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseLoggedOutContainer(String content) {
+
+		/**
+		 * <code>ContainerMatcher</code> for logged-out section parsing. The
+		 * constructor stores the login status into the class: true if logged-in,
+		 * false otherwise. The match method just returns the inverse of this. The
+		 * passed container key is not used and is expected to be null.
+		 */
+		class LoggedOutContainerMatcher extends ContainerMatcher {
+
+			protected LoggedOutContainerMatcher(boolean loggedIn) {
+				super(new Boolean(loggedIn));
+			}
+
+			protected boolean match(String containerKey) {
+				return !((Boolean) subjectOfComparison).booleanValue();
+			}
+		}
 
 		return parseContainer(content, TOKEN_LOGGEDOUT_CONTAINER,
 				new LoggedOutContainerMatcher(getLoginStatus()));
@@ -1223,26 +1223,26 @@ public abstract class TokenParser {
 	 */
 	public String parseGroupContainer(String content) {
 
+		/**
+		 * <code>ContainerMatcher</code> for group parsing. The constructor stores
+		 * an array of group names into the class. The match method returns true if
+		 * the given group name exactly matches (case-insensitive) any of the stored
+		 * group names.
+		 */
+		class GroupContainerMatcher extends ContainerMatcher {
+
+			protected GroupContainerMatcher(String[] groups) {
+				super(groups);
+			}
+
+			protected boolean match(String containerKey) {
+				return Utils.groupMatch((String[]) subjectOfComparison,
+						containerKey);
+			}
+		}
+
 		return parseContainer(content, TOKEN_GROUP_CONTAINER,
 				new GroupContainerMatcher(getGroups()));
-	}
-
-	/**
-	 * <code>ContainerMatcher</code> for group parsing. The constructor stores
-	 * an array of group names into the class. The match method returns true if
-	 * the given group name exactly matches (case-insensitive) any of the stored
-	 * group names.
-	 */
-	protected class GroupContainerMatcher extends ContainerMatcher {
-
-		protected GroupContainerMatcher(String[] groups) {
-			super(groups);
-		}
-
-		protected boolean match(String containerKey) {
-			return Utils.groupMatch((String[]) subjectOfComparison,
-					containerKey);
-		}
 	}
 
 	/**
