@@ -17,7 +17,7 @@
 			id="spf-locale-selector-secondarypage" is-system="false"
 			processing-type="action_based" template-default="false"
 			template-uid="spf-locale-selector-secondarypagetype"
-			title="Service Portal - Select Locale" visible="true">
+			title="Shared Portal Framework - Locale Selector Process" visible="true">
 			<actions>
 				<!-- This process action group is the one which stores to the request, HP.com cookies, and HPP, then redirects to the target. -->
 				<group-reference group-id="1" />
