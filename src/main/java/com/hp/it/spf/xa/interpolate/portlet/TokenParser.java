@@ -60,54 +60,6 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	private PortletResponse response = null;
 
 	/**
-	 * <code>ContainerMatcher</code> for portlet parsing. The constructor
-	 * stores a portlet ID into the class. The match method returns true if the
-	 * given portlet ID is a substring (case-insensitive) of the stored portlet
-	 * ID.
-	 */
-	protected class PortletContainerMatcher extends ContainerMatcher {
-
-		protected PortletContainerMatcher(String portletID) {
-			super(portletID);
-		}
-
-		protected boolean match(String containerKey) {
-			String portletID = (String) subjectOfComparison;
-			if (portletID != null && containerKey != null) {
-				containerKey = containerKey.trim().toUpperCase();
-				portletID = portletID.trim().toUpperCase();
-				if (!portletID.equals("") && !containerKey.equals("")) {
-					if (portletID.indexOf(containerKey) > -1)
-						return true;
-				}
-			}
-			return false;
-		}
-	}
-
-	/**
-	 * <code>ContainerMatcher</code> for role parsing. The constructor stores
-	 * a portlet request into the class. The match method returns true if the
-	 * stored portlet request is in the role indicated by the given role name.
-	 */
-	protected class RoleContainerMatcher extends ContainerMatcher {
-
-		protected RoleContainerMatcher(PortletRequest request) {
-			super(request);
-		}
-
-		protected boolean match(String containerKey) {
-			PortletRequest request = (PortletRequest) subjectOfComparison;
-			if (request != null && containerKey != null) {
-				containerKey = containerKey.trim();
-				if (request.isUserInRole(containerKey))
-					return true;
-			}
-			return false;
-		}
-	}
-
-	/**
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portlet request
 	 * and response. The default token-substitutions property file (<code>default_includes.properties</code>)
@@ -529,6 +481,32 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 */
 	public String parsePortletContainer(String content) {
 
+		/**
+		 * <code>ContainerMatcher</code> for portlet parsing. The constructor
+		 * stores a portlet ID into the class. The match method returns true if the
+		 * given portlet ID is a substring (case-insensitive) of the stored portlet
+		 * ID.
+		 */
+		class PortletContainerMatcher extends ContainerMatcher {
+
+			protected PortletContainerMatcher(String portletID) {
+				super(portletID);
+			}
+
+			protected boolean match(String containerKey) {
+				String portletID = (String) subjectOfComparison;
+				if (portletID != null && containerKey != null) {
+					containerKey = containerKey.trim().toUpperCase();
+					portletID = portletID.trim().toUpperCase();
+					if (!portletID.equals("") && !containerKey.equals("")) {
+						if (portletID.indexOf(containerKey) > -1)
+							return true;
+					}
+				}
+				return false;
+			}
+		}
+
 		return super.parseContainer(content, TOKEN_PORTLET_CONTAINER,
 				new PortletContainerMatcher(getPortletID()));
 	}
@@ -597,6 +575,28 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseRoleContainer(String content) {
+
+		/**
+		 * <code>ContainerMatcher</code> for role parsing. The constructor stores
+		 * a portlet request into the class. The match method returns true if the
+		 * stored portlet request is in the role indicated by the given role name.
+		 */
+		class RoleContainerMatcher extends ContainerMatcher {
+
+			protected RoleContainerMatcher(PortletRequest request) {
+				super(request);
+			}
+
+			protected boolean match(String containerKey) {
+				PortletRequest request = (PortletRequest) subjectOfComparison;
+				if (request != null && containerKey != null) {
+					containerKey = containerKey.trim();
+					if (request.isUserInRole(containerKey))
+						return true;
+				}
+				return false;
+			}
+		}
 
 		return super.parseContainer(content, TOKEN_ROLE_CONTAINER,
 				new RoleContainerMatcher(request));

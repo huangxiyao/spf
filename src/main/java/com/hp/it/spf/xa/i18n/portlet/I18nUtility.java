@@ -112,7 +112,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	/**
 	 * The default portlet resource bundle directory.
 	 */
-	public static final String BUNDLE_DIR_DEFAULT = "/opt/sasuapps/spf/globalResources/portlet/i18n";
+	public static final String BUNDLE_DIR_DEFAULT = "/opt/sasuapps/sp/global_resources/portlet/i18n";
 
 	/**
 	 * Logger instance.

@@ -955,10 +955,10 @@ filesystem to which the portlet JVM has at least read access.</p>
 	already. In any event, we recommend making the portlet bundle folder be
 	a subfolder of your "global resources" classpath folder.</p>
 
-	<p>For example, if you are using SASU, it may be that <code>/opt/sasuapps/spf/globalResources</code>
+	<p>For example, if you are using SASU, it may be that <code>/opt/sasuapps/sp/global_resources</code>
 	is already your assigned classpath folder for all global resources (eg
 	configuration files). If that is the case, we recommend creating the
-	subfolder <code>portlet/i18n/</code> underneath it, so that <code>/opt/sasuapps/spf/globalResources/portlet/i18n/</code>
+	subfolder <code>portlet/i18n/</code> underneath it, so that <code>/opt/sasuapps/sp/global_resources/portlet/i18n/</code>
 	is your portlet bundle folder (which matches the default assumed by the
 	SPF portlet utilities, see point 3 below).</p>
 	</li>
@@ -971,7 +971,7 @@ filesystem to which the portlet JVM has at least read access.</p>
 	subfolder; etc. Like this (example):</p>
 
 	<blockquote><pre>
-    /opt/sasuapps/spf/globalResources/ &lt;-- this is in the classpath
+    /opt/sasuapps/sp/global_resources/ &lt;-- this is in the classpath
         ...                            &lt;-- misc other external config files can go here, like i18n_portlet_config.properties
         portlet/i18n/                  &lt;-- this is your portlet bundle folder
             html/                      &lt;-- this is your portlet bundle HTML subfolder
@@ -1020,7 +1020,7 @@ filesystem to which the portlet JVM has at least read access.</p>
 	folder, configure it in <a href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
 	(see below). The default location is hardcoded in {@link
 	com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}, which is
-	<code>/opt/sasuapps/spf/globalResources/portlet/i18n</code> (as in the
+	<code>/opt/sasuapps/sp/global_resources/portlet/i18n</code> (as in the
 	above example) at this time of writing.</p>
 	</li>
 
@@ -3811,8 +3811,8 @@ you have setup for your Spring portlet.</p>
 	more information. If your file to interpolate does not contain any <code>{INCLUDE:<i>key</i>}</code>
 	tokens, or you are willing to use the default property file, you do not
 	need to set this attribute.</p>
-</p>
-</dd>
+	</p>
+	</dd>
 </dl>
 
 <p>For example, here is a simple extension/implementation of the <code>FileInterpolatorController</code>.
@@ -4798,7 +4798,11 @@ via HPP), HP Enterprise Directory (when the user has logged-in via the
 user profile map</i>, is set in {@javax.portlet.PortletRequest#USER_INFO} as
 per the Java standard. When the user is not logged-in, this map is still
 provided - however its properties are set to default values for the
-user's current locale.</p>
+user's current resolved locale. (The resolved locale is the one
+available to you via <code>PortletRequest.getLocale</code> - see the
+previous discussion about <a href="#i18n.other.locale.get">getting
+the locale</a>, which includes information on how this locale is
+determined.)</p>
 
 <p>The SPF portlet {@link com.hp.it.spf.xa.misc.portlet.Utils} class
 provides access to the properties in the user profile map. You can get
@@ -4828,7 +4832,7 @@ status. Be sure you have configured the SPF <code>MapAttributeFilter</code>
 as <a href="#portal.kinds">shown above</a>.</p>
 
 <a name="portal.user.loginStatus">
-<h4>5.2.2. Checking user authentication status (<code>Utils.isAuthenticatedUser</code>)</h4>
+<h4>5.2.1. Checking user authentication status (<code>Utils.isAuthenticatedUser</code>)</h4>
 </a>
 
 <p>Use {@link
@@ -4893,19 +4897,21 @@ type of property. The method takes the following arguments:</p>
 		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_COUNTRY}</dt>
 		<dd>
 		<p>When you use this argument, <code>Utils.getUserProperty</code>
-		returns an <a
+		returns the <a
 			href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
 		3166-1</a> country code for the country of the user. Note this is <b>not</b>
-		necessarily the same as the country in the current locale (see the
-		previous discussion about <a href="#i18n.other.locale.get">how SPF
-		gets the locale</a>). Rather it is the country of record in the user
-		account.</p>
+		necessarily the same as the country in the current resolved locale (ie
+		the one returned by the <code>PortletRequest.getLocale</code> method -
+		see the previous discussion about <a href="#i18n.other.locale.get">how
+		SPF gets that locale</a>). Rather it is the country of record in the user
+		profile:</p>
 		<p>For an authenticated &#64;HP user, this will be the country of
 		record for the user in the HP Enterprise Directory.</p>
 		<p>For an authenticated HP Passport user, this is the HPP <code>residentCountryCode</code>
-		core profile attribute.</p>
+		attribute from the HPP user profile.</p>
 		<p>For an anonymous user, this is the country of record for the
-		default profile the user has been assigned.</p>
+		default user profile the user has been assigned, based on their
+		current resolved locale.</p>
 
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -4946,15 +4952,16 @@ type of property. The method takes the following arguments:</p>
 		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_LANGUAGE}</dt>
 		<dd>
 		<p>When you use this argument, <code>Utils.getUserProperty</code>
-		returns a code for the language of the user. Note this is <b>not</b>
-		necessarily the same as the language in the current locale (see the
-		previous discussion about <a href="#i18n.other.locale.get">how SPF
-		gets the locale</a>). Rather it is the language of record in the user
-		account.</p>
+		returns a code for the language of the user. Note that this is <b>not</b>
+		necessarily the same as the language in the current resolved locale
+		(ie the one returned by the <code>PortletRequest.getLocale</code>
+		method - see the previous discussion about <a
+			href="#i18n.other.locale.get">how SPF gets that locale</a>). Rather
+		it is the language of record in the user profile:</p>
 		<p>For an authenticated &#64;HP user, this will always be <code>en</code>.
 		</p>
 		<p>For an authenticated HP Passport user, this is the HPP <code>langCode</code>
-		core profile attribute. It looks like an <a
+		attribute from the HPP user profile. It looks like an <a
 			href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
 		639-1</a> language code, but there are exceptions for Simplified and
 		Traditional Chinese (you can use one of the SPF-provided converter
@@ -4963,8 +4970,8 @@ type of property. The method takes the following arguments:</p>
 		to normalize it).</p>
 		<p>For an anonymous user, this is the <a
 			href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
-		639-1</a> language code of record for the default profile the user has
-		been assigned.</p>
+		639-1</a> language code of record for the default user profile the user
+		has been assigned, based on their current resolved locale.</p>
 
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -5122,7 +5129,24 @@ type of property. The method takes the following arguments:</p>
 		returns the timezone for the user, as taken from the HP Passport or HP
 		Enterprise Directory information for the user (depending on whether
 		the user logged-in via HPP or the &#64;HP employee portal).</p>
-		<p>For an anonymous user, this is a null object.</p>
+		<p>For an anonymous user, this is the timezone of record for the
+		default profile the user has been assigned, based on their current
+		resolved locale (see the discussion about <a
+			href="#i18n.other.locale.get">getting the locale</a>, for how the
+		locale is determined).</p>
+
+		<blockquote>
+		<p><b>Note:</b> This is just a reasonable default timezone for the
+		locale, based primarily on the country in the locale (if any), and the
+		language in the locale if the country is generic. For example, the
+		Japan timezone is returned for any Japan-country locale, or any
+		Japanese-language locale with an unrecognized (or generic) country.
+		Many locales span multiple timezones, so the SPF just assigns one of
+		them by default in that case. SPF defaults to GMT if it does not
+		recognize the locale for this purpose. The mapping between locale and
+		timezone returned by the SPF for an anonymous user is not published
+		and may change over time.</p>
+		</blockquote>
 
 		<p><i>Returns type:</i> {@link java.util.TimeZone}</p>
 		</dd>
@@ -5244,39 +5268,92 @@ elsewhere.</p>
 
 <p>The actual groups will vary by application and over time. The SPF
 core framework defines the following groups, but applications will add
-to them:</p>
+to them. All SPF users (whether authenticated or anonymous) are
+automatically assigned by the SPF into the following groups as
+appropriate:</p>
 
 <dl>
-	<dt><code>LOCAL_HPP</code></dt>
+	<dt>
+	<p><b><u>Access Type Groups:</u></b></p>
+	</dt>
 	<dd>
-	<p>Indicates the user is a member of <i>standard</i> (not
-	federated) HP Passport. Whether the user is currently logged-into
-	his/her HPP user account is irrelevant; this group indicates the user
-	is accessing through the public (ie HPP) authentication system. However
-	the current portal site, and the HPP policies, have not been enabled
-	for user-identity federation with a 3rd-party identity provider. (User
-	identity federation is not typically used with SPF at this time.)</p>
-	</dd>
+	<dl>
+		<dt><code>LOCAL_ATHP</code></dt>
+		<dd>
+		<p>Indicates the user is a member of the &#64;HP employee portal,
+		not HP Passport. Whether the user is currently logged-into his/her HP
+		Enterprise Directory account is irrelevant; this group indicates the
+		user is accessing via the HP Intranet and the &#64;HP authentication
+		system.</p>
+		</dd>
 
-	<dt><code>LOCAL_ATHP</code></dt>
-	<dd>
-	<p>Indicates the user is a member of the &#64;HP employee portal,
-	not HP Passport. Whether the user is currently logged-into his/her HP
-	Enterprise Directory account is irrelevant; this group indicates the
-	user is accessing via the HP Intranet and the &#64;HP authentication
-	system.</p>
-	</dd>
+		<dt><code>LOCAL_HPP</code></dt>
+		<dd>
+		<p>Indicates the user is a member of <i>standard</i> (not
+		federated) HP Passport. Whether the user is currently logged-into
+		his/her HPP user account is irrelevant; this group indicates the user
+		is accessing through the public (ie HPP) authentication system.
+		However the current portal site, and the HPP policies, have not been
+		enabled for user-identity federation with a 3rd-party identity
+		provider. (User identity federation is not typically used with SPF at
+		this time.)</p>
+		</dd>
 
-	<dt><code>LOCAL_FED</code></dt>
+		<dt><code>LOCAL_FED</code></dt>
+		<dd>
+		<p><i>This group is uncommon in most SPF portal applications.</i>
+		It indicates the user is a member of <i>federated</i> (not standard)
+		HP Passport. Whether the user is currently logged-into his/her HPP
+		user account is irrelevant; this group indicates the user is accessing
+		through the public (ie HPP) authentication system, which has been
+		setup (along with the portal site) for user-identity federation with a
+		3rd-party identity provider. (User identity federation is not
+		typically used with SPF at this time.)</p>
+		</dd>
+	</dl>
+	</dd>
+	<dt>
+	<p><b><u>Locale Groups:</u></b></p>
+	</dt>
 	<dd>
-	<p><i>This group is uncommon in most SPF portal applications.</i>
-	It indicates the user is a member of <i>federated</i> (not standard) HP
-	Passport. Whether the user is currently logged-into his/her HPP user
-	account is irrelevant; this group indicates the user is accessing
-	through the public (ie HPP) authentication system, which has been setup
-	(along with the portal site) for user-identity federation with a
-	3rd-party identity provider. (User identity federation is not typically
-	used with SPF at this time.)</p>
+	<dl>
+		<dt><code>LOCAL_COUNTRY_<i>&lt;country-code&gt;</i></code></dt>
+		<dd>
+		<p>Indicates the user should be considered a member of the group
+		for the particular country. This is based on the locale resolved for
+		the user (ie, this is the locale returned by <a
+			href="#i18n.other.locale.get"><code>PortletRequest.getLocale</code></a>).
+		The <code><i>&lt;country-code&gt;</i></code> is the uppercase <a
+			href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+		3166-1</a> country code. Note that this may, or may not, be the same
+		country as the user's registered country in SiteMinder (eg, the <code>residentCountryCode</code>
+		attribute of the core HPP profile).</p>
+		<p>For example, <code>LOCAL_COUNTRY_BR</code> for a user with any
+		Brazil locale; <code>LOCAL_COUNTRY_GB</code> for a user with any
+		United Kingdom locale; etc.</p>
+		<blockquote>
+		<p><b>Note:</b> When the user's resolved locale does not include a
+		country (ie a generic locale like French), the user will not be
+		assigned into any such group.</p>
+		</blockquote>
+		</dd>
+
+		<dt><code>LOCAL_LANG_<i>&lt;language-code&gt;</i></code></dt>
+		<dd>
+		<p>Indicates the user should be considered a member of the group
+		for the particular language. This is based on the locale resolved for
+		the user (ie this is the locale returned by <a
+			href="#i18n.other.locale.get"><code>PortletRequest.getLocale</code></a>).
+		The <code><i>&lt;language-code&gt;</i></code> is the uppercase <a
+			href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+		639-1</a> language code. Note that this may, or may not, be the same
+		language as the user's registered language in SiteMinder (eg, the <code>langCode</code>
+		attribute of the core HPP profile).</p>
+		<p>For example, <code>LOCAL_COUNTRY_ZH</code> for a user with any
+		Chinese-language locale; <code>LOCAL_COUNTRY_RU</code> for a user with
+		any Russian-language locale; etc.</p>
+		</dd>
+	</dl>
 	</dd>
 </dl>
 
@@ -5548,7 +5625,7 @@ is already provided by WPAP and Spring Portlet MVC:</p>
 	it in your view. This just saves you from having to store it to the
 	request yourself, before throwing the exception.</p>
 	</li>
-</li>
+	</li>
 </ol>
 
 <p>The rest of this chapter is about those technologies.</p>
@@ -6298,6 +6375,21 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		<td>S. Jorgenson</td>
 		<td>Initial published version.</td>
 	</tr>
+	<tr>
+		<td>1.1</td>
+		<td>Feb 12 2009</td>
+		<td>S. Jorgenson</td>
+		<td>
+		<ul>
+			<li>Added locale groups.</li>
+			<li>Corrected global resources folder to conform to actual SASU
+			value: <code>/opt/sasuapps/spf/globalResources</code> to <code>/opt/sasuapps/sp/global_resources/</code>
+			</li>
+			<li>Added defaults for timezone.</li>
+		</ul>
+		</td>
+	</tr>
+
 </table>
 <p></p>
 

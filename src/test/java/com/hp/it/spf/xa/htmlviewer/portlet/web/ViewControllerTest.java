@@ -131,8 +131,8 @@ public class ViewControllerTest extends TestCase {
 				"<html><body>Template ID: FRIENDLY_ID<br>Portal URL: /template.FRIENDLY_ID?lang=zh&cc=CN<br></body></html>",
 				content);
 		
-		if (fileExists("/opt/sasuapps/spf/globalResources/portlet/i18n/html/test_loc_content_url_ext_zh_CN.html")
-				&& fileExists("/opt/sasuapps/spf/globalResources/portlet/i18n/images/test_ext_zh_CN.gif")) {
+		if (fileExists("/opt/sasuapps/sp/global_resources/portlet/i18n/html/test_loc_content_url_ext_zh_CN.html")
+				&& fileExists("/opt/sasuapps/sp/global_resources/portlet/i18n/images/test_ext_zh_CN.gif")) {
 			pp.setValue(Consts.VIEW_FILENAME, "test_loc_content_url_ext.html");
 			modelAndView = (ModelAndView) viewController.handleRenderRequest(
 					renderRequest, renderResponse);
