@@ -20,7 +20,9 @@ supporting resources can completely disregard all of this.</p>
 <p>The relay servlet class is {@link RelayServlet} and it is
 contained inside the SPF portlet utilities JAR. You need to add a
 deployment descriptor for the servlet into your application's <code>web.xml</code>
-file. The deployment descriptor just looks like this:</p>
+file. (Which application? We recommend using your portlet application,
+but see <a href="#deployment">assembling the application</a>, below, for
+other options.) The deployment descriptor just looks like this:</p>
 
 <blockquote><pre>
 	&lt;servlet&gt;
@@ -37,11 +39,8 @@ file. The deployment descriptor just looks like this:</p>
 </pre></blockquote>
 
 <p>As noted in the above comment, you can use a different path for
-the relay servlet mapping. But we recommend you use <code>/relay</code>
-(ie the current value of {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT}) since
-that is the default path for the relay servlet. If you provide a
-different one, you will have to do extra configuration in <a
+the relay servlet mapping. If you do provide a different one, you will
+have to do extra configuration in <a
 	href="#i18n_portlet_config.properties"><code>i18n_portlet_config.properties</code></a>
 (see below).</p>
 
@@ -92,16 +91,19 @@ Developer's Guide.)</p>
 </a>
 
 <p>The relay servlet needs to know the location of the <i>portlet
-resource bundle folder</i>, unless you are using the default location {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}. Also, if
-you mapped it under anything but the {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} path, the
-SPF portlet utilities need to know that (for example, so that {@link
+resource bundle folder</i>, unless you are using the default location
+(indicated by {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}). Also,
+the SPF portlet utilities need to know the location of the relay
+servlet, unless you are using the default location (indicated by {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} and {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_INCLUDED_DEFAULT}).
+(This is so that, for example, {@link
 com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String)}
-can build a proper URL pointing at it).</p>
+can build a proper URL pointing at the servlet.)</p>
 
 <blockquote>
-<p><b>Note:</b> So if you use the default location for the portlet
+<p><b>Note:</b> So if you use the default locations for the portlet
 bundle folder and the relay servlet path, you can skip configuring <code>i18n_portlet_config.properties</code>.</p>
 </blockquote>
 
@@ -114,9 +116,9 @@ path as needed. (You can also see the instructions for <a
 Developers Guide.)</p>
 
 <p>Then deploy your <code>i18n_portlet_config.properties</code> with
-your application, where the classloader will find it. See the <a
-	href="#deployment">deployment discussion below</a>. (You can also see
-the instructions for <a
+both the relay servlet, and your portlet application, where the
+classloader will find it. See the <a href="#deployment">deployment
+discussion below</a>. (You can also see the instructions for <a
 	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#overview.installation.i18n_portlet_config">installing
 <code>i18n_portlet_config.properties</code></a> in the SPF Portlet Utilities
 Developer's Guide.)</p>
@@ -147,10 +149,10 @@ application instead. The requirements are:</p>
 	<li>The relay servlet Web application must have access to the same
 	<i>portlet resource bundle folder</i> (and all the supporting resource
 	files therein) that your portlet application does.</li>
-	<li>You must configure the new, non-default base relay servlet URL
+	<li>You must configure the new, non-default relay servlet location
 	in <code>i18n_portlet_config.properties</code>. (And if your portlet
 	bundle folder is also non-default, configure that there too.)</li>
-	<li>You must provide identical copies of that <code>i18n_portlet_config.properties</code>
+	<li>You must deploy identical copies of that <code>i18n_portlet_config.properties</code>
 	to your portlet application and the relay servlet application.</li>
 	<li>Finally, your relay servlet Web application must be accessible
 	to the user browser via the base relay servlet URL which you configured

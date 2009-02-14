@@ -53,6 +53,9 @@ package are:</p>
 	<dt><code>{REQUEST-URL}</code></dt>
 	<dd>Replaced with the complete URL for the current portal request
 	which targeted this portlet.</dd>
+	<dt><code>{REQUEST-URL:<i>spec</i>}</code></dt>
+	<dd>Replaced with the complete URL for the current portal request
+	which targeted this portlet, with scheme and port adjusted as specified.</dd>
 	<dt><code>{ROLE:<i>roles</i>}</code></dt>
 	<dd>Includes the surrounded content if the user in the current
 	portlet request is in one of the named <code><i>roles</i></code>.
@@ -67,9 +70,9 @@ package are:</p>
 	<dt><code>{SITE-URL}</code></dt>
 	<dd>Replaced with the home-page URL for this portlet's portal
 	site.</dd>
-	<dt><code>{SITE-URL:<i>uri</i>}</code></dt>
+	<dt><code>{SITE-URL:<i>spec</i>}</code></dt>
 	<dd>Replaced with the page URL for the given friendly URI at this
-	portlet's portal site.</dd>
+	portlet's portal site. Scheme and port can also be specified.</dd>
 	<dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
 	<dd>Replaced with the named user property <code><i>key</i></code>
 	in the current portlet request.</dd>

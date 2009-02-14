@@ -309,8 +309,8 @@ table.props td {
 		<ul>
 			<li>4.5.1. <a href="#file.author.token.url">Referencing URLs
 			(<code>{CONTENT-URL:<i>path</i>}</code>, <code>{LOCALIZED-CONTENT-URL:<i>path</i>&gt</code>,
-			<code>{SITE-URL}</code>, <code>{SITE-URL:<i>uri</i>}</code>, <code>{REQUEST-URL}</code>)
-			</a></li>
+			<code>{SITE-URL}</code>, <code>{SITE-URL:<i>spec</i>}</code>, <code>{REQUEST-URL}</code>,
+			<code>{REQUEST-URL:<i>spec</i>}</code>) </a></li>
 			<li>4.5.2. <a href="#file.author.token.user">Displaying user
 			information (<code>{NAME}</code>, <code>{EMAIL}</code>, <code>{LANGUAGE-CODE}</code>,
 			<code>{COUNTRY-CODE}</code>, <code>{LANGUAGE-TAG}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</a></li>
@@ -2006,11 +2006,10 @@ properly if your portlet bundle folder is at a non-default location (the
 default is indicated in {@link
 com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}). You will
 likewise need to configure <a href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
-with the URL for the relay servlet, if that is at a non-default location
-(the default is indicated in {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT}). And
-finally, you will need to configure and deploy that servlet at that
-location - see <a href="#i18n.supporting.relay">discussion below</a>.</p>
+with the location for the relay servlet, if that is at a non-default
+location. And finally, you will need to configure and deploy that
+servlet at that location - see <a href="#i18n.supporting.relay">discussion
+below</a>.</p>
 
 <a name="i18n.supporting.jsp.localizedFileURL">
 <h4>2.6.1. Using <code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code></h4>
@@ -2428,7 +2427,7 @@ bundle folder</i> in a non-default location, <b>or</b> you are deploying the
 
 <p>The <code>i18n_portlet_config.properties</code> lets you
 configure the location of the portlet resource bundle folder, on the
-portlet server, and the URI for the file relay servlet.</p>
+portlet server, and the location of the file relay servlet.</p>
 
 <dl>
 	<dt><code>portlet.bundleDirectory</code></dt>
@@ -2443,14 +2442,21 @@ portlet.bundleDirectory=/var/my_portlet/my_resources
 	do not need to configure this property if you accept the default.</p>
 	</dd>
 	<dt><code>servlet.fileRelay.url</code></dt>
+	<dt><code>servlet.fileRelay.included</code></dt>
 	<dd>
-	<p>This property gives the URI of the <i>file relay servlet</i>.
-	For example, if you are deploying the relay servlet inside your portlet
-	application (as is recommended), put your servlet mapping path here,
-	like this (eg where you have used <code>&lt;servlet-mapping&gt;/getFile/*</code>
+	<p>These properties give the location of the <i>file relay
+	servlet</i>. The <code>servlet.fileRelay.url</code> property gives the URI,
+	and the <code>servlet.fileRelay.included</code> property indicates if
+	that URI is inside your portlet application (<code>true</code>) or
+	somewhere else (<code>false</code>).</p>
+	<p>For example, if you are deploying the relay servlet inside your
+	portlet application (as is recommended), put your servlet mapping path
+	into the <code>servlet.fileRelay.url</code> property and set the <code>servlet.fileRelay.included</code>
+	property to <code>true</code>, like this (eg where you have used <code>&lt;servlet-mapping&gt;/getFile/*</code>
 	in your deployment descriptor for the servlet):</p>
 	<blockquote><pre>
 servlet.fileRelay.url=/getFile
+servlet.fileRelay.included=true
 	</pre></blockquote>
 	<p>As another example, if you are deploying the relay servlet in
 	the SPF portal application (but remember it must have access to the
@@ -2460,10 +2466,14 @@ servlet.fileRelay.url=/getFile
 	under <code>/portal</code> and the relay servlet is under <code>&lt;servlet-mapping&gt;/relay/*</code>):</p>
 	<blockquote><pre>
 servlet.fileRelay.url=/portal/relay
+servlet.fileRelay.included=false
 	</pre></blockquote>
-	<p>The default value for this property is {@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} and you
-	do not need to configure it if you accept that default.</p>
+	<p>The default value for these properties are {@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} and
+	{@link
+	com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_INCLUDED_DEFAULT} and
+	you do not need to configure the properties if you accept their
+	defaults.</p>
 	</dd>
 </dl>
 
@@ -4148,7 +4158,7 @@ UTF-8 encoding.</p>
 <a name="file.author.token.url">
 <h4>4.5.1. Referencing URLs (<code>{CONTENT-URL:<i>path</i>}</code>,
 <code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code>, <code>{REQUEST-URL}</code>,
-<code>{SITE-URL}</code>, <code>{SITE-URL:<i>uri</i>}</code>)</h4>
+<code>{REQUEST-URL:<i>spec</i>}</code>, <code>{SITE-URL}</code>, <code>{SITE-URL:<i>spec</i>}</code>)</h4>
 </a>
 
 <p>The following tokens can be used to interpolate URL's into your
@@ -4229,9 +4239,11 @@ text. Please click on the links for more documentation for each token.</p>
 	<p>Use this token to insert the current portal request URL into the
 	interpolated content. This is a reconstruction of the URL which, if
 	opened by the browser, would re-request the current portal page and
-	portlet (including any form arguments). Here is some sample HTML text,
-	using this token to help build a hidden form input element containing
-	the request URL as a return URL for the form handler:</p>
+	portlet (including any form arguments). (The URL is for the current
+	scheme; if you need to switch the scheme, see the next token.) Here is
+	some sample HTML text, using this token to help build a hidden form
+	input element containing the request URL as a return URL for the form
+	handler:</p>
 
 	<blockquote><pre>
 &lt;INPUT TYPE="hidden" NAME="returnURL" VALUE="{REQUEST-URL}"&gt;
@@ -4239,11 +4251,49 @@ text. Please click on the links for more documentation for each token.</p>
 	</dd>
 
 	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site-url_p"><code>{REQUEST-URL:<i>spec</i>}</code></a></dt>
+	<dd>
+	<p>Use this token to insert the current portal request URL into the
+	interpolated content. Like the above token, this is a reconstruction of
+	the URL which, if opened by the browser, would re-request the current
+	portal page and portlet (including any form arguments). With this
+	token, you can provide a <code><i>spec</i></code> to switch the scheme
+	or port. The format of the <code><i>spec</i></code> is as follows:</p>
+
+	<blockquote><pre>
+<i>scheme</i>:<i>port</i></i>	
+	</pre></blockquote>
+
+	<p>Each element is optional.</p>
+	<ul>
+		<li>
+		<p>You can specify a <code><i>scheme</i></code>, either <code>http</code>
+		or <code>https</code>. By default the scheme of the current request is
+		assumed.
+		</li>
+		<li>
+		<p>You can provide a <code><i>port</i></code>. By default the port
+		from the current request is assumed.
+		</li>
+	</ul>
+
+	<p>Here is some sample HTML text, using this token to help build a
+	hidden form input element containing the request URL as a return URL
+	for the form handler. The request URL scheme has been forced to HTTPS:</p>
+
+	<blockquote><pre>
+&lt;INPUT TYPE="hidden" NAME="returnURL" VALUE="{REQUEST-URL:https}"&gt;
+</pre></blockquote>
+	</dd>
+
+	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site-url"><code>{SITE-URL}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the portal home page URL into the
-	interpolated content. Here is some sample HTML text, using this token
-	to help build a hyperlink pointing to the home page:</p>
+	interpolated content. (The URL is for the current scheme; if you need
+	to switch the scheme, see the next token.) Here is some sample HTML
+	text, using this token to help build a hyperlink pointing to the home
+	page:</p>
 
 	<blockquote><pre>
 Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
@@ -4251,18 +4301,46 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site-url_p"><code>{SITE-URL:<i>uri</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site-url_p"><code>{SITE-URL:<i>spec</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert a URL pointing to any page in the
-	portal site, by the site-relative URI for that page. For example, your
-	<code><i>uri</i></code> could be a Vignette "friendly URI" for the
-	desired page. It could be a template name, for a secondary page. Your <code><i>uri</i></code>
-	can also include any additional path or query string you might need.
-	You can also use the <code><i>uri</i></code> to switch to another
-	portal site: if your <code><i>uri</i></code> begins with <code>/</code>,
-	it is considered relative to the current site, but otherwise the first
-	part of the <code><i>uri</i></code> is considered to be the new "site
-	DNS name" to use.</p>
+	portal site, by the site-relative URI for that page. You can also
+	adjust the URL scheme (<code>http</code> or <code>https</code>) and
+	port number with this token. The format of the <code><i>spec</i></code>
+	is as follows:</p>
+
+	<blockquote><pre>
+<i>scheme</i>:<i>port</i>;<i>uri</i>	
+	</pre></blockquote>
+
+	<p>Each element is optional.</p>
+	<ul>
+		<li>
+		<p>You can specify a <code><i>scheme</i></code>, either <code>http</code>
+		or <code>https</code>. By default the scheme of the current request is
+		assumed. When you don't provide a scheme or port, you don't need the <code>:</code>
+		or <code>;</code> characters.</p>
+		</li>
+		<li>
+		<p>You can provide a <code><i>port</i></code>. By default the port
+		from the current request is assumed. When you don't provide a scheme
+		or port, you don't need the <code>:</code> or <code>;</code>
+		characters.</p>
+		</li>
+		<li>
+		<p>You can provide a <code><i>uri</i></code>, which you use to
+		indicate the page and/or portal site you wish to target with this URL.
+		For example, your <code><i>uri</i></code> could be a Vignette
+		"friendly URI" for the desired page. It could be a template name, for
+		a secondary page. Your <code><i>uri</i></code> can also include any
+		additional path or query string you might need. You can also use the <code><i>uri</i></code>
+		to switch to another portal site: if your <code><i>uri</i></code>
+		begins with <code>/</code>, it is considered relative to the current
+		site, but otherwise the first part of the <code><i>uri</i></code> is
+		considered to be the new "site DNS name" to use.</p>
+		</li>
+	</ul>
+
 	<p>Here is some sample HTML text, using this token to help build a
 	hyperlink pointing to the current site's Forums page (which in this
 	example has a "friendly URI" of <code>/forums</code>):</p>
@@ -4273,6 +4351,14 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 
 	<p>To repeat the above example, but switch to the <code>itrc</code>
 	site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
+
+	<p>To repeat both of those examples, and force use of HTTPS in the
+	URL, use {SITE-URL:https;/forums}<code>{SITE-URL:https;itrc/forums}</code>
+	instead.</p>
+
+	<p>To force use of HTTPS but otherwise generate just a home page
+	URL for the current portal site (ie like <code>{SITE-URL}</code>
+	without any parameters does), use <code>{SITE-URL:https;}</code>.</p>
 	</dd>
 </dl>
 
@@ -6387,6 +6473,18 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 			value: <code>/opt/sasuapps/spf/globalResources</code> to <code>/opt/sasuapps/sp/global_resources/</code>
 			</li>
 			<li>Added defaults for timezone.</li>
+		</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>1.2</td>
+		<td>Feb 14 2009</td>
+		<td>S. Jorgenson</td>
+		<td>
+		<ul>
+			<li>Added <code>servlet.fileRelay.included</code> property to <code>i18n_portlet_config.properties</code>.</li>
+			<li>Added support for switching scheme and port in <code>{REQUEST-URL}</code>
+			and <code>{SITE-URL}</code> tokens.</li>
 		</ul>
 		</td>
 	</tr>

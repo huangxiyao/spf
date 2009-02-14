@@ -1629,38 +1629,33 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		if (request == null || response == null || url == null) {
 			return url;
 		}
-		String encodedURL;
 
-		// Normalize the URL - remove any duplicate slashes and ensure if it is
-		// not an absolute URL that it is in proper relative form (ie begins
-		// with "/" char).
+		// Normalize the URL - ensure it is either absolute, or relative
+		// starting with "/" char - also remove duplicate "/" chars just in
+		// case.
 		if (url.indexOf("://") == -1) {
 			url = "/" + url;
 		}
-		encodedURL = url = Utils.slashify(url);
+		url = Utils.slashify(url);
 
-		// First portlet-encode the URL.
+		// Check if the URL is relative. If it is, make sure the portlet
+		// application's context path has been prepended to it. In both the
+		// local and remote portlet cases, the URL's context path must be
+		// prepended.
+		if (url.startsWith("/")) {
+			String contextPath = request.getContextPath();
+			if (!url.startsWith(contextPath)) {
+				url = Utils.slashify(contextPath + "/" + url);
+			}
+		}
+
+		// Finally, portlet-encode the URL and return it.
 		try {
-			encodedURL = response.encodeURL(url);
+			url = response.encodeURL(url);
 		} catch (IllegalArgumentException e) {
 			// leave url untouched in this case
 		}
-
-		// Check if the encoded URL is different than the original one. If it
-		// is, return it. If it is unchanged, though, then if it is a relative
-		// URL, make sure the portlet application context root path has been
-		// prepended to it. Here is why: when the current portlet is remote,
-		// encodeURL() will return an encoded value. When it is local, it may
-		// not. If it does not, that is because the container is expecting that
-		// the portlet application will include the root path itself. So make
-		// sure that has been taken care of.
-		if (url.equals(encodedURL) && url.startsWith("/")) {
-			String contextPath = request.getContextPath();
-			if (!url.startsWith(contextPath)) {
-				encodedURL = Utils.slashify(contextPath + "/" + url);
-			}
-		}
-		return (encodedURL);
+		return (url);
 	}
 
 	/**
