@@ -529,12 +529,12 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		Enumeration params;
 		String[] values;
 		String scheme, hostAndPort, host, context, path, info, query, name, value;
-		int port, i;
+		int p, i;
 
 		// We could probably use request.getRequestURL for most of the below,
 		// but to ensure we get the URL in the form we want, we will piece it
 		// together using the more granular API's instead.
-		// First get the scheme used by the browser: http or https
+		// First get the scheme used by the browser: http or https.
 		scheme = request.getScheme();
 		if (scheme == null)
 			scheme = "http";
@@ -544,36 +544,37 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		// Host header which should always be present (otherwise it is assumed
 		// to be the current server name and port). The Host header should
 		// contain the hostname plus any non-standard port; use the non-standard
-		// port if found, otherwise use the default port.
+		// port if found, otherwise use the default port. Override port with the
+		// parameter if positive.
 		hostAndPort = request.getHeader("Host");
 		if (hostAndPort == null) {
 			host = request.getServerName();
-			port = request.getServerPort();
+			p = request.getServerPort();
 		} else {
 			if ((i = hostAndPort.indexOf(":")) != -1) {
 				host = hostAndPort.substring(0, i);
-				if (i < hostAndPort.length() - 1) {
+				if (i < (hostAndPort.length() - 1)) {
 					try {
-						port = Integer.parseInt(hostAndPort.substring(i + 1));
+						p = Integer.parseInt(hostAndPort.substring(i + 1));
 					} catch (NumberFormatException e) {
-						port = 0;
+						p = 0;
 					}
 				} else {
-					port = 0;
+					p = 0;
 				}
 			} else {
 				host = hostAndPort;
-				port = 0;
+				p = 0;
 			}
 		}
 		host = host.toLowerCase();
-		if (scheme.equals("http") && (port == 80))
-			port = 0;
-		if (scheme.equals("https") && (port == 443))
-			port = 0;
+		if (scheme.equals("http") && (p == 80))
+			p = 0;
+		if (scheme.equals("https") && (p == 443))
+			p = 0;
 		hostAndPort = host;
-		if (port > 0)
-			hostAndPort += ":" + port;
+		if (p > 0)
+			hostAndPort += ":" + p;
 
 		// Next get the root path.
 		context = request.getContextPath();
@@ -626,6 +627,43 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
+	 * <p>
+	 * Returns an absolute URL for the given request. This method obtains the
+	 * current request URL like the {@link #getRequestURL(HttpServletRequest)}
+	 * method does, and modifies its scheme, hostname, and/or port as follows:
+	 * </p>
+	 * <ul>
+	 * <li>if the given security scheme is <code>true</code>, then the
+	 * scheme in the returned URL is forced to <code>https://</code>; if it
+	 * is <code>false</code>, it is forced to <code>http://</code>;
+	 * otherwise the current request scheme is retained</li>
+	 * <li>if the given hostname is not blank or null, then the hostname in the
+	 * returned URL is set to it</li>
+	 * <li>if the given port is a positive number, then the port in the
+	 * returned URL is set to it</li>
+	 * </ul>
+	 * 
+	 * @param request
+	 *            The current request.
+	 * @param secure
+	 *            If true, force use of <code>https</code>; if false, force
+	 *            use of <code>http</code>. If null, use the current scheme.
+	 * @param port
+	 *            The port to use (an integer; if non-positive, use the current
+	 *            port).
+	 * @param host
+	 *            The hostname to use (if null, use the hostname already in the
+	 *            URL).
+	 * @return The URL in string form.
+	 */
+	public static String getRequestURL(HttpServletRequest request,
+			Boolean secure, String host, int port) {
+		// TODO: This method should use the PortalURL API's instead.
+		return getPortalSiteURL(getRequestURL(request), secure, host, port,
+				null);
+	}
+
+	/**
 	 * Returns an absolute URL for the the current portal site root (ie portal
 	 * site home page) for the given request. This includes the scheme, hostname
 	 * and port used by the browser. This method returns null given a null
@@ -637,7 +675,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 *         URL.
 	 */
 	public static String getPortalSiteURL(HttpServletRequest request) {
-		return getPortalSiteURL(request, null);
+		return getPortalSiteURL(request, null, null, -1, null);
 	}
 
 	/**
@@ -662,25 +700,38 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 *         URL.
 	 */
 	public static String getEffectiveSiteURL(HttpServletRequest request) {
-		return getEffectiveSiteURL(request, null);
+		return getEffectiveSiteURL(request, null, null, -1, null);
 	}
 
 	/**
 	 * Returns an absolute URL for a page at the <i>effective</i> portal site,
 	 * based on the given request and site URI. This method is the same as the
-	 * {@link #getSiteURL(HttpServletRequest, String)} method - except that if
-	 * the given URI does not indicate a specific portal site, this method
-	 * defaults to using the <i>effective</i> site (from the
+	 * {@link #getPortalSiteURL(HttpServletRequest, Boolean, String, int, String)}
+	 * method - except that if the given URI does not indicate a specific portal
+	 * site, this method defaults to using the <i>effective</i> site (from the
 	 * {@link #getEffectiveSiteDNS(HttpServletRequest)} method) instead of the
 	 * current site.
 	 * 
 	 * @param request
 	 *            The current request.
+	 * @param uri
+	 *            The site name (ie "site DNS name") and/or additional path (eg
+	 *            a friendly URI or template friendly ID). (The part before the
+	 *            first <code>/</code> is considered the site name.)
+	 * @param secure
+	 *            If true, force use of <code>https</code>; if false, force
+	 *            use of <code>http</code>. If null, use the current scheme.
+	 * @param port
+	 *            The port to use (an integer; if non-positive, use the current
+	 *            port).
+	 * @param host
+	 *            The hostname to use (if null, use the hostname already in the
+	 *            URL).
 	 * @return The URL for the current site, in string form. This is an absolute
 	 *         URL.
 	 */
 	public static String getEffectiveSiteURL(HttpServletRequest request,
-			String uri) {
+			Boolean secure, String host, int port, String uri) {
 		String effectiveSiteDNS = getEffectiveSiteDNS(request);
 		if (effectiveSiteDNS != null) {
 			if (uri == null) {
@@ -689,16 +740,43 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 				uri = effectiveSiteDNS + uri;
 			}
 		}
-		return getPortalSiteURL(request, uri);
+		return getPortalSiteURL(request, secure, host, port, uri);
 	}
 
 	/**
 	 * <p>
 	 * Returns an absolute URL for a page at a portal site, based on the given
-	 * request and site URI. The returned URL includes the scheme, hostname and
-	 * port used by the browser in the current request. The portal site name,
-	 * and any additional path (eg a friendly URI, a template friendly ID, a
-	 * query string, etc) are taken from the given URI as follows:
+	 * request, hostname, security scheme, port number, and site-relative URI.
+	 * The elements of the URL are populated as follows:
+	 * </p>
+	 * <ul>
+	 * <li>
+	 * <p>
+	 * The scheme to use can be indicated by the optional boolean parameter. If
+	 * it is true, then <code>https://</code> is used; if it is false, then
+	 * <code>http://</code> is used; and if it is null, then the same scheme
+	 * is used as was used by the browser in the current request.
+	 * </p>
+	 * </li>
+	 * <li>
+	 * <p>
+	 * The hostname to use can be indicated by the string parameter. If it is
+	 * blank or null, then the same hostname is used as was used by the browser
+	 * in the current request.
+	 * </p>
+	 * </li>
+	 * <li>
+	 * <p>
+	 * The port number to use can be indicated by the integer parameter. If it
+	 * is a non-positive integer, then the same port is used as was used by the
+	 * browser in the current request.
+	 * </p>
+	 * </li>
+	 * <li>
+	 * <p>
+	 * The portal site name, and any additional path (eg a friendly URI, a
+	 * template friendly ID, a query string, etc) are taken from the given
+	 * site-relative URI string, as follows:
 	 * </p>
 	 * <ul>
 	 * <li> if the given URI starts with <code>/</code> then the returned URL
@@ -710,21 +788,41 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * additional path for it</li>
 	 * </ul>
 	 * <p>
+	 * If the given URI string is blank or null, then a site root URL is
+	 * returned.
+	 * </p>
+	 * </li>
+	 * </ul>
+	 * <p>
 	 * For example, say that the current portal request is for the
 	 * <code>abc</code> site at <code>http://host.hp.com</code>. Then:
 	 * </p>
 	 * <ul>
-	 * <li> when the given URI is null, the returned URL is for the current
-	 * portal site home page: <code>http://host.hp.com/portal/site/abc/</code></li>
-	 * <li> when the given URI is <code>/template.ABC</code>, the returned
-	 * URL is for that page at the current portal site:
+	 * <li> when the given URI is null, the given hostname is null, the given
+	 * scheme is null, and the given port is 0, the returned URL is for the
+	 * current portal site home page, using the current scheme and port:
+	 * <code>http://host.hp.com/portal/site/abc/</code></li>
+	 * <li> when the given URI is <code>/template.ABC</code> instead, the
+	 * returned URL is for that page at the current portal site (again using the
+	 * current scheme and port):
 	 * <code>http://host.hp.com/portal/site/abc/template.ABC</code></li>
-	 * <li> when the given URI is <code>xyz</code>, the returned URL is for
-	 * the <code>xyz</code> portal site home page:
-	 * <code>http://host.hp.com/portal/site/xyz</code></li>
-	 * <li> when the given URI is <code>xyz/template.ABC</code>, the returned
-	 * URL is for that page at the the <code>xyz</code> portal site:
-	 * <code>http://host.hp.com/portal/site/xyz/template.ABC</li>
+	 * <li> when the given URI is <code>xyz</code> instead, the returned URL
+	 * is for the <code>xyz</code> portal site home page (again with current
+	 * scheme and port): <code>http://host.hp.com/portal/site/xyz</code></li>
+	 * <li> when the given URI is <code>xyz/template.ABC</code> instead, the
+	 * returned URL is for that page at the <code>xyz</code> portal site
+	 * (again with current scheme and port):
+	 * <code>http://host.hp.com/portal/site/xyz/template.ABC</code></li>
+	 * <li> when the given URI is null, the given hostname is null, the given
+	 * security scheme is true, and the given port is 8002, the returned URL is
+	 * for the current portal site home, using <code>https</code> at port
+	 * 8002: <code>https://host.hp.com:8002/portal/site/abc/</code></li>
+	 * <li>when the given URI is <code>/template.ABC</code>, the given
+	 * security scheme is true, the given hostname is
+	 * <code>another.hp.com</code>, and the given port is 0, the returned URL
+	 * is for that page at the current portal site, on the other host, using
+	 * <code>https</code> at the default port (443):
+	 * <code>https://another.hp.com/portal/site/abc/</code></li>
 	 * </ul>
 	 * <p>
 	 * This method returns null given a null request.
@@ -736,23 +834,51 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * 
 	 * @param request
 	 *            The current request.
+	 * @param host
+	 *            The hostname to use (if null, use the hostname already in the
+	 *            URL).
+	 * @param secure
+	 *            If true, force use of <code>https</code>; if false, force
+	 *            use of <code>http</code>. If null, use the current scheme.
+	 * @param port
+	 *            The port to use (an integer; if non-positive, use the current
+	 *            port).
 	 * @param uri
-	 *            The site name (ie "site DNS name") and/or additional path (eg a friendly URI or template friendly ID).
-	 *            (The part before the first <code>/</code> is considered the site name.)
-	 * @return The URL for the given site, in string form. This is an absolute
-	 *         URL.
+	 *            The site name (ie "site DNS name") and/or additional path (eg
+	 *            a friendly URI or template friendly ID). (The part before the
+	 *            first <code>/</code> is considered the site name.)
+	 * @return The URL for the given site, in string form.
 	 */
-	public static String getPortalSiteURL(HttpServletRequest request, String uri) {
+	public static String getPortalSiteURL(HttpServletRequest request,
+			Boolean secure, String host, int port, String uri) {
 		// TODO: This method should use the PortalURL API's instead.
-		return getPortalSiteURL(getRequestURL(request), uri);
+		String siteURL = getPortalSiteURL(getRequestURL(request), secure, host,
+				port, uri);
+		// The parent method leaves the request URL path on there when the URI
+		// was null/blank. So we must remove it now.
+		if ((uri == null) || (uri.trim().length() == 0)) {
+			if (siteURL != null) {
+				int j = siteURL.indexOf("/site/");
+				if ((j != -1) && ((j + 6) < siteURL.length())) {
+					int i = siteURL.indexOf('/', j + 6);
+					if (i != -1) {
+						siteURL = siteURL.substring(0, i + 1);
+					}
+				}
+			}
+		}
+		return (siteURL);
 	}
 
 	/**
-	 * Use {@link #getPortalSiteURL(HttpServletRequest, String)} instead.
+	 * Use
+	 * {@link #getPortalSiteURL(HttpServletRequest, Boolean, String, int, String)}
+	 * instead.
 	 * 
 	 * @deprecated
 	 */
-	public static String getSiteURL(HttpServletRequest request, String uri) {
-		return getPortalSiteURL(request, uri);
+	public static String getSiteURL(HttpServletRequest request, Boolean secure,
+			String host, int port, String uri) {
+		return getPortalSiteURL(request, secure, host, port, uri);
 	}
 }

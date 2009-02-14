@@ -399,16 +399,27 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{REQUEST-URL}</code></dt>
+ * <dt><a name="request-url"><code>{REQUEST-URL}</code></a></dt>
+ * <dt><a name="request-url"><code>{REQUEST-URL:<i>spec</i>}</code></a></dt>
  * <dd>
  * <p>
- * Use this token to insert into the content the complete current URL which the
- * browser used to access the current page. For example,
- * <code>{REQUEST-URL}</code> is replaced with
- * <code>http://portal.hp.com/portal/site/itrc/template.MY_ACCOUNT/...</code>
- * when the <code>template.MY_ACCOUNT</code> secondary page is requested from
- * the <code>itrc</code> portal site on the <code>portal.hp.com</code>
- * server using HTTP.
+ * Use these related tokens to insert into the content the complete current URL
+ * which the browser used to access the current page, optionally with the scheme
+ * and/or port set, as per the <code><i>spec</i></code>.
+ * </p>
+ * <p>
+ * The <code><i>spec</i></code> can contain a scheme (<code>http</code> or
+ * <code>https</code>) and/or port number in the following format:
+ * <code><i>scheme</i>:<i>port</i></code>.
+ * </p>
+ * <p>
+ * For example, <code>{REQUEST-URL}</code> is replaced with
+ * <code>http://portal.hp.com/portal/site/itrc/template.PAGE/...</code> when
+ * the page is requested from the <code>itrc</code> portal site on the
+ * <code>portal.hp.com</code> server using HTTP. If we use
+ * <code>{REQUEST-URL:https}</code> instead, then it is replaced with
+ * <code>https://portal.hp.com/portal/site/itrc/template.PAGE/...</code> - the
+ * same URL with the scheme set to HTTPS.
  * </p>
  * </dd>
  * 
@@ -477,20 +488,39 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </dd>
  * 
  * <dt><a name="site-url"><code>{SITE-URL}</code></a></dt>
- * <dt><a name="site-url_p"><code>{SITE-URL:<i>uri</i>}</code></a></dt>
+ * <dt><a name="site-url_p"><code>{SITE-URL:<i>spec</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use these related tokens to insert URL's for pages at the current portal site
  * into the interpolated content. The <code>{SITE-URL}</code> token inserts
- * the current site home page URL; the <code>{SITE-URL:<i>uri</i>}</code>
- * token inserts a URL for a page at the current site, or another site. The
- * <code><i>uri</i></code> identifies the particular page within the current
- * site, if the <code><i>uri</i></code> starts with <code>/</code> - it it
- * does not start with <code>/</code> then the first part of the
- * <code><i>uri</i></code> is taken to be the new site name, and the
- * remainder is used as the particular page within that site. The URI can
- * include a friendly URI for the page in Vignette, a secondary page template
- * name, or etc - this can even include query data.
+ * the current site home page URL; the <code>{SITE-URL:<i>spec</i>}</code>
+ * token inserts a URL for a page at the current site, or another site,
+ * according to the <code><i>spec</i></code>.
+ * </p>
+ * <p>
+ * The portal site URL is taken from a non-standard attribute in the request
+ * which it is assumed the portal has set (SPF sets this by default). The
+ * <code><i>spec</i></code> identifies the particular page within the current
+ * site, and may also identify the scheme and/or port to use. The
+ * <code><i>spec</i></code> has the following format:
+ * </p>
+ * 
+ * <code><i>scheme</i>:<i>port</i>;<i>uri</i></code>
+ * 
+ * <p>
+ * The <code><i>scheme</i></code> can be <code>http</code> or
+ * <code>https</code>; if it is not specified, then the scheme in the current
+ * request is used. The <code><i>port</i></code> can be a port number; if it
+ * is not specified, then the one from the current request is used. The
+ * <code><i>uri</i></code> is used to give a site-relative URI for
+ * identifying the particular page and/or portal site. If the
+ * <code><i>uri</i></code> starts with <code>/</code>, it is used as the
+ * particular page within the current portal site. If it does not start with
+ * <code>/</code> then the first part of the <code><i>uri</i></code> is
+ * taken to be the new site name, and the remainder is used as the particular
+ * page within that site. The URI can include a friendly URI for the page in
+ * Vignette, a secondary page template name, or etc - this can even include
+ * query data.
  * </p>
  * <p>
  * For example, <code>{SITE-URL}</code> is replaced with
@@ -509,11 +539,21 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <code>{SITE-URL:acme/template.ANON_SPF_GLOBAL_HELP}</code>, etc.
  * </p>
  * <p>
- * Your <code><i>uri</i></code> can "nest" any of the other
+ * And to repeat the above examples again, but switch the scheme to HTTPS, here
+ * is how we do it for the current portal site: <code>{SITE-URL:https;}</code>,
+ * <code>{SITE-URL:https;/forums}</code>,
+ * <code>{SITE-URL:https;/template.ANON_SPF_GLOBAL_HELP}</code>, etc. And to
+ * simultaneously switch to the <code>acme</code> portal site: use
+ * <code>{SITE-URL:https;acme}</code>,
+ * <code>{SITE-URL:https;acme/forums}</code>,
+ * <code>{SITE-URL:https;acme/template.ANON_SPF_GLOBAL_HELP}</code>, etc.
+ * </p>
+ * <p>
+ * Your <code><i>spec</i></code> can "nest" any of the other
  * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
  * <code>{LANGUAGE-CODE}</code>, etc. Except for
  * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>uri</i></code>.
+ * <i>parameterized</i> tokens inside your <code><i>spec</i></code>.
  * </p>
  * </dd>
  * 
@@ -576,6 +616,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
  * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
  * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
+ * <li><code>{REQUEST-URL:<i>spec</i>}</code></li>
  * <li><code>{SITE-URL:<i>uri</i>}</code></li>
  * </ol>
  * </p>

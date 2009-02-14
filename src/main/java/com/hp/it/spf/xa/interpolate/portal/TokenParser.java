@@ -47,8 +47,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portal context.
 	 * The default token-substitutions property file (<code>default_includes.properties</code>)
-	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find any
-	 * <code>&lt;INCLUDE:key&gt;</code> tokens.
+	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find
+	 * any <code>&lt;INCLUDE:key&gt;</code> tokens.
 	 * </p>
 	 * 
 	 * @param portalContext
@@ -62,9 +62,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portal context,
 	 * and overriding the token-substitutions property file. The given file,
-	 * instead of the default (<code>default_includes.properties</code>) will
-	 * be assumed, if subsequent {@link #parseInclude(String)} calls find any
-	 * <code>&lt;INCLUDE:key&gt;</code> tokens.
+	 * instead of the default (<code>default_includes.properties</code>)
+	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find
+	 * any <code>&lt;INCLUDE:key&gt;</code> tokens.
 	 * </p>
 	 * 
 	 * @param portalContext
@@ -261,56 +261,56 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	}
 
 	/**
-	 * Get the portal site root (ie home page) URL for the current portal site,
-	 * from the portal context provided to the constructor. Returns null if
-	 * this has not been set in the request, or the request provided to the
-	 * constructor was null.
-	 * 
-	 * @return site URL string
-	 */
-	protected String getSiteURL() {
-		if (portalContext == null) {
-			return null;
-		}
-		return Utils.getSiteURL(portalContext.getHttpServletRequest());
-	}
-
-	/**
 	 * Get the portal site URL for the portal site and page indicated by the
-	 * given param, from the portal context provided to the constructor. Returns null if
-	 * this has not been set in the request, or the request provided to the
-	 * constructor was null.
+	 * given scheme, port, and URI, from the portal context returned to the
+	 * constructor. Returns null if the portal context was null.
 	 * 
+	 * @param secure
+	 *            If true, force use of <code>https</code>; if false, force
+	 *            use of <code>http</code>. If null, use the current scheme.
+	 * @param port
+	 *            The port to use (an integer; if non-positive, use the current
+	 *            port).
 	 * @param uri
 	 *            The site name (ie "site DNS name") and/or additional path (eg
 	 *            a friendly URI or template friendly ID). (The part before the
 	 *            first <code>/</code> is considered the site name.)
 	 * @return site URL string
 	 */
-	protected String getSiteURL(String param) {
-		if (portalContext == null) {
-			return null;
-		}
-		return Utils.getSiteURL(portalContext.getHttpServletRequest(), param);
-	}
-	
-
-	/**
-	 * Get the portal request URL for the current request. This is the URL which
-	 * was opened by the browser in order to invoke this page. It is obtained
-	 * from the portal context provided to the constructor. Returns null if this
-	 * has not been set in the request, or the context provided to the
-	 * constructor was null.
-	 * 
-	 * @return request URL string
-	 */
-	protected String getRequestURL() {
+	protected String getSiteURL(String URI, Boolean secure, int port) {
 		if (portalContext == null) {
 			return null;
 		}
 		try {
 			HttpServletRequest request = portalContext.getHttpServletRequest();
-			return Utils.getRequestURL(request);
+			return Utils.getPortalSiteURL(request, secure, null, port, URI);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Get the portal request URL for the current request, modified to use the
+	 * given scheme and port. This is the URL which was opened by the browser in
+	 * order to invoke this page, with its scheme and port modified. It is
+	 * obtained from the portal context provided to the constructor. Returns
+	 * null if the portal context was null.
+	 * 
+	 * @param secure
+	 *            If true, force use of <code>https</code>; if false, force
+	 *            use of <code>http</code>. If null, use the current scheme.
+	 * @param port
+	 *            The port to use (an integer; if non-positive, use the current
+	 *            port).
+	 * @return request URL string
+	 */
+	protected String getRequestURL(Boolean secure, int port) {
+		if (portalContext == null) {
+			return null;
+		}
+		try {
+			HttpServletRequest request = portalContext.getHttpServletRequest();
+			return Utils.getRequestURL(request, secure, null, port);
 		} catch (Exception e) {
 			return null;
 		}
