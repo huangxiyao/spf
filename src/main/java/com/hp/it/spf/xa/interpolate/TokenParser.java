@@ -10,6 +10,9 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Locale;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.ParsePosition;
 
 import com.hp.it.spf.xa.i18n.I18nUtility;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
@@ -48,6 +51,8 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
  * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
  * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
+ * <li><code>{BEFORE:<i>date</i>}</code></li>
+ * <li><code>{AFTER:<i>date</i>}</code></li>
  * </dl>
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
@@ -164,6 +169,24 @@ public abstract class TokenParser {
 	 * section.
 	 */
 	private static final String TOKEN_LOGGEDOUT_CONTAINER = "LOGGED-OUT";
+
+	/**
+	 * This class attribute is the name of the container token for a before-date
+	 * section.
+	 */
+	private static final String TOKEN_BEFORE_CONTAINER = "BEFORE";
+
+	/**
+	 * This class attribute is the name of the container token for an after-date
+	 * section.
+	 */
+	private static final String TOKEN_AFTER_CONTAINER = "AFTER";
+
+	/**
+	 * This is the {@link java.text.SimpleDateFormat} pattern used for the
+	 * parameters to the before- and after-date containers.
+	 */
+	protected static String DATE_PATTERN = "M/d/yyyy h:mm:ss a z";
 
 	private int containerIndex; // For container parsing.
 	private int containerLevel; // For container parsing.
@@ -404,6 +427,8 @@ public abstract class TokenParser {
 	 * <dd>All of the unparameterized non-container tokens are parsed next, so
 	 * that their values can be substituted into the parameterized ones below if
 	 * necessary.</dd>
+	 * <dt><code>{BEFORE:<i>key</i>}...{/BEFORE}</code></dt>
+	 * <dt><code>{AFTER:<i>key</i>}...{/AFTER}</code></dt>
 	 * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
 	 * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
 	 * <dd>The parameterized container tokens are parsed, to eliminate as much
@@ -453,6 +478,8 @@ public abstract class TokenParser {
 		content = parseSiteURL(content);
 
 		// Always do parameterized containers fourth:
+		content = parseBeforeContainer(content);
+		content = parseAfterContainer(content);
 		content = parseSiteContainer(content);
 		content = parseGroupContainer(content);
 
@@ -1339,6 +1366,140 @@ public abstract class TokenParser {
 
 		return parseContainer(content, TOKEN_GROUP_CONTAINER,
 				new GroupContainerMatcher(getGroups()));
+	}
+
+	/**
+	 * <p>
+	 * Parses the string for any <code>{BEFORE:<i>date</i>}</code> tokens;
+	 * such content is removed if the current time is after the
+	 * <code><i>date</i></code>. The <code><i>date</i></code> string must
+	 * conform to the {@link #DATE_PATTERN} which is a
+	 * {@link java.text.SimpleDateFormat} pattern.
+	 * </p>
+	 * 
+	 * <p>
+	 * For example, consider the following content string:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is permanent.
+	 *  {BEFORE:11/5/2008 12:00:00 AM GMT}
+	 *  This content is only displayed until midnight (GMT) on November 5, 2008.
+	 *  {/BEFORE}
+	 * </pre>
+	 * 
+	 * <p>
+	 * You can also nest this token with the <code>{AFTER:<i>date</i>}</code>
+	 * token (see {@link #parseAfterContainer(String)}) to form a date range.
+	 * </p>
+	 * 
+	 * <p>
+	 * <b>Note:</b> Be careful the <code><i>date</i></code> you specify
+	 * satisfies the expected {@link #DATE_PATTERN}. If there is a parsing
+	 * error, the content will be included in the returned string (with the
+	 * offending <code>{BEFORE:<i>date</i>}</code> and
+	 * <code>{/BEFORE}</code> tokens removed).
+	 * </p>
+	 * 
+	 * <p>
+	 * If you provide null content, null is returned. <b>Note:</b> For the
+	 * token, you may use <code>&lt;</code> and <code>&gt;</code> instead of
+	 * <code>{</code> and <code>}</code>, if you prefer.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parseBeforeContainer(String content) {
+
+		class BeforeContainerMatcher extends ContainerMatcher {
+
+			protected BeforeContainerMatcher() {
+				super(new Date());
+			}
+
+			protected boolean match(String containerKey) {
+				try {
+					SimpleDateFormat format = new SimpleDateFormat(DATE_PATTERN);
+					Date then = format.parse(containerKey);
+					Date now = (Date) subjectOfComparison;
+					return now.before(then);
+				} catch (Exception e) { // match by default if parsing problem
+					return true;
+				}
+			}
+		}
+
+		return parseContainer(content, TOKEN_BEFORE_CONTAINER,
+				new BeforeContainerMatcher());
+	}
+
+	/**
+	 * <p>
+	 * Parses the string for any <code>{AFTER:<i>date</i>}</code> tokens;
+	 * such content is removed if the current time is before the
+	 * <code><i>date</i></code>. The <code><i>date</i></code> string must
+	 * conform to the {@link #DATE_PATTERN} which is a
+	 * {@link java.text.SimpleDateFormat} pattern.
+	 * </p>
+	 * 
+	 * <p>
+	 * For example, consider the following content string:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is permanent.
+	 *  {AFTER:11/5/2008 12:00:00 AM GMT}
+	 *  This content is only displayed after midnight (GMT) on November 5, 2008.
+	 *  {/AFTER}
+	 * </pre>
+	 * 
+	 * <p>
+	 * You can also nest this token with the <code>{BEFORE:<i>date</i>}</code>
+	 * token (see {@link #parseBeforeContainer(String)}) to form a date range.
+	 * </p>
+	 * 
+	 * <p>
+	 * <b>Note:</b> Be careful the <code><i>date</i></code> you specify
+	 * satisfies the expected {@link #DATE_PATTERN}. If there is a parsing
+	 * error, the content will be included in the returned string (with the
+	 * offending <code>{AFTER:<i>date</i>}</code> and
+	 * <code>{/AFTER}</code> tokens removed).
+	 * </p>
+	 * 
+	 * <p>
+	 * If you provide null content, null is returned. <b>Note:</b> For the
+	 * token, you may use <code>&lt;</code> and <code>&gt;</code> instead of
+	 * <code>{</code> and <code>}</code>, if you prefer.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parseAfterContainer(String content) {
+
+		class AfterContainerMatcher extends ContainerMatcher {
+
+			protected AfterContainerMatcher() {
+				super(new Date());
+			}
+
+			protected boolean match(String containerKey) {
+				try {
+					SimpleDateFormat format = new SimpleDateFormat(DATE_PATTERN);
+					Date then = format.parse(containerKey);
+					Date now = (Date) subjectOfComparison;
+					return now.after(then);
+				} catch (Exception e) { // match by default if parsing problem
+					return true;
+				}
+			}
+		}
+
+		return parseContainer(content, TOKEN_AFTER_CONTAINER,
+				new AfterContainerMatcher());
 	}
 
 	/**
