@@ -44,6 +44,8 @@ import com.hp.it.spf.xa.help.ContextualHelpProvider;
  * @author <link href="kuang.cheng@hp.com"> Cheng Kuang </link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.i18n.portal.tag.MessageTag</code><br>
+ *      <code>com.hp.it.spf.xa.i18n.portlet.tag.MessageTag</code>
  */
 public abstract class MessageBaseTag extends BodyTagSupport {
 
@@ -186,7 +188,7 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	/**
 	 * Add string parameters to the list, for later interpolation into the
 	 * message. String parameters come from any string parameter tags contained
-	 * inside the message tag body (see StringParamBaseTag).
+	 * inside the message tag body (see {@link ParamBaseTag}).
 	 * 
 	 * @param o
 	 *            A string parameter.
@@ -201,7 +203,7 @@ public abstract class MessageBaseTag extends BodyTagSupport {
 	/**
 	 * Add contextual help parameters to the list, for later interpolation into
 	 * the message. These come from any contextual help parameter tags contained
-	 * inside the message tag body (see ContextualHelpParamBaseTag).
+	 * inside the message tag body (see {@link ContextualHelpParamBaseTag}).
 	 * 
 	 * @param c
 	 *            A parameter set for one instance of contextual help.

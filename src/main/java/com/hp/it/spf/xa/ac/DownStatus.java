@@ -13,6 +13,7 @@ import com.hp.it.spf.xa.ac.HealthcheckStatus;
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.ac.HealthcheckStatus</code>
  */
 public class DownStatus extends HealthcheckStatus {
 

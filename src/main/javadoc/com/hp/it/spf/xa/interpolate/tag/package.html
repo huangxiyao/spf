@@ -1,0 +1,31 @@
+<html>
+<body>
+<p>This package contains <b>abstract base classes</b> for JSP tags
+related to file interpolation, in both the portal and portlet frameworks
+of the Shared Portal Framework.</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portal and portlet developers should never need
+to use the Java classes in this package directly. Use the respective JSP
+tags instead which extend and implement these classes for portal
+components and portlets:</p>
+
+<ul>
+	<li>Portal developers should see the tag documentation in {@link
+	com.hp.it.spf.xa.interpolate.portal.tag}</li>
+	<li>Portlet developers should see the tag documentation in {@link
+	com.hp.it.spf.xa.interpolate.portlet.tag}</li>
+</ul>
+
+<p>However, developers who want to extend these base classes to
+produce new kinds of interpolator tags, may do so.</p>
+</blockquote>
+
+<a name="FileInterpolatorBaseTag">
+<h3>FileInterpolatorBaseTag</h3>
+</a>
+<p>The {@link
+com.hp.it.spf.xa.interpolate.tag.FileInterpolatorBaseTag} class is the
+abstract base class for all file interpolation tags, like <code>&lt;spf-file-portlet:interpolate&gt;</code>
+for portlets and <code>&lt;spf-file-portal:interpolate&gt;</code> for
+portal components.</p>

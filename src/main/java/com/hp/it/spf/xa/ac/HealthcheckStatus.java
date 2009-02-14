@@ -17,6 +17,9 @@ import javax.servlet.ServletContext;
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.ac.ClosedStatus</code><br>
+ * <code>com.hp.it.spf.xa.ac.DownStatus</code><br>
+ * <code>com.hp.it.spf.xa.ac.OpenStatus</code>
  */
 public abstract class HealthcheckStatus implements Serializable {
 

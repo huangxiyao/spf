@@ -129,16 +129,19 @@ import com.hp.it.spf.xa.help.ClassicContextualHelpProvider;
  * <p>
  * As noted above, this tag is for the classic-style rendering of contextual
  * help. If you would like a custom style, you must implement your own custom
- * tag for it. Implement a ContextualHelpProvider concrete subclass for that
- * custom style. Then implement a tag class for it, like this one, extending
- * ContextualHelpBaseTag. Have the tag construct the appropriate kind of
- * ContextualHelpProvider subclass corresponding to that custom style, and
- * return its HTML.
+ * tag for it. Implement a {@link com.hp.it.spf.xa.help.ContextualHelpProvider}
+ * concrete subclass for that custom style. Then implement a tag class for it,
+ * like this one, extending {@link ContextualHelpBaseTag} like this one does.
+ * Have the tag construct your new kind of <code>ContextualHelpProvider</code>,
+ * and return its HTML.
  * </p>
  * 
  * @author <link href="kuang.cheng@hp.com">Cheng Kuang</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.help.tag.ContextualHelpBaseTag</code><br>
+ *      <code>com.hp.it.spf.xa.help.portal.tag.ClassicContextualHelpTag</code><br>
+ *      <code>com.hp.it.spf.xa.help.portlet.tag.ClassicContextualHelpTag</code>
  */
 public abstract class ClassicContextualHelpBaseTag extends
 		ContextualHelpBaseTag {
@@ -449,11 +452,13 @@ public abstract class ClassicContextualHelpBaseTag extends
 	/**
 	 * Return an instance of the "classic"-style contextual help provider,
 	 * populated with the parameters from the current tag. This throws a
-	 * JspException if the required parameters for that provider (ie the link,
-	 * title, and help content) were not specified in the tag.
+	 * {@link javax.servlet.jsp.JspException} if the required parameters for
+	 * that provider (ie the link, title, and help content) were not specified
+	 * in the tag.
 	 * 
 	 * @param linkContent
-	 * @return ContextualHelpProvider
+	 * @return The {@link com.hp.it.spf.xa.help.ClassicContextualHelpProvider}
+	 *         for this tag.
 	 * @throws JspException
 	 */
 	protected ContextualHelpProvider getContextualHelpProvider(

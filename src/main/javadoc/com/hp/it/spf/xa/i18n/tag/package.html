@@ -1,0 +1,65 @@
+<html>
+<body>
+<p>This package contains <b>abstract base classes</b> for JSP tags
+related to internationalization in both the portal and portlet
+frameworks of the Shared Portal Framework.</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portal and portlet developers should never need
+to use the Java classes in this package directly. Use the respective JSP
+tags instead which extend and implement these classes for portal
+components and portlets:</p>
+
+<ul>
+	<li>Portal developers should see the tag documentation in {@link
+	com.hp.it.spf.xa.i18n.portal.tag}</li>
+	<li>Portlet developers should see the tag documentation in {@link
+	com.hp.it.spf.xa.i18n.portlet.tag}</li>
+</ul>
+
+<p>However, developers who want to extend these base classes to
+produce new kinds of internationalization tags, may do so.</p>
+</blockquote>
+
+<a name="ParamBaseTag">
+<h3>ParamBaseTag</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.i18n.tag.ParamBaseTag} class is the
+abstract base class for string parameter tags (for message tags), like <code>&lt;spf-i18n-portlet:param&gt;</code>
+for portlets and <code>&lt;spf-i18n-portal:i18nParam&gt;</code> for
+portal components.</p>
+
+<a name="MessageBaseTag">
+<h3>MessageBaseTag</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.i18n.tag.MessageBaseTag} class is the
+abstract base class for message tags, like <code>&lt;spf-i18n-portlet:message&gt;</code>
+for portlets and <code>&lt;spf-i18n-portal:i18nValue&gt;</code> for
+portal components.</p>
+
+<a name="LocalizedFileURLBaseTag">
+<h3>LocalizedFileURLBaseTag</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.i18n.tag.LocalizedFileURLBaseTag}
+class is the abstract base class for tags which express a localized
+file-download URL, like <code>&lt;spf-i18n-portlet:localizedFileURL&gt;</code>
+for portlets and <code>&lt;spf-i18n-portal:localizedFileURL&gt;</code>
+for portal components.</p>
+
+<a name="ContextualHelpParamBaseTag">
+<h3>ContextualHelpParamBaseTag</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.i18n.tag.ContextualHelpParamBaseTag}
+class is the abstract base class for <b>all</b> contextual help parameter
+tags (for message tags), like <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code>
+for portlets and <code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code>
+for portal components.</p>
+
+<a name="ClassicContextualHelpParamBaseTag">
+<h3>ClassicContextualHelpParamBaseTag</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.i18n.tag.ClassicContextualHelpParamBaseTag}
+class is the abstract base class for <b>classic</b> contextual help parameter
+tags (for message tags), like <code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code>
+for portlets and <code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code>
+for portal components.</p>

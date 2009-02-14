@@ -11,12 +11,14 @@ import com.hp.it.spf.xa.help.HelpProvider;
 
 /**
  * <p>
- * An abstract base utility class for help in both the portal and portlet
- * arenas.
+ * An abstract base utility class for help classes in both the portal and
+ * portlet arenas.
  * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.help.ContextualHelpUtility</code><br>
+ *      <code>com.hp.it.spf.xa.help.portal.GlobalHelpUtility</code>
  */
 public abstract class HelpUtility {
 
@@ -33,8 +35,8 @@ public abstract class HelpUtility {
 	/**
 	 * <p>
 	 * Parses the given message string for the given special help tokens, and
-	 * replaces them with the particular help HTML per the given HelpProviders.
-	 * Help tokens (such as
+	 * replaces them with the particular help HTML per the given
+	 * {@link HelpProvider}. Help tokens (such as
 	 * <code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code> in both
 	 * portal and portlet frameworks, and
 	 * <code>&lt;Global_Help&gt;...&lt;/Global_Help&gt;</code> in the portal
@@ -43,13 +45,13 @@ public abstract class HelpUtility {
 	 * of the special tokens, and mated-up with the same ordinal HelpProvider in
 	 * the given array. The content enclosed by the tokens is taken as the link
 	 * content for the help hyperlink; any other parameters are assumed to
-	 * already have been set in the HelpProvider.
+	 * already have been set in the {@link HelpProvider}.
 	 * </p>
 	 * <p>
 	 * Any help tokens which are out of proper sequence or which lack a
-	 * corresponding HelpProvider are simply stripped from the message string
-	 * and ignored. Similarly, any HelpProviders in the array which lack a
-	 * corresponding token in the string are ignored.
+	 * corresponding <code>HelpProvider</code> are simply stripped from the
+	 * message string and ignored. Similarly, any <code>HelpProvider</code> in
+	 * the array which lacks a corresponding token in the string is ignored.
 	 * </p>
 	 * <p>
 	 * If the boolean parameter is true, the content of the message string is
@@ -62,16 +64,16 @@ public abstract class HelpUtility {
 	 * @param msg
 	 *            The message string.
 	 * @param hParams
-	 *            An array of HelpProviders corresponding to the tokens in the
-	 *            message string.
+	 *            An array of {@link HelpProvider} objects corresponding to the
+	 *            tokens in the message string.
 	 * @param escapeHTML
 	 *            Whether to convert HTML special characters into character
 	 *            entities.
 	 * @return The given message string, interpolated with all applicable help
 	 *         markup.
 	 */
-	protected String parseHelp(String msg,
-			HelpProvider[] hParams, boolean escapeHTML) {
+	protected String parseHelp(String msg, HelpProvider[] hParams,
+			boolean escapeHTML) {
 
 		if (msg == null || token == null) {
 			return null;

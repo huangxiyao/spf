@@ -137,16 +137,20 @@ import com.hp.it.spf.xa.help.ClassicContextualHelpProvider;
  * As noted above, this tag is for the classic-style rendering of contextual
  * help. If you would like a custom style, you must implement your own custom
  * tag for it. Like the above tags, your custom tag would be used inside a
- * message tag body. Implement a ContextualHelpProvider concrete subclass for
- * that custom style. Then implement a tag class for it, like this one. Have the
- * tag construct the appropriate kind of ContextualHelpProvider subclass
- * corresponding to that custom style, and have the tag add it into the parent
- * message tag's list.
+ * message tag body. Implement a
+ * {@link com.hp.it.spf.xa.help.ContextualHelpProvider} concrete subclass for
+ * that custom style. Then implement a tag class for it, subclassed from
+ * {@link ContextualHelpParamBaseTag}, like this one. Have the tag construct
+ * your new kind of <code>ContextualHelpProvider</code>, and have the tag add
+ * it into the parent message tag's list using
+ * {@link MessageBaseTag#addContextualHelpProvider(ContextualHelpProvider)}.
  * </p>
  * 
  * @author <link href="kuang.cheng@hp.com">Cheng Kuang</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.i18n.portal.tag.ClassicContextualHelpParamTag</code><br>
+ *      <code>com.hp.it.spf.xa.i18n.portlet.tag.ClassicContextualHelpParamTag</code>
  */
 public abstract class ClassicContextualHelpParamBaseTag extends
 		ContextualHelpParamBaseTag {

@@ -1,0 +1,38 @@
+<html>
+<body>
+<p>This package contains <b>abstract base classes</b> for text
+interpolation, for both portlet applications and portal components in
+the Shared Portal Framework.</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portal and portlet developers should never need
+to use the Java classes in this package directly. Import the portal or
+portlet subclasses instead - eg, {@link
+com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} for portlets, and
+{@link com.hp.it.spf.xa.interpolate.portal.FileInterpolator} for portal
+components.</p>
+</blockquote>
+
+<a name="FileInterpolator">
+<h3>FileInterpolator</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.interpolate.FileInterpolator} class
+is an abstract base class for text interpolation from files, using the <a
+	href="#TokenParser"><code>TokenParser</code></a> below. The file may be
+localized; the class looks for the best-fit localized version of the
+file when loading it. Please see the class documentation for more
+information.</p>
+
+<a name="TokenParser">
+<h3>TokenParser</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.interpolate.TokenParser} class is an
+abstract base class for text interpolation from strings. The parsing of
+common portal/portlet tokens like <code>{LANGUAGE-CODE}</code>, <code>{SITE-URL:<i>spec</i>}</code>,
+etc, is done here. Please see the class documentation for more
+information.</p>
+
+
+
+</body>
+</html>

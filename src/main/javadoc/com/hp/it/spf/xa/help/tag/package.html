@@ -1,0 +1,46 @@
+<html>
+<body>
+<p>This package contains <b>abstract base classes</b> for JSP tags
+related to online help in both the portal and portlet frameworks of the
+Shared Portal Framework.</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portal and portlet developers should never need
+to use the Java classes in this package directly. Use the respective JSP
+tags instead which extend and implement these classes for portal
+components and portlets:</p>
+
+<ul>
+	<li>Portal developers should see the tag documentation in {@link
+	com.hp.it.spf.xa.help.portal.tag}</li>
+	<li>Portlet developers should see the tag documentation in {@link
+	com.hp.it.spf.xa.help.portlet.tag}</li>
+</ul>
+
+<p>However, developers who want to extend these base classes to
+produce new kinds of online help tags, may do so.</p>
+</blockquote>
+
+<a name="HelpBaseTag">
+<h3>HelpBaseTag</h3>
+<p>The {@link com.hp.it.spf.xa.help.tag.HelpBaseTag} class is the
+abstract base class for <b>all</b> online-help tags, like <code>&lt;spf-help-portlet:classicContextualHelp&gt;</code>
+for portlets, and <code>&lt;spf-help-portal:classicContextualHelp&gt;</code>
+and <code>&lt;spf-help-portal:classicGlobalHelp&gt;</code> for portal
+components.</p>
+
+<a name="ContextualHelpBaseTag">
+<h3>ContextualHelpBaseTag</h3>
+<p>The {@link com.hp.it.spf.xa.help.tag.ContextualHelpBaseTag} class
+is the abstract base class for <b>all</b> contextual help tags, like <code>&lt;spf-help-portlet:classicContextualHelp&gt;</code>
+for portlets and <code>&lt;spf-help-portal:classicContextualHelp&gt;</code>
+for portal components.</p>
+
+<a name="ClassicContextualHelpBaseTag">
+<h3>ClassicContextualHelpBaseTag</h3>
+</a>
+<p>The {@link
+com.hp.it.spf.xa.help.tag.ClassicContextualHelpBaseTag} class is the
+abstract base class for <b>classic</b> contextual help tags, like <code>&lt;spf-help-portlet:classicContextualHelp&gt;</code>
+for portlets and <code>&lt;spf-help-portal:classicContextualHelp&gt;</code>
+for portal components.</p>

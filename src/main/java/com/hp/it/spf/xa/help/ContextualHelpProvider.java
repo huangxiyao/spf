@@ -10,8 +10,8 @@ import com.hp.it.spf.xa.help.HelpProvider;
  * <p>
  * The abstract base class for contextual help providers. Subclass this to
  * provide a concrete implementation of a contextual help popup for your
- * particular application. For example, the SPF-provided "classic"-style
- * of contextual help is provided by a subclass of this one.
+ * particular application. For example, the SPF-provided "classic"-style of
+ * contextual help is provided by a subclass of this one.
  * </p>
  * <p>
  * For our purposes, contextual help is a hyperlink surrounding some content
@@ -21,6 +21,8 @@ import com.hp.it.spf.xa.help.HelpProvider;
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.help.HelpProvider</code><br>
+ *      <code>com.hp.it.spf.xa.help.ClassicContextualHelpProvider</code>
  */
 public abstract class ContextualHelpProvider extends HelpProvider {
 

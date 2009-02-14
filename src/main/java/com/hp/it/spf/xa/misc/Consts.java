@@ -7,11 +7,13 @@ package com.hp.it.spf.xa.misc;
 /**
  * <p>
  * Container class for common portal/portlet constants which need
- * cross-portal/portlet exposure.
+ * cross-portal/portlet exposure. Portlets and portal components should import
+ * the respective subclasses, not this one.
  * </p>
  * 
  * @version TBD
- * @see com.hp.it.spf.xa.misc.portal.Consts com.hp.it.spf.xa.misc.portlet.Consts
+ * @see <code>com.hp.it.spf.xa.misc.portal.Consts</code><br>
+ *      <code>com.hp.it.spf.xa.misc.portlet.Consts</code>
  */
 public class Consts {
 
@@ -358,13 +360,14 @@ public class Consts {
 	public final static String SPF_CORE_SITE = "spf";
 
 	/**
-	 * SPF sometimes needs to perform activities under the {@link #SPF_CORE_SITE} Vignette site,
-	 * but which are meant to be effective for an actual portal site.  In that case, the
-	 * site name (ie Vignette "site DNS name") for the actual portal site is carried in a query parameter
+	 * SPF sometimes needs to perform activities under the
+	 * {@link #SPF_CORE_SITE} Vignette site, but which are meant to be effective
+	 * for an actual portal site. In that case, the site name (ie Vignette "site
+	 * DNS name") for the actual portal site is carried in a query parameter
 	 * with this name.
 	 */
 	public final static String PARAM_EFFECTIVE_SITE = "spfSite";
-	
+
 	/**
 	 * The default site name to assume during logout for the redirect target.
 	 * This is also the site name under which the logout process runs. It is

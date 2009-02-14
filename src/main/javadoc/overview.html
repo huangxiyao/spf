@@ -1,0 +1,558 @@
+<html>
+<body>
+<p>This artifact contains common utilities (Java API's and JSP tags)
+for both Vignette portal components, and Java portlets, built using the
+Shared Portal Framework (SPF).</p>
+
+<style type="text/css">
+body {
+	padding: 0;
+	font-family: Verdana, Sans-serif;
+	font-size: small;
+}
+
+h1 {
+	font-family: Georgia, Serif;
+	font-size: 200%;
+	color: #404040;
+	margin-top: 5px;
+}
+
+h2 {
+	font-family: Georgia, Serif;
+	font-size: 175%;
+	color: #404040;
+	page-break-before: always;
+}
+
+h3 {
+	font-family: Verdana, Sans-serif;
+	font-size: 150%;
+	font-weight: bold;
+	color: #404040;
+	margin-top: 20px;
+}
+
+h4 {
+	font-family: Verdana, Sans-serif;
+	font-size: 125%;
+	font-weight: bold;
+	color: #404040;
+	margin-top: 20px;
+}
+
+li {
+	margin-left: -10px;
+}
+
+ol li {
+	margin-bottom: 20px;
+}
+
+code {
+	color: #990000;
+	font-size: 110%
+}
+
+pre {
+	color: #990000;
+	font-size: 110%;
+}
+
+.byline {
+	font-style: italic;
+	font-size: 90%;
+	color: gray;
+	margin-top: -10px;
+	border-bottom: solid black 1px;
+}
+
+.codeSample {
+	color: #990000;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: small;
+	border: solid #990000 1px;
+	padding: 5px;
+}
+
+.leftFloatingImage {
+	float: left;
+	margin: 0 10px 10px 0;
+}
+
+.rightFloatingImage {
+	float: right;
+	margin: 0 0 10px 10px;
+}
+
+.toc {
+	list-style-type: none;
+}
+
+ul.toc ul {
+	list-style-type: none;
+}
+
+table.props td,table.props th {
+	padding: 5px;
+	background-color: #F0F0F0
+}
+
+table.props th {
+	font-size: 11px;
+	font-weight: bold;
+	text-align: right;
+}
+
+table.props td {
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.style1 {
+	border-style: solid;
+	border-width: 1px;
+}
+</style>
+
+<a name="top">
+<h1>Shared Portal Framework - Common Utilities - Developer's Guide<br>
+<font color="red">Work in Progress</font></h1>
+</a>
+
+<a name="toc">
+<h2>Table of Contents</h2>
+</a>
+
+<ul class="toc">
+	<li>1. <a href="#overview">Overview</a>
+	<ul>
+		<li>1.1. <a href="#overview.installation">Installation</a>
+		<ul>
+			<li>1.1.1. <a href="#overview.installation.jar">Installation
+			of the SPF common utilities JAR</a></li>
+			<li>1.1.2. <a href="#overview.installation.config.1">Installation
+			of <code><font color="red">external config file 1</font></code></a></li>
+			<li>1.1.3. <a href="#overview.installation.config.2">Installation
+			of <code><font color="red">external config file 2</font></code></a></li>
+		</ul>
+		</li>
+		<li>1.2. <a href="#overview.dependencies">Dependencies</a></li>
+		<li>1.3. <a href="#overview.other">Other libraries for SPF
+		developers</a></li>
+	</ul>
+	</li>
+	<li>2. <a href="#i18n">Internationalization</a>
+	<ul>
+		<li>2.1. <a href="#i18n.convert">Converting between different
+		representations of locale</a>
+		<ul>
+			<li>2.1.1. <a href="#i18n.convert.hpp">Converting HP
+			Passport language codes (<code>I18nUtility.localeToHPPLanguage</code>,
+			<code>I18nUtility.hppLanguageToLocale</code>)</a></li>
+			<li>2.1.2. <a href="#i18n.convert.rfc3066">Converting RFC
+			3066 language tags (<code>I18nUtility.localeToLanguageTag</code>, <code>I18nUtility.languageTagToLocale</code>)</a></li>
+		</ul>
+		</li>
+		<li>2.2. <a href="#i18n.display">Localized display of common
+		objects</a>
+		<ul>
+			<li>2.2.1. <a href="#i18n.display.username">Localized
+			display of user (person) name (<code>I18nUtility.getUserDisplayName</code>)</a></li>
+			<li>2.2.2. <a href="#i18n.display.timezone">Localized
+			display of time zone (<code>I18nUtility.getLongTimezoneDisplayName</code>,
+			<code>I18nUtility.getShortTimezoneDisplayName</code>)</a></li>
+			<li>2.2.3. <a href="#i18n.display.locale">Localized display
+			of locale (<code>I18nUtility.getLocaleDisplayName</code>)</a></li>
+			<li>2.2.4. <a href="#i18n.display.other">Localized display
+			of other objects (date, currency, etc)</a></li>
+		</ul>
+		</li>
+		<li>2.3. <a href="#i18n.manipulate">Manipulating multiple
+		locales</a>
+		<ul>
+			<li>2.3.1. <a href="#i18n.manipulate.sort">Sorting locales (<code>I18nUtility.sortLocales</code>)</a></li>
+		</ul>
+		</li>
+		<li>2.4. <a href="#i18n.other">Other internationalization
+		topics</a>
+		<ul>
+			<li>2.4.1. <a href="#i18n.other.portlet">Internationalization
+			topics for portlet developers</a></li>
+			<li>2.4.2. <a href="#i18n.other.portal">Internationalization
+			topics for portal component developers</a></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>3. <a href="#url">Portal and Portlet URLs</a>
+	<ul>
+		<li>3.1. <a href="#url.kinds">About portal and portlet URLs</a>
+		<ul>
+			<li>3.1.1. <a href="#url.kinds.portal">URLs for portal pages</a></li>
+			<li>3.1.2. <a href="#url.kinds.portlet">URLs targeting
+			portlets</a></li>
+		</ul>
+		</li>
+		<li>3.2. <a href="#url.portal">Producing portal URLs</a>
+		<ul>
+			<li>3.2.1. <a href="#url.portal.portalUrl">Using <code>PortalURL</code>
+			and the <code>PortalURLFactory</code></a></li>
+			<li>3.2.2. <a href="#url.portal.getPortalSiteUrl">Using <code>Utils.getPortalSiteURL</code></a></li>
+			<li>3.2.3. <a href="#url.portal.friendlyUri">Common friendly
+			URIs</a></li>
+		</ul>
+		</li>
+		<li>3.3. <a href="#url.portlet">Producing URLs targeting
+		portlets</a>
+		<ul>
+			<li>3.3.1. <a href="#url.portlet.portalUrl">Using <code>PortalURL</code>
+			and the <code>PortalURLFactory</code></a></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>4. <a href="#properties">Property File Management</a>
+	<ul>
+		<li>4.1. <a href="#properties.where">Where to put your
+		property files</a></li>
+		<li>4.2. <a href="#properties.propertyResourceBundleManager">Accessing
+		your property files (<code>PropertyResourceBundleManager</code>)</a></li>
+	</ul>
+	</li>
+	<li>5. <a href="#env">Environment</a>
+	<ul>
+		<li>5.1. <a href="#env.kinds">About environment data</a></li>
+		<li>5.2. <a href="#env.environment">Accessing WebLogic
+		environment data (<code>Environment</code>)</a></li>
+	</ul>
+	</li>
+	<li>6. <a href="#history">Document History</a></li>
+</ul>
+
+<hr>
+
+<a name="overview">
+<h2>1. Overview</h2>
+</a>
+
+<p>This is the developer's guide for the <b>Shared Portal
+Framework (SPF) common utilities</b>. The SPF common utilities are a
+collection of Java classes and JSP tag libraries providing useful
+functionality for SPF developers - <b>both</b> developers of Java
+portlet applications, <b>and</b> Vignette portal components. These
+utilities fall into the following areas:</p>
+
+<ul>
+	<li><a href="#i18n">Internationalization</a> - the SPF common
+	utilities provide Java API's for miscellaneous generic
+	internationalization functionality, not provided by the JDK and not
+	specific to either portal components or portlets. These include methods
+	for converting locales, displaying localized objects, and manipulating
+	locales.</li>
+	<li><a href="#url">Portal and Portlet URLs</a> - the SPF common
+	utilities utilities provide Java API's for creating URLs pointing to
+	arbitrary pages in your (or another) portal site. You can also target
+	portlets on those pages and pass them specific parameters.</li>
+	<li><a href="#properties">Property File Management</a> - the SPF
+	common utilities let you load your property files from inside or
+	outside of your application, and provide a management class (Java API)
+	for them which makes them hot-reloadable. So you can change your
+	property files without restarting.</li>
+	<li><a href="#env">Environment</a> - the SPF common utilities
+	provide Java classes for accessing information about the managed
+	environment (ie WebLogic cluster and managed servers).</li>
+</ul>
+
+<p>Besides the SPF common utilities, SPF portlet and portal
+developers will want to use the specific SPF utility libraries for those
+respective architectures. See <a href="#overview.other">other
+libraries</a>, below.</p>
+
+<hr>
+
+<a name="overview.installation">
+<h3>1.1. Installation</h3>
+</a>
+
+<a name="overview.installation.jar">
+<h4>1.1.1 Installation of the SPF common utilities JAR</h4>
+</a>
+
+<p>The SPF common utilities are distributed in Java JAR format. The
+base JAR filename is <code>spf-common-utilities.jar</code>; typically a
+version number is included (for example, <code>spf-common-utilities-1.0.0.jar</code>).
+The SPF portlet utilities are distributed through Maven 2:</p>
+
+<ul>
+	<li>The current Maven 2 repository is <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-common-utilities/"><code>http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-common-utilities/</code></a></li>
+	<li>The group ID is <code>com.hp.it.spf.xa</code>
+	<li>The artifact ID is <code>spf-common-utilities</code>
+</ul>
+
+<p>To get the SPF common utilities, download the latest released
+version from the repository.</p>
+
+<ul>
+	<li>If you are a <b>portlet</b> developer: As usual with any JAR
+	file, include the SPF common utilities JAR in your portlet
+	application's <code>/WEB-INF/lib</code> folder.</li>
+	<li>If you are a <b>portal component</b> developer: The SPF
+	Vignette portal WAR will already provide the JAR, so you only need to
+	get it for compiling your code. You should not put it inside your CAR
+	file. (If you are using Maven, specify scope <code>provided</code> on
+	the SPF common utilities.)</li>
+</ul>
+
+<a name="overview.installation.config.1">
+<h4>1.1.2 Installation of <code><font color="red">external
+config file 1</font></code></h4>
+</a>
+
+<font color="red"><b>TBD</b></font>
+
+<a name="overview.installation.config.2">
+<h4>1.1.3 Installation of <code><font color="red">external
+config file 2</font></code></h4>
+</a>
+
+<font color="red"><b>TBD</b></font>
+
+<hr>
+
+<a name="overview.dependencies">
+<h3>1.2. Dependencies</h3>
+</a>
+
+<p>The SPF common utilities depend the basic J2EE technologies for
+portal/portlet development:</p>
+
+<ul>
+	<li>Java Servlet</li>
+	<li>Java Portlet</li>
+	<li>JSP</li>
+</ul>
+
+<p>In addition, the SPF common utilities depend on Apache commons
+logging.</p>
+
+<p>All of these dependencies are managed through Maven. For a list
+of the exact current dependencies, see the Maven POM for the SPF common
+utilities. You can download it from the Maven repository mentioned
+above.</p>
+
+<ul>
+	<li>If you are a <b>portlet</b> developer: As usual, all of these
+	JAR dependencies also need to be included when you build your portlet
+	application's <code>/WEB-INF/lib</code>.</li>
+	<li>If you are a <b>portal component</b> developer: The SPF
+	Vignette portal WAR will already provide the needed dependencies for
+	SPF common utilities, so you only need to get it for compiling your
+	code. You should not put it inside your CAR file. (If you are using
+	Maven, specify scope <code>provided</code> on the SPF common
+	utilities.)</li>
+</ul>
+
+<hr>
+
+<a name="overview.other">
+<h3>1.3. Other libraries for SPF developers</h3>
+</a>
+
+<p>Developers of <b>Java portlet applications</b> for the SPF portal
+will find many more utilities available to them, in the SPF portlet
+utilities artifact. Please see the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#top">SPF
+Portlet Utilities Developer's Guide</a>.</p>
+
+<p>Developers of
+<p>Vignette portal components</p>
+for the SPF portal will find many more utilities available to them, in
+the SPF portal utilities artifact. Please see the
+<a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/overview-summary.html#top">SPF
+Portal Utilities Developer's Guide</a>
+.
+</p>
+
+<hr>
+
+<a name="i18n">
+<h2>2. Internationalization</h2>
+</a>
+
+<hr>
+
+<a name="i18n.convert">
+<h3>2.1. Converting between different representations of locale</h3>
+</a>
+
+<a name="i18n.convert.hpp">
+<h4>2.1.1. Converting HP Passport language codes (<code>I18nUtility.localeToHPPLanguage</code>,
+<code>I18nUtility.hppLanguageToLocale</code>)</h4>
+</a>
+
+<a name="i18n.convert.rfc3066">
+<h4>2.1.2. Converting RFC 3066 language tags (<code>I18nUtility.localeToLanguageTag</code>,
+<code>I18nUtility.languageTagToLocale</code>)</h4>
+</a>
+
+<hr>
+
+<a name="i18n.display">
+<h3>2.2. Localized display of common objects</h3>
+</a>
+
+<a name="i18n.display.username">
+<h4>2.2.1. Localized display of user (person) name (<code>I18nUtility.getUserDisplayName</code>)</h4>
+</a>
+
+<a name="i18n.display.timezone">
+<h4>2.2.2. Localized display of time zone (<code>I18nUtility.getLongTimezoneDisplayName</code>,
+<code>I18nUtility.getShortTimezoneDisplayName</code>)</h4>
+</a>
+
+<a name="i18n.display.locale">
+<h4>2.2.3. Localized display of locale (<code>I18nUtility.getLocaleDisplayName</code>)</h4>
+</a>
+
+<a name="i18n.display.other">
+<h4>2.2.4. Localized display of other objects (date, currency, etc)</h4>
+</a>
+
+<hr>
+
+<a name="i18n.manipulate">
+<h3>2.3. Manipulating multiple locales</h3>
+</a>
+
+<a name="i18n.manipulate.sort">
+<h4>2.3.1. Sorting locales (<code>I18nUtility.sortLocales</code>)</h4>
+</a>
+
+<hr>
+
+<a name="i18n.other">
+<h3>2.4. Other internationalization topics</h3>
+</a>
+
+<a name="i18n.other.portlet">
+<h4>2.4.1. Internationalization topics for portlet developers</h4>
+</a>
+
+<a name="i18n.other.portal">
+<h4>2.4.2. Internationalization topics for portal component
+developers</h4>
+</a>
+
+<hr>
+
+<a name="url">
+<h2>3. Portal and Portlet URLs</h2>
+</a>
+
+<hr>
+
+<a name="url.kinds">
+<h3>3.1. About portal and portlet URLs</h3>
+</a>
+
+<a name="url.kinds.portal">
+<h4>3.1.1. URLs for portal pages</h4>
+</a>
+
+<a name="url.kinds.portlet">
+<h4>3.1.2. URLs targeting portlets</h4>
+</a>
+
+<hr>
+
+<a name="url.portal">
+<h3>3.2. Producing portal URLs</h3>
+</a>
+
+<a name="url.portal.portalUrl">
+<h4>3.2.1. Using <code>PortalURL</code> and the <code>PortalURLFactory</code></h4>
+</a>
+
+<a name="url.portal.getPortalSiteUrl">
+<h4>3.2.2. Using <code>Utils.getPortalSiteURL</code></h4>
+</a>
+
+<a name="url.portal.friendlyUri">
+<h4>3.2.3. Common friendly URIs</h4>
+</a>
+
+<hr>
+
+<a name="url.portlet">
+<h3>3.3. Producing URLs targeting portlets</h3>
+</a>
+
+<a name="url.portlet.portalUrl">
+<h4>3.3.1. Using <code>PortalURL</code> and the <code>PortalURLFactory</code></code></h4>
+</a>
+
+<hr>
+
+<a name="properties">
+<h2>4. Property File Management</h2>
+</a>
+
+<hr>
+
+<a name="properties.where">
+<h3>4.1. Where to put your property files</h3>
+</a>
+
+<hr>
+
+<a name="properties.propertyResourceBundleManager">
+<h3>4.2. Accessing your property files (<code>PropertyResourceBundleManager</code>)</h3>
+</a>
+
+<hr>
+
+<a name="env">
+<h2>5. Environment</h2>
+</a>
+
+<hr>
+
+<a name="env.kinds">
+<h3>5.1. About environment data</h3>
+</a>
+
+<hr>
+
+<a name="env.environment">
+<h3>5.2. Accessing WebLogic environment data (<code>Environment</code>)</h3>
+</a>
+
+<hr>
+
+<a name="history">
+<h2>6. Document History</h2>
+</a>
+
+<table border="1">
+	<tr>
+		<th>Version</th>
+		<th>Date</th>
+		<th>Editor</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
+<p></p>
+
+<hr>
+
+<h2>- End -</h2>
+</body>
+</html>

@@ -64,13 +64,14 @@ import com.hp.it.spf.xa.interpolate.FileInterpolator;
  * The <code>includeFile="<i>token-filename</i>"</code> attribute can
  * optionally be used to provide the name of a specific token-substitutions
  * property file. The {@link com.hp.it.spf.xa.interpolate.FileInterpolator}
- * supports substitution from this file for the <code>{INCLUDE:<i>key</i>}</code>
- * token. Please see the documentation for more information on how that token
- * works. By default, a file named <code>default_includes.properties</code>
- * is assumed for your token-substitution properties, but you can override that
- * with this tag attribute. Whether you override or accept the default, the
- * actual token-substitution file may be located anywhere that is loadable by
- * the system classloader. You can put some relative path in the
+ * supports substitution from this file for the
+ * <code>{INCLUDE:<i>key</i>}</code> token. Please see the documentation for
+ * more information on how that token works. By default, a file named
+ * <code>default_includes.properties</code> is assumed for your
+ * token-substitution properties, but you can override that with this tag
+ * attribute. Whether you override or accept the default, the actual
+ * token-substitution file may be located anywhere that is loadable by the
+ * system classloader. You can put some relative path in the
  * <code><i>token-filename</i></code> if needed to help the classloader find
  * it.
  * </p>
@@ -88,6 +89,8 @@ import com.hp.it.spf.xa.interpolate.FileInterpolator;
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.interpolate.portal.FileInterpolatorTag</code><br>
+ *      <code>com.hp.it.spf.xa.interpolate.portlet.FileInterpolatorTag</code>
  */
 public abstract class FileInterpolatorBaseTag extends TagSupport {
 
@@ -146,7 +149,7 @@ public abstract class FileInterpolatorBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set file from <code>file</code> attribute.
+	 * Set file from <code>file</code> attribute, normalizing blank to null.
 	 * 
 	 * @param string
 	 *            Value from the <code>file</code> tag attribute.
@@ -165,7 +168,8 @@ public abstract class FileInterpolatorBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set token file from <code>includeFile</code> tag attribute.
+	 * Set includes file from <code>includeFile</code> tag attribute,
+	 * normalizing blank to null.
 	 * 
 	 * @param string
 	 *            Value from the <code>includeFile</code> tag attribute.

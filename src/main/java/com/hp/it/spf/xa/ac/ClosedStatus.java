@@ -13,36 +13,37 @@ import com.hp.it.spf.xa.ac.HealthcheckStatus;
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.ac.HealthcheckStatus</code>
  */
 public class ClosedStatus extends HealthcheckStatus {
 
-    final static private long serialVersionUID = 8057218277720183814L;
+	final static private long serialVersionUID = 8057218277720183814L;
 
-    final static private String CLOSED_STATUS = "closed";
+	final static private String CLOSED_STATUS = "closed";
 
-    // ///////////////////////////////////////////////////////////////////
-    /* PRIVATE ATTRIBUTES */
-    // ///////////////////////////////////////////////////////////////////
-    // ///////////////////////////////////////////////////////////////////
-    /* PUBLIC METHODS */
-    // ///////////////////////////////////////////////////////////////////
-    public ClosedStatus() {
+	// ///////////////////////////////////////////////////////////////////
+	/* PRIVATE ATTRIBUTES */
+	// ///////////////////////////////////////////////////////////////////
+	// ///////////////////////////////////////////////////////////////////
+	/* PUBLIC METHODS */
+	// ///////////////////////////////////////////////////////////////////
+	public ClosedStatus() {
 
-        super();
+		super();
 
-    } // end constructor
+	} // end constructor
 
-    /**
-     * Returns the simple name for the healthcheck status represented by
-     * <code>ClosedStatus</code>: <i>closed</i>.
-     */
-    public String getSimpleName() {
+	/**
+	 * Returns the simple name for the healthcheck status represented by
+	 * <code>ClosedStatus</code>: <i>closed</i>.
+	 */
+	public String getSimpleName() {
 
-        return (CLOSED_STATUS);
+		return (CLOSED_STATUS);
 
-    } // end method
+	} // end method
 
-    // ///////////////////////////////////////////////////////////////////
-    /* PRIVATE METHODS */
-    // ///////////////////////////////////////////////////////////////////
+	// ///////////////////////////////////////////////////////////////////
+	/* PRIVATE METHODS */
+	// ///////////////////////////////////////////////////////////////////
 } // end class

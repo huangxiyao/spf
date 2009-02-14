@@ -825,8 +825,8 @@ public class I18nUtility {
 	 * <p>
 	 * By default (ie, when the flags are <code>0</code>), the language is
 	 * given priority in the display name. For a country-specific locale, this
-	 * will be in the format <i>language - country</i>. For a generic locale (ie
-	 * language only, no country), this will be in the format <i>language</i>.
+	 * will be in the format <i>language - country</i>. For a generic locale
+	 * (ie language only, no country), this will be in the format <i>language</i>.
 	 * </p>
 	 * </li>
 	 * <li>

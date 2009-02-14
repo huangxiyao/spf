@@ -22,9 +22,10 @@ import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
  * <code>&lt;Contextual_Help&gt;...&lt;/Contextual_Help&gt;</code> tokens into
  * your message string, then you should develop a contextual help parameter tag
  * class by subclassing from this one. Implement the abstract methods which
- * should construct and return your new kind of ContextualHelpProvider with your
- * content message; this base class will set that into the parent message tag
- * for output.
+ * should construct and return your new subclass of
+ * {@link com.hp.it.spf.xa.help.ContextualHelpProvider} with your content
+ * message; this base class will set that into the parent message tag for
+ * output.
  * </p>
  * <p>
  * All contextual help has help content, so all contextual help parameter tags
@@ -41,6 +42,7 @@ import com.hp.it.spf.xa.i18n.tag.MessageBaseTag;
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.i18n.tag.ClassicContextualHelpParamBaseTag</code>
  */
 public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	/**
@@ -68,7 +70,8 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set the value from the <code>content</code> attribute.
+	 * Set the value from the <code>content</code> attribute, normalizing
+	 * blank to null.
 	 * 
 	 * @param value
 	 *            The <code>content</code> attribute.
@@ -87,7 +90,8 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set the value from the <code>contentKey</code> attribute.
+	 * Set the value from the <code>contentKey</code> attribute, normalizing
+	 * blank to null.
 	 * 
 	 * @param value
 	 *            The <code>contentKey</code> attribute.
@@ -97,8 +101,8 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Returns the help content, from either the <code>content</code> attribute
-	 * or the <code>contentKey</code> message.
+	 * Returns the help content, from either the <code>content</code>
+	 * attribute or the <code>contentKey</code> message.
 	 * 
 	 * @return The string to use as the help content.
 	 */
@@ -122,8 +126,9 @@ public abstract class ContextualHelpParamBaseTag extends TagSupport {
 	/**
 	 * Do the tag processing. An error is thrown if the tag discovers it is not
 	 * contained inside the body of a surrounding message tag (any subclass of
-	 * MessageBaseTag). Otherwise, it takes the ContextualHelpProvider provided
-	 * by the concrete subclass and sets it into the parent message tag.
+	 * {@link MessageBaseTag}). Otherwise, it takes the
+	 * {@link com.hp.it.spf.xa.help.ContextualHelpProvider} provided by the
+	 * concrete subclass and sets it into the parent message tag.
 	 * 
 	 * @return int
 	 * @throws JspException

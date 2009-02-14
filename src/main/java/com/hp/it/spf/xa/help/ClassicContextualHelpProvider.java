@@ -57,6 +57,9 @@ import com.hp.it.spf.xa.misc.Utils;
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.help.ContextualHelpProvider</code><br>
+ *      <code>com.hp.it.spf.xa.help.portal.ClassicContextualHelpProvider</code><br>
+ *      <code>com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider</code>
  */
 public abstract class ClassicContextualHelpProvider extends
 		ContextualHelpProvider {
@@ -495,13 +498,13 @@ public abstract class ClassicContextualHelpProvider extends
 	 * contextual help popup. Provide the name of a CSS class as you would for a
 	 * standard HTML <code>class</code> attribute. This should be a class
 	 * which you are planning to include in the same page as the HTML from this
-	 * ClassicContextualHelpProvider. That class can define any CSS properties
-	 * valid for the HTML <code>&lt;TABLE&gt;</code> tag border, like
-	 * <code>border-color</code>. If you never call this method, or pass
-	 * null, and you never call the <code>setBorderStyle</code> method, or
-	 * pass null, then the default style will be used (a solid black 1-pixel
-	 * border). You can pass a blank string if you just want to clear that
-	 * default.
+	 * <code>ClassicContextualHelpProvider</code>. That class can define any
+	 * CSS properties valid for the HTML <code>&lt;TABLE&gt;</code> tag
+	 * border, like <code>border-color</code>. If you never call this method,
+	 * or pass null, and you never call the <code>setBorderStyle</code>
+	 * method, or pass null, then the default style will be used (a solid black
+	 * 1-pixel border). You can pass a blank string if you just want to clear
+	 * that default.
 	 * 
 	 * @param pBorderClass
 	 *            The name of the CSS class for the popup border. Pass blank to
@@ -541,13 +544,13 @@ public abstract class ClassicContextualHelpProvider extends
 	 * contextual help popup. Provide the name of a CSS class as you would for a
 	 * standard HTML <code>class</code> attribute. This should be a class
 	 * which you are planning to include in the same page as the HTML from this
-	 * ClassicContextualHelpProvider. That class can define any CSS properties
-	 * valid for the contents of an HTML <code>&lt;TD&gt;</code> tag, like
-	 * <code>background-color</code>. If you never call this method, or pass
-	 * null, and you never call the <code>setTitleStyle</code> method, or pass
-	 * null, then the default style will be used (bold white font on a blue
-	 * background). You can pass a blank string if you just want to clear that
-	 * default.
+	 * <code>ClassicContextualHelpProvider</code>. That class can define any
+	 * CSS properties valid for the contents of an HTML <code>&lt;TD&gt;</code>
+	 * tag, like <code>background-color</code>. If you never call this
+	 * method, or pass null, and you never call the <code>setTitleStyle</code>
+	 * method, or pass null, then the default style will be used (bold white
+	 * font on a blue background). You can pass a blank string if you just want
+	 * to clear that default.
 	 * 
 	 * @param pTitleClass
 	 *            The name of the CSS class for the popup title. Pass blank to
@@ -587,8 +590,8 @@ public abstract class ClassicContextualHelpProvider extends
 	 * "classic"-rendition contextual help popup. Provide the name of a CSS
 	 * class as you would for a standard HTML <code>class</code> attribute.
 	 * This should be a class which you are planning to include in the same page
-	 * as the HTML from this ClassicContextualHelpProvider. That class can
-	 * define any CSS properties valid for the contents of an HTML
+	 * as the HTML from this <code>ClassicContextualHelpProvider</code>. That
+	 * class can define any CSS properties valid for the contents of an HTML
 	 * <code>&lt;TD&gt;</code> tag, like <code>background-color</code>. If
 	 * you never call this method, or pass null, and you never call the
 	 * <code>setContentStyle</code> method, or pass null, then the default

@@ -21,6 +21,8 @@ package com.hp.it.spf.xa.help;
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.help.ContextualHelpProvider</code>
+ * <code>com.hp.it.spf.xa.help.portal.GlobalHelpProvider</code>
  */
 public abstract class HelpProvider {
 

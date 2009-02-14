@@ -86,6 +86,8 @@ import com.hp.it.spf.xa.misc.Utils;
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.help.tag.ContextualHelpBaseTag</code><br>
+ *      <code>com.hp.it.spf.xa.help.portal.tag.GlobalHelpBaseTag</code>
  */
 public abstract class HelpBaseTag extends TagSupport {
 	/**
@@ -135,7 +137,8 @@ public abstract class HelpBaseTag extends TagSupport {
 	protected boolean escapeEnabled;
 
 	/**
-	 * Set the value from the <code>anchor</code> attribute.
+	 * Set the value from the <code>anchor</code> attribute, normalizing blank
+	 * to null.
 	 * 
 	 * @param value
 	 *            The <code>anchor</code> attribute.
@@ -154,7 +157,8 @@ public abstract class HelpBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set the value from the <code>anchorKey</code> attribute.
+	 * Set the value from the <code>anchorKey</code> attribute, normalizing
+	 * blank to null.
 	 * 
 	 * @param value
 	 *            The <code>anchorKey</code> attribute.
@@ -173,7 +177,8 @@ public abstract class HelpBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set the value from the <code>anchorImg</code> attribute.
+	 * Set the value from the <code>anchorImg</code> attribute, normalizing
+	 * blank to null.
 	 * 
 	 * @param value
 	 *            The <code>anchorImg</code> attribute.
@@ -192,7 +197,8 @@ public abstract class HelpBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set the value from the <code>anchorImgKey</code> attribute.
+	 * Set the value from the <code>anchorImgKey</code> attribute, normalizing
+	 * blank to null.
 	 * 
 	 * @param value
 	 *            The <code>anchorImgKey</code> attribute.
@@ -211,7 +217,8 @@ public abstract class HelpBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set the value from the <code>anchorImgAlt</code> attribute.
+	 * Set the value from the <code>anchorImgAlt</code> attribute, normalizing
+	 * blank to null.
 	 * 
 	 * @param value
 	 *            The <code>anchorImgAlt</code> attribute.
@@ -230,7 +237,8 @@ public abstract class HelpBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set the value from the <code>anchorImgAltKey</code> attribute.
+	 * Set the value from the <code>anchorImgAltKey</code> attribute,
+	 * normalizing blank to null.
 	 * 
 	 * @param value
 	 *            The <code>anchorImgAltKey</code> attribute.
@@ -349,8 +357,8 @@ public abstract class HelpBaseTag extends TagSupport {
 	/**
 	 * Assembles the content of the global help hyperlink (ie the anchor content
 	 * itself) from the various tag attributes, and returns it. This content is
-	 * not yet escaped; the concrete subclass will do that when its getHTML
-	 * method is called.
+	 * not yet escaped; the concrete subclass will do that when its
+	 * <code>getHTML</code> method is called.
 	 */
 	protected String getLinkContent() {
 
@@ -412,7 +420,8 @@ public abstract class HelpBaseTag extends TagSupport {
 	 * Abstract method for getting a message from a resource bundle. Different
 	 * action for portal and portlet so this is an abstract method. The message
 	 * should be returned unescaped and unfiltered; any necessary
-	 * escaping/filtering will happen later, in the getHTML method.
+	 * escaping/filtering will happen later, in the <code>getHTML</code>
+	 * method.
 	 * 
 	 * @param key
 	 *            The message key.

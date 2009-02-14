@@ -111,6 +111,8 @@ import javax.servlet.jsp.tagext.TagSupport;
  * @author <link href="ming.zou@hp.com">Ming</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
+ * @see <code>com.hp.it.spf.xa.i18n.portal.tag.LocalizedFileURLTag</code><br>
+ *      <code>com.hp.it.spf.xa.i18n.portlet.tag.LocalizedFileURLTag</code>
  */
 public abstract class LocalizedFileURLBaseTag extends TagSupport {
 
@@ -166,7 +168,7 @@ public abstract class LocalizedFileURLBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set file from <code>file</code> attribute.
+	 * Set file from <code>file</code> attribute, normalizing blank to null.
 	 * 
 	 * @param string
 	 *            Value from the <code>file</code> tag attribute.
@@ -185,7 +187,8 @@ public abstract class LocalizedFileURLBaseTag extends TagSupport {
 	}
 
 	/**
-	 * Set key from <code>fileKey</code> tag attribute.
+	 * Set key from <code>fileKey</code> tag attribute, normalizing blank to
+	 * null.
 	 * 
 	 * @param string
 	 *            Value from the <code>fileKey</code> tag attribute.

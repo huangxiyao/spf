@@ -14,12 +14,14 @@ import com.sun.mail.util.BASE64DecoderStream;
 
 /**
  * A base class for miscellaneous utility methods for both portal and portlet
- * frameworks.
+ * frameworks. Portlets and portal components should import
+ * the respective subclasses, not this one.
  * 
  * @author <link href="wei.teng@hp.com">Teng Wei</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
- * @see com.hp.it.spf.xa.misc.portal.Utils com.hp.it.spf.xa.misc.portlet.Utils
+ * @see <code>com.hp.it.spf.xa.misc.portal.Utils</code><br>
+ * <code>com.hp.it.spf.xa.misc.portlet.Utils</code>
  */
 public class Utils {
 	/**
