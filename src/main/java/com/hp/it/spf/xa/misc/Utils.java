@@ -201,18 +201,27 @@ public class Utils {
 
 	/**
 	 * <p>
-	 * This method returns the given portal URL, modified to refer to the portal
-	 * site name and path provided in the given URI. The given portal URL is
-	 * expected to be of the standard format for the Vignette portal:
-	 * <code>/portal/site/<i>&lt;site-name&gt;</i></code> and may be
-	 * followed by additional path and query string; this URL may be a relative
-	 * URL as shown here, or an absolute URL. In any case, the returned URL is
-	 * as follows:
+	 * This method returns the given portal URL, adjusted with the remaining
+	 * parameters: security scheme, hostname, port number, and site-relative
+	 * URI. The parameters are all optional; if any are set to null or blank (in
+	 * the case of the port number, this is any non-positive number), then that
+	 * element in the returned URL remains the same as it was in the given URL.
+	 * </p>
+	 * <p>
+	 * The given portal URL is expected to be of the standard format for the
+	 * Vignette portal: either a relative URL like
+	 * <code>/portal/site/<i>&lt;site-name&gt;</i></code> or an absolute URL
+	 * like
+	 * <code><i>&lt;scheme&gt;</i>://<i>&lt;host&gt;</i>[:<i>&lt;port&gt;</i>]/portal/site/<i>&lt;site-name&gt;</i></code>.
+	 * In either case, it may be followed by additional path and query string.
+	 * </p>
+	 * <p>
+	 * The path in the returned URL is as follows:
 	 * </p>
 	 * <ul>
-	 * <li> if the given URI starts with <code>/</code> then the returned URL
-	 * is for the same portal site as in the given portal URL, but any
-	 * additional path/query is replaced with the given URL.</li>
+	 * <li> if the given site-relative URI starts with <code>/</code> then the
+	 * returned URL is for the same portal site as in the given portal URL, but
+	 * any additional path/query is replaced with the given URL.</li>
 	 * <li> otherwise the first part of the given URI (up to the first
 	 * <code>/</code>) is used as the replacement site name (ie the Vignette
 	 * "site DNS name") in the returned URL, and the remainder of the given URI
@@ -224,13 +233,28 @@ public class Utils {
 	 * </p>
 	 * <ul>
 	 * <li> when the given URI is null, the returned URL is
-	 * <code>/portal/site/abc/</code></li>
+	 * <code>/portal/site/abc/template.PAGE/?something=...</code></li>
 	 * <li> when the given URI is <code>/template.ABC</code>, the returned
 	 * URL is <code>/portal/site/abc/template.ABC</code></li>
 	 * <li> when the given URI is <code>xyz</code>, the returned URL is
 	 * <code>/portal/site/xyz/</code></li>
 	 * <li> when the given URI is <code>xyz/template.ABC</code>, the returned
 	 * URL is <code>http://host.hp.com/portal/site/xyz/template.ABC</code></li>
+	 * </ul>
+	 * <p>
+	 * As another example, say that the given portal URL is
+	 * <code>http://host.hp.com/portal/site/abc/template.PAGE/?something=...</code>.
+	 * In these examples, the given URI is null (or blank). Then:
+	 * </p>
+	 * <ul>
+	 * <li> when the given security scheme is true, the returned URL is
+	 * <code>https://host.hp.com/portal/site/abc/template.PAGE/?something=...</code></li>
+	 * <li> when the given security scheme is true and the port is 8002, the
+	 * returned URL is
+	 * <code>https://host.hp.com:8002/portal/site/abc/template.PAGE/?something=...</code></li>
+	 * <li> when the given host is <code>another.com</code>, the returned URL
+	 * is
+	 * <code>http://another.com/portal/site/abc/template.PAGE/?something=...</code></li>
 	 * </ul>
 	 * <p>
 	 * This method just returns the given URI if given a null portal URL.
@@ -242,42 +266,148 @@ public class Utils {
 	 * 
 	 * @param portalURL
 	 *            An absolute or server-relative portal URL string.
+	 * @param secure
+	 *            If true, force use of <code>https</code>; if false, force
+	 *            use of <code>http</code>. If null, use the scheme already
+	 *            in the URL.
+	 * @param hostname
+	 *            The hostname to use (if null, use the hostname already in the
+	 *            URL).
+	 * @param port
+	 *            The port to use (an integer; if non-positive, use the port
+	 *            already in the URL).
 	 * @param uri
-	 *            The site name (ie "site DNS name") and/or additional path (eg
-	 *            a friendly URI or template friendly ID). (The part before the
-	 *            first <code>/</code> is considered the site name.)
+	 *            A site-relative URI, comprised of the site name (ie "site DNS
+	 *            name") and/or additional path (eg a friendly URI or template
+	 *            friendly ID). (The part before the first <code>/</code> is
+	 *            considered the site name.)
 	 * @return The modified portal URL.
 	 */
-	public static String getPortalSiteURL(String portalURL, String uri) {
+	public static String getPortalSiteURL(String portalURL, Boolean secure,
+			String host, int port, String uri) {
 		// TODO: Change this class to use PortalURL API's instead, after fixing
 		// those API's to deal with null parameters.
 		String siteURL = uri;
+		String scheme;
 		if (portalURL != null) {
-			int j = portalURL.indexOf("/site/");
-			if (j == -1) {
-				siteURL = portalURL.trim(); // should never happen
-			} else {
-				String siteDNS = "";
-				String path = "";
-				if (uri != null) {
-					int i = uri.indexOf('/');
-					if (i == -1) {
-						siteDNS = uri;
-					} else {
-						siteDNS = uri.substring(0, i);
-						path = uri.substring(i);
+			siteURL = portalURL;
+
+			// first substitute scheme with given value
+			if (secure != null) {
+				int i = siteURL.indexOf("://");
+				if (i != -1) {
+					if (secure.booleanValue())
+						scheme = "https";
+					else
+						scheme = "http";
+					siteURL = scheme + siteURL.substring(i);
+				}
+			}
+
+			// next substitute hostname with given value
+			if (host != null) {
+				host = host.trim();
+				if (host.length() > 0) {
+					int i = siteURL.indexOf("://");
+					if ((i != -1) && ((i + 3) < siteURL.length())) {
+						int j = siteURL.indexOf('/', i + 3);
+						int k = siteURL.indexOf(':', i + 3);
+						if (j == -1) {
+							if (k == -1)
+								// case: scheme://host
+								siteURL = siteURL.substring(0, i).trim()
+										+ "://" + host;
+							else
+								// case: scheme://host:port
+								siteURL = siteURL.substring(0, i).trim()
+										+ "://" + host
+										+ siteURL.substring(k).trim();
+						} else {
+							if ((k == -1) || (k > j))
+								// case: scheme://host/...
+								// case: scheme://host/...:...
+								siteURL = siteURL.substring(0, i).trim()
+										+ "://" + host
+										+ siteURL.substring(j).trim();
+							else
+								// case: scheme://host:port/...
+								siteURL = siteURL.substring(0, i).trim()
+										+ "://" + host
+										+ siteURL.substring(k).trim();
+						}
 					}
 				}
-				if (siteDNS.equals("")) {
-					if ((j + 6) < portalURL.length()) {
-						int k = portalURL.indexOf("/", j + 6);
-						siteDNS = portalURL.substring(j + 6, k);
+			}
+
+			// next substitute port with given value
+			if (port > 0) {
+				int i = siteURL.indexOf("://");
+				if ((i != -1) && ((i + 3) < siteURL.length())) {
+					String p = ":" + port;
+					scheme = siteURL.substring(0, i);
+					if ("http".equalsIgnoreCase(scheme) && (port == 80)) {
+						// case: http URL and port 80 - remove port
+						p = "";
+					} else if ("https".equalsIgnoreCase(scheme)
+							&& (port == 443)) {
+						// case: https URL and port 443 - remove port
+						p = "";
+					}
+					int j = siteURL.indexOf('/', i + 3);
+					int k = siteURL.indexOf(':', i + 3);
+					if (j == -1) {
+						if (k == -1)
+							// case: scheme://host
+							siteURL = siteURL.trim() + p;
+						else
+							// case: scheme://host:port
+							siteURL = siteURL.substring(0, k).trim() + p;
 					} else {
-						siteDNS = ""; // should never happen
+						if ((k == -1) || (k > j))
+							// case: scheme://host/...
+							// case: scheme://host/...:...
+							siteURL = siteURL.substring(0, j).trim() + p
+									+ siteURL.substring(j).trim();
+						else
+							// case: scheme://host:port/...
+							siteURL = siteURL.substring(0, k).trim() + p
+									+ siteURL.substring(j).trim();
 					}
 				}
-				siteURL = portalURL.substring(0, j).trim() + "/site/"
-						+ siteDNS.trim() + "/" + path.trim();
+			}
+
+			// finally substitute site-relative URI with given value
+			if (uri != null) {
+				uri = uri.trim();
+				if (uri.length() > 0) {
+					int j = siteURL.indexOf("/site/");
+					if (j != -1) {
+						String siteDNS = "";
+						String path = "";
+						int i = uri.indexOf('/');
+						if (i == -1) {
+							siteDNS = uri;
+						} else {
+							siteDNS = uri.substring(0, i);
+							path = uri.substring(i);
+						}
+						if (siteDNS.equals("")) {
+							if ((j + 6) < siteURL.length()) {
+								int k = siteURL.indexOf('/', j + 6);
+								if (k == -1) {
+									siteDNS = siteURL.substring(j + 6);
+								} else {
+									siteDNS = siteURL.substring(j + 6, k);
+								}
+							} else {
+								siteDNS = ""; // should never happen
+							}
+						}
+						if (!siteDNS.equals(""))
+							siteURL = siteURL.substring(0, j).trim() + "/site/"
+									+ siteDNS.trim() + "/" + path.trim();
+					}
+				}
 			}
 		}
 		siteURL = slashify(siteURL);
@@ -285,12 +415,13 @@ public class Utils {
 	}
 
 	/**
-	 * Use {@link #getPortalSiteURL(String,String)} instead.
+	 * Use {@link #getPortalSiteURL(String,Boolean,String,int,String)} instead.
 	 * 
 	 * @deprecated
 	 */
-	public static String getSiteURL(String siteURL, String uri) {
-		return getPortalSiteURL(siteURL, uri);
+	public static String getSiteURL(String siteURL, Boolean secure,
+			String host, int port, String uri) {
+		return getPortalSiteURL(siteURL, secure, host, port, uri);
 	}
 
 	/**

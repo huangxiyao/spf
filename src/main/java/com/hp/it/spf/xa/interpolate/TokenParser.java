@@ -37,16 +37,17 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{COUNTRY-CODE}</code></li>
  * <li><code>{LANGUAGE-TAG}</code></li>
  * <li><code>{REQUEST-URL}</code></li>
+ * <li><code>{REQUEST-URL:<i>spec</i>}</code></li>
  * <li><code>{EMAIL}</code></li>
  * <li><code>{NAME}</code></li>
  * <li><code>{SITE}</code></li>
  * <li><code>{SITE-URL}</code></li>
+ * <li><code>{SITE-URL:<i>spec</i>}</code></li>
  * <li><code>{SITE:<i>names</i>}</code></li>
  * <li><code>{GROUP:<i>groups</i>}</code></li>
  * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
  * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
  * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
- * <li><code>{SITE-URL:<i>uri</i>}</code></li>
  * </dl>
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
@@ -274,34 +275,38 @@ public abstract class TokenParser {
 	protected abstract String getSite();
 
 	/**
-	 * Get the portal site root (ie home page) URL for the current portal site.
-	 * Different action by portal and portlet, so therefore this is an abstract
-	 * method.
-	 * 
-	 * @return site URL string
-	 */
-	protected abstract String getSiteURL();
-
-	/**
 	 * Get the portal site URL for the portal site and page indicated by the
-	 * given param. Different action by portal and portlet, so therefore this is
-	 * an abstract method.
+	 * given scheme, port, and URI. Different action by portal and portlet, so
+	 * therefore this is an abstract method.
 	 * 
+	 * @param secure
+	 *            If true, force use of <code>https</code>; if false, force
+	 *            use of <code>http</code>. If null, use the current scheme.
+	 * @param port
+	 *            The port to use (an integer; if non-positive, use the current
+	 *            port).
 	 * @param uri
 	 *            The site name (ie "site DNS name") and/or additional path (eg
 	 *            a friendly URI or template friendly ID). (The part before the
 	 *            first <code>/</code> is considered the site name.)
 	 * @return site URL string
 	 */
-	protected abstract String getSiteURL(String param);
+	protected abstract String getSiteURL(String URI, Boolean secure, int port);
 
 	/**
-	 * Get the current portal request URL. Different action by portal and
-	 * portlet, so therefore this is an abstract method.
+	 * Get the current portal request URL, modified to use the given scheme and
+	 * port. Different action by portal and portlet, so therefore this is an
+	 * abstract method.
 	 * 
+	 * @param secure
+	 *            If true, force use of <code>https</code>; if false, force
+	 *            use of <code>http</code>. If null, use the current scheme.
+	 * @param port
+	 *            The port to use (an integer; if non-positive, use the current
+	 *            port).
 	 * @return request URL string
 	 */
-	protected abstract String getRequestURL();
+	protected abstract String getRequestURL(Boolean secure, int port);
 
 	/**
 	 * Get the authorization groups for the current request. Different action by
@@ -406,7 +411,8 @@ public abstract class TokenParser {
 	 * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
 	 * <dt><code>{CONTENT-URL:<i>path</i>}</code></dt>
 	 * <dt><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></dt>
-	 * <dt><code>{SITE-URL:<i>uri</i>}</code></dt>
+	 * <dt><code>{REQUEST-URL:<i>spec</i>}</code></dt>
+	 * <dt><code>{SITE-URL:<i>spec</i>}</code></dt>
 	 * <dd>Finally the remaining parameterized tokens are parsed last, so that
 	 * the unparameterized ones (and also <code>{INCLUDE:<i>key</i>}</code>)
 	 * can include values in their parameters.</dd>
@@ -454,6 +460,7 @@ public abstract class TokenParser {
 		content = parseUserProperty(content);
 		content = parseNoLocalizedContentURL(content);
 		content = parseLocalizedContentURL(content);
+		content = parseRequestURLParameterized(content);
 		content = parseSiteURLParameterized(content);
 
 		// Done.
@@ -727,9 +734,10 @@ public abstract class TokenParser {
 	 * "http://portal.hp.com/portal/site/acme/".
 	 * </p>
 	 * <p>
-	 * The site root URL is obtained from the {@link #getSiteURL()} method - if
-	 * that method returns null, the token is replaced with blank. If you
-	 * provide null content, null is returned.
+	 * The site root URL is obtained from the
+	 * {@link #getSiteURL(String,String,String)} method - if that method returns
+	 * null, the token is replaced with blank. If you provide null content, null
+	 * is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -742,40 +750,65 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseSiteURL(String content) {
-		content = parseUnparameterized(content, TOKEN_SITE_URL, getSiteURL());
+		content = parseUnparameterized(content, TOKEN_SITE_URL, getSiteURL(
+				null, null, -1));
 		return (content);
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, substituting the respective portal site page URL
-	 * for the <code>{SITE-URL:<i>uri</i>}</code> token. The <i>uri</i>
-	 * specifies the particular page. It can be whatever string comes after (ie
-	 * relative to) the site root URL (ie the home-page URL), including
-	 * additional path, query string, etc. If the <i>uri</i> value begins with
-	 * <code>/</code>, the page URL is built for this current portal site,
-	 * with the <i>uri</i> used to identify the page at that current site. If
-	 * it does not, then the first element in the <i>uri</i> is taken as the
-	 * new portal site (so this lets you switch the site) and the rest is taken
-	 * used for the page at that site.
+	 * for the <code>{SITE-URL:<i>spec</i>}</code> token. The <i>spec</i>
+	 * specifies the particular page, scheme, and/or port. The format of the
+	 * <i>spec</i> is:
 	 * </p>
+	 * 
+	 * <code><i>[scheme[:port];]uri</i></code>
+	 * 
+	 * <ul>
+	 * <li>The <code><i>scheme</i></code> may be <code>http</code> or
+	 * <code>https</code>. If you omit a valid scheme, then the scheme used
+	 * for the current request is assumed.</li>
+	 * <li>The <code><i>port</i></code> is the port number to use. If you
+	 * omit a port number, then the one used for the current request is assumed.</li>
+	 * <li>The <code><i>uri</i></code> can be whatever string you need to
+	 * come after (ie relative to) the site root URL (ie the home-page URL),
+	 * including additional path, query string, etc. If the <i>uri</i> value
+	 * begins with <code>/</code>, the page URL is built for this current
+	 * portal site, with the <i>uri</i> used to identify the page at that
+	 * current site. If it does not, then the first element in the <i>uri</i>
+	 * is taken as the new portal site (so this lets you switch the site) and
+	 * the rest is taken used for the page at that site.</li>
+	 * </ul>
 	 * <p>
-	 * For example:
-	 * <code>&lt;a href="{SITE-URL:/forums}"&gt;go to forums&lt;/a&gt;</code>
-	 * is changed to
+	 * For example, when the current request URL is
+	 * <code>http://portal.hp.com/portal/site/acme/template.PAGE/...</code>:
+	 * </p>
+	 * <dl>
+	 * <dt><code>&lt;a href="{SITE-URL:/forums}"&gt;go to forums&lt;/a&gt;</code></dt>
+	 * <dd>becomes
 	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/forums"&gt;go to
-	 * forums&lt;/a&gt;</code>
-	 * when the current site home-page URL is
-	 * "http://portal.hp.com/portal/site/acme/". In contrast,
-	 * <code>&lt;a href="{SITE-URL:itrc/forums}"&gt;go to ITRC forums&lt;/a&gt;</code>
-	 * is changed to
+	 * forums&lt;/a&gt;</code></dd>
+	 * <dt><code>&lt;a href="{SITE-URL:itrc/forums}"&gt;go to ITRC forums&lt;/a&gt;</code></dt>
+	 * <dd>becomes
 	 * <code>&lt;a href="http://portal.hp.com/portal/site/itrc/forums"&gt;go to
-	 * ITRC forums&lt;/a&gt;</code>.
+	 * ITRC forums&lt;/a&gt;</code></dd>
+	 * <dt><code>&lt;a href="{SITE-URL:itrc}"&gt;go to ITRC home page&lt;/a&gt;</code></dt>
+	 * <dd>becomes
+	 * <code>&lt;a href="http://portal.hp.com/portal/site/itrc/"&gt;go to ITRC home page&lt;/a&gt;</code></dd>
+	 * <dt><code>&lt;a href="{SITE-URL:https;}"&gt;go to secure home page&lt;/a&gt;</code></dt>
+	 * <dd>becomes
+	 * <code>&lt;a href="https://portal.hp.com/portal/site/acme/"&gt;go to secure home page&lt;/a&gt;</code></dd>
+	 * <dt><code>&lt;a href="{SITE-URL:http:7001;itrc}"&gt;go to unsecure ITRC home page&lt;/a&gt;</code></dt>
+	 * <dd>becomes
+	 * <code>&lt;a href="http://portal.hp.com:7001/portal/site/acme/"&gt;go to unsecure home page&lt;/a&gt;</code></dd>
+	 * </dl>
 	 * </p>
 	 * <p>
-	 * The site root URL is obtained from the {@link #getSiteURL()} method - if
-	 * that method returns null, the token is replaced with just the <i>uri</i>.
-	 * If you provide null content, null is returned.
+	 * The site root URL is obtained from the
+	 * {@link #getSiteURL(String,String,String)} method - if that method returns
+	 * null, the token is replaced with just the <i>uri</i>. If you provide
+	 * null content, null is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -791,7 +824,67 @@ public abstract class TokenParser {
 		content = parseParameterized(content, TOKEN_SITE_URL,
 				new ValueProvider() {
 					protected String getValue(String param) {
-						return getSiteURL(param);
+						return getSiteURL(getURI(param), getSecure(param),
+								getPort(param));
+					}
+				});
+		return (content);
+	}
+
+	/**
+	 * <p>
+	 * Parses the given string, modifying and substituting the current portal
+	 * request URL for the <code>{REQUEST-URL:<i>spec</i>}</code> token. The
+	 * <i>spec</i> specifies an alternate scheme and/or port to switch to. The
+	 * format of the <i>spec</i> is:
+	 * </p>
+	 * 
+	 * <code><i>scheme[:port]</i></code>
+	 * 
+	 * <ul>
+	 * <li>The <code><i>scheme</i></code> may be <code>http</code> or
+	 * <code>https</code>. If you omit a valid scheme, then the scheme used
+	 * for the current request is assumed.</li>
+	 * <li>The <code><i>port</i></code> is the port number to use. If you
+	 * omit a port number, then the one used for the current request is assumed.</li>
+	 * </ul>
+	 * 
+	 * <p>
+	 * For example, when the current request URL is
+	 * <code>http://portal.hp.com/portal/site/acme/template.PAGE/...</code>:
+	 * </p>
+	 * 
+	 * <dl>
+	 * <dt><code>&lt;a href="{REQUEST-URL:https}"&gt;switch to secure&lt;/a&gt;</code></dt>
+	 * <dd>becomes
+	 * <code>&lt;a href="https://portal.hp.com/portal/site/acme/template.PAGE/..."&gt;switch to secure&lt;/a&gt;</code></dd>
+	 * <dt><code>&lt;a href="{REQUEST-URL:http:7001}"&gt;switch to unsecure&lt;/a&gt;</code></dt>
+	 * <dd>becomes
+	 * <code>&lt;a href="http://portal.hp.com:7001/portal/site/acme/template.PAGE/..."&gt;switch to unsecure&lt;/a&gt;</code></dd>
+	 * </dl>
+	 * 
+	 * <p>
+	 * The {@link #getRequestURL(String,String)} method is used to obtain the
+	 * request URL; if it is null, the token is replaced with blank. If you
+	 * provide null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parseRequestURLParameterized(String content) {
+		content = parseParameterized(content, TOKEN_REQUEST_URL,
+				new ValueProvider() {
+					protected String getValue(String param) {
+						if (!param.endsWith(";"))
+							param += ';';
+						return getRequestURL(getSecure(param), getPort(param));
 					}
 				});
 		return (content);
@@ -806,9 +899,9 @@ public abstract class TokenParser {
 	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/template.PAGE/?..."&gt;try again&lt;/a&gt;</code>
 	 * when the current request URL is
 	 * "http://portal.hp.com/portal/site/acme/template.PAGE/?...". The
-	 * {@link #getRequestURL()} method is used to obtain the request URL; if it
-	 * is null, the token is replaced with blank. If you provide null content,
-	 * null is returned.
+	 * {@link #getRequestURL(String,String)} method is used to obtain the
+	 * request URL; if it is null, the token is replaced with blank. If you
+	 * provide null content, null is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -821,7 +914,8 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseRequestURL(String content) {
-		return parseUnparameterized(content, TOKEN_REQUEST_URL, getRequestURL());
+		return parseUnparameterized(content, TOKEN_REQUEST_URL, getRequestURL(
+				null, -1));
 	}
 
 	/**
@@ -974,10 +1068,10 @@ public abstract class TokenParser {
 	public String parseSiteContainer(String content) {
 
 		/**
-		 * <code>ContainerMatcher</code> for site section parsing. The constructor
-		 * stores a site name into the class. The match method returns true if the
-		 * given site name is an exact match (case-insensitive) of the stored site
-		 * name.
+		 * <code>ContainerMatcher</code> for site section parsing. The
+		 * constructor stores a site name into the class. The match method
+		 * returns true if the given site name is an exact match
+		 * (case-insensitive) of the stored site name.
 		 */
 		class SiteContainerMatcher extends ContainerMatcher {
 
@@ -1058,9 +1152,10 @@ public abstract class TokenParser {
 
 		/**
 		 * <code>ContainerMatcher</code> for logged-in section parsing. The
-		 * constructor stores the login status into the class: true if logged-in,
-		 * false otherwise. The match method just returns the login status. The
-		 * passed container key is not used and is expected to be null.
+		 * constructor stores the login status into the class: true if
+		 * logged-in, false otherwise. The match method just returns the login
+		 * status. The passed container key is not used and is expected to be
+		 * null.
 		 */
 		class LoggedInContainerMatcher extends ContainerMatcher {
 
@@ -1132,9 +1227,10 @@ public abstract class TokenParser {
 
 		/**
 		 * <code>ContainerMatcher</code> for logged-out section parsing. The
-		 * constructor stores the login status into the class: true if logged-in,
-		 * false otherwise. The match method just returns the inverse of this. The
-		 * passed container key is not used and is expected to be null.
+		 * constructor stores the login status into the class: true if
+		 * logged-in, false otherwise. The match method just returns the inverse
+		 * of this. The passed container key is not used and is expected to be
+		 * null.
 		 */
 		class LoggedOutContainerMatcher extends ContainerMatcher {
 
@@ -1224,10 +1320,10 @@ public abstract class TokenParser {
 	public String parseGroupContainer(String content) {
 
 		/**
-		 * <code>ContainerMatcher</code> for group parsing. The constructor stores
-		 * an array of group names into the class. The match method returns true if
-		 * the given group name exactly matches (case-insensitive) any of the stored
-		 * group names.
+		 * <code>ContainerMatcher</code> for group parsing. The constructor
+		 * stores an array of group names into the class. The match method
+		 * returns true if the given group name exactly matches
+		 * (case-insensitive) any of the stored group names.
 		 */
 		class GroupContainerMatcher extends ContainerMatcher {
 
@@ -1645,5 +1741,82 @@ public abstract class TokenParser {
 			char tokenBegin, char tokenEnd, String value) {
 		String regex = "\\" + tokenBegin + tokenName + "\\" + tokenEnd;
 		return content.replaceAll(regex, value);
+	}
+
+	/**
+	 * Parse a spec string for a page URL and return true if <code>https</code>,
+	 * false if <code>http</code> (returns null if valid scheme was not
+	 * specified).
+	 */
+	protected Boolean getSecure(String spec) {
+		if (spec == null) {
+			return null;
+		}
+		String scheme = null;
+		spec = spec.trim();
+		int i = spec.indexOf(';');
+		if (i == -1) {
+			return null;
+		}
+		int j = spec.substring(0, i).indexOf(':');
+		if (j == -1) {
+			scheme = spec.substring(0, i).trim();
+		} else {
+			scheme = spec.substring(0, j).trim();
+		}
+		if ("http".equalsIgnoreCase(scheme)) {
+			return new Boolean(false);
+		} else if ("https".equalsIgnoreCase(scheme)) {
+			return new Boolean(true);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Parse a spec string for a page URL and get the port if any (returns null
+	 * if valid port was not specified).
+	 */
+	protected int getPort(String spec) {
+		if (spec == null) {
+			return -1;
+		}
+		String port = null;
+		spec = spec.trim();
+		int i = spec.indexOf(';');
+		if (i == -1) {
+			return -1;
+		}
+		int j = spec.substring(0, i).indexOf(':');
+		if (j == -1) {
+			return -1;
+		} else {
+			port = spec.substring(j + 1, i).trim();
+		}
+		try {
+			int p = Integer.parseInt(port);
+			return p;
+		} catch (Exception e) {
+			return -1;
+		}
+	}
+
+	/**
+	 * Parse a spec string for a page URL and get the URI if any (returns null
+	 * if URI was not specified).
+	 */
+	protected String getURI(String spec) {
+		if (spec == null) {
+			return null;
+		}
+		spec = spec.trim();
+		int i = spec.indexOf(';');
+		if (i == -1) {
+			return spec;
+		} else if ((i + 1) < spec.length()) {
+			return spec.substring(i + 1);
+		} else {
+			return null;
+		}
 	}
 }
