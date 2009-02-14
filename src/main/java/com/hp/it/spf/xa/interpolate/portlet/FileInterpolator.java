@@ -65,7 +65,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * tokens for a date range (ie content that should be included only in-between
  * certain dates). The <code><i>date</i></code> must adhere to the
  * {@link java.text.SimpleDateFormat} pattern in
- * {@link com.hp.it.spf.xa.interpolate.TokenParse#DATE_FORMAT}, which at this
+ * {@link com.hp.it.spf.xa.interpolate.TokenParser#DATE_FORMAT}, which at this
  * writing is the following:</p:>
  * 
  * <code><i>M</i>/<i>d</i>/<i>yyyy</i> <i>h</i>:<i>mm</i>:<i>ss</i> <i>a</i> <i>z</i></code>
@@ -107,6 +107,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  *   {/BEFORE}
  * {/AFTER}
  * </pre>
+ * 
  * </p>
  * </dd>
  * 
