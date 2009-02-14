@@ -309,8 +309,8 @@ table.props td {
 		<ul>
 			<li>4.5.1. <a href="#file.author.token.url">Referencing URLs
 			(<code>{CONTENT-URL:<i>path</i>}</code>, <code>{LOCALIZED-CONTENT-URL:<i>path</i>&gt</code>,
-			<code>{SITE-URL}</code>, <code>{SITE-URL:<i>spec</i>}</code>, <code>{REQUEST-URL}</code>,
-			<code>{REQUEST-URL:<i>spec</i>}</code>) </a></li>
+			<code>{REQUEST-URL}</code>, <code>{REQUEST-URL:<i>spec</i>}</code>, <code>{SITE-URL}</code>,
+			<code>{SITE-URL:<i>spec</i>}</code>)</a></li>
 			<li>4.5.2. <a href="#file.author.token.user">Displaying user
 			information (<code>{NAME}</code>, <code>{EMAIL}</code>, <code>{LANGUAGE-CODE}</code>,
 			<code>{COUNTRY-CODE}</code>, <code>{LANGUAGE-TAG}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</a></li>
@@ -320,7 +320,8 @@ table.props td {
 			<li>4.5.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
 			<code>{SITE:<i>site-names</i></code>}, <code>{INCLUDE:<i>key</i>}</code>)</a></li>
-			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>{SITE}</code>)</a></li>
+			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>{AFTER:<i>date</i>}</code>,
+			<code>{BEFORE:<i>date</i>}</code>, <code>{SITE}</code>)</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -4801,6 +4802,55 @@ more documentation on each token.</p>
 
 <dl>
 	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#after"><code>{AFTER:<i>date</i>}...{/AFTER}</code></a></dt>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#before"><code>{BEFORE:<i>date</i>}...{/BEFORE}</code></a></dt>
+	<dd>
+	<p>Use these container tokens to restrict content inside the
+	container based on the current date and time. The <code>{AFTER:<i>date</i>}...{/AFTER}</code>
+	token will cause the wrapped content to be <b>included</b> in the
+	interpolated content beginning on the particular <code><i>date</i></code>.
+	The <code>{BEFORE:<i>date</i>}...{/BEFORE}</code> token is the
+	opposite: the content will be included only until the particular <code><i>date</i></code>.
+	You can nest these tokens to mark content with a beginning and end
+	date.</p>
+	<p>The format of the <code><i>date</i></code> parameter is as
+	follows:</p>
+
+	<p><code><i>M</i>/<i>d</i>/<i>yyyy</i> <i>h</i>:<i>mm</i>:<i>ss</i>
+	<i>a</i> <i>z</i></code></p>
+
+	<ul>
+		<li><code><i>M</i></code> is a one or two-digit month</li>
+		<li><code><i>d</i></code> is a one or two-digit day of month</li>
+		<li><code><i>yyyy</i></code> is a four-digit year</li>
+		<li><code><i>h</i></code> is a one or two-digit hour (12 hour
+		clock)</li>
+		<li><code><i>mm</i></code> is a two-digit minutes</li>
+		<li><code><i>ss</i></code> is a two-digit seconds</li>
+		<li><code><i>a</i></code> is <code>AM</code> or <code>PM</code></li>
+		<li><code><i>z</i></code> is the timezone such as <code>GMT</code>
+		for Greenwich Mean Time, <code>PST</code> for Pacific Standard Time, <code>GMT-05:00</code>
+		for 5 hours behind GMT, etc.</li>
+	</ul>
+
+	<p>The tokens are very picky about this format. If they do not
+	recognize your <code><i>date</i></code>, they will err on the side of
+	displaying the wrapped content.</p>
+
+	<p>For example:</p>
+
+	<blockquote><pre>
+This text is permanent.&lt;BR&gt;
+{AFTER:2/1/2009 12:00:00 AM GMT}
+  {BEFORE:3/1/2009 12:00:00 AM GMT}
+  This text is only for the month of February 2009 (as measured by Greenwich Mean Time).
+  {/BEFORE}
+{/AFTER}
+</pre></blockquote>
+	</dd>
+
+	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site"><code>{SITE}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the portal site name into the
@@ -5507,22 +5557,45 @@ containing your portlet.</p>
 <dl>
 	<dt>{@link
 	com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(PortletRequest)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(PortletRequest,Boolean,String,int)}</dt>
 	<dd>
-	<p>This method returns a URL which reconstructs the current portal
-	request from the user's browser. The URL contains the same scheme,
-	hostname and port which the browser used, with the path for the current
-	portal page and site. Its query string (if any) contains all of the
-	form parameters for the current page as well (including parameters
-	targeted to your portlet, if any). It does not matter whether the form
-	parameters were submitted via HTTP <code>GET</code> or <code>POST</code>
-	- they are included in the query string of the URL returned by this
-	method.</p>
-	<p>For example (where <code>request</code> is the {@link
-	javax.portlet.PortletRequest}):</p>
+	<p>These methods return a URL corresponding to the current portal
+	request. By default, the URL contains the same scheme, hostname and
+	port which the browser used, with the path for the current portal page
+	and site. Its query string (if any) contains all of the form parameters
+	for the current page as well (including parameters targeted to your
+	portlet, if any). It does not matter whether the form parameters were
+	submitted via HTTP <code>GET</code> or <code>POST</code> - they are
+	included in the query string of the URL returned by this method.</p>
+	<p>The arguments are:</p>
+	<ul>
+		<li>Your current {@link javax.portlet.PortletRequest}.</li>
+		<li>A {@link java.lang.Boolean} indicating the security scheme
+		that should be set into the returned URL. If true, then the returned
+		URL will be an <code>https</code> URL. If false, then it will be an <code>http</code>
+		URL. By default (eg if you provide null for this argument) the scheme
+		will be the same as used in the current request.</li>
+		<li>A string hostname indicating the hostname that should be set
+		into the returned URL. By default (eg if you provide a null or blank
+		string), the hostname will be the same as used in the current request.</li>
+		<li>An integer port number indicating the port that should be
+		specified in the returned URL. By default (eg if you provide a
+		non-positive number), the port will be the same as used in the current
+		request.</li>
+	</ul>
+	<p>For example, this gets the URL for the current request (where <code>request</code>
+	is the {@link javax.portlet.PortletRequest}):</p>
 	<blockquote><pre>
 import com.hp.it.spf.xa.misc.portlet.Utils;
 ...
 String url = Utils.getPortalRequestURL(request);
+</pre></blockquote>
+	<p>And this forcibly changes it to use HTTPS:</p>
+	<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+String url = Utils.getPortletRequestURL(request, new Boolean(true));
 </pre></blockquote>
 	</dd>
 
@@ -5565,35 +5638,74 @@ String url = portalURL.toString();
 	</dd>
 
 	<dt>{@link
-	com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest,String)}</dt>
+	com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest,Boolean,String,int,String)}</dt>
 	<dd>
-	<p>This method returns the URL for a page at a portal site. The URL
-	contains the same scheme, hostname, and port which the browser used for
-	the current portal page. The portal site name and additional
-	page-specific path (such as a friendly URI, template ID, query string,
-	etc) are specified in the <code>String</code> (a URI) as follows:</p>
+	<p>This method returns the URL for a page at a portal site. By
+	default, the URL contains the same scheme, hostname, and port which the
+	browser used for the current portal page. Also by default, the URL
+	points to the home page for the current portal site. (Thus the default
+	behavior of this method is the same as the above method.) However you
+	can override the defaults with the arguments. They are:</p>
 
 	<ul>
-		<li>If the URI string starts with <code>/</code> then the
-		returned portal URL will be for the current portal site. The URI
-		string specifies the particular page at that site (plus any additional
-		path and/or query parameters).</li>
-		<li>Otherwise the first part of the URI string is considered to
-		be the site name for the desired portal site. Anything after the first
-		<code>/</code> in the URI string is considered to specify the
-		particular page, as above.</li>
-		<li>If the URI string is null, the current portal site is
-		assumed, and a home page URL for it is returned (same as with {@link
-		com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest)}).</li>
+		<li>
+		<p>Your current {@link javax.portlet.PortletRequest}.</p>
+		</li>
+		<li>
+		<p>A {@link java.lang.Boolean} indicating the security scheme that
+		should be set into the returned URL. If true, then the returned URL
+		will be an <code>https</code> URL. If false, then it will be an <code>http</code>
+		URL. By default (eg if you provide null for this argument) the scheme
+		will be the same as used in the current request.</p>
+		</li>
+		<li>
+		<p>A string hostname indicating the hostname that should be set
+		into the returned URL. By default (eg if you provide a null or blank
+		string), the hostname will be the same as used in the current request.</p>
+		</li>
+		<li>
+		<p>An integer port number indicating the port that should be
+		specified in the returned URL. By default (eg if you provide a
+		non-positive number), the port will be the same as used in the current
+		request.</p>
+		</li>
+		<li>
+		<p>The final string argument is used to provide a <i>site-relative
+		URI</i>, including optionally the portal site name and additional
+		page-specific path (such as a friendly URI, template ID, query string,
+		etc). As follows:</p>
+		<ul>
+			<li>If the URI string starts with <code>/</code> then the
+			returned portal URL will be for the current portal site. The URI
+			string specifies the particular page at that site (plus any
+			additional path and/or query parameters).</li>
+			<li>Otherwise the first part of the URI string is considered to
+			be the site name for the desired portal site. Anything after the
+			first <code>/</code> in the URI string is considered to specify the
+			particular page, as above.</li>
+		</ul>
+		</li>
 	</ul>
 
 	<p>Let's repeat the above example, but this time without using <code>PortalURL</code>.
-	It can all be done through this method instead. Here is the code:</p>
+	It can all be done through this method instead. Here is the code (the
+	null and -1 parameters cause the hostname, scheme and port to default
+	to their current values):</p>
 
 	<blockquote><pre>
 import com.hp.it.spf.xa.misc.portlet.Utils;
 ...
-String url = Utils.getPortalSiteURL(request, "/forums");
+String url = Utils.getPortalSiteURL(request, null, null, -1, "/forums");
+</pre></blockquote>
+
+	<p>If we wanted to switch to HTTPS on a non-standard port 444, too,
+	we could do it like this (passing null as the final parameter means
+	this will result in a home page URL for our current site):</p>
+
+	<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+String url = Utils.getPortalSiteURL(request, new Boolean(true), null, 444, null);
 </pre></blockquote>
 
 	<blockquote>
@@ -6484,7 +6596,9 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		<ul>
 			<li>Added <code>servlet.fileRelay.included</code> property to <code>i18n_portlet_config.properties</code>.</li>
 			<li>Added support for switching scheme and port in <code>{REQUEST-URL}</code>
-			and <code>{SITE-URL}</code> tokens.</li>
+			and <code>{SITE-URL}</code> text interpolation tokens.</li>
+			<li>Added support for <code>{BEFORE:<i>date</i>}</code> and <code>{AFTER:<i>date</i>}</code>
+			text interpolation tokens.
 		</ul>
 		</td>
 	</tr>

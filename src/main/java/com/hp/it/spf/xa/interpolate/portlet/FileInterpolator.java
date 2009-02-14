@@ -56,6 +56,60 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * 
  * <dl>
+ * <dt><a name="after"><code>{AFTER:<i>date</i>}...{/AFTER}</code></a></dt>
+ * <dt><a name="before"><code>{BEFORE:<i>date</i>}...{/BEFORE}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use these tokens around sections of content which should only be included in
+ * the interpolated content before or after certain dates. You can nest these
+ * tokens for a date range (ie content that should be included only in-between
+ * certain dates). The <code><i>date</i></code> must adhere to the
+ * {@link java.text.SimpleDateFormat} pattern in
+ * {@link com.hp.it.spf.xa.interpolate.TokenParse#DATE_FORMAT}, which at this
+ * writing is the following:</p:>
+ * 
+ * <code><i>M</i>/<i>d</i>/<i>yyyy</i> <i>h</i>:<i>mm</i>:<i>ss</i> <i>a</i> <i>z</i></code>
+ * 
+ * <ul>
+ * <li><code><i>M</i></code> is a one or two-digit month</li>
+ * <li><code><i>d</i></code> is a one or two-digit day of month</li>
+ * <li><code><i>yyyy</i></code> is a four-digit year</li>
+ * <li><code><i>h</i></code> is a one or two-digit hour (12 hour clock)</li>
+ * <li><code><i>mm</i></code> is a two-digit minutes</li>
+ * <li><code><i>ss</i></code> is a two-digit seconds</li>
+ * <li><code><i>a</i></code> is <code>AM</code> or <code>PM</code></li>
+ * <li><code><i>z</i></code> is the timezone such as <code>GMT</code> for
+ * Greenwich Mean Time, <code>PST</code> for Pacific Standard Time,
+ * <code>GMT-05:00</code> for 5 hours behind GMT, etc.</li>
+ * </ul>
+ * 
+ * <p>
+ * The content enclosed by the tokens can be anything, including any of the
+ * other special tokens listed here.
+ * </p>
+ * <p>
+ * For example, the following markup selectively includes or omits the content
+ * depending on the date as indicated:
+ * </p>
+ * <p>
+ * 
+ * <pre>
+ * This content is for everybody.
+ * {AFTER:1/5/2009 8:00:00 AM GMT}
+ * This content is only for after 8 AM on January 5 2009 (Greenwich).
+ * {/AFTER}
+ * {BEFORE:6/10/2009 12:00:00 PM CDT}
+ * This content is only for until noon on June 10 2009 (US Central Time).
+ * {/BEFORE}
+ * {AFTER:9/1/2009 12:00:00 AM GMT}
+ *   {BEFORE:10/1/2009 12:00:00 AM GMT}
+ *   This content is only for September 2009 (Greenwich).
+ *   {/BEFORE}
+ * {/AFTER}
+ * </pre>
+ * </p>
+ * </dd>
+ * 
  * <dt><a name="content-url"><code>{CONTENT-URL:<i>pathname</i>}</code></a></dt>
  * <dd>
  * <p>
@@ -764,6 +818,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <li><code>{NAME}</code></li>
  * <li><code>{SITE}</code></li>
  * <li><code>{SITE-URL}</code></li>
+ * <li><code>{BEFORE:<i>date</i>}</code></li>
+ * <li><code>{AFTER:<i>date</i>}</code></li>
  * <li><code>{SITE:<i>names</i>}</code></li>
  * <li><code>{GROUP:<i>groups</i>}</code></li>
  * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
