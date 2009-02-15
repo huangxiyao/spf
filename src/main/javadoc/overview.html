@@ -3825,7 +3825,6 @@ you have setup for your Spring portlet.</p>
 	more information. If your file to interpolate does not contain any <code>{INCLUDE:<i>key</i>}</code>
 	tokens, or you are willing to use the default property file, you do not
 	need to set this attribute.</p>
-	</p>
 	</dd>
 </dl>
 
@@ -3889,8 +3888,7 @@ including any of the special markup tokens described in the <a
 construct your <code>TokenParser</code>, then you use any of its <code>parse</code>
 methods to perform the desired interpolations.</p>
 
-Here are the relevant methods:
-</p>
+<p>Here are the relevant methods:</p>
 
 <dl>
 	<dt>{@link
@@ -4046,12 +4044,9 @@ with dynamic behaviors limited to the bounds of the <a
 is the the easiest way: you don't even need a controller class, just
 write a JSP which calls this tag, and configure it into Spring.</p>
 
-The tag is thoroughly documented in the
-<a
+<p>The tag is thoroughly documented in the <a
 	href="com/hp/it/spf/xa/interpolate/portlet/tag/package-summary.html#interpolate">package
-description</a>
-. Briefly:
-</p>
+description</a>. Briefly:</p>
 
 <dl>
 	<dt>
@@ -4136,7 +4131,7 @@ they use those file(s).</p>
 <p>The <code>html-viewer</code> portlet is covered in a separate
 document, the <a
 	href="http://samson.atl.hp.com:8080/hudson/job/html-viewer/site/apidocs/overview-summary.html">SPF
-HTML Viewer Portlet Developer's Guide</code></a> (see).</p>
+HTML Viewer Portlet Developer's Guide</a> (see).</p>
 
 <hr>
 
@@ -4156,7 +4151,6 @@ com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}.</p>
 file content. If you are authoring your text in a file, be sure to use
 UTF-8 encoding.</p>
 </blockquote>
-</dd>
 
 <a name="file.author.token.url">
 <h4>4.5.1. Referencing URLs (<code>{CONTENT-URL:<i>path</i>}</code>,
@@ -4264,7 +4258,7 @@ text. Please click on the links for more documentation for each token.</p>
 	or port. The format of the <code><i>spec</i></code> is as follows:</p>
 
 	<blockquote><pre>
-<i>scheme</i>:<i>port</i></i>	
+<i>scheme</i>:<i>port</i>	
 	</pre></blockquote>
 
 	<p>Each element is optional.</p>
@@ -5354,11 +5348,11 @@ methods work for anonymous as well as authenticated users.</p>
 <dl>
 	<dt>{@link
 	com.hp.it.spf.xa.misc.portlet.Utils#getGroups(PortletRequest)}</dt>
-	<dd>Use this method to obtain an array of names of the security
+	<dd>
+	<p>Use this method to obtain an array of names of the security
 	groups to which the user belongs. The method takes the current {@link
 	javax.portlet.PortletRequest} for the user. For example (where <code>request</code>
-	is the current <code>PortletRequest</code>):
-	</p>
+	is the current <code>PortletRequest</code>):</p>
 
 	<blockquote><pre>
 import com.hp.it.spf.xa.misc.portlet.Utils;
@@ -5369,7 +5363,8 @@ String[] groups = Utils.getGroups(request);
 
 	<dt>{@link
 	com.hp.it.spf.xa.misc.portlet.Utils#isUserInGroup(PortletRequest,String)}</dt>
-	<dd>Use this method to check whether the the user belongs to a
+	<dd>
+	<p>Use this method to check whether the the user belongs to a
 	certain security group. The method takes the current {@link
 	javax.portlet.PortletRequest} for the user, as well as a name (string)
 	for the group to check. For example, to check if the user is in the <code>ABC</code>
@@ -5825,7 +5820,6 @@ is already provided by WPAP and Spring Portlet MVC:</p>
 	javax.portlet.PortletRequest} automatically for you, so you can access
 	it in your view. This just saves you from having to store it to the
 	request yourself, before throwing the exception.</p>
-	</li>
 	</li>
 </ol>
 
