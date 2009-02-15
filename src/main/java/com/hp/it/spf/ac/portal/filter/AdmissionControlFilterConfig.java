@@ -21,6 +21,9 @@ import java.util.HashSet;
 import java.util.Properties;
 import javax.servlet.FilterConfig;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * A container class for storing the admission control filter configuration in
  * more-easily-accessible fashion.
@@ -33,6 +36,8 @@ public class AdmissionControlFilterConfig {
     // ///////////////////////////////////////////////////////////
     // PRIVATE STATIC ATTRIBUTES
     // ///////////////////////////////////////////////////////////
+
+	private static Log LOG = LogFactory.getLog(AdmissionControlFilterConfig.class);
 
     private static Integer DEFAULT_CLOSING_GRACE = new Integer(0);
 
@@ -342,17 +347,16 @@ public class AdmissionControlFilterConfig {
         props = new Properties();
         in = ClassLoader.getSystemResourceAsStream(PROPERTIES_FILE);
         if (in == null) {
-            System.out.println(errMsg);
+            LOG.warn(errMsg);
         } else {
             try {
-                System.out.println(this.getClass().getName()
+                LOG.info(this.getClass().getName()
                         + ": Found admission control properties file ["
                         + PROPERTIES_FILE + "] on classpath.  Loading.");
                 props.load(in);
                 properties = props;
             } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println(errMsg);
+                LOG.warn(errMsg, e);
             }
         }
 
@@ -411,10 +415,8 @@ public class AdmissionControlFilterConfig {
         // Each pool is a HashMap in turn, containing name-value pairs for each
         // of the properties using that pool ID.
         pools = this.explode(properties);
-        // Following System.out.println to be converted to Log4J or similar
-        // debug logging at a future date - DSJ 2006/11/29
-        //
-        // System.out.println("--- exploded: [" + pools + "]");
+
+        LOG.debug("--- exploded: [" + pools + "]");
         entries = pools.entrySet().iterator();
         while (entries.hasNext()) {
             entry = (Map.Entry) entries.next();
@@ -954,24 +956,21 @@ public class AdmissionControlFilterConfig {
 
     protected void printConfiguration() {
 
-        // Following System.out.println's to be converted to Log4J or similar
-        // debug logging at a future date - DSJ 2006/11/29
-
-        System.out.println(this.getClass().getName()
+        LOG.info(this.getClass().getName()
                 + ": Loaded the following configuration:");
-        System.out.println("--- healthcheck root: ["
+        LOG.info("--- healthcheck root: ["
                 + this.getHealthcheckRoot() + "]");
-        System.out.println("--- privileged client session key: ["
+        LOG.info("--- privileged client session key: ["
                 + this.getPrivilegedClientSessionKey() + "]");
-        System.out.println("--- closing time request key: ["
+        LOG.info("--- closing time request key: ["
                 + this.getClosingTimeRequestKey() + "]");
-        System.out.println("--- admitted client session key: ["
+        LOG.info("--- admitted client session key: ["
                 + this.getAdmittedClientSessionKey() + "]");
-        System.out.println("--- admitted client query key: ["
+        LOG.info("--- admitted client query key: ["
                 + this.getAdmittedClientQueryKey() + "]");
-        System.out.println("--- SSO target query key: ["
+        LOG.info("--- SSO target query key: ["
                 + this.getSsoTargetQueryKey() + "]");
-        System.out.println("--- default pool ID: [" + this.getDefaultPool()
+        LOG.info("--- default pool ID: [" + this.getDefaultPool()
                 + "]");
 
         HashSet pools = this.getPools();
@@ -979,32 +978,32 @@ public class AdmissionControlFilterConfig {
         String pool;
         while (it.hasNext()) {
             pool = (String) it.next();
-            System.out.println("--- for pool ID: [" + pool + "]:");
-            System.out.println("------ primary pool hostname: ["
+            LOG.info("--- for pool ID: [" + pool + "]:");
+            LOG.info("------ primary pool hostname: ["
                     + this.getPoolHostname(pool) + "]");
-            System.out.println("------ primary this-site hostname: ["
+            LOG.info("------ primary this-site hostname: ["
                     + this.getThisSiteHostname(pool) + "]");
-            System.out.println("------ all pool hostnames: ["
+            LOG.info("------ all pool hostnames: ["
                     + this.getPoolHostnames(pool) + "]");
-            System.out.println("------ all this-site hostnames: ["
+            LOG.info("------ all this-site hostnames: ["
                     + this.getThisSiteHostnames(pool) + "]");
-            System.out.println("------ all other-site hostnames: ["
+            LOG.info("------ all other-site hostnames: ["
                     + this.getOtherSiteHostnames(pool) + "]");
-            System.out.println("------ site cookie name: ["
+            LOG.info("------ site cookie name: ["
                     + this.getSiteCookieName(pool) + "]");
-            System.out.println("------ site cookie value: ["
+            LOG.info("------ site cookie value: ["
                     + this.getSiteCookieValue(pool) + "]");
-            System.out.println("------ site cookie domain: ["
+            LOG.info("------ site cookie domain: ["
                     + this.getSiteCookieDomain(pool) + "]");
-            System.out.println("------ site cookie path: ["
+            LOG.info("------ site cookie path: ["
                     + this.getSiteCookiePath(pool) + "]");
-            System.out.println("------ staff-user IP addresses: ["
+            LOG.info("------ staff-user IP addresses: ["
                     + this.getPrivilegedClientAddresses(pool) + "]");
-            System.out.println("------ staff-user query key: ["
+            LOG.info("------ staff-user query key: ["
                     + this.getPrivilegedClientQueryKey(pool) + "]");
-            System.out.println("------ closing grace period: ["
+            LOG.info("------ closing grace period: ["
                     + this.getClosingGrace(pool) + "]");
-            System.out.println("------ closed grace period: ["
+            LOG.info("------ closed grace period: ["
                     + this.getClosedGrace(pool) + "]");
         }
 
