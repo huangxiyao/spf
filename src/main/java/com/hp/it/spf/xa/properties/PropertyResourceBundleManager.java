@@ -67,10 +67,11 @@ public class PropertyResourceBundleManager {
 	 * disk is updated). The properties file is searched for anywhere within the
 	 * current classpath using the standard system class loader. The search
 	 * includes looking for the best-fit localized version of the properties
-	 * file, using the standard search sequence (see ResourceBundle). The method
-	 * returns null if the best-fit properties file cannot be found or has been
-	 * removed from disk. If there was a problem opening or reading the
-	 * properties file, a warning is also logged (using Apache commons logging).
+	 * file, using the standard search sequence (see
+	 * {@link java.util.ResourceBundle}). The method returns null if the
+	 * best-fit properties file cannot be found or has been removed from disk.
+	 * If there was a problem opening or reading the properties file, a warning
+	 * is also logged (using Apache commons logging).
 	 * </p>
 	 * 
 	 * @param propertiesName
@@ -154,11 +155,11 @@ public class PropertyResourceBundleManager {
 	 * is searched for anywhere within the current classpath using the standard
 	 * system class loader. The search includes looking for the best-fit
 	 * localized version of the properties file, using the standard search
-	 * sequence (see ResourceBundle). The method returns null if the best-fit
-	 * properties file cannot be found or has been removed from disk, or if the
-	 * key is not found in the resource bundle. If there was a problem opening
-	 * or reading the properties file, a warning is also logged (using Apache
-	 * commons logging).
+	 * sequence (see {@link java.util.ResourceBundle}). The method returns null
+	 * if the best-fit properties file cannot be found or has been removed from
+	 * disk, or if the key is not found in the resource bundle. If there was a
+	 * problem opening or reading the properties file, a warning is also logged
+	 * (using Apache commons logging).
 	 * </p>
 	 * 
 	 * @param propertiesName
@@ -181,11 +182,11 @@ public class PropertyResourceBundleManager {
 	 * updated). The properties file is searched for anywhere within the current
 	 * classpath using the standard system class loader. The search includes
 	 * looking for the best-fit localized version of the properties file, using
-	 * the standard search sequence (see {@link java.util.ResourceBundle}). The method returns the
-	 * given default if the best-fit properties file cannot be found or has been
-	 * removed from disk, or if the key is not found in the resource bundle. If
-	 * there was a problem opening or reading the properties file, a warning is
-	 * also logged (using Apache commons logging).
+	 * the standard search sequence (see {@link java.util.ResourceBundle}). The
+	 * method returns the given default if the best-fit properties file cannot
+	 * be found or has been removed from disk, or if the key is not found in the
+	 * resource bundle. If there was a problem opening or reading the properties
+	 * file, a warning is also logged (using Apache commons logging).
 	 * </p>
 	 * 
 	 * @param propertiesName
