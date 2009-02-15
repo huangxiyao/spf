@@ -405,7 +405,7 @@ extension classes for the common <code>I18nUtility</code>:</p>
 	<li>the portlet {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility},
 	<code>com.hp.it.spf.xa.i18n.portlet.I18nUtility</code>, containing
 	internationalization methods specifically for Java portlets in SPF</li>
-	<li>the portal {@link com.hp.it.spf.xa.i18n.portal.I18nUtility}, <code>com.hp.it.spf.xa.i18n.portal.I18nUtility,
+	<li>the portal {@link com.hp.it.spf.xa.i18n.portal.I18nUtility}, <code>com.hp.it.spf.xa.i18n.portal.I18nUtility</code>,
 	containing internationalization methods specifically for Vignette
 	portal components in SPF</code></li>
 </ul>
@@ -483,7 +483,7 @@ these methods are case-insensitive, as per the ISO standards.</p>
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.I18nUtility#localeToHPPLanguage(Locale)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#localeToHPPLanguage(Locale)}</dt>
 	<dd>
 	<p>Returns the HPP language code for the given locale, taking into
 	account the fact that HPP uses non-ISO-standard language codes for
@@ -507,18 +507,18 @@ these methods are case-insensitive, as per the ISO standards.</p>
 		java.util.Locale#SIMPLIFIED_CHINESE})</code></dt>
 		<dd>returns the HPP-internal value for Simplified Chinese, which
 		is the value of the {@link
-		com.hp.it.spf.xa.I18nUtility#HPP_SIMP_CHINESE_LANG} constant.</dd>
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_SIMP_CHINESE_LANG} constant.</dd>
 		<dt><code>I18nUtility.localeToHPPLanguage({@link
 		java.util.Locale#TRADITIONAL_CHINESE})</code></dt>
 		<dd>returns the HPP-internal value for Traditional Chinese, which
 		is the value of the {@link
-		com.hp.it.spf.xa.I18nUtility#HPP_TRAD_CHINESE_LANG} constant.</dd>
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_TRAD_CHINESE_LANG} constant.</dd>
 	</dl>
 	<p></p>
 	</dd>
 
 	<dt>{@link
-	com.hp.it.spf.xa.I18nUtility#hppLanguageToLocale(String)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#hppLanguageToLocale(String)}</dt>
 	<dd>
 	<p>Returns the <code>Locale</code> for the given HPP language code
 	(ie HPP <code>langCode</code> core profile attribute), again taking
@@ -536,20 +536,20 @@ these methods are case-insensitive, as per the ISO standards.</p>
 		<dt><code>I18nUtility.hppLanguageToLocale("fr")</code></dt>
 		<dd>returns {@link java.util.Locale#FRENCH}</dd>
 		<dt><code>I18nUtility.hppLanguageToLocale({@link
-		com.hp.it.spf.xa.I18nUtility#HPP_SIMP_CHINESE_LANG})</code></dt>
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_SIMP_CHINESE_LANG})</code></dt>
 		<dd>returns {@link java.util.Locale#SIMPLIFIED_CHINESE}</dd>
 		<dt><code>I18nUtility.hppLanguageToLocale({@link
-		com.hp.it.spf.xa.I18nUtility#HPP_TRAD_CHINESE_LANG})</code></dt>
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_TRAD_CHINESE_LANG})</code></dt>
 		<dd>returns {@link java.util.Locale#TRADITIONAL_CHINESE}</dd>
 	</dl>
 	<p></p>
 	</dd>
 
 	<dt>{@link
-	com.hp.it.spf.xa.I18nUtility#hppLanguageToLocale(String,String)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#hppLanguageToLocale(String,String)}</dt>
 	<dd>
 	<p>Same as {@link
-	com.hp.it.spf.xa.I18nUtility#hppLanguageToLocale(String)}, except you
+	com.hp.it.spf.xa.i18n.I18nUtility#hppLanguageToLocale(String)}, except you
 	can pass the HPP country code (ie HPP <code>residentCountryCode</code>
 	core profile attribute) as well. Thus this method will return a full,
 	country-specific locale. Note that in the case of Simplified and
@@ -562,10 +562,10 @@ these methods are case-insensitive, as per the ISO standards.</p>
 		<dt><code>I18nUtility.hppLanguageToLocale("fr", "CA")</code></dt>
 		<dd>returns {@link java.util.Locale#CANADA_FRENCH}</dd>
 		<dt><code>I18nUtility.hppLanguageToLocale({@link
-		com.hp.it.spf.xa.I18nUtility#HPP_SIMP_CHINESE_LANG}, "<i>anything</i>")</code></dt>
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_SIMP_CHINESE_LANG}, "<i>anything</i>")</code></dt>
 		<dd>returns {@link java.util.Locale#SIMPLIFIED_CHINESE}</dd>
 		<dt><code>I18nUtility.hppLanguageToLocale({@link
-		com.hp.it.spf.xa.I18nUtility#HPP_TRAD_CHINESE_LANG}, "<i>anything</i>")</code></dt>
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_TRAD_CHINESE_LANG}, "<i>anything</i>")</code></dt>
 		<dd>returns {@link java.util.Locale#TRADITIONAL_CHINESE}</dd>
 	</dl>
 	<p></p>
@@ -588,7 +588,7 @@ case-insensitive, as per the respective standards.</p>
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.I18nUtility#localeToLanguageTag(Locale)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#localeToLanguageTag(Locale)}</dt>
 	<dd>
 	<p>Returns the RFC 3066 language tag for the given locale. For
 	example:</p>
@@ -611,7 +611,7 @@ case-insensitive, as per the respective standards.</p>
 	</dd>
 
 	<dt>{@link
-	com.hp.it.spf.xa.I18nUtility#languageTagToLocale(String)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#languageTagToLocale(String)}</dt>
 	<dd>
 	<p>Returns the <code>Locale</code> for the given RFC 3066 language
 	tag. For example:</p>
@@ -880,8 +880,8 @@ methods for you:</p>
 	<dd>
 	<p>These methods return the Java-default formatted date strings in
 	each of the four styles: short (corresponding to {@link
-	java.text.DateFormat#SHORT}, medium ({@link
-	java.text.DateFormat#MEDIUM}, long ({@link java.text.DateFormat#LONG}),
+	java.text.DateFormat#SHORT}), medium ({@link
+	java.text.DateFormat#MEDIUM}), long ({@link java.text.DateFormat#LONG}),
 	and full ({@link java.text.DateFormat#FULL}). The arguments are simply
 	the {@link java.util.Date} in question, and the {@link
 	java.util.Locale} in which to localize it.</p>
@@ -952,11 +952,11 @@ operating on collections of locales.</p>
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection)</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, Locale)</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, Locale)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, Locale, int)</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, Locale, int)}</dt>
 	<dd>
 	<p>These methods return a {@link java.util.Collection} of {@link
 	java.util.Locale} objects, sorted by their localized display names (see
