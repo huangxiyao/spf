@@ -888,29 +888,30 @@ methods for you:</p>
 	date, and the {@link java.util.Locale} in which to localize it.</p>
 
 	<p>For example (where the <code>date</code> is for February 14,
-	2009, at 10:56:55 PM in the North American Pacific timezone):</p>
+	2009, at 10:56:55 PM in the North American Pacific timezone, and <code>tz</code>
+	is that timezone):</p>
 	<dl>
-		<dt><code>I18nUtility.getShortDisplayDate(date, Locale.US)</code></dt>
+		<dt><code>I18nUtility.getShortDisplayDate(date, tz, Locale.US)</code></dt>
 		<dd>returns <code>2/14/09 10:56 PM</code></dd>
-		<dt><code>I18nUtility.getShortDisplayDate(date,
+		<dt><code>I18nUtility.getShortDisplayDate(date, tz,
 		Locale.GERMANY)</code></dt>
 		<dd>returns <code>14.02.09 22:56</code></dd>
-		<dt><code>I18nUtility.getMediumDisplayDate(date,
+		<dt><code>I18nUtility.getMediumDisplayDate(date, tz,
 		Locale.US)</code></dt>
 		<dd>returns <code>Feb 14, 2009 10:56:55 PM</code></dd>
-		<dt><code>I18nUtility.getMediumDisplayDate(date,
+		<dt><code>I18nUtility.getMediumDisplayDate(date, tz,
 		Locale.GERMANY)</code></dt>
 		<dd>returns <code>14.02.2009 22:56:55</code></dd>
 
-		<dt><code>I18nUtility.getLongDisplayDate(date, Locale.US)</code></dt>
+		<dt><code>I18nUtility.getLongDisplayDate(date, tz, Locale.US)</code></dt>
 		<dd>returns <code>February 14, 2009 10:56:55 PM PST</code></dd>
-		<dt><code>I18nUtility.getLongDisplayDate(date,
+		<dt><code>I18nUtility.getLongDisplayDate(date, tz,
 		Locale.GERMANY)</code></dt>
 		<dd>returns <code>14. Februar 2009 22:56:55 PST</code></dd>
-		<dt><code>I18nUtility.getFullDisplayDate(date, Locale.US)</code></dt>
+		<dt><code>I18nUtility.getFullDisplayDate(date, tz, Locale.US)</code></dt>
 		<dd>returns <code>Saturday, February 14, 2009 10:56:55 PM
 		PST</code></dd>
-		<dt><code>I18nUtility.getFullDisplayDate(date,
+		<dt><code>I18nUtility.getFullDisplayDate(date, tz,
 		Locale.GERMANY)</code></dt>
 		<dd>returns <code>Samstag, 14. Februar 2009 22.56 Uhr PST</code></dd>
 	</dl>
