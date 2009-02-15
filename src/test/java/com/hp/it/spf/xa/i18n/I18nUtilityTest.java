@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.Calendar;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -169,14 +170,17 @@ public class I18nUtilityTest extends TestCase {
     public void testGetDisplayDate() {
     	SimpleDateFormat formatter = new SimpleDateFormat("M/dd/yyyy hh:mm:ss a z");
     	try {
-    		Date date = formatter.parse("1/12/2009 12:34:56 PM PST");
+    		TimeZone tz = TimeZone.getTimeZone("GMT");
+    		Calendar cal = Calendar.getInstance(tz);
+    		cal.set(2009, 0, 12, 12, 34, 56);
+    		Date date = cal.getTime();
     		Locale locale = Locale.GERMANY;
-    		String s = I18nUtility.getShortDisplayDate(date, locale);
+    		String s = I18nUtility.getShortDisplayDate(date, tz, locale);
     		assertEquals("12.01.09 12:34", s);
-    		s = I18nUtility.getMediumDisplayDate(date, locale);
+    		s = I18nUtility.getMediumDisplayDate(date, tz, locale);
     		assertEquals("12.01.2009 12:34:56", s);
-    		s = I18nUtility.getLongDisplayDate(date, locale);
-    		assertEquals("12. Januar 2009 12:34:56 PST", s);
+    		s = I18nUtility.getLongDisplayDate(date, tz, locale);
+    		assertEquals("12. Januar 2009 12:34:56 GMT", s);
     	} catch (Exception e) {
     	}
     }

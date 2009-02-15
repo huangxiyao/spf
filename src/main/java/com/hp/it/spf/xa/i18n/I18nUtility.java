@@ -1012,91 +1012,112 @@ public class I18nUtility {
 
 	/**
 	 * <p>
-	 * Get the displayable string for the given date and time, localized in
-	 * short format. This uses the translations and default date-format patterns
-	 * built into the JVM for the {@link java.util.DateFormat} and
-	 * {@link java.util.SimpleDateFormat} classes. Returns null when given null
-	 * parameters.
+	 * Get the displayable string for the given date and time, in the given
+	 * timezone, localized in short format. This uses the translations and
+	 * default date-format patterns built into the JVM for the
+	 * {@link java.util.DateFormat} and {@link java.util.SimpleDateFormat}
+	 * classes. Returns null when given null parameters (except if you give a
+	 * null timezone, GMT is assumed).
 	 * </p>
 	 * 
 	 * @param date
 	 *            A date and time.
+	 * @param tz
+	 *            A timezone in which to format the date and time.
 	 * @param inLocale
 	 *            A locale.
 	 * @return The localized string for that date and time.
 	 */
-	public static String getShortDisplayDate(Date date, Locale inLocale) {
-		return getDisplayDate(date, inLocale, DateFormat.SHORT);
+	public static String getShortDisplayDate(Date date, TimeZone tz,
+			Locale inLocale) {
+		return getDisplayDate(date, tz, inLocale, DateFormat.SHORT);
 	}
 
 	/**
 	 * <p>
-	 * Get the displayable string for the given date and time, localized in
-	 * medium format. This uses the translations and default date-format
-	 * patterns built into the JVM for the {@link java.util.DateFormat} and
-	 * {@link java.util.SimpleDateFormat} classes. Returns null when given null
-	 * parameters.
+	 * Get the displayable string for the given date and time, in the given
+	 * timezone, localized in medium format. This uses the translations and
+	 * default date-format patterns built into the JVM for the
+	 * {@link java.util.DateFormat} and {@link java.util.SimpleDateFormat}
+	 * classes. Returns null when given null parameters (except if you give a
+	 * null timezone, GMT is assumed).
 	 * </p>
 	 * 
 	 * @param date
 	 *            A date and time.
+	 * @param tz
+	 *            A timezone in which to format the date and time.
 	 * @param inLocale
 	 *            A locale.
 	 * @return The localized string for that date and time.
 	 */
-	public static String getMediumDisplayDate(Date date, Locale inLocale) {
-		return getDisplayDate(date, inLocale, DateFormat.MEDIUM);
+	public static String getMediumDisplayDate(Date date, TimeZone tz,
+			Locale inLocale) {
+		return getDisplayDate(date, tz, inLocale, DateFormat.MEDIUM);
 	}
 
 	/**
 	 * <p>
-	 * Get the displayable string for the given date and time, localized in long
-	 * format. This uses the translations and default date-format patterns built
-	 * into the JVM for the {@link java.util.DateFormat} and
-	 * {@link java.util.SimpleDateFormat} classes. Returns null when given null
-	 * parameters.
+	 * Get the displayable string for the given date and time, in the given
+	 * timezone, localized in long format. This uses the translations and
+	 * default date-format patterns built into the JVM for the
+	 * {@link java.util.DateFormat} and {@link java.util.SimpleDateFormat}
+	 * classes. Returns null when given null parameters (except if you give a
+	 * null timezone, GMT is assumed).
 	 * </p>
 	 * 
 	 * @param date
 	 *            A date and time.
+	 * @param tz
+	 *            A timezone in which to format the date and time.
 	 * @param inLocale
 	 *            A locale.
 	 * @return The localized string for that date and time.
 	 */
-	public static String getLongDisplayDate(Date date, Locale inLocale) {
-		return getDisplayDate(date, inLocale, DateFormat.LONG);
+	public static String getLongDisplayDate(Date date, TimeZone tz,
+			Locale inLocale) {
+		return getDisplayDate(date, tz, inLocale, DateFormat.LONG);
 	}
 
 	/**
 	 * <p>
-	 * Get the displayable string for the given date and time, localized in full
-	 * format. This uses the translations and default date-format patterns built
-	 * into the JVM for the {@link java.util.DateFormat} and
-	 * {@link java.util.SimpleDateFormat} classes. Returns null when given null
-	 * parameters.
+	 * Get the displayable string for the given date and time, in the given
+	 * timezone, localized in full format. This uses the translations and
+	 * default date-format patterns built into the JVM for the
+	 * {@link java.util.DateFormat} and {@link java.util.SimpleDateFormat}
+	 * classes. Returns null when given null parameters (except if you give a
+	 * null timezone, GMT is assumed).
 	 * </p>
 	 * 
 	 * @param date
 	 *            A date and time.
+	 * @param tz
+	 *            A timezone in which to format the date and time.
 	 * @param inLocale
 	 *            A locale.
 	 * @return The localized string for that date and time.
 	 */
-	public static String getFullDisplayDate(Date date, Locale inLocale) {
-		return getDisplayDate(date, inLocale, DateFormat.FULL);
+	public static String getFullDisplayDate(Date date, TimeZone tz,
+			Locale inLocale) {
+		return getDisplayDate(date, tz, inLocale, DateFormat.FULL);
 	}
 
 	/**
 	 * Private method for getting display date for a particular style: short,
 	 * medium, long or full.
 	 */
-	private static String getDisplayDate(Date date, Locale inLocale, int style) {
+	private static String getDisplayDate(Date date, TimeZone tz,
+			Locale inLocale, int style) {
 		if (date == null || inLocale == null) {
 			return null;
+		}
+		if (tz == null) {
+			tz = TimeZone.getTimeZone("GMT");
 		}
 		try {
 			SimpleDateFormat formatter = (SimpleDateFormat) DateFormat
 					.getDateTimeInstance(style, style, inLocale);
+			formatter.setTimeZone(tz);
 			return formatter.format(date);
 		} catch (Exception e1) { // should never happen
 			try {

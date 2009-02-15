@@ -549,8 +549,8 @@ these methods are case-insensitive, as per the ISO standards.</p>
 	com.hp.it.spf.xa.i18n.I18nUtility#hppLanguageToLocale(String,String)}</dt>
 	<dd>
 	<p>Same as {@link
-	com.hp.it.spf.xa.i18n.I18nUtility#hppLanguageToLocale(String)}, except you
-	can pass the HPP country code (ie HPP <code>residentCountryCode</code>
+	com.hp.it.spf.xa.i18n.I18nUtility#hppLanguageToLocale(String)}, except
+	you can pass the HPP country code (ie HPP <code>residentCountryCode</code>
 	core profile attribute) as well. Thus this method will return a full,
 	country-specific locale. Note that in the case of Simplified and
 	Traditional Chinese, the given country code will be ignored since SPF
@@ -870,23 +870,23 @@ methods for you:</p>
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.I18nUtility#getShortDisplayDate(Date,Locale)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#getShortDisplayDate(Date,TimeZone,Locale)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.I18nUtility#getMediumDisplayDate(Date,Locale)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#getMediumDisplayDate(Date,TimeZone,Locale)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.I18nUtility#getLongDisplayDate(Date,Locale)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#getLongDisplayDate(Date,TimeZone,Locale)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.I18nUtility#getFullDisplayDate(Date,Locale)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#getFullDisplayDate(Date,TimeZone,Locale)}</dt>
 	<dd>
 	<p>These methods return the Java-default formatted date strings in
 	each of the four styles: short (corresponding to {@link
 	java.text.DateFormat#SHORT}), medium ({@link
-	java.text.DateFormat#MEDIUM}), long ({@link java.text.DateFormat#LONG}),
-	and full ({@link java.text.DateFormat#FULL}). The arguments are simply
-	the {@link java.util.Date} in question, and the {@link
-	java.util.Locale} in which to localize it.</p>
-	<p>If you need different date string formats, please use the Java
-	API's directly.</p>
+	java.text.DateFormat#MEDIUM}), long ({@link
+	java.text.DateFormat#LONG}), and full ({@link
+	java.text.DateFormat#FULL}). The arguments are simply the {@link
+	java.util.Date} in question, the {@link java.util.TimeZone} for that
+	date, and the {@link java.util.Locale} in which to localize it.</p>
+
 	<p>For example (where the <code>date</code> is for February 14,
 	2009, at 10:56:55 PM in the North American Pacific timezone):</p>
 	<dl>
@@ -914,6 +914,8 @@ methods for you:</p>
 		Locale.GERMANY)</code></dt>
 		<dd>returns <code>Samstag, 14. Februar 2009 22.56 Uhr PST</code></dd>
 	</dl>
+	<p>If you need different date string formats, please use the Java
+	API's directly.</p>
 	</dd>
 </dl>
 
