@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -147,16 +149,16 @@ public class I18nUtility {
 	 */
 	public static String getLongTimezoneDisplayName(Date datetime,
 			TimeZone timezone, Locale inLocale) {
-		if (datetime == null) {
-			if (timezone == null || inLocale == null) {
-				return null;
-			} else {
-				return timezone.getDisplayName(timezone
-						.inDaylightTime(new Date()), TimeZone.LONG, inLocale);
-			}
+		if (timezone == null || inLocale == null) {
+			return null;
 		}
-		return timezone.getDisplayName(timezone.inDaylightTime(datetime),
-				TimeZone.LONG, inLocale);
+		if (datetime == null) {
+			return timezone.getDisplayName(timezone.inDaylightTime(new Date()),
+					TimeZone.LONG, inLocale);
+		} else {
+			return timezone.getDisplayName(timezone.inDaylightTime(datetime),
+					TimeZone.LONG, inLocale);
+		}
 	}
 
 	/**
@@ -201,16 +203,16 @@ public class I18nUtility {
 	 */
 	public static String getShortTimezoneDisplayName(Date datetime,
 			TimeZone timezone, Locale inLocale) {
-		if (datetime == null) {
-			if (timezone == null || inLocale == null) {
-				return null;
-			} else {
-				return timezone.getDisplayName(timezone
-						.inDaylightTime(new Date()), TimeZone.SHORT, inLocale);
-			}
+		if (timezone == null || inLocale == null) {
+			return null;
 		}
-		return timezone.getDisplayName(timezone.inDaylightTime(datetime),
-				TimeZone.SHORT, inLocale);
+		if (datetime == null) {
+			return timezone.getDisplayName(timezone.inDaylightTime(new Date()),
+					TimeZone.SHORT, inLocale);
+		} else {
+			return timezone.getDisplayName(timezone.inDaylightTime(datetime),
+					TimeZone.SHORT, inLocale);
+		}
 	}
 
 	/**
@@ -775,11 +777,13 @@ public class I18nUtility {
 	/**
 	 * <p>
 	 * Return the locale display name, localized for that same locale. For a
-	 * country-specific locale, this will be in the format <i>language - country</i>.
-	 * For a generic locale (ie language only, no country), this will be in the
-	 * format <i>language</i>. In either case, if there is a variant in the
-	 * locale, it will be included parenthetically at the end: <i>language -
-	 * country (variant)</i> or <i>language (variant)</i>. Returns null if the
+	 * country-specific locale, this will be in the format:
+	 * <code><i>language</i>-<i>country</i></code>. For a generic locale
+	 * (ie language only, no country), this will be in the format:
+	 * <code><i>language</i></code>. In either case, if there is a variant
+	 * in the locale, it will be included parenthetically at the end:
+	 * <code><i>language</i>-<i>country</i> (<i>variant</i>)</code> or
+	 * <code><i>language</i> (<i>variant</i>)</code>. Returns null if the
 	 * parameter is null. This uses the translations built into the JVM for the
 	 * {@link java.util.Locale} class.
 	 * </p>
@@ -795,13 +799,16 @@ public class I18nUtility {
 	/**
 	 * <p>
 	 * Return the display name of one locale, localized for another locale. For
-	 * a country-specific locale, this will be in the format <i>language -
-	 * country</i>. For a generic locale (ie language only, no country), this
-	 * will be in the format <i>language</i>. In either case, if there is a
-	 * variant in the locale, it will be included parenthetically at the end:
-	 * <i>language - country (variant)</i> or <i>language (variant)</i>.
-	 * Returns null if the parameter is null. This uses the translations built
-	 * into the JVM for the {@link java.util.Locale} class.
+	 * a country-specific locale, this will be in the format
+	 * <code><i>language</i>-
+	 * <i>country</i></code>. For a generic locale
+	 * (ie language only, no country), this will be in the format
+	 * <code><i>language</i></code>. In either case, if there is a variant
+	 * in the locale, it will be included parenthetically at the end:
+	 * <code><i>language</i>-<i>country</i> (<i>variant</i>)</code> or
+	 * <code><i>language</i> (<i>variant</i>)</code>. Returns null if the
+	 * parameter is null. This uses the translations built into the JVM for the
+	 * {@link java.util.Locale} class.
 	 * </p>
 	 * 
 	 * @param locale
@@ -818,32 +825,38 @@ public class I18nUtility {
 	/**
 	 * <p>
 	 * Return the display name of one locale, localized for another locale,
-	 * according to the given flags.
+	 * according to the given flags. You can get the locale name formatted
+	 * according to the current HP.com Web standard, using this method with the
+	 * {@link #LOCALE_BY_COUNTRY} control bit.
 	 * </p>
 	 * <ul>
 	 * <li>
 	 * <p>
 	 * By default (ie, when the flags are <code>0</code>), the language is
 	 * given priority in the display name. For a country-specific locale, this
-	 * will be in the format <i>language - country</i>. For a generic locale
-	 * (ie language only, no country), this will be in the format <i>language</i>.
+	 * will be in the format: <code><i>language</i>-<i>country</i></code>.
+	 * For a generic locale (ie language only, no country), this will be in the
+	 * format: <code><i>language</i></code>.
 	 * </p>
 	 * </li>
 	 * <li>
 	 * <p>
 	 * When the flags (a bitmask) include the {@link #LOCALE_BY_COUNTRY} bit,
 	 * the country is given priority. For a country-specific locale, it will be
-	 * in the format <i>country - language</i>. For a generic locale, it will
-	 * be just <i>language</i>. Note this is the current HPWeb standard.
+	 * in the format: <code><i>country-language</i></code>. For a generic
+	 * locale, it will be just: <code><i>language</i></code>. Note this is
+	 * the current HP.com Web standard.
 	 * </p>
 	 * </li>
 	 * </ul>
 	 * <p>
 	 * In either case, if there is a variant in the locale, it will be included
-	 * parenthetically at the end: <i>language - country (variant)</i> or
-	 * <i>language (variant)</i>. Returns null if the parameter is null. This
-	 * uses the translations built into the JVM for the {@link java.util.Locale}
-	 * class.
+	 * parenthetically at the end:
+	 * <code><i>language</i>-<i>country</i> (<i>variant</i>)</code>,
+	 * <code><i>country</i>-<i>language</i> (<i>variant</i>)</code>, or
+	 * <code><i>language</i> (<i>variant</i>)</code> as appropriate.
+	 * Returns null if the parameter is null. This uses the translations built
+	 * into the JVM for the {@link java.util.Locale} class.
 	 * </p>
 	 * 
 	 * @param locale
@@ -877,12 +890,12 @@ public class I18nUtility {
 			if (displayCountry.equals("") || displayLanguage.equals(""))
 				displayName = displayCountry + displayLanguage;
 			else
-				displayName = displayCountry + " - " + displayLanguage;
+				displayName = displayCountry + "-" + displayLanguage;
 		} else {
 			if (displayCountry.equals("") || displayLanguage.equals(""))
 				displayName = displayLanguage + displayCountry;
 			else
-				displayName = displayLanguage + " - " + displayCountry;
+				displayName = displayLanguage + "-" + displayCountry;
 		}
 		if (!displayVariant.equals("")) {
 			displayName += " (" + displayVariant + ")";
@@ -995,5 +1008,104 @@ public class I18nUtility {
 			return null;
 		}
 		return msg.replaceAll(NO_LOCALIZATION_REGEX, "");
+	}
+
+	/**
+	 * <p>
+	 * Get the displayable string for the given date and time, localized in
+	 * short format. This uses the translations and default date-format patterns
+	 * built into the JVM for the {@link java.util.DateFormat} and
+	 * {@link java.util.SimpleDateFormat} classes. Returns null when given null
+	 * parameters.
+	 * </p>
+	 * 
+	 * @param date
+	 *            A date and time.
+	 * @param inLocale
+	 *            A locale.
+	 * @return The localized string for that date and time.
+	 */
+	public static String getShortDisplayDate(Date date, Locale inLocale) {
+		return getDisplayDate(date, inLocale, DateFormat.SHORT);
+	}
+
+	/**
+	 * <p>
+	 * Get the displayable string for the given date and time, localized in
+	 * medium format. This uses the translations and default date-format
+	 * patterns built into the JVM for the {@link java.util.DateFormat} and
+	 * {@link java.util.SimpleDateFormat} classes. Returns null when given null
+	 * parameters.
+	 * </p>
+	 * 
+	 * @param date
+	 *            A date and time.
+	 * @param inLocale
+	 *            A locale.
+	 * @return The localized string for that date and time.
+	 */
+	public static String getMediumDisplayDate(Date date, Locale inLocale) {
+		return getDisplayDate(date, inLocale, DateFormat.MEDIUM);
+	}
+
+	/**
+	 * <p>
+	 * Get the displayable string for the given date and time, localized in long
+	 * format. This uses the translations and default date-format patterns built
+	 * into the JVM for the {@link java.util.DateFormat} and
+	 * {@link java.util.SimpleDateFormat} classes. Returns null when given null
+	 * parameters.
+	 * </p>
+	 * 
+	 * @param date
+	 *            A date and time.
+	 * @param inLocale
+	 *            A locale.
+	 * @return The localized string for that date and time.
+	 */
+	public static String getLongDisplayDate(Date date, Locale inLocale) {
+		return getDisplayDate(date, inLocale, DateFormat.LONG);
+	}
+
+	/**
+	 * <p>
+	 * Get the displayable string for the given date and time, localized in full
+	 * format. This uses the translations and default date-format patterns built
+	 * into the JVM for the {@link java.util.DateFormat} and
+	 * {@link java.util.SimpleDateFormat} classes. Returns null when given null
+	 * parameters.
+	 * </p>
+	 * 
+	 * @param date
+	 *            A date and time.
+	 * @param inLocale
+	 *            A locale.
+	 * @return The localized string for that date and time.
+	 */
+	public static String getFullDisplayDate(Date date, Locale inLocale) {
+		return getDisplayDate(date, inLocale, DateFormat.FULL);
+	}
+
+	/**
+	 * Private method for getting display date for a particular style: short,
+	 * medium, long or full.
+	 */
+	private static String getDisplayDate(Date date, Locale inLocale, int style) {
+		if (date == null || inLocale == null) {
+			return null;
+		}
+		try {
+			SimpleDateFormat formatter = (SimpleDateFormat) DateFormat
+					.getDateTimeInstance(style, style, inLocale);
+			return formatter.format(date);
+		} catch (Exception e1) {
+			try {
+				SimpleDateFormat formatter = (SimpleDateFormat) DateFormat
+						.getDateTimeInstance(style, style, Locale.getDefault());
+				return formatter.format(date);
+			} catch (Exception e2) {
+				return date.toString();
+			}
+		}
 	}
 }

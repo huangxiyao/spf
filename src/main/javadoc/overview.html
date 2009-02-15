@@ -153,21 +153,24 @@ table.props td {
 			3066 language tags (<code>I18nUtility.localeToLanguageTag</code>, <code>I18nUtility.languageTagToLocale</code>)</a></li>
 		</ul>
 		</li>
-		<li>2.2. <a href="#i18n.display">Localized display of common
-		objects</a>
+		<li>2.2. <a href="#i18n.display">Getting localized strings
+		for common objects</a>
 		<ul>
-			<li>2.2.1. <a href="#i18n.display.username">Localized
-			display of user (person) name (<code>I18nUtility.getUserDisplayName</code>)</a></li>
-			<li>2.2.2. <a href="#i18n.display.timezone">Localized
-			display of time zone (<code>I18nUtility.getLongTimezoneDisplayName</code>,
+			<li>2.2.1. <a href="#i18n.display.username">Getting
+			localized user (person) name (<code>I18nUtility.getUserDisplayName</code>)</a></li>
+			<li>2.2.2. <a href="#i18n.display.timezone">Getting
+			localized time zone name (<code>I18nUtility.getLongTimezoneDisplayName</code>,
 			<code>I18nUtility.getShortTimezoneDisplayName</code>)</a></li>
-			<li>2.2.3. <a href="#i18n.display.locale">Localized display
-			of locale (<code>I18nUtility.getLocaleDisplayName</code>)</a></li>
-			<li>2.2.4. <a href="#i18n.display.other">Localized display
-			of other objects (date, currency, etc)</a></li>
+			<li>2.2.3. <a href="#i18n.display.locale">Getting localized
+			locale name (<code>I18nUtility.getLocaleDisplayName</code>)</a></li>
+			<li>2.2.4. <a href="#i18n.display.date">Getting localized
+			dates (<code>I18nUtility.getShortDisplayDate</code>, <code>I18nUtility.getMediumDisplayDate</code>,
+			<code>I18nUtility.getLongDisplayDate</code>, <code>I18nUtility.getFullDisplayDate</code>)</a></li>
+			<li>2.2.5. <a href="#i18n.display.other">Getting localized
+			strings for other objects (numbers, currency, etc)</a></li>
 		</ul>
 		</li>
-		<li>2.3. <a href="#i18n.manipulate">Manipulating multiple
+		<li>2.3. <a href="#i18n.manipulate">Operating with multiple
 		locales</a>
 		<ul>
 			<li>2.3.1. <a href="#i18n.manipulate.sort">Sorting locales (<code>I18nUtility.sortLocales</code>)</a></li>
@@ -365,15 +368,11 @@ utilities artifact. Please see the <a
 	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#top">SPF
 Portlet Utilities Developer's Guide</a>.</p>
 
-<p>Developers of
-<p>Vignette portal components</p>
-for the SPF portal will find many more utilities available to them, in
-the SPF portal utilities artifact. Please see the
-<a
+<p>Developers of <b>Vignette portal components</b> for the SPF
+portal will find many more utilities available to them, in the SPF
+portal utilities artifact. Please see the <a
 	href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/overview-summary.html#top">SPF
-Portal Utilities Developer's Guide</a>
-.
-</p>
+Portal Utilities Developer's Guide</a>.</p>
 
 <hr>
 
@@ -381,54 +380,644 @@ Portal Utilities Developer's Guide</a>
 <h2>2. Internationalization</h2>
 </a>
 
+<p>The SPF common utilities include an internationalization library,
+the common {@link com.hp.it.spf.xa.i18n.I18nUtility}, <code>com.hp.it.spf.xa.i18n.I18nUtility</code>,
+which provides general-purpose methods that are (1) common to both Java
+portlets and Vignette portal components developed in the Shared Portal
+Framework, and (2) not found elsewhere in the other technologies
+available to those developers (WPA Portlet Edition and Spring Portlet
+MVC for SPF portlet developers, and the Vignette application libraries
+for portal developers). Currently this grab-bag of methods includes:</p>
+
+<ul>
+	<li>methods for converting between different representations of
+	locale;</li>
+	<li>methods for generating SPF-standard localized names for
+	various objects (eg for display to the user); and</li>
+	<li>methods for manipulating (eg sorting) collections of locales
+	in SPF-standard ways.</li>
+</ul>
+
+<blockquote>
+<p><b>Note:</b> The SPF portlet and portal utilities provide
+extension classes for the common <code>I18nUtility</code>:</p>
+<ul>
+	<li>the portlet {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility},
+	<code>com.hp.it.spf.xa.i18n.portlet.I18nUtility</code>, containing
+	internationalization methods specifically for Java portlets in SPF</li>
+	<li>the portal {@link com.hp.it.spf.xa.i18n.portal.I18nUtility}, <code>com.hp.it.spf.xa.i18n.portal.I18nUtility,
+	containing internationalization methods specifically for Vignette
+	portal components in SPF</code></li>
+</ul>
+<p>SPF developers should import and use the following methods via
+the appropriate subclass, in order to have full access to all of the
+SPF-provided internationalization API's.</p>
+</blockquote>
 <hr>
 
 <a name="i18n.convert">
 <h3>2.1. Converting between different representations of locale</h3>
 </a>
 
+<p>In SPF, the Java {@link java.util.Locale} object is the canonical
+form for a locale. However there are 4 related representations for
+locale that SPF developers may need to be concerned with:</p>
+
+<ul>
+	<li>
+	<p>The <a
+		href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+	639-1</a> standard represents each language with a simple 2-character code,
+	like <code>ja</code> for Japanese and <code>zh</code> for Chinese.
+	Similarly, the <a
+		href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+	3166-1</a> standard represents countries with a simple 2-character code.</p>
+	<p>These language and country codes are the constituent elements of
+	a Java <code>Locale</code> (we are disregarding the variant element
+	here as it is not used in SPF). You pass them to the constructor, and
+	get them back with the {@link java.util.Locale#getLanguage()} and
+	{@link java.util.Locale#getCountry()} methods. So the SPF need offer
+	nothing extra to convert between <code>Locale</code> and these
+	ISO-standard language and country codes.</p>
+	</li>
+
+	<li>
+	<p>The <a href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a>
+	standard represents the constituent elements of a <code>Locale</code>
+	in string form, like <code>ja</code> for generic Japanese, <code>ja-JP</code>
+	for Japanese in Japan, etc.</p>
+	<p>Often this standard is used to represent locales in other
+	systems your SPF application might interface with. The SPF provides
+	methods to convert between <code>Locale</code> and RFC 3066.</p>
+	</li>
+
+	<li>
+	<p>Finally, HP Passport (the identity and authentication service
+	provider for Shared Portal Framework public users) represents the
+	locale as a single language code (the <code>langCode</code> element of
+	the HPP core user profile). This is a 2-character code that is
+	generally the same as the ISO 639-1 standard, except for using custom
+	values for Simplified and Traditional Chinese (since those are
+	different character sets but in ISO 639-1 they share the same code, <code>zh</code>
+	- hence HPP uses the custom values of <code>12</code> and <code>13</code>
+	for them).</p>
+	<p>HP Passport user data, which Shared Portal Framework puts into
+	the SPF <i>user profile map</i>, will include this HPP language code,
+	so if you are going to interpret it you will need to convert. Also if
+	you are using HPP Web Services to get or specify an HPP language code,
+	you will need to convert from the canonical SPF representation which is
+	Java <code>Locale</code>. The SPF provides converter methods for this.</p>
+	</li>
+</ul>
+
 <a name="i18n.convert.hpp">
 <h4>2.1.1. Converting HP Passport language codes (<code>I18nUtility.localeToHPPLanguage</code>,
 <code>I18nUtility.hppLanguageToLocale</code>)</h4>
 </a>
+
+<p>The SPF common utilities {@link com.hp.it.spf.xa.I18nUtility}
+class provides the following methods for converting between HP Passport
+language codes and the SPF-canonical representation of locale, which is
+a Java {@link java.util.Locale} object. <b>Note:</b> All strings in
+these methods are case-insensitive, as per the ISO standards.</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.I18nUtility#localeToHPPLanguage(Locale)}</dt>
+	<dd>
+	<p>Returns the HPP language code for the given locale, taking into
+	account the fact that HPP uses non-ISO-standard language codes for
+	Simplified and Traditional Chinese. You give this method a <code>Locale</code>
+	and it returns you the equivalent form for the HPP <code>langCode</code>
+	core profile attribute. Because HPP languages are generic (not
+	country-specific), any country code in your locale will generally be
+	ignored (except that for Chinese, SPF uses the country codes for Taiwan
+	and China to infer Traditional and Simplified Chinese respectively).</p>
+
+	<p>For example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.localeToHPPLanguage({@link
+		java.util.Locale#FRENCH})</code></dt>
+		<dd>returns <code>fr</code>
+		<dt><code>I18nUtility.localeToHPPLanguage({@link
+		java.util.Locale#CANADA_FRENCH})</code></dt>
+		<dd>also returns <code>fr</code>
+		<dt><code>I18nUtility.localeToHPPLanguage({@link
+		java.util.Locale#SIMPLIFIED_CHINESE})</code></dt>
+		<dd>returns the HPP-internal value for Simplified Chinese, which
+		is the value of the {@link
+		com.hp.it.spf.xa.I18nUtility#HPP_SIMP_CHINESE_LANG} constant.</dd>
+		<dt><code>I18nUtility.localeToHPPLanguage({@link
+		java.util.Locale#TRADITIONAL_CHINESE})</code></dt>
+		<dd>returns the HPP-internal value for Traditional Chinese, which
+		is the value of the {@link
+		com.hp.it.spf.xa.I18nUtility#HPP_TRAD_CHINESE_LANG} constant.</dd>
+	</dl>
+	<p></p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.I18nUtility#hppLanguageToLocale(String)}</dt>
+	<dd>
+	<p>Returns the <code>Locale</code> for the given HPP language code
+	(ie HPP <code>langCode</code> core profile attribute), again taking
+	into account the fact that HPP uses non-ISO-standard language codes for
+	Simplified and Traditional Chinese. You give this method an HPP
+	language code and it returns you the equivalent <code>Locale</code>.
+	Note this will be a generic locale (ie no country specified within it)
+	except for Simplified and Traditional Chinese (as noted above, SPF uses
+	the country codes for Taiwan and China - rather than the locale variant
+	- to distinguish Simplified and Traditional Chinese).</p>
+
+	<p>For example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.hppLanguageToLocale("fr")</code></dt>
+		<dd>returns {@link java.util.Locale#FRENCH}</dd>
+		<dt><code>I18nUtility.hppLanguageToLocale({@link
+		com.hp.it.spf.xa.I18nUtility#HPP_SIMP_CHINESE_LANG})</code></dt>
+		<dd>returns {@link java.util.Locale#SIMPLIFIED_CHINESE}</dd>
+		<dt><code>I18nUtility.hppLanguageToLocale({@link
+		com.hp.it.spf.xa.I18nUtility#HPP_TRAD_CHINESE_LANG})</code></dt>
+		<dd>returns {@link java.util.Locale#TRADITIONAL_CHINESE}</dd>
+	</dl>
+	<p></p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.I18nUtility#hppLanguageToLocale(String,String)}</dt>
+	<dd>
+	<p>Same as {@link
+	com.hp.it.spf.xa.I18nUtility#hppLanguageToLocale(String)}, except you
+	can pass the HPP country code (ie HPP <code>residentCountryCode</code>
+	core profile attribute) as well. Thus this method will return a full,
+	country-specific locale. Note that in the case of Simplified and
+	Traditional Chinese, the given country code will be ignored since SPF
+	must force the country in the locale to China or Taiwan, respectively,
+	to respresent those character sets.</p>
+
+	<p>For example:</p>
+	<dl>
+		<dt><code>I18nUtility.hppLanguageToLocale("fr", "CA")</code></dt>
+		<dd>returns {@link java.util.Locale#CANADA_FRENCH}</dd>
+		<dt><code>I18nUtility.hppLanguageToLocale({@link
+		com.hp.it.spf.xa.I18nUtility#HPP_SIMP_CHINESE_LANG}, "<i>anything</i>")</code></dt>
+		<dd>returns {@link java.util.Locale#SIMPLIFIED_CHINESE}</dd>
+		<dt><code>I18nUtility.hppLanguageToLocale({@link
+		com.hp.it.spf.xa.I18nUtility#HPP_TRAD_CHINESE_LANG}, "<i>anything</i>")</code></dt>
+		<dd>returns {@link java.util.Locale#TRADITIONAL_CHINESE}</dd>
+	</dl>
+	<p></p>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
 
 <a name="i18n.convert.rfc3066">
 <h4>2.1.2. Converting RFC 3066 language tags (<code>I18nUtility.localeToLanguageTag</code>,
 <code>I18nUtility.languageTagToLocale</code>)</h4>
 </a>
 
+<p>The SPF common utilities {@link com.hp.it.spf.xa.I18nUtility}
+class also provides the following methods for converting between <a
+	href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tags
+and the SPF-canonical representation of locale, which is a Java {@link
+java.util.Locale} object. <b>Note:</b> All strings in these methods are
+case-insensitive, as per the respective standards.</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.I18nUtility#localeToLanguageTag(Locale)}</dt>
+	<dd>
+	<p>Returns the RFC 3066 language tag for the given locale. For
+	example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.localeToLanguageTag({@link
+		java.util.Locale#FRENCH})</code></dt>
+		<dd>returns <code>fr</code>
+		<dt><code>I18nUtility.localeToLanguageTag({@link
+		java.util.Locale#CANADA_FRENCH})</code></dt>
+		<dd>returns <code>fr-CA</code>
+		<dt><code>I18nUtility.localeToLanguageTag({@link
+		java.util.Locale#SIMPLIFIED_CHINESE})</code></dt>
+		<dd>returns <code>zh-CN</code></dd>
+		<dt><code>I18nUtility.localeToLanguageTag({@link
+		java.util.Locale#TRADITIONAL_CHINESE})</code></dt>
+		<dd>returns <code>zh-TW</code></dd>
+	</dl>
+	<p></p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.I18nUtility#languageTagToLocale(String)}</dt>
+	<dd>
+	<p>Returns the <code>Locale</code> for the given RFC 3066 language
+	tag. For example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.languageTagToLocale("fr")</code></dt>
+		<dd>returns {@link java.util.Locale#FRENCH}</dd>
+		<dt><code>I18nUtility.languageTagToLocale("fr-CA")</code></dt>
+		<dd>returns {@link java.util.Locale#CANADA_FRENCH}</dd>
+		<dt><code>I18nUtility.languageTagToLocale("zh-CN")</code></dt>
+		<dd>returns {@link java.util.Locale#SIMPLIFIED_CHINESE}</dd>
+		<dt><code>I18nUtility.languageTagToLocale("zh-TW")</code></dt>
+		<dd>returns {@link java.util.Locale#TRADITIONAL_CHINESE}</dd>
+	</dl>
+	<p></p>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
 <hr>
 
 <a name="i18n.display">
-<h3>2.2. Localized display of common objects</h3>
+<h3>2.2. Getting localized strings for common objects</h3>
 </a>
+
+<p>To help you with localized display of common objects, the {@link
+com.hp.it.spf.xa.i18n.I18nUtility} library provides methods for
+generating localized name strings for people, time zones, and locales
+themselves.</p>
 
 <a name="i18n.display.username">
-<h4>2.2.1. Localized display of user (person) name (<code>I18nUtility.getUserDisplayName</code>)</h4>
+<h4>2.2.1. Getting localized user (person) name (<code>I18nUtility.getUserDisplayName</code>)</h4>
 </a>
 
+<p>The customary order of a person's given and family names within
+his or her full name can vary by locale. In Chinese, Japanese, Korean,
+Vietnamese, and Hungarian cultures, it is generally customary to use the
+family name first, and the given name last (called <i>Eastern order</i>).
+Elsewhere, it is generally customary to use the opposite sequence
+(called <i>Western order</i>). If you need to display the user's name,
+the SPF common utilities provide a method which returns the full name in
+the proper order for you:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getUserDisplayName(String,String,Locale)}</dt>
+	<dd>
+	<p>The arguments are:</p>
+	<ul>
+		<li>
+		<p>The first string is for the user's first name (ie given name).</p>
+		</li>
+		<li>
+		<p>The second string is for the user's last name (ie family name).</p>
+		</li>
+		<li>
+		<p>The {@link java.util.Locale} is the locale in which to render
+		the name.</p>
+		</li>
+	</ul>
+	<p>For example:</p>
+	<dl>
+		<dt><code>I18nUtility.getUserDisplayName("Xiaoping",
+		"Deng", Locale.ENGLISH)</code></dt>
+		<dd>returns <code>Xiaoping Deng</code></dd>
+		<dt><code>I18nUtility.getUserDisplayName("Xiaoping",
+		"Deng", Locale.CHINESE)</code></dt>
+		<dd>returns <code>Deng Xiaoping</code></dd>
+	</dl>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<blockquote>
+<p><b>Note:</b> The name order is controlled by the language code in
+the locale, not by the country code. Thus any English-language locale
+(even one for the country China) in the above example would return <code>Xiaoping
+Deng</code>, while any Chinese-language locale (even one for the country USA)
+would return <code>Deng Xiaoping</code>.</p>
+
+<p><b>Note:</b>The name order policy comes from the <code>userDisplayName.reverse.lang</code>
+property in the <code>i18n_config.properties</code> file. (Portlet
+developers: do not confuse this with the <code>i18n_portlet_config.properties</code>
+file.) <code>i18n_config.properties</code> is included inside the SPF
+common utilities JAR and should not need to be modified. It is loaded
+from the classpath too, so if you want to override it, you may be able
+to provide a substitute one if you can put it in a location where the
+JVM classloader will search <b>before</b> looking inside the JAR. Your
+classloader search sequence may vary; test it first before relying on
+this.</p>
+</blockquote>
+
 <a name="i18n.display.timezone">
-<h4>2.2.2. Localized display of time zone (<code>I18nUtility.getLongTimezoneDisplayName</code>,
+<h4>2.2.2. Getting localized time zone name (<code>I18nUtility.getLongTimezoneDisplayName</code>,
 <code>I18nUtility.getShortTimezoneDisplayName</code>)</h4>
 </a>
 
+<p>Localized timezone names in Java come in both short and long
+forms. However, for timezones which periodically observe summary
+(daylight) time, another factor in the timezone name besides locale is
+the time of year for which you need the name (eg, for the North American
+Pacific timezone, the English long name is <code>Pacific Daylight
+Time</code> in the summer, and <code>Pacific Standard Time</code> in the
+winter). Although the JDK provides all the API's necessary to let you
+determine the proper localized timezone name yourself, they can be a
+little cumbersome to use. So the SPF common utilities provide these
+convenience methods for you:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLongTimezoneDisplayName(TimeZone,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLongTimezoneDisplayName(Date,TimeZone,Locale)}</dt>
+	<dd>
+	<p>The arguments are:</p>
+	<ul>
+		<li>The {@link java.util.TimeZone} in question.</li>
+		<li>The {@link java.util.Locale} in which to localize the
+		timezone name.</li>
+		<li>By default, the name of the timezone at the current time of
+		year is returned. If you need to get the name of the timezone at a
+		particular time of year, you can provide an optional {@link
+		java.util.Date} object; the name of the timezone at that time of year
+		will be returned.</li>
+	</ul>
+	<p>For example, this code returns <code>Pacific Standard
+	Time</code> when executed in the winter, and <code>Pacific Daylight
+	Time</code> when executed in the summer:</p>
+	<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility; // or import portal I18nUtility instead, if portal component
+...
+TimeZone tz = new TimeZone("America/Los_Angeles");
+String name = I18nUtility.getLongTimezoneDisplayName(tz, Locale.ENGLISH);
+</pre></blockquote>
+
+	<p>But if we have a <code>Date</code> for which we need to get the
+	localized timezone name, we should not base that name on the current
+	time of year; we should base it on the time of year of that <code>Date</code>.
+	Here is the code for that (where <code>date</code> is the date in
+	question):</p>
+
+	<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility; // or import portal I18nUtility instead, if portal component
+...
+TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
+String name = I18nUtility.getLongTimezoneDisplayName(date, tz, Locale.GERMAN);
+</pre></blockquote>
+
+	<p>If the <code>date</code> were sometime in the winter, then the
+	returned timezone name would be <code>Pazifische Normalzeit</code>
+	(notice that the locale in this example was German).</p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getShortTimezoneDisplayName(TimeZone,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getShortTimezoneDisplayName(Date,TimeZone,Locale)}</dt>
+	<dd>
+	<p>These methods are the same as the ones above, except they return
+	the localized timezone name in its short form: for example, <code>PST</code>
+	for the North American Pacific timezone, in the winter, in English.</p>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<blockquote>
+<p><b>Note:</b> The SPF uses the translations built-into the JDK to
+get the localized values; they are not custom translations.</p>
+</blockquote>
+
 <a name="i18n.display.locale">
-<h4>2.2.3. Localized display of locale (<code>I18nUtility.getLocaleDisplayName</code>)</h4>
+<h4>2.2.3. Getting localized locale name (<code>I18nUtility.getLocaleDisplayName</code>)</h4>
 </a>
 
-<a name="i18n.display.other">
-<h4>2.2.4. Localized display of other objects (date, currency, etc)</h4>
+<p>Although the JDK provides all the API's necessary to let you
+determine the proper localized name for a locale yourself, the SPF
+provides an API to do this for you, since HP.com UI standards dictate a
+certain format. These API's provide localized names in that HP.com
+standard format.</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLocaleDisplayName(Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLocaleDisplayName(Locale,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLocaleDisplayName(Locale,Locale,int)}</dt>
+	<dd>
+	<p>The arguments are:</p>
+	<ul>
+		<li>
+		<p>The first {@link java.util.Locale} is the locale for which you
+		need the name.</p>
+		</li>
+		<li>
+		<p>The optional second {@link java.util.Locale} is the locale in
+		which you want the first locale's name to be translated. In this way,
+		you can get the name of one locale, localized for another locale. If
+		you do not provide this second locale, the returned name is localized
+		for that same locale.</p>
+		</li>
+		<li>
+		<p>When given a generic (ie language-only) locale, this method
+		returns the translated name of that language. When given a
+		country-specific locale, the method returns a string containing both
+		the translated language name and country name. Which comes first? By
+		default, the language is first. With the optional <code>int</code>
+		parameter, you can pass a control bit {@link
+		com.hp.it.spf.xa.i18n.I18nUtility#LOCALE_BY_COUNTRY} which reverses
+		that order, returning the country name first. <b>Note:</b> Country
+		name first is the current HP.com Web standard, so you should be sure
+		to specify this control flag in that case.</p>
+		</li>
+	</ul>
+	<p>The returned string is formatted according to the HP.com Web
+	standards for display of locale name: a hyphen character is used to
+	separate the country and language names, with no whitespace. For
+	example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.getLocaleDisplayName(Locale.GERMANY)</code></dt>
+		<dd>returns <code>Deutsch-Deutschland</code></dd>
+		<dt><code>I18nUtility.getLocaleDisplayName(Locale.GERMANY,
+		Locale.FRENCH)</code></dt>
+		<dd>returns <code>allemand-Allemagne</code></dd>
+		<dt><code>I18nUtility.getLocaleDisplayName(Locale.GERMANY,
+		Locale.GERMANY, I18nUtility.LOCALE_BY_COUNTRY)</code></dt>
+		<dd>returns <code>Deutschland-Deutsch</code> (the current HP.com
+		Web standard)</dd>
+	</dl>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<blockquote>
+<p><b>Note:</b> The SPF uses the translations built-into the JDK to
+get the localized values; they are not custom translations.</p>
+</blockquote>
+
+
+<a name="i18n.display.date">
+<h4>2.2.4. Getting localized dates (<code>I18nUtility.getShortDisplayDate</code>,
+<code>I18nUtility.getMediumDisplayDate</code>, <code>I18nUtility.getLongDisplayDate</code>,
+<code>I18nUtility.getFullDisplayDate</code>)</h4>
 </a>
+
+<p>Dates are frequently displayed in different, customary formats
+depending on the locale. Localized, formatted date strings in Java come
+in four forms: short, medium, long, and full. Although the JDK provides
+all the API's necessary to let you generate arbitrary-format date
+strings, the SPF common utilities provide the following convenience
+methods for you:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getShortDisplayDate(Date,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getMediumDisplayDate(Date,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLongDisplayDate(Date,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getFullDisplayDate(Date,Locale)}</dt>
+	<dd>
+	<p>These methods return the Java-default formatted date strings in
+	each of the four styles: short (corresponding to {@link
+	java.text.DateFormat#SHORT}, medium ({@link
+	java.text.DateFormat#MEDIUM}, long ({@link java.text.DateFormat#LONG}),
+	and full ({@link java.text.DateFormat#FULL}). The arguments are simply
+	the {@link java.util.Date} in question, and the {@link
+	java.util.Locale} in which to localize it.</p>
+	<p>If you need different date string formats, please use the Java
+	API's directly.</p>
+	<p>For example (where the <code>date</code> is for February 14,
+	2009, at 10:56:55 PM in the North American Pacific timezone):</p>
+	<dl>
+		<dt><code>I18nUtility.getShortDisplayDate(date, Locale.US)</code></dt>
+		<dd>returns <code>2/14/09 10:56 PM</code></dd>
+		<dt><code>I18nUtility.getShortDisplayDate(date,
+		Locale.GERMANY)</code></dt>
+		<dd>returns <code>14.02.09 22:56</code></dd>
+		<dt><code>I18nUtility.getMediumDisplayDate(date,
+		Locale.US)</code></dt>
+		<dd>returns <code>Feb 14, 2009 10:56:55 PM</code></dd>
+		<dt><code>I18nUtility.getMediumDisplayDate(date,
+		Locale.GERMANY)</code></dt>
+		<dd>returns <code>14.02.2009 22:56:55</code></dd>
+
+		<dt><code>I18nUtility.getLongDisplayDate(date, Locale.US)</code></dt>
+		<dd>returns <code>February 14, 2009 10:56:55 PM PST</code></dd>
+		<dt><code>I18nUtility.getLongDisplayDate(date,
+		Locale.GERMANY)</code></dt>
+		<dd>returns <code>14. Februar 2009 22:56:55 PST</code></dd>
+		<dt><code>I18nUtility.getFullDisplayDate(date, Locale.US)</code></dt>
+		<dd>returns <code>Saturday, February 14, 2009 10:56:55 PM
+		PST</code></dd>
+		<dt><code>I18nUtility.getFullDisplayDate(date,
+		Locale.GERMANY)</code></dt>
+		<dd>returns <code>Samstag, 14. Februar 2009 22.56 Uhr PST</code></dd>
+	</dl>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<blockquote>
+<p><b>Note:</b> The SPF uses the translations and default
+date-format patterns built-into the JDK to get the localized values;
+they are not custom SPF translations or formats.</p>
+</blockquote>
+
+<a name="i18n.display.other">
+<h4>2.2.5. Getting localized strings for other objects (numbers,
+currency, etc)</h4>
+</a>
+
+<p>Use the standard Java-supplied functionality to get localized
+decimal numbers, integers, percentages, currency, etc. The SPF does not
+currently provide any convenience methods for them.</p>
 
 <hr>
 
 <a name="i18n.manipulate">
-<h3>2.3. Manipulating multiple locales</h3>
+<h3>2.3. Operating with multiple locales</h3>
 </a>
+
+<p>The SPF common utilities' {@link
+com.hp.it.spf.xa.i18n.I18nUtility} class provides a few methods for
+operating on collections of locales.</p>
 
 <a name="i18n.manipulate.sort">
 <h4>2.3.1. Sorting locales (<code>I18nUtility.sortLocales</code>)</h4>
 </a>
+
+<p>You can sort collections of locales with these methods:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection)</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, Locale)</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, Locale, int)</dt>
+	<dd>
+	<p>These methods return a {@link java.util.Collection} of {@link
+	java.util.Locale} objects, sorted by their localized display names (see
+	the discussion on <a href="#i18n.display.locale">localized display
+	names</a> above). The arguments are:</p>
+	<ul>
+		<li>
+		<p>The <code>Collection</code> of <code>Locale</code> objects to
+		sort. Note the sort is non-destructive - it does not change this
+		argument.</p>
+		</li>
+		<li>
+		<p>The locales are sorted by their <i>display names</i>, not by
+		language code or anything else. By default, the English names for the
+		locales are used, but you can provide an optional <code>Locale</code>
+		object as the second argument. This locale is used to localize the
+		display names for purposes of the sort, so that the sort is in
+		localized sequence.</p>
+		</li>
+		<li>
+		<p>As noted, the locales are sorted by their display names. By
+		default, this is an ascending sort, with the language name considered
+		over the country name. However there are 2 optional control flags you
+		can provide to the <code>int</code> argument, to override that:</p>
+		<dl>
+			<dt>{@link com.hp.it.spf.xa.i18n.I18nUtility#LOCALE_DESCENDING}</dt>
+			<dd>Use this control flag to perform a descending sort.</dd>
+			<dt>{@link com.hp.it.spf.xa.i18n.I18nUtility#LOCALE_BY_COUNTRY}</dt>
+			<dd>Use this control flag to consider country name over language
+			name during the sort. (Note this is the current HP.com Web standard.)</dd>
+		</dl>
+		<p>The <code>int</code> flag operates as a bitmask, and these
+		control flags are bits that can be set in the mask. If you need to
+		specify only one of the flags, just pass its value as the <code>int</code>
+		argument. If you need to specify both, bitwise-or them together.</p>
+		</li>
+	</ul>
+	<p>For example (where <code>locales</code> is our collection of
+	unsorted locales):</p>
+	<dl>
+		<dt><code>I18nUtility.sortLocales(locales)</code></dt>
+		<dd>returns the locales sorted ascending by their English names,
+		with language over country</dd>
+		<dt><code>I18nUtility.sortLocales(locales,
+		Locale.JAPANESE)</code></dt>
+		<dd>returns the locales sorted ascending by their Japanese names,
+		with language over country</dd>
+		<dt><code>I18nUtility.sortLocales(locales,
+		Locale.JAPANESE, I18nUtility.LOCALE_BY_COUNTRY)</code></dt>
+		<dd>returns the locales sorted ascending by their Japanese names,
+		with country over language (this is the current HP.com Web standard)</dd>
+		<dt><code>I18nUtility.sortLocales(locales,
+		Locale.JAPANESE, I18nUtility.LOCALE_BY_COUNTRY |
+		I18nUtility.LOCALE_DESCENDING)</code></dt>
+		<dd>returns the locales sorted descending by their Japanese
+		names, with country over language</dd>
+	</dl>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
 
 <hr>
 
@@ -440,10 +1029,24 @@ Portal Utilities Developer's Guide</a>
 <h4>2.4.1. Internationalization topics for portlet developers</h4>
 </a>
 
+<p>The <i>SPF portlet utilities</i> provide an extension of the <code>com.hp.it.spf.xa.i18n.I18nUtility</code>
+class which provides additional, portlet-specific internationalization
+functionality, such as access to message resources and localized
+supporting files. Please see the internationalization chapter in the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n">SPF
+Portlet Utilities Developer's Guide</a>.</p>
+
 <a name="i18n.other.portal">
 <h4>2.4.2. Internationalization topics for portal component
 developers</h4>
 </a>
+
+<p>The <i>SPF portal utilities</i> provide an extension of the <code>com.hp.it.spf.xa.i18n.I18nUtility</code>
+class which provides additional, Vignette-specific internationalization
+functionality, such as access to message resources and localized
+supporting files. Please see the internationalization chapter in the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/overview-summary.html#i18n">SPF
+Portal Utilities Developer's Guide</a>.</p>
 
 <hr>
 
@@ -490,7 +1093,8 @@ developers</h4>
 </a>
 
 <a name="url.portlet.portalUrl">
-<h4>3.3.1. Using <code>PortalURL</code> and the <code>PortalURLFactory</code></code></h4>
+<h4>3.3.1. Using <code>PortalURL</code> and the <code>PortalURLFactory</code>
+</h4>
 </a>
 
 <hr>
