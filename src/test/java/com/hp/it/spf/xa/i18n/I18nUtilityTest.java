@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import com.hp.it.spf.xa.i18n.I18nUtility;
 
@@ -26,90 +28,90 @@ public class I18nUtilityTest extends TestCase {
         TimeZone tz = TimeZone.getTimeZone("GMT+8");
         Locale locale = new Locale("zh", "cn");
         String name = I18nUtility.getLongTimezoneDisplayName(tz, locale);
-        assertEquals(name, "GMT+08:00");
+        assertEquals("GMT+08:00", name);
         Date date = new Date();
         I18nUtility.getLongTimezoneDisplayName(date, tz, locale);
-        assertEquals(name, "GMT+08:00");
+        assertEquals("GMT+08:00", name);
     }
 
     public void testGetShortTimezoneDisplayName() {
         TimeZone tz = TimeZone.getTimeZone("GMT+8");
         Locale locale = new Locale("zh", "cn");
         String name = I18nUtility.getShortTimezoneDisplayName(tz, locale);
-        assertEquals(name, "GMT+08:00");
+        assertEquals("GMT+08:00", name);
         Date date = new Date();
         I18nUtility.getShortTimezoneDisplayName(date, tz, locale);
-        assertEquals(name, "GMT+08:00");
+        assertEquals("GMT+08:00", name);
     }
 
     public void testHppLanguageToLocaleString() {
         String lCode = "12";
         Locale locale = I18nUtility.hppLanguageToLocale(lCode);
-        assertEquals(locale, new Locale("zh", "tw"));
+        assertEquals(new Locale("zh", "tw"), locale);
         String cCode = "aabb";
         locale = I18nUtility.hppLanguageToLocale(lCode, cCode);
-        assertEquals(locale, new Locale("zh", "tw"));
+        assertEquals(new Locale("zh", "tw"), locale);
 
         lCode = "13";
         locale = I18nUtility.hppLanguageToLocale(lCode);
-        assertEquals(locale, new Locale("zh", "cn"));
+        assertEquals(new Locale("zh", "cn"), locale);
         cCode = "cccasdf";
         locale = I18nUtility.hppLanguageToLocale(lCode, cCode);
-        assertEquals(locale, new Locale("zh", "cn"));
+        assertEquals(new Locale("zh", "cn"), locale);
 
         lCode = "aa";
         locale = I18nUtility.hppLanguageToLocale(lCode);
-        assertEquals(locale, new Locale("aa"));
+        assertEquals(new Locale("aa"), locale);
         cCode = "cccasdf";
         locale = I18nUtility.hppLanguageToLocale(lCode, cCode);
-        assertEquals(locale, new Locale("aa", "cccasdf"));
+        assertEquals(new Locale("aa", "cccasdf"), locale);
     }
 
     public void testLocaleToHPPLanguage() {
         Locale locale = new Locale("en", "us");
         String hppCode = I18nUtility.localeToHPPLanguage(locale);
-        assertEquals(hppCode, "en");
+        assertEquals("en", hppCode);
 
         locale = new Locale("zh", "tw");
         hppCode = I18nUtility.localeToHPPLanguage(locale);
-        assertEquals(hppCode, "12");
+        assertEquals("12", hppCode);
 
         locale = new Locale("zh", "cn");
         hppCode = I18nUtility.localeToHPPLanguage(locale);
-        assertEquals(hppCode, "13");
+        assertEquals("13", hppCode);
 
         locale = new Locale("zh", "hk");
         hppCode = I18nUtility.localeToHPPLanguage(locale);
-        assertEquals(hppCode, "zh");
+        assertEquals("zh", hppCode);
     }
 
     public void testHppLanguageToISOLanguage() {
         String hppCode = "12";
         String isoCode = I18nUtility.hppLanguageToISOLanguage(hppCode);
-        assertEquals(isoCode, "zh");
+        assertEquals("zh", isoCode);
 
         hppCode = "13";
         isoCode = I18nUtility.hppLanguageToISOLanguage(hppCode);
-        assertEquals(isoCode, "zh");
+        assertEquals("zh", isoCode);
 
         hppCode = "11";
         isoCode = I18nUtility.hppLanguageToISOLanguage(hppCode);
-        assertEquals(isoCode, "11");
+        assertEquals("11", isoCode);
 
         hppCode = "EN";
         isoCode = I18nUtility.hppLanguageToISOLanguage(hppCode);
-        assertEquals(isoCode, "en");
+        assertEquals("en", isoCode);
     }
 
     public void testLocaleToLanguageTag() {
         Locale locale = new Locale("zh", "wwlala");
         String langtag = I18nUtility.localeToLanguageTag(locale);
-        assertEquals(langtag, "zh-WWLALA");
+        assertEquals("zh-WWLALA", langtag);
     }
 
     public void testLanguageTagToLocale() {
         Locale locale = I18nUtility.languageTagToLocale("zh-cN");
-        assertEquals(locale, new Locale("zh", "cn"));
+        assertEquals(new Locale("zh", "cn"), locale);
     }
 
     public void testSortLocalesbyLocaleCode() {
@@ -123,20 +125,20 @@ public class I18nUtilityTest extends TestCase {
 
         Locale tempLocale = null;
         tempLocale = (Locale)iterator.next();
-        assertEquals(tempLocale, new Locale("zh"));
+        assertEquals(new Locale("zh"), tempLocale);
         tempLocale = (Locale)iterator.next();
-        assertEquals(tempLocale, new Locale("en"));
+        assertEquals(new Locale("en"), tempLocale);
         tempLocale = (Locale)iterator.next();
-        assertEquals(tempLocale, new Locale("en", "US"));
+        assertEquals(new Locale("en", "US"), tempLocale);
         tempLocale = (Locale)iterator.next();
-        assertEquals(tempLocale, new Locale("th"));
+        assertEquals(new Locale("th"), tempLocale);
     }
 
     public void testGetLocaleDisplayName() {
         Locale locale = new Locale("de", "DE");
         String name = I18nUtility.getLocaleDisplayName(locale);
 //        assertEquals(name, "中国 - 中文");
-        assertEquals(name, "Deutsch - Deutschland");
+        assertEquals("Deutsch-Deutschland", name);
     }
 
     public void testGetUserDisplayName() {
@@ -164,4 +166,18 @@ public class I18nUtilityTest extends TestCase {
         assertEquals("yingzhi wu", userDisName);
     }
 
+    public void testGetDisplayDate() {
+    	SimpleDateFormat formatter = new SimpleDateFormat("M/dd/yyyy hh:mm:ss a z");
+    	try {
+    		Date date = formatter.parse("1/12/2009 12:34:56 PM PST");
+    		Locale locale = Locale.GERMANY;
+    		String s = I18nUtility.getShortDisplayDate(date, locale);
+    		assertEquals("12.01.09 12:34", s);
+    		s = I18nUtility.getMediumDisplayDate(date, locale);
+    		assertEquals("12.01.2009 12:34:56", s);
+    		s = I18nUtility.getLongDisplayDate(date, locale);
+    		assertEquals("12. Januar 2009 12:34:56 PST", s);
+    	} catch (Exception e) {
+    	}
+    }
 }
