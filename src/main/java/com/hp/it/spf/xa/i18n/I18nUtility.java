@@ -1098,12 +1098,12 @@ public class I18nUtility {
 			SimpleDateFormat formatter = (SimpleDateFormat) DateFormat
 					.getDateTimeInstance(style, style, inLocale);
 			return formatter.format(date);
-		} catch (Exception e1) {
+		} catch (Exception e1) { // should never happen
 			try {
 				SimpleDateFormat formatter = (SimpleDateFormat) DateFormat
 						.getDateTimeInstance(style, style, Locale.getDefault());
 				return formatter.format(date);
-			} catch (Exception e2) {
+			} catch (Exception e2) { // should really never happen
 				return date.toString();
 			}
 		}
