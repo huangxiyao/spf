@@ -105,8 +105,6 @@
 					<include>AtHPAuthenticator.properties</include>
 					<include>HPPAuthenticator.properties</include>
 				</includes>
-				<excludes>
-				</excludes>
 			</resource>
 		</resources>
 		<plugins>
