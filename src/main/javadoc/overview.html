@@ -1,0 +1,224 @@
+<html>
+<body>
+<p>This artifact is a Maven plugin which defines a new packaging lifecycle which 
+supports the creation of artifacts that conform to the Vignette Component 
+Archive (CAR) standards.</p>
+
+
+<h3>Overview</h3>
+
+
+
+<style type="text/css">
+body {
+	padding: 0;
+	font-family: Verdana, Sans-serif;
+	font-size: small;
+}
+
+
+h3 {
+	font-family: Verdana, Sans-serif;
+	font-size: 150%;
+	font-weight: bold;
+	color: #404040;
+	margin-top: 20px;
+}
+
+
+
+code {
+	color: #990000;
+	font-size: 110%
+}
+
+pre {
+	color: #990000;
+	font-size: 110%;
+}
+
+
+.codeSample {
+	color: #990000;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: small;
+	border: solid #990000 1px;
+	padding: 5px;
+}
+
+
+
+table.props td,table.props th {
+	padding: 5px;
+	background-color: #F0F0F0
+}
+
+table.props th {
+	font-size: 11px;
+	font-weight: bold;
+	text-align: left;
+}
+
+table.props td {
+	font-family: 'Courier New', Courier, monospace;
+}
+
+</style>
+
+<p>
+For the most part, the CAR packaging lifecycle is identical to the standard
+WAR lifecycle except that the war mojo typically bound to the 
+<em>package</em> life-cycle phase is replaced by the car mojo. The 'car' 
+packaging definition assigns the following life-cycle phase bindings:
+</p>
+
+<table class="props">
+<tr>
+<th>Life-cycle Phase</th>
+<th>Mojo</th>
+<th>Plugin</th>
+</tr>
+<tr>
+<td>process-resources</th>
+<td>resources</td>
+<td>maven-resources-plugin</td>
+</tr>
+<tr>
+<td>compile</th>
+<td>compile</td>
+<td>maven-compiler-plugin</td>
+</tr>
+<tr>
+<td>process-test-resources</th>
+<td>testResources</td>
+<td>maven-resources-plugin</td>
+</tr>
+<tr>
+<td>test-compile</th>
+<td>testCompile</td>
+<td>maven-compiler-plugin</td>
+</tr>
+<tr>
+<td>test</th>
+<td>test</td>
+<td>maven-surefire-plugin</td>
+</tr>
+<tr>
+<td>package</th>
+<td>car</td>
+<td>spf-maven-car-plugin</td>
+</tr>
+<tr>
+<td>install</th>
+<td>install</td>
+<td>maven-install-plugin</td>
+</tr>
+<tr>
+<td>deploy</th>
+<td>deploy</td>
+<td>maven-deploy-plugin</td>
+</tr>
+</table>
+<p>
+The <em>package</em> phase of the lifecycle is handled by the
+{@link com.hp.it.spf.tools.maven.car.CarMojo CarMojo} class which is also
+provided as part of this plugin.
+</p>
+
+<p>
+The <code>CarMojo</code> functions very similarly to the Maven-provided 
+<code>WarMojo</code>. The <code>CarMojo</code> only supports a subset of the 
+configuration options that are exposed by the WAR plugin, but the most 
+significant difference between the two is that the CAR plugin generates an 
+artifact with a <em>.car</em> extension instead of a <em>.war</em> 
+extenstion.
+</p>
+
+<p>
+Much like the WAR plugin, any webapp resources (things like JSP files or
+the <em>component.xml</em> descriptor) that simply need to be included in
+the final CAR should be placed in the <em>src/main/webapp/</em> directory
+of the Maven project.
+</p>
+
+<h3>Usage</h3>
+
+<p>
+In order for Maven to locate the CAR plugin you need to ensure that you have
+the appropriate plugin repository registered in either your POM or you
+<em>settings.xml</em> file.
+</p>
+
+<p>
+To specify the plugin repository in your POM, use a
+<code>&lt;pluginRepositories&gt;</code> element similar to the one shown
+below:
+</p>
+
+<pre class="codeSample">
+&lt;project ...&gt;
+  ...
+  &lt;pluginRepositories&gt;
+    &lt;pluginRepository&gt;
+        &lt;id&gt;<em>enter_repository_id_here</em>&lt;/id&gt;
+        &lt;url&gt;<em>enter_repository_url_here</em>&lt;/url&gt;
+    &lt;/pluginRepository&gt;
+  &lt;/pluginRepositories&gt;
+  ...
+&lt;/project&gt;</pre>
+
+<p>
+For information about configuring the plugin repository via the
+<em>settings.xml</em> file instead please see the Maven <a
+href="http://maven.apache.org/settings.html">Settings Reference</a>
+documentation.
+</p>
+
+<p>
+Once you've configured the appropriate plugin repository, the next step is to
+register the CAR plugin in your POM. This is done by adding the following
+<code>&lt;plugin&gt;</code> element to the <em>pom.xml</em> file for your
+project:
+</p>
+
+<pre class="codeSample">
+&lt;project ...&gt;
+  ...
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;com.hp.it.spf.tools&lt;/groupId&gt;
+        &lt;artifactId&gt;spf-maven-car-plugin&lt;/artifactId&gt;
+        &lt;extensions&gt;true&lt;/extensions&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+  ...
+&lt;/project&gt;</pre>
+
+<p>
+The inclusion of the <code>&lt;extensions&gt;true&lt;/extensions&gt;</code>
+element is very important as this is what allows the plugin to define a new
+packaging lifecycle.
+</p>
+
+<p>
+The final step is configure the POM to use the 'car' packaging:
+</p>
+
+<pre class="codeSample">
+&lt;project ...&gt;
+  ...
+  &lt;packaging&gt;car&lt;/packaging&gt;
+  ...
+&lt;/project&gt;</pre>
+
+<p>
+Note that the <code>&lt;packaging&gt;</code> element is where you might have
+specified a value like 'jar' or 'war' in the past projects.
+</p>
+
+<p>For configuration options related to the CAR plugin, see the documentation
+for the {@link com.hp.it.spf.tools.maven.car.CarMojo CarMojo} class. </p>
+</body>
+</html>
