@@ -14,14 +14,14 @@ import com.sun.mail.util.BASE64DecoderStream;
 
 /**
  * A base class for miscellaneous utility methods for both portal and portlet
- * frameworks. Portlets and portal components should import
- * the respective subclasses, not this one.
+ * frameworks. Portlets and portal components should import the respective
+ * subclasses, not this one.
  * 
  * @author <link href="wei.teng@hp.com">Teng Wei</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  * @see <code>com.hp.it.spf.xa.misc.portal.Utils</code><br>
- * <code>com.hp.it.spf.xa.misc.portlet.Utils</code>
+ *      <code>com.hp.it.spf.xa.misc.portlet.Utils</code>
  */
 public class Utils {
 	/**
@@ -298,10 +298,24 @@ public class Utils {
 			if (secure != null) {
 				int i = siteURL.indexOf("://");
 				if (i != -1) {
-					if (secure.booleanValue())
+					String currentScheme = siteURL.substring(0, i).trim();
+					if (secure.booleanValue()) {
 						scheme = "https";
-					else
+						// if not given port, and URL not already using HTTPS,
+						// default port to 443 (this removes port from URL)
+						if ((port <= 0)
+								&& !currentScheme.equalsIgnoreCase("https"))
+							// TODO: get default https port from property file.
+							port = 443;
+					} else {
 						scheme = "http";
+						// if not given port, and URL not already using HTTP,
+						// default to 80 (this removes port from URL)
+						if ((port <= 0)
+								&& !currentScheme.equalsIgnoreCase("http"))
+							// TODO: get default http port from property file.
+							port = 80;
+					}
 					siteURL = scheme + siteURL.substring(i);
 				}
 			}

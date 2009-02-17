@@ -84,6 +84,12 @@ public class UtilsTest extends TestCase {
     	System.out.println("testGetPortalSiteURL.22 got: " + url);
     	assertEquals("https://another:8080/portal/site/foo/something", url);
 
+    	url = Utils.getPortalSiteURL("http://host:12345/something", t, null, 0, null);
+    	System.out.println("testGetPortalSiteURL.23 got: " + url);
+    	assertEquals("https://host/something", url);
+    	url = Utils.getPortalSiteURL("https://host:12345/something", f, null, 0, null);
+    	System.out.println("testGetPortalSiteURL.24 got: " + url);
+    	assertEquals("http://host/something", url);
     }
 
 }
