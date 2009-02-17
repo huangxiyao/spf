@@ -207,7 +207,10 @@ public class UserContextInjector extends BasicHandler {
 		if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 			LOG.debug("UserContextInjector userProfile " + PROFILE_HELPER.profileToString(userContext));
 		}
-		userContextElement.addTextNode(PROFILE_HELPER.profileToString(userContext));
+		// FIXME this is a special way to escape special character
+		userContextElement.addTextNode(PROFILE_HELPER.spfSpecialEscape(PROFILE_HELPER.profileToString(userContext)));
+		
+		System.out.println(userContextElement);
 	}
 
 	/**
