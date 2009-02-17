@@ -5,6 +5,7 @@
 package com.hp.it.spf.wsrp.extractor.context;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.hp.it.spf.xa.misc.Consts;
 import com.hp.it.spf.xa.wsrp.ProfileHelper;
@@ -127,12 +130,28 @@ public class UserContextExtractor implements SOAPHandler {
 		}
 		Map userContextKeys = null;
 		Map userProfile = null;
-		try {
+		try {		    
 			Map userContext = extractUserContext(messageContext.getMessage().getSOAPPart().getEnvelope());
 			if (userContext != null) {
 				userContextKeys = (Map) userContext.get(USER_CONTEXT_KEYS_KEY);
 				userProfile = (Map) userContext.get(USER_PROFILE_KEY);
 			}
+			
+			// retrieve friendlyid and set it to userContextKey map
+			NodeList nodes = messageContext.getMessage().getSOAPBody().getElementsByTagName("clientAttributes");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                boolean isFriendlyID = node.getAttributes().getNamedItem("name").getNodeValue().equals(Consts.KEY_PORTAL_PORTLET_ID);
+                if (isFriendlyID) {
+                    String value = node.getFirstChild().getTextContent();
+                    if (userContextKeys == null) {                        
+                        userContextKeys = new HashMap();
+                    } 
+                    userContextKeys.put(Consts.KEY_PORTAL_PORTLET_ID, value);
+                    break;
+                }                
+            }
+            
 			if (mLog.isDebugEnabled()) {
 				mLog.debug("User context keys: " + userContextKeys);
 				mLog.debug("User profile: " + userProfile);
@@ -166,6 +185,8 @@ public class UserContextExtractor implements SOAPHandler {
 			if (headerElement.hasChildNodes()) {
 				String userContextString = headerElement.getFirstChild().getNodeValue();
 				try {
+				    // FIXME this is a special way to unescape special character
+				    userContextString = PROFILE_HELPER.spfSpecialUnescape(userContextString);
 					return PROFILE_HELPER.profileFromString(userContextString);
 				}
 				catch (IllegalArgumentException e) {
