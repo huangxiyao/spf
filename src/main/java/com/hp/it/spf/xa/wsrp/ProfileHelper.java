@@ -338,7 +338,7 @@ public class ProfileHelper {
 			if (i + 1 < endPos && c == '\\') {
 				char c2 = s.charAt(i + 1);
 				if (c2 == '{' || c2 == '}' || c2 == '[' || c2 == ']'
-						|| c2 == ',') {
+						|| c2 == ',' || c2 == '=') {
 					// do nothing, skip '\' character
 				} else {
 					sb.append(c);
