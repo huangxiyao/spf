@@ -36,17 +36,46 @@ abstract class AbstractPortalURL implements PortalURL
 
 	protected AbstractPortalURL(String siteRootUrl, String anotherSiteName, String pageFriendlyUri, boolean secure)
 	{
-		if (siteRootUrl == null || siteRootUrl.trim().equals("")) {
-			throw new IllegalArgumentException("siteRootUrl parameter cannot be null or empty: " + siteRootUrl);
-		}
-		if (pageFriendlyUri == null || pageFriendlyUri.trim().equals("")) {
-			throw new IllegalArgumentException("pageFriendlyUri parameter cannot be null or empty: " + pageFriendlyUri);
-		}
+		checkSiteRootUrl(siteRootUrl);
+		checkPageFriendlyUri(pageFriendlyUri);
 
 		mSiteRootUrl = siteRootUrl;
 		mAnotherSiteName = anotherSiteName;
 		mPageFriendlyUri = pageFriendlyUri;
 		mSecure = secure;
+	}
+
+	/**
+	 * Checks validity of page friendly URI.
+	 * @param pageFriendlyUri page friendly URI as defined in portal console for navigation item
+	 * @throws IllegalArgumentException if parameter is null or empty
+	 */
+	private void checkPageFriendlyUri(String pageFriendlyUri) throws IllegalArgumentException {
+		if (pageFriendlyUri == null || pageFriendlyUri.trim().equals("")) {
+			throw new IllegalArgumentException("pageFriendlyUri parameter cannot be null or empty: " + pageFriendlyUri);
+		}
+	}
+
+	/**
+	 * Checks validity of site root URL.
+	 * @param siteRootUrl site root URL
+	 * @throws IllegalArgumentException if parameter is null or empty
+	 */
+	private void checkSiteRootUrl(String siteRootUrl) {
+		if (siteRootUrl == null || siteRootUrl.trim().equals("")) {
+			throw new IllegalArgumentException("siteRootUrl parameter cannot be null or empty: " + siteRootUrl);
+		}
+	}
+
+	/**
+	 * Checks validity of portlet friendly ID.
+	 * @param portletFriendlyId portlet friendly ID as defined in portal console
+	 * @throws IllegalArgumentException if parameter is null or empty
+	 */
+	private void checkPortletFriendlyId(String portletFriendlyId) {
+		if (portletFriendlyId == null || portletFriendlyId.trim().equals("")) {
+			throw new IllegalArgumentException("portletFriendlyId cannot be null or empty: " + portletFriendlyId);
+		}
 	}
 
 	// added method for portal parameter support - DSJ 2009/1/28
@@ -86,6 +115,7 @@ abstract class AbstractPortalURL implements PortalURL
 	
 	public void setParameter(String portletFriendlyId, String paramName, String paramValue)
 	{
+		checkPortletFriendlyId(portletFriendlyId);
 		List<String> portletParamValueList = getPortletParamValueList(portletFriendlyId, paramName, false);
 		portletParamValueList.clear();
 		if (paramValue != null) {
@@ -95,6 +125,7 @@ abstract class AbstractPortalURL implements PortalURL
 
 	public void setParameter(String portletFriendlyId, String paramName, String[] paramValues)
 	{
+		checkPortletFriendlyId(portletFriendlyId);
 		List<String> portletParamValueList = getPortletParamValueList(portletFriendlyId, paramName, false);
 		portletParamValueList.clear();
 		if (paramValues != null) {
@@ -104,6 +135,7 @@ abstract class AbstractPortalURL implements PortalURL
 
 	public void setParameters(String portletFriendlyId, Map params)
 	{
+		checkPortletFriendlyId(portletFriendlyId);
 		for (Iterator it = params.entrySet().iterator(); it.hasNext();) {
 			Map.Entry incomingParam = (Map.Entry) it.next();
 			String incomingParamName = (String) incomingParam.getKey();
@@ -118,6 +150,7 @@ abstract class AbstractPortalURL implements PortalURL
 
 	public void setPublicParameter(String portletFriendlyId, String paramName, String paramValue)
 	{
+		checkPortletFriendlyId(portletFriendlyId);
 		List<String> portletParamValueList = getPortletParamValueList(portletFriendlyId, paramName, true);
 		portletParamValueList.clear();
 		if (paramValue != null) {
@@ -127,6 +160,7 @@ abstract class AbstractPortalURL implements PortalURL
 
 	public void setPublicParameter(String portletFriendlyId, String paramName, String[] paramValues)
 	{
+		checkPortletFriendlyId(portletFriendlyId);
 		List<String> portletParamValueList = getPortletParamValueList(portletFriendlyId, paramName, true);
 		portletParamValueList.clear();
 		if (paramValues != null) {
@@ -136,6 +170,7 @@ abstract class AbstractPortalURL implements PortalURL
 
 	public void setPublicParameters(String portletFriendlyId, Map params)
 	{
+		checkPortletFriendlyId(portletFriendlyId);
 		for (Iterator it = params.entrySet().iterator(); it.hasNext();) {
 			Map.Entry incomingParam = (Map.Entry) it.next();
 			String incomingParamName = (String) incomingParam.getKey();
@@ -150,6 +185,7 @@ abstract class AbstractPortalURL implements PortalURL
 
 	public void setWindowState(String portletFriendlyId, WindowState windowState)
 	{
+		checkPortletFriendlyId(portletFriendlyId);
 		if (windowState == null) {
 			windowState = WindowState.NORMAL;
 		}
@@ -158,6 +194,7 @@ abstract class AbstractPortalURL implements PortalURL
 
 	public void setPortletMode(String portletFriendlyId, PortletMode portletMode)
 	{
+		checkPortletFriendlyId(portletFriendlyId);
 		if (portletMode == null) {
 			portletMode = PortletMode.VIEW;
 		}
@@ -166,6 +203,7 @@ abstract class AbstractPortalURL implements PortalURL
 
 	public void setAsActionURL(String portletFriendlyId) throws IllegalStateException
 	{
+		checkPortletFriendlyId(portletFriendlyId);
 		if (mActionPortletFriendlyId != null) {
 			throw new IllegalStateException("Target portlet for action URL has already been set to " + mActionPortletFriendlyId);
 		}
