@@ -23,5 +23,19 @@
  * <p>
  * <b>Important:</b> The classes from this package can be used by portlet and portal components.
  * They do not depend on any Vignette Portal classes.
+ * <p>
+ * <b>Usage</b>
+ * <p>
+ * <pre>
+ * // create PortalURL using one of the factory methods
+ * PortalURL url = PortalURLFactory.createPageURL(...);
+ * // set URL query string parameters if needed; those are not specific to any portlets
+ * url.setParameter(queryStringParamName, value);
+ * // set portlet-specific parameters using portlet friendly ID as defined in portal console
+ * url.setParameter(portletFriendlyId, paramName, value);
+ * // set portlet public parameters using portlet friendly ID as defined in portal console
+ * url.setPublicParameter(portletFriendlyId, paramName, value);
+ * // use other set methods to configure the URL appropriately
+ * </pre>
  */
 package com.hp.it.spf.xa.portalurl;
