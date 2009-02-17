@@ -1,5 +1,7 @@
 package com.hp.it.spf.xa.portalurl;
 
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -16,7 +18,7 @@ import java.util.Properties;
  */
 public class PortalURLFactory {
 
-	static final String PROPERTY_FILE_RESOURCE_PATH = "/portalurl.properties";
+	static final String PROPERTY_FILE_RESOURCE_PATH = "portalurl.properties";
 	static final String PROPERTY_NAME = "PortalURLFactory.remote";
 	
 //	private static Logger mLog = Logger.getLogger(PortalURLFactory.class);
@@ -118,21 +120,9 @@ public class PortalURLFactory {
 		}
 
 		// then check property file
-		InputStream is = PortalURLFactory.class.getResourceAsStream(propertyFileResourcePath);
-		try {
-			if (is != null) {
-				try {
-					Properties props = new Properties();
-					props.load(is);
-					return Boolean.valueOf(props.getProperty(PROPERTY_NAME));
-				}
-				finally {
-					is.close();
-				}
-			}
-		}
-		catch (IOException e) {
-			throw new RuntimeException("Error loading property file: " + propertyFileResourcePath, e);
+		String isRemote = PropertyResourceBundleManager.getString(propertyFileResourcePath, PROPERTY_NAME);
+		if (isRemote != null && !isRemote.trim().equals("")) {
+			return Boolean.valueOf(isRemote);
 		}
 
 		// finally return default value

@@ -25,10 +25,10 @@ public class PortalURLFactoryTest extends TestCase {
 
 	public void testCreatesRemoteUrlsPropertyFile() {
 		assertEquals("Uses property file value if defined",
-				false, PortalURLFactory.createsRemoteUrls("/test_portalurl.properties"));
+				false, PortalURLFactory.createsRemoteUrls("test_portalurl.properties"));
 
 		System.setProperty(PortalURLFactory.PROPERTY_NAME, "true");
 		assertEquals("Uses system property if both property file and system property defined",
-				true, PortalURLFactory.createsRemoteUrls("/test_portalurl.properties"));
+				true, PortalURLFactory.createsRemoteUrls("test_portalurl.properties"));
 	}
 }

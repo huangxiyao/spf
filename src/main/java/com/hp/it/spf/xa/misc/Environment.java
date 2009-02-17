@@ -4,11 +4,14 @@ package com.hp.it.spf.xa.misc;
 
 //import org.apache.log4j.Logger;
 
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Collections;
+import java.util.ResourceBundle;
 
 import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
@@ -35,7 +38,11 @@ public enum Environment {
 	
 //	private final Logger mLog = Logger.getLogger(Environment.class);
 
-	private String mType = "DEV";
+	private final String PROP_FILE_NAME = "spf_environment.properties";
+	private final String PROP_NAME = "ENVIRONMENT";
+	private final String DEFAULT_TYPE = "DEV";
+
+	private String mType = DEFAULT_TYPE;
 	private String mServerId = null;
 	private String mManagedServerName;
 	private List<String> mManagedServerList;
@@ -47,24 +54,18 @@ public enum Environment {
 	}
 
 	private void determineEnvironmentType() {
-		try {
-			InputStream is = Environment.class.getResourceAsStream("/spf_environment.properties");
-			if (is == null) {
-				mType = "DEV";
+		ResourceBundle props = PropertyResourceBundleManager.getBundle(PROP_FILE_NAME);
+		if (props == null) {
 //				if (mLog.isInfoEnabled()) {
-//					mLog.info("Unable to load environment.properties. Will use DEV!");
+//					mLog.info("Unable to load " + PROP_FILE_NAME +". Will use " + DEFAULT_TYPE);
 //				}
-			}
-			else {
-				Properties prop = new Properties();
-				prop.load(is);
-				is.close();
-
-				String envType = prop.getProperty("ENVIRONMENT");
+		}
+		else {
+			try {
+				String envType = props.getString(PROP_NAME);
 				if (envType == null || envType.trim().equals("")) {
-					mType = "DEV";
 //					if (mLog.isInfoEnabled()) {
-//						mLog.info("ENVIRONMENT entry not present in environment.properties. Will use DEV!");
+//						mLog.info("Unable to retrieve " + PROP_NAME + " entry from " + PROP_FILE_NAME + ". Will use " + DEFAULT_TYPE, e);
 //					}
 				}
 				else {
@@ -74,10 +75,11 @@ public enum Environment {
 //					}
 				}
 			}
-		}
-		catch (Exception e) {
-			mType = "DEV";
-//			mLog.error("Error occured while determining environment type! Will use DEV.", e);
+			catch (Exception e) {
+//					if (mLog.isInfoEnabled()) {
+//						mLog.info("Unable to retrieve " + PROP_NAME + " entry from " + PROP_FILE_NAME + ". Will use " + DEFAULT_TYPE, e);
+//					}
+			}
 		}
 	}
 
