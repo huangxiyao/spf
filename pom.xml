@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.xa</groupId>
@@ -13,12 +14,12 @@
 			<scope>test</scope>
 		</dependency>
 		<!-- 
-		<dependency>
+			<dependency>
 			<groupId>com.bea</groupId>
 			<artifactId>weblogic</artifactId>
 			<version>10.0.1.0</version>
 			<scope>provided</scope>
-		</dependency>
+			</dependency>
 		-->
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -55,7 +56,16 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<description>Common utilities for both portal and portlet sides of the Shared Portal Framework.  Currently includes common and abstract utilities for portal and portlet file content interpolation (useful for any use case involving display of an authored HTML file with certain dynamic substitutions supported), internationalization, property resource bundle management (hot-reloadable property files), contextual help, portal URL creation (targeting URLs with parameters to portlets), etc.</description>
+	<description>
+		Common utilities for both portal and portlet sides of the Shared
+		Portal Framework. Currently includes common and abstract
+		utilities for portal and portlet file content interpolation
+		(useful for any use case involving display of an authored HTML
+		file with certain dynamic substitutions supported),
+		internationalization, property resource bundle management
+		(hot-reloadable property files), contextual help, portal URL
+		creation (targeting URLs with parameters to portlets), etc.
+	</description>
 	<inceptionYear>December 2008</inceptionYear>
 	<parent>
 		<artifactId>spf-pom</artifactId>
@@ -64,12 +74,20 @@
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/</url>
+		<url>
+			http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/
+		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-common-utilities</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-common-utilities</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-common-utilities</url>
+		<connection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-common-utilities
+		</connection>
+		<developerConnection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-common-utilities
+		</developerConnection>
+		<url>
+			http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-common-utilities
+		</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
