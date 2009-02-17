@@ -151,11 +151,12 @@ public class ProfileHelper {
 		return (Map) stack.pop();
 	}
 	
-	
+	//FIXME this is a special way to escape '&'
 	public String spfSpecialEscape(String input) {
 		return input.replaceAll("&", "#__38__#");
 	}
 	
+	//FIXME this is a special way to unescape '&'
 	public String spfSpecialUnescape(String input) {
 		return input.replaceAll("#__38__#", "&");
 	}
