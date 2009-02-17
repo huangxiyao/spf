@@ -507,11 +507,15 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	public static String getPortalPortletID(PortletRequest request) {
 		String portletId = null;
 		if (request != null) {
-			// TODO: Finish this logic. Get portlet ID (currently, the Vignette
-			// portlet friendly ID) from the request using the new
-			// authentication module. If not found in request, return null. A
-			// key name for this is defined in the common Consts class - see
-			// TODO there.
+			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
+			if (o != null) {
+				try {
+					Map contextMap = (Map) o;
+					return (String) contextMap
+							.get(Consts.KEY_PORTAL_PORTLET_ID);
+				} catch (ClassCastException e) { // should never happen
+				}
+			}
 		}
 		return portletId;
 	}
