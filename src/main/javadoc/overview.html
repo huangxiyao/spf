@@ -1,7 +1,7 @@
 <html>
 <body>
-<p>This artifact is a Maven plugin which defines a new packaging lifecycle which 
-supports the creation of artifacts that conform to the Vignette Component 
+<p>This artifact is a Maven plugin which defines a new packaging lifecycle 
+supporting the creation of artifacts that conform to the Vignette Component 
 Archive (CAR) standards.</p>
 
 
@@ -61,6 +61,10 @@ table.props th {
 
 table.props td {
 	font-family: 'Courier New', Courier, monospace;
+}
+
+.style1 {
+	margin-bottom: 19px;
 }
 
 </style>
@@ -220,5 +224,41 @@ specified a value like 'jar' or 'war' in the past projects.
 
 <p>For configuration options related to the CAR plugin, see the documentation
 for the {@link com.hp.it.spf.tools.maven.car.CarMojo CarMojo} class. </p>
+<h3 class="style1">Composite CAR</h3>
+<p>In situations where you have multiple CAR artifacts that you've created, it 
+can be tedious to import all of the artifacts into Vignette (you have to load 
+them one-at-a-time). However Vignette supports the use of a “composite CAR” 
+which allows you to install a number of CAR artifacts simultaneously. A 
+composite CAR is nothing more than a CAR containing other CARs. By bundling each 
+of your individual components into a composite CAR file you can easily 
+upload/install everything at once. </p>
+<p>The CAR plugin can be configured to generate a composite CAR by configuring 
+it with the <code>&lt;composite&gt;</code> configuration element as shown below:</p>
+<pre class="codeSample">
+&lt;project ...&gt;
+  ...
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;com.hp.it.spf.tools&lt;/groupId&gt;
+        &lt;artifactId&gt;spf-maven-car-plugin&lt;/artifactId&gt;
+        &lt;extensions&gt;true&lt;/extensions&gt;
+        &lt;configruration&gt;
+          &lt;composite&gt;true&lt;/composite&gt;
+        &lt;/configuration&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+  ...
+&lt;/project&gt;</pre>
+
+<p>When a value of <em>true</em> is specified for the <code>&lt;composite&gt;</code> 
+configuration element, the CAR plugin will look for any CAR artifacts that have 
+been listed in the <code>&lt;dependencies&gt;</code> section of the POM and will 
+include them as part of the composite CAR that is generated.</p>
+<p><strong>Note</strong>: When specifying CAR files as dependencies in a 
+composite CAR project remember to identify each <code>&lt;dependency&gt;</code> as 
+being of <code>&lt;type&gt;</code> 'car'. Unless instructed otherwise, Maven assumes 
+all dependencies are JARs.</p>
 </body>
 </html>
