@@ -5,7 +5,7 @@
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-navportlet-portalbean</artifactId>
 	<packaging>car</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>SPF Navigation Portlet PortalBean</name>
 	<description>
 		PortalBean used to render portal navigation tree's node and its children. 
@@ -28,13 +28,6 @@
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
 	</organization>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>snapshots</id>
-			<name>Internal Snapshots</name>
-			<url>http://samson.atl.hp.com:8081/nexus/content/repositories/snapshots</url>
-		</pluginRepository>
-	</pluginRepositories>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -73,14 +66,4 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	<build>
-		<finalName>spf-navportlet-portalbean</finalName>
-		<plugins>
-		  <plugin>
-			<groupId>com.hp.it.spf.tools</groupId>
-			<artifactId>spf-maven-car-plugin</artifactId>
-			<extensions>true</extensions>
-		  </plugin>
-		</plugins>
-	</build>
 </project>
