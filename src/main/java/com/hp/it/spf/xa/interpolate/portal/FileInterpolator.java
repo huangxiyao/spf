@@ -8,8 +8,6 @@
  */
 package com.hp.it.spf.xa.interpolate.portal;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
