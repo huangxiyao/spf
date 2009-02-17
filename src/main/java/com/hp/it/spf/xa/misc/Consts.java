@@ -183,13 +183,8 @@ public class Consts {
 	public static final String ANON_USER_NAME_PREFIX = "sso_guest_user_";
 
 	/**
-	 * The key for the portlet friendly id in the portlet request. This is
-	 * non-standard. The SPF portal puts the friendly ID into this request
-	 * attribute so the portlet can then get it.
+	 * The key to get the portlet friendly id from portal context map.
 	 */
-	// TODO - this is the key name for accessing portlet friendly ID in the
-	// portlet request. Check and change this as needed. Also see TODO in the
-	// portlet Utils.getPortletID method.
 	public static final String KEY_PORTAL_PORTLET_ID = "com.vignette.portal.portlet.friendlyid";
 
 	/**
