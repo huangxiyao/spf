@@ -150,6 +150,15 @@ public class ProfileHelper {
 		readMap(stack, s, 0);
 		return (Map) stack.pop();
 	}
+	
+	
+	public String spfSpecialEscape(String input) {
+		return input.replaceAll("&", "#__38__#");
+	}
+	
+	public String spfSpecialUnescape(String input) {
+		return input.replaceAll("#__38__#", "&");
+	}
 
 	private void writeObject(StringBuffer sb, Object obj) {
 		if (obj == null) {
