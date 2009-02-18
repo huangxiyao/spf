@@ -209,8 +209,6 @@ public class UserContextInjector extends BasicHandler {
 		}
 		// FIXME this is a special way to escape special character
 		userContextElement.addTextNode(PROFILE_HELPER.spfSpecialEscape(PROFILE_HELPER.profileToString(userContext)));
-		
-		System.out.println(userContextElement);
 	}
 
 	/**
