@@ -9,12 +9,14 @@
 		<requestFlow>
 			<handler type="java:com.vignette.portal.webservices.internal.axis.handlers.CookieHeaderAccessHandler"/>
 			<handler type="java:com.vignette.webservices.toolkit.security.SecurityHandler"/>
+			<handler type="java:com.hp.it.spf.wsrp.log.WsrpTimeRecordingHandler" />
 			<handler type="java:com.hp.it.spf.wsrp.rewriter.WsrpRewriterHandler"/>
 			<handler type="java:com.hp.it.spf.wsrp.injector.context.UserContextInjector"/>
 		</requestFlow>
 		<responseFlow>
 			<handler type="java:com.vignette.portal.webservices.internal.axis.handlers.CookieHeaderAccessHandler"/>
 			<handler type="java:com.vignette.portal.portlet.wsrpconsumer.internal.cookie.SessionCookieSnoopingHandler"/>
+			<handler type="java:com.hp.it.spf.wsrp.log.WsrpTimeRecordingHandler" />
 			<handler type="java:com.hp.it.spf.wsrp.rewriter.WsrpRewriterHandler"/>
 		</responseFlow>
 	</transport>
