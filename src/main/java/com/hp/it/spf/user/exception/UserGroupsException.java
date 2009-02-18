@@ -10,7 +10,7 @@ package com.hp.it.spf.user.exception;
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @version 1.0
  */
-public class UserGroupsException extends Exception {
+public class UserGroupsException extends RuntimeException {
     private static final long serialVersionUID = 345532829912627537L;
 
     /**

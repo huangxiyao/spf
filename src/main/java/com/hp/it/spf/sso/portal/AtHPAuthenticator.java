@@ -5,8 +5,6 @@
  */
 package com.hp.it.spf.sso.portal;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -68,13 +66,6 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
     }
 
     /**
-     * retrieve user profile for atHP
-     */
-    protected Map<String, String> getUserProfile() {
-        return null;
-    }
-    
-    /**
      * 
      * This method is used to get the phone extension It will get the String
      * from ssouser's field phone, and splitting on "ext." if there are more
@@ -82,22 +73,20 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
      * field phone, the second one will be stored in ssouser's field phone_ext
      */
     @SuppressWarnings("unchecked")
-    private void setPhone() {
-        if (this.ssoUser != null) {            
-            String tmpPhone = (String)userProfile.get(AuthenticationConsts.KEY_PHONE_NUMBER);
-            if (tmpPhone != null) {
-                tmpPhone = tmpPhone.toLowerCase();
-                String[] phones = tmpPhone.split(AuthenticationConsts.PHONE_EXT_SPLIT);
-                if (phones.length > 1) {
-                    String ext = phones[1].trim();
-                    if (ext != null && ext.length() > 0) {
-                        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext);
-                    }
+    private void setPhone() {                
+        String tmpPhone = (String)userProfile.get(AuthenticationConsts.KEY_PHONE_NUMBER);
+        if (tmpPhone != null) {
+            tmpPhone = tmpPhone.toLowerCase();
+            String[] phones = tmpPhone.split(AuthenticationConsts.PHONE_EXT_SPLIT);
+            if (phones.length > 1) {
+                String ext = phones[1].trim();
+                if (ext != null && ext.length() > 0) {
+                    userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext);
                 }
-                userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, phones[0].trim());
-            } else {
-                userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, "");
             }
-        }
+            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, phones[0].trim());
+        } else {
+            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, "");
+        }        
     }
 }

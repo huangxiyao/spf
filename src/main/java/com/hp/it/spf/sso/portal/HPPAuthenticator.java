@@ -4,8 +4,6 @@
  */
 package com.hp.it.spf.sso.portal;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
@@ -79,13 +77,6 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 	}
     
     /**
-     * Retrieve user profile for HPP
-     */
-    protected Map<String, String> getUserProfile() {
-    	return null;
-    }
-    
-    /**
      * Return corresponding field value in request header, If field is in
      * cl_header,get its value from CL_HEADER Otherwise, return the decoded
      * value in request header.
@@ -121,31 +112,28 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      * from headers. Construct extension with the one from header.
      */
     @SuppressWarnings("unchecked")
-    private void setPhone() {
-        if (this.ssoUser != null) {
-            String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);
-            String country = getValue(AuthenticationConsts.HEADER_PHONE_COUNTRY_CODE);
-            String area = getValue(AuthenticationConsts.HEADER_PHONE_AREA_CODE);
-            String ext = getValue(AuthenticationConsts.HEADER_PHONE_EXT);
+    private void setPhone() {       
+        String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);
+        String country = getValue(AuthenticationConsts.HEADER_PHONE_COUNTRY_CODE);
+        String area = getValue(AuthenticationConsts.HEADER_PHONE_AREA_CODE);
+        String ext = getValue(AuthenticationConsts.HEADER_PHONE_EXT);
 
-            StringBuffer phone = new StringBuffer("");
-            if ((country != null) && !("".equals(country.trim()))) {
-                phone.append("+").append(country.trim()).append(" ");
-            }
-            if ((area != null) && !("".equals(area.trim()))) {
-                phone.append(area.trim()).append(" ");
-            }
-            if ((number != null) && !("".equals(number.trim()))) {
-                phone.append(number.trim());
-            }
-            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, 
-                            phone.toString());           
+        StringBuffer phone = new StringBuffer("");
+        if ((country != null) && !("".equals(country.trim()))) {
+            phone.append("+").append(country.trim()).append(" ");
+        }
+        if ((area != null) && !("".equals(area.trim()))) {
+            phone.append(area.trim()).append(" ");
+        }
+        if ((number != null) && !("".equals(number.trim()))) {
+            phone.append(number.trim());
+        }
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, phone.toString());           
 
-            if ((ext != null) && !("".equals(ext.trim()))) {
-                userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext.trim());
-            } else {
-                userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, "");
-            }
+        if ((ext != null) && !("".equals(ext.trim()))) {
+            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext.trim());
+        } else {
+            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, "");
         }
     }
 }

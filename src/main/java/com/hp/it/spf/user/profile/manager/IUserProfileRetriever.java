@@ -1,8 +1,11 @@
+/*
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ *
+ */
 package com.hp.it.spf.user.profile.manager;
 
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import com.hp.it.spf.user.exception.UserProfileException;
 
@@ -15,12 +18,11 @@ import com.hp.it.spf.user.exception.UserProfileException;
  */
 public interface IUserProfileRetriever {
 	/**
-	 * Retrieve specified user profile 
+	 * Retrieve specified user profiles 
 	 * 
-	 * @param profileId             user profile id
-	 * @param request               httpservletrequest contain some metadata
-	 * @returnuser                  profile map
-	 * @throws UserProfileException user profile exception
+	 * @param userIdentifier  user indentifier
+	 * @return user profile map or an empty map
+	 * @throws UserProfileException if retrieving user profiles errror
 	 */
-	Map<String, String> getUserProfile(String profileId, HttpServletRequest request) throws UserProfileException;
+	Map<String, String> getUserProfile(String profileId) throws UserProfileException;
 }

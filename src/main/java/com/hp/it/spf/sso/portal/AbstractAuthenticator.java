@@ -24,6 +24,8 @@ import com.epicentric.user.User;
 import com.hp.it.spf.user.exception.UserGroupsException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
+import com.hp.it.spf.user.profile.manager.IUserProfileRetriever;
+import com.hp.it.spf.user.profile.manager.UserProfileRetrieverFactory;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
@@ -480,10 +482,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     protected User syncVAPUser() throws UniquePropertyValueConflictException,
                                 EntityPersistenceException {
         // append all external user profile retrieved from UPS/Persona
-        Map upMap = getUserProfile();
-        if (upMap != null) {
-            userProfile.putAll(upMap);
-        }
+        userProfile.putAll(getUserProfile());
+        
         mapUserProfile2SSOUser();
         ssoUser.setGroups(getUserGroup());
 
@@ -518,7 +518,10 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * @return user profile map
      */
     protected Map<String, String> getUserProfile() {
-        return null;
+        String profileId = null;
+        IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl();
+        
+        return retriever.getUserProfile(profileId);
     }
 
     /**
@@ -529,27 +532,26 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      */
     @SuppressWarnings("unchecked")
     protected Set getUserGroup() {
-        /**
-         *  if (loggedIntoFed(request)) {
-            groupToAssign = AuthenticationConsts.SP_FN_FED_NAME;
-        } else if (loggedIntoAtHP(request)) {
-            groupToAssign = AuthenticationConsts.SP_FN_ATHP_NAME;
-        } else if (loggedIntoHPP(request)) {
-            groupToAssign = AuthenticationConsts.SP_FN_HPP_NAME;
-        }
-         */
         //TODO need to fulfill the logic of retrieve user groups
         Set<String> group = new HashSet<String>();
+        // set group acoording to login type
+        if (AuthenticatorHelper.loggedIntoAtHP(request)) {
+            group.add(AuthenticationConsts.LOCAL_ATHP_NAME);
+        } else if (AuthenticatorHelper.loggedIntoHPP(request)) {
+            group.add(AuthenticationConsts.LOCAL_HPP_NAME);
+        } else if (AuthenticatorHelper.loggedIntoFed(request)) {
+            group.add(AuthenticationConsts.LOCAL_FED_NAME);
+        }
+        
         Site site = Utils.getEffectiveSite(request);
         if (site != null) {
             IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(null);
-
             
             try {
-                group = retriever.getGroups(site.getDNSName(), userProfile);
+                group.addAll(retriever.getGroups(site.getDNSName(), userProfile));
             } catch (UserGroupsException e) {
+                // TODO remove this try/catch block
             }
-            
         }
         return group;
     }
