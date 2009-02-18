@@ -39,9 +39,12 @@ if (!user.isGuestUser()) { // means that this user is logged in
     }
 }
 
-String s_userType = (String)AuthenticationUtility.getSPUserRole(user);
-if (s_userType == null) {
-    s_userType = "unknown";
+String s_userType = "anonymous";
+if (AuthenticationUtility.loggedIntoAtHP(request)) {
+    s_userType = "ATHP";
+} else if (AuthenticatorHelper.loggedIntoHPP(request)
+        || AuthenticatorHelper.loggedIntoFed(request)) {
+	s_userType = "HPP";
 }
 
 String s_region = CountryRegionMapping.getRegionFromCountryCode(s_country);
