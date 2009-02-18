@@ -16,8 +16,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import com.hp.it.spf.xa.misc.Consts;
-import com.hp.it.spf.xa.wsrp.RequestMap;
-import com.hp.it.spf.xa.wsrp.RequestWrapper;
+import com.hp.it.spf.xa.wsrp.portal.RequestMap;
+import com.hp.it.spf.xa.wsrp.portal.RequestWrapper;
 import com.vignette.portal.log.LogWrapper;
 
 /**
