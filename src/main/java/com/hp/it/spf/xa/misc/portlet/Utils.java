@@ -96,7 +96,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 				try {
 					Map userMap = (Map) o;
 					return (String) userMap.get(key.trim());
-				} catch (ClassCastException e) {
+				} catch (Exception e) {
 				}
 			}
 		}
@@ -129,7 +129,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 									.startsWith(Consts.ANON_USER_NAME_PREFIX)) {
 						return true;
 					}
-				} catch (ClassCastException e) {
+				} catch (Exception e) {
 				}
 			}
 		}
@@ -161,7 +161,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 						return (String[]) ((List) groupList)
 								.toArray(new String[0]);
 					}
-				} catch (ClassCastException e) {
+				} catch (Exception e) {
 				}
 			}
 		}
@@ -205,7 +205,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 				try {
 					Map contextMap = (Map) o;
 					return (String) contextMap.get(Consts.KEY_PORTAL_SITE_NAME);
-				} catch (ClassCastException e) {
+				} catch (Exception e) {
 				}
 			}
 		}
@@ -241,7 +241,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 					Map contextMap = (Map) o;
 					siteRootURL = (String) contextMap
 							.get(Consts.KEY_PORTAL_SITE_URL);
-				} catch (ClassCastException e) { // should never happen
+				} catch (Exception e) { // should never happen
 				}
 			}
 		}
@@ -418,7 +418,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 					Map contextMap = (Map) o;
 					return (String) contextMap
 							.get(Consts.KEY_PORTAL_REQUEST_URL);
-				} catch (ClassCastException e) { // should never happen
+				} catch (Exception e) { // should never happen
 				}
 			}
 		}
@@ -513,7 +513,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 					Map contextMap = (Map) o;
 					return (String) contextMap
 							.get(Consts.KEY_PORTAL_PORTLET_ID);
-				} catch (ClassCastException e) { // should never happen
+				} catch (Exception e) { // should never happen
 				}
 			}
 		}
