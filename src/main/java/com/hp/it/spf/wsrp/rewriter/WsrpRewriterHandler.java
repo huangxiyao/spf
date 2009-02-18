@@ -3,17 +3,15 @@ package com.hp.it.spf.wsrp.rewriter;
 import com.hp.it.spf.wsrp.rewriter.impl.ConfigModeUserIdRewriter;
 import com.hp.it.spf.wsrp.rewriter.impl.UploadRewriter;
 import com.hp.it.spf.wsrp.rewriter.impl.UrlTemplateProcessingRewriter;
+import com.hp.it.spf.wsrp.misc.Predicates;
+import com.hp.it.spf.wsrp.misc.Utils;
 import org.apache.axis.AxisFault;
 import org.apache.axis.MessageContext;
 import org.apache.axis.handlers.BasicHandler;
-import org.apache.axis.message.RPCElement;
 import org.apache.axis.message.RPCParam;
 import org.xml.sax.SAXException;
 
-import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
-import java.util.Iterator;
-import java.util.Vector;
 
 /**
  * The handler performing changes to outgoing WSRP request or returned response. The goal of this
@@ -82,7 +80,7 @@ public class WsrpRewriterHandler extends BasicHandler {
 	 * @throws AxisFault	 If an unexpected error occurs
 	 */
 	private void invokeRewriters(IRewriter[] rewriters, MessageContext messageContext) throws SAXException, SOAPException, AxisFault {
-		RPCParam rpcParam = getWsrpCallRPCParam(messageContext);
+		RPCParam rpcParam = Utils.getWsrpCallRPCParam(messageContext);
 		for (IRewriter rewriter : rewriters) {
 			if (rewriter.shouldApply(messageContext)) {
 				rewriter.rewrite(rpcParam.getObjectValue());
@@ -90,35 +88,5 @@ public class WsrpRewriterHandler extends BasicHandler {
 		}
 	}
 
-
-	/**
-	 * Extracts from the SOAP message WSRP request or response object
-	 *
-	 * @param messageContext this web service call message context
-	 * @return RPCParam containing the object
-	 * @throws SAXException  If an error occurs when extracting request or reponse objects
-	 * @throws SOAPException If an error occurs when processing SOAP message
-	 * @throws AxisFault	 If an unexpected error occurs
-	 */
-	private RPCParam getWsrpCallRPCParam(MessageContext messageContext) throws SOAPException, SAXException, AxisFault {
-		SOAPBody soapBody = messageContext.getMessage().getSOAPPart().getEnvelope().getBody();
-		Iterator it = soapBody.getChildElements();
-		if (!it.hasNext()) {
-			throw new AxisFault("SOAPBody has no children: " + soapBody);
-		}
-
-		Object operation = it.next();
-		if (!(operation instanceof RPCElement)) {
-			throw new AxisFault("Operation is not instance of RPCElement: " + (operation == null ? "null" : operation.getClass().getName()));
-		}
-
-		RPCElement rpcElement = (RPCElement) operation;
-		Vector params = rpcElement.getParams();
-		if (params == null || params.size() != 1) {
-			throw new AxisFault("Number of operation parameters is not 1: " + (params == null ? "null" : params.size()));
-		}
-
-		return (RPCParam) params.get(0);
-	}
 
 }

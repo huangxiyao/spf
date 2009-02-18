@@ -1,9 +1,9 @@
-package com.hp.it.spf.wsrp.rewriter;
+package com.hp.it.spf.wsrp.misc;
 
 import org.apache.axis.MessageContext;
 
 /**
- * Helper class which can be used by {@link IRewriter} implementations in their
+ * Helper class which can be used by {@link com.hp.it.spf.wsrp.rewriter.IRewriter} implementations in their
  * {@link com.hp.it.spf.wsrp.rewriter.IRewriter#shouldApply(org.apache.axis.MessageContext)}
  * method.
  *
@@ -48,4 +48,18 @@ public class Predicates {
 		}
 		return false;
 	}
+
+	/**
+	 * @param messageContext web service message context
+	 * @return <tt>true</tt> if the web service call is a WSRP call (V1 or V2) to any of the
+	 * following methods: getMarkup, performBlockingInteraction, handleEvents, getResource
+	 */
+	public static boolean isWsrpBaseCall(MessageContext messageContext) {
+		return isWsrp(messageContext) &&
+				isAnyOfMethods(messageContext,
+						"getMarkup",
+						"performBlockingInteraction",
+						"handleEvents",
+						"getResource");
+	}                                           
 }

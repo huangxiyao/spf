@@ -1,7 +1,7 @@
 package com.hp.it.spf.wsrp.rewriter.impl;
 
 import com.hp.it.spf.wsrp.rewriter.IRewriter;
-import com.hp.it.spf.wsrp.rewriter.Predicates;
+import com.hp.it.spf.wsrp.misc.Predicates;
 import oasis.names.tc.wsrp.v2.types.GetMarkup;
 import oasis.names.tc.wsrp.v2.types.HandleEvents;
 import oasis.names.tc.wsrp.v2.types.MarkupParams;

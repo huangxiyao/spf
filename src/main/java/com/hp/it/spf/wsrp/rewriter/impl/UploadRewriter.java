@@ -1,7 +1,7 @@
 package com.hp.it.spf.wsrp.rewriter.impl;
 
 import com.hp.it.spf.wsrp.rewriter.IRewriter;
-import com.hp.it.spf.wsrp.rewriter.Predicates;
+import com.hp.it.spf.wsrp.misc.Predicates;
 import org.apache.axis.MessageContext;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.FileUpload;

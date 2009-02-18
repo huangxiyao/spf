@@ -6,36 +6,29 @@
 package com.hp.it.spf.wsrp.injector.context;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.soap.Name;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPHeaderElement;
 import javax.xml.soap.SOAPMessage;
 
-import oasis.names.tc.wsrp.v2.types.GetMarkup;
-import oasis.names.tc.wsrp.v2.types.PerformBlockingInteraction;
-
 import org.apache.axis.AxisFault;
 import org.apache.axis.MessageContext;
 import org.apache.axis.handlers.BasicHandler;
-import org.apache.axis.message.RPCElement;
-import org.apache.axis.message.RPCParam;
 
 import com.epicentric.common.website.MenuItemNode;
 import com.epicentric.common.website.MenuItemUtils;
 import com.epicentric.site.Site;
 import com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter;
+import com.hp.it.spf.wsrp.misc.Predicates;
+import com.hp.it.spf.wsrp.misc.Utils;
 import com.hp.it.spf.xa.misc.Consts;
-import com.hp.it.spf.xa.misc.portal.Utils;
 import com.hp.it.spf.xa.wsrp.ProfileHelper;
 import com.hp.it.spf.xa.wsrp.portal.RequestMap;
 import com.vignette.portal.log.LogConfiguration;
@@ -57,14 +50,13 @@ import com.vignette.portal.website.enduser.PortalContext;
  * request must be synchronized. The scope of the synchronized block must be
  * limited to avoid bottlenecks.
  * </p>
- * 
+ *
+ * @author Slawek Zachcial (slawomir.zachcial@hp.com) 
  * @author Oliver, Kaijian Ding, Ye Liu
  * @version TBD
  */
 public class UserContextInjector extends BasicHandler {
-	private static final LogWrapper LOG = new LogWrapper(
-			UserContextInjector.class, "[SP-INJECTION]"
-					+ UserContextInjector.class.getName());
+	private static final LogWrapper LOG = new LogWrapper(UserContextInjector.class);
 
 	public static final ProfileHelper PROFILE_HELPER = new ProfileHelper();
 	static final String WSRP_PROFILE_ERROR_FLAG = "WsrpProfileError";
@@ -79,7 +71,7 @@ public class UserContextInjector extends BasicHandler {
 		// We are only interested in getMarkup and performBlockingInteraction.
 		// If this is not the case
 		// exit from this method.
-		if (!isWsrpBaseCall(messageContext)) {
+		if (!Predicates.isWsrpBaseCall(messageContext)) {
 			return;
 		}
 
@@ -93,7 +85,7 @@ public class UserContextInjector extends BasicHandler {
 				SOAPMessage message = messageContext.getMessage();
 				SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
 
-				request = retrieveRequest(envelope);
+				request = Utils.retrieveRequest(messageContext);
 				if (request == null) {
 					LOG.error("Unable to find request! User context will not be injected");
 					return;
@@ -134,20 +126,6 @@ public class UserContextInjector extends BasicHandler {
 	}
 
 	/**
-	 * @param messageContext this web service call message context
-	 * @return <tt>true</tt> if it is supported wsrp version, for now v1 and v2 are supported
-	 */
-	static boolean isWsrpBaseCall(MessageContext messageContext) {
-		String actionURI = messageContext.getSOAPActionURI();
-		return actionURI != null &&
-				actionURI.startsWith("urn:oasis:names:tc:wsrp:") &&
-				(actionURI.endsWith(":getMarkup") ||
-						actionURI.endsWith(":performBlockingInteraction") ||
-						actionURI.endsWith(":handleEvents") ||
-						actionURI.endsWith(":getResource"));
-	}
-
-	/**
 	 * @param request
 	 *            user original request
 	 * @return user context key map whose values are {@link String} objects
@@ -155,8 +133,8 @@ public class UserContextInjector extends BasicHandler {
 	private Map retrieveUserContextKeys(HttpServletRequest request) {
 		Map userContext = new HashMap();
 
-		userContext.put(Consts.KEY_PORTAL_SITE_URL, Utils.getSiteURL(request));
-		userContext.put(Consts.KEY_PORTAL_REQUEST_URL, Utils.getRequestURL(request));
+		userContext.put(Consts.KEY_PORTAL_SITE_URL, com.hp.it.spf.xa.misc.portal.Utils.getSiteURL(request));
+		userContext.put(Consts.KEY_PORTAL_REQUEST_URL, com.hp.it.spf.xa.misc.portal.Utils.getRequestURL(request));
 		userContext.put(Consts.KEY_PORTAL_SITE_NAME, getPortalSiteName(request));
 		userContext.put(Consts.KEY_PORTAL_SESSION_ID, getPortalSessionId(request));
 		userContext.put(Consts.KEY_SESSION_TOKEN, getHppSessionToken(request));
@@ -188,7 +166,7 @@ public class UserContextInjector extends BasicHandler {
 	 * @throws SOAPException
 	 *             If an error occurs while manipulating the header
 	 * 
-	 * @see com.hp.it.spf.wsrp.injector.profile.ProfileHelper for more information of the
+	 * @see com.hp.it.spf.xa.wsrp.ProfileHelper for more information of the
 	 *      string encoding of the profile
 	 */
 	private void injectUserContext(SOAPEnvelope envelope, Map userContextKeys,
@@ -322,90 +300,4 @@ public class UserContextInjector extends BasicHandler {
 		}
 	}
 
-	/**
-	 * Retrieves the request from the {@link RequestMap} based on the id stored
-	 * in <code>user-agent</code> value.
-	 * 
-	 * @param envelope
-	 *            parent envelope for WSRP request
-	 * @return request based on the ID or <code>null</code> if the request could
-	 *         not be found
-	 * @throws Exception
-	 *             If an error occurs when retrieving the request key from
-	 *             envelope
-	 */
-	private HttpServletRequest retrieveRequest(SOAPEnvelope envelope)
-			throws Exception {
-		String userAgentValue = findUserAgentValue(envelope);
-		if (userAgentValue != null) {
-			int pos = userAgentValue
-					.lastIndexOf(RequestBindingFilter.KEY_PREFIX);
-			if (pos != -1) {
-				// this extraction should be done somehow by RequestWrapper
-				// as it's the only class that know how this was encoded
-				String requestKey = userAgentValue.substring(pos
-						+ RequestBindingFilter.KEY_PREFIX.length());
-				return RequestMap.getInstance().get(requestKey);
-			} else {
-				LOG.error("SPF request key not found!");
-			}
-		} else {
-			LOG.error("User-agent value not found!");
-		}
-
-		// we didn't find the request :-(
-		return null;
-	}
-
-	/**
-	 * Finds <code>userAgent</code> value and extracts the request key from it.
-	 * 
-	 * @param envelope
-	 *            WSRP envelope to dig into
-	 * @return request key or <code>null</code> if none could be found
-	 * @throws Exception
-	 *             If an error occurs when accessing the envelope occurs
-	 */
-	private String findUserAgentValue(SOAPEnvelope envelope) throws Exception {
-		SOAPBody body = envelope.getBody();
-		Iterator it = body.getChildElements();
-		if (it.hasNext()) {
-			SOAPElement operation = (SOAPElement) it.next();
-			boolean isGetMarkup = "getMarkup".equals(operation.getElementName()
-					.getLocalName());
-			if (isGetMarkup
-					|| "performBlockingInteraction".equals(operation
-							.getElementName().getLocalName())) {
-				if (operation instanceof RPCElement) {
-					String operationName = isGetMarkup ? "getMarkup"
-							: "performBlockingInteraction";
-					RPCParam rpcParam = ((RPCElement) operation)
-							.getParam(operationName);
-					if (rpcParam != null) {
-						Object value = rpcParam.getObjectValue();
-						if (value != null) {
-							if (isGetMarkup && value instanceof GetMarkup) {
-								return ((GetMarkup) value).getMarkupParams()
-										.getClientData().getUserAgent();
-							} else if (value instanceof PerformBlockingInteraction) {
-								return ((PerformBlockingInteraction) value)
-										.getMarkupParams().getClientData()
-										.getUserAgent();
-							}
-						} else {
-							LOG.error("Parameter value of '" + operationName
-									+ "' is null");
-						}
-					} else {
-						LOG.error("Unable to find '" + operationName
-								+ "' parameter");
-					}
-				} else {
-					LOG.error("Operation is not of type 'RPCElement': "
-							+ operation.getClass().getName());
-				}
-			}
-		}
-		return null;
-	}
 }
