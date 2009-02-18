@@ -92,7 +92,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
                                                                   ssousername);
         if (vapUser != null) {
             userName = ssousername;
-            saveUserProfile2Session(vapUser);
+            saveUserProfile2Session(vapUser, language, country);
             return;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
@@ -105,7 +105,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
                                                              ssousername);
         if (vapUser != null) {
             userName = ssousername;
-            saveUserProfile2Session(vapUser);
+            saveUserProfile2Session(vapUser, language, "");
             return;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
@@ -119,7 +119,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
                                                              ssousername);
         if (vapUser != null) {
             userName = ssousername;
-            saveUserProfile2Session(vapUser);
+            saveUserProfile2Session(vapUser, AuthenticationConsts.DEFAULT_LANGUAGE, "");
             return;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
@@ -138,11 +138,16 @@ public class ANONAuthenticator extends AbstractAuthenticator {
      * @param vapUser vignette user
      */
     @SuppressWarnings("unchecked")
-    protected void saveUserProfile2Session(User vapUser) {
+    protected void saveUserProfile2Session(User vapUser, String language, String country) {
         if (vapUser == null) {
             throw new IllegalArgumentException("Vignette user is not specified.");
         }
-
+        
+        userProfile.put(AuthenticationConsts.KEY_LANGUAGE, language);
+        userProfile.put(AuthenticationConsts.KEY_COUNTRY, country);
+        userProfile.put(AuthenticationConsts.KEY_TIMEZONE,
+                        vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID));
+        
         // Retrieve user group
         userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
                         Collections.list(Collections.enumeration(AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser)))));
