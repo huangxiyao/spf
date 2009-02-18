@@ -134,7 +134,7 @@ public class Consts {
 	/**
 	 * The key to get user groups from user profile map.
 	 */
-	public static final String KEY_USER_GROUPS = "Groups";
+	public static final String KEY_USER_GROUPS = "UserGroups";
 
 	/**
 	 * The portal context map contains some useful portal information which they
