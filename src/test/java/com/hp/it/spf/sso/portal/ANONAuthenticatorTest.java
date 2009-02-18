@@ -95,13 +95,13 @@ public class ANONAuthenticatorTest {
 
         // user is null
         try {
-            authenticator.saveUserProfile2Session(null, null, null);
-            fail("Should raise an IllegalArgumentException.");
+            authenticator.saveUserProfile2Session(null);      
+            assertEquals(authenticator.userProfile.entrySet().size(), 0);
         } catch (IllegalArgumentException ex) {
-            assertTrue(true);
+            fail();
         }
 
-        authenticator.saveUserProfile2Session(user, "en", "");
+        authenticator.saveUserProfile2Session(user);
         assertTrue(authenticator.userProfile.size() > 0);
     }
 

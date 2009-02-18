@@ -114,6 +114,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * <li>If the user is not changed, then check if the initSession tag is set</li>
      * <li>If the initSession tag is not set, then check if the primary site is
      * changed</li>
+     * <li>If user changes the site</li>
      * </ol>
      * if the user doesn't need to be synchronized to VAP, then return the
      * userName of the current user's name. Otherwise, synchronize user to VAP
@@ -140,12 +141,12 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                     LOG.debug("Force initSession tag found.");
                 }
                 AuthenticatorHelper.cleanupSession(request);
-            } else {
-                // TODO 1. need to determine if should cleanup session
-                // TODO 2. if site is spf, that means logout action, only return userName, no other operations?
-                if (AuthenticatorHelper.needUpdatePrimarySite(request)) {
-                    updatePrimarySite();
+            } else if (AuthenticatorHelper.isPrimarySiteChanged(request)) {
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug("Site is changed.");
                 }
+                AuthenticatorHelper.cleanupSession(request);
+            } else {                
                 userName = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
                 return;
             }
@@ -392,33 +393,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         } else {
             return false;
         }
-    }
-
-    /**
-     * The method is used to update VAP user's primary site
-     */
-    protected void updatePrimarySite() {
-        // Update user's info if needed
-        LOG.info("update primary site.");
-        String siteUID = AuthenticatorHelper.getPrimarySiteUID(request);
-        if (siteUID == null) {
-            return;
-        }
-        try {
-            User user = SessionUtils.getCurrentUser(request.getSession());
-            user.setProperty(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID,
-                             siteUID);
-
-            user.save();
-
-        } catch (UniquePropertyValueConflictException e) {
-            LOG.error("Required unique values conflict when updating user"
-                      + e.getMessage());
-        } catch (EntityPersistenceException e) {
-            LOG.error("Entity persistence exception when updating user"
-                      + e.getMessage());
-        }
-    }
+    }    
 
     /**
      * This method is used to check whether the user in the vignette session is

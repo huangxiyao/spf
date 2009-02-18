@@ -92,7 +92,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
                                                                   ssousername);
         if (vapUser != null) {
             userName = ssousername;
-            saveUserProfile2Session(vapUser, language, country.toUpperCase());
+            saveUserProfile2Session(vapUser);
             return;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
@@ -105,7 +105,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
                                                              ssousername);
         if (vapUser != null) {
             userName = ssousername;
-            saveUserProfile2Session(vapUser, language, "");
+            saveUserProfile2Session(vapUser);
             return;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
@@ -119,15 +119,15 @@ public class ANONAuthenticator extends AbstractAuthenticator {
                                                              ssousername);
         if (vapUser != null) {
             userName = ssousername;
-            saveUserProfile2Session(vapUser, AuthenticationConsts.DEFAULT_LANGUAGE, "");
+            saveUserProfile2Session(vapUser);
             return;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("User" + ssousername + "not found.");
         }
 
-        if (LOG.willLogAtLevel(LogConfiguration.INFO)) {
-            LOG.info("No anonymous user according to loacle is found, Vignette Guest User will be used.");
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("No anonymous user according to loacle is found, Vignette Guest User will be used.");
         }
     }
 
@@ -138,21 +138,15 @@ public class ANONAuthenticator extends AbstractAuthenticator {
      * @param vapUser vignette user
      */
     @SuppressWarnings("unchecked")
-    protected void saveUserProfile2Session(User vapUser, String language, String country) {
-        if (vapUser == null) {
-            throw new IllegalArgumentException("Vignette user is not specified.");
+    protected void saveUserProfile2Session(User vapUser) {
+        if (vapUser != null) {
+            userProfile.put(AuthenticationConsts.KEY_LANGUAGE, 
+                            vapUser.getProperty(AuthenticationConsts.PROPERTY_LANGUAGE_ID));
+            userProfile.put(AuthenticationConsts.KEY_COUNTRY, 
+                            vapUser.getProperty(AuthenticationConsts.PROPERTY_COUNTRY_ID));
+            userProfile.put(AuthenticationConsts.KEY_TIMEZONE,
+                            vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID));
+            super.saveUserProfile2Session(vapUser);
         }
-        
-        userProfile.put(AuthenticationConsts.KEY_LANGUAGE, language);
-        userProfile.put(AuthenticationConsts.KEY_COUNTRY, country);
-        userProfile.put(AuthenticationConsts.KEY_TIMEZONE,
-                        vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID));
-        
-        // Retrieve user group
-        userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
-                        Collections.list(Collections.enumeration(AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser)))));
-
-        request.getSession()
-               .setAttribute(AuthenticationConsts.USER_PROFILE_KEY, userProfile);
     }
 }

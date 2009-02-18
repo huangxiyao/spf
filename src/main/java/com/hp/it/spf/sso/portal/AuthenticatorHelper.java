@@ -252,7 +252,7 @@ public class AuthenticatorHelper {
         Set<String> withoutLocal = new HashSet<String>();
         Set<String> userGroupsTitleSet = getUserGroupTitleSet(userGroups);
         for (String title : userGroupsTitleSet) {
-            if (!title.startsWith("LOCAL_")) {
+            if (isGroupNeedSync(title)) {
                 withoutLocal.add(title);
             }
         }      
@@ -271,7 +271,7 @@ public class AuthenticatorHelper {
      *            User from Vignette
      * @return true if need to update user's primary site, otherwise false
      */
-    static boolean needUpdatePrimarySite(HttpServletRequest request) {
+    static boolean isPrimarySiteChanged(HttpServletRequest request) {
         Site currentSite = Utils.getEffectiveSite(request);
         User user = SessionUtils.getCurrentUser(request.getSession());
                                                                   
@@ -315,13 +315,28 @@ public class AuthenticatorHelper {
             return user.getParents(userGroupManager.getUserGroupEntityType(),
                     false);
         } catch (EntityPersistenceException exception) {
-            LOG
-                    .error("Entity Persistence Exception when getting user group set");
+            LOG.error("Entity Persistence Exception when getting user group set");
             LOG.error(exception);
             return new HashSet();
         }
     }
-
+    
+    /**
+     * Check if the group need to be synchronized according to the group title. 
+     * Only group that start with 'LOCAL_' and not start with 'LOCAL_PORTAL_' doesn't need
+     * to be synchronized.
+     * 
+     * @param groupTitle group titile
+     * @return <code>true</code> if group need to be synchronized or given group is 
+     *         <code>null</code>.
+     */
+    private static boolean isGroupNeedSync(String groupTitle) {
+        if (groupTitle != null) {
+           return !(groupTitle.startsWith("LOCAL_") && !groupTitle.startsWith("LOCAL_PORTAL_"));
+        }
+        return true;
+    }
+    
     /**
      * This method is used to update user's group
      * 
@@ -351,7 +366,7 @@ public class AuthenticatorHelper {
             String grouptitle = (String)temp
                     .getProperty(AuthenticationConsts.GROUP_TITLE);
             // don't sync groups starting with LOCAL_
-            if (grouptitle.startsWith("LOCAL_")) {
+            if (!isGroupNeedSync(grouptitle)) {
                 continue;
             }
             if (!ssoGroups.contains(grouptitle)) {
@@ -803,6 +818,6 @@ public class AuthenticatorHelper {
      * @return
      */
     static LogWrapper getLog(Class cls) {
-        return new LogWrapper(cls, "[SP-AUTH]" + cls.getName());
+        return new LogWrapper(cls, cls.getName());
     }
 }
