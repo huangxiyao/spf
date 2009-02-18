@@ -8,7 +8,7 @@ such that it matches the reference from your global help content
 */
 .spf-globalhelp-content-header {
 	font-family: Tahoma, Arial;
-	font-size: 12px;
+	font-size: 16px;
 	font-weight: bold;
 	color: #000000;
 	text-align: left;
@@ -61,6 +61,12 @@ a.spf-globalhelp-link {
 	padding: 2px 0 2px 0;
 }
 
+p.spf-globalhelp-section-separator {
+	background-color: Black;
+	height: 3px;
+	text-indent: 10px;
+}
+
 a.spf-globalhelp-link:visited {
 	color: Black;
 }
@@ -69,7 +75,8 @@ a.spf-globalhelp-link:hover {
 	color: #000000;
 }
 
-#print {
+#spf-globalhelp-print {
+	color: #000000;
 	float: right;
 	margin-right: 2px;
 }

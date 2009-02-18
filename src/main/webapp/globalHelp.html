@@ -37,29 +37,17 @@ filename in the token to match the name you chose): -->
 
 <!--                              -->
 
-<!-- You can also refer to external JavaScript in this file.  Put your 
-JavaScript in a JS file.  Then give the file an appropriate name.  Eg, 
-if you are providing JavaScript just for a particular portal site, name
-the file <site-name>GlobalHelp.js where <site-name> is the site name 
-for the site in Vignette.  Or if you are providing scripts for all sites
-without site-specific scripts, name it globalHelp.js.  Then upload the
-file as a secondary support file into the Global Help Page component in
-Vignette.  And put a token to resolve it below, like this one (be sure to
-set the filename in the token to match the filename you chose): -->
-
-<script src="{CONTENT-URL:globalHelp.js}" type="text/javascript" language="javascript" charset="utf-8"/>
-
 <!-- Here is an example of a print hyperlink, for printing the global
-help content.  This example calls JavaScript defined in the above script. -->
+help content. -->
 
-<div id="print"><font size="-1">
+<div id="spf-globalhelp-print">
 	<script type="text/javascript" language="javascript" charset="utf-8">
     // <![CDATA[
-    document.writeln('<a class="spf-globalhelp-link" href="#" onclick="globalHelpPrint();return false;">Print</a>');
+    document.writeln('<a class="spf-globalhelp-link" href="#" onclick="window.print();return false;">Print</a>');
     // ]]>
 	</script>
 	<noscript>To print this document use Ctrl+p on your keypad.</noscript>
-</font></div>
+</div>
 
 <!-- Here is some sample help content referring to styles in the above CSS. -->
 
@@ -78,32 +66,44 @@ topic 1 here</a>
 	</li>
 	<li><a class="spf-globalhelp-link" href="#topic2">Put link text for
 	topic 2 here</a></li>
-	<li>Etc.</li>
+	<li><a class="spf-globalhelp-link" href="#">Etc.</a></li>
 </ul>
 </strong>
 
 <p class="spf-globalhelp-section-separator"></p>
 
-<h2><a class="spf-globalhelp-subject" name="topic1"></a>Topic 1</h2>
+<h2><a class="spf-globalhelp-subject" name="topic1">Topic 1</a></h2>
 
-<h3><a class="spf-globalhelp-subject" name="topic1.1"></a>Topic 1.1</h3>
-
-<p class="spf-globalhelp-body">Put some help content on this topic here.</p>
-
-<p><a class="spf-globalhelp-link" href="#index">Return to Index</a></p>
-
-<h3><a class="spf-globalhelp-subject" name="topic1.2"></a>Topic 1.2</h3>
+<h3><a class="spf-globalhelp-subject" name="topic1.1">Topic 1.1</a></h3>
 
 <p class="spf-globalhelp-body">Put some help content on this topic here.</p>
 
 <p><a class="spf-globalhelp-link" href="#index">Return to Index</a></p>
 
-<p class="spf-globalhelp-section-separator"></p>
-
-<h2><a class="spf-globalhelp-subject" name="topic2"></a>Topic 2</h2>
+<h3><a class="spf-globalhelp-subject" name="topic1.2">Topic 1.2</a></h3>
 
 <p class="spf-globalhelp-body">Put some help content on this topic here.</p>
 
 <p><a class="spf-globalhelp-link" href="#index">Return to Index</a></p>
 
 <p class="spf-globalhelp-section-separator"></p>
+
+<h2><a class="spf-globalhelp-subject" name="topic2">Topic 2</a></h2>
+
+<p class="spf-globalhelp-body">Put some help content on this topic here.</p>
+
+<p><a class="spf-globalhelp-link" href="#index">Return to Index</a></p>
+
+<!-- You can also refer to external JavaScript in this file.  Put your 
+JavaScript in a JS file.  Then give the file an appropriate name.  Eg, 
+if you are providing JavaScript just for a particular portal site, name
+the file <site-name>GlobalHelp.js where <site-name> is the site name 
+for the site in Vignette.  Or if you are providing scripts for all sites
+without site-specific scripts, name it globalHelp.js.  Then upload the
+file as a secondary support file into the Global Help Page component in
+Vignette.  And put a token to resolve it below, like this one (be sure to
+set the filename in the token to match the filename you chose): -->
+
+<!-- Not used in this demo
+<script src="{CONTENT-URL:globalHelp.js}" type="text/javascript" language="javascript" charset="utf-8"/>
+-->
