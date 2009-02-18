@@ -36,14 +36,14 @@ files in this component. --%>
 	<tr>
 		<td>
 			<p class="spf-autherror-message">
-				<sp-i18n-portal:i18nValue stringID="<%= i18nID %>" key="autherror.notice.text" />
+				<spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="autherror.notice.text" />
 			</p>
 		</td>
 	</tr>
 	<tr>
 		<td>
 			<p class="spf-autherror-code">
-				<sp-i18n-portal:i18nValue stringID="<%= i18nID %>" key="autherror.errorcode.text" />
+				<spf-i18n-portal:i18nValue stringID="<%= i18nID %>" key="autherror.errorcode.text" />
 			</p>
 		</td>
 	</tr>
