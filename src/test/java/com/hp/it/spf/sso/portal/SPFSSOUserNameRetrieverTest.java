@@ -1,8 +1,7 @@
 package com.hp.it.spf.sso.portal;
 
-import static org.junit.Assert.*;
-
-import java.util.Locale;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -59,11 +58,11 @@ public class SPFSSOUserNameRetrieverTest {
         SPFSSOUserNameRetriever retriever = new SPFSSOUserNameRetriever();
         // username with the value 'username' can be retrieved from request
         String username = retriever.getSSOUsername(request);
-        assertEquals("Retrieved user name is not correct.", username, "username");
+        assertEquals("Retrieved username is not correct.", username, "username");
         
         // No username exist in the request
         username = retriever.getSSOUsername(request);
-        assertNull("Retrieved user name should be null", username);
+        assertNull("Retrieved username should be null", username);
     }
 
 }
