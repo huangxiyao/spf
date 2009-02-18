@@ -59,13 +59,13 @@ public class PortalURLFactory {
 	 * The <tt>siteRootUrl</tt> should be the home page URL for the current
 	 * portal site. It is available for portlets using one of the following
 	 * methods from the SPF portlet utilities:
-	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest)}
+	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest)}
 	 * or
-	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest,Boolean,String,int,String)}
+	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest,java.lang.Boolean,java.lang.String,int,java.lang.String)}
 	 * (see). You can also pass the results of the portlet utilities'
-	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(PortletRequest)}
+	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(javax.portlet.PortletRequest)}
 	 * or
-	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(PortletRequest,Boolean,String,int,String)}
+	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(javax.portlet.PortletRequest,java.lang.Boolean,java.lang.String,int,java.lang.String)}
 	 * methods as the <tt>siteRootUrl</tt> (everything in the passed URL
 	 * beyond the site root is ignored). Note that all of those techniques pass
 	 * an absolute URL, so if you need to switch the protocol using
@@ -77,13 +77,13 @@ public class PortalURLFactory {
 	 * (see). That returns a relative URL, though. For an absolute URL, use the
 	 * portal equivalent methods to the ones for portlets above: ie, the portal
 	 * utilities'
-	 * {@link com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.http.HttpServletRequest)},
-	 * {@link com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.http.HttpServletRequest, Boolean, String, int, String)},
+	 * {@link com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.http.HttpServletRequest)} method,
+	 * {@link com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.http.HttpServletRequest, java.lang.Boolean, java.lang.String, int, java.lang.String)} method,
 	 * etc.
 	 * <p>
 	 * For your interest, some secondary page template names for SPF-standard
 	 * secondary pages are available through both the portlet
-	 * {@link com.hp.it.spf.xa.misc.portlet.Consts} and
+	 * {@link com.hp.it.spf.xa.misc.portlet.Consts} and portal 
 	 * {@link com.hp.it.spf.xa.misc.portal.Consts} classes. For example, the
 	 * template for the global help secondary page is available to portlets in
 	 * {@link com.hp.it.spf.xa.misc.portlet.Consts#PAGE_FRIENDLY_URI_GLOBAL_HELP}.

@@ -17,58 +17,120 @@ import java.util.Map;
 public interface PortalURL {
 
 	/**
-	 * Sets a query parameter targeted to the portal in the portal url.
+	 * Sets a portal query parameter of the given <tt>paramName</tt> to the
+	 * given <tt>paramValue</tt>. The parameters are not edit-checked in any
+	 * way (but note that any null parameters or values will be ignored and not
+	 * included in the final URL string from {@link #toString()}. Each time you
+	 * call this method, any previous value(s) set for the same
+	 * <tt>paramName</tt> will be overwritten; so to set multiple values for
+	 * the same <tt>paramName</tt>, use the companion
+	 * {@link #setParameter(String, String[])} method.
+	 * <p>
+	 * <b>Note:</b> This method is for setting portal query parameters.
+	 * Portlets will not see these parameters. To pass parameters to portlets
+	 * instead, use one of the methods which takes portlet friendly ID - for
+	 * example, {@link #setParameter(String, String, String)} or
+	 * {@link #setPublicParameter(String, String, String)}.
 	 * 
-	 * @param paramName -
-	 *            name of the portal query parameter
-	 * @param paramValue -
-	 *            value for the portal query parameter
+	 * @param paramName
+	 *            the parameter name
+	 * @param paramValue
+	 *            the parameter value
 	 */
 	void setParameter(String paramName, String paramValue);
 
 	/**
-	 * Sets a multi-value query parameter targeted to the portal in the portal
-	 * url.
+	 * Sets a portal query parameter of the given <tt>paramName</tt> to the
+	 * given set of <tt>paramValues</tt>. The parameters are not edit-checked
+	 * in any way (but note that any null parameters or values will be ignored
+	 * and not included in the final URL string from {@link #toString()}. Each
+	 * time you call this method, any previous value(s) set for the same
+	 * <tt>paramName</tt> will be overwritten.
+	 * <p>
+	 * <b>Note:</b> This method is for setting portal query parameters.
+	 * Portlets will not see these parameters. To pass parameters to portlets
+	 * instead, use one of the methods which takes portlet friendly ID - for
+	 * example, {@link #setParameter(String, String, String)} or
+	 * {@link #setPublicParameter(String, String, String)}.
 	 * 
-	 * @param paramName -
-	 *            name of the portal query parameter
-	 * @param paramValues -
-	 *            values for the portal query parameter
+	 * @param paramName
+	 *            the parameter name
+	 * @param paramValues
+	 *            an array of the parameter values
 	 */
 	void setParameter(String paramName, String[] paramValues);
 
 	/**
-	 * Sets query parameters targeted to the portal in the portal url.
+	 * Sets portal query parameter(s) from the given map of <tt>params</tt>.
+	 * The map key is the string parameter name, and the map value is the string
+	 * parameter value. Any non-string elements are ignored (and any null
+	 * parameters or values will be ignored too) - these are not included in the
+	 * final URL string from {@link #toString()}. Otherwise, the parameters are
+	 * not edit-checked in any way. Each time you call this method, any previous
+	 * value(s) set for the same parameter names will be overwritten.
+	 * <p>
+	 * <b>Note:</b> This method is for setting portal query parameters.
+	 * Portlets will not see these parameters. To pass parameters to portlets
+	 * instead, use one of the methods which takes portlet friendly ID - for
+	 * example, {@link #setParameter(String, String, String)} or
+	 * {@link #setPublicParameter(String, String, String)}.
 	 * 
-	 * @param params -
-	 *            Each map entry represents one portal query parameter. The keys
-	 *            must be strings and they are parameter names. The values can
-	 *            be either String or String[] and represent parameter values.
+	 * @param params
+	 *            a map of the parameter names to values (either single strings
+	 *            or arrays of strings)
 	 */
 	void setParameters(Map params);
 
 	/**
-	 * Sets a portlet render parameter in the portal url.
+	 * Sets a private render parameter targeted to the portlet with the given
+	 * <tt>portletFriendlyId</tt>, using the given <tt>paramName</tt> and
+	 * <tt>paramValue</tt>. The parameters are not edit-checked in any way
+	 * (but note that any null parameters or values will be ignored and not
+	 * included in the final URL string from {@link #toString()}. Each time you
+	 * call this method, any previous value(s) set for the same
+	 * <tt>paramName</tt> and same <tt>portletFriendlyId</tt> will be
+	 * overwritten; so to set multiple values for the same <tt>paramName</tt>
+	 * and same <tt>portletFriendlyId</tt>, use the companion
+	 * {@link #setParameter(String, String, String[])} method.
+	 * <p>
+	 * <b>Note:</b> This method is for setting portlet <i>private</i> render
+	 * parameters. To pass <i>public</i> render parameters to portlets instead,
+	 * use a method like {@link #setPublicParameter(String, String, String)}.
+	 * To pass <i>portal</i> query parameters, use a method like
+	 * {@link #setParameter(String, String)}.
 	 * 
-	 * @param portletFriendlyId -
-	 *            friendly ID of the portlet in the portal
-	 * @param paramName -
-	 *            name of the portlet render parameter
-	 * @param paramValue -
-	 *            value for the portlet parameter
+	 * @param portletFriendlyId
+	 *            the portlet friendly ID as configured in the portal console
+	 * @param paramName
+	 *            the parameter name
+	 * @param paramValue
+	 *            the parameter value
 	 */
 	void setParameter(String portletFriendlyId, String paramName,
 			String paramValue);
 
 	/**
-	 * Sets a portlet multi-value render parameter in the portal url.
+	 * Sets a private render parameter targeted to the portlet with the given
+	 * <tt>portletFriendlyId</tt>, using the given <tt>paramName</tt> and
+	 * set of <tt>paramValues</tt>. The parameters are not edit-checked in
+	 * any way (but note that any null parameters or values will be ignored and
+	 * not included in the final URL string from {@link #toString()}. Each time
+	 * you call this method, any previous value(s) set for the same
+	 * <tt>paramName</tt> and same <tt>portletFriendlyId</tt> will be
+	 * overwritten.
+	 * <p>
+	 * <b>Note:</b> This method is for setting portlet <i>private</i> render
+	 * parameters. To pass <i>public</i> render parameters to portlets instead,
+	 * use a method like {@link #setPublicParameter(String, String, String)}.
+	 * To pass <i>portal</i> query parameters, use a method like
+	 * {@link #setParameter(String, String)}.
 	 * 
-	 * @param portletFriendlyId -
-	 *            friendly ID of the portlet in the portal
-	 * @param paramName -
-	 *            name of the portlet render parameter
-	 * @param paramValues -
-	 *            values for the portlet parameter
+	 * @param portletFriendlyId
+	 *            the portlet friendly ID as configured in the portal console
+	 * @param paramName
+	 *            the parameter name
+	 * @param paramValues
+	 *            an array of the parameter values
 	 */
 	void setParameter(String portletFriendlyId, String paramName,
 			String[] paramValues);
@@ -79,100 +141,151 @@ public interface PortalURL {
 	// void setParameter(String portletFriendlyId, Map params);
 
 	/**
-	 * Sets portlet render parameters in the portal url.
+	 * Sets private render parameter(s) targeted to the portlet with the given
+	 * <tt>portletFriendlyId</tt>, using the given map of <tt>params</tt>.
+	 * The map key is the string parameter name, and the map value is the string
+	 * parameter value. Any non-string elements are ignored (and any null
+	 * parameters or values will be ignored too) - these are not included in the
+	 * final URL string from {@link #toString()}. Each time you call this
+	 * method, any previous value(s) set for the same <tt>paramName</tt> and
+	 * same <tt>portletFriendlyId</tt> will be overwritten.
+	 * <p>
+	 * <b>Note:</b> This method is for setting portlet <i>private</i> render
+	 * parameters. To pass <i>public</i> render parameters to portlets instead,
+	 * use a method like {@link #setPublicParameter(String, String, String)}.
+	 * To pass <i>portal</i> query parameters, use a method like
+	 * {@link #setParameter(String, String)}.
 	 * 
-	 * @param portletFriendlyId -
-	 *            friendly ID of the portlet in the portal
-	 * @param params -
-	 *            portlet render parameters; each map entry represnts one
-	 *            parameter. The keys must be strings and they are parameter
-	 *            names. The values can be either String or String[] and
-	 *            represent parameter values.
+	 * @param portletFriendlyId
+	 *            the portlet friendly ID as configured in the portal console
+	 * @param params
+	 *            a map of parameter names (strings) to parameter values
+	 *            (strings or arrays of strings)
 	 */
 	void setParameters(String portletFriendlyId, Map params);
 
 	/**
-	 * Sets a portlet public render parameter in the portal url.
+	 * Sets a public render parameter targeted to the portlet with the given
+	 * <tt>portletFriendlyId</tt>, using the given <tt>paramName</tt> and
+	 * <tt>paramValue</tt>. The parameters are not edit-checked in any way
+	 * (but note that any null parameters or values will be ignored and not
+	 * included in the final URL string from {@link #toString()}. Each time you
+	 * call this method, any previous value(s) set for the same
+	 * <tt>paramName</tt> and same <tt>portletFriendlyId</tt> will be
+	 * overwritten; so to set multiple values for the same <tt>paramName</tt>
+	 * and same <tt>portletFriendlyId</tt>, use the companion
+	 * {@link #setParameter(String, String, String[])} method.
+	 * <p>
+	 * <b>Note:</b> This method is for setting portlet <i>public</i> render
+	 * parameters. To pass <i>private</i> render parameters to portlets
+	 * instead, use a method like {@link #setParameter(String, String, String)}.
+	 * To pass <i>portal</i> query parameters, use a method like
+	 * {@link #setParameter(String, String)}.
 	 * 
-	 * @param portletFriendlyId -
-	 *            friendly ID of the portlet in the portal
-	 * @param paramName -
-	 *            name of the portlet render parameter
-	 * @param paramValue -
-	 *            value for the portlet parameter
-	 * 
+	 * @param portletFriendlyId
+	 *            the portlet friendly ID as configured in the portal console
+	 * @param paramName
+	 *            the parameter name
+	 * @param paramValue
+	 *            the parameter value
 	 * @since SPF 1.0
 	 */
 	void setPublicParameter(String portletFriendlyId, String paramName,
 			String paramValue);
 
 	/**
-	 * Sets a portlet public multi-value render parameter in the portal url.
+	 * Sets a public render parameter targeted to the portlet with the given
+	 * <tt>portletFriendlyId</tt>, using the given <tt>paramName</tt> and
+	 * set of <tt>paramValues</tt>. The parameters are not edit-checked in
+	 * any way (but note that any null parameters or values will be ignored and
+	 * not included in the final URL string from {@link #toString()}. Each time
+	 * you call this method, any previous value(s) set for the same
+	 * <tt>paramName</tt> and same <tt>portletFriendlyId</tt> will be
+	 * overwritten.
+	 * <p>
+	 * <b>Note:</b> This method is for setting portlet <i>public</i> render
+	 * parameters. To pass <i>private</i> render parameters to portlets
+	 * instead, use a method like {@link #setParameter(String, String, String)}.
+	 * To pass <i>portal</i> query parameters, use a method like
+	 * {@link #setParameter(String, String)}.
 	 * 
-	 * @param portletFriendlyId -
-	 *            friendly ID of the portlet in the portal
-	 * @param paramName -
-	 *            name of the portlet render parameter
-	 * @param paramValues -
-	 *            values for the portlet parameter
-	 * 
+	 * @param portletFriendlyId
+	 *            the portlet friendly ID as configured in the portal console
+	 * @param paramName
+	 *            the parameter name
+	 * @param paramValues
+	 *            an array of the parameter values
 	 * @since SPF 1.0
 	 */
 	void setPublicParameter(String portletFriendlyId, String paramName,
 			String[] paramValues);
 
 	/**
-	 * Sets portlet public render parameters in the portal url.
+	 * Sets public render parameter(s) targeted to the portlet with the given
+	 * <tt>portletFriendlyId</tt>, using the given map of <tt>params</tt>.
+	 * The map key is the string parameter name, and the map value is the string
+	 * parameter value. Any non-string elements are ignored (and any null
+	 * parameters or values will be ignored too) - these are not included in the
+	 * final URL string from {@link #toString()}. Each time you call this
+	 * method, any previous value(s) set for the same <tt>paramName</tt> and
+	 * same <tt>portletFriendlyId</tt> will be overwritten.
+	 * <p>
+	 * <b>Note:</b> This method is for setting portlet <i>public</i> render
+	 * parameters. To pass <i>private</i> render parameters to portlets
+	 * instead, use a method like {@link #setParameter(String, String, String)}.
+	 * To pass <i>portal</i> query parameters, use a method like
+	 * {@link #setParameter(String, String)}.
 	 * 
-	 * @param portletFriendlyId -
-	 *            friendly ID of the portlet in the portal
-	 * @param params -
-	 *            portlet render parameters; Each map entry represnts one
-	 *            parameter. The keys must be strings and they are parameter
-	 *            names. The values can be either String or String[] and
-	 *            represent parameter values.
-	 * 
+	 * @param portletFriendlyId
+	 *            the portlet friendly ID as configured in the portal console
+	 * @param params
+	 *            a map of parameter names (strings) to parameter values
+	 *            (strings or arrays of strings)
 	 * @since SPF 1.0
 	 */
 	void setPublicParameters(String portletFriendlyId, Map params);
 
 	/**
-	 * Sets a window state in the portal url.
+	 * Sets a <tt>windowState</tt> targeted at the portlet with the given
+	 * <tt>portletFriendlyId</tt>. If the given <tt>windowState</tt> is
+	 * null, then {@link javax.portlet.WindowState#NORMAL} is presumed.
 	 * 
-	 * @param portletFriendlyId -
-	 *            friendly ID of the portlet in the portal
-	 * @param windowState -
-	 *            requested window state
-	 * 
+	 * @param portletFriendlyId
+	 *            the portlet friendly ID as configured in the portal console
+	 * @param windowState
+	 *            the portlet window state
 	 * @since SPF 1.0
 	 */
 	void setWindowState(String portletFriendlyId, WindowState windowState);
 
 	/**
-	 * Sets a portlet mode in the portal url.
+	 * Sets a <tt>portletMode</tt> targeted at the portlet with the given
+	 * <tt>portletFriendlyId</tt>. If the given <tt>portletMode</tt> is
+	 * null, then {@link javax.portlet.PortletMode#VIEW} is presumed.
 	 * 
-	 * @param portletFriendlyId -
-	 *            friendly ID of the portlet in the portal
-	 * @param portletMode -
-	 *            requested portlet mode
+	 * @param portletFriendlyId
+	 *            the portlet friendly ID as configured in the portal console
+	 * @param portletMode
+	 *            the portlet mode
 	 */
 	void setPortletMode(String portletFriendlyId, PortletMode portletMode);
 
 	/**
-	 * Sets this URL as action URL for the portlet with the specified friendly
-	 * ID
+	 * Makes this <code>PortalURL</code> an action URL targeted at the portlet
+	 * with the given <tt>portletFriendlyId</tt>. You can only do this once
+	 * with any one <code>PortalURL</code> object, since setting an action URL
+	 * irreversibly changes the state of the object.
 	 * 
-	 * @param portletFriendlyId -
-	 *            friendly ID of the portlet in theportal
+	 * @param portletFriendlyId
+	 *            the portlet friendly ID as configured in the portal console
 	 * @throws IllegalStateException
-	 *             If this URL has already been set as an action URL
-	 * 
+	 *             if action URL has already been set
 	 * @since SPF 1.0
 	 */
 	void setAsActionURL(String portletFriendlyId) throws IllegalStateException;
 
 	/**
-	 * Returns the url in String form.
+	 * Returns the <code>PortalURL</code> in String form.
 	 * 
 	 * @return the url in String form
 	 * @deprecated
@@ -180,7 +293,7 @@ public interface PortalURL {
 	String urlToString();
 
 	/**
-	 * Returns the url in String form.
+	 * Returns the <code>PortalURL</code> in String form.
 	 * 
 	 * @return the url in String form
 	 */
