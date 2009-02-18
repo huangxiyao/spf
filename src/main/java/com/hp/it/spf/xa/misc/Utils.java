@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 
 import com.sun.mail.util.ASCIIUtility;
 import com.sun.mail.util.BASE64DecoderStream;
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
 
 /**
  * A base class for miscellaneous utility methods for both portal and portlet
@@ -304,17 +305,21 @@ public class Utils {
 						// if not given port, and URL not already using HTTPS,
 						// default port to 443 (this removes port from URL)
 						if ((port <= 0)
-								&& !currentScheme.equalsIgnoreCase("https"))
-							// TODO: get default https port from property file.
-							port = 443;
+								&& !currentScheme.equalsIgnoreCase("https")) {
+							port = PortalURLFactory.getNonstandardHttpsPort();
+							if (port <= 0)
+								port = 443;
+						}
 					} else {
 						scheme = "http";
 						// if not given port, and URL not already using HTTP,
 						// default to 80 (this removes port from URL)
 						if ((port <= 0)
-								&& !currentScheme.equalsIgnoreCase("http"))
-							// TODO: get default http port from property file.
-							port = 80;
+								&& !currentScheme.equalsIgnoreCase("http")) {
+							port = PortalURLFactory.getNonstandardHttpPort();
+							if (port <= 0)
+								port = 80;
+						}
 					}
 					siteURL = scheme + siteURL.substring(i);
 				}
