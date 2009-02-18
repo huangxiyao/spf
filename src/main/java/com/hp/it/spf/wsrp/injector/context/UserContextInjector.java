@@ -37,7 +37,7 @@ import com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter;
 import com.hp.it.spf.xa.misc.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.hp.it.spf.xa.wsrp.ProfileHelper;
-import com.hp.it.spf.xa.wsrp.RequestMap;
+import com.hp.it.spf.xa.wsrp.portal.RequestMap;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
