@@ -6,7 +6,7 @@
 
 <%@ page import = "com.hp.it.spf.xa.i18n.portal.I18nUtility"%>
 <%@ page import = "com.hp.it.spf.sso.portal.AuthenticationUtility"%>
-<%@ page import = "com.hp.serviceportal.framework.common.utils.CountryRegionMapping"%>
+<%@ page import = "com.hp.it.spf.xa.misc.CountryRegionMapping"%>
 
 <%@ page import = "com.epicentric.user.User"%>
 <%@ page import = "com.epicentric.site.Site"%>
@@ -75,5 +75,5 @@ function s_hp_sendExitLinkEvent(addlAccount,linkName){
 }
 </script>
 
-<script language="JavaScript" src="https://secure.hp-ww.com/cma/segment/ww/ces/metrics_ServicePortal.js"></script>
+<jsp:include page="spf_metrics.js" />
 
