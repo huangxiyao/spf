@@ -1160,13 +1160,13 @@ in <code>portalurl.properties</code>, this will be included).</p>
 
 <p>The SPF portlet utilities include alternative methods for
 generating portal URLs, such as {@link
-com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest)}
+com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest)}
 and {@link
-com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest,Boolean,String,int,String)}.
+com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest,java.lang.Boolean,java.lang.String,int,java.lang.String)}.
 So, too, do the SPF portal utilities (eg {@link
-com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(HttpServletRequest)}
+com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.HttpServletRequest)}
 and {@link
-com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(HttpServletRequest,Boolean,String,int,String)}).
+com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(java.servlet.HttpServletRequest,java.lang.Boolean,java.lang.String,int,java.lang.String)}).
 With these methods, you can build an absolute URL for this or another
 portal site, and you can specify the path for a particular page, and
 optionally switch the scheme/protocol, too (any non-standard port
@@ -1414,10 +1414,10 @@ the <code>PortalURL</code> interface:</p>
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String)</dt>
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String[])</dt>
-	<dt>{@link com.hp.it.spf.xa.portalurl.PortalURL#setParameters(Map)</dt>
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String[])}</dt>
+	<dt>{@link com.hp.it.spf.xa.portalurl.PortalURL#setParameters(Map)}</dt>
 	<dd>
 	<p>These methods let you set <i>portal query parameters</i>. You
 	can provide a {@link java.util.Map} of your parameters, or set them
@@ -1433,11 +1433,11 @@ the <code>PortalURL</code> interface:</p>
 	previous parameter(s) of the same name(s) are cleared.</p>
 	</dd>
 	<dt>{@link
-	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String)</dt>
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String[])</dt>
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String[])}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.portalurl.PortalURL#setParameters(String,Map)</dt>
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameters(String,Map)}</dt>
 	<dd>
 	<p>These methods let you set <i>portlet parameters</i>. The first
 	string is the portlet ID (ie the Vignette "friendly ID") of the portlet
@@ -1455,11 +1455,11 @@ the <code>PortalURL</code> interface:</p>
 	methods, any previous parameter(s) of the same name(s) are cleared.</p>
 	</dd>
 	<dt>{@link
-	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameter(String,String,String)</dt>
+	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameter(String,String,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameter(String,String,String[])</dt>
+	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameter(String,String,String[])}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameters(String,Map)</dt>
+	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameters(String,Map)}</dt>
 	<dd>
 	<p>These methods let you set <i>portlet public render
 	parameters</i>. The first string is the portlet ID (ie the Vignette
@@ -1477,14 +1477,14 @@ the <code>PortalURL</code> interface:</p>
 	methods, any previous parameter(s) of the same name(s) are cleared.</p>
 	</dd>
 	<dt>{@link
-	com.hp.it.spf.xa.portalurl.PortalURL#setPortletMode(String,javax.portlet.PortletMode)}</dt>
+	com.hp.it.spf.xa.portalurl.PortalURL#setPortletMode(String,PortletMode)}</dt>
 	<dd>
 	<p>You can specify a portlet mode with this method. The string is
 	the portlet ID (ie the Vignette "friendly ID") of the portlet in
 	question.</p>
 	</dd>
 	<dt>{@link
-	com.hp.it.spf.xa.portalurl.PortalURL#setWindowState(String,javax.portlet.WindowState)}</dt>
+	com.hp.it.spf.xa.portalurl.PortalURL#setWindowState(String,WindowState)}</dt>
 	<dd>
 	<p>You can specify a window state with this method. The string is
 	the portlet ID (ie the Vignette "friendly ID") of the portlet in
