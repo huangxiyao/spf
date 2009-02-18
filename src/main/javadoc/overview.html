@@ -5580,6 +5580,15 @@ containing your portlet.</p>
 		specified in the returned URL. By default (eg if you provide a
 		non-positive number), the port will be the same as used in the current
 		request.</li>
+		<blockquote>
+		<p><b>Note:</b> You can configure a non-standard HTTP or HTTPS
+		port in the <code>portalurl.properties</code> file. If you switch the
+		security scheme using this method, and do not provide a positive port
+		number directly, your non-standard port number from the file will be
+		used in the returned URL string. For information about installing and
+		configuring <code>portalurl.properties</code>, please see the SPF
+		common utilities developer's guide.</p>
+		</blockquote>
 	</ul>
 	<p>For example, this gets the URL for the current request (where <code>request</code>
 	is the {@link javax.portlet.PortletRequest}):</p>
@@ -5665,6 +5674,15 @@ String url = portalURL.toString();
 		specified in the returned URL. By default (eg if you provide a
 		non-positive number), the port will be the same as used in the current
 		request.</p>
+		<blockquote>
+		<p><b>Note:</b> You can configure a non-standard HTTP or HTTPS
+		port in the <code>portalurl.properties</code> file. If you switch the
+		security scheme using this method, and do not provide a positive port
+		number directly, your non-standard port number from the file will be
+		used in the returned URL string. For information about installing and
+		configuring <code>portalurl.properties</code>, please see the SPF
+		common utilities developer's guide.</p>
+		</blockquote>
 		</li>
 		<li>
 		<p>The final string argument is used to provide a <i>site-relative
