@@ -13,8 +13,7 @@ files in this component. --%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="java.text.MessageFormat"%>
 
-<%@ taglib uri="http://www.hp.com/spf/i18n/portal"
-	prefix="spf-i18n-portal"%>
+<%@ taglib uri="/spf-i18n-portal.tld" prefix="spf-i18n-portal"%>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@ taglib uri="vgn-tags" prefix="vgn-portal"%>
 
@@ -41,7 +40,7 @@ files in this component. --%>
 		// Use default system error message.
 		// Get display message from resource bundle.
 
-		errorMessage = I18nUtility.getI18nValue(i18nID, 
+		errorMessage = I18nUtility.getValue(i18nID, 
 			"default_error_message",
 			null, portalContext);
 	}
@@ -61,7 +60,7 @@ files in this component. --%>
 		// Use default system error message.
 		// Get display message from resource bundle.
 
-		errorTitle = I18nUtility.getI18nValue(i18nID, 
+		errorTitle = I18nUtility.getValue(i18nID, 
 			"default_error_title",
 			null, portalContext);
 	}
@@ -87,7 +86,7 @@ files in this component. --%>
 
 	String errorCodeMessage = "";
     if (errorCode != null && errorCode.length() != 0) {
-		errorCodeMessage = I18nUtility.getI18nValue(i18nID,
+		errorCodeMessage = I18nUtility.getValue(i18nID,
 			"error_code_message_format",
 			null, portalContext);
 		errorCodeMessage =
