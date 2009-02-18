@@ -92,7 +92,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
                                                                   ssousername);
         if (vapUser != null) {
             userName = ssousername;
-            saveUserProfile2Session(vapUser, language, country);
+            saveUserProfile2Session(vapUser, language, country.toUpperCase());
             return;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
