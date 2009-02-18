@@ -115,8 +115,7 @@ table.props td {
 </style>
 
 <a name="top">
-<h1>Shared Portal Framework - Common Utilities - Developer's Guide<br>
-<font color="red">Work in Progress</font></h1>
+<h1>Shared Portal Framework - Common Utilities - Developer's Guide</h1>
 </a>
 
 <a name="toc">
@@ -130,10 +129,8 @@ table.props td {
 		<ul>
 			<li>1.1.1. <a href="#overview.installation.jar">Installation
 			of the SPF common utilities JAR</a></li>
-			<li>1.1.2. <a href="#overview.installation.config.1">Installation
-			of <code><font color="red">external config file 1</font></code></a></li>
-			<li>1.1.3. <a href="#overview.installation.config.2">Installation
-			of <code><font color="red">external config file 2</font></code></a></li>
+			<li>1.1.2. <a href="#overview.installation.config.portalurl">Installation
+			of <code>portalurl.properties</code> (optional)</a></li>
 		</ul>
 		</li>
 		<li>1.2. <a href="#overview.dependencies">Dependencies</a></li>
@@ -196,22 +193,18 @@ table.props td {
 			portlets</a></li>
 		</ul>
 		</li>
-		<li>3.2. <a href="#url.portal">Producing portal URLs</a>
+		<li>3.2. <a href="#url.portal">Producing portal and portlet
+		URLs</a>
 		<ul>
-			<li>3.2.1. <a href="#url.portal.portalUrl">Using <code>PortalURL</code>
-			and the <code>PortalURLFactory</code></a></li>
-			<li>3.2.2. <a href="#url.portal.getPortalSiteUrl">Using <code>Utils.getPortalSiteURL</code></a></li>
+			<li>3.2.1. <a href="#url.portal.portalUrlFactory">Using the
+			<code>PortalURLFactory</code></a></li>
+			<li>3.2.2. <a href="#url.portal.portalUrl">Using the <code>PortalURL</code></a></li>
 			<li>3.2.3. <a href="#url.portal.friendlyUri">Common friendly
 			URIs</a></li>
 		</ul>
 		</li>
-		<li>3.3. <a href="#url.portlet">Producing URLs targeting
-		portlets</a>
-		<ul>
-			<li>3.3.1. <a href="#url.portlet.portalUrl">Using <code>PortalURL</code>
-			and the <code>PortalURLFactory</code></a></li>
-		</ul>
-		</li>
+		<li>3.3. <a href="#url.other.config.portalurl">Configuring <code>portalurl.properties</code>
+		(optional)</a></li>
 	</ul>
 	</li>
 	<li>4. <a href="#properties">Configuration File Management</a>
@@ -240,6 +233,7 @@ table.props td {
 		</li>
 	</ul>
 	</li>
+	<!-- 
 	<li>5. <a href="#env">Environment</a>
 	<ul>
 		<li>5.1. <a href="#env.kinds">About environment data</a></li>
@@ -247,7 +241,8 @@ table.props td {
 		environment data (<code>Environment</code>)</a></li>
 	</ul>
 	</li>
-	<li>6. <a href="#history">Document History</a></li>
+-->
+	<li>5. <a href="#history">Document History</a></li>
 </ul>
 
 <hr>
@@ -325,19 +320,63 @@ version from the repository.</p>
 	the SPF common utilities.)</li>
 </ul>
 
-<a name="overview.installation.config.1">
-<h4>1.1.2 Installation of <code><font color="red">external
-config file 1</font></code></h4>
+<a name="overview.installation.config.portalurl">
+<h4>1.1.2 Installation of <code>portalurl.properties</code>
+(optional)</h4>
 </a>
 
-<font color="red"><b>TBD</b></font>
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>portalurl.properties</code>
+if you will be <a href="#url">making portal or portlet URLs</a> <b>and</b>
+you are using <i>local</i> Java portlets instead of WSRP-remoted ones, <i>or</i>
+your portal is using non-standard HTTP or HTTPS ports (eg in a sandbox).</p>
+</blockquote>
 
-<a name="overview.installation.config.2">
-<h4>1.1.3 Installation of <code><font color="red">external
-config file 2</font></code></h4>
-</a>
+<p>To install this file:</p>
 
-<font color="red"><b>TBD</b></font>
+<ul>
+	<li>
+	<p>Download the template for <code>portalurl.properties</code> from
+	<b><font color="blue">TBD</font></b>.</p>
+	</li>
+	<li>
+	<p>Customize the properties in the file as needed - see
+	instructions for <a href="#url.other.config.portalurl">configuring
+	the <code>portalurl.properties</code></a>.</p>
+	</li>
+	<li>
+	<p>Include the customized file, named <code>portalurl.properties</code>,
+	with your application (ie for portlet developers, we are talking about
+	the portlet application; for portal component developers, we are
+	talking about the Vignette portal application). You can put the file
+	anywhere that the system classloader searches: inside your application
+	(eg in <code>/WEB-INF/classes</code>) or in any folder outside of the
+	WAR which is named in the classpath of the JVM. If you need to make the
+	configuration easily performable by an administrator, we recommend the
+	latter approach; otherwise the former is easier because you can then
+	just deliver the file inside the WAR.</p>
+
+	<p>If you are interested in externalizing the <code>portalurl.properties</code>,
+	check how your application server is configured. If you are using an
+	application server hosting environment, like DASH or SASU, they
+	probably will have provided you a "global resources" folder on the
+	server filesystem and in the JVM classpath. You would put the <code>portalurl.properties</code>
+	file there, if you wanted it to be external to your WAR (eg so the
+	administrator can easily customize it).</p>
+
+	<blockquote>
+	<p><b>Note:</b> Depending on the search order performed by your
+	system classloader, you may be able to do both: include a <code>portalurl.properties</code>
+	inside your application, and also let the administrator optionally
+	override it when needed, by putting a <code>portalurl.properties</code>
+	outside of the WAR. For this to work, your classloader must search the
+	external folders in the classpath before searching inside the WAR. If
+	you are interested in this "mixed" deployment, be sure to test it out
+	first, as actual behavior may vary by environment (application server,
+	etc).</p>
+	</blockquote>
+	</li>
+</ul>
 
 <hr>
 
@@ -1078,7 +1117,23 @@ Portal Utilities Developer's Guide</a>.</p>
 <h2>3. Portal and Portlet URLs</h2>
 </a>
 
-<font color="red"><b>TBD</b></font>
+<p>Whether writing Java portlets or Vignette portal components that
+will run in the Shared Portal Framework environment, developers often
+need to create URL's pointing at pages within the portal site and even
+targeting portlets within that page: passing parameters, specifying
+portlet mode, etc. The SPF common utilities give both portlet and portal
+developers the tools to do this, with the {@link
+com.hp.it.spf.xa.portalurl.PortalURL} interface and the {@link
+com.hp.it.spf.xa.portalurl.PortalURLFactory}.</p>
+
+<blockquote>
+<p><b>Note:</b> The SPF portal utilities' {@link
+com.hp.it.spf.xa.misc.portal.Utils} class, and the SPF portlet
+utilities' {@link com.hp.it.spf.xa.misc.portlet.Utils} class, both
+provide alternative methods (named <code>getPortalSiteURL</code>) for
+generating portal URLs, but you cannot target portlets with them. So the
+<code>PortalURL</code> classes are the recommended method.</p>
+</blockquote>
 
 <hr>
 
@@ -1086,60 +1141,480 @@ Portal Utilities Developer's Guide</a>.</p>
 <h3>3.1. About portal and portlet URLs</h3>
 </a>
 
-<font color="red"><b>TBD</b></font>
-
 <a name="url.kinds.portal">
 <h4>3.1.1. URLs for portal pages</h4>
 </a>
 
-<font color="red"><b>TBD</b></font>
+<p>For purposes of this discussion, a <i>portal URL</i> is a URL
+which points to a portal page. The page could be within the current
+portal site, or in another site hosted by the same SPF portal server.</p>
+
+<p>The SPF common utilities' <code>PortalURLFactory</code> and <code>PortalURL</code>
+let you generate relative or absolute portal URLs, for the current or
+another portal site, pointing to any particular page on that site by its
+path (eg, in Vignette, the friendly URI for a navigation item, the
+template friendly name for a secondary page, or etc). You can set portal
+query parameters into the portal URL, and (for an absolute URL) you can
+set the scheme/protocol too (if you have a non-standard port configured
+in <code>portalurl.properties</code>, this will be included).</p>
+
+<p>The SPF portlet utilities include alternative methods for
+generating portal URLs, such as {@link
+com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest)}
+and {@link
+com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest,Boolean,String,int,String)}.
+So, too, do the SPF portal utilities (eg {@link
+com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(HttpServletRequest)}
+and {@link
+com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(HttpServletRequest,Boolean,String,int,String)}).
+With these methods, you can build an absolute URL for this or another
+portal site, and you can specify the path for a particular page, and
+optionally switch the scheme/protocol, too (any non-standard port
+configured in <code>portalurl.properties</code> will automatically be
+included). You can't set portal query parameters explicitly, but you can
+include them on the end of your path (eg Vignette friendly URI) which
+you pass to the method. You can also set an arbitrary port or host,
+something the <code>PortalURL</code> classes do not support. However you
+cannot target portlets with them. If you are interested in using those
+methods instead, to generate your portal URLs, please see the respective
+documentation.</p>
 
 <a name="url.kinds.portlet">
-<h4>3.1.2. URLs targeting portlets</h4>
+<h4>3.1.1. URLs targeting portlets</h4>
 </a>
 
-<font color="red"><b>TBD</b></font>
+<p>For purposes of this discussion, a <i>portlet URL</i> is a URL
+which points to a portal page and targets one or more portlets on that
+page. The page could be within the current portal site, or in another
+site hosted by the same SPF portal server, and it could target action
+processing within one of those portlets besides just rendering.</p>
+
+<p>The SPF common utilities' <code>PortalURLFactory</code> and <code>PortalURL</code>
+let you generate portlet URLs as well as portal URLs. You need to know
+the portlet ID (ie the Vignette friendly ID) for the portlet(s) you want
+to target. You can set the portlet mode and window state, and target one
+portlet for action processing. You can also set portlet parameters
+(including public render parameters) for any or all portlet(s) on the
+page.</p>
+
+<p>In contrast, the various portal and portlet <code>Utils</code>
+methods do not support portlet URLs.</p>
 
 <hr>
 
 <a name="url.portal">
-<h3>3.2. Producing portal URLs</h3>
+<h3>3.2. Producing portal and portlet URLs</h3>
 </a>
 
-<font color="red"><b>TBD</b></font>
+<p>First, you use the {@link
+com.hp.it.spf.xa.portalurl.PortalURLFactory} to create a {@link
+com.hp.it.spf.xa.portalurl.PortalURL} instance for your desired base
+URL. Then you use the methods in that interface to set portal query
+parameters and/or target portlets (set render parameters, portlet modes,
+etc).</p>
+
+<blockquote>
+<p><b>Note:</b> As discussed above, the SPF portal and portlet
+utilities' <code>Utils</code> classes also provide methods for
+generating portal URLs (not portlet URLs). They are not discussed
+further in this guide. Please see the SPF portlet or portal utilities
+developer guides for documentation about them.</p>
+</blockquote>
+
+<a name="url.portal.portalUrlFactory">
+<h4>3.2.1. Using the <code>PortalURLFactory</code></h4>
+</a>
+
+<p>The {@link com.hp.it.spf.xa.portalurl.PortalURLFactory} provides
+the static <code>PortalURLFactory.createPageURL</code> methods for
+getting the desired {@link com.hp.it.spf.xa.portalurl.PortalURL}
+instance:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURLFactory#createPageURL(String,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURLFactory#createPageURL(String,String,boolean)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURLFactory#createPageURL(String,String,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURLFactory#createPageURL(String,String,String,boolean)}</dt>
+</dl>
+
+<p>With the <code>createPageURL</code> methods, you make the base <code>PortalURL</code>
+instance, minus any parameters and portlets. The <code>PortalURLFactory</code>
+will generate the <code>PortalURL</code> accordingly, assuming either a
+<i>local</i> or <i>remote</i> portlet. Whether the <code>PortalURLFactory</code>
+returns a <code>PortalURL</code> for local or remote, depends on the <code>portalurl.remote</code>
+property of <code>portalurl.properties</code>. See <a
+	href="#url.other.config.portalurl">configuring <code>portalurl.properties</code></a>,
+below.</p>
+
+<p>The arguments are:</p>
+
+<ul>
+	<li>
+	<p>The first string argument is the <i>site root URL</i> (ie, site
+	home page URL). This can be a relative or absolute URL pointing to any
+	portal site on the current SPF portal server. Typically you would use
+	your current portal site. You can pass the site home page URL exactly,
+	or you can pass any page URL for any page in that site (the additional
+	page-specific path and parameters you provide, if any, will be ignored
+	- the factory uses this only to obtain the site root URL for your <code>PortalURL</code>).
+	This argument is required.</p>
+
+	<p>How do you get the site root URL to pass?</p>
+	<ul>
+		<li>
+		<p>For Java portlet developers, there are API's in the SPF portlet
+		utilities {@link com.hp.it.spf.xa.misc.portlet.Utils} class which let
+		you get the current portal request URL or current portal site URL. For
+		example, {@link
+		com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(javax.portlet.PortletRequest)}
+		and {@link
+		com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest)}.
+		Any of those methods would work.</p>
+		</li>
+		<li>
+		<p>Vignette portal component developers can use any of a few
+		methods in the Vignette published API which return site root URLs,
+		such as {@link
+		com.vignette.portal.website.enduser.PortalContext#getSiteURI(String)}.
+		You can also use the API's in the SPF portal utilities {@link
+		com.hp.it.spf.xa.misc.portal.Utils} class, which let you get the
+		current portal request URL or site URL, similar to portlets. For
+		example, {@link
+		com.hp.it.spf.xa.misc.portal.Utils#getRequestURL(javax.servlet.HttpServletRequest)}
+		and {@link
+		com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.HttpServletRequest)}.
+		Any of those methods would work.</p>
+		</li>
+	</ul>
+	</li>
+
+	<li>
+	<p>The second string argument is an optional <i>page URI</i> such
+	as a Vignette friendly URI for a navigation item related to the page;
+	or a Vignette template friendly name for a secondary page. The factory
+	joins this URI with your site root URL to make a full page URL for your
+	desired page. If you do not provide this argument, then the <code>PortalURL</code>
+	will point to the home page.</p>
+	</li>
+
+	<li>
+	<p>The third string argument is an optional <i>site name</i> (ie in
+	Vignette, a "site DNS name") to use for the URL. If you do not provide
+	this argument, the <code>PortalURL</code> will point to the same portal
+	site as referenced in the site root URL. But you can switch to another
+	site with this argument.</p>
+	</li>
+
+	<li>
+	<p>The optional boolean argument only applies when you have
+	provided an absolute site root URL above - ie a site root URL
+	specifying scheme/protocol, host, and possibly port number. The boolean
+	argument indicates whether the created <code>PortalURL</code> should be
+	secure or not. If set to <code>true</code> then an HTTPS <code>PortalURL</code>
+	will be created; if set to <code>false</code> then an HTTP <code>PortalURL</code>
+	will be created. If this results in a different scheme/protocol than
+	was used in the site root URL, then the port number in the <code>PortalURL</code>
+	will be set consistent with the new scheme:</p>
+	<ul>
+		<li>any previous port number in the site root URL will be omitted
+		from the <code>PortalURL</code></li>
+		<li>any non-standard port number defined in <code>portalurl.properties</code>
+		will be included in the <code>PortalURL</code> (see <a
+			href="#url.other.config.portalurl">configuring <code>portalurl.properties</code></a>,
+		below)</li>
+	</ul>
+	<p><b>Note:</b> If the provided site root URL argument is a
+	relative URL, this boolean argument has no effect.</p>
+	</li>
+</ul>
+
+<p>The arguments provided to the factory are validated, and an
+{@link java.lang.IllegalArgumentException} will be thrown if any appear
+to be invalid. Note this just checks the syntax of the arguments you
+provide; it does not validate that the portal site, page URI, etc
+actually exist.</p>
+
+<p>For example, here we make a <code>PortalURL</code> pointing
+simply to the current site's home page. (In this example, <code>siteRootURL</code>
+is the home page URL for the current site. The procedure for getting the
+site root URL varies between Vignette portal components and Java
+portlets, so is not shown here. See the discussion above about the site
+root URL argument.)</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+import com.hp.it.spf.xa.portalurl.PortalURL;
+...
+try {
+   PortalURL url = PortalURLFactory.createPageURL(siteRootURL, null);
+} catch (IllegalArgumentException e) {
+   // there was a problem with the siteRootURL
+}
+</pre></blockquote>
+
+<p>In the above example, if the <code>siteRootURL</code> was <code>http://portal.hp.com/portal/site/abc</code>,
+then <code>PortalURL.toString()</code> will return <code>http://portal.hp.com/portal/site/abc/</code>.</p>
+
+<p>Here we make a <code>PortalURL</code> object for the current
+site's Forums page, where <code>/forums</code> is assumed to be the
+Vignette "friendly URI" for that page:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+import com.hp.it.spf.xa.portalurl.PortalURL;
+...
+try {
+   PortalURL url = PortalURLFactory.createPageURL(siteRootURL, "/forums");
+} catch (IllegalArgumentException e) {
+   // there was a problem with the siteRootURL
+}
+</pre></blockquote>
+
+<p>In the above example, if the <code>siteRootURL</code> was <code>http://portal.hp.com/portal/site/abc</code>,
+then <code>PortalURL.toString()</code> will return <code>http://portal.hp.com/portal/site/abc/forums/</code>.</p>
+
+<p>Here we force use of a secure HTTPS URL for the Forums page. This
+assumes the <code>siteRootURL</code> is an absolute URL to begin with.
+Note that the port in the <code>PortalURL</code> will be reset (and set
+to a non-standard HTTPS port in <code>portalurl.properties</code>, if
+any) unless the <code>siteRootURL</code> was an HTTPS URL to begin with.</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+import com.hp.it.spf.xa.portalurl.PortalURL;
+...
+try {
+   PortalURL url = PortalURLFactory.createPageURL(siteRootURL, "/forums", true);
+} catch (IllegalArgumentException e) {
+   // there was a problem with the siteRootURL
+}
+</pre></blockquote>
+
+<p>In the above example, if the <code>siteRootURL</code> was <code>http://portal.hp.com:8080/portal/site/abc</code>,
+then <code>PortalURL.toString()</code> will return <code>https://portal.hp.com/portal/site/abc/forums/</code>.
+But if <code>portalurl.properties</code> had defined <code>portalurl.port.https=444</code>,
+then <code>PortalURL.toString()</code> would return <code>https://portal.hp.com:444/portal/site/abc/forums/</code>.</p>
 
 <a name="url.portal.portalUrl">
-<h4>3.2.1. Using <code>PortalURL</code> and the <code>PortalURLFactory</code></h4>
+<h4>3.2.2. Using the <code>PortalURL</code></h4>
 </a>
 
-<font color="red"><b>TBD</b></font>
+<p>Once you have gotten your {@link
+com.hp.it.spf.xa.portalurl.PortalURL} object from the {@link
+com.hp.it.spf.xa.portalurl.PortalURLFactory}, you can use its {@link
+com.hp.it.spf.xa.portalurl.PortalURL#toString()} method to get it in
+string form (as in the above examples). But so far it will just be a
+base URL. To set portal query parameters or target portlets with
+parameters, modes, window states, etc, you use the following methods in
+the <code>PortalURL</code> interface:</p>
 
-<a name="url.portal.getPortalSiteUrl">
-<h4>3.2.2. Using <code>Utils.getPortalSiteURL</code></h4>
-</a>
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String)</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String[])</dt>
+	<dt>{@link com.hp.it.spf.xa.portalurl.PortalURL#setParameters(Map)</dt>
+	<dd>
+	<p>These methods let you set <i>portal query parameters</i>. You
+	can provide a {@link java.util.Map} of your parameters, or set them
+	individually. As usual, each parameter has a name and one (or more)
+	values. To set a single parameter with a single value, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String)}. To
+	set a single parameter with multiple values, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String[])}. To
+	set many parameters, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(Map)} where each map
+	entry uses the parameter name as a key, and a single string or array of
+	strings as the value. Note that each time you call these methods, any
+	previous parameter(s) of the same name(s) are cleared.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String)</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String[])</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameters(String,Map)</dt>
+	<dd>
+	<p>These methods let you set <i>portlet parameters</i>. The first
+	string is the portlet ID (ie the Vignette "friendly ID") of the portlet
+	in question. You can provide a {@link java.util.Map} of your
+	parameters, or set them individually. As usual, each parameter has a
+	name and one (or more) values. To set a single parameter with a single
+	value, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String)}.
+	To set a single parameter with multiple values, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String[])}.
+	To set many parameters, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,Map)} where
+	each map entry uses the parameter name as a key, and a single string or
+	array of strings as the value. Note that each time you call these
+	methods, any previous parameter(s) of the same name(s) are cleared.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameter(String,String,String)</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameter(String,String,String[])</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameters(String,Map)</dt>
+	<dd>
+	<p>These methods let you set <i>portlet public render
+	parameters</i>. The first string is the portlet ID (ie the Vignette
+	"friendly ID") of the portlet in question. You can provide a {@link
+	java.util.Map} of your parameters, or set them individually. As usual,
+	each parameter has a name and one (or more) values. To set a single
+	parameter with a single value, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String)}.
+	To set a single parameter with multiple values, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String[])}.
+	To set many parameters, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,Map)} where
+	each map entry uses the parameter name as a key, and a single string or
+	array of strings as the value. Note that each time you call these
+	methods, any previous parameter(s) of the same name(s) are cleared.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setPortletMode(String,javax.portlet.PortletMode)}</dt>
+	<dd>
+	<p>You can specify a portlet mode with this method. The string is
+	the portlet ID (ie the Vignette "friendly ID") of the portlet in
+	question.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setWindowState(String,javax.portlet.WindowState)}</dt>
+	<dd>
+	<p>You can specify a window state with this method. The string is
+	the portlet ID (ie the Vignette "friendly ID") of the portlet in
+	question.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setAsActionURL(String)}</dt>
+	<dd>
+	<p>You can target a particular portlet's action phase with this
+	method. The string is the portlet ID (ie the Vignette "friendly ID") of
+	the portlet in question. <b>Note:</b> You can only use this method
+	once; an {@link java.lang.IllegalStateException} is thrown if you use
+	it again.</p>
+	</dd>
+</dl>
 
-<font color="red"><b>TBD</b></font>
+<p>In this example, we construct a secure Forums URL as in the
+previous section. Then we target the forum-display portlet (friendly ID:
+<code>forum-display</code>) and pass it a private render parameter (name
+<code>forumName</code>, value <code>HP-UX_Forum</code>). We also
+maximize its window state. Like this:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+import com.hp.it.spf.xa.portalurl.PortalURL;
+...
+try {
+   PortalURL url = PortalURLFactory.createPageURL(siteRootURL, "/forums", true);
+   url.setParameter("forum-display", "forumName", "HP-UX_Forum");
+   url.setWindowState(WindowState.MAXIMIZED);
+} catch (IllegalArgumentException e) {
+   // there was a problem with the siteRootURL
+}
+</pre></blockquote>
+
+<p>So now we can use <code>url.toString()</code> to get the <code>PortalURL</code>
+as a string, and display it to the user (eg, as the <code>HREF</code>
+attribute for an <code>&lt;A&gt;</code>).</p>
 
 <a name="url.portal.friendlyUri">
 <h4>3.2.3. Common friendly URIs</h4>
 </a>
 
-<font color="red"><b>TBD</b></font>
+<p>Common friendly URI's for secondary pages in the SPF portal are
+defined in the {@link com.hp.it.spf.xa.misc.Consts} class - they are
+ones beginning with <code>PAGE_FRIENDLY_URI_*</code>. If you need to
+build portal URLs which point to any of those pages, you can pass the
+desired constant value into the <a href="#url.portal.portalUrlFactory"><code>PortalURLFactory.createPageURL</code></a>
+method.</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portlet developers should import the SPF portlet
+utilities' {@link com.hp.it.spf.xa.misc.portlet.Consts} class to get
+access to these constants. SPF portal component developers should import
+the similar {@link com.hp.it.spf.xa.misc.portal.Consts} class in the SPF
+portal utilities.</p>
+</blockquote>
 
 <hr>
 
-<a name="url.portlet">
-<h3>3.3. Producing URLs targeting portlets</h3>
+<a name="url.other.config.portalurl">
+<h3>3.3. Configuring <code>portalurl.properties</code> (optional)</h3>
 </a>
 
-<font color="red"><b>TBD</b></font>
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>portalurl.properties</code>
+if you will be <a href="#url">making portal or portlet URLs</a> <b>and</b>
+you are using <i>local</i> Java portlets instead of WSRP-remoted ones, <i>or</i>
+your portal is using non-standard HTTP or HTTPS ports (eg in a sandbox).</p>
+</blockquote>
 
-<a name="url.portlet.portalUrl">
-<h4>3.3.1. Using <code>PortalURL</code> and the <code>PortalURLFactory</code>
-</h4>
-</a>
+<p>The <code>portalurl.properties</code> file lets you configure
+whether local portlet URLs or remote portlet URLs are created, and
+whether non-standard HTTP or HTTPS ports are used in your portal and
+portlet URLs.</p>
 
-<font color="red"><b>TBD</b></font>
+<dl>
+	<dt><code>portalurl.remote</code></dt>
+	<dd>
+	<p>This property is set to either <code>true</code> or <code>false</code>
+	and indicates whether the portlets for which you will be generating
+	URLs are deployed <i>local</i> or <i>remote</i> from the portal. The
+	default is <code>true</code> so you only need to set this property if
+	you are targeting local portlets. For example, to enable local portlet
+	URL creation:</p>
+
+	<blockquote><pre>
+portalurl.remote=false
+	</pre></blockquote>
+
+	<p><b>Note:</b> A mix of local and remote portlets is not currently
+	supported; they must be all one or the other.</p>
+	</dd>
+
+	<dt><code>portalurl.port.http</code></dt>
+	<dd>
+	<p>This property indicates whether the portal/portlet URLs you will
+	be generating should use a non-standard HTTP port. If you are only
+	using HTTPS, or your portal Web server is running on the standard HTTP
+	port (80), you do not need to set the property; otherwise, set it to
+	the non-standard HTTP port number the portal Web server is using. For
+	example:</p>
+
+	<blockquote><pre>
+portalurl.port.http=81
+	</pre></blockquote>
+
+	<p><b>Note to portlet developers:</b> A mix of portals using your
+	portlet and running on different HTTP ports is not currently supported;
+	they all must be using the same HTTP port.</p>
+	</dd>
+
+	<dt><code>portalurl.port.https</code></dt>
+	<dd>
+	<p>This property indicates whether the portal/portlet URLs you will
+	be generating should use a non-standard HTTPS port. If you are only
+	using HTTP, or your portal is running on the standard HTTPS port (443),
+	you do not need to set the property; otherwise, set it to the
+	non-standard HTTPS port number the portal Web server is using. For
+	example:</p>
+
+	<blockquote><pre>
+portalurl.port.https=444
+	</pre></blockquote>
+
+	<p><b>Note to portlet developers:</b> A mix of portals using your
+	portlet and running on different HTTPS ports is not currently
+	supported; they all must be using the same HTTPS port.</p>
+	</dd>
+</dl>
 
 <hr>
 
@@ -1451,6 +1926,7 @@ String defaultID = PropertyResourceBundleManager.getString("my_config", Locale.J
 
 <hr>
 
+<!--
 <a name="env">
 <h2>5. Environment</h2>
 </a>
@@ -1474,9 +1950,10 @@ String defaultID = PropertyResourceBundleManager.getString("my_config", Locale.J
 <font color="red"><b>TBD</b></font>
 
 <hr>
+-->
 
 <a name="history">
-<h2>6. Document History</h2>
+<h2>5. Document History</h2>
 </a>
 
 <table border="1">

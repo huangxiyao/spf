@@ -33,14 +33,14 @@ public class AbstractPortalURLTest extends TestCase {
 				"my_folder/my_page", true, -1, -1);
 		assertEquals(
 				"Render URL",
-				"https://my_host:my_port/portal/site/my_site/my_folder/my_page/",
+				"https://my_host/portal/site/my_site/my_folder/my_page/",
 				url.createBaseUrl(false).toString());
 
 		url = new TestURL("https://my_host:my_port/portal/site/my_site/", null,
 				"/my_folder/my_page", false, -1, -1);
 		assertEquals(
 				"Action URL",
-				"http://my_host:my_port/portal/site/my_site/template.PAGE/action.process/my_folder/my_page/",
+				"http://my_host/portal/site/my_site/template.PAGE/action.process/my_folder/my_page/",
 				url.createBaseUrl(true).toString());
 	}
 
@@ -70,14 +70,14 @@ public class AbstractPortalURLTest extends TestCase {
 				"another_site", "my_folder/my_page", true, -1, -1);
 		assertEquals(
 				"Render URL",
-				"https://my_host:my_port/portal/site/another_site/my_folder/my_page/",
+				"https://my_host/portal/site/another_site/my_folder/my_page/",
 				url.createBaseUrl(false).toString());
 
 		url = new TestURL("https://my_host:my_port/portal/site/my_site/",
 				"another_site", "/my_folder/my_page", false, -1, -1);
 		assertEquals(
 				"Action URL",
-				"http://my_host:my_port/portal/site/another_site/template.PAGE/action.process/my_folder/my_page/",
+				"http://my_host/portal/site/another_site/template.PAGE/action.process/my_folder/my_page/",
 				url.createBaseUrl(true).toString());
 	}
 

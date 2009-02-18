@@ -650,6 +650,7 @@ abstract class AbstractPortalURL implements PortalURL {
 		int nonStandardPort = 0;
 		int pathBegin = 0;
 		int protoEnd = 0;
+		boolean switchScheme = false;
 		if (!mSiteRootUrl.startsWith("/")) {
 			final String protoEndMarker = "://";
 			final String https = "https";
@@ -658,9 +659,11 @@ abstract class AbstractPortalURL implements PortalURL {
 			String proto = mSiteRootUrl.substring(0, protoEnd);
 			if (mSecure && !https.equals(proto)) {
 				result.append(https);
+				switchScheme = true;
 				nonStandardPort = mNonstandardHttpsPort;
 			} else if (!mSecure && !http.equals(proto)) {
 				result.append(http);
+				switchScheme = true;
 				nonStandardPort = mNonstandardHttpPort;
 			} else {
 				result.append(proto);
@@ -669,15 +672,17 @@ abstract class AbstractPortalURL implements PortalURL {
 			protoEnd += protoEndMarker.length();
 			pathBegin = mSiteRootUrl.indexOf('/', protoEnd);
 			String hostAndPort = mSiteRootUrl.substring(protoEnd, pathBegin);
-			if (nonStandardPort > 0) {
+			if (switchScheme) {
 				int portMarker = hostAndPort.indexOf(':');
 				if (portMarker == -1) {
 					result.append(hostAndPort);
 				} else {
 					result.append(hostAndPort.substring(0, portMarker));
 				}
-				result.append(':');
-				result.append(nonStandardPort);
+				if (nonStandardPort > 0) {
+					result.append(':');
+					result.append(nonStandardPort);
+				}
 			} else {
 				result.append(hostAndPort);
 			}
