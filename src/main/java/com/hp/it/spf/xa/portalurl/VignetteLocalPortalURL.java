@@ -36,16 +36,23 @@ class VignetteLocalPortalURL extends AbstractPortalURL {
 	private void addParameters(StringBuilder result, String portletFriendlyId,
 			Map<String, List<String>> parameters, String paramNameSuffix) {
 		for (String paramName : parameters.keySet()) {
-			for (String paramValue : parameters.get(paramName)) {
-				result.append('&').append(PARAM_NAME_PREFIX).append(
-						paramNameSuffix);
-				try {
-					result.append(portletFriendlyId).append('_').append(
-							URLEncoder.encode(paramName, "UTF-8")).append('=');
-					result.append(URLEncoder.encode(paramValue, "UTF-8"));
-				} catch (UnsupportedEncodingException e) {
-					throw new RuntimeException("UTF-8 encoding not supported? "
-							+ e, e);
+			if (paramName != null) {
+				for (String paramValue : parameters.get(paramName)) {
+					if (paramValue != null) {
+						result.append('&').append(PARAM_NAME_PREFIX).append(
+								paramNameSuffix);
+						try {
+							result.append(portletFriendlyId).append('_')
+									.append(
+											URLEncoder.encode(paramName,
+													"UTF-8")).append('=');
+							result.append(URLEncoder
+									.encode(paramValue, "UTF-8"));
+						} catch (UnsupportedEncodingException e) {
+							throw new RuntimeException(
+									"UTF-8 encoding not supported? " + e, e);
+						}
+					}
 				}
 			}
 		}
