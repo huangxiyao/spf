@@ -230,6 +230,29 @@ public class MockeryUtils {
     }
     
     /**
+     * Create ANON HttpServletRequest mock object and set expectations to it.
+     * 
+     * @param context mockery context
+     * @return mocked HttpServletRequest object
+     */
+    public static HttpServletRequest mockHttpServletRequestForANON(Mockery context) {
+        // mock HttpServletRequest
+        final HttpServletRequest request = mockHttpServletRequest(context, "ANON");        
+        context.checking(new Expectations() {
+            {
+                allowing(request).getPathInfo();will(returnValue("/acme"));
+                
+                allowing(request).getHeader("SM_AUTHDIRNAME");will(returnValue(""));  
+                allowing(request).getHeader("AuthSource");will(returnValue(""));
+                
+                allowing(request).getCookies();
+                will(returnValue(new Cookie[] {new Cookie("SMSESSION", "LOGGEDOFF")}));
+            }
+        });
+        return request;
+    }
+    
+    /**
      * Create Vignette user mock object and set expectations to it.
      * 
      * @param context mockery context
