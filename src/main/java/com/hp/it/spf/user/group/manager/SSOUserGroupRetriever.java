@@ -29,6 +29,7 @@ import com.hp.it.spf.user.group.stub.UserContext;
 import com.hp.it.spf.user.group.utils.UGSParametersManager;
 import com.hp.it.spf.xa.log.portal.Operation;
 import com.hp.it.spf.xa.log.portal.TimeRecorder;
+import com.hp.it.spf.xa.misc.portal.RequestContext;
 
 /**
  * This is the implimentation class of <tt>IUserGroupRetriever</tt>.
@@ -54,8 +55,9 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
     public Set<String> getGroups(String siteName,
                                  Map<String, Object> userProfile) throws UserGroupsException {
         Set<String> groupSet = new HashSet<String>();
-        try {
-            TimeRecorder.getThreadInstance().recordStart(Operation.GROUPS_CALL);
+		TimeRecorder timeRecorder = RequestContext.getThreadInstance().getTimeRecorder();
+		try {
+            timeRecorder.recordStart(Operation.GROUPS_CALL);
             GroupRequest serviceRequest = getServiceRequest(siteName, userProfile);
             if (LOG.isLoggable(Level.FINEST)) {
                 LOG.finest("UGS invokeService");
@@ -81,17 +83,17 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
                     }
                 }
             }
-            TimeRecorder.getThreadInstance().recordEnd(Operation.GROUPS_CALL);
+            timeRecorder.recordEnd(Operation.GROUPS_CALL);
             return groupSet;
 
         } catch (SiteDoesNotExistException e) {
             String msg = "The site, "
                          + siteName
                          + ", doesn't exist in the UGS definition database";
-            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, msg);
+            timeRecorder.recordError(Operation.GROUPS_CALL, msg);
             throw new UserGroupsException(msg, e);
         } catch (Exception e) {
-            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, e);
+            timeRecorder.recordError(Operation.GROUPS_CALL, e);
             throw new UserGroupsException(e);
         }
     }
