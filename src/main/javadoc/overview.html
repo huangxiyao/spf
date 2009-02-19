@@ -1158,15 +1158,13 @@ query parameters into the portal URL, and (for an absolute URL) you can
 set the scheme/protocol too (if you have a non-standard port configured
 in <code>portalurl.properties</code>, this will be included).</p>
 
-<p>The SPF portlet utilities include alternative methods for
-generating portal URLs, such as {@link
-com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest)}
-and {@link
-com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest,java.lang.Boolean,java.lang.String,int,java.lang.String)}.
-So, too, do the SPF portal utilities (eg {@link
-com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.HttpServletRequest)}
-and {@link
-com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(java.servlet.HttpServletRequest,java.lang.Boolean,java.lang.String,int,java.lang.String)}).
+<p>The SPF portlet utilities' {@link
+com.hp.it.spf.xa.misc.portlet.Utils} class includes alternative methods
+for generating portal URLs, such as <code>Utils.getPortalSiteURL(PortletRequest)</code>
+and <code>Utils.getPortalSiteURL(PortletRequest,Boolean,String,int,String)</code>.
+So, too, do the SPF portal utilities' {@link
+com.hp.it.spf.xa.misc.portal.Utils} class (eg, <code>Utils.getPortalSiteURL(HttpServletRequest)</code>
+and <code>Utils.getPortalSiteURL(HttpServletRequest,Boolean,String,int,String)</code>.
 With these methods, you can build an absolute URL for this or another
 portal site, and you can specify the path for a particular page, and
 optionally switch the scheme/protocol, too (any non-standard port
@@ -1175,9 +1173,9 @@ included). You can't set portal query parameters explicitly, but you can
 include them on the end of your path (eg Vignette friendly URI) which
 you pass to the method. You can also set an arbitrary port or host,
 something the <code>PortalURL</code> classes do not support. However you
-cannot target portlets with them. If you are interested in using those
+cannot target portlets with them. If you are interested in using those <code>getPortalSiteURL</code>
 methods instead, to generate your portal URLs, please see the respective
-documentation.</p>
+developer's guides for the portlet and portal utilities.</p>
 
 <a name="url.kinds.portlet">
 <h4>3.1.1. URLs targeting portlets</h4>
@@ -1269,10 +1267,7 @@ below.</p>
 		<p>For Java portlet developers, there are API's in the SPF portlet
 		utilities {@link com.hp.it.spf.xa.misc.portlet.Utils} class which let
 		you get the current portal request URL or current portal site URL. For
-		example, {@link
-		com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(javax.portlet.PortletRequest)}
-		and {@link
-		com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest)}.
+		example, <code>Utils.getPortalRequestURL(PortletRequest)</code> and <code>Utils.getPortalSiteURL(PortletRequest)</code>.
 		Any of those methods would work.</p>
 		</li>
 		<li>
@@ -1283,10 +1278,7 @@ below.</p>
 		You can also use the API's in the SPF portal utilities {@link
 		com.hp.it.spf.xa.misc.portal.Utils} class, which let you get the
 		current portal request URL or site URL, similar to portlets. For
-		example, {@link
-		com.hp.it.spf.xa.misc.portal.Utils#getRequestURL(javax.servlet.HttpServletRequest)}
-		and {@link
-		com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.HttpServletRequest)}.
+		example, <code>Utils.getRequestURL(HttpServletRequest)</code> and <code>Utils.getPortalSiteURL(HttpServletRequest)</code>.
 		Any of those methods would work.</p>
 		</li>
 	</ul>
@@ -1417,7 +1409,8 @@ the <code>PortalURL</code> interface:</p>
 	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String)}</dt>
 	<dt>{@link
 	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String[])}</dt>
-	<dt>{@link com.hp.it.spf.xa.portalurl.PortalURL#setParameters(Map)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameters(Map)}</dt>
 	<dd>
 	<p>These methods let you set <i>portal query parameters</i>. You
 	can provide a {@link java.util.Map} of your parameters, or set them
