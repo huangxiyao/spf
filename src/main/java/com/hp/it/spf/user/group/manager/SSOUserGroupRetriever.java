@@ -27,6 +27,8 @@ import com.hp.it.spf.user.group.stub.UGSRuntimeServiceXfireImplHttpBindingStub;
 import com.hp.it.spf.user.group.stub.UGSRuntimeServiceXfireImplLocator;
 import com.hp.it.spf.user.group.stub.UserContext;
 import com.hp.it.spf.user.group.utils.UGSParametersManager;
+import com.hp.it.spf.xa.log.portal.Operation;
+import com.hp.it.spf.xa.log.portal.TimeRecorder;
 
 /**
  * This is the implimentation class of <tt>IUserGroupRetriever</tt>.
@@ -53,6 +55,7 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
                                  Map<String, Object> userProfile) throws UserGroupsException {
         Set<String> groupSet = new HashSet<String>();
         try {
+            TimeRecorder.getThreadInstance().recordStart(Operation.GROUPS_CALL);
             GroupRequest serviceRequest = getServiceRequest(siteName, userProfile);
             if (LOG.isLoggable(Level.FINEST)) {
                 LOG.finest("UGS invokeService");
@@ -78,25 +81,32 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
                     }
                 }
             }
+            TimeRecorder.getThreadInstance().recordEnd(Operation.GROUPS_CALL);
             return groupSet;
 
         } catch (SiteDoesNotExistException e) {
             String msg = "The site, "
                          + siteName
                          + ", doesn't exist in the UGS definition database";
+            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, msg);
             throw new UserGroupsException(msg, e);
         } catch (ServiceException e) {
             String msg = "Invoking UGS webservice raise a ServiceException";
+            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, msg);
             throw new UserGroupsException(msg, e);
         } catch (RemoteException e) {
             String msg = "Invoking UGS webservice raise a RemoteException";
+            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, msg);
             throw new UserGroupsException(msg, e);
         } catch (MalformedURLException e) {
             String msg = "Invoking UGS webservice with a malformed URL";
+            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, msg);
             throw new UserGroupsException(msg, e);
         } catch (IllegalArgumentException e) {
+            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, e);
             throw new UserGroupsException(e);
         } catch (Exception e) {
+            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, e);
             throw new UserGroupsException(e);
         }
     }

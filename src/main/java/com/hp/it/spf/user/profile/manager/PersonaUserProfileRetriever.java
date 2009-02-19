@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.hp.it.spf.user.exception.UserProfileException;
+import com.hp.it.spf.xa.log.portal.Operation;
+import com.hp.it.spf.xa.log.portal.TimeRecorder;
 
 /**
  * This is a concrete class of IUserProfileRetriever interface.
@@ -28,13 +30,21 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
      * @throws UserProfileException if invoke Persona error
      */
     public Map<String, String> getUserProfile(String userIdentifier) throws UserProfileException {
-        // TODO fulfill this logic
-        // EUserIdentifierType USER_IDENTIFIER_TYPE =
-        // EUserIdentifierType.EXTERNAL_USER;
-        // IUser user = userService.createUser(USER_IDENTIFIER_TYPE,
-        // userIdentifier);
-        // user.getSimpleAttributeValues();
-        // user.getCompoundAttributeValues();
-        return new HashMap<String, String>();
+        // TODO fulfill the Persiona invoking logic    
+        Map<String, String> userProfiles = new HashMap<String, String>();
+        try {
+            TimeRecorder.getThreadInstance().recordStart(Operation.PROFILE_CALL);
+            // EUserIdentifierType USER_IDENTIFIER_TYPE =
+            // EUserIdentifierType.EXTERNAL_USER;
+            // IUser user = userService.createUser(USER_IDENTIFIER_TYPE,
+            // userIdentifier);
+            // user.getSimpleAttributeValues();
+            // user.getCompoundAttributeValues();
+            TimeRecorder.getThreadInstance().recordEnd(Operation.PROFILE_CALL);
+        } catch (Exception ex) {
+            TimeRecorder.getThreadInstance().recordError(Operation.PROFILE_CALL, ex);
+            throw new UserProfileException(ex);
+        } 
+        return userProfiles;         
     }
 }
