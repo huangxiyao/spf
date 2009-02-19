@@ -235,8 +235,8 @@ class AuthenticationConsts {
     /**
      * Groups stands for the user is from HPP/FED/@HP.
      */
-    public final static String LOCAL_ATHP_NAME = "LOCAL_ATHP";
-    public final static String LOCAL_FED_NAME = "LOCAL_FED";
-    public final static String LOCAL_HPP_NAME = "LOCAL_HPP";
+    public final static String LOCAL_ATHP_NAME = "LOCAL_PORTAL_AUTH_ATHP";
+    public final static String LOCAL_FED_NAME = "LOCAL_PORTAL_AUTH_FED";
+    public final static String LOCAL_HPP_NAME = "LOCAL_PORTAL_AUTH_HPP";
 }
 
