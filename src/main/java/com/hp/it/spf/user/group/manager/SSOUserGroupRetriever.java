@@ -90,21 +90,6 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
                          + ", doesn't exist in the UGS definition database";
             TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, msg);
             throw new UserGroupsException(msg, e);
-        } catch (ServiceException e) {
-            String msg = "Invoking UGS webservice raise a ServiceException";
-            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, msg);
-            throw new UserGroupsException(msg, e);
-        } catch (RemoteException e) {
-            String msg = "Invoking UGS webservice raise a RemoteException";
-            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, msg);
-            throw new UserGroupsException(msg, e);
-        } catch (MalformedURLException e) {
-            String msg = "Invoking UGS webservice with a malformed URL";
-            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, msg);
-            throw new UserGroupsException(msg, e);
-        } catch (IllegalArgumentException e) {
-            TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, e);
-            throw new UserGroupsException(e);
         } catch (Exception e) {
             TimeRecorder.getThreadInstance().recordError(Operation.GROUPS_CALL, e);
             throw new UserGroupsException(e);

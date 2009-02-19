@@ -96,6 +96,7 @@ public class AuthenticationUtility {
      *            The user who is using SP
      * @return SP_STANDARD_USER or SP_SUPER_USER or SP_HP_AGENT
      */
+    @Deprecated
     public static String getSPUserRole(User user) {
         if (user == null || user.isGuestUser()) {
             return null;
@@ -194,6 +195,7 @@ public class AuthenticationUtility {
      *            HttpServletRequest
      * @return a String array of group name
      */
+    @Deprecated
     public static String[] getGroupsFromCurrentUser(HttpServletRequest request) {
         try {
             String[] userGroups = null;
