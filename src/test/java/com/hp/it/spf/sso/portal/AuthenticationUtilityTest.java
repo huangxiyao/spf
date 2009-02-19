@@ -84,6 +84,9 @@ public class AuthenticationUtilityTest {
         
         isLoggedIntoHPP = AuthenticationUtility.loggedIntoHPP(athpRequest);
         assertFalse("Should be not from HPP", isLoggedIntoHPP);
+        
+        isLoggedIntoHPP = AuthenticationUtility.loggedIntoHPP(fedRequest);
+        assertFalse("Should be not from HPP", isLoggedIntoHPP);
     }
 
     /**
