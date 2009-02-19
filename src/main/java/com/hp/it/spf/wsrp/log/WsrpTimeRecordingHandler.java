@@ -6,6 +6,7 @@ import org.apache.axis.AxisFault;
 import org.apache.axis.Message;
 import com.hp.it.spf.xa.log.portal.TimeRecorder;
 import com.hp.it.spf.xa.log.portal.Operation;
+import com.hp.it.spf.xa.misc.portal.RequestContext;
 import com.hp.it.spf.wsrp.misc.Predicates;
 import com.hp.it.spf.wsrp.misc.Utils;
 import com.vignette.portal.log.LogWrapper;
@@ -101,14 +102,15 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 
 		HttpServletRequest request = Utils.retrieveRequest(messageContext);
 		if (request == null) {
-			LOG.error("Cannot find request in based on messageContext content");
+			LOG.error("Cannot find request in the content of messageContext");
 		}
-		timeRecorder = (TimeRecorder) request.getAttribute(TimeRecorder.REQUEST_KEY);
+		RequestContext requestContext = (RequestContext) request.getAttribute(RequestContext.REQUEST_KEY);
 
 		// We are probably in the web service request now. Let's save the timeRecorder we got
 		// from the portal request in the messageContext so it can be used when this handler
 		// gets called for web service response.
-		if (timeRecorder != null) {
+		if (requestContext != null) {
+			timeRecorder = requestContext.getTimeRecorder();
 			messageContext.setProperty(TIME_RECORDER_MC_KEY, timeRecorder);
 		}
 		return timeRecorder;
