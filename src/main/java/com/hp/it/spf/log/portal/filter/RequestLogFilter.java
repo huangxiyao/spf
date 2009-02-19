@@ -3,6 +3,7 @@ package com.hp.it.spf.log.portal.filter;
 import com.hp.it.spf.xa.log.portal.TimeRecorder;
 import com.hp.it.spf.xa.log.portal.Operation;
 import com.hp.it.spf.xa.misc.portal.Utils;
+import com.hp.it.spf.xa.misc.portal.RequestContext;
 import com.hp.it.spf.xa.misc.Consts;
 
 import javax.servlet.Filter;
@@ -21,8 +22,6 @@ import org.apache.log4j.MDC;
 /**
  * This filter performs different activities around logging which are scoped to the lifetime of
  * a request.
- * It initializes {@link TimeRecorder} and records the ovall request execution time. It also initializes
- * Log4J MDC.
  *
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  */
@@ -42,7 +41,9 @@ public class RequestLogFilter implements Filter {
 			request.setAttribute(FILTER_APPLIED_KEY, Boolean.TRUE);
 			
 			initMDC((HttpServletRequest) request);
-			TimeRecorder timeRecorder = initTimeRecorder(request);
+			RequestContext requestContext = initRequestContext(request);
+			TimeRecorder timeRecorder = requestContext.getTimeRecorder();
+
 
 			try {
 				timeRecorder.recordStart(Operation.REQUEST, ((HttpServletRequest) request).getRequestURI());
@@ -65,8 +66,8 @@ public class RequestLogFilter implements Filter {
 				timeRecorder.logRecordedData();
 
 				// Thread instance must be reset to make sure that the next time (during next request) this thread
-				// calls, the TimeRecorder gets properly initialized for this thread.
-				TimeRecorder.resetThreadInstance();
+				// calls, the RequestContext gets properly initialized for this thread.
+				RequestContext.resetThreadInstance();
 
 				cleanMDC();
 			}
@@ -133,14 +134,14 @@ public class RequestLogFilter implements Filter {
 	}
 
 	/**
-	 * Binds the thread-scoped {@link com.hp.it.spf.xa.log.portal.TimeRecorder} to the given request.
+	 * Binds the thread-scoped {@link com.hp.it.spf.xa.misc.portal.RequestContext} to the given request.
 	 * @param request portal request
-	 * @return this request's thread-scoped time recorder
+	 * @return this request's thread-scoped context
 	 */
-	private TimeRecorder initTimeRecorder(ServletRequest request) {
-		TimeRecorder timeRecorder = TimeRecorder.getThreadInstance();
-		request.setAttribute(TimeRecorder.REQUEST_KEY, timeRecorder);
-		return timeRecorder;
+	private RequestContext initRequestContext(ServletRequest request) {
+		RequestContext requestContext = RequestContext.getThreadInstance();
+		request.setAttribute(RequestContext.REQUEST_KEY, requestContext);
+		return requestContext;
 	}
 
 	public void init(FilterConfig filterConfig) throws ServletException {
