@@ -238,5 +238,11 @@ class AuthenticationConsts {
     public final static String LOCAL_ATHP_NAME = "LOCAL_PORTAL_AUTH_ATHP";
     public final static String LOCAL_FED_NAME = "LOCAL_PORTAL_AUTH_FED";
     public final static String LOCAL_HPP_NAME = "LOCAL_PORTAL_AUTH_HPP";
+    
+    /**
+     * Groups stands for the user locale.
+     */
+    public final static String LOCAL_PORTAL_LANG_PREFIX = "LOCAL_PORTAL_LANG_";
+    public final static String LOCAL_PORTAL_COUNTRY_PREFIX = "LOCAL_PORTAL_COUNTRY_";
 }
 

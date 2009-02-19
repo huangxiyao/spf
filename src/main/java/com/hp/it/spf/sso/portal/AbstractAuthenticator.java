@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -148,7 +149,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                     LOG.debug("Site is changed.");
                 }
                 AuthenticatorHelper.cleanupSession(request);
-            } else {                
+            } else {
                 userName = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
                 return;
             }
@@ -205,7 +206,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                         getValue(AuthenticationConsts.HEADER_LAST_NAME_PROPERTY_NAME));
         userProfile.put(AuthenticationConsts.KEY_COUNTRY,
                         getValue(AuthenticationConsts.HEADER_COUNTRY_PROPERTY_NAME));
-        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, 
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER,
                         getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME));
 
         // Set lanuage, if null, set to default EN
@@ -239,21 +240,22 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         } else {
             userProfile.put(AuthenticationConsts.KEY_TIMEZONE, tz);
         }
-        
+
         // Set security level, if null, set as default 0
         String securitylevel = getValue(AuthenticationConsts.HEADER_SECURITY_LEVEL_PROPERTY_NAME);
         if (securitylevel != null && (!("").equals(securitylevel.trim()))) {
             try {
                 userProfile.put(AuthenticationConsts.KEY_SECURITY_LEVEL,
-                                Float.valueOf(securitylevel));                
+                                Float.valueOf(securitylevel));
             } catch (NumberFormatException ne) {
-                LOG.error("Can't change security level " + securitylevel
-                        + " to float value. Will set default value as 0");
-                userProfile.put(AuthenticationConsts.KEY_SECURITY_LEVEL, 
+                LOG.error("Can't change security level "
+                          + securitylevel
+                          + " to float value. Will set default value as 0");
+                userProfile.put(AuthenticationConsts.KEY_SECURITY_LEVEL,
                                 AuthenticationConsts.DEFAULT_SECURITY_LEVEL);
             }
         } else {
-            userProfile.put(AuthenticationConsts.KEY_SECURITY_LEVEL, 
+            userProfile.put(AuthenticationConsts.KEY_SECURITY_LEVEL,
                             AuthenticationConsts.DEFAULT_SECURITY_LEVEL);
         }
     }
@@ -395,7 +397,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         } else {
             return false;
         }
-    }    
+    }
 
     /**
      * This method is used to check whether the user in the vignette session is
@@ -438,7 +440,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 
         // Retrieve current user from session
         User currUser = SessionUtils.getCurrentUser(request.getSession());
-        
+
         Date lastChangeDateVap = null;
         Integer tzVap = null;
         // Retrieve user's current timezone offset and last change date
@@ -483,7 +485,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                                 EntityPersistenceException {
         // append all external user profile retrieved from UPS/Persona
         userProfile.putAll(getUserProfile());
-        
+
         mapUserProfile2SSOUser();
         ssoUser.setGroups(getUserGroup());
 
@@ -494,7 +496,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         // If user has not been created in Vignette, then create this user
         if (vapUser == null) {
             // If employee number doesn't exist at the beginning, email will
-            // be instead of profileid, so later, when employee number is assigned,
+            // be instead of profileid, so later, when employee number is
+            // assigned,
             // the previous email based user should be removed from vignette.
             User emailUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_PROFILE_ID,
                                                                         ssoUser.getEmail());
@@ -520,7 +523,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     protected Map<String, String> getUserProfile() {
         String profileId = null;
         IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl();
-        
+
         return retriever.getUserProfile(profileId);
     }
 
@@ -531,9 +534,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * @return retrieved groups set
      */
     @SuppressWarnings("unchecked")
-    protected Set getUserGroup() {
-        //TODO need to fulfill the logic of retrieve user groups
+    protected Set getUserGroup() {        
         Set<String> group = new HashSet<String>();
+        
         // set group acoording to login type
         if (AuthenticatorHelper.loggedIntoAtHP(request)) {
             group.add(AuthenticationConsts.LOCAL_ATHP_NAME);
@@ -543,10 +546,21 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             group.add(AuthenticationConsts.LOCAL_FED_NAME);
         }
         
+        // set group according to user locale retrieved by locale resolver
+        Locale reqLocale = (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE);
+        String language = reqLocale.getLanguage().toUpperCase();
+        group.add(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX + language);
+        String country = reqLocale.getCountry().trim().toUpperCase();
+        if (country.length() > 0) {
+            group.add(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX
+                      + country);
+        }
+
+        // TODO need to fulfill the logic of retrieve user groups
         Site site = Utils.getEffectiveSite(request);
         if (site != null) {
             IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(null);
-            
+
             try {
                 group.addAll(retriever.getGroups(site.getDNSName(), userProfile));
             } catch (UserGroupsException e) {
