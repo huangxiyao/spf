@@ -23,46 +23,15 @@ import java.util.Iterator;
  */
 public class TimeRecorder {
 
-	/**
-	 * Attribute name used to bind the time recorder instance to the HttpServletRequest.
-	 */
-	public static final String REQUEST_KEY = TimeRecorder.class.getName();
-
 	private static final Logger mTLog = Logger.getLogger("TIME." + TimeRecorder.class.getName());
 
 	private static Map<Operation, Logger> mOperationLoggers = Collections.synchronizedMap(new HashMap<Operation, Logger>());
-	private static final ThreadLocal<TimeRecorder> mInstance = new ThreadLocal<TimeRecorder>();
 
 	private Thread mMainThread;
 	private Map<Thread, List<OperationData>> mThreadOperations = Collections.synchronizedMap(new HashMap<Thread, List<OperationData>>());
 
-	protected TimeRecorder() {
+	public TimeRecorder() {
 		mMainThread = Thread.currentThread();
-	}
-
-	/**
-	 * This method returns the <tt>TimeRecorder</tt> instance tied to the current thread. It
-	 * should be called only in main request thread. In order to use this instance in any other thread
-	 * (e.g. WSRP) it must be bound to some context that the main request thread shares with these
-	 * additional threads.
-	 * Note that {@link #resetThreadInstance()} must be called prior to the first call to any other
-	 * call to time recorder for a given request.
-	 * @return TimeRecorder instance that is tied to the current thread.
-	 */
-	public static TimeRecorder getThreadInstance() {
-		TimeRecorder instance = mInstance.get();
-		if (instance == null) {
-			instance = new TimeRecorder();
-			mInstance.set(instance);
-		}
-		return instance;
-	}
-
-	/**
-	 * Resets the instance of <tt>TimeRecorder</tt> associated to the current thread.
-	 */
-	public static void resetThreadInstance() {
-		mInstance.set(null);
 	}
 
 	/**
@@ -131,7 +100,7 @@ public class TimeRecorder {
 	}
 
 	/**
-	 * Creates a string represenation of the recorded operations since the last call to {@link #resetThreadInstance()}.
+	 * Creates a string represenation of the recorded operations.
 	 *
 	 * @see OperationData#writeOperationData(StringBuffer) for the format of the data logged for a
 	 * single operation.
