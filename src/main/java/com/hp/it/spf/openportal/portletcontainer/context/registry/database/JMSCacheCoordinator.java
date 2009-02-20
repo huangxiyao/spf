@@ -1,6 +1,7 @@
 package com.hp.it.spf.openportal.portletcontainer.context.registry.database;
 
 import java.net.InetAddress;
+import java.util.ResourceBundle;
 
 import org.eclipse.persistence.config.SessionCustomizer;
 import org.eclipse.persistence.sessions.DatabaseSession;
@@ -8,8 +9,9 @@ import org.eclipse.persistence.sessions.Session;
 import org.eclipse.persistence.sessions.coordination.CommandProcessor;
 import org.eclipse.persistence.sessions.coordination.RemoteCommandManager;
 import org.eclipse.persistence.sessions.coordination.jms.JMSTopicTransportManager;
-
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 import com.hp.it.spf.xa.misc.Environment;
+
 
 public class JMSCacheCoordinator implements SessionCustomizer{
 
@@ -30,8 +32,11 @@ public class JMSCacheCoordinator implements SessionCustomizer{
         
         transportMgr.setTopicConnectionFactoryName("jms/WSRPTopicConnectionFactory");
         transportMgr.setTopicName("jms/EclipseLinkCacheTopic");
-        transportMgr.setUserName("weblogic");
-        transportMgr.setPassword("weblogic");
+        
+        ResourceBundle rb = PropertyResourceBundleManager.getBundle("ContainerJMSConfig");
+        
+        transportMgr.setUserName(rb.getString("UserName"));
+        transportMgr.setPassword(rb.getString("Password"));
 
         // Initial context factory name is default to 
         // com.evermind.server.rmi.RMIInitialContextFactory for OracleAS
