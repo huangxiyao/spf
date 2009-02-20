@@ -366,26 +366,10 @@
 		<filter-name>RequestLogFilter</filter-name>
 		<servlet-name>controller</servlet-name>
 	</filter-mapping>
-	<filter-mapping>
-		<filter-name>RequestLogFilter</filter-name>
-		<servlet-name>admin_Controller</servlet-name>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>RequestLogFilter</filter-name>
-		<servlet-name>admin_Portlet_Invocation_Controller</servlet-name>
-	</filter-mapping>
 
 	<filter-mapping>
 		<filter-name>PortalURLRewriterFilter</filter-name>
 		<servlet-name>controller</servlet-name>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>PortalURLRewriterFilter</filter-name>
-		<servlet-name>admin_Controller</servlet-name>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>PortalURLRewriterFilter</filter-name>
-		<servlet-name>admin_Portlet_Invocation_Controller</servlet-name>
 	</filter-mapping>
 
 	<filter-mapping>
