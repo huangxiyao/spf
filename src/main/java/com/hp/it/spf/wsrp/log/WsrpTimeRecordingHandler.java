@@ -7,6 +7,7 @@ import org.apache.axis.Message;
 import com.hp.it.spf.xa.log.portal.TimeRecorder;
 import com.hp.it.spf.xa.log.portal.Operation;
 import com.hp.it.spf.xa.misc.portal.RequestContext;
+import com.hp.it.spf.xa.dc.portal.ErrorCode;
 import com.hp.it.spf.wsrp.misc.Predicates;
 import com.hp.it.spf.wsrp.misc.Utils;
 import com.vignette.portal.log.LogWrapper;
@@ -32,14 +33,14 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 		}
 
 		try {
-			TimeRecorder timeRecorder = getTimeRecorder(messageContext);
-			// TimeRecorder is null for console requests
-			if (timeRecorder != null) {
+			RequestContext requestContext = getRequestContext(messageContext);
+			// RequestContext may be null for console requests
+			if (requestContext != null) {
 				if (!messageContext.getPastPivot()) {
-					timeRecorder.recordStart(Operation.WSRP_CALL);
+					requestContext.getTimeRecorder().recordStart(Operation.WSRP_CALL);
 				}
 				else {
-					timeRecorder.recordEnd(Operation.WSRP_CALL);
+					requestContext.getTimeRecorder().recordEnd(Operation.WSRP_CALL);
 				}
 			}
 		}
@@ -57,18 +58,16 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 		}
 
 		try {
-			TimeRecorder timeRecorder = getTimeRecorder(messageContext);
-			// TimeRecorder is null for console requests
-			if (timeRecorder != null) {
+			RequestContext requestContext = getRequestContext(messageContext);
+			// RequestContext may be null for console requests
+			if (requestContext != null) {
+				SOAPFault fault = getFault(messageContext);
+				String faultString = (fault != null ? fault.getFaultCode() + ":" + fault.getFaultString() : null);
 				if (TimeRecorder.isOperationRecordingEnabled(Operation.WSRP_CALL)) {
-					SOAPFault fault = getFault(messageContext);
-					if (fault != null) {
-						timeRecorder.recordError(Operation.WSRP_CALL, fault.getFaultCode() + ": " + fault.getFaultString());
-					}
-					else {
-						timeRecorder.recordError(Operation.WSRP_CALL, null);
-					}
+					requestContext.getTimeRecorder().recordError(Operation.WSRP_CALL, faultString);
 				}
+				// save also the error information in the DiagnosticContext
+				requestContext.getDiagnosticContext().setError(ErrorCode.WSRP001, faultString);
 			}
 		}
 		catch (Exception e) {
@@ -89,31 +88,30 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 	}
 
 
-	private TimeRecorder getTimeRecorder(MessageContext messageContext) throws Exception {
-		final String TIME_RECORDER_MC_KEY = TimeRecorder.class.getName();
+	private RequestContext getRequestContext(MessageContext messageContext) throws Exception {
+		final String REQUEST_CONTEXT_MC_KEY = TimeRecorder.class.getName();
 
 		// Let's check first if we already have it in the context. This would be the case
 		// when this method is called during web service response because it that case
 		// we cannot retrieve the request as the required data is not available.
-		TimeRecorder timeRecorder = (TimeRecorder) messageContext.getProperty(TIME_RECORDER_MC_KEY);
-		if (timeRecorder != null) {
-			return timeRecorder;
+		RequestContext requestContext = (RequestContext) messageContext.getProperty(REQUEST_CONTEXT_MC_KEY);
+		if (requestContext != null) {
+			return requestContext;
 		}
 
 		HttpServletRequest request = Utils.retrieveRequest(messageContext);
 		if (request == null) {
 			LOG.error("Cannot find request in the content of messageContext");
 		}
-		RequestContext requestContext = (RequestContext) request.getAttribute(RequestContext.REQUEST_KEY);
+		requestContext = (RequestContext) request.getAttribute(RequestContext.REQUEST_KEY);
 
 		// We are probably in the web service request now. Let's save the timeRecorder we got
 		// from the portal request in the messageContext so it can be used when this handler
 		// gets called for web service response.
 		if (requestContext != null) {
-			timeRecorder = requestContext.getTimeRecorder();
-			messageContext.setProperty(TIME_RECORDER_MC_KEY, timeRecorder);
+			messageContext.setProperty(REQUEST_CONTEXT_MC_KEY, requestContext);
 		}
-		return timeRecorder;
+		return requestContext;
 	}
 
 }
