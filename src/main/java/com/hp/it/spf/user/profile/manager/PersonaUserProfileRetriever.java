@@ -12,6 +12,7 @@ import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.xa.log.portal.Operation;
 import com.hp.it.spf.xa.log.portal.TimeRecorder;
 import com.hp.it.spf.xa.misc.portal.RequestContext;
+import com.hp.it.spf.xa.dc.portal.ErrorCode;
 
 /**
  * This is a concrete class of IUserProfileRetriever interface.
@@ -45,6 +46,7 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
             timeRecorder.recordEnd(Operation.PROFILE_CALL);
         } catch (Exception ex) {
             timeRecorder.recordError(Operation.PROFILE_CALL, ex);
+			RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.PROFILE001, ex.toString());
             throw new UserProfileException(ex);
         } 
         return userProfiles;         

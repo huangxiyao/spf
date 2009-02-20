@@ -28,6 +28,8 @@ import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
 import com.hp.it.spf.user.profile.manager.IUserProfileRetriever;
 import com.hp.it.spf.user.profile.manager.UserProfileRetrieverFactory;
 import com.hp.it.spf.xa.misc.portal.Utils;
+import com.hp.it.spf.xa.misc.portal.RequestContext;
+import com.hp.it.spf.xa.dc.portal.ErrorCode;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
@@ -171,6 +173,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             request.getSession()
                    .setAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR,
                                  "1");
+			RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.AUTH001, ex.toString());
         }
     }
 
@@ -586,9 +589,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * 
      * @param fieldName field in request header
      * @return corresponding field in request header
-     * @see com.hp.serviceportal.framework.portal.authentication.AuthenticatorHelper
-     *      #getRequestHeader(javax.servlet.http.HttpServletRequest,
-     *      java.lang.String);
+	 * @see com.hp.it.spf.sso.portal.AuthenticatorHelper#getRequestHeader(javax.servlet.http.HttpServletRequest, String)
      */
     protected String getValue(String fieldName) {
         return AuthenticatorHelper.getRequestHeader(request,

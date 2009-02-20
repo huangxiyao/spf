@@ -30,6 +30,7 @@ import com.hp.it.spf.user.group.utils.UGSParametersManager;
 import com.hp.it.spf.xa.log.portal.Operation;
 import com.hp.it.spf.xa.log.portal.TimeRecorder;
 import com.hp.it.spf.xa.misc.portal.RequestContext;
+import com.hp.it.spf.xa.dc.portal.ErrorCode;
 
 /**
  * This is the implimentation class of <tt>IUserGroupRetriever</tt>.
@@ -91,9 +92,11 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
                          + siteName
                          + ", doesn't exist in the UGS definition database";
             timeRecorder.recordError(Operation.GROUPS_CALL, msg);
+			RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.GROUPS002, msg);
             throw new UserGroupsException(msg, e);
         } catch (Exception e) {
             timeRecorder.recordError(Operation.GROUPS_CALL, e);
+			RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.GROUPS001, e.toString());
             throw new UserGroupsException(e);
         }
     }
