@@ -1,6 +1,7 @@
 package com.hp.it.spf.xa.misc.portal;
 
 import com.hp.it.spf.xa.log.portal.TimeRecorder;
+import com.hp.it.spf.xa.dc.portal.DiagnosticContext;
 
 /**
  * The objects of this class are thread-scoped global variables which hold other objects
@@ -21,12 +22,12 @@ public class RequestContext {
 	private static final ThreadLocal<RequestContext> mInstance =
 			new ThreadLocal<RequestContext>();
 
-//	private DiagnosticContext mDiagnosticContext;
+	private DiagnosticContext mDiagnosticContext;
 	private TimeRecorder mTimeRecorder;
 
 	private RequestContext() {
 		mTimeRecorder = new TimeRecorder();
-//		mDiagnosticContext = new DiagnosticContext();
+		mDiagnosticContext = new DiagnosticContext();
 	}
 
 	/**
@@ -54,9 +55,9 @@ public class RequestContext {
 		mInstance.set(null);
 	}
 
-//	public DiagnosticContext getDiagnosticContext() {
-//		return mDiagnosticContext;
-//	}
+	public DiagnosticContext getDiagnosticContext() {
+		return mDiagnosticContext;
+	}
 
 	public TimeRecorder getTimeRecorder() {
 		return mTimeRecorder;

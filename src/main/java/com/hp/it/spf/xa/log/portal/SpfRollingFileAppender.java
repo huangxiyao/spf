@@ -174,7 +174,7 @@ public class SpfRollingFileAppender extends org.apache.log4j.RollingFileAppender
 		}
 		boolean directoriesCreatedSuccessfully = parentFile.mkdirs();
 		if (!directoriesCreatedSuccessfully) {
-			LogLog.error("Error creating directories for path: " + parentFile.getAbsolutePath());
+			LogLog.warn("Not able to create directories for path: " + parentFile.getAbsolutePath() + ". If the directories exist already you may ingore this message.");
 		}
 		return file.getAbsolutePath();
 	}
