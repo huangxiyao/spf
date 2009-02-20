@@ -1,0 +1,90 @@
+<!DOCTYPE weblogic-web-app PUBLIC "-//BEA Systems, Inc.//DTD Web Application 8.1//EN"
+   "http://www.bea.com/servers/wls810/dtd/weblogic810-web-jar.dtd">
+<weblogic-web-app>
+	<session-descriptor>
+		<session-param>
+			<param-name>CookieName</param-name>
+			<param-value>HP_SPF_SID</param-value>
+		</session-param>
+		<session-param>
+			<param-name>CookieDomain</param-name>
+			<param-value>.hp.com</param-value>
+		</session-param>
+		<session-param>
+			<param-name>CookiePath</param-name>
+			<param-value>/</param-value>
+		</session-param>
+		<session-param>
+			<param-name>CookieMaxAgeSecs</param-name>
+			<param-value>-1</param-value>
+		</session-param>
+		<session-param>
+			<param-name>InvalidationIntervalSecs</param-name>
+			<param-value>60</param-value>
+		</session-param>
+		<session-param>
+			<param-name>CookieComment</param-name>
+			<param-value>HP Shared Portal Framework - HTTP session tracking cookie</param-value>
+		</session-param>
+		<session-param>
+			<param-name>TimeoutSecs</param-name>
+			<param-value>3600</param-value>
+		</session-param>
+		<session-param>
+			<param-name>PersistentStoreType</param-name>
+			<param-value>replicated_if_clustered</param-value>
+		</session-param>
+		<session-param>
+			<param-name>TrackingEnabled</param-name>
+			<param-value>true</param-value>
+		</session-param>
+		<session-param>
+			<param-name>URLRewritingEnabled</param-name>
+			<param-value>false</param-value>
+		</session-param>
+	</session-descriptor>
+	<jsp-descriptor>
+		<jsp-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</jsp-param>
+		<jsp-param>
+<!--
+For QXCR1000790406 - changed pageCheckSeconds for production, from -1 to 60.
+This enables JSP modification checking in WebLogic.  For some reason, this 
+has a side-effect of resolving the CR (ie modified support files in Vignette
+become visible within 1 minute, instead of requiring server restart).  
+DSJ 2008/3/20
+-->
+			<param-name>pageCheckSeconds</param-name>
+			<param-value>60</param-value>
+		</jsp-param>
+		<jsp-param>
+			<param-name>verbose</param-name>
+			<param-value>false</param-value>
+		</jsp-param>
+		<jsp-param>
+			<param-name>keepgenerated</param-name>
+			<param-value>false</param-value>
+		</jsp-param>
+		<jsp-param>
+			<param-name>debug</param-name>
+			<param-value>false</param-value>
+		</jsp-param>
+		<jsp-param>
+			<param-name>precompile</param-name>
+			<param-value>false</param-value>
+		</jsp-param>
+	</jsp-descriptor>
+	<container-descriptor>
+		<redirect-with-absolute-url>false</redirect-with-absolute-url>
+		<servlet-reload-check-secs>-1</servlet-reload-check-secs>
+		<prefer-web-inf-classes>true</prefer-web-inf-classes>
+	</container-descriptor>
+	<charset-params>
+		<input-charset>
+			<resource-path>*</resource-path>
+			<java-charset-name>UTF-8</java-charset-name>
+		</input-charset>
+	</charset-params>
+</weblogic-web-app>
