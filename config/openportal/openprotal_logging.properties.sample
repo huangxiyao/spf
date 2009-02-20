@@ -1,0 +1,16 @@
+handlers=java.util.logging.ConsoleHandler,java.util.logging.FileHandler
+.level=INFO
+
+java.util.logging.FileHandler.pattern = C:/bea/user_projects/domains/WSRP_SYSTEST/openportal/portlet-container/logs/java.log
+java.util.logging.FileHandler.limit = 50000
+java.util.logging.FileHandler.count = 1
+java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+
+java.util.logging.ConsoleHandler.level=INFO
+java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
+
+javax.management.level=INFO
+javax.management.remote.level=INFO
+
+javax.xml.level=FINER
+javax.jws.level=FINER
