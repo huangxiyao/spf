@@ -11,6 +11,13 @@
 		This POM encapsulates all the reporting features of the shared
 		portal framework.
 	</description>
+	
+	<scm>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-pom</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-pom</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-pom</url>
+	</scm>
+	
 	<ciManagement>
 		<system>Hudson</system>
 		<url>http://samson.atl.hp.com:8080/hudson</url>
