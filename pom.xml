@@ -29,7 +29,6 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.14</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.xml.ws</groupId>
@@ -71,6 +70,7 @@
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<!-- This is part of OpenPortal lib directory therefore the scope for this is provided -->
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
