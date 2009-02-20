@@ -283,6 +283,7 @@
 		if (node.inPopup()){
 			String href = menuItemHelper.getNodeHref(portalContext, node);
 			//FIXME (slawek) Uncomment the line below once we have a common place for SPF javascript
+			href = href + "\" target=\"_blank";
 //				    href = "#\" onclick=\"return popupLink(this, '"+href+"','"+childMenuItemName+"',htmlFormat(securityMessage),"+node.inPopup()+");";
 				%>
 		
