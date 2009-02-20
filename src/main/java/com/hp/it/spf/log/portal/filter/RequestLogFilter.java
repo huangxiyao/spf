@@ -4,7 +4,16 @@ import com.hp.it.spf.xa.log.portal.TimeRecorder;
 import com.hp.it.spf.xa.log.portal.Operation;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.hp.it.spf.xa.misc.portal.RequestContext;
+import com.hp.it.spf.xa.dc.portal.DiagnosticContext;
+import com.hp.it.spf.xa.dc.portal.DiagnosticContextResponseWrapper;
+import com.hp.it.spf.xa.dc.portal.DataCallback;
+import com.hp.it.spf.xa.dc.portal.ErrorCode;
 import com.hp.it.spf.xa.misc.Consts;
+import com.hp.it.spf.xa.misc.Environment;
+import com.epicentric.common.website.MenuItemUtils;
+import com.epicentric.common.website.MenuItemNode;
+import com.epicentric.navigation.MenuItem;
+import com.vignette.portal.website.enduser.PortalContext;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
@@ -14,6 +23,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
@@ -43,23 +53,33 @@ public class RequestLogFilter implements Filter {
 			initMDC((HttpServletRequest) request);
 			RequestContext requestContext = initRequestContext(request);
 			TimeRecorder timeRecorder = requestContext.getTimeRecorder();
-
+			DiagnosticContext diagnosticContext = requestContext.getDiagnosticContext();
+			initDiagnosticContext((HttpServletRequest) request, diagnosticContext);
 
 			try {
 				timeRecorder.recordStart(Operation.REQUEST, ((HttpServletRequest) request).getRequestURI());
-				chain.doFilter(request, response);
+
+				chain.doFilter(
+						request,
+						new DiagnosticContextResponseWrapper(
+								(HttpServletRequest) request,
+								(HttpServletResponse) response));
+
 				timeRecorder.recordEnd(Operation.REQUEST);
 			}
 			catch (IOException e) {
 				timeRecorder.recordError(Operation.REQUEST, e);
+				diagnosticContext.setError(ErrorCode.REQUEST001, e.toString());
 				throw e;
 			}
 			catch (ServletException e) {
 				timeRecorder.recordError(Operation.REQUEST, e);
+				diagnosticContext.setError(ErrorCode.REQUEST001, e.toString());
 				throw e;
 			}
 			catch (RuntimeException e) {
 				timeRecorder.recordError(Operation.REQUEST, e);
+				diagnosticContext.setError(ErrorCode.REQUEST001, e.toString());
 				throw e;
 			}
 			finally {
@@ -75,6 +95,51 @@ public class RequestLogFilter implements Filter {
 		else {
 			chain.doFilter(request, response);
 		}
+	}
+
+	private void initDiagnosticContext(HttpServletRequest request, DiagnosticContext diagnosticContext) {
+		diagnosticContext.set("Web Server Name", "TBD");
+		diagnosticContext.set("Portal Server Name", Environment.singletonInstance.getManagedServerName());
+		diagnosticContext.set("Nav Item Name", getMenuItemName(request));
+
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			DiagnosticContext savedDiagnosticContext =
+					(DiagnosticContext) session.getAttribute(DiagnosticContextResponseWrapper.DC_SESSION_KEY);
+			if (savedDiagnosticContext != null) {
+				session.removeAttribute(DiagnosticContextResponseWrapper.DC_SESSION_KEY);
+				diagnosticContext.set("IMPORTANT", "Error from previous request");
+				diagnosticContext.copyFrom(savedDiagnosticContext);
+			}
+		}
+	}
+
+	/**
+	 * Returns a callback which will be used to retrieve the menu item name.
+	 * This approach is required as at the time this method is called portal request is not yet
+	 * completely initialized - this happens in the filters and/or servlet which are invoked
+	 * after this filter.
+	 * @param request current request
+	 * @return callback used to retrieve the menu item name
+	 */
+	private DataCallback getMenuItemName(final HttpServletRequest request) {
+		return new DataCallback() {
+			public String getData() {
+				PortalContext portalContext = (PortalContext) request.getAttribute("portalContext");
+				if (portalContext == null) {
+					return "";
+				}
+				MenuItemNode menuItemNode = MenuItemUtils.getSelectedMenuItemNode(portalContext);
+				if (menuItemNode == null) {
+					return "";
+				}
+				MenuItem menuItem = menuItemNode.getMenuItem();
+				if (menuItem == null) {
+					return "";
+				}
+				return menuItem.getTitle();
+			}
+		};
 	}
 
 	/**
