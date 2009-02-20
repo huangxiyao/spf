@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.openportal</groupId>
 	<artifactId>spf-portlet-container</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>spf-portlet-container</name>
 	<description>To support config mode.</description>
 	<parent>
