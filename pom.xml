@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
 		<artifactId>spf-pom</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 			<!-- This is part of OpenPortal lib directory therefore the scope for this is provided -->
 			<scope>provided</scope>
 		</dependency>
