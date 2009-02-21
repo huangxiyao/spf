@@ -3,7 +3,7 @@
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-portlet-utilities</artifactId>
 	<name>SPF portlet utilities</name>
-	<version>1.0.0</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<description>
 		Utilities for the portlet side of the Shared Portal Framework.
 		Currently includes concrete utility classes for portlet file
