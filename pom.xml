@@ -1,11 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-portlet-utilities</artifactId>
 	<name>SPF portlet utilities</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<description>
 		Utilities for the portlet side of the Shared Portal Framework.
 		Currently includes concrete utility classes for portlet file
@@ -30,15 +28,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>
-			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-utilities
-		</connection>
-		<developerConnection>
-			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-utilities
-		</developerConnection>
-		<url>
-			http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-utilities
-		</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.0</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.0</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.0</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
@@ -111,6 +103,6 @@
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
-		<dependencies></dependencies>
+		<dependencies />
 	</dependencyManagement>
 </project>
