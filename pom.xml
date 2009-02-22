@@ -5,12 +5,12 @@
 	<artifactId>pc-database-persistence</artifactId>
 	<packaging>jar</packaging>
 	<name>pc-database-persistence</name>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<description>As the target portlet applications will be deployed in the clustered environment, the producer as well as the underlying portlet container should store their data in a way that is cluster-friendly, e.g. when a portlet preference value is updated this change must be visible on all the servers running this portlet application, but openportal portlet container does not provide a database persistence implementation. This project just provides the database persitence feature with our own implementation.</description>
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
 		<artifactId>spf-pom</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>	
 	<dependencies>
 		<dependency>
