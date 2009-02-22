@@ -1,12 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.apps</groupId>
 	<artifactId>healthcheck</artifactId>
 	<packaging>war</packaging>
 	<name>SPF healthcheck application</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<description>
 		Web application which performs automated healthchecks against
 		the portal and the open-sign, and relays the status to the
@@ -23,15 +21,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/healthcheck</url>
 	</ciManagement>
 	<scm>
-		<connection>
-			scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/healthcheck
-		</connection>
-		<developerConnection>
-			scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/healthcheck
-		</developerConnection>
-		<url>
-			http://samson.atl.hp.com/svn/spf/source/apps/trunk/healthcheck
-		</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/healthcheck-1.0.0</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/healthcheck-1.0.0</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/apps/tags/healthcheck-1.0.0</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
