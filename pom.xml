@@ -17,7 +17,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
@@ -70,12 +70,12 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portlet-utilities</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.sso</groupId>
 			<artifactId>spf-portlet-filters</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 </project>
