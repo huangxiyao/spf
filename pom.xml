@@ -1,12 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.apps</groupId>
 	<artifactId>html-viewer</artifactId>
 	<packaging>war</packaging>
 	<name>SPF HTML viewer portlet</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<description>
 		Portlet application implementing the HTMLViewer portlet: a
 		JSR-168 portlet which interpolates and displays an administrated
@@ -24,9 +22,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/html-viewer/</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/html-viewer-1.0.0</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/html-viewer-1.0.0</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/apps/tags/html-viewer-1.0.0</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
