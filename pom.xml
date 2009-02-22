@@ -4,7 +4,7 @@
 	<artifactId>healthcheck</artifactId>
 	<packaging>war</packaging>
 	<name>SPF healthcheck application</name>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<description>
 		Web application which performs automated healthchecks against
 		the portal and the open-sign, and relays the status to the
@@ -21,9 +21,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/healthcheck</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/healthcheck-1.0.0</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/healthcheck-1.0.0</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/apps/tags/healthcheck-1.0.0</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/healthcheck</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/healthcheck</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/healthcheck</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
