@@ -4,7 +4,7 @@
 	<artifactId>html-viewer</artifactId>
 	<packaging>war</packaging>
 	<name>SPF HTML viewer portlet</name>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<description>
 		Portlet application implementing the HTMLViewer portlet: a
 		JSR-168 portlet which interpolates and displays an administrated
@@ -22,9 +22,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/html-viewer/</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/html-viewer-1.0.0</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/html-viewer-1.0.0</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/apps/tags/html-viewer-1.0.0</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/html-viewer</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
