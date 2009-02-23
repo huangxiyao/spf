@@ -17,4 +17,5 @@
          <param-value>false</param-value>
       </session-param>
    </session-descriptor>
+   <context-root>healthcheck</context-root>
 </weblogic-web-app>
