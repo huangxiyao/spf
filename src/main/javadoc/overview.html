@@ -5412,7 +5412,7 @@ appropriate:</p>
 	</dt>
 	<dd>
 	<dl>
-		<dt><code>LOCAL_ATHP</code></dt>
+		<dt><code>LOCAL_PORTAL_AUTH_ATHP</code></dt>
 		<dd>
 		<p>Indicates the user is a member of the &#64;HP employee portal,
 		not HP Passport. Whether the user is currently logged-into his/her HP
@@ -5421,7 +5421,7 @@ appropriate:</p>
 		system.</p>
 		</dd>
 
-		<dt><code>LOCAL_HPP</code></dt>
+		<dt><code>LOCAL_PORTAL_AUTH_HPP</code></dt>
 		<dd>
 		<p>Indicates the user is a member of <i>standard</i> (not
 		federated) HP Passport. Whether the user is currently logged-into
@@ -5433,7 +5433,7 @@ appropriate:</p>
 		this time.)</p>
 		</dd>
 
-		<dt><code>LOCAL_FED</code></dt>
+		<dt><code>LOCAL_PORTAL_AUTH_FED</code></dt>
 		<dd>
 		<p><i>This group is uncommon in most SPF portal applications.</i>
 		It indicates the user is a member of <i>federated</i> (not standard)
@@ -5451,7 +5451,7 @@ appropriate:</p>
 	</dt>
 	<dd>
 	<dl>
-		<dt><code>LOCAL_COUNTRY_<i>&lt;country-code&gt;</i></code></dt>
+		<dt><code>LOCAL_PORTAL_COUNTRY_<i>&lt;country-code&gt;</i></code></dt>
 		<dd>
 		<p>Indicates the user should be considered a member of the group
 		for the particular country. This is based on the locale resolved for
@@ -5462,8 +5462,8 @@ appropriate:</p>
 		3166-1</a> country code. Note that this may, or may not, be the same
 		country as the user's registered country in SiteMinder (eg, the <code>residentCountryCode</code>
 		attribute of the core HPP profile).</p>
-		<p>For example, <code>LOCAL_COUNTRY_BR</code> for a user with any
-		Brazil locale; <code>LOCAL_COUNTRY_GB</code> for a user with any
+		<p>For example, <code>LOCAL_PORTAL_COUNTRY_BR</code> for a user with any
+		Brazil locale; <code>LOCAL_PORTAL_COUNTRY_GB</code> for a user with any
 		United Kingdom locale; etc.</p>
 		<blockquote>
 		<p><b>Note:</b> When the user's resolved locale does not include a
@@ -5472,7 +5472,7 @@ appropriate:</p>
 		</blockquote>
 		</dd>
 
-		<dt><code>LOCAL_LANG_<i>&lt;language-code&gt;</i></code></dt>
+		<dt><code>LOCAL_PORTAL_LANG_<i>&lt;language-code&gt;</i></code></dt>
 		<dd>
 		<p>Indicates the user should be considered a member of the group
 		for the particular language. This is based on the locale resolved for
@@ -5483,8 +5483,8 @@ appropriate:</p>
 		639-1</a> language code. Note that this may, or may not, be the same
 		language as the user's registered language in SiteMinder (eg, the <code>langCode</code>
 		attribute of the core HPP profile).</p>
-		<p>For example, <code>LOCAL_COUNTRY_ZH</code> for a user with any
-		Chinese-language locale; <code>LOCAL_COUNTRY_RU</code> for a user with
+		<p>For example, <code>LOCAL_PORTAL_LANG_ZH</code> for a user with any
+		Chinese-language locale; <code>LOCAL_PORTAL_LANG_RU</code> for a user with
 		any Russian-language locale; etc.</p>
 		</dd>
 	</dl>
@@ -6613,6 +6613,16 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 			and <code>{SITE-URL}</code> text interpolation tokens.</li>
 			<li>Added support for <code>{BEFORE:<i>date</i>}</code> and <code>{AFTER:<i>date</i>}</code>
 			text interpolation tokens.
+		</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>1.3</td>
+		<td>Feb 23 2009</td>
+		<td>S. Jorgenson</td>
+		<td>
+		<ul>
+			<li>Changed authentication-type and locale group names per Slawek and Ye.</li>
 		</ul>
 		</td>
 	</tr>
