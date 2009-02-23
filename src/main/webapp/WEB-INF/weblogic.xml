@@ -24,7 +24,10 @@
 		</session-param>
 		<session-param>
 			<param-name>CookieComment</param-name>
-			<param-value>HP Shared Portal Framework - HTTP session tracking cookie</param-value>
+			<param-value>
+				HP Shared Portal Framework - HTTP session tracking
+				cookie
+			</param-value>
 		</session-param>
 		<session-param>
 			<param-name>TimeoutSecs</param-name>
@@ -49,13 +52,13 @@
 			<param-value>UTF-8</param-value>
 		</jsp-param>
 		<jsp-param>
-<!--
-For QXCR1000790406 - changed pageCheckSeconds for production, from -1 to 60.
-This enables JSP modification checking in WebLogic.  For some reason, this 
-has a side-effect of resolving the CR (ie modified support files in Vignette
-become visible within 1 minute, instead of requiring server restart).  
-DSJ 2008/3/20
--->
+			<!--
+				For QXCR1000790406 - changed pageCheckSeconds for production, from -1 to 60.
+				This enables JSP modification checking in WebLogic.  For some reason, this 
+				has a side-effect of resolving the CR (ie modified support files in Vignette
+				become visible within 1 minute, instead of requiring server restart).  
+				DSJ 2008/3/20
+			-->
 			<param-name>pageCheckSeconds</param-name>
 			<param-value>60</param-value>
 		</jsp-param>
@@ -87,4 +90,5 @@ DSJ 2008/3/20
 			<java-charset-name>UTF-8</java-charset-name>
 		</input-charset>
 	</charset-params>
+	<context-root>portal</context-root>
 </weblogic-web-app>
