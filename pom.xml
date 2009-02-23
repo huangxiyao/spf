@@ -1,15 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.apps</groupId>
-	<artifactId>open-sign</artifactId>
+	<artifactId>spf-open-sign</artifactId>
 	<packaging>war</packaging>
 	<name>SPF open-sign</name>
 	<version>1.0.1-SNAPSHOT</version>
-	<description>
-		Web application for the open-sign. When this application is
-		running, it means the site is open. When this application is not
-		running, it means the site is closed.
-	</description>
+	<description>Web application for the Shared Portal Framework open-sign. When this application is
+		running, it means the SPF site (cluster) is open. When this application is not
+		running, it means the SPF site (cluster) is closed.</description>
 	<inceptionYear>January 2009</inceptionYear>
 	<parent>
 		<artifactId>spf-pom</artifactId>
@@ -18,12 +16,12 @@
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/open-sign</url>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-open-sign</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/open-sign</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/open-sign</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/open-sign</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-open-sign</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-open-sign</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-open-sign</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
