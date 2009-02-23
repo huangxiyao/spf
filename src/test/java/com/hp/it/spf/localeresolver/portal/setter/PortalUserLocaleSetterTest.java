@@ -11,10 +11,10 @@ import org.springframework.mock.web.MockHttpSession;
 import com.epicentric.common.website.SessionInfo;
 import com.hp.it.spf.localeresolver.hpweb.LanguageNegotiator;
 import com.hp.it.spf.localeresolver.portal.mock.MockUserMediator;
+import com.hp.it.spf.localeresolver.portal.mock.MockUser;
+import com.hp.it.spf.localeresolver.portal.mock.SurrogateSessionInfo;
+import com.hp.it.spf.localeresolver.portal.mock.SurrogateSite;
 import com.hp.it.spf.localeresolver.portal.setter.PortalUserLocaleSetter;
-import com.hp.it.spf.xa.mock.portal.MockUser;
-import com.hp.it.spf.xa.mock.portal.SurrogateSessionInfo;
-import com.hp.it.spf.xa.mock.portal.SurrogateSite;
 
 import junit.framework.TestCase;
 
