@@ -20,7 +20,5 @@
 		<prefer-web-inf-classes>true</prefer-web-inf-classes>
 		</container-descriptor>
 	-->
-	<!-- 
-		<context-root>/portlet_htmlviewer</context-root>
-	-->
+	<context-root>html-viewer</context-root>
 </weblogic-web-app>

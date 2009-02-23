@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>html-viewer</name>
+	<name>spf-html-viewer</name>
 	<comment></comment>
 	<projects>
-		<project>portlet-utilities</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
