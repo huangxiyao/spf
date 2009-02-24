@@ -123,8 +123,7 @@ public class ViewController extends FileInterpolatorController {
 		Log.logInfo(this, "ViewController: render phase invoked.");
 		if (fileContent != null) {
 			fileContent = fileContent.trim();
-		}
-		if (fileContent == null || fileContent.length() == 0) {
+		} else {
 			Log
 					.logError(this,
 							"ViewController: content is not found or empty.");
