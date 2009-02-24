@@ -46,6 +46,7 @@ will use the prefix <code>spf-help-portlet</code>.</p>
 	titleKey="<i>help-title-message-key</i>"
 	content="<i>help-content</i>"
 	contentKey="<i>help-content-message-key</i>"
+	escape="<i>true-or-false</i>"
 	noScriptHref="<i>uri</i>"
 	width="<i>pixels</i>"
 	borderStyle="<i>inline-style</i>'
@@ -112,11 +113,11 @@ display, with no contextual-help link around it at all).</p>
 	<code>anchorImg="<i>link-image-url</i>"</code><br>
 	<code>anchorImgKey="<i>link-image-base-file</i>"</code></dt>
 	<dd>
-	<p>Use <b>one</b> of these attributes to provide the contents for
-	the contextual help hyperlink (ie not the help contents itself, but
-	what is anchored to that). It is an error if you do not use one of
-	these with a non-null, non-blank value; if you use more than one, they
-	take priority in the below-listed order).</p>
+	<p>Use <b>one</b> of these attributes to provide the content for
+	the contextual help hyperlink (ie not the help content itself, but what
+	is anchored to that). It is an error if you do not use one of these
+	with a non-null, non-blank value; if you use more than one, they take
+	priority in the below-listed order).</p>
 	<ul>
 		<li>
 		<p>The <code>anchor</code> attribute lets you provide some literal
@@ -185,18 +186,19 @@ display, with no contextual-help link around it at all).</p>
 	is a message key for the title - the tag looks inside your configured
 	message resources to retrieve the title (using the key itself as the
 	default, if the message is not found). The message lookup proceeds as
-	described for the <a href="../../../i18n/portlet/tag/package-summary.html#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>
+	described for the <a
+		href="../../../i18n/portlet/tag/package-summary.html#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>
 	tag.</p>
 	</dd>
 
 	<dt><code>content="<i>help-content</i>"</code><br>
-	<code>titleKey="<i>help-content-message-key</i>"</code></dt>
+	<code>contentKey="<i>help-content-message-key</i>"</code></dt>
 	<dd>
-	<p>Use one of these attributes to provide the title for the
-	contextual help (it is an error if you do not use one of these with a
-	non-null, non-blank value; if you use both, the <code>content</code>
+	<p>Use one of these attributes to provide the main body content for
+	the contextual help popup (it is an error if you do not use one of
+	these with a non-null, non-blank value; if you use both, the <code>content</code>
 	attribute takes precedence). The <code>content</code> attribute
-	provides the literal string to use for the main help content (so it is
+	provides the literal string to use for the main body content (so it is
 	your responsibility to have already generated that string, localized as
 	needed). The <code>contentKey</code> is a message key for that - the
 	tag looks inside your configured message resources to retrieve the main
@@ -204,6 +206,28 @@ display, with no contextual-help link around it at all).</p>
 	not found). The message lookup proceeds as described for the <a
 		href="../../../i18n/portlet/tag/package-summary.html#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>
 	tag.</p>
+	</dd>
+
+	<dt><code>escape="<i>true-or-false</i>"</code></dt>
+	<dd>
+	<p>The <code>escape</code> attribute is used as a switch to control
+	the HTML-escaping policy for the all of the above contents: the title
+	and body for the help popup, and the anchored text itself. By default,
+	these content strings are unescaped; any HTML special characters they
+	may contain, such as <code>&lt;</code>, are left as literal. This lets
+	you put HTML markup in your messages and have it render as such in the
+	browser. If you need the HTML special characters to be converted into
+	their corresponding character entities, so that they display literally
+	in the browser instead, use the <code>escape="true"</code> attribute on
+	the tag.</p>
+
+	<blockquote>
+	<p><b>Note:</b> Do not use <code>escape=<i>true</i></code> when you
+	are anchoring an image with the <code>anchorImg</code> or <code>anchorImgKey</code>
+	attributes. The <code>escape</code> attribute is a global HTML-escaping
+	policy for all the contents of the tag, so setting it <code>true</code>
+	will even HTML-escape the <code>&lt;IMG&gt;</code> tag markup.</p>
+	</blockquote>
 	</dd>
 
 	<dt><code>noScriptHref="<i>uri</i>"</code></dt>
