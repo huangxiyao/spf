@@ -159,5 +159,11 @@
 			<version>1.0.0-SNAPSHOT</version>
 			<type>car</type>
 		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.comps</groupId>
+			<artifactId>spf-navportlet-portalbean</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<type>car</type>
+		</dependency>
 	</dependencies>
 </project>
