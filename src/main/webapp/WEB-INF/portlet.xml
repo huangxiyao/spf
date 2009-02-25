@@ -48,7 +48,7 @@
 	</portlet>
 	
 	<custom-portlet-mode>
-		<portlet-mode>config</portlet-mode>
+		<portlet-mode>vignette:config</portlet-mode>
 	</custom-portlet-mode>
 
 	<!-- WPAP logging filter -->
