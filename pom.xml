@@ -85,6 +85,16 @@
 			<artifactId>spring-webmvc-portlet</artifactId>
 			<version>2.5.6</version>
 		</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.1.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>html-viewer</finalName>
