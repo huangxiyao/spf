@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-portal-filters</artifactId>
@@ -13,13 +15,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>2.0.1</version>
+			<artifactId>spring-webmvc</artifactId>
+			<version>2.5.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring</artifactId>
-			<version>2.0</version>
+			<version>2.5.6</version>
 		</dependency>
 		<dependency>
 			<groupId>vignette</groupId>
@@ -43,46 +45,54 @@
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
 			<version>1.0.1-SNAPSHOT</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
 			<version>1.0.1-SNAPSHOT</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-hpp</artifactId>
 			<version>1.0.1-SNAPSHOT</version>
-			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-mock</artifactId>
+			<version>2.0.1</version>
+			<scope>test</scope>
 		</dependency>
 		<!-- 
-		<dependency>
+			<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-jsr-container-taglib</artifactId>
 			<version>7.4.2</version>
-		</dependency>
-		<dependency>
+			</dependency>
+			<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-base</artifactId>
 			<version>7.4.2</version>
-		</dependency>
+			</dependency>
 		-->
 		<!-- 
-		<dependency>
+			<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-linking</artifactId>
 			<version>7.4.2</version>
-		</dependency>
-		<dependency>
+			</dependency>
+			<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-log</artifactId>
 			<version>7.4.2</version>
-		</dependency>
+			</dependency>
 		-->
 	</dependencies>
-	<description>Servlet filters for use in the SPF portal application.  These include the admission controller (for performing affinity during load-balancing/failover), the locale resolver (for determining user locale), and the portal URL filter.</description>
+	<description>
+		Servlet filters for use in the SPF portal application. These
+		include the admission controller (for performing affinity during
+		load-balancing/failover), the locale resolver (for determining
+		user locale), and the portal URL filter.
+	</description>
 	<inceptionYear>January 2009</inceptionYear>
 	<parent>
 		<artifactId>spf-pom</artifactId>
@@ -91,12 +101,20 @@
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/spf-portal-filters/</url>
+		<url>
+			http://samson.atl.hp.com:8080/hudson/job/spf-portal-filters/
+		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portal-filters-1.0.0</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portal-filters-1.0.0</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portal-filters-1.0.0</url>
+		<connection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portal-filters-1.0.0
+		</connection>
+		<developerConnection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portal-filters-1.0.0
+		</developerConnection>
+		<url>
+			http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portal-filters-1.0.0
+		</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>

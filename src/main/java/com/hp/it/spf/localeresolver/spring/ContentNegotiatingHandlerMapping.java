@@ -42,7 +42,12 @@ public class ContentNegotiatingHandlerMapping extends SimpleUrlHandlerMapping {
     }
 
     protected Object lookupHandler(String urlPath, HttpServletRequest request) {
-        Object handler = super.lookupHandler(urlPath, request);
+        Object handler;
+        try { // added try-catch when porting to Spring 2.5.6
+        	handler = super.lookupHandler(urlPath, request);
+        } catch (Exception e) {
+        	handler = null;
+        }
 
         // if the URL matches, check the negotiators for acceptability
         if (!(handler == null || negotiators.isEmpty())) {
