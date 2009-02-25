@@ -8,6 +8,7 @@
 
 <%@ include file="include.jsp" %>
 <%@ page import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" %>
+<%@ page import="com.hp.it.spf.xa.i18n.portlet.I18nUtility" %>
 
 <%----------------------------------------------------------------- SCRIPT --%>
 
@@ -15,29 +16,37 @@
 
 <%---------------------------------------------------------------- MARKUP ---%>
 
-<link href="<%= renderResponse.encodeURL("/css/html_viewer.css") %>" rel="stylesheet" type="text/css">
-<c:if test="${! empty errorMessage }">
-	<p>
-		<span class="spf-htmlviewer-config-error-label">
-			<spf-i18n-portlet:message key="error.message"/>
-		</span>&nbsp;
-		<span class="spf-htmlviewer-config-error-message">
-			<c:out value="${errorMessage}"/>
-		</span>
-	</p>
-</c:if>
-<c:if test="${! empty infoMessage }">
-	<p>
-		<span class="spf-htmlviewer-config-info-message">
-			<c:out value="${infoMessage}"/>
-		</span>
-	</p>
-</c:if>
+<link href="<%= I18nUtility.getLocalizedFileURL(renderRequest, renderResponse, "/css/html_viewer.css", false) %>" rel="stylesheet" type="text/css">
+
+<table>
+	<tr>
+		<td>
+			<c:if test="${! empty errorMessage }">
+				<p>
+					<span class="spf-htmlviewer-config-error-label">
+						<spf-i18n-portlet:message key="error.message"/>
+					</span>&nbsp;
+					<span class="spf-htmlviewer-config-error-message">
+						<c:out value="${errorMessage}"/>
+					</span>
+				</p>
+			</c:if>
+			<c:if test="${! empty infoMessage }">
+				<p>
+					<span class="spf-htmlviewer-config-info-message">
+						<c:out value="${infoMessage}"/>
+					</span>
+				</p>
+			</c:if>
+		</td>
+	</tr>
+</table>
+
 <form name="htmlViewerConfig" action='<portlet:actionURL/>' method="post">
 	<table>
 		<tr>
 			<td nowrap>
-				<spf-help-portlet:classicContextualHelp anchorKey="config.viewfilename" titleKey="config.viewfilename.help.title" contentKey="config.viewfilename.help.content" width="450"/>&nbsp;&nbsp;
+				<spf-help-portlet:classicContextualHelp anchorKey="config.viewfilename" titleKey="config.viewfilename.help.title" contentKey="config.viewfilename.help.content"/>&nbsp;&nbsp;
 			</td>					
 			<td>
 				<input type="text" name="<%= Consts.VIEW_FILENAME %>" value="<%= renderRequest.getAttribute(Consts.VIEW_FILENAME) %>">

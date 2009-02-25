@@ -8,6 +8,7 @@
 
 <%@ include file="include.jsp" %>
 <%@ page import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" %>
+<%@ page import="com.hp.it.spf.xa.i18n.portlet.I18nUtility" %>
 
 <%----------------------------------------------------------------- SCRIPT --%>
 
@@ -15,7 +16,8 @@
 
 <%---------------------------------------------------------------- MARKUP ---%>
 
-<link href="<%= renderResponse.encodeURL("/css/html_viewer.css") %>" rel="stylesheet" type="text/css">
+<link href="<%= I18nUtility.getLocalizedFileURL(renderRequest, renderResponse, "/css/html_viewer.css", false) %>" rel="stylesheet" type="text/css">
+
 <table>
 	<tbody>
 		<tr>
