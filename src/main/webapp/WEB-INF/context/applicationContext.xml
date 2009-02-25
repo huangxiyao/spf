@@ -20,7 +20,6 @@
 		class="com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver"
 		abstract="true">
 		<property name="defaultErrorView" value="defaultError" />
-		<property name="logResolvedException" value="true" />
 	</bean>
 
 	<!-- Message sources -->
