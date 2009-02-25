@@ -18,4 +18,4 @@
 
 <link href="<%= I18nUtility.getLocalizedFileURL(renderRequest, renderResponse, "/css/html_viewer.css", false) %>" rel="stylesheet" type="text/css">
 
-<c:out value="${viewContent}"/>
+<c:out value="${viewContent}" escapeXml="false"/>
