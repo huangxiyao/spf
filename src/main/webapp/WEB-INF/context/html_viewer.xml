@@ -27,7 +27,7 @@
 				<entry key="view">
 					<ref bean="htmlViewerViewController" />
 				</entry>
-				<entry key="config">
+				<entry key="vignette:config">
 					<ref bean="htmlViewerConfigController" />
 				</entry>
 			</map>
