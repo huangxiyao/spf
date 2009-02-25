@@ -1,14 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.apps</groupId>
 	<artifactId>spf-html-viewer</artifactId>
 	<packaging>war</packaging>
 	<name>SPF HTML viewer portlet</name>
 	<version>1.0.1-SNAPSHOT</version>
-	<description>Shared Portal Framework portlet application implementing the HTMLViewer portlet: a
-		JSR-168 portlet which interpolates and displays an administrated
-		HTML file (including defined tokens for certain dynamic
-		substitutions).</description>
+	<description>
+		Shared Portal Framework portlet application implementing the
+		HTMLViewer portlet: a JSR-168 portlet which interpolates and
+		displays an administrated HTML file (including defined tokens
+		for certain dynamic substitutions).
+	</description>
 	<inceptionYear>December 2008</inceptionYear>
 	<parent>
 		<artifactId>spf-pom</artifactId>
@@ -17,12 +21,20 @@
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/spf-html-viewer/</url>
+		<url>
+			http://samson.atl.hp.com:8080/hudson/job/spf-html-viewer/
+		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-html-viewer</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-html-viewer</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-html-viewer</url>
+		<connection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-html-viewer
+		</connection>
+		<developerConnection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-html-viewer
+		</developerConnection>
+		<url>
+			http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-html-viewer
+		</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
@@ -38,16 +50,16 @@
 			<artifactId>wpa-portlet-core</artifactId>
 			<version>3.0.1</version>
 		</dependency>
-<!-- 	<dependency>
+		<!-- 	<dependency>
 			<groupId>com.hp.websat</groupId>
 			<artifactId>wpap-core</artifactId>
 			<version>2.2.0</version>
-		</dependency>
-		<dependency>
+			</dependency>
+			<dependency>
 			<groupId>com.hp.websat</groupId>
 			<artifactId>timber</artifactId>
 			<version>1.2.5</version>
-		</dependency> -->
+			</dependency> -->
 		<dependency>
 			<groupId>javax.portlet</groupId>
 			<artifactId>portlet-api</artifactId>
@@ -74,4 +86,7 @@
 			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<finalName>html-viewer</finalName>
+	</build>
 </project>
