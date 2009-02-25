@@ -97,6 +97,6 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>html-viewer</finalName>
+		<finalName>htmlviewer</finalName>
 	</build>
 </project>
