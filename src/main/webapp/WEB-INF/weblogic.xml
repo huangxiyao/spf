@@ -20,5 +20,5 @@
 		<prefer-web-inf-classes>true</prefer-web-inf-classes>
 		</container-descriptor>
 	-->
-	<context-root>html-viewer</context-root>
+	<context-root>htmlviewer</context-root>
 </weblogic-web-app>

@@ -11,7 +11,7 @@
 		<description>
 			Interpolates and displays an HTML file (localized).
 		</description>
-		<portlet-name>HTML Viewer Portlet</portlet-name>
+		<portlet-name>HTMLViewerPortlet</portlet-name>
 		<display-name>HTMLViewer</display-name>
 		<portlet-class>
 			com.hp.frameworks.wpa.portlet.WPADispatcherPortlet
@@ -38,11 +38,11 @@
 		<portlet-preferences>
 			<preference>
 				<name>viewFilename</name>
-				<read-only>true</read-only>
+				<read-only>false</read-only>
 			</preference>
 			<preference>
 				<name>launchButtonless</name>
-				<read-only>true</read-only>
+				<read-only>false</read-only>
 			</preference>
 		</portlet-preferences>
 	</portlet>
