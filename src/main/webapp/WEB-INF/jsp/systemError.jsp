@@ -6,22 +6,17 @@
 
 <%------------------------------------------------------------- DIRECTIVES --%>
 
-<jsp:directive.page
-	import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" />
-<jsp:directive.page
-	import="com.hp.it.spf.xa.exception.portlet.ExceptionUtil" />
-
-<%---------------------------------------------------------- TAG LIBRARIES --%>
-
-<jsp:directive.include file="include.jsp" />
+<%@ include file="include.jsp" %>
+<%@ page import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" %>
+<%@ page import="com.hp.it.spf.xa.exception.portlet.ExceptionUtil" %>
 
 <%----------------------------------------------------------------- SCRIPT --%>
 
 <portlet:defineObjects />
-<jsp:scriptlet>
+<%
 	String errorCode = ExceptionUtil.getErrorCode(renderRequest, Consts.ERROR_CODE_INTERNAL);
 	String errorMessage = ExceptionUtil.getLocalizedMessage(renderRequest, Consts.ERROR_CODE_INTERNAL);
-</jsp:scriptlet>
+%>
 
 <%---------------------------------------------------------------- MARKUP ---%>
 

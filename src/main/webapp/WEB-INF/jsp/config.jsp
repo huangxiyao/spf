@@ -6,17 +6,12 @@
 
 <%------------------------------------------------------------- DIRECTIVES --%>
 
-<jsp:directive.page import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" />
-
-<%---------------------------------------------------------- TAG LIBRARIES --%>
-
-<jsp:directive.include file="include.jsp" />
+<%@ include file="include.jsp" %>
+<%@ page import="com.hp.it.spf.xa.htmlviewer.portlet.util.Consts" %>
 
 <%----------------------------------------------------------------- SCRIPT --%>
 
 <portlet:defineObjects/>
-<jsp:scriptlet>
-</jsp:scriptlet>
 
 <%---------------------------------------------------------------- MARKUP ---%>
 
