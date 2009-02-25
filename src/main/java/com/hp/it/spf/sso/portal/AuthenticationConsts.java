@@ -240,6 +240,12 @@ class AuthenticationConsts {
     public final static String LOCAL_HPP_NAME = "LOCAL_PORTAL_AUTH_HPP";
     
     /**
+     * Groups that indicate the user is authenticated or not. 
+     */
+    public final static String LOCAL_PORTAL_AUTHENTICATED_USERS = "LOCAL_PORTAL_AUTHENTICATED_USERS";
+    public final static String LOCAL_PORTAL_ANONYMOUS_USERS = "LOCAL_PORTAL_ANONYMOUS_USERS";
+    
+    /**
      * Groups stands for the user locale.
      */
     public final static String LOCAL_PORTAL_LANG_PREFIX = "LOCAL_PORTAL_LANG_";

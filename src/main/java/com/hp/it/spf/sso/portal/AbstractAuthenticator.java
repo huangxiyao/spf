@@ -549,6 +549,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             group.add(AuthenticationConsts.LOCAL_FED_NAME);
         }
         
+        // set authenticated user group
+        group.add(AuthenticationConsts.LOCAL_PORTAL_AUTHENTICATED_USERS);
+        
         // set group according to user locale retrieved by locale resolver
         Locale reqLocale = (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE);
         String language = reqLocale.getLanguage().toUpperCase();
