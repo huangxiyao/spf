@@ -4547,6 +4547,12 @@ This text is for everybody.&lt;BR&gt;
 	core groups - see the list in the discussion about <a
 		href="#portal.user.groups"><code>Utils.getGroups</code></a>, below.</p>
 
+	<blockquote>
+	<p><b>Note:</b> In the <code><i>groups</i></code> for the <code>{GROUP:<i>groups</i>}</code>
+	token, you must use the literal group name - you cannot use the Java
+	constant/variable name for it.</p>
+	</blockquote>
+
 	<p><b>Background:</b> The SPF has 2 related concepts for
 	authorization: groups and roles. Groups are portal-level constructs and
 	are not JSR portlet standard; roles are portlet-level constructs which
@@ -5412,7 +5418,8 @@ appropriate:</p>
 	</dt>
 	<dd>
 	<dl>
-		<dt><code>LOCAL_PORTAL_AUTH_ATHP</code></dt>
+		<dt><code>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#GROUP_AUTH_TYPE_ATHP}</code></dt>
 		<dd>
 		<p>Indicates the user is a member of the &#64;HP employee portal,
 		not HP Passport. Whether the user is currently logged-into his/her HP
@@ -5421,7 +5428,8 @@ appropriate:</p>
 		system.</p>
 		</dd>
 
-		<dt><code>LOCAL_PORTAL_AUTH_HPP</code></dt>
+		<dt><code>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#GROUP_AUTH_TYPE_HPP}</code></dt>
 		<dd>
 		<p>Indicates the user is a member of <i>standard</i> (not
 		federated) HP Passport. Whether the user is currently logged-into
@@ -5433,7 +5441,8 @@ appropriate:</p>
 		this time.)</p>
 		</dd>
 
-		<dt><code>LOCAL_PORTAL_AUTH_FED</code></dt>
+		<dt><code>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#GROUP_AUTH_TYPE_FED}</code></dt>
 		<dd>
 		<p><i>This group is uncommon in most SPF portal applications.</i>
 		It indicates the user is a member of <i>federated</i> (not standard)
@@ -5447,11 +5456,41 @@ appropriate:</p>
 	</dl>
 	</dd>
 	<dt>
+	<p><b><u>Authentication Status Groups:</u></b></p>
+	</dt>
+	<dd>
+	<dl>
+		<dt><code>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#GROUP_AUTH_STATUS_AUTHENTICATED}</code></dt>
+		<dd>
+		<p>Indicates the user is currently logged-in (whether via HP
+		Passport or HP Enterprise Directory is not indicated; check the
+		access-type groups).</p>
+		</dd>
+
+		<dt><code>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#GROUP_AUTH_STATUS_ANONYMOUS}</code></dt>
+		<dd>
+		<p>Indicates the user is currently <b>not</b> logged-in (whether
+		via HP Passport or HP Enterprise Directory is not indicated; check the
+		access-type groups).</p>
+		</dd>
+	</dl>
+	<p><b>Note:</b> These groups are mutually-exclusive. They will
+	present consistently with the results of the <a
+		href="#portal.user.loginStatus"><code>Utils.isAuthenticatedUser</code>
+	method</a> (see above). That is, when <code>Utils.isAuthenticatedUser</code>
+	returns true, the user will also be a member of the <code>{@link
+	com.hp.it.spf.xa.misc.portlet.Consts#GROUP_AUTH_STATUS_AUTHENTICATED}</code>
+	group; and vice-versa.</p>
+	</dd>
+	<dt>
 	<p><b><u>Locale Groups:</u></b></p>
 	</dt>
 	<dd>
 	<dl>
-		<dt><code>LOCAL_PORTAL_COUNTRY_<i>&lt;country-code&gt;</i></code></dt>
+		<dt><code>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#GROUP_LOCALE_COUNTRY_PREFIX} + "<i>&lt;country-code&gt;</i>"</code></dt>
 		<dd>
 		<p>Indicates the user should be considered a member of the group
 		for the particular country. This is based on the locale resolved for
@@ -5462,9 +5501,9 @@ appropriate:</p>
 		3166-1</a> country code. Note that this may, or may not, be the same
 		country as the user's registered country in SiteMinder (eg, the <code>residentCountryCode</code>
 		attribute of the core HPP profile).</p>
-		<p>For example, <code>LOCAL_PORTAL_COUNTRY_BR</code> for a user with any
-		Brazil locale; <code>LOCAL_PORTAL_COUNTRY_GB</code> for a user with any
-		United Kingdom locale; etc.</p>
+		<p>For example, <code>Consts.GROUP_LOCALE_COUNTRY_PREFIX +
+		"BR"</code> for a user with any Brazil locale; <code>Consts.GROUP_LOCALE_COUNTRY_PREFIX
+		+ "GB"</code> for a user with any United Kingdom locale; etc.</p>
 		<blockquote>
 		<p><b>Note:</b> When the user's resolved locale does not include a
 		country (ie a generic locale like French), the user will not be
@@ -5472,7 +5511,8 @@ appropriate:</p>
 		</blockquote>
 		</dd>
 
-		<dt><code>LOCAL_PORTAL_LANG_<i>&lt;language-code&gt;</i></code></dt>
+		<dt><code>{@link
+		com.hp.it.spf.xa.misc.portlet.Consts#GROUP_LOCALE_LANGUAGE_PREFIX} + "<i>&lt;language-code&gt;</i>"</code></dt>
 		<dd>
 		<p>Indicates the user should be considered a member of the group
 		for the particular language. This is based on the locale resolved for
@@ -5483,9 +5523,9 @@ appropriate:</p>
 		639-1</a> language code. Note that this may, or may not, be the same
 		language as the user's registered language in SiteMinder (eg, the <code>langCode</code>
 		attribute of the core HPP profile).</p>
-		<p>For example, <code>LOCAL_PORTAL_LANG_ZH</code> for a user with any
-		Chinese-language locale; <code>LOCAL_PORTAL_LANG_RU</code> for a user with
-		any Russian-language locale; etc.</p>
+		<p>For example, <code>Consts.GROUP_LOCALE_LANGUAGE_PREFIX +
+		"ZH"</code> for a user with any Chinese-language locale; <code>Consts.GROUP_LOCALE_LANGUAGE_PREFIX
+		+ "RU"</code> for a user with any Russian-language locale; etc.</p>
 		</dd>
 	</dl>
 	</dd>
@@ -6622,7 +6662,19 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		<td>S. Jorgenson</td>
 		<td>
 		<ul>
-			<li>Changed authentication-type and locale group names per Slawek and Ye.</li>
+			<li>Changed authentication-type and locale group names per
+			Slawek and Ye.</li>
+		</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>1.4</td>
+		<td>Feb 25 2009</td>
+		<td>S. Jorgenson</td>
+		<td>
+		<ul>
+			<li>Documented authentication status groups, and constant names
+			for all groups.</li>
 		</ul>
 		</td>
 	</tr>
