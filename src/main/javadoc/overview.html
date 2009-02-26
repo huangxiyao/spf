@@ -146,7 +146,7 @@ table.props td {
 			(JSR 286)</a></li>
 			<li>1.3.4. <a href="#overview.other.spf.common">SPF Common
 			Utilities</a></li>
-			<li>1.3.5. <a href="#overview.other.spf.htmlviewer">SPF <code>html-viewer</code>
+			<li>1.3.5. <a href="#overview.other.spf.htmlviewer">SPF <code>htmlviewer</code>
 			Portlet</a></li>
 		</ul>
 		</li>
@@ -304,7 +304,7 @@ table.props td {
 			<li>4.3.1. <a href="#file.display.jsp.interpolate">Using <code>&lt;spf-file-portlet:interpolate&gt;</code></a></li>
 		</ul>
 		</li>
-		<li>4.4. <a href="#file.display.htmlViewer">Using the <code>html-viewer</code>
+		<li>4.4. <a href="#file.display.htmlViewer">Using the <code>htmlviewer</code>
 		portlet to display interpolated text from files</a></li>
 		<li>4.5. <a href="#file.author">Authoring text using
 		interpolation tokens</a>
@@ -671,10 +671,10 @@ to import them directly.</p>
 	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#top"><code>http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html</code></p>
 
 <a name="overview.other.spf.htmlviewer">
-<h4>1.3.5. SPF <code>html-viewer</code> Portlet</h4>
+<h4>1.3.5. SPF <code>htmlviewer</code> Portlet</h4>
 </a>
 
-<p>The Shared Portal Framework includes a portlet application, <code>html-viewer</code>,
+<p>The Shared Portal Framework includes a portlet application, <code>htmlviewer</code>,
 which you can use with minimal customization. This portlet renders a
 text file, such as an HTML file (containing arbitrary HTML, JavaScript,
 and/or CSS), to the user.</p>
@@ -691,24 +691,24 @@ and/or CSS), to the user.</p>
 	permission content in the file by group or role; include
 	possibly-localized images and other static resources; etc.</li>
 
-	<li>The <code>html-viewer</code> portlet's <code>view</code> mode
+	<li>The <code>htmlviewer</code> portlet's <code>view</code> mode
 	renders the file, and its <code>config</code> mode lets the portlet
 	administrator configure the portlet (eg specify which bundle of HTML
 	files to render).</li>
 </ul>
 
-<p>The <code>html-viewer</code> portlet is often a quick and easy
+<p>The <code>htmlviewer</code> portlet is often a quick and easy
 basis for developing a simple, static or mostly-static portlet for your
 SPF portal site. You don't write any code or configure any Spring or
 portlet XML files; you just supply the text files for it to display.
-Furthermore, the <code>html-viewer</code> code is extensible (it is
+Furthermore, the <code>htmlviewer</code> code is extensible (it is
 actually included inside the SPF portlet utilities) if you rather need
 to build upon it for your own portlet application.</p>
 
-<p>Although the SPF portlet utilities include the classes for <code>html-viewer</code>,
-it is a separate application with its own SPF HTML Viewer Portlet
+<p>Although the SPF portlet utilities include the classes for <code>htmlviewer</code>,
+it is a separate application with its own SPF HTML Viewer Portlet Administration and 
 Developer's Guide here: <a
-	href="http://samson.atl.hp.com:8080/hudson/job/html-viewer/site/apidocs/overview-summary.html"><code>http://samson.atl.hp.com:8080/hudson/job/html-viewer/site/apidocs/overview-summary.html</code></a></p>
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-html-viewer/site/apidocs/overview-summary.html"><code>http://samson.atl.hp.com:8080/hudson/job/spf-html-viewer/site/apidocs/overview-summary.html</code></a></p>
 
 <hr>
 
@@ -4110,28 +4110,28 @@ above</a> about portlet <code>help</code> mode.</p>
 <hr>
 
 <a name="file.display.htmlViewer">
-<h3>4.4. Using the <code>html-viewer</code> portlet to display
+<h3>4.4. Using the <code>htmlviewer</code> portlet to display
 interpolated text from files</h3>
 </a>
 
-<p>The Shared Portal Framework includes a portlet application, <code>html-viewer</code>,
+<p>The Shared Portal Framework includes a portlet application, <code>htmlviewer</code>,
 which you can use with minimal customization. This portlet basically
 wraps-around the file interpolation framework discussed above, at the
 highest possible level: the portlet application.</p>
 
 <p>If you have a portlet which needs to do nothing more than display
 some basic text, with dynamic behaviors within the capabilities of the <a
-	href="#file.author">text interpolation tokens</a>, then using <code>html-viewer</code>
+	href="#file.author">text interpolation tokens</a>, then using <code>htmlviewer</code>
 is the easiest way to inmplement. You write no Java code, no JSP, and no
 Spring configuration. You just write the needed text file(s), and use
 the Vignette site console to instantiate the needed portlet instance(s)
 and configure them via the portlet's <code>config</code> mode so that
 they use those file(s).</p>
 
-<p>The <code>html-viewer</code> portlet is covered in a separate
+<p>The <code>htmlviewer</code> portlet is covered in a separate
 document, the <a
-	href="http://samson.atl.hp.com:8080/hudson/job/html-viewer/site/apidocs/overview-summary.html">SPF
-HTML Viewer Portlet Developer's Guide</a> (see).</p>
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-html-viewer/site/apidocs/overview-summary.html">SPF
+HTML Viewer Portlet Administration and Developer's Guide</a> (see).</p>
 
 <hr>
 
@@ -4726,7 +4726,7 @@ url.hp=http://www.hp.com
 		class attribute.</li>
 		<li>If you use the <a href="#file.display.jsp.interpolate"><code>&lt;spf-file-portlet:interpolate&gt;</code></a>
 		JSP tag, set use the <code>includeFile</code> tag attribute.</li>
-		<li>If you use the <a href="#file.display.htmlViewer"><code>html-viewer</code></a>
+		<li>If you use the <a href="#file.display.htmlViewer"><code>htmlviewer</code></a>
 		portlet, the file must be named <code>html_viewer_includes.properties</code>.</li>
 	</ul>
 
