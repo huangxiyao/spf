@@ -12,12 +12,14 @@
 			<handler type="java:com.hp.it.spf.wsrp.log.WsrpTimeRecordingHandler" />
 			<handler type="java:com.hp.it.spf.wsrp.rewriter.WsrpRewriterHandler"/>
 			<handler type="java:com.hp.it.spf.wsrp.injector.context.UserContextInjector"/>
+			<handler type="java:com.hp.it.spf.wsrp.sticky.StickyHandler"/>
 		</requestFlow>
 		<responseFlow>
 			<handler type="java:com.vignette.portal.webservices.internal.axis.handlers.CookieHeaderAccessHandler"/>
 			<handler type="java:com.vignette.portal.portlet.wsrpconsumer.internal.cookie.SessionCookieSnoopingHandler"/>
 			<handler type="java:com.hp.it.spf.wsrp.log.WsrpTimeRecordingHandler" />
 			<handler type="java:com.hp.it.spf.wsrp.rewriter.WsrpRewriterHandler"/>
+			<handler type="java:com.hp.it.spf.wsrp.sticky.StickyHandler"/>
 		</responseFlow>
 	</transport>
 	<%MAPPINGS_PLACEHOLDER%>
