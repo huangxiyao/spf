@@ -25,6 +25,63 @@ public class Consts {
 	 */
 	public static final String USER_PROFILE_KEY = "userProfile";
 
+	private static final String GROUP_PREFIX = "LOCAL_PORTAL_";
+
+	/**
+	 * The SPF-assigned user group indicating the user is accessing via standard
+	 * HP Passport.
+	 */
+	public static final String GROUP_AUTH_TYPE_HPP = GROUP_PREFIX + "AUTH_HPP";
+
+	/**
+	 * The SPF-assigned user group indicating the user is accessing via
+	 * federated HP Passport.
+	 */
+	public static final String GROUP_AUTH_TYPE_FED = GROUP_PREFIX + "AUTH_FED";
+
+	/**
+	 * The SPF-assigned user group indicating the user is accessing via HP
+	 * Enterprise Directory and the AtHP employee portal.
+	 */
+	public static final String GROUP_AUTH_TYPE_ATHP = GROUP_PREFIX
+			+ "AUTH_ATHP";
+
+	/**
+	 * The SPF-assigned user group indicating the user is currently logged-in
+	 * (ie, authenticated).
+	 */
+	public static final String GROUP_AUTH_STATUS_AUTHENTICATED = GROUP_PREFIX
+			+ "AUTHENTICATED_USERS";
+
+	/**
+	 * The SPF-assigned user group indicating the user is currently logged-out
+	 * (ie, anonymous or guest).
+	 */
+	public static final String GROUP_AUTH_STATUS_ANONYMOUS = GROUP_PREFIX
+			+ "ANONYMOUS_USERS";
+
+	/**
+	 * The prefix for the SPF-assigned user group for country - if the user is
+	 * in this group, it indicates his or her resolved locale includes that
+	 * country. Append this string with the <a
+	 * href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+	 * 3166-1</a> country code to get a complete group name - for example,
+	 * <code>GROUP_LOCALE_COUNTRY_PREFIX + "CN"</code> for China.
+	 */
+	public static final String GROUP_LOCALE_COUNTRY_PREFIX = GROUP_PREFIX
+			+ "COUNTRY_";
+
+	/**
+	 * The prefix for the SPF-assigned user group for language - if the user is
+	 * in this group, it means his or her resolved locale includes that
+	 * language. Append this string with the <a
+	 * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+	 * 639-1</a> language code to make a complete group name - for example,
+	 * <code>GROUP_LOCALE_LANGUAGE_PREFIX + "ZH" for Chinese.
+	 */
+	public static final String GROUP_LOCALE_LANGUAGE_PREFIX = GROUP_PREFIX
+			+ "LANG_";
+
 	/**
 	 * The key to get profile id from user profile map.
 	 */
