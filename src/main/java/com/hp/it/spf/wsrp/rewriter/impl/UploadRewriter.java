@@ -27,7 +27,7 @@ import java.io.ByteArrayInputStream;
  * Rewrites upload contexts and form parameters values provided by Vignette into the format expected
  * by OpenPortal WSRP producer.
  * Vignette encodes the entire form with all its parameters (normal and files) into a single upload
- * context. OpenPortal however expectes each of the parameters to be present in form parameters,
+ * context. OpenPortal however expects each of the parameters to be present in form parameters,
  * and each of the files to be present in a separate upload context. This class performs that
  * transformations.
  * 
@@ -60,7 +60,7 @@ public class UploadRewriter implements IRewriter {
 	}
 
 	/**
-	 * Rewrites interaction params. This method is used for <tt>performBlockingInteraction</tt>
+	 * Rewrites interaction parameters. This method is used for <tt>performBlockingInteraction</tt>
 	 * requests.
 	 *
 	 * @param interactionParams interaction parameters containing form parameters and upload contexts
@@ -79,7 +79,7 @@ public class UploadRewriter implements IRewriter {
 	}
 
 	/**
-	 * Rewrites resource params. This method is used for <tt>getResource</tt> requests.
+	 * Rewrites resource parameters. This method is used for <tt>getResource</tt> requests.
 	 *
 	 * @param resourceParams resource parameters containing form parameters and upload contexts
 	 */
@@ -173,7 +173,7 @@ public class UploadRewriter implements IRewriter {
 	/**
 	 * Creates file upload's request context based on the provided data.
 	 * @param uploadData the actual request content
-	 * @param contentType the request content type; usually multi-part request
+	 * @param contentType the request content type; usually multipart request
 	 * @return request context as expected by file upload parseRequest method.
 	 */
 	private RequestContext createRequestContext(final byte[] uploadData, final String contentType) {

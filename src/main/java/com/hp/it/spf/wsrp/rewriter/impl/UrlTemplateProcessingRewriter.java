@@ -7,13 +7,13 @@ import oasis.names.tc.wsrp.v2.types.ServiceDescription;
 import org.apache.axis.MessageContext;
 
 /**
- * Rewrites the <tt>getServiceDescription</tt> response changing the flag inidicating whether
+ * Rewrites the <tt>getServiceDescription</tt> response changing the flag indicating whether
  * the portlets support URL template processing to true.
  * The reason for this change is that Vignette sends to the producer URL templates which do not
  * result in valid URLs and require further processing by Vignette. Disabling the templates
  * we prevent Vignette from sending templates with each WSRP markup request and we force the producer
  * to generate its own URLs. This way the generated URLs still need to be processed but the templates
- * are not sent with each request making the request ligher.
+ * are not sent with each request making the request lighter.
  *
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  */

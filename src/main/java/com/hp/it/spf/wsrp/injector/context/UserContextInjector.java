@@ -55,6 +55,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * @author Oliver, Kaijian Ding, Ye Liu
  * @version TBD
  */
+@SuppressWarnings("serial")
 public class UserContextInjector extends BasicHandler {
 	private static final LogWrapper LOG = new LogWrapper(UserContextInjector.class);
 
@@ -62,7 +63,7 @@ public class UserContextInjector extends BasicHandler {
 	static final String WSRP_PROFILE_ERROR_FLAG = "WsrpProfileError";
 
 	/**
-	 * Retrieve user profile map from session and Injcet user profile map into
+	 * Retrieves user profile map from session and injects user profile map into
 	 * soap. Add UserContextKeys and UserProfile to soap header section .
 	 * 
 	 * @param messageContext this web service call message context
@@ -101,7 +102,7 @@ public class UserContextInjector extends BasicHandler {
 							request.getAttribute(RequestBindingFilter.THREAD_NAME_REQUEST_KEY));
 				}
 
-				Map userContextKeys = retrieveUserContextKeys(request);
+				Map<String, String> userContextKeys = retrieveUserContextKeys(request);
 				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 					LOG.debug("User context keys: " + userContextKeys);
 				}
@@ -130,8 +131,8 @@ public class UserContextInjector extends BasicHandler {
 	 *            user original request
 	 * @return user context key map whose values are {@link String} objects
 	 */
-	private Map retrieveUserContextKeys(HttpServletRequest request) {
-		Map userContext = new HashMap();
+	private Map<String, String> retrieveUserContextKeys(HttpServletRequest request) {
+		Map<String, String> userContext = new HashMap<String, String>();
 
 		userContext.put(Consts.KEY_PORTAL_SITE_URL, com.hp.it.spf.xa.misc.portal.Utils.getSiteURL(request));
 		userContext.put(Consts.KEY_PORTAL_REQUEST_URL, com.hp.it.spf.xa.misc.portal.Utils.getRequestURL(request));
@@ -154,7 +155,7 @@ public class UserContextInjector extends BasicHandler {
 	 * SOAP header is much more efficient than XML or direct SOAP header
 	 * elements. Based on the conducted tests we confirmed that the using SOAP
 	 * header elements results in a response time proportional to the number of
-	 * concurrent calls. Using plain text form avoids olso the verbosity of XML
+	 * concurrent calls. Using plain text form avoids also the verbosity of XML
 	 * representation which makes the overall SOAP request size much smaller.
 	 * 
 	 * @param envelope
@@ -198,7 +199,7 @@ public class UserContextInjector extends BasicHandler {
 	private String getPortalSiteName(HttpServletRequest request) {
 		// synchronize this as multiple WSRP threads will access the request in
 		// parallel and we don't
-		// know the underlying request implemenation
+		// know the underlying request implementation
 		synchronized (request) {
 			PortalContext portalContext = (PortalContext) request
 					.getAttribute("portalContext");
@@ -225,7 +226,7 @@ public class UserContextInjector extends BasicHandler {
 	private String getPortalSessionId(HttpServletRequest request) {
 		// synchronize this as multiple WSRP threads will access the request in
 		// parallel and we don't
-		// know the underlying request implemenation
+		// know the underlying request implementation
 		synchronized (request) {
 			return request.getSession(true).getId();
 		}
@@ -241,7 +242,7 @@ public class UserContextInjector extends BasicHandler {
 		Cookie[] cookies = null;
 		// synchronize this as multiple WSRP threads will access the request in
 		// parallel and we don't
-		// know the underlying request implemenation
+		// know the underlying request implementation
 		synchronized (request) {
 			cookies = request.getCookies();
 		}
@@ -288,7 +289,7 @@ public class UserContextInjector extends BasicHandler {
 	private Map getUserProfileMap(HttpServletRequest request) {
 		// synchronize this as multiple WSRP threads will access the request in
 		// parallel and we don't
-		// know the underlying request implemenation
+		// know the underlying request implementation
 		synchronized (request) {
 			HttpSession session = request.getSession(true);
 			Map userProfile = (Map) session.getAttribute(Consts.USER_PROFILE_KEY);

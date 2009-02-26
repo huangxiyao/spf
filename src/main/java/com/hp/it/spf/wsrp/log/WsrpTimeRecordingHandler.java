@@ -19,10 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * A handler capturing WSRP execution time. This class relies on {@link TimeRecorder} to
- * peform this logging.
+ * perform this logging.
  *
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  */
+@SuppressWarnings("serial")
 public class WsrpTimeRecordingHandler extends BasicHandler {
 	private static final LogWrapper LOG = new LogWrapper(WsrpTimeRecordingHandler.class);
 
@@ -45,7 +46,7 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 			}
 		}
 		catch (Exception e) {
-			// Don't retrhow this exception as are in the loging code so the error is due to
+			// Don't rethrow this exception as are in the logging code so the error is due to
 			// logging infrastructure and probably does not impact proper application operation
 			LOG.error("Error occured while recording time", e);
 		}
