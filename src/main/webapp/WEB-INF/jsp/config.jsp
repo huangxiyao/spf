@@ -27,14 +27,14 @@
 						<spf-i18n-portlet:message key="error.message"/>
 					</span>&nbsp;
 					<span class="spf-htmlviewer-config-error-message">
-						<c:out value="${errorMessage}"/>
+						<c:out value="${errorMessage}" escapeXml="false"/>
 					</span>
 				</p>
 			</c:if>
 			<c:if test="${! empty infoMessage }">
 				<p>
 					<span class="spf-htmlviewer-config-info-message">
-						<c:out value="${infoMessage}"/>
+						<c:out value="${infoMessage}" escapeXml="false"/>
 					</span>
 				</p>
 			</c:if>
