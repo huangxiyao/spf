@@ -64,9 +64,9 @@ public class RequestBindingFilter implements Filter {
      * @param servletResponse
      *            incoming response
      * @param filterChain
-     *            fitler chain
+     *            filter chain
      * @throws IOException
-     *             If an exeption occurs duing the fitler chain processing; this
+     *             If an exception occurs during the filter chain processing; this
      *             class doesn't throw any IOException
      * @throws ServletException
      *             If an exception occurs during the filter chain processing;
@@ -75,7 +75,7 @@ public class RequestBindingFilter implements Filter {
     public void doFilter(ServletRequest servletRequest,
             ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-        LOG.info("RequestBindingFilter start");
+        LOG.debug("RequestBindingFilter start");
         HttpServletRequest request = (HttpServletRequest)servletRequest;
 
         String userAgentValue = request.getHeader("user-agent");
