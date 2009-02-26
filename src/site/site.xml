@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project>
+<project name="SPF html viewer">
+  <bannerLeft>
+    <name>Maven</name>
+    <src>http://maven.apache.org/images/apache-maven-project.png</src>
+    <href>http://maven.apache.org/</href>
+  </bannerLeft>
+  <bannerRight>
+    <src>http://maven.apache.org/images/maven-small.gif</src>
+  </bannerRight>
   <body>
     <menu ref="reports">
       <item name="Administrator and Developer Guide" href="overview.html"/>
