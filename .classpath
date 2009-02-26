@@ -6,6 +6,7 @@
 	<classpathentry kind="src" path="src/test/resources"/>
 	<classpathentry kind="src" path="src/main/javadoc"/>
 	<classpathentry kind="src" path="src/main/resources/META-INF"/>
+	<classpathentry kind="src" path="src/site"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="output" path="target/classes"/>
