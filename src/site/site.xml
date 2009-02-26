@@ -9,7 +9,7 @@
     <src>http://maven.apache.org/images/maven-small.gif</src>
   </bannerRight>
   <body>
-    <menu ref="reports">
+    <menu name="Project Documentation" inherit="bottom">
       <item name="Administrator and Developer Guide" href="overview.html"/>
     </menu>
   </body>
