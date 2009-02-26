@@ -175,7 +175,8 @@ public class AdmissionControlFilter implements Filter {
 		if (!staffUser && (closed || (closing && !admitted))) {
 			if (poolHostname != null) {
 				LOG.debug("-- Exit 5 AdmissionControlFilter.doFilter");
-				LOG.info("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [site closed or closing]");
+				LOG
+						.info("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [site closed or closing]");
 				this.redirect(request, response, poolHostname, poolID,
 						thisSiteHostname);
 				return;
@@ -187,7 +188,8 @@ public class AdmissionControlFilter implements Filter {
 				&& !usedOtherSiteHostname) {
 			if (poolHostname != null) {
 				LOG.debug("-- Exit 6 AdmissionControlFilter.doFilter");
-				LOG.info("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [load redistribution]");
+				LOG
+						.info("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [load redistribution]");
 				this.redirect(request, response, poolHostname, poolID,
 						thisSiteHostname);
 				return;
@@ -203,7 +205,8 @@ public class AdmissionControlFilter implements Filter {
 				// unsticky settings
 				this.admitClient(request, poolID, thisSiteHostname);
 				LOG.debug("-- Exit 7 AdmissionControlFilter.doFilter");
-				LOG.info("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [site affinity]");
+				LOG
+						.info("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [site affinity]");
 				this.redirect(request, response, thisSiteHostname, poolID,
 						thisSiteHostname);
 				return;
@@ -744,7 +747,7 @@ public class AdmissionControlFilter implements Filter {
 		HashSet poolHostnames = this.config.getPoolHostnames(poolID);
 		if ((hostname != null) && (poolHostnames != null)
 				&& poolHostnames.contains(hostname))
-			return true;
+			return true && !clientUsedThisSiteHostname(request, poolID);
 		else
 			return false;
 
@@ -770,7 +773,8 @@ public class AdmissionControlFilter implements Filter {
 		HashSet siteHostnames = this.config.getOtherSiteHostnames(poolID);
 		if ((hostname != null) && (siteHostnames != null)
 				&& siteHostnames.contains(hostname))
-			return true;
+			return true && !clientUsedPoolHostname(request, poolID)
+					&& !clientUsedThisSiteHostname(request, poolID);
 		else
 			return false;
 
