@@ -102,7 +102,7 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 
 		HttpServletRequest request = Utils.retrieveRequest(messageContext);
 		if (request == null) {
-			LOG.error("Cannot find request in the content of messageContext");
+			throw new IllegalStateException("Cannot find request in the content of the messageContext");
 		}
 		requestContext = (RequestContext) request.getAttribute(RequestContext.REQUEST_KEY);
 

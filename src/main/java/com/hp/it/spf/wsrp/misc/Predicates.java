@@ -30,6 +30,15 @@ public class Predicates {
 		String url = messageContext.getStrProp(MessageContext.TRANS_URL);
 		return url != null && url.indexOf("/portletdriver/wsrp/router") != -1;
 	}
+	
+	/**
+	 * @param messageContext web service message context
+	 * @return <tt>true</tt> if the web service request is targeted to WSRP4J producer
+	 */
+	public static boolean isWsrp4jProducer(MessageContext messageContext) {
+		String url = messageContext.getStrProp(MessageContext.TRANS_URL);
+		return url != null && url.indexOf("/WSRP4JProducer/") != -1;
+	}
 
 	/**
 	 * @param messageContext web service message context

@@ -13,12 +13,12 @@ import org.apache.axis.MessageContext;
  * Rewrites the <tt>userContextKey</tt> to a generic admin user for portlets invoked in <tt>config</tt>
  * mode. It should be invoked only for OpenPortal WSRP producer.<p>
  * Config mode is used to define the configuration for the given portlet instance for all the users.
- * OpenPortal scopes the portlet prefernces (used often to store portlet configuration) to the users
- * invoking the portlet. Without this rewrting the portlet preferences defined in config mode would
+ * OpenPortal scopes the portlet preferences (used often to store portlet configuration) to the users
+ * invoking the portlet. Without this rewriting the portlet preferences defined in config mode would
  * be specific to the actual administrator user which invoked the portlet and would be invisible to
  * the end users. Changing the current user to generic admin user allows on the producer side to use
  * this user's preferences and merge them with end user preferences. The merge behavior is not
- * provided by OpenPortal either and requires SPF-specfic implementation of the appropriate peristence
+ * provided by OpenPortal either and requires SPF-specific implementation of the appropriate persistence
  * class to perform it.
  *
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
@@ -33,7 +33,7 @@ public class ConfigModeUserIdRewriter implements IRewriter {
 
 	/**
 	 * @param messageContext web service call message context
-	 * @return <tt>true</tt> if inoved for OpenPortal producer and WSRP V2 markup methods
+	 * @return <tt>true</tt> if invoked for OpenPortal producer and WSRP V2 markup methods
 	 */
 	public boolean shouldApply(MessageContext messageContext) {
 		return Predicates.isOpenPortalProducer(messageContext) &&
@@ -43,7 +43,7 @@ public class ConfigModeUserIdRewriter implements IRewriter {
 	/**
 	 * Rewrites <tt>userContextKey</tt> for portlets invoked in <tt>config</tt> mode.
 	 *
-	 * @param data WSRP request or reponse object
+	 * @param data WSRP request or response object
 	 */
 	public void rewrite(Object data) {
 		MarkupParams markupParams = null;
