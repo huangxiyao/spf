@@ -12,5 +12,6 @@
     <menu name="Project Documentation" inherit="bottom">
       <item name="Administrator and Developer Guide" href="overview.html"/>
     </menu>
+    <menu ref="reports"/>
   </body>
 </project>
