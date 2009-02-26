@@ -4,6 +4,8 @@
  */
 package com.hp.it.spf.xa.help;
 
+import java.util.StringTokenizer;
+
 /**
  * <p>
  * The abstract base class for contextual help providers and portal global help
@@ -71,4 +73,50 @@ public abstract class HelpProvider {
 	 */
 	public abstract String getHTML(boolean escape);
 
+	/**
+	 * Returns the input string with all occurrences of the quote characters
+	 * <code>"</code> and <code>'</code> escaped with the <code>\</code>
+	 * character. This escapes the characters for JavaScript, so then the
+	 * returned String can be embedded in a JavaScript string literal.
+	 * 
+	 * @param input
+	 *            String
+	 * @return The string with escaped quotes
+	 */
+	protected String escapeQuotes(String input) {
+
+		if (input == null)
+			return null;
+		StringBuffer buffer = new StringBuffer();
+		StringTokenizer st = new StringTokenizer(input, "\\", true);
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			if (token.equals("\\")) {
+				buffer.append("\\\\");
+			} else {
+				buffer.append(token);
+			}
+		}
+		st = new StringTokenizer(buffer.toString(), "\"", true);
+		buffer = new StringBuffer();
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			if (token.equals("\"")) {
+				buffer.append("\\\"");
+			} else {
+				buffer.append(token);
+			}
+		}
+		st = new StringTokenizer(buffer.toString(), "'", true);
+		buffer = new StringBuffer();
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			if (token.equals("'")) {
+				buffer.append("\\'");
+			} else {
+				buffer.append(token);
+			}
+		}
+		return buffer.toString();
+	}
 }

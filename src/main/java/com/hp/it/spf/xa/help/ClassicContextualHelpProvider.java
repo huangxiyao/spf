@@ -667,7 +667,7 @@ public abstract class ClassicContextualHelpProvider extends
 		String help = this.helpContent;
 		// Add element ID to <img> (it does not already have it and the script
 		// needs it).
-		if ((link != null) && (link.startsWith("<img ")) && (link.length() > 5)) {
+		if (isImage(link)) {
 			link = "<img id=\"" + id + "\" " + link.substring(5);
 		}
 		// Escape XML meta-characters if needed.
@@ -735,13 +735,13 @@ public abstract class ClassicContextualHelpProvider extends
 		// pieces. First, assemble the event-handler script.
 
 		html.append("<script>\n");
-		if (link != null && link.startsWith("<img ")) {
+		if (isImage(link)) {
 			// If the anchor text is an image tag, then don't need an
 			// anchor tag to surround it.
-			html.append("document.write('" + link + "');\n");
+			html.append("document.write('" + escapeQuotes(link) + "');\n");
 		} else {
 			html.append("document.write('<a href=\"javascript:noop\" id=\""
-					+ id + "\">" + link + "</a>');\n");
+					+ id + "\">" + escapeQuotes(link) + "</a>');\n");
 		}
 		// Write html to call javascript popup function
 		html
@@ -875,4 +875,16 @@ public abstract class ClassicContextualHelpProvider extends
 	 */
 	protected abstract String getCloseImageAlt();
 
+	/**
+	 * Returns true if the given string appears to be an HTML
+	 * <code>&lt;IMG&gt;</code> tag, false otherwise.
+	 */
+	private boolean isImage(String s) {
+		if (s != null) {
+			s = s.trim().toLowerCase();
+			if (s.startsWith("<img ") && s.endsWith(">"))
+				return true;
+		}
+		return false;
+	}
 }
