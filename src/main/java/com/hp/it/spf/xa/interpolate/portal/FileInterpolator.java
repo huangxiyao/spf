@@ -851,8 +851,12 @@ public class FileInterpolator extends
 		if (portalContext == null || baseContentFilePath == null) {
 			return null;
 		}
+		Locale loc = locale;
+		if (loc == null) {
+			loc = I18nUtility.getLocale(portalContext.getHttpServletRequest());
+		}
 		return I18nUtility.getLocalizedFileStream(portalContext,
-				baseContentFilePath, locale, true);
+				baseContentFilePath, loc, true);
 	}
 
 	/**

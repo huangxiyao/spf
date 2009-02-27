@@ -119,7 +119,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * built (eg the file is not found). This method is implemented using
 	 * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocalizedFileURL(PortalContext, String, Locale, boolean)}
 	 * (see). The current locale is the one provided to the constructor (or the
-	 * one in the portlet request if that was null).
+	 * one in the portal context if that was null).
 	 * </p>
 	 * <p>
 	 * The given file pathname should be a base filename of a file that has been
@@ -138,7 +138,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 			return null;
 		}
 		return I18nUtility.getLocalizedFileURL(portalContext, baseFilePath,
-				locale, localized);
+				getLocale(), localized);
 	}
 
 	/**
@@ -175,8 +175,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 */
 	protected Locale getLocale() {
 		if ((locale == null) && (portalContext != null)) {
-			return I18nUtility.getLocale(portalContext.getPortalRequest()
-					.getRequest());
+			return I18nUtility.getLocale(portalContext.getHttpServletRequest());
 		}
 		return locale;
 	}
