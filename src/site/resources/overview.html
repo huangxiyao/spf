@@ -212,10 +212,6 @@ file you provide (called a <i>view file</i>).</p>
 
 <ul>
 	<li>
-	<p>The portal administrator, when creating an instance of the
-	portlet, configures the basename of the view file to render.</p>
-	</li>
-	<li>
 	<p>The view file may contain any HTML, CSS, or JavaScript so long
 	as it is portal-consumable (eg can be aggregated with other content
 	from the portal and possible other portlet(s) to constitute the overall
@@ -237,9 +233,16 @@ file you provide (called a <i>view file</i>).</p>
 		maintained in multiple view files</li>
 	</ul>
 	<li>
-	<p>The view file and its other static resources (images, etc), if
-	any, may be localized; the portlet will render the versions which
-	best-fit the user's locale.</p>
+	<p>The view file and its static resources (images, etc), if any,
+	may be localized (for example, using the SPF standard localization
+	business process); the portlet will render the versions which best-fit
+	the user's locale.</p>
+	</li>
+	<li>
+	<p>The portal administrator, when creating an instance of the
+	portlet, configures the name of the view file to render. (The view file
+	itself, and its other static resources if any, are created and edited
+	separately, not online.)</p>
 	</li>
 	<li>
 	<p>The view file, its static resources, and their localized
