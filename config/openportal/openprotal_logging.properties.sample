@@ -1,7 +1,21 @@
+############################################################
+# Filename: openportal_logging.properties
+#
+# This file is a template for the logger configuration for the
+# OpenPortal application.
+#
+# Only one property needs to be set, and points to your log file.
+#
+# For example:
+#
+#       java.util.logging.FileHandler.pattern = /opt/sasuapps/sp/OpenPortal/logs/java.log
+#
+#
+##### ADD YOUR CONFIGURATION BELOW #####
 handlers=java.util.logging.ConsoleHandler,java.util.logging.FileHandler
 .level=INFO
 
-java.util.logging.FileHandler.pattern = C:/bea/user_projects/domains/WSRP_SYSTEST/openportal/portlet-container/logs/java.log
+java.util.logging.FileHandler.pattern = 
 java.util.logging.FileHandler.limit = 50000
 java.util.logging.FileHandler.count = 1
 java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter

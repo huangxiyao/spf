@@ -1,9 +1,12 @@
-# Properties file containing the value of the Portlet Container Home.
-
 ############################################################
-# This property contains the value of Portlet Container Home
-# The value is picked up during installation
-# Do not modify the value manually
-############################################################
-com.sun.portal.portletcontainer.dir=C:/bea/user_projects/domains/WSRP_SYSTEST/openportal/portlet-container
-#com.sun.portal.portletcontainer.dir=Z:/portlet-container
+# Filename: ContainerConfig.properties
+#
+# This property contains the value of Portlet Container Home.
+#
+# For example:
+#
+#       com.sun.portal.portletcontainer.dir=/opt/sasuapps/sp/OpenPortal
+#
+#
+##### ADD YOUR CONFIGURATION BELOW #####
+com.sun.portal.portletcontainer.dir=
