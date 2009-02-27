@@ -206,28 +206,77 @@ and Developer's Guide<br>
 </a>
 
 <p>This is the administration guide and developer's guide for the <b>Shared
-Portal Framework (SPF) HTML viewer portlet</b>.</p>
+Portal Framework (SPF) HTML viewer portlet</b>. The HTML viewer portlet is a
+JSR-168 (JSR-286-compatible) portlet for displaying an arbitrary content
+file you provide (called a <i>view file</i>).</p>
+
+<ul>
+	<li>
+	<p>The portal administrator, when creating an instance of the
+	portlet, configures the basename of the view file to render.</p>
+	</li>
+	<li>
+	<p>The view file may contain any HTML, CSS, or JavaScript so long
+	as it is portal-consumable (eg can be aggregated with other content
+	from the portal and possible other portlet(s) to constitute the overall
+	page).</p>
+	</li>
+	<li>
+	<p>The view file may also contain any of the <a href="">special
+	markup tokens</a> for server-side text interpolation, as supported by the
+	SPF portlet utilities' <a href="">text interpolation</a> engine. Using
+	these special markup tokens, your view file can:</p>
+	<ul>
+		<li>permission content based on user authentication or
+		authorization;</li>
+		<li>display user profile attributes (name, email, etc);</li>
+		<li>present URLs for other static resources (images, etc) or
+		portal pages (but not target portlets on those pages with parameters,
+		modes, etc);</li>
+		<li>consolidate content that otherwise would have to be
+		maintained in multiple view files</li>
+	</ul>
+	<li>
+	<p>The view file and its other static resources (images, etc), if
+	any, may be localized; the portlet will render the versions which
+	best-fit the user's locale.</p>
+	</li>
+	<li>
+	<p>The view file, its static resources, and their localized
+	versions may be stored <i>internal</i> to the portlet application or <i>external</i>,
+	on the filesystem of the portlet server, in the <i>portlet resource
+	bundle folder</i>.</p>
+	<ul>
+		<li>It is recommended to store them externally, if you anticipate
+		the administrator will need to change those files.</li>
+		<li>Changes to external files take effect without restarts.</li>
+	</ul>
+	</li>
+	<li>
+	<p>The portlet is contained in the <code>htmlviewer.war</code>
+	portlet application and may be deployed as a local portlet with the
+	portal, or as a remote portlet accessed by the portal over WSRP. (In
+	Shared Portal Framework, in practice, the portlet will be deployed
+	remotely in the OpenPortal container, and consumed by Vignette Portal.)</p>
+	</li>
+</ul>
 
 <hr>
 
 <a name="overview.installation">
 <h3>1.1. Installation</h3>
 </a>
-
 <a name="overview.installation.war">
 <h4>1.1.1 Installation of the <code>htmlviewer</code> WAR</h4>
 </a>
-
 <a name="overview.installation.i18n_portlet_config">
 <h4>1.1.2 Installation of <code>i18n_portlet_config.properties</code>
 (optional)</h4>
 </a>
-
 <a name="overview.installation.init_relay">
 <h4>1.1.3 Installation of <code>init_relay.properties</code>
 (optional)</h4>
 </a>
-
 <a name="overview.installation.html_viewer_includes">
 <h4>1.1.4 Installation of <code>html_viewer_includes.properties</code>
 (optional)</h4>
@@ -257,11 +306,9 @@ administrators and developers</h3>
 <a name="using.authoring">
 <h3>2.1. Authoring the view content</h3>
 </a>
-
 <a name="using.authoring.file">
 <h4>2.1.1. Authoring the view file</h4>
 </a>
-
 <a name="using.authoring.other">
 <h4>2.1.2. Other resources referenced from the view file</h4>
 </a>
@@ -277,11 +324,9 @@ administrators and developers</h3>
 <a name="using.creating">
 <h3>2.3. Creating and configuring the portlet instance</h3>
 </a>
-
 <a name="using.creating.create">
 <h4>2.3.1. Creating the portlet instance</h4>
 </a>
-
 <a name="using.creating.configure">
 <h4>2.3.2. Configuring the portlet instance</h4>
 </a>
@@ -297,11 +342,9 @@ administrators and developers</h3>
 <a name="extending.view">
 <h3>3.1. Extending the <code>view</code> mode</h3>
 </a>
-
 <a name="extending.view.java">
 <h4>3.1.1. Extending <code>ViewController</code></h4>
 </a>
-
 <a name="extending.view.jsp">
 <h4>3.1.2. Extending <code>view.jsp</code></h4>
 </a>
@@ -311,11 +354,9 @@ administrators and developers</h3>
 <a name="extending.config">
 <h3>3.2. Extending the <code>config</code> mode</h3>
 </a>
-
 <a name="extending.config.java">
 <h4>3.2.1. Extending <code>ConfigController</code></h4>
 </a>
-
 <a name="extending.config.jsp">
 <h4>3.2.2. Extending <code>config.jsp</code></h4>
 </a>
@@ -325,11 +366,9 @@ administrators and developers</h3>
 <a name="extending.app">
 <h3>3.3. Configuring and building the extended application</h3>
 </a>
-
 <a name="extending.app.spring">
 <h4>3.3.1. Configuring Spring to use the extensions</h4>
 </a>
-
 <a name="extending.app.packaging">
 <h4>3.3.2. Packaging the extensions</h4>
 </a>
