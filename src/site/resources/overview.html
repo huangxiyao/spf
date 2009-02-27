@@ -116,8 +116,7 @@ table.props td {
 
 <a name="top">
 <h1>Shared Portal Framework - HTML Viewer Portlet - Administration
-and Developer's Guide<br>
-<font color="red">Work in Progress</font></h1>
+and Developer's Guide</h1>
 </a>
 
 <a name="toc">
@@ -174,35 +173,8 @@ and Developer's Guide<br>
 		</ul>
 		</li>
 	</ul>
-	<li>3. <a href="#extending">Extending the <code>htmlviewer</code>
-	portlet</a>
-	<ul>
-		<li>3.1. <a href="#extending.view">Extending the <code>view</code>
-		mode</a>
-		<ul>
-			<li>3.1.1. <a href="#extending.view.java">Extending <code>ViewController</code></a></li>
-			<li>3.1.2. <a href="#extending.view.jsp">Extending <code>view.jsp</code></a></li>
-		</ul>
-		</li>
-		<li>3.2. <a href="#extending.config">Extending the <code>config</code>
-		mode</a>
-		<ul>
-			<li>3.2.1. <a href="#extending.config.java">Extending <code>ConfigController</code></a></li>
-			<li>3.2.2. <a href="#extending.config.jsp">Extending <code>config.jsp</code></a></li>
-		</ul>
-		</li>
-		<li>3.3. <a href="#extending.app">Configuring and building
-		the extended application</a>
-		<ul>
-			<li>3.3.1. <a href="#extending.app.spring">Configuring
-			Spring to use the extensions</a></li>
-			<li>3.3.2. <a href="#extending.app.packaging">Packaging the
-			extensions</a></li>
-		</ul>
-		</li>
-	</ul>
 	</li>
-	<li>4. <a href="#history">Document History</a></li>
+	<li>3. <a href="#history">Document History</a></li>
 </ul>
 
 <hr>
@@ -291,7 +263,7 @@ The <code>htmlviewer</code> WAR is distributed through Maven 2:</p>
 
 <ul>
 	<li>The current Maven 2 repository is <a
-		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-html-viewer/"><code>http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-html-viewer/</code></a></li>
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/apps/spf-html-viewer/"><code>http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-html-viewer/</code></a></li>
 	<li>The Maven group ID is <code>com.hp.it.spf.apps</code>
 	<li>The Maven artifact ID is <code>spf-html-viewer</code>
 </ul>
@@ -300,10 +272,12 @@ The <code>htmlviewer</code> WAR is distributed through Maven 2:</p>
 version of <code>htmlviewer.war</code> from the repository.</p>
 
 <p>To install it, deploy it into your JSR-168-compliant portlet
-application server. For the Shared Portal Framework platform, this means
-deploying it into the application server where your OpenPortal portlet
-container is running. The deployment procedures are the same as for any
-other JSR-168 portlet application.</p>
+application server. It can be local to the portal application, or
+remoted with the support of a WSRP portlet container. For the Shared
+Portal Framework platform, we will generally use remote portlets with
+the OpenPortal portlet container, so this means deploying it into the
+application server where OpenPortal is running. The deployment
+procedures are the same as for any other JSR-168 portlet application.</p>
 
 <a name="overview.installation.i18n_portlet_config">
 <h4>1.1.2 Installation of <code>i18n_portlet_config.properties</code>
@@ -693,7 +667,8 @@ have to do it without the support of such a portlet-provided tool.</p>
 </blockquote>
 
 <a name="using.storing.internal">
-<h4>2.3.1. Packaging it inside the <code>htmlviewer</code> WAR</h4>
+<h4>2.3.1. Packaging view content inside the <code>htmlviewer</code>
+WAR</h4>
 </a>
 
 <p>You can choose to add your view content to the <code>htmlviewer.war</code>.
@@ -714,13 +689,20 @@ WAR, here is how:</p>
 	<li>Create an <code>html/</code> folder at the root of the
 	exploded WAR.</li>
 	<li>Copy your view file(s) - both the base file(s) and the
-	localized version(s) if any - into the <code>html/</code> folder.</li>
+	localized version(s) if any - into the <code>html/</code> folder. You
+	can put your file(s) into the <code>html/</code> folder directly, or
+	you can organize them into subfolders of the <code>html/</code>.
+	However, be sure to keep each localized bundle - ie each base file and
+	its localized variants - in the same folder.</li>
 	<li>For each type of other static resource which you have, create
 	an appropriate folder at the root of the exploded WAR, and likewise
 	copy those resource files into it (again, both the base and localized
-	versions if any). Make sure the folder name and file name (ie base
-	name, in the case of a localized bundle of resource files) match what
-	you used in your URL's in your view file(s).</li>
+	versions if any). As with the view files, you can use further levels of
+	subfolder to organize the static resources, so long as you keep all the
+	files of each localized bundle together. <b>Important:</b> Make sure
+	the relative path and file name (ie base name, in the case of a
+	localized bundle of resource files) match what you used in your URL's
+	in your view file(s).</li>
 	<li>Make sure all the folder and file permissions are set to allow
 	read by the application server at runtime.</li>
 	<li>Re-build the <code>htmlviewer.war</code> file as you normally
@@ -728,8 +710,41 @@ WAR, here is how:</p>
 	htmlviewer.war *</code> for this.</li>
 </ol>
 
+<p>For example, imagine that we plan to have 2 HTML viewer portlet
+instances, each displaying different, localized views (including some
+shared images). The layout could look like this:</p>
+
+<blockquote><pre>
+<code><i>&lt;web-app-root&gt;</i></code>/
+     html/
+          my_portlet_instance_1/
+               my_view_file_1.html
+               my_view_file_1_de.html
+               my_view_file_1_fr.html
+               my_view_file_1_pt_BR.html
+               ...
+          my_portlet_instance_2/
+               my_view_file_2.html
+               my_view_file_2_de.html
+               ...
+     images/
+          shared/
+               an_image.gif
+               an_image_de.gif
+               an_image_fr.gif
+               an_image_pt_BR.gif
+               ...
+</pre></blockquote>
+
+<blockquote>
+<p><b>Note:</b> The <code>htmlviewer</code> portlet WAR already
+contains many files. Be sure not to lose or corrupt any of them when
+inserting your content into the WAR or rebuilding the WAR.</p>
+</blockquote>
+
 <a name="using.storing.external">
-<h4>2.3.2. Installing it outside of the <code>htmlviewer</code> WAR</h4>
+<h4>2.3.2. Installing view content outside of the <code>htmlviewer</code>
+WAR</h4>
 </a>
 
 <p>Alternatively, you can put your resource files outside of the <code>htmlviewer.war</code>,
@@ -761,76 +776,147 @@ itself.</p>
 		already exist.</li>
 		<li>Create an <code>html/</code> subfolder within it.</li>
 		<li>Copy your view file(s) - both the base file(s) and the
-		localized version(s) if any - into the <code>html/</code> subfolder.</li>
+		localized version(s) if any - into the <code>html/</code> subfolder.
+		You can put your file(s) into the <code>html/</code> folder directly,
+		or you can organize them into further subfolders of the <code>html/</code>
+		folder. However, be sure to keep each localized bundle - ie each base
+		file and its localized variants - in the same folder.</li>
 		<li>For each type of other static resource which you have, create
 		an appropriate subfolder within the portlet bundle folder, and
 		likewise copy those resource files into it (again, both the base and
-		localized versions if any). Make sure the folder name and file name
-		(ie base name, in the case of a localized bundle of resource files)
-		match what you used in your URL's in your view file(s).</li>
+		localized versions if any). As with the view files, you can use
+		further levels of subfolder to organize the static resources, so long
+		as you keep all the files of each localized bundle together. <b>Important:</b>
+		Make sure the relative path and file name (ie base name, in the case
+		of a localized bundle of resource files) match what you used in your
+		URL's in your view file(s).</li>
 		<li>Make sure all the folder and file permissions are set to
 		allow read by the application server at runtime.</li>
 	</ol>
 </ol>
+
+<p>Let's repeat the previous example, this time externalizing the
+content. The layout looks the same, except that it is relative to the
+portlet bundle directory (eg, <code>/opt/sasuapps/sp/global_resources/portlet/i18n/</code>
+by default) instead of the WAR root:</p>
+
+<blockquote><pre>
+/opt/sasuapps/sp/global_resources/portlet/i18n/
+     html/
+          my_portlet_instance_1/
+               my_view_file_1.html
+               my_view_file_1_de.html
+               my_view_file_1_fr.html
+               my_view_file_1_pt_BR.html
+               ...
+          my_portlet_instance_2/
+               my_view_file_2.html
+               my_view_file_2_de.html
+               ...
+     images/
+          shared/
+               an_image.gif
+               an_image_de.gif
+               an_image_fr.gif
+               an_image_pt_BR.gif
+               ...
+</pre></blockquote>
 
 <hr>
 
 <a name="using.creating">
 <h3>2.4. Creating and configuring the portlet instance</h3>
 </a>
+
+<p>Once the <code>htmlviewer</code> application has been installed
+in your portlet application server, and your view content is prepared
+and installed, you are ready to instantiate and configure an instance of
+the portlet to display the content.</p>
+
 <a name="using.creating.create">
 <h4>2.4.1. Creating the portlet instance</h4>
 </a>
+
+<p>If your portlet deployment succeeded, and your portal is in
+communication with your portlet container, then in the administrative
+console for your portal site, you will see the HTML viewer portlet
+listed as an available portlet type for instantiation. Just follow the
+standard procedures for creating an instance of a portlet type. You may
+name the portlet whatever you like, permission however you require,
+dress it in whatever portlet chrome of your choice as needed (or go
+chromeless), and position the portlet wherever needed on whatever page.</p>
+
+<blockquote>
+<p><b>Note:</b> If your view content uses the special <code>{PORTLET:<i>id</i>}...{/PORTLET}</code>
+markup token, then when you create the portlet instance for that
+content, be sure to enter a <i>portlet friendly ID</i> which matches
+that token. In Vignette console, the portlet friendly ID is entered on
+the <b>Basics</b> tab of the portlet instance.</p>
+</blockquote>
+
 <a name="using.creating.configure">
 <h4>2.4.2. Configuring the portlet instance</h4>
 </a>
 
-<hr>
+<p>After creating the portlet instance, go to its configuration view
+(ie run the portlet's <code>config</code> mode). This is where you tell
+the portlet instance what view file to render. In Vignette console, the
+configuration view is found in the <b>Details</b> tab of the portlet
+instance.</p>
 
-<a name="extending">
-<h2>3. Extending the <code>htmlviewer</code> portlet</h2>
-</a>
+<blockquote>
+<p><b>Note:</b> Until you configure the portlet instance, its <code>view</code>
+mode will not know what view content to render, and will display an
+error if invoked.</p>
+</blockquote>
 
-<hr>
+<p>In the configuration view:</p>
 
-<a name="extending.view">
-<h3>3.1. Extending the <code>view</code> mode</h3>
-</a>
-<a name="extending.view.java">
-<h4>3.1.1. Extending <code>ViewController</code></h4>
-</a>
-<a name="extending.view.jsp">
-<h4>3.1.2. Extending <code>view.jsp</code></h4>
-</a>
+<ol>
+	<li>
+	<p>In the text box, enter the name of the view file containing the
+	content this portlet instance should render. In the case of a localized
+	bundle of view files, enter the base name. Include the file extension,
+	and any subfolders relative to the <code>html/</code> folder where you
+	put the content. Do not enter the <code>html/</code> folder itself, or
+	the portlet bundle folder. Consider the example layout in the previous
+	section:</p>
 
-<hr>
+	<ul>
+		<li>When configuring the first portlet instance, you would enter
+		just <code>my_view_file_1.html</code>.</li>
+		<li>When configuring the second portlet instance, you would enter
+		just <code>my_view_file_2.html</code>.</li>
+	</ul>
+	<li>
+	<p><b>Optional:</b> The HTML viewer portlet has a secondary feature
+	whereby it can rewrite hyperlinks in your view content so that, when
+	clicked, the link is opened in a new, buttonless, child window. Only
+	hyperlinks coded in your view file using the <code>&lt;A
+	HREF="..."&gt;</code> tag are rewritten. JavaScript must be enabled in the
+	browser for the rewrite to have any effect (if JavaScript is disabled,
+	the link still functions but does not launch a new buttonless window).</p>
+	<p>To enable this optional feature, click the checkmark in the
+	configuration view. This feature is off by default.</p>
+	</li>
+	<li>Click the <code>Save</code> button to save your changes.</li>
+</ol>
 
-<a name="extending.config">
-<h3>3.2. Extending the <code>config</code> mode</h3>
-</a>
-<a name="extending.config.java">
-<h4>3.2.1. Extending <code>ConfigController</code></h4>
-</a>
-<a name="extending.config.jsp">
-<h4>3.2.2. Extending <code>config.jsp</code></h4>
-</a>
+<p>You are now done configuring the portlet, and you can go view or
+preview the portlet to see and test your rendered content.</p>
 
-<hr>
-
-<a name="extending.app">
-<h3>3.3. Configuring and building the extended application</h3>
-</a>
-<a name="extending.app.spring">
-<h4>3.3.1. Configuring Spring to use the extensions</h4>
-</a>
-<a name="extending.app.packaging">
-<h4>3.3.2. Packaging the extensions</h4>
-</a>
+<ul>
+	<li>Come back to the configuration view at any time to make
+	changes (eg point the portlet instance at a different view file).</li>
+	<li>You can also make changes to the view content at any time.
+	Changes you make to external view content take effect immediately,
+	without any restart or reconfiguration of the portlet required.</li>
+</ul>
 
 <hr>
 
 <a name="history">
-<h2>4. Document History</h2>
+<h2>3. Document History</h2>
 </a>
 
 <table border="1">
@@ -839,6 +925,12 @@ itself.</p>
 		<th>Date</th>
 		<th>Editor</th>
 		<th>Description</th>
+	</tr>
+	<tr>
+		<td>1.0</td>
+		<td>Feb 27 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Initial published version.</td>
 	</tr>
 </table>
 <p></p>
