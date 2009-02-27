@@ -825,7 +825,7 @@ public class FileInterpolator extends
 	 * @throws Exception
 	 *             Some exception
 	 */
-	public String interpolate(Locale pLocale) throws Exception {
+	public String interpolate() throws Exception {
 
 		if (portalContext == null) {
 			logWarning("Portal context was null.");
