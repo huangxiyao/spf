@@ -218,10 +218,14 @@ file you provide (called a <i>view file</i>).</p>
 	page).</p>
 	</li>
 	<li>
-	<p>The view file may also contain any of the <a href="">special
+	<p>The view file may also contain any of the <a
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#file.author">special
 	markup tokens</a> for server-side text interpolation, as supported by the
-	SPF portlet utilities' <a href="">text interpolation</a> engine. Using
-	these special markup tokens, your view file can:</p>
+	SPF portlet utilities' <a
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#file">text
+	interpolation</a> engine. Using these special markup tokens, your view file
+	can:</p>
+	<p>
 	<ul>
 		<li>permission content based on user authentication or
 		authorization;</li>
@@ -232,6 +236,7 @@ file you provide (called a <i>view file</i>).</p>
 		<li>consolidate content that otherwise would have to be
 		maintained in multiple view files</li>
 	</ul>
+	</p>
 	<li>
 	<p>The view file and its static resources (images, etc), if any,
 	may be localized (for example, using the SPF standard localization
@@ -249,11 +254,13 @@ file you provide (called a <i>view file</i>).</p>
 	versions may be stored <i>internal</i> to the portlet application or <i>external</i>,
 	on the filesystem of the portlet server, in the <i>portlet resource
 	bundle folder</i>.</p>
+	<p>
 	<ul>
 		<li>It is recommended to store them externally, if you anticipate
 		the administrator will need to change those files.</li>
 		<li>Changes to external files take effect without restarts.</li>
 	</ul>
+	</p>
 	</li>
 	<li>
 	<p>The portlet is contained in the <code>htmlviewer.war</code>
