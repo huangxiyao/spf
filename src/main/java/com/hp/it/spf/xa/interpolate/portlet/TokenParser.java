@@ -164,7 +164,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 			return null;
 		}
 		return I18nUtility.getLocalizedFileURL(request, response, baseFilePath,
-				locale, localized);
+				getLocale(), localized);
 	}
 
 	/**
