@@ -1,6 +1,7 @@
 <html>
 <head>
-<title>Shared Portal Framework - Portlet Utilities - Developer's Guide</title>
+<title>Shared Portal Framework - Portlet Utilities - Developer's
+Guide</title>
 </head>
 <body>
 <p>This artifact contains utilities (Java API's and JSP tags) for
@@ -703,15 +704,40 @@ and/or CSS), to the user.</p>
 <p>The <code>htmlviewer</code> portlet is often a quick and easy
 basis for developing a simple, static or mostly-static portlet for your
 SPF portal site. You don't write any code or configure any Spring or
-portlet XML files; you just supply the text files for it to display.
-Furthermore, the <code>htmlviewer</code> code is extensible (it is
-actually included inside the SPF portlet utilities) if you rather need
-to build upon it for your own portlet application.</p>
+portlet XML files; you just supply the text files for it to display.</p>
 
-<p>Although the SPF portlet utilities include the classes for <code>htmlviewer</code>,
-it is a separate application with its own SPF HTML Viewer Portlet Administration and 
-Developer's Guide here: <a
+<p>For more information, see the SPF HTML Viewer Portlet
+Administration and Developer's Guide here: <a
 	href="http://samson.atl.hp.com:8080/hudson/job/spf-html-viewer/site/overview.html"><code>http://samson.atl.hp.com:8080/hudson/job/spf-html-viewer/site/overview.html</code></a></p>
+
+<blockquote>
+<p><b>Note:</b> The Java classes for the <code>htmlviewer</code>
+portlet are actually contained inside the SPF portlet utilities, so if
+necessary you can extend them for your own Web application. This is not
+covered in this guide. Please see the package, class and method
+documentation for the following packages in the SPF portlet utilities,
+if you are interested in this option:</p>
+
+<dl>
+	<dt>{@link com.hp.it.spf.xa.htmlviewer.portlet.web}</dt>
+	<dd>This package contains the Spring controller classes for the <code>htmlviewer</code>
+	portlet. The {@link
+	com.hp.it.spf.xa.htmlviewer.portlet.web.ViewController} is the <code>view</code>
+	mode controller, and the {@link
+	com.hp.it.spf.xa.htmlviewer.portlet.web.ConfigController} is the <code>config</code>
+	mode controller.</dd>
+	<dt>{@link com.hp.it.spf.xa.htmlviewer.portlet.util}</dt>
+	<dd>This package contains utility methods and constants used by
+	the <code>htmlviewer</code> portlet classes and JSP's.</dd>
+	<dt>{@link com.hp.it.spf.xa.htmlviewer.portlet.exception}</dt>
+	<dd>This package contains exception classes used by the <code>htmlviewer</code>
+	portlet classes and JSP's.
+</dl>
+
+<p>All other artifacts for the portlet - its JSP's, message
+properties, deployment descriptor, etc - are inside the <code>htmlviewer</code>
+WAR, for your reference.</p>
+</blockquote>
 
 <hr>
 
