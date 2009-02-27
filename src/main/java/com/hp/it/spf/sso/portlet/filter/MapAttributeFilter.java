@@ -173,7 +173,7 @@ public class MapAttributeFilter
      */
     private void forOpenPortal(PortletRequest request) {
         HttpServletRequest rq = (HttpServletRequest)request.getAttribute("javax.portlet.portletc.httpServletRequest");
-        if (rq.getAttribute("com.hp.spp.UserProfile") instanceof Map) {
+        if (rq.getAttribute(Consts.USER_PROFILE_KEY) instanceof Map) {
             Object obj = rq.getAttribute("com.sun.portal.portletcontainer.portlet_container_request");
             if (obj != null) {
                 try {
@@ -181,7 +181,7 @@ public class MapAttributeFilter
                                        .getMethod("setUserInfo",
                                                   new Class[] {Map.class});
                     method.invoke(obj,
-                                  new Object[] {(Map)rq.getAttribute("com.hp.spp.UserProfile")});
+                                  new Object[] {(Map)rq.getAttribute(Consts.USER_PROFILE_KEY)});
                 } catch (SecurityException e) {
                     System.out.println(e.getMessage());
                 } catch (NoSuchMethodException e) {
@@ -197,6 +197,6 @@ public class MapAttributeFilter
         }
         // set UserContextKeys into PortletRequest with PORTAL_CONTEXT_KEY key
         request.setAttribute(Consts.PORTAL_CONTEXT_KEY,
-                             rq.getAttribute("com.hp.spp.UserContextKeys"));
+                             rq.getAttribute(Consts.PORTAL_CONTEXT_KEY));
     }
 }
