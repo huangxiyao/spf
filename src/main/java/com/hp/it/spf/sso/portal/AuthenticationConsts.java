@@ -235,20 +235,20 @@ class AuthenticationConsts {
     /**
      * Groups stands for the user is from HPP/FED/@HP.
      */
-    public final static String LOCAL_ATHP_NAME = "LOCAL_PORTAL_AUTH_ATHP";
-    public final static String LOCAL_FED_NAME = "LOCAL_PORTAL_AUTH_FED";
-    public final static String LOCAL_HPP_NAME = "LOCAL_PORTAL_AUTH_HPP";
+    public final static String LOCAL_ATHP_NAME = Consts.GROUP_AUTH_TYPE_HPP;
+    public final static String LOCAL_FED_NAME = Consts.GROUP_AUTH_TYPE_FED;
+    public final static String LOCAL_HPP_NAME = Consts.GROUP_AUTH_TYPE_ATHP;
     
     /**
      * Groups that indicate the user is authenticated or not. 
      */
-    public final static String LOCAL_PORTAL_AUTHENTICATED_USERS = "LOCAL_PORTAL_AUTHENTICATED_USERS";
-    public final static String LOCAL_PORTAL_ANONYMOUS_USERS = "LOCAL_PORTAL_ANONYMOUS_USERS";
+    public final static String LOCAL_PORTAL_AUTHENTICATED_USERS = Consts.GROUP_AUTH_STATUS_AUTHENTICATED;
+    public final static String LOCAL_PORTAL_ANONYMOUS_USERS = Consts.GROUP_AUTH_STATUS_ANONYMOUS;
     
     /**
      * Groups stands for the user locale.
      */
-    public final static String LOCAL_PORTAL_LANG_PREFIX = "LOCAL_PORTAL_LANG_";
-    public final static String LOCAL_PORTAL_COUNTRY_PREFIX = "LOCAL_PORTAL_COUNTRY_";
+    public final static String LOCAL_PORTAL_LANG_PREFIX = Consts.GROUP_LOCALE_LANGUAGE_PREFIX;
+    public final static String LOCAL_PORTAL_COUNTRY_PREFIX = Consts.GROUP_LOCALE_COUNTRY_PREFIX;
 }
 

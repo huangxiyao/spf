@@ -7,6 +7,7 @@ package com.hp.it.spf.sso.portal;
 import javax.servlet.http.HttpServletRequest;
 
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
 /**
@@ -102,7 +103,9 @@ public class HPPAuthenticator extends AbstractAuthenticator {
             	value = AuthenticatorHelper.getRequestHeader(request, temp, true);
             }
         }
-        LOG.info("HPP getValue: " + fieldName + "=" + value);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("HPP getValue: " + fieldName + "=" + value);
+        }
         return value;
     }
     

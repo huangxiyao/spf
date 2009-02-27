@@ -8,6 +8,7 @@ package com.hp.it.spf.sso.portal;
 import javax.servlet.http.HttpServletRequest;
 
 import com.epicentric.authentication.SSOUsernameRetriever;
+import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
 /**
@@ -34,7 +35,9 @@ public class SPFSSOUserNameRetriever implements SSOUsernameRetriever {
         if (request.getAttribute(AuthenticationConsts.SSO_USERNAME) != null) {
             return (String)request.getAttribute(AuthenticationConsts.SSO_USERNAME);
         } else {
-            LOG.debug("Retrieve null from request for SSO username.");
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("Retrieve null from request for SSO username.");
+            }            
             return null;
         }
     }

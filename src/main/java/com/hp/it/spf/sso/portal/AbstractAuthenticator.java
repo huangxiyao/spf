@@ -102,7 +102,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         String rbFile = retrieveRbFile();
         try {
             rb = ResourceBundle.getBundle(rbFile);
-            LOG.info("Get Resource Bundle File = " + rbFile);
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("Get Resource Bundle File = " + rbFile);
+            }
         } catch (Exception e) {
             LOG.error("No Resource Bundle File = " + rbFile);
             throw new RuntimeException("No Resource Bundle File = " + rbFile, e);
@@ -185,13 +187,15 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     protected void mapHeaderToUserProfileMap() {
         userProfile.put(AuthenticationConsts.KEY_PROFILE_ID,
                         getValue(AuthenticationConsts.HEADER_PROFILE_ID_PROPERTY_NAME));
-        LOG.info("userProfile.PROFILE_ID="
-                 + userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
-
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("userProfile.PROFILE_ID=" + userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
+        }
+        
         userProfile.put(AuthenticationConsts.KEY_USER_NAME,
                         getValue(AuthenticationConsts.HEADER_USER_NAME_PROPERTY_NAME));
-        LOG.info("userProfile.USERNAME="
-                 + userProfile.get(AuthenticationConsts.KEY_USER_NAME));
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("userProfile.USERNAME=" + userProfile.get(AuthenticationConsts.KEY_USER_NAME));
+        }
 
         // set email
         String email = getValue(AuthenticationConsts.HEADER_EMAIL_ADDRESS_PROPERTY_NAME);
@@ -344,7 +348,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                                               EntityPersistenceException {
         try {
             // Update user's info if needed
-            LOG.info("update basic info for " + ssoUser.getUserName());
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("update basic info for " + ssoUser.getUserName());
+            }            
             AuthenticatorHelper.updateVAPUser(vapUser, ssoUser);
 
             // if user is not logged in, get the groups and
@@ -394,7 +400,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 
         // Update group info if needed
         if (AuthenticatorHelper.needUpdateGroup(oldGroups, newGroups)) {
-            LOG.info("Update group info for " + ssoUser.getUserName());
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("Update group info for " + ssoUser.getUserName());
+            }
             AuthenticatorHelper.updateUserGroup(user, oldGroups, newGroups);
             return true;
         } else {
@@ -421,12 +429,14 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         }
         // If profile ID is different, return true
         if (!profileIdVap.equals(userProfile.get(AuthenticationConsts.KEY_PROFILE_ID))) {
-            LOG.info("profile_id_vap:" + profileIdVap);
-            LOG.info("profileid:"
-                     + userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("profile_id_vap:" + profileIdVap + "; profileid:" + userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
+            }            
             return true;
         }
-        LOG.info("same user in session: " + profileIdVap);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("same user in session: " + profileIdVap);
+        }        
         return false;
     }
 
@@ -507,8 +517,10 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             if (emailUser != null) {
                 emailUser.delete();
             }
-            LOG.info("Not found this user in SP, now creating this user"
-                     + ssoUser.getUserName());
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("Not found this user in SP, now creating this user"
+                          + ssoUser.getUserName());
+            }            
             vapUser = createVAPUser();
         } else { // Try to update user info if needed
             vapUser = updateVAPUser(vapUser);
@@ -624,7 +636,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * @return the userName
      */
     public String getUserName() {
-        LOG.info("Return userName: " + userName);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Return userName: " + userName);
+        }        
         return userName;
     }
 }

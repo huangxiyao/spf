@@ -82,7 +82,9 @@ public class AuthenticatorHelper {
             throws UniquePropertyValueConflictException,
             EntityPersistenceException {
 
-        LOG.info("creating new vap user start");
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("creating new vap user start");
+        }
         // get realm id
         Realm rlm = AuthenticationManager.getDefaultAuthenticationManager()
                                          .getSSORealm();
@@ -116,7 +118,9 @@ public class AuthenticatorHelper {
             addUser2Group(user, ssoUser.getGroups());
             // Save VAP User object
             user.save();
-            LOG.info("saved new vap user " + ssoUser.getUserName());
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("saved new vap user " + ssoUser.getUserName());
+            }            
             return user;
         } catch (UniquePropertyValueConflictException e) {
             LOG.error("Required unique values conflict when saving user: "
@@ -145,7 +149,9 @@ public class AuthenticatorHelper {
     static void updateVAPUser(User user, SSOUser ssoUser)
             throws UniquePropertyValueConflictException,
             EntityPersistenceException {
-        LOG.info("updating vap user start");
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("updating vap user start");
+        }
         // Setting VAP User object
         try {
             //user.setProperty(AuthenticationConsts.PROPERTY_PROFILE_ID, ssoUser.getProfileId());
@@ -168,8 +174,9 @@ public class AuthenticatorHelper {
                 user.setProperty(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID, ssoUser.getCurrentSite());
             }
             
-            // updateUserGroup(user, ssoUser.getGroups());
-            LOG.info("Updated user:" + ssoUser.getUserName());
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("Updated user:" + ssoUser.getUserName());
+            }
         } catch (UniquePropertyValueConflictException e) {
             LOG.error("Required unique values conflict when updating user:"
                     + ssoUser.getUserName());
@@ -201,24 +208,30 @@ public class AuthenticatorHelper {
         }
         UserGroupManager userGroupManager = UserGroupManager.getInstance();
         try {
-            LOG.info("add user to group start");
-            LOG.info("ssoGroups size is " + ssoGroups.size());
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("add user to group start. " + "ssoGroups size is " + ssoGroups.size());
+            }            
             // add vapUser to group
             for (Iterator iter = ssoGroups.iterator(); iter.hasNext();) {
                 String newgroup = (String)iter.next();
-                LOG.info("begin to add " + newgroup + " to vapuser");
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug("begin to add " + newgroup + " to vapuser");
+                }
                 try {
                     UserGroup ug = (UserGroup)userGroupManager.getUserGroups(
                             AuthenticationConsts.GROUP_TITLE, newgroup).next();
                     user.addParent(ug);
-                    LOG.info("add " + newgroup + " to vapuser success");
+                    if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                        LOG.debug("add " + newgroup + " to vapuser success");
+                    }
                 } catch (NullPointerException e) {
-                    LOG.info("not found group " + newgroup + " in database");
+                    if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                        LOG.debug("not found group " + newgroup + " in database");
+                    }
                 }
             }
         } catch (EntityPersistenceException exception) {
-            LOG.error("Entity Persistence Exception when adding user to groups");
-            LOG.error(exception);
+            LOG.error("Entity Persistence Exception when adding user to groups", exception);
         }
     }
 
@@ -315,8 +328,7 @@ public class AuthenticatorHelper {
             return user.getParents(userGroupManager.getUserGroupEntityType(),
                     false);
         } catch (EntityPersistenceException exception) {
-            LOG.error("Entity Persistence Exception when getting user group set");
-            LOG.error(exception);
+            LOG.error("Entity Persistence Exception when getting user group set", exception);
             return new HashSet();
         }
     }
@@ -356,7 +368,9 @@ public class AuthenticatorHelper {
                 || ssoGroups == null) {
             return;
         }
-        LOG.info("updating vap user's group start");
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("updating vap user's group start");
+        }
         // false means no recursive groups
         // LOG.info("ssoGroups size is " + ssoGroups.size());
         // LOG.info("userGroups size is " + userGroups.size());
@@ -372,11 +386,11 @@ public class AuthenticatorHelper {
             if (!ssoGroups.contains(grouptitle)) {
                 try {
                     user.removeParent(temp);
-                    LOG.info("remove group " + grouptitle);
+                    if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                        LOG.debug("remove group " + grouptitle);
+                    }
                 } catch (EntityPersistenceException exception) {
-                    LOG
-                            .error("Entity Persistence Exception when updating user group");
-                    LOG.error(exception);
+                    LOG.error("Entity Persistence Exception when updating user group", exception);
                 }
             } else {
                 ssoGroups.remove(grouptitle);
@@ -555,18 +569,24 @@ public class AuthenticatorHelper {
      * @see com.epicentric.common.website.SessionInfo#setUser(com.epicentric.user.User)
      */
     static void cleanupSession(HttpServletRequest request) {
-        LOG.info("Cleaning up session start");
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Cleaning up session start");
+        }
         HttpSession session = request.getSession(true);
         Enumeration it = session.getAttributeNames();
         // remove service portal specific session attributes except the ones
         // with "SP_RETAIN"
         while(it.hasMoreElements()) {
             String next = (String)it.nextElement();
-            LOG.info("Session Attribute:" + next);
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("Session Attribute:" + next);
+            }
             if (next.indexOf(AuthenticationConsts.PARAMETER_PREFIX) >= 0) {
                 if (next.indexOf(AuthenticationConsts.RETAINED_PARAMETER_PREFIX) < 0) {
                     session.removeAttribute(next);
-                    LOG.info("Removed Session Attribute:" + next);
+                    if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                        LOG.debug("Removed Session Attribute:" + next);
+                    }
                 }
             }
         }
@@ -582,14 +602,12 @@ public class AuthenticatorHelper {
         if (sessionInfo != null) {
             try {
                 sessionInfo.setUser(UserManager.getInstance().getGuestUser());
-                LOG.info("Set guest user to session info");
-                session
-                        .setAttribute(SessionInfo.SESSION_INFO_NAME,
-                                sessionInfo);
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug("Set guest user to session info");
+                }
+                session.setAttribute(SessionInfo.SESSION_INFO_NAME, sessionInfo);
             } catch (EntityPersistenceException e) {
-                LOG
-                        .error("Entity Persistence Exception when cleaning up session");
-                LOG.error(e);
+                LOG.error("Entity Persistence Exception when cleaning up session", e);
             }
         }
         // request.setAttribute("expireSessionCookie", "1");
@@ -746,16 +764,19 @@ public class AuthenticatorHelper {
      */
     static User retrieveUserByProperty(String property, String value) {
         try {
-            LOG.info("Retrieving user. PROPERTY: " + property + " VALUE: " + value);
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("Retrieving user. PROPERTY: " + property + " VALUE: " + value);
+            }            
             User u = UserManager.getInstance().getUser(property, value);
-            LOG.info("Retrieved user. PROPERTY: " + property + " VALUE: " + value);
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("Retrieved user. PROPERTY: " + property + " VALUE: " + value);
+            }
             return u;
         } catch (EntityNotFoundException e) {
-            LOG.info("User with PROPERTY: " + property + " VALUE: "  + value + " not found");
+            LOG.error("User with PROPERTY: " + property + " VALUE: "  + value + " not found");
             return null;
         } catch (EntityPersistenceException e) {
-            LOG.error("Entity Persistence Exception when retrieving user.  PROPERTY: " + property + " VALUE: " + value);
-            LOG.error(e);
+            LOG.error("Entity Persistence Exception when retrieving user.  PROPERTY: " + property + " VALUE: " + value, e);
             return null;
         }
     }
