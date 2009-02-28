@@ -6,7 +6,12 @@ package com.hp.it.spf.xa.htmlviewer.portlet.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.InputStream;
+import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+import org.springframework.web.portlet.ModelAndView;
+
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 
 /**
  * Container class for common utility methods used within the
@@ -21,6 +26,58 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 	private static String TOKEN_HREF_END = "</a>";
 
 	protected Utils() {
+	}
+
+	/**
+	 * Checks the indicated view file name for error conditions given the
+	 * particular request, returning the particular error code for the first
+	 * error condition found, or null if no errors are found. The checked error
+	 * conditions are a null or blank filename, or a filename containing a
+	 * parent directory reference.
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @param viewFilename
+	 *            The view file name.
+	 * @return error code (or null if no errors found).
+	 */
+	public static String checkViewFilenameForErrors(PortletRequest request,
+			String viewFilename) {
+		if (viewFilename == null) {
+			return Consts.ERROR_CODE_VIEW_FILENAME_NULL;
+		}
+		viewFilename = viewFilename.trim();
+		if (viewFilename.length() == 0) {
+			return Consts.ERROR_CODE_VIEW_FILENAME_NULL;
+		}
+		if (viewFilename.indexOf("..") != -1) {
+			return Consts.ERROR_CODE_VIEW_FILENAME_PATH;
+		}
+		return null;
+	}
+
+	/**
+	 * Checks the indicated view file name for warning conditions given the
+	 * particular request, returning the particular warning code for the first
+	 * warning condition found, or null if no warnings are found. The checked
+	 * warning conditions are a non-existent or unreadable file. Note the method
+	 * does not check if the file is empty.
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @param viewFilename
+	 *            The view file name.
+	 * @return warning code (or null if no warnings found).
+	 */
+	public static String checkViewFilenameForWarnings(PortletRequest request,
+			String viewFilename) {
+		// treat as base file and check only for its existence/readability
+		InputStream is = I18nUtility.getLocalizedFileStream(request,
+				Consts.HTML_FILE_FOLD + viewFilename, false);
+		if (is == null) {
+			return Consts.WARN_CODE_VIEW_FILE_NULL;
+		}
+		return null;
 	}
 
 	/**

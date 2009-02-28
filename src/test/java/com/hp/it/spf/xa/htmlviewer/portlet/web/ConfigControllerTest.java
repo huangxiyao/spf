@@ -16,6 +16,7 @@ import com.hp.it.spf.xa.htmlviewer.portlet.web.ConfigController;
 import javax.portlet.PortletPreferences;
 import junit.framework.TestCase;
 import java.util.Map;
+import java.util.ArrayList;
 
 /**
  * The Class ConfigControllerTest.
@@ -63,6 +64,7 @@ public class ConfigControllerTest extends TestCase {
 	 * @throws Exception
 	 *             the exception
 	 */
+	@SuppressWarnings("unchecked")
 	public void testHandleActionRequestInternal() throws Exception {
 		MockActionRequest actionRequest = new MockActionRequest();
 		MockActionResponse actionResponse = new MockActionResponse();
@@ -81,7 +83,9 @@ public class ConfigControllerTest extends TestCase {
 		ModelAndView model = (ModelAndView) configController.handleRenderRequest(
 				renderRequest, renderResponse);
 		Map map = model.getModel();
-		assertEquals(Consts.INFO_CODE_PREFS_SAVED, (String) map.get(Consts.INFO_MESSAGE));
+		ArrayList<String> infoMsgs = (ArrayList<String>) map.get(Consts.INFO_MESSAGES);
+		assertEquals(1, infoMsgs.size());
+		assertEquals(Consts.INFO_CODE_PREFS_SAVED, infoMsgs.get(0));
 		
 		actionRequest = new MockActionRequest();
 		actionResponse = new MockActionResponse();
@@ -95,7 +99,9 @@ public class ConfigControllerTest extends TestCase {
 		model = (ModelAndView) configController.handleRenderRequest(
 				renderRequest, renderResponse);
 		map = model.getModel();
-		assertEquals(Consts.ERROR_CODE_VIEW_FILENAME_NULL, (String) map.get(Consts.ERROR_MESSAGE));
+		ArrayList<String> errMsgs = (ArrayList<String>) map.get(Consts.ERROR_MESSAGES);
+		assertEquals(1, errMsgs.size());
+		assertEquals(Consts.ERROR_CODE_VIEW_FILENAME_NULL, errMsgs.get(0));
 
 		actionRequest = new MockActionRequest();
 		actionResponse = new MockActionResponse();
@@ -109,6 +115,9 @@ public class ConfigControllerTest extends TestCase {
 		model = (ModelAndView) configController.handleRenderRequest(
 				renderRequest, renderResponse);
 		map = model.getModel();
-		assertEquals(Consts.ERROR_CODE_VIEW_FILENAME_PATH, (String) map.get(Consts.ERROR_MESSAGE));
+		errMsgs = (ArrayList<String>) map.get(Consts.ERROR_MESSAGES);
+		assertEquals(2, errMsgs.size());
+		assertEquals(Consts.ERROR_CODE_VIEW_FILENAME_PATH, errMsgs.get(0));
+		assertEquals(Consts.ERROR_CODE_VIEW_FILENAME_NULL, errMsgs.get(1));
 	}
 }

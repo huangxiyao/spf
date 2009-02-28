@@ -10,12 +10,14 @@ import javax.portlet.RenderResponse;
 
 import org.springframework.web.portlet.ModelAndView;
 
+import com.hp.frameworks.wpa.portlet.transaction.Transaction;
+import com.hp.frameworks.wpa.portlet.transaction.TransactionImpl;
 import com.hp.it.spf.xa.htmlviewer.portlet.exception.InternalErrorException;
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 import com.hp.it.spf.xa.htmlviewer.portlet.util.Consts;
 import com.hp.it.spf.xa.htmlviewer.portlet.util.Utils;
 import com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController;
-import com.hp.websat.timber.logging.Log;
+import com.hp.websat.timber.model.StatusIndicator;
 
 /**
  * The controller class for <code>view</code> mode of the
@@ -82,13 +84,13 @@ public class ViewController extends FileInterpolatorController {
 	public String getFilename(RenderRequest request) throws Exception {
 
 		PortletPreferences pp = request.getPreferences();
-		String viewFileName = pp.getValue(Consts.VIEW_FILENAME, null);
-		if (viewFileName == null || viewFileName.length() == 0) {
-			Log.logError(this,
-					"ViewController: view filename is not found or empty.");
-			throw new InternalErrorException(request, Consts.ERROR_CODE_FILE_NULL);
+		String viewFilename = pp.getValue(Consts.VIEW_FILENAME, null);
+		String errorCode = Utils.checkViewFilenameForErrors(request,
+				viewFilename);
+		if (errorCode != null) {
+			throw new InternalErrorException(request, errorCode);
 		}
-		return Utils.slashify(Consts.HTML_FILE_FOLD + viewFileName);
+		return Utils.slashify(Consts.HTML_FILE_FOLD + viewFilename);
 	}
 
 	/**
@@ -120,14 +122,29 @@ public class ViewController extends FileInterpolatorController {
 	protected ModelAndView execute(RenderRequest request,
 			RenderResponse response, String fileContent) throws Exception {
 
-		Log.logInfo(this, "ViewController: render phase invoked.");
+		Transaction trans = TransactionImpl.getTransaction(request);
+		if (trans != null)
+			trans.setStatusIndicator(StatusIndicator.OK); // Assume OK for
+		// now.
+
 		if (fileContent != null) {
 			fileContent = fileContent.trim();
+			if (fileContent.length() == 0) {
+				// Warning if the file is blank/empty before or after
+				// interpolation. Record this in the WPAP transaction object for
+				// logging purposes.
+				if (trans != null) {
+					trans.addContextInfo("fileContent", "empty");
+					trans.setStatusIndicator(StatusIndicator.WARNING);
+				}
+			}
 		} else {
-			Log
-					.logError(this,
-							"ViewController: content is not found or empty.");
-			throw new InternalErrorException(request, Consts.ERROR_CODE_FILE_NULL);
+			// Error if file content is null (this means the file was not found
+			// or could not be read/parsed). No need for explicit logging here;
+			// the WPAP logging interceptor will handle it from the thrown
+			// exception.
+			throw new InternalErrorException(request,
+					Consts.ERROR_CODE_VIEW_FILE_NULL);
 		}
 
 		// If launch-buttonless, update the file content accordingly.
@@ -135,18 +152,17 @@ public class ViewController extends FileInterpolatorController {
 		PortletPreferences pp = request.getPreferences();
 		String buttonLess = pp.getValue(Consts.LAUNCH_BUTTONLESS, null);
 		if (buttonLess != null && buttonLess.equals("true")) {
-			Log
-					.logInfo(
-							this,
-							"ViewController: enable buttonless child window launch for content-embedded hyperlinks.");
 			modelView.addObject(Consts.LAUNCH_BUTTONLESS, "true");
 			fileContent = Utils.addButtonlessChildLauncher(response,
 					fileContent);
+			if (trans != null) {
+				trans.addContextInfo("launchButtonless", "true");
+				trans.setStatusIndicator(StatusIndicator.FYI);
+			}
 		}
 
 		// Set the file content to display into the model.
 		modelView.addObject(Consts.VIEW_CONTENT, fileContent);
-
 		return modelView;
 	}
 }

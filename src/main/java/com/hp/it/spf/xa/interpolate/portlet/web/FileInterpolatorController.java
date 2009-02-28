@@ -12,7 +12,6 @@ import org.springframework.web.portlet.mvc.AbstractController;
 import com.hp.it.spf.xa.interpolate.portlet.FileInterpolator;
 import com.hp.it.spf.xa.exception.portlet.SPFException;
 import com.hp.it.spf.xa.misc.portlet.Utils;
-import com.hp.websat.timber.logging.Log;
 
 /**
  * <p>
@@ -156,13 +155,7 @@ public abstract class FileInterpolatorController extends AbstractController {
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 
-		Log.logInfo(this, "FileInterpolatorController: render phase invoked.");
 		String relativeName = getFilename(request);
-		Log
-				.logInfo(
-						this,
-						"FileInterpolatorController: rendering file content from proper localized version of base file: "
-								+ relativeName);
 		FileInterpolator f = new FileInterpolator(request, response,
 				relativeName, this.includeFileName);
 		String fileContent = f.interpolate();

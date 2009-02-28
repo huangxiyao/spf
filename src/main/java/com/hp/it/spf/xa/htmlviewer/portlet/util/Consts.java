@@ -27,13 +27,19 @@ public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 	public static final String ERROR_CODE = "errorCode";
 
 	/** Error message model attribute. */
-	public static final String ERROR_MESSAGE = "errorMessage";
+	public static final String ERROR_MESSAGES = "errorMessages";
 
 	/** Status code render parameter. */
 	public static final String INFO_CODE = "infoCode";
 	
 	/** Status message model attribute. */
-	public static final String INFO_MESSAGE = "infoMessage";
+	public static final String INFO_MESSAGES = "infoMessages";
+	
+	/** Warning code render parameter. */
+	public static final String WARN_CODE = "warnCode";
+	
+	/** Warning message model attribute. */
+	public static final String WARN_MESSAGES = "warnMessages";
 	
 	/** View content model attribute. */
 	public static final String VIEW_CONTENT = "viewContent";
@@ -48,7 +54,7 @@ public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 	public static final String ERROR_CODE_INTERNAL = "error.internal";
 	
 	/** Error code: view file not found or empty. */
-	public static final String ERROR_CODE_FILE_NULL = "error.nullFile";
+	public static final String ERROR_CODE_VIEW_FILE_NULL = "error.nullFile";
 
 	/** Error code: view filename was blank. */
 	public static final String ERROR_CODE_VIEW_FILENAME_NULL = "error.nullFilename";
@@ -56,6 +62,9 @@ public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 	/** Error code: view filename contained path information. */
 	public static final String ERROR_CODE_VIEW_FILENAME_PATH = "error.pathInFilename";
 
+	/** Warning code: view file or token substitutions file not found or empty during config mode. */
+	public static final String WARN_CODE_VIEW_FILE_NULL = "warn.nullFile";
+	
 	/** Status code: portlet preferences saved. */
 	public static final String INFO_CODE_PREFS_SAVED = "info.saved";
 	

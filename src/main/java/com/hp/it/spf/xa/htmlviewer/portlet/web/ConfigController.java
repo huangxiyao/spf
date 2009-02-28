@@ -9,6 +9,9 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Map;
 
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.mvc.AbstractController;
@@ -17,7 +20,10 @@ import com.hp.it.spf.xa.htmlviewer.portlet.exception.InputErrorException;
 import com.hp.it.spf.xa.htmlviewer.portlet.util.Consts;
 import com.hp.it.spf.xa.htmlviewer.portlet.util.Utils;
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
-import com.hp.websat.timber.logging.Log;
+
+import com.hp.frameworks.wpa.portlet.transaction.Transaction;
+import com.hp.frameworks.wpa.portlet.transaction.TransactionImpl;
+import com.hp.websat.timber.model.StatusIndicator;
 
 /**
  * The controller class for <code>config</code> mode of the
@@ -88,22 +94,43 @@ public class ConfigController extends AbstractController {
 	 * particular error code into the
 	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#ERROR_CODE} render
 	 * parameter. So if that parameter exists, this method gets a localized
-	 * error message for it and copies it into the model under the
+	 * error message for it and adds it into the model under the
 	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#ERROR_MESSAGE}
-	 * element name. </dd>
+	 * element name (this is a {@link java.util.ArrayList} of accumulated error
+	 * messages). </dd>
+	 * </p>
+	 * <p>
+	 * <dt>Any warning message from a preceding action process.</dt>
+	 * <dd>If there was such a warning, the action process will have set the
+	 * particular warning code into the
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#WARN_CODE} render
+	 * parameter. So if that parameter exists, this method gets a localized
+	 * warning message for it and adds it into the model under the
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#WARN_MESSAGE}
+	 * element name (this is a {@link java.util.ArrayList} of accumulated
+	 * warning messages). </dd>
 	 * </p>
 	 * <p>
 	 * <dt>Any other status message from a preceding action process.</dt>
-	 * <dd>If there was any other (ie non-error) status to report from the
-	 * preceding action (if any), the action process will have set the
-	 * particular status code into the
+	 * <dd>If there was any info status to report from the preceding action,
+	 * the action process will have set the particular status code into the
 	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#INFO_CODE} render
 	 * parameter. So if that parameter exists, this method gets a localized
 	 * status message for it and copies it into the model under the
 	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#INFO_MESSAGE}
-	 * element name.</dd>
+	 * element name (this is a {@link java.util.ArrayList} of accumulated info
+	 * messages).</dd>
 	 * </p>
 	 * </dl>
+	 * <p>
+	 * This method also double-checks the view filename preference to make sure
+	 * it has no errors or warnings; if it does, and they have not already been
+	 * reported as above by the action phase, then this method adds error or
+	 * warnings messages similarly for them to the model.
+	 * </p>
+	 * <p>
+	 * This method uses WPAP Timber logging to record the outcome.
+	 * </p>
 	 * 
 	 * @param request
 	 *            The render request.
@@ -116,23 +143,61 @@ public class ConfigController extends AbstractController {
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 
-		Log.logInfo(this, "ConfigController: render phase invoked.");
+		String errorCode = null;
+		String warnCode = null;
+		String infoCode = null;
+		Transaction trans = TransactionImpl.getTransaction(request);
+		if (trans != null)
+			trans.setStatusIndicator(StatusIndicator.OK); // Assume OK for
+															// now.
+
+		// Get the portlet preferences and copy them into the model.
+
 		PortletPreferences pp = request.getPreferences();
 		ModelAndView modelView = new ModelAndView(viewName);
-		modelView.addObject(Consts.VIEW_FILENAME, pp.getValue(
-				Consts.VIEW_FILENAME, ""));
-		modelView.addObject(Consts.LAUNCH_BUTTONLESS, pp.getValue(
-				Consts.LAUNCH_BUTTONLESS, "false"));
+		String viewFilename = Utils.slashify(pp.getValue(Consts.VIEW_FILENAME,
+				""));
+		String launchButtonless = pp
+				.getValue(Consts.LAUNCH_BUTTONLESS, "false");
+		modelView.addObject(Consts.VIEW_FILENAME, viewFilename);
+		modelView.addObject(Consts.LAUNCH_BUTTONLESS, launchButtonless);
 
-		String errorCode = null;
+		// Get any status codes passed from action phase and copy their messages
+		// into the model. Currently only info status might be passed from the
+		// action phase, but check for errors and warnings too.
+
 		if ((errorCode = request.getParameter(Consts.ERROR_CODE)) != null) {
 			String errorMsg = I18nUtility.getMessage(request, errorCode);
-			modelView.addObject(Consts.ERROR_MESSAGE, errorMsg);
+			addMessage(modelView, Consts.ERROR_MESSAGES, errorMsg);
+			if (trans != null)
+				trans.setStatusIndicator(StatusIndicator.ERROR);
 		}
-		String infoCode = null;
+		if ((warnCode = request.getParameter(Consts.WARN_CODE)) != null) {
+			String warnMsg = I18nUtility.getMessage(request, warnCode);
+			addMessage(modelView, Consts.WARN_MESSAGES, warnMsg);
+			if (trans != null)
+				trans.setStatusIndicator(StatusIndicator.WARNING);
+		}
 		if ((infoCode = request.getParameter(Consts.INFO_CODE)) != null) {
 			String infoMsg = I18nUtility.getMessage(request, infoCode);
-			modelView.addObject(Consts.INFO_MESSAGE, infoMsg);
+			addMessage(modelView, Consts.INFO_MESSAGES, infoMsg);
+		}
+
+		// Finally check the portlet preferences in the model for errors or
+		// warnings, and add messages to the model as needed.
+		if ((errorCode = Utils
+				.checkViewFilenameForErrors(request, viewFilename)) != null) {
+			String errorMsg = I18nUtility.getMessage(request, errorCode);
+			addMessage(modelView, Consts.ERROR_MESSAGES, errorMsg);
+			if (trans != null)
+				trans.setStatusIndicator(StatusIndicator.ERROR);
+		}
+		if ((warnCode = Utils.checkViewFilenameForWarnings(request,
+				viewFilename)) != null) {
+			String warnMsg = I18nUtility.getMessage(request, warnCode);
+			addMessage(modelView, Consts.WARN_MESSAGES, warnMsg);
+			if (trans != null)
+				trans.setStatusIndicator(StatusIndicator.WARNING);
 		}
 		return modelView;
 	}
@@ -155,16 +220,20 @@ public class ConfigController extends AbstractController {
 	 * However, an
 	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.exception.InputErrorException}
 	 * on the part of the administrator is caught, not thrown, by this method.
-	 * In that case, the particular error code is set into the
+	 * The portlet preferences are not stored when this happens; instead, the
+	 * method sets the
 	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#ERROR_CODE} render
-	 * parameter and the method simply returns, allowing Spring to proceed into
-	 * the render phase as usual.
+	 * parameter with the relevant error code and returns, allowing Spring to
+	 * proceed into the render phase as usual.
 	 * </p>
 	 * <p>
 	 * Upon successfully storing the input parameters, this method sets the
 	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#INFO_CODE} render
 	 * parameter with any relevant information and returns, allowing Spring to
 	 * proceed into the render phase as usual.
+	 * </p>
+	 * <p>
+	 * This method uses WPAP Timber logging to record the outcome.
 	 * </p>
 	 * 
 	 * @param request
@@ -176,50 +245,89 @@ public class ConfigController extends AbstractController {
 	 */
 	protected void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
-
-		Log.logInfo(this, "ConfigController: action phase invoked.");
+		
+		Transaction trans = TransactionImpl.getTransaction(request);
 		try {
-			String viewFile = request.getParameter(Consts.VIEW_FILENAME);
-			String buttonLess = request.getParameter(Consts.LAUNCH_BUTTONLESS);
+			String viewFilename = request.getParameter(Consts.VIEW_FILENAME);
+			String launchButtonless = request
+					.getParameter(Consts.LAUNCH_BUTTONLESS);
 
-			if (viewFile == null || viewFile.trim().length() == 0) {
-				// use info logging as this is a user error only, not a system
-				// error
-				Log
-						.logInfo(this,
-								"ConfigController: view filename from form is null or empty.");
-				throw new InputErrorException(request,
-						Consts.ERROR_CODE_VIEW_FILENAME_NULL);
-			}
-			if (viewFile.indexOf("..") != -1) {
-				// use info logging as this is a user error only, not a system
-				// error
-				Log
-						.logInfo(this,
-								"ConfigController: view filename from form contains outside path information.");
-				throw new InputErrorException(request,
-						Consts.ERROR_CODE_VIEW_FILENAME_PATH);
+			// First edit-check the view filename value. If errors found, do not
+			// store any of the new preferences.
+
+			String errorCode = Utils.checkViewFilenameForErrors(request,
+					viewFilename);
+			if (errorCode != null) {
+				throw new InputErrorException(request, errorCode);
 			}
 
-			if (buttonLess != null
-					&& buttonLess.equals(Consts.LAUNCH_BUTTONLESS)) {
-				buttonLess = "true";
+			// Next determine the launch-buttonless value. No error conditions
+			// possible here.
+
+			if (launchButtonless != null
+					&& launchButtonless.equals(Consts.LAUNCH_BUTTONLESS)) {
+				launchButtonless = "true";
 			} else {
-				buttonLess = "false";
+				launchButtonless = "false";
 			}
 
+			// Save the preferences and set the "success" info code.
 			PortletPreferences pp = request.getPreferences();
-			pp.setValue(Consts.VIEW_FILENAME, Utils.slashify(viewFile));
-			pp.setValue(Consts.LAUNCH_BUTTONLESS, buttonLess);
+			pp.setValue(Consts.VIEW_FILENAME, Utils.slashify(viewFilename));
+			pp.setValue(Consts.LAUNCH_BUTTONLESS, launchButtonless);
 			pp.store();
 			response.setRenderParameter(Consts.INFO_CODE,
 					Consts.INFO_CODE_PREFS_SAVED);
-			Log.logInfo(this,
-					"ConfigController: preferences saved: view filename: "
-							+ viewFile + "; launch buttonless child window: "
-							+ buttonLess);
+
+			// Log success to WPAP logs, recording the parameters as context
+			// info.
+			if (trans != null) {
+				trans.addContextInfo("viewFilename", viewFilename);
+				trans.addContextInfo("launchButtonless", launchButtonless);
+				trans.setStatusIndicator(StatusIndicator.OK);
+			}
 		} catch (InputErrorException e) {
 			response.setRenderParameter(Consts.ERROR_CODE, e.getErrorCode());
+
+			// Log error to WPAP logs. Do not generate an error/error-trace
+			// however since those are only for system errors and this is a user
+			// error.
+			if (trans != null)
+				trans.setStatusIndicator(StatusIndicator.ERROR);
+		}
+		// Note: exceptions thrown back to Spring are automatically logged by
+		// WPAP (transaction logging interceptor) to the error/error-trace logs,
+		// so no need to set thrown exception info here.
+	}
+
+	/**
+	 * Add an error, warning, or info message to the model if it is not already
+	 * there, while retaining what is already there.
+	 */
+	@SuppressWarnings("unchecked")
+	private void addMessage(ModelAndView model, String msgType, String errMsg) {
+		if (model != null && errMsg != null) {
+			errMsg = errMsg.trim();
+			if (errMsg.length() > 0) {
+				Map modelMap = model.getModel();
+				ArrayList<String> errMsgs = null;
+				try {
+					errMsgs = (ArrayList<String>) modelMap.get(msgType);
+				} catch (ClassCastException e) {
+					// should never happen
+				}
+				if (errMsgs == null) {
+					errMsgs = new ArrayList<String>();
+				}
+				// suppress duplicate messages
+				for (int i = 0; i < errMsgs.size(); i++) {
+					if (errMsg.equals(errMsgs.get(i)))
+						return;
+				}
+				errMsgs.add(errMsg);
+				model.addObject(msgType, errMsgs);
+			}
 		}
 	}
+
 }
