@@ -72,6 +72,18 @@
 				<input type="text" name="<%= Consts.VIEW_FILENAME %>" value="<%= renderRequest.getAttribute(Consts.VIEW_FILENAME) %>">
 			</td>
 		</tr>
+		<tr>
+			<td nowrap>
+				<span class="spf-htmlviewer-config-label">
+					<spf-i18n-portlet:message key="config.subsfilename">
+						<spf-i18n-portlet:classicContextualHelpParam titleKey="config.subsfilename.help.title" contentKey="config.subsfilename.help.content"/>
+					</spf-i18n-portlet:message>&nbsp;&nsbp;
+				</span>
+			</td>					
+			<td>
+				<input type="text" name="<%= Consts.INCLUDES_FILENAME %>" value="<%= renderRequest.getAttribute(Consts.INCLUDES_FILENAME) %>">
+			</td>
+		</tr>
 		<tr>	
 			<td colspan=2>
 				<span class="spf-htmlviewer-config-label">

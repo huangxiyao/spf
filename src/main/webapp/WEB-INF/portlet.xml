@@ -41,6 +41,10 @@
 				<read-only>false</read-only>
 			</preference>
 			<preference>
+				<name>includesFilename</name>
+				<read-only>false</read-only>
+			</preference>
+			<preference>
 				<name>launchButtonless</name>
 				<read-only>false</read-only>
 			</preference>
