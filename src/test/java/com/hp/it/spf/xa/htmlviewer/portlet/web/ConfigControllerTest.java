@@ -70,11 +70,13 @@ public class ConfigControllerTest extends TestCase {
 		MockActionResponse actionResponse = new MockActionResponse();
 		PortletPreferences pp = actionRequest.getPreferences();
 		actionRequest.addParameter(Consts.VIEW_FILENAME, "file.htm");
+		actionRequest.addParameter(Consts.INCLUDES_FILENAME, "includes.properties");
 		actionRequest.addParameter(Consts.LAUNCH_BUTTONLESS,
 				Consts.LAUNCH_BUTTONLESS);
 		configController.handleActionRequestInternal(actionRequest,
 				actionResponse);
 		assertEquals("file.htm", pp.getValue(Consts.VIEW_FILENAME, ""));
+		assertEquals("includes.properties", pp.getValue(Consts.INCLUDES_FILENAME, ""));
 		assertEquals("true", pp.getValue(Consts.LAUNCH_BUTTONLESS, ""));
 		assertEquals(Consts.INFO_CODE_PREFS_SAVED, actionResponse.getRenderParameter(Consts.INFO_CODE));
 		MockRenderRequest renderRequest = new MockRenderRequest();
@@ -119,5 +121,28 @@ public class ConfigControllerTest extends TestCase {
 		assertEquals(2, errMsgs.size());
 		assertEquals(Consts.ERROR_CODE_VIEW_FILENAME_PATH, errMsgs.get(0));
 		assertEquals(Consts.ERROR_CODE_VIEW_FILENAME_NULL, errMsgs.get(1));
+		
+		actionRequest = new MockActionRequest();
+		actionResponse = new MockActionResponse();
+		actionRequest.setParameter(Consts.VIEW_FILENAME, "/some/non-existent/file");
+		actionRequest.setParameter(Consts.INCLUDES_FILENAME, "/some/non-existent/properties");
+		configController.handleActionRequestInternal(actionRequest,
+				actionResponse);
+		assertEquals(null, actionResponse.getRenderParameter(Consts.ERROR_CODE));
+		assertEquals(null, actionResponse.getRenderParameter(Consts.WARN_CODE));
+		assertEquals(Consts.INFO_CODE_PREFS_SAVED, actionResponse.getRenderParameter(Consts.INFO_CODE));
+		renderRequest = new MockRenderRequest();
+		renderResponse = new MockRenderResponse();
+		renderRequest.setPreferences(actionRequest.getPreferences());
+		model = (ModelAndView) configController.handleRenderRequest(renderRequest, renderResponse);
+		map = model.getModel();
+		errMsgs = (ArrayList<String>) map.get(Consts.ERROR_MESSAGES);
+		assertEquals(null, errMsgs);
+		ArrayList<String> warnMsgs = (ArrayList<String>) map.get(Consts.WARN_MESSAGES);
+		assertEquals(2, warnMsgs.size());
+		assertEquals(Consts.WARN_CODE_INCLUDES_FILE_NULL, warnMsgs.get(1));
+		assertEquals(Consts.WARN_CODE_VIEW_FILE_NULL, warnMsgs.get(0));
+		infoMsgs = (ArrayList<String>) map.get(Consts.INFO_MESSAGES);
+		assertEquals(null, infoMsgs);
 	}
 }

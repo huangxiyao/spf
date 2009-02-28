@@ -40,10 +40,11 @@ public class ViewController extends FileInterpolatorController {
 
 	/**
 	 * Constructor which sets the token-substitutions filename to
-	 * html_viewer_includes.properties.
+	 * <code>html_viewer_includes.properties</code>.
 	 */
 	public ViewController() {
-		// Override the default token-substitutions filename.
+		// Override the default token-substitutions filename with a default for
+		// this portlet.
 		this.includeFileName = "html_viewer_includes";
 	}
 
@@ -62,8 +63,8 @@ public class ViewController extends FileInterpolatorController {
 
 	/**
 	 * <p>
-	 * Gets the base filename of the file resource bundle to interpolate and
-	 * display, from the portlet preferences where the portlet config mode
+	 * Gets the base filename of the view file resource bundle to interpolate
+	 * and display, from the portlet preferences where the portlet config mode
 	 * stored it (in the preference element named
 	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#VIEW_FILENAME}).
 	 * Throws an
@@ -71,8 +72,17 @@ public class ViewController extends FileInterpolatorController {
 	 * if the filename cannot be found.
 	 * </p>
 	 * <p>
+	 * This method, as a side-effect, also gets the name of the token
+	 * substitutions file to use, also from the portlet preferences where the
+	 * config mode stored it (in the element named
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#INCLUDES_FILENAME}).
+	 * This is an optional element; if not found, then the default
+	 * <code>html_viewer_includes.properties</code> set by the constructor is
+	 * retained.
+	 * </p>
+	 * <p>
 	 * The render-phase controller in the abstract superclass calls this method
-	 * at the beginning of its execution.
+	 * at the beginning of its execution, before interpolating the content.
 	 * </p>
 	 * 
 	 * @param request
@@ -83,14 +93,28 @@ public class ViewController extends FileInterpolatorController {
 	 */
 	public String getFilename(RenderRequest request) throws Exception {
 
+		// Get the portlet preferences.
 		PortletPreferences pp = request.getPreferences();
 		String viewFilename = pp.getValue(Consts.VIEW_FILENAME, null);
+		String includesFilename = pp.getValue(Consts.INCLUDES_FILENAME, null);
+
+		// Check the view filename for possible errors. Otherwise finalize it by
+		// making a valid relative path out of it.
 		String errorCode = Utils.checkViewFilenameForErrors(request,
 				viewFilename);
 		if (errorCode != null) {
 			throw new InternalErrorException(request, errorCode);
 		}
-		return Utils.slashify(Consts.HTML_FILE_FOLD + viewFilename);
+		viewFilename = Utils.slashify(Consts.HTML_FILE_FOLD + viewFilename);
+
+		// Finalize the includes filename by setting it into the class attribute
+		// if defined.
+		includesFilename = Utils.slashify(includesFilename);
+		if (includesFilename != null) {
+			this.includeFileName = includesFilename;
+		}
+
+		return (viewFilename);
 	}
 
 	/**
@@ -105,7 +129,7 @@ public class ViewController extends FileInterpolatorController {
 	 * </p>
 	 * <p>
 	 * The render-phase controller in the abstract superclass calls this method
-	 * at the end of its execution.
+	 * at the end of its execution, after interpolating the content.
 	 * </p>
 	 * 
 	 * @param request

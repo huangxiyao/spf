@@ -131,6 +131,17 @@ public class ViewControllerTest extends TestCase {
 				"<html><body>Template ID: FRIENDLY_ID<br>Portal URL: /template.FRIENDLY_ID?lang=zh&cc=CN<br></body></html>",
 				content);
 		
+		pp.setValue(Consts.VIEW_FILENAME, "test_basic.html");
+		pp.setValue(Consts.INCLUDES_FILENAME, "test_includes.properties");
+		modelAndView = (ModelAndView) viewController.handleRenderRequest(renderRequest, renderResponse);
+		map = modelAndView.getModel();
+		content = (String) map.get(Consts.VIEW_CONTENT);
+		System.out.println("testHandleRenderRequestInternal.6 got: " + content);
+		assertEquals(
+				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Did we find this?</p></body></html>",
+				content);
+		pp.reset(Consts.INCLUDES_FILENAME);
+		
 		if (fileExists("/opt/sasuapps/sp/global_resources/portlet/i18n/html/test_loc_content_url_ext_zh_CN.html")
 				&& fileExists("/opt/sasuapps/sp/global_resources/portlet/i18n/images/test_ext_zh_CN.gif")) {
 			pp.setValue(Consts.VIEW_FILENAME, "test_loc_content_url_ext.html");
@@ -138,7 +149,7 @@ public class ViewControllerTest extends TestCase {
 					renderRequest, renderResponse);
 			map = modelAndView.getModel();
 			content = (String) map.get(Consts.VIEW_CONTENT);
-			System.out.println("testHandleRenderRequestInternal.6 got: "
+			System.out.println("testHandleRenderRequestInternal.7 got: "
 					+ content);
 			assertEquals(
 					"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1> Here is an image tag: <img src=\"/relay/images/test_ext_zh_CN.gif\"></body></html>",

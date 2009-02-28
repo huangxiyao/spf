@@ -17,6 +17,9 @@ public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 	/** View filename portlet preference, request parameter, and model attribute. */
 	public static final String VIEW_FILENAME = "viewFilename";
 
+	/** Token substitutions filename portlet preference, request parameter, and model attribute. */
+	public static final String INCLUDES_FILENAME = "includesFilename";
+	
 	/**
 	 * Launch-buttonless portlet preference, request parameter, and model
 	 * attribute.
@@ -62,9 +65,12 @@ public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 	/** Error code: view filename contained path information. */
 	public static final String ERROR_CODE_VIEW_FILENAME_PATH = "error.pathInFilename";
 
-	/** Warning code: view file or token substitutions file not found or empty during config mode. */
+	/** Warning code: view file not found or empty during config mode. */
 	public static final String WARN_CODE_VIEW_FILE_NULL = "warn.nullFile";
-	
+
+	/** Warning code: token substitutions file not found or empty during config mode. */
+	public static final String WARN_CODE_INCLUDES_FILE_NULL = "warn.nullSubsFile";
+
 	/** Status code: portlet preferences saved. */
 	public static final String INFO_CODE_PREFS_SAVED = "info.saved";
 	

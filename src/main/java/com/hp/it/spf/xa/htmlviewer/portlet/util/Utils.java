@@ -6,12 +6,14 @@ package com.hp.it.spf.xa.htmlviewer.portlet.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.ResourceBundle;
 import java.io.InputStream;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import org.springframework.web.portlet.ModelAndView;
 
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 
 /**
  * Container class for common utility methods used within the
@@ -78,6 +80,34 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 			return Consts.WARN_CODE_VIEW_FILE_NULL;
 		}
 		return null;
+	}
+
+	/**
+	 * Checks the indicated token substitutions file name for warning conditions
+	 * given the particular request, returning the particular warning code for
+	 * the first warning condition found, or null if no warnings are found. The
+	 * checked warning conditions are a non-existent or unloadable file. Note
+	 * the method does not check if the file is empty.
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @param includesFilename
+	 *            The token substitutions filename.
+	 * @return warning code (or null if no warnings found).
+	 */
+	public static String checkIncludesFilenameForWarnings(PortletRequest request,
+			String includesFilename) {
+		// see if we can load a property resource bundle for it off the classpath
+		try {
+			ResourceBundle resBundle = PropertyResourceBundleManager
+					.getBundle(includesFilename);
+			if (resBundle != null) {
+				return null;
+			}
+			return Consts.WARN_CODE_INCLUDES_FILE_NULL;
+		} catch (Exception e) {
+			return Consts.WARN_CODE_INCLUDES_FILE_NULL;
+		}
 	}
 
 	/**

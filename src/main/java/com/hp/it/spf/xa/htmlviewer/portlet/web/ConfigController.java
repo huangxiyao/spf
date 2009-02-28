@@ -80,7 +80,15 @@ public class ConfigController extends AbstractController {
 	 * into the model is blank.</dd>
 	 * </p>
 	 * <p>
-	 * <dt>The launch-buttonless option.</dt>
+	 * <dt>The token substitutions filename (optional).</dt>
+	 * <dd>Its value is set into the model element named
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#INCLUDES_FILENAME}
+	 * (taken from the portlet preference element of the same name). If no view
+	 * filename has yet been set in the preferences, then the default value put
+	 * into the model is blank.</dd>
+	 * </p>
+	 * <p>
+	 * <dt>The launch-buttonless option (optional).</dt>
 	 * <dd>Its value is set into the model element named
 	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#LAUNCH_BUTTONLESS}
 	 * (taken from the portlet preference element of the same name) and will be
@@ -123,10 +131,10 @@ public class ConfigController extends AbstractController {
 	 * </p>
 	 * </dl>
 	 * <p>
-	 * This method also double-checks the view filename preference to make sure
-	 * it has no errors or warnings; if it does, and they have not already been
-	 * reported as above by the action phase, then this method adds error or
-	 * warnings messages similarly for them to the model.
+	 * This method also double-checks the filename preferences to make sure they
+	 * have no errors or warnings; if either does, and they have not already
+	 * been reported as above by the action phase, then this method adds error
+	 * or warnings messages similarly for them to the model.
 	 * </p>
 	 * <p>
 	 * This method uses WPAP Timber logging to record the outcome.
@@ -149,7 +157,7 @@ public class ConfigController extends AbstractController {
 		Transaction trans = TransactionImpl.getTransaction(request);
 		if (trans != null)
 			trans.setStatusIndicator(StatusIndicator.OK); // Assume OK for
-															// now.
+		// now.
 
 		// Get the portlet preferences and copy them into the model.
 
@@ -157,9 +165,12 @@ public class ConfigController extends AbstractController {
 		ModelAndView modelView = new ModelAndView(viewName);
 		String viewFilename = Utils.slashify(pp.getValue(Consts.VIEW_FILENAME,
 				""));
+		String includesFilename = Utils.slashify(pp.getValue(
+				Consts.INCLUDES_FILENAME, ""));
 		String launchButtonless = pp
 				.getValue(Consts.LAUNCH_BUTTONLESS, "false");
 		modelView.addObject(Consts.VIEW_FILENAME, viewFilename);
+		modelView.addObject(Consts.INCLUDES_FILENAME, includesFilename);
 		modelView.addObject(Consts.LAUNCH_BUTTONLESS, launchButtonless);
 
 		// Get any status codes passed from action phase and copy their messages
@@ -199,6 +210,12 @@ public class ConfigController extends AbstractController {
 			if (trans != null)
 				trans.setStatusIndicator(StatusIndicator.WARNING);
 		}
+		if ((warnCode = Utils.checkIncludesFilenameForWarnings(request, includesFilename)) != null) {
+			String warnMsg = I18nUtility.getMessage(request, warnCode);
+			addMessage(modelView, Consts.WARN_MESSAGES, warnMsg);
+			if (trans != null)
+				trans.setStatusIndicator(StatusIndicator.WARNING);
+		}
 		return modelView;
 	}
 
@@ -208,6 +225,9 @@ public class ConfigController extends AbstractController {
 	 * configuration information into the portlet preferences. The new view
 	 * filename is expected to be in the
 	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#VIEW_FILENAME}
+	 * request parameter, the new token substitutions filename is expected to be
+	 * in the
+	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#INCLUDES_FILENAME}
 	 * request parameter, and the new launch-buttonless option is expected to be
 	 * in the
 	 * {@link com.hp.it.spf.xa.htmlviewer.portlet.util.Consts#LAUNCH_BUTTONLESS}
@@ -245,10 +265,12 @@ public class ConfigController extends AbstractController {
 	 */
 	protected void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
-		
+
 		Transaction trans = TransactionImpl.getTransaction(request);
 		try {
 			String viewFilename = request.getParameter(Consts.VIEW_FILENAME);
+			String includesFilename = request
+					.getParameter(Consts.INCLUDES_FILENAME);
 			String launchButtonless = request
 					.getParameter(Consts.LAUNCH_BUTTONLESS);
 
@@ -260,6 +282,9 @@ public class ConfigController extends AbstractController {
 			if (errorCode != null) {
 				throw new InputErrorException(request, errorCode);
 			}
+
+			// Next edit-check the includes filename value. Actually because
+			// this is an optional field, there are no error conditions.
 
 			// Next determine the launch-buttonless value. No error conditions
 			// possible here.
@@ -274,6 +299,8 @@ public class ConfigController extends AbstractController {
 			// Save the preferences and set the "success" info code.
 			PortletPreferences pp = request.getPreferences();
 			pp.setValue(Consts.VIEW_FILENAME, Utils.slashify(viewFilename));
+			pp.setValue(Consts.INCLUDES_FILENAME, Utils
+					.slashify(includesFilename));
 			pp.setValue(Consts.LAUNCH_BUTTONLESS, launchButtonless);
 			pp.store();
 			response.setRenderParameter(Consts.INFO_CODE,
@@ -283,6 +310,7 @@ public class ConfigController extends AbstractController {
 			// info.
 			if (trans != null) {
 				trans.addContextInfo("viewFilename", viewFilename);
+				trans.addContextInfo("includesFilename", includesFilename);
 				trans.addContextInfo("launchButtonless", launchButtonless);
 				trans.setStatusIndicator(StatusIndicator.OK);
 			}
