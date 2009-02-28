@@ -19,34 +19,54 @@
 <link href="<%= I18nUtility.getLocalizedFileURL(renderRequest, renderResponse, "/css/html_viewer.css", false) %>" rel="stylesheet" type="text/css">
 
 <table>
-	<tr>
-		<td>
-			<c:if test="${! empty errorMessage }">
-				<p>
+	<c:if test="${! empty errorMessages }">
+		<c:forEach var="errorMessage" items="${errorMessages}">
+			<tr>
+				<td>
 					<span class="spf-htmlviewer-config-error-label">
-						<spf-i18n-portlet:message key="error.message"/>
-					</span>&nbsp;
-					<span class="spf-htmlviewer-config-error-message">
-						<c:out value="${errorMessage}" escapeXml="false"/>
+						<spf-i18n-portlet:message key="error.message"/>&nbsp;
 					</span>
-				</p>
-			</c:if>
-			<c:if test="${! empty infoMessage }">
-				<p>
+					<span class="spf-htmlviewer-config-error-message">
+						<c:out value="${errorMessage}" escapeXml="false"/><br>
+					</span>
+				</td>
+			</tr>
+		</c:forEach>
+	</c:if>
+	<c:if test="${! empty warnMessages }">
+		<c:forEach var="warnMessage" items="${warnMessages}">
+			<tr>
+				<td>
+					<span class="spf-htmlviewer-config-warning-label">
+						<spf-i18n-portlet:message key="warn.message"/>&nbsp;
+					</span>
+					<span class="spf-htmlviewer-config-warning-message">
+						<c:out value="${warnMessage}" escapeXml="false"/><br>
+					</span>
+				</td>
+			</tr>
+		</c:forEach>
+	</c:if>
+	<c:if test="${! empty infoMessages }">
+		<c:forEach var="infoMessage" items="${infoMessages}">
+			<tr>
+				<td>
 					<span class="spf-htmlviewer-config-info-message">
 						<c:out value="${infoMessage}" escapeXml="false"/>
 					</span>
-				</p>
-			</c:if>
-		</td>
-	</tr>
+				</td>
+			</tr>
+		</c:forEach>
+	</c:if>
 </table>
-
+<p></p>
 <form name="htmlViewerConfig" action='<portlet:actionURL/>' method="post">
 	<table>
 		<tr>
 			<td nowrap>
-				<spf-help-portlet:classicContextualHelp anchorKey="config.viewfilename" titleKey="config.viewfilename.help.title" contentKey="config.viewfilename.help.content"/>&nbsp;&nbsp;
+				<span class="spf-htmlviewer-config-label">
+					<spf-help-portlet:classicContextualHelp anchorKey="config.viewfilename" titleKey="config.viewfilename.help.title" contentKey="config.viewfilename.help.content"/>&nbsp;&nbsp;
+				</span>
 			</td>					
 			<td>
 				<input type="text" name="<%= Consts.VIEW_FILENAME %>" value="<%= renderRequest.getAttribute(Consts.VIEW_FILENAME) %>">
@@ -54,17 +74,19 @@
 		</tr>
 		<tr>	
 			<td colspan=2>
-				<spf-i18n-portlet:message key="config.launchbuttonless">
-					<spf-i18n-portlet:classicContextualHelpParam titleKey="config.launchbuttonless.help.title" contentKey="config.launchbuttonless.help.content"/>
-				</spf-i18n-portlet:message>&nbsp;&nbsp;
-				<c:choose>
-					<c:when test="${! empty launchButtonless && launchButtonless == 'true' }">
-				    	<input type="checkbox" name="<%= Consts.LAUNCH_BUTTONLESS %>" value="<%= Consts.LAUNCH_BUTTONLESS %>" checked>
-					</c:when>
-					<c:otherwise>
-						<input type="checkbox" name="<%= Consts.LAUNCH_BUTTONLESS %>" value="<%= Consts.LAUNCH_BUTTONLESS %>">
-					</c:otherwise>
-				</c:choose>
+				<span class="spf-htmlviewer-config-label">
+					<spf-i18n-portlet:message key="config.launchbuttonless">
+						<spf-i18n-portlet:classicContextualHelpParam titleKey="config.launchbuttonless.help.title" contentKey="config.launchbuttonless.help.content"/>
+					</spf-i18n-portlet:message>&nbsp;&nbsp;
+					<c:choose>
+						<c:when test="${! empty launchButtonless && launchButtonless == 'true' }">
+					    	<input type="checkbox" name="<%= Consts.LAUNCH_BUTTONLESS %>" value="<%= Consts.LAUNCH_BUTTONLESS %>" checked>
+						</c:when>
+						<c:otherwise>
+							<input type="checkbox" name="<%= Consts.LAUNCH_BUTTONLESS %>" value="<%= Consts.LAUNCH_BUTTONLESS %>">
+						</c:otherwise>
+					</c:choose>
+				</span>
 			</td>			
 		</tr>
 		<tr>	
@@ -74,7 +96,9 @@
 		</tr>		
 		<tr>	
 			<td>
-				<input type="submit" value='<spf-i18n-portlet:message key="config.okbutton"/>'>
+				<span class="spf-htmlviewer-config-button">
+					<input type="submit" value='<spf-i18n-portlet:message key="config.okbutton"/>'>
+				</span>
 			</td>			
 		</tr>
 	</table>

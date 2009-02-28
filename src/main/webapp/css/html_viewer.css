@@ -2,6 +2,7 @@
 
 .spf-htmlviewer-config-error-message {
 	color: red;
+	font: bold;
 }
 .spf-htmlviewer-config-error-label {
 	color: red;
@@ -16,4 +17,18 @@
 .spf-htmlviewer-config-info-message {
 	color: green;
 	font: bold;
+}
+.spf-htmlviewer-config-warning-message {
+	color: green;
+	font: bold;
+}
+.spf-htmlviewer-config-warning-label {
+	color: green;
+	font: bold;
+}
+.spf-htmlviewer-config-label {
+	font: bold;
+}
+.spf-htmlviewer-config-button {
+	/ * reserved */
 }

@@ -23,7 +23,7 @@
 			value="${LOG_ROOT}/main/business/business.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %X{SESSION_ID} | %X{CLIENT_ID} | %X{PORTLET_NAME} | %X{REQUEST_TYPE} | %X{PORTLET_MODE} | %X{WINDOW_STATE} | %X{PAGE_ID} | %X{LOCALE} | %X{ERROR_CODE} | %m%n" />
+				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %X{SESSION_ID} | %X{CLIENT_ID} | %X{PORTLET_NAME} | %X{REQUEST_TYPE} | %X{PORTLET_MODE} | %X{WINDOW_STATE} | %X{PAGE_ID} | %X{LOCALE} | %X{CONTEXT_INFO} | %X{ERROR_CODE} | %m%n" />
 		</layout>
 	</appender>
 
@@ -35,7 +35,7 @@
 			value="${LOG_ROOT}/main/error/error.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %m %n" />
+				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %m%n" />
 		</layout>
 	</appender>
 
