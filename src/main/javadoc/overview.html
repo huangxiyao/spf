@@ -3846,10 +3846,11 @@ you have setup for your Spring portlet.</p>
 	<dt>{@link
 	com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#includeFileName}</dt>
 	<dd>
-	<p>If desired, override this attribute (inside your constructor)
-	and set it to the name (plus any needed relative path) of the <i>token
-	substitution</i> property file to use during the interpolation. This is
-	used as a parameter to the <code>FileInterpolator</code>. See the <a
+	<p>If desired, override this attribute (eg,inside your constructor
+	or your <code>getFilename</code> method) and set it to the name (plus
+	any needed relative path) of the <i>token substitution</i> property
+	file to use during the interpolation. This is used as a parameter to
+	the <code>FileInterpolator</code>. See the <a
 		href="#file.display.java.fileInterpolator">above discussion</a> for
 	more information. If your file to interpolate does not contain any <code>{INCLUDE:<i>key</i>}</code>
 	tokens, or you are willing to use the default property file, you do not
@@ -4756,7 +4757,11 @@ url.hp=http://www.hp.com
 		<li>If you use the <a href="#file.display.jsp.interpolate"><code>&lt;spf-file-portlet:interpolate&gt;</code></a>
 		JSP tag, set use the <code>includeFile</code> tag attribute.</li>
 		<li>If you use the <a href="#file.display.htmlViewer"><code>htmlviewer</code></a>
-		portlet, the file must be named <code>html_viewer_includes.properties</code>.</li>
+		portlet, the file is assumed to be named <code>html_viewer_includes.properties</code>
+		by default, but the portal administrator can override that when
+		configuring the portlet instance. (The portlet's <code>config</code>
+		mode lets the administrator enter an alternate token substitutions
+		filename.)</li>
 	</ul>
 
 	<p>A template for the token substitutions file, also named <code>default_includes.properties</code>,
@@ -6708,7 +6713,17 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		</ul>
 		</td>
 	</tr>
-
+	<tr>
+		<td>1.5</td>
+		<td>Feb 28 2009</td>
+		<td>S. Jorgenson</td>
+		<td>
+		<ul>
+			<li>Documented that <code>html_viewer_includes.properties</code>
+			can be overridden in HTML viewer portlet <code>config</code> mode.</li>
+		</ul>
+		</td>
+	</tr>
 </table>
 <p></p>
 
