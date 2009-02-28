@@ -415,20 +415,20 @@ interpolation</a> engine to parse your view files and perform dynamic
 substitutions for certain special markup tokens you can use when <a
 	href="#using.authoring.file">authoring the view file</a>. If you use
 the <code>{INCLUDE:<i>key</i>}</code> token, then you will need to
-configure the <code>html_viewer_includes.properties</code> file to
-define your key-value pair(s).</p>
+configure a <i>token substitutions</i> property file to define your
+key-value pair(s). By default, this property file is named <code>html_viewer_includes.properties</code>.</p>
 
 <blockquote>
-<p><b>Note:</b> You only need to concern yourself with <code>html_viewer_includes.properties</code>
-if you use the special <code>{INCLUDE:<i>key</i>}</code> markup token in
-your view file. <i>Otherwise you can skip this.</i></p>
+<p><b>Note:</b> You only need to concern yourself with the token
+substitutions property file if you use the special <code>{INCLUDE:<i>key</i>}</code>
+markup token in your view file. <i>Otherwise you can skip this.</i></p>
 </blockquote>
 
 <p>To install this file:</p>
 
 <ul>
 	<li>
-	<p>Download the template for <code>html_viewer_includes.properties</code>
+	<p>Download the template for the token substitutions property file
 	from <b><font color="blue">TBD</font></b> (the template file is named <code>default_includes.properties</code>
 	but you will rename it).</p>
 	</li>
@@ -442,12 +442,14 @@ your view file. <i>Otherwise you can skip this.</i></p>
 	</li>
 
 	<li>
-	<p>Include the customized file, named <code>html_viewer_includes.properties</code>,
-	with your <code>htmlviewer</code> application. You can put the file
-	anywhere that the system classloader searches. See the discussion on
-	this point above, in regard to <a
+	<p>Include the customized file with your <code>htmlviewer</code>
+	application. By default, you can name it <code>html_viewer_includes.properties</code>,
+	but you can give it a custom name. (If you will have multiple portlet
+	instances and you want them to use different property files, this is
+	the way.) You can put the file anywhere that the system classloader
+	searches. See the discussion on this point above, in regard to <a
 		href="#overview.installation.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
-	- the same comments apply to <code>html_viewer_includes.properties</code>.</p>
+	- the same comments apply to your token substitutions property file.</p>
 	</li>
 </ul>
 
@@ -523,8 +525,8 @@ server-side substitutions such as:</p>
 	<li>Conditionally including content based on user authentication
 	status or group- or role-based authorization; portlet ID or site; and
 	date and time;</li>
-	<li>Including content kept in the <code>html_viewer_includes.properties</code>
-	file;</li>
+	<li>Including content kept as key-value pairs in a separate <i>token
+	substitutions</i> property file;</li>
 	<li>And other behaviors.</li>
 </ul>
 </p>
@@ -537,8 +539,9 @@ view file.</p>
 
 <blockquote>
 <p><b>Note:</b> Be advised that if you use the <code>{INCLUDE:<i>key</i>}</code>
-token, your <i>token-substitutions file</i> must be named <code>html_viewer_includes.properties</code>.
-See the discussion about <a
+token, you will want to create a <i>token substitutions property
+file</i> to go with it. That is where you will define the key-value pairs
+you reference from your view file. See the discussion about <a
 	href="#overview.installation.html_viewer_includes">installing <code>html_viewer_includes.properties</code></a>
 above.</p>
 </blockquote>
@@ -866,15 +869,17 @@ instance.</p>
 
 <blockquote>
 <p><b>Note:</b> Until you configure the portlet instance, its <code>view</code>
-mode will not know what view content to render, and will display an
-error if invoked.</p>
+mode will not know what view file to render, and will display an error
+if invoked. The <code>config</code> mode view will remind you to specify
+at least a view file when you first enter the mode.</p>
 </blockquote>
 
-<p>In the configuration view:</p>
+<p>In the configuration view, there are 3 input elements:</p>
 
-<ol>
-	<li>
-	<p>In the text box, enter the name of the view file containing the
+<dl>
+	<dt><b>View file:</b></dt>
+	<dd>
+	<p>In this text box, enter the name of the view file containing the
 	content this portlet instance should render. In the case of a localized
 	bundle of view files, enter the base name. Include the file extension,
 	and any subfolders relative to the <code>html/</code> folder where you
@@ -888,8 +893,27 @@ error if invoked.</p>
 		<li>When configuring the second portlet instance, you would enter
 		just <code>my_view_file_2.html</code>.</li>
 	</ul>
-	<li>
-	<p><b>Optional:</b> The HTML viewer portlet has a secondary feature
+	</dd>
+
+	<dt><b>Token substitutions file:</b></dt>
+	<dd>
+	<p><b>Optional.</b> You only care about this input element if your
+	view file content uses the special <code>{INCLUDE:<i>key</i>}</code>
+	token to dynamically insert key-value pairs from the <i>token
+	substitutions property file</i>; <b>and</b> that property file is named
+	something other than the default (<code>html_viewer_includes.properties)</code>.
+	If so, then enter the filename here. Include the file extension, and
+	any subfolder relative to the classloader folder where the file is
+	located. (Note it is <b>not</b> installed in the <code>html/</code>
+	subfolder like the view file is; it is installed in a folder searched
+	by the classloader. See the discussion about <a
+		href="#overview.installation.html_viewer_includes">installing <code>html_viewer_includes.properties</code></a>
+	earlier in this guide.)</p>
+	</dd>
+
+	<dt><b>Open lins in new buttonless window?</b></dt>
+	<dd>
+	<p><b>Optional.</b> The HTML viewer portlet has a secondary feature
 	whereby it can rewrite hyperlinks in your view content so that, when
 	clicked, the link is opened in a new, buttonless, child window. Only
 	hyperlinks coded in your view file using the <code>&lt;A
@@ -898,9 +922,11 @@ error if invoked.</p>
 	the link still functions but does not launch a new buttonless window).</p>
 	<p>To enable this optional feature, click the checkmark in the
 	configuration view. This feature is off by default.</p>
-	</li>
-	<li>Click the <code>Save</code> button to save your changes.</li>
-</ol>
+	</dd>
+</dl>
+
+<p>Be sure to click the <code>Save</code> button to save your
+changes.</p>
 
 <p>You are now done configuring the portlet, and you can go view or
 preview the portlet to see and test your rendered content.</p>
@@ -931,6 +957,14 @@ preview the portlet to see and test your rendered content.</p>
 		<td>Feb 27 2009</td>
 		<td>S. Jorgenson</td>
 		<td>Initial published version.</td>
+	</tr>
+	<tr>
+		<td>1.1</td>
+		<td>Feb 28 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Added support for using a token substitutions property file
+		named something other than the default <code>html_viewer_includes.properties</code>,
+		and configured in the portlet's <code>config</code> mode.</td>
 	</tr>
 </table>
 <p></p>
