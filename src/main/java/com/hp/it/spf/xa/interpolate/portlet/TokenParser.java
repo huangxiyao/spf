@@ -7,6 +7,7 @@ package com.hp.it.spf.xa.interpolate.portlet;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import java.util.Locale;
+import java.io.InputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -148,12 +149,12 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * </p>
 	 * <p>
 	 * The given file pathname should be a base filename and path relative to
-	 * the portlet bundle directory.
+	 * the portlet bundle directory or portlet WAR root.
 	 * </p>
 	 * 
 	 * @param baseFilePath
 	 *            A base filename including path relative to portlet bundle
-	 *            directory if needed
+	 *            directory or portlet WAR root, if needed
 	 * @param localized
 	 *            decide to localize or not
 	 * @return The content URL
@@ -165,6 +166,37 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		}
 		return I18nUtility.getLocalizedFileURL(request, response, baseFilePath,
 				getLocale(), localized);
+	}
+
+	/**
+	 * <p>
+	 * Get an {@link java.io.InputStream} for the token substitutions property
+	 * file, from the portlet resource bundle folder or portlet WAR root. This
+	 * returns null if the stream cannot be opened (eg the file is not found).
+	 * This method is implemented using
+	 * {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileStream(PortletRequest, String, Locale, boolean)}
+	 * (see) and the include file is allowed to be localized. The current locale
+	 * is the one provided to the constructor (or the one in the portlet request
+	 * if that was null).
+	 * </p>
+	 * <p>
+	 * The given file pathname should be a base filename for the token
+	 * substitutions file, and path relative to portlet bundle directory or
+	 * portlet WAR root.
+	 * </p>
+	 * 
+	 * @param subsFilePath
+	 *            A base filename including path relative to the portlet bundle
+	 *            directory or portlet WAR root, if needed
+	 * @return The input stream
+	 */
+	protected InputStream getIncludeFileAsStream(String subsFilePath) {
+
+		if (request == null) {
+			return null;
+		}
+		return I18nUtility.getLocalizedFileStream(request, subsFilePath,
+				getLocale(), true);
 	}
 
 	/**

@@ -3640,10 +3640,10 @@ methods:</p>
 			href="#file.author.token.consolidate">authoring text</a>, one of the
 		special markup tokens (<code>{INCLUDE:<i>key</i>}</code>) substitutes
 		values from this property file. By default, the name of the property
-		file is considered to be <code>default_includes.properties</code>, but
-		you can override it with this parameter. If you will not be using the
-		special <code>{INCLUDE:<i>key</i>}</code> or will use the default
-		filename, you can ignore this parameter.</p>
+		file is considered to be <code>default_includes.properties</code>,
+		with no subfolder, but you can override that with this parameter. If
+		you will not be using the special <code>{INCLUDE:<i>key</i>}</code> or
+		will use the default filename, you can ignore this parameter.</p>
 		</li>
 	</ul>
 	</dd>
@@ -3950,10 +3950,10 @@ methods to perform the desired interpolations.</p>
 			href="#file.author.token.consolidate">authoring text</a>, one of the
 		special markup tokens (<code>{INCLUDE:<i>key</i>}</code>) substitutes
 		values from this property file. By default, the name of the property
-		file is considered to be <code>default_includes.properties</code>, but
-		you can override it with this parameter. If you will not be using the
-		special <code>{INCLUDE:<i>key</i>}</code> or will use the default
-		filename, you can ignore this parameter.</p>
+		file is considered to be <code>default_includes.properties</code>,
+		with no subfolder, but you can override it with this parameter. If you
+		will not be using the special <code>{INCLUDE:<i>key</i>}</code> or
+		will use the default filename, you can ignore this parameter.</p>
 		</li>
 	</ul>
 	</dd>
@@ -4735,12 +4735,17 @@ url.hp=http://www.hp.com
 	configured on the JVM classpath. (Of course, you can always put it
 	inside your portlet WAR, in <code>/WEB-INF/classes</code>.)</p>
 
+	<p>Alternatively, the file may be treated as an <a
+		href="#i18n.location">internal or external resource</a> and
+	accordingly stored anywhere inside your portlet WAR or underneath the
+	portlet resource bundle folder.</p>
+
 	<p>The name of the token substitutions property file is assumed by
-	the interpolator to be <code>default_includes.properties</code> unless
-	otherwise specified. You can specify a different name (including any
-	subfolders relative to the location where you put it - see previous
-	paragraph) in different ways, depending on how you invoke the
-	interpolator:</p>
+	the interpolator to be <code>default_includes.properties</code>, and it
+	is assumed to not be stored in a subfolder, unless otherwise specified.
+	You can specify a different name (and/or any subfolders relative to the
+	location where you put it - see previous paragraphs) in different ways,
+	depending on how you invoke the interpolator:</p>
 
 	<ul>
 		<li>If you invoke <a href="#file.display.java.tokenParser"><code>TokenParser</code></a>
@@ -6720,7 +6725,8 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		<td>
 		<ul>
 			<li>Documented that <code>html_viewer_includes.properties</code>
-			can be overridden in HTML viewer portlet <code>config</code> mode.</li>
+			can be overridden in HTML viewer portlet <code>config</code> mode,
+			and may be located as an internal or external resource.</li>
 		</ul>
 		</td>
 	</tr>
