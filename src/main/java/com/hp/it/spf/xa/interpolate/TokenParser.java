@@ -7,12 +7,14 @@ package com.hp.it.spf.xa.interpolate;
 
 import java.util.Comparator;
 import java.util.ResourceBundle;
+import java.util.PropertyResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Locale;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParsePosition;
+import java.io.InputStream;
 
 import com.hp.it.spf.xa.i18n.I18nUtility;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
@@ -230,18 +232,42 @@ public abstract class TokenParser {
 	 * </p>
 	 * <p>
 	 * The given file pathname should be a base filename and path relative to
-	 * the portlet bundle directory.
+	 * the supporting resources location. For a portal component, supporting
+	 * resource files are secondary support files; for a portlet, they are files
+	 * underneatch the portlet resource bundle folder or the portlet WAR.
 	 * </p>
 	 * 
 	 * @param baseFilePath
-	 *            A base filename including path relative to portlet bundle
-	 *            directory if needed
+	 *            A base filename including path relative to the supporting
+	 *            resources root folder, if needed
 	 * @param localized
 	 *            Decide to localize or not
 	 * @return The content URL
 	 */
 	protected abstract String getContentURL(String baseFilePath,
 			boolean localized);
+
+	/**
+	 * <p>
+	 * Get an {@link java.io.InputStream} for the token substitutions property
+	 * file, from the caller's supporting resource files. For a portal
+	 * component, supporting resource files are secondary support files; for a
+	 * portlet, they are files underneatch the portlet resource bundle folder or
+	 * the portlet WAR. This should return null if the stream cannot be opened
+	 * (eg the file is not found). Different action by portal and portlet, so
+	 * therefore this is an abstract method.
+	 * </p>
+	 * <p>
+	 * The given file pathname should be a base filename for the token
+	 * substitutions file, and path relative to the location.
+	 * </p>
+	 * 
+	 * @param subsFilePath
+	 *            A base filename including path relative to the supporting
+	 *            resources root folder, if needed
+	 * @return The input stream
+	 */
+	protected abstract InputStream getIncludeFileAsStream(String subsFilePath);
 
 	/**
 	 * <p>
@@ -1464,8 +1490,8 @@ public abstract class TokenParser {
 	 * <b>Note:</b> Be careful the <code><i>date</i></code> you specify
 	 * satisfies the expected {@link #DATE_PATTERN}. If there is a parsing
 	 * error, the content will be included in the returned string (with the
-	 * offending <code>{AFTER:<i>date</i>}</code> and
-	 * <code>{/AFTER}</code> tokens removed).
+	 * offending <code>{AFTER:<i>date</i>}</code> and <code>{/AFTER}</code>
+	 * tokens removed).
 	 * </p>
 	 * 
 	 * <p>
@@ -1503,9 +1529,13 @@ public abstract class TokenParser {
 	}
 
 	/**
-	 * Get token key value from token substitutions file, using the
+	 * Get token key value from token substitutions file. First try using the
 	 * {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager} to
 	 * hot-load the properties file from anywhere searched by the class loader.
+	 * If not found, try using #getIncludeFileAsStream to load it from the
+	 * supporting resource files (eg, for a portal component, from the secondary
+	 * support files; and for a portlet, from the portlet resource bundle folder
+	 * or the portlet WAR).
 	 * 
 	 * @param key
 	 *            token key
@@ -1513,17 +1543,20 @@ public abstract class TokenParser {
 	 * @see {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager}
 	 */
 	private String getIncludeValue(String key) {
-		String tokenValue = null;
 		try {
 			ResourceBundle resBundle = PropertyResourceBundleManager
 					.getBundle(this.subsFilePath);
 			if (resBundle != null) {
-				tokenValue = resBundle.getString(key.trim());
+				return resBundle.getString(key.trim());
 			}
-			return tokenValue;
+			PropertyResourceBundle propBundle = new PropertyResourceBundle(
+					getIncludeFileAsStream(this.subsFilePath));
+			if (propBundle != null) {
+				return propBundle.getString(key.trim());
+			}
 		} catch (Exception e) {
-			return null;
 		}
+		return null;
 	}
 
 	/**
