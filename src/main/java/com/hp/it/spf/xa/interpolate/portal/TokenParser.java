@@ -7,6 +7,7 @@ package com.hp.it.spf.xa.interpolate.portal;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -139,6 +140,36 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		}
 		return I18nUtility.getLocalizedFileURL(portalContext, baseFilePath,
 				getLocale(), localized);
+	}
+
+	/**
+	 * <p>
+	 * Get an {@link java.io.InputStream} for the token substitutions property
+	 * file, from the "secondary support files" for the portal component. This
+	 * returns null if the stream cannot be opened (eg the file is not found).
+	 * This method is implemented using
+	 * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocalizedFileStream(PortalContext, String, Locale, boolean)}
+	 * (see) and the token substitutions file is allowed to be localized. The
+	 * current locale is the one provided to the constructor (or the one in the
+	 * portal context if that was null).
+	 * </p>
+	 * <p>
+	 * The given file pathname should be a base filename for the token
+	 * substitutions file, which has been loaded into the portal as a "secondary
+	 * support file".
+	 * </p>
+	 * 
+	 * @param subsFilePath
+	 *            A base filename for the token substitutions property file
+	 * @return The input stream
+	 */
+	protected InputStream getIncludeFileAsStream(String subsFilePath) {
+
+		if (portalContext == null) {
+			return null;
+		}
+		return I18nUtility.getLocalizedFileStream(portalContext, subsFilePath,
+				getLocale(), true);
 	}
 
 	/**
