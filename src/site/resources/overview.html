@@ -446,10 +446,23 @@ markup token in your view file. <i>Otherwise you can skip this.</i></p>
 	application. By default, you can name it <code>html_viewer_includes.properties</code>,
 	but you can give it a custom name. (If you will have multiple portlet
 	instances and you want them to use different property files, this is
-	the way.) You can put the file anywhere that the system classloader
-	searches. See the discussion on this point above, in regard to <a
-		href="#overview.installation.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
-	- the same comments apply to your token substitutions property file.</p>
+	the way.) You have several choices where you can put this file:</p>
+	<ul>
+		<li>
+		<p>You can put the file anywhere that the system classloader
+		searches. See the discussion on this point above, in regard to <a
+			href="#overview.installation.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
+		- the same comments apply to your token substitutions property file.</p>
+		</li>
+		<li>
+		<p>Alternatively, you can put the file anywhere in your portlet
+		WAR or in the <i>portlet resource bundle folder</i>, managing it as an
+		<i>internal</i> or <i>external</i> resource file like the view file
+		itself - see <a href="#using.storing">installing the view content</a>.</p>
+		</li>
+	</ul>
+	<p>When you <a href="#using.creating.configure">configure the
+	portlet instance</a>, you will tell it where to find the file.</p>
 	</li>
 </ul>
 
@@ -662,11 +675,21 @@ to put your resources</a> in the SPF portlet utilities developer's guide.</p>
 </blockquote>
 
 <blockquote>
+<p><b>Note:</b> If you have a <i>token substitutions</i> property
+file, you can install it as an internal or external resource file, too.
+See the discussion about <a
+	href="#overview.installation.html_viewer_includes">installing <code>html_viewer_includes.properties</code></a>
+above, and <a href="#using.creating.configure">configuring the
+portlet instance</a> below.</p>
+</blockquote>
+
+<blockquote>
 <p><b>Note:</b> Unfortunately at this time the HTML viewer portlet
-does not support loading the view content to a database; only to the
-portlet WAR or the filesystem. Similarly, at this time it does not
-provide a UI wizard or config mode for installing the view content; you
-have to do it without the support of such a portlet-provided tool.</p>
+does not support loading the view content or token substitution
+properties to a database; only to the portlet WAR or the filesystem.
+Similarly, at this time it does not provide a UI wizard or config mode
+for installing that content; you have to do it without the support of
+such a portlet-provided tool.</p>
 </blockquote>
 
 <a name="using.storing.internal">
@@ -715,7 +738,9 @@ WAR, here is how:</p>
 
 <p>For example, imagine that we plan to have 2 HTML viewer portlet
 instances, each displaying different, localized views (including some
-shared images). The layout could look like this:</p>
+shared images). One of the views using a <i>token substitutions file</i>
+for the <code>{INCLUDE:<i>key</i>}</code> token. The layout could look
+like this:</p>
 
 <blockquote><pre>
 <code><i>&lt;web-app-root&gt;</i></code>/
@@ -737,6 +762,10 @@ shared images). The layout could look like this:</p>
                an_image_fr.gif
                an_image_pt_BR.gif
                ...
+     properties/
+          my_portlet_instance_1/
+               my_includes.properties
+          ...
 </pre></blockquote>
 
 <blockquote>
@@ -823,6 +852,10 @@ by default) instead of the WAR root:</p>
                an_image_fr.gif
                an_image_pt_BR.gif
                ...
+     properties/
+          my_portlet_instance_1/
+               my_includes.properties
+          ...
 </pre></blockquote>
 
 <hr>
@@ -883,9 +916,8 @@ at least a view file when you first enter the mode.</p>
 	content this portlet instance should render. In the case of a localized
 	bundle of view files, enter the base name. Include the file extension,
 	and any subfolders relative to the <code>html/</code> folder where you
-	put the content. Do not enter the <code>html/</code> folder itself, or
-	the portlet bundle folder. Consider the example layout in the previous
-	section:</p>
+	put the content. Do not enter the <code>html/</code> folder itself.
+	Consider the example layout in the previous section:</p>
 
 	<p>
 	<ul>
@@ -894,37 +926,42 @@ at least a view file when you first enter the mode.</p>
 		<li>When configuring the second portlet instance, you would enter
 		just <code>my_view_file_2.html</code>.</li>
 	</ul>
-	</p>
-	</dd>
+</p>
+</dd>
 
-	<dt><b>Token substitutions file:</b></dt>
-	<dd>
-	<p><b>Optional.</b> You only care about this input element if your
-	view file content uses the special <code>{INCLUDE:<i>key</i>}</code>
-	token to dynamically insert key-value pairs from the <i>token
-	substitutions property file</i>; <b>and</b> that property file is named
-	something other than the default (<code>html_viewer_includes.properties)</code>.
-	If so, then enter the filename here. Include the file extension, and
-	any subfolder relative to the classloader folder where the file is
-	located. (Note it is <b>not</b> installed in the <code>html/</code>
-	subfolder like the view file is; it is installed in a folder searched
-	by the classloader. See the discussion about <a
-		href="#overview.installation.html_viewer_includes">installing <code>html_viewer_includes.properties</code></a>
-	earlier in this guide.)</p>
-	</dd>
+<dt><b>Token substitutions file:</b></dt>
+<dd>
+<p><b>Optional.</b> You only care about this input element if your
+view file content uses the special <code>{INCLUDE:<i>key</i>}</code>
+token to dynamically insert key-value pairs from the <i>token
+substitutions property file</i>; <b>and</b> that property file is named
+something other than the default (<code>html_viewer_includes.properties</code>)
+or exists in a subfolder. If so, then enter the filename here. Include
+the file extension, and any subfolder relative to the classloader
+folder, <code>htmlviewer.war</code> root, or <i>portlet resource
+bundle folder</i> where the file is located. (The file may be located in any
+folder searched by the system classloader, such as your "global
+resources" folder configured on the JVM classpath; or it may be anywhere
+inside the WAR or underneath the portlet resource bundle folder. See the
+discussion about <a href="#overview.installation.html_viewer_includes">installing
+<code>html_viewer_includes.properties</code></a> earlier in this guide.)</p>
 
-	<dt><b>Open lins in new buttonless window?</b></dt>
-	<dd>
-	<p><b>Optional.</b> The HTML viewer portlet has a secondary feature
-	whereby it can rewrite hyperlinks in your view content so that, when
-	clicked, the link is opened in a new, buttonless, child window. Only
-	hyperlinks coded in your view file using the <code>&lt;A
-	HREF="..."&gt;</code> tag are rewritten. JavaScript must be enabled in the
-	browser for the rewrite to have any effect (if JavaScript is disabled,
-	the link still functions but does not launch a new buttonless window).</p>
-	<p>To enable this optional feature, click the checkmark in the
-	configuration view. This feature is off by default.</p>
-	</dd>
+<p>Consider the example layout in the previous section - for that
+example, you would enter <code>/properties/my_portlet_instance_1/my_includes.properties</code>.</p>
+</dd>
+
+<dt><b>Open links in new buttonless window?</b></dt>
+<dd>
+<p><b>Optional.</b> The HTML viewer portlet has a secondary feature
+whereby it can rewrite hyperlinks in your view content so that, when
+clicked, the link is opened in a new, buttonless, child window. Only
+hyperlinks coded in your view file using the <code>&lt;A
+HREF="..."&gt;</code> tag are rewritten. JavaScript must be enabled in the
+browser for the rewrite to have any effect (if JavaScript is disabled,
+the link still functions but does not launch a new buttonless window).</p>
+<p>To enable this optional feature, click the checkmark in the
+configuration view. This feature is off by default.</p>
+</dd>
 </dl>
 
 <p>Be sure to click the <code>Save</code> button to save your
@@ -966,7 +1003,9 @@ preview the portlet to see and test your rendered content.</p>
 		<td>S. Jorgenson</td>
 		<td>Added support for using a token substitutions property file
 		named something other than the default <code>html_viewer_includes.properties</code>,
-		and configured in the portlet's <code>config</code> mode.</td>
+		and configured in the portlet's <code>config</code> mode. The file may
+		exist in a classloader folder or an internal or external resource
+		file.</td>
 	</tr>
 </table>
 <p></p>
