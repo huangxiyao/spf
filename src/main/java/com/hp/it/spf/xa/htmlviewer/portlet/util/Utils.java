@@ -6,6 +6,7 @@ package com.hp.it.spf.xa.htmlviewer.portlet.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.io.InputStream;
 import javax.portlet.PortletRequest;
@@ -73,11 +74,13 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 	 */
 	public static String checkViewFilenameForWarnings(PortletRequest request,
 			String viewFilename) {
-		// treat as base file and check only for its existence/readability
-		InputStream is = I18nUtility.getLocalizedFileStream(request,
-				Consts.HTML_FILE_FOLD + viewFilename, false);
-		if (is == null) {
-			return Consts.WARN_CODE_VIEW_FILE_NULL;
+		if (viewFilename != null) {
+			// treat as base file and check only for its existence/readability
+			InputStream is = I18nUtility.getLocalizedFileStream(request,
+					Consts.HTML_FILE_FOLD + viewFilename, false);
+			if (is == null) {
+				return Consts.WARN_CODE_VIEW_FILE_NULL;
+			}
 		}
 		return null;
 	}
@@ -95,13 +98,24 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 	 *            The token substitutions filename.
 	 * @return warning code (or null if no warnings found).
 	 */
-	public static String checkIncludesFilenameForWarnings(PortletRequest request,
-			String includesFilename) {
-		// see if we can load a property resource bundle for it off the classpath
+	public static String checkIncludesFilenameForWarnings(
+			PortletRequest request, String includesFilename) {
+		// includes file is optional, so return if not defined
+		if (includesFilename == null) {
+			return null;
+		}
+		// see if we can load a property resource bundle for it off the
+		// classpath, or from the internal or external resource files
 		try {
 			ResourceBundle resBundle = PropertyResourceBundleManager
 					.getBundle(includesFilename);
 			if (resBundle != null) {
+				return null;
+			}
+			PropertyResourceBundle propBundle = new PropertyResourceBundle(
+					I18nUtility.getLocalizedFileStream(request,
+							includesFilename, false));
+			if (propBundle != null) {
 				return null;
 			}
 			return Consts.WARN_CODE_INCLUDES_FILE_NULL;
