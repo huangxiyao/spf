@@ -1,5 +1,5 @@
 /**
- * Provides SPF database persistence implementation on portlet window preference registry-context.
+ * Provides SPF customized feature to support config mode.
  */
 
 package com.hp.it.spf.openportal.portletcontainer.admin.registry.database;
