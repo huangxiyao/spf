@@ -77,7 +77,7 @@
 				<span class="spf-htmlviewer-config-label">
 					<spf-i18n-portlet:message key="config.subsfilename">
 						<spf-i18n-portlet:classicContextualHelpParam titleKey="config.subsfilename.help.title" contentKey="config.subsfilename.help.content"/>
-					</spf-i18n-portlet:message>&nbsp;&nsbp;
+					</spf-i18n-portlet:message>&nbsp;&nbsp;
 				</span>
 			</td>					
 			<td>
