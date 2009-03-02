@@ -4,7 +4,7 @@
 	<artifactId>spf-portlet-container</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 	<name>spf-portlet-container</name>
-	<description>To support config mode.</description>
+	<description>This project provides some spf customized features on OpenPortal portlet container.</description>
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
 		<artifactId>spf-pom</artifactId>
