@@ -4,6 +4,14 @@
  */
 package com.hp.it.spf.user.group.utils;
 
+/**
+ * <p>
+ * Container class defines constants for UGS web-service.
+ * </p>
+ * 
+ * @author <link href="ye.liu@hp.com">Liu Ye</link>
+ * @version TBD
+ */
 public class IUGSConstant {
 	// Definition of parameters list name
 	public final static String UGSPARAMETERSFILENAME = "UGSParameters";
