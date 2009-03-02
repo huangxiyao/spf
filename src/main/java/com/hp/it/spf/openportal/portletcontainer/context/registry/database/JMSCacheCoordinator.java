@@ -1,3 +1,8 @@
+/*
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
+ *
+ */
 package com.hp.it.spf.openportal.portletcontainer.context.registry.database;
 
 import java.net.InetAddress;
@@ -12,9 +17,17 @@ import org.eclipse.persistence.sessions.coordination.jms.JMSTopicTransportManage
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 import com.hp.it.spf.xa.misc.Environment;
 
-
+/**
+ * This class involves Weblogic JMS to support Eclipselink cache coordination.
+ * 
+ * @author <link href="ye.liu@hp.com">Liu Ye</link>
+ * @version TBD
+ */
 public class JMSCacheCoordinator implements SessionCustomizer{
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.persistence.config.SessionCustomizer#customize(org.eclipse.persistence.sessions.Session)
+	 */
 	public void customize(Session session) throws Exception {
 		// define the Command Manager
         RemoteCommandManager commandMgr = new RemoteCommandManager((CommandProcessor) session);
