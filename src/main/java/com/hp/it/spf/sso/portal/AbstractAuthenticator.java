@@ -34,8 +34,8 @@ import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
 /**
- * AbstractAuthenticator is the father authenticator. All other authenticators
- * will be extended from this class.
+ * AbstractAuthenticator is the super authenticator and defines common process logic. 
+ * All other authenticators will be extended from this class.
  * <p>
  * This class defines the public process of doing session initialization.
  * </p>
