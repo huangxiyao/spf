@@ -1,25 +1,7 @@
 /*
- * CDDL HEADER START
- * The contents of this file are subject to the terms
- * of the Common Development and Distribution License
- * (the License). You may not use this file except in
- * compliance with the License.
+ * Project: Shared Portal Framework
+ * Copyright (c) 2008 HP. All Rights Reserved.
  *
- * You can obtain a copy of the License at
- * http://www.sun.com/cddl/cddl.html and legal/CDDLv1.0.txt
- * See the License for the specific language governing
- * permission and limitations under the License.
- *
- * When distributing Covered Code, include this CDDL
- * Header Notice in each file and include the License file
- * at legal/CDDLv1.0.txt.
- * If applicable, add the following below the CDDL Header,
- * with the fields enclosed by brackets [] replaced by
- * your own identifying information:
- * "Portions Copyrighted [year] [name of copyright owner]"
- *
- * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
- * CDDL HEADER END
  */
 
 package com.hp.it.spf.openportal.portletcontainer.admin.registry.database;
@@ -30,8 +12,7 @@ import com.sun.portal.portletcontainer.context.registry.PortletRegistryContext;
 import com.sun.portal.portletcontainer.context.registry.PortletRegistryException;
 
 /**
- * PortletWindowPreferenceRegistryContextImpl is a concrete implementation of
- * the PortletWindowPreferenceRegistryContext interface.
+ * PortletWindowPreferenceRegistryContextImpl is a concrete implementation of the PortletWindowPreferenceRegistryContext interface.
  */
 public class PortletWindowPreferenceRegistryContextDBImpl
 		extends
@@ -40,29 +21,77 @@ public class PortletWindowPreferenceRegistryContextDBImpl
 	// "U1BGX0NPTkZJR19BRE1JTg==" is the base64 encoded "SPF_CONFIG_ADMIN"
 	private final String defaultBase64 = "U1BGX0NPTkZJR19BRE1JTg==";
 
+	/**
+	 * construction method
+	 * 
+	 * @throws PortletRegistryException
+	 */
 	public PortletWindowPreferenceRegistryContextDBImpl()
 			throws PortletRegistryException {
 		super();
 	}
 
+	/**
+	 * get readonly preference map for special portlet window and user
+	 * 
+	 * @param String
+	 *            portletWindowName
+	 * @param String
+	 *            userName
+	 * @return readonly preference map
+	 */
 	public Map getPreferencesReadOnly(String portletWindowName, String userName)
 			throws PortletRegistryException {
 		return super.getPreferencesReadOnly(portletWindowName,
 				formatDefaultUserName(userName));
 	}
 
+	/**
+	 * get preference map for special portlet window and user
+	 * 
+	 * @param String
+	 *            portletWindowName
+	 * @param String
+	 *            userName
+	 * @return preference map
+	 */
 	public Map getPreferences(String portletWindowName, String userName)
 			throws PortletRegistryException {
 		return super.getPreferences(portletWindowName,
 				formatDefaultUserName(userName));
 	}
 
+	/**
+	 * save preferences for special portlet, portlet window and user
+	 * 
+	 * @param String
+	 *            portletName
+	 * @param String
+	 *            portletWindowName
+	 * @param String
+	 *            userName
+	 * @param Map
+	 *            preference map
+	 */
 	public void savePreferences(String portletName, String portletWindowName,
 			String userName, Map prefMap) throws PortletRegistryException {
 		super.savePreferences(portletName, portletWindowName,
 				formatDefaultUserName(userName), prefMap);
 	}
 
+	/**
+	 * save preferences for special porlet, portlet window and user
+	 * 
+	 * @param String
+	 *            portletName
+	 * @param String
+	 *            portletWindowName
+	 * @param String
+	 *            userName
+	 * @param boolean is readonly
+	 * @param Map
+	 *            preference map
+	 */
 	public void savePreferences(String portletName, String portletWindowName,
 			String userName, Map prefMap, boolean readOnly)
 			throws PortletRegistryException {
@@ -70,6 +99,19 @@ public class PortletWindowPreferenceRegistryContextDBImpl
 				formatDefaultUserName(userName), prefMap, readOnly);
 	}
 
+	/**
+	 * create preferences for special portlet, portlet window and user
+	 * 
+	 * @param String
+	 *            portletName
+	 * @param String
+	 *            portletWindowName
+	 * @param String
+	 *            userName
+	 * @param boolean create to create
+	 * @param Map
+	 *            preference map
+	 */
 	public void createPreferences(String portletName, String portletWindowName,
 			String userName, Map prefMap, boolean create)
 			throws PortletRegistryException {
