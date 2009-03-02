@@ -33,7 +33,8 @@ public class UserProfile {
         userProfile.put(AuthenticationConsts.KEY_TIMEZONE, AuthenticationConsts.DEFAULT_TIMEZONE);
         Set group = new HashSet();
         group.add("LOCAL_TEST_GROUP");
-        userProfile.put(AuthenticationConsts.KEY_USER_GROUPS, group);
+        userProfile.put(AuthenticationConsts.KEY_USER_GROUPS, group); 
+        userProfile.put(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID, "primarysiteid");  
     }
     
     /**

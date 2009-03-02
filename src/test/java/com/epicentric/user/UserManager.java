@@ -119,7 +119,7 @@ public class UserManager {
      * @throws EntityPersistenceException
      */
     public User getGuestUser() throws EntityPersistenceException {
-        return user;
+        return guestUser;
     }
 
     /**

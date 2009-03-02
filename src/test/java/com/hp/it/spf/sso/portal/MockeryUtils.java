@@ -10,14 +10,18 @@ import java.util.Set;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 
+import com.epicentric.authentication.Realm;
 import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.EntityType;
+import com.epicentric.entity.UniquePropertyValueConflictException;
 import com.epicentric.entity.implementations.generic.ChildEntityWrapper;
+import com.epicentric.site.Site;
 import com.epicentric.user.User;
 import com.epicentric.user.UserGroup;
 import com.epicentric.user.UserProvider;
@@ -72,6 +76,13 @@ public class MockeryUtils {
                 allowing(request).getAttribute(AuthenticationConsts.SSO_USER_LOCALE);
                 will(returnValue(new Locale("en", "US")));
                 
+                allowing(request).setAttribute(with(any(String.class)), with(any(Object.class)));
+                
+                allowing(request).setAttribute(with(any(String.class)), with(any(null)));
+                
+                allowing(request).getParameter("initSession");
+                will(returnValue("false"));
+                
                 allowing(request).getServletPath();
                 will(returnValue("/site"));
             }
@@ -98,6 +109,7 @@ public class MockeryUtils {
                 allowing(request).getHeader("timeZoneName");will(returnValue("Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London"));
                 allowing(request).getHeader("LAST_CHANGE_DATE");will(returnValue("20070308110124Z"));
                 allowing(request).getHeader("givenname");will(returnValue("Doe"));
+                allowing(request).getHeader("preferredlanguage");will(returnValue("en"));
                 allowing(request).getHeader("email");will(returnValue("test@hp.com"));
                 allowing(request).getHeader("country_code");will(returnValue("cn"));
                 allowing(request).getHeader("sn");will(returnValue("John"));
@@ -143,6 +155,10 @@ public class MockeryUtils {
                 allowing(request).getHeader("SM_AUTHDIRNAME");will(returnValue("=?UTF-8?B?VURfUFJJTUFSWQ==?="));
                 allowing(request).getHeader("SM_AUTHDIRSERVER");will(returnValue("=?UTF-8?B?SFBQX1BSSU1BUlk=?="));
                 allowing(request).getHeader("SM_AUTHDIRNAMESPACE");will(returnValue("=?UTF-8?B?T0RCQzo=?="));
+                allowing(request).getHeader("bustelnr");will(returnValue("88388834"));
+                allowing(request).getHeader("bustelxtn");will(returnValue("010"));
+                allowing(request).getHeader("bustelcntry");will(returnValue("86"));
+                allowing(request).getHeader("bustelcity");will(returnValue("0571"));
                 allowing(request).getHeader("cookie");will(returnValue("ATHP_COOKIE=; HP_SP_ENTER_USERID=vignetteAdmin; SMIDENTITY=1TXNYBq9Kh6NjrnSnc3xdi/MnlLg48m6gLCYDqZQKQZUllDdaBstT+QoalALkzLe8ZDDUP+cCWHQ0jOvcmWuBlEcD0w7UchZMnPTWgDXsgt8a6G/tMApDM3KvVZs995u+Go+UIivmRBRHGEpxDXdtty7A3wKfLhz+SB9n26fWAV7FT6M06awc+05a8wBo44tmXX/mMOErYhoiSMS9MM5P5tp5vfqZTxLezYrXNY8TuJSvu2dc1ksgUVlxN4mxd8QOXsy7UlRH04GVVhn9o0YDMCh/zXuVNuIn8qbmjvVsnxmEPejR4TnNw3EY/sDNVRNz2gHSavSzgELs1//h1h1j5INxHEf3UkW/zTaW6TDNrTs82MApp94I4Xdt0upfkxXOrPvqX7MeyqEgJKkxjWrM96NES24LTrWtGSYydIjzoB0md4du2LXwc8jbzsr7u1BBt3QE2Zbur249yazC3QO1Hr8VHuqWU/D7znNMQBzdwIC5i7G+oo22jPq9KDHVHLDgiaKfRAjhkXJN5uIeCgbokkHXELfGXDqon+8F8PZ+Z+aL+vi9hGqcQ==; c_lang==?UTF-8?B?ZW4=?=; c_u==?UTF-8?B?bWFuc2Fuc3JtYW5zYW5zcnw3YmZkMDYyNTllMmQzNDc4ZjkzZjgxOWI4ZWY5MjVlZQ==?=; ; JSESSIONID=bsL4GyQQBQlxngRhdS8cFfgJYbDnD9vRGY24vpccn4RLvhp2Wwlk!195315785; SMSESSION=JJquaN4UDF6OZtW51bkO3jY7MfQJbzlSc6FfAWEOTch0VDFk2n6uZYiQUDobSbhNxsMnv4wiQJShDz0BjZrnX/X+GoFUR/PGh/iA0xNIvmqpw90TiK6C42vJB2CL5RUTF1KBpat9KVWxy7COmnMS7fpEH3CbiwbnKtqXsbpNSQNcP8GEkR1ydPZryDrGcPjcNJLzRPHwIJ1t5OWUiaeoUZakXwvASPPiW/ZO4nxzQGtxqJZo72ropLVMVj4v0rjUep7DMD41c5clh9YluA37SQ1zAPiguKdcWzRKPGRu5BPj8x3AYH0WeZSJceAJjYf7y2i+Bg0Df0F+BEpMXLZOwTy1/dKoYJlEXkgiK1K1TqdKksdzQ10xLH79XwcyueRUBt2Q1NZzZ9ak2YclFY/iJNpzXlr5/0MfRybwHJyTxx5gMhgtZXtvkWe9KRJ8iOb4AEFjzXiTHsminXHAoedMQZTpZzLPpjun+uDRnmrpF3MJ6UWCiUlUPTdnj+8ZmBPxZsUBtVESWYfg33iWoDwjW8AkFq21CRn/x3I7GswzvYK+kmcAXQEw4vbqqjMqm22YXzANi/FIi7IjR5wjarzOmbLH9I8kBudBd+vsC4lT+PCp4QxBX5ftwMniL1qLon4BINqMoIL9L3iCAgWqaiTc20/JUpbPMy3NhUcM9LCjEM5U3bYr4sRGNKoNepb0uoBZs/LSM88uC/Hq+M4XpAQPxmg9v/kqul7qy2aWccrVorGys0LO0dSsyfw+XNWGkYHJHz2in8h5Ep81DHZtCtUIamW6DhBtMNzc5wE8jLo202vPuV/y/ZHwsJ/lwgszze/3nwyIKllEIYvVA/4wn9pEwbgDTAuOly7jAIg5UWtw4daYnvZ6eSU14WLxAHyid4wlEKv78v/1hk8HS3yNImMLecjaBQR6VrmBbhBvwOgh8es="));
                 allowing(request).getHeader("SM_USER");will(returnValue("=?UTF-8?B?dmlnbmV0dGVBZG1pbg==?="));
                 allowing(request).getHeader("SM_USERDN");will(returnValue("=?UTF-8?B?dmlnbmV0dGVBZG1pbg==?="));
@@ -201,6 +217,10 @@ public class MockeryUtils {
                 allowing(request).getHeader("SM_AUTHDIRSERVER");will(returnValue("=?UTF-8?B?SFBQX1BSSU1BUlk=?="));
                 allowing(request).getHeader("SM_AUTHDIRNAMESPACE");will(returnValue("=?UTF-8?B?T0RCQzo=?="));
                 allowing(request).getHeader("cookie");will(returnValue("ATHP_COOKIE=; HP_SP_ENTER_USERID=vignetteAdmin; SMIDENTITY=1TXNYBq9Kh6NjrnSnc3xdi/MnlLg48m6gLCYDqZQKQZUllDdaBstT+QoalALkzLe8ZDDUP+cCWHQ0jOvcmWuBlEcD0w7UchZMnPTWgDXsgt8a6G/tMApDM3KvVZs995u+Go+UIivmRBRHGEpxDXdtty7A3wKfLhz+SB9n26fWAV7FT6M06awc+05a8wBo44tmXX/mMOErYhoiSMS9MM5P5tp5vfqZTxLezYrXNY8TuJSvu2dc1ksgUVlxN4mxd8QOXsy7UlRH04GVVhn9o0YDMCh/zXuVNuIn8qbmjvVsnxmEPejR4TnNw3EY/sDNVRNz2gHSavSzgELs1//h1h1j5INxHEf3UkW/zTaW6TDNrTs82MApp94I4Xdt0upfkxXOrPvqX7MeyqEgJKkxjWrM96NES24LTrWtGSYydIjzoB0md4du2LXwc8jbzsr7u1BBt3QE2Zbur249yazC3QO1Hr8VHuqWU/D7znNMQBzdwIC5i7G+oo22jPq9KDHVHLDgiaKfRAjhkXJN5uIeCgbokkHXELfGXDqon+8F8PZ+Z+aL+vi9hGqcQ==; c_lang==?UTF-8?B?ZW4=?=; c_u==?UTF-8?B?bWFuc2Fuc3JtYW5zYW5zcnw3YmZkMDYyNTllMmQzNDc4ZjkzZjgxOWI4ZWY5MjVlZQ==?=; ; JSESSIONID=bsL4GyQQBQlxngRhdS8cFfgJYbDnD9vRGY24vpccn4RLvhp2Wwlk!195315785; SMSESSION=JJquaN4UDF6OZtW51bkO3jY7MfQJbzlSc6FfAWEOTch0VDFk2n6uZYiQUDobSbhNxsMnv4wiQJShDz0BjZrnX/X+GoFUR/PGh/iA0xNIvmqpw90TiK6C42vJB2CL5RUTF1KBpat9KVWxy7COmnMS7fpEH3CbiwbnKtqXsbpNSQNcP8GEkR1ydPZryDrGcPjcNJLzRPHwIJ1t5OWUiaeoUZakXwvASPPiW/ZO4nxzQGtxqJZo72ropLVMVj4v0rjUep7DMD41c5clh9YluA37SQ1zAPiguKdcWzRKPGRu5BPj8x3AYH0WeZSJceAJjYf7y2i+Bg0Df0F+BEpMXLZOwTy1/dKoYJlEXkgiK1K1TqdKksdzQ10xLH79XwcyueRUBt2Q1NZzZ9ak2YclFY/iJNpzXlr5/0MfRybwHJyTxx5gMhgtZXtvkWe9KRJ8iOb4AEFjzXiTHsminXHAoedMQZTpZzLPpjun+uDRnmrpF3MJ6UWCiUlUPTdnj+8ZmBPxZsUBtVESWYfg33iWoDwjW8AkFq21CRn/x3I7GswzvYK+kmcAXQEw4vbqqjMqm22YXzANi/FIi7IjR5wjarzOmbLH9I8kBudBd+vsC4lT+PCp4QxBX5ftwMniL1qLon4BINqMoIL9L3iCAgWqaiTc20/JUpbPMy3NhUcM9LCjEM5U3bYr4sRGNKoNepb0uoBZs/LSM88uC/Hq+M4XpAQPxmg9v/kqul7qy2aWccrVorGys0LO0dSsyfw+XNWGkYHJHz2in8h5Ep81DHZtCtUIamW6DhBtMNzc5wE8jLo202vPuV/y/ZHwsJ/lwgszze/3nwyIKllEIYvVA/4wn9pEwbgDTAuOly7jAIg5UWtw4daYnvZ6eSU14WLxAHyid4wlEKv78v/1hk8HS3yNImMLecjaBQR6VrmBbhBvwOgh8es="));
+                allowing(request).getHeader("bustelnr");will(returnValue("88388834"));
+                allowing(request).getHeader("bustelxtn");will(returnValue("010"));
+                allowing(request).getHeader("bustelcntry");will(returnValue("86"));
+                allowing(request).getHeader("bustelcity");will(returnValue("0571"));
                 allowing(request).getHeader("SM_USER");will(returnValue("=?UTF-8?B?dmlnbmV0dGVBZG1pbg==?="));
                 allowing(request).getHeader("SM_USERDN");will(returnValue("=?UTF-8?B?dmlnbmV0dGVBZG1pbg==?="));
                 allowing(request).getHeader("SM_SERVERSESSIONID");will(returnValue("=?UTF-8?B?eEg3emRiOG1nMmRIYTZ3UGRMQW9WQXpabE5jPQ==?="));
@@ -253,13 +273,35 @@ public class MockeryUtils {
     }
     
     /**
+     * Create SandBox HttpServletRequest mock object and set expectations to it.
+     * 
+     * @param context mockery context
+     * @return mocked HttpServletRequest object
+     */
+    public static HttpServletRequest mockHttpServletRequestForSandBox(Mockery context) {
+        // mock HttpServletRequest
+        final HttpServletRequest request = mockHttpServletRequest(context, "SandBox");        
+        context.checking(new Expectations() {
+            {
+                allowing(request).getPathInfo();will(returnValue("/acme"));
+                
+                one(request).getParameter("guestMode");
+                will(returnValue("false"));
+            }
+        });
+        return request;
+    }
+    
+    /**
      * Create Vignette user mock object and set expectations to it.
      * 
      * @param context mockery context
      * @return mocked User object
+     * @throws EntityPersistenceException 
+     * @throws UniquePropertyValueConflictException 
      * @see com.epicentric.user.User
      */
-    public static User mockUser(Mockery context) {
+    public static User mockUser(Mockery context) throws UniquePropertyValueConflictException, EntityPersistenceException {
         // mock User Entity, EntityType
         final ChildEntityWrapper entity = context.mock(ChildEntityWrapper.class);
         final EntityType entityType = context.mock(EntityType.class);
@@ -277,7 +319,7 @@ public class MockeryUtils {
                 will(returnValue("LOCAL_TEST_GROUP"));
                 
                 allowing(userGroup2).getProperty(AuthenticationConsts.GROUP_TITLE);
-                will(returnValue("LOCAL_TEST_GROUP2"));
+                will(returnValue("LOCAL_PORTAL_LANG_EN"));
 
                 try {
                     Set<UserGroup> set = new HashSet<UserGroup>();
@@ -319,7 +361,13 @@ public class MockeryUtils {
 
                 allowing(entity).getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID);
                 will(returnValue(UserProfile.get(AuthenticationConsts.KEY_TIMEZONE)));
-
+                
+                allowing(entity).getProperty(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID);
+                will(returnValue(UserProfile.get(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID)));
+                
+                allowing(entity).setProperty(with(any(String.class)), with(any(Object.class)));
+                
+                allowing(entity).save();
             }
         });
         User user = UserProvider.getUser(entity);
@@ -351,7 +399,7 @@ public class MockeryUtils {
                 will(returnValue("LOCAL_TEST_GROUP"));
                 
                 allowing(userGroup2).getProperty(AuthenticationConsts.GROUP_TITLE);
-                will(returnValue("LOCAL_TEST_GROUP2"));
+                will(returnValue("LOCAL_PORTAL_LANG_EN"));
 
                 try {
                     Set<UserGroup> set = new HashSet<UserGroup>();
@@ -370,5 +418,75 @@ public class MockeryUtils {
         });
         User guestUser = UserProvider.getUser(entity);
         return guestUser;
+    }
+    
+    /**
+     * Create HttpServletResponse mock object with <code>null</code> name.
+     * 
+     * @param context mockery context
+     * @return mocked HttpServletResponse object
+     */
+    public static HttpServletResponse mockHttpServletResponse(Mockery context) {
+        return mockHttpServletResponse(context, null);
+    }
+    
+    /**
+     * Create HttpServletResponse mock object and set expectations to it.
+     * 
+     * @param context mockery context
+     * @param mocked object name
+     * @return mocked HttpServletResponse object
+     */
+    public static HttpServletResponse mockHttpServletResponse(Mockery context, String name) {
+        // mock HttpServletResponse
+        final HttpServletResponse response = context.mock(HttpServletResponse.class, name);
+        context.checking(new Expectations() {
+            {
+                atLeast(1).of(response).getLocale();
+                will(returnValue(new Locale("en", "US")));                
+            }
+        });
+        return response;
+    }
+    
+    /**
+     * Create Site mock object and set expectations to it.
+     * 
+     * @param context mockery context
+     * @param mocked object name
+     * @return mocked Site object
+     */
+    public static Site mockSite(Mockery context, final String name) {
+     // mock Site
+        final Site site = context.mock(Site.class, name);
+        context.checking(new Expectations() {
+            {
+                allowing(site).getUID();
+                will(returnValue(UserProfile.get(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID)));
+                
+                allowing(site).getDNSName();
+                will(returnValue(name));
+            }
+        });
+        return site;
+    }
+    
+    /**
+     * Create Realm mock object and set expectations to it.
+     * 
+     * @param context mockery context
+     * @param mocked object name
+     * @return mocked Realm object
+     */
+    public static Realm mockRealm(Mockery context, final String name) {
+     // mock Site
+        final Realm realm = context.mock(Realm.class, name);
+        context.checking(new Expectations() {
+            {
+                one(realm).getID();
+                will(returnValue("realmid"));
+            }
+        });
+        return realm;
     }
 }
