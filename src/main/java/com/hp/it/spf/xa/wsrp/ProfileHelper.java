@@ -22,7 +22,7 @@ import org.w3c.dom.Node;
 
 
 /**
- * Class with several helper methods working on the SPP profile representation.
+ * Class with several helper methods working on the SPF profile representation.
  *
  * This class contains methods that can serialize and deserialize the profile
  * map into and from String object. The grammar is as follows: <code>
