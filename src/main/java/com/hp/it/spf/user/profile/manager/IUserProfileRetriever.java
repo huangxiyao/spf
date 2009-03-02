@@ -10,8 +10,7 @@ import java.util.Map;
 import com.hp.it.spf.user.exception.UserProfileException;
 
 /**
- * User profile operation interface which defines some methods to interact with
- * UPS webservice
+ * User profile operation interface which defines some methods to retrieve user profile.
  * 
  * @author  wuyingzh
  * @version 1.0

@@ -10,8 +10,7 @@ import java.util.Set;
 import com.hp.it.spf.user.exception.UserGroupsException;
 
 /**
- * User group operation interface which defines some methods to interact with
- * UGS webservice
+ * User group operation interface which defines some methods to retrieve user groups.
  * 
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @version 1.0
