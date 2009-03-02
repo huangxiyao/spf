@@ -1,4 +1,4 @@
 /**
- * Shared Portal Framework portlet filters both for local and romote portlets.
+ * Shared Portal Framework portlet filters.
  */
 package com.hp.it.spf.sso.portlet.filter;
