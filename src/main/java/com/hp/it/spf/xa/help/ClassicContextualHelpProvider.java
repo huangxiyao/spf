@@ -109,7 +109,7 @@ public abstract class ClassicContextualHelpProvider extends
 	protected static String CLASSIC_CONTEXTUAL_HELP_JS = "<script type=\"text/javascript\" language=\"JavaScript\">\n"
 			+ "if (typeof(loadedClassicContextualHelpJS) == 'undefined') \n"
 			+ "{ \n"
-			+ "    var loadedContextualHelpJS = true; \n"
+			+ "    var loadedClassicContextualHelpJS = true; \n"
 			+ "    var classicContextualHelpUtil = \n"
 			+ "    { \n"
 			+ "        addEvent: function(elm, evType, fn) \n"
@@ -136,152 +136,6 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "        else \n"
 			+ "            return false; \n"
 			+ "    } \n"
-			+ "    var lastShow = null;\n"
-			+ "    function hideFrame(o) {\n"
-			+ "        if (isMSIE() == true && o != null) {\n"
-			+ "            var wframe = document.getElementById(o.id+'Frame'); \n"
-			+ "            if (wframe != null) {\n"
-			+ "                wframe.style.display = \"none\"; \n"
-			+ "                wframe.style.zIndex = 0; \n"
-			+ "            } \n"
-			+ "        } \n"
-			+ "    } \n"
-			+ "    function hideObject(ev) {\n"
-			+ "        var e = window.event ? window.event : ev; \n"
-			+ "        var t = e.target ? e.target : e.srcElement; \n"
-
-			// set help div element to none display, extract div element
-			// name from close image id by removing 'Close' string from it.
-			+ "        var w = document.getElementById(t.id.substr(0, t.id.lastIndexOf('Close'))); \n"
-			+ "        if (w != null) { \n "
-			+ "            w.style.display = \"none\"; \n"
-			+ "            w.style.zIndex=0; \n"
-			+ "            hideFrame(w); \n"
-			+ "        } \n"
-			+ "    } \n"
-			+ "    function showFrame(o) { \n"
-			+ "        if (isMSIE() == true && o != null) { \n"
-			+ "            var wframe = document.getElementById(o.id+'Frame'); \n"
-			+ "            if (wframe != null) { \n"
-			+ "                wframe.style.top = o.offsetTop; \n"
-			+ "                wframe.style.left = o.offsetLeft; \n"
-			+ "                wframe.style.width=o.offsetWidth; \n"
-			+ "                wframe.style.height=o.offsetHeight; \n"
-			+ "                wframe.style.display = \"block\"; \n"
-			+ "                wframe.style.zIndex=4999; \n"
-			+ "            } \n"
-			+ "        } \n"
-			+ "    } \n"
-			+ "    function showObject(ev) { \n"
-			+ "        var e = window.event ? window.event : ev; \n"
-			+ "        var t = e.target ? e.target : e.srcElement; \n"
-
-			// use the lastShow variable to close the last popup window, if any,
-			// before opening the new popup window.
-			+ "        if (lastShow != null) { \n"
-			+ "            lastShow.style.display = \"none\"; \n"
-			+ "            lastShow.style.zIndex=0; \n"
-			+ "            hideFrame(lastShow); \n"
-			+ "        } \n"
-
-			// set help div element to block display, get div element
-			// name by concatenating 'Close' string to anchor id.
-			+ "        var w = document.getElementById(t.id + 'Help'); \n"
-			+ "        if (w != null) { \n"
-			+ "            lastShow = w; \n"
-			+ "            w.style.display = \"block\"; \n"
-			+ "            w.style.left = e.clientX + \"px\"; \n"
-			+ "            w.style.zIndex=5999; \n"
-			+ "            var spaceNeeded; \n"
-			+ "            var spaceAvail; \n"
-			+ "            if (document.documentElement && document.documentElement.clientWidth) { \n"
-
-			// IE6 and Firefox
-			+ "                frameWidth = document.documentElement.clientWidth; \n"
-			+ "                frameHeight = document.documentElement.clientHeight; \n"
-			+ "                scrollTop = document.documentElement.scrollTop; \n"
-			+ "                scrollLeft = document.documentElement.scrollLeft; \n"
-			+ "            } \n"
-			+ "            else if (document.body) { \n"
-
-			// IE5
-			+ "                frameWidth = document.body.clientWidth; \n"
-			+ "                frameHeight = document.body.clientHeight; \n"
-			+ "                scrollTop = document.body.scrollTop; \n"
-			+ "                scrollLeft = document.body.scrollLeft; \n"
-			+ "            } \n"
-
-			// Calculate Y position to put popup
-			+ "            spaceAvail = frameHeight - e.clientY; \n"
-			+ "            if (spaceAvail > w.offsetHeight) { \n"
-
-			// display top of popup at cursor if there's enough space
-			// below cursor position to display entire popup
-			+ "                w.style.top = e.clientY + scrollTop + \"px\"; \n"
-			+ "            } else { \n"
-
-			// top window is big enough to display popup
-			+ "                spaceNeeded = w.offsetHeight - spaceAvail; \n"
-			+ "                if (spaceNeeded < e.clientY) { \n"
-
-			// there's room in top window to display popup, position
-			// popup as high as possible in top window to fit
-			+ "                    w.style.top = e.clientY + scrollTop - spaceNeeded + \"px\"; \n"
-			+ "                } else { \n"
-			+ "                    if (e.clientY > 100) { \n"
-
-			// popup won't fit top window, so just position popup
-			// at 25 pixel for margin top space, as long as top
-			// window has has more than 100 pixels,
-			+ "                        w.style.top = 25 + scrollTop + \"px\"; \n"
-			+ "                    } else { \n"
-
-			// no margin top space, just display top of popup
-			// at cursor position
-			+ "                        w.style.top = e.clientY + scrollTop + \"px\"; \n"
-			+ "                    } \n"
-			+ "                } \n"
-			+ "            } \n"
-
-			// Calculate X position to put popup - same algorithm as
-			// displaying Y position above
-			+ "            spaceAvail = frameWidth - e.clientX; \n"
-			+ "            if (spaceAvail > w.offsetWidth) { \n"
-			+ "                w.style.left = e.clientX + scrollLeft + \"px\"; \n"
-			+ "            } else { \n"
-			+ "                spaceNeeded = w.offsetWidth - spaceAvail; \n"
-			+ "                if (spaceNeeded < e.clientX) { \n"
-			+ "                    w.style.left = e.clientX + scrollLeft - spaceNeeded + \"px\"; \n"
-			+ "                } else { \n"
-			+ "                    if (e.clientX > 100) { \n"
-			+ "                        w.style.left = 25 + scrollLeft + \"px\"; \n"
-			+ "                    } else { \n"
-			+ "                        w.style.left = e.clientX + scrollLeft + \"px\"; \n"
-			+ "                    } \n"
-			+ "                } \n"
-			+ "            } \n"
-			+ "            showFrame(w); \n"
-			+ "        } \n"
-			+ "        if (window.event) { \n"
-			+ "            window.event.cancelBubble = true; \n"
-			+ "            window.event.returnValue = false; \n"
-			+ "        } \n"
-			+ "        if (e && e.stopPropagation && e.preventDefault) { \n"
-			+ "            e.stopPropagation(); \n"
-			+ "            e.preventDefault(); \n"
-			+ "        } \n"
-			+ "    } \n"
-
-			// Append the JavaScript code for div moving
-			// These variables are used to get mouse position, calculate and
-			// change div position.
-			+ "    var mousex = 0,mousey = 0,grabx = 0,graby = 0,orix = 0,oriy = 0,elex = 0,eley = 0; \n"
-			+ "    var dragobj = null; \n"
-
-			// Update the mousex,mousey when mouse is moving
-			+ "    document.onmousemove = update; \n"
-			+ "    update(); \n\n"
-
 			// Used to block cascading events
 			+ "    function falsefunc() { return false; } \n"
 
@@ -296,8 +150,8 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "        { //Work on FF \n"
 			+ "            if (e.pageX || e.pageY) \n"
 			+ "            { \n"
-			+ "                mousex = e.pageX; \n"
-			+ "                mousey = e.pageY; \n"
+			+ "                mousex = e.pageX + window.pageXOffset; \n"
+			+ "                mousey = e.pageY + window.pageYOffset; \n"
 			+ "            } \n"
 			+ "            else if (e.clientX || e.clientY) \n"
 			+ "            { \n"
@@ -321,12 +175,12 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "        elex = orix = dragobj.offsetLeft; \n"
 			+ "        eley = oriy = dragobj.offsetTop; \n"
 			+ "        update(); \n"
-			+ "    } \n\n"
+			+ "    } \n"
 
 			+ "    function moveFrame(o) \n"
 			+ "    { \n"
 			+ "        if (isMSIE() == true && o != null) { \n"
-			+ "            var wframe = document.getElementById(o.id+'Frame'); \n"
+			+ "            var wframe = document.getElementById(o.id+'HelpFrame'); \n"
 			+ "            if (wframe != null) { \n"
 			+ "                wframe.style.top = o.offsetTop; \n"
 			+ "                wframe.style.left = o.offsetLeft; \n"
@@ -360,7 +214,156 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "        update(); \n"
 			+ "        document.onmousemove = update; \n"
 			+ "        document.onmouseup = null; \n"
-			+ "        document.onmousedown = null; \n" + "    } \n"
+			+ "        document.onmousedown = null; \n"
+			+ "    } \n"
+			
+			+ "    function hideFrame(o) {\n"
+			+ "        if (isMSIE() == true && o != null) {\n"
+			+ "            var wframe = document.getElementById(o.id+'HelpFrame'); \n"
+			+ "            if (wframe != null) {\n"
+			+ "                wframe.style.display = \"none\"; \n"
+			+ "                wframe.style.zIndex = 0; \n"
+			+ "            } \n"
+			+ "        } \n"
+			+ "    } \n"
+			+ "    function hideObject(ev) {\n"
+			+ "        var e = window.event ? window.event : ev; \n"
+			+ "        var t = e.target ? e.target : e.srcElement; \n"
+
+			// set help div element to none display, extract div element
+			// name from close image id by removing 'Close' string from it.
+			+ "        var w = document.getElementById(t.id.substr(0, t.id.lastIndexOf('Close'))); \n"
+			+ "        if (w != null) { \n "
+			+ "            w.style.display = \"none\"; \n"
+			+ "            w.style.zIndex=0; \n"
+			+ "            hideFrame(w); \n"
+			+ "        } \n"
+			+ "    } \n"
+			+ "    function showFrame(o) { \n"
+			+ "        if (isMSIE() == true && o != null) { \n"
+			+ "            var wframe = document.getElementById(o.id+'HelpFrame'); \n"
+			+ "            if (wframe != null) { \n"
+			+ "                wframe.style.top = o.offsetTop; \n"
+			+ "                wframe.style.left = o.offsetLeft; \n"
+			+ "                wframe.style.width=o.offsetWidth; \n"
+			+ "                wframe.style.height=o.offsetHeight; \n"
+			+ "                wframe.style.display = \"block\"; \n"
+			+ "                wframe.style.zIndex=4999; \n"
+			+ "            } \n"
+			+ "        } \n"
+			+ "    } \n"
+			+ "    function showObject(ev) { \n"
+			+ "        var e = window.event ? window.event : ev; \n"
+			+ "        var t = e.target ? e.target : e.srcElement; \n"
+			+ "        var w = document.getElementById(t.id + 'Help'); \n"
+			+ "        var mouseX = e.pageX ? e.pageX : e.clientX; \n"
+			+ "        var mouseY = e.pageY ? e.pageY : e.clientY; \n"
+
+			// use the lastShow variable to close the last popup window, if any,
+			// before opening the new popup window.
+			+ "        if (lastShow != null) { \n"
+			+ "            lastShow.style.display = \"none\"; \n"
+			+ "            lastShow.style.zIndex=0; \n"
+			+ "            hideFrame(lastShow); \n"
+			+ "        } \n"
+
+			// set help div element to block display, get div element
+			// name by concatenating 'Close' string to anchor id.
+			+ "        if (w != null) { \n"
+			+ "            lastShow = w; \n"
+			+ "            w.style.display = \"block\"; \n"
+			+ "            w.style.left = mouseX + \"px\"; \n"
+			+ "            w.style.zIndex=5999; \n"
+			+ "            var spaceNeeded; \n"
+			+ "            var spaceAvail; \n"
+			+ "            if (document.documentElement && document.documentElement.clientWidth) { \n"
+
+			// IE6 and Firefox
+			+ "                frameWidth = document.documentElement.clientWidth; \n"
+			+ "                frameHeight = document.documentElement.clientHeight; \n"
+			+ "                scrollTop = document.documentElement.scrollTop; \n"
+			+ "                scrollLeft = document.documentElement.scrollLeft; \n"
+			+ "            } \n"
+			+ "            else if (document.body) { \n"
+
+			// IE5
+			+ "                frameWidth = document.body.clientWidth; \n"
+			+ "                frameHeight = document.body.clientHeight; \n"
+			+ "                scrollTop = document.body.scrollTop; \n"
+			+ "                scrollLeft = document.body.scrollLeft; \n"
+			+ "            } \n"
+
+			// Calculate Y position to put popup
+			+ "            spaceAvail = frameHeight - mouseY; \n"
+			+ "            if (spaceAvail > w.offsetHeight) { \n"
+
+			// display top of popup at cursor if there's enough space
+			// below cursor position to display entire popup
+			+ "                w.style.top = mouseY + scrollTop + \"px\"; \n"
+			+ "            } else { \n"
+
+			// top window is big enough to display popup
+			+ "                spaceNeeded = w.offsetHeight - spaceAvail; \n"
+			+ "                if (spaceNeeded < mouseY) { \n"
+
+			// there's room in top window to display popup, position
+			// popup as high as possible in top window to fit
+			+ "                    w.style.top = mouseY + scrollTop - spaceNeeded + \"px\"; \n"
+			+ "                } else { \n"
+			+ "                    if (mouseY > 100) { \n"
+
+			// popup won't fit top window, so just position popup
+			// at 25 pixel for margin top space, as long as top
+			// window has has more than 100 pixels,
+			+ "                        w.style.top = 25 + scrollTop + \"px\"; \n"
+			+ "                    } else { \n"
+
+			// no margin top space, just display top of popup
+			// at cursor position
+			+ "                        w.style.top = mouseY + scrollTop + \"px\"; \n"
+			+ "                    } \n"
+			+ "                } \n"
+			+ "            } \n"
+
+			// Calculate X position to put popup - same algorithm as
+			// displaying Y position above
+			+ "            spaceAvail = frameWidth - mouseX; \n"
+			+ "            if (spaceAvail > w.offsetWidth) { \n"
+			+ "                w.style.left = mouseX + scrollLeft + \"px\"; \n"
+			+ "            } else { \n"
+			+ "                spaceNeeded = w.offsetWidth - spaceAvail; \n"
+			+ "                if (spaceNeeded < mouseX) { \n"
+			+ "                    w.style.left = mouseX + scrollLeft - spaceNeeded + \"px\"; \n"
+			+ "                } else { \n"
+			+ "                    if (mouseX > 100) { \n"
+			+ "                        w.style.left = 25 + scrollLeft + \"px\"; \n"
+			+ "                    } else { \n"
+			+ "                        w.style.left = mouseX + scrollLeft + \"px\"; \n"
+			+ "                    } \n"
+			+ "                } \n"
+			+ "            } \n"
+			+ "            showFrame(w); \n"
+			+ "        } \n"
+			+ "        if (window.event) { \n"
+			+ "            window.event.cancelBubble = true; \n"
+			+ "            window.event.returnValue = false; \n"
+			+ "        } \n"
+			+ "        if (e && e.stopPropagation && e.preventDefault) { \n"
+			+ "            e.stopPropagation(); \n"
+			+ "            e.preventDefault(); \n"
+			+ "        } \n"
+			+ "    } \n"
+
+			// Append the JavaScript code for div moving
+			// These variables are used to get mouse position, calculate and
+			// change div position.
+			+ "    var mousex = 0,mousey = 0,grabx = 0,graby = 0,orix = 0,oriy = 0,elex = 0,eley = 0; \n"
+			+ "    var dragobj = null; \n"
+			+ "    var lastShow = null;\n"
+
+			// Update the mousex,mousey when mouse is moving
+			+ "    document.onmousemove = update; \n"
+			+ "    update(); \n\n"
 
 			+ "} \n" + "</script>";
 
