@@ -16,9 +16,11 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.epicentric.common.website.SessionUtils;
 import com.epicentric.entity.EntityPersistenceException;
@@ -35,6 +37,7 @@ import com.epicentric.user.UserManager;
  * @version 1.0
  * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
  */
+@RunWith(JMock.class)
 public class AuthenticatorHelperTest {
     private static Mockery context;
     

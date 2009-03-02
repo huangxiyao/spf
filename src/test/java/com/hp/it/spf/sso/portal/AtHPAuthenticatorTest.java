@@ -10,9 +10,11 @@ import static org.junit.Assert.assertTrue;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * This is the test class for AtHPAuthenticator class.
@@ -21,6 +23,7 @@ import org.junit.Test;
  * @version 1.0
  * @see com.hp.it.spf.sso.portal.AtHPAuthenticator
  */
+@RunWith(JMock.class)
 public class AtHPAuthenticatorTest {
     private static Mockery context;
 

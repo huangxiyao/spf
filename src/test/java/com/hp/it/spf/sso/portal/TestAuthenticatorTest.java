@@ -14,9 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * This is the test class for TestAuthenticator class.
@@ -25,6 +27,7 @@ import org.junit.Test;
  * @version 1.0
  * @see com.hp.it.spf.sso.portal.TestAuthenticator
  */
+@RunWith(JMock.class)
 public class TestAuthenticatorTest {
     private static Mockery context;
 

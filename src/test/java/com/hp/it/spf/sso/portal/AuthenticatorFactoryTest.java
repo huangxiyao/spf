@@ -9,9 +9,11 @@ import static org.junit.Assert.*;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * This is the test class for AuthenticatorFactory class.
@@ -20,6 +22,7 @@ import org.junit.Test;
  * @version 1.0
  * @see com.hp.it.spf.sso.portal.AuthenticatorFactory
  */
+@RunWith(JMock.class)
 public class AuthenticatorFactoryTest {
 
     private static Mockery context;
