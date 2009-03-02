@@ -351,7 +351,6 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dl>
  * <dt><code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code></dt>
  * <dd>
  * <p>
@@ -643,8 +642,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <i>parameterized</i> tokens inside your <code><i>key</i></code>.
  * </p>
  * </dd>
- * 
  * </dl>
+ * 
  * </p>
  * 
  * <p>
