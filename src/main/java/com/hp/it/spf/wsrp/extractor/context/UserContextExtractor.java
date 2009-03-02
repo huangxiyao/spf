@@ -81,7 +81,7 @@ public class UserContextExtractor implements SOAPHandler {
     }
 	
 	/**
-	 * Handle inbound message, if the soap action need to be handle, then extractor user
+	 * Handle inbound message, if the soap action need to be handle, then extract user
 	 * profile information from soap message's head
 	 * 
 	 * @param mc
@@ -229,7 +229,7 @@ public class UserContextExtractor implements SOAPHandler {
 	}
 	
 	/**
-	 * Check currect request is inbound or outbound
+	 * Check current request is inbound or outbound
 	 * @param mc
 	 * 			message context
 	 * @return if the request is inbound, then return true
@@ -239,7 +239,7 @@ public class UserContextExtractor implements SOAPHandler {
 	}
 	
 	/**
-	 * Check currect soap action is need to be handled
+	 * Check current soap action is need to be handled
 	 * @param mc
 	 * @return true/false
 	 */
