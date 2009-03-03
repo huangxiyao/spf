@@ -46,20 +46,51 @@ public class UserContextInjectorTest extends TestCase {
 		Message msg = new Message(input);
 		msg.setMessageContext(messageContext);
 		message = msg;
-
-		messageContext.setSOAPActionURI("urn:oasis:names:tc:wsrp:getMarkup");
 		messageContext.setMessage(message);
 
+	}
+
+	/**
+	 * test when it is not a wsrp base call
+	 */
+	public void testInvokeNotWSRPBaseCall() {
+		try {
+			UserContextInjector injector = new UserContextInjector();
+			injector.invoke(messageContext);
+			// nothing will happen when it is not a wsrp base call
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * test when it is not a wsrp Request type
+	 */
+	public void testInvokeNotWSRPRequestType() {
+		try {
+			messageContext
+					.setSOAPActionURI("urn:oasis:names:tc:wsrp:getMarkup");
+			messageContext.setPastPivot(true);
+			UserContextInjector injector = new UserContextInjector();
+			injector.invoke(messageContext);
+			// nothing will happen when it is not a wsrp request type soap
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * test when it is wsrp and with request
+	 */
+	public void testInvokeNormal() {
 		// prepare test data
+		messageContext.setSOAPActionURI("urn:oasis:names:tc:wsrp:getMarkup");
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		HttpSession session = request.getSession();
 		Map userProfile = new HashMap();
 		userProfile.put("profileId", "1234");
 		session.setAttribute("userProfile", userProfile);
 		messageContext.setProperty(Utils.class.getName() + ".Request", request);
-	}
-
-	public void testInvoke() {
 		try {
 			UserContextInjector injector = new UserContextInjector();
 			injector.invoke(messageContext);
@@ -88,4 +119,5 @@ public class UserContextInjectorTest extends TestCase {
 			e.printStackTrace();
 		}
 	}
+
 }
