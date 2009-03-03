@@ -130,6 +130,16 @@ public class UserContextExtractorTest {
     }
 
     /**
+     * Test method for {@link com.hp.it.spf.wsrp.extractor.context.UserContextExtractor#invoke(javax.xml.ws.handler.soap.SOAPMessageContext)}.
+     */
+    @Test
+    public void testInvoke() {
+        UserContextExtractor extractor = new UserContextExtractor();
+        extractor.invoke(messageContext);
+        context.assertIsSatisfied();
+    }   
+    
+    /**
      * Test method for {@link com.hp.it.spf.wsrp.extractor.context.UserContextExtractor#handleMessage(javax.xml.ws.handler.MessageContext)}.
      */
     @Test
