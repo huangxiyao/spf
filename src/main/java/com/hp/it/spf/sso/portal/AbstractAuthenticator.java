@@ -546,20 +546,11 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * This is the abstract method used to retrieve user group info and return
      * as a Set
      * 
-     * @return retrieved groups set
+     * @return retrieved groups set or an empty set
      */
     @SuppressWarnings("unchecked")
     protected Set getUserGroup() {        
         Set<String> group = new HashSet<String>();
-        
-        // set group acoording to login type
-        if (AuthenticatorHelper.loggedIntoAtHP(request)) {
-            group.add(AuthenticationConsts.LOCAL_ATHP_NAME);
-        } else if (AuthenticatorHelper.loggedIntoHPP(request)) {
-            group.add(AuthenticationConsts.LOCAL_HPP_NAME);
-        } else if (AuthenticatorHelper.loggedIntoFed(request)) {
-            group.add(AuthenticationConsts.LOCAL_FED_NAME);
-        }
         
         // set authenticated user group
         group.add(AuthenticationConsts.LOCAL_PORTAL_AUTHENTICATED_USERS);
@@ -570,8 +561,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         group.add(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX + language);
         String country = reqLocale.getCountry().trim().toUpperCase();
         if (country.length() > 0) {
-            group.add(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX
-                      + country);
+            group.add(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX + country);
         }
 
         // TODO need to fulfill the logic of retrieve user groups

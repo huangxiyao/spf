@@ -145,6 +145,7 @@ public class MockeryUtils {
                 allowing(request).getHeader("Accept-Encoding");will(returnValue("gzip, deflate"));
                 allowing(request).getHeader("User-Agent");will(returnValue("Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.0.3705; .NET CLR 1.1.4322; .NET CLR 2.0.50727)"));
                 allowing(request).getHeader("Host");will(returnValue("bollo22.serviceportal.hp.com"));
+                allowing(request).getHeader("hppgroups");will(returnValue("USERS-CHINA-MOBILE|ADMIN_PERSONA"));
                 allowing(request).getHeader("SM_TRANSACTIONID");will(returnValue("=?UTF-8?B?NDUzOGY2MGYtMDcwNC00NjI4NTEwZS0xNWU4LTAwYTQyNDll?="));
                 allowing(request).getHeader("SM_SDOMAIN");will(returnValue("=?UTF-8?B?LmhwLmNvbQ==?="));
                 allowing(request).getHeader("SM_REALM");will(returnValue("=?UTF-8?B?MDYtMDAwNTBlZDItMGZiMi0xNTZmLTlhY2ItNDZkNjNhMDQwMDAw?="));
@@ -178,7 +179,7 @@ public class MockeryUtils {
                 allowing(request).getHeader("WL-Proxy-Client-IP");will(returnValue("16.158.81.82"));
                 allowing(request).getHeader("Proxy-Client-IP");will(returnValue("16.158.81.82"));
                 allowing(request).getHeader("X-Forwarded-For");will(returnValue("16.158.81.82"));
-                allowing(request).getHeader("X-WebLogic-Force-JVMID");will(returnValue("195315785"));
+                allowing(request).getHeader("X-WebLogic-Force-JVMID");will(returnValue("195315785"));                
                 allowing(request).getHeader("AuthSource");will(returnValue("HPP"));
                 
                 allowing(request).getCookies();
@@ -206,6 +207,7 @@ public class MockeryUtils {
                 allowing(request).getHeader("Accept-Encoding");will(returnValue("gzip, deflate"));
                 allowing(request).getHeader("User-Agent");will(returnValue("Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.0.3705; .NET CLR 1.1.4322; .NET CLR 2.0.50727)"));
                 allowing(request).getHeader("Host");will(returnValue("bollo22.serviceportal.hp.com"));
+                allowing(request).getHeader("hppgroups");will(returnValue("USERS-CHINA-MOBILE|ADMIN_PERSONA"));
                 allowing(request).getHeader("SM_TRANSACTIONID");will(returnValue("=?UTF-8?B?NDUzOGY2MGYtMDcwNC00NjI4NTEwZS0xNWU4LTAwYTQyNDll?="));
                 allowing(request).getHeader("SM_SDOMAIN");will(returnValue("=?UTF-8?B?LmhwLmNvbQ==?="));
                 allowing(request).getHeader("SM_REALM");will(returnValue("=?UTF-8?B?MDYtMDAwNTBlZDItMGZiMi0xNTZmLTlhY2ItNDZkNjNhMDQwMDAw?="));

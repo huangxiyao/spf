@@ -5,6 +5,10 @@
  */
 package com.hp.it.spf.sso.portal;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -88,5 +92,37 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
         } else {
             userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, "");
         }        
+    }
+    
+    /**
+     * Retrieve user groups from atHP header and invoke related super method
+     * to retrieve user groups from other sources
+     * 
+     * @return retrieved groups set or an empty set
+     */
+    @SuppressWarnings("unchecked")
+    protected Set getUserGroup() {  
+        Set<String> groups = new HashSet<String>();
+        // retrive groups from http header
+        String groupstring = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
+        // groups are divided by ,
+        if (groupstring != null) {
+            StringTokenizer st = new StringTokenizer(groupstring, "^");
+            while (st.hasMoreElements()) {
+                String temp = (String)st.nextElement();
+                if (temp.toLowerCase().startsWith(AuthenticationConsts.ATHP_GROUP_PREFIX)) {
+                    String group = temp.substring(3, temp.indexOf(','));
+                    LOG.info("Get UserGroup = " + group);
+                    groups.add(group);
+                }
+            }
+        }
+        
+        // loggin atHP
+        groups.add(AuthenticationConsts.LOCAL_ATHP_NAME);
+        
+        // retrive groups with invoking super method and merge them
+        groups.addAll(super.getUserGroup());
+        return groups;
     }
 }

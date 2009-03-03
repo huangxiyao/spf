@@ -4,6 +4,10 @@
  */
 package com.hp.it.spf.sso.portal;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
@@ -138,5 +142,36 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         } else {
             userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, "");
         }
+    }
+    
+    /**
+     * Retrieve user groups from HPP/Fed header and invoke related super method
+     * to retrieve user groups from other sources
+     * 
+     * @return retrieved groups set or an empty set
+     */
+    @SuppressWarnings("unchecked")
+    protected Set getUserGroup() {  
+        Set<String> groups = new HashSet<String>();
+        // retrieve groups from http header
+        String groupString = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("The groups string got from HPP request header is: " + groupString);
+        }
+        StringTokenizer st = new StringTokenizer(groupString, "|");
+        while (st.hasMoreTokens()) {
+            groups.add(st.nextToken());
+        }
+        
+        // loggin HPP/Fed
+        if (AuthenticatorHelper.loggedIntoHPP(request)) {
+            groups.add(AuthenticationConsts.LOCAL_HPP_NAME);
+        } else if (AuthenticatorHelper.loggedIntoFed(request)) {
+            groups.add(AuthenticationConsts.LOCAL_FED_NAME);
+        }
+        
+        // retrive groups with invoking super method and merge them
+        groups.addAll(super.getUserGroup());
+        return groups;
     }
 }
