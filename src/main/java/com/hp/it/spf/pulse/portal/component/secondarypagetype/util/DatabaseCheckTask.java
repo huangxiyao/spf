@@ -34,7 +34,7 @@ public class DatabaseCheckTask extends GeneralComponentCheckTask {
         "Vignette Database"; // the name of VIG DB
 
     private static final String QUERY_STRING = 
-        "select * from user_tables"; //The SQL for testing the database
+        "select * from accounts"; //The SQL for testing the database
 
     /*
      * Modified by xie xingxing(xxie@hp.com) for QXCR1000813689 at 5/29/2008.
