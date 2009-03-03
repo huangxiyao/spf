@@ -35,6 +35,18 @@
 					<groupId>org.apache.axis</groupId>
 					<artifactId>axis</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.apache.axis</groupId>
+					<artifactId>axis-jaxrpc</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.axis</groupId>
+					<artifactId>axis-saaj</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
