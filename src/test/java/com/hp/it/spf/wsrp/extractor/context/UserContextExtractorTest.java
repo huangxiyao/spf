@@ -71,7 +71,7 @@ public class UserContextExtractorTest {
                 will(returnValue(request));
                 
                 allowing(messageContext).get("javax.xml.ws.soap.http.soapaction.uri");
-                will(returnValue("urn:oasis:names:tc:wsrp:v1:getMarkup"));
+                will(returnValue("\"urn:oasis:names:tc:wsrp:v1:getMarkup\""));
                 
                 allowing(messageContext).get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
                 will(returnValue(false));
