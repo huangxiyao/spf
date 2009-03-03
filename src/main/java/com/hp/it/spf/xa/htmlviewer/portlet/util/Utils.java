@@ -74,10 +74,10 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 	 */
 	public static String checkViewFilenameForWarnings(PortletRequest request,
 			String viewFilename) {
-		if (viewFilename != null) {
+		if (viewFilename != null && (viewFilename.trim().length() > 0)) {
 			// treat as base file and check only for its existence/readability
 			InputStream is = I18nUtility.getLocalizedFileStream(request,
-					Consts.HTML_FILE_FOLD + viewFilename, false);
+					Consts.HTML_FILE_FOLD + viewFilename.trim(), false);
 			if (is == null) {
 				return Consts.WARN_CODE_VIEW_FILE_NULL;
 			}
@@ -101,12 +101,13 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 	public static String checkIncludesFilenameForWarnings(
 			PortletRequest request, String includesFilename) {
 		// includes file is optional, so return if not defined
-		if (includesFilename == null) {
+		if (includesFilename == null || (includesFilename.trim().length() == 0)) {
 			return null;
 		}
 		// see if we can load a property resource bundle for it off the
 		// classpath, or from the internal or external resource files
 		try {
+			includesFilename = includesFilename.trim();
 			ResourceBundle resBundle = PropertyResourceBundleManager
 					.getBundle(includesFilename);
 			if (resBundle != null) {
