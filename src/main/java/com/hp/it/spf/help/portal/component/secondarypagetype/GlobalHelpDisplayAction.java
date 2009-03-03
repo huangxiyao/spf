@@ -13,6 +13,7 @@ import com.vignette.portal.website.enduser.components.BaseAction;
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.interpolate.portal.FileInterpolator;
 import com.hp.it.spf.xa.misc.portal.Consts;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 
 /**
  * <p>
@@ -40,15 +41,31 @@ public class GlobalHelpDisplayAction extends BaseAction {
 	private static final String GLOBAL_HELP_BASE_NAME = "globalHelp.html";
 
 	/**
+	 * Base name of portal default global help include properties file
+	 * (secondary support file in this component)
+	 */
+	private static final String GLOBAL_HELP_INCLUDE_BASE_NAME = "globalHelpInclude.properties";
+
+	/**
 	 * Base name of site-specific global help HTML file (secondary support file
 	 * in this component)
 	 */
 	private static final String SITE_GLOBAL_HELP_BASE_NAME_SUFFIX = "GlobalHelp.html";
 
 	/**
-	 * Get the <code>globalHelp.html</code> file content, localized and
-	 * interpolated, and store it into the request for display by the primary
-	 * JSP.
+	 * Base name of site-specific global help include properties file (secondary
+	 * support file in this component)
+	 */
+	private static final String SITE_GLOBAL_HELP_INCLUDE_BASE_NAME_SUFFIX = "GlobalHelpInclude.properties";
+
+	/**
+	 * Get the global help HTML file content, localized and interpolated, and
+	 * store it into the request for display by the primary JSP. The file
+	 * content comes from this site's
+	 * <code>&lt;site-name&gt;GlobalHelp.html</code> or the default
+	 * <code>globalHelp.html</code>. Any token substitutions come from this
+	 * site's <code>&lt;site-name&gt;GlobalHelpInclude.properties</code> or
+	 * the default <code>globalHelpInclude.properties</code>.
 	 * 
 	 * @param portalContext
 	 *            The encapsulated PortalContext object of current secondary
@@ -68,14 +85,33 @@ public class GlobalHelpDisplayAction extends BaseAction {
 
 			FileInterpolator f = null;
 			String baseName = null;
+			String propName = null;
 			String helpContent = null;
 
 			LOG.info("GlobalHelpDisplayAction: invoked.");
 
-			// First look for site-specific global help file.
+			// First determine the proper global help file to use.
 			baseName = portalContext.getCurrentSite().getDNSName()
 					+ SITE_GLOBAL_HELP_BASE_NAME_SUFFIX;
-			f = new FileInterpolator(portalContext, baseName);
+			if (I18nUtility.getLocalizedFileName(portalContext, baseName) == null) {
+				baseName = GLOBAL_HELP_BASE_NAME;
+			}
+			LOG
+					.info("GlobalHelpDisplayAction: rendering content from proper localized version of "
+							+ baseName + " secondary support file.");
+
+			// Next determine the proper token substitutions property file to
+			// use.
+			propName = portalContext.getCurrentSite().getDNSName()
+					+ SITE_GLOBAL_HELP_INCLUDE_BASE_NAME_SUFFIX;
+			if (I18nUtility.getLocalizedFileName(portalContext, propName) == null) {
+				propName = GLOBAL_HELP_INCLUDE_BASE_NAME;
+			}
+			LOG
+					.info("GlobalHelpDisplayAction: token substitutions come from proper localized version of "
+							+ propName + " secondary support file.");
+
+			f = new FileInterpolator(portalContext, baseName, propName);
 			helpContent = f.interpolate();
 
 			// If the content is not null or blank, then store into request
@@ -86,29 +122,10 @@ public class GlobalHelpDisplayAction extends BaseAction {
 				request.setAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA,
 						helpContent);
 			} else {
-				// If the content was null or blank, try default global help
-				// file.
-				f = new FileInterpolator(portalContext, GLOBAL_HELP_BASE_NAME);
-				helpContent = f.interpolate();
-
-				// If the content is not null or blank, then store into request.
-				if (helpContent != null && helpContent.trim().length() > 0) {
-					LOG
-							.info("GlobalHelpDisplayAction: rendering content from proper localized version of "
-									+ GLOBAL_HELP_BASE_NAME
-									+ " secondary support file.");
-					request.setAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA,
-							helpContent);
-				} else {
-					throw new Exception(
-							"GlobalHelpDisplayAction: both "
-									+ baseName
-									+ " and "
-									+ GLOBAL_HELP_BASE_NAME
-									+ " secondary support files are empty or not found in this component.");
-				}
+				throw new Exception(
+						"GlobalHelpDisplayAction: interpolated content is null or empty");
 			}
-			// Redirect null so action will forward normally to view
+			// Return null so action will forward normally to view
 			return null;
 		} catch (Exception ex) {
 			// Redirect to system error page if anything unusual happens
