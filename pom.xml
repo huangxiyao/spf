@@ -70,6 +70,18 @@
 			<version>1.0.1-SNAPSHOT</version>
 			<!-- This is part of OpenPortal lib directory therefore the scope for this is provided -->
 		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-junit4</artifactId>
+			<version>2.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-legacy</artifactId>
+			<version>2.5.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<ciManagement>
 		<system>Hudson</system>
@@ -79,5 +91,5 @@
 		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-wsrp</connection>
 		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-wsrp</developerConnection>
 		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-wsrp</url>
-	</scm>
+	</scm>		
 </project>
