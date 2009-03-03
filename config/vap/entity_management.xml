@@ -213,7 +213,7 @@
                 searchable="true"
                 displayable="true"
                 required="true"
-                unique="true"
+                unique="false"
                 />
 
             <entity-property-descriptor id="firstname"
