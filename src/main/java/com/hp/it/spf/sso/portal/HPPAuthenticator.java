@@ -5,11 +5,16 @@
 package com.hp.it.spf.sso.portal;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
+import com.hp.it.spf.user.exception.UserProfileException;
+import com.hp.it.spf.user.profile.manager.IUserProfileRetriever;
+import com.hp.it.spf.user.profile.manager.UserProfileRetrieverFactory;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
@@ -20,9 +25,7 @@ import com.vignette.portal.log.LogWrapper;
  * @author <link href="kaijian.ding@hp.com">dingk</link>
  * @author <link href="ye.liu@hp.com">liuye</link>
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
- * 
  * @version TBD
- * 
  * @see com.hp.it.spf.sso.portal.AbstractAuthenticator
  */
 public class HPPAuthenticator extends AbstractAuthenticator {
@@ -38,56 +41,54 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      * This is the constructor for HPP Authenticator. First, it will call the
      * constructor of AbstractAuthenticator which is its father class to do some
      * SSO initialization task. After that, it will do some initialization for
-     * HPP web service calls. It will get CL Header List from property file
-     * And get CL Header value from request header.
+     * HPP web service calls. It will get CL Header List from property file And
+     * get CL Header value from request header.
      * 
-     * @param request
-     *            HttpServletRequest object
+     * @param request HttpServletRequest object
      * @see com.hp.it.spf.sso.portal.AbstractAuthenticator
      *      #AbstractAuthenticator(javax.servlet.http.HttpServletRequest)
      */
     public HPPAuthenticator(HttpServletRequest request) {
         super(request);
-              
-    	// retrieve the cl_header list
-    	if (clHeaderList == null) {
+
+        // retrieve the cl_header list
+        if (clHeaderList == null) {
             clHeaderList = getProperty(AuthenticationConsts.HEADER_CL_HEADER_LIST_PROPERTY_NAME);
         }
-    	clHeaderHpp = getValue(AuthenticationConsts.HEADER_CL_HEADER_PROPERTY_NAME);
-    }    
+        clHeaderHpp = getValue(AuthenticationConsts.HEADER_CL_HEADER_PROPERTY_NAME);
+    }
 
     /**
      * @see AbstractAuthenticator#mapHeaderToUserProfileMap()
      */
     @SuppressWarnings("unchecked")
     protected void mapHeaderToUserProfileMap() {
-    	super.mapHeaderToUserProfileMap();    	
-    	
-    	// Set lanuage, change language from HPP format to ISO standard
-		String language = (String)userProfile.get(AuthenticationConsts.KEY_LANGUAGE);
-		userProfile.put(AuthenticationConsts.KEY_LANGUAGE, 
-						I18nUtility.hppLanguageToISOLanguage(language));
-		
-		// retrieve HPP specific attributes. e.g. email pref, phone, etc.
-		userProfile.put(AuthenticationConsts.KEY_EMAIL_PREF, 
-		                getValue(AuthenticationConsts.HEADER_EMAIL_CONTACT_PREF_PROPERTY_NAME));		
-		userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, 
+        super.mapHeaderToUserProfileMap();
+
+        // Set lanuage, change language from HPP format to ISO standard
+        String language = (String)userProfile.get(AuthenticationConsts.KEY_LANGUAGE);
+        userProfile.put(AuthenticationConsts.KEY_LANGUAGE,
+                        I18nUtility.hppLanguageToISOLanguage(language));
+
+        // retrieve HPP specific attributes. e.g. email pref, phone, etc.
+        userProfile.put(AuthenticationConsts.KEY_EMAIL_PREF,
+                        getValue(AuthenticationConsts.HEADER_EMAIL_CONTACT_PREF_PROPERTY_NAME));
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT,
                         getValue(AuthenticationConsts.HEADER_PHONE_EXT));
-		userProfile.put(AuthenticationConsts.KEY_PHONE_PREF, 
+        userProfile.put(AuthenticationConsts.KEY_PHONE_PREF,
                         getValue(AuthenticationConsts.HEADER_PHONE_CONTACT_PREF_PROPERTY_NAME));
-		userProfile.put(AuthenticationConsts.KEY_POSTAL_PREF, 
+        userProfile.put(AuthenticationConsts.KEY_POSTAL_PREF,
                         getValue(AuthenticationConsts.HEADER_POSTAL_CONTACT_PREF_PROPERTY_NAME));
-		
-		setPhone();
-	}
-    
+
+        setPhone();
+    }
+
     /**
      * Return corresponding field value in request header, If field is in
      * cl_header,get its value from CL_HEADER Otherwise, return the decoded
      * value in request header.
      * 
-     * @param fieldName
-     *            field name in request header
+     * @param fieldName field name in request header
      * @return corresponding field in request header, null if field not found
      * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
      *      #getValuesFromCLHeader(java.lang.String, java.langString)
@@ -96,15 +97,18 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      *      java.lang.String, boolean)
      */
     protected String getValue(String fieldName) {
-        
+
         String temp = getProperty(fieldName);
         String value = null;
         if (temp != null) {
             if (clHeaderList.indexOf(temp) != -1) {
                 // Return field value from CL Header
-            	value = AuthenticatorHelper.getValuesFromCLHeader(clHeaderHpp, temp);
+                value = AuthenticatorHelper.getValuesFromCLHeader(clHeaderHpp,
+                                                                  temp);
             } else {
-            	value = AuthenticatorHelper.getRequestHeader(request, temp, true);
+                value = AuthenticatorHelper.getRequestHeader(request,
+                                                             temp,
+                                                             true);
             }
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
@@ -112,14 +116,14 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         }
         return value;
     }
-    
+
     /**
      * This method is used to map the 4 http headers include phone info to
-     * userProfile map. Construct phone number with country code, number and area code
-     * from headers. Construct extension with the one from header.
+     * userProfile map. Construct phone number with country code, number and
+     * area code from headers. Construct extension with the one from header.
      */
     @SuppressWarnings("unchecked")
-    private void setPhone() {       
+    private void setPhone() {
         String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);
         String country = getValue(AuthenticationConsts.HEADER_PHONE_COUNTRY_CODE);
         String area = getValue(AuthenticationConsts.HEADER_PHONE_AREA_CODE);
@@ -135,15 +139,16 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         if ((number != null) && !("".equals(number.trim()))) {
             phone.append(number.trim());
         }
-        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, phone.toString());           
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, phone.toString());
 
         if ((ext != null) && !("".equals(ext.trim()))) {
-            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext.trim());
+            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT,
+                            ext.trim());
         } else {
             userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, "");
         }
     }
-    
+
     /**
      * Retrieve user groups from HPP/Fed header and invoke related super method
      * to retrieve user groups from other sources
@@ -151,27 +156,43 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      * @return retrieved groups set or an empty set
      */
     @SuppressWarnings("unchecked")
-    protected Set getUserGroup() {  
+    protected Set getUserGroup() {
         Set<String> groups = new HashSet<String>();
         // retrieve groups from http header
         String groupString = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("The groups string got from HPP request header is: " + groupString);
+            LOG.debug("The groups string got from HPP request header is: "
+                      + groupString);
         }
         StringTokenizer st = new StringTokenizer(groupString, "|");
         while (st.hasMoreTokens()) {
             groups.add(st.nextToken());
         }
-        
+
         // loggin HPP/Fed
         if (AuthenticatorHelper.loggedIntoHPP(request)) {
             groups.add(AuthenticationConsts.LOCAL_HPP_NAME);
         } else if (AuthenticatorHelper.loggedIntoFed(request)) {
             groups.add(AuthenticationConsts.LOCAL_FED_NAME);
         }
-        
+
         // retrive groups with invoking super method and merge them
         groups.addAll(super.getUserGroup());
         return groups;
+    }
+
+    /**
+     * Retrieve user profile from user profile retriever for HPP user.
+     * 
+     * @return user profile map or an empty map
+     * @throws UserProfileException if retrieving user profiles errror
+     */
+    protected Map<String, String> getUserProfile() {
+        String profileId = (String)userProfile.get(AuthenticationConsts.KEY_PROFILE_ID);
+        IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl();
+
+        return retriever.getUserProfile(EUserIdentifierType.EXTERNAL_USER,
+                                        profileId,
+                                        request);
     }
 }

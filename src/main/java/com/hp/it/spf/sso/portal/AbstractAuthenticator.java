@@ -533,13 +533,10 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * This is the abstract method used to retrieve user profile according to
      * different orignal of the logged in user's information
      * 
-     * @return user profile map
+     * @return user profile map or an empty map
      */
     protected Map<String, String> getUserProfile() {
-        String profileId = null;
-        IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl();
-
-        return retriever.getUserProfile(profileId);
+        return new HashMap<String, String>();
     }
 
     /**

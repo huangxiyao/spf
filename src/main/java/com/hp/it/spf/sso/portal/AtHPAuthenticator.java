@@ -6,10 +6,16 @@
 package com.hp.it.spf.sso.portal;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
+import com.hp.it.spf.user.exception.UserProfileException;
+import com.hp.it.spf.user.profile.manager.IUserProfileRetriever;
+import com.hp.it.spf.user.profile.manager.UserProfileRetrieverFactory;
 
 /**
  * This authenticator is used for AtHP users
@@ -17,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
  * @author <link href="kaijian.ding@hp.com">dingk</link>
  * @author <link href="ye.liu@hp.com">liuye</link>
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
- * 
  * @version TBD
  * @see com.hp.it.spf.sso.portal.AbstractAuthenticator
  */
@@ -31,15 +36,14 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
      * constructor of AbstractAuthenticator which is its father class To do the
      * initialization task.
      * 
-     * @param request
-     *            HttpServletRequest object
+     * @param request HttpServletRequest object
      * @see com.hp.it.spf.sso.portal.AbstractAuthenticator
      *      #AbstractAuthenticator(javax.servlet.http.HttpServletRequest)
      */
     public AtHPAuthenticator(HttpServletRequest request) {
         super(request);
     }
-    
+
     /**
      * @see AbstractAuthenticator#mapHeaderToUserProfileMap()
      */
@@ -53,7 +57,7 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
             userProfile.put(AuthenticationConsts.KEY_PROFILE_ID,
                             userProfile.get(AuthenticationConsts.KEY_EMAIL));
         }
-        
+
         // retrieve atHP specific attributes. e.g. mailstop, street, etc.
         userProfile.put(AuthenticationConsts.KEY_MAIL_STOP,
                         userProfile.get(AuthenticationConsts.HEADER_MAIL_STOP_NAME));
@@ -65,19 +69,18 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
                         userProfile.get(AuthenticationConsts.HEADER_STATE_NAME));
         userProfile.put(AuthenticationConsts.KEY_ZIP,
                         userProfile.get(AuthenticationConsts.HEADER_ZIP_NAME));
-        
+
         setPhone();
     }
 
     /**
-     * 
      * This method is used to get the phone extension It will get the String
      * from ssouser's field phone, and splitting on "ext." if there are more
      * than one field after splitting, the first one will be stored in ssouser's
      * field phone, the second one will be stored in ssouser's field phone_ext
      */
     @SuppressWarnings("unchecked")
-    private void setPhone() {                
+    private void setPhone() {
         String tmpPhone = (String)userProfile.get(AuthenticationConsts.KEY_PHONE_NUMBER);
         if (tmpPhone != null) {
             tmpPhone = tmpPhone.toLowerCase();
@@ -85,23 +88,25 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
             if (phones.length > 1) {
                 String ext = phones[1].trim();
                 if (ext != null && ext.length() > 0) {
-                    userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext);
+                    userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT,
+                                    ext);
                 }
             }
-            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, phones[0].trim());
+            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER,
+                            phones[0].trim());
         } else {
             userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, "");
-        }        
+        }
     }
-    
+
     /**
-     * Retrieve user groups from atHP header and invoke related super method
-     * to retrieve user groups from other sources
+     * Retrieve user groups from atHP header and invoke related super method to
+     * retrieve user groups from other sources
      * 
      * @return retrieved groups set or an empty set
      */
     @SuppressWarnings("unchecked")
-    protected Set getUserGroup() {  
+    protected Set getUserGroup() {
         Set<String> groups = new HashSet<String>();
         // retrive groups from http header
         String groupstring = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
@@ -110,19 +115,43 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
             StringTokenizer st = new StringTokenizer(groupstring, "^");
             while (st.hasMoreElements()) {
                 String temp = (String)st.nextElement();
-                if (temp.toLowerCase().startsWith(AuthenticationConsts.ATHP_GROUP_PREFIX)) {
+                if (temp.toLowerCase()
+                        .startsWith(AuthenticationConsts.ATHP_GROUP_PREFIX)) {
                     String group = temp.substring(3, temp.indexOf(','));
                     LOG.info("Get UserGroup = " + group);
                     groups.add(group);
                 }
             }
         }
-        
+
         // loggin atHP
         groups.add(AuthenticationConsts.LOCAL_ATHP_NAME);
-        
+
         // retrive groups with invoking super method and merge them
         groups.addAll(super.getUserGroup());
         return groups;
+    }
+
+    /**
+     * Retrieve user profile according to user type from user profile retriever for 
+     * atHP user.
+     * 
+     * @return user profile map or an empty map
+     * @throws UserProfileException if retrieving user profiles errror
+     */
+    protected Map<String, String> getUserProfile() {
+        String profileId = (String)userProfile.get(AuthenticationConsts.KEY_PROFILE_ID);
+        IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl();
+
+        String originalProfileId = getValue(AuthenticationConsts.HEADER_PROFILE_ID_PROPERTY_NAME);
+        if (originalProfileId != null && !"".equals(originalProfileId.trim())) {
+            return retriever.getUserProfile(EUserIdentifierType.EMPLOYEE,
+                                            profileId,
+                                            request);
+        } else {
+            return retriever.getUserProfile(EUserIdentifierType.EMPLOYEE_SIMPLIFIED_EMAIL_ADDRESS,
+                                            profileId,
+                                            request);
+        }
     }
 }
