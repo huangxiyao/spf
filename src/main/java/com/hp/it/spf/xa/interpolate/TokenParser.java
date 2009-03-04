@@ -41,6 +41,7 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{LANGUAGE-CODE}</code></li>
  * <li><code>{COUNTRY-CODE}</code></li>
  * <li><code>{LANGUAGE-TAG}</code></li>
+ * <li><code>{HPP-LANGUAGE-CODE}</code></li>
  * <li><code>{REQUEST-URL}</code></li>
  * <li><code>{REQUEST-URL:<i>spec</i>}</code></li>
  * <li><code>{EMAIL}</code></li>
@@ -74,6 +75,14 @@ public abstract class TokenParser {
 	 * extension <code>.properties</code> is required and assumed.
 	 */
 	private static final String DEFAULT_SUBS_PATHNAME = "default_includes";
+
+	/**
+	 * This class attribute is the token for the user's HP Passport language
+	 * code. This is generally but not necessarily the same code as the
+	 * <code>{LANGUAGE-CODE}</code> token since HPP does not strictly conform
+	 * to the ISO 639-1 standard.
+	 */
+	private static final String TOKEN_HPP_LANGUAGE_CODE = "HPP-LANGUAGE-CODE";
 
 	/**
 	 * This class attribute is the token for the user's <a
@@ -445,6 +454,7 @@ public abstract class TokenParser {
 	 * <dt><code>{LANGUAGE-CODE}</code></dt>
 	 * <dt><code>{COUNTRY-CODE}</code></dt>
 	 * <dt><code>{LANGUAGE-TAG}</code></dt>
+	 * <dt><code>{HPP-LANGUAGE-CODE}</code></dt>
 	 * <dt><code>{REQUEST-URL}</code></dt>
 	 * <dt><code>{EMAIL}</code></dt>
 	 * <dt><code>{NAME}</code></dt>
@@ -497,6 +507,7 @@ public abstract class TokenParser {
 		content = parseLanguageCode(content);
 		content = parseCountryCode(content);
 		content = parseLanguageTag(content);
+		content = parseHPPLanguageCode(content);
 		content = parseRequestURL(content);
 		content = parseEmail(content);
 		content = parseName(content);
@@ -552,6 +563,44 @@ public abstract class TokenParser {
 			lang = loc.getLanguage();
 		}
 		return parseUnparameterized(content, TOKEN_LANGUAGE_CODE, lang);
+	}
+
+	/**
+	 * <p>
+	 * Parses the given string, substituting the HP Passport language code for
+	 * the current locale in place of the <code>{HPP-LANGUAGE-CODE}</code>
+	 * token. The HPP language code is usually the ISO 639-1 value, but not
+	 * necessarily; for example, HPP uses non-ISO-standard codes for Simplified
+	 * and Traditional Chinese.
+	 * </p>
+	 * <p>
+	 * For example: <code>&lt;a
+	 * href="https://passport2.hp.com?lang={HPP-LANGUAGE-CODE}"&gt;go to
+	 * HPP&lt;/a&gt;</code>
+	 * is changed to <code>&lt;a
+	 * href="https://passport2.hp.com?lang=ja"&gt;go to HPP&lt;/a&gt;</code>
+	 * when the locale is for Japan. The locale is determined from the concrete
+	 * subclass {@link #getLocale()} method. If the locale is null, or one in
+	 * which a language code is not specified, the token is replaced with blank.
+	 * If you provide null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parseHPPLanguageCode(String content) {
+		String lang = null;
+		Locale loc = getLocale();
+		if (loc != null) {
+			lang = I18nUtility.localeToHPPLanguage(loc);
+		}
+		return parseUnparameterized(content, TOKEN_HPP_LANGUAGE_CODE, lang);
 	}
 
 	/**
