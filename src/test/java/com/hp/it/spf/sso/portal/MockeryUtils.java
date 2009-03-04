@@ -25,6 +25,7 @@ import com.epicentric.site.Site;
 import com.epicentric.user.User;
 import com.epicentric.user.UserGroup;
 import com.epicentric.user.UserProvider;
+import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.cas.persona.user.service.IUserService;
 import com.hp.it.spf.persona.PersonaUserServiceFilter;
 
@@ -104,6 +105,8 @@ public class MockeryUtils {
         context.checking(new Expectations() {
             {
                 allowing(request).getPathInfo();will(returnValue("/acme"));
+                allowing(request).getAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE);
+                will(returnValue(EUserIdentifierType.EMPLOYEE));
                 
                 allowing(request).getHeader("SM_AUTHDIRNAME");will(returnValue("ED5_employees"));
                 allowing(request).getHeader("SM_USER");will(returnValue("test@hp.com"));
@@ -141,6 +144,8 @@ public class MockeryUtils {
         context.checking(new Expectations() {
             {
                 allowing(request).getPathInfo();will(returnValue("/acme"));
+                allowing(request).getAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE);
+                will(returnValue(EUserIdentifierType.EXTERNAL_USER));
                 
                 allowing(request).getHeader("Accept");will(returnValue("image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*"));
                 allowing(request).getHeader("Accept-Language");will(returnValue("zh-cn"));
@@ -203,6 +208,8 @@ public class MockeryUtils {
         context.checking(new Expectations() {
             {
                 allowing(request).getPathInfo();will(returnValue("/acmefed"));
+                allowing(request).getAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE);
+                will(returnValue(EUserIdentifierType.EXTERNAL_USER));
                 
                 allowing(request).getHeader("Accept");will(returnValue("image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*"));
                 allowing(request).getHeader("Accept-Language");will(returnValue("zh-cn"));

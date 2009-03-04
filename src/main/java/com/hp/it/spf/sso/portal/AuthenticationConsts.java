@@ -7,7 +7,7 @@ package com.hp.it.spf.sso.portal;
 
 import com.hp.it.spf.xa.misc.portal.Consts;
 
-class AuthenticationConsts {
+public class AuthenticationConsts {
 
 	static final String SSO_USERNAME = "SP_SSO_USERNAME";
 		
@@ -34,6 +34,8 @@ class AuthenticationConsts {
     static final String AUTH_SOURCE_TAGE = "AuthSource";
     
     static final String PHONE_EXT_SPLIT = "ext.";
+    
+    public static final String USER_IDENTIFIER_TYPE = "SP_USERIDENTIFIERTYPE";
     
     /**
      * Following are property id that represents custom attributes added in

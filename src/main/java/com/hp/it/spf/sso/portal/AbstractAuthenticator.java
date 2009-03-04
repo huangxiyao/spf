@@ -22,6 +22,7 @@ import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.UniquePropertyValueConflictException;
 import com.epicentric.site.Site;
 import com.epicentric.user.User;
+import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserGroupsException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
@@ -535,8 +536,11 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * 
      * @return user profile map or an empty map
      */
-    protected Map<String, String> getUserProfile() {
-        return new HashMap<String, String>();
+    protected Map<Object, Object> getUserProfile() {
+        String profileId = (String)userProfile.get(AuthenticationConsts.KEY_PROFILE_ID);
+        IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl();
+      
+        return retriever.getUserProfile(profileId, request);
     }
 
     /**

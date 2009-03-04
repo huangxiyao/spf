@@ -9,7 +9,7 @@ package com.hp.it.spf.user.profile.manager;
  * This is a factory class to create a concrete implementation
  * of IUserProfileRetriever interface.
  * 
- * @author  wuyingzh
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @version 1.0
  */
 public class UserProfileRetrieverFactory {
