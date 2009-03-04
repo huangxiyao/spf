@@ -5,7 +5,6 @@
  */
 package com.hp.it.spf.sso.portal;
 
-import java.util.Collections;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +16,7 @@ import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
 /**
- * ANONAuthenticator is extended from AbstractAuthenticator. This antenticator
+ * ANONAuthenticator is extended from AbstractAuthenticator. This authenticator
  * will called for anonymous users.
  * <p>
  * Anonymous user is the user whose username start with sso_guest_user_
