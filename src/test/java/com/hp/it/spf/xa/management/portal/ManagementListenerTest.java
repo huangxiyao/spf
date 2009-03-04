@@ -48,15 +48,19 @@ public class ManagementListenerTest extends TestCase {
 		ManagementListener listener = new ManagementListener();
 		
 		assertEquals("-1 returned if port system property not defined", 
-				-1, listener.getManagementPort());
+				-1, listener.getManagementPort(null));
 		
 		System.setProperty(ManagementListener.MANAGEMENT_PORT_PROP_NAME, "abc");
 		assertEquals("-1 returned if port is invalid", 
-				-1, listener.getManagementPort());
+				-1, listener.getManagementPort(null));
 		
 		System.setProperty(ManagementListener.MANAGEMENT_PORT_PROP_NAME, "1234");
 		assertEquals("Management port read from system property", 
-				1234, listener.getManagementPort());
+				1234, listener.getManagementPort(null));
+
+		System.getProperties().remove(ManagementListener.MANAGEMENT_PORT_PROP_NAME);
+		assertEquals("Management port read from property file",
+				5678, listener.getManagementPort("test_spfmanagement"));
 	}
 	
 	
@@ -73,7 +77,7 @@ public class ManagementListenerTest extends TestCase {
 				throw new RemoteException("Test error");
 			}
 			@Override 
-			int getManagementPort() { return 1234; }
+			int getManagementPort(String propertyFileResourcePath) { return 1234; }
 		};
 		listener.contextInitialized(null);
 		assertTrue("Management features not available", !listener.managementFeaturesAavailable());

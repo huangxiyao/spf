@@ -1,5 +1,7 @@
 package com.hp.it.spf.xa.management.portal;
 
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+import com.vignette.portal.log.LogConfiguration;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
@@ -19,16 +21,22 @@ import com.vignette.portal.log.LogWrapper;
 /**
  * Servlet context listener which starts RMI Registry and binds to it JMXConnectorServer to 
  * allow access the management features using JMX with tools such as JConsole.
- * This class expects the system property <tt>-Dspf.management.port</tt> to be set with 
- * an available port number which will be used to bind RMI Registry to. 
+ * This class needs a port number used to run the registry. It can be specified either through
+ * a system property <tt>-Dspf.management.port</tt> or in the property file available on the
+ * classpath and named <tt>spfmanagement.properties</tt>.
  * 
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
- *
  */
 public class ManagementListener implements ServletContextListener {
 
 	static LogWrapper LOG = new LogWrapper(ManagementListener.class);
-	
+
+	/**
+	 * Resource path (must be available classpath) of the optional property file which contains
+	 * <tt>spf.management.port</tt> property containing the port number.
+	 */
+	static final String PROPERTY_FILE_RESOURCE_PATH = "spfmanagement.properties";
+
 	/**
 	 * Port number system property name.
 	 */
@@ -46,7 +54,7 @@ public class ManagementListener implements ServletContextListener {
 	 * this method does nothing simply logging an error message. 
 	 */
 	public void contextInitialized(ServletContextEvent event) {
-		int managementPort = getManagementPort();
+		int managementPort = getManagementPort(PROPERTY_FILE_RESOURCE_PATH);
 		if (managementPort <= 0) {
 			LOG.error("Management port system property (" + MANAGEMENT_PORT_PROP_NAME + 
 					") not defined. Management features will not be available.");
@@ -111,11 +119,23 @@ public class ManagementListener implements ServletContextListener {
 	}
 
 	/**
-	 * @return the management port number based on value of {@link #MANAGEMENT_PORT_PROP_NAME}
-	 * system property or <tt>-1</tt> if the number was incorrect or if the property was not specified.
+	 * @param propertyFileResourcePath resource path to the property file containing the property
+	 * <tt>spf.management.port</tt> or null if the file should not be checked.
+	 * @return the management port number based on the value of {@link #MANAGEMENT_PORT_PROP_NAME}
+	 * system property, property file entry or <tt>-1</tt> if the number was incorrect or
+	 * if the property was not specified.
 	 */
-	int getManagementPort() {
+	int getManagementPort(String propertyFileResourcePath) {
 		String mgmtPort = System.getProperty(MANAGEMENT_PORT_PROP_NAME);
+		if (mgmtPort == null && propertyFileResourcePath != null) {
+			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+				LOG.debug("System property '" + MANAGEMENT_PORT_PROP_NAME + "' not specified. " +
+						"Trying configuration file '" + propertyFileResourcePath + "'");
+			}
+			mgmtPort = PropertyResourceBundleManager.getString(
+					 propertyFileResourcePath, MANAGEMENT_PORT_PROP_NAME);
+		}
+
 		if (mgmtPort == null || mgmtPort.trim().equals("")) {
 			return -1;
 		}
