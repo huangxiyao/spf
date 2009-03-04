@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserProfileException;
 
 /**
