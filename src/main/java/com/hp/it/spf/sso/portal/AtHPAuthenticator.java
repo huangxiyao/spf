@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserProfileException;
-import com.hp.it.spf.user.profile.manager.IUserProfileRetriever;
-import com.hp.it.spf.user.profile.manager.UserProfileRetrieverFactory;
 
 /**
  * This authenticator is used for AtHP users
@@ -51,7 +49,7 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
     protected void mapHeaderToUserProfileMap() {
         super.mapHeaderToUserProfileMap();
 
-        // if profileid is not specified, then use email to instead
+        // if profile id is not specified, then use email to instead
         String profileId = (String)userProfile.get(AuthenticationConsts.KEY_PROFILE_ID);
         if (profileId == null || profileId.trim().equals("")) {
             userProfile.put(AuthenticationConsts.KEY_PROFILE_ID,
@@ -108,7 +106,7 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
     @SuppressWarnings("unchecked")
     protected Set getUserGroup() {
         Set<String> groups = new HashSet<String>();
-        // retrive groups from http header
+        // retrieve groups from http header
         String groupstring = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
         // groups are divided by ,
         if (groupstring != null) {
@@ -124,10 +122,10 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
             }
         }
 
-        // loggin atHP
+        // login atHP
         groups.add(AuthenticationConsts.LOCAL_ATHP_NAME);
 
-        // retrive groups with invoking super method and merge them
+        // retrieve groups with invoking super method and merge them
         groups.addAll(super.getUserGroup());
         return groups;
     }
@@ -137,7 +135,7 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
      * atHP user.
      * 
      * @return user profile map or an empty map
-     * @throws UserProfileException if retrieving user profiles errror
+     * @throws UserProfileException if retrieving user profiles error
      */
     protected Map<Object, Object> getUserProfile() {
         String originalProfileId = getValue(AuthenticationConsts.HEADER_PROFILE_ID_PROPERTY_NAME);
