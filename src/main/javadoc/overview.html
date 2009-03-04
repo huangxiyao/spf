@@ -319,7 +319,8 @@ table.props td {
 			<code>{SITE-URL:<i>spec</i>}</code>)</a></li>
 			<li>4.5.2. <a href="#file.author.token.user">Displaying user
 			information (<code>{NAME}</code>, <code>{EMAIL}</code>, <code>{LANGUAGE-CODE}</code>,
-			<code>{COUNTRY-CODE}</code>, <code>{LANGUAGE-TAG}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</a></li>
+			<code>{COUNTRY-CODE}</code>, <code>{LANGUAGE-TAG}</code>, <code>{HPP-LANGUAGE-CODE}</code>,
+			<code>{USER-PROPERTY:<i>key</i>}</code>)</a></li>
 			<li>4.5.3. <a href="#file.author.token.auth">Permissioning
 			content for authorized users (<code>{LOGGED-IN}</code>, <code>{LOGGED-OUT}</code>,
 			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</a></li>
@@ -4392,7 +4393,7 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 <a name="file.author.token.user">
 <h4>4.5.2. Displaying user information (<code>{NAME}</code>, <code>{EMAIL}</code>,
 <code>{LANGUAGE-CODE}</code>, <code>{COUNTRY-CODE}</code>, <code>{LANGUAGE-TAG}</code>,
-<code>{USER-PROPERTY:<i>key</i>}</code>)</h4>
+<code>{HPP-LANGUAGE-CODE}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</h4>
 </a>
 
 <p>The following tokens can be used to interpolate information about
@@ -4435,6 +4436,24 @@ The email address we have on record for you is: {EMAIL}
 	</dd>
 
 	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#hpp-language-code"><code>{HPP-LANGUAGE-CODE}</code></a></dt>
+	<dd>
+	<p>Use this token to insert the HP Passport standard language code
+	for the current user into the interpolated content. Note that HP
+	Passport does not exactly conform to the ISO 639-1 standard, which is
+	why this token is provided; to work with HP Passport in all languages,
+	your content must use this token instead of <code>{LANGUAGE-CODE}</code>.
+	Here is some sample HTML text, using this token to help build a URL
+	pointing to an HP Passport login page, passing the language in the
+	query string:</p>
+
+	<blockquote><pre>
+&lt;A HREF="https://passport2.hp.com/hppcf/login.do?lang={HPP-LANGUAGE-CODE}"&gt;...&lt;/A&gt;
+</pre></blockquote>
+	</dd>
+
+
+	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-code"><code>{LANGUAGE-CODE}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the <a
@@ -4449,6 +4468,10 @@ The email address we have on record for you is: {EMAIL}
 	<blockquote><pre>
 &lt;A HREF="http://other.hp.com/path?lang={LANGUAGE-CODE}&cc={COUNTRY-CODE}"&gt;...&lt;/A&gt;
 </pre></blockquote>
+
+	<p><b>Note:</b> HP Passport does not fully conform to the ISO 639-1
+	standard. To work with HP Passport in all languages, use the <code>{HPP-LANGUAGE-CODE}</code>
+	token instead.</p>
 	</dd>
 
 	<dt><a
@@ -6727,6 +6750,17 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 			<li>Documented that <code>html_viewer_includes.properties</code>
 			can be overridden in HTML viewer portlet <code>config</code> mode,
 			and may be located as an internal or external resource.</li>
+		</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>1.6</td>
+		<td>Mar 4 2009</td>
+		<td>S. Jorgenson</td>
+		<td>
+		<ul>
+			<li>Documented new <code>{HPP-LANGUAGE-CODE} text
+			interpolation token.</li>
 		</ul>
 		</td>
 	</tr>
