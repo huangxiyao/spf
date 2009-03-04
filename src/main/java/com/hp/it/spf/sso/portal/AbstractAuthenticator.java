@@ -22,15 +22,14 @@ import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.UniquePropertyValueConflictException;
 import com.epicentric.site.Site;
 import com.epicentric.user.User;
-import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserGroupsException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
 import com.hp.it.spf.user.profile.manager.IUserProfileRetriever;
 import com.hp.it.spf.user.profile.manager.UserProfileRetrieverFactory;
-import com.hp.it.spf.xa.misc.portal.Utils;
-import com.hp.it.spf.xa.misc.portal.RequestContext;
 import com.hp.it.spf.xa.dc.portal.ErrorCode;
+import com.hp.it.spf.xa.misc.portal.RequestContext;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
@@ -84,21 +83,21 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     protected HttpServletRequest request = null;
 
     /**
-     * The default consturctor
+     * The default constructor
      */
     protected AbstractAuthenticator() {
     }
 
     /**
-     * The constructor of AbstractAuthenticator class. It will do sime
-     * initialization for anthenticators
+     * The constructor of AbstractAuthenticator class. It will do some
+     * initialization for authenticators
      * 
      * @param request HttpServletRequest object
      */
     public AbstractAuthenticator(HttpServletRequest request) {
         this.request = request;
 
-        // retrieve corresponding resourcebundle according to current
+        // retrieve corresponding resource bundle according to current
         // Authenticator class
         String rbFile = retrieveRbFile();
         try {
@@ -217,7 +216,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER,
                         getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME));
 
-        // Set lanuage, if null, set to default EN
+        // Set language, if null, set to default EN
         String language = getValue(AuthenticationConsts.HEADER_LANGUAGE_PROPERTY_NAME);
         if (language == null || ("").equals(language.trim())) {
             userProfile.put(AuthenticationConsts.KEY_LANGUAGE,
@@ -304,7 +303,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     }
 
     /**
-     * If this user is first time login, create it in Vignette If error occured,
+     * If this user is first time login, create it in Vignette If error occurred,
      * an error flag will be set in the session.
      * 
      * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
@@ -330,7 +329,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 
     /**
      * The method is used to update VAP user info It will: Update user's info
-     * AND update user's group. If error occured, set an error flag in the
+     * AND update user's group. If error occurred, set an error flag in the
      * session
      * 
      * @param vapUser vignette user
@@ -510,7 +509,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         // If user has not been created in Vignette, then create this user
         if (vapUser == null) {
             // If employee number doesn't exist at the beginning, email will
-            // be instead of profileid, so later, when employee number is
+            // be instead of profile id, so later, when employee number is
             // assigned,
             // the previous email based user should be removed from vignette.
             User emailUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_PROFILE_ID,
