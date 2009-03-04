@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserProfileException;
-import com.hp.it.spf.user.profile.manager.IUserProfileRetriever;
-import com.hp.it.spf.user.profile.manager.UserProfileRetrieverFactory;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
@@ -65,7 +63,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     protected void mapHeaderToUserProfileMap() {
         super.mapHeaderToUserProfileMap();
 
-        // Set lanuage, change language from HPP format to ISO standard
+        // Set language, change language from HPP format to ISO standard
         String language = (String)userProfile.get(AuthenticationConsts.KEY_LANGUAGE);
         userProfile.put(AuthenticationConsts.KEY_LANGUAGE,
                         I18nUtility.hppLanguageToISOLanguage(language));
@@ -169,14 +167,14 @@ public class HPPAuthenticator extends AbstractAuthenticator {
             groups.add(st.nextToken());
         }
 
-        // loggin HPP/Fed
+        // login HPP/Fed
         if (AuthenticatorHelper.loggedIntoHPP(request)) {
             groups.add(AuthenticationConsts.LOCAL_HPP_NAME);
         } else if (AuthenticatorHelper.loggedIntoFed(request)) {
             groups.add(AuthenticationConsts.LOCAL_FED_NAME);
         }
 
-        // retrive groups with invoking super method and merge them
+        // retrieve groups with invoking super method and merge them
         groups.addAll(super.getUserGroup());
         return groups;
     }
@@ -185,7 +183,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      * Retrieve user profile from user profile retriever for HPP user.
      * 
      * @return user profile map or an empty map
-     * @throws UserProfileException if retrieving user profiles errror
+     * @throws UserProfileException if retrieving user profiles error
      */
     protected Map<Object, Object> getUserProfile() {
         request.setAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE, EUserIdentifierType.EXTERNAL_USER);
