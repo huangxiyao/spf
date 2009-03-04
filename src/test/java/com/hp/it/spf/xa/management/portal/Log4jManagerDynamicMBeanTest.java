@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import junit.framework.TestCase;
@@ -14,9 +15,9 @@ public class Log4jManagerDynamicMBeanTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		BasicConfigurator.configure();
-		Logger.getLogger("a.b");
-		Logger.getLogger("a.b.c");
-		Logger.getLogger("a.b.c.d");
+		Logger.getLogger("a.b").setLevel(Level.DEBUG);
+		Logger.getLogger("a.b.c").setLevel(Level.DEBUG);
+		Logger.getLogger("a.b.c.d").setLevel(Level.DEBUG);
 	}
 	
 	public void testGetAllLoggersLevels() {
