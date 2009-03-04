@@ -221,6 +221,20 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
+ * <dt><code>{HPP-LANGUAGE-CODE}</code></dt>
+ * <dd>
+ * <p>
+ * Use this token to insert the HP Passport standard language code for the
+ * current locale. Note that HP Passport does not exactly follow the ISO 639-1
+ * convention; that is why you need to use this token instead of
+ * <code>{LANGUAGE-CODE}</code> if you are dealing with HP Passport. Note that
+ * the country code is not part of this (HP Passport uses the ISO 3166-1 country
+ * code so you can use the <code>{COUNTRY-CODE}</code> token for that). For
+ * example, for a Traditional Chinese request, <code>{HPP-LANGUAGE-CODE}</code>
+ * is replaced with <code>12</code>.
+ * </p>
+ * </dd>
+ * 
  * <dt><a name="include"><code>{INCLUDE:<i>key</i>}</code></a></dt>
  * <dd>
  * <p>
@@ -335,7 +349,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO 639-1</a>
  * language code from the current locale. Note that the country code is not a
  * part of this. For example, for a Japanese request,
- * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>.
+ * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>. <b>Note:</b>
+ * If you need the language code for use with HP Passport, be sure to use the
+ * <code>{HPP-LANGUAGE-CODE}</code> token instead of this one.
  * </p>
  * </dd>
  * 
@@ -658,6 +674,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <li><code>{LANGUAGE-CODE}</code></li>
  * <li><code>{COUNTRY-CODE}</code></li>
  * <li><code>{LANGUAGE-TAG}</code></li>
+ * <li><code>{HPP-LANGUAGE-CODE}</code></li>
  * <li><code>{REQUEST-URL}</code></li>
  * <li><code>{EMAIL}</code></li>
  * <li><code>{NAME}</code></li>

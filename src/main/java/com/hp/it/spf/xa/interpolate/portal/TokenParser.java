@@ -28,9 +28,6 @@ import com.vignette.portal.website.enduser.PortalContext;
  * substitutions as the base class - see the base class method documentation for
  * further description.
  * </p>
- * <dl>
- * <dt><code>&lt;GROUP:<i>groups</i>&gt;...&lt;/GROUP&gt;</code></dt>
- * </dl>
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @version TBD
