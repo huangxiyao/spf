@@ -35,6 +35,7 @@
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-logout-secondarypagetype</artifactId>
 			<version>1.0.1-SNAPSHOT</version>
+			<type>car</type>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
