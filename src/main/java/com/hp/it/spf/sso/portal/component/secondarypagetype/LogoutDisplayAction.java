@@ -107,10 +107,11 @@ public class LogoutDisplayAction extends BaseAction {
 				LOG
 						.info("LogoutDisplayAction: user was accessing from federated HPP - redirecting to federated logout confirmation page.");
 				// use TARGET parameter (typically not present) just in case
-				url = request.getParameter("TARGET");
+				url = request.getParameter(Consts.PARAM_SM_TARGET);
 				if (url == null) {
-					url = portalContext.getSiteURI(site) + "template."
-							+ Consts.PAGE_FRIENDLY_ID_FED_LOGOUT;
+					String uri = Utils.slashify(site + "/"
+							+ Consts.PAGE_FRIENDLY_URI_FED_LOGOUT);
+					url = Utils.getPortalSiteURL(request, uri);
 				}
 			} else {
 				// finally, assume standard HPP case and redirect to portal site
@@ -123,7 +124,7 @@ public class LogoutDisplayAction extends BaseAction {
 						.getCurrentSecondaryPage().getUID(),
 						"logout.confirmation.text", "", portalContext);
 				session.setAttribute(Consts.SESSION_ATTR_STATUS_MSG, msg);
-				url = portalContext.getSiteURI(site);
+				url = Utils.getPortalSiteURL(request, site);
 			}
 
 			// send the redirect and return null to allow processing to continue
