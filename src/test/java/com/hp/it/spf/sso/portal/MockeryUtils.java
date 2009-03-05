@@ -26,8 +26,6 @@ import com.epicentric.user.User;
 import com.epicentric.user.UserGroup;
 import com.epicentric.user.UserProvider;
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
-import com.hp.it.cas.persona.user.service.IUserService;
-import com.hp.it.spf.persona.PersonaUserServiceFilter;
 
 /**
  * This is a utils class to create mockery context and create needed mock

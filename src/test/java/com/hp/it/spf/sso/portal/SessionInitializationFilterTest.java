@@ -19,7 +19,6 @@ import com.epicentric.user.User;
 import com.epicentric.user.UserManager;
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.cas.persona.user.service.IUserService;
-import com.hp.it.spf.persona.PersonaUserServiceFilter;
 
 public class SessionInitializationFilterTest {
     private static Mockery context;
@@ -40,8 +39,6 @@ public class SessionInitializationFilterTest {
 
     private static User guestUser;
     
-    private static IUserService userService;
-
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         context = MockeryUtils.createMockery();
@@ -52,21 +49,11 @@ public class SessionInitializationFilterTest {
         response = MockeryUtils.mockHttpServletResponse(context);
         user = MockeryUtils.mockUser(context);
         guestUser = MockeryUtils.mockGuestUser(context);
-        userService = context.mock(IUserService.class);
-        
+                
         chain = context.mock(FilterChain.class);
         context.checking(new Expectations() {
             {
                 allowing(chain).doFilter(with(any(HttpServletRequest.class)), with(any(HttpServletResponse.class)));
-                
-                allowing(athpRequest).getAttribute(PersonaUserServiceFilter.class.getName() + ".USER_SERVICE");
-                will(returnValue(userService));
-                allowing(hppRequest).getAttribute(PersonaUserServiceFilter.class.getName() + ".USER_SERVICE");
-                will(returnValue(userService));
-                allowing(fedRequest).getAttribute(PersonaUserServiceFilter.class.getName() + ".USER_SERVICE");
-                will(returnValue(userService));
-                
-                allowing(userService).createUser(with(any(EUserIdentifierType.class)), with(any(String.class)));
             }
         });
     }
@@ -82,7 +69,6 @@ public class SessionInitializationFilterTest {
         chain = null;
         user = null;
         guestUser = null;       
-        userService = null;
         UserManager.cleanup();
     }
 

@@ -98,8 +98,8 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.it.spf.sso</groupId>
-			<artifactId>spf-persona-integration</artifactId>
+			<groupId>com.hp.it.cas.persona</groupId>
+			<artifactId>cas-persona</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
