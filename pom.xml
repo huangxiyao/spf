@@ -6,7 +6,7 @@
 	<artifactId>spf-portal-pulse-secondarypage</artifactId>
 	<packaging>car</packaging>
 	<name>SPF portal pulse secondary page</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<description>
 		JSP's and other artifacxts for the Shared Portal Framework
 		portal pulse secondary page. This Vignette component provides
@@ -17,7 +17,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<issueManagement></issueManagement>
 	<ciManagement>
@@ -36,19 +36,19 @@
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-portal-pulse-secondarypagetype</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
