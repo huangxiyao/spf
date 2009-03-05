@@ -11,7 +11,7 @@
 		minor-version="0" />
 	<epideploy:detail>
 		<style-info id="spf-fed-launch-error-secondarypage"
-			friendly-id="ANON_SPF_FED_ERROR"
+			friendly-id="PUBLIC_SPF_FED_ERROR"
 			title="Shared Portal Framework - Federated Launch Error Page"
 			description="Shared Portal Framework secondary page for displaying a generic error to users upon a federation error."
 			template-uid="spf-fed-launch-error-secondarypagetype"
