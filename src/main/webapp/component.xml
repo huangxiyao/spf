@@ -9,7 +9,7 @@
 	<epideploy:detail>
 		<template-info allow-guest-access="true"
 			description="Shared Portal Framework secondary page type for persisting a user locale selection variously."
-			friendly-id="ANON_SPF_SELECT_LOCALE" header-filename=""
+			friendly-id="PUBLIC_SPF_SELECT_LOCALE" header-filename=""
 			id="spf-locale-selector-secondarypagetype" is-system="false"
 			title="Shared Portal Framework - Locale Selector Process"
 			type="templatetype_page_content_include" visible="true">
