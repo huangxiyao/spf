@@ -13,7 +13,7 @@
 	<epideploy:detail>
 		<style-info apply-template-header="true"
 			description="Shared Portal Framework secondary page for display of default system error page."
-			friendly-id="ANON_SPF_SYSTEM_ERROR" id="spf-system-error-secondarypage"
+			friendly-id="PUBLIC_SPF_SYSTEM_ERROR" id="spf-system-error-secondarypage"
 			is-system="false" primary-filename="systemError.jsp"
 			processing-type="ACTION_BASED" template-default="true"
 			template-uid="template0053"
