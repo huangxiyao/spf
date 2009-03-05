@@ -13,7 +13,7 @@
 	<epideploy:detail>
 		<style-info apply-template-header="false"
 			description="Shared Portal Framework secondary page for persisting a user locale selection to the standard locations."
-			friendly-id="ANON_SPF_SELECT_LOCALE"
+			friendly-id="PUBLIC_SPF_SELECT_LOCALE"
 			id="spf-locale-selector-secondarypage" is-system="false"
 			processing-type="action_based" template-default="false"
 			template-uid="spf-locale-selector-secondarypagetype"
