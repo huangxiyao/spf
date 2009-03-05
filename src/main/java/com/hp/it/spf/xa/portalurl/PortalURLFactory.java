@@ -57,33 +57,33 @@ public class PortalURLFactory {
 	 * is not specified, then the home page is assumed.
 	 * <p>
 	 * The <tt>siteRootUrl</tt> should be the home page URL for the current
-	 * portal site. It is available for portlets using one of the following
+	 * portal site. It is available for portlets using any of the following
 	 * methods from the SPF portlet utilities:
-	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest)}
-	 * or
-	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest,java.lang.Boolean,java.lang.String,int,java.lang.String)}
-	 * (see). You can also pass the results of the portlet utilities'
-	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(javax.portlet.PortletRequest)}
-	 * or
-	 * {@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(javax.portlet.PortletRequest,java.lang.Boolean,java.lang.String,int,java.lang.String)}
-	 * methods as the <tt>siteRootUrl</tt> (everything in the passed URL
-	 * beyond the site root is ignored). Note that all of those techniques pass
-	 * an absolute URL, so if you need to switch the protocol using
-	 * <tt>secure</tt>, you can.
+	 * </p>
+	 * <ul>
+	 * <li>{@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest)}</li>
+	 * <li>{@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest, String)}</li>
+	 * <li>{@link com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(javax.portlet.PortletRequest,java.lang.Boolean,java.lang.String,int,java.lang.String)}</li>
+	 * </ul>
+	 * <p>
+	 * Note that all of those methods return an absolute URL, so if you need to
+	 * switch the protocol using <tt>secure</tt>, you can.
 	 * <p>
 	 * For portal components, the <tt>siteRootUrl</tt> can be gotten from the
 	 * Vignette API's such as
 	 * {@link com.vignette.portal.website.enduser.PortalContext#getSiteURI(String)}
 	 * (see). That returns a relative URL, though. For an absolute URL, use the
-	 * portal equivalent methods to the ones for portlets above: ie, the portal
-	 * utilities'
-	 * {@link com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.http.HttpServletRequest)} method,
-	 * {@link com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.http.HttpServletRequest, java.lang.Boolean, java.lang.String, int, java.lang.String)} method,
-	 * etc.
+	 * portal equivalent methods to the ones for portlets above:
+	 * </p>
+	 * <ul>
+	 * <li>{@link com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.http.HttpServletRequest)}</li>
+	 * <li>{@link com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.http.HttpServletRequest, String)}</li>
+	 * <li>{@link com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.http.HttpServletRequest, java.lang.Boolean, java.lang.String, int, java.lang.String)}</li>
+	 * </ul>
 	 * <p>
 	 * For your interest, some secondary page template names for SPF-standard
 	 * secondary pages are available through both the portlet
-	 * {@link com.hp.it.spf.xa.misc.portlet.Consts} and portal 
+	 * {@link com.hp.it.spf.xa.misc.portlet.Consts} and portal
 	 * {@link com.hp.it.spf.xa.misc.portal.Consts} classes. For example, the
 	 * template for the global help secondary page is available to portlets in
 	 * {@link com.hp.it.spf.xa.misc.portlet.Consts#PAGE_FRIENDLY_URI_GLOBAL_HELP}.
@@ -303,7 +303,7 @@ public class PortalURLFactory {
 	public static int getNonstandardHttpPort() {
 		return getNonstandardHttpPort(PROPERTY_FILE_RESOURCE_PATH);
 	}
-	
+
 	/**
 	 * Same as {@link #getNonstandardHttpPort()} but lets the property file
 	 * <code>portalurl.properties</code> be overridden with another file of a
@@ -334,7 +334,7 @@ public class PortalURLFactory {
 	public static int getNonstandardHttpsPort() {
 		return getNonstandardHttpsPort(PROPERTY_FILE_RESOURCE_PATH);
 	}
-		
+
 	/**
 	 * Same as {@link #getNonstandardHttpsPort()} but lets the property file
 	 * <code>portalurl.properties</code> be overridden with another file of a

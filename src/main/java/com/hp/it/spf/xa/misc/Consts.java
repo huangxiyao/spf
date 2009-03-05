@@ -453,4 +453,10 @@ public class Consts {
 	 */
 	public final static String PARAM_SELECT_LOCALE_TARGET = "spfLocaleSelectorTarget";
 
+	/**
+	 * The name of the form parameter (query parameter) used by SiteMinder (both HPP and AtHP versions) to record
+	 * the target URL.
+	 */
+	public final static String PARAM_SM_TARGET = "TARGET";
+	
 }
