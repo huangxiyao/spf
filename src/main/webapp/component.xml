@@ -9,7 +9,7 @@
 	<epideploy:detail>
 		<template-info allow-guest-access="true"
 			description="Shared Portal Framework secondary page type for displaying a confirmation page to federated users after logout."
-			friendly-id="ANON_SPF_FED_LOGOUT" header-filename=""
+			friendly-id="PUBLIC_SPF_FED_LOGOUT" header-filename=""
 			id="spf-fed-logout-confirm-secondarypagetype" is-system="false"
 			title="Shared Portal Framework - Federated Logout Confirmation Page"
 			type="templatetype_page_content_include" visible="true">
