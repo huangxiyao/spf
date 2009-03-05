@@ -9,7 +9,7 @@
 	<epideploy:detail>
 		<template-info allow-guest-access="true" 
 			description="Shared Portal Framework secondary page type for display of global help." 
-			friendly-id="ANON_SPF_GLOBAL_HELP" header-filename="" 
+			friendly-id="PUBLIC_SPF_GLOBAL_HELP" header-filename="" 
 			id="spf-global-help-secondarypagetype" is-system="false" 
 			system-secondary-page-type="false" 
 			title="Shared Portal Framework - Global Help Page" 
