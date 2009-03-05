@@ -12,7 +12,7 @@
 		minor-version="0" />
 	<epideploy:detail>
 		<style-info id="spf-auth-error-secondarypage"
-			friendly-id="ANON_SPF_AUTH_ERROR"
+			friendly-id="PUBLIC_SPF_AUTH_ERROR"
 			title="Shared Portal Framework - Authorization Error Page"
 			description="Shared Portal Framework secondary page for displaying an authorization error."
 			primary-filename="authError.jsp"
