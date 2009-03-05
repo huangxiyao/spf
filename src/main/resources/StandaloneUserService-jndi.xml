@@ -11,9 +11,9 @@
 		http://www.springframework.org/schema/security	http://www.springframework.org/schema/security/spring-security-2.0.xsd
 		"
 	> 
-	<!--
+
 	<context:property-placeholder location="classpath:StandaloneUserService.properties"/>
-	-->
+
 <!-- Data source -->
 
 	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/cas-persona"/>
@@ -45,8 +45,8 @@
 	</bean>
 
 	<bean id="standaloneUserService" class="com.hp.it.cas.persona.user.service.standalone.StandaloneUserService">
-		<constructor-arg value="116414"/>			<!-- EXTERNALIZE -->
-		<constructor-arg value="123qwe!@#QWE"/>		<!-- EXTERNALIZE -->
+		<constructor-arg value="${applicationPortfolioIdentifier}"/>			<!-- EXTERNALIZE -->
+		<constructor-arg value="${applicationPassword}"/>		<!-- EXTERNALIZE -->
 		<constructor-arg ref="userService"/>
 		<constructor-arg ref="authenticationManager"/>
 	</bean>
