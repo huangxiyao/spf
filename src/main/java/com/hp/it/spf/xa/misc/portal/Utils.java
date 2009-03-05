@@ -696,8 +696,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * 
 	 * @param request
 	 *            The current request.
-	 * @return The URL for the current site, in string form. This is an absolute
-	 *         URL.
+	 * @return The URL for the current effective site, in string form. This is
+	 *         an absolute URL.
 	 */
 	public static String getEffectiveSiteURL(HttpServletRequest request) {
 		return getEffectiveSiteURL(request, null, null, -1, null);
@@ -727,8 +727,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @param host
 	 *            The hostname to use (if null, use the hostname already in the
 	 *            URL).
-	 * @return The URL for the current site, in string form. This is an absolute
-	 *         URL.
+	 * @return The URL for the current effective site, in string form. This is
+	 *         an absolute URL.
 	 */
 	public static String getEffectiveSiteURL(HttpServletRequest request,
 			Boolean secure, String host, int port, String uri) {
@@ -741,6 +741,27 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 			}
 		}
 		return getPortalSiteURL(request, secure, host, port, uri);
+	}
+
+	/**
+	 * Returns an absolute URL for a page at the <i>effective</i> portal site,
+	 * based on the given request and site URI. This method is the same as the
+	 * {@link #getEffectiveSiteURL(HttpServletRequest, Boolean, String, int, String)}
+	 * method when called like this:
+	 * <code>getEffectiveSiteURL(request, null, null, -1, uri)</code>.
+	 * 
+	 * @param request
+	 *            The current request.
+	 * @param uri
+	 *            The site name (ie "site DNS name") and/or additional path (eg
+	 *            a friendly URI or template friendly ID). (The part before the
+	 *            first <code>/</code> is considered the site name.)
+	 * @return The URL for the current effective site, in string form. This is
+	 *         an absolute URL.
+	 */
+	public static String getEffectiveSiteURL(HttpServletRequest request,
+			String uri) {
+		return getEffectiveSiteURL(request, null, null, -1, uri);
 	}
 
 	/**
@@ -871,6 +892,29 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
+	 * <p>
+	 * Returns an absolute URL for a page at a portal site, based on the given
+	 * request and site-relative URI. This method is equivalent to using the
+	 * companion
+	 * {@link #getPortalSiteURL(HttpServletRequest, Boolean, String, int, String)}
+	 * method and passing
+	 * <code>getPortalSiteURL(request, null, null, -1, uri)</code>.
+	 * </p>
+	 * 
+	 * @param request
+	 *            The current request.
+	 * @param uri
+	 *            The site name (ie "site DNS name") and/or additional path (eg
+	 *            a friendly URI or template friendly ID). (The part before the
+	 *            first <code>/</code> is considered the site name.)
+	 * @return The URL for the given site, in string form. This is an absolute
+	 *         URL.
+	 */
+	public static String getPortalSiteURL(HttpServletRequest request, String uri) {
+		return getPortalSiteURL(request, null, null, -1, uri);
+	}
+
+	/**
 	 * Use
 	 * {@link #getPortalSiteURL(HttpServletRequest, Boolean, String, int, String)}
 	 * instead.
@@ -880,5 +924,14 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	public static String getSiteURL(HttpServletRequest request, Boolean secure,
 			String host, int port, String uri) {
 		return getPortalSiteURL(request, secure, host, port, uri);
+	}
+
+	/**
+	 * Use {@link #getPortalSiteURL(HttpServletRequest, String)} instead.
+	 * 
+	 * @deprecated
+	 */
+	public static String getSiteURL(HttpServletRequest request, String uri) {
+		return getPortalSiteURL(request, uri);
 	}
 }
