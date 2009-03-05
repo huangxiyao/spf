@@ -13,7 +13,7 @@
 	<epideploy:detail>
 		<style-info apply-template-header="false"
 			description="Shared Portal Framework secondary page for display of global help."
-			friendly-id="ANON_SPF_GLOBAL_HELP" 
+			friendly-id="PUBLIC_SPF_GLOBAL_HELP" 
 			id="spf-global-help-secondarypage"
 			is-system="false" primary-filename="globalHelpMain.jsp"
 			processing-type="ACTION_BASED" 
