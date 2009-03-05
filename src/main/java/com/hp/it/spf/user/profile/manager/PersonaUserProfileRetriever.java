@@ -11,11 +11,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.cas.persona.user.service.ICompoundUserAttributeValue;
 import com.hp.it.cas.persona.user.service.IUser;
 import com.hp.it.cas.persona.user.service.IUserService;
-import com.hp.it.spf.persona.PersonaUserServiceFilter;
 import com.hp.it.spf.sso.portal.AuthenticationConsts;
 import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.xa.dc.portal.ErrorCode;
@@ -52,11 +53,15 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
                                               HttpServletRequest request) throws UserProfileException {
         // TODO fulfill the Persiona invoking logic
         Map<Object, Object> userProfiles = new HashMap<Object, Object>();
-        TimeRecorder timeRecorder = RequestContext.getThreadInstance().getTimeRecorder();
+        TimeRecorder timeRecorder = RequestContext.getThreadInstance()
+                                                  .getTimeRecorder();
         try {
             timeRecorder.recordStart(Operation.PROFILE_CALL);
             // get the user service from the request
-            IUserService userService = PersonaUserServiceFilter.getUserService(request);
+            IUserService userService = (IUserService)WebApplicationContextUtils.getWebApplicationContext(request.getSession(true)
+                                                                                                                .getServletContext())
+                                                                               .getBean("standaloneUserService");
+
             // get the user from the service
             EUserIdentifierType userIdentifierType = (EUserIdentifierType)request.getAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE);
             IUser user = userService.createUser(userIdentifierType,
@@ -64,14 +69,16 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
 
             Map<Integer, Collection<String>> simple = user.getSimpleAttributeValues();
             userProfiles.putAll(simple);
-                        
+
             Map<Integer, Collection<ICompoundUserAttributeValue>> compound = user.getCompoundAttributeValues();
             userProfiles.putAll(compound);
-            
+
             timeRecorder.recordEnd(Operation.PROFILE_CALL);
         } catch (Exception ex) {
             timeRecorder.recordError(Operation.PROFILE_CALL, ex);
-            RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.PROFILE001, ex.toString());
+            RequestContext.getThreadInstance()
+                          .getDiagnosticContext()
+                          .setError(ErrorCode.PROFILE001, ex.toString());
             throw new UserProfileException(ex);
         }
         return userProfiles;
