@@ -754,24 +754,24 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <code>portal.hp.com</code> server using HTTP. Similarly,
  * <code>{SITE-URL:/forums}</code> is replaced with
  * <code>http://portal.hp.com/portal/site/itrc/forums</code>,
- * <code>{SITE-URL:/template.ANON_SPF_GLOBAL_HELP}</code> is replaced with
- * <code>http://portal.hp.com/portal/site/itrc/template.ANON_SPF_GLOBAL_HELP</code>
+ * <code>{SITE-URL:/template.PUBLIC_SPF_GLOBAL_HELP}</code> is replaced with
+ * <code>http://portal.hp.com/portal/site/itrc/template.PUBLIC_SPF_GLOBAL_HELP</code>
  * (the global help secondary page), etc.
  * </p>
  * <p>
  * To repeat the above examples, but switch the site to <code>acme</code>:
  * use <code>{SITE-URL:acme}</code>, <code>{SITE-URL:acme/forums}</code>,
- * <code>{SITE-URL:acme/template.ANON_SPF_GLOBAL_HELP}</code>, etc.
+ * <code>{SITE-URL:acme/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc.
  * </p>
  * <p>
  * And to repeat the above examples again, but switch the scheme to HTTPS, here
  * is how we do it for the current portal site: <code>{SITE-URL:https;}</code>,
  * <code>{SITE-URL:https;/forums}</code>,
- * <code>{SITE-URL:https;/template.ANON_SPF_GLOBAL_HELP}</code>, etc. And to
+ * <code>{SITE-URL:https;/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc. And to
  * simultaneously switch to the <code>acme</code> portal site: use
  * <code>{SITE-URL:https;acme}</code>,
  * <code>{SITE-URL:https;acme/forums}</code>,
- * <code>{SITE-URL:https;acme/template.ANON_SPF_GLOBAL_HELP}</code>, etc.
+ * <code>{SITE-URL:https;acme/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc.
  * </p>
  * <p>
  * Your <code><i>spec</i></code> can "nest" any of the other
