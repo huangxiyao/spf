@@ -11,7 +11,7 @@
 		minor-version="0" />
 	<epideploy:detail>
 		<style-info id="spf-fed-logout-confirm-secondarypage"
-			friendly-id="ANON_SPF_FED_LOGOUT"
+			friendly-id="PUBLIC_SPF_FED_LOGOUT"
 			title="Shared Portal Framework - Federated Logout Confirmation Page"
 			description="Shared Portal Framework secondary page for displaying a confirmation page to federated users after logout."
 			primary-filename="fedLogoutConfirm.jsp"
