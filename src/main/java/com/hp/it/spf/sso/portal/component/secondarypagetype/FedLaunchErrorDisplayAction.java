@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.hp.it.spf.sso.portal.AuthenticationUtility;
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.misc.portal.Consts;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
 import com.vignette.portal.website.enduser.PortalURI;
@@ -71,12 +72,11 @@ public class FedLaunchErrorDisplayAction extends BaseAction {
 
 			// Get the launch URL so the user can try again if desired. The
 			// launch URL may be in the "TARGET" query string parameter; if not,
-			// just use the current portal site home page.
+			// just use the current effective portal site home page.
 			String launchUrl = null;
-			launchUrl = request.getParameter("TARGET");
+			launchUrl = request.getParameter(Consts.PARAM_SM_TARGET);
 			if (launchUrl == null) {
-				launchUrl = portalContext.getSiteURI(portalContext
-						.getCurrentSite().getDNSName());
+				launchUrl = Utils.getEffectiveSiteURL(request);
 			}
 			request.setAttribute(Consts.REQUEST_ATTR_FED_ERROR_RETRY_URL, launchUrl);
 			return null;

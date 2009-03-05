@@ -6,7 +6,7 @@
 	<artifactId>spf-fed-launch-error-secondarypagetype</artifactId>
 	<packaging>car</packaging>
 	<name>SPF federation launch error secondary page type</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<description>
 		Classes and other artifacts for the Shared Portal Framework
 		federation launch error secondary page type. This Vignette
@@ -17,7 +17,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
@@ -35,13 +35,13 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -83,7 +83,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.sso</groupId>
 			<artifactId>spf-session-initialization</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
