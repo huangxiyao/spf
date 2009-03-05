@@ -36,6 +36,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-portal-pulse-secondarypagetype</artifactId>
+			<type>car</type>
 			<version>1.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
