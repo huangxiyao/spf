@@ -6,7 +6,7 @@
 	<artifactId>spf-auth-error-secondarypagetype</artifactId>
 	<packaging>car</packaging>
 	<name>SPF authorization error secondary page type</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<description>
 		Classes and other artifacts for the Shared Portal Framework
 		authorization error secondary page type. This page type should
@@ -17,7 +17,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
