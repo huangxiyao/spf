@@ -6,7 +6,7 @@
 	<artifactId>spf-locale-widget-styletype</artifactId>
 	<packaging>car</packaging>
 	<name>SPF locale widget style type</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<description>
 		Artifacts for the Shared Portal Framework locale widget style
 		type. Locale widgets include the locale selector and locale
@@ -16,7 +16,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
