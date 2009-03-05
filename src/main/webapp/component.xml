@@ -14,7 +14,7 @@
 	<epideploy:detail>
 		<style-info apply-template-header="false"
 			description="Shared Portal Framework secondary page for performing portal pulse and displaying results."
-			friendly-id="ANON_SPF_PORTAL_PULSE"
+			friendly-id="PUBLIC_SPF_PORTAL_PULSE"
 			id="spf-portal-pulse-secondarypage"
 			primary-filename="portalPulse.jsp" processing-type="ACTION_BASED"
 			template-default="true"
