@@ -31,6 +31,7 @@
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-locale-selector-secondarypagetype</artifactId>
 			<version>1.0.1-SNAPSHOT</version>
+			<type>car</type>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
