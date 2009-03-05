@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.hp.it.spf.sso.portal.AuthenticationUtility;
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.misc.portal.Consts;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
 import com.vignette.portal.website.enduser.PortalURI;
@@ -56,8 +57,9 @@ public class FedLogoutConfirmationDisplayAction extends BaseAction {
 				return null;
 			}
 
-			String url = portalContext.getSiteURI(portalContext
-					.getCurrentSite().getDNSName());
+			// Get the current effective portal site URL for use for resuming
+			// the user's session.
+			String url = Utils.getEffectiveSiteURL(request);
 			request
 					.setAttribute(Consts.REQUEST_ATTR_FED_LOGOUT_RESUME_URL,
 							url);
