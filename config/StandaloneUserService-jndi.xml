@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context-2.5.xsd
+		http://www.springframework.org/schema/jee		http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+		http://www.springframework.org/schema/security	http://www.springframework.org/schema/security/spring-security-2.0.xsd
+		"
+	> 
+	<!--
+	<context:property-placeholder location="classpath:StandaloneUserService.properties"/>
+	-->
+<!-- Data source -->
+
+	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/cas-persona"/>
+
+<!-- DAO -->
+
+	<bean id="userAttributesDaoFactory" class="com.hp.it.cas.userattributes.dao.UserattributesDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+	
+	<bean id="userAttributesCustomDaoFactory" class="com.hp.it.cas.userattributes.custom.dao.UserAttributesCustomDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+	
+	<bean id="personaDaoFactory" class="com.hp.it.cas.persona.dao.PersonaDaoFactory">
+		<constructor-arg ref="dataSource"/>
+		<constructor-arg ref="userAttributesDaoFactory"/>
+		<constructor-arg ref="userAttributesCustomDaoFactory"/>
+	</bean>
+
+<!-- Service -->
+
+	<bean id="userAttributeValueService" class="com.hp.it.cas.persona.uav.service.impl.UserAttributeValueService">
+		<constructor-arg ref="personaDaoFactory"/>
+	</bean>
+	
+	<bean id="userService" class="com.hp.it.cas.persona.user.service.impl.UserService">
+		<constructor-arg ref="userAttributeValueService"/>
+	</bean>
+
+	<bean id="standaloneUserService" class="com.hp.it.cas.persona.user.service.standalone.StandaloneUserService">
+		<constructor-arg value="116414"/>			<!-- EXTERNALIZE -->
+		<constructor-arg value="123qwe!@#QWE"/>		<!-- EXTERNALIZE -->
+		<constructor-arg ref="userService"/>
+		<constructor-arg ref="authenticationManager"/>
+	</bean>
+	
+<!-- Method security -->
+
+	<security:global-method-security secured-annotations="enabled"/>
+	<security:authentication-manager alias="authenticationManager"/>
+	
+	<bean id="applicationAuthenticationProvider" class="org.springframework.security.providers.ldap.LdapAuthenticationProvider">
+		<description>
+			Applications are authenticated by Enterprise Directory. Application account names are composed of the
+			prefix "APP-" followed by the application portfolio identifier.
+		</description>
+		
+		<constructor-arg>
+			<bean class="org.springframework.security.providers.ldap.authenticator.BindAuthenticator">
+				<description>
+					Authenticate and retrieve application information using an encrypted LDAP connection.
+				</description>
+				<constructor-arg>
+					<bean class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">						
+						<constructor-arg value="ldaps://ldap.hp.com:636/o=hp.com"/>	<!-- Encrypted connection -->
+					</bean>
+				</constructor-arg>
+				<property name="userDnPatterns">
+					<list>
+						<value>cn={0},ou=Applications</value>
+					</list>
+				</property>
+			</bean>
+		</constructor-arg>
+
+		<constructor-arg>
+			<bean class="org.springframework.security.ldap.populator.DefaultLdapAuthoritiesPopulator">
+				<description>
+					Retrieve application groups (roles) using a normal LDAP connection.
+				</description>
+				<constructor-arg>
+					<bean class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+						<constructor-arg value="ldap://ldap.hp.com:389/o=hp.com"/>	<!-- Non-encrypted connection -->
+					</bean>
+				</constructor-arg>
+				<constructor-arg value="ou=Groups"/>
+			</bean>
+		</constructor-arg>
+
+		<property name="userDetailsContextMapper">
+			<description>
+				Maps LDAP application account information into an IApplicationPrincipal.
+			</description>
+			<bean class="com.hp.it.cas.persona.security.ApplicationPrincipalMapper"/>
+		</property>
+		
+		<security:custom-authentication-provider/>		
+	</bean>
+
+</beans>
