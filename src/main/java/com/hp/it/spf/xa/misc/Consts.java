@@ -264,7 +264,7 @@ public class Consts {
 	 * secondary page. This is common because both portal and portlets may want
 	 * to create URLs pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_AUTH_ERROR = "ANON_SPF_AUTH_ERROR";
+	public static final String PAGE_FRIENDLY_ID_AUTH_ERROR = "PUBLIC_SPF_AUTH_ERROR";
 
 	/**
 	 * The template friendly URI for the SPF-standard authorization error
@@ -279,7 +279,7 @@ public class Consts {
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_PORTAL_PULSE = "ANON_SPF_PORTAL_PULSE";
+	public static final String PAGE_FRIENDLY_ID_PORTAL_PULSE = "PUBLIC_SPF_PORTAL_PULSE";
 
 	/**
 	 * The template friendly URI for the SPF-standard portal pulse secondary
@@ -294,7 +294,7 @@ public class Consts {
 	 * This is common because both portal and portlets may want to create URLs
 	 * pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_GLOBAL_HELP = "ANON_SPF_GLOBAL_HELP";
+	public static final String PAGE_FRIENDLY_ID_GLOBAL_HELP = "PUBLIC_SPF_GLOBAL_HELP";
 
 	/**
 	 * The template friendly URI for the SPF-standard global help secondary
@@ -309,7 +309,7 @@ public class Consts {
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_FED_LOGOUT = "ANON_SPF_FED_LOGOUT";
+	public static final String PAGE_FRIENDLY_ID_FED_LOGOUT = "PUBLIC_SPF_FED_LOGOUT";
 
 	/**
 	 * The template friendly URI for the SPF-standard federated logout secondary
@@ -324,7 +324,7 @@ public class Consts {
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_FED_ERROR = "ANON_SPF_FED_ERROR";
+	public static final String PAGE_FRIENDLY_ID_FED_ERROR = "PUBLIC_SPF_FED_ERROR";
 
 	/**
 	 * The template friendly URI for the SPF-standard federation error secondary
@@ -339,7 +339,7 @@ public class Consts {
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_SELECT_LOCALE = "ANON_SPF_SELECT_LOCALE";
+	public static final String PAGE_FRIENDLY_ID_SELECT_LOCALE = "PUBLIC_SPF_SELECT_LOCALE";
 
 	/**
 	 * The template friendly URI for the SPF-standard locale selector secondary
