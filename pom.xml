@@ -36,6 +36,7 @@
 			<artifactId>spf-locale-widget-styletype</artifactId>
 			<version>1.0.1-SNAPSHOT</version>
 			<type>car</type>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
