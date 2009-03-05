@@ -389,13 +389,45 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
-	 * Use {@link #getPortalSiteURL(PortletRequest,String,Boolean,int)} instead.
+	 * <p>
+	 * Returns an absolute URL for a page at a portal site, based on the given
+	 * request and site-relative URI. This method is equivalent to using the
+	 * companion
+	 * {@link #getPortalSiteURL(PortletRequest, Boolean, String, int, String)}
+	 * method and passing
+	 * <code>getPortalSiteURL(request, null, null, -1, uri)</code>.
+	 * </p>
+	 * 
+	 * @param request
+	 *            The current request.
+	 * @param uri
+	 *            The site name (ie "site DNS name") and/or additional path (eg
+	 *            a friendly URI or template friendly ID). (The part before the
+	 *            first <code>/</code> is considered the site name.)
+	 * @return The URL for the given site, in string form. This is an absolute
+	 *         URL.
+	 */
+	public static String getPortalSiteURL(PortletRequest request, String uri) {
+		return getPortalSiteURL(request, null, null, -1, uri);
+	}
+	
+	/**
+	 * Use {@link #getPortalSiteURL(PortletRequest,Boolean,String,int,String)} instead.
 	 * 
 	 * @deprecated
 	 */
 	public static String getSiteURL(PortletRequest request, Boolean secure,
 			String host, int port, String uri) {
 		return getPortalSiteURL(request, secure, host, port, uri);
+	}
+
+	/**
+	 * Use {@link #getPortalSiteURL(PortletRequest,String)} instead.
+	 * 
+	 * @deprecated
+	 */
+	public static String getSiteURL(PortletRequest request, String uri) {
+		return getPortalSiteURL(request, uri);
 	}
 
 	/**
