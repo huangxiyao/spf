@@ -90,9 +90,7 @@ public class LogoutDisplayAction extends BaseAction {
 			LOG.info("LogoutDisplayAction: invoked.");
 
 			// determine which site to redirect to
-			String site = request.getParameter(Consts.PARAM_LOGOUT_SITE) != null ? (String) request
-					.getParameter(Consts.PARAM_LOGOUT_SITE)
-					: Consts.LOGOUT_DEFAULT_SITE;
+			String site = Utils.getEffectiveSiteDNS(request);
 
 			// redirect to AtHP landing page in AtHP case
 			if (AuthenticationUtility.isFromAtHP(request)) {
@@ -109,9 +107,7 @@ public class LogoutDisplayAction extends BaseAction {
 				// use TARGET parameter (typically not present) just in case
 				url = request.getParameter(Consts.PARAM_SM_TARGET);
 				if (url == null) {
-					String uri = Utils.slashify(site + "/"
-							+ Consts.PAGE_FRIENDLY_URI_FED_LOGOUT);
-					url = Utils.getPortalSiteURL(request, uri);
+					url = Utils.getEffectiveSiteURL(request, Consts.PAGE_FRIENDLY_URI_FED_LOGOUT);
 				}
 			} else {
 				// finally, assume standard HPP case and redirect to portal site
@@ -124,7 +120,7 @@ public class LogoutDisplayAction extends BaseAction {
 						.getCurrentSecondaryPage().getUID(),
 						"logout.confirmation.text", "", portalContext);
 				session.setAttribute(Consts.SESSION_ATTR_STATUS_MSG, msg);
-				url = Utils.getPortalSiteURL(request, site);
+				url = Utils.getEffectiveSiteURL(request);
 			}
 
 			// send the redirect and return null to allow processing to continue
