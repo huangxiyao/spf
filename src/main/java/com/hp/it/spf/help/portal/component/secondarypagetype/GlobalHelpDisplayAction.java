@@ -88,8 +88,6 @@ public class GlobalHelpDisplayAction extends BaseAction {
 			String propName = null;
 			String helpContent = null;
 
-			LOG.info("GlobalHelpDisplayAction: invoked.");
-
 			// First determine the proper global help file to use.
 			baseName = portalContext.getCurrentSite().getDNSName()
 					+ SITE_GLOBAL_HELP_BASE_NAME_SUFFIX;
@@ -116,14 +114,11 @@ public class GlobalHelpDisplayAction extends BaseAction {
 
 			// If the content is not null or blank, then store into request
 			if (helpContent != null && helpContent.trim().length() > 0) {
-				LOG
-						.info("GlobalHelpDisplayAction: rendering content from proper localized version of "
-								+ baseName + " secondary support file.");
 				request.setAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA,
 						helpContent);
 			} else {
 				throw new Exception(
-						"GlobalHelpDisplayAction: interpolated content is null or empty");
+						"GlobalHelpDisplayAction: interpolated content is null or empty.");
 			}
 			// Return null so action will forward normally to view
 			return null;
