@@ -15,7 +15,7 @@
 			description="Shared Portal Framework secondary page for persisting a user locale selection to the standard locations."
 			friendly-id="PUBLIC_SPF_SELECT_LOCALE"
 			id="spf-locale-selector-secondarypage" is-system="false"
-			processing-type="action_based" template-default="false"
+			processing-type="action_based" template-default="true"
 			template-uid="spf-locale-selector-secondarypagetype"
 			title="Shared Portal Framework - Locale Selector Process" visible="true">
 			<actions>
