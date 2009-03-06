@@ -87,8 +87,6 @@ public class LogoutDisplayAction extends BaseAction {
 			HttpSession session = request.getSession(true);
 			String url = null;
 
-			LOG.info("LogoutDisplayAction: invoked.");
-
 			// determine which site to redirect to
 			String site = Utils.getEffectiveSiteDNS(request);
 
