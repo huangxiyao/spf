@@ -84,17 +84,17 @@ public class SelectLocaleProcessAction extends BaseAction {
 			if (isAvailableLocale(request, plocale)) {
 				// set locale into the request
 				LOG
-						.info("SelectLocaleProcessAction: Updating user's locale into request for Vignette.");
+						.info("SelectLocaleProcessAction: updating user's locale into request for Vignette.");
 				boolean setLocaleFlag = I18nUtility.setLocale(request, plocale);
 				if (!setLocaleFlag) {
 					LOG
-							.error("SelectLocaleProcessAction: Update user's locale into request for Vignette failed!");
+							.error("SelectLocaleProcessAction: update user's locale into request for Vignette failed.");
 					sFlag = false;
 				}
 
 				// set locale into the HP.com cookies
 				LOG
-						.info("SelectLocaleProcessAction: Updating user's locale into HP.com standard cookie(s).");
+						.info("SelectLocaleProcessAction: updating user's locale into HP.com standard cookie(s).");
 				addCookie(response, Consts.PARAM_HPCOM_LANGUAGE, plocale
 						.getLanguage(), 1 * SECONDS_PER_YEAR);
 				if (hasCountry(plocale)) {
@@ -110,7 +110,7 @@ public class SelectLocaleProcessAction extends BaseAction {
 				if (isAuthenticatedByHPP(request)) {
 					try {
 						LOG
-								.info("SelectLocaleProcessAction: Updating user's locale into HPP. HPP language code: "
+								.info("SelectLocaleProcessAction: updating user's locale into HPP. HPP language code: "
 										+ I18nUtility
 												.localeToHPPLanguage(plocale));
 						updateLocaleInHPP(portalContext, request, plocale);
@@ -118,7 +118,7 @@ public class SelectLocaleProcessAction extends BaseAction {
 						Object obj = e.getFaults().get(0);
 						if (obj instanceof Fault) {
 							LOG
-									.error("SelectLocaleProcessAction: Update user's locale into HPP failed!"
+									.error("SelectLocaleProcessAction: update user's locale into HPP failed."
 											+ " More detail: "
 											+ ((Fault) obj).getDescription());
 						}
@@ -126,19 +126,17 @@ public class SelectLocaleProcessAction extends BaseAction {
 					}
 				} else {
 					LOG
-							.info("SelectLocaleProcessAction: Not an HPP user or not logged-in - will not update locale into HPP.");
+							.info("SelectLocaleProcessAction: not an HPP user, or not logged-in - will not update locale into HPP.");
 				}
 			} else {
 				LOG
-						.error("SelectLocaleProcessAction: The locale, "
-								+ plocale
-								+ ", is not in the site available locales! No updates performed.");
+						.error("SelectLocaleProcessAction: locale is not in the site available locales - no updates performed.");
 				sFlag = false;
 			}
 
 			// log the outcome
 			if (!sFlag) {
-				LOG.error("SelectLocaleProcessAction: Process failed.");
+				LOG.error("SelectLocaleProcessAction: process failed.");
 			}
 
 			// return null so process will continue normally

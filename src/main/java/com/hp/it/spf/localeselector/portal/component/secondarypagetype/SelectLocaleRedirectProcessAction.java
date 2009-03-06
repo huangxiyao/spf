@@ -76,7 +76,7 @@ public class SelectLocaleRedirectProcessAction extends BaseAction {
 				response.sendRedirect(redirectUrl);
 			} catch (IOException ex) {
 				LOG
-						.error("SelectLocaleRedirectProcessAction: Redirect failed!  More detail: "
+						.error("SelectLocaleRedirectProcessAction: redirect failed!  More detail: "
 								+ ex);
 			}
 
