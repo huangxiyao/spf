@@ -622,6 +622,9 @@
 		<listener-class>com.hp.it.spf.xa.management.portal.ManagementListener</listener-class>
 	</listener>
 
+	<listener>
+		<listener-class>com.hp.it.spf.xa.axis.portal.AxisInitializationListener</listener-class>
+	</listener>
 
 	<!-- BEGIN HPD Listeners   -->
 
