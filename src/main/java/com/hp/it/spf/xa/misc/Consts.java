@@ -245,6 +245,11 @@ public class Consts {
 	public static final String KEY_PORTAL_PORTLET_ID = "com.vignette.portal.portlet.friendlyid";
 
 	/**
+	 * The prefix for all template friendly ID's which are to be publicly
+	 * accessible (ie no login required).
+	 */
+	public static final String PUBLIC_PAGE_FRIENDLY_ID_PREFIX = "PUBLIC_SPF_";
+	/**
 	 * The template friendly ID for the SPF-standard system error secondary
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
@@ -264,7 +269,8 @@ public class Consts {
 	 * secondary page. This is common because both portal and portlets may want
 	 * to create URLs pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_AUTH_ERROR = "PUBLIC_SPF_AUTH_ERROR";
+	public static final String PAGE_FRIENDLY_ID_AUTH_ERROR = PUBLIC_PAGE_FRIENDLY_ID_PREFIX
+			+ "AUTH_ERROR";
 
 	/**
 	 * The template friendly URI for the SPF-standard authorization error
@@ -279,7 +285,8 @@ public class Consts {
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_PORTAL_PULSE = "PUBLIC_SPF_PORTAL_PULSE";
+	public static final String PAGE_FRIENDLY_ID_PORTAL_PULSE = PUBLIC_PAGE_FRIENDLY_ID_PREFIX
+			+ "PORTAL_PULSE";
 
 	/**
 	 * The template friendly URI for the SPF-standard portal pulse secondary
@@ -294,7 +301,8 @@ public class Consts {
 	 * This is common because both portal and portlets may want to create URLs
 	 * pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_GLOBAL_HELP = "PUBLIC_SPF_GLOBAL_HELP";
+	public static final String PAGE_FRIENDLY_ID_GLOBAL_HELP = PUBLIC_PAGE_FRIENDLY_ID_PREFIX
+			+ "GLOBAL_HELP";
 
 	/**
 	 * The template friendly URI for the SPF-standard global help secondary
@@ -309,7 +317,8 @@ public class Consts {
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_FED_LOGOUT = "PUBLIC_SPF_FED_LOGOUT";
+	public static final String PAGE_FRIENDLY_ID_FED_LOGOUT = PUBLIC_PAGE_FRIENDLY_ID_PREFIX
+			+ "FED_LOGOUT";
 
 	/**
 	 * The template friendly URI for the SPF-standard federated logout secondary
@@ -324,7 +333,8 @@ public class Consts {
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_FED_ERROR = "PUBLIC_SPF_FED_ERROR";
+	public static final String PAGE_FRIENDLY_ID_FED_ERROR = PUBLIC_PAGE_FRIENDLY_ID_PREFIX
+			+ "FED_ERROR";
 
 	/**
 	 * The template friendly URI for the SPF-standard federation error secondary
@@ -339,7 +349,8 @@ public class Consts {
 	 * page. This is common because both portal and portlets may want to create
 	 * URLs pointing to this page.
 	 */
-	public static final String PAGE_FRIENDLY_ID_SELECT_LOCALE = "PUBLIC_SPF_SELECT_LOCALE";
+	public static final String PAGE_FRIENDLY_ID_SELECT_LOCALE = PUBLIC_PAGE_FRIENDLY_ID_PREFIX
+			+ "SELECT_LOCALE";
 
 	/**
 	 * The template friendly URI for the SPF-standard locale selector secondary
@@ -349,6 +360,24 @@ public class Consts {
 	 */
 	public static final String PAGE_FRIENDLY_URI_SELECT_LOCALE = "template."
 			+ PAGE_FRIENDLY_ID_SELECT_LOCALE + "/action.process/";
+
+	/**
+	 * The template friendly ID for the SPF returns secondary page. This is the
+	 * page which can be linked to (eg by 3rd-party Web sites like HPP Central
+	 * Forms) for returning to SPF. This is common because both portal and
+	 * portlet may want to create URLs pointing to this page.
+	 */
+	public static final String PAGE_FRIENDLY_ID_RETURN = PUBLIC_PAGE_FRIENDLY_ID_PREFIX
+			+ "RETURN";
+
+	/**
+	 * The template friendly URI for the SPF returns secondary page. This is the
+	 * page which can be linked to (eg by 3rd-party Web sites like HPP Central
+	 * Forms) for returning to SPF. This is common because both portal and
+	 * portlet may want to create URLs pointing to this page.
+	 */
+	public static final String PAGE_FRIENDLY_URI_RETURN = "template."
+			+ PAGE_FRIENDLY_ID_RETURN;
 
 	/**
 	 * The template friendly ID for the SPF-standard logout secondary page. This
@@ -454,9 +483,9 @@ public class Consts {
 	public final static String PARAM_SELECT_LOCALE_TARGET = "spfLocaleSelectorTarget";
 
 	/**
-	 * The name of the form parameter (query parameter) used by SiteMinder (both HPP and AtHP versions) to record
-	 * the target URL.
+	 * The name of the form parameter (query parameter) used by SiteMinder (both
+	 * HPP and AtHP versions) to record the target URL.
 	 */
 	public final static String PARAM_SM_TARGET = "TARGET";
-	
+
 }
