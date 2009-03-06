@@ -22,17 +22,17 @@ import java.util.HashMap;
  * <ul>
  * <li>create non existing users</li>
  * <li>update existing users</li>
- * <li>create LOCAL_PROFILE_LANG_{langugage} and LOCAL_PROFILE_COUNTRY_{country} groups if they
+ * <li>create LOCAL_PROFILE_LANG_{language} and LOCAL_PROFILE_COUNTRY_{country} groups if they
  * don't exist already</li>
- * <li>add users to LOCAL_PROFILE_LANG_{langugage} and LOCAL_PROFILE_COUNTRY_{country} groups</li>
+ * <li>add users to LOCAL_PROFILE_LANG_{language} and LOCAL_PROFILE_COUNTRY_{country} groups</li>
  * </ul>
  * <p>
  * In order to use this class its JAR file must be copied to Portal WAR directory and then the class
  * must be executed as follows:
  * <pre>
- * run_with_classpath com.hp.it.spf.sso.portal.AnonUsersImport {realm} {data file path}
+ * runs_with_classpath com.hp.it.spf.sso.portal.AnonUsersImport {realm} {data file path}
  * </pre>
- * run_with_classpath(.bat or .sh) is Vignette tool present in VAP bin directory which allows to run a class
+ * runs_with_classpath(.bat or .sh) is Vignette tool present in VAP bin directory which allows to run a class
  * with the classpath containing all the libraries present in the portal WAR.
  *
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
@@ -50,6 +50,21 @@ public class AnonUsersImport {
 					AuthenticationConsts.PROPERTY_DOMAIN_ID,
 					AuthenticationConsts.PROPERTY_USER_NAME_ID
 			));
+
+	/**
+	 * Prefix for country-specific local group.
+	 */
+	private static final String GROUP_PREFIX_COUNTRY = "LOCAL_PORTAL_COUNTRY_";
+
+	/**
+	 * Prefix for language-specific local group.
+	 */
+	private static final String GROUP_PREFIX_LANGUAGE = "LOCAL_PORTAL_LANG_";
+
+	/**
+	 * Group for all anonymous users.
+	 */
+	private static final String GROUP_ANONYMOUS_USERS = "LOCAL_PORTAL_ANONYMOUS_USERS";
 
 
 	/**
@@ -72,13 +87,21 @@ public class AnonUsersImport {
 		}
 	}
 
-
+	/**
+	 * Prints usage information and exists JVM.
+	 */
 	private static void printUsageAndExit() {
 		System.out.printf("%nUsage runs_with_classpath %s <realm> <input_file_name>%n%n", AnonUsersImport.class.getName());
 		System.exit(0);
 	}
 
 
+	/**
+	 * Performs the actual import process.
+	 * @param realm realm the users will be associated with
+	 * @param inputFilePath path to the input file
+	 * @throws FileNotFoundException If the input file cannot be found
+	 */
 	private void run(String realm, String inputFilePath) throws FileNotFoundException {
 		final InputFile inputFile = new InputFile(inputFilePath);
 
@@ -105,6 +128,16 @@ public class AnonUsersImport {
 	}
 
 
+	/**
+	 * Creates or updates the user based on the given <tt>userData</tt>.
+	 * @param userData user information
+	 * @param realm realm user will be associated with
+	 * @return a new or existing user corresponding to the given data
+	 * @throws EntityPersistenceException If an error occurs when reading/writing data using
+	 * Vignette APIs
+	 * @throws UniquePropertyValueConflictException If user data contains some data which
+	 * is considered by Vignette as unique and it conflicts with the data already in the database.
+	 */
 	private User saveUser(AnonymousUserData userData, String realm) throws EntityPersistenceException, UniquePropertyValueConflictException {
 		Map<String, Object> userProperties = userData.toVignetteUserProperties();
 		setRealm(userProperties, realm);
@@ -133,12 +166,30 @@ public class AnonUsersImport {
 	}
 
 
+	/**
+	 * Sets user realm property in the <tt>userProperties</tt> map.
+	 * @param userProperties map containing user information; after this method is run it will also
+	 * contain the realm.
+	 * @param realm realm put in the map.
+	 */
 	private void setRealm(Map<String, Object> userProperties, String realm)
 	{
 		userProperties.put(AuthenticationConsts.PROPERTY_DOMAIN_ID, realm);
 	}
 
 
+	/**
+	 * Saves all the required groups for the anonymous user. Currently those include language
+	 * (LOCAL_PORTAL_LANG_{language}), country (LOCAL_PORTAL_COUNTRY_{country}) and anonymous user
+	 * group (LOCAL_PORTAL_ANONYMOUS_USERS).
+	 * @param user user for which the groups will be saved
+	 * @param language user's language
+	 * @param country user's country
+	 * @throws EntityPersistenceException If an error occurs when reading/writing data using
+	 * Vignette APIs
+	 * @throws UniquePropertyValueConflictException If user data contains some data which
+	 * is considered by Vignette as unique and it conflicts with the data already in the database.
+	 */
 	@SuppressWarnings("unchecked")
 	private void saveUserGroups(User user, String language, String country) throws EntityPersistenceException, UniquePropertyValueConflictException
 	{
@@ -148,7 +199,16 @@ public class AnonUsersImport {
 
 		setLanguageGroup(user, userGroupNames, language);
 		setCountryGroup(user, userGroupNames, country);
+		setAnonymousGroup(user, userGroupNames);
 		user.save();
+	}
+
+	private void setAnonymousGroup(User user, Set<String> userGroupNames) throws UniquePropertyValueConflictException, EntityPersistenceException
+	{
+		if (!userGroupNames.contains(GROUP_ANONYMOUS_USERS)) {
+			user.addParent(getGroup(GROUP_ANONYMOUS_USERS));
+			LOG.info("User added to group: " + GROUP_ANONYMOUS_USERS);
+		}
 	}
 
 
@@ -158,7 +218,7 @@ public class AnonUsersImport {
 			return;
 		}
 
-		final String countryGroupName = "LOCAL_PORTAL_COUNTRY_" + country.toUpperCase();
+		final String countryGroupName = GROUP_PREFIX_COUNTRY + country.toUpperCase();
 		if (!userGroupNames.contains(countryGroupName)) {
 			user.addParent(getGroup(countryGroupName));
 			LOG.info("User added to country group: " + countryGroupName);
@@ -172,7 +232,7 @@ public class AnonUsersImport {
 			return;
 		}
 
-		final String languageGroupName = "LOCAL_PORTAL_LANG_" + language.toUpperCase();
+		final String languageGroupName = GROUP_PREFIX_LANGUAGE + language.toUpperCase();
 		if (!userGroupNames.contains(languageGroupName)) {
 			user.addParent(getGroup(languageGroupName));
 			LOG.info("User added to language group: " + languageGroupName);
@@ -180,6 +240,17 @@ public class AnonUsersImport {
 	}
 
 
+	/**
+	 * Retrieves or creates (if not existing yet) the group with the given name. If there is more
+	 * than one group with that name the method logs a worning.
+	 * @param groupName name of the group
+	 * @return Vignette group with the given name; if there is more than one group with the given
+	 * name in the database the first one, as returned by Vignette APIs, is used.
+	 * @throws EntityPersistenceException If an error occurs when reading/writing data using
+	 * Vignette APIs
+	 * @throws UniquePropertyValueConflictException If user data contains some data which
+	 * is considered by Vignette as unique and it conflicts with the data already in the database.
+	 */
 	private UserGroup getGroup(String groupName) throws EntityPersistenceException, UniquePropertyValueConflictException
 	{
 		UserGroupQueryResults userGroups =
