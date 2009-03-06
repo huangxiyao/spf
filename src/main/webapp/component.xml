@@ -13,7 +13,7 @@
 			description="Shared Portal Framework style for the classic look-and-feel locale indicator."
 			friendly-id="spfClassicLocaleIndicator" id="spf-locale-indicator-classic-style"
 			is-system="false" primary-filename="classicLocaleIndicator.jsp"
-			processing-type="JSP_BASED" template-default="false"
+			processing-type="JSP_BASED" template-default="true"
 			template-uid="spf-locale-widget-styletype"
 			title="Shared Portal Framework - Classic Locale Indicator Style"
 			visible="true" />
