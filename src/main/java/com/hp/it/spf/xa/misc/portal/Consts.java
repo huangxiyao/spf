@@ -16,13 +16,6 @@ package com.hp.it.spf.xa.misc.portal;
 public class Consts extends com.hp.it.spf.xa.misc.Consts {
 
 	/**
-	 * The name of the session attribute containing transient status message.
-	 * Used by logout secondary page type action to set a logout message; can be
-	 * retrieved and removed by a JSP to display.
-	 */
-	public static final String SESSION_ATTR_STATUS_MSG = "SPF_STATUS_MSG";
-
-	/**
 	 * The name of the SiteMinder session cookie (for both HPP and AtHP)
 	 */
 	public static final String COOKIE_NAME_SMSESSION = "SMSESSION";
@@ -51,12 +44,6 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 * JSP.
 	 */
 	public static final String REQUEST_ATTR_FED_ERROR_RETRY_URL = "SPF_FED_ERROR_RETRY_URL";
-
-	/**
-	 * The name of the session attribute storing portal pulse data. Set by the
-	 * secondary page type action for use by the secondary page JSP.
-	 */
-	public static final String SESSION_ATTR_PORTAL_PULSE_DATA = "SPF_PORTAL_PULSE_DATA";
 
 	/**
 	 * The name of the response header from the portal pulse page which
@@ -139,5 +126,28 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 * portal session attributes only, not portlet.)
 	 */
 	public final static String UNSTICKY_SESSION_ATTR_PREFIX = "SPF_";
+
+	/**
+	 * The name of the session attribute containing transient status message.
+	 * Used by logout secondary page type action to set a logout message; can be
+	 * retrieved and removed by a JSP to display.
+	 */
+	public static final String SESSION_ATTR_STATUS_MSG = UNSTICKY_SESSION_ATTR_PREFIX
+			+ "STATUS_MSG";
+
+	/**
+	 * The name of the session attribute storing portal pulse data. Set by the
+	 * secondary page type action for use by the secondary page JSP.
+	 */
+	public static final String SESSION_ATTR_PORTAL_PULSE_DATA = UNSTICKY_SESSION_ATTR_PREFIX
+			+ "PORTAL_PULSE_DATA";
+
+	/**
+	 * The name of the session attribute storing the SPF return URL. Set on
+	 * every request and read by the SPF return page to determine where to
+	 * redirect.
+	 */
+	public static final String SESSION_ATTR_RETURN_URL = UNSTICKY_SESSION_ATTR_PREFIX
+			+ "RETURN_URL";
 
 }
