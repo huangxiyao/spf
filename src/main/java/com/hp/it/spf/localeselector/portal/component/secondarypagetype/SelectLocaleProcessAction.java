@@ -138,7 +138,7 @@ public class SelectLocaleProcessAction extends BaseAction {
 
 			// log the outcome
 			if (!sFlag) {
-				LOG.error("SelectLocaleProcessAction: process failed!");
+				LOG.error("SelectLocaleProcessAction: Process failed.");
 			}
 
 			// return null so process will continue normally

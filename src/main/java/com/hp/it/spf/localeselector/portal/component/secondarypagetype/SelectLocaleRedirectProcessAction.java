@@ -16,6 +16,7 @@ import com.vignette.portal.website.enduser.components.BaseAction;
 
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.misc.portal.Consts;
+import com.hp.it.spf.xa.misc.portal.Utils;
 
 /**
  * <p>
@@ -60,6 +61,11 @@ public class SelectLocaleRedirectProcessAction extends BaseAction {
 			if (redirectUrl == null || redirectUrl.trim().equals("")) {
 				redirectUrl = request.getHeader("Referer");
 			}
+			// if the referer was absent, use the portal site home page
+			if (redirectUrl == null || redirectUrl.trim().equals("")) {
+				redirectUrl = Utils.getEffectiveSiteURL(request);
+			}
+		
 			// not sure why we need to do this - therefore leaving it in
 			redirectUrl = this.filterUrlLocaleParams(redirectUrl);
 
