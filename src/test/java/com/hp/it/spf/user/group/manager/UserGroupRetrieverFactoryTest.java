@@ -24,9 +24,9 @@ public class UserGroupRetrieverFactoryTest {
      */
     @Test
     public void testCreateUserGroupImpl() {
-        IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(null);
+        IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl();
         assertNotNull("Should return a implimentation class", retriever);
         assertTrue("SSOUserGroupRetriever object should be created.",
-                   retriever instanceof SSOUserGroupRetriever);
+                   retriever instanceof DefaultUserGroupRetriever);
     }
 }

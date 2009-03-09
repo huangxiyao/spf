@@ -27,10 +27,6 @@ import com.hp.it.spf.user.group.stub.UGSRuntimeServiceXfireImplHttpBindingStub;
 import com.hp.it.spf.user.group.stub.UGSRuntimeServiceXfireImplLocator;
 import com.hp.it.spf.user.group.stub.UserContext;
 import com.hp.it.spf.user.group.utils.UGSParametersManager;
-import com.hp.it.spf.xa.log.portal.Operation;
-import com.hp.it.spf.xa.log.portal.TimeRecorder;
-import com.hp.it.spf.xa.misc.portal.RequestContext;
-import com.hp.it.spf.xa.dc.portal.ErrorCode;
 
 /**
  * This is the implimentation class of <tt>IUserGroupRetriever</tt>.
@@ -56,9 +52,7 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
     public Set<String> getGroups(String siteName,
                                  Map<String, Object> userProfile) throws UserGroupsException {
         Set<String> groupSet = new HashSet<String>();
-		TimeRecorder timeRecorder = RequestContext.getThreadInstance().getTimeRecorder();
-		try {
-            timeRecorder.recordStart(Operation.GROUPS_CALL);
+		try {            
             GroupRequest serviceRequest = getServiceRequest(siteName, userProfile);
             if (LOG.isLoggable(Level.FINEST)) {
                 LOG.finest("UGS invokeService");
@@ -83,20 +77,14 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
                         LOG.finest("Output group listing: " + groupStr);
                     }
                 }
-            }
-            timeRecorder.recordEnd(Operation.GROUPS_CALL);
+            }            
             return groupSet;
-
         } catch (SiteDoesNotExistException e) {
             String msg = "The site, "
                          + siteName
-                         + ", doesn't exist in the UGS definition database";
-            timeRecorder.recordError(Operation.GROUPS_CALL, msg);
-			RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.GROUPS002, msg);
+                         + ", doesn't exist in the UGS definition database";            
             throw new UserGroupsException(msg, e);
-        } catch (Exception e) {
-            timeRecorder.recordError(Operation.GROUPS_CALL, e);
-			RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.GROUPS001, e.toString());
+        } catch (Exception e) {            
             throw new UserGroupsException(e);
         }
     }

@@ -59,7 +59,7 @@ public class AuthenticatorHelper {
     private static ResourceBundle getAuthenticationConsts() {
         if (AUTH_CONSTS == null) {
             AUTH_CONSTS = PropertyResourceBundleManager
-                    .getBundle(AuthenticationConsts.HEADER_CONSTS_FILE_BASE);
+                    .getBundle(AuthenticationConsts.SHARED_PORTAL_SSO_FILE_BASE);
         }
         return AUTH_CONSTS;
     }
@@ -838,7 +838,7 @@ public class AuthenticatorHelper {
      * @param cls
      * @return
      */
-    static LogWrapper getLog(Class cls) {
+    public static LogWrapper getLog(Class cls) {
         return new LogWrapper(cls, cls.getName());
     }
 }

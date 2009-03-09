@@ -23,11 +23,14 @@ import com.epicentric.entity.UniquePropertyValueConflictException;
 import com.epicentric.site.Site;
 import com.epicentric.user.User;
 import com.hp.it.spf.user.exception.UserGroupsException;
+import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
 import com.hp.it.spf.user.profile.manager.IUserProfileRetriever;
 import com.hp.it.spf.user.profile.manager.UserProfileRetrieverFactory;
 import com.hp.it.spf.xa.dc.portal.ErrorCode;
+import com.hp.it.spf.xa.log.portal.Operation;
+import com.hp.it.spf.xa.log.portal.TimeRecorder;
 import com.hp.it.spf.xa.misc.portal.RequestContext;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogConfiguration;
@@ -535,11 +538,22 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * 
      * @return user profile map or an empty map
      */
-    protected Map<Object, Object> getUserProfile() {
+    protected Map<String, Object> getUserProfile() {
+        TimeRecorder timeRecorder = RequestContext.getThreadInstance().getTimeRecorder();
         String profileId = (String)userProfile.get(AuthenticationConsts.KEY_PROFILE_ID);
         IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl();
-      
-        return retriever.getUserProfile(profileId, request);
+        try {
+            timeRecorder.recordStart(Operation.PROFILE_CALL);            
+            Map<String, Object> userProfile = retriever.getUserProfile(profileId, request);
+            timeRecorder.recordEnd(Operation.PROFILE_CALL);
+            return userProfile;
+        } catch (UserProfileException ex) {
+            timeRecorder.recordError(Operation.PROFILE_CALL, ex);
+            RequestContext.getThreadInstance()
+                          .getDiagnosticContext()
+                          .setError(ErrorCode.PROFILE001, ex.toString());
+            throw ex;
+        }
     }
 
     /**
@@ -567,12 +581,17 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         // TODO need to fulfill the logic of retrieve user groups
         Site site = Utils.getEffectiveSite(request);
         if (site != null) {
-            IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(null);
-
+            TimeRecorder timeRecorder = RequestContext.getThreadInstance().getTimeRecorder();
+            
+            IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl();
             try {
+                timeRecorder.recordStart(Operation.GROUPS_CALL);
                 group.addAll(retriever.getGroups(site.getDNSName(), userProfile));
-            } catch (UserGroupsException e) {
-                // TODO remove this try/catch block
+                timeRecorder.recordEnd(Operation.GROUPS_CALL);
+            } catch (UserGroupsException ex) {
+                timeRecorder.recordError(Operation.GROUPS_CALL, ex);
+                RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.GROUPS002, ex.getMessage());
+                throw ex;
             }
         }
         return group;

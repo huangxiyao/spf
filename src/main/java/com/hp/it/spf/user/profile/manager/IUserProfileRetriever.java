@@ -37,6 +37,6 @@ public interface IUserProfileRetriever {
      * @return user profile map or an empty map
      * @throws UserProfileException if retrieving user profile error occurs
      */
-    Map<Object, Object> getUserProfile(String userIdentifier,
+    Map<String, Object> getUserProfile(String userIdentifier,
                                        HttpServletRequest request) throws UserProfileException;
 }

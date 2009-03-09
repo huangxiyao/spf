@@ -19,7 +19,7 @@ public class AuthenticationConsts {
 	
 	static final String USER_PROFILE_KEY = "userProfile";
 
-    static final String HEADER_CONSTS_FILE_BASE = "SharedPortalSSO";
+    public static final String SHARED_PORTAL_SSO_FILE_BASE = "SharedPortalSSO";
 
     static final String COOKIE_ATTR_SMSESSION = "SMSESSION";
     
@@ -252,5 +252,11 @@ public class AuthenticationConsts {
      */
     public final static String LOCAL_PORTAL_LANG_PREFIX = Consts.GROUP_LOCALE_LANGUAGE_PREFIX;
     public final static String LOCAL_PORTAL_COUNTRY_PREFIX = Consts.GROUP_LOCALE_COUNTRY_PREFIX;
+    
+    /**
+     * Keys of user profile and group retriever defined in properties
+     */
+    public final static String USER_PROFILE_RETRIEVER = "user_profile_retriever";
+    public final static String USER_GROUP_RETRIEVER = "user_group_retriever";
 }
 

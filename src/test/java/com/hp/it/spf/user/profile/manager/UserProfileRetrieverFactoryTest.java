@@ -26,7 +26,7 @@ public class UserProfileRetrieverFactoryTest {
         IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl();
         assertNotNull("Should return a implimentation class", retriever);
         assertTrue("UserProfileRetriever object should be created.",
-                   retriever instanceof PersonaUserProfileRetriever);
+                   retriever instanceof DefaultUserProfileRetriever);
     }
 
 }

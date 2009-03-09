@@ -140,7 +140,7 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
      * @return user profile map or an empty map
      * @throws UserProfileException if retrieving user profiles error
      */
-    protected Map<Object, Object> getUserProfile() {
+    protected Map<String, Object> getUserProfile() {
         String originalProfileId = getValue(AuthenticationConsts.HEADER_PROFILE_ID_PROPERTY_NAME);
         if (originalProfileId != null && !"".equals(originalProfileId.trim())) {
             request.setAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE, EUserIdentifierType.EMPLOYEE);

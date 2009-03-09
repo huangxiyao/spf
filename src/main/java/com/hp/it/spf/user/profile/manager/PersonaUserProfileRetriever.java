@@ -19,10 +19,6 @@ import com.hp.it.cas.persona.user.service.IUser;
 import com.hp.it.cas.persona.user.service.IUserService;
 import com.hp.it.spf.sso.portal.AuthenticationConsts;
 import com.hp.it.spf.user.exception.UserProfileException;
-import com.hp.it.spf.xa.dc.portal.ErrorCode;
-import com.hp.it.spf.xa.log.portal.Operation;
-import com.hp.it.spf.xa.log.portal.TimeRecorder;
-import com.hp.it.spf.xa.misc.portal.RequestContext;
 
 /**
  * This is a concrete class of IUserProfileRetriever interface.
@@ -49,14 +45,10 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
      * @return user profile map or an empty map
      * @throws UserProfileException if invoke Persona error
      */
-    public Map<Object, Object> getUserProfile(String userIdentifier,
+    public Map<String, Object> getUserProfile(String userIdentifier,
                                               HttpServletRequest request) throws UserProfileException {
-        // TODO fulfill the Persiona invoking logic
-        Map<Object, Object> userProfiles = new HashMap<Object, Object>();
-        TimeRecorder timeRecorder = RequestContext.getThreadInstance()
-                                                  .getTimeRecorder();
+        Map<String, Object> userProfiles = new HashMap<String, Object>();
         try {
-            timeRecorder.recordStart(Operation.PROFILE_CALL);
             // get the user service from the request
             IUserService userService = (IUserService)WebApplicationContextUtils.getWebApplicationContext(request.getSession(true)
                                                                                                                 .getServletContext())
@@ -67,19 +59,19 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
             IUser user = userService.createUser(userIdentifierType,
                                                 userIdentifier);
 
-            Map<Integer, Collection<String>> simple = user.getSimpleAttributeValues();
-            userProfiles.putAll(simple);
+            // retrieve simple attribute values and convert key from Integer type to String type
+            Map<Integer, Collection<String>> simple = user.getSimpleAttributeValues();            
+            for (Map.Entry<Integer, Collection<String>> entry: simple.entrySet()) {
+                userProfiles.put(String.valueOf(entry.getKey()), entry.getValue());
+            }            
 
+            // retrieve compound attribute values and convert key from Integer type to String type
             Map<Integer, Collection<ICompoundUserAttributeValue>> compound = user.getCompoundAttributeValues();
-            userProfiles.putAll(compound);
-
-            timeRecorder.recordEnd(Operation.PROFILE_CALL);
-        } catch (Exception ex) {
-            timeRecorder.recordError(Operation.PROFILE_CALL, ex);
-            RequestContext.getThreadInstance()
-                          .getDiagnosticContext()
-                          .setError(ErrorCode.PROFILE001, ex.toString());
-            throw new UserProfileException(ex);
+            for (Map.Entry<Integer, Collection<ICompoundUserAttributeValue>> entry: compound.entrySet()) {
+                userProfiles.put(String.valueOf(entry.getKey()), entry.getValue());
+            }            
+        } catch (Exception ex) {            
+            throw new UserProfileException("Retrieve user profile from Persona error.", ex);
         }
         return userProfiles;
     }

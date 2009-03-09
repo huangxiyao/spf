@@ -187,7 +187,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      * @return user profile map or an empty map
      * @throws UserProfileException if retrieving user profiles error
      */
-    protected Map<Object, Object> getUserProfile() {
+    protected Map<String, Object> getUserProfile() {
         request.setAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE, EUserIdentifierType.EXTERNAL_USER);
         return super.getUserProfile();
     }
