@@ -10,53 +10,84 @@
 
 	<!--BEGIN HPD Context Params -->
 	<!--
-		- Key of the system property that should specify the root directory of
-		this - web app. Applied by WebAppRootListener. <context-param>
+		- Key of the system property that should specify the root directory of this
+		- web app. Applied by WebAppRootListener.
+	-->
+	<!--
+	<context-param>
 		<param-name>webAppRootKey</param-name>
-		<param-value>hpd.root</param-value> </context-param> <!-- - Used by
-		Spring's SingletonBeanFactoryLocator. Combined with the -
-		locatorFactorySelector option below this causes Spring to create - a
-		SingletonBeanFactoryLocator and look for a bean factory with the -
-		name supplied in this option. That factory will become the parent -
-		context for the web application context defined in the context
-		parameter - contextConfigLocation. <context-param>
+		<param-value>hpd.root</param-value>
+	</context-param>
+	-->
+	<!--
+		- Used by Spring's SingletonBeanFactoryLocator.  Combined with the
+		- locatorFactorySelector option below this causes Spring to create
+		- a SingletonBeanFactoryLocator and look for a bean factory with the
+		- name supplied in this option.  That factory will become the parent
+		- context for the web application context defined in the context parameter
+		- contextConfigLocation.
+	-->
+	<!--
+	<context-param>
 		<param-name>parentContextKey</param-name>
-		<param-value>com.vignette.hpd</param-value> </context-param> <!-- -
-		This paramter causes Spring to create a SingletonBeanFactoryLocator
-		and - look for a beanRefFactory.xml with defined bean factories. In
-		HPD - there is another bean factory that will be the parent of the web
-		- application context. <context-param>
-		<param-name>locatorFactorySelector</param-name>
-		<param-value>classpath*:vgnHpdBeanRefFactory.xml</param-value>
-		</context-param> <!-- - Used by the ContextConfigLocator to create the
-		WebApplicationContext. - For HPD this contains the definitions of the
-		web filters. If a - web application was also using spring and had its
-		own web application - context XML file it could be added to this this
-		param value. The - contexts will be merged. <context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:VgnWebContext.xml</param-value>
-		</context-param> <!--END HPD Context Params
+		<param-value>com.vignette.hpd</param-value>
+	</context-param>
 	-->
 
-	<!-- load the Persona configuration file -->
+	<!--
+		- This paramter causes Spring to create a SingletonBeanFactoryLocator and
+		- look for a beanRefFactory.xml with defined bean factories.  In HPD
+		- there is another bean factory that will be the parent of the web
+		- application context.
+	-->
+	<!--
+	<context-param>
+		<param-name>locatorFactorySelector</param-name>
+		<param-value>classpath*:vgnHpdBeanRefFactory.xml</param-value>
+	</context-param>
+	-->
+
+	<!--
+		- Used by the ContextConfigLocator to create the WebApplicationContext.
+		- For HPD this contains the definitions of the web filters.  If a
+		- web application was also using spring and had its own web application
+		- context XML file it could be added to this this param value.  The
+		- contexts will be merged.
+	-->
+	<!--
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:StandaloneUserService-jndi.xml</param-value>
+		<param-value>classpath:VgnWebContext.xml</param-value>
 	</context-param>
+	-->
+	<!--END HPD Context Params -->
+	
+	<!-- Persona configuration file -->
+	<context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:StandaloneUserService-jndi.xml</param-value>
+    </context-param>
 
 	<!-- BEGIN HPD Filters  -->
 	<!-- Set up HPD reader and writer filters.-->
-	<!--
-		Only uncomment if HPD is being used. <filter>
+	<!-- Only uncomment if HPD is being used.
+		<filter>
 		<filter-name>HPDCacheReaderFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-		<init-param> <param-name>targetBeanName</param-name>
-		<param-value>cacheReaderFilter</param-value> </init-param> </filter>
-
-		<filter> <filter-name>HPDCaptureFilter</filter-name>
+		<init-param>
+		<param-name>targetBeanName</param-name>
+		<param-value>cacheReaderFilter</param-value>
+		</init-param>
+		</filter>
+		
+		<filter>
+		<filter-name>HPDCaptureFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-		<init-param> <param-name>targetBeanName</param-name>
-		<param-value>captureFilter</param-value> </init-param> </filter>
+		<init-param>
+		<param-name>targetBeanName</param-name>
+		<param-value>captureFilter</param-value>
+		</init-param>
+		</filter>
 	-->
 	<!-- END HPD Filters  -->
 
@@ -65,18 +96,23 @@
 
 	<filter>
 		<filter-name>AdmissionControlFilter</filter-name>
-		<filter-class>com.hp.it.spf.ac.portal.filter.AdmissionControlFilter</filter-class>
+		<filter-class>
+			com.hp.it.spf.ac.portal.filter.AdmissionControlFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>InitPortalContextFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.enduser.filters.InitPortalContextFilter</filter-class>
+			com.vignette.portal.website.enduser.filters.InitPortalContextFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>LocaleFilter</filter-name>
-		<filter-class>com.hp.it.spf.localeresolver.filter.LocaleFilter</filter-class>
+		<filter-class>
+			com.hp.it.spf.localeresolver.filter.LocaleFilter
+		</filter-class>
 		<init-param>
 			<param-name>targetLocaleProviderFactory</param-name>
 			<param-value>
@@ -99,25 +135,30 @@
 
 	<filter>
 		<filter-name>SessionInitializationFilter</filter-name>
-		<filter-class>com.hp.it.spf.sso.portal.SessionInitializationFilter</filter-class>
+		<filter-class>
+			com.hp.it.spf.sso.portal.SessionInitializationFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>AuthenticationFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.enduser.filters.AuthenticationFilter</filter-class>
+			com.vignette.portal.website.enduser.filters.AuthenticationFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>SiteResolutionFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.enduser.filters.SiteResolutionFilter</filter-class>
+			com.vignette.portal.website.enduser.filters.SiteResolutionFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>JSP Secure Access</filter-name>
 		<filter-class>
-			com.vignette.portal.website.enduser.filters.JSPAccessFilter</filter-class>
+			com.vignette.portal.website.enduser.filters.JSPAccessFilter
+		</filter-class>
 	</filter>
 
 	<!-- SPP FILTER DEFINITIONS - BEGIN -->
@@ -125,7 +166,8 @@
 	<filter>
 		<filter-name>SPFLocaleFilter</filter-name>
 		<filter-class>
-			com.hp.it.spf.localeresolver.portal.filter.SPFLocaleFilter</filter-class>
+			com.hp.it.spf.localeresolver.portal.filter.SPFLocaleFilter
+		</filter-class>
 		<init-param>
 			<param-name>targetLocaleProviderFactory</param-name>
 			<param-value>
@@ -154,26 +196,30 @@
 
 	<filter>
 		<filter-name>RequestLogFilter</filter-name>
-		<filter-class>com.hp.it.spf.log.portal.filter.RequestLogFilter</filter-class>
+		<filter-class>
+			com.hp.it.spf.log.portal.filter.RequestLogFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>PortalURLRewriterFilter</filter-name>
 		<filter-class>
-			com.hp.it.spf.portalurl.portal.filter.PortalURLRewriterFilter</filter-class>
+			com.hp.it.spf.portalurl.portal.filter.PortalURLRewriterFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>RequestBindingFilter</filter-name>
 		<filter-class>
-			com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter</filter-class>
+			com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter
+		</filter-class>
 	</filter>
 
 	<!-- SPP FILTER DEFINITIONS - END -->
 
 	<!-- BEGIN HPD Filters  -->
-	<!--
-		Only uncomment if HPD is being used. <filter>
+	<!-- Only uncomment if HPD is being used.
+		<filter>
 		<filter-name>ResourcesCachingFilter</filter-name>
 		<filter-class>com.vignette.portal.website.enduser.filters.ResourcesCachingFilter</filter-class>
 		</filter>
@@ -186,44 +232,51 @@
 	<filter>
 		<filter-name>admin_MultipartFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.admin.internal.control.MultipartFilter</filter-class>
+			com.vignette.portal.website.admin.internal.control.MultipartFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>admin_InitFrameworkFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.admin.internal.control.InitFrameworkFilter</filter-class>
+			com.vignette.portal.website.admin.internal.control.InitFrameworkFilter
+		</filter-class>
 	</filter>
 
 
 	<filter>
 		<filter-name>admin_FailoverManagementFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.admin.internal.control.FailoverManagementFilter</filter-class>
+			com.vignette.portal.website.admin.internal.control.FailoverManagementFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>admin_LegacySiteConsoleURLFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.admin.internal.control.LegacySiteConsoleURLFilter</filter-class>
+			com.vignette.portal.website.admin.internal.control.LegacySiteConsoleURLFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>admin_AdminContextFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.admin.internal.control.AdminContextFilter</filter-class>
+			com.vignette.portal.website.admin.internal.control.AdminContextFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>admin_ConsoleAuthorizationFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.admin.internal.control.ConsoleAuthorizationFilter</filter-class>
+			com.vignette.portal.website.admin.internal.control.ConsoleAuthorizationFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>admin_HelpAuthorizationFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.admin.internal.control.HelpAuthorizationFilter</filter-class>
+			com.vignette.portal.website.admin.internal.control.HelpAuthorizationFilter
+		</filter-class>
 	</filter>
 	<!-- ADMIN WEBSITE FILTER DEFINITIONS - END -->
 
@@ -231,47 +284,75 @@
 	<filter>
 		<filter-name>EnvironmentalWrapperFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.internal.EnvironmentalWrapperFilter</filter-class>
+			com.vignette.portal.website.internal.EnvironmentalWrapperFilter
+		</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>StartupProtectionFilter</filter-name>
 		<filter-class>
-			com.vignette.portal.website.internal.StartupProtectionFilter</filter-class>
+			com.vignette.portal.website.internal.StartupProtectionFilter
+		</filter-class>
 	</filter>
 	<!-- GLOBAL FILTER DEFINITIONS - END -->
 
 	<!-- BEGIN HPD Filter Mappings  -->
-	<!--
-		Only uncomment if HPD is being used. <filter-mapping>
+	<!-- Only uncomment if HPD is being used.
+		<filter-mapping>
 		<filter-name>HPDCacheReaderFilter</filter-name>
-		<url-pattern>/*</url-pattern> <dispatcher>REQUEST</dispatcher>
-		<dispatcher>INCLUDE</dispatcher> <dispatcher>FORWARD</dispatcher>
-		</filter-mapping> <filter-mapping>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		</filter-mapping>
+		
+		<filter-mapping>
 		<filter-name>HPDCaptureFilter</filter-name>
-		<url-pattern>/*</url-pattern> <dispatcher>REQUEST</dispatcher>
-		<dispatcher>INCLUDE</dispatcher> <dispatcher>FORWARD</dispatcher>
-		</filter-mapping> <filter-mapping>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		</filter-mapping>
+		
+		<filter-mapping>
 		<filter-name>ResourcesCachingFilter</filter-name>
 		<url-pattern>/templates/*</url-pattern>
-		<dispatcher>REQUEST</dispatcher> <dispatcher>INCLUDE</dispatcher>
-		<dispatcher>FORWARD</dispatcher> </filter-mapping> <filter-mapping>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		</filter-mapping>
+		
+		<filter-mapping>
 		<filter-name>ResourcesCachingFilter</filter-name>
-		<url-pattern>/beans/*</url-pattern> <dispatcher>REQUEST</dispatcher>
-		<dispatcher>INCLUDE</dispatcher> <dispatcher>FORWARD</dispatcher>
-		</filter-mapping> <filter-mapping>
+		<url-pattern>/beans/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		</filter-mapping>
+		
+		<filter-mapping>
 		<filter-name>ResourcesCachingFilter</filter-name>
-		<url-pattern>/images/*</url-pattern> <dispatcher>REQUEST</dispatcher>
-		<dispatcher>INCLUDE</dispatcher> <dispatcher>FORWARD</dispatcher>
-		</filter-mapping> <filter-mapping>
+		<url-pattern>/images/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		</filter-mapping>
+		
+		<filter-mapping>
 		<filter-name>ResourcesCachingFilter</filter-name>
-		<url-pattern>/jslib/*</url-pattern> <dispatcher>REQUEST</dispatcher>
-		<dispatcher>INCLUDE</dispatcher> <dispatcher>FORWARD</dispatcher>
-		</filter-mapping> <filter-mapping>
+		<url-pattern>/jslib/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		</filter-mapping>
+		
+		<filter-mapping>
 		<filter-name>ResourcesCachingFilter</filter-name>
 		<url-pattern>/beanutils/*</url-pattern>
-		<dispatcher>REQUEST</dispatcher> <dispatcher>INCLUDE</dispatcher>
-		<dispatcher>FORWARD</dispatcher> </filter-mapping>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		</filter-mapping>
 	-->
 	<!-- END HPD Filter Mappings  -->
 
@@ -541,11 +622,13 @@
 	<!-- GLOBAL APPLICATION LISTENERS - BEGIN -->
 	<listener>
 		<listener-class>
-			com.vignette.portal.website.internal.AppContextListener</listener-class>
+			com.vignette.portal.website.internal.AppContextListener
+		</listener-class>
 	</listener>
 	<listener>
 		<listener-class>
-			com.vignette.webservices.toolkit.config.WebServiceToolkitConfiguration</listener-class>
+			com.vignette.webservices.toolkit.config.WebServiceToolkitConfiguration
+		</listener-class>
 	</listener>
 
 	<listener>
@@ -553,39 +636,44 @@
 	</listener>
 
 	<listener>
-		<listener-class>
-			com.hp.it.spf.xa.axis.portal.AxisInitializationListener</listener-class>
+		<listener-class>com.hp.it.spf.xa.axis.portal.AxisInitializationListener</listener-class>
 	</listener>
 
 	<!-- BEGIN HPD Listeners   -->
 
 	<!--
-		- Loads the root application context of this web app at startup, - by
-		default from "/WEB-INF/applicationContext.xml". - Note that you need
-		to fall back to Spring's ContextLoaderServlet for - J2EE servers that
-		do not follow the Servlet 2.4 initialization order. - - Use
-		WebApplicationContextUtils.getWebApplicationContext(servletContext) -
-		to access it anywhere in the web application, outside of the
-		framework. - - The root context is the parent of all servlet-specific
-		contexts. - This means that its beans are automatically available in
-		these child contexts, - both for getBean(name) calls and (external)
-		bean references.
+		- Loads the root application context of this web app at startup,
+		- by default from "/WEB-INF/applicationContext.xml".
+		- Note that you need to fall back to Spring's ContextLoaderServlet for
+		- J2EE servers that do not follow the Servlet 2.4 initialization order.
+		-
+		- Use WebApplicationContextUtils.getWebApplicationContext(servletContext)
+		- to access it anywhere in the web application, outside of the framework.
+		-
+		- The root context is the parent of all servlet-specific contexts.
+		- This means that its beans are automatically available in these child contexts,
+		- both for getBean(name) calls and (external) bean references.
 	-->
-	<!--  Only uncomment if HPD is being used.-->
-
-	<!-- enable the spring context load -->
-	<listener>
+	<!--  Only uncomment if HPD is being used.
+		<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+		</listener>
+	-->
 
 	<!-- This listener starts the Portal-HPD Invalidation Manager. -->
-	<!--
-		Only uncomment if HPD is being used. <listener>
+	<!-- Only uncomment if HPD is being used.
+		<listener>
 		<listener-class>com.vignette.portal.hpd.invalidation.InvalidationManager</listener-class>
 		</listener>
 	-->
 
 	<!-- END HPD Listeners   -->
+	
+	<!-- enable loading spring context -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
 	<!-- GLOBAL APPLICATION LISTENERS - END -->
 
 	<!-- END-USER WEBSITE SERVLET DEFINITIONS - BEGIN -->
@@ -594,7 +682,8 @@
 		<display-name>ServletDispatcherServlet</display-name>
 		<servlet-name>ServletDispatcherServlet</servlet-name>
 		<servlet-class>
-			com.epicentric.servlets.stackable.ServletDispatcherServlet</servlet-class>
+			com.epicentric.servlets.stackable.ServletDispatcherServlet
+		</servlet-class>
 		<init-param>
 			<description>
 				Value ("true" or "false") that determines whether class
@@ -609,13 +698,16 @@
 	<servlet>
 		<servlet-name>controller</servlet-name>
 		<servlet-class>
-			com.vignette.portal.website.enduser.internal.ControllerServlet</servlet-class>
+			com.vignette.portal.website.enduser.internal.ControllerServlet
+		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet>
 		<servlet-name>CssServlet</servlet-name>
-		<servlet-class>com.epicentric.template.servlet.CSSServlet</servlet-class>
+		<servlet-class>
+			com.epicentric.template.servlet.CSSServlet
+		</servlet-class>
 	</servlet>
 	<servlet>
 		<description>
@@ -623,7 +715,9 @@
 		</description>
 		<display-name>Web Service Servlet</display-name>
 		<servlet-name>WebServiceServlet</servlet-name>
-		<servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class>
+		<servlet-class>
+			org.apache.axis.transport.http.AxisServlet
+		</servlet-class>
 	</servlet>
 	<!-- END-USER WEBSITE SERVLET DEFINITIONS - END -->
 
@@ -633,7 +727,8 @@
 		<display-name>Admin Website Controller</display-name>
 		<servlet-name>admin_Controller</servlet-name>
 		<servlet-class>
-			com.vignette.portal.website.admin.internal.control.Controller</servlet-class>
+			com.vignette.portal.website.admin.internal.control.Controller
+		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<!-- ADMIN WEBSITE SERVLET DEFINITIONS - END -->
@@ -644,22 +739,29 @@
 			Controller servlet for pages which invoke portlets in the
 			admin console
 		</description>
-		<display-name>Admin Console Portlet Invocation Controller</display-name>
+		<display-name>
+			Admin Console Portlet Invocation Controller
+		</display-name>
 		<servlet-name>admin_Portlet_Invocation_Controller</servlet-name>
 		<servlet-class>
-			com.vignette.portal.portlet.website.internal.admin.PortletInvocationServlet</servlet-class>
+			com.vignette.portal.portlet.website.internal.admin.PortletInvocationServlet
+		</servlet-class>
 	</servlet>
 	<!-- ADMIN CONSOLE PORLTET INVOCATION SERVLET DEFINITIONS - END -->
 
 	<!--BEGIN HPD remoting servlet -->
 	<!-- spring remoting servlet   -->
-	<!--
-		Only uncomment if HPD is being used. <servlet>
+	<!-- Only uncomment if HPD is being used.
+		<servlet>
 		<servlet-name>remoting</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>1</load-on-startup> </servlet> <servlet-mapping>
+		<load-on-startup>1</load-on-startup>
+		</servlet>
+		
+		<servlet-mapping>
 		<servlet-name>remoting</servlet-name>
-		<url-pattern>/remoting/*</url-pattern> </servlet-mapping>
+		<url-pattern>/remoting/*</url-pattern>
+		</servlet-mapping>
 	-->
 	<!-- END HPD remoting servlet -->
 
@@ -710,11 +812,12 @@
 	<!-- BEGIN resource-ref Mapping -->
 
 	<!-- This resource reference defines the jndi datasource name -->
-	<!--
-		uncomment for HPD <resource-ref id="HpdDbResourceRef">
+	<!-- uncomment for HPD
+		<resource-ref id="HpdDbResourceRef">
 		<res-ref-name>jdbc/hpdDataSource</res-ref-name>
 		<res-type>javax.sql.DataSource</res-type>
-		<res-auth>Container</res-auth> </resource-ref>
+		<res-auth>Container</res-auth>
+		</resource-ref>
 	-->
 
 	<!-- END resource-ref Mapping -->
@@ -1247,17 +1350,23 @@
 	<jsp-config>
 		<taglib>
 			<taglib-uri>epi-tags</taglib-uri>
-			<taglib-location>/WEB-INF/taglib/taglib.tld</taglib-location>
+			<taglib-location>
+				/WEB-INF/taglib/taglib.tld
+			</taglib-location>
 		</taglib>
 
 		<taglib>
 			<taglib-uri>vgn-tags</taglib-uri>
-			<taglib-location>/WEB-INF/taglib/taglib.tld</taglib-location>
+			<taglib-location>
+				/WEB-INF/taglib/taglib.tld
+			</taglib-location>
 		</taglib>
 
 		<taglib>
 			<taglib-uri>module-tags</taglib-uri>
-			<taglib-location>/WEB-INF/taglib/modules.tld</taglib-location>
+			<taglib-location>
+				/WEB-INF/taglib/modules.tld
+			</taglib-location>
 		</taglib>
 
 		<!-- END-USER WEBSITE TAGLIBS - END -->
