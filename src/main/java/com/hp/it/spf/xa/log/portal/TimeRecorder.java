@@ -109,31 +109,32 @@ public class TimeRecorder {
 	 */
 	public String getRecordedDataAsString() {
 		StringBuffer sb = new StringBuffer();
-		List<OperationData> operations = getThreadOperationList(mMainThread);
-		for (Iterator<OperationData> it = operations.iterator(); it.hasNext();) {
-			OperationData data = it.next();
-			data.writeOperationData(sb);
+
+		for (Iterator<OperationData> it = getRecordedData().iterator(); it.hasNext();) {
+			OperationData operationData = it.next();
+			operationData.writeOperationData(sb);
 			if (it.hasNext()) {
 				sb.append(',');
 			}
 		}
 
+		return sb.toString();
+	}
+
+
+	/**
+	 * @return list of recorder operations' data
+	 */
+	List<OperationData> getRecordedData() {
+		List<OperationData> result = new ArrayList<OperationData>();
+
+		result.addAll(getThreadOperationList(mMainThread));
 		Thread thread = findLongestNotMainRunningThread();
 		if (thread != null) {
-			operations = getThreadOperationList(thread);
-			if (operations != null && !operations.isEmpty()) {
-				sb.append(',');
-				for (Iterator<OperationData> it = operations.iterator(); it.hasNext();) {
-					OperationData data = it.next();
-					data.writeOperationData(sb);
-					if (it.hasNext()) {
-						sb.append(',');
-					}
-				}
-			}
+			result.addAll(getThreadOperationList(thread));
 		}
 
-		return sb.toString();
+		return result;
 	}
 
 	/**

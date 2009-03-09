@@ -115,7 +115,7 @@ public class DiagnosticContext implements Serializable {
 			}
 		}
 
-		if (!mErrors.isEmpty()) {
+		if (!mDiagnosticMap.isEmpty() && !mErrors.isEmpty()) {
 			result.append(componentSeparator);
 		}
 
