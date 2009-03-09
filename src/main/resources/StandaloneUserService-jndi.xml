@@ -55,53 +55,8 @@
 
 	<security:global-method-security secured-annotations="enabled"/>
 	<security:authentication-manager alias="authenticationManager"/>
-	
-	<bean id="applicationAuthenticationProvider" class="org.springframework.security.providers.ldap.LdapAuthenticationProvider">
-		<description>
-			Applications are authenticated by Enterprise Directory. Application account names are composed of the
-			prefix "APP-" followed by the application portfolio identifier.
-		</description>
-		
-		<constructor-arg>
-			<bean class="org.springframework.security.providers.ldap.authenticator.BindAuthenticator">
-				<description>
-					Authenticate and retrieve application information using an encrypted LDAP connection.
-				</description>
-				<constructor-arg>
-					<bean class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">						
-						<constructor-arg value="ldaps://ldap.hp.com:636/o=hp.com"/>	<!-- Encrypted connection -->
-					</bean>
-				</constructor-arg>
-				<property name="userDnPatterns">
-					<list>
-						<value>cn={0},ou=Applications</value>
-					</list>
-				</property>
-			</bean>
-		</constructor-arg>
 
-		<constructor-arg>
-			<bean class="org.springframework.security.ldap.populator.DefaultLdapAuthoritiesPopulator">
-				<description>
-					Retrieve application groups (roles) using a normal LDAP connection.
-				</description>
-				<constructor-arg>
-					<bean class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
-						<constructor-arg value="ldap://ldap.hp.com:389/o=hp.com"/>	<!-- Non-encrypted connection -->
-					</bean>
-				</constructor-arg>
-				<constructor-arg value="ou=Groups"/>
-			</bean>
-		</constructor-arg>
-
-		<property name="userDetailsContextMapper">
-			<description>
-				Maps LDAP application account information into an IApplicationPrincipal.
-			</description>
-			<bean class="com.hp.it.cas.persona.security.ApplicationPrincipalMapper"/>
-		</property>
-		
+	<bean id="applicationAuthenticationProvider" class="com.hp.it.cas.persona.security.ApplicationAuthenticationProvider">		
 		<security:custom-authentication-provider/>		
 	</bean>
-
 </beans>
