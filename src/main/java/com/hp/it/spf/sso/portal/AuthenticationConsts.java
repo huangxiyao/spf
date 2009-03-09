@@ -232,14 +232,14 @@ public class AuthenticationConsts {
     /**
      * Configuration for AtHP group prefix
      */
-    static final String ATHP_GROUP_PREFIX = "cn=sp_";
+    static final String ATHP_GROUP_PREFIX = "cn=";
     
     /**
      * Groups stands for the user is from HPP/FED/@HP.
      */
-    public final static String LOCAL_ATHP_NAME = Consts.GROUP_AUTH_TYPE_HPP;
+    public final static String LOCAL_ATHP_NAME = Consts.GROUP_AUTH_TYPE_ATHP;
     public final static String LOCAL_FED_NAME = Consts.GROUP_AUTH_TYPE_FED;
-    public final static String LOCAL_HPP_NAME = Consts.GROUP_AUTH_TYPE_ATHP;
+    public final static String LOCAL_HPP_NAME = Consts.GROUP_AUTH_TYPE_HPP;
     
     /**
      * Groups that indicate the user is authenticated or not. 

@@ -162,9 +162,11 @@ public class HPPAuthenticator extends AbstractAuthenticator {
             LOG.debug("The groups string got from HPP request header is: "
                       + groupString);
         }
-        StringTokenizer st = new StringTokenizer(groupString, "|");
-        while (st.hasMoreTokens()) {
-            groups.add(st.nextToken());
+        if (groupString != null) {
+            StringTokenizer st = new StringTokenizer(groupString, "|");
+            while (st.hasMoreTokens()) {
+                groups.add(st.nextToken());
+            }
         }
 
         // login HPP/Fed

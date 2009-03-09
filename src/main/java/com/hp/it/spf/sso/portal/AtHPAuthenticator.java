@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserProfileException;
+import com.vignette.portal.log.LogConfiguration;
 
 /**
  * This authenticator is used for AtHP users
@@ -116,7 +117,9 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
                 if (temp.toLowerCase()
                         .startsWith(AuthenticationConsts.ATHP_GROUP_PREFIX)) {
                     String group = temp.substring(3, temp.indexOf(','));
-                    LOG.info("Get UserGroup = " + group);
+                    if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                        LOG.debug("Get UserGroup = " + group);
+                    }
                     groups.add(group);
                 }
             }
