@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.wsrp</groupId>
 	<artifactId>spf-portal-wsrp</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<name>spf-portal-wsrp</name>
 	<description>Vignette Portal does not allow sending different sets of profile attributes for
 		different sites, and the profile structure supported by Vignette Portal must be predefined.
@@ -131,8 +131,8 @@
 		<url>http://samson.atl.hp.com:8080/hudson/view/com.hp.it.spf.xa/job/spf-portal-wsrp</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portal-wsrp</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portal-wsrp</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portal-wsrp</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portal-wsrp-1.0.1</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portal-wsrp-1.0.1</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portal-wsrp-1.0.1</url>
 	</scm>
 </project>
