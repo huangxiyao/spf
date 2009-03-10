@@ -7,7 +7,6 @@ package com.hp.it.spf.user.profile.manager;
 
 import java.util.ResourceBundle;
 
-import com.hp.it.spf.sso.portal.AtHPAuthenticator;
 import com.hp.it.spf.sso.portal.AuthenticationConsts;
 import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
