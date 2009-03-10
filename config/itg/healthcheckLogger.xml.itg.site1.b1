@@ -20,13 +20,13 @@ you have added to the CLASSPATH for the respective managed server.
      
 	<!-- Appenders -->
 	<appender name="WPA_DEBUG_APPENDER" class="org.apache.log4j.FileAppender">
-		<param name="File" value="${LOG_ROOT}/REPLACE-WITH-INSTANCE-NAME/debug/debug.log" />
+		<param name="File" value="${LOG_ROOT}/spfB1/debug/debug.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{MM/dd/yyyy, HH:mm:ss} | %p | %c | %m%n" />
 		</layout>
 	</appender>
 	<appender name="WPA_BUSINESS_APPENDER" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${LOG_ROOT}/REPLACE-WITH-INSTANCE-NAME/main/business/business.log" />
+		<param name="File" value="${LOG_ROOT}/spfB1/main/business/business.log" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -34,7 +34,7 @@ you have added to the CLASSPATH for the respective managed server.
 		</layout>
 	</appender>
 	<appender name="WPA_ERROR_APPENDER" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${LOG_ROOT}/REPLACE-WITH-INSTANCE-NAME/main/error/error.log" />
+		<param name="File" value="${LOG_ROOT}/spfB1/main/error/error.log" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -42,7 +42,7 @@ you have added to the CLASSPATH for the respective managed server.
 		</layout>
 	</appender>
 	<appender name="WPA_ERROR_TRACE_APPENDER" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${LOG_ROOT}/REPLACE-WITH-INSTANCE-NAME/main/error/error_trace.log" />
+		<param name="File" value="${LOG_ROOT}/spfB1/main/error/error_trace.log" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -50,7 +50,7 @@ you have added to the CLASSPATH for the respective managed server.
 		</layout>
 	</appender>
 	<appender name="WPA_PERFORMANCE_APPENDER" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${LOG_ROOT}/REPLACE-WITH-INSTANCE-NAME/main/performance/performance.log" />
+		<param name="File" value="${LOG_ROOT}/spfB1/main/performance/performance.log" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -58,7 +58,7 @@ you have added to the CLASSPATH for the respective managed server.
 		</layout>
 	</appender>
 	<appender name="HEALTHCHECK_APPENDER" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${LOG_ROOT}/REPLACE-WITH-INSTANCE-NAME/main/background/healthcheck.log" />
+		<param name="File" value="${LOG_ROOT}/spfB1/main/background/healthcheck.log" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
 		<layout class="org.apache.log4j.PatternLayout">
