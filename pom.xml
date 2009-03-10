@@ -4,7 +4,7 @@
 	<artifactId>pc-database-persistence</artifactId>
 	<packaging>jar</packaging>
 	<name>pc-database-persistence</name>
-	<version>1.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<description>As the target portlet applications will be deployed in the clustered environment, the producer as well as the underlying portlet container should store their data in a way that is cluster-friendly, e.g. when a portlet preference value is updated this change must be visible on all the servers running this portlet application, but openportal portlet container does not provide a database persistence implementation. This project just provides the database persitence feature with our own implementation.</description>
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
@@ -86,9 +86,9 @@
 		</dependency>
 	</dependencies>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/openportal/tags/pc-database-persistence-1.0.1</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/openportal/tags/pc-database-persistence-1.0.1</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/openportal/tags/pc-database-persistence-1.0.1</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/openportal/trunk/pc-database-persistence</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/openportal/trunk/pc-database-persistence</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/openportal/trunk/pc-database-persistence</url>
 	</scm>
 	<build>
 		<finalName>spf-pc-database-persistence</finalName>
