@@ -7,7 +7,7 @@
 	<groupId>com.hp.it.spf.tools</groupId>
 	<artifactId>spf-maven-car-plugin</artifactId>
 	<name>Maven CAR Plugin</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>maven-plugin</packaging>	
 	
 	<description>
@@ -20,7 +20,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 	
 	<ciManagement>
