@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.wsrp</groupId>
 	<artifactId>spf-portlet-wsrp</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>spf-portlet-wsrp</name>
 	<description>Vignette Portal does not allow sending different sets of profile attributes for different sites, and the profile structure supported by Vignette Portal must be predefined. In SPF, this issue was addressed by injecting user profile information into the WSRP SOAP request. The injection occurred in the consumer with another project called spf-portal-wsrp. On the producer side, this project can extract the profile from WSRP SOAP request.</description>
 	<parent>
@@ -88,8 +88,8 @@
 		<url>http://samson.atl.hp.com:8080/hudson/view/com.hp.it.spf.xa/job/spf-portlet-wsrp</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-wsrp-1.0.1</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-wsrp-1.0.1</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-wsrp-1.0.1</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-wsrp</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-wsrp</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-wsrp</url>
 	</scm>		
 </project>
