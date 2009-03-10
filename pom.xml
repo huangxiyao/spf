@@ -4,7 +4,7 @@
 	<artifactId>spf-healthcheck</artifactId>
 	<packaging>war</packaging>
 	<name>SPF healthcheck application</name>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<description>Shared Portal Framework Web application which performs automated healthchecks against
 		the SPF portal and the SPF open-sign, and relays the status to the
 		load-balancers (or any other interested clients).</description>
@@ -19,9 +19,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-healthcheck</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-healthcheck</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-healthcheck</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-healthcheck</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-healthcheck-1.0.1</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-healthcheck-1.0.1</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-healthcheck-1.0.1</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
