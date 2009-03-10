@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.1</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.apps</groupId>
@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.wsrp</groupId>
 			<artifactId>spf-portlet-wsrp</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.1</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.hp.it.spf.xa</groupId>
