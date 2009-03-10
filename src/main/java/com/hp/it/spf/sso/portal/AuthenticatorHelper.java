@@ -34,6 +34,7 @@ import com.epicentric.user.User;
 import com.epicentric.user.UserGroup;
 import com.epicentric.user.UserGroupManager;
 import com.epicentric.user.UserManager;
+import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 import com.vignette.portal.log.LogConfiguration;
@@ -153,9 +154,7 @@ public class AuthenticatorHelper {
             LOG.debug("updating vap user start");
         }
         // Setting VAP User object
-        try {
-            //user.setProperty(AuthenticationConsts.PROPERTY_PROFILE_ID, ssoUser.getProfileId());
-            //user.setProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID, ssoUser.getUserName());
+        try {            
             user.setProperty(AuthenticationConsts.PROPERTY_EMAIL_ID, ssoUser.getEmail());
             user.setProperty(AuthenticationConsts.PROPERTY_FIRSTNAME_ID, ssoUser.getFirstName());
             user.setProperty(AuthenticationConsts.PROPERTY_LASTNAME_ID, ssoUser.getLastName());
@@ -169,9 +168,6 @@ public class AuthenticatorHelper {
             if (ssoUser.getLastLoginDate() != null) {
                 user.setProperty(AuthenticationConsts.PROPERTY_LAST_LOGIN_DATE_ID,
                                  ssoUser.getLastLoginDate());
-            }
-            if (ssoUser.getCurrentSite() != null) {
-                user.setProperty(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID, ssoUser.getCurrentSite());
             }
             
             if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
@@ -274,21 +270,35 @@ public class AuthenticatorHelper {
     }
 
     /**
-     * This method is used to judge whether user's primary site needs to be
-     * updated. If current site is different with user's primary site, then need
-     * to update!
+     * This method is used to judge whether user's primary site is changed.
      * 
-     * @param su
-     *            SSOUser
-     * @param user
-     *            User from Vignette
-     * @return true if need to update user's primary site, otherwise false
+     * @param request HttpServletRequest
+     * @return <code>true</code> if user's primary site is changed, otherwise <code>false</code>
      */
-    static boolean isPrimarySiteChanged(HttpServletRequest request) {
+    static boolean isSiteChanged(HttpServletRequest request) {
         Site currentSite = Utils.getEffectiveSite(request);
-        User user = SessionUtils.getCurrentUser(request.getSession());
-                                                                  
-        return (currentSite != null && user != null && !currentSite.getUID().equals(user.getProperty(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID)));
+        // if the site is spf core site, it will be considered as no change
+        if (currentSite == null || currentSite.getDNSName().equals(Consts.SPF_CORE_SITE)) {
+            return false;
+        } 
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Requested site is " + currentSite.getDNSName());
+        }
+
+        SessionInfo sessionInfo = (SessionInfo)request.getSession().getAttribute(SessionInfo.SESSION_INFO_NAME);
+        // this can only happen at the first login, so there is no sessioninfo
+        if (sessionInfo == null) {
+            return true;            
+        }
+        Site previousSite = sessionInfo.getSite();
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Previous site is " + previousSite.getDNSName());
+        }        
+        if (previousSite.getDNSName().equals(Consts.SPF_CORE_SITE)) {
+            return false;
+        }
+        
+        return (!currentSite.getUID().equals(previousSite.getUID()));
     }    
     
     /**

@@ -151,7 +151,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                     LOG.debug("Force initSession tag found.");
                 }
                 AuthenticatorHelper.cleanupSession(request);
-            } else if (AuthenticatorHelper.isPrimarySiteChanged(request)) {
+            } else if (AuthenticatorHelper.isSiteChanged(request)) {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("Site is changed.");
                 }
@@ -174,7 +174,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             userName = ssoUser.getUserName();
         } catch (Exception ex) {
             userName = null;
-            LOG.error("Invoke Authenticator.execute error: " + ex.getMessage());
+            LOG.error("Invoke Authenticator.execute error: " + ex.getMessage(), ex);
             request.getSession()
                    .setAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR,
                                  "1");

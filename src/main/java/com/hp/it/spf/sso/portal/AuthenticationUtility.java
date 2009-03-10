@@ -10,9 +10,10 @@ import java.util.Iterator;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+
 import com.epicentric.common.website.SessionUtils;
-import com.epicentric.entity.EntityType;
 import com.epicentric.entity.EntityPersistenceException;
+import com.epicentric.entity.EntityType;
 import com.epicentric.user.User;
 import com.epicentric.user.UserGroup;
 import com.epicentric.user.UserGroupManager;

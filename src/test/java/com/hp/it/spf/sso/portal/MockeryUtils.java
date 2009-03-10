@@ -17,6 +17,7 @@ import org.jmock.Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 
 import com.epicentric.authentication.Realm;
+import com.epicentric.common.website.SessionInfo;
 import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.EntityType;
 import com.epicentric.entity.UniquePropertyValueConflictException;
@@ -68,7 +69,7 @@ public class MockeryUtils {
      */
     public static HttpServletRequest mockHttpServletRequest(Mockery context, String name) {
         // mock HttpServletRequest
-        final HttpServletRequest request = context.mock(HttpServletRequest.class, name);
+        final HttpServletRequest request = context.mock(HttpServletRequest.class, name+".HttpServletRequest");                
         context.checking(new Expectations() {
             {
                 allowing(request).getSession();
@@ -99,7 +100,7 @@ public class MockeryUtils {
                 allowing(request).getContextPath();
                 will(returnValue(""));
                 
-                allowing(request).getParameterNames();                
+                allowing(request).getParameterNames();
             }
         });
         return request;

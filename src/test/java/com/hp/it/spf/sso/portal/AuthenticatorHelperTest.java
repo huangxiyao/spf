@@ -14,14 +14,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
+import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.epicentric.common.website.SessionInfo;
 import com.epicentric.common.website.SessionUtils;
 import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.UniquePropertyValueConflictException;
@@ -174,14 +178,17 @@ public class AuthenticatorHelperTest {
 
     /**
      * Test method for
-     * {@link com.hp.it.spf.sso.portal.AuthenticatorHelper#isPrimarySiteChanged(javax.servlet.http.HttpServletRequest)}
+     * {@link com.hp.it.spf.sso.portal.AuthenticatorHelper#isSiteChanged(javax.servlet.http.HttpServletRequest)}
      * .
      */
     @Test
-    public void testIsPrimarySiteChanged() {
+    public void testIsPrimarySiteChanged() {        
         boolean result = false;
-        result = AuthenticatorHelper.isPrimarySiteChanged(athpRequest);
-        assertFalse(result);        
+        result = AuthenticatorHelper.isSiteChanged(null);
+        assertFalse(result);
+        
+        result = AuthenticatorHelper.isSiteChanged(anonRequest);
+        assertTrue(result);        
     }
 
     /**
