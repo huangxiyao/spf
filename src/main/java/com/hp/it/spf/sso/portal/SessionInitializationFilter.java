@@ -37,8 +37,7 @@ import com.vignette.portal.website.enduser.PortalURI;
  * @version TBD
  */
 public class SessionInitializationFilter implements Filter {
-	private static final LogWrapper LOG = AuthenticatorHelper
-			.getLog(SessionInitializationFilter.class);
+	private static final LogWrapper LOG = AuthenticatorHelper.getLog(SessionInitializationFilter.class);
 
 	/**
 	 * Filter init operations
@@ -90,14 +89,16 @@ public class SessionInitializationFilter implements Filter {
 
 			// save the current URL to session
 			PortalContext context = (PortalContext) req.getAttribute("portalContext");
-			Style thisPage = context.getCurrentSecondaryPage();
-			if (thisPage != null) {
-				if (!Consts.PAGE_FRIENDLY_ID_RETURN.equals(thisPage
-						.getFriendlyID())) {
-					String currentURL = Utils.getRequestURL(req);			
-					if (session != null) {
-						session.setAttribute(Consts.SESSION_ATTR_RETURN_URL,
-								currentURL);
+			if (context != null) {
+				Style thisPage = context.getCurrentSecondaryPage();
+				if (thisPage != null) {
+					if (!Consts.PAGE_FRIENDLY_ID_RETURN.equals(thisPage
+							.getFriendlyID())) {
+						String currentURL = Utils.getRequestURL(req);
+						if (session != null) {
+							session.setAttribute(
+									Consts.SESSION_ATTR_RETURN_URL, currentURL);
+						}
 					}
 				}
 			}
@@ -105,7 +106,8 @@ public class SessionInitializationFilter implements Filter {
 			// if there is a error tag in session, which means that current
 			// request page is
 			// error handling page, don't need to do the session initialization.
-			if (session.getAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR) == null) {
+			if (session
+					.getAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR) == null) {
 
 				// retrieve sso username and set it into the session
 				doSessionInitialize(req, res);
