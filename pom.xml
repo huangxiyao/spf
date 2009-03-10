@@ -86,7 +86,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.sso</groupId>
-			<artifactId>spf-session-initialization</artifactId>
+			<artifactId>spf-portal-session</artifactId>
 			<version>1.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
