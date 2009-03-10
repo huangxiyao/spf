@@ -214,7 +214,7 @@ EOF
       # 'out' directory.
 
       print "----- Packing and staging remaining $pdir text files.\n";
-      $zip_file = "$in_out_pdir/xlated-${pdir}-msgs-${cycle}.zip";
+      $zip_file = "$in_out_pdir/xlated-${pdir}-msgs.zip";
       &zip_files ($in_text_pdir, $zip_file, $all_msg_text_files_re);
       &copy_files ($in_text_pdir, $in_out_pdir, $all_nonmsg_text_files_re);
 
@@ -238,9 +238,9 @@ EOF
       # Put the message properties in one TAR file, and the HTML in another.
 
       print "----- Packing remaining $pdir text files to TAR.\n";
-      $tar_file = "$in_out_pdir/xlated-${pdir}-msgs-${cycle}.tar";
+      $tar_file = "$in_out_pdir/xlated-${pdir}-msgs.tar";
       &tar_files ($in_text_pdir, $tar_file, $all_msg_text_files_re);
-      $tar_file = "$in_out_pdir/xlated-${pdir}-html-${cycle}.tar";
+      $tar_file = "$in_out_pdir/xlated-${pdir}-html.tar";
       &tar_files ($in_text_pdir, $tar_file, $all_nonmsg_text_files_re);
    }
 
@@ -310,8 +310,10 @@ EOF
 
    if ($pdir eq "portlet")  {
       print "----- Packing remaining $pdir media files to TAR.\n";
-      $tar_file = "$in_out_pdir/xlated-${pdir}-images-${cycle}.tar";
-      &tar_files ($in_media_pdir, $tar_file);
+      $tar_file = "$in_out_pdir/xlated-${pdir}-images.tar";
+      &tar_files ($in_media_pdir, $tar_file, $all_image_files_re);
+      $tar_file = "$in_out_pdir/xlated-${pdir}-misc.tar";
+      &tar_files ($in_media_pdir, $tar_file, $all_misc_files_re);
    }
 
    print <<EOF;

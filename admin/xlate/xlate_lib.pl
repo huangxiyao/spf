@@ -25,12 +25,16 @@ use integer;
 
 $msg_ext_re = "properties";
 $nonmsg_ext_re = "html|htm|xml|txt|css|js|rtf";
-$media_ext_re = "jpg|gif|tif|pdf|doc|mpg|wav|psd|jpg|mpg|wmv|avi|ppt";
+$image_ext_re = "jpg|gif|tif";
+$misc_ext_re = "pdf|doc|mpg|wav|psd|wmv|avi|ppt";
+$media_ext_re = "$image_ext_re|$misc_ext_re";
 $nonnormal_tags_re = "es_es|fr_ca|pt_br|zh_tw|zh_hk";
 
 $all_msg_text_files_re = "^.*\.($msg_ext_re)\$";
 $all_nonmsg_text_files_re = "^.*\.($nonmsg_ext_re)\$";
 $all_text_files_re = "^.*\.($msg_ext_re|$nonmsg_ext_re)\$";
+$all_image_files_re = "^.*\.($image_ext_re)\$";
+$all_misc_files_re = "^.*\.($misc_ext_re)\$";
 $all_media_files_re = "^.*\.($media_ext_re)\$";
 $all_vgn_portal_msg_files_re = "^[a-f0-9]{32}.*\.($msg_ext_re)\$";
 $all_spf_portal_msg_files_re = "^spf\-.*\.($msg_ext_re)\$";
