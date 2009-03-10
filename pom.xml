@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
 		<artifactId>spf-pom</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.1</version>
 	</parent>
 	<build>
 		<resources>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.sun.portal.portletcontainer</groupId>
             <artifactId>pc-database-persistence</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -52,7 +52,7 @@
         <dependency>
         	<groupId>com.hp.it.spf.xa</groupId>
         	<artifactId>spf-common-utilities</artifactId>
-        	<version>1.0.1-SNAPSHOT</version>
+        	<version>1.0.1</version>
         	<scope>provided</scope>
         </dependency>
 	</dependencies>
