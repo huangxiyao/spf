@@ -15,10 +15,12 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.epicentric.template.Style;
 import com.epicentric.user.User;
 import com.epicentric.user.UserManager;
-import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
-import com.hp.it.cas.persona.user.service.IUserService;
+import com.hp.it.spf.xa.misc.portal.Consts;
+import com.vignette.portal.website.enduser.PortalContext;
+
 
 public class SessionInitializationFilterTest {
     private static Mockery context;
@@ -50,10 +52,35 @@ public class SessionInitializationFilterTest {
         user = MockeryUtils.mockUser(context);
         guestUser = MockeryUtils.mockGuestUser(context);
                 
-        chain = context.mock(FilterChain.class);
+        chain = context.mock(FilterChain.class);        
         context.checking(new Expectations() {
             {
                 allowing(chain).doFilter(with(any(HttpServletRequest.class)), with(any(HttpServletResponse.class)));
+            }
+        });
+        
+        final PortalContext portalContext = context.mock(PortalContext.class);
+        final Style style = context.mock(Style.class);
+        context.checking(new Expectations() {
+            {
+                allowing(athpRequest).getAttribute("portalContext");
+                will(returnValue(portalContext));
+                
+                allowing(hppRequest).getAttribute("portalContext");
+                will(returnValue(portalContext));
+                
+                allowing(fedRequest).getAttribute("portalContext");
+                will(returnValue(portalContext));
+                
+                allowing(anonRequest).getAttribute("portalContext");
+                will(returnValue(portalContext));
+                
+                allowing(portalContext).getCurrentSecondaryPage();
+                will(returnValue(style));
+                
+                allowing(style).getFriendlyID();
+                will(returnValue(Consts.PAGE_FRIENDLY_ID_RETURN+"diff"));
+                
             }
         });
     }

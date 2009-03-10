@@ -86,6 +86,20 @@ public class MockeryUtils {
                 
                 allowing(request).getServletPath();
                 will(returnValue("/site"));
+                
+                allowing(request).getScheme();
+                will(returnValue("http"));
+                
+                allowing(request).getServerName();
+                will(returnValue("127.0.0.1"));
+                
+                allowing(request).getServerPort();
+                will(returnValue("7001"));
+                
+                allowing(request).getContextPath();
+                will(returnValue(""));
+                
+                allowing(request).getParameterNames();                
             }
         });
         return request;
@@ -109,6 +123,7 @@ public class MockeryUtils {
                 allowing(request).getHeader("SM_AUTHDIRNAME");will(returnValue("ED5_employees"));
                 allowing(request).getHeader("SM_USER");will(returnValue("test@hp.com"));
                 allowing(request).getHeader("SM_UNIVERSALID");will(returnValue("test@hp.com"));
+                allowing(request).getHeader("Host");will(returnValue("bollo22.serviceportal.hp.com"));
                 allowing(request).getHeader("timeZoneName");will(returnValue("Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London"));
                 allowing(request).getHeader("LAST_CHANGE_DATE");will(returnValue("20070308110124Z"));
                 allowing(request).getHeader("givenname");will(returnValue("Doe"));
@@ -273,6 +288,7 @@ public class MockeryUtils {
                 
                 allowing(request).getHeader("SM_AUTHDIRNAME");will(returnValue(""));  
                 allowing(request).getHeader("AuthSource");will(returnValue(""));
+                allowing(request).getHeader("Host");will(returnValue("bollo22.serviceportal.hp.com"));
                 
                 allowing(request).getCookies();
                 will(returnValue(new Cookie[] {new Cookie("SMSESSION", "LOGGEDOFF")}));
