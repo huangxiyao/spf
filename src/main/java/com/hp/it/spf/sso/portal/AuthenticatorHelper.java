@@ -270,13 +270,24 @@ public class AuthenticatorHelper {
     }
 
     /**
+     * This method should be invoked before Vignette's SSO.
+     * <p>
      * This method is used to judge whether user's primary site is changed.
+     * </p>
+     * <p>
+     * This method will compare the site retrieved from the request url to the site stored in
+     * the SessionInfo.
+     * </p>
+     * <p>
+     * Vignette will update the site to SessionInfo after user successfully logged in.
+     * </p>
      * 
      * @param request HttpServletRequest
      * @return <code>true</code> if user's primary site is changed, otherwise <code>false</code>
      */
     static boolean isSiteChanged(HttpServletRequest request) {
         Site currentSite = Utils.getEffectiveSite(request);
+        // if current site is null, user switchs to the console
         // if the site is spf core site, it will be considered as no change
         if (currentSite == null || currentSite.getDNSName().equals(Consts.SPF_CORE_SITE)) {
             return false;
@@ -291,9 +302,13 @@ public class AuthenticatorHelper {
             return true;            
         }
         Site previousSite = sessionInfo.getSite();
+        // user from the console and switchs to other site
+        if (previousSite == null) {
+            return true;
+        }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("Previous site is " + previousSite.getDNSName());
-        }        
+        }
         if (previousSite.getDNSName().equals(Consts.SPF_CORE_SITE)) {
             return false;
         }
