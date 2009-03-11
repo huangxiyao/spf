@@ -9,7 +9,7 @@
 	<artifactId>spf-portal</artifactId>
 	<packaging>war</packaging>
 	<name>Modified Vignette Portal Application</name>
-	<version>1.0.1</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<description>Modified Vignette Portal Application</description>
 	<dependencies>
 		<dependency>
