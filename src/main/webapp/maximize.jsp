@@ -58,17 +58,21 @@ maintenance for this software.
 										width="20" height="18"
 										align="absmiddle"></vgn-portal:i18nElement></td>
 							<td class="epi-dim">
-								<vgn-portal:i18nValue stringID="<%= secondaryPageI18nID %>"
-													  key="<%= portletRenderException.getName() %>"
-													  defaultValue="An error has occurred.  This portlet is unavailable at this time.">
-									<vgn-portal:i18nParams
-											value="<%= portletRenderException.getErrorParameters() %>"/>
-								</vgn-portal:i18nValue>
-								<vgn-portal:i18nValue stringID="<%= secondaryPageI18nID %>" key="error_code"
-													  defaultValue="">
-									<vgn-portal:i18nParams
-											value="<%= new Object[] { portletRenderException.getName() } %>"/>
-								</vgn-portal:i18nValue>
+								<p>
+									<vgn-portal:i18nValue stringID="<%= secondaryPageI18nID %>"
+														  key="<%= portletRenderException.getName() %>"
+														  defaultValue="An error has occurred.  This portlet is unavailable at this time.">
+										<vgn-portal:i18nParams
+												value="<%= portletRenderException.getErrorParameters() %>"/>
+									</vgn-portal:i18nValue>
+								</p>
+								<p style="font-size:smaller;">
+									<vgn-portal:i18nValue stringID="<%= secondaryPageI18nID %>" key="error_code"
+														  defaultValue="">
+										<vgn-portal:i18nParams
+												value="<%= new Object[] { portletRenderException.getName() } %>"/>
+									</vgn-portal:i18nValue>
+								</p>
 							</td>
 						</tr>
 					</table>
