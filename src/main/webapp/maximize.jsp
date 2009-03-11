@@ -61,7 +61,7 @@ maintenance for this software.
 								<p>
 									<vgn-portal:i18nValue stringID="<%= secondaryPageI18nID %>"
 														  key="<%= portletRenderException.getName() %>"
-														  defaultValue="An error has occurred.  This portlet is unavailable at this time.">
+														  defaultValue="The service or information you requested is not available at this time. Please try again later.">
 										<vgn-portal:i18nParams
 												value="<%= portletRenderException.getErrorParameters() %>"/>
 									</vgn-portal:i18nValue>
