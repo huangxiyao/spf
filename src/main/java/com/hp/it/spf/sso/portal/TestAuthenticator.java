@@ -75,8 +75,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 	private String retrieveProfileFile() {
 		String rbFile = retrieveRbFile();
 		// Get current user.
-		String currentUser = (String) request.getSession().getAttribute(
-				"sandbox.username");
+		String currentUser = (String) request.getSession().getAttribute("sandbox.username");
 		try {
 			refreshBundle();
 			LOG.info("Get Resource Bundle File = " + rbFile);
@@ -87,9 +86,11 @@ public class TestAuthenticator extends AbstractAuthenticator {
 		} catch (MissingResourceException e) {
 			LOG.info("No Resource Bundle File = " + rbFile);
 		}
+		if ((Utils.getEffectiveSite(request) == null)) {
+		    return "console_" + currentUser;
+		}
 		Site currentSite = AuthenticatorHelper.getCurrentSite(request);
-		String currentSiteName = currentSite != null ? Utils.getEffectiveSite(request).getDNSName()
-				: "console";
+		String currentSiteName = currentSite != null ? Utils.getEffectiveSite(request).getDNSName(): "console";
 		return currentSiteName + "_" + currentUser;
 	}
 
