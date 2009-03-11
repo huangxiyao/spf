@@ -86,7 +86,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 		} catch (MissingResourceException e) {
 			LOG.info("No Resource Bundle File = " + rbFile);
 		}
-		if ((Utils.getEffectiveSite(request) == null)) {
+		if (Utils.getEffectiveSite(request) == null) {
 		    return "console_" + currentUser;
 		}
 		Site currentSite = AuthenticatorHelper.getCurrentSite(request);
