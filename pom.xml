@@ -1,13 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
 		
 	<groupId>com.hp.it.spf.tools</groupId>
 	<artifactId>spf-maven-car-plugin</artifactId>
 	<name>Maven CAR Plugin</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>maven-plugin</packaging>	
 	
 	<description>
@@ -29,9 +27,9 @@
 	</ciManagement>
 	
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/trunk/maven-car-plugin</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/trunk/maven-car-plugin</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/tools/trunk/maven-car-plugin</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/tags/spf-maven-car-plugin-1.0.0</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/tags/spf-maven-car-plugin-1.0.0</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/tools/tags/spf-maven-car-plugin-1.0.0</url>
 	</scm>
 	
 	<organization>
