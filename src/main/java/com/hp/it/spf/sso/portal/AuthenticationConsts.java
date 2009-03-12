@@ -218,6 +218,8 @@ public class AuthenticationConsts {
     
     static final String SANDBOX_MODE = "SandboxMode";
     
+    static final String HPPGROUPS_FROM_WEBSERVICE = "hppgroups_from_webservice";
+    
     /**
      * Configuration for default values
      */
