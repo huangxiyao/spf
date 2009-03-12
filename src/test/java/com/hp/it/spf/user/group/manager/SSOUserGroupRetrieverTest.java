@@ -12,11 +12,14 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.hp.it.spf.user.exception.UserGroupsException;
+import com.hp.it.spf.user.group.stub.UserContext;
 
 /**
  * This is the test class for SSOUserGroupRetriever class.
@@ -243,5 +246,96 @@ public class SSOUserGroupRetrieverTest {
             assertFalse(ex.getMessage(), true);
         }
     }
+
+	@Test
+	public void testConvertToUserContext() {
+		Map<String, Object> profile = new HashMap<String, Object>();
+
+		// String attribute values
+		profile.put("simpleAttribute", "value");
+		profile.put("emptyAttribute", "");
+		profile.put("nullAttribute", null);
+
+		// List<String> attribute value
+		profile.put("emptyListOfStringsAttribute", Collections.emptyList());
+		profile.put("listOfStringsAttribute", Arrays.asList("item1", "item2", "item3"));
+
+		// Map attribute value
+		Map<String, String> mapAttribute = new HashMap<String, String>();
+		mapAttribute.put("property1", "value1");
+		mapAttribute.put("property2", "value2");
+		profile.put("mapAttributeValue", mapAttribute);
+
+		// Single element list of maps attribute
+		Map<String, String> mapAttribute3 = new HashMap<String, String>();
+		mapAttribute3.put("property5", "value5");
+		mapAttribute3.put("property6", "value6");
+		profile.put("singleElementListOfMapsAttribute", Arrays.asList(mapAttribute3));
+
+		// List of maps attribute
+		Map<String, String> mapAttribute1 = new HashMap<String, String>();
+		mapAttribute1.put("property3", "value3.1");
+		mapAttribute1.put("property4", "value4.1");
+		Map<String, String> mapAttribute2 = new HashMap<String, String>();
+		mapAttribute2.put("property3", "value3.2");
+		mapAttribute2.put("property4", "value4.2");
+		profile.put("listOfMapsAttribute", Arrays.asList(mapAttribute1, mapAttribute2));
+
+		// Something else attribute
+		Object somethingElseAttributeValue = new Object() {
+			@Override
+			public String toString()
+			{
+				return "something else";
+			}
+		};
+		profile.put("somethingElseAttribute", somethingElseAttributeValue);
+
+		// Call the method we're testing
+		UserContext[] userContextItems = new SSOUserGroupRetriever().convertToUserContext(profile);
+
+		// Convert result to map so we can easily access it using keys
+		Map<String, String> userContextItemsMap = new HashMap<String, String>();
+		for (UserContext item : userContextItems) {
+			userContextItemsMap.put(item.getKey(), item.getValue());
+		}
+
+		// Simple attribute values
+		assertEquals("simple attribute value",
+				"value", userContextItemsMap.get("simpleAttribute"));
+		assertEquals("empty attribute value",
+				"", userContextItemsMap.get("emptyAttribute"));
+		assertEquals("null attribute value",
+				null, userContextItemsMap.get("nullAttribute"));
+
+		// List<String> attribute value
+		assertEquals("empty list of strings attribute value",
+				null, userContextItemsMap.get("emptyListOfStringsAttribute"));
+		assertEquals("list of strings attribute value",
+				"item1;item2;item3", userContextItemsMap.get("listOfStringsAttribute"));
+
+		// Map attribute value
+		assertEquals("map attribute value for mapAttributeValue.property1",
+				"value1", userContextItemsMap.get("mapAttributeValue.property1"));
+		assertEquals("map attribute value for mapAttributeValue.property2",
+				"value2", userContextItemsMap.get("mapAttributeValue.property2"));
+
+		// Single element list of maps attribute
+		assertEquals("single element list of maps attribute value for singleElementListOfMapsAttribute.property5",
+				"value5", userContextItemsMap.get("singleElementListOfMapsAttribute.property5"));
+		assertEquals("single element list of maps attribute value for singleElementListOfMapsAttribute.property6",
+				"value6", userContextItemsMap.get("singleElementListOfMapsAttribute.property6"));
+
+		// List of map attributes
+		assertEquals("list of maps attribute value for istOfMapsAttribute.property3",
+				"value3.1;value3.2", userContextItemsMap.get("listOfMapsAttribute.property3"));
+		assertEquals("list of maps attribute value for listOfMapsAttribute.property4",
+				"value4.1;value4.2", userContextItemsMap.get("listOfMapsAttribute.property4"));
+
+		// something else attribute
+		assertEquals("Not supported attribute value is saved as its string representation",
+				somethingElseAttributeValue.toString(), userContextItemsMap.get("somethingElseAttribute"));
+
+	}
 
 }
