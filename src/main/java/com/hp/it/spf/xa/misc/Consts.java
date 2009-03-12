@@ -23,7 +23,7 @@ public class Consts {
 	 * portlet side, it can be retrieved with the method
 	 * <code>(Map)PortletRequest.getAttribute(PortletRequest.USER_INFO)</code>.
 	 */
-	public static final String USER_PROFILE_KEY = "userProfile";
+	public static final String USER_PROFILE_KEY = "SPF_USER_PROFILE";
 
 	private static final String GROUP_PREFIX = "LOCAL_PORTAL_";
 
