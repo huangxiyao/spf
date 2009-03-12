@@ -109,7 +109,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 LOG.debug("Get Resource Bundle File = " + rbFile);
             }
         } catch (Exception e) {
-            LOG.error("No Resource Bundle File = " + rbFile);
+            LOG.error("No Resource Bundle File = " + rbFile, e);
             throw new RuntimeException("No Resource Bundle File = " + rbFile, e);
         }
     }
@@ -238,7 +238,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             } catch (ParseException pe) {
                 LOG.error("Can't set last change date as"
                           + lastChangeStr
-                          + pe.getMessage());
+                          + pe.getMessage(), pe);
             }
         }
 
@@ -260,7 +260,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             } catch (NumberFormatException ne) {
                 LOG.error("Can't change security level "
                           + securitylevel
-                          + " to float value. Will set default value as 0");
+                          + " to float value. Will set default value as 0", ne);
                 userProfile.put(AuthenticationConsts.KEY_SECURITY_LEVEL,
                                 AuthenticationConsts.DEFAULT_SECURITY_LEVEL);
             }
@@ -321,11 +321,11 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             return AuthenticatorHelper.createVAPUser(ssoUser);
         } catch (UniquePropertyValueConflictException e) {
             LOG.error("Required unique values conflict when creating user "
-                      + e.getMessage());
+                      + e.getMessage(), e);
             throw e;
         } catch (EntityPersistenceException e) {
             LOG.error("Entity persistence exception when creating user "
-                      + e.getMessage());
+                      + e.getMessage(), e);
             throw e;
         }
     }
@@ -368,11 +368,11 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 
         } catch (UniquePropertyValueConflictException e) {
             LOG.error("Required unique values conflict when updating user"
-                      + e.getMessage());
+                      + e.getMessage(), e);
             throw e;
         } catch (EntityPersistenceException e) {
             LOG.error("Entity persistence exception when updating user"
-                      + e.getMessage());
+                      + e.getMessage(), e);
             throw e;
         }
     }
@@ -634,7 +634,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             }
             return rb.getString(key);
         } catch (Exception ex) {
-            LOG.error("Can't find key " + key + "in resource bundle file");
+            LOG.error("Can't find key " + key + "in resource bundle file", ex);
             return null;
         }
     }

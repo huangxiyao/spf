@@ -4,6 +4,7 @@
  */
 package com.hp.it.spf.sso.portal;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +21,7 @@ import com.hp.globalops.hppcbl.webservice.ProfileIdentity;
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
@@ -84,6 +86,9 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         userProfile.put(AuthenticationConsts.KEY_POSTAL_PREF,
                         getValue(AuthenticationConsts.HEADER_POSTAL_CONTACT_PREF_PROPERTY_NAME));
 
+        // retrieve HPP cookie account values
+        userProfile.putAll(getCookieValuesAsMap());
+        
         setPhone();
     }
 
@@ -244,4 +249,58 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 		}
 		return groups;
 	}
+    
+    /**
+     * Retrieve all cookie account values as a map.
+     * <p>
+     * It retrieves Account-Cookie, Account-BusCookie and Account-HomeCookie values
+     * as a map from http cookie.
+     * </p>
+     * 
+     * @return cookie account value map or an empty map
+     */
+    private Map<String, String> getCookieValuesAsMap() {
+        Map<String, String> map = new HashMap<String, String>();
+        
+        String ac = AuthenticatorHelper.getCookieValue(request, AuthenticationConsts.ACCOUNT_COOKIE);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Retrieve ACCOUNT_COOKIE: " + ac);
+        }
+        map.putAll(convertCookieValueToMap(ac));
+        String ahc = AuthenticatorHelper.getCookieValue(request, AuthenticationConsts.ACCOUNT_HOMECOOKIE);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Retrieve ACCOUNT_HOMECOOKIE: " + ahc);
+        }
+        map.putAll(convertCookieValueToMap(ahc));
+        String absc = AuthenticatorHelper.getCookieValue(request, AuthenticationConsts.ACCOUNT_BUSCOOKIE);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Retrieve ACCOUNT_BUSCOOKIE: " + absc);
+        }
+        map.putAll(convertCookieValueToMap(absc));
+        
+        return map;
+    }
+    
+    /**
+     * Convert String which format is <code>|key=value|key1=value1|key2=value2</code> to map
+     * @param cookieValue string value
+     * @return cookie value map or an empty map
+     */
+    private Map<String, String> convertCookieValueToMap(String cookieValue) {
+        Map<String, String> map = new HashMap<String, String>();
+        if (cookieValue != null && !"".equals(cookieValue.trim())) {
+            cookieValue = Utils.decodeBase64(Utils.trimUnwantedSmPadding(cookieValue));
+            StringTokenizer st = new StringTokenizer(cookieValue, "|");
+            while (st.hasMoreTokens()) {
+                String[] key_value = st.nextToken().split("=", 2);
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug("Retrieve key_value: " + key_value);
+                }
+                if (key_value.length == 2) {
+                    map.put(key_value[0], key_value[1].trim());
+                }
+            }
+        }
+        return map;
+    }
 }

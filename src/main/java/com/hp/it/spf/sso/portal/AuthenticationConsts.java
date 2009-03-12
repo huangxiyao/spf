@@ -9,21 +9,19 @@ import com.hp.it.spf.xa.misc.portal.Consts;
 
 public class AuthenticationConsts {
 
-	static final String SSO_USERNAME = "SP_SSO_USERNAME";
+	static final String SSO_USERNAME = Consts.UNSTICKY_SESSION_ATTR_PREFIX + "SSO_USERNAME";
 		
-	static final String SSO_USER_LOCALE = "SP_USER_LOCALE";	
+	static final String SSO_USER_LOCALE = Consts.UNSTICKY_SESSION_ATTR_PREFIX + "USER_LOCALE";	
 	
 	static final String DEFAULT_PRIMARY_SITE_NAME = Consts.LOGOUT_DEFAULT_SITE;
 	
 	static final String ANON_USER_NAME_PREFIX = Consts.ANON_USER_NAME_PREFIX;	
 	
-	static final String USER_PROFILE_KEY = "userProfile";
+	static final String USER_PROFILE_KEY = Consts.USER_PROFILE_KEY;
 
     public static final String SHARED_PORTAL_SSO_FILE_BASE = "SharedPortalSSO";
 
     static final String COOKIE_ATTR_SMSESSION = "SMSESSION";
-    
-    static final String SESSSION_ATTR_SP_TARGET = "SP_HPP_TARGET";
     
     static final String SP_FROM_HPP = "HPP";
 
@@ -35,7 +33,13 @@ public class AuthenticationConsts {
     
     static final String PHONE_EXT_SPLIT = "ext.";
     
-    public static final String USER_IDENTIFIER_TYPE = "SP_USERIDENTIFIERTYPE";
+    static final String ACCOUNT_COOKIE = "Account-Cookie";
+    
+    static final String ACCOUNT_HOMECOOKIE = "Account-HomeCookie";
+    
+    static final String ACCOUNT_BUSCOOKIE = "Account-BusCookie";
+    
+    public static final String USER_IDENTIFIER_TYPE =  Consts.UNSTICKY_SESSION_ATTR_PREFIX + "USERIDENTIFIERTYPE";
     
     /**
      * Following are property id that represents custom attributes added in
@@ -179,9 +183,9 @@ public class AuthenticationConsts {
     /**
      * SharedPortal session attributes prefix
      */
-    static final String RETAINED_PARAMETER_PREFIX = "SP_RETAIN_";
+    static final String RETAINED_PARAMETER_PREFIX = Consts.STICKY_SESSION_ATTR_PREFIX;
 
-    static final String PARAMETER_PREFIX = "SP_";
+    static final String PARAMETER_PREFIX = Consts.UNSTICKY_SESSION_ATTR_PREFIX;
 
     static final String ANON_IND_PROPERTY_NAME = "ANON_IND";
 
@@ -192,15 +196,7 @@ public class AuthenticationConsts {
     /**
      * Config information for cookie
      */
-    static final String COOKIE_REMEMBER_USER_FLAG = "HP_SP_SET_REMEMBER_USER_FLAG";
-
-    static final String COOKIE_USER_ID = "HP_SP_USERID";
-
-    static final String COOKIE_PATH = "/";
-
-    static final String COOKIE_DOMAIN = ".hp.com";
-
-    static final String SESSION_ATTR_SSO_ERROR = "SP_SSO_ERROR";
+    static final String SESSION_ATTR_SSO_ERROR = Consts.UNSTICKY_SESSION_ATTR_PREFIX + "SSO_ERROR";
     
     /**
      * SharedPortal Group attributes

@@ -616,11 +616,6 @@ public class AuthenticatorHelper {
             }
         }
         
-        // remove user profile stored in session
-        if (session.getAttribute(AuthenticationConsts.USER_PROFILE_KEY) != null) {
-            session.removeAttribute(AuthenticationConsts.USER_PROFILE_KEY);
-        }
-        
         // reset vignette session info to the guest user state
         SessionInfo sessionInfo = (SessionInfo)session
                 .getAttribute(SessionInfo.SESSION_INFO_NAME);
