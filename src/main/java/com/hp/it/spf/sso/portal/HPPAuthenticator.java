@@ -11,6 +11,12 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.hp.globalops.hppcbl.passport.PassportService;
+import com.hp.globalops.hppcbl.passport.PassportServiceException;
+import com.hp.globalops.hppcbl.passport.manager.PassportParametersManager;
+import com.hp.globalops.hppcbl.webservice.GetUserGroupsResponseElement;
+import com.hp.globalops.hppcbl.webservice.GroupRole;
+import com.hp.globalops.hppcbl.webservice.ProfileIdentity;
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
@@ -148,7 +154,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     }
 
     /**
-     * Retrieve user groups from HPP/Fed header and invoke related super method
+     * Retrieve user groups from HPP/Fed header or webservice and invoke related super method
      * to retrieve user groups from other sources
      * 
      * @return retrieved groups set or an empty set
@@ -156,17 +162,12 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     @SuppressWarnings("unchecked")
     protected Set getUserGroup() {
         Set<String> groups = new HashSet<String>();
-        // retrieve groups from http header
-        String groupString = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
-        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("The groups string got from HPP request header is: "
-                      + groupString);
-        }
-        if (groupString != null) {
-            StringTokenizer st = new StringTokenizer(groupString, "|");
-            while (st.hasMoreTokens()) {
-                groups.add(st.nextToken());
-            }
+        
+        String isFromWebserivce = AuthenticatorHelper.getProperty(AuthenticationConsts.HPPGROUPS_FROM_WEBSERVICE);
+        if (isFromWebserivce != null && "YES".equalsIgnoreCase(isFromWebserivce)) {
+        	groups = getUserGroupsFromWebService();
+        } else {
+        	groups = getUserGroupsFromHeader();
         }
 
         // login HPP/Fed
@@ -191,4 +192,56 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         request.setAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE, EUserIdentifierType.EXTERNAL_USER);
         return super.getUserProfile();
     }
+    
+    /**
+     * Retrieve user groups from HPP header.
+     * 
+     * @return retrieved groups set or an empty set
+     */
+    private Set<String> getUserGroupsFromHeader() {
+    	Set<String> groups = new HashSet<String>();
+    	String groupString = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("The groups string got from HPP request header is: "
+                      + groupString);
+        }
+        if (groupString != null) {
+            StringTokenizer st = new StringTokenizer(groupString, "|");
+            while (st.hasMoreTokens()) {
+                groups.add(st.nextToken());
+            }
+        }
+        return groups;
+    }
+    
+    /**
+     * Retrieve user groups from HPP webservice.
+     * 
+     * @return retrieved groups set or an empty set
+     */
+    private Set<String> getUserGroupsFromWebService() {
+		Set<String> groups = new HashSet<String>();
+		try {
+			PassportService ws = new PassportService();
+			PassportParametersManager wsManager = PassportParametersManager
+					.getInstance();
+			String adminSessionToken = (ws.login(wsManager.getAdminUser(),
+					wsManager.getAdminPassword())).getSessionToken();
+			
+			ProfileIdentity profileIdentity = new ProfileIdentity();
+            profileIdentity.setUserId((String)userProfile.get(AuthenticationConsts.KEY_USER_NAME));
+            
+            GetUserGroupsResponseElement response = ws.getUserGroups(
+                    adminSessionToken, profileIdentity);
+            for (int i = 0; i < response.getGroupRoleCount(); i++) {
+                GroupRole groupRole = response.getGroupRole(i);
+                groups.add(groupRole.getGroupName());
+            }
+		} catch (PassportServiceException pse) {
+			LOG.error("Invoke HPP webservice failed, and got PassportServiceException", pse);
+		} catch (Exception ex) {
+			LOG.error("Invoke HPP webservice failed and got other Exception", ex);
+		}
+		return groups;
+	}
 }
