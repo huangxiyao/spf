@@ -79,8 +79,6 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         // retrieve HPP specific attributes. e.g. email pref, phone, etc.
         userProfile.put(AuthenticationConsts.KEY_EMAIL_PREF,
                         getValue(AuthenticationConsts.HEADER_EMAIL_CONTACT_PREF_PROPERTY_NAME));
-        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT,
-                        getValue(AuthenticationConsts.HEADER_PHONE_EXT));
         userProfile.put(AuthenticationConsts.KEY_PHONE_PREF,
                         getValue(AuthenticationConsts.HEADER_PHONE_CONTACT_PREF_PROPERTY_NAME));
         userProfile.put(AuthenticationConsts.KEY_POSTAL_PREF,
