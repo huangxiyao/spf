@@ -292,7 +292,7 @@ public class MockeryUtils {
         final HttpServletRequest request = mockHttpServletRequest(context, "ANON");        
         context.checking(new Expectations() {
             {
-                allowing(request).getPathInfo();will(returnValue("/acme"));
+                allowing(request).getPathInfo();will(returnValue("/smartportal"));
                 
                 allowing(request).getHeader("SM_AUTHDIRNAME");will(returnValue(""));  
                 allowing(request).getHeader("AuthSource");will(returnValue(""));

@@ -8,13 +8,14 @@ package com.hp.it.spf.sso.portal;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserProfileException;
-import com.vignette.portal.log.LogConfiguration;
+import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
+import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
+import com.vignette.portal.log.LogWrapper;
 
 /**
  * This authenticator is used for AtHP users
@@ -28,7 +29,7 @@ import com.vignette.portal.log.LogConfiguration;
 public class AtHPAuthenticator extends AbstractAuthenticator {
     private static final long serialVersionUID = 1L;
 
-    private static final com.vignette.portal.log.LogWrapper LOG = AuthenticatorHelper.getLog(AtHPAuthenticator.class);
+    private static final LogWrapper LOG = AuthenticatorHelper.getLog(AtHPAuthenticator.class);
 
     /**
      * This is the constructor for AtHPAuthenticator. It will call the
@@ -107,26 +108,13 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
     @SuppressWarnings("unchecked")
     protected Set getUserGroup() {
         Set<String> groups = new HashSet<String>();
-        // retrieve groups from http header
-        String groupstring = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
-        // groups are divided by ,
-        if (groupstring != null) {
-            StringTokenizer st = new StringTokenizer(groupstring, "^");
-            while (st.hasMoreElements()) {
-                String temp = (String)st.nextElement();
-                if (temp.toLowerCase()
-                        .startsWith(AuthenticationConsts.ATHP_GROUP_PREFIX)) {
-                    String group = temp.substring(3, temp.indexOf(','));
-                    if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-                        LOG.debug("Get UserGroup = " + group);
-                    }
-                    groups.add(group);
-                }
-            }
-        }
-
+        
         // login atHP
         groups.add(AuthenticationConsts.LOCAL_ATHP_NAME);
+        
+        // retrieve groups from UserGroupRetriever
+        IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(AuthenticationConsts.ATHP_USER_GROUP_RETRIEVER);
+        groups.addAll(retriever.getGroups(userProfile, request));
 
         // retrieve groups with invoking super method and merge them
         groups.addAll(super.getUserGroup());

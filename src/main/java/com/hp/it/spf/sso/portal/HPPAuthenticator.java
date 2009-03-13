@@ -12,14 +12,10 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.hp.globalops.hppcbl.passport.PassportService;
-import com.hp.globalops.hppcbl.passport.PassportServiceException;
-import com.hp.globalops.hppcbl.passport.manager.PassportParametersManager;
-import com.hp.globalops.hppcbl.webservice.GetUserGroupsResponseElement;
-import com.hp.globalops.hppcbl.webservice.GroupRole;
-import com.hp.globalops.hppcbl.webservice.ProfileIdentity;
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserProfileException;
+import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
+import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogConfiguration;
@@ -86,7 +82,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 
         // retrieve HPP cookie account values
         userProfile.putAll(getCookieValuesAsMap());
-        
+
         setPhone();
     }
 
@@ -104,7 +100,6 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      *      java.lang.String, boolean)
      */
     protected String getValue(String fieldName) {
-
         String temp = getProperty(fieldName);
         String value = null;
         if (temp != null) {
@@ -157,21 +152,14 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     }
 
     /**
-     * Retrieve user groups from HPP/Fed header or webservice and invoke related super method
-     * to retrieve user groups from other sources
+     * Retrieve user groups from HPP/Fed header or webservice and invoke related
+     * super method to retrieve user groups from other sources
      * 
      * @return retrieved groups set or an empty set
      */
     @SuppressWarnings("unchecked")
     protected Set getUserGroup() {
         Set<String> groups = new HashSet<String>();
-        
-        String isFromWebserivce = AuthenticatorHelper.getProperty(AuthenticationConsts.HPPGROUPS_FROM_WEBSERVICE);
-        if (isFromWebserivce != null && "YES".equalsIgnoreCase(isFromWebserivce)) {
-        	groups = getUserGroupsFromWebService();
-        } else {
-        	groups = getUserGroupsFromHeader();
-        }
 
         // login HPP/Fed
         if (AuthenticatorHelper.loggedIntoHPP(request)) {
@@ -179,7 +167,11 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         } else if (AuthenticatorHelper.loggedIntoFed(request)) {
             groups.add(AuthenticationConsts.LOCAL_FED_NAME);
         }
-
+        
+        // retrieve groups from UserGroupRetriever
+        IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(AuthenticationConsts.HPP_USER_GROUP_RETRIEVER);
+        groups.addAll(retriever.getGroups(userProfile, request));
+        
         // retrieve groups with invoking super method and merge them
         groups.addAll(super.getUserGroup());
         return groups;
@@ -192,95 +184,49 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      * @throws UserProfileException if retrieving user profiles error
      */
     protected Map<String, Object> getUserProfile() {
-        request.setAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE, EUserIdentifierType.EXTERNAL_USER);
+        request.setAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE,
+                             EUserIdentifierType.EXTERNAL_USER);
         return super.getUserProfile();
     }
-    
-    /**
-     * Retrieve user groups from HPP header.
-     * 
-     * @return retrieved groups set or an empty set
-     */
-    private Set<String> getUserGroupsFromHeader() {
-    	Set<String> groups = new HashSet<String>();
-    	String groupString = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
-        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("The groups string got from HPP request header is: "
-                      + groupString);
-        }
-        if (groupString != null) {
-            StringTokenizer st = new StringTokenizer(groupString, "|");
-            while (st.hasMoreTokens()) {
-                groups.add(st.nextToken());
-            }
-        }
-        return groups;
-    }
-    
-    /**
-     * Retrieve user groups from HPP webservice.
-     * 
-     * @return retrieved groups set or an empty set
-     */
-    private Set<String> getUserGroupsFromWebService() {
-		Set<String> groups = new HashSet<String>();
-		try {
-			PassportService ws = new PassportService();
-			PassportParametersManager wsManager = PassportParametersManager
-					.getInstance();
-			String adminSessionToken = (ws.login(wsManager.getAdminUser(),
-					wsManager.getAdminPassword())).getSessionToken();
-			
-			ProfileIdentity profileIdentity = new ProfileIdentity();
-            profileIdentity.setUserId((String)userProfile.get(AuthenticationConsts.KEY_USER_NAME));
-            
-            GetUserGroupsResponseElement response = ws.getUserGroups(
-                    adminSessionToken, profileIdentity);
-            for (int i = 0; i < response.getGroupRoleCount(); i++) {
-                GroupRole groupRole = response.getGroupRole(i);
-                groups.add(groupRole.getGroupName());
-            }
-		} catch (PassportServiceException pse) {
-			LOG.error("Invoke HPP webservice failed, and got PassportServiceException", pse);
-		} catch (Exception ex) {
-			LOG.error("Invoke HPP webservice failed and got other Exception", ex);
-		}
-		return groups;
-	}
-    
+
     /**
      * Retrieve all cookie account values as a map.
      * <p>
-     * It retrieves Account-Cookie, Account-BusCookie and Account-HomeCookie values
-     * as a map from http cookie.
+     * It retrieves Account-Cookie, Account-BusCookie and Account-HomeCookie
+     * values as a map from http cookie.
      * </p>
      * 
      * @return cookie account value map or an empty map
      */
     private Map<String, String> getCookieValuesAsMap() {
         Map<String, String> map = new HashMap<String, String>();
-        
-        String ac = AuthenticatorHelper.getCookieValue(request, AuthenticationConsts.ACCOUNT_COOKIE);
+
+        String ac = AuthenticatorHelper.getCookieValue(request,
+                                                       AuthenticationConsts.ACCOUNT_COOKIE);
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("Retrieve ACCOUNT_COOKIE: " + ac);
         }
         map.putAll(convertCookieValueToMap(ac));
-        String ahc = AuthenticatorHelper.getCookieValue(request, AuthenticationConsts.ACCOUNT_HOMECOOKIE);
+        String ahc = AuthenticatorHelper.getCookieValue(request,
+                                                        AuthenticationConsts.ACCOUNT_HOMECOOKIE);
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("Retrieve ACCOUNT_HOMECOOKIE: " + ahc);
         }
         map.putAll(convertCookieValueToMap(ahc));
-        String absc = AuthenticatorHelper.getCookieValue(request, AuthenticationConsts.ACCOUNT_BUSCOOKIE);
+        String absc = AuthenticatorHelper.getCookieValue(request,
+                                                         AuthenticationConsts.ACCOUNT_BUSCOOKIE);
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("Retrieve ACCOUNT_BUSCOOKIE: " + absc);
         }
         map.putAll(convertCookieValueToMap(absc));
-        
+
         return map;
     }
-    
+
     /**
-     * Convert String which format is <code>|key=value|key1=value1|key2=value2</code> to map
+     * Convert String which format is
+     * <code>|key=value|key1=value1|key2=value2</code> to map
+     * 
      * @param cookieValue string value
      * @return cookie value map or an empty map
      */

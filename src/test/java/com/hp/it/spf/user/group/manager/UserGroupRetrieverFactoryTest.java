@@ -5,9 +5,10 @@
 package com.hp.it.spf.user.group.manager;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import com.hp.it.spf.sso.portal.AuthenticationConsts;
 
 /**
  * This is the test class for UserGroupRetrieverFactory.
@@ -24,9 +25,7 @@ public class UserGroupRetrieverFactoryTest {
      */
     @Test
     public void testCreateUserGroupImpl() {
-        IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl();
-        assertNotNull("Should return a implimentation class", retriever);
-        assertTrue("SSOUserGroupRetriever object should be created.",
-                   retriever instanceof DefaultUserGroupRetriever);
+        IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(AuthenticationConsts.HPP_USER_GROUP_RETRIEVER);
+        assertNotNull("Should return a implimentation class", retriever);        
     }
 }

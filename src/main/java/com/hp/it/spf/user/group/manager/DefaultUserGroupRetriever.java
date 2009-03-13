@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * This is the defalut implimentation class of <tt>IUserGroupRetriever</tt>.
  * 
@@ -18,13 +20,13 @@ public class DefaultUserGroupRetriever implements IUserGroupRetriever {
     /**
      * Return an empty user groups set
      * 
-     * @param siteName site name
      * @param userProfile user profiles
+     * @param request HttpServletRequest
      * @return user groups set, if user has no groups, an empty Set will be
      *         returned.
      */    
-    public Set<String> getGroups(String siteName,
-                                 Map<String, Object> userProfile){
+    public Set<String> getGroups(Map<String, Object> userProfile,
+                                 HttpServletRequest request){
         return new HashSet<String>();
     }
 }

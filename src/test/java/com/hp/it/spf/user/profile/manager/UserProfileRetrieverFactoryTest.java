@@ -9,6 +9,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.hp.it.spf.sso.portal.AuthenticationConsts;
+
 /**
  * This is the test class for UserProfileRetrieverFactory.
  * 
@@ -23,10 +25,8 @@ public class UserProfileRetrieverFactoryTest {
      */
     @Test
     public void testCreateUserProfileImpl() {
-        IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl();
-        assertNotNull("Should return a implimentation class", retriever);
-        assertTrue("UserProfileRetriever object should be created.",
-                   retriever instanceof DefaultUserProfileRetriever);
+        IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl(AuthenticationConsts.USER_PROFILE_RETRIEVER);
+        assertNotNull("Should return a implimentation class", retriever);        
     }
 
 }

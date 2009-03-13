@@ -57,8 +57,8 @@ public class AuthenticatorHelper {
     private AuthenticatorHelper() {
     }
 
-    private static ResourceBundle getAuthenticationConsts() {
-        if (AUTH_CONSTS == null) {
+    private static ResourceBundle getAuthenticationConsts(boolean needRefresh) {
+        if (AUTH_CONSTS == null || needRefresh) {
             AUTH_CONSTS = PropertyResourceBundleManager
                     .getBundle(AuthenticationConsts.SHARED_PORTAL_SSO_FILE_BASE);
         }
@@ -664,8 +664,8 @@ public class AuthenticatorHelper {
      * @see decode(java.lang.String)
      * @see trimUnwanted(java.lang.String)
      */
-    static String getRequestHeader(HttpServletRequest request, String in,
-            boolean needDecode) {
+    public static String getRequestHeader(HttpServletRequest request, String in,
+                                          boolean needDecode) {
         if (request == null) {
             return null;
         }
@@ -721,9 +721,40 @@ public class AuthenticatorHelper {
      * @param key
      * @return
      */
-    static String getProperty(String key) {
+    public static String getProperty(String key) {
+        return getProperty(key, false);
+    }
+    
+    /**
+     * Use resource bundle to get property.
+     * 
+     * @param key
+     * @param needRefresh if the resource bundle file need to be refreshed
+     * @return
+     */
+    public static String getProperty(String key, boolean needRefresh) {
         try {
-            return AuthenticatorHelper.getAuthenticationConsts().getString(key);
+            return AuthenticatorHelper.getAuthenticationConsts(needRefresh).getString(key);
+        } catch (Exception ex) {
+            LOG.error("Can't find key " + key + " in resource bundle");
+            return null;
+        }
+    }
+    
+    /**
+     * Use resource bundle to get property.
+     * 
+     * @param clazz the resource bundle name is the specified class's name
+     * @param key property key
+     * @return value of the specified key or <code>null</code>
+     */
+    public static String getProperty(Class clazz, String key) {
+        try {
+            String className = clazz.getName();
+            String packageName = clazz.getPackage().getName() + ".";
+            className =  className.replaceFirst(packageName, "");
+            ResourceBundle rb = ResourceBundle.getBundle(className);
+            return rb.getString(key);
         } catch (Exception ex) {
             LOG.error("Can't find key " + key + " in resource bundle");
             return null;

@@ -111,7 +111,7 @@ public class AuthenticationConsts {
 
     static final String HEADER_DATE_FORMAT_NAME = "DATE_FORMAT";
 
-    static final String HEADER_GROUP_NAME = "GROUPS";
+    public static final String HEADER_GROUP_NAME = "GROUPS";
 
     static final String HEADER_CITY_NAME = "CITY";
 
@@ -138,7 +138,7 @@ public class AuthenticationConsts {
      */
     static final String KEY_PROFILE_ID = Consts.KEY_PROFILE_ID;
     
-    static final String KEY_USER_NAME = Consts.KEY_USER_NAME;
+    public static final String KEY_USER_NAME = Consts.KEY_USER_NAME;
     
     static final String KEY_FIRST_NAME = Consts.KEY_FIRST_NAME;
     
@@ -230,7 +230,7 @@ public class AuthenticationConsts {
     /**
      * Configuration for AtHP group prefix
      */
-    static final String ATHP_GROUP_PREFIX = "cn=";
+    public static final String ATHP_GROUP_PREFIX = "cn=";
     
     /**
      * Groups stands for the user is from HPP/FED/@HP.
@@ -255,6 +255,7 @@ public class AuthenticationConsts {
      * Keys of user profile and group retriever defined in properties
      */
     public final static String USER_PROFILE_RETRIEVER = "user_profile_retriever";
-    public final static String USER_GROUP_RETRIEVER = "user_group_retriever";
+    public final static String HPP_USER_GROUP_RETRIEVER = "hpp_user_group_retriever";
+    public final static String ATHP_USER_GROUP_RETRIEVER = "athp_user_group_retriever";
 }
 

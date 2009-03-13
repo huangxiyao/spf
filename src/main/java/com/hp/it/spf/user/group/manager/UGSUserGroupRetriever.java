@@ -7,16 +7,17 @@ package com.hp.it.spf.user.group.manager;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.rpc.ServiceException;
 
 import com.hp.it.spf.user.exception.UserGroupsException;
@@ -31,6 +32,11 @@ import com.hp.it.spf.user.group.stub.UGSRuntimeServiceXfireImplHttpBindingStub;
 import com.hp.it.spf.user.group.stub.UGSRuntimeServiceXfireImplLocator;
 import com.hp.it.spf.user.group.stub.UserContext;
 import com.hp.it.spf.user.group.utils.UGSParametersManager;
+import com.hp.it.spf.xa.dc.portal.ErrorCode;
+import com.hp.it.spf.xa.log.portal.Operation;
+import com.hp.it.spf.xa.log.portal.TimeRecorder;
+import com.hp.it.spf.xa.misc.portal.RequestContext;
+import com.hp.it.spf.xa.misc.portal.Utils;
 
 /**
  * This is the implimentation class of <tt>IUserGroupRetriever</tt>.
@@ -39,23 +45,28 @@ import com.hp.it.spf.user.group.utils.UGSParametersManager;
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  * @version 1.0
  */
-public class SSOUserGroupRetriever implements IUserGroupRetriever {
-    private static final Logger LOG = Logger.getLogger(SSOUserGroupRetriever.class.toString());
+public class UGSUserGroupRetriever implements IUserGroupRetriever {
+    private static final Logger LOG = Logger.getLogger(UGSUserGroupRetriever.class.toString());
 
 	/**
      * Retrieve user groups by site name and user profiles.
      * 
-     * @param siteName site name
      * @param userProfile user profiles
+     * @param request HttpServletRequest
      * @return user groups set, if user has no groups, an empty Set will be
      *         returned.
      * @throws UserGroupsException if any exception occurs, an
      *             UserGroupsException will be thrown.
      */
-    public Set<String> getGroups(String siteName,
-                                 Map<String, Object> userProfile) throws UserGroupsException {
+    public Set<String> getGroups(Map<String, Object> userProfile,
+                                 HttpServletRequest request) throws UserGroupsException {
         Set<String> groupSet = new HashSet<String>();
-		try {            
+        String siteName = null;
+        
+        TimeRecorder timeRecorder = RequestContext.getThreadInstance().getTimeRecorder();
+        try {          
+		    timeRecorder.recordStart(Operation.GROUPS_CALL);
+		    siteName = Utils.getEffectiveSite(request).getDNSName();
             GroupRequest serviceRequest = getServiceRequest(siteName, userProfile);
             if (LOG.isLoggable(Level.FINEST)) {
                 LOG.finest("UGS invokeService");
@@ -81,14 +92,19 @@ public class SSOUserGroupRetriever implements IUserGroupRetriever {
                     }
                 }
             }            
+            timeRecorder.recordEnd(Operation.GROUPS_CALL);
             return groupSet;
-        } catch (SiteDoesNotExistException e) {
+        } catch (SiteDoesNotExistException ex) {
             String msg = "The site, "
                          + siteName
-                         + ", doesn't exist in the UGS definition database";            
-            throw new UserGroupsException(msg, e);
-        } catch (Exception e) {            
-            throw new UserGroupsException(e);
+                         + ", doesn't exist in the UGS definition database"; 
+            timeRecorder.recordError(Operation.GROUPS_CALL, ex);
+            RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.GROUPS002, ex.getMessage());
+            throw new UserGroupsException(msg, ex);
+        } catch (Exception ex) {      
+            timeRecorder.recordError(Operation.GROUPS_CALL, ex);
+            RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.GROUPS002, ex.getMessage());
+            throw new UserGroupsException(ex);
         }
     }
 

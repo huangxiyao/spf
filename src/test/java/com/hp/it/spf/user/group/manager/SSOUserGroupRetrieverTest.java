@@ -10,14 +10,25 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Arrays;
 import java.util.Collections;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.epicentric.common.website.SessionUtils;
+import com.epicentric.user.UserManager;
+import com.hp.it.spf.sso.portal.AuthenticationConsts;
+import com.hp.it.spf.sso.portal.MockeryUtils;
 import com.hp.it.spf.user.exception.UserGroupsException;
 import com.hp.it.spf.user.group.stub.UserContext;
 
@@ -26,11 +37,37 @@ import com.hp.it.spf.user.group.stub.UserContext;
  * 
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @version 1.0
- * @see com.hp.it.spf.user.group.manager.SSOUserGroupRetriever
+ * @see com.hp.it.spf.user.group.manager.UGSUserGroupRetriever
  */
 public class SSOUserGroupRetrieverTest {
-    String siteName = null;
     Map<String, Object> userProfile = new HashMap<String, Object>();
+    
+    private static HttpServletRequest request;
+    
+    private static Mockery context;
+    
+    /**
+    * Init mock objects.
+    * 
+    * @throws java.lang.Exception
+    */
+   @BeforeClass
+   public static void setUpBeforeClass() throws Exception {
+       context = MockeryUtils.createMockery();
+       request = MockeryUtils.mockHttpServletRequestForANON(context);      
+   }
+
+   /**
+    * Claenup the resource. Set static pararmters to null, so the object they
+    * refer to can be GCed by JVM.
+    * 
+    * @throws Exception
+    */
+   @AfterClass
+   public static void tearDownAfterClass() throws Exception {
+       context = null;
+       request = null;      
+   }
     
     /**
      * Init siteName parameter and userProfile map for test
@@ -38,8 +75,7 @@ public class SSOUserGroupRetrieverTest {
      * @throws Exception if setUp operation failed.
      */
     @Before
-    public void setUp() throws Exception {
-        siteName = "smartportal";
+    public void setUp() throws Exception {        
         userProfile.put("Accreditations", "EU-02pp-Q530;EU-02pp-N342;EU-02pp-O138");
         userProfile.put("AgreementNos", "");
         userProfile.put("AgreementSubTypes", "");
@@ -172,74 +208,53 @@ public class SSOUserGroupRetrieverTest {
     /**
      * Test GetGroups method and check the return value.
      * 
-     * @see SSOUserGroupRetriever#getGroups(String, Map)
+     * @see UGSUserGroupRetriever#getGroups(String, Map)
      */
     @Test
     public void testGetGroups() {
-        IUserGroupRetriever retriever = new SSOUserGroupRetriever();
+        IUserGroupRetriever retriever = new UGSUserGroupRetriever();
         Set<String> groupSet;
-        // siteName, userProfile both assigned.
+        // request, userProfile both assigned.
         try {
-            groupSet = retriever.getGroups(siteName, userProfile);
+            groupSet = retriever.getGroups(userProfile, request);
             assertNotNull("Result group set shouldn't be null.", groupSet);
         } catch (UserGroupsException ex) {
             assertFalse(ex.getMessage(), true);
         }  
      
-        // siteName is assigned, userProfile is null
+        // request is assigned, userProfile is null
         try {
-            groupSet = retriever.getGroups(siteName, null);            
+            groupSet = retriever.getGroups(null, request);            
         } catch (UserGroupsException ex) {
             assertTrue(ex.getMessage(), true);
         }  
         
-        // siteName is null, userProfile is assigned
+        // request is null, userProfile is assigned
         try {
-            groupSet = retriever.getGroups(null, userProfile);            
+            groupSet = retriever.getGroups(userProfile, null);            
         } catch (UserGroupsException ex) {
             assertTrue(ex.getMessage(), true);
         }  
         
-        // siteName is null, userProfile is an empty map
+        // request is null, userProfile is an empty map
         try {
-            groupSet = retriever.getGroups(null, new HashMap<String, Object>());            
+            groupSet = retriever.getGroups(new HashMap<String, Object>(), null);            
         } catch (UserGroupsException ex) {
             assertTrue(ex.getMessage(), true);
         }  
-        
-        // siteName is "", userProfile is assigned
-        try {
-            groupSet = retriever.getGroups("", userProfile);            
-        } catch (UserGroupsException ex) {
-            assertTrue(ex.getMessage(), true);
-        } 
         
         // both are null
         try {
             groupSet = retriever.getGroups(null, null);            
         } catch (UserGroupsException ex) {
             assertTrue(ex.getMessage(), true);
-        }  
+        }          
         
-        // siteName is "", userProfile is an empty map
-        try {
-            groupSet = retriever.getGroups("", new HashMap<String, Object>());            
-        } catch (UserGroupsException ex) {
-            assertTrue(ex.getMessage(), true);
-        } 
-        
-        // siteName refer to a invaild site, userProfile is assigned.
-        try {
-            groupSet = retriever.getGroups("donotexist", userProfile);            
-        } catch (UserGroupsException ex) {
-            assertTrue(ex.getMessage(), true);
-        }
-        
-        // siteName is assigned, userProfile is an invaild map.
+        // request is assigned, userProfile is an invaild map.
         try {
             Map<String, Object> profiles = new HashMap<String, Object>();
             profiles.put("test", "test");            
-            groupSet = retriever.getGroups(siteName, profiles);
+            groupSet = retriever.getGroups(profiles, request);
             // should be an empty set
             assertEquals(groupSet.size(), 0);
         } catch (UserGroupsException ex) {
@@ -292,7 +307,7 @@ public class SSOUserGroupRetrieverTest {
 		profile.put("somethingElseAttribute", somethingElseAttributeValue);
 
 		// Call the method we're testing
-		UserContext[] userContextItems = new SSOUserGroupRetriever().convertToUserContext(profile);
+		UserContext[] userContextItems = new UGSUserGroupRetriever().convertToUserContext(profile);
 
 		// Convert result to map so we can easily access it using keys
 		Map<String, String> userContextItemsMap = new HashMap<String, String>();
