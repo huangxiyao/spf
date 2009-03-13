@@ -102,9 +102,7 @@ public class UserGroupRetrieverFactory {
         String value = AuthenticatorHelper.getProperty(key, true);
 
         if (retrieverPorperties.containsKey(key)) {
-            if (!retrieverPorperties.get(key).equals(value)) {
-                return false;
-            } else {
+            if (retrieverPorperties.get(key).equals(value)) {                
                 // CompoundUserGroupRetriever
                 if (CompoundUserGroupRetriever.class.getName().equals(value)) {
                     String delegateKey = key.concat(".delegates");
@@ -115,9 +113,7 @@ public class UserGroupRetrieverFactory {
                         // delegated class names are not changed
                         if (retrieverPorperties.get(delegateKey).equals(delegateValue)) {
                             return true;
-                        } else {
-                            return false;
-                        }
+                        } 
                     }
                 } else {
                     return true;

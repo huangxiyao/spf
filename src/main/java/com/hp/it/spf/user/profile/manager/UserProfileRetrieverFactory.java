@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.hp.it.spf.sso.portal.AuthenticatorHelper;
+import com.hp.it.spf.user.group.manager.CompoundUserGroupRetriever;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
@@ -100,11 +101,9 @@ public class UserProfileRetrieverFactory {
         String value = AuthenticatorHelper.getProperty(key, true);
 
         if (retrieverPorperties.containsKey(key)) {
-            if (!retrieverPorperties.get(key).equals(value)) {
-                return false;
-            } else {
-                // CompoundUserProfileRetriever
-                if (CompoundUserProfileRetriever.class.getName().equals(value)) {
+            if (retrieverPorperties.get(key).equals(value)) {                
+                // CompoundUserGroupRetriever
+                if (CompoundUserGroupRetriever.class.getName().equals(value)) {
                     String delegateKey = key.concat(".delegates");
                     String delegateValue = AuthenticatorHelper.getProperty(delegateKey);
                     // specified retriever key already exist in the
@@ -113,9 +112,7 @@ public class UserProfileRetrieverFactory {
                         // delegated class names are not changed
                         if (retrieverPorperties.get(delegateKey).equals(delegateValue)) {
                             return true;
-                        } else {
-                            return false;
-                        }
+                        } 
                     }
                 } else {
                     return true;
