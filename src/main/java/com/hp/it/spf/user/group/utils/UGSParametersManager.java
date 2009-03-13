@@ -28,7 +28,9 @@ public class UGSParametersManager {
 
     private String password = null;
 
-    private String timeout = null;   
+    private String timeout = null;
+
+	private String siteNamePrefix = null;
     
 
     private UGSParametersManager() {
@@ -71,6 +73,7 @@ public class UGSParametersManager {
             setUserName(parameters.getString(IUGSConstant.USERNAME_PREFIX + mode));
             setPassword(parameters.getString(IUGSConstant.PASSWORD_PREFIX + mode));
             setTimeout(parameters.getString(IUGSConstant.TIMEOUT + mode));
+			setSiteNamePrefix(parameters.getString(IUGSConstant.SITE_NAME_PREFIX_PREFIX + mode));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -115,4 +118,14 @@ public class UGSParametersManager {
     private void setTimeout(String timeout) {
         this.timeout = timeout;
     }
+
+	public String getSiteNamePrefix()
+	{
+		return siteNamePrefix;
+	}
+
+	private void setSiteNamePrefix(String siteNamePrefix)
+	{
+		this.siteNamePrefix = siteNamePrefix;
+	}
 }

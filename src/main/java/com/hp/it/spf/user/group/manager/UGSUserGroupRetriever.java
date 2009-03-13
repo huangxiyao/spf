@@ -128,18 +128,36 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
 
         // Populate request object
         GroupRequest groupRequest = new GroupRequest();
-        groupRequest.setSiteName(siteName);
+		String ugsSiteId = getUGSSiteID(siteName);
+        groupRequest.setSiteName(ugsSiteId);
         groupRequest.setUserContext(new ArrayOfUserContext(convertToUserContext(userProfile)));
 
         if (LOG.isLoggable(Level.FINEST)) {
             LOG.finest("UGS request object: SiteName="
-                       + siteName
+                       + ugsSiteId
                        + " User Profile="
                        + userProfile.toString());
         }
 
         return groupRequest;
     }
+
+
+	/**
+	 * Returns the site ID expected by UGS.
+	 * In UGS site ID is unique. This means that if we want to connect different portal environments
+	 * (e.g. DEV, ITFT, ITG) to the same UGS instance and if each hosts the same sites, we need to
+	 * uniquely identify these sites in UGS. To achieve this we can use environment specific prefix
+	 * which is defined in UGSParameters.properties file.
+	 *
+	 * @param siteName portal site name
+	 * @return UGS site ID
+	 */
+	private String getUGSSiteID(String siteName)
+	{
+		return UGSParametersManager.getInstance().getSiteNamePrefix() + siteName;
+	}
+
 
     /**
      * Convert user profile map to <tt>UserContext</tt> array.
@@ -239,6 +257,7 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void convertListOfMaps(List<UserContext> result, String attributeName, List listValue)
 	{
 		// If attribute is a list of maps we create a flat set of name value pairs

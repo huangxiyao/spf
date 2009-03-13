@@ -21,4 +21,5 @@ public class IUGSConstant {
     public final static String USERNAME_PREFIX = "UserName";
     public final static String PASSWORD_PREFIX = "Password";
     public final static String TIMEOUT = "Timeout";
+	public static final String SITE_NAME_PREFIX_PREFIX = "SiteNamePrefix";
 }
