@@ -107,7 +107,7 @@
 		<dependency>
 			<groupId>com.hp.it.cas.persona</groupId>
 			<artifactId>cas-persona</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
