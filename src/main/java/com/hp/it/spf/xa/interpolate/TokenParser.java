@@ -39,9 +39,13 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{LOGGED-IN}</code></li>
  * <li><code>{LOGGED-OUT}</code></li>
  * <li><code>{LANGUAGE-CODE}</code></li>
+ * <li><code>{LANGUAGE-CODE:<i>case</i>}</code></li>
  * <li><code>{COUNTRY-CODE}</code></li>
+ * <li><code>{COUNTRY-CODE:<i>case</i>}</code></li>
  * <li><code>{LANGUAGE-TAG}</code></li>
+ * <li><code>{LANGUAGE-TAG:<i>case</i>}</code></li>
  * <li><code>{HPP-LANGUAGE-CODE}</code></li>
+ * <li><code>{HPP-LANGUAGE-CODE:<i>case</i>}</code></li>
  * <li><code>{REQUEST-URL}</code></li>
  * <li><code>{REQUEST-URL:<i>spec</i>}</code></li>
  * <li><code>{EMAIL}</code></li>
@@ -199,25 +203,29 @@ public abstract class TokenParser {
 	 */
 	protected static String DATE_PATTERN = "M/d/yyyy h:mm:ss a z";
 
-	private int containerIndex; // For container parsing.
-	private int containerLevel; // For container parsing.
-	private String containerNewContent; // For container parsing.
-	private String containerOldContent; // For container parsing.
-	private String containerToken; // For container parsing.
-	private char containerTokenBegin; // For container parsing.
-	private char containerTokenEnd; // For container parsing.
-	private ContainerMatcher containerMatcher; // For container parsing.
+	private int containerIndex = -1; // For container parsing.
+	private int containerLevel = -1; // For container parsing.
+	private String containerNewContent = null; // For container parsing.
+	private String containerOldContent = null; // For container parsing.
+	private String containerToken = null; // For container parsing.
+	private char containerTokenBegin = 0; // For container parsing.
+	private char containerTokenEnd = 0; // For container parsing.
+	private ContainerMatcher containerMatcher = null; // For container
+	// parsing.
 
 	private static final int FOUND_CONTAINER_START_MATCH = 3;
 	private static final int FOUND_CONTAINER_START_NOMATCH = 2;
 	private static final int FOUND_CONTAINER_END = 1;
 	private static final int FOUND_END = 0;
 	private static final String TOKEN_CONTAINER_OR = "|";
-	private static char TOKEN_BEGIN = '{';
-	private static char TOKEN_END = '}';
-	private static char TOKEN_BEGIN_PARAM = ':';
-	private static char DEPRECATED_TOKEN_BEGIN = '<';
-	private static char DEPRECATED_TOKEN_END = '>';
+	private static final char TOKEN_BEGIN = '{';
+	private static final char TOKEN_END = '}';
+	private static final char TOKEN_BEGIN_PARAM = ':';
+	private static final char DEPRECATED_TOKEN_BEGIN = '<';
+	private static final char DEPRECATED_TOKEN_END = '>';
+
+	private static final String UPPERCASE = "upper";
+	private static final String LOWERCASE = "lower";
 
 	/**
 	 * This class attribute holds the base filename of the token-substitution
@@ -383,11 +391,11 @@ public abstract class TokenParser {
 	protected abstract boolean getLoginStatus();
 
 	/**
-	 * An inner class interface for deciding whether a content section enclosed
-	 * within a container token should be included in the interpolated content.
-	 * Different action by portal and portlet, and also different depending on
-	 * the type of container token, so therefore this is an interface. It should
-	 * be implemented in the concrete subclass for each type of container token
+	 * An inner class for deciding whether a content section enclosed within a
+	 * container token should be included in the interpolated content. Different
+	 * action by portal and portlet, and also different depending on the type of
+	 * container token, so therefore this is an interface. It should be
+	 * implemented in the concrete subclass for each type of container token
 	 * that subclass (portal or portlet) may encounter.
 	 */
 	protected abstract class ContainerMatcher {
@@ -416,9 +424,9 @@ public abstract class TokenParser {
 	}
 
 	/**
-	 * An inner class interface for returning the value to substitute for a
-	 * non-container, parameterized token like <code>{INCLUDE:key}</code>
-	 * where "key" is the parameter passed to the getValue method.
+	 * An inner class for returning the value to substitute for a non-container,
+	 * (ie elemental) token like <code>{INCLUDE:key}</code> where "key" is the
+	 * parameter passed to the getValue method.
 	 */
 	protected abstract class ValueProvider {
 
@@ -437,52 +445,7 @@ public abstract class TokenParser {
 	 * <p>
 	 * Parses the given string, performing all of the token substitutions and
 	 * interpolations supported by this class. For a list and description of all
-	 * the supported tokens, see the other parse methods - this method calls all
-	 * of them in series. The order of token evaluation is as follows:
-	 * </p>
-	 * <dl>
-	 * <dt><code>{INCLUDE:<i>key</i>}</code></dt>
-	 * <dd>This token is parsed first, and the substituted content is added to
-	 * the string. So subsequent substitutions operate against the value for the
-	 * <i>key</i> - therefore that value may itself contain other tokens, and
-	 * other tokens' parameters may contain that value.</dd>
-	 * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code></dt>
-	 * <dt><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
-	 * <dd>The unparameterized container tokens are parsed next, to eliminate
-	 * as much content as possible. The other container tokens can't be parsed
-	 * yet because they are parameterized.</dd>
-	 * <dt><code>{LANGUAGE-CODE}</code></dt>
-	 * <dt><code>{COUNTRY-CODE}</code></dt>
-	 * <dt><code>{LANGUAGE-TAG}</code></dt>
-	 * <dt><code>{HPP-LANGUAGE-CODE}</code></dt>
-	 * <dt><code>{REQUEST-URL}</code></dt>
-	 * <dt><code>{EMAIL}</code></dt>
-	 * <dt><code>{NAME}</code></dt>
-	 * <dt><code>{SITE}</code></dt>
-	 * <dt><code>{SITE-URL}</code></dt>
-	 * <dd>All of the unparameterized non-container tokens are parsed next, so
-	 * that their values can be substituted into the parameterized ones below if
-	 * necessary.</dd>
-	 * <dt><code>{BEFORE:<i>key</i>}...{/BEFORE}</code></dt>
-	 * <dt><code>{AFTER:<i>key</i>}...{/AFTER}</code></dt>
-	 * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
-	 * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
-	 * <dd>The parameterized container tokens are parsed, to eliminate as much
-	 * content as possible. Their parameters may include values from above.</dd>
-	 * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>
-	 * <dt><code>{CONTENT-URL:<i>path</i>}</code></dt>
-	 * <dt><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></dt>
-	 * <dt><code>{REQUEST-URL:<i>spec</i>}</code></dt>
-	 * <dt><code>{SITE-URL:<i>spec</i>}</code></dt>
-	 * <dd>Finally the remaining parameterized tokens are parsed last, so that
-	 * the unparameterized ones (and also <code>{INCLUDE:<i>key</i>}</code>)
-	 * can include values in their parameters.</dd>
-	 * </dl>
-	 * </p>
-	 * <p>
-	 * <b>Note:</b> The <code>&lt;</code> and <code>&gt;</code> symbols are
-	 * also supported for the token boundaries, in place of <code>{</code> and
-	 * <code>}</code>.
+	 * the supported tokens, see the other parse methods.
 	 * </p>
 	 * 
 	 * @param content
@@ -496,36 +459,34 @@ public abstract class TokenParser {
 		}
 
 		// Start parsing and substituting the tokens:
-		// Always do {INCLUDE:key} first.
-		content = parseInclude(content);
-
-		// Always do unparameterized containers second:
+		// For efficiency, do containers first:
+		// Starting with the unparameterized containers...
 		content = parseLoggedInContainer(content);
 		content = parseLoggedOutContainer(content);
 
-		// Always do unparameterized non-containers third:
-		content = parseLanguageCode(content);
-		content = parseCountryCode(content);
-		content = parseLanguageTag(content);
-		content = parseHPPLanguageCode(content);
-		content = parseRequestURL(content);
-		content = parseEmail(content);
-		content = parseName(content);
-		content = parseSite(content);
-		content = parseSiteURL(content);
-
-		// Always do parameterized containers fourth:
+		// Then the parameterized containers.
 		content = parseBeforeContainer(content);
 		content = parseAfterContainer(content);
 		content = parseSiteContainer(content);
 		content = parseGroupContainer(content);
 
-		// Always finish with parameterized non-containers:
+		// Do the elemental tokens second:
+		// Starting with the unparameterized tokens...
+		content = parseLanguageCode(content);
+		content = parseCountryCode(content);
+		content = parseLanguageTag(content);
+		content = parseHPPLanguageCode(content);
+		content = parseEmail(content);
+		content = parseName(content);
+		content = parseSite(content);
+
+		// Then the parameterized tokens.
+		content = parseInclude(content);
 		content = parseUserProperty(content);
 		content = parseNoLocalizedContentURL(content);
 		content = parseLocalizedContentURL(content);
-		content = parseRequestURLParameterized(content);
-		content = parseSiteURLParameterized(content);
+		content = parseRequestURL(content);
+		content = parseSiteURL(content);
 
 		// Done.
 		return (content);
@@ -536,15 +497,28 @@ public abstract class TokenParser {
 	 * Parses the given string, substituting the <a
 	 * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
 	 * 639-1</a> language code for the current locale in place of the
-	 * <code>{LANGUAGE-CODE}</code> token. For example: <code>&lt;a
+	 * <code>{LANGUAGE-CODE}</code> or
+	 * <code>{LANGUAGE-CODE:<i>case</i>}</code> tokens. The
+	 * <code><i>case</i></code> controls whether the substituted value is
+	 * uppercase (<code><i>upper</i></code>) or lowercase (<code><i>lower</i></code>).
+	 * By default, lowercase is used.
+	 * </p>
+	 * <p>
+	 * For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?lang={LANGUAGE-CODE}"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
 	 * href="https://ovsc.hp.com?lang=ja"&gt;go to OVSC&lt;/a&gt;</code>
-	 * when the locale is for Japan. The locale is determined from the concrete
-	 * subclass {@link #getLocale()} method. If the locale is null, or one in
-	 * which a language code is not specified, the token is replaced with blank.
-	 * If you provide null content, null is returned.
+	 * when the locale is for Japan. If <code>{LANGUAGE-CODE:upper}</code>
+	 * were used, then we would get
+	 * <code>&lt;a href="https://ovsc.hp.com?lang=JA"&gt;go to OVSC&lt;/a&gt;</code>
+	 * instead.
+	 * </p>
+	 * <p>
+	 * The locale is determined from the concrete subclass {@link #getLocale()}
+	 * method. If the locale is null, or one in which a language code is not
+	 * specified, the token is replaced with blank. If you provide null content,
+	 * null is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -557,21 +531,42 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseLanguageCode(String content) {
-		String lang = null;
-		Locale loc = getLocale();
-		if (loc != null) {
-			lang = loc.getLanguage();
+
+		/**
+		 * Value provider for the language code (possibly forced to upper or
+		 * lowercase).
+		 */
+		class LanguageCodeValueProvider extends ValueProvider {
+			protected String getValue(String param) {
+				if (param != null)
+					param = param.trim();
+				String lang = null;
+				Locale loc = getLocale();
+				if (loc != null) {
+					lang = loc.getLanguage();
+					if (UPPERCASE.equalsIgnoreCase(param))
+						lang = lang.toUpperCase();
+					else if (LOWERCASE.equalsIgnoreCase(param))
+						lang = lang.toLowerCase();
+				}
+				return (lang);
+			}
 		}
-		return parseUnparameterized(content, TOKEN_LANGUAGE_CODE, lang);
+
+		return parseElementalToken(content, TOKEN_LANGUAGE_CODE,
+				new LanguageCodeValueProvider());
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, substituting the HP Passport language code for
-	 * the current locale in place of the <code>{HPP-LANGUAGE-CODE}</code>
-	 * token. The HPP language code is usually the ISO 639-1 value, but not
-	 * necessarily; for example, HPP uses non-ISO-standard codes for Simplified
-	 * and Traditional Chinese.
+	 * the current locale in place of the <code>{HPP-LANGUAGE-CODE}</code> or
+	 * <code>{HPP-LANGUAGE-CODE:<i>case</i>}</code> tokens. The HPP language
+	 * code is usually the ISO 639-1 value, but not necessarily; for example,
+	 * HPP uses non-ISO-standard codes for Simplified and Traditional Chinese.
+	 * The <code><i>case</i></code> controls whether the substituted value is
+	 * uppercase (<code><i>upper</i></code>) or lowercase (<code><i>lower</i></code>).
+	 * By default, lowercase is used.
 	 * </p>
 	 * <p>
 	 * For example: <code>&lt;a
@@ -579,10 +574,16 @@ public abstract class TokenParser {
 	 * HPP&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
 	 * href="https://passport2.hp.com?lang=ja"&gt;go to HPP&lt;/a&gt;</code>
-	 * when the locale is for Japan. The locale is determined from the concrete
-	 * subclass {@link #getLocale()} method. If the locale is null, or one in
-	 * which a language code is not specified, the token is replaced with blank.
-	 * If you provide null content, null is returned.
+	 * when the locale is for Japan. If <code>{HPP-LANGUAGE-CODE:upper}</code>
+	 * were used, we would get
+	 * <code>&lt;a href="https://passport2.hp.com?lang=JA"&gt;go to HPP&lt;/a&gt;</code>
+	 * instead.
+	 * </p>
+	 * <p>
+	 * The locale is determined from the concrete subclass {@link #getLocale()}
+	 * method. If the locale is null, or one in which a language code is not
+	 * specified, the token is replaced with blank. If you provide null content,
+	 * null is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -595,12 +596,30 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseHPPLanguageCode(String content) {
-		String lang = null;
-		Locale loc = getLocale();
-		if (loc != null) {
-			lang = I18nUtility.localeToHPPLanguage(loc);
+
+		/**
+		 * Value provider for the HPP language code (possibly forced to upper or
+		 * lowercase).
+		 */
+		class HPPLanguageCodeValueProvider extends ValueProvider {
+			protected String getValue(String param) {
+				if (param != null)
+					param = param.trim();
+				String lang = null;
+				Locale loc = getLocale();
+				if (loc != null) {
+					lang = I18nUtility.localeToHPPLanguage(loc);
+					if (UPPERCASE.equalsIgnoreCase(param))
+						lang = lang.toUpperCase();
+					else if (LOWERCASE.equalsIgnoreCase(param))
+						lang = lang.toLowerCase();
+				}
+				return (lang);
+			}
 		}
-		return parseUnparameterized(content, TOKEN_HPP_LANGUAGE_CODE, lang);
+
+		return parseElementalToken(content, TOKEN_HPP_LANGUAGE_CODE,
+				new HPPLanguageCodeValueProvider());
 	}
 
 	/**
@@ -608,15 +627,27 @@ public abstract class TokenParser {
 	 * Parses the given string, substituting the <a
 	 * href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
 	 * 3166-1</a> country code for the current locale in place of the
-	 * <code>{COUNTRY-CODE}</code> token. For example: <code>&lt;a
+	 * <code>{COUNTRY-CODE}</code> or <code>{COUNTRY-CODE:<i>case</i>}</code>
+	 * token. The <code><i>case</i></code> controls whether the substituted
+	 * value is uppercase (<code><i>upper</i></code>) or lowercase (<code><i>lower</i></code>).
+	 * By default, uppercase is used.
+	 * </p>
+	 * <p>
+	 * For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?cc={COUNTRY-CODE}"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
 	 * href="https://ovsc.hp.com?cc=JP"&gt;go to OVSC&lt;/a&gt;</code>
-	 * when the locale is for Japan. The locale is determined from the concrete
-	 * subclass {@link #getLocale()} method. If the locale is null, or one in
-	 * which a country is not specified, the token is replaced with blank. If
-	 * you provide null content, null is returned.
+	 * when the locale is for Japan. If <code>{COUNTRY-CODE:lower}</code> were
+	 * used, then we would get <code>&lt;a 
+	 * href="https://ovsc.hp.com?cc=jp"&gt;go to OVSC&lt;/a&gt;</code>
+	 * instead.
+	 * </p>
+	 * <p>
+	 * The locale is determined from the concrete subclass {@link #getLocale()}
+	 * method. If the locale is null, or one in which a country is not
+	 * specified, the token is replaced with blank. If you provide null content,
+	 * null is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -629,12 +660,30 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseCountryCode(String content) {
-		String cc = null;
-		Locale loc = getLocale();
-		if (loc != null) {
-			cc = loc.getCountry();
+
+		/**
+		 * Value provider for the country code (possibly forced to upper or
+		 * lowercase).
+		 */
+		class CountryCodeValueProvider extends ValueProvider {
+			protected String getValue(String param) {
+				if (param != null)
+					param = param.trim();
+				String lang = null;
+				Locale loc = getLocale();
+				if (loc != null) {
+					lang = loc.getCountry();
+					if (UPPERCASE.equalsIgnoreCase(param))
+						lang = lang.toUpperCase();
+					else if (LOWERCASE.equalsIgnoreCase(param))
+						lang = lang.toLowerCase();
+				}
+				return (lang);
+			}
 		}
-		return parseUnparameterized(content, TOKEN_COUNTRY_CODE, cc);
+
+		return parseElementalToken(content, TOKEN_COUNTRY_CODE,
+				new CountryCodeValueProvider());
 	}
 
 	/**
@@ -642,15 +691,29 @@ public abstract class TokenParser {
 	 * Parses the given string, substituting the given <a
 	 * href="href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language
 	 * tag for the current locale in place of the <code>{LANGUAGE-TAG}</code>
-	 * token. For example: <code>&lt;a
+	 * or <code>{LANGUAGE-TAG:<i>case</i>}</code> tokens. The
+	 * <code><i>case</i></code> controls whether the tag is all uppercase (<code><i>upper</i></code>)
+	 * or all lowercase (<code><i>lower</i></code>). By default, mixed case
+	 * is used (lowercase for the language code, and uppercase for the country
+	 * code). Note that when the country code is not defined in the current
+	 * locale, the language tag contains just the language code.
+	 * </p>
+	 * 
+	 * <p>
+	 * For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?lang={LANGUAGE-TAG}"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * is changed to <code>&lt;a
-	 * href="https://ovsc.hp.com?lang=zn-CN"&gt;go to OVSC&lt;/a&gt;</code>
-	 * when the locale is Chinese (China). The locale is determined from the
-	 * concrete subclass {@link #getLocale()} method. If the locale is null, the
-	 * token is replaced with blank. If you provide null content, null is
-	 * returned.
+	 * href="https://ovsc.hp.com?lang=zh-CN"&gt;go to OVSC&lt;/a&gt;</code>
+	 * when the locale is Chinese (China). If we used
+	 * <code>{LANGUAGE-TAG:lower}</code>, we would get <code>&lt; a
+	 * href="https://ovsc.hp.com?lang=zh-cn"&gt;go to OVSC&lt;/a&gt;</code>
+	 * instead.
+	 * </p>
+	 * <p>
+	 * The locale is determined from the concrete subclass {@link #getLocale()}
+	 * method. If the locale is null, the token is replaced with blank. If you
+	 * provide null content, null is returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -663,9 +726,30 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseLanguageTag(String content) {
-		Locale loc = getLocale();
-		String lang = I18nUtility.localeToLanguageTag(loc);
-		return parseUnparameterized(content, TOKEN_LANGUAGE_TAG, lang);
+
+		/**
+		 * Value provider for the language tag (possibly forced to upper or
+		 * lowercase).
+		 */
+		class LanguageTagValueProvider extends ValueProvider {
+			protected String getValue(String param) {
+				if (param != null)
+					param = param.trim();
+				String lang = null;
+				Locale loc = getLocale();
+				if (loc != null) {
+					lang = I18nUtility.localeToLanguageTag(loc);
+					if (UPPERCASE.equalsIgnoreCase(param))
+						lang = lang.toUpperCase();
+					else if (LOWERCASE.equalsIgnoreCase(param))
+						lang = lang.toLowerCase();
+				}
+				return (lang);
+			}
+		}
+
+		return parseElementalToken(content, TOKEN_LANGUAGE_TAG,
+				new LanguageTagValueProvider());
 	}
 
 	/**
@@ -694,12 +778,18 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseLocalizedContentURL(String content) {
-		return parseParameterized(content, TOKEN_LOCALIZED_CONTENT_URL,
-				new ValueProvider() {
-					protected String getValue(String param) {
-						return getContentURL(param, true);
-					}
-				});
+
+		/**
+		 * Value provider for the localized content URL.
+		 */
+		class LocalizedContentURLProvider extends ValueProvider {
+			protected String getValue(String param) {
+				return getContentURL(param, true);
+			}
+		}
+
+		return parseElementalToken(content, TOKEN_LOCALIZED_CONTENT_URL,
+				new LocalizedContentURLProvider());
 	}
 
 	/**
@@ -726,12 +816,18 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseNoLocalizedContentURL(String content) {
-		return parseParameterized(content, TOKEN_CONTENT_URL,
-				new ValueProvider() {
-					protected String getValue(String param) {
-						return getContentURL(param, false);
-					}
-				});
+
+		/**
+		 * Value provider for the unlocalized content URL.
+		 */
+		class NoLocalizedContentURLProvider extends ValueProvider {
+			protected String getValue(String param) {
+				return getContentURL(param, false);
+			}
+		}
+
+		return parseElementalToken(content, TOKEN_CONTENT_URL,
+				new NoLocalizedContentURLProvider());
 	}
 
 	/**
@@ -758,7 +854,7 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseEmail(String content) {
-		return parseUnparameterized(content, TOKEN_EMAIL, getEmail());
+		return parseElementalToken(content, TOKEN_EMAIL, getEmail());
 	}
 
 	/**
@@ -791,7 +887,7 @@ public abstract class TokenParser {
 	public String parseName(String content) {
 		String name = I18nUtility.getUserDisplayName(getFirstName(),
 				getLastName(), getLocale());
-		return parseUnparameterized(content, TOKEN_NAME, name);
+		return parseElementalToken(content, TOKEN_NAME, name);
 	}
 
 	/**
@@ -817,52 +913,15 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseSite(String content) {
-		return parseUnparameterized(content, TOKEN_SITE, getSite());
-	}
-
-	/**
-	 * <p>
-	 * Parses the given string, substituting the current portal site home-page
-	 * URL for the <code>{SITE-URL}</code> token.
-	 * </p>
-	 * 
-	 * <p>
-	 * For example: <code>&lt;a
-	 * href="{SITE-URL}"&gt;go to home page&lt;/a&gt;</code>
-	 * is changed to
-	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/"&gt;go to
-	 * home page&lt;/a&gt;</code>
-	 * when the current site home-page URL is
-	 * "http://portal.hp.com/portal/site/acme/".
-	 * </p>
-	 * <p>
-	 * The site root URL is obtained from the
-	 * {@link #getSiteURL(String,String,String)} method - if that method returns
-	 * null, the token is replaced with blank. If you provide null content, null
-	 * is returned.
-	 * </p>
-	 * <p>
-	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
-	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
-	 * you prefer.
-	 * </p>
-	 * 
-	 * @param content
-	 *            The content string.
-	 * @return The interpolated string.
-	 */
-	public String parseSiteURL(String content) {
-		content = parseUnparameterized(content, TOKEN_SITE_URL, getSiteURL(
-				null, null, -1));
-		return (content);
+		return parseElementalToken(content, TOKEN_SITE, getSite());
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, substituting the respective portal site page URL
-	 * for the <code>{SITE-URL:<i>spec</i>}</code> token. The <i>spec</i>
-	 * specifies the particular page, scheme, and/or port. The format of the
-	 * <i>spec</i> is:
+	 * for the <code>{SITE-URL}</code> and <code>{SITE-URL:<i>spec</i>}</code>
+	 * tokens. The optional <i>spec</i> specifies the particular page, scheme,
+	 * and/or port. The format of the <i>spec</i> is:
 	 * </p>
 	 * 
 	 * <code><i>[scheme[:port];]uri</i></code>
@@ -887,6 +946,9 @@ public abstract class TokenParser {
 	 * <code>http://portal.hp.com/portal/site/acme/template.PAGE/...</code>:
 	 * </p>
 	 * <dl>
+	 * <dt><code>&lt;a href="{SITE-URL}"&gt;go to home page&lt;/a&gt;</code></dt>
+	 * <dd>becomes
+	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/"&gt;go to home page&lt;/a&gt;</code></dd>
 	 * <dt><code>&lt;a href="{SITE-URL:/forums}"&gt;go to forums&lt;/a&gt;</code></dt>
 	 * <dd>becomes
 	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/forums"&gt;go to
@@ -922,23 +984,29 @@ public abstract class TokenParser {
 	 *            The content string.
 	 * @return The interpolated string.
 	 */
-	public String parseSiteURLParameterized(String content) {
-		content = parseParameterized(content, TOKEN_SITE_URL,
-				new ValueProvider() {
-					protected String getValue(String param) {
-						return getSiteURL(getURI(param), getSecure(param),
-								getPort(param));
-					}
-				});
-		return (content);
+	public String parseSiteURL(String content) {
+
+		/**
+		 * Value provider for the site URL.
+		 */
+		class SiteURLProvider extends ValueProvider {
+			protected String getValue(String param) {
+				return getSiteURL(getURI(param), getSecure(param),
+						getPort(param));
+			}
+		}
+
+		return parseElementalToken(content, TOKEN_SITE_URL,
+				new SiteURLProvider());
 	}
 
 	/**
 	 * <p>
 	 * Parses the given string, modifying and substituting the current portal
-	 * request URL for the <code>{REQUEST-URL:<i>spec</i>}</code> token. The
-	 * <i>spec</i> specifies an alternate scheme and/or port to switch to. The
-	 * format of the <i>spec</i> is:
+	 * request URL for the <code>{REQUEST-URL}</code> and
+	 * <code>{REQUEST-URL:<i>spec</i>}</code> tokens. The optional <i>spec</i>
+	 * specifies an alternate scheme and/or port to switch to. The format of the
+	 * <i>spec</i> is:
 	 * </p>
 	 * 
 	 * <code><i>scheme[:port]</i></code>
@@ -957,6 +1025,9 @@ public abstract class TokenParser {
 	 * </p>
 	 * 
 	 * <dl>
+	 * <dt><code>&lt;a href="{REQUEST-URL}"&gt;repeat this request&lt;/a&gt;</code></dt>
+	 * <dd>becomes
+	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/template.PAGE/..."&gt;repeat this request&lt;/a&gt;</code></dd>
 	 * <dt><code>&lt;a href="{REQUEST-URL:https}"&gt;switch to secure&lt;/a&gt;</code></dt>
 	 * <dd>becomes
 	 * <code>&lt;a href="https://portal.hp.com/portal/site/acme/template.PAGE/..."&gt;switch to secure&lt;/a&gt;</code></dd>
@@ -980,44 +1051,21 @@ public abstract class TokenParser {
 	 *            The content string.
 	 * @return The interpolated string.
 	 */
-	public String parseRequestURLParameterized(String content) {
-		content = parseParameterized(content, TOKEN_REQUEST_URL,
-				new ValueProvider() {
-					protected String getValue(String param) {
-						if (!param.endsWith(";"))
-							param += ';';
-						return getRequestURL(getSecure(param), getPort(param));
-					}
-				});
-		return (content);
-	}
-
-	/**
-	 * <p>
-	 * Parses the given string, substituting the current portal request URL for
-	 * the <code>{REQUEST-URL}</code> token. For example: <code>&lt;a
-	 * href="{REQUEST-URL}"&gt;try again&lt;/a&gt;</code>
-	 * is changed to
-	 * <code>&lt;a href="http://portal.hp.com/portal/site/acme/template.PAGE/?..."&gt;try again&lt;/a&gt;</code>
-	 * when the current request URL is
-	 * "http://portal.hp.com/portal/site/acme/template.PAGE/?...". The
-	 * {@link #getRequestURL(String,String)} method is used to obtain the
-	 * request URL; if it is null, the token is replaced with blank. If you
-	 * provide null content, null is returned.
-	 * </p>
-	 * <p>
-	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
-	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
-	 * you prefer.
-	 * </p>
-	 * 
-	 * @param content
-	 *            The content string.
-	 * @return The interpolated string.
-	 */
 	public String parseRequestURL(String content) {
-		return parseUnparameterized(content, TOKEN_REQUEST_URL, getRequestURL(
-				null, -1));
+
+		/**
+		 * Value provider for the request URL.
+		 */
+		class RequestURLProvider extends ValueProvider {
+			protected String getValue(String param) {
+				if (!param.endsWith(";"))
+					param += ';';
+				return getRequestURL(getSecure(param), getPort(param));
+			}
+		}
+
+		return parseElementalToken(content, TOKEN_REQUEST_URL,
+				new RequestURLProvider());
 	}
 
 	/**
@@ -1055,12 +1103,18 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseUserProperty(String content) {
-		return parseParameterized(content, TOKEN_USER_PROPERTY,
-				new ValueProvider() {
-					protected String getValue(String param) {
-						return getUserProperty(param);
-					}
-				});
+
+		/**
+		 * Value provider for a user property.
+		 */
+		class UserPropertyValueProvider extends ValueProvider {
+			protected String getValue(String param) {
+				return getUserProperty(param);
+			}
+		}
+
+		return parseElementalToken(content, TOKEN_USER_PROPERTY,
+				new UserPropertyValueProvider());
 	}
 
 	/**
@@ -1087,17 +1141,20 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseInclude(String content) {
-		content = parseParameterized(content, TOKEN_TOKEN, new ValueProvider() {
+
+		/**
+		 * Value provider for an include property.
+		 */
+		class IncludePropertyValueProvider extends ValueProvider {
 			protected String getValue(String param) {
 				return getIncludeValue(param);
 			}
-		});
-		content = parseParameterized(content, TOKEN_INCLUDE,
-				new ValueProvider() {
-					protected String getValue(String param) {
-						return getIncludeValue(param);
-					}
-				});
+		}
+
+		content = parseElementalToken(content, TOKEN_TOKEN,
+				new IncludePropertyValueProvider());
+		content = parseElementalToken(content, TOKEN_INCLUDE,
+				new IncludePropertyValueProvider());
 		return (content);
 	}
 
@@ -1195,7 +1252,7 @@ public abstract class TokenParser {
 			}
 		}
 
-		return parseContainer(content, TOKEN_SITE_CONTAINER,
+		return parseContainerToken(content, TOKEN_SITE_CONTAINER,
 				new SiteContainerMatcher(getSite()));
 	}
 
@@ -1270,7 +1327,7 @@ public abstract class TokenParser {
 			}
 		}
 
-		return parseContainer(content, TOKEN_LOGGEDIN_CONTAINER,
+		return parseContainerToken(content, TOKEN_LOGGEDIN_CONTAINER,
 				new LoggedInContainerMatcher(getLoginStatus()));
 	}
 
@@ -1345,7 +1402,7 @@ public abstract class TokenParser {
 			}
 		}
 
-		return parseContainer(content, TOKEN_LOGGEDOUT_CONTAINER,
+		return parseContainerToken(content, TOKEN_LOGGEDOUT_CONTAINER,
 				new LoggedOutContainerMatcher(getLoginStatus()));
 	}
 
@@ -1439,7 +1496,7 @@ public abstract class TokenParser {
 			}
 		}
 
-		return parseContainer(content, TOKEN_GROUP_CONTAINER,
+		return parseContainerToken(content, TOKEN_GROUP_CONTAINER,
 				new GroupContainerMatcher(getGroups()));
 	}
 
@@ -1506,7 +1563,7 @@ public abstract class TokenParser {
 			}
 		}
 
-		return parseContainer(content, TOKEN_BEFORE_CONTAINER,
+		return parseContainerToken(content, TOKEN_BEFORE_CONTAINER,
 				new BeforeContainerMatcher());
 	}
 
@@ -1573,7 +1630,7 @@ public abstract class TokenParser {
 			}
 		}
 
-		return parseContainer(content, TOKEN_AFTER_CONTAINER,
+		return parseContainerToken(content, TOKEN_AFTER_CONTAINER,
 				new AfterContainerMatcher());
 	}
 
@@ -1605,7 +1662,7 @@ public abstract class TokenParser {
 			}
 		} catch (Exception e) {
 		}
-		return null;
+		return "";
 	}
 
 	/**
@@ -1645,7 +1702,7 @@ public abstract class TokenParser {
 	 *            The <code>ContainerMatcher</code>.
 	 * @return The interpolated string.
 	 */
-	protected String parseContainer(String content, String tokenName,
+	protected String parseContainerToken(String content, String tokenName,
 			ContainerMatcher matcher) {
 
 		if (content == null || tokenName == null) {
@@ -1655,6 +1712,18 @@ public abstract class TokenParser {
 		if (content.equals("") || tokenName.equals("")) {
 			return content;
 		}
+
+		// Save container state (in case another parse is currently in
+		// progress).
+		ContainerMatcher savedContainerMatcher = containerMatcher;
+		String savedContainerToken = containerToken;
+		String savedContainerNewContent = containerNewContent;
+		String savedContainerOldContent = containerOldContent;
+		char savedContainerTokenBegin = containerTokenBegin;
+		char savedContainerTokenEnd = containerTokenEnd;
+		int savedContainerIndex = containerIndex;
+		int savedContainerLevel = containerLevel;
+		String finalContainerNewContent;
 
 		// Initialize global variables for "{...}" and "<...>" parsing.
 		containerMatcher = matcher;
@@ -1667,7 +1736,7 @@ public abstract class TokenParser {
 		containerNewContent = "";
 		containerTokenBegin = TOKEN_BEGIN;
 		containerTokenEnd = TOKEN_END;
-		parseContainerRecursively(true);
+		parseContainerTokenIntl(true);
 
 		// Initialize global variables for "<...>" parsing (legacy).
 		containerIndex = 0;
@@ -1676,21 +1745,32 @@ public abstract class TokenParser {
 		containerNewContent = "";
 		containerTokenBegin = DEPRECATED_TOKEN_BEGIN;
 		containerTokenEnd = DEPRECATED_TOKEN_END;
-		parseContainerRecursively(true);
+		parseContainerTokenIntl(true);
+		finalContainerNewContent = containerNewContent;
+
+		// Restore previous container state.
+		containerMatcher = savedContainerMatcher;
+		containerToken = savedContainerToken;
+		containerIndex = savedContainerIndex;
+		containerLevel = savedContainerLevel;
+		containerNewContent = savedContainerNewContent;
+		containerOldContent = savedContainerOldContent;
+		containerTokenBegin = savedContainerTokenBegin;
+		containerTokenEnd = savedContainerTokenEnd;
 
 		// Return the parsed content.
-		return containerNewContent;
+		return finalContainerNewContent;
 	}
 
 	/**
-	 * Parses the container content recursively for parseContainer method. Used
-	 * to parse a level block of content.
+	 * Parses the container content recursively for parseContainerToken method.
+	 * Used to parse a level block of content.
 	 * 
 	 * @param isIncluded
 	 *            Controls whether contained-enclosed content is to be included
 	 *            in the output content or skipped.
 	 */
-	private void parseContainerRecursively(boolean isIncluded) {
+	private void parseContainerTokenIntl(boolean isIncluded) {
 
 		int result;
 
@@ -1704,13 +1784,14 @@ public abstract class TokenParser {
 		 * have recursed at least a level, return - it means we are done parsing
 		 * this recursion's job.
 		 */
-		while ((result = nextContainer((containerLevel == 0) || isIncluded)) != FOUND_END) {
+		while ((result = nextContainerTokenIntl((containerLevel == 0)
+				|| isIncluded)) != FOUND_END) {
 			if (result == FOUND_CONTAINER_START_MATCH) {
 				containerLevel++;
-				parseContainerRecursively(isIncluded && true);
+				parseContainerTokenIntl(isIncluded && true);
 			} else if (result == FOUND_CONTAINER_START_NOMATCH) {
 				containerLevel++;
-				parseContainerRecursively(isIncluded && false);
+				parseContainerTokenIntl(isIncluded && false);
 			} else if ((result == FOUND_CONTAINER_END) && (containerLevel > 0)) {
 				containerLevel--;
 				break;
@@ -1734,9 +1815,9 @@ public abstract class TokenParser {
 	 *            Controls whether contained-enclosed content is to be included
 	 *            in the output content or skipped.
 	 */
-	private int nextContainer(boolean isIncluded) {
+	private int nextContainerTokenIntl(boolean isIncluded) {
 
-		int j, k, n;
+		int j, k, m, n, p, q, cnt;
 		String containerKeyString;
 		String[] containerKeys;
 		boolean containerMatch;
@@ -1768,15 +1849,15 @@ public abstract class TokenParser {
 				break; // if <FOO> found, match
 			if ((containerOldContent.charAt(n) == TOKEN_BEGIN_PARAM)
 					&& ((n + 1) < containerOldContent.length()))
-				break; // if <FOO:...> found, match
-			// if <FOO... not <FOO> or <FOO:...> found, try again
+				break; // if <FOO:... found, match
+			// if <FOO... not <FOO> or <FOO:... found, try again
 			j = n;
 		} while (true);
 		k = containerOldContent.indexOf(endToken, k);
 
 		/*
-		 * If start token found first, parse out the keys string and test the
-		 * keys. Only logical-or is now supported in the keys string -
+		 * If start token found first, parse out the params string and test the
+		 * params. Only logical-or is now supported in the params string -
 		 * logical-and is not supported (but usually can be accomplished by
 		 * nesting container tokens). Return the proper result code depending on
 		 * whether the test passed or not. Note: even if the test passed, it can
@@ -1795,31 +1876,53 @@ public abstract class TokenParser {
 			}
 			/*
 			 * Find the ending ">" of the container start tag - if not found,
-			 * finish, ignore the rest of the content.
+			 * finish, ignore the rest of the content. Allow for nested tokens
+			 * in the param string.
 			 */
-			k = containerOldContent.indexOf(containerTokenEnd, j);
-			if (k == -1) {
+			cnt = 0;
+			m = n;
+			do {
+				p = containerOldContent.indexOf(containerTokenEnd, m);
+				q = containerOldContent.indexOf(containerTokenBegin, m);
+				if (p == -1) // if end char not found, bail - no match
+					break;
+				if ((q == -1) || (p < q)) { // if end char comes next, decrement
+					// level counter
+					cnt--;
+					m = p + 1;
+				} else { // if begin char comes next, increment level counter
+					cnt++;
+					m = q + 1;
+				}
+				if (cnt < 0) // when level counter is negative - match
+					break;
+			} while (true);
+			/*
+			 * If end char not found, done. Ignore the rest of the content.
+			 */
+			if (p == -1) {
 				containerIndex = containerOldContent.length();
 				return FOUND_END;
 			}
 			/*
 			 * Two cases: either the ending ">" of the start tag was found in
-			 * the next char (meaning no key string - continue), or ":" was
-			 * found in the next char (meaning what follows up to ">" is the key
-			 * string - get it).
+			 * the next char (meaning no param string - continue), or ":" was
+			 * found in the next char (meaning what follows up to ">" is the
+			 * param string - get it).
 			 */
+			k = p;
 			containerKeyString = "";
 			if (containerOldContent.charAt(n) == TOKEN_BEGIN_PARAM) {
 				containerKeyString = containerOldContent.substring(n + 1, k);
 			}
-			/*
-			 * Now we have the key string (or no key string), so evaluate the
-			 * container - ie determine whether to include it or not.
-			 */
 			containerKeyString = containerKeyString.trim();
+			/*
+			 * Now we have the param string (or no param string), so evaluate
+			 * the container - ie determine whether to include it or not.
+			 */
 			containerMatch = false;
 			if (containerMatcher != null) {
-				containerKeys = getContainerKeys(containerKeyString);
+				containerKeys = getContainerTokenParams(containerKeyString);
 				for (int i = 0; i < containerKeys.length; i++) {
 					if (containerMatcher.match(containerKeys[i])) {
 						containerMatch = true;
@@ -1862,30 +1965,36 @@ public abstract class TokenParser {
 	/**
 	 * Get container keys by splitting on "|" character.
 	 */
-	private String[] getContainerKeys(String content) {
+	private String[] getContainerTokenParams(String content) {
 		String containerKeys[] = content.split("\\" + TOKEN_CONTAINER_OR);
+		// Parse each of the container keys before returning, so any tokens they
+		// include are interpolated.
+		for (int i = 0; i < containerKeys.length; i++) {
+			containerKeys[i] = this.parse(containerKeys[i]);
+		}
 		return containerKeys;
 	}
 
 	/**
 	 * Parses the given content, searching for all occurrences of the given
-	 * parameterized token (like <code>CONTENT-URL</code> for the
-	 * <code>{CONTENT-URL:<i>pathname</i>}</code> token), and replacing them
-	 * with the value generated by the given <code>ValueProvider</code>. This
-	 * method recognizes both <code>{...}</code> and <code>&lt;...&gt;</code>
-	 * symbols for the token boundaries.
+	 * <i>parameterized</i> elemental token (like <code>CONTENT-URL</code>
+	 * for the <code>{CONTENT-URL:<i>pathname</i>}</code> token), and
+	 * replacing them with the value generated by the given
+	 * <code>ValueProvider</code>. This method recognizes both
+	 * <code>{...}</code> and <code>&lt;...&gt;</code> symbols for the token
+	 * boundaries.
 	 * 
 	 * @param content
 	 *            The content string.
 	 * @param tokenName
-	 *            The name of the parameterized token - eg <code>FOO</code>
-	 *            for the <code>{FOO:<i>param</i>}</code> or
-	 *            <code>{FOO:<i>param</i>}</code> token.
+	 *            The name of the parameterized elemental token - eg
+	 *            <code>FOO</code> for the <code>{FOO:<i>param</i>}</code>
+	 *            or <code>{FOO:<i>param</i>}</code> token.
 	 * @param provider
 	 *            Provides the value to substitute.
 	 * @return The interpolated string.
 	 */
-	protected String parseParameterized(String content, String tokenName,
+	protected String parseElementalToken(String content, String tokenName,
 			ValueProvider provider) {
 		if (content == null || tokenName == null || provider == null) {
 			return content;
@@ -1896,11 +2005,11 @@ public abstract class TokenParser {
 		}
 
 		// First parse for "{...}" format.
-		content = parseParameterizedIntl(content, tokenName, TOKEN_BEGIN,
+		content = parseElementalTokenIntl(content, tokenName, TOKEN_BEGIN,
 				TOKEN_END, provider);
 
 		// Second parse for legacy "<...>" format.
-		content = parseParameterizedIntl(content, tokenName,
+		content = parseElementalTokenIntl(content, tokenName,
 				DEPRECATED_TOKEN_BEGIN, DEPRECATED_TOKEN_END, provider);
 
 		// Return the parsed content.
@@ -1908,52 +2017,41 @@ public abstract class TokenParser {
 	}
 
 	/**
-	 * Parse a parameterized token and replace with the provided value.
-	 */
-	private String parseParameterizedIntl(String content, String tokenName,
-			char tokenBegin, char tokenEnd, ValueProvider provider) {
-		String str, param, value;
-		// This makes a token like: {tokenName:
-		String token = tokenBegin + tokenName + TOKEN_BEGIN_PARAM;
-		// This makes a regex like: (\{tokenName:.*?\})
-		String regex = "(\\" + token + ".*?\\" + tokenEnd + ")";
-		Pattern p = Pattern.compile(regex);
-		Matcher m = p.matcher(content);
-		while (m.find()) {
-			str = m.group();
-			param = str.substring(str.indexOf(token) + token.length(), str
-					.length() - 1);
-			value = provider.getValue(param.trim());
-			// This makes a regex like: (\{tokenName:\Qparam\E\})
-			regex = "(\\" + token + "\\Q" + param + "\\E\\" + tokenEnd + ")";
-			if (value != null) {
-				content = content.replaceAll(regex, value);
-			} else {
-				content = content.replaceAll(regex, "");
-			}
-		}
-		return (content);
-	}
-
-	/**
 	 * Parses the given content, searching for all occurrences of the given
-	 * unparameterized token (like <code>EMAIL</code> for the
-	 * <code>{EMAIL}</code> or <code>{EMAIL}</code> tokens), and replacing
-	 * them with the given value. This method recognizes both <code>{...}</code>
-	 * and <code>&lt;...&gt;</code> symbols for the token boundaries.
+	 * <i>unparameterized</i> elemental token name (like <code>EMAIL</code>
+	 * for the <code>{EMAIL}</code> token), and replacing them with the given
+	 * value. This method recognizes both <code>{...}</code> and
+	 * <code>&lt;...&gt;</code> symbols for the token boundaries.
 	 * 
 	 * @param content
 	 *            The content string.
 	 * @param tokenName
-	 *            The name of the unparameterized token - eg <code>FOO</code>
-	 *            for the <code>{FOO}</code> or <code>&lt;FOO&gt;</code>
-	 *            tokens.
+	 *            The name of the unparameterized elemental token - eg
+	 *            <code>FOO</code> for the <code>{FOO}</code> or
+	 *            <code>&lt;FOO&gt;</code> tokens.
 	 * @param value
 	 *            The value to substitute
 	 * @return The interpolated string.
 	 */
-	protected String parseUnparameterized(String content, String tokenName,
+	protected String parseElementalToken(String content, String tokenName,
 			String value) {
+
+		/**
+		 * Value provider class for fixed-value token replacement.
+		 */
+		class FixedValueProvider extends ValueProvider {
+
+			String fixedValue = null;
+
+			protected FixedValueProvider(String value) {
+				fixedValue = value;
+			}
+
+			protected String getValue(String param) {
+				return (fixedValue);
+			}
+		}
+
 		if (content == null || tokenName == null) {
 			return content;
 		}
@@ -1964,26 +2062,110 @@ public abstract class TokenParser {
 		if (value == null) {
 			value = "";
 		}
+		ValueProvider provider = new FixedValueProvider(value);
 
 		// First parse for "{...}" format.
-		content = parseUnparameterizedIntl(content, tokenName, TOKEN_BEGIN,
-				TOKEN_END, value);
+		content = parseElementalTokenIntl(content, tokenName, TOKEN_BEGIN,
+				TOKEN_END, provider);
 
 		// Second parse for legacy "<...>" format.
-		content = parseUnparameterizedIntl(content, tokenName,
-				DEPRECATED_TOKEN_BEGIN, DEPRECATED_TOKEN_END, value);
+		content = parseElementalTokenIntl(content, tokenName,
+				DEPRECATED_TOKEN_BEGIN, DEPRECATED_TOKEN_END, provider);
 
 		// Return the parsed content.
 		return (content);
 	}
 
 	/**
-	 * Parse an unparameterized token and replace with the provided value.
+	 * Parse a token, possibly parameterized, and replace it with the value for
+	 * that parameter (if any) based on the given value provider.
 	 */
-	private String parseUnparameterizedIntl(String content, String tokenName,
-			char tokenBegin, char tokenEnd, String value) {
-		String regex = "\\" + tokenBegin + tokenName + "\\" + tokenEnd;
-		return content.replaceAll(regex, value);
+	private String parseElementalTokenIntl(String content, String tokenName,
+			char tokenBegin, char tokenEnd, ValueProvider provider) {
+
+		int j, k = 0, m, n, p, q, cnt;
+		String startToken = tokenBegin + tokenName;
+		String newContent = "";
+		String param, value;
+
+		while (true) {
+			if (k >= content.length())
+				break;
+
+			// Parse for start token.
+			j = k;
+			n = -1;
+			do {
+				j = content.indexOf(startToken, j);
+				if (j == -1) // if not found, bail - no match
+					break;
+				n = j + startToken.length();
+				if (n >= content.length()) {
+					j = -1;
+					break; // if found at very end, bail - no match
+				}
+				if (content.charAt(n) == tokenEnd)
+					break; // if <FOO> found, match
+				if ((content.charAt(n) == TOKEN_BEGIN_PARAM)
+						&& ((n + 1) < content.length()))
+					break; // if <FOO:... found, match
+				// if <FOO... not <FOO> or <FOO:... found, try again
+				j = n;
+			} while (true);
+
+			// If start token not found, done. Copy everything from last match
+			// to end of content, put it into new content and return.
+			if ((j == -1) || (n == -1)) {
+				newContent += content.substring(k);
+				break;
+			}
+
+			// Parse for end char. Allow for other tokens to be nested in the
+			// param (just skip past them).
+			cnt = 0;
+			m = n;
+			do {
+				p = content.indexOf(tokenEnd, m);
+				q = content.indexOf(tokenBegin, m);
+				if (p == -1) // if end char not found, bail - no match
+					break;
+				if ((q == -1) || (p < q)) { // if end char comes next, decrement
+					// level counter
+					cnt--;
+					m = p + 1;
+				} else { // if begin char comes next, increment level counter
+					cnt++;
+					m = q + 1;
+				}
+				if (cnt < 0) // when level counter is negative - match
+					break;
+			} while (true);
+
+			// If end char not found, done. Copy everything from last match to
+			// end of content, put it into new content and return.
+			if (p == -1) {
+				newContent += content.substring(k);
+				break;
+			}
+
+			// We have our match. Get the value for the param and add to new
+			// content.
+			newContent += content.substring(k, j);
+			param = content.substring(n, p);
+			if ((param.length() > 0) && (param.charAt(0) == TOKEN_BEGIN_PARAM))
+				param = param.substring(1);
+			param = param.trim();
+			param = this.parse(param); // parse the param before getting the
+			// value.
+			value = provider.getValue(param);
+			value = this.parse(value); // parse the value too.
+			if (value == null)
+				value = "";
+			newContent += value;
+			k = p + 1;
+		}
+
+		return (newContent);
 	}
 
 	/**
