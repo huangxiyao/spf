@@ -172,16 +172,20 @@ EOF
    &copy_files ($out_in_pdir, $out_text_pdir, $all_text_files_re);
 
    # Portal only:
-   # Third, normalize Vignette message property files from en (English) to 
-   # base versions.  This means finding all *_en.properties files named with 
-   # Vignette GUID's (32 hex characters), and renaming them without the _en
-   # code.  This may overwrite existing base files, which is what we want.
-   # Why are we doing this step?  See the Service Portal (OS) R2 localization 
-   # architecture (HLD) document (the design for this script came from SP OS).
+   # Third, normalize Vignette message property files from en (English) or
+   # en_US (US English) to base versions.  This means finding all *_en.properties
+   # files named with Vignette GUID's (32 hex characters), and renaming them
+   # without the _en code.  This may overwrite existing base files, which is what
+   # we want.  Then we find all *_en_US.properties files named with GUID's
+   # likewise, and rename them to also lack the _en_US code, thus possibly 
+   # overwriting base files or _en files.  Why are we doing this step?  See the
+   # Service Portal (OS) R2 localization architecture (HLD) document (the design
+   # for this script came from SP OS).
 
    if ($pdir eq "portal")  {
       print "----- Normalizing English to base $pdir message property files.\n";
       &normalize_files ($out_text_pdir, $all_vgn_portal_msg_files_re, "_en");
+      &normalize_files ($out_text_pdir, $all_vgn_portal_msg_files_re, "_en_US");
    }
 
    # Portal only:
