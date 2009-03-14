@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.4</version>
+			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>		
 		<dependency>
@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2-SNAPSHOT</version>
 			<!-- This is part of OpenPortal lib directory therefore the scope for this is provided -->
 		</dependency>
 		<dependency>
