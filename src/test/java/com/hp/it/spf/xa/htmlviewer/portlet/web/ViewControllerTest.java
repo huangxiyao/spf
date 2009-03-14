@@ -15,6 +15,7 @@ import org.springframework.web.portlet.ModelAndView;
 
 import com.hp.it.spf.xa.htmlviewer.portlet.util.Consts;
 import com.hp.it.spf.xa.htmlviewer.portlet.web.ViewController;
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 
 /**
  * The Class ViewControllerTest.
@@ -87,9 +88,9 @@ public class ViewControllerTest extends TestCase {
 		String content = (String) map.get(Consts.VIEW_CONTENT);
 		System.out.println("testHandleRenderRequestInternal.1 got: " + content);
 		assertEquals(
-				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Hello world!</p></body></html>",
+				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Hello world!</p><p>Upper language: ZH<br>Lower country: cn</p></body></html>",
 				content);
-		
+
 		pp.setValue(Consts.VIEW_FILENAME, "test_url_1.html");
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(
 				renderRequest, renderResponse);
@@ -99,7 +100,7 @@ public class ViewControllerTest extends TestCase {
 		assertEquals(
 				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1> Here is an image tag: <img src=\"/images/test_zh.gif\"></body></html>",
 				content);
-		
+
 		pp.setValue(Consts.VIEW_FILENAME, "test_url_2.html");
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(
 				renderRequest, renderResponse);
@@ -109,7 +110,7 @@ public class ViewControllerTest extends TestCase {
 		assertEquals(
 				"<html><head><title>Hello world!</title></head><body><h1>Hello world!</h1> Here is an image tag: <img src=\"/images/nonexistent.gif\"><br>Here is the site URL: <br>Here is a site page URL: test/template.PAGE<br></body></html>",
 				content);
-		
+
 		pp.setValue(Consts.VIEW_FILENAME, "test_login_container.html");
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(
 				renderRequest, renderResponse);
@@ -119,37 +120,59 @@ public class ViewControllerTest extends TestCase {
 		assertEquals(
 				"<html><body>Everybody sees this part.  Only logged-out users see this.</body></html>",
 				content);
-		
+
 		pp.setValue(Consts.VIEW_FILENAME, "test_nested_token.html");
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(
 				renderRequest, renderResponse);
 		map = modelAndView.getModel();
 		content = (String) map.get(Consts.VIEW_CONTENT);
-		System.out.println("testHandleRenderRequestInternal.5 got: "
-				+ content);
+		System.out.println("testHandleRenderRequestInternal.5 got: " + content);
 		assertEquals(
 				"<html><body>Template ID: FRIENDLY_ID<br>Portal URL: /template.FRIENDLY_ID?lang=zh&cc=CN<br></body></html>",
 				content);
-		
+
 		pp.setValue(Consts.VIEW_FILENAME, "test_basic.html");
 		pp.setValue(Consts.INCLUDES_FILENAME, "test_includes.properties");
-		modelAndView = (ModelAndView) viewController.handleRenderRequest(renderRequest, renderResponse);
+		modelAndView = (ModelAndView) viewController.handleRenderRequest(
+				renderRequest, renderResponse);
 		map = modelAndView.getModel();
 		content = (String) map.get(Consts.VIEW_CONTENT);
 		System.out.println("testHandleRenderRequestInternal.6 got: " + content);
 		assertEquals(
-				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Did we find this?</p></body></html>",
+				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Did we find this?</p><p>Upper language: ZH<br>Lower country: cn</p></body></html>",
 				content);
 
-		pp.setValue(Consts.INCLUDES_FILENAME, "/properties/test_includes_2.properties");
-		modelAndView = (ModelAndView) viewController.handleRenderRequest(renderRequest, renderResponse);
+		pp.setValue(Consts.INCLUDES_FILENAME,
+				"/properties/test_includes_2.properties");
+		modelAndView = (ModelAndView) viewController.handleRenderRequest(
+				renderRequest, renderResponse);
 		map = modelAndView.getModel();
 		content = (String) map.get(Consts.VIEW_CONTENT);
 		System.out.println("testHandleRenderRequestInternal.7 got: " + content);
 		assertEquals(
-				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: What about this (Chinese)?</p></body></html>",
+				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: What about this (Chinese)?</p><p>Upper language: ZH<br>Lower country: cn</p></body></html>",
 				content);
-		
+
+		pp.setValue(Consts.VIEW_FILENAME, "test_nested_token_2.html");
+		modelAndView = (ModelAndView) viewController.handleRenderRequest(
+				renderRequest, renderResponse);
+		map = modelAndView.getModel();
+		content = (String) map.get(Consts.VIEW_CONTENT);
+		System.out.println("testHandleRenderRequestInternal.8 got: " + content);
+		assertEquals(
+				"<html><body>Template ID: CHINESE_FRIENDLY_ID<br>Portal URL: /template.CHINA_FRIENDLY_ID<br></body></html>",
+				content);
+
+		pp.setValue(Consts.VIEW_FILENAME, "test_nested_token_3.html");
+		modelAndView = (ModelAndView) viewController.handleRenderRequest(
+				renderRequest, renderResponse);
+		map = modelAndView.getModel();
+		content = (String) map.get(Consts.VIEW_CONTENT);
+		System.out.println("testHandleRenderRequestInternal.9 got: " + content);
+		assertEquals(
+				"<html><body>Template ID: CHINESE_FRIENDLY_ID</body></html>",
+				content);
+
 		if (fileExists("/opt/sasuapps/sp/global_resources/portlet/i18n/html/test_loc_content_url_ext_zh_CN.html")
 				&& fileExists("/opt/sasuapps/sp/global_resources/portlet/i18n/images/test_ext_zh_CN.gif")) {
 			pp.setValue(Consts.VIEW_FILENAME, "test_loc_content_url_ext.html");
@@ -157,7 +180,7 @@ public class ViewControllerTest extends TestCase {
 					renderRequest, renderResponse);
 			map = modelAndView.getModel();
 			content = (String) map.get(Consts.VIEW_CONTENT);
-			System.out.println("testHandleRenderRequestInternal.8 got: "
+			System.out.println("testHandleRenderRequestInternal.10 got: "
 					+ content);
 			assertEquals(
 					"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1> Here is an image tag: <img src=\"/relay/images/test_ext_zh_CN.gif\"></body></html>",

@@ -319,14 +319,16 @@ table.props td {
 			<code>{SITE-URL:<i>spec</i>}</code>)</a></li>
 			<li>4.5.2. <a href="#file.author.token.user">Displaying user
 			information (<code>{NAME}</code>, <code>{EMAIL}</code>, <code>{LANGUAGE-CODE}</code>,
-			<code>{COUNTRY-CODE}</code>, <code>{LANGUAGE-TAG}</code>, <code>{HPP-LANGUAGE-CODE}</code>,
-			<code>{USER-PROPERTY:<i>key</i>}</code>)</a></li>
+			<code>{LANGUAGE-CODE:<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>,
+			<code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG}</code>,
+			<code>{LANGUAGE-TAG:<i>case</i>}</code>, <code>{HPP-LANGUAGE-CODE}</code>,
+			<code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</a></li>
 			<li>4.5.3. <a href="#file.author.token.auth">Permissioning
 			content for authorized users (<code>{LOGGED-IN}</code>, <code>{LOGGED-OUT}</code>,
 			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</a></li>
 			<li>4.5.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-			<code>{SITE:<i>site-names</i></code>}, <code>{INCLUDE:<i>key</i>}</code>)</a></li>
+			<code>{SITES:<i>site-names</i></code>}, <code>{INCLUDE:<i>key</i>}</code>)</a></li>
 			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>{AFTER:<i>date</i>}</code>,
 			<code>{BEFORE:<i>date</i>}</code>, <code>{SITE}</code>)</a></li>
 		</ul>
@@ -4183,6 +4185,18 @@ file content. If you are authoring your text in a file, be sure to use
 UTF-8 encoding.</p>
 </blockquote>
 
+<blockquote>
+<p><b>Note:</b> Many of the interpolation tokens take parameters.
+You can use any of the tokens inside the parameters; they will be
+interpolated before the parameter is used. Similarly, many of the tokens
+get substituted with replacement values. Any tokens inside the inserted
+values will also get interpolated. Finally, many of the tokens are
+"container" tokens, which you use to surround content with to
+conditionally include or exclude it. That surrounded content can contain
+any of the tokens, including nested occurrences of the same token; they
+will get interpolated too.
+</blockquote>
+
 <a name="file.author.token.url">
 <h4>4.5.1. Referencing URLs (<code>{CONTENT-URL:<i>path</i>}</code>,
 <code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code>, <code>{REQUEST-URL}</code>,
@@ -4392,8 +4406,10 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 
 <a name="file.author.token.user">
 <h4>4.5.2. Displaying user information (<code>{NAME}</code>, <code>{EMAIL}</code>,
-<code>{LANGUAGE-CODE}</code>, <code>{COUNTRY-CODE}</code>, <code>{LANGUAGE-TAG}</code>,
-<code>{HPP-LANGUAGE-CODE}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</h4>
+<code>{LANGUAGE-CODE}</code>, <code>{LANGUAGE-CODE<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>,
+<code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>,
+<code>{HPP-LANGUAGE-CODE}</code>, <code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>,
+<code>{USER-PROPERTY:<i>key</i>}</code>)</h4>
 </a>
 
 <p>The following tokens can be used to interpolate information about
@@ -4403,15 +4419,19 @@ documentation for each token.</p>
 <dl>
 	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#country-code"><code>{COUNTRY-CODE}</code></a></dt>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#country-code"><code>{COUNTRY-CODE:<i>case</i>}</code></a></dt>
 	<dd>
-	<p>Use this token to insert the <a
+	<p>Use either of these tokens to insert the <a
 		href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
 	3166-1</a> country code for the current user into the interpolated content.
-	If the user's locale is not a country-specific locale (eg is simply
-	French instead of France French, for example), then blank will be
-	substituted. Here is some sample HTML text, using this token to help
-	build a URL pointing to the another HP Web site, passing the country
-	(and language) codes in the URL as per the <a
+	By default the inserted country code is uppercase; you can force the
+	case using <code><i>lower</i></code> or <code><i>upper</i></code>
+	accordingly. If the user's locale is not a country-specific locale (eg
+	is simply French instead of France French, for example), then blank
+	will be substituted. Here is some sample HTML text, using this token to
+	help build a URL pointing to the another HP Web site, passing the
+	country (and language) codes in the URL as per the <a
 		href="https://h10014.www1.hp.com/hpweb/buildguide/locale_codes.html">HP.com
 	standards</a>:</p>
 
@@ -4437,15 +4457,19 @@ The email address we have on record for you is: {EMAIL}
 
 	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#hpp-language-code"><code>{HPP-LANGUAGE-CODE}</code></a></dt>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#hpp-language-code"><code>{HPP-LANGUAGE-CODE:<i>case</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the HP Passport standard language code
 	for the current user into the interpolated content. Note that HP
 	Passport does not exactly conform to the ISO 639-1 standard, which is
 	why this token is provided; to work with HP Passport in all languages,
 	your content must use this token instead of <code>{LANGUAGE-CODE}</code>.
-	Here is some sample HTML text, using this token to help build a URL
-	pointing to an HP Passport login page, passing the language in the
-	query string:</p>
+	By default the inserted HPP language code is lowercase; you can force
+	the case using <code><i>lower</i></code> or <code><i>upper</i></code>
+	accordingly. Here is some sample HTML text, using this token to help
+	build a URL pointing to an HP Passport login page, passing the language
+	in the query string:</p>
 
 	<blockquote><pre>
 &lt;A HREF="https://passport2.hp.com/hppcf/login.do?lang={HPP-LANGUAGE-CODE}"&gt;...&lt;/A&gt;
@@ -4455,13 +4479,17 @@ The email address we have on record for you is: {EMAIL}
 
 	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-code"><code>{LANGUAGE-CODE}</code></a></dt>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-code"><code>{LANGUAGE-CODE:<i>case</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the <a
 		href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
 	639-1</a> language code for the current user into the interpolated content.
-	Here is some sample HTML text, using this token to help build a URL
-	pointing to the another HP Web site, passing the language (and country)
-	codes in the URL as per the <a
+	By default the inserted language code is lowercase; you can force the
+	case using <code><i>lower</i></code> or <code><i>upper</i></code>
+	accordingly. Here is some sample HTML text, using this token to help
+	build a URL pointing to the another HP Web site, passing the language
+	(and country) codes in the URL as per the <a
 		href="https://h10014.www1.hp.com/hpweb/buildguide/locale_codes.html">HP.com
 	standards</a>:</p>
 
@@ -4476,6 +4504,8 @@ The email address we have on record for you is: {EMAIL}
 
 	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-tag"><code>{LANGUAGE-TAG}</code></a></dt>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolator/portlet/FileInterpolator.html#language-tag"><code>{LANGUAGE-TAG:<i>case</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the <a
 		href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag
@@ -4483,9 +4513,13 @@ The email address we have on record for you is: {EMAIL}
 	country-specific locale, this will be a full language-country value (eg
 	<code>es-MX</code> for Spanish in Mexico). For a user with a generic
 	locale (ie no country indicated), this will be just the language code
-	(eg <code>es</code> for generic Spanish). Here is some sample HTML
-	text, using this token to help build a URL pointing to the another HP
-	Web site, passing the language tag:</p>
+	(eg <code>es</code> for generic Spanish). By default the inserted
+	language tag uses mixed case (uppercase for country and lowercase for
+	language). You can force the case to all-lowercase or all-uppercase,
+	using <code><i>lower</i></code> or <code><i>upper</i></code>
+	accordingly. Here is some sample HTML text, using this token to help
+	build a URL pointing to the another HP Web site, passing the language
+	tag:</p>
 
 	<blockquote><pre>
 &lt;A HREF="http://other.hp.com/path?lang={LANGUAGE-TAG}"&gt;...&lt;/A&gt;
@@ -4699,7 +4733,7 @@ This text is for everybody.&lt;BR&gt;
 
 <a name="file.author.token.consolidate">
 <h4>4.5.4. Consolidating content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-<code>{SITE:<i>site-names</i>}</code>, <code>{INCLUDE:<i>key</i>}</code>)</h4>
+<code>{SITES:<i>site-names</i>}</code>, <code>{INCLUDE:<i>key</i>}</code>)</h4>
 </a>
 
 <p>The following tokens may be used to consolidate content, either
@@ -4711,7 +4745,7 @@ for each token.</p>
 <blockquote>
 <p><b>Note:</b> The SPF lets you "nest" container tokens. Nested
 containers form a "logical-AND" between their respective conditions. So,
-for example, <code>{PORTLET:forums}{SITE:itrc}...{/SITE}{/PORTLET}</code>
+for example, <code>{PORTLET:forums}{SITES:itrc}...{/SITES}{/PORTLET}</code>
 means the current request must be for the <code>forums</code> portlet
 instance in the portal site named <code>itrc</code>, in order to get the
 <code>...</code> wrapped content.
@@ -4829,7 +4863,7 @@ This text is for everybody.&lt;BR&gt;
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site_c"><code>{SITE:<i>sites</i>}...{/SITE}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site_c"><code>{SITES:<i>sites</i>}...{/SITES}</code></a></dt>
 	<dd>
 	<p>Use this container token to put content for multiple portal
 	sites into the same uninterpolated content string (eg file). When it is
@@ -4848,8 +4882,8 @@ This text is for everybody.&lt;BR&gt;
 	<p>For example:</p>
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{SITE:abc|def}This text is only for portlets in the the "abc" or "def" portal sites.{/SITE}
-{SITE:xyz}This text is only for portlets in the "xyz" portal site.{/SITE}
+{SITES:abc|def}This text is only for portlets in the the "abc" or "def" portal sites.{/SITES}
+{SITES:xyz}This text is only for portlets in the "xyz" portal site.{/SITES}
 </pre></blockquote>
 
 	<p>The actual site names will vary by portal site; they are setup
@@ -4935,8 +4969,8 @@ This text is permanent.&lt;BR&gt;
 
 	<p>(Incidentally, notice from this example how <code>{SITE}</code>
 	is nested inside the <code><i>uri</i></code> parameter for <code>{SITE-URL:<i>uri</i>}</code>.
-	In general, any of the unparameterized tokens can be used inside the
-	parameter-values for any of the parameterized tokens.)</p>
+	In general, any of the tokens can be used inside the parameter-values
+	for any of the tokens.)</p>
 	</dd>
 </dl>
 
@@ -6768,8 +6802,22 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		<td>S. Jorgenson</td>
 		<td>
 		<ul>
-			<li>Documented new <code>{HPP-LANGUAGE-CODE} text
+			<li>Documented new <code>{HPP-LANGUAGE-CODE}</code> text
 			interpolation token.</li>
+		</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>1.7</td>
+		<td>Mar 13 2009</td>
+		<td>S. Jorgenson</td>
+		<td>
+		<ul>
+			<li>Documented new <code>{LANGUAGE-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>,
+			<code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>
+			text interpolation tokens. Changed name of <code>{SITE:<i>names</i>}...{/SITE}</code>
+			container token to <code>{SITES:<i>names</i>}...{/SITES}</code> to
+			avoid ambiguity with <code>{SITE}</code> elemental token.</li>
 		</ul>
 		</td>
 	</tr>

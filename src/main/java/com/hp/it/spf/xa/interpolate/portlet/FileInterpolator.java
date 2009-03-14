@@ -52,8 +52,20 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * Your content may use <code>&lt;</code> and <code>&gt;</code> instead of
  * <code>{</code> and <code>}</code> as the token delimiters, if desired.
  * The token names are case-sensitive.
- * 
  * </p>
+ * <blockquote>
+ * <p>
+ * <b>Note:</b> Several of the tokens take parameters. You can embed other
+ * tokens inside those parameters if desired; they will get interpolated before
+ * the parameters are used. Similarly, several of the tokens do value
+ * substitution (ie replace the token with a value). The substituted values can
+ * themselves contain other tokens; they will get interpolated when the value is
+ * substituted. Finally, several of the tokens are "container" tokens - you use
+ * them to surround other content and put a condition on its inclusion in the
+ * final output. Content surrounded by container tokens can itself contain other
+ * tokens, including nested occurrences of container tokens.
+ * </p>
+ * </blockquote>
  * 
  * <dl>
  * <dt><a name="after"><code>{AFTER:<i>date</i>}...{/AFTER}</code></a></dt>
@@ -161,23 +173,19 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * unlocalized content too, so the <code>{CONTENT-URL:<i>pathname</i>}</code>
  * token is isn't really necessary. It is retained for backward-compatibility.
  * </p>
- * <p>
- * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the
- * other <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>pathname</i></code>.
- * </p>
  * </dd>
  * 
  * <dt><a name="country-code"><code>{COUNTRY-CODE}</code></a></dt>
+ * <dt><code>{COUNTRY-CODE:<i>case</i>}</code></dt>
  * <dd>
  * <p>
- * Use this token to insert the <a
+ * Use either of these tokens to insert the <a
  * href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
  * 3166-1</a> country code from the current locale. Note that the language code
  * is not a part of this. For example, for a Japanese request,
- * <code>{COUNTRY-CODE}</code> is replaced with <code>JP</code>.
+ * <code>{COUNTRY-CODE}</code> is replaced with <code>JP</code>. Note the
+ * country code is uppercase by default; you can force use of lowercase with
+ * <code>{COUNTRY-CODE:lower}</code>.
  * </p>
  * </dd>
  * 
@@ -238,26 +246,22 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </pre>
  * 
  * </p>
- * <p>
- * Your <code><i>groups</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>groups</i></code>.
- * </p>
  * </dd>
  * 
  * <dt><a name="hpp-language-code"><code>{HPP-LANGUAGE-CODE}</code></a></dt>
+ * <dt><code>{HPP-LANGUAGE-CODE:<i>case</i>}</code></dt>
  * <dd>
  * <p>
- * Use this token to insert the HP Passport standard language code for the
- * current locale. Note that HP Passport does not exactly follow the ISO 639-1
- * convention; that is why you need to use this token instead of
- * <code>{LANGUAGE-CODE}</code> if you are dealing with HP Passport. Note that
- * the country code is not part of this (HP Passport uses the ISO 3166-1 country
- * code so you can use the <code>{COUNTRY-CODE}</code> token for that). For
- * example, for a Traditional Chinese request, <code>{HPP-LANGUAGE-CODE}</code>
- * is replaced with <code>12</code>.
+ * Use either of these tokens to insert the HP Passport standard language code
+ * for the current locale. Note that HP Passport does not exactly follow the ISO
+ * 639-1 convention; that is why you need to use this token instead of
+ * <code>{LANGUAGE-CODE}</code> or <code>{LANGUAGE-CODE:<i>case</i>}</code>
+ * if you are dealing with HP Passport. Note that the country code is not part
+ * of this (HP Passport uses the ISO 3166-1 country code so you can use the
+ * <code>{COUNTRY-CODE}</code> token for that). For example, for a Traditional
+ * Chinese request, <code>{HPP-LANGUAGE-CODE}</code> is replaced with
+ * <code>12</code>. By default, the HPP language code is lowercase; you can
+ * use <code>{HPP-LANGUAGE-CODE:upper}</code> to force uppercase.
  * </p>
  * </dd>
  * 
@@ -298,8 +302,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <li>
  * <p>
  * The property value for this token may contain <b>any</b> of the other
- * special markup tokens supported by <code>FileInterpolator</code>,
- * <b>except</b> another <code>{INCLUDE:<i>key</i>}</code> token. In other
+ * special markup tokens supported by <code>FileInterpolator</code>. In other
  * words, you can "nest" other tokens inside the propery values expressed by
  * this token.
  * </p>
@@ -320,13 +323,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </li>
  * <li>
  * <p>
- * Vice-versa, the <code>{INCLUDE:<i>key</i>}</code> token can itself be
- * used within the parameter to <b>any</b> of the other tokens, except another
- * <code>{INCLUDE:<i>key</i>}</code> token. So you can "nest" this token
- * inside the parameter values to other tokens.
- * </p>
- * <p>
- * For example, assume we now have this in our property file:
+ * As another example, assume we now have this in our property file:
  * </p>
  * <p>
  * <code>image.current-promo=december_sale.gif</code>
@@ -351,15 +348,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * (In actuality, the URL would be portlet-encoded for the SPF portal; the
  * <i>unencoded</i> URL is shown above for simplicity.)
  * </p>
- * <blockquote>
- * <p>
- * <b>Note:</b> Although you can "nest" <code>{INCLUDE:<i>key</i>}</code>
- * within other token's parameters, you cannot nest other token parameters of
- * any kind inside the <code><i>key</i></code> parameter for
- * <code>{INCLUDE:<i>key</i>}</code>. In other words, the
- * <code><i>key</i></code> is always treated as a literal.
- * </p>
- * </blockquote> </li>
+ * </li>
  * </ul>
  * <p>
  * A template for the token substitution property file, also named
@@ -369,27 +358,35 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </dd>
  * 
  * <dt><a name="language-code"><code>{LANGUAGE-CODE}</code></a></dt>
+ * <dt><code>{LANGUAGE-CODE:<i>case</i>}</code></dt>
  * <dd>
  * <p>
- * Use this token to insert the <a
+ * Use either of these tokens to insert the <a
  * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO 639-1</a>
  * language code from the current locale. Note that the country code is not a
  * part of this. For example, for a Japanese request,
- * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>. <b>Note:</b>
- * If you need the language code for use with HP Passport, be sure to use the
+ * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>. By
+ * default, the language code is lowercase; to force uppercase, use
+ * <code>{LANGUAGE-CODE:upper}</code>. <b>Note:</b> If you need the language
+ * code for use with HP Passport, be sure to use the
  * <code>{HPP-LANGUAGE-CODE}</code> token instead of this one.
  * </p>
  * </dd>
  * 
  * <dt><a name="language-tag"><code>{LANGUAGE-TAG}</code></a></dt>
+ * <dt><code>{LANGUAGE-TAG:<i>case</i>}</code></dt>
  * <dd>
  * <p>
- * Use this token to insert the <a
+ * Use either of these tokens to insert the <a
  * href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag from
  * the current locale. Note that the country code is included in the language
  * tag, if it was set in the locale (otherwise the language tag consists of the
  * language code only). For example, for a French (Canada) request,
- * <code>{LANGUAGE-TAG}</code> is replaced with <code>fr-CA</code>.
+ * <code>{LANGUAGE-TAG}</code> is replaced with <code>fr-CA</code>. By
+ * default, the language tag is mixed-case (uppercase for country code,
+ * lowercase for language code). You can force all-uppercase with
+ * <code>{LANGUAGE-TAG:upper}</code> and all-lowercase with
+ * <code>{LANGUAGE-TAG:lower}</code>.
  * </p>
  * </dd>
  * 
@@ -442,13 +439,6 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * application). And you must have configured
  * <code>i18n_portlet_config.properties</code> with any non-default portlet
  * bundle folder or relay servlet URL. This is documented elsewhere.
- * </p>
- * <p>
- * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the
- * other <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>pathname</i></code>.
  * </p>
  * </dd>
  * 
@@ -556,17 +546,10 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </pre>
  * 
  * </p>
- * <p>
- * Your <code><i>portlets</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>portlets</i></code>.
- * </p>
  * </dd>
  * 
  * <dt><a name="request-url"><code>{REQUEST-URL}</code></a></dt>
- * <dt><a name="request-url"><code>{REQUEST-URL:<i>spec</i>}</code></a></dt>
+ * <dt><code>{REQUEST-URL:<i>spec</i>}</code></dt>
  * <dd>
  * <p>
  * Use these related tokens to insert into the content the complete current URL
@@ -635,13 +618,6 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </pre>
  * 
  * </p>
- * <p>
- * Your <code><i>roles</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>roles</i></code>.
- * </p>
  * </dd>
  * 
  * <dt><a name="site"><code>{SITE}</code></a></dt>
@@ -656,7 +632,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><a name="site_c"><code>{SITE:<i>names</i>}...{/SITE}</code></a></dt>
+ * <dt><a name="site_c"><code>{SITES:<i>names</i>}...{/SITES}</code></a></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -667,10 +643,10 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * <p>
  * In the <code><i>names</i></code> parameter to the
- * <code>{SITE:<i>names</i>}</code> token, you can list just a single site
+ * <code>{SITES:<i>names</i>}</code> token, you can list just a single site
  * name, or multiple (use the <code>|</code> character to delimit them). The
- * content enclosed by the <code>{SITE:<i>names</i>}</code> and
- * <code>{/SITE}</code> tokens is omitted from the returned content unless the
+ * content enclosed by the <code>{SITES:<i>names</i>}</code> and
+ * <code>{/SITES}</code> tokens is omitted from the returned content unless the
  * site name in the request matches one of those values. The match is
  * case-insensitive.
  * </p>
@@ -680,10 +656,10 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * automatically (a non-standard behavior).
  * </p>
  * <p>
- * The content enclosed by the <code>{SITE:<i>names</i>}</code> and
- * <code>{/SITE}</code> tokens can be anything, including any of the special
+ * The content enclosed by the <code>{SITES:<i>names</i>}</code> and
+ * <code>{/SITES}</code> tokens can be anything, including any of the special
  * tokens supported by this class (including other
- * <code>{SITE:<i>names</i>}...{/SITE}</code> tokens - ie you can "nest"
+ * <code>{SITES:<i>names</i>}...{/SITES}</code> tokens - ie you can "nest"
  * them.
  * </p>
  * <p>
@@ -694,26 +670,19 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  * <pre>
  * This content is for all portlets using this file to show.
- * {SITE:site_A|site_B}
+ * {SITES:site_A|site_B}
  * This content is only to be shown when the portlet is in site_A or site_B.
- * {SITE:site_B}
+ * {SITES:site_B}
  * This content is only to be shown when the portlet is in site_B.
- * {/SITE}
- * {/SITE}
+ * {/SITES}
+ * {/SITES}
  * </pre>
  * 
- * </p>
- * <p>
- * Your <code><i>names</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>names</i></code>.
  * </p>
  * </dd>
  * 
  * <dt><a name="site-url"><code>{SITE-URL}</code></a></dt>
- * <dt><a name="site-url_p"><code>{SITE-URL:<i>spec</i>}</code></a></dt>
+ * <dt><code>{SITE-URL:<i>spec</i>}</code></dt>
  * <dd>
  * <p>
  * Use these related tokens to insert URL's for pages at the current portal site
@@ -767,18 +736,11 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * And to repeat the above examples again, but switch the scheme to HTTPS, here
  * is how we do it for the current portal site: <code>{SITE-URL:https;}</code>,
  * <code>{SITE-URL:https;/forums}</code>,
- * <code>{SITE-URL:https;/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc. And to
- * simultaneously switch to the <code>acme</code> portal site: use
+ * <code>{SITE-URL:https;/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc. And
+ * to simultaneously switch to the <code>acme</code> portal site: use
  * <code>{SITE-URL:https;acme}</code>,
  * <code>{SITE-URL:https;acme/forums}</code>,
  * <code>{SITE-URL:https;acme/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc.
- * </p>
- * <p>
- * Your <code><i>spec</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>spec</i></code>.
  * </p>
  * </dd>
  * 
@@ -807,51 +769,12 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * empty string will be inserted. Similarly, if the user object itself is guest
  * or null (ie the user is not logged-in), then an empty string is inserted.
  * </p>
- * <p>
- * Your <code><i>key</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>key</i></code>.
- * </p>
  * </dd>
  * </dl>
  * </p>
  * 
- * <p>
- * The above tokens are parsed in the following order:
- * </p>
- * 
- * <p>
- * <ol>
- * <li><code>{INCLUDE:<i>key</i>}</code></li>
- * <li><code>{LOGGED-IN}</code></li>
- * <li><code>{LOGGED-OUT}</code></li>
- * <li><code>{LANGUAGE-CODE}</code></li>
- * <li><code>{COUNTRY-CODE}</code></li>
- * <li><code>{LANGUAGE-TAG}</code></li>
- * <li><code>{HPP-LANGUAGE-CODE}</code></li>
- * <li><code>{REQUEST-URL}</code></li>
- * <li><code>{EMAIL}</code></li>
- * <li><code>{NAME}</code></li>
- * <li><code>{SITE}</code></li>
- * <li><code>{SITE-URL}</code></li>
- * <li><code>{BEFORE:<i>date</i>}</code></li>
- * <li><code>{AFTER:<i>date</i>}</code></li>
- * <li><code>{SITE:<i>names</i>}</code></li>
- * <li><code>{GROUP:<i>groups</i>}</code></li>
- * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
- * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
- * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
- * <li><code>{REQUEST-URL:<i>spec</i>}</code></li>
- * <li><code>{SITE-URL:<i>spec</i>}</code></li>
- * <li><code>{PORTLET:<i>portlets</i>}</code></li>
- * <li><code>{ROLE:<i>roles</i>}</code></li>
- * </ol>
- * </p>
- * 
- * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
+ * @author <link href="jyu@hp.com">Yu Jie</link>
  * @version TBD
  * @see <code>com.hp.it.spf.xa.interpolate.FileInterpolator</code><br>
  *      <code>com.hp.it.spf.xa.interpolate.portlet.TokenParser</code><br>

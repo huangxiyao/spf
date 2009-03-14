@@ -16,6 +16,9 @@ package are:</p>
 	<dd>Replaced with the <a
 		href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
 	3166-1</a> country code for the current portlet request.</dd>
+	<dt><code>{COUNTRY-CODE:<i>case</i>}</code></dt>
+	<dd>As above, forced to <code><i>lower</i></code> or <code><i>upper</i></code>
+	case (default is upper).</dd>
 	<dt><code>{EMAIL}</code></dt>
 	<dd>Replaced with the email address for the user in the current
 	portlet request.</dd>
@@ -26,6 +29,9 @@ package are:</p>
 	<dt><code>{HPP-LANGUAGE-CODE}</code></dt>
 	<dd>Replaced with the HP Passport language code for the current
 	portlet request.</dd>
+	<dt><code>{HPP-LANGUAGE-CODE:<i>case</i>}</code></dt>
+	<dd>As above, forced to <code><i>lower</i></code> or <code><i>upper</i></code>
+	case (default is lower).</dd>
 	<dt><code>{INCLUDE:<i>key</i>}</code></dt>
 	<dd>Replaced with the value for the <code><i>key</i></code>
 	property as found in the token substitutions file (eg <code>default_includes.properties</code>
@@ -34,10 +40,16 @@ package are:</p>
 	<dd>Replaced with the <a
 		href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
 	639-1</a> language code for the current portlet request.</dd>
+	<dt><code>{LANGUAGE-CODE:<i>case</i>}</code></dt>
+	<dd>As above, forced to <code><i>lower</i></code> or <code><i>upper</i></code>
+	case (default is lower).</dd>
 	<dt><code>{LANGUAGE-TAG}</code></dt>
 	<dd>Replaced with the <a
 		href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag
 	for the current portlet request.</dd>
+	<dt><code>{LANGUAGE-TAG:<i>case</i>}</code></dt>
+	<dd>As above, forced to all <code><i>lower</i></code> or all <code><i>upper</i></code>
+	case (default is mixed case: lowercase language and uppercase country).</dd>
 	<dt><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></dt>
 	<dd>Replaced with the properly-encoded URL for the (possibly
 	localized) external or internal static resource file, the base name of
@@ -71,7 +83,7 @@ package are:</p>
 	<dt><code>{SITE}</code></dt>
 	<dd>Replaced with the name of the current portal site which
 	includes this portlet.</dd>
-	<dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+	<dt><code>{SITES:<i>names</i>}...{/SITES}</code></dt>
 	<dd>Includes the surrounded content if the current request is for
 	one of the portal site <code><i>names</i></code>. Otherwise suppresses
 	the surrounded content.</dd>

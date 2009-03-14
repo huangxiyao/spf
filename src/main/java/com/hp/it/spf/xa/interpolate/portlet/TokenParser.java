@@ -308,7 +308,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	protected String getSite() {
 		if (request == null) {
 			return null;
-		}
+		}		
 		return Utils.getPortalSiteName(request);
 	}
 
@@ -536,7 +536,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 			}
 		}
 
-		return super.parseContainer(content, TOKEN_PORTLET_CONTAINER,
+		return super.parseContainerToken(content, TOKEN_PORTLET_CONTAINER,
 				new PortletContainerMatcher(getPortletID()));
 	}
 
@@ -628,7 +628,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 			}
 		}
 
-		return super.parseContainer(content, TOKEN_ROLE_CONTAINER,
+		return super.parseContainerToken(content, TOKEN_ROLE_CONTAINER,
 				new RoleContainerMatcher(request));
 	}
 }
