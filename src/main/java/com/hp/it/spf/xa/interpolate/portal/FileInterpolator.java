@@ -46,6 +46,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <code>{</code> and <code>}</code> as the token delimiters, if desired.
  * The token names are case-sensitive.
  * </p>
+ * <blockquote>
+ * <p>
+ * <b>Note:</b> Several of the tokens take parameters. You can embed other
+ * tokens inside those parameters if desired; they will get interpolated before
+ * the parameters are used. Similarly, several of the tokens do value
+ * substitution (ie replace the token with a value). The substituted values can
+ * themselves contain other tokens; they will get interpolated when the value is
+ * substituted. Finally, several of the tokens are "container" tokens - you use
+ * them to surround other content and put a condition on its inclusion in the
+ * final output. Content surrounded by container tokens can itself contain other
+ * tokens, including nested occurrences of container tokens.
+ * </p>
+ * </blockquote>
  * 
  * <dl>
  * <dt><a name="after"><code>{AFTER:<i>date</i>}...{/AFTER}</code></a></dt>
@@ -133,23 +146,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * unlocalized content too, so the <code>{CONTENT-URL:<i>pathname</i>}</code>
  * token isn't really necessary. It is retained for backward-compatibility.
  * </p>
- * <p>
- * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the
- * other <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>pathname</i></code>.
- * </p>
  * </dd>
  * 
  * <dt><code>{COUNTRY-CODE}</code></dt>
+ * <dt><code>{COUNTRY-CODE:<i>case</i>}</code></dt>
  * <dd>
  * <p>
- * Use this token to insert the <a
+ * Use either of these tokens to insert the <a
  * href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
  * 3166-1</a> country code from the current locale. Note that the language code
  * is not a part of this. For example, for a Japanese request,
- * <code>{COUNTRY-CODE}</code> is replaced with <code>JP</code>.
+ * <code>{COUNTRY-CODE}</code> is replaced with <code>JP</code>. Note the
+ * country code is uppercase by default; you can force use of lowercase with
+ * <code>{COUNTRY-CODE:lower}</code>.
  * </p>
  * </dd>
  * 
@@ -211,27 +220,22 @@ import com.vignette.portal.website.enduser.PortalContext;
  * {/GROUP}
  * </pre>
  * 
- * </p>
- * <p>
- * Your <code><i>groups</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>groups</i></code>.
- * </p>
  * </dd>
  * 
  * <dt><code>{HPP-LANGUAGE-CODE}</code></dt>
+ * <dt><code>{HPP-LANGUAGE-CODE:<i>case</i>}</code></dt>
  * <dd>
  * <p>
- * Use this token to insert the HP Passport standard language code for the
- * current locale. Note that HP Passport does not exactly follow the ISO 639-1
- * convention; that is why you need to use this token instead of
- * <code>{LANGUAGE-CODE}</code> if you are dealing with HP Passport. Note that
- * the country code is not part of this (HP Passport uses the ISO 3166-1 country
- * code so you can use the <code>{COUNTRY-CODE}</code> token for that). For
- * example, for a Traditional Chinese request, <code>{HPP-LANGUAGE-CODE}</code>
- * is replaced with <code>12</code>.
+ * Use either of these tokens to insert the HP Passport standard language code
+ * for the current locale. Note that HP Passport does not exactly follow the ISO
+ * 639-1 convention; that is why you need to use this token instead of
+ * <code>{LANGUAGE-CODE}</code> or <code>{LANGUAGE-CODE:<i>case</i>}</code>
+ * if you are dealing with HP Passport. Note that the country code is not part
+ * of this (HP Passport uses the ISO 3166-1 country code so you can use the
+ * <code>{COUNTRY-CODE}</code> token for that). For example, for a Traditional
+ * Chinese request, <code>{HPP-LANGUAGE-CODE}</code> is replaced with
+ * <code>12</code>. By default, the HPP language code is lowercase; you can
+ * use <code>{HPP-LANGUAGE-CODE:upper}</code> to force uppercase.
  * </p>
  * </dd>
  * 
@@ -293,14 +297,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </li>
  * <li>
- * <p>
- * Vice-versa, the <code>{INCLUDE:<i>key</i>}</code> token can itself be
- * used within the parameter to <b>any</b> of the other tokens, except another
- * <code>{INCLUDE:<i>key</i>}</code> token. So you can "nest" this token
- * inside the parameter values to other tokens.
- * </p>
- * <p>
- * For example, assume we now have this in our property file:
+ * As another example, assume we now have this in our property file:
  * </p>
  * <p>
  * <code>image.current-promo=december_sale.gif</code>
@@ -343,27 +340,35 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </dd>
  * 
  * <dt><code>{LANGUAGE-CODE}</code></dt>
+ * <dt><code>{LANGUAGE-CODE:<i>case</i>}</code></dt>
  * <dd>
  * <p>
- * Use this token to insert the <a
+ * Use either of these tokens to insert the <a
  * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO 639-1</a>
  * language code from the current locale. Note that the country code is not a
  * part of this. For example, for a Japanese request,
- * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>. <b>Note:</b>
- * If you need the language code for use with HP Passport, be sure to use the
+ * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>. By
+ * default, the language code is lowercase; to force uppercase, use
+ * <code>{LANGUAGE-CODE:upper}</code>. <b>Note:</b> If you need the language
+ * code for use with HP Passport, be sure to use the
  * <code>{HPP-LANGUAGE-CODE}</code> token instead of this one.
  * </p>
  * </dd>
  * 
  * <dt><code>{LANGUAGE-TAG}</code></dt>
+ * <dt><code>{LANGUAGE-TAG:<i>case</i>}</code></dt>
  * <dd>
  * <p>
- * Use this token to insert the <a
+ * Use either of these tokens to insert the <a
  * href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag from
  * the current locale. Note that the country code is included in the language
  * tag, if it was set in the locale (otherwise the language tag consists of the
  * language code only). For example, for a French (Canada) request,
- * <code>{LANGUAGE-TAG}</code> is replaced with <code>fr-CA</code>.
+ * <code>{LANGUAGE-TAG}</code> is replaced with <code>fr-CA</code>. By
+ * default, the language tag is mixed-case (uppercase for country code,
+ * lowercase for language code). You can force all-uppercase with
+ * <code>{LANGUAGE-TAG:upper}</code> and all-lowercase with
+ * <code>{LANGUAGE-TAG:lower}</code>.
  * </p>
  * </dd>
  * 
@@ -401,14 +406,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * will cause an HTTP 404 error if the browser subsequently opens the URL - this
  * is intentional and will help you detect the missing file.)
  * </p>
- * <p>
- * <b>Note:</b> Your <code><i>pathname</i></code> can "nest" any of the
- * other <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>pathname</i></code>.
- * </p>
- * <p>
+ * </dd>
  * 
  * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code><br>
  * <code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
@@ -503,7 +501,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+ * <dt><code>{SITES:<i>names</i>}...{/SITES}</code></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -514,19 +512,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * In the <code><i>names</i></code> parameter to the
- * <code>{SITE:names}</code> token, you can list just a single site name, or
+ * <code>{SITES:names}</code> token, you can list just a single site name, or
  * multiple (use the <code>|</code> character to delimit them). The content
- * enclosed by the <code>{SITE:<i>names</i>}</code> and <code>{/SITE}</code>
+ * enclosed by the <code>{SITES:<i>names</i>}</code> and <code>{/SITES}</code>
  * tokens is omitted from the returned content unless the site name in the
  * request matches one of those values. The match is case-insensitive. The site
  * name in the request is gotten from the portal context (it is the Vignette
  * "site DNS name").
  * </p>
  * <p>
- * The content enclosed by the <code>{SITE:<i>names</i>}</code> and
- * <code>{/SITE}</code> tokens can be anything, including any of the special
+ * The content enclosed by the <code>{SITES:<i>names</i>}</code> and
+ * <code>{/SITES}</code> tokens can be anything, including any of the special
  * tokens supported by this class (including other
- * <code>{SITE:<i>names</i>}...{/SITE}</code> tokens - ie you can "nest"
+ * <code>{SITES:<i>names</i>}...{/SITES}</code> tokens - ie you can "nest"
  * them.
  * </p>
  * <p>
@@ -545,13 +543,6 @@ import com.vignette.portal.website.enduser.PortalContext;
  * {/SITE}
  * </pre>
  * 
- * </p>
- * <p>
- * Your <code><i>names</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>names</i></code>.
  * </p>
  * </dd>
  * 
@@ -616,13 +607,6 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <code>{SITE-URL:https;acme/forums}</code>,
  * <code>{SITE-URL:https;acme/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc.
  * </p>
- * <p>
- * Your <code><i>spec</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>spec</i></code>.
- * </p>
  * </dd>
  * 
  * <dt><a name="user-property"><code>{USER-PROPERTY:<i>key</i>}</code></a></dt>
@@ -650,46 +634,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * empty string will be inserted. Similarly, if the user object itself is guest
  * or null (ie the user is not logged-in), then an empty string is inserted.
  * </p>
- * <p>
- * Your <code><i>key</i></code> can "nest" any of the other
- * <i>non-parameterized</i> tokens listed here: <code>{SITE}</code>,
- * <code>{LANGUAGE-CODE}</code>, etc. Except for
- * <code>{INCLUDE:<i>key</i>}</code>, you cannot "nest" any
- * <i>parameterized</i> tokens inside your <code><i>key</i></code>.
- * </p>
  * </dd>
  * </dl>
  * 
- * </p>
- * 
- * <p>
- * The above tokens are parsed in the following order:
- * </p>
- * 
- * <p>
- * <ol>
- * <li><code>{INCLUDE:<i>key</i>}</code></li>
- * <li><code>{LOGGED-IN}</code></li>
- * <li><code>{LOGGED-OUT}</code></li>
- * <li><code>{LANGUAGE-CODE}</code></li>
- * <li><code>{COUNTRY-CODE}</code></li>
- * <li><code>{LANGUAGE-TAG}</code></li>
- * <li><code>{HPP-LANGUAGE-CODE}</code></li>
- * <li><code>{REQUEST-URL}</code></li>
- * <li><code>{EMAIL}</code></li>
- * <li><code>{NAME}</code></li>
- * <li><code>{SITE}</code></li>
- * <li><code>{SITE-URL}</code></li>
- * <li><code>{BEFORE:<i>date</i>}</code></li>
- * <li><code>{AFTER:<i>date</i>}</code></li>
- * <li><code>{SITE:<i>names</i>}</code></li>
- * <li><code>{GROUP:<i>groups</i>}</code></li>
- * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
- * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
- * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
- * <li><code>{REQUEST-URL:<i>spec</i>}</code></li>
- * <li><code>{SITE-URL:<i>uri</i>}</code></li>
- * </ol>
  * </p>
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
