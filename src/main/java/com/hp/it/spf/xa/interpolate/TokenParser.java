@@ -53,7 +53,7 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{SITE}</code></li>
  * <li><code>{SITE-URL}</code></li>
  * <li><code>{SITE-URL:<i>spec</i>}</code></li>
- * <li><code>{SITE:<i>names</i>}</code></li>
+ * <li><code>{SITES:<i>names</i>}</code></li>
  * <li><code>{GROUP:<i>groups</i>}</code></li>
  * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
  * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
@@ -165,7 +165,7 @@ public abstract class TokenParser {
 	 * This class attribute is the name of the container token for a site
 	 * section.
 	 */
-	private static final String TOKEN_SITE_CONTAINER = "SITE";
+	private static final String TOKEN_SITE_CONTAINER = "SITES";
 
 	/**
 	 * This class attribute is the name of the container token for a group
@@ -1160,12 +1160,12 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the string for any <code>{SITE:<i>names</i>}</code> content;
+	 * Parses the string for any <code>{SITES:<i>names</i>}</code> content;
 	 * such content is deleted if the current portal site name does not match
 	 * (otherwise only the special markup is removed). The site name is the
 	 * unique name in the portal URL for the virtual portal site. The <i>names</i>
 	 * may include one or more site names, delimited by "|" for a logical-or.
-	 * <code>{SITE:<i>names</i>}</code> markup may be nested for logical-and
+	 * <code>{SITES:<i>names</i>}</code> markup may be nested for logical-and
 	 * (however since any one site has only one site name, the desire to
 	 * logical-and seems unlikely).
 	 * </p>
@@ -1182,9 +1182,9 @@ public abstract class TokenParser {
 	 * 
 	 * <pre>
 	 *  This content is for all sites to display.
-	 *  {SITE:abc|def}
+	 *  {SITES:abc|def}
 	 *  This content is to be displayed only in the abc or def sites.
-	 *  {/SITE}
+	 *  {/SITES}
 	 * </pre>
 	 * 
 	 * <p>
@@ -1211,7 +1211,7 @@ public abstract class TokenParser {
 	 * <p>
 	 * If you provide null content, null is returned. The site name is obtained
 	 * from the {@link #getSite()} method - if it returns null or an empty site
-	 * name, all <code>{SITE:names}</code>-enclosed sections are removed from
+	 * name, all <code>{SITES:names}</code>-enclosed sections are removed from
 	 * the content.
 	 * </p>
 	 * <p>
