@@ -39,7 +39,7 @@ import com.hp.it.spf.user.group.stub.UserContext;
  * @version 1.0
  * @see com.hp.it.spf.user.group.manager.UGSUserGroupRetriever
  */
-public class SSOUserGroupRetrieverTest {
+public class UGSUserGroupRetrieverTest {
     Map<String, Object> userProfile = new HashMap<String, Object>();
     
     private static HttpServletRequest request;
