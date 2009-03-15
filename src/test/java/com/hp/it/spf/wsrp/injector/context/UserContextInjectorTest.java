@@ -22,6 +22,7 @@ import org.apache.axis.configuration.NullProvider;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import com.hp.it.spf.wsrp.misc.Utils;
+import com.hp.it.spf.xa.misc.portal.Consts;
 
 /**
  * This is the test class for UserContextInjector class.
@@ -89,7 +90,7 @@ public class UserContextInjectorTest extends TestCase {
 		HttpSession session = request.getSession();
 		Map userProfile = new HashMap();
 		userProfile.put("profileId", "1234");
-		session.setAttribute("userProfile", userProfile);
+		session.setAttribute(Consts.USER_PROFILE_KEY, userProfile);
 		messageContext.setProperty(Utils.class.getName() + ".Request", request);
 		try {
 			UserContextInjector injector = new UserContextInjector();
