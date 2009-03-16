@@ -20,18 +20,18 @@
 
 <!-- DAO -->
 
-	<bean id="userAttributesDaoFactory" class="com.hp.it.cas.userattributes.dao.UserattributesDAOFactoryImpl">
+	<bean id="securityDaoFactory" class="com.hp.it.cas.security.dao.SecurityDAOFactoryImpl">
 		<constructor-arg ref="dataSource"/>
 	</bean>
 	
-	<bean id="userAttributesCustomDaoFactory" class="com.hp.it.cas.userattributes.custom.dao.UserAttributesCustomDAOFactoryImpl">
+	<bean id="securityCustomDaoFactory" class="com.hp.it.cas.security.custom.dao.SecurityCustomDAOFactoryImpl">
 		<constructor-arg ref="dataSource"/>
 	</bean>
 	
 	<bean id="personaDaoFactory" class="com.hp.it.cas.persona.dao.PersonaDaoFactory">
 		<constructor-arg ref="dataSource"/>
-		<constructor-arg ref="userAttributesDaoFactory"/>
-		<constructor-arg ref="userAttributesCustomDaoFactory"/>
+		<constructor-arg ref="securityDaoFactory"/>
+		<constructor-arg ref="securityCustomDaoFactory"/>
 	</bean>
 
 <!-- Service -->
