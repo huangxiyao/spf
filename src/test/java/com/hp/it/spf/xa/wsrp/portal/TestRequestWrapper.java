@@ -1,44 +1,58 @@
 package com.hp.it.spf.xa.wsrp.portal;
 
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Vector;
+import org.junit.runner.RunWith;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.Mockery;
+import org.jmock.Expectations;
+import static org.hamcrest.core.Is.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
-import org.jmock.Mock;
-import org.jmock.MockObjectTestCase;
+/**
+ * @author Slawek Zachcial (slawomir.zachcial@hp.com)
+ */
+@RunWith(JMock.class)
+public class TestRequestWrapper  {
 
-public class TestRequestWrapper extends MockObjectTestCase {
+	Mockery mContext = new JUnit4Mockery();
 
+	@Test
 	public void testGetHeader() {
-		Mock mockRequest = mock(HttpServletRequest.class);
-		mockRequest.stubs().method("getHeader").
-				with(eq("sample")).will(returnValue("samplevalue"));
-		mockRequest.stubs().method("getHeader").
-				with(eq("user-agent")).will(returnValue("firefox"));
+		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
+		mContext.checking(new Expectations() {{
+			allowing(request).getHeader("sample"); will(returnValue("sampleValue"));
+			allowing(request).getHeader("user-agent"); will(returnValue("firefox"));
+		}});
 
-		RequestWrapper wrapper = new RequestWrapper((HttpServletRequest) mockRequest.proxy(), "__KEY");
-		assertEquals("getting sample header", "samplevalue", wrapper.getHeader("sample"));
-		assertEquals("getting user-agent header", "firefox__KEY", wrapper.getHeader("user-agent"));
+		RequestWrapper wrapper = new RequestWrapper(request, "__KEY");
+		assertThat("getting sample header", wrapper.getHeader("sample"), is("sampleValue"));
+		assertThat("getting user-agent header", wrapper.getHeader("user-agent"), is("firefox__KEY"));
 	}
 
+	@Test
 	public void testGetHeaderNoUserAgentInRequest() {
-		Mock mockRequest = mock(HttpServletRequest.class);
-		mockRequest.stubs().method("getHeader").
-				with(eq("user-agent")).will(returnValue(null));
+		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
+		mContext.checking(new Expectations() {{
+			allowing(request).getHeader("user-agent"); will(returnValue(null));
+		}});
 
-		RequestWrapper wrapper = new RequestWrapper((HttpServletRequest) mockRequest.proxy(), "__KEY");
-		assertEquals("user-agent value from wrapper", "__KEY", wrapper.getHeader("user-agent"));
+		RequestWrapper wrapper = new RequestWrapper(request, "__KEY");
+		assertThat("user-agent value from wrapper", wrapper.getHeader("user-agent"), is("__KEY"));
 	}
 
+	@Test
 	public void testGetHeaderNamesNoUserAgent() {
-		Mock mockRequest = mock(HttpServletRequest.class);
-		mockRequest.stubs().method("getHeader");
-		mockRequest.stubs().method("getHeaderNames").will(
-				returnValue(new Vector(Arrays.asList(new String[] {"header1", "header2"})).elements()));
+		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
+		mContext.checking(new Expectations() {{
+			allowing(request).getHeader("user-agent"); will(returnValue(null));
+			allowing(request).getHeaderNames(); will(returnEnumeration("header1", "header2"));
+		}});
 
-		RequestWrapper wrapper = new RequestWrapper((HttpServletRequest) mockRequest.proxy(), "__KEY");
+		RequestWrapper wrapper = new RequestWrapper(request, "__KEY");
 		boolean userAgentHeaderFound = false;
 		for (Enumeration en = wrapper.getHeaderNames(); !userAgentHeaderFound && en.hasMoreElements(); ) {
 			userAgentHeaderFound = "user-agent".equals(en.nextElement());
@@ -46,16 +60,17 @@ public class TestRequestWrapper extends MockObjectTestCase {
 		assertTrue("user-agent header added", userAgentHeaderFound);
 	}
 
+	@Test
 	public void testGetHeaders() {
-		Mock mockRequest = mock(HttpServletRequest.class);
-		mockRequest.stubs().method("getHeader").with(eq("user-agent")).will(returnValue("firefox"));
-		mockRequest.stubs().method("getHeaders").
-				with(eq("user-agent")).
-				will(returnValue(new Vector(Arrays.asList(new String[] {"firefox"})).elements()));
+		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
+		mContext.checking(new Expectations() {{
+			allowing(request).getHeader("user-agent"); will(returnValue("firefox"));
+			allowing(request).getHeaders("user-agent"); will(returnEnumeration("firefox"));
+		}});
 
-		RequestWrapper wrapper = new RequestWrapper((HttpServletRequest) mockRequest.proxy(), "__KEY");
+		RequestWrapper wrapper = new RequestWrapper(request, "__KEY");
 		Enumeration en = wrapper.getHeaders("user-agent");
 		assertTrue("user-agent header found", en.hasMoreElements());
-		assertEquals("user-agent header value", "firefox__KEY", en.nextElement());
+		assertThat("user-agent header value", (String) en.nextElement(), is("firefox__KEY"));
 	}
 }

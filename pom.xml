@@ -95,6 +95,18 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-junit4</artifactId>
+			<version>2.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-legacy</artifactId>
+			<version>2.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
 			<version>1.0.2-SNAPSHOT</version>
@@ -103,12 +115,6 @@
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-hpp</artifactId>
 			<version>1.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>jmock</groupId>
-			<artifactId>jmock</artifactId>
-			<version>1.0.1</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>

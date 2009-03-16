@@ -6,56 +6,74 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jmock.MockObjectTestCase;
-import org.jmock.Mock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.Mockery;
+import org.jmock.Expectations;
 
 /**
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  */
-public class DiagnosticContextResponseWrapperTest extends MockObjectTestCase
+@RunWith(JMock.class)
+public class DiagnosticContextResponseWrapperTest
 {
+	Mockery mContext = new JUnit4Mockery();
 
-	protected void setUp() throws Exception
+	@Before
+	public void setUp() throws Exception
 	{
 		RequestContext.resetThreadInstance();
 	}
 
+	@Test
 	public void testSendRedirectDoesNothingIfNoErrors() throws Exception {
-		Mock sessionMock = mock(HttpSession.class);
-		sessionMock.
-				expects(never()).
-				method("setAttribute").
-				with(eq(DiagnosticContextResponseWrapper.DC_SESSION_KEY));
+		final HttpSession session = mContext.mock(HttpSession.class);
+		mContext.checking(new Expectations() {{
+			never(session).setAttribute(
+					with(equal(DiagnosticContextResponseWrapper.DC_SESSION_KEY)),
+					with(any(DiagnosticContext.class)));
+		}});
 
-		Mock requestMock = mock(HttpServletRequest.class);
-		requestMock.stubs().method("getSession").will(returnValue(sessionMock.proxy()));
+		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
+		mContext.checking(new Expectations() {{
+			allowing(request).getSession(); will(returnValue(session));
+		}});
 
-		Mock responseMock = mock(HttpServletResponse.class);
-		responseMock.expects(once()).method("sendRedirect").with(eq("somewhere"));
+		final HttpServletResponse response = mContext.mock(HttpServletResponse.class);
+		mContext.checking(new Expectations() {{
+			oneOf(response).sendRedirect("somewhere");
+		}});
 
-		DiagnosticContextResponseWrapper wrapper =
-				new DiagnosticContextResponseWrapper(
-						(HttpServletRequest) requestMock.proxy(),
-						(HttpServletResponse) responseMock.proxy());
+		DiagnosticContextResponseWrapper wrapper = new DiagnosticContextResponseWrapper(request, response);
 		wrapper.sendRedirect("somewhere");
 	}
 
+	@Test
 	public void testSendRedirectSavesContextInSessionIfErrors() throws Exception {
 		RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.AUTH001, "xxx");
-		Mock sessionMock = mock(HttpSession.class);
-		sessionMock.expects(once()).method("setAttribute").with(
-				eq(DiagnosticContextResponseWrapper.DC_SESSION_KEY), isA(DiagnosticContext.class));
 
-		Mock requestMock = mock(HttpServletRequest.class);
-		requestMock.stubs().method("getSession").will(returnValue(sessionMock.proxy()));
+		final HttpSession session = mContext.mock(HttpSession.class);
+		mContext.checking(new Expectations() {{
+			oneOf(session).setAttribute(
+					with(equal(DiagnosticContextResponseWrapper.DC_SESSION_KEY)),
+					with(any(DiagnosticContext.class)));
+		}});
 
-		Mock responseMock = mock(HttpServletResponse.class);
-		responseMock.expects(once()).method("sendRedirect").with(eq("somewhereelse"));
+		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
+		mContext.checking(new Expectations() {{
+			allowing(request).getSession(); will(returnValue(session));
+		}});
+
+		final HttpServletResponse response = mContext.mock(HttpServletResponse.class);
+		mContext.checking(new Expectations() {{
+			oneOf(response).sendRedirect("somewhereelse");
+		}});
 
 		DiagnosticContextResponseWrapper wrapper =
-				new DiagnosticContextResponseWrapper(
-						(HttpServletRequest) requestMock.proxy(),
-						(HttpServletResponse) responseMock.proxy());
+				new DiagnosticContextResponseWrapper(request, response);
 		wrapper.sendRedirect("somewhereelse");
 	}
 
