@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.rpc.ServiceException;
 
+import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.hp.it.spf.user.exception.UserGroupsException;
 import com.hp.it.spf.user.group.stub.ArrayOfString;
 import com.hp.it.spf.user.group.stub.ArrayOfUserContext;
@@ -37,6 +37,8 @@ import com.hp.it.spf.xa.log.portal.Operation;
 import com.hp.it.spf.xa.log.portal.TimeRecorder;
 import com.hp.it.spf.xa.misc.portal.RequestContext;
 import com.hp.it.spf.xa.misc.portal.Utils;
+import com.vignette.portal.log.LogConfiguration;
+import com.vignette.portal.log.LogWrapper;
 
 /**
  * This is the implimentation class of <tt>IUserGroupRetriever</tt>.
@@ -45,9 +47,8 @@ import com.hp.it.spf.xa.misc.portal.Utils;
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  * @version 1.0
  */
-public class UGSUserGroupRetriever implements IUserGroupRetriever {
-    private static final Logger LOG = Logger.getLogger(UGSUserGroupRetriever.class.toString());
-
+public class UGSUserGroupRetriever implements IUserGroupRetriever {    
+    private static final LogWrapper LOG = AuthenticatorHelper.getLog(UGSUserGroupRetriever.class);
 	/**
      * Retrieve user groups by site name and user profiles.
      * 
@@ -68,8 +69,8 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
 		    timeRecorder.recordStart(Operation.GROUPS_CALL);
 		    siteName = Utils.getEffectiveSite(request).getDNSName();
             GroupRequest serviceRequest = getServiceRequest(siteName, userProfile);
-            if (LOG.isLoggable(Level.FINEST)) {
-                LOG.finest("UGS invokeService");
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("UGS invokeService");
             }
 
             GroupResponse serviceResponse = invokeService(serviceRequest);
@@ -80,17 +81,16 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
                 for (String group : groupList) {
                     groupSet.add(group);
                 }
-                
-                if (LOG.isLoggable(Level.FINEST)) {
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     StringBuffer groupStr = new StringBuffer();
                     if (groupList.length > 0) {
                         for (int i = 0; i < groupList.length; i++) {
                             groupStr.append(groupList[i]);
                             groupStr.append(",");
                         }
-                        LOG.finest("Output group listing: " + groupStr);
+                        LOG.debug("Output group listing: " + groupStr);
                     }
-                }
+                }                
             }            
             timeRecorder.recordEnd(Operation.GROUPS_CALL);
             return groupSet;
@@ -132,8 +132,8 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
         groupRequest.setSiteName(ugsSiteId);
         groupRequest.setUserContext(new ArrayOfUserContext(convertToUserContext(userProfile)));
 
-        if (LOG.isLoggable(Level.FINEST)) {
-            LOG.finest("UGS request object: SiteName="
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("UGS request object: SiteName="
                        + ugsSiteId
                        + " User Profile="
                        + userProfile.toString());
@@ -218,8 +218,8 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
 			}
 			else {
 				// If we are not able to figure out what that is we simply add its string representation
-				if (LOG.isLoggable(Level.FINEST)) {
-					LOG.finest("Don't know how to hanlde attribute '" + attributeName +
+			    if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+					LOG.debug("Don't know how to hanlde attribute '" + attributeName +
 					"' of type '" + attributeNativeValue.getClass().getName() +
 							"'. Adding its string representation.");
 				}
@@ -328,14 +328,14 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
 
         // Configure the url of call
         String ugsUrl = ugsParametersManager.getEndPoint();
-        if (LOG.isLoggable(Level.FINEST)) {
-            LOG.finest("URL to call UGS : [" + ugsUrl + "]");
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("URL to call UGS : [" + ugsUrl + "]");
         }
 
         UGSRuntimeServiceXfireImplHttpBindingStub binding = (UGSRuntimeServiceXfireImplHttpBindingStub)gms.getUGSRuntimeServiceXfireImplHttpPort(new URL(ugsUrl));
         binding.setTimeout(Integer.valueOf(ugsParametersManager.getTimeout()));
-        if (LOG.isLoggable(Level.FINEST)) {
-            LOG.finest("UGS Timeout after setting: " + binding.getTimeout());
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("UGS Timeout after setting: " + binding.getTimeout());
         }
         // Invoke the service
         return binding.getGroups(new GetGroups(groupRequest)).getOut();
