@@ -6,6 +6,7 @@ package com.hp.it.spf.user.group.manager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.vignette.portal.log.LogConfiguration;
@@ -40,8 +41,8 @@ public class UserGroupRetrieverFactory {
 
     // put default retriever into the map
     static {
-        retrieverMap = new HashMap<String, IUserGroupRetriever>();
-        retrieverPorperties = new HashMap<String, String>();
+        retrieverMap = new ConcurrentHashMap<String, IUserGroupRetriever>();
+        retrieverPorperties = new ConcurrentHashMap<String, String>();
         retrieverMap.put(DEFAULT_RETRIEVER, new DefaultUserGroupRetriever());
     }
 

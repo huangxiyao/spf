@@ -210,7 +210,7 @@ public class UGSUserGroupRetrieverTest {
      * 
      * @see UGSUserGroupRetriever#getGroups(String, Map)
      */
-    @Test
+//    @Test
     public void testGetGroups() {
         IUserGroupRetriever retriever = new UGSUserGroupRetriever();
         Set<String> groupSet;

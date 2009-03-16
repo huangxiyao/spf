@@ -5,8 +5,8 @@
  */
 package com.hp.it.spf.user.profile.manager;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.hp.it.spf.user.group.manager.CompoundUserGroupRetriever;
@@ -40,8 +40,8 @@ public class UserProfileRetrieverFactory {
     
     // put default retriever into the map
     static {
-        retrieverMap = new HashMap<String, IUserProfileRetriever>();
-        retrieverPorperties = new HashMap<String, String>();
+        retrieverMap = new ConcurrentHashMap<String, IUserProfileRetriever>();
+        retrieverPorperties = new ConcurrentHashMap<String, String>();
         retrieverMap.put(DEFAULT_RETRIEVER, new DefaultUserProfileRetriever());
     }
     

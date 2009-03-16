@@ -65,6 +65,9 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      */
     @SuppressWarnings("unchecked")
     protected void mapHeaderToUserProfileMap() {
+        // retrieve HPP cookie account values
+        userProfile.putAll(getCookieValuesAsMap());
+        
         super.mapHeaderToUserProfileMap();
 
         // Set language, change language from HPP format to ISO standard
@@ -80,8 +83,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         userProfile.put(AuthenticationConsts.KEY_POSTAL_PREF,
                         getValue(AuthenticationConsts.HEADER_POSTAL_CONTACT_PREF_PROPERTY_NAME));
 
-        // retrieve HPP cookie account values
-        userProfile.putAll(getCookieValuesAsMap());
+        
 
         setPhone();
     }
@@ -192,7 +194,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     /**
      * Retrieve all cookie account values as a map.
      * <p>
-     * It retrieves Account-Cookie, Account-BusCookie and Account-HomeCookie
+     * It retrieves Account-Cookie, Account-BusCookie, Account-HomeCookie and CL_Cookie
      * values as a map from http cookie.
      * </p>
      * 
@@ -219,6 +221,12 @@ public class HPPAuthenticator extends AbstractAuthenticator {
             LOG.debug("Retrieve ACCOUNT_BUSCOOKIE: " + absc);
         }
         map.putAll(convertCookieValueToMap(absc));
+        String cl_cookie = AuthenticatorHelper.getCookieValue(request,
+                                                         AuthenticationConsts.CL_COOKIE);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Retrieve CL_COOKIE: " + cl_cookie);
+        }
+        map.putAll(convertCookieValueToMap(cl_cookie));
 
         return map;
     }

@@ -39,6 +39,8 @@ public class AuthenticationConsts {
     
     static final String ACCOUNT_BUSCOOKIE = "Account-BusCookie";
     
+    static final String CL_COOKIE = "CL_Cookie";
+    
     public static final String USER_IDENTIFIER_TYPE =  Consts.UNSTICKY_SESSION_ATTR_PREFIX + "USERIDENTIFIERTYPE";
     
     /**
