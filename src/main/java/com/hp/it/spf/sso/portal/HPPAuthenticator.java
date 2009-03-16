@@ -35,10 +35,6 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 
     private static final LogWrapper LOG = AuthenticatorHelper.getLog(HPPAuthenticator.class);
 
-    private static String clHeaderList = null;
-
-    private String clHeaderHpp = null;
-
     /**
      * This is the constructor for HPP Authenticator. First, it will call the
      * constructor of AbstractAuthenticator which is its father class to do some
@@ -52,12 +48,6 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      */
     public HPPAuthenticator(HttpServletRequest request) {
         super(request);
-
-        // retrieve the cl_header list
-        if (clHeaderList == null) {
-            clHeaderList = getProperty(AuthenticationConsts.HEADER_CL_HEADER_LIST_PROPERTY_NAME);
-        }
-        clHeaderHpp = getValue(AuthenticationConsts.HEADER_CL_HEADER_PROPERTY_NAME);
     }
 
     /**
@@ -83,8 +73,6 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         userProfile.put(AuthenticationConsts.KEY_POSTAL_PREF,
                         getValue(AuthenticationConsts.HEADER_POSTAL_CONTACT_PREF_PROPERTY_NAME));
 
-        
-
         setPhone();
     }
 
@@ -105,52 +93,21 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         String temp = getProperty(fieldName);
         String value = null;
         if (temp != null) {
-            if (clHeaderList.indexOf(temp) != -1) {
-                // Return field value from CL Header
-                value = AuthenticatorHelper.getValuesFromCLHeader(clHeaderHpp,
-                                                                  temp);
-            } else {
-                value = AuthenticatorHelper.getRequestHeader(request,
-                                                             temp,
-                                                             true);
-            }
+            value = (String)userProfile.get(temp);
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("HPP getValue: " + fieldName + "=" + value);
         }
         return value;
     }
-
-    /**
-     * This method is used to map the 4 http headers include phone info to
-     * userProfile map. Construct phone number with country code, number and
-     * area code from headers. Construct extension with the one from header.
-     */
+    
     @SuppressWarnings("unchecked")
     private void setPhone() {
-        String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);
-        String country = getValue(AuthenticationConsts.HEADER_PHONE_COUNTRY_CODE);
-        String area = getValue(AuthenticationConsts.HEADER_PHONE_AREA_CODE);
+        String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);        
         String ext = getValue(AuthenticationConsts.HEADER_PHONE_EXT);
-
-        StringBuffer phone = new StringBuffer("");
-        if ((country != null) && !("".equals(country.trim()))) {
-            phone.append("+").append(country.trim()).append(" ");
-        }
-        if ((area != null) && !("".equals(area.trim()))) {
-            phone.append(area.trim()).append(" ");
-        }
-        if ((number != null) && !("".equals(number.trim()))) {
-            phone.append(number.trim());
-        }
-        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, phone.toString());
-
-        if ((ext != null) && !("".equals(ext.trim()))) {
-            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT,
-                            ext.trim());
-        } else {
-            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, "");
-        }
+        
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, number);        
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext);       
     }
 
     /**

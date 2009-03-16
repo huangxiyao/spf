@@ -205,9 +205,10 @@ public class MockeryUtils {
                 
                 Cookie ac = new Cookie("Account-Cookie", "=?UTF-8?B?fGhwcHByb2ZpbGVJZD02Y2IyM2YxMjAzZmM2NzJjMWEzMWZkMjY0OTkyMDUyNA0KfHNpZ25Jbk5hbWU9bGl1eWVfY2FmDQp8Zmlyc3ROYW1lPVllDQp8bGFzdG5hbWU9TGl1DQp8ZW1haWw9bGl1eWVAaHAuY29tDQp8bGFuZ2NvZGU9MTMNCnxjb250YWN0UHJlZkVtYWlsPU4NCnxjb250YWN0UHJlZlBvc3Q9Tg0KfGNvbnRhY3RQcmVmVGVsZXBob25lPU4=?=");
                 Cookie ahc = new Cookie("Account-HomeCookie", "=?UTF-8?B?fFRlbGVDaXR5Q0Q9MDIxDQp8aG9tZVRlbGVwaG9uZUNvdW50cnlDb2RlPTg2DQp8aG9tZVRlbGVwaG9uZU51bWJlcj0xMjM0NTY3OA0KfGhvbWVQb3N0YWxjb2RlPTAyMQ0KfGhvbWVBZGRyZXNzTGluZTE9aG9tZV9hZGRyZXNzMQ0KfGhvbWVBZGRyZXNzTGluZTI9aG9tZV9hZGRyZXNzMg0KfGhvbWVDaXR5PWhvbWVfY2l0eQ0KfGhvbWVTdGF0ZT0NCnxob21lQ291bnRyeUNvZGU9Q04NCnxob21lQ291bnR5PUNODQp8aG9tZVppcENvZGVQb3N0Q29kZT0wMjENCnxob21lVGVsZXBob25lQ2l0eUNvZGU9MDIxDQp8aG9tZVRlbGVwaG9uZU51bWJlcj04NigwMjEpMTIzNDU2Nzg=?=");
+                Cookie cl_cookie = new Cookie("CL_Cookie", "=?UTF-8?B?cHJlZmVycmVkbGFuZ3VhZ2U9MTN8aHBjbG5hbWU9bGl1eWVfY2FmfGhwY2xpZG51bWJlcj02Y2IyM2YxMjAzZmM2NzJjMWEzMWZkMjY0OTkyMDUyNHxocHJlc2lkZW50Y291bnRyeWNvZGU9Q058c249TGl1fGdpdmVubmFtZT1ZZXxlbWFpbD1saXV5ZUBocC5jb218Y3JlYXRldGltZXN0YW1wPTIwMDktMDMtMTAgMDI6NTk6MjB8bW9kaWZ5dGltZXN0YW1wPTIwMDktMDMtMTAgMDM6MDM6MTh8Y2xhbmc9Q04tMTM=?=");
                 Cookie smsession = new Cookie("SMSESSION", "NOT");
                 allowing(request).getCookies();
-                will(returnValue(new Cookie[]{ac, ahc, smsession}));
+                will(returnValue(new Cookie[]{ac, ahc, cl_cookie, smsession}));
             }
         });
         return request;
@@ -273,9 +274,10 @@ public class MockeryUtils {
                 
                 Cookie ac = new Cookie("Account-Cookie", "=?UTF-8?B?fGhwcHByb2ZpbGVJZD02Y2IyM2YxMjAzZmM2NzJjMWEzMWZkMjY0OTkyMDUyNA0KfHNpZ25Jbk5hbWU9bGl1eWVfY2FmDQp8Zmlyc3ROYW1lPVllDQp8bGFzdG5hbWU9TGl1DQp8ZW1haWw9bGl1eWVAaHAuY29tDQp8bGFuZ2NvZGU9MTMNCnxjb250YWN0UHJlZkVtYWlsPU4NCnxjb250YWN0UHJlZlBvc3Q9Tg0KfGNvbnRhY3RQcmVmVGVsZXBob25lPU4=?=");
                 Cookie ahc = new Cookie("Account-HomeCookie", "=?UTF-8?B?fFRlbGVDaXR5Q0Q9MDIxDQp8aG9tZVRlbGVwaG9uZUNvdW50cnlDb2RlPTg2DQp8aG9tZVRlbGVwaG9uZU51bWJlcj0xMjM0NTY3OA0KfGhvbWVQb3N0YWxjb2RlPTAyMQ0KfGhvbWVBZGRyZXNzTGluZTE9aG9tZV9hZGRyZXNzMQ0KfGhvbWVBZGRyZXNzTGluZTI9aG9tZV9hZGRyZXNzMg0KfGhvbWVDaXR5PWhvbWVfY2l0eQ0KfGhvbWVTdGF0ZT0NCnxob21lQ291bnRyeUNvZGU9Q04NCnxob21lQ291bnR5PUNODQp8aG9tZVppcENvZGVQb3N0Q29kZT0wMjENCnxob21lVGVsZXBob25lQ2l0eUNvZGU9MDIxDQp8aG9tZVRlbGVwaG9uZU51bWJlcj04NigwMjEpMTIzNDU2Nzg=?=");
+                Cookie cl_cookie = new Cookie("CL_Cookie", "=?UTF-8?B?cHJlZmVycmVkbGFuZ3VhZ2U9MTN8aHBjbG5hbWU9bGl1eWVfY2FmfGhwY2xpZG51bWJlcj02Y2IyM2YxMjAzZmM2NzJjMWEzMWZkMjY0OTkyMDUyNHxocHJlc2lkZW50Y291bnRyeWNvZGU9Q058c249TGl1fGdpdmVubmFtZT1ZZXxlbWFpbD1saXV5ZUBocC5jb218Y3JlYXRldGltZXN0YW1wPTIwMDktMDMtMTAgMDI6NTk6MjB8bW9kaWZ5dGltZXN0YW1wPTIwMDktMDMtMTAgMDM6MDM6MTh8Y2xhbmc9Q04tMTM=?=");
                 Cookie smsession = new Cookie("SMSESSION", "NOT");
                 allowing(request).getCookies();
-                will(returnValue(new Cookie[]{ac, ahc, smsession}));                
+                will(returnValue(new Cookie[]{ac, ahc, cl_cookie, smsession}));                
             }
         });
         return request;

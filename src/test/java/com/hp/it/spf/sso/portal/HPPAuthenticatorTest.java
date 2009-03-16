@@ -4,7 +4,8 @@
  */
 package com.hp.it.spf.sso.portal;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -70,22 +71,14 @@ public class HPPAuthenticatorTest {
         authenticator.mapHeaderToUserProfileMap();
         assertTrue(authenticator.userProfile.size() > 0);
         
-        authenticator = new HPPAuthenticator(fedRequest);
-        authenticator.mapHeaderToUserProfileMap();
-        assertTrue(authenticator.userProfile.size() > 0);
-    }
-
-    /**
-     * Test method for {@link com.hp.it.spf.sso.portal.HPPAuthenticator#getValue(java.lang.String)}.
-     */
-    @Test
-    public void testGetValue() {
-        HPPAuthenticator authenticator = new HPPAuthenticator(hppRequest);
         String profileid = authenticator.getValue(AuthenticationConsts.HEADER_PROFILE_ID_PROPERTY_NAME);
         assertEquals(UserProfile.get(AuthenticationConsts.KEY_PROFILE_ID), profileid);
         
         authenticator = new HPPAuthenticator(fedRequest);
+        authenticator.mapHeaderToUserProfileMap();
+        assertTrue(authenticator.userProfile.size() > 0);
+        
         profileid = authenticator.getValue(AuthenticationConsts.HEADER_PROFILE_ID_PROPERTY_NAME);
         assertEquals(UserProfile.get(AuthenticationConsts.KEY_PROFILE_ID), profileid);
-    }
+    }    
 }
