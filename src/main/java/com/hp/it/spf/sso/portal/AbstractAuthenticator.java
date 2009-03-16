@@ -210,9 +210,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         userProfile.put(AuthenticationConsts.KEY_LAST_NAME,
                         getValue(AuthenticationConsts.HEADER_LAST_NAME_PROPERTY_NAME));
         userProfile.put(AuthenticationConsts.KEY_COUNTRY,
-                        getValue(AuthenticationConsts.HEADER_COUNTRY_PROPERTY_NAME));
-        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER,
-                        getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME));
+                        getValue(AuthenticationConsts.HEADER_COUNTRY_PROPERTY_NAME));        
 
         // Set language, if null, set to default EN
         String language = getValue(AuthenticationConsts.HEADER_LANGUAGE_PROPERTY_NAME);

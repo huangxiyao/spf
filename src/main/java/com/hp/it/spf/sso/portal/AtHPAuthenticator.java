@@ -60,15 +60,15 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
 
         // retrieve atHP specific attributes. e.g. mailstop, street, etc.
         userProfile.put(AuthenticationConsts.KEY_MAIL_STOP,
-                        userProfile.get(AuthenticationConsts.HEADER_MAIL_STOP_NAME));
+                        getValue(AuthenticationConsts.HEADER_MAIL_STOP_NAME));
         userProfile.put(AuthenticationConsts.KEY_CITY,
-                        userProfile.get(AuthenticationConsts.HEADER_CITY_NAME));
+                        getValue(AuthenticationConsts.HEADER_CITY_NAME));
         userProfile.put(AuthenticationConsts.KEY_STREET,
-                        userProfile.get(AuthenticationConsts.HEADER_STREET_NAME));
+                        getValue(AuthenticationConsts.HEADER_STREET_NAME));
         userProfile.put(AuthenticationConsts.KEY_STATE,
-                        userProfile.get(AuthenticationConsts.HEADER_STATE_NAME));
+                        getValue(AuthenticationConsts.HEADER_STATE_NAME));
         userProfile.put(AuthenticationConsts.KEY_ZIP,
-                        userProfile.get(AuthenticationConsts.HEADER_ZIP_NAME));
+                        getValue(AuthenticationConsts.HEADER_ZIP_NAME));
 
         setPhone();
     }
@@ -81,7 +81,7 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
      */
     @SuppressWarnings("unchecked")
     private void setPhone() {
-        String tmpPhone = (String)userProfile.get(AuthenticationConsts.KEY_PHONE_NUMBER);
+        String tmpPhone = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);        
         if (tmpPhone != null) {
             tmpPhone = tmpPhone.toLowerCase();
             String[] phones = tmpPhone.split(AuthenticationConsts.PHONE_EXT_SPLIT);
