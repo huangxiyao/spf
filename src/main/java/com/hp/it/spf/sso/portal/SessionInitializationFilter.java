@@ -82,21 +82,6 @@ public class SessionInitializationFilter implements Filter {
             HttpServletResponse res = (HttpServletResponse)response;
             HttpSession session = req.getSession();
 
-            // save the current URL to session
-            PortalContext context = (PortalContext)req.getAttribute("portalContext");
-            if (context != null) {
-                Style thisPage = context.getCurrentSecondaryPage();
-                if (thisPage != null) {
-                    if (!Consts.PAGE_FRIENDLY_ID_RETURN.equals(thisPage.getFriendlyID())) {
-                        String currentURL = Utils.getRequestURL(req);
-                        if (session != null) {
-                            session.setAttribute(Consts.SESSION_ATTR_RETURN_URL,
-                                                 currentURL);
-                        }
-                    }
-                }
-            }
-
             // if there is a error tag in session, which means that current
             // request page is
             // error handling page, don't need to do the session initialization.
