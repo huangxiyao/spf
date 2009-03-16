@@ -207,6 +207,13 @@
 			com.hp.it.spf.portalurl.portal.filter.PortalURLRewriterFilter
 		</filter-class>
 	</filter>
+	
+	<filter>
+		<filter-name>RememberReturnURLFilter</filter-name>
+		<filter-class>
+			com.hp.it.spf.misc.portal.filter.RememberReturnURLFilter
+		</filter-class>
+	</filter>
 
 	<filter>
 		<filter-name>RequestBindingFilter</filter-name>
@@ -382,6 +389,11 @@
 
 	<filter-mapping>
 		<filter-name>PortalURLRewriterFilter</filter-name>
+		<servlet-name>controller</servlet-name>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>RememberReturnURLFilter</filter-name>
 		<servlet-name>controller</servlet-name>
 	</filter-mapping>
 
