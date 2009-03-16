@@ -646,7 +646,7 @@ public class AuthenticatorHelper {
      * @see getRequestHeader(javax.servlet.http.HttpServletRequest,
      *      java.lang.String, boolean)
      */
-    static String getRequestHeader(HttpServletRequest request, String in) {
+    public static String getRequestHeader(HttpServletRequest request, String in) {
         return getRequestHeader(request, in, false);
     }
 
