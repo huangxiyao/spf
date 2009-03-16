@@ -49,6 +49,50 @@ import com.hp.it.spf.xa.misc.portal.Utils;
  * </li>
  * <li>
  * <p>
+ * The <code>order="<i>spec</i>"</code> attribute lets you optionally
+ * specify the sort order used in the list in the selector widget, as well as
+ * the display format for each locale name in that list. Use
+ * <code>order="language-country"</code> to give the language name priority in
+ * the sort, as well as display it first. Use
+ * <code>order="country-language"</code> (the default and the current HPWeb
+ * standard) to give the country name primacy. Regardless of this setting,
+ * locales in the list are always sorted in ascending order according to their
+ * names as displayed in the list. <b>Note:</b> The <code>order</code>
+ * attribute is only relevant for lists that may contain full (ie
+ * country-specific locales), since generic (ie language-only) locales have only
+ * a language name with which to sort and display.
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * The <code>sortInLocale="<i>language-tag</i>"</code> attribute lets you
+ * optionally specify a locale in which to sort the list. Locales are always
+ * sorted in ascending order according to their localized locale names (see
+ * above); this attribute lets you set the locale to use for that. You pass an
+ * <a href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag
+ * for the locale in which you want to perform the sort (for example, use
+ * <code>sortInLocale="en"</code> to sort using the English locale names). By
+ * default, the sort will be done in the user's current locale (the HPWeb
+ * standard); or, instead of passing a language tag, you can explicitly request
+ * that by using <code>sortInLocale="current"</code>.
+ * </p>
+ * </li>
+ * <li>
+ * <p>
+ * The <code>displayInLocale="<i>language-tag</i>"</code> attribute lets you
+ * optionally specify a locale in which to display each locale name in the list.
+ * You pass an <a href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a>
+ * language tag for the locale (for example, use
+ * <code>displayInLocale="en"</code> to display in English). By default, the
+ * display will be in the user's current locale (the HPWeb standard); or,
+ * instead of passing a language tag, you can explicitly request that by using
+ * <code>displayInLocale="current"</code>. Finally, you can use
+ * <code>displayInLocale="various"</code> to display the locale name in its
+ * native rendering.
+ * </p>
+ * </li>
+ * <li>
+ * <p>
  * The <code>labelStyle="<i>title-style</i>"</code> and
  * <code>labelClass="<i>title-class</i>"</code> attributes are optional
  * alternative ways of specifying a CSS style for the locale selector's label.
@@ -108,8 +152,6 @@ import com.hp.it.spf.xa.misc.portal.Utils;
  * </li>
  * </ul>
  * 
- * 
- * @author <link href="maomao.guan@hp.com">Aaron</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  */
@@ -128,6 +170,39 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	 * The <code>labelKey</code> attribute from the tag.
 	 */
 	protected String labelKey;
+
+	/**
+	 * Stores the <code>sortInLocale</code> attribute from the tag.
+	 */
+	protected String sortInLocaleValue;
+
+	/**
+	 * Stores the locale for the <code>sortInLocale</code> attribute from the
+	 * tag.
+	 */
+	protected Locale sortInLocale;
+
+	/**
+	 * Stores the <code>order</code> attribute from the tag.
+	 */
+	protected String orderValue;
+
+	/**
+	 * Stores the integer code for the <code>order</code> attribute from the
+	 * tag.
+	 */
+	protected int order;
+
+	/**
+	 * Stores the <code>displayInLocale</code> attribute from the tag.
+	 */
+	protected String displayInLocaleValue;
+
+	/**
+	 * Stores the locale for the <code>displayInLocale</code> attribute from
+	 * the tag.
+	 */
+	protected Locale displayInLocale;
 
 	/**
 	 * Stores the value of the <code>labelStyle</code> attribute.
@@ -152,6 +227,11 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	protected static final LogWrapper LOGGER = new LogWrapper(
 			ClassicLocaleSelectorTag.class);
 
+	private static final String CURRENT_LOCALE = "current";
+	private static final String VARIOUS_LOCALE = "various";
+	private static final String COUNTRY_FIRST = "country-language";
+	private static final String LANGUAGE_FIRST = "language-country";
+
 	/**
 	 * Constructor to initialize tag attributes.
 	 * 
@@ -164,6 +244,21 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 		labelStyle = null;
 		listClass = null;
 		listStyle = null;
+
+		// need current locale
+		Locale current = Locale.getDefault();
+		PortalContext portalContext = (PortalContext) pageContext.getRequest()
+				.getAttribute("portalContext");
+		if (portalContext != null) {
+			current = I18nUtility.getLocale(portalContext
+					.getHttpServletRequest());
+		}
+		sortInLocale = current;
+		sortInLocaleValue = null;
+		displayInLocale = current;
+		displayInLocaleValue = null;
+		order = ClassicLocaleSelectorProvider.ORDER_COUNTRY_FIRST;
+		orderValue = null;
 	}
 
 	/**
@@ -177,6 +272,12 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 		labelStyle = null;
 		listClass = null;
 		listStyle = null;
+		sortInLocale = null;
+		sortInLocaleValue = null;
+		displayInLocale = null;
+		displayInLocaleValue = null;
+		order = -1;
+		orderValue = null;
 	}
 
 	/**
@@ -197,16 +298,132 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 			LOGGER.error(msg);
 			throw new JspException(msg);
 		}
+
+		// make the provider
 		PortalContext portalContext = (PortalContext) pageContext.getRequest()
 				.getAttribute("portalContext");
 		ClassicLocaleSelectorProvider c = new ClassicLocaleSelectorProvider(
 				portalContext);
+
+		// set its configuration
 		c.setLabelContent(labelContent);
 		c.setLabelStyle(labelStyle);
 		c.setLabelClass(labelClass);
 		c.setListStyle(listStyle);
 		c.setListClass(listClass);
+		c.setOrder(order);
+		c.setSortLocale(sortInLocale);
+		c.setDisplayLocale(displayInLocale);
+
 		return c;
+	}
+
+	/**
+	 * Set the locale in which to sort, from the <code>sortInLocale</code>
+	 * attribute in the tag. This converts the tag attribute value (a string)
+	 * into the desired locale, where the special value <code>current</code>
+	 * denotes the current locale.
+	 * 
+	 * @param value
+	 *            The attribute value.
+	 */
+	public void setSortInLocale(String value) {
+		sortInLocaleValue = normalize(value);
+		if ((sortInLocaleValue == null)
+				|| CURRENT_LOCALE.equalsIgnoreCase(sortInLocaleValue)) {
+			PortalContext portalContext = (PortalContext) pageContext
+					.getRequest().getAttribute("portalContext");
+			if (portalContext != null) {
+				sortInLocale = I18nUtility.getLocale(portalContext
+						.getHttpServletRequest());
+			} else {
+				sortInLocale = Locale.getDefault();
+			}
+		} else {
+			sortInLocale = I18nUtility.languageTagToLocale(value);
+		}
+	}
+
+	/**
+	 * Get the value of the <code>sortInLocale</code> attribute.
+	 * 
+	 * @return String
+	 */
+	public String getSortInLocale() {
+		return sortInLocaleValue;
+	}
+
+	/**
+	 * Set the locale in which to display locale names, from the
+	 * <code>displayInLocale</code> attribute in the tag. This converts the
+	 * tag attribute value (a string) into the desired locale, where the special
+	 * value <code>current</code> denotes the current locale, and the special
+	 * value <code>various</code> means to localize natively for each locale.
+	 * 
+	 * @param value
+	 *            The attribute value.
+	 */
+	public void setDisplayInLocale(String value) {
+		displayInLocaleValue = normalize(value);
+		if ((displayInLocaleValue == null)
+				|| CURRENT_LOCALE.equalsIgnoreCase(displayInLocaleValue)) {
+			PortalContext portalContext = (PortalContext) pageContext
+					.getRequest().getAttribute("portalContext");
+			if (portalContext != null) {
+				displayInLocale = I18nUtility.getLocale(portalContext
+						.getHttpServletRequest());
+			} else {
+				displayInLocale = Locale.getDefault();
+			}
+		} else if (VARIOUS_LOCALE.equalsIgnoreCase(displayInLocaleValue)) {
+			displayInLocale = null;
+		} else {
+			displayInLocale = I18nUtility.languageTagToLocale(value);
+		}
+	}
+
+	/**
+	 * Get the value of the <code>displayInLocale</code> attribute.
+	 * 
+	 * @return String
+	 */
+	public String getDisplayInLocale() {
+		return displayInLocaleValue;
+	}
+
+	/**
+	 * Set the sort and display-name order for the locale list, from the
+	 * <code>order</code> attribute in the tag. (Note that generic locales -
+	 * ie language-only locales - are always sorted by language only, and always
+	 * display language name only.) The supported tag values are:
+	 * <ul>
+	 * <li>"country-language" (the current HPWeb standard and the default) -
+	 * sort full locale by country first and language second, and display as
+	 * <code><i>country-language</i></code> (eg,
+	 * <code>United States-English</code>).</li>
+	 * <li>"language-country" - sort full locale by language first and country
+	 * second, and display as <code><i>language-country</i></code> (eg,
+	 * <code>English-United States</code>).</li>
+	 * </ul>
+	 * 
+	 * @param value
+	 */
+	public void setOrder(String value) {
+		orderValue = normalize(value);
+		if (LANGUAGE_FIRST.equalsIgnoreCase(orderValue)) {
+			order = ClassicLocaleSelectorProvider.ORDER_LANGUAGE_FIRST;
+		} else {
+			order = ClassicLocaleSelectorProvider.ORDER_COUNTRY_FIRST;
+		}
+	}
+
+	/**
+	 * Get the value of the <code>order</code> attribute.
+	 * 
+	 * @return String
+	 */
+	public String getOrder() {
+		return orderValue;
 	}
 
 	/**
@@ -344,4 +561,5 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 		}
 		return normalize(actualLabel);
 	}
+
 }

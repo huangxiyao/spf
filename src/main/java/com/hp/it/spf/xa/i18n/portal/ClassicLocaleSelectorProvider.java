@@ -42,6 +42,18 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * The code for sorting and displaying full locales by country first.
+	 * (Language-only locales, if any, will still be sorted by language and
+	 * display only language.)
+	 */
+	public static final int ORDER_COUNTRY_FIRST = 1;
+
+	/**
+	 * The sort order code for sorting full locales by language first.
+	 */
+	public static final int ORDER_LANGUAGE_FIRST = 2;
+
+	/**
 	 * The name of the submit button image for the classic locale selector form.
 	 */
 	protected static String SUBMIT_BUTTON_IMG_NAME = "btn_submit.gif";
@@ -57,6 +69,11 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	protected static String DEFAULT_LIST_STYLE = null;
 
 	/**
+	 * The default sort order for the list of locales.
+	 */
+	protected static int DEFAULT_SORT_ORDER = ORDER_COUNTRY_FIRST;
+
+	/**
 	 * The content of the label to use in this classic locale selector.
 	 */
 	protected String labelContent = "";
@@ -64,25 +81,42 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	/**
 	 * This is the style to use for the label in the classic locale selector.
 	 */
-	protected String labelStyle;
+	protected String labelStyle = null;
 
 	/**
 	 * This is the CSS class to use for the label in the classic locale
 	 * selector.
 	 */
-	protected String labelClass;
+	protected String labelClass = null;
 
 	/**
 	 * This is the style to use for the <code>&lt;SELECT&gt;</code> list in
 	 * the classic locale selector.
 	 */
-	protected String listStyle;
+	protected String listStyle = null;
 
 	/**
 	 * This is the CSS class to use for the <code>&lt;SELECT&gt;</code> list
 	 * in the classic locale selector.
 	 */
-	protected String listClass;
+	protected String listClass = null;
+
+	/**
+	 * This is the locale in which to render each locale name in the list. If
+	 * null, then each locale name is rendered in that native locale.
+	 */
+	protected Locale displayLocale = null;
+
+	/**
+	 * This is the code for the sort order to use for the list.
+	 */
+	protected int order = DEFAULT_SORT_ORDER;
+
+	/**
+	 * This is the locale in which to sort the locales in the list. If null,
+	 * then the locales are sorted in the current locale.
+	 */
+	protected Locale sortLocale = null;
 
 	/**
 	 * <p>
@@ -93,6 +127,59 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	 */
 	public ClassicLocaleSelectorProvider(PortalContext pContext) {
 		super(pContext);
+	}
+
+	/**
+	 * Setter for the locale in which to display each locale name in the
+	 * selector. If you set null, then each locale will be used to render its
+	 * own name.
+	 * 
+	 * @param locale
+	 *            The desired locale in which to display the locale names, or
+	 *            null for each to display according to its own native locale.
+	 */
+	public void setDisplayLocale(Locale locale) {
+		this.displayLocale = locale;
+	}
+
+	/**
+	 * Setter for the locale in which to sort the list of locales in the
+	 * selector. If you set null then the current locale for the user is
+	 * assumed.
+	 * 
+	 * @param locale
+	 *            The desired locale in which to sort, or null for the current
+	 *            locale.
+	 */
+	public void setSortLocale(Locale locale) {
+		this.sortLocale = locale;
+	}
+
+	/**
+	 * Setter for the order in which to sort and display the locale names in the
+	 * selector list. Pass in an integer code indicating the desired order:
+	 * <ul>
+	 * <li>{@link #ORDER_COUNTRY_FIRST} (the current HPWeb standard and the
+	 * default) - sort the list of locales by country first and language second,
+	 * and display them as <code><i>country-language</i></code> (eg
+	 * <code>United States-English</code>). Note that language-only locales
+	 * (ie generic locales), if any are present, will still sort by language and
+	 * only display the language name.</li>
+	 * <li>{@link #ORDER_LANGUAGE_FIRST} - sort the list of locales by language
+	 * first and country second, and display them as
+	 * <code><i>language-country</i></code> (eg
+	 * <code>English-United States</code>).</li>
+	 * </ul>
+	 * 
+	 * @param order
+	 *            One of the above codes.
+	 */
+	public void setOrder(int order) {
+		if ((order == ORDER_COUNTRY_FIRST) || (order == ORDER_LANGUAGE_FIRST)) {
+			this.order = order;
+		} else {
+			this.order = DEFAULT_SORT_ORDER;
+		}
 	}
 
 	/**
@@ -232,14 +319,15 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	 * passed in by the superclass.
 	 * </p>
 	 * <p>
-	 * <b>Note:</b> The contract here is that the returned HTML must name the
-	 * <code>&lt;SELECT&gt;</code> with the given widget name and available
-	 * locales, and the selectable values must be RFC 3066 language tags (eg
-	 * <code>zh-CN</code> for Simplified Chinese). That is what the locale
-	 * selector secondary page type is expecting. Also, there is no need for
-	 * this method to return the <code>&lt;FORM&gt;</code> tag or any hidden
-	 * inputs to the form (eg the locale selector redirect target URL) because
-	 * the superclass provides those.
+	 * <b>Note:</b> The contract here is that the returned HTML must only
+	 * include the selectable list widget itself (plus its submit button). The
+	 * surrounding HTML <code>&lt;FORM&gt;</code> tag and hidden form
+	 * parameters are expected to be provided by the parent class since all
+	 * locale selectors have that in common. Furthermore, the returned HTML here
+	 * must name the <code>&lt;SELECT&gt;</code> element with the given widget
+	 * name and available locales, and the selectable values must be RFC 3066
+	 * language tags (eg <code>zh-CN</code> for Simplified Chinese). That is
+	 * what the locale selector secondary page type is expecting.
 	 * </p>
 	 * <p>
 	 * The first boolean parameter controls whether or not to escape any HTML
@@ -255,6 +343,10 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	 * label content provided to the setter was itself retrieved from a Vignette
 	 * resource bundle), so this allows you to remove them.
 	 * </p>
+	 * <p>
+	 * Other aspects of the returned HTML are determined by the setters for this
+	 * class. Please see each of the setter methods for more information.
+	 * </p>
 	 * 
 	 * @param widgetName
 	 *            The name to use for the <code>&lt;SELECT&gt;</code> element.
@@ -268,7 +360,7 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	 * @param filterSpan
 	 *            Whether or not to strip <code>&lt;SPAN&gt;</code> tags from
 	 *            the link content.
-	 * @return The HTML string for the locale selector visible elements.
+	 * @return The HTML string for the locale selector list and submit button.
 	 */
 	protected String getWidgetHTML(String widgetName,
 			Collection availableLocales, Locale currentLocale, boolean escape,
@@ -330,20 +422,35 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 		html.append("<select " + listStyleAttr + "id=\"" + widgetName
 				+ "\" name=\"" + widgetName + "\">\n");
 		if (availableLocales != null) {
-			// sort available locales by the current locale - note that
-			// HPWeb standard is to sort and display by country first,
-			// language second, alphabetically by the current locale
+
+			// prepare current settings
+			int flags = I18nUtility.LOCALE_BY_COUNTRY;
+			if (order == ORDER_LANGUAGE_FIRST) {
+				flags = 0;
+			}
+			Locale sortInLocale = currentLocale;
+			if (sortLocale != null) {
+				sortInLocale = sortLocale;
+			}
+			Locale displayInLocale = displayLocale;
+
+			// sort available locales according to the settings
 			availableLocales = I18nUtility.sortLocales(availableLocales,
-					currentLocale, I18nUtility.LOCALE_BY_COUNTRY);
+					sortInLocale, flags);
+
+			// iterate over the sorted locales and display the select option for
+			// each one
 			Iterator atts = availableLocales.iterator();
 			int i = 1;
 			while (atts.hasNext()) {
 				Locale locale = (Locale) atts.next();
-				// get display name in same locale (not necessarily current
-				// locale) - note that HPWeb standard is to display country
-				// first, language second, in the same locale
+
+				// get display name according to the settings
+				if (displayInLocale == null) {
+					displayInLocale = locale;
+				}
 				String dispName = I18nUtility.getLocaleDisplayName(locale,
-						locale, I18nUtility.LOCALE_BY_COUNTRY);
+						displayInLocale, flags);
 				String value = I18nUtility.localeToLanguageTag(locale);
 				// both the display name and value need to be HTML-escaped
 				// just in case

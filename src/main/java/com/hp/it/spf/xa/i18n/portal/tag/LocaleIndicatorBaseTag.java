@@ -98,4 +98,20 @@ public abstract class LocaleIndicatorBaseTag extends TagSupport {
 	 */
 	protected abstract String getHTML(Locale currentLocale) throws JspException;
 
+	/**
+	 * Normalize blank string values to null - so the return is either a
+	 * non-blank, trimmed string, or null.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	protected String normalize(String value) {
+		if (value != null) {
+			value = value.trim();
+			if (value.equals("")) {
+				value = null;
+			}
+		}
+		return value;
+	}
 }
