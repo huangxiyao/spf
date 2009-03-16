@@ -46,7 +46,7 @@ public class ATHPHeaderUserGroupRetriever implements IUserGroupRetriever {
 
         // retrieve groups from http header
         String groupName = AuthenticatorHelper.getProperty(AtHPAuthenticator.class, AuthenticationConsts.HEADER_GROUP_NAME);
-        String groupstring = AuthenticatorHelper.getRequestHeader(request, groupName, true);
+        String groupstring = AuthenticatorHelper.getRequestHeader(request, groupName);
         // groups are divided by ,
         if (groupstring != null) {
             StringTokenizer st = new StringTokenizer(groupstring, "^");
