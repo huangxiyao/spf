@@ -3,7 +3,6 @@ package com.hp.it.spf.xa.log.portal;
 import junit.framework.TestCase;
 import org.apache.log4j.BasicConfigurator;
 
-import java.util.Set;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Map;
@@ -24,10 +23,14 @@ public class TimeRecorderTest extends TestCase
 		TimeRecorder recorder = new TimeRecorder();
 		OperationData requestData = recorder.recordStart(Operation.REQUEST, "/portal/site/abc");
 		OperationData profileData = recorder.recordStart(Operation.PROFILE_CALL);
+		long profileStart = System.currentTimeMillis();
 		Thread.sleep(50);
+		long profileEnd = System.currentTimeMillis();
 		recorder.recordEnd(Operation.PROFILE_CALL);
 		OperationData groupsData = recorder.recordStart(Operation.GROUPS_CALL);
+		long groupsStart = System.currentTimeMillis();
 		Thread.sleep(50);
+		long groupsEnd = System.currentTimeMillis();
 		recorder.recordError(Operation.GROUPS_CALL, "Something terrible happened");
 		recorder.recordEnd(Operation.REQUEST);
 
@@ -39,26 +42,31 @@ public class TimeRecorderTest extends TestCase
 
 		assertTrue("Profile call finished", profileData.isFinished());
 		assertFalse("Profile call error", profileData.isError());
-		assertTrue("Profile call time >=50", profileData.getExecutionTime() >= 50);
+		assertTrue("Profile call time", profileData.getExecutionTime() >= (profileEnd-profileStart));
 
 		assertTrue("Groups call finished", groupsData.isFinished());
 		assertTrue("Groups call error", groupsData.isError());
-		assertTrue("Groups call time >=50", groupsData.getExecutionTime() >= 50);
+		assertTrue("Groups call time", groupsData.getExecutionTime() >= (groupsEnd-groupsStart));
 	}
 
 	public void testMultiThreadRecording() throws Exception {
 		final TimeRecorder recorder = new TimeRecorder();
 		recorder.recordStart(Operation.REQUEST, "/portal/site/def");
 		recorder.recordStart(Operation.PROFILE_CALL);
+		long profileStart = System.currentTimeMillis();
 		Thread.sleep(50);
+		long profileEnd = System.currentTimeMillis();
 		recorder.recordEnd(Operation.PROFILE_CALL);
+		final long[][] wsrp = {{0,0},{0,0}};
 		List<Thread> threads = Arrays.asList(
 				new Thread() {
 					public void run()
 					{
 						recorder.recordStart(Operation.WSRP_CALL, "portlet1");
 						try {
+							wsrp[0][0] = System.currentTimeMillis();
 							Thread.sleep(50);
+							wsrp[0][1] = System.currentTimeMillis();
 						}
 						catch (InterruptedException e) {
 							throw new IllegalStateException(e);
@@ -71,7 +79,9 @@ public class TimeRecorderTest extends TestCase
 					{
 						recorder.recordStart(Operation.WSRP_CALL, "portlet2");
 						try {
+							wsrp[1][0] = System.currentTimeMillis();
 							Thread.sleep(100);
+							wsrp[1][1] = System.currentTimeMillis();
 						}
 						catch (InterruptedException e) {
 							throw new IllegalStateException(e);
@@ -92,11 +102,11 @@ public class TimeRecorderTest extends TestCase
 		Map<Operation, OperationData> resultMap = convert(recorder.getRecordedData());
 
 		assertTrue("Profile call time",
-				resultMap.get(Operation.PROFILE_CALL).getExecutionTime() >= 50);
+				resultMap.get(Operation.PROFILE_CALL).getExecutionTime() >= (profileEnd-profileStart));
 		assertTrue("Only longest WSRP call time recorded",
-				resultMap.get(Operation.WSRP_CALL).getExecutionTime() >= 100);
+				resultMap.get(Operation.WSRP_CALL).getExecutionTime() >= (wsrp[1][1]-wsrp[1][0]));
 		assertTrue("Request time",
-				resultMap.get(Operation.REQUEST).getExecutionTime() >= 150);
+				resultMap.get(Operation.REQUEST).getExecutionTime() >= ((profileEnd-profileStart) + (wsrp[1][1]-wsrp[1][0])));
 	}
 
 	private Map<Operation, OperationData> convert(List<OperationData> data)
