@@ -128,5 +128,11 @@
 			<version>2.0.8</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.bea</groupId>
+			<artifactId>weblogic</artifactId>
+			<version>10.0.1.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>
