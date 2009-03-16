@@ -80,7 +80,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 			refreshBundle();
 			LOG.info("Get Resource Bundle File = " + rbFile);
 			rb = ResourceBundle.getBundle(rbFile);
-			if (currentUser == null) {
+			if (currentUser == null || "".equals(currentUser.trim())) {
 				currentUser = rb.getString("CurrentUser");
 			}
 		} catch (MissingResourceException e) {
@@ -203,14 +203,13 @@ public class TestAuthenticator extends AbstractAuthenticator {
 				"active"));
 		// guestMode is for logout
 		if ("true".equalsIgnoreCase(request.getParameter("guestMode"))) {
-			// cleanupsession() will only clean session attributes starting from
-			// sp_
-			AuthenticatorHelper.cleanupSession(request);
-			request.getSession().setAttribute("active", "false");
-			userName = null;
 			Localizer localizer = I18nUtils.getLocalizer(request
 					.getSession(false), request);
 			localizer.setLocale(Locale.ENGLISH);
+			ANONAuthenticator authenticator = new ANONAuthenticator(request);
+			authenticator.execute();
+			userName = authenticator.getUserName();
+			request.getSession().setAttribute("active", "false");
 		} else if (active) {
 			// not guest
 			super.execute();
