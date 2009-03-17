@@ -3,7 +3,7 @@
 	<groupId>com.hp.it.spf.sso</groupId>
 	<artifactId>spf-portal-session</artifactId>
 	<name>sso session-initialization</name>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<description>This session initialization project provides the followinng features:
 1. SSO Authenticator module/filter; 
 2. Pulls authentication attributes from Siteminder header;
@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-hpp</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>wsdl4j</groupId>
