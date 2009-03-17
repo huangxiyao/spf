@@ -368,14 +368,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		if (portalContext == null) {
 			return false;
 		}
-		try {
-			HttpSession session = portalContext.getHttpServletRequest()
-					.getSession();
-			User currentUser = SessionUtils.getCurrentUser(session);
-			return !currentUser.isGuestUser();
-		} catch (Exception e) {
-			return false;
-		}
+		return Utils.isAuthenticatedUser(portalContext);
 	}
 
 }
