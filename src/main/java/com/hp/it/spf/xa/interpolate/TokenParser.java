@@ -227,6 +227,8 @@ public abstract class TokenParser {
 	private static final String UPPERCASE = "upper";
 	private static final String LOWERCASE = "lower";
 
+	private PropertyResourceBundle subsFileBundle = null;
+	
 	/**
 	 * This class attribute holds the base filename of the token-substitution
 	 * file to use.
@@ -1165,9 +1167,9 @@ public abstract class TokenParser {
 	 * (otherwise only the special markup is removed). The site name is the
 	 * unique name in the portal URL for the virtual portal site. The <i>names</i>
 	 * may include one or more site names, delimited by "|" for a logical-or.
-	 * <code>{SITES:<i>names</i>}</code> markup may be nested for logical-and
-	 * (however since any one site has only one site name, the desire to
-	 * logical-and seems unlikely).
+	 * <code>{SITES:<i>names</i>}</code> markup may be nested for
+	 * logical-and (however since any one site has only one site name, the
+	 * desire to logical-and seems unlikely).
 	 * </p>
 	 * 
 	 * <p>
@@ -1211,8 +1213,8 @@ public abstract class TokenParser {
 	 * <p>
 	 * If you provide null content, null is returned. The site name is obtained
 	 * from the {@link #getSite()} method - if it returns null or an empty site
-	 * name, all <code>{SITES:names}</code>-enclosed sections are removed from
-	 * the content.
+	 * name, all <code>{SITES:names}</code>-enclosed sections are removed
+	 * from the content.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -1638,10 +1640,11 @@ public abstract class TokenParser {
 	 * Get token key value from token substitutions file. First try using the
 	 * {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager} to
 	 * hot-load the properties file from anywhere searched by the class loader.
-	 * If not found, try using #getIncludeFileAsStream to load it from the
-	 * supporting resource files (eg, for a portal component, from the secondary
-	 * support files; and for a portlet, from the portlet resource bundle folder
-	 * or the portlet WAR).
+	 * If not found, try using {@link #getIncludeFileAsStream} to load it from
+	 * the supporting resource files (eg, for a portal component, from the
+	 * secondary support files; and for a portlet, from the portlet resource
+	 * bundle folder or the portlet WAR). Cache the results of that load as a
+	 * side-effect, so we can refer to the cache in subsequent calls.
 	 * 
 	 * @param key
 	 *            token key
@@ -1655,10 +1658,12 @@ public abstract class TokenParser {
 			if (resBundle != null) {
 				return resBundle.getString(key.trim());
 			}
-			PropertyResourceBundle propBundle = new PropertyResourceBundle(
-					getIncludeFileAsStream(this.subsFilePath));
-			if (propBundle != null) {
-				return propBundle.getString(key.trim());
+			if (this.subsFileBundle == null) {
+				this.subsFileBundle = new PropertyResourceBundle(
+						getIncludeFileAsStream(this.subsFilePath));
+			}
+			if (this.subsFileBundle != null) {
+				return this.subsFileBundle.getString(key.trim());
 			}
 		} catch (Exception e) {
 		}
