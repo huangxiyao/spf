@@ -10,9 +10,12 @@ import java.util.Map;
 
 import javax.portlet.PortletContext;
 import javax.portlet.PortletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.portlet.context.PortletApplicationContextUtils;
+
+import com.hp.it.spf.xa.misc.portlet.Consts;
 
 /**
  * <p>
@@ -88,19 +91,28 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @return The user property value.
 	 */
 	public static Object getUserProperty(PortletRequest request, String key) {
-		if (request != null && key != null) {
-			// See the property key name constants, defined in the common Consts
-			// class.
-			Object o = request.getAttribute(PortletRequest.USER_INFO);
-			if (o != null) {
-				try {
-					Map userMap = (Map) o;
-					return (String) userMap.get(key.trim());
-				} catch (Exception e) {
-				}
-			}
+		try {
+			Map userMap = getUserProfileMap(request);
+			return userMap.get(key.trim());
+		} catch (Exception e) {
+			return null;
 		}
-		return null;
+	}
+
+	/**
+	 * Get the SPF <i>user profile map</i> from the given portlet request. The
+	 * user profile map contains all of the SPF user attributes.
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @return The user profile map.
+	 */
+	public static Map getUserProfileMap(PortletRequest request) {
+		try {
+			return (Map) request.getAttribute(PortletRequest.USER_INFO);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	/**
@@ -117,23 +129,18 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @return True if the user is authenticated, false otherwise.
 	 */
 	public static boolean isAuthenticatedUser(PortletRequest request) {
-		if (request != null) {
-			Object o = request.getAttribute(PortletRequest.USER_INFO);
-			if (o != null) {
-				try {
-					Map userMap = (Map) o;
-					String username = (String) userMap
-							.get(Consts.KEY_USER_NAME);
-					if (username != null
-							&& !username
-									.startsWith(Consts.ANON_USER_NAME_PREFIX)) {
-						return true;
-					}
-				} catch (Exception e) {
-				}
+		try {
+			String username = (String) getUserProperty(request,
+					Consts.KEY_USER_NAME);
+			if (username != null
+					&& !username.startsWith(Consts.ANON_USER_NAME_PREFIX)) {
+				return true;
+			} else {
+				return false;
 			}
+		} catch (Exception e) {
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -150,22 +157,16 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @return The list of groups (null if none).
 	 */
 	public static String[] getGroups(PortletRequest request) {
-		String[] groups = null;
-		if (request != null) {
-			Object o = request.getAttribute(PortletRequest.USER_INFO);
-			if (o != null) {
-				try {
-					Map userMap = (Map) o;
-					Object groupList = userMap.get(Consts.KEY_USER_GROUPS);
-					if (groupList instanceof List) {
-						return (String[]) ((List) groupList)
-								.toArray(new String[0]);
-					}
-				} catch (Exception e) {
-				}
+		try {
+			Object groupList = getUserProperty(request, Consts.KEY_USER_GROUPS);
+			if (groupList instanceof List) {
+				return (String[]) ((List) groupList).toArray(new String[0]);
+			} else {
+				return null;
 			}
+		} catch (Exception e) {
+			return null;
 		}
-		return groups;
 	}
 
 	/**
@@ -410,9 +411,10 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	public static String getPortalSiteURL(PortletRequest request, String uri) {
 		return getPortalSiteURL(request, null, null, -1, uri);
 	}
-	
+
 	/**
-	 * Use {@link #getPortalSiteURL(PortletRequest,Boolean,String,int,String)} instead.
+	 * Use {@link #getPortalSiteURL(PortletRequest,Boolean,String,int,String)}
+	 * instead.
 	 * 
 	 * @deprecated
 	 */
