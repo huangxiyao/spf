@@ -9,7 +9,7 @@
 	<artifactId>spf-portal</artifactId>
 	<packaging>war</packaging>
 	<name>Modified Vignette Portal Application</name>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<description>Modified Vignette Portal Application</description>
 	<dependencies>
 		<dependency>
@@ -132,8 +132,8 @@
 	</build>
 
   <scm>
-    <connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portal-1.0.2</connection>
-    <developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portal-1.0.2</developerConnection>
-    <url>http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portal-1.0.2</url>
+    <connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portal-1.0.1</connection>
+    <developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portal-1.0.1</developerConnection>
+    <url>http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portal-1.0.1</url>
   </scm>
 </project>
