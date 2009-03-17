@@ -4,7 +4,7 @@
 	<artifactId>spf-portal-pulse-secondarypage</artifactId>
 	<packaging>car</packaging>
 	<name>SPF portal pulse secondary page</name>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<description>
 		JSP's and other artifacxts for the Shared Portal Framework
 		portal pulse secondary page. This Vignette component provides
@@ -23,9 +23,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-portal-pulse-secondarypage</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-portal-pulse-secondarypage</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-portal-pulse-secondarypage</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-portal-pulse-secondarypage</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/tags/spf-portal-pulse-secondarypage-1.0.2</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/tags/spf-portal-pulse-secondarypage-1.0.2</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/comps/tags/spf-portal-pulse-secondarypage-1.0.2</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
