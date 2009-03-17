@@ -3,12 +3,12 @@
 	build-version="Gold" 
 	component-id="spf-hpweb-layout-config-style"
 	component-type="Styles" 
-	description="Shared Portal Framework style to hold custom code for hpweb layout configuration."
+	description="Shared Portal Framework style to hold custom code for WPA HPWeb layout configuration."
 	epi-build="570014" 
 	epi-version="7.4" 
 	major-version="1" 
 	minor-version="0" 
-	title="Shared Portal Framework - HPWeb Layout Config"
+	title="Shared Portal Framework - WPA HPWeb Layout Configuration Style"
 	xmlns:epideploy="http://www.epicentric.com/deployment">
 	
 		<epideploy:required-component 
@@ -20,7 +20,7 @@
 		<epideploy:detail>
 			<style-info 
 				apply-template-header="false" 
-				description="Shared Portal Framework style to hold custom code for hpweb layout configuration."
+				description="Shared Portal Framework style to hold custom code for WPA HPWeb layout configuration."
 				friendly-id="SPF_HPWEB_LAYOUT_CONFIG_STYLE" 
 				id="spf-hpweb-layout-config-style"
 				is-system="false" 
@@ -28,7 +28,7 @@
 				processing-type="JSP_BASED" 
 				template-default="false" 
 				template-uid="HPLayoutConfigStyleType" 
-				title="Shared Portal Framework - HPWeb Layout Config"
+				title="Shared Portal Framework - WPA HPWeb Layout Configuration Style"
 				visible="true" />
 		</epideploy:detail>
 

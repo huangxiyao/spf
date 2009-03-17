@@ -3,11 +3,9 @@
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-hpweb-layout-config-style</artifactId>
 	<packaging>car</packaging>
-	<name>SPF HPWeb Layout Config Style example</name>
+	<name>SPF WPA HPWeb layout configuration style</name>
 	<version>1.0.3-SNAPSHOT</version>
-	<description>
-		Sample Shared Portal Framework style implementation for HPWebLayoutConfigStyleType.
-	</description>
+	<description>JSPs and other artifacts for the Shared Portal Framework standard implementation of a WPA HPWeb layout configuration style. This Vignette component customizes the WPA HPWeb layout.</description>
 	<inceptionYear>January 2009</inceptionYear>
 	<parent>
 		<artifactId>spf-pom</artifactId>
