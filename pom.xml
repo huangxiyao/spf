@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.openportal</groupId>
 	<artifactId>spf-portlet-container</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>spf-portlet-container</name>
 	<description>This project provides some spf customized features on OpenPortal portlet container.</description>
 	<parent>
@@ -61,8 +61,8 @@
 		<url>http://samson.atl.hp.com:8080/hudson/view/com.hp.it.spf.xa/job/spf-portlet-container</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-container-1.0.2</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-container-1.0.2</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-container-1.0.2</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-container</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-container</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-container</url>
 	</scm>
 </project>
