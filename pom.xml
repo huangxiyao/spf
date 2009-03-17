@@ -4,7 +4,7 @@
 	<artifactId>spf-locale-selector-classic-style</artifactId>
 	<packaging>car</packaging>
 	<name>SPF classic locale selector style</name>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<description>
 		JSPs and other artifacts for the Shared Portal Framework classic
 		locale selector style. This Vignette component displays the
@@ -21,9 +21,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-locale-selector-classic-style</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-locale-selector-classic-style</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-locale-selector-classic-style</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-locale-selector-classic-style</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/tags/spf-locale-selector-classic-style-1.0.2</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/tags/spf-locale-selector-classic-style-1.0.2</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/comps/tags/spf-locale-selector-classic-style-1.0.2</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
