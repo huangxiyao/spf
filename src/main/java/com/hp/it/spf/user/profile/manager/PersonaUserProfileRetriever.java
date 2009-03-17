@@ -8,6 +8,9 @@ package com.hp.it.spf.user.profile.manager;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,29 +53,72 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
         Map<String, Object> userProfiles = new HashMap<String, Object>();
         try {
             // get the user service from the request
-            IUserService userService = (IUserService)WebApplicationContextUtils.getWebApplicationContext(request.getSession(true)
-                                                                                                                .getServletContext())
-                                                                               .getBean("standaloneUserService");
+            IUserService userService = getUserServiceFromRequest(request);
 
             // get the user from the service
-            EUserIdentifierType userIdentifierType = (EUserIdentifierType)request.getAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE);
-            IUser user = userService.createUser(userIdentifierType,
-                                                userIdentifier);
+			IUser user = getUserFromService(userIdentifier, request, userService);
 
             // retrieve simple attribute values and convert key from Integer type to String type
-            Map<Integer, Collection<String>> simple = user.getSimpleAttributeValues();            
-            for (Map.Entry<Integer, Collection<String>> entry: simple.entrySet()) {
-                userProfiles.put(String.valueOf(entry.getKey()), entry.getValue());
-            }            
+            Map<Integer, Collection<String>> simple = user.getSimpleAttributeValues();
+			covertSimpleValue(userProfiles, simple);
 
-            // retrieve compound attribute values and convert key from Integer type to String type
+			// retrieve compound attribute values and convert key from Integer type to String type
             Map<Integer, Collection<ICompoundUserAttributeValue>> compound = user.getCompoundAttributeValues();
-            for (Map.Entry<Integer, Collection<ICompoundUserAttributeValue>> entry: compound.entrySet()) {
-                userProfiles.put(String.valueOf(entry.getKey()), entry.getValue());
-            }            
-        } catch (Exception ex) {            
+			convertCompoundValue(userProfiles, compound);
+		} catch (Exception ex) {
             throw new UserProfileException("Retrieve user profile from Persona error.", ex);
         }
         return userProfiles;
     }
+
+	private IUser getUserFromService(String userIdentifier, HttpServletRequest request, IUserService userService)
+	{
+		EUserIdentifierType userIdentifierType =
+				(EUserIdentifierType)request.getAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE);
+		return userService.createUser(userIdentifierType, userIdentifier);
+	}
+
+	private IUserService getUserServiceFromRequest(HttpServletRequest request)
+	{
+		return (IUserService) WebApplicationContextUtils.getWebApplicationContext(
+				request.getSession(true).getServletContext()).
+				getBean("standaloneUserService");
+	}
+
+
+	private void convertCompoundValue(Map<String, Object> userProfiles, Map<Integer, Collection<ICompoundUserAttributeValue>> compound)
+	{
+		for (Map.Entry<Integer, Collection<ICompoundUserAttributeValue>> entry: compound.entrySet()) {
+
+			String attributeName = String.valueOf(entry.getKey());
+			Collection<ICompoundUserAttributeValue> origianlValue = entry.getValue();
+
+			List<Map<String, String>> attributeValue = new ArrayList<Map<String, String>>();
+			for (ICompoundUserAttributeValue compoundUserAttributeValue : origianlValue) {
+
+				// convert the Map<Integer, String> to Map<String, String>
+				Map<String, String> attributeValueItem = new LinkedHashMap<String, String>();
+				for (Map.Entry<Integer, String> compuoundAttributeValueItem : compoundUserAttributeValue.entrySet()) {
+					attributeValueItem.put(
+							String.valueOf(compuoundAttributeValueItem.getKey()),
+							compuoundAttributeValueItem.getValue());
+				}
+				attributeValue.add(attributeValueItem);
+			}
+
+			userProfiles.put(attributeName, attributeValue);
+		}
+	}
+
+
+	private void covertSimpleValue(Map<String, Object> userProfiles, Map<Integer, Collection<String>> simple)
+	{
+		for (Map.Entry<Integer, Collection<String>> entry: simple.entrySet()) {
+			String attributeName = String.valueOf(entry.getKey());
+			Collection<String> originalValue = entry.getValue();
+			// convert the Collection to List in case it's not a list
+			List<String> attributeValue = new ArrayList<String>(originalValue);
+			userProfiles.put(attributeName, attributeValue);
+		}
+	}
 }
