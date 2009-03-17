@@ -8,7 +8,7 @@
 	<groupId>com.hp.it.spf.apps</groupId>
 	<artifactId>spf-portletdriver</artifactId>
 	<packaging>war</packaging>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>Modified OpenPortal WSRP Producer</name>
 	<description>
 		This project creates OpenPortal-based WSRP producer including SPF libraries 
