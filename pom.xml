@@ -4,7 +4,7 @@
 	<artifactId>spf-hpweb-layout-config-style</artifactId>
 	<packaging>car</packaging>
 	<name>SPF HPWeb Layout Config Style example</name>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<description>
 		Sample Shared Portal Framework style implementation for HPWebLayoutConfigStyleType.
 	</description>
