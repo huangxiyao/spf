@@ -2,6 +2,8 @@ package com.hp.it.spf.xa.log.portal;
 
 import junit.framework.TestCase;
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
 
 import java.util.List;
 import java.util.Arrays;
@@ -17,6 +19,10 @@ public class TimeRecorderTest extends TestCase
 	protected void setUp() throws Exception
 	{
 		BasicConfigurator.configure();
+		// Force the level to DEBUG for TimeRecorder loggers otherwise it will result in a
+		// NullPointerException thrown in the tests as recordStart would return null if
+		// loggers are not at debug level.
+		Logger.getLogger("TIME." + TimeRecorder.class.getName()).setLevel(Level.DEBUG);
 	}
 
 	public void testSingleThreadRecording() throws Exception {
