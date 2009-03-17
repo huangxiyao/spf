@@ -49,9 +49,18 @@ public class StickyHandler extends BasicHandler {
 	/**
 	 * Access object to get DNS cache map.
 	 */
-	private IDNSCacheStore mStore = new HttpSessionDNSCacheStore();
-	
-	
+	private IDNSCacheStore mStore;
+
+	public StickyHandler()
+	{
+		this(new HttpSessionDNSCacheStore());
+	}
+
+	StickyHandler(IDNSCacheStore store)
+	{
+		mStore = store;
+	}
+
 	/**
 	 * Swaps the host name with the resolved and cached IP in the URL used by Axis to call the
 	 * web service.
@@ -229,7 +238,7 @@ public class StickyHandler extends BasicHandler {
 	}
 
 
-	private boolean isSOAPFaultResponse(MessageContext messageContext) throws SOAPException {
+	/*private*/ boolean isSOAPFaultResponse(MessageContext messageContext) throws SOAPException {
 		return messageContext.getPastPivot() && 
 			Utils.isSOAPFault(messageContext.getResponseMessage());
 	}
@@ -259,7 +268,7 @@ public class StickyHandler extends BasicHandler {
 	 * @return IP corresponding to the host
 	 * @throws UnknownHostException If the host could not be found
 	 */
-	private String lookup(String targetHost) throws UnknownHostException {
+	/*private*/ String lookup(String targetHost) throws UnknownHostException {
 		return InetAddress.getByName(targetHost).getHostAddress();
 	}
 
@@ -286,5 +295,10 @@ public class StickyHandler extends BasicHandler {
 			return null;
 		}
 		return getHost(originalTransportUrl);
+	}
+
+	static void setCookieHolder(CookieHolder cookieHolder)
+	{
+		mCookieHolder = cookieHolder;
 	}
 }
