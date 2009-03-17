@@ -8,6 +8,7 @@ package com.hp.it.spf.xa.misc.portal;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import com.epicentric.site.Site;
 import com.epicentric.site.SiteException;
 import com.epicentric.site.SiteManager;
+import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 import com.vignette.portal.log.LogWrapper;
@@ -374,9 +376,9 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	/**
 	 * Get the value for the given user property from the SPF <i>user profile
 	 * map</i> in the given portal context. Returns null if this property has
-	 * not been set in the user object, or if the user object itself is null or
-	 * guest (eg, when the user is not logged-in), or the portal context or key
-	 * provided were null.
+	 * not been set in the user object, or the portal context or key provided
+	 * were null, or the user was not logged-in and no default value for the
+	 * user property has been set into the map.
 	 * 
 	 * @param portalContext
 	 *            The portal context.
@@ -385,11 +387,11 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @return The user property value.
 	 */
 	public static Object getUserProperty(PortalContext portalContext, String key) {
-		Map userProfile = getUserProfileMap(portalContext);
-		if (userProfile == null) {
+		try {
+			Map userMap = getUserProfileMap(portalContext);
+			return userMap.get(key.trim());
+		} catch (Exception e) {
 			return null;
-		} else {
-			return userProfile.get(key);
 		}
 	}
 
@@ -402,9 +404,6 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @return The user profile map.
 	 */
 	public static Map getUserProfileMap(PortalContext portalContext) {
-		if (portalContext == null) {
-			return null;
-		}
 		try {
 			HttpSession session = portalContext.getPortalRequest().getRequest()
 					.getSession();
@@ -424,15 +423,17 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * @return The list of groups (null if none).
 	 */
 	public static String[] getGroups(PortalContext portalContext) {
-		Map userProfile = getUserProfileMap(portalContext);
-		String[] groups = null;
-		if (userProfile != null) {
-			try {
-				groups = (String[]) userProfile.get(Consts.KEY_USER_GROUPS);
-			} catch (ClassCastException e) { // should never happen
+		try {
+			Object groupList = getUserProperty(portalContext,
+					Consts.KEY_USER_GROUPS);
+			if (groupList instanceof List) {
+				return (String[]) ((List) groupList).toArray(new String[0]);
+			} else {
+				return null;
 			}
+		} catch (Exception e) {
+			return null;
 		}
-		return groups;
 	}
 
 	/**
@@ -449,6 +450,33 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	public static boolean isUserInGroup(PortalContext portalContext,
 			String group) {
 		return Utils.groupMatch(getGroups(portalContext), group);
+	}
+
+	/**
+	 * Return true if the given portal context indicates the user is logged-in
+	 * (ie authenticated), or false if it indicates the user is not logged-in
+	 * (ie anonymous). This is based on the SPF <i>user profile map</i> present
+	 * in the session. When that information indicates an authenticated user,
+	 * this method returns true, but when it indicates a guest or null user, it
+	 * returns false.
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @return True if the user is authenticated, false otherwise.
+	 */
+	public static boolean isAuthenticatedUser(PortalContext context) {
+		try {
+			String username = (String) getUserProperty(context,
+					Consts.KEY_USER_NAME);
+			if (username != null
+					&& !username.startsWith(Consts.ANON_USER_NAME_PREFIX)) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	/**

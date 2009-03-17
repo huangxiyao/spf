@@ -13,7 +13,7 @@
 	<tag>
 		<name>interpolate</name>
 		<tagclass>
-			com.hp.it.spf.xa.interpolate.portlet.tag.FileInterpolatorTag
+			com.hp.it.spf.xa.interpolate.portal.tag.FileInterpolatorTag
 		</tagclass>
 		<bodycontent>empty</bodycontent>
 		<info>
