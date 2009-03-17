@@ -7,7 +7,7 @@
 	<artifactId>spf-hpweb-layout-config-style</artifactId>
 	<packaging>car</packaging>
 	<name>SPF HPWeb Layout Config Style example</name>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<description>
 		Sample Shared Portal Framework style implementation for HPWebLayoutConfigStyleType.
 	</description>
@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
+			<version>1.0.2</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
