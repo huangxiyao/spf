@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-maximize-secondarypage</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>car</packaging>
 	<name>SPF maximize secondary page</name>
 	<description>
