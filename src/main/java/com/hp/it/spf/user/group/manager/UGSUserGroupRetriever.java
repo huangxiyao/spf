@@ -14,7 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.rpc.ServiceException;
@@ -81,18 +80,12 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
                 for (String group : groupList) {
                     groupSet.add(group);
                 }
-                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-                    StringBuffer groupStr = new StringBuffer();
-                    if (groupList.length > 0) {
-                        for (int i = 0; i < groupList.length; i++) {
-                            groupStr.append(groupList[i]);
-                            groupStr.append(",");
-                        }
-                        LOG.debug("Output group listing: " + groupStr);
-                    }
-                }                
-            }            
+            }
+			
             timeRecorder.recordEnd(Operation.GROUPS_CALL);
+			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+				LOG.debug("Group returned by UGS: " + groupSet);
+			}
             return groupSet;
         } catch (SiteDoesNotExistException ex) {
             String msg = "The site, "
@@ -130,13 +123,22 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
         GroupRequest groupRequest = new GroupRequest();
 		String ugsSiteId = getUGSSiteID(siteName);
         groupRequest.setSiteName(ugsSiteId);
-        groupRequest.setUserContext(new ArrayOfUserContext(convertToUserContext(userProfile)));
+		UserContext[] userContextItems = convertToUserContext(userProfile);
+		groupRequest.setUserContext(new ArrayOfUserContext(userContextItems));
 
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("UGS request object: SiteName="
-                       + ugsSiteId
-                       + " User Profile="
-                       + userProfile.toString());
+			StringBuilder message = new StringBuilder("UGS request object: SiteName=");
+			message.append(ugsSiteId);
+			message.append(" User Profile=[");
+			for (int i = 0, length = userContextItems.length; i < length; i++) {
+				UserContext userContextItem = userContextItems[i];
+				message.append(userContextItem.getKey()).append('=').append(userContextItem.getValue());
+				if (i < length-1) {
+					message.append(',');
+				}
+			}
+			message.append("]");
+            LOG.debug(message);
         }
 
         return groupRequest;
