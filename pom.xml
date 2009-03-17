@@ -3,7 +3,7 @@
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-portal-utilities</artifactId>
 	<name>SPF portal utilities</name>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<description>
 		Utilities for the portal side of the Shared Portal Framework.
 		These are currently based on Vignette Portal. They currently
@@ -114,7 +114,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-hpp</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
