@@ -4,7 +4,7 @@
 	<artifactId>spf-auth-error-secondarypagetype</artifactId>
 	<packaging>car</packaging>
 	<name>SPF authorization error secondary page type</name>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<description>
 		Classes and other artifacts for the Shared Portal Framework
 		authorization error secondary page type. This page type should
@@ -22,9 +22,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-auth-error-secondarypagetype</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-auth-error-secondarypagetype</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-auth-error-secondarypagetype</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-auth-error-secondarypagetype</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/tags/spf-auth-error-secondarypagetype-1.0.2</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/tags/spf-auth-error-secondarypagetype-1.0.2</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/comps/tags/spf-auth-error-secondarypagetype-1.0.2</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
