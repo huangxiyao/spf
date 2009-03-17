@@ -199,7 +199,7 @@ public class SessionInitializationFilter implements Filter {
                 
                 // if SPF_NO_CL_COOKIE exist, this means that at the second time, cookie still not exist
                 if (spfNoCLCookie != null && spfNoCLCookie.equals("N")) {
-                    LOG.error("Logged in more than one times but the CL_Cookie still doesn't exist.");
+                    LOG.error("HPP CL_Cookie doesn't exist.");
                     request.getSession()
                            .setAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR,
                                          "1");
