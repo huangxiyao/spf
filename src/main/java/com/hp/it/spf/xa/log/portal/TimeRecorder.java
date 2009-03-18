@@ -20,6 +20,8 @@ import java.util.Iterator;
  * time recorder will automatically create a logger "TIME.com.hp.it.spf.xa.log.portal.TimeRecorder.UPS".
  *
  * All the time metrics are logged as a signle message using {@link #logRecordedData()}
+ *
+ * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  */
 public class TimeRecorder {
 

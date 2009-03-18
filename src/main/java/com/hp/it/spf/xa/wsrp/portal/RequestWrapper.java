@@ -14,6 +14,7 @@ import java.util.NoSuchElementException;
 /**
  * Wraps a request by appending <code>userAgentPostfix</code> to user-agent header value. The HTTP
  * header accessor methods are modified appropriately to return this updated value.
+ * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  * @author Oliver, Kaijian Ding, Ye Liu
  * @version TBD
  */
