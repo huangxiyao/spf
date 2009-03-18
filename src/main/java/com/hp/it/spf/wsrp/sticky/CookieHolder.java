@@ -25,8 +25,21 @@ class CookieHolder {
 	 * Maps <tt>cookie|host</tt> to VIP corresponding to the host and which was used to get
 	 * the cookie.
 	 */
-	private Map<String, String> mCookies = new HashMap<String, String>();
-	
+	private Map<String, String> mCookies;
+
+	CookieHolder()
+	{
+		this(new HashMap<String, String>());
+	}
+
+	/**
+	 * Constructor used for testing purposes.
+	 */
+	CookieHolder(Map<String, String> cookies)
+	{
+		mCookies = cookies;
+	}
+
 	/**
 	 * Removes the cookie for the target host.
 	 */

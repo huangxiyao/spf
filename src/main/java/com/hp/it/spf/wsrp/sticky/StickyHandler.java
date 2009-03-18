@@ -297,6 +297,9 @@ public class StickyHandler extends BasicHandler {
 		return getHost(originalTransportUrl);
 	}
 
+	/**
+	 * Method used for testing purpose to setup the test fixtture.
+	 */
 	static void setCookieHolder(CookieHolder cookieHolder)
 	{
 		mCookieHolder = cookieHolder;
