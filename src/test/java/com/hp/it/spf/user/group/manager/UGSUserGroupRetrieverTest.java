@@ -36,6 +36,7 @@ import com.hp.it.spf.user.group.stub.UserContext;
  * This is the test class for SSOUserGroupRetriever class.
  * 
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  * @version 1.0
  * @see com.hp.it.spf.user.group.manager.UGSUserGroupRetriever
  */
