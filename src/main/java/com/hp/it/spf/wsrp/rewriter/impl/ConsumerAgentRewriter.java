@@ -21,7 +21,7 @@ public class ConsumerAgentRewriter implements IRewriter {
 	/**
 	 * Max size of the user agent which will be sent.
 	 */
-	private static final int CONSUMER_AGENT_MAX_SIZE = 50;
+	static final int CONSUMER_AGENT_MAX_SIZE = 50;
 	
 	/**
 	 * Position at which the user agent name will be split to include its tail.
@@ -30,7 +30,7 @@ public class ConsumerAgentRewriter implements IRewriter {
 	
 	/**
 	 * Rewrites user agent value including in the result its head and tail.
-	 * @param registration data
+	 * @param data registration data
 	 */
 	public void rewrite(Object data) {
 		if (!(data instanceof RegistrationData)) {
@@ -49,7 +49,7 @@ public class ConsumerAgentRewriter implements IRewriter {
 		registrationData.setConsumerAgent(
 				consumerAgent.substring(0, CONSUMER_AGENT_SPLIT_POS) + 
 				"..." + 
-				consumerAgent.substring(CONSUMER_AGENT_MAX_SIZE - CONSUMER_AGENT_SPLIT_POS - 3));
+				consumerAgent.substring(consumerAgent.length() - (CONSUMER_AGENT_MAX_SIZE - CONSUMER_AGENT_SPLIT_POS - 3)));
 		
 	}
 
