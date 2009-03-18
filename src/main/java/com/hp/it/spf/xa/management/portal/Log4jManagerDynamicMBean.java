@@ -26,6 +26,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerRepository;
+import com.vignette.portal.log.LogConfiguration;
 
 /**
  * MBean allowing to view and change Log4J loggers level.
@@ -57,7 +58,7 @@ public class Log4jManagerDynamicMBean  implements DynamicMBean {
 				new MBeanConstructorInfo[] {
 					new MBeanConstructorInfo(
 							"Creates Log4jManager",
-							getClass().getConstructors()[0])
+							Log4jManagerDynamicMBean.class.getConstructors()[0])
 				},
 				new MBeanOperationInfo[] {
 					new MBeanOperationInfo(
@@ -69,6 +70,17 @@ public class Log4jManagerDynamicMBean  implements DynamicMBean {
 											String.class.getName(),
 											"Regular expression used to select loggers based on their names")
 									
+							},
+							String[].class.getName(),
+							MBeanOperationInfo.INFO),
+					new MBeanOperationInfo(
+							"getLoggersForLevel",
+							"Retrieves the loggers based on the given level",
+							new MBeanParameterInfo[] {
+									new MBeanParameterInfo(
+											"level",
+											String.class.getName(),
+											"Logging level; can be one of FATAL, ERROR, WARN, INFO, DEBUG")
 							},
 							String[].class.getName(),
 							MBeanOperationInfo.INFO),
@@ -142,6 +154,9 @@ public class Log4jManagerDynamicMBean  implements DynamicMBean {
 		else if ("setLoggersLevels".equals(actionName)) {
 			return setLoggersLevels((String) params[0], (String)params[1]).toArray();
 		}
+		else if ("getLoggersForLevel".equals(actionName)) {
+			return getLoggersForLevel((String) params[0]).toArray();
+		}
 		return null;
 	}
 
@@ -183,11 +198,31 @@ public class Log4jManagerDynamicMBean  implements DynamicMBean {
 		for (Logger logger : findLoggers(loggerNamePattern)) {
 			loggerLevels.put(logger.getName(), logger.getEffectiveLevel().toString());
 		}
-		
+
 		List<String> result = new ArrayList<String>(loggerLevels.size());
 		for (Map.Entry<String, String> loggerLevel : loggerLevels.entrySet()) {
 			result.add(loggerLevel.getKey() + ": " + loggerLevel.getValue());
 		}
+		return result;
+	}
+
+	/**
+	 * Returns the logger names with the given level.
+	 * @param level logging level
+	 * @return an alphabetically sorted list of logger names having given level.
+	 */
+	public List<String> getLoggersForLevel(String level) {
+		Level logLevel = Level.toLevel(level, null);
+		if (logLevel == null) {
+			return Collections.emptyList();
+		}
+		List<String> result = new ArrayList<String>();
+		for (Logger logger : findLoggers(null)) {
+			if (logger.getEffectiveLevel().equals(logLevel)) {
+				result.add(logger.getName());
+			}
+		}
+		Collections.sort(result);
 		return result;
 	}
 
@@ -206,12 +241,83 @@ public class Log4jManagerDynamicMBean  implements DynamicMBean {
 		if (logLevel == null) {
 			return Collections.emptyList();
 		}
+
+		// first handle plain log4j loggers
 		for (Logger logger : findLoggers(loggerNamePattern)) {
 			logger.setLevel(logLevel);
+			// Vignette is caching log levels so we need to have special handling for its
+			// logging subsystems
+			setPortalSubsystemLevel(logLevel, logger);
 		}
+
 		return getLoggersLevels(loggerNamePattern);
 	}
-	
+
+	/**
+	 * Sets Vignette logging subsystem level. This method is required as Vignette is caching
+	 * logging levels and do not check them using Log4J facitlities. It changes the level
+	 * of the logging subsystem which results in the appropriate cache refresh.
+	 * <p>
+	 * The method is package protected for testing purpose.
+	 * @param level logging level
+	 * @param logger logger for whose subsystem's level will be changed.
+	 */
+	/*private*/ void setPortalSubsystemLevel(Level level, Logger logger)
+	{
+		int subsystemLevel = toPortalLevel(level);
+		if (subsystemLevel == -1) {
+			return;
+		}
+
+		String subsystem = getSubsystem(logger.getName());
+		if (subsystem != null) {
+			LogConfiguration.getInstance().setLevel(subsystemLevel, subsystem);
+		}
+	}
+
+	/**
+	 * @param loggerName logger name
+	 * @return Vignette logging subsystem name; if the logger name corresponds to a class name,
+	 * the class' package name will be retured; otherwise the logger name will be returned.
+	 */
+	private String getSubsystem(String loggerName)
+	{
+		int pos = loggerName.lastIndexOf('.');
+		if (pos == -1 || pos == loggerName.length()-1) {
+			return null;
+		}
+		if (Character.isUpperCase(loggerName.charAt(pos+1))) {
+			return loggerName.substring(0, pos);
+		}
+		return loggerName;
+	}
+
+	/**
+	 * Converts the Log4J level to portal logging level
+	 * @param logLevel Log$j logging level
+	 * @return corresponding portal logging level or <tt>-1</tt> if the given level is not one
+	 * of DEBUG, INFO, WARN, ERROR, FATAL.
+	 */
+	private int toPortalLevel(Level logLevel)
+	{
+		if (Level.DEBUG.equals(logLevel)) {
+			return LogConfiguration.DEBUG;
+		}
+		else if (Level.INFO.equals(logLevel)) {
+			return LogConfiguration.INFO;
+		}
+		else if (Level.ERROR.equals(logLevel)) {
+			return LogConfiguration.ERROR;
+		}
+		else if (Level.FATAL.equals(logLevel)) {
+			return LogConfiguration.FATAL;
+		}
+		else if (Level.WARN.equals(logLevel)) {
+			return LogConfiguration.WARNING;
+		}
+		return -1;
+	}
+
 	/**
 	 * Finds loggers corresponding to the given pattern.
 	 * @param loggerNamePattern regular expression which should be present in the logger name
