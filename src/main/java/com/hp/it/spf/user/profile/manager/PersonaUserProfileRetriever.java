@@ -60,11 +60,11 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
 
             // retrieve simple attribute values and convert key from Integer type to String type
             Map<Integer, Collection<String>> simple = user.getSimpleAttributeValues();
-			covertSimpleValue(userProfiles, simple);
+			convertSimpleValues(userProfiles, simple);
 
 			// retrieve compound attribute values and convert key from Integer type to String type
             Map<Integer, Collection<ICompoundUserAttributeValue>> compound = user.getCompoundAttributeValues();
-			convertCompoundValue(userProfiles, compound);
+			convertCompoundValues(userProfiles, compound);
 		} catch (Exception ex) {
             throw new UserProfileException("Retrieve user profile from Persona error.", ex);
         }
@@ -86,9 +86,9 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
 	}
 
 
-	private void convertCompoundValue(Map<String, Object> userProfiles, Map<Integer, Collection<ICompoundUserAttributeValue>> compound)
+	void convertCompoundValues(Map<String, Object> userProfile, Map<Integer, Collection<ICompoundUserAttributeValue>> compoundValues)
 	{
-		for (Map.Entry<Integer, Collection<ICompoundUserAttributeValue>> entry: compound.entrySet()) {
+		for (Map.Entry<Integer, Collection<ICompoundUserAttributeValue>> entry: compoundValues.entrySet()) {
 
 			String attributeName = String.valueOf(entry.getKey());
 			Collection<ICompoundUserAttributeValue> origianlValue = entry.getValue();
@@ -106,19 +106,24 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
 				attributeValue.add(attributeValueItem);
 			}
 
-			userProfiles.put(attributeName, attributeValue);
+			userProfile.put(attributeName, attributeValue);
 		}
 	}
 
 
-	private void covertSimpleValue(Map<String, Object> userProfiles, Map<Integer, Collection<String>> simple)
+	void convertSimpleValues(Map<String, Object> userProfile, Map<Integer, Collection<String>> simpleValues)
 	{
-		for (Map.Entry<Integer, Collection<String>> entry: simple.entrySet()) {
+		for (Map.Entry<Integer, Collection<String>> entry: simpleValues.entrySet()) {
 			String attributeName = String.valueOf(entry.getKey());
 			Collection<String> originalValue = entry.getValue();
 			// convert the Collection to List in case it's not a list
-			List<String> attributeValue = new ArrayList<String>(originalValue);
-			userProfiles.put(attributeName, attributeValue);
+			if (originalValue != null) {
+				List<String> attributeValue = new ArrayList<String>(originalValue);
+				userProfile.put(attributeName, attributeValue);
+			}
+			else {
+				userProfile.put(attributeName, null);
+			}
 		}
 	}
 }
