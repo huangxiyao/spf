@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.rpc.ServiceException;
 
+import com.epicentric.site.Site;
 import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.hp.it.spf.user.exception.UserGroupsException;
 import com.hp.it.spf.user.group.stub.ArrayOfString;
@@ -66,7 +67,13 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
         TimeRecorder timeRecorder = RequestContext.getThreadInstance().getTimeRecorder();
         try {          
 		    timeRecorder.recordStart(Operation.GROUPS_CALL);
-		    siteName = Utils.getEffectiveSite(request).getDNSName();
+		    Site site = Utils.getEffectiveSite(request);
+		    
+		    // user access VAP console
+		    if (site == null) {
+		    	return groupSet;
+		    }
+		    siteName = site.getDNSName();
             GroupRequest serviceRequest = getServiceRequest(siteName, userProfile);
             if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                 LOG.debug("UGS invokeService");
