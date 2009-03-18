@@ -33,6 +33,7 @@ import org.w3c.dom.Node;
  * List: "[" (AttributeValue ", ")* "]
  * </code>
  * 
+ * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  * @author Oliver, Kaijian Ding, Ye Liu
  * @version 1.0
  */
@@ -161,7 +162,7 @@ public class ProfileHelper {
 		return input.replaceAll("#__38__#", "&");
 	}
 
-	private void writeObject(StringBuffer sb, Object obj) {
+	void writeObject(StringBuffer sb, Object obj) {
 		if (obj == null) {
 			sb.append("");
 		} else if (obj instanceof Map) {
@@ -216,7 +217,7 @@ public class ProfileHelper {
 		}
 	}
 
-	private int readObject(Stack stack, String s, int pos) {
+	int readObject(Stack stack, String s, int pos) {
 		if (s == null) {
 			throw new IllegalArgumentException("String cannot be null");
 		}
