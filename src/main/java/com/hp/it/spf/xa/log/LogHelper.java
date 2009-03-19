@@ -28,10 +28,6 @@ public class LogHelper {
 
 	private static final String DEFAULT_SPLIT_TAG = "|"; // default separator
 
-	private LogHelper() {
-
-	}
-
 	/**
 	 * <p>
 	 * Returns a formatted string of log parameter information taken from
