@@ -14,6 +14,7 @@ import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.interpolate.portal.FileInterpolator;
 import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.log.portal.LogHelper;
 
 /**
  * <p>
@@ -130,9 +131,7 @@ public class GlobalHelpDisplayAction extends BaseAction {
 		} catch (Exception ex) {
 			// Redirect to system error page if anything unusual happens
 			LOG.error("GlobalHelpDisplayAction error: " + ex);
-			StackTraceElement[] e = ex.getStackTrace();
-			for (int i = 0; i < e.length; i++)
-				LOG.error(e[i]);
+			LogHelper.logStackTrace(this, ex);
 			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
 					null, null);
 		}
