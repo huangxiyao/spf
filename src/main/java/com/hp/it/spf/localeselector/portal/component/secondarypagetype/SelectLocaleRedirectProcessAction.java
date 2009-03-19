@@ -15,6 +15,7 @@ import com.vignette.portal.website.enduser.PortalURI;
 import com.vignette.portal.website.enduser.components.BaseAction;
 
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
+import com.hp.it.spf.xa.log.portal.LogHelper;
 import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
 
@@ -86,6 +87,7 @@ public class SelectLocaleRedirectProcessAction extends BaseAction {
 		} catch (Exception ex) {
 			// redirect to system error page if anything unusual happens
 			LOG.error("SelectLocaleRedirectProcessAction error: " + ex);
+			LogHelper.logStackTrace(this, ex);
 			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
 					null, null);
 		}

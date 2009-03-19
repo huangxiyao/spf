@@ -19,6 +19,7 @@ import com.hp.globalops.hppcbl.webservice.ProfileCore;
 import com.hp.it.spf.sso.portal.AuthenticationUtility;
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.log.portal.LogHelper;
 import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogWrapper;
@@ -144,6 +145,7 @@ public class SelectLocaleProcessAction extends BaseAction {
 		} catch (Exception ex) {
 			// redirect to system error page if anything unusual happens
 			LOG.error("SetLocaleProcessAction error: " + ex);
+			LogHelper.logStackTrace(this, ex);
 			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
 					null, null);
 		}
