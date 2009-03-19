@@ -95,8 +95,8 @@ public class GlobalHelpDisplayAction extends BaseAction {
 				baseName = GLOBAL_HELP_BASE_NAME;
 			}
 			LOG
-					.info("GlobalHelpDisplayAction: rendering content from proper localized version of "
-							+ baseName + " secondary support file.");
+					.info("GlobalHelpDisplayAction: rendering content from "
+							+ baseName + " resource bundle.");
 
 			// Next determine the proper token substitutions property file to
 			// use.
@@ -106,14 +106,14 @@ public class GlobalHelpDisplayAction extends BaseAction {
 				propName = GLOBAL_HELP_INCLUDE_BASE_NAME;
 			}
 			LOG
-					.info("GlobalHelpDisplayAction: token substitutions come from proper localized version of "
-							+ propName + " secondary support file.");
+					.info("GlobalHelpDisplayAction: include-tokens will be substituted from "
+							+ propName + " resource bundle.");
 
 			f = new FileInterpolator(portalContext, baseName, propName);
 			helpContent = f.interpolate();
 
 			// If the content is not null or blank, then store into request
-			if (helpContent != null && helpContent.trim().length() > 0) {
+			if ((helpContent != null) && (helpContent.trim().length() > 0)) {
 				request.setAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA,
 						helpContent);
 			} else {
