@@ -130,7 +130,9 @@ public class GlobalHelpDisplayAction extends BaseAction {
 		} catch (Exception ex) {
 			// Redirect to system error page if anything unusual happens
 			LOG.error("GlobalHelpDisplayAction error: " + ex);
-			ex.printStackTrace();
+			StackTraceElement[] e = ex.getStackTrace();
+			for (int i = 0; i < e.length; i++)
+				LOG.error(e[i]);
 			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
 					null, null);
 		}
