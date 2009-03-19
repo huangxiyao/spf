@@ -934,6 +934,12 @@ public class I18nUtility {
 		if (givenName == null && familyName == null) {
 			return null;
 		}
+		if (givenName == null) {
+			givenName = "";
+		}
+		if (familyName == null) {
+			familyName = "";
+		}
 		givenName = givenName.trim();
 		familyName = familyName.trim();
 
