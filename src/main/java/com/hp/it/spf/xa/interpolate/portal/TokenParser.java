@@ -222,7 +222,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		}
 		try {
 			return (String) Utils.getUserProperty(portalContext,
-					Consts.PROPERTY_EMAIL_ID);
+					Consts.KEY_EMAIL);
 		} catch (ClassCastException e) {
 			return null;
 		}
@@ -242,7 +242,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		}
 		try {
 			return (String) Utils.getUserProperty(portalContext,
-					Consts.PROPERTY_FIRSTNAME_ID);
+					Consts.KEY_FIRST_NAME);
 		} catch (ClassCastException e) {
 			return null;
 		}
@@ -262,7 +262,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		}
 		try {
 			return (String) Utils.getUserProperty(portalContext,
-					Consts.PROPERTY_LASTNAME_ID);
+					Consts.KEY_LAST_NAME);
 		} catch (ClassCastException e) {
 			return null;
 		}

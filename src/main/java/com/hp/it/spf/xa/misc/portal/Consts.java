@@ -53,63 +53,99 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 
 	/**
 	 * The Vignette User object property for user ID. This is the user ID, not
-	 * the user person name.
+	 * the user person name. <b>Note:</b> In SPF we use the custom user profile
+	 * map for user properties, not the Vignette User object. To find user
+	 * properties, you generally should use the user profile map instead of the
+	 * User object.
 	 */
 	public static final String PROPERTY_USER_NAME_ID = "username";
 
 	/**
-	 * The Vignette User object property for domain.
+	 * The Vignette User object property for domain. <b>Note:</b> In SPF we use
+	 * the custom user profile map for user properties, not the Vignette User
+	 * object. To find user properties, you generally should use the user
+	 * profile map instead of the User object.
 	 */
 	public static final String PROPERTY_DOMAIN_ID = "domain";
 
 	/**
-	 * The Vignette User object property for profile ID.
+	 * The Vignette User object property for profile ID. <b>Note:</b> In SPF we
+	 * use the custom user profile map for user properties, not the Vignette
+	 * User object. To find user properties, you generally should use the user
+	 * profile map instead of the User object.
 	 */
 	public static final String PROPERTY_PROFILE_ID = "profileid";
 
 	/**
-	 * The Vignette User object property for last change timestamp.
+	 * The Vignette User object property for last change timestamp. <b>Note:</b>
+	 * In SPF we use the custom user profile map for user properties, not the
+	 * Vignette User object. To find user properties, you generally should use
+	 * the user profile map instead of the User object.
 	 */
 	public static final String PROPERTY_LAST_CHANGE_DATE_ID = "lastchangedate";
 
 	/**
-	 * The Vignette User object property for SPF-standard timezone.
+	 * The Vignette User object property for SPF-standard timezone. <b>Note:</b>
+	 * In SPF we use the custom user profile map for user properties, not the
+	 * Vignette User object. To find user properties, you generally should use
+	 * the user profile map instead of the User object.
 	 */
 	public static final String PROPERTY_SPF_TIMEZONE_ID = "spf_timezone";
 
 	/**
 	 * The Vignette User object property for Vignette-standard timezone (which
-	 * is really just a GMT offset, not a timezone).
+	 * is really just a GMT offset, not a timezone). <b>Note:</b> In SPF we use
+	 * the custom user profile map for user properties, not the Vignette User
+	 * object. To find user properties, you generally should use the user
+	 * profile map instead of the User object.
 	 */
 	public static final String PROPERTY_TIMEZONE_ID = "timezone";
 
 	/**
-	 * The Vignette User object property for first (given) name.
+	 * The Vignette User object property for first (given) name. <b>Note:</b>
+	 * In SPF we use the custom user profile map for user properties, not the
+	 * Vignette User object. To find user properties, you generally should use
+	 * the user profile map instead of the User object.
 	 */
 	public static final String PROPERTY_FIRSTNAME_ID = "firstname";
 
 	/**
-	 * The Vignette User object property for last (family) name.
+	 * The Vignette User object property for last (family) name. <b>Note:</b>
+	 * In SPF we use the custom user profile map for user properties, not the
+	 * Vignette User object. To find user properties, you generally should use
+	 * the user profile map instead of the User object.
 	 */
 	public static final String PROPERTY_LASTNAME_ID = "lastname";
 
 	/**
-	 * The Vignette User object property for language code.
+	 * The Vignette User object property for language code. <b>Note:</b> In SPF
+	 * we use the custom user profile map for user properties, not the Vignette
+	 * User object. To find user properties, you generally should use the user
+	 * profile map instead of the User object.
 	 */
 	public static final String PROPERTY_LANGUAGE_ID = "language";
 
 	/**
-	 * The Vignette User object property for country code.
+	 * The Vignette User object property for country code. <b>Note:</b> In SPF
+	 * we use the custom user profile map for user properties, not the Vignette
+	 * User object. To find user properties, you generally should use the user
+	 * profile map instead of the User object.
 	 */
 	public static final String PROPERTY_COUNTRY_ID = "country";
 
 	/**
-	 * The Vignette User object property for email address.
+	 * The Vignette User object property for email address. <b>Note:</b> In SPF
+	 * we use the custom user profile map for user properties, not the Vignette
+	 * User object. To find user properties, you generally should use the user
+	 * profile map instead of the User object.
 	 */
 	public static final String PROPERTY_EMAIL_ID = "email";
 
 	/**
-	 * The Vignette User object property for last used site DNS name.
+	 * The Vignette User object property for last used site DNS name. <b>Note:</b>
+	 * In SPF we use the custom user profile map for user properties, not the
+	 * Vignette User object. To find user properties, you generally should use
+	 * the user profile map instead of the User object.
 	 */
 	public static final String PROPERTY_PRIMARY_SITE_ID = "primary_site_id";
 
