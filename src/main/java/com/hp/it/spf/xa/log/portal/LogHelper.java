@@ -56,6 +56,7 @@ public class LogHelper extends com.hp.it.spf.xa.log.LogHelper {
 			return;
 		}
 		LogWrapper logger = new LogWrapper(o.getClass());
+		logger.error(ex + "; at:");
 		StackTraceElement[] lines = ex.getStackTrace();
 		for (int i = 0; i < lines.length; i++) {
 			if (i == howManyLines - 1) {
