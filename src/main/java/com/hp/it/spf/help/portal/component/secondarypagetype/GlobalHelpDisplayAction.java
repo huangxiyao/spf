@@ -94,9 +94,8 @@ public class GlobalHelpDisplayAction extends BaseAction {
 			if (I18nUtility.getLocalizedFileName(portalContext, baseName) == null) {
 				baseName = GLOBAL_HELP_BASE_NAME;
 			}
-			LOG
-					.info("GlobalHelpDisplayAction: rendering content from "
-							+ baseName + " resource bundle.");
+			LOG.info("GlobalHelpDisplayAction: rendering content from "
+					+ baseName + " resource bundle.");
 
 			// Next determine the proper token substitutions property file to
 			// use.
@@ -113,12 +112,18 @@ public class GlobalHelpDisplayAction extends BaseAction {
 			helpContent = f.interpolate();
 
 			// If the content is not null or blank, then store into request
-			if ((helpContent != null) && (helpContent.trim().length() > 0)) {
-				request.setAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA,
-						helpContent);
+			if (helpContent != null) {
+				helpContent = helpContent.trim();
+				if (helpContent.length() > 0) {
+					request.setAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA,
+							helpContent);
+				} else {
+					throw new Exception(
+							"GlobalHelpDisplayAction: interpolated content is empty.");
+				}
 			} else {
 				throw new Exception(
-						"GlobalHelpDisplayAction: interpolated content is null or empty.");
+						"GlobalHelpDisplayAction: interpolated content is null.");
 			}
 			// Return null so action will forward normally to view
 			return null;
