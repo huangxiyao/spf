@@ -51,14 +51,14 @@ public class PortalURLRewriterFilter implements Filter
 	@SuppressWarnings("unchecked")
 	private HttpServletRequest convertPortletIds(HttpServletRequest request)
 	{
-		Enumeration portletIdValues = RequestUtils.getParameterValues(request, "spf_p.tpst");
+		Enumeration portletIdValues = getParameterValues(request, "spf_p.tpst");
 		if (portletIdValues == null || !portletIdValues.hasMoreElements()) {
 			return request;
 		}
 
-		Enumeration portletRenderParamNames = RequestUtils.getParameterNamesByPrefix(request, "spf_p.prp_");
-		Enumeration portletPublicRenderParamNames = RequestUtils.getParameterNamesByPrefix(request, "spf_p.pbp_");
-		Enumeration portletStates = RequestUtils.getParameterValues(request, "spf_p.pst");
+		Enumeration portletRenderParamNames = getParameterNamesByPrefix(request, "spf_p.prp_");
+		Enumeration portletPublicRenderParamNames = getParameterNamesByPrefix(request, "spf_p.pbp_");
+		Enumeration portletStates = getParameterValues(request, "spf_p.pst");
 
 		Set<String> portletFriendlyIds = new HashSet<String>();
 
@@ -84,6 +84,16 @@ public class PortalURLRewriterFilter implements Filter
 		}
 
 		return new RequestWrapper(request, portletFriendlyIdToUidMap);
+	}
+
+	/*private*/ Enumeration getParameterNamesByPrefix(HttpServletRequest request, String paramNamePrefix)
+	{
+		return RequestUtils.getParameterNamesByPrefix(request, paramNamePrefix);
+	}
+
+	/*private*/ Enumeration getParameterValues(HttpServletRequest request, String parameterName)
+	{
+		return RequestUtils.getParameterValues(request, parameterName);
 	}
 
 	private String extractPorltletIdFromParamValue(String value)
@@ -130,7 +140,7 @@ public class PortalURLRewriterFilter implements Filter
 	 * @param portletIds portlet friendly IDs
 	 * @return Map of portlet friendly IDs present in the request to their respective UIDs
 	 */
-	private Map<String, String> buildPortletFriendlyIdToUIDMap(Set<String> portletIds)
+	/*private*/ Map<String, String> buildPortletFriendlyIdToUIDMap(Set<String> portletIds)
 	{
 		Map<String, String> portletFriendlyIdToUidMap = new HashMap<String, String>();
 		for (String portletId : portletIds) {
