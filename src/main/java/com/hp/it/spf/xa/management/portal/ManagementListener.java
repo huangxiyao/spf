@@ -37,7 +37,7 @@ import com.vignette.portal.log.LogWrapper;
  */
 public class ManagementListener implements ServletContextListener {
 
-	static LogWrapper LOG = new LogWrapper(ManagementListener.class);
+	private static final LogWrapper LOG = new LogWrapper(ManagementListener.class);
 
 	/**
 	 * Resource path (must be available classpath) of the optional property file which contains

@@ -24,7 +24,7 @@ import weblogic.security.services.Authentication;
  */
 class Authenticator implements JMXAuthenticator
 {
-	static LogWrapper LOG = new LogWrapper(Authenticator.class);
+	private static final LogWrapper LOG = new LogWrapper(Authenticator.class);
 
 	private String mRealm;
 	private Set<String> mGroupNames;

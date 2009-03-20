@@ -14,11 +14,6 @@ import javax.security.auth.login.LoginException;
  */
 public class AuthenticatorTest
 {
-	@BeforeClass
-	public static void setLogger() {
-		Authenticator.LOG = new NullLogWrapper(Authenticator.class);
-	}
-
 	private Authenticator mTestAuthenticator = new Authenticator(null, null) {
 		@Override
 		protected Subject doAuthenticate(String username, String password) throws LoginException

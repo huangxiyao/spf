@@ -20,7 +20,6 @@ public class ManagementListenerTest {
 				it.remove();
 			}
 		}
-		ManagementListener.LOG = new NullLogWrapper(ManagementListener.class);
 	}
 
 
