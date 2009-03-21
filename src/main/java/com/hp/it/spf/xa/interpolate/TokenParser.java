@@ -15,6 +15,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParsePosition;
 import java.io.InputStream;
+import java.net.URLEncoder;
 
 import com.hp.it.spf.xa.i18n.I18nUtility;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
@@ -53,6 +54,7 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{SITE}</code></li>
  * <li><code>{SITE-URL}</code></li>
  * <li><code>{SITE-URL:<i>spec</i>}</code></li>
+ * <li><code>{URL-ENCODE:<i>string</i>}</code></li>
  * <li><code>{SITES:<i>names</i>}</code></li>
  * <li><code>{GROUP:<i>groups</i>}</code></li>
  * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
@@ -162,6 +164,11 @@ public abstract class TokenParser {
 	private static final String TOKEN_REQUEST_URL = "REQUEST-URL";
 
 	/**
+	 * This class attribute is the token for the URL encoder.
+	 */
+	private static final String TOKEN_URL_ENCODE = "URL-ENCODE";
+
+	/**
 	 * This class attribute is the name of the container token for a site
 	 * section.
 	 */
@@ -228,7 +235,7 @@ public abstract class TokenParser {
 	private static final String LOWERCASE = "lower";
 
 	private PropertyResourceBundle subsFileBundle = null;
-	
+
 	/**
 	 * This class attribute holds the base filename of the token-substitution
 	 * file to use.
@@ -489,6 +496,7 @@ public abstract class TokenParser {
 		content = parseLocalizedContentURL(content);
 		content = parseRequestURL(content);
 		content = parseSiteURL(content);
+		content = parseURLEncode(content);
 
 		// Done.
 		return (content);
@@ -757,10 +765,52 @@ public abstract class TokenParser {
 	/**
 	 * <p>
 	 * Parses the given string, converting the
+	 * <code>{URL-ENCODE:<i>string</i>}</code> token into the URL-encoded
+	 * value of that <code><i>string</i></code>. For example,
+	 * <code>&lt;a href="https://passport2.hp.com/hppcf/modifyuser.do?applandingpage={URL-ENCODE:{REQUEST-URL}}"&gt;</code>
+	 * causes the <code>applandingpage</code> query parameter to be set to the
+	 * URL-encoded value of the current request URL. If you provide null
+	 * content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parseURLEncode(String content) {
+
+		/**
+		 * Value provider for the URL-encoded string.
+		 */
+		class URLEncodedValueProvider extends ValueProvider {
+			protected String getValue(String param) {
+				if (param != null) {
+					try {
+						param = URLEncoder.encode(param, "UTF-8");
+					} catch (Exception e) {
+					}
+				}
+				return (param);
+			}
+		}
+
+		return parseElementalToken(content, TOKEN_URL_ENCODE,
+				new URLEncodedValueProvider());
+	}
+
+	/**
+	 * <p>
+	 * Parses the given string, converting the
 	 * <code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code> token into a URL
-	 * for the best-candidate localized form of that <i>pathname</i>. Actual
-	 * implementation depends on portal or portlet context (eg for getting the
-	 * locale). For example: <code>&lt;img
+	 * for the best-candidate localized form of that
+	 * <code><i>pathname</i></code>. Actual implementation depends on portal
+	 * or portlet context (eg for getting the locale). For example:
+	 * <code>&lt;img
 	 * src="{LOCALIZED-CONTENT-URL:/images/done.jpg}"&gt; is returned as:
 	 * &lt;img src="/<i>implementation-dependent</i>/images/done_fr.jpg"&gt;</code>
 	 * when the user is French and the French version of <code>done.jpg</code>
@@ -798,8 +848,8 @@ public abstract class TokenParser {
 	 * <p>
 	 * Parses the given string, converting the
 	 * <code>{CONTENT-URL:<i>pathname</i>}</code> token into a URL for that
-	 * <i>pathname</i>. Localization is not performed. Actual implementation
-	 * depends on portal or portlet context. For example:
+	 * <code><i>pathname</i></code>. Localization is not performed. Actual
+	 * implementation depends on portal or portlet context. For example:
 	 * <code>&lt;img src="{CONTENT-URL:/images/picture.jpg}"&gt;</code> is
 	 * returned as:
 	 * <code>&lt;img src="<i>implementation-dependent</i>/images/picture.jpg"&gt;</code>.
