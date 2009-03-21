@@ -330,7 +330,7 @@ table.props td {
 			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
 			<code>{SITES:<i>site-names</i></code>}, <code>{INCLUDE:<i>key</i>}</code>)</a></li>
 			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>{AFTER:<i>date</i>}</code>,
-			<code>{BEFORE:<i>date</i>}</code>, <code>{SITE}</code>)</a></li>
+			<code>{BEFORE:<i>date</i>}</code>, <code>{SITE}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -4893,7 +4893,7 @@ This text is for everybody.&lt;BR&gt;
 
 <a name="file.author.token.misc">
 <h4>4.5.5. Miscellaneous (<code>{AFTER:<i>date</i>}</code>, <code>{BEFORE:<i>date</i>}</code>,
-<code>{SITE}</code>)</h4>
+<code>{SITE}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</h4>
 </a>
 
 <p>These are miscellaneous tokens. Please click on the links for
@@ -4971,6 +4971,20 @@ This text is permanent.&lt;BR&gt;
 	is nested inside the <code><i>uri</i></code> parameter for <code>{SITE-URL:<i>uri</i>}</code>.
 	In general, any of the tokens can be used inside the parameter-values
 	for any of the tokens.)</p>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#url-encode"><code>{URL-ENCODE:<i>string</i>}</code></a></dt>
+	<dd>
+	<p>Use this token to insert a <code><i>string</i></code>,
+	URL-encoded, into the interpolated content. For example:</p>
+
+	<blockquote><pre>
+&lt;A HREF="https://passport2.hp.com/hppcf/modifyuser.do?applandingpage={URL-ENCODE:{REQUEST-URL}}"&gt;
+	</pre></blockquote>
+
+	<p>This inserts the current request URL, properly encoded, into the
+	query string of that hyperlink.</p>
 	</dd>
 </dl>
 

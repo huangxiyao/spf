@@ -98,7 +98,7 @@ public class ViewControllerTest extends TestCase {
 		content = (String) map.get(Consts.VIEW_CONTENT);
 		System.out.println("testHandleRenderRequestInternal.2 got: " + content);
 		assertEquals(
-				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1> Here is an image tag: <img src=\"/images/test_zh.gif\"></body></html>",
+				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1> Here is an image tag: <img src=\"/images/test_zh.gif\"><br>Here it is again, with the URL encoded: <img src=\"%2Fimages%2Ftest_zh.gif\"></body></html>",
 				content);
 
 		pp.setValue(Consts.VIEW_FILENAME, "test_url_2.html");

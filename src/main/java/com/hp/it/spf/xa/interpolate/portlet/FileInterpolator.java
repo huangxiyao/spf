@@ -646,8 +646,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <code>{SITES:<i>names</i>}</code> token, you can list just a single site
  * name, or multiple (use the <code>|</code> character to delimit them). The
  * content enclosed by the <code>{SITES:<i>names</i>}</code> and
- * <code>{/SITES}</code> tokens is omitted from the returned content unless the
- * site name in the request matches one of those values. The match is
+ * <code>{/SITES}</code> tokens is omitted from the returned content unless
+ * the site name in the request matches one of those values. The match is
  * case-insensitive.
  * </p>
  * <p>
@@ -741,6 +741,17 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <code>{SITE-URL:https;acme}</code>,
  * <code>{SITE-URL:https;acme/forums}</code>,
  * <code>{SITE-URL:https;acme/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc.
+ * </p>
+ * </dd>
+ * 
+ * <dt><a name="url-encode"><code>{URL-ENCODE:<i>string</i>}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use this token to URL-encode the <code><i>string</i></code> parameter. For
+ * example,
+ * <code>&lt;a href="https://passport2.hp.com/hppcf/modifyuser.do?applandingpage={URL-ENCODE:{REQUEST-URL}}"&gt;</code>
+ * causes the current request URL to be set (URL-encoded) into the
+ * <code>applandingpage</code> query parameter of that hyperlink.
  * </p>
  * </dd>
  * 
