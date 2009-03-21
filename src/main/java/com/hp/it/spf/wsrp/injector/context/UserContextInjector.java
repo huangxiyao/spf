@@ -5,7 +5,10 @@
  */
 package com.hp.it.spf.wsrp.injector.context;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -171,9 +174,26 @@ public class UserContextInjector extends BasicHandler {
 	 *      string encoding of the profile
 	 */
 	private void injectUserContext(SOAPEnvelope envelope, Map userContextKeys,
-			Map userProfile) throws SOAPException {
+			Map origUserProfile) throws SOAPException {
 		Map userContext = new HashMap();
 		userContext.put(Consts.PORTAL_CONTEXT_KEY, userContextKeys);
+		
+		Map userProfile = new HashMap();
+		if (origUserProfile != null && !origUserProfile.isEmpty()) {
+			for (Iterator it = origUserProfile.entrySet().iterator(); it.hasNext();) {
+				Map.Entry entry = (Map.Entry) it.next();
+				// for last change date and last login date, format the string
+				if (Consts.KEY_LAST_CHANGE_DATE.equals(entry.getKey()) || 
+						Consts.KEY_LAST_LOGIN_DATE.equals(entry.getKey())) {
+					DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+					userProfile.put(entry.getKey(), format.format(entry.getValue()));
+				}
+				else {
+					userProfile.put(entry.getKey(), entry.getValue());
+				}
+			}
+		}
+		
 		userContext.put(Consts.USER_PROFILE_KEY, userProfile);
 		if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 			LOG.debug("UserContextInjector userProfile ", userProfile);
