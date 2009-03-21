@@ -20,14 +20,11 @@
 %>
 
 <body>
-<br />
 <h1>Portal Pulse</h1>
 <br />
 <h2>Server Name: <%= localname %></h2>
 <br />
-<br />
-Current Time:
-<%= new Date() %>
+Current Time: <%= new Date() %>
 <br />
 <br />
 <%
@@ -36,9 +33,9 @@ Current Time:
 	if (taskList != null) {
 		out.println("<table cellpadding=0 cellspacing=0 width=635>");
 		out.println("<tr>");
-		out.println("<th>Service Target</th>");
-		out.println("<th>Status</th>");
-		out.println("<th>Response Time (ms)</th>");
+		out.println("<th align=\"left\">Service Target</th>");
+		out.println("<th align=\"left\">Status</th>");
+		out.println("<th align=\"left\">Response Time (ms)</th>");
 		out.println("</tr>");
    
 		Iterator it = taskList.iterator();
@@ -46,11 +43,11 @@ Current Time:
 			IComponentCheckTask task = (IComponentCheckTask)it.next();
 			String taskName = task.getName();
 			out.println("<tr>");
-			out.println("<td>");
+			out.println("<td align=\"left\">");
 			out.println(taskName);
 			out.println("</td>");
 
-			out.println("<td>");
+			out.println("<td align=\"left\">");
 			int status = task.getStatus();
 			if (status == IComponentCheckTask.STATUS_PASS) {
 				out.println(" <!-- " + taskName + ":PASS --> ");
@@ -64,7 +61,7 @@ Current Time:
 			}
 			out.println("</td>");
 
-			out.println("<td>");
+			out.println("<td align=\"left\">");
 			out.println(task.getResponseTime());
 			out.println("</td>");
 			out.println("</tr>");	                    
