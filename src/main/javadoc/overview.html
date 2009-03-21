@@ -5121,25 +5121,25 @@ type of property. The method takes the following arguments:</p>
 	</li>
 	<li>
 	<p>The string name of the property to lookup. This could be the
-	name of a user property from HP Passport or the &#64;HP employeee
-	portal - these are the core user-identity systems in SPF - or it could
-	be the name of an extended user property from Persona or UPS.</p>
+	name of a core user property from HP Passport or the &#64;HP employeee
+	portal - these are the user-identity systems in SPF - or it could be
+	the name of an extended user property from those systems, or from
+	Persona or UPS.</p>
 
-	<p>The core user-identity properties' names names each have
-	constants defined for them in the {@link
-	com.hp.it.spf.xa.misc.portlet.Consts} class. They are the <code>Consts</code>
-	class attributes whose names begin with <code>KEY_*</code> but <b>not</b>
-	<code>KEY_PORTAL_*</code>. Here they are (<b>note:</b> this is not
-	necessarily a complete list; please check the class definition for
-	more):</p>
+	<p>The core user-identity properties' names each have constants
+	defined for them in the {@link com.hp.it.spf.xa.misc.portlet.Consts}
+	class. They are the <code>Consts</code> class attributes whose names
+	begin with <code>KEY_*</code> but <b>not</b> <code>KEY_PORTAL_*</code>.
+	Here they are:</p>
+
 	<dl>
 		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_CITY}</dt>
 		<dd>
 		<p>When you use this argument with an authenticated user, it
 		returns the "city" field from the postal address on record for the
-		user. This is taken from the HP Passport or HP Enterprise Directory
-		information for the user (depending on whether the user logged-in via
-		HPP or the &#64;HP employee portal).</p>
+		user. This is taken from the HP Passport business contact data, or the
+		HP Enterprise Directory information for the user (depending on whether
+		the user logged-in via HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -5267,9 +5267,9 @@ type of property. The method takes the following arguments:</p>
 		<dd>
 		<p>When you use this argument with an authenticated user, it
 		returns the "mail stop" field from the postal address on record for
-		the user. This is taken from the HP Passport or HP Enterprise
-		Directory information for the user (depending on whether the user
-		logged-in via HPP or the &#64;HP employee portal).</p>
+		the user. This is taken from the HP Passport business contact data, or
+		the or HP Enterprise Directory information for the user (depending on
+		whether the user logged-in via HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -5278,10 +5278,11 @@ type of property. The method takes the following arguments:</p>
 		<dd>
 		<p>When you use this argument with an authenticated user, it
 		returns the telephone number on record for the user. This is taken
-		from the HP Passport or HP Enterprise Directory information for the
-		user (depending on whether the user logged-in via HPP or the &#64;HP
-		employee portal). Whether the telephone number already includes
-		international dialing information depends on those systems.</p>
+		from the HP Passport business contact data, or the HP Enterprise
+		Directory information for the user (depending on whether the user
+		logged-in via HPP or the &#64;HP employee portal). Whether the
+		telephone number already includes international dialing information
+		depends on those systems.</p>
 		<p>For an anonymous user, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -5291,9 +5292,9 @@ type of property. The method takes the following arguments:</p>
 		<dd>
 		<p>When you use this argument with an authenticated user, it
 		returns the telephone extension on record for the user. This is taken
-		from the HP Passport or HP Enterprise Directory information for the
-		user (depending on whether the user logged-in via HPP or the &#64;HP
-		employee portal).</p>
+		from the HP Passport business contact data, or the HP Enterprise
+		Directory information for the user (depending on whether the user
+		logged-in via HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -5347,7 +5348,7 @@ type of property. The method takes the following arguments:</p>
 		it returns the user's &#64;HP security level. This also is an integer,
 		corresponding to the kind of login which the user used (SEA or
 		DigitalBadge).</p>
-		<p>For anonymous users, this returns null.</p>
+		<p>For anonymous users and &#64;HP users, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.Integer}</p>
 		</dd>
 
@@ -5355,9 +5356,10 @@ type of property. The method takes the following arguments:</p>
 		<dd>
 		<p>When you use this argument with an authenticated user, it
 		returns the "state or province" field from the postal address on
-		record for the user. This is taken from the HP Passport or HP
-		Enterprise Directory information for the user (depending on whether
-		the user logged-in via HPP or the &#64;HP employee portal).</p>
+		record for the user. This is taken from the HP Passport business
+		contact data, or the HP Enterprise Directory information for the user
+		(depending on whether the user logged-in via HPP or the &#64;HP
+		employee portal).</p>
 		<p>For an anonymous user, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -5366,9 +5368,9 @@ type of property. The method takes the following arguments:</p>
 		<dd>
 		<p>When you use this argument with an authenticated user, it
 		returns the "street" field from the postal address on record for the
-		user. This is taken from the HP Passport or HP Enterprise Directory
-		information for the user (depending on whether the user logged-in via
-		HPP or the &#64;HP employee portal).</p>
+		user. This is taken from the HP Passport business contact data, or the
+		HP Enterprise Directory information for the user (depending on whether
+		the user logged-in via HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this returns null.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
@@ -5376,9 +5378,10 @@ type of property. The method takes the following arguments:</p>
 		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_TIMEZONE}</dt>
 		<dd>
 		<p>When you use this argument with an authenticated user, it
-		returns the timezone for the user, as taken from the HP Passport or HP
-		Enterprise Directory information for the user (depending on whether
-		the user logged-in via HPP or the &#64;HP employee portal).</p>
+		returns the timezone for the user, as taken from the HP Passport
+		business contact data, or the HP Enterprise Directory information for
+		the user (depending on whether the user logged-in via HPP or the
+		&#64;HP employee portal).</p>
 		<p>For an anonymous user, this is the timezone of record for the
 		default profile the user has been assigned, based on their current
 		resolved locale (see the discussion about <a
@@ -5398,7 +5401,9 @@ type of property. The method takes the following arguments:</p>
 		and may change over time.</p>
 		</blockquote>
 
-		<p><i>Returns type:</i> {@link java.util.TimeZone}</p>
+		<p><i>Returns type:</i> {@link java.lang.String} which is a valid
+		{@link java.util.TimeZone} ID string from which you can build a <code>TimeZone</code>
+		object</p>
 		</dd>
 
 		<dt>{@link com.hp.it.spf.xa.misc.portlet.Consts#KEY_USER_NAME}</dt>
@@ -5420,17 +5425,24 @@ type of property. The method takes the following arguments:</p>
 		<dd>
 		<p>When you use this argument with an authenticated user, it
 		returns the "postal code" field from the postal address on record for
-		the user. This is taken from the HP Passport or HP Enterprise
-		Directory information for the user (depending on whether the user
-		logged-in via HPP or the &#64;HP employee portal).</p>
+		the user. This is taken from the HP Passport business contact data, or
+		the HP Enterprise Directory information for the user (depending on
+		whether the user logged-in via HPP or the &#64;HP employee portal).</p>
 		<p>For an anonymous user, this is a null or blank string.</p>
 		<p><i>Returns type:</i> {@link java.lang.String}</p>
 		</dd>
 
 	</dl>
-	<p>The extended user properties, from Persona or UPS, are not
-	well-defined within the SPF framework and so they are not listed here.</p>
 </ul>
+<blockquote>
+<p><b>Note:</b> The above are just the core properties. The extended
+properties include other business contact and home contact data elements
+from HP Passport, as well as custom properties from Persona or UPS.
+Their property names are not defined here. SPF will relay them through
+if they are encountered, however, and you can access them by passing the
+string literal property name to the same <code>Utils.getUserProperty</code>
+API. All are returned as type {@link java.lang.String}.</p>
+</blockquote>
 
 <p>For example, here is how we can use <code>Utils.getUserProperty</code>,
 along with the <a href="#overview.other.spf.common">SPF common
@@ -6832,6 +6844,19 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 			text interpolation tokens. Changed name of <code>{SITE:<i>names</i>}...{/SITE}</code>
 			container token to <code>{SITES:<i>names</i>}...{/SITES}</code> to
 			avoid ambiguity with <code>{SITE}</code> elemental token.</li>
+		</ul>
+		</td>
+	</tr>
+	<tr>
+		<td>1.8</td>
+		<td>Mar 29 2009</td>
+		<td>S. Jorgenson</td>
+		<td>
+		<ul>
+			<li>Documented new <code>{URL-ENCODE:<i>string</i>}</code> text
+			interpolation token. Documented that timezone user property is
+			returned as a string timezone ID; and added some generic
+			documentation about extended user properties.</li>
 		</ul>
 		</td>
 	</tr>
