@@ -609,6 +609,17 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
+ * <dt><a name="url-encode"><code>{URL-ENCODE:<i>string</i>}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use this token to URL-encode the <code><i>string</i></code> parameter. For
+ * example,
+ * <code>&lt;a href="https://passport2.hp.com/hppcf/modifyuser.do?applandingpage={URL-ENCODE:{REQUEST-URL}}"&gt;</code>
+ * causes the current request URL to be set (URL-encoded) into the
+ * <code>applandingpage</code> query parameter of that hyperlink.
+ * </p>
+ * </dd>
+ * 
  * <dt><a name="user-property"><code>{USER-PROPERTY:<i>key</i>}</code></a></dt>
  * <dd>
  * <p>
