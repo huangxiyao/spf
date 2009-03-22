@@ -1358,6 +1358,29 @@
 	</welcome-file-list>
 	<!-- WELCOME FILE LIST - END -->
 
+	<!-- ERROR TO CUSTOMIZED PAGE MAPPINGS - BEGIN -->
+	<error-page>
+        <error-code>403</error-code>
+        <location>/error/error_403.html</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/error_404.html</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/error_500.html</location>
+    </error-page>
+    <error-page>
+        <error-code>502</error-code>
+        <location>/error/error_502.html</location>
+    </error-page>
+    <error-page>
+        <error-code>503</error-code>
+        <location>/error/error_503.html</location>
+    </error-page>
+	<!-- ERROR TO CUSTOMIZED PAGE MAPPINGS - END -->
+
 	<!-- END-USER WEBSITE TAGLIBS - BEGIN -->
 	<jsp-config>
 		<taglib>
