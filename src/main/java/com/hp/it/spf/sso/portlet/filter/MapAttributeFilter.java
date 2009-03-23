@@ -7,6 +7,9 @@ package com.hp.it.spf.sso.portlet.filter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -180,8 +183,36 @@ public class MapAttributeFilter
                     Method method = obj.getClass()
                                        .getMethod("setUserInfo",
                                                   new Class[] {Map.class});
+                    
+                    Map userProfile = (Map)rq.getAttribute(Consts.USER_PROFILE_KEY);
+                    if (userProfile != null) {
+                    	// convert last change date and last login date to java.util.Date type
+    					DateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
+    					String lastChangeDateString = (String) userProfile.get(Consts.KEY_LAST_CHANGE_DATE);
+    					if ((lastChangeDateString != null)
+    							&& !("".equals(lastChangeDateString.trim()))) {
+    						try {
+    							userProfile.put(Consts.KEY_LAST_CHANGE_DATE, format.parse(lastChangeDateString));
+    						} catch (ParseException e) {
+    							userProfile.put(Consts.KEY_LAST_CHANGE_DATE, null);
+    						}
+    					} else {
+    						userProfile.put(Consts.KEY_LAST_CHANGE_DATE, null);
+    					}
+    					String lastLoginDateString = (String) userProfile.get(Consts.KEY_LAST_LOGIN_DATE);
+    					if ((lastLoginDateString != null)
+    							&& !("".equals(lastLoginDateString.trim()))) {
+    						try {
+    							userProfile.put(Consts.KEY_LAST_LOGIN_DATE, format.parse(lastLoginDateString));
+    						} catch (ParseException e) {
+    							userProfile.put(Consts.KEY_LAST_LOGIN_DATE, null);
+    						}
+    					} else {
+    						userProfile.put(Consts.KEY_LAST_LOGIN_DATE, null);
+    					}
+    				}
                     method.invoke(obj,
-                                  new Object[] {(Map)rq.getAttribute(Consts.USER_PROFILE_KEY)});
+                                  new Object[] {userProfile});
                 } catch (SecurityException e) {
                     System.out.println(e.getMessage());
                 } catch (NoSuchMethodException e) {
