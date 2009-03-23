@@ -3,7 +3,7 @@
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-portlet-utilities</artifactId>
 	<name>SPF portlet utilities</name>
-	<version>1.0.3</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<description>
 		Utilities for the portlet side of the Shared Portal Framework.
 		Currently includes concrete utility classes for portlet file
@@ -28,9 +28,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.3</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.3</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.3</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.0</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.0</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.0</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
