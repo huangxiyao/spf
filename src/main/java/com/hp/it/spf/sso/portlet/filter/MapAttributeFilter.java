@@ -186,30 +186,7 @@ public class MapAttributeFilter
                     
                     Map userProfile = (Map)rq.getAttribute(Consts.USER_PROFILE_KEY);
                     if (userProfile != null) {
-                    	// convert last change date and last login date to java.util.Date type
-    					DateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
-    					String lastChangeDateString = (String) userProfile.get(Consts.KEY_LAST_CHANGE_DATE);
-    					if ((lastChangeDateString != null)
-    							&& !("".equals(lastChangeDateString.trim()))) {
-    						try {
-    							userProfile.put(Consts.KEY_LAST_CHANGE_DATE, format.parse(lastChangeDateString));
-    						} catch (ParseException e) {
-    							userProfile.put(Consts.KEY_LAST_CHANGE_DATE, null);
-    						}
-    					} else {
-    						userProfile.put(Consts.KEY_LAST_CHANGE_DATE, null);
-    					}
-    					String lastLoginDateString = (String) userProfile.get(Consts.KEY_LAST_LOGIN_DATE);
-    					if ((lastLoginDateString != null)
-    							&& !("".equals(lastLoginDateString.trim()))) {
-    						try {
-    							userProfile.put(Consts.KEY_LAST_LOGIN_DATE, format.parse(lastLoginDateString));
-    						} catch (ParseException e) {
-    							userProfile.put(Consts.KEY_LAST_LOGIN_DATE, null);
-    						}
-    					} else {
-    						userProfile.put(Consts.KEY_LAST_LOGIN_DATE, null);
-    					}
+                    	userProfile = convertDataTypes(userProfile);
     				}
                     method.invoke(obj,
                                   new Object[] {userProfile});
@@ -230,4 +207,33 @@ public class MapAttributeFilter
         request.setAttribute(Consts.PORTAL_CONTEXT_KEY,
                              rq.getAttribute(Consts.PORTAL_CONTEXT_KEY));
     }
+
+	private Map convertDataTypes(Map userProfile) {
+		// convert last change date and last login date to java.util.Date type
+		DateFormat format = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
+		String lastChangeDateString = (String) userProfile.get(Consts.KEY_LAST_CHANGE_DATE);
+		if ((lastChangeDateString != null)
+				&& !("".equals(lastChangeDateString.trim()))) {
+			try {
+				userProfile.put(Consts.KEY_LAST_CHANGE_DATE, format.parse(lastChangeDateString));
+			} catch (ParseException e) {
+				userProfile.put(Consts.KEY_LAST_CHANGE_DATE, null);
+			}
+		} else {
+			userProfile.put(Consts.KEY_LAST_CHANGE_DATE, null);
+		}
+		String lastLoginDateString = (String) userProfile.get(Consts.KEY_LAST_LOGIN_DATE);
+		if ((lastLoginDateString != null)
+				&& !("".equals(lastLoginDateString.trim()))) {
+			try {
+				userProfile.put(Consts.KEY_LAST_LOGIN_DATE, format.parse(lastLoginDateString));
+			} catch (ParseException e) {
+				userProfile.put(Consts.KEY_LAST_LOGIN_DATE, null);
+			}
+		} else {
+			userProfile.put(Consts.KEY_LAST_LOGIN_DATE, null);
+		}
+		
+		return userProfile;
+	}
 }
