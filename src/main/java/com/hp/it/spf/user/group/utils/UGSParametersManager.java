@@ -4,9 +4,16 @@
  */
 package com.hp.it.spf.user.group.utils;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.StringTokenizer;
 
+import com.hp.it.spf.sso.portal.AuthenticationConsts;
+import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+import com.vignette.portal.log.LogConfiguration;
 
 /**
  * UGS webservice parameters management class
@@ -31,8 +38,9 @@ public class UGSParametersManager {
     private String timeout = null;
 
 	private String siteNamePrefix = null;
+	
+	private Set<String> failOnErrorSites = null;
     
-
     private UGSParametersManager() {
         super();
         init();
@@ -74,12 +82,32 @@ public class UGSParametersManager {
             setPassword(parameters.getString(IUGSConstant.PASSWORD_PREFIX + mode));
             setTimeout(parameters.getString(IUGSConstant.TIMEOUT + mode));
 			setSiteNamePrefix(parameters.getString(IUGSConstant.SITE_NAME_PREFIX_PREFIX + mode));
+			
+			String siteString = parameters.getString(IUGSConstant.FAIL_ON_ERROR_SITES + mode);
+			Set<String> siteSet = new HashSet<String>();
+			// sites are divided by ,
+	        if (siteString != null) {
+	            StringTokenizer st = new StringTokenizer(siteString, ",");
+	            while (st.hasMoreElements()) {
+	                String site = (String)st.nextElement();
+	                siteSet.add(site.trim());
+	            }
+	        }
+	        setFailOnErrorSites(siteSet);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }    
 
-    public String getEndPoint() {
+	public Set<String> getFailOnErrorSites() {
+		return failOnErrorSites;
+	}
+
+	public void setFailOnErrorSites(Set<String> failOnErrorSites) {
+		this.failOnErrorSites = failOnErrorSites;
+	}
+
+	public String getEndPoint() {
         return endPoint;
     }
 

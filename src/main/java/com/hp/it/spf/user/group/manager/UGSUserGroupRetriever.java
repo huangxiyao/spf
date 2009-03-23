@@ -93,19 +93,23 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
 			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 				LOG.debug("Group returned by UGS: " + groupSet);
 			}
-            return groupSet;
         } catch (SiteDoesNotExistException ex) {
             String msg = "The site, "
                          + siteName
                          + ", doesn't exist in the UGS definition database"; 
             timeRecorder.recordError(Operation.GROUPS_CALL, ex);
             RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.GROUPS002, ex.getMessage());
-            throw new UserGroupsException(msg, ex);
+            if (UGSParametersManager.getInstance().getFailOnErrorSites().contains(siteName)) {
+            	throw new UserGroupsException(msg, ex);
+            }
         } catch (Exception ex) {      
             timeRecorder.recordError(Operation.GROUPS_CALL, ex);
             RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.GROUPS002, ex.getMessage());
-            throw new UserGroupsException(ex);
+            if (UGSParametersManager.getInstance().getFailOnErrorSites().contains(siteName)) {
+            	throw new UserGroupsException(ex);
+            }
         }
+        return groupSet;
     }
 
     /**
@@ -162,8 +166,7 @@ public class UGSUserGroupRetriever implements IUserGroupRetriever {
 	 * @param siteName portal site name
 	 * @return UGS site ID
 	 */
-	private String getUGSSiteID(String siteName)
-	{
+	private String getUGSSiteID(String siteName) {
 		return UGSParametersManager.getInstance().getSiteNamePrefix() + siteName;
 	}
 
