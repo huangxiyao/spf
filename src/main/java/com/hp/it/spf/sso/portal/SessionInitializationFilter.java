@@ -83,9 +83,6 @@ public class SessionInitializationFilter implements Filter {
             HttpServletResponse res = (HttpServletResponse)response;
             HttpSession session = req.getSession();
 
-            // if there is a error tag in session, which means that current
-            // request page is
-            // error handling page, don't need to do the session initialization.
             if (session.getAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR) == null) {
                 
                 // if HPP loggin, check if the main cookies (CL_Cookie) exist 
@@ -101,6 +98,11 @@ public class SessionInitializationFilter implements Filter {
                     return;
                 }
             } else {
+            	// if there is a error tag in session, which means that current
+                // request page is error handling page, cleanup session and error flag, 
+            	// then return guest user.
+            	
+            	AuthenticatorHelper.cleanupSession(req);
                 request.setAttribute(AuthenticationConsts.SSO_USERNAME, null);
             }
         }
@@ -154,7 +156,7 @@ public class SessionInitializationFilter implements Filter {
                .getAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR) != null) {
             HashMap map = new HashMap(3);
             map.put("errorCode", "Error system-user_synch_failure");
-            req.getSession().setAttribute("systemErrorPage", map);
+            req.getSession().setAttribute(ExceptionUtil.SESSION_ATTR_SYSTEM_ERROR_DATA, map);
 
             if (req.getRequestURI().toUpperCase().indexOf("ERROR") == -1) {
                 PortalURI uri = ExceptionUtil.redirectSystemErrorPage((PortalContext)req.getAttribute("portalContext"),
