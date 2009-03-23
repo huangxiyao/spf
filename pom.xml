@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -60,12 +60,12 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-hpp</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>wsdl4j</groupId>
@@ -100,7 +100,7 @@
 		<dependency>
 			<groupId>com.hp.it.cas.persona</groupId>
 			<artifactId>cas-persona</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -112,13 +112,13 @@
 		<dependency>
 			<groupId>com.hp.it.cas</groupId>
 			<artifactId>cas-security-dao</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.cas</groupId>
 			<artifactId>cas-security-custom-dao</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
