@@ -3,7 +3,7 @@
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-common-utilities</artifactId>
 	<name>SPF common utilities</name>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.3</version>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -71,9 +71,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-common-utilities</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-common-utilities</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-common-utilities</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-common-utilities-1.0.3</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-common-utilities-1.0.3</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-common-utilities-1.0.3</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
