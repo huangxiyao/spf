@@ -400,6 +400,9 @@ public class MockeryUtils {
                 allowing(entity).getProperty(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID);
                 will(returnValue(UserProfile.get(AuthenticationConsts.PROPERTY_PRIMARY_SITE_ID)));
                 
+                allowing(entity).getProperty(AuthenticationConsts.PROPERTY_LAST_LOGIN_DATE_ID);
+                will(returnValue(UserProfile.get(AuthenticationConsts.KEY_LAST_LOGIN_DATE)));
+                
                 allowing(entity).setProperty(with(any(String.class)), with(any(Object.class)));
                 
                 allowing(entity).save();

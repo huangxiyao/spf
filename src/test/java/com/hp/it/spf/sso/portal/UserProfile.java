@@ -30,6 +30,7 @@ public class UserProfile {
         userProfile.put(AuthenticationConsts.KEY_COUNTRY, "US");
         userProfile.put(AuthenticationConsts.KEY_LANGUAGE, "en");
         userProfile.put(AuthenticationConsts.KEY_LAST_CHANGE_DATE, new Date(2008, 9, 29, 17, 53, 25));
+        userProfile.put(AuthenticationConsts.KEY_LAST_LOGIN_DATE, new Date(2008, 9, 29, 17, 53, 25));
         userProfile.put(AuthenticationConsts.KEY_TIMEZONE, AuthenticationConsts.DEFAULT_TIMEZONE);
         Set group = new HashSet();
         group.add("LOCAL_TEST_GROUP");

@@ -291,6 +291,13 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     @SuppressWarnings("unchecked")
     protected void saveUserProfile2Session(User vapUser) {
         if (vapUser != null) {
+            // set last login date if user is same
+            if (userProfile.get(AuthenticationConsts.KEY_LAST_LOGIN_DATE) == null) {
+                Date lastLoginDate = (Date)vapUser.getProperty(AuthenticationConsts.PROPERTY_LAST_LOGIN_DATE_ID);
+                userProfile.put(AuthenticationConsts.KEY_LAST_LOGIN_DATE, lastLoginDate);
+            }
+            
+            // set user groups
             userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
                             Collections.list(Collections.enumeration(AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser)))));
         }
