@@ -4,7 +4,7 @@
 	<groupId>com.hp.it.spf.tools</groupId>
 	<artifactId>spf-anon-users-loader</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<name>SPF Anonymous Users Loader</name>
 	<description>
 		Tool loading anonymous users information present in the provided input file with
@@ -21,9 +21,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-anon-users-loader</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-anon-users-loader</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-anon-users-loader</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-anon-users-loader</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/tags/spf-anon-users-loader-1.0.2</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/tags/spf-anon-users-loader-1.0.2</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/tools/tags/spf-anon-users-loader-1.0.2</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
