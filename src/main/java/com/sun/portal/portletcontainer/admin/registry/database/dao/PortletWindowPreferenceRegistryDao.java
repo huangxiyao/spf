@@ -212,6 +212,45 @@ public class PortletWindowPreferenceRegistryDao {
     }
 
     /**
+     * remove specified Portlet Window Preference and all its related properties for none cloned portlet windows
+     * 
+     * @param portletName
+     *            portlet name
+     */
+    public void removeInitPortletWindowPreferences(String portletName) {
+        EntityManager em = emFactory.createEntityManager();
+
+        EntityTransaction tran = em.getTransaction();
+
+        String sql = "select x from PortletUserWindow x"
+                + " where x.portletName = x.portletWindowName and x.portletName = :portletName";
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("JPA SQL: " + sql);
+        }
+        try {
+            tran.begin();
+            Query query = em.createQuery(sql);
+            query.setParameter("portletName", portletName);
+            List result = query.getResultList();
+            for (Object object : result) {
+                em.remove(object);
+            }
+            // excute the sql to delete all the items in the database
+            tran.commit();
+        } catch (Exception ex) {
+            if (tran.isActive()) {
+                tran.rollback();            	
+            }
+            String message = "delete init portlet Window Preference error, portletName: " + portletName;
+            throw new PortletRegistryDBException(message, ex);
+        } finally {
+            if (em != null) {
+                em.close();            	
+            }
+        }
+    }
+
+    /**
      * update the specified portlet window preference object
      * 
      * @param portletWindowPreference
