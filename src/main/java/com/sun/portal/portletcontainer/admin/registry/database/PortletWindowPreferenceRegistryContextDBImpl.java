@@ -121,7 +121,7 @@ public class PortletWindowPreferenceRegistryContextDBImpl implements
         userPrefMap.putAll(prefMap);
 
         PortletRegistryUtils.setCollectionProperty(portletWindowPreference,
-                PortletRegistryTags.PREFERENCE_PROPERTIES_KEY, prefMap);
+                PortletRegistryTags.PREFERENCE_PROPERTIES_KEY, userPrefMap);
 
         // add all readonly map, if create, create readonly
         Map readOnlyMap = create ? prefMap : getPreferencesReadOnly(
