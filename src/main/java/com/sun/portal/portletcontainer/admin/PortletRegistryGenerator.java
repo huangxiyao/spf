@@ -154,6 +154,9 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
 //        createPortletRegistryElements( roleProperties, userInfoProperties, getWebAppRoles(jar), portletLang);
         createPortletRegistryElements(portletAppList, portletWindowList, portletWindowPreferenceList, roleProperties, userInfoProperties, portletWindowProperties, getWebAppRoles(jar), portletLang);
         
+        //cleanup portlets don't be used anymore
+        cleanPortletApps(portletAppList, portletWindowList, portletWindowPreferenceList);
+        
         PortletAppRegistryDao portletAppRegistryDao = new PortletAppRegistryDao();
         portletAppRegistryDao.addPortlets(portletAppList);
         logger.log(Level.FINE, "PSPL_CSPPAM0010", "save portletApps");
@@ -639,5 +642,17 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
         PortletRegistryContextAbstractFactory afactory = new PortletRegistryContextAbstractFactory();
         PortletRegistryContextFactory factory = afactory.getPortletRegistryContextFactory();
         return factory.getPortletRegistryContext();
+    }
+    
+    private void cleanPortletApps(List portletAppList, List portletWindowList, 
+    		List portletWindowPreferenceList) {
+    	/*
+    	 * 1. get all portlets belongs to this app (query by archive name);
+    	 * 2. compare with newAppList, and find the one doesn't use anymore;
+    	 * 3. call getPortletRegistryContext().removePortlet() method to cleanup the whole portlet doesn't be used
+    	 * 4. for each portletapp, remove old registration information;
+    	 * 5. for each portlet window, remove old registration information except the cloned ones;
+    	 * 6. for each portlet window preference, remove old registration information except the cloned ones;
+    	 * */
     }
 }
