@@ -649,11 +649,37 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
 			   List<PortletUserWindow> portletWindowPreferenceList) {
     	/*
     	 * 1. get all portlets belongs to this app (query by archive name);
-    	 * 2. compare with newAppList, and find the one doesn't use anymore;
+    	 * 2. compare with newAppList, and find the one doesn't be used anymore;
     	 * 3. call getPortletRegistryContext().removePortlet() method to cleanup the whole portlet doesn't be used
     	 * 4. for each portletapp, remove old registration information;
     	 * 5. for each portlet window, remove old registration information except the cloned ones;
     	 * 6. for each portlet window preference, remove old registration information except the cloned ones;
     	 * */
+    	PortletAppRegistryDao portletAppRegistryDao = new PortletAppRegistryDao();
+    	List<PortletApp> oldPortlets = portletAppRegistryDao.getPortletsForArchiveName(portletAppList.get(0).getArchiveName());
+    	for (PortletApp oldPortlet : oldPortlets) {
+			if (!portletAppList.contains(oldPortlet)) {
+				try {
+					//delete the portlet doesn't be used anymore
+					getPortletRegistryContext().removePortlet(oldPortlet.getName());
+				} catch (PortletRegistryException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+    	// retrieve the portlets will be overwritten
+    	oldPortlets = portletAppRegistryDao.getPortletsForArchiveName(portletAppList.get(0).getArchiveName());
+    	for (PortletApp oldPortlet : oldPortlets) {
+    		portletAppRegistryDao.removePortlet(oldPortlet.getName());
+		}
+    	// retrieve the portlet windows will be overwritten
+    	String portletName = portletWindowList.get(0).getPortletName();
+		String appName = portletName.substring(0, portletName.indexOf("."));
+		PortletWindowRegistryDao portletWindowRegistryDao = new PortletWindowRegistryDao();
+    	List<PortletWindow> oldWindows = portletWindowRegistryDao.getNonClonedPortletWindowsForAppName(appName);
+    	for (PortletWindow oldWindow : oldWindows) {
+    		portletWindowRegistryDao.removePortletWindow(oldWindow.getName());
+		}
     }
 }

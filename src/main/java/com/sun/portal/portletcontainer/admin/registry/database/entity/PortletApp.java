@@ -120,4 +120,27 @@ public class PortletApp implements Serializable {
 	public void setPortletAppProperties(Set<PortletAppProperties> portletAppProperties) {
 		this.portletAppProperties = portletAppProperties;
 	}
+
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof PortletApp))
+			return false;
+		PortletApp other = (PortletApp) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
 }

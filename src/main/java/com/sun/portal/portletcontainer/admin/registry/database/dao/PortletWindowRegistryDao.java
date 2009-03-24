@@ -249,4 +249,28 @@ public class PortletWindowRegistryDao {
 			em.close();
 		}	
 	}	
+	
+	@SuppressWarnings("unchecked")
+	public List<PortletWindow> getNonClonedPortletWindowsForAppName(String appName) {
+		EntityManager em = emFactory.createEntityManager();
+		
+		String sql = "select x"
+				   + " from PortletWindow x"
+				   + " where x.portletName like :appName%"
+				   + " and x.name = x.portletName";
+		if (LOG.isLoggable(Level.FINE)) {
+			LOG.fine("JPA SQL: " + sql);
+		}
+		
+		try {
+			Query query = em.createQuery(sql);
+			query.setParameter("appName", appName);
+			List<PortletWindow> list = query.getResultList();
+			return list;
+		} catch (Exception ex) {
+			throw new PortletRegistryDBException("getNonClonedPortletWindowsForAppName.", ex);
+		} finally {		
+			em.close();
+		}
+	}
 }
