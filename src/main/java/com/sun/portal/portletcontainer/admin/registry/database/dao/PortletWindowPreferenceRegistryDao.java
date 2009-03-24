@@ -223,7 +223,7 @@ public class PortletWindowPreferenceRegistryDao {
         EntityTransaction tran = em.getTransaction();
 
         String sql = "select x from PortletUserWindow x"
-                + " where x.portletName = x.portletWindowName and x.portletName = :portletName";
+                + " where x.portletName = x.windowName and x.portletName = :portletName";
         if (LOG.isLoggable(Level.FINE)) {
             LOG.fine("JPA SQL: " + sql);
         }
