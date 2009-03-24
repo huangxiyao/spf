@@ -235,13 +235,13 @@ public class PortletWindowPreferenceRegistryDao {
             for (Object object : result) {
                 em.remove(object);
             }
-            // excute the sql to delete all the items in the database
+            // execute the sql to delete all the items in the database
             tran.commit();
         } catch (Exception ex) {
             if (tran.isActive()) {
                 tran.rollback();            	
             }
-            String message = "delete init portlet Window Preference error, portletName: " + portletName;
+            String message = "removeNonClonedPortletWindowPreferences error, portletName: " + portletName;
             throw new PortletRegistryDBException(message, ex);
         } finally {
             if (em != null) {

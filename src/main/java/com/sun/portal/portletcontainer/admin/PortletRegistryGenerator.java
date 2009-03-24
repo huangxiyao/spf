@@ -673,7 +673,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
     	PortletWindowPreferenceRegistryDao windowPreferenceRegistryDao = new PortletWindowPreferenceRegistryDao();
     	for (PortletApp oldPortlet : oldPortlets) {
     		portletAppRegistryDao.removePortlet(oldPortlet.getName());
-    		portletWindowRegistryDao.removeNonClonedPortletWindowsForAppName(oldPortlet.getName());
+    		portletWindowRegistryDao.removeNonClonedPortletWindows(oldPortlet.getName());
             windowPreferenceRegistryDao.removeNonClonedPortletWindowPreferences(oldPortlet.getName());
 		}
     }
