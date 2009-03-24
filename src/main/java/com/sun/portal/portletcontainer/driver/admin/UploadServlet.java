@@ -34,8 +34,9 @@ import org.apache.commons.io.FilenameUtils;
  * UploadServlet is responsible for uploading the portlet war file
  */
 public class UploadServlet extends HttpServlet {
-    
-    private ServletContext context;
+	private static final long serialVersionUID = 1L;
+
+	private ServletContext context;
     
     private long maxUploadSize;
     
