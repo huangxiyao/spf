@@ -123,9 +123,9 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
     					 Properties portletWindowProperties,
     					 PortletLang portletLang) throws Exception {
     	
-        List portletAppList = new ArrayList();
-        List portletWindowList = new ArrayList();
-        List portletWindowPreferenceList = new ArrayList();
+        List<PortletApp> portletAppList = new ArrayList<PortletApp>();
+        List<PortletWindow> portletWindowList = new ArrayList<PortletWindow>();
+        List<PortletUserWindow> portletWindowPreferenceList = new ArrayList<PortletUserWindow>();
         
         JarFile jar = new JarFile(updatedArchiveFile);
         String configFileLocation = PortletRegistryHelper.getConfigFileLocation();
@@ -199,9 +199,9 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
      * @param portletLang
      * @throws PortletRegistryException
      */
-    private void createPortletRegistryElements(List portletAppList,
-    										   List portletWindowList,
-    										   List portletWindowPreferenceList,
+    private void createPortletRegistryElements(List<PortletApp> portletAppList,
+    										   List<PortletWindow> portletWindowList,
+    										   List<PortletUserWindow> portletWindowPreferenceList,
     										   Properties roleProperties, 
     										   Properties userInfoProperties, 
     										   Properties portletWindowProperties,
@@ -644,8 +644,9 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
         return factory.getPortletRegistryContext();
     }
     
-    private void cleanPortletApps(List portletAppList, List portletWindowList, 
-    		List portletWindowPreferenceList) {
+    private void cleanPortletApps(List<PortletApp> portletAppList,
+			   List<PortletWindow> portletWindowList,
+			   List<PortletUserWindow> portletWindowPreferenceList) {
     	/*
     	 * 1. get all portlets belongs to this app (query by archive name);
     	 * 2. compare with newAppList, and find the one doesn't use anymore;
