@@ -251,12 +251,12 @@ public class PortletWindowRegistryDao {
 	}	
 	
 	@SuppressWarnings("unchecked")
-	public List<PortletWindow> getNonClonedPortletWindowsForAppName(String appName) {
+	public List<PortletWindow> removeNonClonedPortletWindowsForAppName(String portletName) {
 		EntityManager em = emFactory.createEntityManager();
 		
 		String sql = "select x"
 				   + " from PortletWindow x"
-				   + " where x.portletName like :appName%"
+				   + " where x.portletName = :portletName%"
 				   + " and x.name = x.portletName";
 		if (LOG.isLoggable(Level.FINE)) {
 			LOG.fine("JPA SQL: " + sql);
@@ -264,8 +264,11 @@ public class PortletWindowRegistryDao {
 		
 		try {
 			Query query = em.createQuery(sql);
-			query.setParameter("appName", appName);
+			query.setParameter("portletName", portletName);
 			List<PortletWindow> list = query.getResultList();
+			for (Object object : list) {
+                em.remove(object);
+            }
 			return list;
 		} catch (Exception ex) {
 			throw new PortletRegistryDBException("getNonClonedPortletWindowsForAppName.", ex);

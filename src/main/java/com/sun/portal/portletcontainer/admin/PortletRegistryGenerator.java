@@ -155,7 +155,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
         createPortletRegistryElements(portletAppList, portletWindowList, portletWindowPreferenceList, roleProperties, userInfoProperties, portletWindowProperties, getWebAppRoles(jar), portletLang);
         
         //cleanup portlets don't be used anymore
-        cleanPortletApps(portletAppList, portletWindowList, portletWindowPreferenceList);
+        cleanPortletApps(portletAppList, portletWindowList);
         
         PortletAppRegistryDao portletAppRegistryDao = new PortletAppRegistryDao();
         portletAppRegistryDao.addPortlets(portletAppList);
@@ -645,8 +645,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
     }
     
     private void cleanPortletApps(List<PortletApp> portletAppList,
-			   List<PortletWindow> portletWindowList,
-			   List<PortletUserWindow> portletWindowPreferenceList) {
+			   List<PortletWindow> portletWindowList) {
     	/*
     	 * 1. get all portlets belongs to this app (query by archive name);
     	 * 2. compare with newAppList, and find the one doesn't be used anymore;
@@ -670,18 +669,12 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
 		}
     	// retrieve the portlets will be overwritten
     	oldPortlets = portletAppRegistryDao.getPortletsForArchiveName(portletAppList.get(0).getArchiveName());
+    	PortletWindowRegistryDao portletWindowRegistryDao = new PortletWindowRegistryDao();
     	PortletWindowPreferenceRegistryDao windowPreferenceRegistryDao = new PortletWindowPreferenceRegistryDao();
     	for (PortletApp oldPortlet : oldPortlets) {
     		portletAppRegistryDao.removePortlet(oldPortlet.getName());
-            windowPreferenceRegistryDao.removeInitPortletWindowPreferences(oldPortlet.getName());
-		}
-    	// retrieve the portlet windows will be overwritten
-    	String portletName = portletWindowList.get(0).getPortletName();
-		String appName = portletName.substring(0, portletName.indexOf("."));
-		PortletWindowRegistryDao portletWindowRegistryDao = new PortletWindowRegistryDao();
-    	List<PortletWindow> oldWindows = portletWindowRegistryDao.getNonClonedPortletWindowsForAppName(appName);
-    	for (PortletWindow oldWindow : oldWindows) {
-    		portletWindowRegistryDao.removePortletWindow(oldWindow.getName());
+    		portletWindowRegistryDao.removeNonClonedPortletWindowsForAppName(oldPortlet.getName());
+            windowPreferenceRegistryDao.removeNonClonedPortletWindowPreferences(oldPortlet.getName());
 		}
     }
 }

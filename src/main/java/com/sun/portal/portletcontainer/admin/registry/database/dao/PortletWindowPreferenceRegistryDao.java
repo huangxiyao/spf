@@ -217,7 +217,7 @@ public class PortletWindowPreferenceRegistryDao {
      * @param portletName
      *            portlet name
      */
-    public void removeInitPortletWindowPreferences(String portletName) {
+    public void removeNonClonedPortletWindowPreferences(String portletName) {
         EntityManager em = emFactory.createEntityManager();
 
         EntityTransaction tran = em.getTransaction();
