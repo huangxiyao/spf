@@ -670,8 +670,10 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
 		}
     	// retrieve the portlets will be overwritten
     	oldPortlets = portletAppRegistryDao.getPortletsForArchiveName(portletAppList.get(0).getArchiveName());
+    	PortletWindowPreferenceRegistryDao windowPreferenceRegistryDao = new PortletWindowPreferenceRegistryDao();
     	for (PortletApp oldPortlet : oldPortlets) {
     		portletAppRegistryDao.removePortlet(oldPortlet.getName());
+            windowPreferenceRegistryDao.removeInitPortletWindowPreferences(oldPortlet.getName());
 		}
     	// retrieve the portlet windows will be overwritten
     	String portletName = portletWindowList.get(0).getPortletName();
