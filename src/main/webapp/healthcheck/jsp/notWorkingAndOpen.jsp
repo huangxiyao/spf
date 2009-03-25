@@ -1,15 +1,19 @@
 <%-------------------------------------
 File: notWorkingAndOpen.jsp
-View file for case where site is working.
+View file for case where site is not working or is closed.
 -------------------------------------%>
 <jsp:directive.page import="com.hp.it.spf.ac.healthcheck.web.References" />
 <jsp:directive.page import="com.hp.bco.pl.wpa.util.Environment" />
 <jsp:directive.page import="com.hp.it.spf.xa.ac.HealthcheckStatus" />
 <%
+	String portalPulseSource = "(pending)";
+	String openSignSource = "(pending)";
 	HealthcheckStatus status = HealthcheckStatus.retrieve(Environment
 			.getInstance().getContext());
-	String portalPulseSource = status.getPortalPulseSource();
-	String openSignSource = status.getOpenSignSource();
+	if (status != null) {
+		portalPulseSource = status.getPortalPulseSource();
+		openSignSource = status.getOpenSignSource();
+	}
 %>
 <html>
 <head>

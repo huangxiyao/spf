@@ -6,10 +6,14 @@ View file for case where site is both working and open.
 <jsp:directive.page import="com.hp.bco.pl.wpa.util.Environment" />
 <jsp:directive.page import="com.hp.it.spf.xa.ac.HealthcheckStatus" />
 <%
+	String portalPulseSource = "(pending)";
+	String openSignSource = "(pending)";
 	HealthcheckStatus status = HealthcheckStatus.retrieve(Environment
 			.getInstance().getContext());
-	String portalPulseSource = status.getPortalPulseSource();
-	String openSignSource = status.getOpenSignSource();
+	if (status != null) {
+		portalPulseSource = status.getPortalPulseSource();
+		openSignSource = status.getOpenSignSource();
+	}
 %>
 <html>
 <head>
