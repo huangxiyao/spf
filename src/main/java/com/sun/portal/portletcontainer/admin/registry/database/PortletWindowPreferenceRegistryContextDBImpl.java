@@ -49,7 +49,7 @@ public class PortletWindowPreferenceRegistryContextDBImpl implements
         windowPreferenceRegistryDao = new PortletWindowPreferenceRegistryDao();
     }
 
-    private Map getPreDefinedPreferences(String portletWindowName,
+    private Map getExistingPreferences(String portletWindowName,
             String userName, boolean readOnly) {
         String preferenceTag = readOnly ? PortletRegistryTags.PREFERENCE_READ_ONLY_KEY
                 : PortletRegistryTags.PREFERENCE_PROPERTIES_KEY;
@@ -59,28 +59,37 @@ public class PortletWindowPreferenceRegistryContextDBImpl implements
 
     public Map getPreferencesReadOnly(String portletWindowName, String userName)
             throws PortletRegistryException {
-        return getPreDefinedPreferences(portletWindowName, getDefaultUserName(), true);
+        return getExistingPreferences(portletWindowName, getDefaultUserName(), true);
     }
 
     public Map getPreferences(String portletWindowName, String userName)
             throws PortletRegistryException {
-        // predefined preferences
-        Map predefinedPrefMap = getPreDefinedPreferences(portletWindowName,
+    	// preference from portlet.xml
+    	Map predefinedPreMap = windowPreferenceRegistryDao.getDefaultPortletWindowPreferences(portletWindowName, 
+    			"default", PortletRegistryTags.PREFERENCE_PROPERTIES_KEY);
+    	
+        // preferences from config mode
+        Map configModePrefMap = getExistingPreferences(portletWindowName,
                 getDefaultUserName(), false);
-
-        Map tempUserPrefMap = getPreDefinedPreferences(portletWindowName,
+        
+        // preferences from other mode
+        Map customizedPrefMap = getExistingPreferences(portletWindowName,
                 userName, false);
-        // The Pref Map of the user has the same content as that of the
-        // predefined map and it is overwritten by user customizations
+        
+        // merge all preferences defined in portlet.xml, config mode and edit mode
         Map userPrefMap;
-        if (predefinedPrefMap != null) {
-            userPrefMap = new HashMap(predefinedPrefMap);
+        if (predefinedPreMap != null) {
+            userPrefMap = new HashMap(predefinedPreMap);
         } else {
             userPrefMap = new HashMap();
         }
 
-        if (tempUserPrefMap != null) {
-            userPrefMap.putAll(tempUserPrefMap);
+        if (configModePrefMap != null) {
+            userPrefMap.putAll(configModePrefMap);
+        }
+        
+        if (customizedPrefMap != null) {
+            userPrefMap.putAll(customizedPrefMap);
         }
         return userPrefMap;
     }
@@ -111,7 +120,7 @@ public class PortletWindowPreferenceRegistryContextDBImpl implements
             portletWindowPreference.setUserName(userName);
         }
 
-        Map userPrefMap = getPreDefinedPreferences(portletWindowName, userName,
+        Map userPrefMap = getExistingPreferences(portletWindowName, userName,
                 false);
         // If there is an exisiting content, override it with fresh content
         if (userPrefMap == null) {

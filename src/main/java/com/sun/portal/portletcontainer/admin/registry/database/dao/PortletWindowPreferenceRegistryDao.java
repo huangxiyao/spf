@@ -82,7 +82,7 @@ public class PortletWindowPreferenceRegistryDao {
     }
 
     /**
-     * get specified portlet window preference object accroding to window name
+     * get specified portlet window preference object according to window name
      * and user name
      * 
      * @param portletWindowName
@@ -289,6 +289,58 @@ public class PortletWindowPreferenceRegistryDao {
             if (em != null) {
                 em.close();            	
             }
+        }
+    }
+    
+    /**
+     * get specified portlet window preference defined in portlet.xml
+     * and user name
+     * 
+     * @param portletWindowName
+     * @param userName
+     * @return
+     */
+
+    public Map getDefaultPortletWindowPreferences(String portletWindowName,
+            String userName, String type) {
+        EntityManager em = emFactory.createEntityManager();
+
+        StringBuilder sql = new StringBuilder("select x.preferenceName, x.preferenceValue");
+        sql.append(" from PortletUserWindowPreference x");
+        sql.append(" where x.type = :type");
+        sql.append(" and x.portletUserWindow.windowName = x.portletUserWindow.portletName");
+        sql.append(" and x.portletUserWindow.userName = :userName");
+        sql.append(" and x.portletUserWindow.portletName in (");
+        sql.append(" select w.portletName from PortletUserWindow w where w.windowName = :windowName");
+        sql.append(")");
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("JPA SQL: " + sql);
+        }
+
+        try {
+            Query query = em.createQuery(sql.toString());
+            query.setParameter("windowName", portletWindowName);
+            query.setParameter("userName", userName);
+            query.setParameter("type", type);
+            List result = query.getResultList();
+            Map resultMap = new HashMap();
+            for (Object object : result) {
+                Object[] element = (Object[])object;
+                resultMap.put((String)element[0], (String)element[1]);
+            }
+            return resultMap;
+        } catch (NoResultException e) {
+        	if (LOG.isLoggable(Level.WARNING)){
+            	LOG.log(Level.WARNING, "not found predefined portlet Window Preference error, portletWindowName: "
+                        + portletWindowName + ", userName: " + userName);        		
+        	}
+            return null;
+        } catch (Exception ex) {
+        	String message = "get portlet Window Preference error, portletWindowName: "
+                + portletWindowName + ", userName: " + userName;            
+        	throw new PortletRegistryDBException(message, ex);
+        } finally {
+            em.close();
         }
     }
 }
