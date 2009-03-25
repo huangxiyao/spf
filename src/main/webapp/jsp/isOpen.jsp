@@ -7,7 +7,7 @@
 <body bgcolor="#FFFFFF">
 <h1>Site is OPEN</h1>
 
-<p>The portal at this site has been marked <b>open</b>. This means
+<p>This site has been marked <b>open</b>. This means
 that, if the site is also working, it will be accessible to users.</p>
 
 <p>Check <b><a href="/healthcheck/isWorkingAndOpen.do">Working
