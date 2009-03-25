@@ -13,6 +13,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.sun.portal.portletcontainer.admin.database.exception.PortletRegistryDBException;
+import com.sun.portal.portletcontainer.admin.registry.PortletRegistryTags;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindow;
 
 public class PortletWindowPreferenceRegistryDao {
@@ -341,6 +342,51 @@ public class PortletWindowPreferenceRegistryDao {
         	throw new PortletRegistryDBException(message, ex);
         } finally {
             em.close();
+        }
+    }
+    
+    /**
+     * remove read-only Portlet Window Preference for a specific portlet
+     * 
+     * @param portletName
+     *            portlet name
+     */
+    public void removeReadOnlyPortletWindowPreferences(String portletName) {
+        EntityManager em = emFactory.createEntityManager();
+
+        EntityTransaction tran = em.getTransaction();
+
+        StringBuilder sql = new StringBuilder("select x from PortletUserWindowPreference x");
+        sql.append(" where x.portletUserWindow.portletName = :portletName");
+        sql.append(" and x.preferenceName in (");
+        sql.append(" select y.preferenceName from PortletUserWindowPreference y");
+        sql.append(" where y.type = :type and y.preferenceValue = :value");
+        sql.append(" )");
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("JPA SQL: " + sql);
+        }
+        try {
+            tran.begin();
+            Query query = em.createQuery(sql.toString());
+            query.setParameter("portletName", portletName);
+            query.setParameter("type", PortletRegistryTags.PREFERENCE_READ_ONLY_KEY);
+            query.setParameter("value", "true");
+            List result = query.getResultList();
+            for (Object object : result) {
+                em.remove(object);
+            }
+            // execute the sql to delete all the items in the database
+            tran.commit();
+        } catch (Exception ex) {
+            if (tran.isActive()) {
+                tran.rollback();            	
+            }
+            String message = "removeReadOnlyPortletWindowPreferences error, portletName: " + portletName;
+            throw new PortletRegistryDBException(message, ex);
+        } finally {
+            if (em != null) {
+                em.close();            	
+            }
         }
     }
 }
