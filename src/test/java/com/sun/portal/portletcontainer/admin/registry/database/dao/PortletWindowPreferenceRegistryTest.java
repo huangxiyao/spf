@@ -93,8 +93,8 @@ public class PortletWindowPreferenceRegistryTest extends TestCase {
                 .writeDocument(portletWindowPreferenceElementList);
 
         // for prePortletWindowPreferenceDBRegistry
-        prePortletWindowPreferenceDBRegistry.createPreferences(portletName,
-                portletName, defaultUserName, readOnlyPrefMap, true);
+        // prePortletWindowPreferenceDBRegistry.createPreferences(portletName,
+        //        portletName, defaultUserName, readOnlyPrefMap, true);
         prePortletWindowPreferenceDBRegistry.savePreferences(portletName,
                 portletName, defaultUserName, defaultPrefMap, false);
         prePortletWindowPreferenceDBRegistry.savePreferences(portletName,
