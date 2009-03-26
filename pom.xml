@@ -4,7 +4,7 @@
 	<artifactId>spf-open-sign</artifactId>
 	<packaging>war</packaging>
 	<name>SPF open-sign</name>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.3</version>
 	<description>Web application for the Shared Portal Framework open-sign. When this application is
 		running, it means the SPF site (cluster) is open. When this application is not
 		running, it means the SPF site (cluster) is closed.</description>
@@ -19,9 +19,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-open-sign</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-open-sign</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-open-sign</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-open-sign</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-open-sign-1.0.3</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-open-sign-1.0.3</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-open-sign-1.0.3</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
