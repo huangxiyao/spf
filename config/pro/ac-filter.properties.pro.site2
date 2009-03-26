@@ -22,8 +22,8 @@
 #   portal environment in which you use the filter will have at least one pool
 #   hostname, so YOU SHOULD NOT leave this property unset.
 #
-hppCanonical.poolHostnames=spp-itg-hpp.austin.hp.com
-athpCanonical.poolHostnames=spp-itg-athp.austin.hp.com
+hppCanonical.poolHostnames=spp-pro-hpp.austin.hp.com
+athpCanonical.poolHostnames=spp-pro-athp.austin.hp.com
 #
 # [id.]thisSiteHostnames
 #   The comma-delimited list of site hostnames for the particular pool
@@ -34,8 +34,8 @@ athpCanonical.poolHostnames=spp-itg-athp.austin.hp.com
 #   cluster of portal managed server instances), so YOU SHOULD NOT leave this
 #   property unset.
 #
-hppCanonical.thisSiteHostnames=spp-itg-site2-hpp.austin.hp.com
-athpCanonical.thisSiteHostnames=spp-itg-site2-athp.austin.hp.com
+hppCanonical.thisSiteHostnames=spp-pro-site2-hpp.austin.hp.com
+athpCanonical.thisSiteHostnames=spp-pro-site2-athp.austin.hp.com
 #
 # [id.]otherSiteHostnames
 #   The comma-delimited list of site hostnames for the particular pool
@@ -45,8 +45,8 @@ athpCanonical.thisSiteHostnames=spp-itg-site2-athp.austin.hp.com
 #   portal environment has just a single site (in which case there is no reason
 #   to be using the filter anyway), YOU SHOULD NOT leave this property unset.
 #
-hppCanonical.otherSiteHostnames=spp-itg-site1-hpp.austin.hp.com
-athpCanonical.otherSiteHostnames=spp-itg-site1-athp.austin.hp.com
+hppCanonical.otherSiteHostnames=spp-pro-site1-hpp.austin.hp.com
+athpCanonical.otherSiteHostnames=spp-pro-site1-athp.austin.hp.com
 #
 # [id.]siteCookieName
 #   The name to use when setting a session cookie which records which 
