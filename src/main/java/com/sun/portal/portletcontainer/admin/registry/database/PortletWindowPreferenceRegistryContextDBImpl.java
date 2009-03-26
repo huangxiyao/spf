@@ -54,33 +54,32 @@ public class PortletWindowPreferenceRegistryContextDBImpl implements
     }
 
     private Map getExistingPreferences(String portletWindowName,
-            String userName, boolean readOnly) {
-        String preferenceTag = readOnly ? PortletRegistryTags.PREFERENCE_READ_ONLY_KEY
-                : PortletRegistryTags.PREFERENCE_PROPERTIES_KEY;
+            String userName) {
         return windowPreferenceRegistryDao.getPortletWindowPreferences(
-                portletWindowName, userName, preferenceTag);
+                portletWindowName, userName, PortletRegistryTags.PREFERENCE_PROPERTIES_KEY);
     }
 
     public Map getPreferencesReadOnly(String portletWindowName, String userName)
             throws PortletRegistryException {
     	// get readonly preference from default scope (portlet.xml)
     	String portletName = windowRegistryDao.getPortletNameByWindowName(portletWindowName);
-        return getExistingPreferences(portletName, getDefaultUserName(), true);
+    	return windowPreferenceRegistryDao.getPortletWindowPreferences(
+    			portletName, getDefaultUserName(), PortletRegistryTags.PREFERENCE_READ_ONLY_KEY);
     }
 
     public Map getPreferences(String portletWindowName, String userName)
             throws PortletRegistryException {
     	// preference from portlet.xml
-    	Map predefinedPreMap = windowPreferenceRegistryDao.getDefaultPortletWindowPreferences(portletWindowName, 
-    			getDefaultUserName(), PortletRegistryTags.PREFERENCE_PROPERTIES_KEY);
+    	String portletName = windowRegistryDao.getPortletNameByWindowName(portletWindowName);
+    	Map predefinedPreMap = getExistingPreferences(portletName, getDefaultUserName());
     	
         // preferences from config mode
         Map configModePrefMap = getExistingPreferences(portletWindowName,
-                getDefaultUserName(), false);
+                getDefaultUserName());
         
         // preferences from other mode
         Map customizedPrefMap = getExistingPreferences(portletWindowName,
-                userName, false);
+                userName);
         
         // merge all preferences defined in portlet.xml, config mode and edit mode
         Map userPrefMap;
@@ -101,20 +100,13 @@ public class PortletWindowPreferenceRegistryContextDBImpl implements
     }
 
     public void savePreferences(String portletName, String portletWindowName,
-            String userName, Map prefMap) throws PortletRegistryException {
-        createPreferences(portletName, portletWindowName, userName, prefMap,
-                false);
+            String userName, Map prefMap, boolean readOnly)
+            throws PortletRegistryException {
+    	savePreferences(portletName, portletWindowName, userName, prefMap);
     }
 
     public void savePreferences(String portletName, String portletWindowName,
-            String userName, Map prefMap, boolean readOnly)
-            throws PortletRegistryException {
-        createPreferences(portletName, portletWindowName, userName, prefMap,
-                false);
-    }
-
-    public void createPreferences(String portletName, String portletWindowName,
-            String userName, Map prefMap, boolean create)
+            String userName, Map prefMap)
             throws PortletRegistryException {
         PortletUserWindow portletWindowPreference = windowPreferenceRegistryDao
                 .getPortletWindowPreference(portletWindowName, userName);
@@ -126,8 +118,7 @@ public class PortletWindowPreferenceRegistryContextDBImpl implements
             portletWindowPreference.setUserName(userName);
         }
 
-        Map userPrefMap = getExistingPreferences(portletWindowName, userName,
-                false);
+        Map userPrefMap = getExistingPreferences(portletWindowName, userName);
         // If there is an existing content, override it with fresh content
         if (userPrefMap == null) {
             userPrefMap = new HashMap();
@@ -147,14 +138,6 @@ public class PortletWindowPreferenceRegistryContextDBImpl implements
         PortletRegistryUtils.setCollectionProperty(portletWindowPreference,
                 PortletRegistryTags.PREFERENCE_PROPERTIES_KEY, userPrefMap);
 
-        // add all readonly map, if create, create readonly
-        
-//        Map readOnlyMap = create ? prefMap : getPreferencesReadOnly(
-//                portletName, userName);
-//        if (readOnlyMap != null) {
-//            PortletRegistryUtils.setCollectionProperty(portletWindowPreference,
-//                    PortletRegistryTags.PREFERENCE_READ_ONLY_KEY, readOnlyMap);
-//        }
         if (needCreate) {
             windowPreferenceRegistryDao
                     .addPortletWindowPreference(portletWindowPreference);
