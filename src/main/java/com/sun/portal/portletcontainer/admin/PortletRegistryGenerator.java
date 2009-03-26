@@ -216,9 +216,7 @@ public class PortletRegistryGenerator implements PortletRegistryTags {
             Object[] tokens = {"portlet.xml"};
             throw new PortletRegistryException("invalidWar", tokens);
         }
-        //retrive the current max row number
-        PortletWindowRegistryDao portletWindowRegistryDao = new PortletWindowRegistryDao();
-            
+
         for (int i = 0; i < portletDescriptors.size(); i++) {
             // Instantiate the objects required to write to the registry files
             portletApp = new PortletApp();
