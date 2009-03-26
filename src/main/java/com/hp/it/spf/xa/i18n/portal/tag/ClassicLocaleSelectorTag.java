@@ -244,18 +244,9 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 		labelStyle = null;
 		listClass = null;
 		listStyle = null;
-
-		// need current locale
-		Locale current = Locale.getDefault();
-		PortalContext portalContext = (PortalContext) pageContext.getRequest()
-				.getAttribute("portalContext");
-		if (portalContext != null) {
-			current = I18nUtility.getLocale(portalContext
-					.getHttpServletRequest());
-		}
-		sortInLocale = current;
+		sortInLocale = null;
 		sortInLocaleValue = null;
-		displayInLocale = current;
+		displayInLocale = null;
 		displayInLocaleValue = null;
 		order = ClassicLocaleSelectorProvider.ORDER_COUNTRY_FIRST;
 		orderValue = null;
@@ -286,10 +277,11 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 	 * JspException if the required parameters for that provider (ie the label
 	 * content) were not specified in the tag.
 	 * 
+	 * @param currentLocale The current locale to assume.
 	 * @return LocaleSelectorProvider
 	 * @throws JspException
 	 */
-	protected LocaleSelectorProvider getLocaleSelectorProvider()
+	protected LocaleSelectorProvider getLocaleSelectorProvider(Locale currentLocale)
 			throws JspException {
 
 		String labelContent = getLabelContent();
@@ -299,9 +291,16 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 			throw new JspException(msg);
 		}
 
-		// make the provider
+		// make the provider (and finalize the display locale which may have not
+		// been set - we cannot leave it set to null because the provider
+		// interprets that to mean "various" but we need an unset display locale
+		// to mean "current" unless the user really did set it to "various")
+		if ((displayInLocale == null)
+				&& !VARIOUS_LOCALE.equalsIgnoreCase(displayInLocaleValue)) {
+			displayInLocale = currentLocale;
+		}
 		PortalContext portalContext = (PortalContext) pageContext.getRequest()
-				.getAttribute("portalContext");
+		.getAttribute("portalContext");
 		ClassicLocaleSelectorProvider c = new ClassicLocaleSelectorProvider(
 				portalContext);
 
@@ -331,14 +330,8 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 		sortInLocaleValue = normalize(value);
 		if ((sortInLocaleValue == null)
 				|| CURRENT_LOCALE.equalsIgnoreCase(sortInLocaleValue)) {
-			PortalContext portalContext = (PortalContext) pageContext
-					.getRequest().getAttribute("portalContext");
-			if (portalContext != null) {
-				sortInLocale = I18nUtility.getLocale(portalContext
-						.getHttpServletRequest());
-			} else {
-				sortInLocale = Locale.getDefault();
-			}
+			// null means current locale
+			sortInLocale = null;
 		} else {
 			sortInLocale = I18nUtility.languageTagToLocale(value);
 		}
@@ -367,14 +360,10 @@ public class ClassicLocaleSelectorTag extends LocaleSelectorBaseTag {
 		displayInLocaleValue = normalize(value);
 		if ((displayInLocaleValue == null)
 				|| CURRENT_LOCALE.equalsIgnoreCase(displayInLocaleValue)) {
-			PortalContext portalContext = (PortalContext) pageContext
-					.getRequest().getAttribute("portalContext");
-			if (portalContext != null) {
-				displayInLocale = I18nUtility.getLocale(portalContext
-						.getHttpServletRequest());
-			} else {
-				displayInLocale = Locale.getDefault();
-			}
+			// null means current locale or various locale; we will later use
+			// displayInLocaleValue to distinguish (see
+			// getLocaleSelectorProvider method)
+			displayInLocale = null;
 		} else if (VARIOUS_LOCALE.equalsIgnoreCase(displayInLocaleValue)) {
 			displayInLocale = null;
 		} else {

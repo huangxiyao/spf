@@ -92,15 +92,7 @@ public class ClassicLocaleIndicatorTag extends LocaleIndicatorBaseTag {
 	 */
 	public ClassicLocaleIndicatorTag() {
 		super();
-		// need current locale
-		Locale current = Locale.getDefault();
-		PortalContext portalContext = (PortalContext) pageContext.getRequest()
-				.getAttribute("portalContext");
-		if (portalContext != null) {
-			current = I18nUtility.getLocale(portalContext
-					.getHttpServletRequest());
-		}
-		displayInLocale = current;
+		displayInLocale = null;
 		displayInLocaleValue = null;
 		order = I18nUtility.LOCALE_BY_COUNTRY;
 		orderValue = null;
@@ -130,14 +122,8 @@ public class ClassicLocaleIndicatorTag extends LocaleIndicatorBaseTag {
 		displayInLocaleValue = normalize(value);
 		if ((displayInLocaleValue == null)
 				|| CURRENT_LOCALE.equalsIgnoreCase(displayInLocaleValue)) {
-			PortalContext portalContext = (PortalContext) pageContext
-					.getRequest().getAttribute("portalContext");
-			if (portalContext != null) {
-				displayInLocale = I18nUtility.getLocale(portalContext
-						.getHttpServletRequest());
-			} else {
-				displayInLocale = Locale.getDefault();
-			}
+			// null means current locale
+			displayInLocale = null;
 		} else {
 			displayInLocale = I18nUtility.languageTagToLocale(value);
 		}

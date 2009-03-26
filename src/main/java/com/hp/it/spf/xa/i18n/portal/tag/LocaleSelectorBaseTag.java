@@ -197,8 +197,14 @@ public abstract class LocaleSelectorBaseTag extends TagSupport {
 
 		JspWriter out = pageContext.getOut();
 		try {
+			// Get the current locale.
+			PortalContext portalContext = (PortalContext) pageContext
+					.getRequest().getAttribute("portalContext");
+			HttpServletRequest request = portalContext.getHttpServletRequest();
+			Locale currentLocale = I18nUtility.getLocale(request);
+
 			// Get the locale selector provider, gets its HTML, and output it.
-			LocaleSelectorProvider l = getLocaleSelectorProvider();
+			LocaleSelectorProvider l = getLocaleSelectorProvider(currentLocale);
 			String value = l.getHTML(escapeEnabled, filterSpanEnabled);
 			if (value == null) {
 				value = "";
@@ -218,8 +224,8 @@ public abstract class LocaleSelectorBaseTag extends TagSupport {
 	 * depending on the particular style of contextual help, so this is
 	 * abstract.
 	 */
-	protected abstract LocaleSelectorProvider getLocaleSelectorProvider()
-			throws JspException;
+	protected abstract LocaleSelectorProvider getLocaleSelectorProvider(
+			Locale currentLocale) throws JspException;
 
 	/**
 	 * Normalize blank string values to null - so the return is either a
