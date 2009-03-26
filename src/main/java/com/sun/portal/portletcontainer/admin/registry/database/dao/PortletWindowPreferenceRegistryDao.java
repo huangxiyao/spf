@@ -312,7 +312,7 @@ public class PortletWindowPreferenceRegistryDao {
         sql.append(" and x.portletUserWindow.windowName = x.portletUserWindow.portletName");
         sql.append(" and x.portletUserWindow.userName = :userName");
         sql.append(" and x.portletUserWindow.portletName in (");
-        sql.append(" select w.portletName from PortletUserWindow w where w.windowName = :windowName");
+        sql.append(" select w.portletName from PortletWindow w where w.name = :windowName");
         sql.append(")");
         if (LOG.isLoggable(Level.FINE)) {
             LOG.fine("JPA SQL: " + sql);
@@ -351,42 +351,41 @@ public class PortletWindowPreferenceRegistryDao {
      * @param portletName
      *            portlet name
      */
-    public void removeReadOnlyPortletWindowPreferences(String portletName) {
+    public Map getPortletPreferenceByCriteria(String userName, String portletName, 
+    		String type, String value) {
         EntityManager em = emFactory.createEntityManager();
 
-        EntityTransaction tran = em.getTransaction();
-
-        StringBuilder sql = new StringBuilder("select x from PortletUserWindowPreference x");
-        sql.append(" where x.portletUserWindow.portletName = :portletName");
-        sql.append(" and x.preferenceName in (");
-        sql.append(" select y.preferenceName from PortletUserWindowPreference y");
-        sql.append(" where y.type = :type and y.preferenceValue = :value");
-        sql.append(" )");
+        StringBuilder sql = new StringBuilder("select x.preferenceName, x.preferenceValue from PortletUserWindowPreference x");
+        sql.append(" where x.portletUserWindow.windowName = :portletName");
+        sql.append(" and x.portletUserWindow.userName=:userName and x.type = :type and x.preferenceValue = :value");
         if (LOG.isLoggable(Level.FINE)) {
             LOG.fine("JPA SQL: " + sql);
         }
         try {
-            tran.begin();
             Query query = em.createQuery(sql.toString());
             query.setParameter("portletName", portletName);
-            query.setParameter("type", PortletRegistryTags.PREFERENCE_READ_ONLY_KEY);
-            query.setParameter("value", "true");
+            query.setParameter("userName", userName);
+            query.setParameter("type", type);
+            query.setParameter("value", value);
             List result = query.getResultList();
+            Map resultMap = new HashMap();
             for (Object object : result) {
-                em.remove(object);
+                Object[] element = (Object[])object;
+                resultMap.put((String)element[0], (String)element[1]);
             }
-            // execute the sql to delete all the items in the database
-            tran.commit();
+            return resultMap;
+        } catch (NoResultException e) {
+        	if (LOG.isLoggable(Level.WARNING)){
+            	LOG.log(Level.WARNING, "getPortletPreferenceByCriteria error, portletName: "
+                        + portletName + ", type: " + type + ", value: " + value);        		
+        	}
+            return null;
         } catch (Exception ex) {
-            if (tran.isActive()) {
-                tran.rollback();            	
-            }
-            String message = "removeReadOnlyPortletWindowPreferences error, portletName: " + portletName;
-            throw new PortletRegistryDBException(message, ex);
+        	String message = "getPortletPreferenceByCriteria error, portletName: "
+                + portletName + ", type: " + type + ", value: " + value;            
+        	throw new PortletRegistryDBException(message, ex);
         } finally {
-            if (em != null) {
-                em.close();            	
-            }
+            em.close();
         }
     }
 }

@@ -285,4 +285,31 @@ public class PortletWindowRegistryDao {
             }
 		}
 	}
+	
+	public String getPortletNameByWindowName(String windowName) {
+        EntityManager em = emFactory.createEntityManager();
+
+        String sql = "select x.portletName from PortletWindow x where x.name = :windowName";
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("JPA SQL: " + sql);
+        }
+
+        try {
+            Query query = em.createQuery(sql);
+            query.setParameter("windowName", windowName);
+            return (String)query.getSingleResult();
+        } catch (NoResultException e) {
+        	if (LOG.isLoggable(Level.WARNING)){
+            	LOG.log(Level.WARNING, "getPortletNameByWindowName error, portletWindowName: "
+                        + windowName);        		
+        	}
+            return null;
+        } catch (Exception ex) {
+        	String message = "getPortletNameByWindowName error, portletWindowName: "
+                + windowName;            
+        	throw new PortletRegistryDBException(message, ex);
+        } finally {
+            em.close();
+        }
+    }
 }
