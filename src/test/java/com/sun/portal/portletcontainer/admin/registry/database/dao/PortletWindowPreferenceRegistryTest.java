@@ -15,6 +15,8 @@ import com.sun.portal.portletcontainer.admin.registry.PortletWindowPreference;
 import com.sun.portal.portletcontainer.admin.registry.PortletWindowPreferenceRegistryContextImpl;
 import com.sun.portal.portletcontainer.admin.registry.PortletWindowPreferenceRegistryWriter;
 import com.sun.portal.portletcontainer.admin.registry.database.PortletWindowPreferenceRegistryContextDBImpl;
+import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindow;
+import com.sun.portal.portletcontainer.admin.registry.database.utils.PortletRegistryUtils;
 import com.sun.portal.portletcontainer.context.registry.PortletRegistryException;
 
 public class PortletWindowPreferenceRegistryTest extends TestCase {
@@ -61,6 +63,8 @@ public class PortletWindowPreferenceRegistryTest extends TestCase {
         defaultPrefMap.put("producerContext", "|producer");
         defaultPrefMap.put("producerHost", "|localhost");
         defaultPrefMap.put("isLocal", "|true");
+        
+        
         PortletRegistryElement portletWindowPreference = new PortletWindowPreference();
         portletWindowPreference.setPortletName(portletName);
         // portlet window name for default user is equal to portlet name
@@ -93,14 +97,40 @@ public class PortletWindowPreferenceRegistryTest extends TestCase {
                 .writeDocument(portletWindowPreferenceElementList);
 
         // for prePortletWindowPreferenceDBRegistry
-        // prePortletWindowPreferenceDBRegistry.createPreferences(portletName,
-        //        portletName, defaultUserName, readOnlyPrefMap, true);
-        prePortletWindowPreferenceDBRegistry.savePreferences(portletName,
-                portletName, defaultUserName, defaultPrefMap, false);
-        prePortletWindowPreferenceDBRegistry.savePreferences(portletName,
-                portletWindowName, defaultUserName, defaultPrefMap, false);
-        prePortletWindowPreferenceDBRegistry.savePreferences(portletName,
-                portletWindowName, userName, defaultPrefMap, false);
+        List portletWindowPreferenceList = new ArrayList();
+        
+        
+		PortletUserWindow portletWindowPreferenceDB = new PortletUserWindow();
+		portletWindowPreferenceDB.setPortletName(portletName);
+		// portlet window name for default user is equal to portlet name
+		portletWindowPreferenceDB.setWindowName(portletName);
+		portletWindowPreferenceDB.setUserName(defaultUserName);
+		PortletRegistryUtils.setCollectionProperty(portletWindowPreferenceDB,
+				PortletRegistryTags.PREFERENCE_READ_ONLY_KEY, readOnlyPrefMap);
+		PortletRegistryUtils.setCollectionProperty(portletWindowPreferenceDB,
+				PortletRegistryTags.PREFERENCE_PROPERTIES_KEY, defaultPrefMap);
+		portletWindowPreferenceList.add(portletWindowPreferenceDB);
+
+		PortletUserWindow portletWindowPreferenceDB2 = new PortletUserWindow();
+		portletWindowPreferenceDB2.setPortletName(portletName);
+		// portlet window name for default user is equal to portlet name
+		portletWindowPreferenceDB2.setWindowName(portletWindowName);
+		portletWindowPreferenceDB2.setUserName(defaultUserName);
+		PortletRegistryUtils.setCollectionProperty(portletWindowPreferenceDB2,
+				PortletRegistryTags.PREFERENCE_PROPERTIES_KEY, defaultPrefMap);
+		portletWindowPreferenceList.add(portletWindowPreferenceDB2);
+
+		PortletUserWindow portletWindowPreferenceDB3 = new PortletUserWindow();
+		portletWindowPreferenceDB3.setPortletName(portletName);
+		// portlet window name for default user is equal to portlet name
+		portletWindowPreferenceDB3.setWindowName(portletWindowName);
+		portletWindowPreferenceDB3.setUserName(userName);
+		PortletRegistryUtils.setCollectionProperty(portletWindowPreferenceDB3,
+				PortletRegistryTags.PREFERENCE_PROPERTIES_KEY, defaultPrefMap);
+		portletWindowPreferenceList.add(portletWindowPreferenceDB2);
+		
+		PortletWindowPreferenceRegistryDao windowPreferenceRegistryDao = new PortletWindowPreferenceRegistryDao();
+        windowPreferenceRegistryDao.addPortletWindowPreferences(portletWindowPreferenceList);
 
         portletWindowPreferenceRegistry = new PortletWindowPreferenceRegistryContextImpl();
         portletWindowPreferenceDBRegistry = new PortletWindowPreferenceRegistryContextDBImpl();

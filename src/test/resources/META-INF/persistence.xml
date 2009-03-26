@@ -13,9 +13,9 @@
     <properties>
 
          <property name="eclipselink.jdbc.user" value="openportal"/>
-         <property name="eclipselink.jdbc.password" value="wsrp"/>
-         <property name="eclipselink.jdbc.url" value="jdbc:oracle:thin:@kding:1521:openportal"/>
-         <property name="eclipselink.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>         
+         <property name="eclipselink.jdbc.password" value="openportal"/>
+         <property name="eclipselink.jdbc.url" value="jdbc:derby:C:/bea/user_projects/domains/openportal_v010_db_domain/derby/openportaldb"/>
+         <property name="eclipselink.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>         
 <!--
          <property name="eclipselink.logging.level" value="INFO"/>
          <property name="eclipselink.logging.file" value="C:\java\workspace\OpenPortalDBPersistence\logs\logs.txt"/>         
