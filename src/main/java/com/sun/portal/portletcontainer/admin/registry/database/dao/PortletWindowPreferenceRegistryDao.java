@@ -292,48 +292,5 @@ public class PortletWindowPreferenceRegistryDao {
             }
         }
     }
-        
-    /**
-     * get Portlet Window Preference for a specific criteria
-     * 
-     * @param portletName
-     *            portlet name
-     */
-    public Map getPortletPreferenceByCriteria(String userName, String portletName, 
-    		String type, String value) {
-        EntityManager em = emFactory.createEntityManager();
 
-        StringBuilder sql = new StringBuilder("select x.preferenceName, x.preferenceValue from PortletUserWindowPreference x");
-        sql.append(" where x.portletUserWindow.windowName = :portletName");
-        sql.append(" and x.portletUserWindow.userName=:userName and x.type = :type and x.preferenceValue = :value");
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.fine("JPA SQL: " + sql);
-        }
-        try {
-            Query query = em.createQuery(sql.toString());
-            query.setParameter("portletName", portletName);
-            query.setParameter("userName", userName);
-            query.setParameter("type", type);
-            query.setParameter("value", value);
-            List result = query.getResultList();
-            Map resultMap = new HashMap();
-            for (Object object : result) {
-                Object[] element = (Object[])object;
-                resultMap.put((String)element[0], (String)element[1]);
-            }
-            return resultMap;
-        } catch (NoResultException e) {
-        	if (LOG.isLoggable(Level.WARNING)){
-            	LOG.log(Level.WARNING, "getPortletPreferenceByCriteria error, portletName: "
-                        + portletName + ", type: " + type + ", value: " + value);        		
-        	}
-            return null;
-        } catch (Exception ex) {
-        	String message = "getPortletPreferenceByCriteria error, portletName: "
-                + portletName + ", type: " + type + ", value: " + value;            
-        	throw new PortletRegistryDBException(message, ex);
-        } finally {
-            em.close();
-        }
-    }
 }

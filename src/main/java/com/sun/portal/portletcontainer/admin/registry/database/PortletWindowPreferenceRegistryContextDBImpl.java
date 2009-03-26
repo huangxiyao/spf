@@ -127,12 +127,14 @@ public class PortletWindowPreferenceRegistryContextDBImpl implements
         userPrefMap.putAll(prefMap);
         
         // get all readonly preference
-        Map readonlyPreference = windowPreferenceRegistryDao.getPortletPreferenceByCriteria(getDefaultUserName(), 
-        		portletName, PortletRegistryTags.PREFERENCE_READ_ONLY_KEY, "true");
+        Map readonlyPreference = windowPreferenceRegistryDao.getPortletWindowPreferences(portletName, getDefaultUserName(), 
+        		PortletRegistryTags.PREFERENCE_READ_ONLY_KEY);
         Set readonlyKeySet = readonlyPreference.keySet();
         // remove readonly items
         for (Object item : readonlyKeySet) {
-        	userPrefMap.remove(item);
+        	if ("true".equals(readonlyPreference.get(item))) {
+            	userPrefMap.remove(item);        		
+        	}
         }
 
         PortletRegistryUtils.setCollectionProperty(portletWindowPreference,
