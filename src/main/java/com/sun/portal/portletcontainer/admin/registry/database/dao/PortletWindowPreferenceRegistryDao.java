@@ -346,7 +346,7 @@ public class PortletWindowPreferenceRegistryDao {
     }
     
     /**
-     * remove read-only Portlet Window Preference for a specific portlet
+     * get Portlet Window Preference for a specific criteria
      * 
      * @param portletName
      *            portlet name
