@@ -189,7 +189,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		String key = siteDNS + Utils.FED_PROP_SUFFIX;
 
 		if (rb == null) {
-			LOG.error("I18nUtility: isFederatedSite failed to open "
+			LOG.error("Utils: isFederatedSite failed to open "
 					+ Utils.SITE_FEDERATION + " properties file");
 			return false;
 		} else {
