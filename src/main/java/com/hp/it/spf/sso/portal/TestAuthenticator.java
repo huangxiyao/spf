@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import com.epicentric.common.website.I18nUtils;
@@ -23,6 +24,7 @@ import com.epicentric.common.website.Localizer;
 import com.epicentric.common.website.SessionUtils;
 import com.epicentric.site.Site;
 import com.epicentric.user.User;
+import com.hp.it.spf.xa.misc.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
 
 /**
@@ -40,10 +42,9 @@ public class TestAuthenticator extends AbstractAuthenticator {
 
 	private ResourceBundle prop;
 
-	private String profileFileName = null;
-
 	private final String VIGNETTE_PREFIX = "com.vignette.portal.attribute.portlet.";
 
+	private final String MESSAGEPANE = "messagePane";
 
     /**
      * Constructor for TestAuthenticator. It will get the resource bundle file
@@ -56,20 +57,31 @@ public class TestAuthenticator extends AbstractAuthenticator {
      */
     public TestAuthenticator(HttpServletRequest request) {
         this.request = request;
-        
-        profileFileName = retrieveProfileFile();
+
+        String profileFileName = retrieveProfileFile();
         try {
             LOG.info("Get Resource Bundle File = " + profileFileName);
             // Read current user's info.
             prop = ResourceBundle.getBundle(profileFileName);
-            LOG
-                    .info("Refresh Resource Bundle File for user "
-                            + profileFileName);
+            LOG.info("Refresh Resource Bundle File for user " + profileFileName + ".properties");
         } catch (MissingResourceException e) {
             LOG.info("No Resource Bundle File = " + profileFileName);
-            request.getSession().setAttribute(
-                    AuthenticationConsts.SESSION_ATTR_SSO_ERROR, "1");
-        }      
+            StringBuffer message = new StringBuffer("Cound not find " + profileFileName + ".properties");
+            String currentUser = (String) request.getSession().getAttribute("sandbox.username");
+			request.getSession().setAttribute("sandbox.username", rb.getString("CurrentUser"));
+			String profileFileName2 = retrieveProfileFile();
+            LOG.info("Get Resource Bundle File = " + profileFileName2);
+            // Read current user's info.
+            prop = ResourceBundle.getBundle(profileFileName2);
+            LOG.info("Refresh Resource Bundle File for user " + profileFileName2);
+            message.append(", use " + profileFileName2 + ".properties (default one) instead.");
+            message.append(" please create " + profileFileName + ".properties for user ");
+            message.append(currentUser);
+    		Site currentSite = AuthenticatorHelper.getCurrentSite(request);
+    		String currentSiteName = currentSite != null ? Utils.getEffectiveSite(request).getDNSName(): "console";
+            message.append(" on " + currentSiteName + " site in %domain_home%/sandbox_resoureces/ directory.");
+			request.getSession().setAttribute(MESSAGEPANE, message.toString());
+        }
     }
 
 	private String retrieveProfileFile() {
@@ -90,7 +102,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 		    return "console_" + currentUser;
 		}
 		Site currentSite = AuthenticatorHelper.getCurrentSite(request);
-		String currentSiteName = currentSite != null ? Utils.getEffectiveSite(request).getDNSName(): "console";
+		String currentSiteName = currentSite != null ? Utils.getEffectiveSiteDNS(request): "console";
 		return currentSiteName + "_" + currentUser;
 	}
 
@@ -193,6 +205,8 @@ public class TestAuthenticator extends AbstractAuthenticator {
 	 * @see com.hp.it.spf.sso.portal.IAuthenticator#execute()
 	 */
 	public void execute() {
+		String guestMode = request.getParameter("guestMode");
+		// if there is any error
 		// first time login or initSession
 		if (request.getSession().getAttribute("active") == null
 				|| "true".equalsIgnoreCase((String) request
@@ -202,7 +216,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 		boolean active = "true".equals(request.getSession().getAttribute(
 				"active"));
 		// guestMode is for logout
-		if ("true".equalsIgnoreCase(request.getParameter("guestMode"))) {
+		if ("true".equalsIgnoreCase(guestMode)) {
 			Localizer localizer = I18nUtils.getLocalizer(request
 					.getSession(false), request);
 			localizer.setLocale(Locale.ENGLISH);
@@ -225,6 +239,9 @@ public class TestAuthenticator extends AbstractAuthenticator {
 					request.setAttribute(VIGNETTE_PREFIX + portlet
 							+ ".javax.portlet.userinfo", request.getSession()
 							.getAttribute(AuthenticationConsts.USER_PROFILE_KEY));
+					// pass userProfile to portlets in vignette way
+					request.setAttribute(VIGNETTE_PREFIX + portlet
+							+ "." + Consts.PORTAL_CONTEXT_KEY, retrieveUserContextKeys(request));
 				}
 			}
 			User user = SessionUtils.getCurrentUser(request.getSession());
@@ -242,5 +259,45 @@ public class TestAuthenticator extends AbstractAuthenticator {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param request
+	 *            user original request
+	 * @return user context key map whose values are {@link String} objects
+	 */
+	private Map<String, String> retrieveUserContextKeys(HttpServletRequest request) {
+		Map<String, String> userContext = new HashMap<String, String>();
+		userContext.put(Consts.KEY_PORTAL_SITE_URL, Utils.getPortalSiteURL(request));
+		userContext.put(Consts.KEY_PORTAL_REQUEST_URL, Utils.getRequestURL(request));
+		userContext.put(Consts.KEY_PORTAL_SITE_NAME, Utils.getEffectiveSiteDNS(request));
+		userContext.put(Consts.KEY_PORTAL_SESSION_ID, request.getSession(true).getId());
+		userContext.put(Consts.KEY_SESSION_TOKEN, getHppSessionToken(request));
+		return userContext;
+	}
+
+	/**
+	 * @param request
+	 *            incoming user request
+	 * @return value of <code>SMSESSION</code> cookie set by HPP or empty string
+	 *         if non could be found
+	 */
+	private String getHppSessionToken(HttpServletRequest request) {
+		Cookie[] cookies = null;
+		// synchronize this as multiple WSRP threads will access the request in
+		// parallel and we don't
+		// know the underlying request implementation
+		synchronized (request) {
+			cookies = request.getCookies();
+		}
+		if (cookies != null) {
+			for (int i = 0, len = cookies.length; i < len; i++) {
+				Cookie cookie = cookies[i];
+				if ("SMSESSION".equals(cookie.getName())) {
+					return cookie.getValue();
+				}
+			}
+		}
+		return "";
 	}
 }
