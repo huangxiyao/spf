@@ -51,7 +51,7 @@ public abstract class FileInterpolatorController extends AbstractController {
 	 * Stores the default path to the view file, relative to where the
 	 * {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} searches.
 	 */
-	protected String VIEW_FILE_DEFAULT_FOLDER = "/html/";
+	public static String VIEW_FILE_DEFAULT_FOLDER = "/html/";
 
 	/**
 	 * Stores the name of the token-substitutions file to use for any file-based

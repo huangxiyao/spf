@@ -203,6 +203,15 @@ public class ConfigController extends AbstractController {
 			if (trans != null)
 				trans.setStatusIndicator(StatusIndicator.ERROR);
 		}
+		// Added includes filename error check.
+		// DSJ 2009/3/30
+		if ((errorCode = Utils.checkIncludesFilenameForErrors(request,
+				includesFilename)) != null) {
+			String errorMsg = I18nUtility.getMessage(request, errorCode);
+			addMessage(modelView, Consts.ERROR_MESSAGES, errorMsg);
+			if (trans != null)
+				trans.setStatusIndicator(StatusIndicator.ERROR);
+		}
 		if ((warnCode = Utils.checkViewFilenameForWarnings(request,
 				viewFilename)) != null) {
 			String warnMsg = I18nUtility.getMessage(request, warnCode);
@@ -210,7 +219,8 @@ public class ConfigController extends AbstractController {
 			if (trans != null)
 				trans.setStatusIndicator(StatusIndicator.WARNING);
 		}
-		if ((warnCode = Utils.checkIncludesFilenameForWarnings(request, includesFilename)) != null) {
+		if ((warnCode = Utils.checkIncludesFilenameForWarnings(request,
+				includesFilename)) != null) {
 			String warnMsg = I18nUtility.getMessage(request, warnCode);
 			addMessage(modelView, Consts.WARN_MESSAGES, warnMsg);
 			if (trans != null)
@@ -283,8 +293,15 @@ public class ConfigController extends AbstractController {
 				throw new InputErrorException(request, errorCode);
 			}
 
-			// Next edit-check the includes filename value. Actually because
-			// this is an optional field, there are no error conditions.
+			// Next edit-check the includes filename value. If errors found, do
+			// not store any of the new preferences.
+			// DSJ 2009/3/30
+
+			errorCode = Utils.checkIncludesFilenameForErrors(request,
+					includesFilename);
+			if (errorCode != null) {
+				throw new InputErrorException(request, errorCode);
+			}
 
 			// Next determine the launch-buttonless value. No error conditions
 			// possible here.

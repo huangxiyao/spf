@@ -47,12 +47,6 @@ public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 	/** View content model attribute. */
 	public static final String VIEW_CONTENT = "viewContent";
 
-	/**
-	 * Portlet resource bundle directory sub-folder containing the HTML files to
-	 * view.
-	 */
-	public static final String HTML_FILE_FOLD = "/html/";
-
 	/** Error code: internal error. */
 	public static final String ERROR_CODE_INTERNAL = "error.internal";
 	
@@ -62,9 +56,14 @@ public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 	/** Error code: view filename was blank. */
 	public static final String ERROR_CODE_VIEW_FILENAME_NULL = "error.nullFilename";
 
-	/** Error code: view filename contained path information. */
+	/** Error code: view filename contained problem in path. */
 	public static final String ERROR_CODE_VIEW_FILENAME_PATH = "error.pathInFilename";
 
+	// Added for error in includes filename.
+	// DSJ 2009/3/30
+	/** Error code: token substitution file contained problem in path. */
+	public static final String ERROR_CODE_INCLUDES_FILENAME_PATH = "error.pathInSubsFilename";
+		
 	/** Warning code: view file not found or empty during config mode. */
 	public static final String WARN_CODE_VIEW_FILE_NULL = "warn.nullFile";
 

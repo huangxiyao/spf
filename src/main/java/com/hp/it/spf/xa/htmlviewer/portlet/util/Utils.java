@@ -15,6 +15,7 @@ import org.springframework.web.portlet.ModelAndView;
 
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+import com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController;
 
 /**
  * Container class for common utility methods used within the
@@ -60,6 +61,29 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 	}
 
 	/**
+	 * Checks the indicated includes file name for error conditions given the
+	 * particular request, returning the particular error code for the first
+	 * error condition found, or null if no errors are found. The only checked
+	 * error condition is a filename containing a parent directory reference.
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @param includesFilename
+	 *            The includes file name.
+	 * @return error code (or null if no errors found).
+	 */
+	public static String checkIncludesFilenameForErrors(PortletRequest request,
+			String includesFilename) {
+		// Added check for parent directory reference.
+		// DSJ 2009/3/30
+		if ((includesFilename != null)
+				&& (includesFilename.indexOf("..") != -1)) {
+			return Consts.ERROR_CODE_INCLUDES_FILENAME_PATH;
+		}
+		return null;
+	}
+
+	/**
 	 * Checks the indicated view file name for warning conditions given the
 	 * particular request, returning the particular warning code for the first
 	 * warning condition found, or null if no warnings are found. The checked
@@ -74,12 +98,23 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 	 */
 	public static String checkViewFilenameForWarnings(PortletRequest request,
 			String viewFilename) {
-		if (viewFilename != null && (viewFilename.trim().length() > 0)) {
+		if ((viewFilename != null) && (viewFilename.trim().length() > 0)) {
 			// treat as base file and check only for its existence/readability
+			// check first for filename as-is
+			viewFilename = slashify(viewFilename);
 			InputStream is = I18nUtility.getLocalizedFileStream(request,
-					Consts.HTML_FILE_FOLD + viewFilename.trim(), false);
+					viewFilename, false);
 			if (is == null) {
-				return Consts.WARN_CODE_VIEW_FILE_NULL;
+				// if not found, check for filename in default folder -
+				// DSJ 2009/3/30
+				viewFilename = FileInterpolatorController.VIEW_FILE_DEFAULT_FOLDER
+						+ viewFilename;
+				viewFilename = slashify(viewFilename);
+				is = I18nUtility.getLocalizedFileStream(request, viewFilename,
+						false);
+				if (is == null) {
+					return Consts.WARN_CODE_VIEW_FILE_NULL;
+				}
 			}
 		}
 		return null;
@@ -107,7 +142,7 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 		// see if we can load a property resource bundle for it off the
 		// classpath, or from the internal or external resource files
 		try {
-			includesFilename = includesFilename.trim();
+			includesFilename = slashify(includesFilename);
 			ResourceBundle resBundle = PropertyResourceBundleManager
 					.getBundle(includesFilename);
 			if (resBundle != null) {

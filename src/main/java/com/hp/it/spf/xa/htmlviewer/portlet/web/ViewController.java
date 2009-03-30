@@ -110,7 +110,7 @@ public class ViewController extends FileInterpolatorController {
 		// Don't prepend html/ folder automatically anymore, so as not to lock
 		// the administrator into any fixed folder structure.
 		// DSJ 2009/3/30
-		// viewFilename = Utils.slashify(Consts.HTML_FILE_FOLD + viewFilename);
+		// viewFilename = Utils.slashify(VIEW_FILE_DEFAULT_FOLDER + viewFilename);
 
 		// Finalize the includes filename by setting it into the class attribute
 		// if defined.
