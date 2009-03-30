@@ -48,7 +48,7 @@ public class ViewControllerTest extends TestCase {
 		MockRenderRequest renderRequest = new MockRenderRequest();
 		PortletPreferences pp = renderRequest.getPreferences();
 		pp.setValue(Consts.VIEW_FILENAME, "test.html");
-		assertEquals("/html/test.html", viewController
+		assertEquals("test.html", viewController
 				.getFilename(renderRequest));
 	}
 
@@ -80,7 +80,7 @@ public class ViewControllerTest extends TestCase {
 		MockRenderResponse renderResponse = new MockRenderResponse();
 		renderRequest.addPreferredLocale(new Locale("zh", "CN"));
 		PortletPreferences pp = renderRequest.getPreferences();
-		pp.setValue(Consts.VIEW_FILENAME, "test_basic.html");
+		pp.setValue(Consts.VIEW_FILENAME, "/html/test_basic.html");
 		ModelAndView modelAndView = (ModelAndView) viewController
 				.handleRenderRequest(renderRequest, renderResponse);
 		assertEquals("view", modelAndView.getViewName());
@@ -91,7 +91,7 @@ public class ViewControllerTest extends TestCase {
 				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Hello world!</p><p>Upper language: ZH<br>Lower country: cn</p></body></html>",
 				content);
 
-		pp.setValue(Consts.VIEW_FILENAME, "test_url_1.html");
+		pp.setValue(Consts.VIEW_FILENAME, "/html/test_url_1.html");
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(
 				renderRequest, renderResponse);
 		map = modelAndView.getModel();
