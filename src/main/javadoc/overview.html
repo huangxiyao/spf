@@ -1032,12 +1032,13 @@ filesystem to which the portlet JVM has at least read access.</p>
 	administrator can update your message bundles without restarting the
 	JVM). Your Spring application context configuration would look similar
 	to the one for <a href="#i18n.location.internal">internal resources</a>
-	- but be sure to specify loading from the <code>classpath:</code> like
-	this:</p>
+	- but be sure to specify loading from the <code>classpath:</code> and
+	specify a positive <code>cacheSeconds</code>, like this:</p>
 
 	<blockquote><pre>
 	&lt;bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource"&gt;
+		&lt;property name="cacheSeconds" value="1"/&gt;
 		&lt;property name="basenames"&gt;
 			&lt;list&gt;
 				&lt;value&gt;
@@ -6856,7 +6857,9 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 			<li>Documented new <code>{URL-ENCODE:<i>string</i>}</code> text
 			interpolation token. Documented that timezone user property is
 			returned as a string timezone ID; and added some generic
-			documentation about extended user properties.</li>
+			documentation about extended user properties. Documented cacheSeconds
+			for Spring <code>ReloadableResourceBundleMessageSource</code>
+			configuration.</li>
 		</ul>
 		</td>
 	</tr>
