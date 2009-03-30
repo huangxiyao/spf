@@ -100,12 +100,17 @@ public class ViewController extends FileInterpolatorController {
 
 		// Check the view filename for possible errors. Otherwise finalize it by
 		// making a valid relative path out of it.
+		viewFilename = Utils.slashify(viewFilename);
 		String errorCode = Utils.checkViewFilenameForErrors(request,
 				viewFilename);
 		if (errorCode != null) {
 			throw new InternalErrorException(request, errorCode);
 		}
-		viewFilename = Utils.slashify(Consts.HTML_FILE_FOLD + viewFilename);
+
+		// Don't prepend html/ folder automatically anymore, so as not to lock
+		// the administrator into any fixed folder structure.
+		// DSJ 2009/3/30
+		// viewFilename = Utils.slashify(Consts.HTML_FILE_FOLD + viewFilename);
 
 		// Finalize the includes filename by setting it into the class attribute
 		// if defined.

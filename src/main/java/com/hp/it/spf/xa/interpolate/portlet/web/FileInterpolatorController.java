@@ -48,6 +48,12 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
 public abstract class FileInterpolatorController extends AbstractController {
 
 	/**
+	 * Stores the default path to the view file, relative to where the
+	 * {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} searches.
+	 */
+	protected String VIEW_FILE_DEFAULT_FOLDER = "/html/";
+
+	/**
 	 * Stores the name of the token-substitutions file to use for any file-based
 	 * token substitutions. The default is null, which causes the
 	 * <code>default_includes.properties</code> file to be assumed. You can
@@ -137,11 +143,16 @@ public abstract class FileInterpolatorController extends AbstractController {
 	 * automatically.
 	 * </p>
 	 * <p>
-	 * <b>Note:</b> This method does not consider it an error if the
-	 * interpolated file content is blank (or not found). It will just pass it
-	 * to the concrete execute method anyway. It is the execute method's
-	 * responsibility to check for that condition if desired (since not all
-	 * implementations may consider empty or missing content to be an error).
+	 * <b>Note:</b> If the
+	 * {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} cannot find
+	 * the view file, this method will try again, looking for it in the location
+	 * indicated by {@link #VIEW_FILE_DEFAULT_FOLDER} this time. If still the
+	 * file cannot be found, this method does not consider it an error (nor is
+	 * it an error if the file is found but the interpolated file content is
+	 * blank). It will just pass the null or blank content to the concrete
+	 * execute method anyway. It is the execute method's responsibility to check
+	 * for that condition if desired (since not all implementations may consider
+	 * empty or missing content to be an error).
 	 * </p>
 	 * 
 	 * @param request
@@ -159,6 +170,16 @@ public abstract class FileInterpolatorController extends AbstractController {
 		FileInterpolator f = new FileInterpolator(request, response,
 				relativeName, this.includeFileName);
 		String fileContent = f.interpolate();
+		// If file not found (ie fileContent is null) then try again, looking
+		// relative to the default folder this time.
+		// DSJ 2009/3/30
+		if (fileContent == null) {
+			relativeName = VIEW_FILE_DEFAULT_FOLDER + relativeName;
+			relativeName = Utils.slashify(relativeName);
+			f = new FileInterpolator(request, response, relativeName,
+					this.includeFileName);
+			fileContent = f.interpolate();
+		}
 		return this.execute(request, response, fileContent);
 	}
 }
