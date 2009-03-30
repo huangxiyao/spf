@@ -172,6 +172,8 @@ public class TestAuthenticator extends AbstractAuthenticator {
                 groups.add(group);
             }
         }
+        // retrieve groups with invoking super method and merge them
+        groups.addAll(super.getUserGroup());
         return groups;
     }
 
