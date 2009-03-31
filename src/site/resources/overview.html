@@ -294,10 +294,9 @@ to configure the <code>htmlviewer</code> WAR.</p>
 if you use <a href="#using.storing.external">external view files</a> <b>and</b>
 you are putting the <i>portlet resource bundle folder</i> in a
 non-default location. (That is the external folder on the portlet
-server's filesystem, where you plan to put the <code>html/</code>
-subfolder that will contain your externalized view content - see the
-discussion about <a href="#using.storing.external">external view
-files</a> below.) <i>Otherwise you can skip this.</i></p>
+server's filesystem, where you plan to put your externalized view
+content - see the discussion about <a href="#using.storing.external">external
+view files</a> below.) <i>Otherwise you can skip this.</i></p>
 </blockquote>
 
 <p>To install this file:</p>
@@ -312,9 +311,8 @@ files</a> below.) <i>Otherwise you can skip this.</i></p>
 	<p>Customize the <code>portlet.bundleDirectory</code> property in
 	the file, so that it has your non-default path for the <i>portlet
 	resource bundle folder</i>. For example, if you plan to keep your external
-	view files in <code>/var/htmlviewer/content</code> (putting the view
-	files into the <code>html/</code> subfolder thereof), then you would
-	configure:</p>
+	view files somewhere under <code>/var/htmlviewer/content</code>, then
+	you would configure:</p>
 
 	<blockquote><pre>
 portlet.bundleDirectory=/var/htmlviewer/content
@@ -671,7 +669,10 @@ and other resource files: that is, <i>internal</i> versus <i>external</i>
 resources. The same ideas apply; you may want to read the discussion on
 <a
 	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.location">where
-to put your resources</a> in the SPF portlet utilities developer's guide.</p>
+to put your resources</a> in the SPF portlet utilities developer's guide. We
+recommend you put your content files outside of the <code>htmlviewer.war</code>;
+that way, when the SPF team provides an updated version of the WAR, you
+can upgrade to it without first adding your custom file.</p>
 </blockquote>
 
 <blockquote>
@@ -680,7 +681,8 @@ file, you can install it as an internal or external resource file, too.
 See the discussion about <a
 	href="#overview.installation.html_viewer_includes">installing <code>html_viewer_includes.properties</code></a>
 above, and <a href="#using.creating.configure">configuring the
-portlet instance</a> below.</p>
+portlet instance</a> below. As above, we recommend your put your token
+substitutions file outside of the WAR.</p>
 </blockquote>
 
 <blockquote>
@@ -712,12 +714,13 @@ WAR, here is how:</p>
 	<li>Explode the <code>htmlviewer.war</code> file as you normally
 	would any WAR, EAR, JAR or ZIP file. Eg on Unix you can use <code>jar
 	xvf htmlviewer.war</code> for this.</li>
-	<li>Create an <code>html/</code> folder at the root of the
-	exploded WAR.</li>
+	<li>For organizational purposes, create a desirable folder at the
+	root of the exploded WAR, to store your view file(s). For example,
+	create an <code>html/</code> folder at the root of the exploded WAR.</li>
 	<li>Copy your view file(s) - both the base file(s) and the
-	localized version(s) if any - into the <code>html/</code> folder. You
-	can put your file(s) into the <code>html/</code> folder directly, or
-	you can organize them into subfolders of the <code>html/</code>.
+	localized version(s) if any - into the folder you just created (eg, the
+	<code>html/</code> folder). You can put your file(s) into that folder
+	directly, or you can organize them into subfolders of that one.
 	However, be sure to keep each localized bundle - ie each base file and
 	its localized variants - in the same folder.</li>
 	<li>For each type of other static resource which you have, create
@@ -806,13 +809,14 @@ itself.</p>
 	<ol>
 		<li>Create the portlet resource bundle folder if it does not
 		already exist.</li>
-		<li>Create an <code>html/</code> subfolder within it.</li>
+		<li>Create a desirable folder underneath it for storing your view
+		file(s), such as an <code>html/</code> subfolder.</li>
 		<li>Copy your view file(s) - both the base file(s) and the
-		localized version(s) if any - into the <code>html/</code> subfolder.
-		You can put your file(s) into the <code>html/</code> folder directly,
-		or you can organize them into further subfolders of the <code>html/</code>
-		folder. However, be sure to keep each localized bundle - ie each base
-		file and its localized variants - in the same folder.</li>
+		localized version(s) if any - into the folder you created (eg, the <code>html/</code>
+		folder). You can put your file(s) into that folder directly, or you
+		can organize them into further subfolders. However, be sure to keep
+		each localized bundle - ie each base file and its localized variants -
+		in the same folder.</li>
 		<li>For each type of other static resource which you have, create
 		an appropriate subfolder within the portlet bundle folder, and
 		likewise copy those resource files into it (again, both the base and
@@ -915,53 +919,53 @@ at least a view file when you first enter the mode.</p>
 	<p>In this text box, enter the name of the view file containing the
 	content this portlet instance should render. In the case of a localized
 	bundle of view files, enter the base name. Include the file extension,
-	and any subfolders relative to the <code>html/</code> folder where you
-	put the content. Do not enter the <code>html/</code> folder itself.
-	Consider the example layout in the previous section:</p>
+	and any subfolders relative to the portlet bundle folder or portlet WAR
+	root. Consider the example layout in the previous section:</p>
 
 	<p>
 	<ul>
 		<li>When configuring the first portlet instance, you would enter
-		just <code>my_view_file_1.html</code>.</li>
+		just <code>/html/my_view_file_1.html</code>.</li>
 		<li>When configuring the second portlet instance, you would enter
-		just <code>my_view_file_2.html</code>.</li>
+		just <code>/html/my_view_file_2.html</code>.</li>
 	</ul>
-</p>
-</dd>
+	</p>
+	</dd>
 
-<dt><b>Token substitutions file:</b></dt>
-<dd>
-<p><b>Optional.</b> You only care about this input element if your
-view file content uses the special <code>{INCLUDE:<i>key</i>}</code>
-token to dynamically insert key-value pairs from the <i>token
-substitutions property file</i>; <b>and</b> that property file is named
-something other than the default (<code>html_viewer_includes.properties</code>)
-or exists in a subfolder. If so, then enter the filename here. Include
-the file extension, and any subfolder relative to the classloader
-folder, <code>htmlviewer.war</code> root, or <i>portlet resource
-bundle folder</i> where the file is located. (The file may be located in any
-folder searched by the system classloader, such as your "global
-resources" folder configured on the JVM classpath; or it may be anywhere
-inside the WAR or underneath the portlet resource bundle folder. See the
-discussion about <a href="#overview.installation.html_viewer_includes">installing
-<code>html_viewer_includes.properties</code></a> earlier in this guide.)</p>
+	<dt><b>Token substitutions file:</b></dt>
+	<dd>
+	<p><b>Optional.</b> You only care about this input element if your
+	view file content uses the special <code>{INCLUDE:<i>key</i>}</code>
+	token to dynamically insert key-value pairs from the <i>token
+	substitutions property file</i>; <b>and</b> that property file is named
+	something other than the default (<code>html_viewer_includes.properties</code>)
+	or exists in a subfolder. If so, then enter the filename here. Include
+	the file extension, and any subfolder relative to the classloader
+	folder, <code>htmlviewer.war</code> root, or <i>portlet resource
+	bundle folder</i> where the file is located. (The file may be located in
+	any folder searched by the system classloader, such as your "global
+	resources" folder configured on the JVM classpath; or it may be
+	anywhere inside the WAR or underneath the portlet resource bundle
+	folder. See the discussion about <a
+		href="#overview.installation.html_viewer_includes">installing <code>html_viewer_includes.properties</code></a>
+	earlier in this guide.)</p>
 
-<p>Consider the example layout in the previous section - for that
-example, you would enter <code>/properties/my_portlet_instance_1/my_includes.properties</code>.</p>
-</dd>
+	<p>Consider the example layout in the previous section - for that
+	example, you would enter <code>/properties/my_portlet_instance_1/my_includes.properties</code>.</p>
+	</dd>
 
-<dt><b>Open links in new buttonless window?</b></dt>
-<dd>
-<p><b>Optional.</b> The HTML viewer portlet has a secondary feature
-whereby it can rewrite hyperlinks in your view content so that, when
-clicked, the link is opened in a new, buttonless, child window. Only
-hyperlinks coded in your view file using the <code>&lt;A
-HREF="..."&gt;</code> tag are rewritten. JavaScript must be enabled in the
-browser for the rewrite to have any effect (if JavaScript is disabled,
-the link still functions but does not launch a new buttonless window).</p>
-<p>To enable this optional feature, click the checkmark in the
-configuration view. This feature is off by default.</p>
-</dd>
+	<dt><b>Open links in new buttonless window?</b></dt>
+	<dd>
+	<p><b>Optional.</b> The HTML viewer portlet has a secondary feature
+	whereby it can rewrite hyperlinks in your view content so that, when
+	clicked, the link is opened in a new, buttonless, child window. Only
+	hyperlinks coded in your view file using the <code>&lt;A
+	HREF="..."&gt;</code> tag are rewritten. JavaScript must be enabled in the
+	browser for the rewrite to have any effect (if JavaScript is disabled,
+	the link still functions but does not launch a new buttonless window).</p>
+	<p>To enable this optional feature, click the checkmark in the
+	configuration view. This feature is off by default.</p>
+	</dd>
 </dl>
 
 <p>Be sure to click the <code>Save</code> button to save your
@@ -1006,6 +1010,13 @@ preview the portlet to see and test your rendered content.</p>
 		and configured in the portlet's <code>config</code> mode. The file may
 		exist in a classloader folder or an internal or external resource
 		file.</td>
+	</tr>
+	<tr>
+		<td>1.2</td>
+		<td>Mar 30 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Documented that <code>html/</code> is no longer a required
+		subfolder for view files; any desirable subfolder can be used instead.</td>
 	</tr>
 </table>
 <p></p>
