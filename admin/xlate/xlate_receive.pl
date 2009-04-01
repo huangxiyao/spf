@@ -63,6 +63,7 @@
 # 1.0   05/05/07        GWM first version
 # 2.0   06/22/07        DSJ overhaul
 # 3.0   02/16/09        DSJ updated for Shared Portal Framework
+# 3.1   04/01/09        DSJ updated for Hebrew
 #
 ################################################################
 package main;
@@ -181,6 +182,10 @@ EOF
    &normalize_files ($in_text_pdir, $all_xlated_text_files_re, 
                      "_[a-zA-Z]{2}", $all_nonnormal_xlated_files_re);
 
+   print "----- Duplicating translated files for locales with multiple codes.\n";
+   &duplicate_files ($in_text_pdir, $all_text_files_re,
+                     "_[a-zA-Z]{2}", @all_multicode_locale_res);
+                     
    # Fourth, convert non-ASCII characters in the properties files (which are all
    # assumed to be UTF8) to proper Java \u notation.  This means running Java
    # native2ascii utility against each property file.
@@ -285,6 +290,10 @@ EOF
    print "----- Normalizing country-specific to language-only translated files.\n";
    &normalize_files ($in_media_pdir, $all_xlated_media_files_re, 
                      "_[a-zA-Z]{2}", $all_nonnormal_xlated_files_re);
+
+   print "----- Duplicating translated files for locales with multiple codes.\n";
+   &duplicate_files ($in_media_pdir, $all_media_files_re,
+                     "_[a-zA-Z]{2}", @all_multicode_locale_res);
 
    # Next, winnow media files down to just the translated versions, not base
    # versions or anything else.  Remove all the rest.

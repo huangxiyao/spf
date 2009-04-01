@@ -13,6 +13,7 @@
 # 2.1   12/13/07        DSJ updated for QXCR1000756101
 # 2.2   1/2/08          DSJ updated again for QXCR1000756101
 # 3.0   02/16/09        DSJ updated for Shared Portal Framework
+# 3.1   04/01/09        DSJ updated for Hebrew
 #
 ################################################################
 package main;
@@ -44,6 +45,7 @@ $all_xlated_files_re = "_[a-zA-Z]{2}\.[^\.]*\$";
 $all_xlated_text_files_re = "^.*_[a-zA-Z]{2}\.($msg_ext_re|$nonmsg_ext_re)\$";
 $all_xlated_media_files_re = "^.*_[a-zA-Z]{2}\.($media_ext_re)\$";
 $all_nonnormal_xlated_files_re = "_($nonnormal_tags_re)\.[^\.]*\$";
+@all_multicode_locale_res = ("he|iw", "yi|ji", "id|in"); 
 
 @no_xlate_msg_keys = ("description", "[^\=]*_comment");
 
@@ -532,6 +534,60 @@ sub convert_files  {
 
 }
 
+# Subroutine duplicate_files
+# 
+# The first parameter is the directory in which to operate.  The second 
+# parameter is the pattern of files to look for.  The third parameter is the
+# pattern of locale tag to look for within those files.  The remaining 
+# parameters are regexps of locales to duplicate: any file matching the first 
+# two patterns when merged, and matching one of those regexps, is copied to
+# each filename in the regexp that does not already exist.
+
+sub duplicate_files  {
+
+   local ($from_dir, $re1, $re2, @loc_res) = @_;
+   local ($from_file, $to_file, $filename, $locs, $loc);
+   local ($duplicated) = 0;
+
+   # Merge regexps on which to search.  Eg, if re1 is ".*\.properties" and
+   # re2 is "_en", then the merged regexp is ".*_en\.properties"
+
+   $re1 =~ s/(\.[^\.]*)$/${re2}$1/;
+
+   # Search for files matching merged regexp.  For each one found, compare
+   # against list of regexps (which are assumed to be alternative, equivalent
+   # locale codes like "he|iw".  If there is a match, split the regexp into
+   # the individual locale codes, and copy the file to a new file for each 
+   # one unless a file of that name already exists.
+   
+   opendir FILES, $from_dir or die "Cannot open directory $from_dir: $!\nDied";
+   while (defined ($filename = readdir (FILES)))  {
+      $from_file = "$from_dir/$filename";
+      if ( -f $from_file && $filename =~ /$re1/i )  {
+         foreach $locs (@loc_res)  {
+            if ($filename =~ /_($locs)\.[^\.]*$/)  {
+               foreach $loc (split (/\|/, $locs))  {
+                  $to_file = $from_file;
+                  $to_file =~ s/${re2}(\.[^\.]*)$/_${loc}$1/;
+                  unless (-f $to_file)  {
+                     print "Duplicating $from_file to $to_file\n";
+                     copy ($from_file, $to_file) or die "Cannot copy $from_file to $to_file: $!\nDied";
+                     $duplicated++;
+                  }
+               }
+               last;
+            }
+         }
+      }
+   }
+   closedir FILES or die "Cannot close directory $from_dir: $!\nDied";
+   unless ($duplicated)  {
+      print "No files duplicated in $from_dir\n";
+   }
+   return;
+   
+}
+
 # 
 # Subroutine normalize_files
 #
@@ -541,7 +597,6 @@ sub convert_files  {
 # is the exception pattern.  Every file matching the first two patterns when
 # merged, but not matching the exception pattern, the locale tag stripped from 
 # it.  
-
 
 sub normalize_files  {
 
