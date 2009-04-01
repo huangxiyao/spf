@@ -824,10 +824,14 @@ public class AuthenticatorHelper {
             }
             return u;
         } catch (EntityNotFoundException e) {
-            LOG.error("User with PROPERTY: " + property + " VALUE: "  + value + " not found");
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("User with PROPERTY: " + property + " VALUE: "  + value + " not found", e);
+            }
             return null;
         } catch (EntityPersistenceException e) {
-            LOG.error("Entity Persistence Exception when retrieving user.  PROPERTY: " + property + " VALUE: " + value, e);
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("Entity Persistence Exception when retrieving user.  PROPERTY: " + property + " VALUE: " + value, e);
+            }
             return null;
         }
     }
