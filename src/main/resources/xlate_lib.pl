@@ -377,9 +377,9 @@ sub unpack_files  {
       $file = "$from_dir/$file";
       if ( -f $file )  {
 
-         # Unpack ZIP files.
+         # Unpack ZIP and JAR files.
 
-         if ($file =~ /\.zip$/i)  {
+         if ($file =~ /\.(zip|jar)$/i)  {
             print "Unzipping $file to $to_dir\n";
             if (&is_ms()) {  # Microsoft: assume 7-Zip 7ZA installed
 # Replaced PowerArchiver (fee) with 7-Zip (free) - DSJ 2007/07/13
