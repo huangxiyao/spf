@@ -40,7 +40,7 @@ $all_media_files_re = "^.*\.($media_ext_re)\$";
 $all_vgn_portal_msg_files_re = "^[a-f0-9]{32}.*\.($msg_ext_re)\$";
 $all_spf_portal_msg_files_re = "^spf\-.*\.($msg_ext_re)\$";
 # PROJECT will be replaced with the project name at run time
-$all_project_portal_msg_files_re = "^PROJECT\-.*\.($msg_ext_re)\$";
+$all_project_portal_msg_files_re = "^PROJECT.*\.($msg_ext_re)\$";
 $all_xlated_files_re = "_[a-zA-Z]{2}\.[^\.]*\$";
 $all_xlated_text_files_re = "^.*_[a-zA-Z]{2}\.($msg_ext_re|$nonmsg_ext_re)\$";
 $all_xlated_media_files_re = "^.*_[a-zA-Z]{2}\.($media_ext_re)\$";
