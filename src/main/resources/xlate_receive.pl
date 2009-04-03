@@ -176,17 +176,22 @@ EOF
    # finding all files tagged with a country code (*_lc_CC.*) and stripping
    # the country code from it (unless the lc_CC is in an exception list).
    # Why are we doing this step?  See the Service Portal (OS) R2 localization 
-   # architecture (HLD) document.  This script was taken fron the SP OS design.
+   # architecture (HLD) document.  This script was taken from the SP OS design.
 
    print "----- Normalizing country-specific to language-only translated files.\n";
    &normalize_files ($in_text_pdir, $all_xlated_text_files_re, 
                      "_[a-zA-Z]{2}", $all_nonnormal_xlated_files_re);
 
+   # Fourth, certain language codes have multiple equivalent values; make sure
+   # there is a duplicate file for each one present.  For example, Hebrew is 
+   # both "he" and "iw", so if any "he" file is present, duplicate it to "iw"
+   # unless that already exists (and vice-versa).
+   
    print "----- Duplicating translated files for locales with multiple codes.\n";
    &duplicate_files ($in_text_pdir, $all_text_files_re,
                      "_[a-zA-Z]{2}", @all_multicode_locale_res);
                      
-   # Fourth, convert non-ASCII characters in the properties files (which are all
+   # Fifth, convert non-ASCII characters in the properties files (which are all
    # assumed to be UTF8) to proper Java \u notation.  This means running Java
    # native2ascii utility against each property file.
 
@@ -199,7 +204,7 @@ EOF
  
       # Next winnow text files down to just the translated versions of our 
       # application files (named spf-*.properties), project application files
-      # (named ProjectName-*.properties), Vignette message property files
+      # (named ProjectName*.properties), Vignette message property files
       # (named with Vignette GUID's), and misc text files (html, etc).  Only 
       # the translated versions of these files, not base versions or anything 
       # else.  Remove all the rest.
@@ -219,7 +224,7 @@ EOF
       # 'out' directory.
 
       print "----- Packing and staging remaining $pdir text files.\n";
-      $zip_file = "$in_out_pdir/xlated-${pdir}-msgs.zip";
+      $zip_file = "$in_out_pdir/xlated-${pdir}-bundle.zip";
       &zip_files ($in_text_pdir, $zip_file, $all_msg_text_files_re);
       &copy_files ($in_text_pdir, $in_out_pdir, $all_nonmsg_text_files_re);
 
@@ -245,7 +250,7 @@ EOF
       print "----- Packing remaining $pdir text files to TAR.\n";
       $tar_file = "$in_out_pdir/xlated-${pdir}-msgs.tar";
       &tar_files ($in_text_pdir, $tar_file, $all_msg_text_files_re);
-      $tar_file = "$in_out_pdir/xlated-${pdir}-html.tar";
+      $tar_file = "$in_out_pdir/xlated-${pdir}-text.tar";
       &tar_files ($in_text_pdir, $tar_file, $all_nonmsg_text_files_re);
    }
 
@@ -291,6 +296,11 @@ EOF
    &normalize_files ($in_media_pdir, $all_xlated_media_files_re, 
                      "_[a-zA-Z]{2}", $all_nonnormal_xlated_files_re);
 
+   # Fourth, certain language codes have multiple equivalent values; make sure
+   # there is a duplicate file for each one present.  For example, Hebrew is 
+   # both "he" and "iw", so if any "he" file is present, duplicate it to "iw"
+   # unless that already exists (and vice-versa).
+   
    print "----- Duplicating translated files for locales with multiple codes.\n";
    &duplicate_files ($in_media_pdir, $all_media_files_re,
                      "_[a-zA-Z]{2}", @all_multicode_locale_res);

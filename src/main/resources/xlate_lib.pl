@@ -29,8 +29,10 @@ $nonmsg_ext_re = "html|htm|xml|txt|css|js|rtf";
 $image_ext_re = "jpg|gif|tif";
 $misc_ext_re = "pdf|doc|mpg|wav|psd|wmv|avi|ppt";
 $media_ext_re = "$image_ext_re|$misc_ext_re";
+$text_ext_re = "$msg_ext_re|$nonmsg_ext_re";
 $nonnormal_tags_re = "es_es|fr_ca|pt_br|zh_tw|zh_hk";
 
+$all_files_re = "^.*\.($text_ext_re|$media_ext_re)\$";
 $all_msg_text_files_re = "^.*\.($msg_ext_re)\$";
 $all_nonmsg_text_files_re = "^.*\.($nonmsg_ext_re)\$";
 $all_text_files_re = "^.*\.($msg_ext_re|$nonmsg_ext_re)\$";

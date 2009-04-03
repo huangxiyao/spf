@@ -171,7 +171,6 @@ EOF
    &copy_files ($out_unpack_pdir, $out_text_pdir, $all_text_files_re);
    &copy_files ($out_in_pdir, $out_text_pdir, $all_text_files_re);
 
-   # Portal only:
    # Third, normalize Vignette message property files from en (English) or
    # en_US (US English) to base versions.  This means finding all *_en.properties
    # files named with Vignette GUID's (32 hex characters), and renaming them
@@ -181,17 +180,19 @@ EOF
    # overwriting base files or _en files.  Why are we doing this step?  See the
    # Service Portal (OS) R2 localization architecture (HLD) document (the design
    # for this script came from SP OS).
+   #
+   # Note: This step used to just apply to Vignette message property files.
+   # Now we apply it to all files, for both portal and portlet.  DSJ 2009/4/3
 
-   if ($pdir eq "portal")  {
-      print "----- Normalizing English to base $pdir message property files.\n";
-      &normalize_files ($out_text_pdir, $all_vgn_portal_msg_files_re, "_en");
-      &normalize_files ($out_text_pdir, $all_vgn_portal_msg_files_re, "_en_US");
-   }
+   print "----- Normalizing English to base $pdir text files.\n";
+   &normalize_files ($out_text_pdir, $all_text_files_re, "_en");
+   print "----- Normalizing US-English to base $pdir text files.\n";
+   &normalize_files ($out_text_pdir, $all_text_files_re, "_en_US");
 
    # Portal only:
    # Fourth, winnow text files down to just our framework application files
    # (named spf-*.properties), project application files (named
-   # ProjectName-*.properties), Vignette message property files
+   # ProjectName*.properties), Vignette message property files
    # (named with Vignette GUID's), and misc text files (html, etc).  Only the
    # base versions of these files, not xlated versions (if any).  Remove all 
    # the rest.
@@ -217,11 +218,14 @@ EOF
       &remove_files ($out_text_pdir, \@death_patterns, \@life_patterns);
    }
 
+   # Portal only:
    # Sixth, comment-out unneeded messages from surviving message property 
    # files, and remove any resulting empty message property files.
 
-   print "----- Commenting unneeded messages in $pdir message property files.\n";
-   &comment_files ($out_text_pdir, @no_xlate_msg_keys);
+   if ($pdir eq "portal")  {
+      print "----- Commenting unneeded messages in $pdir message property files.\n";
+      &comment_files ($out_text_pdir, @no_xlate_msg_keys);
+   }
 
    # Last, TAR the surviving text files to the 'out' directory.
 
@@ -260,6 +264,21 @@ EOF
    print "----- Gathering $pdir media files.\n";
    &copy_files ($out_unpack_pdir, $out_media_pdir, $all_media_files_re);
    &copy_files ($out_in_pdir, $out_media_pdir, $all_media_files_re);
+
+   # Third, normalize media files from en (English) or en_US (US English) to
+   # base versions.  This means finding all *_en tagged media files and renaming
+   # without the _en code.  This may overwrite existing base files, which is what
+   # we want.  Then we find all *_en_US tagged media files and rename them to\
+   # also lack the _en_US code, thus possibly overwriting base files or _en 
+   # files.
+   #
+   # Note: This step used to just apply to Vignette message property files.
+   # Now we apply it to all files, for both portal and portlet.  DSJ 2009/4/3
+
+   print "----- Normalizing English to base $pdir text files.\n";
+   &normalize_files ($out_text_pdir, $all_media_files_re, "_en");
+   print "----- Normalizing US-English to base $pdir text files.\n";
+   &normalize_files ($out_text_pdir, $all_media_files_re, "_en_US");
 
    # Third, winnow media files down to just the base versions, not xlated
    # versions (if any).  Remove all the rest.
