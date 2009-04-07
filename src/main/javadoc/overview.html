@@ -1,6 +1,7 @@
 <html>
 <head>
-<title>Shared Portal Framework - Common Utilities - Developer's Guide</title>
+<title>Shared Portal Framework - Common Utilities - Developer's
+Guide</title>
 </head>
 <body>
 <p>This artifact contains common utilities (Java API's and JSP tags)
@@ -340,7 +341,16 @@ your portal is using non-standard HTTP or HTTPS ports (eg in a sandbox).</p>
 <ul>
 	<li>
 	<p>Download the template for <code>portalurl.properties</code> from
-	<b><font color="blue">TBD</font></b>.</p>
+	the appropriate SPF configuration template JAR file. For portlet
+	applications, use the template in the <code>spf-portlet-config.jar</code>,
+	where you can find on the SPF team's Maven 2 repository here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+	(browse for the latest version - the JAR file may have the version
+	number affixed to the file name). SPF portal developers should use the
+	template in the <code>spf-portal-config.jar</code>, here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config/</a>.
+	In either case, extract the template from the JAR file once you have
+	downloaded it.</p>
 	</li>
 	<li>
 	<p>Customize the properties in the file as needed - see
@@ -1960,10 +1970,17 @@ String defaultID = PropertyResourceBundleManager.getString("my_config", Locale.J
 		<th>Description</th>
 	</tr>
 	<tr>
-		<td>Work in progress</td>
+		<td>1.0</td>
 		<td>Feb 15 2009</td>
 		<td>S. Jorgenson</td>
-		<td>Work in progress</td>
+		<td>Initial release.</td>
+	</tr>
+	<tr>
+		<td>1.1</td>
+		<td>Apr 7 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Updated TBD URL's for property file templates, with pointers
+		to SPF portlet config JAR.</td>
 	</tr>
 </table>
 <p></p>
