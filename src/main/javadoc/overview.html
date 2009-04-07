@@ -489,8 +489,17 @@ bundle folder</i> in a non-default location, <b>or</b> you are deploying the
 
 <ul>
 	<li>
-	<p>Download the template for <code>i18n_portlet_config.properties</code>
-	from <b><font color="blue">TBD</font></b>.</p>
+	<p>Download the template for <code>i18n_portlet_config.properties</code>.
+	It is packaged with the rest of the SPF portlet configuration file
+	templates, in the <code>spf-portlet-config.jar</code>. Download the
+	latest version of this JAR (typically a version number is affixed to
+	the JAR filename) and extract the <code>i18n_portlet_config.properties</code>
+	template file from it.</p>
+
+	<p>You can get the latest <code>spf-portlet-config.jar</code> from
+	the SPF team on their Maven 2 repository, here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+	(browse for the latest version).</p>
 	</li>
 
 	<li>
@@ -550,8 +559,17 @@ description</a> for the relay servlet.</p>
 
 <ul>
 	<li>
-	<p>Download the template for <code>init_relay.properties</code>
-	from <b><font color="blue">TBD</font></b>.</p>
+	<p>Download the template for <code>init_relay.properties</code>. It
+	is packaged with the rest of the SPF portlet configuration file
+	templates, in the <code>spf-portlet-config.jar</code>. Download the
+	latest version of this JAR (typically a version number is affixed to
+	the JAR filename) and extract the <code>init_relay.properties</code>
+	template file from it.</p>
+
+	<p>You can get the latest <code>spf-portlet-config.jar</code> from
+	the SPF team on their Maven 2 repository, here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+	(browse for the latest version).</p>
 	</li>
 
 	<li>
@@ -614,12 +632,6 @@ framework. Several facilities which SPF portlet developers will use
 site for WPA Portlet Edition here: <a
 	href="http://intranet.hp.com/Sites/SOA/TechnicalDocs/WPAPortlet/Pages/framework.aspx"><code>http://intranet.hp.com/Sites/SOA/TechnicalDocs/WPAPortlet/Pages/framework.aspx</code></a></p>
 
-<blockquote>
-<p><b>Note:</b> At this time, only the Portlet 1.0 (JSR-168)
-compliant version of WPAP is available and documented at the above link.
-The Portlet 2.0 (JSR-286) version is <font color="blue"><b>TBD</b></font>.</p>
-</blockquote>
-
 <a name="overview.other.spring">
 <h4>1.3.2. Spring Portlet MVC</h4>
 </a>
@@ -629,12 +641,6 @@ framework. The basic workflow of an SPF portlet, for example, is
 typically provided by Spring Portlet MVC. See the Spring Portlet MVC
 developer's site here: <a
 	href="http://static.springframework.org/spring/docs/2.0.x/reference/portlet.html"><code>http://static.springframework.org/spring/docs/2.0.x/reference/portlet.html</code></a></p>
-
-<blockquote>
-<p><b>Note:</b> The above link is for the Portlet 1.0 (JSR-168)
-version of Spring Portlet MVC. The Portlet 2.0 (JSR-286) Spring Portlet
-MVC documentation is <font color="blue"><b>TBD</b></font>.</p>
-</blockquote>
 
 <a name="overview.other.portlet">
 <h4>1.3.3. Portlet 2.0 (JSR 286)</h4>
@@ -2260,8 +2266,7 @@ activities. In this process:</p>
 </ol>
 
 <p>This process is not further documented in this guide. It is
-covered in the <a href="TBD">SPF Localization Guide</a> (<b><font
-	color="blue">TBD</font></b>).</p>
+covered in the <b>SPF Localization Guide</b>.</p>
 
 <hr>
 
@@ -4828,9 +4833,19 @@ url.hp=http://www.hp.com
 	</ul>
 
 	<p>A template for the token substitutions file, also named <code>default_includes.properties</code>,
-	is provided in the <a href="#overview.other.spf.common">SPF common
-	utilities</a>. You can download it from <b><font color="blue">TBD</font></b>,
-	then modify and rename it.</p>
+	is provided. You download it, then modify and rename it as needed, and
+	ship it with your application.</p>
+
+	<p>To get the <code>default_includes.properties</code> template,
+	download the <code>spf-portlet-config.jar</code>. Download the latest
+	version of this JAR (typically a version number is affixed to the JAR
+	filename) and extract the <code>default_includes.properties</code>
+	template file from it.</p>
+
+	<p>You can get the latest <code>spf-portlet-config.jar</code> from
+	the SPF team on their Maven 2 repository, here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+	(browse for the latest version).</p>
 	</dd>
 
 	<dt><a
@@ -6863,6 +6878,14 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		</ul>
 		</td>
 	</tr>
+	<tr>
+		<td>1.9</td>
+		<td>Apr 7 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Updated TBD URL's for property file templates, with pointers
+		to SPF portlet config JAR.</td>
+	</tr>
+
 </table>
 <p></p>
 
