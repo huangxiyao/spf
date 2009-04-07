@@ -137,6 +137,7 @@
 					<include>AtHPAuthenticator.properties</include>
 					<include>HPPAuthenticator.properties</include>
 					<include>StandaloneUserService-jndi.xml</include>
+					<include>META-INF/config/*.properties</include>
 				</includes>
 			</resource>
 		</resources>
