@@ -163,7 +163,7 @@ EOF
    print "----- Unpacking $pdir packages.\n";
    &unpack_files ($out_in_pdir, $out_unpack_pdir);
 
-   # First copy text files to 'text' directory from both 'unpack' and 'in' dirs.
+   # Now, copy text files to 'text' directory from both 'unpack' and 'in' dirs.
    # Why both places?  To pickup text files that had been staged to 'in' packed
    # or not.
 
@@ -171,7 +171,33 @@ EOF
    &copy_files ($out_unpack_pdir, $out_text_pdir, $all_text_files_re);
    &copy_files ($out_in_pdir, $out_text_pdir, $all_text_files_re);
 
-   # Third, normalize Vignette message property files from en (English) or
+   # Portal only:
+   # Next, winnow text files down to just our framework application files
+   # (named spf-*.properties), project application files (named
+   # ProjectName*.properties), Vignette message property files
+   # (named with Vignette GUID's), and misc text files (html, etc).  
+   # Remove all the rest.
+
+   if ($pdir eq "portal")  {
+      print "----- Removing unneeded $pdir text files.\n";
+      @death_patterns = ();
+      @life_patterns = ($all_vgn_portal_msg_files_re,
+                        $all_spf_portal_msg_files_re,
+                        $all_project_portal_msg_files_re,
+                        $all_nonmsg_text_files_re);
+      &remove_files ($out_text_pdir, \@death_patterns, \@life_patterns);
+   }
+
+   # Portal only:
+   # Next, comment-out unneeded messages from surviving message property 
+   # files, and remove any resulting empty message property files.
+
+   if ($pdir eq "portal")  {
+      print "----- Commenting unneeded messages in $pdir message property files.\n";
+      &comment_files ($out_text_pdir, @no_xlate_msg_keys);
+   }
+
+   # Next, normalize Vignette message property files from en (English) or
    # en_US (US English) to base versions.  This means finding all *_en.properties
    # files named with Vignette GUID's (32 hex characters), and renaming them
    # without the _en code.  This may overwrite existing base files, which is what
@@ -189,43 +215,13 @@ EOF
    print "----- Normalizing US-English to base $pdir text files.\n";
    &normalize_files ($out_text_pdir, $all_text_files_re, "_en_US");
 
-   # Portal only:
-   # Fourth, winnow text files down to just our framework application files
-   # (named spf-*.properties), project application files (named
-   # ProjectName*.properties), Vignette message property files
-   # (named with Vignette GUID's), and misc text files (html, etc).  Only the
-   # base versions of these files, not xlated versions (if any).  Remove all 
-   # the rest.
-
-   if ($pdir eq "portal")  {
-      print "----- Removing unneeded $pdir text files.\n";
-      @death_patterns = ($all_xlated_files_re);
-      @life_patterns = ($all_vgn_portal_msg_files_re,
-                        $all_spf_portal_msg_files_re,
-                        $all_project_portal_msg_files_re,
-                        $all_nonmsg_text_files_re);
-      &remove_files ($out_text_pdir, \@death_patterns, \@life_patterns);
-   }
-
-   # Portlet only:
    # Fifth, winnow text files down to just the base versions, not xlated
-   # versions (if any).  Remove all the rest.
+   # versions (if any).  Remove all the other files besides base text files.
 
-   if ($pdir eq "portlet")  {
-      print "----- Removing unneeded $pdir text files.\n";
-      @death_patterns = ($all_xlated_files_re);
-      @life_patterns = ($all_text_files_re);
-      &remove_files ($out_text_pdir, \@death_patterns, \@life_patterns);
-   }
-
-   # Portal only:
-   # Sixth, comment-out unneeded messages from surviving message property 
-   # files, and remove any resulting empty message property files.
-
-   if ($pdir eq "portal")  {
-      print "----- Commenting unneeded messages in $pdir message property files.\n";
-      &comment_files ($out_text_pdir, @no_xlate_msg_keys);
-   }
+   print "----- Removing unneeded $pdir text files.\n";
+   @death_patterns = ($all_xlated_files_re);
+   @life_patterns = ($all_text_files_re);
+   &remove_files ($out_text_pdir, \@death_patterns, \@life_patterns);
 
    # Last, TAR the surviving text files to the 'out' directory.
 
