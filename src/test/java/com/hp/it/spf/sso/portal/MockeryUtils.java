@@ -321,6 +321,7 @@ public class MockeryUtils {
                 allowing(request).getPathInfo();will(returnValue("/acme"));
                 
                 allowing(request).getParameter("guestMode");
+                allowing(request).getParameter("username");
                 will(returnValue("false"));
             }
         });
