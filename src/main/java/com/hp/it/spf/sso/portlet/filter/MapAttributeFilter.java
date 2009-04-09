@@ -168,7 +168,9 @@ public class MapAttributeFilter
             }
         }
         Map contextMap = (Map)request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
-        contextMap.put(Consts.KEY_PORTAL_PORTLET_ID, request.getProperty(Consts.KEY_PORTAL_PORTLET_ID));
+        if (contextMap != null){
+            contextMap.put(Consts.KEY_PORTAL_PORTLET_ID, request.getProperty(Consts.KEY_PORTAL_PORTLET_ID));        	
+        }
     }
 
     /**
