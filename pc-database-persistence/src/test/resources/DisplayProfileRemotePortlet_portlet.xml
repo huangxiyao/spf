@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+	version="2.0">
+
+	<portlet>
+		<portlet-name>DisplayProfileRemotePortlet</portlet-name>
+		<display-name>Display Profile Remote Portlet</display-name>
+		<portlet-class>com.sun.portal.portlet.DisplayProfileRemotePortlet</portlet-class>
+		<expiration-cache>0</expiration-cache>
+
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>VIEW</portlet-mode>
+			<portlet-mode>EDIT</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>DisplayProfileRemotePortlet</title>
+		</portlet-info>
+	</portlet>
+
+	<filter>
+		<display-name>MapAttributeFilter</display-name>
+		<filter-name>MapAttributeFilter</filter-name>
+		<filter-class>com.hp.it.spf.sso.portlet.filter.MapAttributeFilter</filter-class>
+		<lifecycle>ACTION_PHASE</lifecycle>
+		<lifecycle>RENDER_PHASE</lifecycle>
+		<lifecycle>RESOURCE_PHASE</lifecycle>
+		<lifecycle>EVENT_PHASE</lifecycle>
+	</filter>
+	<filter-mapping>
+		<filter-name>MapAttributeFilter</filter-name>
+		<portlet-name>*</portlet-name>
+	</filter-mapping>
+
+</portlet-app>
