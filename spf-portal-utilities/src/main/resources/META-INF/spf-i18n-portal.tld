@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+<taglib>
+	<tlibversion>1.0</tlibversion>
+	<jspversion>1.2</jspversion>
+	<shortname>spf-i18n-portal</shortname>
+	<uri>/spf-i18n-portal.tld</uri>
+	<info>
+		Tag library for Shared Portal Framework portal
+		internationalization tags.
+	</info>
+	<!-- Tag: <spf-i18n-portal:localizedFileURL> -->
+	<tag>
+		<name>localizedFileURL</name>
+		<tagclass>
+			com.hp.it.spf.xa.i18n.portal.tag.LocalizedFileURLTag
+		</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Expresses a URL for a proper best-fit localized version of
+			the given external file reference in the portal secondary
+			support files for the current component. This tag is for SPF
+			portal components.
+		</info>
+		<attribute>
+			<name>file</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fileKey</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- Tag: <spf-i18n-portal:i18nValue> -->
+	<tag>
+		<name>i18nValue</name>
+		<tagclass>com.hp.it.spf.xa.i18n.portal.tag.MessageTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>
+			Expresses a message string for the given message key in the
+			given portal component's resource bundles. If the given
+			component ID (string ID) is not found, then the current
+			portal component is assumed. If the message string is not
+			found, the given default is expressed instead. In any case,
+			the expressed message may optionally be HTML-escaped, and
+			HTML &lt;SPAN&gt; tags inserted automatically by Vignette
+			may optionally be suppressed. To insert general string
+			parameters into the message, put
+			&lt;spf-i18n-portal:i18nParam&gt; tags inside the tag body.
+			To insert contextual-help parameters into the message, put
+			&lt;spf-i18n-portal:i18nContextualHelpParam&gt; tags inside
+			the tag body. To insert global-help into the message, put
+			&lt;spf-i18n-portal:i18nGlobalHelpParam&gt; tags inside the
+			tag body. This tag is for SPF portal components.
+		</info>
+		<attribute>
+			<name>stringID</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>key</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>defaultValue</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>escape</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>filterSpan</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- Tag: <spf-i18n-portal:i18nParam> -->
+	<tag>
+		<name>i18nParam</name>
+		<tagclass>com.hp.it.spf.xa.i18n.portal.tag.ParamTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			A general string parameter for a surrounding
+			&lt;spf-i18n-portal:i18nValue&gt; tag. The given value will
+			be treated as a general string parameter to substitute into
+			the message string where it is formatted as per the
+			Java-standard MessageFormat specification. This tag is for
+			SPF portal components.
+		</info>
+		<attribute>
+			<name>value</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- Tag: <spf-i18n-portal:i18nClassicContextualHelpParam -->
+	<tag>
+		<name>i18nClassicContextualHelpParam</name>
+		<tagclass>
+			com.hp.it.spf.xa.i18n.portal.tag.ClassicContextualHelpParamTag
+		</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			A set of contextual-help parameters for a surrounding
+			&lt;spf-i18n-portal:i18nValue&gt; tag. These parameters are
+			used to populate a classic-style contextual-help hyperlink
+			corresponding to any special &lt;Contextual_Help&gt; token
+			found inside the message string. There are too many tag
+			attributes to describe here. This tag is for SPF portal
+			components.
+		</info>
+		<attribute>
+			<name>title</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>titleKey</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>content</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>contentKey</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>noScriptHref</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>borderStyle</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>borderClass</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>titleStyle</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>titleClass</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>contentStyle</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>contentClass</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- Tag: <spf-i18n-portal:i18nClassicGlobalHelpParam -->
+	<tag>
+		<name>i18nClassicGlobalHelpParam</name>
+		<tagclass>
+			com.hp.it.spf.xa.i18n.portal.tag.ClassicGlobalHelpParamTag
+		</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			A set of global-help parameters for a surrounding
+			&lt;spf-i18n-portal:i18nValue&gt; tag. These parameters are
+			used to populate a classic-style global-help hyperlink
+			corresponding to any special &lt;Global_Help&gt; token found
+			inside the message string. You can provide a document
+			fragment name for the global help page to scroll to, and you
+			can provide a set of Javascript window.open() window
+			features to use for the child window. This tag is for SPF
+			portal components.
+		</info>
+		<attribute>
+			<name>fragment</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>windowFeatures</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- Tag: <spf-i18n-portal:classicLocaleSelector> -->
+	<tag>
+		<name>classicLocaleSelector</name>
+		<tagclass>
+			com.hp.it.spf.xa.i18n.portal.tag.ClassicLocaleSelectorTag
+		</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Expresses a "classic"-style locale selector widget: a
+			drop-down list of the names and values for the available
+			locales, with the current locale pre-chosen, and including a
+			label message for prompting the user to make a selection, as
+			well as a submit button image. This tag is for SPF portal
+			components.
+		</info>
+		<attribute>
+			<name>label</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>labelKey</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>labelStyle</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>labelClass</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>listStyle</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>listClass</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>order</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>sortInLocale</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>displayInLocale</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>escape</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>filterSpan</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- Tag: <spf-i18n-portal:classicLocaleIndicator -->
+	<tag>
+		<name>classicLocaleIndicator</name>
+		<tagclass>
+			com.hp.it.spf.xa.i18n.portal.tag.ClassicLocaleIndicatorTag
+		</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Expresses the "classic"-style locale indicator widget: a
+			simple string displaying the name of the current locale.
+			This tag is for SPF portal components.
+		</info>
+		<attribute>
+			<name>order</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>displayInLocale</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>
