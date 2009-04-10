@@ -2,7 +2,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.1</version>
+		<version>1.0.2</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.apps</groupId>
@@ -86,8 +86,8 @@
 		<finalName>portletdriver</finalName>
 	</build>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portletdriver-1.0.0</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portletdriver-1.0.0</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portletdriver-1.0.0</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portletdriver</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portletdriver</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portletdriver</url>
 	</scm>
 </project>
