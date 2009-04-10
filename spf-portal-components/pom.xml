@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.1</version>
+		<version>1.0.2</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
@@ -23,9 +23,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-portal-components</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-portal-components</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-portal-components</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-components</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-components</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-components</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
