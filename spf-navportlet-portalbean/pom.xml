@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.it.spf.comps</groupId>
+	<artifactId>spf-navportlet-portalbean</artifactId>
+	<packaging>car</packaging>
+	<version>1.0.4-SNAPSHOT</version>
+	<name>SPF Navigation Portlet PortalBean</name>
+	<description>
+		PortalBean used to render portal navigation tree's node and its children. 
+	</description>
+	<inceptionYear>January 2009</inceptionYear>
+	<parent>
+		<artifactId>spf-pom</artifactId>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<version>1.0.1</version>
+	</parent>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-navportlet-portalbean</url>
+	</ciManagement>
+	<scm>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-navportlet-portalbean</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-navportlet-portalbean</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/comps/trunk/spf-navportlet-portalbean</url>
+	</scm>
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>vignette</groupId>
+			<artifactId>webinf-classes</artifactId>
+			<version>7.4.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>vignette</groupId>
+			<artifactId>vgn-portal-core</artifactId>
+			<version>7.4.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-portal-utilities</artifactId>
+			<version>1.0.3</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>
