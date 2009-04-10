@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="1"
+	component-id="spf-fed-logout-confirm-secondarypagetype"
+	component-type="Secondary Page Types"
+	description="Shared Portal Framework secondary page type for displaying a confirmation page to federated users after logout."
+	epi-build="251" epi-version="7.2.2" major-version="7" minor-version="2"
+	title="Shared Portal Framework - Federated Logout Confirmation Page"
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:detail>
+		<template-info allow-guest-access="true"
+			description="Shared Portal Framework secondary page type for displaying a confirmation page to federated users after logout."
+			friendly-id="PUBLIC_SPF_FED_LOGOUT" header-filename=""
+			id="spf-fed-logout-confirm-secondarypagetype" is-system="false"
+			title="Shared Portal Framework - Federated Logout Confirmation Page"
+			type="templatetype_page_content_include" visible="true">
+			<actions>
+				<action id="1" type="PRE_DISPLAY">
+					<class>
+						com.hp.it.spf.sso.portal.component.secondarypagetype.FedLogoutConfirmationDisplayAction
+					</class>
+				</action>
+			</actions>
+		</template-info>
+	</epideploy:detail>
+</epideploy:component>
