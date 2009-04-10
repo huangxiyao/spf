@@ -2,15 +2,15 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.1</version>
+		<version>1.0.2</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.apps</groupId>
 	<artifactId>spf-portal</artifactId>
 	<packaging>war</packaging>
-	<name>Modified Vignette Portal Application</name>
+	<name>SPF portal application</name>
 	<version>1.0.4-SNAPSHOT</version>
-	<description>Modified Vignette Portal Application</description>
+	<description>Modified Vignette Portal Application for the Shared Portal Framework.</description>
 	<dependencies>
 		<dependency>
 			<groupId>vignette</groupId>
@@ -137,8 +137,8 @@
 	</build>
 
   <scm>
-    <connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portal-1.0.1</connection>
-    <developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portal-1.0.1</developerConnection>
-    <url>http://samson.atl.hp.com/svn/spf/source/apps/tags/spf-portal-1.0.1</url>
+    <connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal</connection>
+    <developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal</developerConnection>
+    <url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal</url>
   </scm>
 </project>
