@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<description>
+		Templates for external configuration files used by the SPF
+		portlet framework.
+	</description>
+	<inceptionYear>April 2009</inceptionYear>
+	<parent>
+		<artifactId>spf-pom</artifactId>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<version>1.0.2-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.it.spf.xa</groupId>
+	<artifactId>spf-portlet-config</artifactId>
+	<name>SPF portlet configuration templates</name>
+	<version>1.0.0-SNAPSHOT</version>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>
+			http://samson.atl.hp.com:8080/hudson/job/spf-portlet-config
+		</url>
+	</ciManagement>
+	<scm>
+		<connection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-config
+		</connection>
+		<developerConnection>
+			scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-config
+		</developerConnection>
+		<url>
+			http://samson.atl.hp.com/svn/spf/source/xa/trunk/spf-portlet-config
+		</url>
+	</scm>
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-dependencies</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<excludeTransitive>true</excludeTransitive>
+							<includes>META-INF/config/*</includes>
+							<outputDirectory>
+								${project.build.directory}/stage/
+							</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>${project.build.directory}/stage/META-INF/config</directory>
+			</resource>
+		</resources>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>1.0.4-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-portlet-utilities</artifactId>
+			<version>1.0.4-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-hpp</artifactId>
+			<version>1.0.4-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>
