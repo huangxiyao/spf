@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.it.spf.apps</groupId>
+	<artifactId>spf-healthcheck</artifactId>
+	<packaging>war</packaging>
+	<name>SPF healthcheck application</name>
+	<version>1.0.5-SNAPSHOT</version>
+	<description>Shared Portal Framework Web application which performs automated healthchecks against
+		the SPF portal and the SPF open-sign, and relays the status to the
+		load-balancers (or any other interested clients).</description>
+	<inceptionYear>January 2009</inceptionYear>
+	<parent>
+		<artifactId>spf-pom</artifactId>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<version>1.0.1</version>
+	</parent>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-healthcheck</url>
+	</ciManagement>
+	<scm>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-healthcheck</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-healthcheck</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-healthcheck</url>
+	</scm>
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
+	<dependencies>
+		<dependency>
+			<groupId>com.hp.websat</groupId>
+			<artifactId>timber</artifactId>
+			<version>1.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.websat</groupId>
+			<artifactId>wpa-framework</artifactId>
+			<version>3.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>struts</groupId>
+			<artifactId>struts</artifactId>
+			<version>1.2.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+	</dependencies>
+</project>

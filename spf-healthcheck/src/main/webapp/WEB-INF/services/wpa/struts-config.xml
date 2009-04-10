@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+
+	<global-exceptions>
+		<exception 
+			type="java.lang.Exception"
+			handler="com.hp.bco.pl.wpa.action.WPAExceptionHandler"
+			path="/wpa/jsp/Error.jsp" 
+			key="wpa.error.general">
+		</exception>
+	</global-exceptions>
+
+
+	<global-forwards>
+		<forward 
+			className="com.hp.bco.pl.wpa.action.WPAActionForward" 
+			name="wpa.error" 
+			path="/wpa/jsp/Error.jsp">
+		</forward>
+	</global-forwards>
+
+
+	<action-mappings type="com.hp.bco.pl.wpa.action.WPAActionMapping">
+		<action
+			path="/wpa/test"
+			forward="/wpa/jsp/Test.jsp">
+		</action>
+	</action-mappings>
+
+
+	<controller 
+		processorClass="com.hp.bco.pl.wpa.action.WPARequestProcessor"
+		inputForward="false">
+	</controller>
+
+	<message-resources 
+		factory="com.hp.bco.pl.wpa.util.WPAMessageResourcesFactory"
+		parameter="Messages|PathMessages">
+	</message-resources>
+ 
+	<plug-in className="com.hp.bco.pl.wpa.configuration.environment.EnvironmentConfigurator"/>
+	<plug-in className="com.hp.bco.pl.wpa.configuration.errorcode.ErrorCodeConfigurator"/>
+	<plug-in className="com.hp.bco.pl.wpa.configuration.preprocessor.PreprocessorConfigurator"/>
+	<plug-in className="com.hp.bco.pl.wpa.configuration.markmenu.MarkMenuConfigurator"/>
+	<plug-in className="com.hp.bco.pl.wpa.configuration.navigation.NavManagerConfigurator"/>
+	<plug-in className="com.hp.bco.pl.wpa.configuration.httpheader.HttpHeaderConfigurator"/>
+	<plug-in className="com.hp.bco.pl.wpa.configuration.layout.LayoutConfigurator"/>
+	<plug-in className="com.hp.bco.pl.wpa.configuration.layout.LayoutMappingConfigurator"/>
+	<plug-in className="com.hp.bco.pl.wpa.configuration.cache.CacheConfigurator"/>
+	<plug-in className="com.hp.bco.pl.wpa.configuration.WPAConfiguratorController"/>
+
+</struts-config>
