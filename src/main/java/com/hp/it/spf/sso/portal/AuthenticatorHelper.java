@@ -631,7 +631,9 @@ public class AuthenticatorHelper {
             }
         }
         // request.setAttribute("expireSessionCookie", "1");
-        LOG.info("Cleaning up session end");
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Cleaning up session end");
+        }        
     }
 
     /**
