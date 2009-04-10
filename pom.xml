@@ -12,16 +12,16 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.1</version>
+		<version>1.0.2</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-open-sign</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-open-sign</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-open-sign</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/apps/trunk/spf-open-sign</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-open-sign</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-open-sign</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-open-sign</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
