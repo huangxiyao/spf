@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 	<description>
 		This POM encapsulates all the reporting features of the shared
-		portal framework.  Please modify at your own risk.
+		portal framework.
 	</description>
 	<scm>
 		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-pom-1.0.2</connection>
