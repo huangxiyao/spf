@@ -1,0 +1,86 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.hp.it.spf.tools</groupId>
+	<artifactId>spf-maven-car-plugin</artifactId>
+	<name>Maven CAR Plugin</name>
+	<version>1.0.1-SNAPSHOT</version>
+	<packaging>maven-plugin</packaging>
+
+	<description>
+		Maven plugin that provides packaging support for the
+		Vignette Component Archive (CAR) format.
+	</description>
+
+	<inceptionYear>January 2009</inceptionYear>
+
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-maven-car-plugin</url>
+	</ciManagement>
+
+	<scm>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-maven-car-plugin</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-maven-car-plugin</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-maven-car-plugin</url>
+	</scm>
+	
+		<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Internal Releases</name>
+			<url>http://samson.atl.hp.com:8081/nexus/content/repositories/releases</url>
+		</repository>
+		
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Internal Snapshots</name>
+			<url>http://samson.atl.hp.com:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+		
+		<site>
+			<id>cas.sdk</id>
+			<name>CAS SDK</name>
+			<!--  <url>scp://samson.atl.hp.com:/var/www/sdk/${project.artifactId}/${project.version}</url>  -->
+			<url>file:/var/www/sdk/${project.artifactId}/${project.version}</url>
+		</site>
+	</distributionManagement>
+
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-war-plugin</artifactId>
+			<version>2.1-alpha-2</version>
+		</dependency>
+	</dependencies>
+
+	<properties>
+		<java.version>1.5</java.version>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<inherited>true</inherited>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
