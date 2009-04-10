@@ -1,0 +1,34 @@
+/* Standard CSS classes for the HTMLViewer portlet application. */
+
+.spf-htmlviewer-config-error-message {
+	color: red;
+	font: bold;
+}
+.spf-htmlviewer-config-error-label {
+	color: red;
+	font: bold;
+}
+.spf-htmlviewer-internal-error-message {
+	/* reserved */
+}
+.spf-htmlviewer-internal-error-code {
+	font: italic smaller;
+}
+.spf-htmlviewer-config-info-message {
+	color: green;
+	font: bold;
+}
+.spf-htmlviewer-config-warning-message {
+	color: green;
+	font: bold;
+}
+.spf-htmlviewer-config-warning-label {
+	color: green;
+	font: bold;
+}
+.spf-htmlviewer-config-label {
+	font: bold;
+}
+.spf-htmlviewer-config-button {
+	/ * reserved */
+}
