@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.it.spf.tools</groupId>
+	<artifactId>spf-anon-users-loader</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0.3-SNAPSHOT</version>
+	<name>SPF Anonymous Users Loader</name>
+	<description>
+		Tool loading anonymous users information present in the provided input file with
+		Vignette portal database. Existing users's will be updated with the data from the file.
+	</description>
+	<inceptionYear>January 2009</inceptionYear>
+	<parent>
+		<artifactId>spf-pom</artifactId>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<version>1.0.1</version>
+	</parent>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-anon-users-loader</url>
+	</ciManagement>
+	<scm>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-anon-users-loader</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-anon-users-loader</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/tools/trunk/spf-anon-users-loader</url>
+	</scm>
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.5</version>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+			<groupId>vignette</groupId>
+			<artifactId>vgn-portal-core</artifactId>
+			<version>7.4.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>vignette</groupId>
+			<artifactId>vgn-portal-log</artifactId>
+			<version>7.4.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.sso</groupId>
+			<artifactId>spf-portal-session</artifactId>
+			<version>1.0.3</version>
+			<scope>provided</scope>
+		</dependency>
+    </dependencies>
+<!--
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>
+								${project.build.directory}/dependencies</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+-->
+</project>

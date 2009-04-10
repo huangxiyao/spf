@@ -1,0 +1,102 @@
+#SPF guest user locale and timezone mappings - 1 guest user for each row in the table			
+			
+#Language code	Country code	Java Timezone ID	Comments
+en		America/Los_Angeles	English (generic) (Vignette server default)
+en	US	America/Los_Angeles	English - USA
+en	CA	America/Montreal	English - Canada
+en	GB	Europe/London	English - UK
+en	AU	Australia/Sydney	English - Australia
+en	HK	Asia/Hong_Kong	English - Hong Kong
+en	SG	Asia/Singapore	English - Singapore
+en	IN	Asia/Calcutta	English - India
+en	NZ	Pacific/Auckland	English - New Zealand
+en	IE	Europe/Dublin	English - Ireland
+en	MY	Asia/Kuala_Lumpur	English - Malaysia
+en	TH	Asia/Bangkok	English - Thailand
+en	ID	Asia/Jakarta	English - Indonesia
+en	PH	Asia/Manila	English - Philippines
+en	VN	Asia/Saigon	English - Vietnam
+en	ZA	Africa/Johannesburg	English - South Africa
+es		America/Mexico_City	Spanish (generic)
+es	MX	America/Mexico_City	Spanish - Mexico
+es	AR	America/Buenos_Aires	Spanish - Argentina
+es	CL	America/Santiago	Spanish - Chile
+es	CO	America/Bogota	Spanish - Colombia
+es	VE	America/Caracas	Spanish - Venezuela
+es	BO	America/La_Paz	Spanish - Bolivia
+es	EC	America/Guayaquil	Spanish - Ecuador
+es	PY	America/Asuncion	Spanish - Paraguay
+es	PE	America/Lima	Spanish - Peru
+es	PR	America/Puerto_Rico	Spanish - Puerto Rico
+es	UY	America/Montevideo	Spanish - Uruguay
+es	ES	Europe/Madrid	Spanish - Spain
+fr		Europe/Paris	French (generic)
+fr	FR	Europe/Paris	French - France
+fr	CH	Europe/Zurich	French - Switzerland
+fr	CA	America/Montreal	French - Canada
+fr	BE	Europe/Brussels	French - Belgium
+ru		Europe/Moscow	Russian (generic)
+ru	RU	Europe/Moscow	Russian - Russia
+ru	UA	Europe/Kiev	Russian - Ukraine
+ru	KZ	Asia/Almaty	Russian - Kazahkstan
+ru	BY	Europe/Minsk	Russian - Belarus
+de		Europe/Berlin	German (generic)
+de	DE	Europe/Berlin	German - Germany
+de	AT	Europe/Vienna	German - Austria
+de	CH	Europe/Zurich	German - Switzerland
+nl		Europe/Amsterdam	Dutch (generic)
+nl	NL	Europe/Amsterdam	Dutch - Netherlands
+nl	BE	Europe/Brussels	Dutch - Belgium
+ja		Asia/Tokyo	Japanese (generic)
+ja	JP	Asia/Tokyo	Japanese - Japan
+pt		Europe/Lisbon	Portuguese (generic)
+pt	BR	America/Sao_Paulo	Portuguese - Brazil
+pt	PT	Europe/Lisbon	Portuguese - Portugal
+zh		Asia/Shanghai	Chinese (generic) (assume simplified)
+zh	CN	Asia/Shanghai	Chinese - China (simplified)
+zh	TW	Asia/Taipei	Chinese - Taiwan (traditional)
+zh	HK	Asia/Hong_Kong	Chinese - Hong Kong (traditional)
+it		Europe/Rome	Italian (generic)
+it	IT	Europe/Rome	Italian - Italy
+ko		Asia/Seoul	Korean (generic)
+ko	KR	Asia/Seoul	Korean - S. Korea
+cs		Europe/Prague	Czech (generic)
+cs	CZ	Europe/Prague	Czech - Czech Republic
+sv		Europe/Stockholm	Swedish (generic)
+sv	SE	Europe/Stockholm	Swedish - Sweden
+fi		Europe/Helsinki	Finnish (generic)
+fi	FI	Europe/Helsinki	Finnish - Finland
+no		Europe/Oslo	Norwegian (generic)
+no	NO	Europe/Oslo	Norwegian - Norway
+hu		Europe/Budapest	Hungarian (generic)
+hu	HU	Europe/Budapest	Hungarian - Hungary
+da		Europe/Copenhagen	Danish (generic)
+da	DK	Europe/Copenhagen	Danish - Denmark
+pl		Europe/Warsaw	Polish (generic)
+pl	PL	Europe/Warsaw	Polish - Poland
+tr		Europe/Istanbul	Turkish (generic)
+tr	TR	Europe/Istanbul	Turkish - Turkey
+he		Asia/Tel_Aviv	Hebrew (generic)
+he	IL	Asia/Tel_Aviv	Hebrew - Israel
+sk		Europe/Bratislava	Slovak (generic)
+sk	SK	Europe/Bratislava	Slovak - Slovakia
+el		Europe/Athens	Greek (generic)
+el	GR	Europe/Athens	Greek - Greece
+el	CY	Europe/Nicosia	Greek - Cyprus
+bg		Europe/Sofia	Bulgarian (generic)
+bg	BG	Europe/Sofia	Bulgarian - Bulgaria
+hr		Europe/Zagreb	Croatian (generic)
+hr	HR	Europe/Zagreb	Croatian - Croatia
+et		Europe/Tallinn	Estonian (generic)
+et	EE	Europe/Tallinn	Estonian - Estonia
+sl		Europe/Ljubljana	Slovenian (generic)
+sl	SI	Europe/Ljubljana	Slovenian - Slovenia
+lv		Europe/Riga	Latvian (generic)
+lv	LV	Europe/Riga	Latvian - Latvia
+lt		Europe/Vilnius	Lithuanian (generic)
+lt	LT	Europe/Vilnius	Lithuanian - Lithuania
+ro		Europe/Bucharest	Romanian (generic)
+ro	RO	Europe/Bucharest	Romanian - Romania
+sr		Europe/Belgrade	Serbian (generic)
+sr	RS	Europe/Belgrade	Serbian - Serbia
+sr	ME	Europe/Belgrade	Serbian - Montenegro
