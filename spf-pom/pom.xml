@@ -10,9 +10,9 @@
 		portal framework.
 	</description>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-pom</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-pom</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-pom</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/${project.artifactId}</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/${project.artifactId}</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/${project.artifactId}</url>
 	</scm>
 	
 	<ciManagement>
