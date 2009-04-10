@@ -1,0 +1,113 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.it.spf.xa</groupId>
+	<artifactId>spf-portlet-utilities</artifactId>
+	<name>SPF portlet utilities</name>
+	<version>1.0.4-SNAPSHOT</version>
+	<description>
+		Utilities for the portlet side of the Shared Portal Framework.
+		Currently includes concrete utility classes for portlet file
+		content interpolation (useful for any portlet use case involving
+		display of an authored HTML file with certain dynamic
+		substitutions supported), internationalization (including
+		generating localized resource file URLs and getting localized
+		message properties with various optional hooks such as
+		contextual help), help (including contextual help and a useful
+		controller for portlet help mode), etc.
+	</description>
+	<inceptionYear>December 2008</inceptionYear>
+	<parent>
+		<artifactId>spf-pom</artifactId>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<version>1.0.1</version>
+	</parent>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>
+			http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities
+		</url>
+	</ciManagement>
+	<scm>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.0</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.0</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/xa/tags/spf-portlet-utilities-1.0.0</url>
+	</scm>
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc-portlet</artifactId>
+			<version>2.5.6</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-portlet</artifactId>
+			<version>2.0.1</version>
+		</dependency> -->
+		<dependency>
+			<groupId>javax.portlet</groupId>
+			<artifactId>portlet-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- 	<dependency>
+			<groupId>com.hp.websat</groupId>
+			<artifactId>timber</artifactId>
+			<version>1.2.5</version> 
+			</dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-mock</artifactId>
+			<version>2.0.8</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+			<version>2.5.6</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+		<!-- 	<dependency>
+			<groupId>com.hp.websat</groupId>
+			<artifactId>wpap-core</artifactId>
+			<version>2.2.0</version>
+			</dependency> -->
+		<dependency>
+			<groupId>com.hp.frameworks</groupId>
+			<artifactId>timber-core</artifactId>
+			<version>2.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.frameworks</groupId>
+			<artifactId>wpa-portlet-core</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies />
+	</dependencyManagement>
+</project>
