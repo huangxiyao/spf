@@ -31,8 +31,6 @@ import com.hp.it.spf.xa.misc.portal.Utils;
  * without siteminder. All of the user info are read from property file.
  * 
  * @author <link href="kaijian.ding@hp.com">dingk</link>
- * @version TBD
- * @see others
  */
 public class TestAuthenticator extends AbstractAuthenticator {
 
@@ -67,36 +65,42 @@ public class TestAuthenticator extends AbstractAuthenticator {
 
 		String profileFileName = retrieveProfileFile();
 		try {
-			LOG.info("Get Resource Bundle File = " + profileFileName);
+			LOG.debug("Get Resource Bundle File = " + profileFileName);
 			// Read current user's info.
 			prop = ResourceBundle.getBundle(profileFileName);
-			LOG.info("Refresh Resource Bundle File for user " + profileFileName
+			LOG.debug("Refresh Resource Bundle File for user " + profileFileName
 					+ ".properties");
 		} catch (MissingResourceException e) {
-			LOG.info("No Resource Bundle File = " + profileFileName);
-			StringBuffer message = new StringBuffer("Cound not find "
-					+ profileFileName + ".properties.");
-			String currentUser = (String) request.getSession().getAttribute(
-					SANDBOX_USERNAME);
-			Site currentSite = AuthenticatorHelper.getCurrentSite(request);
-			String profileFileName2 = "console_" + rb.getString("CurrentUser");
-			// if not going to console, use anon user as logged in user
+			LOG.error("No Resource Bundle File = " + profileFileName);			
+
+			// if not goes to console, act as anon user
+			Site currentSite = Utils.getEffectiveSite(request);
 			if (currentSite != null) {
 				actAsANON = true;
 			}
-			LOG.info("Get Resource Bundle File = " + profileFileName2);
-			// Read current user's info.
-			prop = ResourceBundle.getBundle(profileFileName2);
-			LOG.info("Refresh Resource Bundle File for user "
-					+ profileFileName2);
-			message.append(" Please create " + profileFileName
-					+ ".properties for user ");
+			
+			// make up message pane
+			StringBuffer message = new StringBuffer("Cound not find " + profileFileName + ".properties.");
+			message.append(" Please create " + profileFileName + ".properties for user ");
+			// Get current user
+			String currentUser = request.getParameter("username");
+			if (currentUser == null || "".equals(currentUser.trim())) {
+				currentUser = (String) request.getSession().getAttribute(
+						SANDBOX_USERNAME);
+			}
 			message.append(currentUser);
 			String currentSiteName = currentSite != null ? Utils
-					.getEffectiveSite(request).getDNSName() : "console";
+					.getEffectiveSiteDNS(request) : "console";
 			message.append(" on " + currentSiteName
 					+ " site in %domain_home%/sandbox_resoureces/ directory.");
 			request.getSession().setAttribute(MESSAGEPANE, message.toString());
+			
+			String profileFileName2 = "console_" + rb.getString("CurrentUser");
+			LOG.debug("Get Resource Bundle File = " + profileFileName2);
+			// Read current user's info.
+			prop = ResourceBundle.getBundle(profileFileName2);
+			LOG.debug("Refresh Resource Bundle File for user "
+					+ profileFileName2);
 		}
 	}
 
@@ -110,28 +114,27 @@ public class TestAuthenticator extends AbstractAuthenticator {
 		}
 		try {
 			refreshBundle();
-			LOG.info("Get Resource Bundle File = " + rbFile);
+			LOG.debug("Get Resource Bundle File = " + rbFile);
 			rb = ResourceBundle.getBundle(rbFile);
+			// if it is guest user or first time user, act as user console
+			// vignette
 			if (currentUser == null || "".equals(currentUser.trim())
 					|| GUESTUSER.equals(currentUser)) {
 				// in this kind, act as anon user
 				if (Utils.getEffectiveSite(request) != null) {
 					actAsANON = true;
-					return "console_" + rb.getString("CurrentUser");
-				} else {
-					currentUser = rb.getString("CurrentUser");
 				}
+				return "console_" + rb.getString("CurrentUser");
 			}
 		} catch (MissingResourceException e) {
-			LOG.info("No Resource Bundle File = " + rbFile);
+			LOG.error("No Resource Bundle File = " + rbFile);
 		}
+		// if some one goes to console
 		if (Utils.getEffectiveSite(request) == null) {
 			return "console_" + currentUser;
 		}
-		Site currentSite = AuthenticatorHelper.getCurrentSite(request);
-		String currentSiteName = currentSite != null ? Utils
-				.getEffectiveSiteDNS(request) : "console";
-		return currentSiteName + "_" + currentUser;
+		// some one goes to site
+		return Utils.getEffectiveSiteDNS(request) + "_" + currentUser;
 	}
 
 	/**
@@ -179,7 +182,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 			// Put back the private status on the cacheList property
 			field.setAccessible(false);
 		} catch (Exception e) {
-			LOG.error("Failed to refresh bundle due to " + e.getMessage());
+			LOG.error("Failed to refresh bundle due to " + e.getMessage(), e);
 		}
 	}
 
@@ -196,7 +199,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 			StringTokenizer st = new StringTokenizer(groupstring, ",");
 			while (st.hasMoreElements()) {
 				String group = (String) st.nextElement();
-				LOG.info("Get UserGroup = " + group);
+				LOG.debug("Get UserGroup = " + group);
 				groups.add(group);
 			}
 		}
@@ -227,11 +230,9 @@ public class TestAuthenticator extends AbstractAuthenticator {
 	}
 
 	/**
-	 * This method is used to perform all related tasks. 
-	 * 1. If act as anon user
-	 * 2. act as normal user
-	 * 3. pass user info to portlet
-	 * 4. pass context map to portlet
+	 * This method is used to perform all related tasks. 1. If act as anon user
+	 * 2. act as normal user 3. pass user info to portlet 4. pass context map to
+	 * portlet
 	 * 
 	 * @see com.hp.it.spf.sso.portal.IAuthenticator#execute()
 	 */
@@ -240,7 +241,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 			actAsANON = true;
 		}
 		// guestMode
-		if (actAsANON == true) {
+		if (actAsANON) {
 			ANONAuthenticator authenticator = new ANONAuthenticator(request);
 			authenticator.execute();
 			userName = authenticator.getUserName();
@@ -250,6 +251,8 @@ public class TestAuthenticator extends AbstractAuthenticator {
 			super.execute();
 			request.getSession().setAttribute(SANDBOX_USERNAME, userName);
 		}
+		
+		// pass user info to local portlet
 		boolean islocalMode = "true"
 				.equalsIgnoreCase(getProperty("local_mode"));
 		String portlets = getProperty("portlets");
@@ -313,8 +316,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 	private String getHppSessionToken(HttpServletRequest request) {
 		Cookie[] cookies = null;
 		// synchronize this as multiple WSRP threads will access the request in
-		// parallel and we don't
-		// know the underlying request implementation
+		// parallel and we don't know the underlying request implementation
 		synchronized (request) {
 			cookies = request.getCookies();
 		}
