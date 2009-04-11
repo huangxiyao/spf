@@ -28,6 +28,11 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	<parent>
+		<artifactId>spf-pom</artifactId>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<version>1.0.2</version>
+	</parent>
 	<build>
 		<finalName>SessionTestPortlet</finalName>
 		<plugins>
