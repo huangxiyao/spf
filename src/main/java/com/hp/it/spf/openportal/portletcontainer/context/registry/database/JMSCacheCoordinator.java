@@ -40,7 +40,7 @@ public class JMSCacheCoordinator implements SessionCustomizer{
         String port = String.valueOf(Environment.singletonInstance.getManagedServerPort());
         //String port = "8002";
         hostUrl.append(host).append(":").append(port);
-        System.out.println("Set TopicHostUrl = " + hostUrl.toString());
+        
         transportMgr.setTopicHostUrl(hostUrl.toString());
         
         transportMgr.setTopicConnectionFactoryName("jms/WSRPTopicConnectionFactory");
