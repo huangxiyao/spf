@@ -196,12 +196,17 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * @param portletFriendlyId
 	 *            portlet friendly ID as defined in portal console
 	 * @throws IllegalArgumentException
-	 *             if parameter is null or empty
+	 *             if parameter is null, empty or contains underscores
 	 */
 	private String checkPortletFriendlyId(String portletFriendlyId) {
 		if (portletFriendlyId == null || portletFriendlyId.trim().equals("")) {
 			throw new IllegalArgumentException(
 					"portletFriendlyId cannot be null or empty: "
+							+ portletFriendlyId);
+		}
+		if (portletFriendlyId.indexOf('_') != -1) {
+			throw new IllegalArgumentException(
+					"portletFriendlyId cannot contain underscores: "
 							+ portletFriendlyId);
 		}
 		return (portletFriendlyId.trim());
