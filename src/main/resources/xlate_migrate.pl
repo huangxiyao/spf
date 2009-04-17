@@ -27,6 +27,7 @@
 # 2.2   Aug 29 07       DSJ only copy files if they don't already exist
 # 2.3   Sep 5 07        DSJ merge logo files too
 # 3.0   Feb 16 09       DSJ update for Shared Portal Framework
+# 3.1   Apr 17 09       DSJ update to migate layout config files too
 #
 ################################################################
 use strict;
@@ -67,27 +68,37 @@ if (!explodeCarsOnBasePath($newCarDir)) {
 
 # Find files needing migration, and merge them into the new CAR.
 # These are the files tagged _lc.* or _lc_CC.*, or named logo-*.jpg,
-# or global help base files, in the original CAR, whose components
-# are still present in the new CAR.
+# or global help base files, or environment-specific layout configuration
+# files in the original CAR, whose components still exist in the new CAR.
 # DSJ 2007/09/05 1000460949
+# DSJ 2009/4/17
 
 print <<EOF;
 ---------------------------------------------------
------ Merging translated files, logo files, and global help base files from
------ reference CAR to release CAR.
+----- Merging translated files, logo files, global help base files, and 
+----- environment-specific layout configuration files from reference CAR
+----- to release CAR.
 ---------------------------------------------------
 EOF
 my @localized_files = &findFiles(\&filterByLocalizableExtension, $orgCarDir);
 my @logo_files = &findFiles(\&filterByLogoExtension, $orgCarDir);
 my @globalhelp_files = &findFiles(\&filterByGlobalHelp, $orgCarDir);
+my @layoutconfig_files = &findFiles(\&filterByLayoutConfig, $orgCarDir);
+
 my $componentsRegex = vapComponentsRegex($newCarDir);
+
 @localized_files = grep(/$componentsRegex/, @localized_files);
 @logo_files = grep(/$componentsRegex/, @logo_files);
 @globalhelp_files = grep(/$componentsRegex/, @globalhelp_files);
+@layoutconfig_files = grep(/$componentsRegex/, @layoutconfig_files);
+
 my $num_loc_files = @localized_files;
 my $num_logo_files = @logo_files;
 my $num_globalhelp_files = @globalhelp_files;
-if ($num_loc_files + $num_logo_files + $num_globalhelp_files == 0) {
+my $num_layoutconfig_files = @layoutconfig_files;
+
+if ($num_loc_files + $num_logo_files + $num_globalhelp_files + 
+    $num_layoutconfig_files == 0) {
 
     # Cleanup working files.
 
@@ -101,10 +112,12 @@ if ($num_loc_files + $num_logo_files + $num_globalhelp_files == 0) {
     exit 0;
 }
 
-print "----- Found $num_loc_files translated files, $num_logo_files logo files, and $num_globalhelp_files global help\nbase files to merge.  Beginning merge.\n";
+print "----- Found $num_loc_files translated files, $num_logo_files logo files, $num_globalhelp_files global help\n";
+print "base files, and $num_layoutconfig_files layout configuration files to merge.  Beginning merge.\n";
 copyLocFilesToDest($orgCarDir, $newCarDir, @localized_files);
 copyLogoFilesToDest($orgCarDir, $newCarDir, @logo_files);
 copyGlobalHelpFilesToDest($orgCarDir, $newCarDir, @globalhelp_files);
+copyLayoutConfigFilesToDest($orgCarDir, $newCarDir, @layoutconfig_files);
 
 # Repack the merged components into a replacement CAR file.
 
@@ -345,6 +358,32 @@ sub copyGlobalHelpFilesToDest() {
     return copyGlobalHelpFilesToDest($orgCarDir, $newCarDir, @_);
 }
 
+# Need to copy environment-specific layout configuration files, too, into the new
+# location.  The files are copied unless they already exist in the new location.
+# DSJ 2009/4/17
+
+sub copyLayoutConfigFilesToDest() {
+    my $orgCarDir = shift;
+    my $newCarDir = shift;
+    my $head = shift;
+    if ($head eq undef) {
+	return;
+    }
+
+    my $head_destination = 
+        sourceFileLocationToDestFileLocation($orgCarDir, $newCarDir, $head);
+    print "Copying $head to $head_destination\n";
+    if (!fileExists($head_destination)) {
+        copy($head, $head_destination) 
+            or die "Error copying $head to $head_destination: $!\nDied";
+    }
+    else {
+        print "Layout configuration file $head_destination already exists - skipping copy\n";
+    }
+
+    return copyLayoutConfigFilesToDest($orgCarDir, $newCarDir, @_);
+}
+
 sub fileExists() {
     my $file = shift;
     my $exists = -f $file;
@@ -438,6 +477,18 @@ sub filterByGlobalHelp() {
        /[gG]lobalHelp\.html$|[gG]lobalHelp\.css$|[gG]lobalHelp.js$|[gG]lobalHelpInclude\.properties$|GlobalHelpResource\.[^\.]*$/,
        @content);
     return map {$baseDir . "/" . $_} @content_globalhelp_basefiles;
+}
+
+# Need to migrate environment-specific layout configuration files, too.
+# These are all files ending in "_layout_config_env.*".
+
+sub filterByLayoutConfig() {
+    my $baseDir = shift;
+    my @content = @_;
+    my @content_layoutconfig_files = grep (
+       /_layout_config_env\.[^\.]*$/,
+       @content);
+    return map {$baseDir . "/" . $_} @content_layoutconfig_files;
 }
 
 sub filterDirs() {
