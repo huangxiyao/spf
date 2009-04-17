@@ -27,11 +27,11 @@ import javax.portlet.PortletMode;
  * <li>Deploy this portlet as a remote portlet in OpenPortal producer and register it in Vignette</li>
  * <li>Create a test page and map it to Vignette friendly URL "portal-url-test"</li>
  * <li>On the portal-url-test create 3 instances of local test portlet and name (portlet friendly ID)
- * them respectively: portalurltestportlet1, portalurltestportlet2, portalurltestportlet3</li>
+ * them respectively: portalurltestportlet1, portalurltestportlet2, portal-urltestportlet3</li>
  * <li>Create a test page and map it to Vignette friendly URL "portal-url-test-remote"</li>
  * <li>On the portal-url-test-remote create 3 instances of remote test portlet and name them
  * (portlet friendly ID) respectively: portalurltestportlet1remote, portalurltestportlet2remote,
- * portalurltestportlet3remote</li>
+ * portal-urltestportlet3remote</li>
  * <li>Call this class passing in the URL of your test site, e.g. http://myhost:1234/portal/site/mysite/</li>
  * </ol>
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
@@ -39,10 +39,10 @@ import javax.portlet.PortletMode;
 public class GenerateTestPage
 {
 	private static final String[] LOCAL_PORTLET_IDS = {
-			"portalurltestportlet1", "portalurltestportlet2", "portalurltestportlet3"
+			"portalurltestportlet1", "portalurltestportlet2", "portal-urltestportlet3"
 	};
 	private static final String[] REMOTE_PORTLET_IDS = {
-			"portalurltestportlet1remote", "portalurltestportlet2remote", "portalurltestportlet3remote"
+			"portalurltestportlet1remote", "portalurltestportlet2remote", "portal-urltestportlet3remote"
 	};
 	private static final String LOCAL_PORTLETS_PAGE = "portal-url-test";
 	private static final String REMOTE_PORTLETS_PAGE = "portal-url-test-remote";
@@ -77,17 +77,7 @@ public class GenerateTestPage
 	}
 
 	private static void setupFactoryCreatedUrlsAsRemote(boolean isRemote) {
-		try {
-			Field f = PortalURLFactory.class.getDeclaredField("mCreatesRemoteUrls");
-			f.setAccessible(true);
-			f.setBoolean(null, isRemote);
-		}
-		catch (NoSuchFieldException e) {
-			throw new RuntimeException(e);
-		}
-		catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
+		System.setProperty("portalurl.portlet.remote", String.valueOf(isRemote));
 	}
 
 	private static void generateTestHtml(String siteRootUrl, String pageFriendlyId, String[] portletIds, PrintWriter out) {
