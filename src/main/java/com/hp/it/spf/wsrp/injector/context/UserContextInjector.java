@@ -24,6 +24,7 @@ import org.apache.axis.handlers.BasicHandler;
 
 import com.epicentric.common.website.MenuItemNode;
 import com.epicentric.common.website.MenuItemUtils;
+import com.epicentric.page.Page;
 import com.epicentric.site.Site;
 import com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter;
 import com.hp.it.spf.wsrp.misc.Predicates;
@@ -140,6 +141,7 @@ public class UserContextInjector extends BasicHandler {
 		userContext.put(Consts.KEY_PORTAL_SESSION_ID, getPortalSessionId(request));
 		userContext.put(Consts.KEY_SESSION_TOKEN, getHppSessionToken(request));
 		userContext.put(Consts.KEY_NAVIGATION_ITEM_NAME, getNavigationItemName(request));
+		userContext.put(Consts.KEY_PORTAL_PAGE_ID, getPageFriendlyId(request));
 		return userContext;
 	}
 
@@ -301,4 +303,31 @@ public class UserContextInjector extends BasicHandler {
 		}
 	}
 
+	/**
+	 * @param request
+	 *            incoming user request
+	 * @return page friendly id retrieved from Vignette
+	 *         <tt>PortalContext</tt> object
+	 */
+	private String getPageFriendlyId(HttpServletRequest request) {
+		// synchronize this as multiple WSRP threads will access the request in
+		// parallel and we don't
+		// know the underlying request implementation
+		synchronized (request) {
+			PortalContext portalContext = (PortalContext) request
+					.getAttribute("portalContext");
+			if (portalContext == null) {
+				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+					LOG.debug("Unable to find PortalContext object - this happens when called from Vignette Console");
+				}
+				return "";
+			}
+			Page page = portalContext.getResolvedPortletPage();
+			if (page == null) {
+				LOG.warning("Unable to get page object for current request");
+				return "";
+			}
+			return page.getFriendlyID(portalContext);
+		}
+	}
 }
