@@ -305,7 +305,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * 
 	 * @return site name
 	 */
-	protected String getSite() {
+	protected String getSiteName() {
 		if (request == null) {
 			return null;
 		}		
@@ -398,9 +398,20 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		if (request == null) {
 			return null;
 		}
-		return Utils.getPortletID(request);
+		return Utils.getPortalPortletID(request);
 	}
 
+	/**
+	 * Get the page ID (ie the Vignette page friendly ID) from the portlet request provided to the constructor.  
+	 * Returns null if this has not been set in the request, or the request provided to the constructor was null.
+	 */
+	protected String getPageID() {
+		if (request == null) {
+			return null;
+		}
+		return Utils.getPortalPageID(request);
+	}
+	
 	/**
 	 * <p>
 	 * Parses the given string, performing all of the token substitutions and

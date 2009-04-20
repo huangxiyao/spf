@@ -65,6 +65,10 @@ package are:</p>
 	<dt><code>{NAME}</code></dt>
 	<dd>Replaced with the full name for the user in the current
 	portlet request, displayed in customary order for the locale.</dd>
+	<dt><code>{PAGE:<i>pages</i>}</code></dt>
+	<dd>Includes the surrounded content if the current portlet is on
+	one of the named portal <code><i>pages</i></code>. Otherwise suppresses
+	the surrounded content.</dd>
 	<dt><code>{PORTLET:<i>portlets</i>}</code></dt>
 	<dd>Includes the surrounded content if the current portlet is one
 	of the named <code><i>portlets</i></code>. Otherwise suppresses the
@@ -80,10 +84,10 @@ package are:</p>
 	<dd>Includes the surrounded content if the user in the current
 	portlet request is in one of the named <code><i>roles</i></code>.
 	Otherwise suppresses the surrounded content.</dd>
-	<dt><code>{SITE}</code></dt>
+	<dt><code>{SITE-NAME}</code></dt>
 	<dd>Replaced with the name of the current portal site which
 	includes this portlet.</dd>
-	<dt><code>{SITES:<i>names</i>}...{/SITES}</code></dt>
+	<dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
 	<dd>Includes the surrounded content if the current request is for
 	one of the portal site <code><i>names</i></code>. Otherwise suppresses
 	the surrounded content.</dd>

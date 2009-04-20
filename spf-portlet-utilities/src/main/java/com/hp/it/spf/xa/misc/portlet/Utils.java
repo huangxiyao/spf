@@ -535,11 +535,10 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * this method just returns the portlet ID from the given request. The
 	 * method returns null if no portlet ID was recorded in the request.
 	 * 
-	 * @param request
-	 * @return
+	 * @param request The portlet request.
+	 * @return The portlet friendly ID for this portlet instance.
 	 */
 	public static String getPortalPortletID(PortletRequest request) {
-		String portletId = null;
 		if (request != null) {
 			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
 			if (o != null) {
@@ -551,7 +550,37 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 				}
 			}
 		}
-		return portletId;
+		return null;
+	}
+
+	/**
+	 * Get the current page ID from the given portlet request. The page ID is
+	 * the unique identifier within the portal site for the page on which this
+	 * portlet instance appears (thus it is not an element from the portlet
+	 * application itself; it is an element from the portal). For Vignette
+	 * Portal, this is the "page friendly ID" configured by the portal
+	 * administrator on the portlet instance. The SPF framework propagates the
+	 * page ID from the from the portal to the portlet, where it is made
+	 * accessible in the request. So this method just returns the page ID
+	 * from the given request. The method returns null if no page ID was
+	 * recorded in the request.
+	 * 
+	 * @param request The portlet request.
+	 * @return The page friendly ID for the page containing this portlet instance.
+	 */
+	public static String getPortalPageID(PortletRequest request) {
+		if (request != null) {
+			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
+			if (o != null) {
+				try {
+					Map contextMap = (Map) o;
+					return (String) contextMap
+							.get(Consts.KEY_PORTAL_PAGE_ID);
+				} catch (Exception e) { // should never happen
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -562,4 +591,14 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	public static String getPortletID(PortletRequest request) {
 		return getPortalPortletID(request);
 	}
+
+	/**
+	 * Use {@link #getPortalPageID(PortletRequest)} instead.
+	 * 
+	 * @deprecated
+	 */
+	public static String getPageID(PortletRequest request) {
+		return getPortalPageID(request);
+	}
+
 }
