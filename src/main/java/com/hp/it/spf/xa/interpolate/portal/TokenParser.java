@@ -275,7 +275,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * 
 	 * @return site name
 	 */
-	protected String getSite() {
+	protected String getSiteName() {
 		if (portalContext == null) {
 			return null;
 		}
@@ -287,6 +287,20 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		}
 	}
 
+	/**
+	 * Get the page ID for the current portal request from the portal context
+	 * provided to the constructor.  Returns null if this has not been set in the
+	 * request, or the portal context provided to the constructor was null.
+	 * 
+	 * @return page ID
+	 */
+	protected String getPageID() {
+		if (portalContext == null) {
+			return null;
+		}
+		return Utils.getPageID(portalContext);
+	}
+	
 	/**
 	 * Get the portal site URL for the portal site and page indicated by the
 	 * given scheme, port, and URI, from the portal context returned to the

@@ -296,8 +296,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <code>&lt;A HREF="http://shopping.hp.com?lang=pt&cc=BR"&gt;Go to HP shopping.&lt;/A&gt;</code>
  * </p>
  * </li>
- * <li>
- * As another example, assume we now have this in our property file:
+ * <li> As another example, assume we now have this in our property file:
  * </p>
  * <p>
  * <code>image.current-promo=december_sale.gif</code>
@@ -465,6 +464,50 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
+ * <dt><code>{PAGE:<i>pages</i>}...{/PAGE}</code></dt>
+ * <dd>
+ * <p>
+ * Use this token around a section of content which should only be included in
+ * the interpolated content if the current request is for a particular page (as
+ * indicated by the page friendly ID). For example, using this token, a single
+ * file can contain different content for use depending on the current page.
+ * This may make administration of the content easier.
+ * </p>
+ * <p>
+ * In the <code><i>pages</i></code> parameter to the
+ * <code>{PAGE:<i>pages</i>}</code> token, you can list just a single page
+ * friendly ID, or multiple (use the <code>|</code> character to delimit
+ * them). The content enclosed by the <code>{PAGE:<i>pages</i>}</code> and
+ * <code>{/PAGE}</code> tokens is omitted from the returned content unless the
+ * page friendly ID in the request matches one of those values. The match is a
+ * case-insensitive substring match.
+ * </p>
+ * <p>
+ * The content enclosed by the <code>{PAGE:<i>pages</i>}</code> and
+ * <code>{/PAGE}</code> tokens can be anything, including any of the special
+ * tokens supported by this class (including other
+ * <code>{PAGE:<i>pages</i>}...{/PAGE}</code> tokens - ie you can "nest"
+ * them.
+ * </p>
+ * <p>
+ * For example, the following markup selectively includes or omits the content
+ * depending on the portlet as indicated:
+ * </p>
+ * <p>
+ * 
+ * <pre>
+ * This content is for all pages using this file to show.
+ * {PAGE:page_A|page_B}
+ * This content is only for page_A or page_B to show.
+ * {PAGE:page_B}
+ * This content is only for page_B to show.
+ * {/PAGE}
+ * {/PAGE}
+ * </pre>
+ * 
+ * </p>
+ * </dd>
+ * 
  * <dt><a name="request-url"><code>{REQUEST-URL}</code></a></dt>
  * <dt><a name="request-url"><code>{REQUEST-URL:<i>spec</i>}</code></a></dt>
  * <dd>
@@ -489,19 +532,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{SITE}</code></dt>
+ * <dt><code>{SITE-NAME}</code></dt>
  * <dd>
  * <p>
  * Use this token to insert the site name of the current portal site into the
  * interpolated content. The site name is taken from the portal context (it is
- * the Vignette "site DNS name" element). For example, <code>{SITE}</code> is
- * replaced with <code>itrc</code> when the portal component invoking this
+ * the Vignette "site DNS name" element). For example, <code>{SITE-NAME}</code>
+ * is replaced with <code>itrc</code> when the portal component invoking this
  * <code>FileInterpolator</code> is requested from the <code>itrc</code>
  * portal site.
  * </p>
  * </dd>
  * 
- * <dt><code>{SITES:<i>names</i>}...{/SITES}</code></dt>
+ * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -512,19 +555,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * In the <code><i>names</i></code> parameter to the
- * <code>{SITES:names}</code> token, you can list just a single site name, or
+ * <code>{SITE:names}</code> token, you can list just a single site name, or
  * multiple (use the <code>|</code> character to delimit them). The content
- * enclosed by the <code>{SITES:<i>names</i>}</code> and <code>{/SITES}</code>
+ * enclosed by the <code>{SITE:<i>names</i>}</code> and <code>{/SITE}</code>
  * tokens is omitted from the returned content unless the site name in the
  * request matches one of those values. The match is case-insensitive. The site
  * name in the request is gotten from the portal context (it is the Vignette
  * "site DNS name").
  * </p>
  * <p>
- * The content enclosed by the <code>{SITES:<i>names</i>}</code> and
- * <code>{/SITES}</code> tokens can be anything, including any of the special
+ * The content enclosed by the <code>{SITE:<i>names</i>}</code> and
+ * <code>{/SITE}</code> tokens can be anything, including any of the special
  * tokens supported by this class (including other
- * <code>{SITES:<i>names</i>}...{/SITES}</code> tokens - ie you can "nest"
+ * <code>{SITE:<i>names</i>}...{/SITE}</code> tokens - ie you can "nest"
  * them.
  * </p>
  * <p>
@@ -601,8 +644,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * And to repeat the above examples again, but switch the scheme to HTTPS, here
  * is how we do it for the current portal site: <code>{SITE-URL:https;}</code>,
  * <code>{SITE-URL:https;/forums}</code>,
- * <code>{SITE-URL:https;/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc. And to
- * simultaneously switch to the <code>acme</code> portal site: use
+ * <code>{SITE-URL:https;/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc. And
+ * to simultaneously switch to the <code>acme</code> portal site: use
  * <code>{SITE-URL:https;acme}</code>,
  * <code>{SITE-URL:https;acme/forums}</code>,
  * <code>{SITE-URL:https;acme/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc.
