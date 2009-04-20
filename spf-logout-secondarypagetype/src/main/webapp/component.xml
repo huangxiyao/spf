@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<epideploy:component build-version="1"
-	component-id="spf-logout-secondarypagetype"
+
+<epideploy:component
+	component-id="SPFSwitchUserType"
 	component-type="Secondary Page Types"
-	description="Shared Portal Framework secondary page type for the logout process."
-	epi-build="251" epi-version="7.2.2" major-version="7" minor-version="2"
-	title="Shared Portal Framework - Logout Process"
+	major-version="7"
+	minor-version="0"
+	build-version="00"
+	pi-version="7.0"
+	epi-build="1"
+	title="SPF - Switch User"
+	description="SPF secondary page type for the switch sandbox user process."
 	xmlns:epideploy="http://www.epicentric.com/deployment">
-	<epideploy:detail>
-		<template-info allow-guest-access="true"
-			description="Shared Portal Framework secondary page type for the logout process."
-			friendly-id="SPF_LOGOUT" header-filename=""
-			id="spf-logout-secondarypagetype" is-system="false"
-			title="Shared Portal Framework - Logout Process"
-			type="templatetype_page_content_include" visible="true">
-			<actions>
-				<action id="1" type="PRE_DISPLAY">
-					<class>
-						com.hp.it.spf.sso.portal.component.secondarypagetype.LogoutDisplayAction
-					</class>
-				</action>
-			</actions>
-		</template-info>
-	</epideploy:detail>
+	
+<epideploy:detail>
+	<template-info
+		id="SPFSwitchUserType"
+		friendly-id="SP_SWITCH_USER"
+		title="SPF - Switch User"
+		description="SPF secondary page type for the switch sandbox user process."	
+		type="templatetype_page_content_include"
+		is-system="false"
+		visible="true"
+		allow-guest-access="true"
+		header-filename="">
+		
+	<actions>
+		<action id="1" type="PROCESS">
+			<class>com.hp.it.portal.secondarypagetypes.switchuser.SPSwitchUserProcessAction</class>
+		</action>
+	</actions>
+	
+	</template-info>
+</epideploy:detail>
 </epideploy:component>
