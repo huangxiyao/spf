@@ -328,9 +328,10 @@ table.props td {
 			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</a></li>
 			<li>4.5.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-			<code>{SITES:<i>site-names</i></code>}, <code>{INCLUDE:<i>key</i>}</code>)</a></li>
+			<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{SITE:<i>site-names</i></code>},
+			<code>{INCLUDE:<i>key</i>}</code>)</a></li>
 			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>{AFTER:<i>date</i>}</code>,
-			<code>{BEFORE:<i>date</i>}</code>, <code>{SITE}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</a></li>
+			<code>{BEFORE:<i>date</i>}</code>, <code>{SITE-NAME}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -4739,7 +4740,8 @@ This text is for everybody.&lt;BR&gt;
 
 <a name="file.author.token.consolidate">
 <h4>4.5.4. Consolidating content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-<code>{SITES:<i>site-names</i>}</code>, <code>{INCLUDE:<i>key</i>}</code>)</h4>
+<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{SITE:<i>site-names</i>}</code>,
+<code>{INCLUDE:<i>key</i>}</code>)</h4>
 </a>
 
 <p>The following tokens may be used to consolidate content, either
@@ -4751,7 +4753,7 @@ for each token.</p>
 <blockquote>
 <p><b>Note:</b> The SPF lets you "nest" container tokens. Nested
 containers form a "logical-AND" between their respective conditions. So,
-for example, <code>{PORTLET:forums}{SITES:itrc}...{/SITES}{/PORTLET}</code>
+for example, <code>{PORTLET:forums}{SITE:itrc}...{/SITE}{/PORTLET}</code>
 means the current request must be for the <code>forums</code> portlet
 instance in the portal site named <code>itrc</code>, in order to get the
 <code>...</code> wrapped content.
@@ -4849,6 +4851,34 @@ url.hp=http://www.hp.com
 	</dd>
 
 	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#page"><code>{PAGE:<i>pages</i>}...{/PAGE}</code></a></dt>
+	<dd>
+	<p>Use this container token to put content for multiple portal
+	pages into the same uninterpolated content string (or file). When it is
+	interpolated, only the section for the current portal page will be
+	included.</p>
+
+	<p>The <code><i>pages</i></code> parameter lists the page ID <i>substrings</i>
+	for the pages that should use the wrapped content. The page ID for the
+	current portal page must <i>contain</i> (case-insensitive) at least one
+	of the listed page ID's. Use the <code>|</code> character to delimit
+	multiple page ID's in the <code><i>pages</i></code> parameter. (In the
+	SPF portal, the page ID is the Vignette <i>friendly ID</i> assigned to
+	the page by the administrator. The SPF transmits this to the portlet
+	where it can be accessed.)</p>
+
+	<p>For example:</p>
+	<blockquote><pre>
+This text is for everybody.&lt;BR&gt;
+{PAGE:abc|def}This text is only for the "abc" or "def" pages.{/PAGE}
+{PAGE:xyz}This text is only for the "xyz" page.{/PAGE}
+</pre></blockquote>
+
+	<p>The actual page ID's will vary; they are setup by the
+	administrator. They are not listed here.</p>
+	</dd>
+
+	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#portlet"><code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></a></dt>
 	<dd>
 	<p>Use this container token to put content for multiple instances
@@ -4879,7 +4909,7 @@ This text is for everybody.&lt;BR&gt;
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site_c"><code>{SITES:<i>sites</i>}...{/SITES}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site"><code>{SITE:<i>sites</i>}...{/SITE}</code></a></dt>
 	<dd>
 	<p>Use this container token to put content for multiple portal
 	sites into the same uninterpolated content string (eg file). When it is
@@ -4898,8 +4928,8 @@ This text is for everybody.&lt;BR&gt;
 	<p>For example:</p>
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{SITES:abc|def}This text is only for portlets in the the "abc" or "def" portal sites.{/SITES}
-{SITES:xyz}This text is only for portlets in the "xyz" portal site.{/SITES}
+{SITE:abc|def}This text is only for portlets in the the "abc" or "def" portal sites.{/SITE}
+{SITE:xyz}This text is only for portlets in the "xyz" portal site.{/SITE}
 </pre></blockquote>
 
 	<p>The actual site names will vary by portal site; they are setup
@@ -4909,7 +4939,7 @@ This text is for everybody.&lt;BR&gt;
 
 <a name="file.author.token.misc">
 <h4>4.5.5. Miscellaneous (<code>{AFTER:<i>date</i>}</code>, <code>{BEFORE:<i>date</i>}</code>,
-<code>{SITE}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</h4>
+<code>{SITE-NAME}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</h4>
 </a>
 
 <p>These are miscellaneous tokens. Please click on the links for
@@ -4966,7 +4996,7 @@ This text is permanent.&lt;BR&gt;
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site"><code>{SITE}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site-name"><code>{SITE-NAME}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the portal site name into the
 	interpolated content. In SPF, the portal site name is the Vignette
@@ -4980,10 +5010,10 @@ This text is permanent.&lt;BR&gt;
 	site DNS name to be in the <code>spfSite</code> query parameter):</p>
 
 	<blockquote><pre>
-&lt;A HREF="{SITE-URL:spf/template.SPF_LOGOUT?spfSite={SITE}}"&gt;Sign out&lt;/A&gt;
+&lt;A HREF="{SITE-URL:spf/template.SPF_LOGOUT?spfSite={SITE-NAME}}"&gt;Sign out&lt;/A&gt;
 </pre></blockquote>
 
-	<p>(Incidentally, notice from this example how <code>{SITE}</code>
+	<p>(Incidentally, notice from this example how <code>{SITE-NAME}</code>
 	is nested inside the <code><i>uri</i></code> parameter for <code>{SITE-URL:<i>uri</i>}</code>.
 	In general, any of the tokens can be used inside the parameter-values
 	for any of the tokens.)</p>
@@ -6884,6 +6914,15 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		<td>S. Jorgenson</td>
 		<td>Updated TBD URL's for property file templates, with pointers
 		to SPF portlet config JAR.</td>
+	</tr>
+	<tr>
+		<td>2.0</td>
+		<td>Apr 20 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Documented new <code>{PAGE:<i>pages</i>}</code> container
+		token. Documented that <code>{SITES:<i>sites</i>}</code> container
+		token has been renamed <code>{SITE:<i>sites</i>}</code>, and <code>{SITE}</code>
+		token has been renamed <code>{SITE-NAME}</code>.</td>
 	</tr>
 
 </table>

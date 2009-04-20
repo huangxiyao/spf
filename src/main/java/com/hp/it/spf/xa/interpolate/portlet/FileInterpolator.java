@@ -498,6 +498,56 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
+ * <dt><a name="page"><code>{PAGE:<i>pages</i>}...{/PAGE}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use this token around a section of content which should only be included in
+ * the interpolated content if the current request is for a portlet on a
+ * particular page (as indicated by the page friendly ID in the request). For
+ * example, using this token, a single file can contain different content for a
+ * portlet depending on which page(s) the portlet appears. This may make
+ * administration of the portlet contents easier.
+ * </p>
+ * <p>
+ * In the <code><i>pages</i></code> parameter to the
+ * <code>{PAGE:<i>pages</i>}</code> token, you can list just a single page
+ * friendly ID, or multiple (use the <code>|</code> character to delimit
+ * them). The content enclosed by the <code>{PAGE:<i>pages</i>}</code> and
+ * <code>{/PAGE}</code> tokens is omitted from the returned content unless the
+ * page friendly ID in the request matches one of those values. The match is a
+ * case-insensitive substring match.
+ * </p>
+ * <p>
+ * This method assumes that the page friendly ID has been set by the portal into
+ * the proper-namespaced attribute in the portlet request. The Shared Portal
+ * Framework does this automatically (a non-standard behavior).
+ * </p>
+ * <p>
+ * The content enclosed by the <code>{PAGE:<i>pages</i>}</code> and
+ * <code>{/PAGE}</code> tokens can be anything, including any of the special
+ * tokens supported by this class (including other
+ * <code>{PAGE:<i>pages</i>}...{/PAGE}</code> tokens - ie you can "nest"
+ * them.
+ * </p>
+ * <p>
+ * For example, the following markup selectively includes or omits the content
+ * depending on the portlet as indicated:
+ * </p>
+ * <p>
+ * 
+ * <pre>
+ * This content is for all pages using this file to show.
+ * {PAGE:page_A|page_B}
+ * This content is only for page_A or page_B to show.
+ * {PAGE:page_B}
+ * This content is only for page_B to show.
+ * {/PAGE}
+ * {/PAGE}
+ * </pre>
+ * 
+ * </p>
+ * </dd>
+ * 
  * <dt><a name="portlet"><code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></a></dt>
  * <dd>
  * <p>
@@ -519,8 +569,8 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * <p>
  * This method assumes that the portlet friendly ID has been set by the portal
- * into the proper-namespaced attribute in the portlet request. Vignette Portal
- * does this automatically (a non-standard behavior).
+ * into the proper-namespaced attribute in the portlet request. The Shared
+ * Portal Framework does this automatically (a non-standard behavior).
  * </p>
  * <p>
  * The content enclosed by the <code>{PORTLET:<i>portlets</i>}</code> and
@@ -539,7 +589,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * This content is for all portlets using this file to show.
  * {PORTLET:portlet_A|portlet_B}
  * This content is only for portlet_A or portlet_B to show.
- * {PORTLET:B}
+ * {PORTLET:portlet_B}
  * This content is only for portlet_B to show.
  * {/PORTLET}
  * {/PORTLET}
@@ -620,19 +670,19 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><a name="site"><code>{SITE}</code></a></dt>
+ * <dt><a name="site-name"><code>{SITE-NAME}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert the site name of the current portal site into the
  * interpolated content. The site name is taken from a non-standard attribute in
  * the request which it is assumed the portal has set (SPF sets this by default -
  * the value set is the so-called "site DNS name"). For example,
- * <code>{SITE}</code> is replaced with <code>itrc</code> when the portlet
- * is requested from the <code>itrc</code> portal site.
+ * <code>{SITE-NAME}</code> is replaced with <code>itrc</code> when the
+ * portlet is requested from the <code>itrc</code> portal site.
  * </p>
  * </dd>
  * 
- * <dt><a name="site_c"><code>{SITES:<i>names</i>}...{/SITES}</code></a></dt>
+ * <dt><a name="site"><code>{SITE:<i>names</i>}...{/SITE}</code></a></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -643,11 +693,11 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * <p>
  * In the <code><i>names</i></code> parameter to the
- * <code>{SITES:<i>names</i>}</code> token, you can list just a single site
+ * <code>{SITE:<i>names</i>}</code> token, you can list just a single site
  * name, or multiple (use the <code>|</code> character to delimit them). The
- * content enclosed by the <code>{SITES:<i>names</i>}</code> and
- * <code>{/SITES}</code> tokens is omitted from the returned content unless
- * the site name in the request matches one of those values. The match is
+ * content enclosed by the <code>{SITE:<i>names</i>}</code> and
+ * <code>{/SITE}</code> tokens is omitted from the returned content unless the
+ * site name in the request matches one of those values. The match is
  * case-insensitive.
  * </p>
  * <p>
@@ -656,10 +706,10 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * automatically (a non-standard behavior).
  * </p>
  * <p>
- * The content enclosed by the <code>{SITES:<i>names</i>}</code> and
- * <code>{/SITES}</code> tokens can be anything, including any of the special
+ * The content enclosed by the <code>{SITE:<i>names</i>}</code> and
+ * <code>{/SITE}</code> tokens can be anything, including any of the special
  * tokens supported by this class (including other
- * <code>{SITES:<i>names</i>}...{/SITES}</code> tokens - ie you can "nest"
+ * <code>{SITE:<i>names</i>}...{/SITE}</code> tokens - ie you can "nest"
  * them.
  * </p>
  * <p>
@@ -670,12 +720,12 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  * <pre>
  * This content is for all portlets using this file to show.
- * {SITES:site_A|site_B}
+ * {SITE:site_A|site_B}
  * This content is only to be shown when the portlet is in site_A or site_B.
- * {SITES:site_B}
+ * {SITE:site_B}
  * This content is only to be shown when the portlet is in site_B.
- * {/SITES}
- * {/SITES}
+ * {/SITE}
+ * {/SITE}
  * </pre>
  * 
  * </p>
