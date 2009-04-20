@@ -212,6 +212,11 @@ public class Consts {
 	 * from portal context map.
 	 */
 	public static final String KEY_PORTAL_SITE_NAME = "PortalSite";
+	
+	/**
+	 * The key to get the page friendly id from portal context map.
+	 */
+	public static final String KEY_PORTAL_PAGE_ID = "PortalPageId";
 
 	/**
 	 * The key to get the site URL (ie the portal home page URL for the current
