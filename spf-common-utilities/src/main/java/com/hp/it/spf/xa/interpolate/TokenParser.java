@@ -51,11 +51,12 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{REQUEST-URL:<i>spec</i>}</code></li>
  * <li><code>{EMAIL}</code></li>
  * <li><code>{NAME}</code></li>
- * <li><code>{SITE}</code></li>
+ * <li><code>{SITE-NAME}</code></li>
  * <li><code>{SITE-URL}</code></li>
  * <li><code>{SITE-URL:<i>spec</i>}</code></li>
  * <li><code>{URL-ENCODE:<i>string</i>}</code></li>
- * <li><code>{SITES:<i>names</i>}</code></li>
+ * <li><code>{PAGE:<i>ids</i>}</code></li>
+ * <li><code>{SITE:<i>names</i>}</code></li>
  * <li><code>{GROUP:<i>groups</i>}</code></li>
  * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
  * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
@@ -64,8 +65,8 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{AFTER:<i>date</i>}</code></li>
  * </dl>
  * 
- * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
+ * @author <link href="jyu@hp.com">Yu Jie</link>
  * @version TBD
  * @see <code>com.hp.it.spf.xa.interpolate.portal.TokenParser</code><br>
  *      <code>com.hp.it.spf.xa.interpolate.portlet.TokenParser</code></br>
@@ -149,9 +150,9 @@ public abstract class TokenParser {
 	private static final String TOKEN_USER_PROPERTY = "USER-PROPERTY";
 
 	/**
-	 * This class attribute is the token for the current portal site.
+	 * This class attribute is the token for the current portal site name.
 	 */
-	private static final String TOKEN_SITE = "SITE";
+	private static final String TOKEN_SITE = "SITE-NAME";
 
 	/**
 	 * This class attribute is the token for the current portal site URL.
@@ -169,10 +170,16 @@ public abstract class TokenParser {
 	private static final String TOKEN_URL_ENCODE = "URL-ENCODE";
 
 	/**
+	 * This class attribute is the name of the container token for a page
+	 * section.
+	 */
+	private static final String TOKEN_PAGE_CONTAINER = "PAGE";
+
+	/**
 	 * This class attribute is the name of the container token for a site
 	 * section.
 	 */
-	private static final String TOKEN_SITE_CONTAINER = "SITES";
+	private static final String TOKEN_SITE_CONTAINER = "SITE";
 
 	/**
 	 * This class attribute is the name of the container token for a group
@@ -347,7 +354,15 @@ public abstract class TokenParser {
 	 * 
 	 * @return site name
 	 */
-	protected abstract String getSite();
+	protected abstract String getSiteName();
+
+	/**
+	 * Get the page ID for the current portal page. Different action by portal
+	 * and portlet, so therefore this is an abstract method.
+	 * 
+	 * @return page ID
+	 */
+	protected abstract String getPageID();
 
 	/**
 	 * Get the portal site URL for the portal site and page indicated by the
@@ -477,6 +492,7 @@ public abstract class TokenParser {
 		content = parseBeforeContainer(content);
 		content = parseAfterContainer(content);
 		content = parseSiteContainer(content);
+		content = parsePageContainer(content);
 		content = parseGroupContainer(content);
 
 		// Do the elemental tokens second:
@@ -945,13 +961,13 @@ public abstract class TokenParser {
 	/**
 	 * <p>
 	 * Parses the given string, substituting the current portal site name for
-	 * the <code>{SITE}</code> token. The site name is the unique name in the
+	 * the <code>{SITE-NAME}</code> token. The site name is the unique name in the
 	 * portal URL for the virtual portal site. For example: <code>&lt;a
-	 * href="https://ovsc.hp.com?site={SITE}"&gt;go to OVSC&lt;/a&gt;</code>
+	 * href="https://ovsc.hp.com?site={SITE-NAME}"&gt;go to OVSC&lt;/a&gt;</code>
 	 * is changed to <code>{a href="https://ovsc.hp.com?site=acme"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * when the site name is "acme". The site name is obtained from
-	 * {@link #getSite()} - if that method returns a null site name, the token
+	 * {@link #getSiteName()} - if that method returns a null site name, the token
 	 * is replaced with blank. If you provide null content, null is returned.
 	 * </p>
 	 * <p>
@@ -965,7 +981,7 @@ public abstract class TokenParser {
 	 * @return The interpolated string.
 	 */
 	public String parseSite(String content) {
-		return parseElementalToken(content, TOKEN_SITE, getSite());
+		return parseElementalToken(content, TOKEN_SITE, getSiteName());
 	}
 
 	/**
@@ -1212,12 +1228,12 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the string for any <code>{SITES:<i>names</i>}</code> content;
+	 * Parses the string for any <code>{SITE:<i>names</i>}</code> content;
 	 * such content is deleted if the current portal site name does not match
 	 * (otherwise only the special markup is removed). The site name is the
 	 * unique name in the portal URL for the virtual portal site. The <i>names</i>
 	 * may include one or more site names, delimited by "|" for a logical-or.
-	 * <code>{SITES:<i>names</i>}</code> markup may be nested for
+	 * <code>{SITE:<i>names</i>}</code> markup may be nested for
 	 * logical-and (however since any one site has only one site name, the
 	 * desire to logical-and seems unlikely).
 	 * </p>
@@ -1234,9 +1250,9 @@ public abstract class TokenParser {
 	 * 
 	 * <pre>
 	 *  This content is for all sites to display.
-	 *  {SITES:abc|def}
+	 *  {SITE:abc|def}
 	 *  This content is to be displayed only in the abc or def sites.
-	 *  {/SITES}
+	 *  {/SITE}
 	 * </pre>
 	 * 
 	 * <p>
@@ -1262,8 +1278,8 @@ public abstract class TokenParser {
 	 * 
 	 * <p>
 	 * If you provide null content, null is returned. The site name is obtained
-	 * from the {@link #getSite()} method - if it returns null or an empty site
-	 * name, all <code>{SITES:names}</code>-enclosed sections are removed
+	 * from the {@link #getSiteName()} method - if it returns null or an empty site
+	 * name, all <code>{SITE:names}</code>-enclosed sections are removed
 	 * from the content.
 	 * </p>
 	 * <p>
@@ -1305,7 +1321,102 @@ public abstract class TokenParser {
 		}
 
 		return parseContainerToken(content, TOKEN_SITE_CONTAINER,
-				new SiteContainerMatcher(getSite()));
+				new SiteContainerMatcher(getSiteName()));
+	}
+
+	/**
+	 * <p>
+	 * Parses the string for any <code>{PAGE:<i>ids</i>}</code> content;
+	 * such content is deleted if the current page ID does not qualify
+	 * (otherwise only the special markup is removed). The <i>ids</i> may
+	 * include one or more page IDs, delimited by "|" for a logical-or.
+	 * <code>{PAGE:<i>ids</i>}</code> markup may be nested for
+	 * logical-and (however since any one request is only for one page, the
+	 * desire to logical-and seems unlikely).
+	 * </p>
+	 * 
+	 * <p>
+	 * <b>Note:</b> As of this writing, the page ID's should be page
+	 * friendly ID's provided by Vignette automatically. A page ID provided
+	 * by Vignette matches the one in the token, if the token is a
+	 * case-insensitive substring of it.
+	 * </p>
+	 * 
+	 * <p>
+	 * For example, consider the following content string:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content always displays.
+	 *  {PAGE:abc|def}
+	 *  This content displays only on pages whose ID's contain abc or def.
+	 *  {/PAGE}
+	 * </pre>
+	 * 
+	 * <p>
+	 * If the current page ID is <code>AbcXyz</code>, the returned content
+	 * string is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content always displays.
+	 *  
+	 *  This content displays only on pages whose ID's contain abc or def.
+	 *     
+	 * </pre>
+	 * 
+	 * <p>
+	 * But if the current page ID is just <code>xyz</code>, the returned
+	 * content string is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content always displays.
+	 *  
+	 *  
+	 * </pre>
+	 * 
+	 * <p>
+	 * If you provide null content, null is returned. The current page ID is
+	 * obtained from the {@link #getPageID()} method - if it returns a null
+	 * or empty portlet ID, all <code>{PAGE}</code>-enclosed sections are
+	 * removed from the content.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string.
+	 */
+	public String parsePageContainer(String content) {
+
+		/**
+		 * <code>ContainerMatcher</code> for page parsing. The constructor
+		 * stores a page ID into the class. The match method returns true if
+		 * the given page ID is a substring (case-insensitive) of the stored
+		 * page ID.
+		 */
+		class PageContainerMatcher extends ContainerMatcher {
+
+			protected PageContainerMatcher(String pageID) {
+				super(pageID);
+			}
+
+			protected boolean match(String containerKey) {
+				String pageID = (String) subjectOfComparison;
+				if (pageID != null && containerKey != null) {
+					containerKey = containerKey.trim().toUpperCase();
+					pageID = pageID.trim().toUpperCase();
+					if (!pageID.equals("") && !containerKey.equals("")) {
+						if (pageID.indexOf(containerKey) > -1)
+							return true;
+					}
+				}
+				return false;
+			}
+		}
+
+		return parseContainerToken(content, TOKEN_PAGE_CONTAINER,
+				new PageContainerMatcher(getPageID()));
 	}
 
 	/**

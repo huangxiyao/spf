@@ -245,7 +245,7 @@ public class Consts {
 	public static final String ANON_USER_NAME_PREFIX = "sso_guest_user_";
 
 	/**
-	 * The key to get the portlet friendly id from portal context map.
+	 * The key to get the portlet friendly id from the portal context map.
 	 */
 	public static final String KEY_PORTAL_PORTLET_ID = "com.vignette.portal.portlet.friendlyid";
 
