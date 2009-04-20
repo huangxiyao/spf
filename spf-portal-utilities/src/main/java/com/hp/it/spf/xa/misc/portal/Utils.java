@@ -26,6 +26,8 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.util.StringUtils;
 import com.vignette.portal.website.enduser.PortalContext;
+import com.epicentric.template.Style;
+import com.epicentric.page.Page;
 
 /**
  * A container class for miscellaneous utility methods for Vignette portal
@@ -281,6 +283,44 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 			siteDNS = siteDNS.trim();
 		}
 		return siteDNS;
+	}
+
+	/**
+	 * Get the ID for the current portal page from the given portal context.
+	 * With Vignette portal, this returns the page friendly ID if the current
+	 * page is a primary page; otherwise it returns the friendly ID for the
+	 * current secondary page or its secondary page type. This method returns
+	 * null if the page ID cannot be determined with that logic.
+	 * 
+	 * @param context The current portal context.
+	 * @return The page ID as defined above.
+	 */
+	public static String getPageID(PortalContext context) {
+		String friendlyID;
+		if (context != null) {
+			Page currentPage = context.getResolvedPortletPage();
+			if (currentPage != null) {
+				friendlyID = currentPage.getFriendlyID(context);
+				if (friendlyID != null)
+					friendlyID = friendlyID.trim();
+				if ((friendlyID != null) && (friendlyID.length() > 0))
+					return friendlyID;
+			}
+			Style currentSecondaryPage = context.getCurrentSecondaryPage();
+			if (currentSecondaryPage != null) {
+				friendlyID = currentSecondaryPage.getFriendlyID();
+				if (friendlyID != null)
+					friendlyID = friendlyID.trim();
+				if ((friendlyID != null) && (friendlyID.length() > 0))
+					return friendlyID;
+				friendlyID = currentSecondaryPage.getTemplateFriendlyID();
+				if (friendlyID != null)
+					friendlyID = friendlyID.trim();
+				if ((friendlyID != null) && (friendlyID.length() > 0))
+					return friendlyID;
+			}
+		}
+		return null;
 	}
 
 	/**
