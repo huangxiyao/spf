@@ -324,9 +324,6 @@ public class MockeryUtils {
                 allowing(request).getParameter("username");
                 allowing(request).getHeader("Host");will(returnValue("bollo22.serviceportal.hp.com"));
                 will(returnValue("false"));
-                Cookie smsession = new Cookie("SMSESSION", "NOT");
-                allowing(request).getCookies();
-                will(returnValue(new Cookie[]{smsession}));
             }
         });
         return request;
