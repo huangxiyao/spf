@@ -104,11 +104,38 @@
         </portlet-info>
     </portlet>
 
+    <portlet>
+        <portlet-name>DisplayProfileTestPortlet</portlet-name>
+        <portlet-class>com.hp.it.spf.apps.displayprofiletest.portlet.DisplayProfileTestPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Display Profile Test Portlet</title>
+        </portlet-info>
+    </portlet>
 
     <custom-portlet-mode>
         <portlet-mode>vignette:config</portlet-mode>
     </custom-portlet-mode>
     
+    <filter>
+        <display-name>MapAttributeFilter</display-name>
+        <filter-name>MapAttributeFilter</filter-name>
+        <filter-class>com.hp.it.spf.sso.portlet.filter.MapAttributeFilter</filter-class>
+        <lifecycle>ACTION_PHASE</lifecycle>
+        <lifecycle>RENDER_PHASE</lifecycle>
+        <lifecycle>RESOURCE_PHASE</lifecycle>
+        <lifecycle>EVENT_PHASE</lifecycle>
+    </filter>
+    <filter-mapping>
+        <filter-name>MapAttributeFilter</filter-name>
+        <portlet-name>*</portlet-name>
+    </filter-mapping>
+
     <!--<default-namespace>com.hp.it.spf.apps.clonebeforewritetestportlet</default-namespace>-->
 
     <event-definition>
