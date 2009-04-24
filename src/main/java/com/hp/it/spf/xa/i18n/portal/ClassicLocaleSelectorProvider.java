@@ -432,7 +432,6 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 			if (sortLocale != null) {
 				sortInLocale = sortLocale;
 			}
-			Locale displayInLocale = displayLocale;
 
 			// sort available locales according to the settings
 			availableLocales = I18nUtility.sortLocales(availableLocales,
@@ -444,6 +443,7 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 			int i = 1;
 			while (atts.hasNext()) {
 				Locale locale = (Locale) atts.next();
+				Locale displayInLocale = displayLocale;
 
 				// get display name according to the settings
 				if (displayInLocale == null) {
