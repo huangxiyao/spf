@@ -41,7 +41,7 @@ $all_misc_files_re = "^.*\.($misc_ext_re)\$";
 $all_media_files_re = "^.*\.($media_ext_re)\$";
 $all_vgn_portal_msg_files_re = "^[a-f0-9]{32}.*\.($msg_ext_re)\$";
 $all_spf_portal_msg_files_re = "^spf\-.*\.($msg_ext_re)\$";
-# PROJECT will be replaced with the project name at run time
+# PROJECT will be replaced with the project name prefix at run time
 $all_project_portal_msg_files_re = "^PROJECT.*\.($msg_ext_re)\$";
 $all_xlated_files_re = "_[a-zA-Z]{2}\.[^\.]*\$";
 $all_xlated_text_files_re = "^.*_[a-zA-Z]{2}\.($msg_ext_re|$nonmsg_ext_re)\$";
@@ -59,6 +59,7 @@ sub get_project  {
 
    local ($project_opt) = @_;
    local ($project);
+   local ($project_prefix);
 
    $project = $project_opt;
    $project =~ s/^[\s\/]*//g;     # Trim any leading whitespace or dir chars
@@ -69,8 +70,14 @@ sub get_project  {
       &print_usage ();
       exit 1;
    }
-   # Specify the projecxt name in the global variable
-   $all_project_portal_msg_files_re =~ s/PROJECT/$project/g;
+   
+   # Specify the project prefix in the global variable
+   $project_prefix = $project;
+   if ($project =~ /^(.*)[\-\_\.]/) {
+      $project_prefix = $1;
+   }
+   $all_project_portal_msg_files_re =~ s/PROJECT/$project_prefix/g;
+
    return $project;
 }
 
