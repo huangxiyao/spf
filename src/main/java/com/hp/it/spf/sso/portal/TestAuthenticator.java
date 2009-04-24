@@ -267,16 +267,9 @@ public class TestAuthenticator extends AbstractAuthenticator {
 		}
 		User user = SessionUtils.getCurrentUser(request.getSession());
 		if (user != null) {
-			// make up locale for user
-			String country = ssoUser.getCountry();
-			String language = ssoUser.getLanguage();
-			Locale locale = Locale.ENGLISH;
-			if (language != null) {
-				locale = country != null ? new Locale(language, country)
-						: new Locale(language);
-			}
 			if (!user.isGuestUser()) {
-				I18nUtils.setUserLocale(user, locale);
+				// use locale got from locale resolver
+				I18nUtils.setUserLocale(user, (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE));
 			}
 		}
 	}
