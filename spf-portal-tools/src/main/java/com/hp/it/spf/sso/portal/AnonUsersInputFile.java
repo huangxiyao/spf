@@ -23,7 +23,7 @@ import java.util.NoSuchElementException;
  *
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  */
-class InputFile implements Iterator<AnonymousUserData> {
+class AnonUsersInputFile implements Iterator<AnonymousUserData> {
 
 	private static final int IDX_LANGUAGE = 0;
 	private static final int IDX_COUNTRY = 1;
@@ -47,11 +47,11 @@ class InputFile implements Iterator<AnonymousUserData> {
 	private String mNextLine = null;
 
 
-	public InputFile(String inputFilePath) throws FileNotFoundException {
+	public AnonUsersInputFile(String inputFilePath) throws FileNotFoundException {
 		this(new BufferedReader(new FileReader(inputFilePath)));
 	}
 
-	InputFile(BufferedReader reader) {
+	AnonUsersInputFile(BufferedReader reader) {
 		mReader = reader;
 	}
 
@@ -60,15 +60,16 @@ class InputFile implements Iterator<AnonymousUserData> {
 	 * that this does not mean that it has more {@link AnonymousUserData} entries as the file
 	 * may contain error lines.
 	 *
-	 * @throws FileReadException If an error occurred while reading the input file.
+	 * @throws AnonUsersFileReadException If an error occurred while reading the input file.
 	 */
-	public boolean hasNext() throws FileReadException {
+	public boolean hasNext() throws AnonUsersFileReadException
+	{
 		if (!mStartedReading) {
 			try {
 				mNextLine = loadNextNonEmptyOrCommentLine();
 			}
 			catch (IOException e) {
-				throw new FileReadException("Error reading file", e);
+				throw new AnonUsersFileReadException("Error reading file", e);
 			}
 			mStartedReading = true;
 		}
@@ -78,12 +79,12 @@ class InputFile implements Iterator<AnonymousUserData> {
 	/**
 	 * @return Next successfully {@link AnonymousUserData} object.
 	 * @throws NoSuchElementException If there is no more valid data to read.
-	 * @throws FileReadException If an error occurs while reading the input file.
+	 * @throws AnonUsersFileReadException If an error occurs while reading the input file.
 	 * @throws IllegalArgumentException If incorrectly formatted line was found in the input file.
 	 * Note that a call to this method after an error occurs will read next entry from the input file
 	 * and may yield correct results if the data in the file is correct.
 	 */
-	public AnonymousUserData next() throws NoSuchElementException, FileReadException, IllegalArgumentException {
+	public AnonymousUserData next() throws NoSuchElementException, AnonUsersFileReadException, IllegalArgumentException {
 		if (!hasNext()) {
 			throw new NoSuchElementException();
 		}
@@ -92,13 +93,13 @@ class InputFile implements Iterator<AnonymousUserData> {
 			result = loadNext();
 		}
 		catch (IOException e) {
-			throw new FileReadException("Error reading file", e);
+			throw new AnonUsersFileReadException("Error reading file", e);
 		}
 		if (result == null) {
 			try {
 				mReader.close();
 			} catch (IOException ex) {
-				throw new FileReadException("Error closing file.", ex);
+				throw new AnonUsersFileReadException("Error closing file.", ex);
 			}
 		}
 		return result;

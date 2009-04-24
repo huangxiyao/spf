@@ -103,7 +103,7 @@ public class AnonUsersImport {
 	 * @throws FileNotFoundException If the input file cannot be found
 	 */
 	private void run(String realm, String inputFilePath) throws FileNotFoundException {
-		final InputFile inputFile = new InputFile(inputFilePath);
+		final AnonUsersInputFile inputFile = new AnonUsersInputFile(inputFilePath);
 
 		LOG.info("Starting anonymous users import process from file " + inputFilePath);
 		int counter = 0;

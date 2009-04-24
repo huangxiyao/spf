@@ -8,11 +8,11 @@ import junit.framework.TestCase;
 /**
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  */
-public class InputFileTest extends TestCase {
+public class AnonUsersInputFileTest extends TestCase {
 
 	public void testInputFileNotFound() {
 		try {
-			new InputFile("NON_EXISTING_INPUT_FILE_PATH");
+			new AnonUsersInputFile("NON_EXISTING_INPUT_FILE_PATH");
 			fail("FileNotFoundException expected!");
 		}
 		catch (FileNotFoundException e) {
@@ -21,7 +21,7 @@ public class InputFileTest extends TestCase {
 	}
 
 	public void testEmptyInputFile() {
-		InputFile inputFile = new InputFile(new BufferedReader(new StringReader("")));
+		AnonUsersInputFile inputFile = new AnonUsersInputFile(new BufferedReader(new StringReader("")));
 		assertFalse("Iterator has elements", inputFile.hasNext());
 	}
 
@@ -29,7 +29,7 @@ public class InputFileTest extends TestCase {
 		String data = "\n# some comment\n,,,\nen,US,America/Los_Angeles\n,,,\n";
 
 		AnonymousUserData userData = null;
-		InputFile inputFile = new InputFile(new BufferedReader(new StringReader(data)));
+		AnonUsersInputFile inputFile = new AnonUsersInputFile(new BufferedReader(new StringReader(data)));
 
 		// 1st non-empty and non-comment line is invalid
 		assertTrue("Iterator has next even though the line is invalid", inputFile.hasNext());
@@ -59,7 +59,7 @@ public class InputFileTest extends TestCase {
 	}
 
 	public void testCommentsAndEmptyLinesIgnored() {
-		InputFile inputFile = new InputFile(new BufferedReader(new StringReader("# a single comment line\n\n")));
+		AnonUsersInputFile inputFile = new AnonUsersInputFile(new BufferedReader(new StringReader("# a single comment line\n\n")));
 		assertFalse("Iterator has elements", inputFile.hasNext());
 	}
 
@@ -68,7 +68,7 @@ public class InputFileTest extends TestCase {
 				"en\tUS\tAmerica/Los_Angeles\n" +
 				"es,MX,America/Mexico_City\n" +
 				"fr;FR;Europe/Paris";
-		InputFile inputFile = new InputFile(new BufferedReader(new StringReader(data)));
+		AnonUsersInputFile inputFile = new AnonUsersInputFile(new BufferedReader(new StringReader(data)));
 
 		assertTrue("1st user available", inputFile.hasNext());
 		AnonymousUserData user1 = inputFile.next();
@@ -93,7 +93,7 @@ public class InputFileTest extends TestCase {
 
 	public void testUserDataWithEmptyCountry() {
 		String data = "en,,America/Los_Angeles\n";
-		InputFile inputFile = new InputFile(new BufferedReader(new StringReader(data)));
+		AnonUsersInputFile inputFile = new AnonUsersInputFile(new BufferedReader(new StringReader(data)));
 
 		AnonymousUserData userData = inputFile.next();
 		assertNull("User country", userData.getCountry());
