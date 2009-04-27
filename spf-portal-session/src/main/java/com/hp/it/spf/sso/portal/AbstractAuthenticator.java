@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -152,6 +154,11 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 }
                 AuthenticatorHelper.cleanupSession(request);
             } else {
+            	// fetch userProfile from session
+            	userProfile = (Map)request.getSession().getAttribute(AuthenticationConsts.USER_PROFILE_KEY);
+            	// get groups from userProfile
+            	List<String> sessionGroups = (List<String>)userProfile.get(AuthenticationConsts.KEY_USER_GROUPS);
+            	refreshLocaleGroups(sessionGroups);
                 userName = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
                 return;
             }
@@ -175,6 +182,49 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                                  "1");
 			RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.AUTH001, ex.toString());
         }
+    }
+
+    /**
+     * This method is used to update user's locale groups if locale in response has been changed.
+     * It will get country and langauge from session and find out if they are different with the one from locale resolver
+     * if different, update the groups in vignette and save back to session
+     */
+    @SuppressWarnings("unchecked")
+    protected void refreshLocaleGroups(List<String> sessionGroups) {
+    	Set<String> inputGroups = new HashSet<String>();
+    	String language = "";
+    	String country = "";
+    	Iterator<String> iterator = sessionGroups.iterator();
+    	while(iterator.hasNext()) {
+    		String group = iterator.next();
+    		if (!group.startsWith(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX)
+    				&& !group.startsWith(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX)) {
+    			// find all groups which are not locale groups
+    			inputGroups.add(group);
+    		}
+    		if (group.startsWith(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX)) {
+    			language = group.replace(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX, "");
+    		}
+    		if (group.startsWith(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX)) {
+    			country = group.replace(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX, "");
+    		}
+    	}
+    	Locale reqLocale = (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE);
+    	// if locale change
+    	if (!(reqLocale.getLanguage().equalsIgnoreCase(language)
+    			&& reqLocale.getCountry().equalsIgnoreCase(country))) {
+    		// add new locale group to the final group set
+    		inputGroups.addAll(getLocaleGroups());
+    		ssoUser.setGroups(inputGroups);
+            try {
+        		// Retrieve user from session, in current situation user will not be null
+                User currentUser = SessionUtils.getCurrentUser(request.getSession());
+				updateVAPUserGroups(currentUser);
+				saveUserProfile2Session(currentUser);
+			} catch (EntityPersistenceException ex) {
+				LOG.error("Invoke Authenticator.execute error: updateVAPUserGroups error: " + ex.getMessage(), ex);
+			}
+    	}
     }
 
     /**
@@ -503,7 +553,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         userProfile.putAll(getUserProfile());
 
         mapUserProfile2SSOUser();
-        ssoUser.setGroups(getUserGroup());
+        Set groups = getUserGroups();
+        groups.addAll(getLocaleGroups());
+        ssoUser.setGroups(groups);
 
         // Retrieve user from Vignette.
         User vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_PROFILE_ID,
@@ -562,12 +614,17 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * 
      * @return retrieved groups set or an empty set
      */
+    protected abstract Set getUserGroups();
+
+    /**
+     * This is the method used to retrieve locale groups info and return
+     * as a Set
+     * 
+     * @return retrieved groups set or an empty set
+     */
     @SuppressWarnings("unchecked")
-    protected Set getUserGroup() {        
+    protected Set getLocaleGroups() {        
         Set<String> group = new HashSet<String>();
-        
-        // set authenticated user group
-        group.add(AuthenticationConsts.LOCAL_PORTAL_AUTHENTICATED_USERS);
         
         // set group according to user locale retrieved by locale resolver
         Locale reqLocale = (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE);

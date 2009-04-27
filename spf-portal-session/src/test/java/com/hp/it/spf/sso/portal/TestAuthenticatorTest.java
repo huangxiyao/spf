@@ -75,7 +75,7 @@ public class TestAuthenticatorTest {
     @Test
     public void testGetUserGroup() {
         TestAuthenticator authenticator = new TestAuthenticator(request);
-        Set set = authenticator.getUserGroup();
+        Set set = authenticator.getUserGroups();
         assertTrue(set.size() > 0);
     }
 

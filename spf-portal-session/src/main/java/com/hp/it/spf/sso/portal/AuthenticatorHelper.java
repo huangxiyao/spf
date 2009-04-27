@@ -404,11 +404,11 @@ public class AuthenticatorHelper {
             // if groups in vapuser and not in ssoUser, remove from vap user
             String grouptitle = (String)temp
                     .getProperty(AuthenticationConsts.GROUP_TITLE);
-            // don't sync groups starting with LOCAL_
-            if (!isGroupNeedSync(grouptitle)) {
-                continue;
-            }
             if (!ssoGroups.contains(grouptitle)) {
+                // don't sync groups starting with LOCAL_
+                if (!isGroupNeedSync(grouptitle)) {
+                    continue;
+                }
                 try {
                     user.removeParent(temp);
                     if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {

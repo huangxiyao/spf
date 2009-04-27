@@ -117,7 +117,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      * @return retrieved groups set or an empty set
      */
     @SuppressWarnings("unchecked")
-    protected Set getUserGroup() {
+    protected Set getUserGroups() {
         Set<String> groups = new HashSet<String>();
 
         // login HPP/Fed
@@ -130,9 +130,9 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         // retrieve groups from UserGroupRetriever
         IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(AuthenticationConsts.HPP_USER_GROUP_RETRIEVER);
         groups.addAll(retriever.getGroups(userProfile, request));
-        
-        // retrieve groups with invoking super method and merge them
-        groups.addAll(super.getUserGroup());
+
+        // set authenticated user group
+        groups.add(AuthenticationConsts.LOCAL_PORTAL_AUTHENTICATED_USERS);
         return groups;
     }
 
