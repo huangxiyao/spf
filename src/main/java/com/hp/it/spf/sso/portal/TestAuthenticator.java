@@ -189,7 +189,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 	 * 
 	 * @return groups
 	 */
-	protected Set getUserGroup() {
+	protected Set getUserGroups() {
 		Set groups = new HashSet();
 		String groupstring = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
 		// groups are divided by ,
@@ -201,8 +201,8 @@ public class TestAuthenticator extends AbstractAuthenticator {
 				groups.add(group);
 			}
 		}
-		// retrieve groups with invoking super method and merge them
-		groups.addAll(super.getUserGroup());
+        // set authenticated user group
+        groups.add(AuthenticationConsts.LOCAL_PORTAL_AUTHENTICATED_USERS);
 		return groups;
 	}
 

@@ -5,7 +5,9 @@
  */
 package com.hp.it.spf.sso.portal;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -148,4 +150,9 @@ public class ANONAuthenticator extends AbstractAuthenticator {
             super.saveUserProfile2Session(vapUser);
         }
     }
+
+	@Override
+	protected Set getUserGroups() {
+		return new HashSet();
+	}
 }
