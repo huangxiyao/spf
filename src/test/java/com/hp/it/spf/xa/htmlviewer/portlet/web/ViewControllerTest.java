@@ -139,7 +139,7 @@ public class ViewControllerTest extends TestCase {
 		content = (String) map.get(Consts.VIEW_CONTENT);
 		System.out.println("testHandleRenderRequestInternal.6 got: " + content);
 		assertEquals(
-				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Did we find this?</p><p>Upper language: ZH<br>Lower country: cn</p></body></html>",
+				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Did we find this (Chinese)?</p><p>Upper language: ZH<br>Lower country: cn</p></body></html>",
 				content);
 
 		pp.setValue(Consts.INCLUDES_FILENAME,
