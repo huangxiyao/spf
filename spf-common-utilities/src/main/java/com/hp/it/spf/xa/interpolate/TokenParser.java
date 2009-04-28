@@ -241,7 +241,7 @@ public abstract class TokenParser {
 	private static final String UPPERCASE = "upper";
 	private static final String LOWERCASE = "lower";
 
-	private PropertyResourceBundle subsFileBundle = null;
+	private ResourceBundle subsFileBundle = null;
 
 	/**
 	 * This class attribute holds the base filename of the token-substitution
@@ -961,14 +961,15 @@ public abstract class TokenParser {
 	/**
 	 * <p>
 	 * Parses the given string, substituting the current portal site name for
-	 * the <code>{SITE-NAME}</code> token. The site name is the unique name in the
-	 * portal URL for the virtual portal site. For example: <code>&lt;a
+	 * the <code>{SITE-NAME}</code> token. The site name is the unique name in
+	 * the portal URL for the virtual portal site. For example: <code>&lt;a
 	 * href="https://ovsc.hp.com?site={SITE-NAME}"&gt;go to OVSC&lt;/a&gt;</code>
 	 * is changed to <code>{a href="https://ovsc.hp.com?site=acme"&gt;go to
 	 * OVSC&lt;/a&gt;</code>
 	 * when the site name is "acme". The site name is obtained from
-	 * {@link #getSiteName()} - if that method returns a null site name, the token
-	 * is replaced with blank. If you provide null content, null is returned.
+	 * {@link #getSiteName()} - if that method returns a null site name, the
+	 * token is replaced with blank. If you provide null content, null is
+	 * returned.
 	 * </p>
 	 * <p>
 	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
@@ -1233,9 +1234,9 @@ public abstract class TokenParser {
 	 * (otherwise only the special markup is removed). The site name is the
 	 * unique name in the portal URL for the virtual portal site. The <i>names</i>
 	 * may include one or more site names, delimited by "|" for a logical-or.
-	 * <code>{SITE:<i>names</i>}</code> markup may be nested for
-	 * logical-and (however since any one site has only one site name, the
-	 * desire to logical-and seems unlikely).
+	 * <code>{SITE:<i>names</i>}</code> markup may be nested for logical-and
+	 * (however since any one site has only one site name, the desire to
+	 * logical-and seems unlikely).
 	 * </p>
 	 * 
 	 * <p>
@@ -1278,8 +1279,8 @@ public abstract class TokenParser {
 	 * 
 	 * <p>
 	 * If you provide null content, null is returned. The site name is obtained
-	 * from the {@link #getSiteName()} method - if it returns null or an empty site
-	 * name, all <code>{SITE:names}</code>-enclosed sections are removed
+	 * from the {@link #getSiteName()} method - if it returns null or an empty
+	 * site name, all <code>{SITE:names}</code>-enclosed sections are removed
 	 * from the content.
 	 * </p>
 	 * <p>
@@ -1330,16 +1331,16 @@ public abstract class TokenParser {
 	 * such content is deleted if the current page ID does not qualify
 	 * (otherwise only the special markup is removed). The <i>ids</i> may
 	 * include one or more page IDs, delimited by "|" for a logical-or.
-	 * <code>{PAGE:<i>ids</i>}</code> markup may be nested for
-	 * logical-and (however since any one request is only for one page, the
-	 * desire to logical-and seems unlikely).
+	 * <code>{PAGE:<i>ids</i>}</code> markup may be nested for logical-and
+	 * (however since any one request is only for one page, the desire to
+	 * logical-and seems unlikely).
 	 * </p>
 	 * 
 	 * <p>
-	 * <b>Note:</b> As of this writing, the page ID's should be page
-	 * friendly ID's provided by Vignette automatically. A page ID provided
-	 * by Vignette matches the one in the token, if the token is a
-	 * case-insensitive substring of it.
+	 * <b>Note:</b> As of this writing, the page ID's should be page friendly
+	 * ID's provided by Vignette automatically. A page ID provided by Vignette
+	 * matches the one in the token, if the token is a case-insensitive
+	 * substring of it.
 	 * </p>
 	 * 
 	 * <p>
@@ -1378,8 +1379,8 @@ public abstract class TokenParser {
 	 * 
 	 * <p>
 	 * If you provide null content, null is returned. The current page ID is
-	 * obtained from the {@link #getPageID()} method - if it returns a null
-	 * or empty portlet ID, all <code>{PAGE}</code>-enclosed sections are
+	 * obtained from the {@link #getPageID()} method - if it returns a null or
+	 * empty portlet ID, all <code>{PAGE}</code>-enclosed sections are
 	 * removed from the content.
 	 * </p>
 	 * 
@@ -1391,9 +1392,9 @@ public abstract class TokenParser {
 
 		/**
 		 * <code>ContainerMatcher</code> for page parsing. The constructor
-		 * stores a page ID into the class. The match method returns true if
-		 * the given page ID is a substring (case-insensitive) of the stored
-		 * page ID.
+		 * stores a page ID into the class. The match method returns true if the
+		 * given page ID is a substring (case-insensitive) of the stored page
+		 * ID.
 		 */
 		class PageContainerMatcher extends ContainerMatcher {
 
@@ -1798,14 +1799,17 @@ public abstract class TokenParser {
 	}
 
 	/**
-	 * Get token key value from token substitutions file. First try using the
+	 * Get token key value from token substitutions file. First, try using
+	 * {@link #getIncludeFileAsStream} to load it from the supporting resource
+	 * files (eg, for a portal component, from the secondary support files; and
+	 * for a portlet, from the portlet resource bundle folder or the portlet
+	 * WAR). If not found, then try using the
 	 * {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager} to
 	 * hot-load the properties file from anywhere searched by the class loader.
-	 * If not found, try using {@link #getIncludeFileAsStream} to load it from
-	 * the supporting resource files (eg, for a portal component, from the
-	 * secondary support files; and for a portlet, from the portlet resource
-	 * bundle folder or the portlet WAR). Cache the results of that load as a
-	 * side-effect, so we can refer to the cache in subsequent calls.
+	 * In either case, cache the results of that load inside this
+	 * <code>TokenParser</code> as a side-effect, so we can refer to the cache
+	 * in subsequent calls to this <code>TokenParser</code>. If the file is
+	 * not found by either approach, return an empty string.
 	 * 
 	 * @param key
 	 *            token key
@@ -1814,15 +1818,20 @@ public abstract class TokenParser {
 	 */
 	private String getIncludeValue(String key) {
 		try {
-			ResourceBundle resBundle = PropertyResourceBundleManager
-					.getBundle(this.subsFilePath);
-			if (resBundle != null) {
-				return resBundle.getString(key.trim());
-			}
 			if (this.subsFileBundle == null) {
 				this.subsFileBundle = new PropertyResourceBundle(
 						getIncludeFileAsStream(this.subsFilePath));
 			}
+		} catch (Exception e) {
+		}
+		try {
+			if (this.subsFileBundle == null) {
+				this.subsFileBundle = PropertyResourceBundleManager
+						.getBundle(this.subsFilePath);
+			}
+		} catch (Exception e) {
+		}
+		try {
 			if (this.subsFileBundle != null) {
 				return this.subsFileBundle.getString(key.trim());
 			}
