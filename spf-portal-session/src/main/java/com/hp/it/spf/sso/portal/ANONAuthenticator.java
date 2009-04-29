@@ -11,9 +11,9 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.epicentric.common.website.I18nUtils;
 import com.epicentric.common.website.SessionUtils;
 import com.epicentric.user.User;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
@@ -65,7 +65,8 @@ public class ANONAuthenticator extends AbstractAuthenticator {
         if (currentUser != null) {
             String currUserName = (String)currentUser.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID);
             if (currUserName.startsWith(AuthenticationConsts.ANON_USER_NAME_PREFIX)) {
-                Locale userLocale = I18nUtils.getUserLocale(currentUser);
+            	String langTag = currUserName.substring(AuthenticationConsts.ANON_USER_NAME_PREFIX.length());
+                Locale userLocale = I18nUtility.languageTagToLocale(langTag);
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("Retrieve loacle from session user," + userLocale);
                 }
