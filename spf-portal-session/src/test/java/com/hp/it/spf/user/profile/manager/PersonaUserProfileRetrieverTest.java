@@ -47,10 +47,10 @@ public class PersonaUserProfileRetrieverTest {
 	public void testConvertSimpleValues() {
 		Map<String, Object> userProfile = new HashMap<String, Object>();
 
-		Map<Integer, Collection<String>> simpleValues = new HashMap<Integer, Collection<String>>();
-		simpleValues.put(1, (Collection<String>) null);
-		simpleValues.put(2, stringCollection());
-		simpleValues.put(3, stringCollection("a", "b", "c"));
+		Map<String, Collection<String>> simpleValues = new HashMap<String, Collection<String>>();
+		simpleValues.put("1", (Collection<String>) null);
+		simpleValues.put("2", stringCollection());
+		simpleValues.put("3", stringCollection("a", "b", "c"));
 
 		PersonaUserProfileRetriever retriever = new PersonaUserProfileRetriever();
 		retriever.convertSimpleValues(userProfile, simpleValues);
@@ -65,11 +65,11 @@ public class PersonaUserProfileRetrieverTest {
 	public void testConvertCompoundValues() {
 		Map<String, Object> userProfile = new HashMap<String, Object>();
 
-		Map<Integer, Collection<ICompoundUserAttributeValue>> compoundValues =
-				new HashMap<Integer, Collection<ICompoundUserAttributeValue>>();
-		compoundValues.put(1, (Collection<ICompoundUserAttributeValue>) null);
-		compoundValues.put(2, compoundCollection());
-		compoundValues.put(3, compoundCollection(
+		Map<String, Collection<ICompoundUserAttributeValue>> compoundValues =
+				new HashMap<String, Collection<ICompoundUserAttributeValue>>();
+		compoundValues.put("1", (Collection<ICompoundUserAttributeValue>) null);
+		compoundValues.put("2", compoundCollection());
+		compoundValues.put("3", compoundCollection(
 				"{1 : a, 2 : b, 3 : c}",
 				"{1 : x, 2 : y, 3 : z}"));
 
@@ -109,7 +109,7 @@ public class PersonaUserProfileRetrieverTest {
 		return result;
 	}
 
-	private class TestCompoundUserAttributeValue extends HashMap<Integer, String> implements ICompoundUserAttributeValue {
+	private class TestCompoundUserAttributeValue extends HashMap<String, String> implements ICompoundUserAttributeValue {
 
 		private TestCompoundUserAttributeValue(String entries)
 		{
@@ -117,7 +117,7 @@ public class PersonaUserProfileRetrieverTest {
 			entries = entries.substring(0, entries.length()-1);
 			for (String entry : entries.split(",")) {
 				String[] entryItems = entry.split(":");
-				put(new Integer(entryItems[0].trim()), entryItems[1].trim());
+				put(entryItems[0].trim(), entryItems[1].trim());
 			}
 		}
 

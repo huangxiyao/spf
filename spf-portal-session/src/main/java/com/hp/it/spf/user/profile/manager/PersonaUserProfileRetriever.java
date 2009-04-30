@@ -59,11 +59,11 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
 			IUser user = getUserFromService(userIdentifier, request, userService);
 
             // retrieve simple attribute values and convert key from Integer type to String type
-            Map<Integer, Collection<String>> simple = user.getSimpleAttributeValues();
+            Map<String, Collection<String>> simple = user.getSimpleAttributeValues();
 			convertSimpleValues(userProfiles, simple);
 
 			// retrieve compound attribute values and convert key from Integer type to String type
-            Map<Integer, Collection<ICompoundUserAttributeValue>> compound = user.getCompoundAttributeValues();
+            Map<String, Collection<ICompoundUserAttributeValue>> compound = user.getCompoundAttributeValues();
 			convertCompoundValues(userProfiles, compound);
 		} catch (Exception ex) {
             throw new UserProfileException("Retrieve user profile from Persona error.", ex);
@@ -86,21 +86,21 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
 	}
 
 
-	void convertCompoundValues(Map<String, Object> userProfile, Map<Integer, Collection<ICompoundUserAttributeValue>> compoundValues)
+	void convertCompoundValues(Map<String, Object> userProfile, Map<String, Collection<ICompoundUserAttributeValue>> compoundValues)
 	{
-		for (Map.Entry<Integer, Collection<ICompoundUserAttributeValue>> entry: compoundValues.entrySet()) {
+		for (Map.Entry<String, Collection<ICompoundUserAttributeValue>> entry: compoundValues.entrySet()) {
 
-			String attributeName = String.valueOf(entry.getKey());
+			String attributeName = entry.getKey();
 			Collection<ICompoundUserAttributeValue> origianlValue = entry.getValue();
 
 			List<Map<String, String>> attributeValue = new ArrayList<Map<String, String>>();
 			for (ICompoundUserAttributeValue compoundUserAttributeValue : origianlValue) {
 
-				// convert the Map<Integer, String> to Map<String, String>
+				// convert the Map<String, String> to Map<String, String>
 				Map<String, String> attributeValueItem = new LinkedHashMap<String, String>();
-				for (Map.Entry<Integer, String> compuoundAttributeValueItem : compoundUserAttributeValue.entrySet()) {
+				for (Map.Entry<String, String> compuoundAttributeValueItem : compoundUserAttributeValue.entrySet()) {
 					attributeValueItem.put(
-							String.valueOf(compuoundAttributeValueItem.getKey()),
+							compuoundAttributeValueItem.getKey(),
 							compuoundAttributeValueItem.getValue());
 				}
 				attributeValue.add(attributeValueItem);
@@ -111,10 +111,10 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
 	}
 
 
-	void convertSimpleValues(Map<String, Object> userProfile, Map<Integer, Collection<String>> simpleValues)
+	void convertSimpleValues(Map<String, Object> userProfile, Map<String, Collection<String>> simpleValues)
 	{
-		for (Map.Entry<Integer, Collection<String>> entry: simpleValues.entrySet()) {
-			String attributeName = String.valueOf(entry.getKey());
+		for (Map.Entry<String, Collection<String>> entry: simpleValues.entrySet()) {
+			String attributeName = entry.getKey();
 			Collection<String> originalValue = entry.getValue();
 			// convert the Collection to List in case it's not a list
 			if (originalValue != null) {
