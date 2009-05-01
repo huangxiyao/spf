@@ -410,7 +410,8 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 					+ "\" ";
 
 		// begin selector table layout
-		html.append("<table cellpadding=\"2\" cellspacing=\"0\">\n");
+		html
+				.append("<table id=\"spfClassicLocaleSelector\" cellpadding=\"2\" cellspacing=\"0\">\n");
 		html.append("<tr>\n");
 
 		// label column

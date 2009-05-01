@@ -143,8 +143,9 @@ public abstract class LocaleSelectorProvider {
 				Consts.PAGE_FRIENDLY_ID_SELECT_LOCALE).toString();
 		StringBuffer html = new StringBuffer();
 		if (localeSelectorURI != null) {
-			html.append("<form action=\"" + localeSelectorURI
-					+ "\" method=\"post\">\n");
+			html
+					.append("<form id=\"spfLocaleSelector\" style=\"display: inline;\" action=\""
+							+ localeSelectorURI + "\" method=\"post\">\n");
 		} else {
 			html.append("<form>\n");
 		}
