@@ -1664,6 +1664,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			value = c.parseContextualHelpTokens(value, cArgs, pEscape);
 			return value;
 		} catch (Exception ex) {
+			value = pDefaultValue;
 		}
 		return value;
 	}
