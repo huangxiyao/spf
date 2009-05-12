@@ -106,8 +106,8 @@ public class ViewController extends FileInterpolatorController {
 		if (errorCode != null) {
 			// Force error code to internal error, so proper error
 			// message for view mode displays.
-			errorCode = Consts.ERROR_CODE_INTERNAL;
-			throw new InternalErrorException(request, errorCode);
+			throw new InternalErrorException(request,
+					Consts.ERROR_CODE_INTERNAL);
 		}
 
 		// Don't prepend html/ folder automatically anymore, so as not to lock
