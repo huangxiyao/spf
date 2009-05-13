@@ -29,7 +29,6 @@
 	</bean>
 	
 	<bean id="personaDaoFactory" class="com.hp.it.cas.persona.dao.PersonaDaoFactory">
-		<constructor-arg ref="dataSource"/>
 		<constructor-arg ref="securityDaoFactory"/>
 		<constructor-arg ref="securityCustomDaoFactory"/>
 	</bean>
