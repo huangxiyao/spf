@@ -11,6 +11,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import com.hp.it.spf.localeresolver.hpweb.LanguageNegotiator;
 import com.hp.it.spf.localeresolver.http.NoAcceptableLanguageException;
 import com.hp.it.spf.localeresolver.mock.MockLocaleProviderFactory;
+import com.hp.it.spf.localeresolver.mock.MockTargetLocaleProviderFactory;
 
 import junit.framework.TestCase;
 
@@ -22,6 +23,7 @@ public class LanguageNegotiatorTest extends TestCase {
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
     private MockLocaleProviderFactory localeProviderFactory;
+    private MockTargetLocaleProviderFactory targetLocaleProviderFactory;
 
     public void setUp() {
         request = new MockHttpServletRequest();
@@ -32,6 +34,8 @@ public class LanguageNegotiatorTest extends TestCase {
         supportedLocales.add(new Locale("fr", "ca"));
         localeProviderFactory = new MockLocaleProviderFactory();
         localeProviderFactory.setLocales(supportedLocales);
+        targetLocaleProviderFactory = new MockTargetLocaleProviderFactory();
+        targetLocaleProviderFactory.setLocales(supportedLocales);
     }
     
     /**
@@ -42,7 +46,7 @@ public class LanguageNegotiatorTest extends TestCase {
      */
     public void testCorrectlyResolvesMultipleLocales() {
         LanguageNegotiator ln = new LanguageNegotiator();
-        ln.setTargetLocaleProviderFactory(this.localeProviderFactory);
+        ln.setTargetLocaleProviderFactory(this.targetLocaleProviderFactory);
         request.addPreferredLocale(Locale.GERMAN);
         request.addPreferredLocale(Locale.CANADA_FRENCH);
         request.addPreferredLocale(Locale.JAPANESE);
@@ -60,7 +64,7 @@ public class LanguageNegotiatorTest extends TestCase {
     public void testAcceptLanguageMatchesProvidedLanguage()
             throws NoAcceptableLanguageException {
         LanguageNegotiator ln = new LanguageNegotiator();
-        ln.setTargetLocaleProviderFactory(this.localeProviderFactory);
+        ln.setTargetLocaleProviderFactory(this.targetLocaleProviderFactory);
         request.addPreferredLocale(Locale.GERMAN);
         ln.negotiate(request, response);
 
@@ -72,7 +76,7 @@ public class LanguageNegotiatorTest extends TestCase {
             throws NoAcceptableLanguageException {
         this.localeProviderFactory.addLocale(new Locale("fr"));
         LanguageNegotiator ln = new LanguageNegotiator();
-        ln.setTargetLocaleProviderFactory(this.localeProviderFactory);
+        ln.setTargetLocaleProviderFactory(this.targetLocaleProviderFactory);
         
         request.addPreferredLocale(Locale.CANADA_FRENCH);
         ln.negotiate(request, response);
@@ -86,7 +90,7 @@ public class LanguageNegotiatorTest extends TestCase {
             throws NoAcceptableLanguageException {
         try {           
             LanguageNegotiator ln = new LanguageNegotiator();
-            ln.setTargetLocaleProviderFactory(this.localeProviderFactory);
+            ln.setTargetLocaleProviderFactory(this.targetLocaleProviderFactory);
             
             request.addPreferredLocale(Locale.FRENCH);
             ln.negotiate(request, response);
@@ -101,7 +105,7 @@ public class LanguageNegotiatorTest extends TestCase {
         ArrayList supportedLocales = new ArrayList();
         supportedLocales.add(new Locale("fr"));
         supportedLocales.add(new Locale("de"));
-        MockLocaleProviderFactory provider = new MockLocaleProviderFactory();
+        MockTargetLocaleProviderFactory provider = new MockTargetLocaleProviderFactory();
         provider.setLocales(supportedLocales);
         
         LanguageNegotiator ln = new LanguageNegotiator();
@@ -116,7 +120,7 @@ public class LanguageNegotiatorTest extends TestCase {
     public void testNoMatch() {
         ArrayList supportedLocales = new ArrayList();
         supportedLocales.add(new Locale("fr"));
-        MockLocaleProviderFactory provider = new MockLocaleProviderFactory();
+        MockTargetLocaleProviderFactory provider = new MockTargetLocaleProviderFactory();
         provider.setLocales(supportedLocales);
         LanguageNegotiator ln = new LanguageNegotiator();
         ln.setTargetLocaleProviderFactory(provider);
