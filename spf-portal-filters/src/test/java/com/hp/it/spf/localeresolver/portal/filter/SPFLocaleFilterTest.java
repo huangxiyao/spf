@@ -11,6 +11,7 @@ import com.hp.it.spf.localeresolver.portal.filter.SPFLocaleFilter;
 import com.hp.it.spf.localeresolver.portal.mock.MockLocaleProviderFactory;
 import com.hp.it.spf.localeresolver.portal.mock.MockLocaleSetter;
 import com.hp.it.spf.localeresolver.portal.provider.HppHeaderLocaleProviderFactory;
+import com.hp.it.spf.localeresolver.portal.mock.MockTargetLocaleProviderFactory;
 
 import junit.framework.TestCase;
 
@@ -24,7 +25,7 @@ public class SPFLocaleFilterTest extends TestCase {
     protected void setUp() {
         config = new MockFilterConfig();
         config.addInitParameter("targetLocaleProviderFactory",
-                MockLocaleProviderFactory.class.getName());
+                MockTargetLocaleProviderFactory.class.getName());
         config.addInitParameter("defaultLocaleProviderFactory",
                 MockLocaleProviderFactory.class.getName());
         config.addInitParameter("passportLocaleProviderFactory",
@@ -38,7 +39,7 @@ public class SPFLocaleFilterTest extends TestCase {
             filter.init(config);
             assertTrue(true);
         } catch (ServletException e) {
-            fail("should be no failures");
+            fail("should be no failures: " + e);
         }
     }
 }

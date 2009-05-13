@@ -24,13 +24,4 @@ final class DefaultLocaleProviderFactory implements LocaleProviderFactory {
     public LocaleProvider getLocaleProvider(HttpServletRequest request) {
         return INSTANCE;
     }
-
-    /**
-     * @author Quintin May
-     */
-    static class DefaultLocaleProvider implements LocaleProvider {
-        public Collection getLocales() {
-            return Collections.singleton(Locale.getDefault());
-        }
-    }
 }

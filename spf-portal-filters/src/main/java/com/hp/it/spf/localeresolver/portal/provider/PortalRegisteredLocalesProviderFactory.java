@@ -6,23 +6,29 @@ package com.hp.it.spf.localeresolver.portal.provider;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.hp.it.spf.localeresolver.hpweb.LocaleProvider;
-import com.hp.it.spf.localeresolver.hpweb.LocaleProviderFactory;
+import com.hp.it.spf.localeresolver.hpweb.TargetLocaleProvider;
+import com.hp.it.spf.localeresolver.hpweb.TargetLocaleProviderFactory;
 
 /**
+ * A factory class for returning the target locale provider for the SPF Vignette
+ * portal.
+ * 
  * @author <link href="marc.derosa@hp.com"></link>
- * @version $Revision 0$ $Date. 01/01/2007$
+ * @author Scott Jorgenson
+ * @version $Revision 2.0 $
  */
 public class PortalRegisteredLocalesProviderFactory implements
-        LocaleProviderFactory {
+		TargetLocaleProviderFactory {
 
-    /**
-     * Creates a new locale provider specific to the request
-     * @param request the http servlet request
-     * @return locale provider
-     */
-    public LocaleProvider getLocaleProvider(HttpServletRequest request) {
-        return new PortalRegisteredLocalesProvider(request);
-    }
-
+	/**
+	 * Creates a new target locale provider specific to the request.
+	 * 
+	 * @param request
+	 *            the http servlet request
+	 * @return target locale provider
+	 */
+	public TargetLocaleProvider getTargetLocaleProvider(
+			HttpServletRequest request) {
+		return new PortalRegisteredLocalesProvider(request);
+	}
 }

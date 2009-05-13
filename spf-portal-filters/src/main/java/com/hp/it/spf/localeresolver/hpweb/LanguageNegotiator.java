@@ -18,200 +18,246 @@ import com.hp.it.spf.xa.misc.portal.Consts;
 
 /**
  * A language negotiator implementation that incorporates all HP.com language
- * selection criteria, including URL, cookie, HP Passport (optional), and
- * user-agent language settings. Also persists language settings into HP.com
- * specified cookies when appropriate.
+ * selection criteria, including URL, cookie, HP Passport (optional),
+ * user-agent, and default language settings. Also persists language settings
+ * into HP.com specified cookies when appropriate (ie when set from URL or HP
+ * Passport). Each language selection source is validated against the allowed
+ * locales for the target environment; only allowed languages are set. (As of
+ * version 2.0, any locale known in the target environment can be forcibly set
+ * via the URL, even if not otherwise allowed, by using the
+ * {@link UrlLocaleProvider.ALLOW_LOCALE_PARAM} query parameter.)
  * 
  * @author Quintin May
- * @version $Revision: 1.1 $
+ * @author Scott Jorgenson
+ * @version $Revision: 2.0 $
  */
 public class LanguageNegotiator implements ContentNegotiator {
-    private static final String ACCEPTABLE = LanguageNegotiator.class.getName()
-            + ".ACCEPTABLE";
-    private static final String NEGOTIATED_VALUE = LanguageNegotiator.class
-            .getName()
-            + ".NEGOTIATED_VALUE";
-    private static final String PERSIST_VALUE = LanguageNegotiator.class
-            .getName()
-            + ".PERSIST_VALUE";
-    private static final String TARGET_LOCALES = LanguageNegotiator.class
-            .getName()
-            + ".TARGET_LOCALES";
+	private static final String ACCEPTABLE = LanguageNegotiator.class.getName()
+			+ ".ACCEPTABLE";
+	private static final String NEGOTIATED_VALUE = LanguageNegotiator.class
+			.getName()
+			+ ".NEGOTIATED_VALUE";
+	private static final String PERSIST_VALUE = LanguageNegotiator.class
+			.getName()
+			+ ".PERSIST_VALUE";
+	private static final String ALLOWED_LOCALES = LanguageNegotiator.class
+			.getName()
+			+ ".ALLOWED_LOCALES";
 
-    private LocaleProviderFactory targetLocaleProviderFactory = new DefaultLocaleProviderFactory();
-    private LocaleProviderFactory passportLocaleProviderFactory;
-    private LocaleProviderFactory defaultLocaleProviderFactory;
+	private TargetLocaleProviderFactory targetLocaleProviderFactory;
+	private LocaleProviderFactory passportLocaleProviderFactory;
+	private LocaleProviderFactory defaultLocaleProviderFactory;
 
-    private final CookieLocaleSaver cookieLocaleSaver = new CookieLocaleSaver();
+	private final CookieLocaleSaver cookieLocaleSaver = new CookieLocaleSaver();
 
-    /**
-     * Sets the locale provider factory that returns locale providers that
-     * return the languages in which the application is localized.
-     * 
-     * @param targetLocaleProviderFactory
-     *            application locale provider factory.
-     */
-    public void setTargetLocaleProviderFactory(
-            LocaleProviderFactory targetLocaleProviderFactory) {
-        this.targetLocaleProviderFactory = targetLocaleProviderFactory;
-    }
+	/**
+	 * Sets the locale provider factory that returns locale providers that
+	 * return the languages in which the application is localized.
+	 * 
+	 * @param targetLocaleProviderFactory
+	 *            application locale provider factory.
+	 */
+	public void setTargetLocaleProviderFactory(
+			TargetLocaleProviderFactory targetLocaleProviderFactory) {
+		this.targetLocaleProviderFactory = targetLocaleProviderFactory;
+	}
 
-    /**
-     * Sets the locale provider factory that returns locale providers that in
-     * turn return the user's HP Passport locale settings.
-     * 
-     * @param passportLocaleProviderFactory
-     *            the HP Passport locale provider factory.
-     */
-    public void setPassportLocaleProviderFactory(
-            LocaleProviderFactory passportLocaleProviderFactory) {
-        this.passportLocaleProviderFactory = passportLocaleProviderFactory;
-    }
+	/**
+	 * Sets the locale provider factory that returns locale providers that in
+	 * turn return the user's HP Passport locale settings.
+	 * 
+	 * @param passportLocaleProviderFactory
+	 *            the HP Passport locale provider factory.
+	 */
+	public void setPassportLocaleProviderFactory(
+			LocaleProviderFactory passportLocaleProviderFactory) {
+		this.passportLocaleProviderFactory = passportLocaleProviderFactory;
+	}
 
-    /**
-     * Sets the last-resort locale provider factory. The first element returned
-     * by {@link LocaleProvider#getLocales()} will be used as the negotiated
-     * locale if no other source was able to provide a locale.
-     * 
-     * @param defaultLocaleProviderFactory
-     *            the default locale provider factory.
-     */
-    public void setDefaultLocaleProviderFactory(
-            LocaleProviderFactory defaultLocaleProviderFactory) {
-        this.defaultLocaleProviderFactory = defaultLocaleProviderFactory;
-    }
+	/**
+	 * Sets the last-resort locale provider factory. The first element returned
+	 * by {@link LocaleProvider#getLocales()} will be used as the negotiated
+	 * locale if no other source was able to provide a locale.
+	 * 
+	 * @param defaultLocaleProviderFactory
+	 *            the default locale provider factory.
+	 */
+	public void setDefaultLocaleProviderFactory(
+			LocaleProviderFactory defaultLocaleProviderFactory) {
+		this.defaultLocaleProviderFactory = defaultLocaleProviderFactory;
+	}
 
-    public boolean acceptable(HttpServletRequest request) {
-        Boolean acceptable = (Boolean) request.getAttribute(ACCEPTABLE);
+	/**
+	 * Resolves the locale from the request and returns true if an acceptable
+	 * locale was resolved (false otherwise). The resolved locale is set into a
+	 * request attribute as a side-effect. See the class documentation above for
+	 * a brief description of the algorithm used.
+	 * 
+	 * @param request
+	 *            the request for which to resolve a locale
+	 * @return true if the locale was resolved acceptably
+	 */
+	public boolean acceptable(HttpServletRequest request) {
 
-        // if we haven't determined this before for this request
-        if (acceptable == null) {
-            Collection targetLocales = targetLocaleProviderFactory
-                    .getLocaleProvider(request).getLocales();
-            request.setAttribute(TARGET_LOCALES, targetLocales);
+		Boolean acceptable = (Boolean) request.getAttribute(ACCEPTABLE);
 
-            // check URL
-            Locale negotiatedLocale = Negotiators.resolveLocale(
-                    new UrlLocaleProvider(request).getLocales(), targetLocales);
-            if (negotiatedLocale == null) {
-                // check cookies
-                negotiatedLocale = Negotiators.resolveLocale(
-                        new CookieLocaleProvider(request).getLocales(),
-                        targetLocales);
+		// if we haven't determined this before for this request
+		if (acceptable == null) {
+			Locale negotiatedLocale = null;
 
-                if (negotiatedLocale == null) {
-                    if (passportLocaleProviderFactory != null) {
-                        // check HP Passport
-                        negotiatedLocale = Negotiators.resolveLocale(
-                                passportLocaleProviderFactory
-                                        .getLocaleProvider(request)
-                                        .getLocales(), targetLocales);
-                    }
+			// if a target locale provider factory has been specified (required)
+			if (targetLocaleProviderFactory != null) {
+				// setup - get target locales
+				TargetLocaleProvider targetLocaleProvider = targetLocaleProviderFactory
+						.getTargetLocaleProvider(request);
+				Collection allowedLocales = targetLocaleProvider
+						.getAllowedLocales();
+				Collection knownLocales = targetLocaleProvider.getAllLocales();
+				request.setAttribute(ALLOWED_LOCALES, allowedLocales);
 
-                    if (negotiatedLocale == null) {
-                        // check user agent
-                        negotiatedLocale = Negotiators.resolveLocale(
-                                new UserAgentLocaleProvider(request)
-                                        .getLocales(), targetLocales);
+				// check URL
+				// note: allow any known locale (not just any allowed locale) if
+				// the
+				// special query parameter is present
+				UrlLocaleProvider urlLocaleProvider = new UrlLocaleProvider(
+						request);
+				Collection urlLocales = urlLocaleProvider.getLocales();
+				if (urlLocaleProvider.allowLocale()) {
+					negotiatedLocale = Negotiators.resolveLocale(urlLocales,
+							knownLocales);
+				}
+				if (negotiatedLocale == null) {
+					negotiatedLocale = Negotiators.resolveLocale(urlLocales,
+							allowedLocales);
+				}
+				if (negotiatedLocale == null) {
+					// check cookies
+					negotiatedLocale = Negotiators.resolveLocale(
+							new CookieLocaleProvider(request).getLocales(),
+							allowedLocales);
 
-                        if (negotiatedLocale == null
-                                && defaultLocaleProviderFactory != null) {
-                            // check for a default
-                            Collection locales = defaultLocaleProviderFactory
-                                    .getLocaleProvider(request).getLocales();
-                            if (!locales.isEmpty()) {
-                                negotiatedLocale = (Locale) locales.iterator()
-                                        .next();
-                            }
-                        }
-                    } else {
-                        // write cookies if locale specified in HP Passport
-                        request.setAttribute(PERSIST_VALUE, Boolean.TRUE);
-                    }
-                }
-            } else {
-                // write cookies if locale specified in URL
-                request.setAttribute(PERSIST_VALUE, Boolean.TRUE);
-            }
+					if (negotiatedLocale == null) {
+						if (passportLocaleProviderFactory != null) {
+							// check HP Passport
+							negotiatedLocale = Negotiators.resolveLocale(
+									passportLocaleProviderFactory
+											.getLocaleProvider(request)
+											.getLocales(), allowedLocales);
+						}
 
-            acceptable = new Boolean(negotiatedLocale != null);
-            request.setAttribute(ACCEPTABLE, acceptable);
+						if (negotiatedLocale == null) {
+							// check user agent
+							negotiatedLocale = Negotiators.resolveLocale(
+									new UserAgentLocaleProvider(request)
+											.getLocales(), allowedLocales);
 
-            if (acceptable.booleanValue()) {
-                request.setAttribute(NEGOTIATED_VALUE, negotiatedLocale);
-            }
-        }
+							if (negotiatedLocale == null
+									&& defaultLocaleProviderFactory != null) {
+								// check for a default
+								Collection defaultLocales = defaultLocaleProviderFactory
+										.getLocaleProvider(request)
+										.getLocales();
+								if (!defaultLocales.isEmpty()) {
+									negotiatedLocale = (Locale) defaultLocales
+											.iterator().next();
+								}
+							}
+						} else {
+							// write cookies if locale specified in HP Passport
+							request.setAttribute(PERSIST_VALUE, Boolean.TRUE);
+						}
+					}
+				} else {
+					// write cookies if locale specified in URL
+					request.setAttribute(PERSIST_VALUE, Boolean.TRUE);
+				}
+			}
 
-        return acceptable.booleanValue();
-    }
+			acceptable = new Boolean(negotiatedLocale != null);
+			request.setAttribute(ACCEPTABLE, acceptable);
 
-    public Object negotiatedValue(HttpServletRequest request) {
-        return acceptable(request) ? (Locale) request
-                .getAttribute(NEGOTIATED_VALUE) : null;
-    }
+			if (acceptable.booleanValue()) {
+				request.setAttribute(NEGOTIATED_VALUE, negotiatedLocale);
+			}
+		}
 
-    // @SuppressWarnings("unchecked")
-    public void negotiate(HttpServletRequest request,
-            HttpServletResponse response) throws NoAcceptableLanguageException {
-        Locale negotiatedLocale = null;
+		return acceptable.booleanValue();
+	}
 
-        response.addHeader("Vary", "Cookie Accept-Language");
+	public Object negotiatedValue(HttpServletRequest request) {
+		return acceptable(request) ? (Locale) request
+				.getAttribute(NEGOTIATED_VALUE) : null;
+	}
 
-        if (acceptable(request)) {
-            negotiatedLocale = (Locale) request.getAttribute(NEGOTIATED_VALUE);
-            Boolean persist = (Boolean) request.getAttribute(PERSIST_VALUE);
+	/**
+	 * The main method for this class - resolves the locale for the request and
+	 * sets it in the response, also persisting it when appropriate into HP.com
+	 * cookies. A {@link NoAcceptableLanguageException} is thrown if a locale
+	 * could not be resolved. See the class documentation abovce for a brief
+	 * description of the algorithm used to resolve the locale.
+	 */
+	// @SuppressWarnings("unchecked")
+	public void negotiate(HttpServletRequest request,
+			HttpServletResponse response) throws NoAcceptableLanguageException {
+		Locale negotiatedLocale = null;
 
-            if (persist != null) {
-                cookieLocaleSaver.saveLocale(request, response,
-                        negotiatedLocale);
-            }
+		response.addHeader("Vary", "Cookie Accept-Language");
 
-            response.setLocale(negotiatedLocale);
-        } else {
-            throw new NoAcceptableLanguageException(
-                    "No acceptable language could be negotiated.",
-                    (Collection) request.getAttribute(TARGET_LOCALES));
-        }
-    }
+		if (acceptable(request)) {
+			negotiatedLocale = (Locale) request.getAttribute(NEGOTIATED_VALUE);
+			Boolean persist = (Boolean) request.getAttribute(PERSIST_VALUE);
 
-    /**
-     * @author Quintin May
-     */
-    static class CookieLocaleSaver {
+			if (persist != null) {
+				cookieLocaleSaver.saveLocale(request, response,
+						negotiatedLocale);
+			}
 
-        void saveLocale(HttpServletRequest request,
-                HttpServletResponse response, Locale locale) {
-            if (locale != null) {
-                addCookie(response, Consts.COOKIE_NAME_HPCOM_LANGUAGE, locale
-                        .getLanguage());
+			response.setLocale(negotiatedLocale);
+		} else {
+			throw new NoAcceptableLanguageException(
+					"No acceptable language could be negotiated.",
+					(Collection) request.getAttribute(ALLOWED_LOCALES));
+		}
+	}
 
-                if (locale.getCountry() == null) {
-                    deleteCookie(response, Consts.COOKIE_NAME_HPCOM_COUNTRY);
-                } else {
-                    addCookie(response, Consts.COOKIE_NAME_HPCOM_COUNTRY, locale
-                            .getCountry());
-                }
-            }
-        }
+	/**
+	 * @author Quintin May
+	 */
+	static class CookieLocaleSaver {
 
-        private void addCookie(HttpServletResponse response, String name,
-                String value) {
-            response.addCookie(createCookie(name, value, -1)); // -1 = session
-        }
+		void saveLocale(HttpServletRequest request,
+				HttpServletResponse response, Locale locale) {
+			if (locale != null) {
+				addCookie(response, Consts.COOKIE_NAME_HPCOM_LANGUAGE, locale
+						.getLanguage());
 
-        private void deleteCookie(HttpServletResponse response, String name) {
-            response.addCookie(createCookie(name, "", 0));
-        }
+				if (locale.getCountry() == null) {
+					deleteCookie(response, Consts.COOKIE_NAME_HPCOM_COUNTRY);
+				} else {
+					addCookie(response, Consts.COOKIE_NAME_HPCOM_COUNTRY,
+							locale.getCountry());
+				}
+			}
+		}
 
-        private Cookie createCookie(String name, String value, int maxAge) {
-            Cookie cookie = new Cookie(name, value);
+		private void addCookie(HttpServletResponse response, String name,
+				String value) {
+			response.addCookie(createCookie(name, value, -1)); // -1 = session
+		}
 
-            cookie.setDomain(Consts.HP_COOKIE_DOMAIN);
-            cookie.setPath(Consts.HP_COOKIE_PATH);
-            cookie.setMaxAge(maxAge);
+		private void deleteCookie(HttpServletResponse response, String name) {
+			response.addCookie(createCookie(name, "", 0));
+		}
 
-            return cookie;
-        }
-    }
+		private Cookie createCookie(String name, String value, int maxAge) {
+			Cookie cookie = new Cookie(name, value);
+
+			cookie.setDomain(Consts.HP_COOKIE_DOMAIN);
+			cookie.setPath(Consts.HP_COOKIE_PATH);
+			cookie.setMaxAge(maxAge);
+
+			return cookie;
+		}
+	}
 
 }
