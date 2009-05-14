@@ -35,6 +35,18 @@
 			value="${LOG_ROOT}/main/error/error.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
+				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %m | %X{CONTEXT_INFO} %n" />
+		</layout>
+	</appender>
+
+	<appender name="WPAP_ERRORTRACE_APPENDER"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="3" />
+		<param name="File"
+			value="${LOG_ROOT}/main/errortrace/errortrace.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
 				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %m%n" />
 		</layout>
 	</appender>
@@ -54,23 +66,27 @@
 	<!-- Loggers -->
 
 	<logger name="com.hp.websat.timber.business" additivity="false">
-		<level value="error" />
+		<level value="debug" />
 		<appender-ref ref="WPAP_BUSINESS_APPENDER" />
 	</logger>
 
 	<logger name="com.hp.websat.timber.error" additivity="false">
-		<level value="error" />
+		<level value="debug" />
 		<appender-ref ref="WPAP_ERROR_APPENDER" />
 	</logger>
 
-	<logger name="com.hp.websat.timber.performance"
-		additivity="false">
-		<level value="error" />
+	<logger name="com.hp.websat.timber.errortrace" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="WPAP_ERRORTRACE_APPENDER" />
+	</logger>
+
+	<logger name="com.hp.websat.timber.performance" additivity="false">
+		<level value="debug" />
 		<appender-ref ref="WPAP_PERFORMANCE_APPENDER" />
 	</logger>
 
 	<root>
-		<level value="error" />
+		<level value="debug" />
 		<appender-ref ref="WPAP_DEBUG_APPENDER" />
 	</root>
 </log4j:configuration>
