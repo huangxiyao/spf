@@ -391,11 +391,6 @@
 		<filter-name>PortalURLRewriterFilter</filter-name>
 		<servlet-name>controller</servlet-name>
 	</filter-mapping>
-	
-	<filter-mapping>
-		<filter-name>RememberReturnURLFilter</filter-name>
-		<servlet-name>controller</servlet-name>
-	</filter-mapping>
 
 	<filter-mapping>
 		<filter-name>RequestBindingFilter</filter-name>
@@ -628,6 +623,11 @@
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>RememberReturnURLFilter</filter-name>
+		<servlet-name>controller</servlet-name>
 	</filter-mapping>
 	<!-- ADMIN CONSOLE PORLTET INVOCATION FILTER MAPPING - END -->
 
