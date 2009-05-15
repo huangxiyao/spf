@@ -86,7 +86,7 @@
 	</logger>
 
 	<root>
-		<level value="debug" />
+		<level value="off" />
 		<appender-ref ref="WPAP_DEBUG_APPENDER" />
 	</root>
 </log4j:configuration>
