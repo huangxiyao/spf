@@ -26,16 +26,16 @@
 <table>
 	<tbody>
 		<tr>
-			<td><p><span class="spf-htmlviewer-internal-error-message">
+			<td>
+				<p><span class="spf-htmlviewer-internal-error-message">
 				<%= errorMessage %>
-			</span></p></td>
-		</tr>
-		<tr>
-			<td><p><span class="spf-htmlviewer-internal-error-code">
+				</span></p>
+				<p><span class="spf-htmlviewer-internal-error-code">
 				<spf-i18n-portlet:message key="error.code">
 					<spf-i18n-portlet:param value="<%= errorCode %>" />
 				</spf-i18n-portlet:message>
-			</span></p></td>
+				</span></p>
+			</td>
 		</tr>
 	</tbody>
 </table>
