@@ -21,16 +21,16 @@
 <table>
 	<tbody>
 		<tr>
-			<td><p><span class="spf-htmlviewer-internal-error-message">
+			<td>
+				<p><span class="spf-htmlviewer-internal-error-message">
 				<spf-i18n-portlet:message key="<%= Consts.ERROR_CODE_INTERNAL %>" />
-			</span></p></td>
-		</tr>
-		<tr>
-			<td><p><span class="spf-htmlviewer-internal-error-code">
+				</span></p>
+				<p><span class="spf-htmlviewer-internal-error-code">
 				<spf-i18n-portlet:message key="error.code">
 					<spf-i18n-portlet:param value="<%= Consts.ERROR_CODE_INTERNAL %>" />
 				</spf-i18n-portlet:message>
-			</span></p></td>
+				</span></p>
+			</td>
 		</tr>
 	</tbody>
 </table>

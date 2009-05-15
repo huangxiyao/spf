@@ -12,7 +12,7 @@
 	/* reserved */
 }
 .spf-htmlviewer-internal-error-code {
-	font: italic smaller;
+	font-size: smaller;
 }
 .spf-htmlviewer-config-info-message {
 	color: green;
