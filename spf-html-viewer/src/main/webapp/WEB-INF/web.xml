@@ -20,7 +20,7 @@
 	<!-- WPAP log root -->
 	<context-param>
 		<param-name>timberLogRoot</param-name>
-		<param-value>/opt/sasuapps/sp/logs/html-viewer</param-value>
+		<param-value>/opt/sasuapps/sp/logs</param-value>
 	</context-param>
 
 	<!-- Spring application context loader -->
