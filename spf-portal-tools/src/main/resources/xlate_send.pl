@@ -198,9 +198,9 @@ EOF
    }
 
    # Next, normalize Vignette message property files from en (English) or
-   # en_US (US English) to base versions.  This means finding all *_en.properties
+   # en_US (US English) to base versions. This means finding all *_en.properties
    # files named with Vignette GUID's (32 hex characters), and renaming them
-   # without the _en code.  This may overwrite existing base files, which is what
+   # without the _en code. This may overwrite existing base files, which is what
    # we want.  Then we find all *_en_US.properties files named with GUID's
    # likewise, and rename them to also lack the _en_US code, thus possibly 
    # overwriting base files or _en files.  Why are we doing this step?  See the
@@ -263,18 +263,18 @@ EOF
 
    # Third, normalize media files from en (English) or en_US (US English) to
    # base versions.  This means finding all *_en tagged media files and renaming
-   # without the _en code.  This may overwrite existing base files, which is what
-   # we want.  Then we find all *_en_US tagged media files and rename them to\
+   # without the _en code. This may overwrite existing base files, which is what
+   # we want.  Then we find all *_en_US tagged media files and rename them to
    # also lack the _en_US code, thus possibly overwriting base files or _en 
    # files.
    #
    # Note: This step used to just apply to Vignette message property files.
    # Now we apply it to all files, for both portal and portlet.  DSJ 2009/4/3
 
-   print "----- Normalizing English to base $pdir text files.\n";
-   &normalize_files ($out_text_pdir, $all_media_files_re, "_en");
-   print "----- Normalizing US-English to base $pdir text files.\n";
-   &normalize_files ($out_text_pdir, $all_media_files_re, "_en_US");
+   print "----- Normalizing English to base $pdir media files.\n";
+   &normalize_files ($out_media_pdir, $all_media_files_re, "_en");
+   print "----- Normalizing US-English to base $pdir media files.\n";
+   &normalize_files ($out_media_pdir, $all_media_files_re, "_en_US");
 
    # Third, winnow media files down to just the base versions, not xlated
    # versions (if any).  Remove all the rest.
