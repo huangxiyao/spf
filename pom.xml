@@ -1,10 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.wsrp</groupId>
 	<artifactId>spf-portal-wsrp</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4</version>
 	<name>spf-portal-wsrp</name>
 	<description>
 		Vignette Portal does not allow sending different sets of profile
@@ -145,14 +143,8 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>
-			scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-wsrp
-		</connection>
-		<developerConnection>
-			scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-wsrp
-		</developerConnection>
-		<url>
-			https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-wsrp
-		</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-wsrp-1.0.4</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-wsrp-1.0.4</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-wsrp-1.0.4</url>
 	</scm>
 </project>
