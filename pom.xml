@@ -1,12 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-system-error-secondarypage</artifactId>
 	<packaging>car</packaging>
 	<name>SPF system error secondary page</name>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4</version>
 	<description>
 		JSPs and other artifacts for the Shared Portal Framework system
 		error secondary page. This page should be setup as the default
@@ -14,15 +12,9 @@
 		ExceptionUtil in the portal utilities.
 	</description>
 	<scm>
-		<connection>
-			scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-system-error-secondarypage
-		</connection>
-		<developerConnection>
-			scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-system-error-secondarypage
-		</developerConnection>
-		<url>
-			https://samson.atl.hp.com/svn/spf/source/trunk/spf-system-error-secondarypage
-		</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-system-error-secondarypage-1.0.4</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-system-error-secondarypage-1.0.4</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/tags/spf-system-error-secondarypage-1.0.4</url>
 	</scm>
 	<ciManagement>
 		<system>Hudson</system>
