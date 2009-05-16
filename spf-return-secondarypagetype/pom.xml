@@ -4,7 +4,7 @@
   <artifactId>spf-return-secondarypagetype</artifactId>
   <packaging>car</packaging>
   <name>spf-return-secondarypagetype</name>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <description>Classes and other artifacts for the Shared Portal Framework 
 return secondary page type. This Vignette component provides the display action code for get the return URL from session and redirect the user to it.</description>
   <inceptionYear>May 2009</inceptionYear>
