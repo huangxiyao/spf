@@ -4,7 +4,7 @@
   <artifactId>spf-return-secondarypage</artifactId>
   <packaging>car</packaging>
   <name>spf-return-secondarypage</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <description>JSPs and other artifacts for the Shared Portal Framework 
 return secondary page. </description>
   <inceptionYear>May 2009</inceptionYear>
@@ -29,4 +29,10 @@ return secondary page. </description>
   		<scope>provided</scope>
   	</dependency>
   </dependencies>
+
+  <scm>
+    <connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-return-secondarypage-1.0.0</connection>
+    <developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-return-secondarypage-1.0.0</developerConnection>
+    <url>https://samson.atl.hp.com/svn/spf/source/tags/spf-return-secondarypage-1.0.0</url>
+  </scm>
 </project>
