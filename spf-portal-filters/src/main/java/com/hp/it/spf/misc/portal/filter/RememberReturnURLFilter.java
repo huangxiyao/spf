@@ -16,26 +16,27 @@ import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.website.enduser.PortalContext;
 
-public class RememberReturnURLFilter implements Filter {
-
+public class RememberReturnURLFilter implements Filter {    
+    private static final String PAGE_FRIENDLY_ID_BINARYPORTLET = "BINARYPORTLET";
+    
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		if (request instanceof HttpServletRequest) {
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();
 			// save the current URL to session
-			PortalContext context = (PortalContext) req
-					.getAttribute("portalContext");
+			PortalContext context = (PortalContext) req.getAttribute("portalContext");
 			if (context != null) {
 				Style thisPage = context.getCurrentSecondaryPage();
 				if (thisPage != null) {
-					if (!Consts.PAGE_FRIENDLY_ID_RETURN.equals(thisPage
-							.getFriendlyID())) {
-						String currentURL = Utils.getRequestURL(req);
-						if (session != null) {
-							session.setAttribute(
-									Consts.SESSION_ATTR_RETURN_URL, currentURL);
-						}
+					if (!Consts.PAGE_FRIENDLY_ID_RETURN.equals(thisPage.getFriendlyID())) {
+					    if (!PAGE_FRIENDLY_ID_BINARYPORTLET.equals(thisPage.getFriendlyID())) {
+    						String currentURL = Utils.getRequestURL(req);
+    						if (session != null) {
+    							session.setAttribute(
+    									Consts.SESSION_ATTR_RETURN_URL, currentURL);
+    						}
+					    }
 					}
 				}
 			}
