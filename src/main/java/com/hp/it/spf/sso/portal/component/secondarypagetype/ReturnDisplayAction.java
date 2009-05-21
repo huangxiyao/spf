@@ -55,7 +55,7 @@ public class ReturnDisplayAction extends BaseAction {
                     .getAttribute(Consts.SESSION_ATTR_RETURN_URL);
             if (url == null) {
                 LOG
-                        .info("ReturnDisplayAction: no return URL found ¨C redirecting to site home page.");
+                        .info("ReturnDisplayAction: no return URL found - redirecting to site home page.");
                 // if the return URL is null , set it to the site home page URL
                 url = Utils.getEffectiveSiteURL(request);
             }
