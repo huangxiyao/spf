@@ -107,34 +107,27 @@ public class LanguageNegotiator implements ContentNegotiator {
 
 			// if a target locale provider factory has been specified (required)
 			if (targetLocaleProviderFactory != null) {
-				// setup - get target locales
+				// setup - get target locales - by default, this gets the allowed
+				// locales for the target, but if special query parameter is
+				// present (or was present in previous request in this session),
+				// then that can override that and get all locales known to the
+				// target instead.
 				TargetLocaleProvider targetLocaleProvider = targetLocaleProviderFactory
 						.getTargetLocaleProvider(request);
-				Collection allowedLocales = targetLocaleProvider
-						.getAllowedLocales();
-				Collection knownLocales = targetLocaleProvider.getAllLocales();
-				request.setAttribute(ALLOWED_LOCALES, allowedLocales);
+				Collection targetLocales = targetLocaleProvider.getLocales();
+				request.setAttribute(ALLOWED_LOCALES, targetLocales);
 
 				// check URL
-				// note: allow any known locale (not just any allowed locale) if
-				// the
-				// special query parameter is present
 				UrlLocaleProvider urlLocaleProvider = new UrlLocaleProvider(
 						request);
 				Collection urlLocales = urlLocaleProvider.getLocales();
-				if (urlLocaleProvider.allowLocale()) {
-					negotiatedLocale = Negotiators.resolveLocale(urlLocales,
-							knownLocales);
-				}
-				if (negotiatedLocale == null) {
-					negotiatedLocale = Negotiators.resolveLocale(urlLocales,
-							allowedLocales);
-				}
+				negotiatedLocale = Negotiators.resolveLocale(urlLocales,
+						targetLocales);
 				if (negotiatedLocale == null) {
 					// check cookies
 					negotiatedLocale = Negotiators.resolveLocale(
 							new CookieLocaleProvider(request).getLocales(),
-							allowedLocales);
+							targetLocales);
 
 					if (negotiatedLocale == null) {
 						if (passportLocaleProviderFactory != null) {
@@ -142,14 +135,14 @@ public class LanguageNegotiator implements ContentNegotiator {
 							negotiatedLocale = Negotiators.resolveLocale(
 									passportLocaleProviderFactory
 											.getLocaleProvider(request)
-											.getLocales(), allowedLocales);
+											.getLocales(), targetLocales);
 						}
 
 						if (negotiatedLocale == null) {
 							// check user agent
 							negotiatedLocale = Negotiators.resolveLocale(
 									new UserAgentLocaleProvider(request)
-											.getLocales(), allowedLocales);
+											.getLocales(), targetLocales);
 
 							if (negotiatedLocale == null
 									&& defaultLocaleProviderFactory != null) {

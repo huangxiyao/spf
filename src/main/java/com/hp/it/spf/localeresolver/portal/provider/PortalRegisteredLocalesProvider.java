@@ -20,18 +20,12 @@ import com.hp.it.spf.xa.i18n.portal.I18nUtility;
  * @author Scott Jorgenson
  * @version $Revision 2.0 $
  */
-public class PortalRegisteredLocalesProvider implements TargetLocaleProvider {
-	private HttpServletRequest request;
+public class PortalRegisteredLocalesProvider extends TargetLocaleProvider {
 
-	/**
-	 * 
-	 * @param request
-	 *            the http servlet request
-	 */
 	public PortalRegisteredLocalesProvider(HttpServletRequest request) {
-		this.request = request;
+		super(request);
 	}
-
+	
 	/**
 	 * @return all locales that the current portal site allows. May return an
 	 *         empty list.

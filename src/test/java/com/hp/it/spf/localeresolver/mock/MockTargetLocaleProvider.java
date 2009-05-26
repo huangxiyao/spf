@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.hp.it.spf.localeresolver.hpweb.TargetLocaleProvider;
 
 /**
@@ -15,8 +17,12 @@ import com.hp.it.spf.localeresolver.hpweb.TargetLocaleProvider;
  * @author Scott Jorgenson
  *
  */
-public class MockTargetLocaleProvider implements TargetLocaleProvider {
+public class MockTargetLocaleProvider extends TargetLocaleProvider {
     private Collection locales = Collections.singleton(new Locale("en", "US"));
+
+	public MockTargetLocaleProvider(HttpServletRequest request) {
+		super(request);
+	}
 
     public void setLocales(Collection locales) {
         this.locales = locales;

@@ -26,30 +26,6 @@ public class UrlLocaleProvider extends AbstractLocaleProvider {
 	private HttpServletRequest request;
 
 	/**
-	 * The name of the query parameter which can be used in the URL to force
-	 * adoption of the locale in the URL so long as it is known to the target
-	 * environment - even if it is not otherwise allowed in the target
-	 * environment.
-	 */
-	public static final String ALLOW_LOCALE_PARAM = "allowLocale";
-
-	/**
-	 * If the {@link #ALLOW_LOCALE_PARAM} is used in a query string, then its
-	 * valid values are this (<code>on</code>) or {@link #ALLOW_LOCALE_YES}.
-	 * Other values are invalid and will be treated as if the query parameter
-	 * had not been used.
-	 */
-	public static final String ALLOW_LOCALE_ON = "on";
-
-	/**
-	 * If the {@link #ALLOW_LOCALE_PARAM} is used in a query string, then its
-	 * valid values are this (<code>yes</code>) or {@link #ALlOW_LOCALE_ON}.
-	 * Other values are invalid and will be treated as if the query parameter
-	 * had not been used.
-	 */
-	public static final String ALLOW_LOCALE_YES = "yes";
-
-	/**
 	 * Creates an HP query parameter locale provider.
 	 * 
 	 * @param request
@@ -71,27 +47,5 @@ public class UrlLocaleProvider extends AbstractLocaleProvider {
 
 	public boolean persistSuppliedLocalesAsCookie() {
 		return true;
-	}
-
-	/**
-	 * Returns true if the special parameter exists in the given request for
-	 * allowing a locale to be set via URL regardless of whether that locale
-	 * would be allowed by the target environment otherwise. The name of the
-	 * parameter is {@link #ALLOW_LOCALE_PARAM}, and its valid values are
-	 * {@link #ALLOW_LOCALE_ON} and {@link #ALLOW_LOCALE_YES}
-	 * (case-insensitive). Note the parameter at present only works to force a
-	 * locale through the {@link UrlLocaleProvider}, not other providers, and
-	 * it only works if the locale is known to the target environment.
-	 */
-	public boolean allowLocale() {
-		String value = this.request.getParameter(ALLOW_LOCALE_PARAM);
-		if (value != null) {
-			value = value.trim();
-		}
-		if (ALLOW_LOCALE_ON.equalsIgnoreCase(value)
-				|| ALLOW_LOCALE_YES.equalsIgnoreCase(value)) {
-			return true;
-		}
-		return false;
 	}
 }
