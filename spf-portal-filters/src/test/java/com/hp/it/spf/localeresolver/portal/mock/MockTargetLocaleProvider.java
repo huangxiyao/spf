@@ -14,30 +14,32 @@ import com.hp.it.spf.localeresolver.hpweb.TargetLocaleProvider;
 /**
  * @author Scott Jorgenson
  */
-public class MockTargetLocaleProvider implements TargetLocaleProvider {
-    private Collection locales = Collections.EMPTY_LIST;
-    private boolean persistCookies;
+public class MockTargetLocaleProvider extends TargetLocaleProvider {
+	private Collection locales = Collections.EMPTY_LIST;
+	private boolean persistCookies;
 
-    public MockTargetLocaleProvider(HttpServletRequest request) { }
-    
-    public void setLocales(Collection locales) {
-        this.locales = locales;
-    }
+	public MockTargetLocaleProvider(HttpServletRequest request) {
+		super(request);
+	}
 
-    public Collection getAllowedLocales() {
-        return locales;
-    }
+	public void setLocales(Collection locales) {
+		this.locales = locales;
+	}
 
-    public Collection getAllLocales() {
-        return locales;
-    }
+	public Collection getAllowedLocales() {
+		return locales;
+	}
 
-    public void setPersistSuppliedLocalesAsCookie(boolean persistCookies) {
-        this.persistCookies = persistCookies;
-    }
+	public Collection getAllLocales() {
+		return locales;
+	}
 
-    public boolean persistSuppliedLocalesAsCookie() {
-        return persistCookies;
-    }
+	public void setPersistSuppliedLocalesAsCookie(boolean persistCookies) {
+		this.persistCookies = persistCookies;
+	}
+
+	public boolean persistSuppliedLocalesAsCookie() {
+		return persistCookies;
+	}
 
 }

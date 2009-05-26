@@ -15,20 +15,23 @@ import com.hp.it.spf.localeresolver.hpweb.TargetLocaleProviderFactory;
 /**
  * 
  * @author Scott Jorgenson
- *
+ * 
  */
-public class MockTargetLocaleProviderFactory implements TargetLocaleProviderFactory {
-    private MockTargetLocaleProvider targetLocaleProvider = new MockTargetLocaleProvider();
-    
-    public TargetLocaleProvider getTargetLocaleProvider(HttpServletRequest request) {
-        return targetLocaleProvider;
-    }
-    
-    public void setLocales(Collection locales) {
-        targetLocaleProvider.setLocales(locales);
-    }
-    
-    public void addLocale(Locale locale) {
-        targetLocaleProvider.addLocale(locale);
-    }
+public class MockTargetLocaleProviderFactory implements
+		TargetLocaleProviderFactory {
+	private MockTargetLocaleProvider targetLocaleProvider = new MockTargetLocaleProvider(
+			null);
+
+	public TargetLocaleProvider getTargetLocaleProvider(
+			HttpServletRequest request) {
+		return targetLocaleProvider;
+	}
+
+	public void setLocales(Collection locales) {
+		targetLocaleProvider.setLocales(locales);
+	}
+
+	public void addLocale(Locale locale) {
+		targetLocaleProvider.addLocale(locale);
+	}
 }
