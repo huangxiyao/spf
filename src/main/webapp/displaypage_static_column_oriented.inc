@@ -9,7 +9,8 @@
   {
     PageDividerBean pageDivider = (PageDividerBean)pageDividerIterator.next();
 %>
-    <td width=<%= pageDivider.getDividerWidth() %><%= pageBean.usesPercentageWidths() ? "%" : "" %> valign="top" align="left">
+	<%-- HPWeb change: remove left align attribute --%>
+    <td width=<%= pageDivider.getDividerWidth() %><%= pageBean.usesPercentageWidths() ? "%" : "" %> valign="top">
   
 <%--
   the nested table that follows this line is necessary for the case when
@@ -25,6 +26,17 @@
           <td>
 
 <%
+		  // HPWeb change: added following lines to set flags to
+		  // apply div to all portlets in the last column only.
+
+		  boolean applyPortletDivsFlag = false;
+		  boolean applyAllPortletsFlag = false;
+		  if (pageDivider.getDividerIndex() == (numDividers - 1))
+		  {
+		      applyPortletDivsFlag = true;
+		      applyAllPortletsFlag = true;
+		  }
+
 		    List dividerPanels = pageDivider.getPanels();
 			int numPanels = dividerPanels.size();
 			Iterator dividerPanelIterator = dividerPanels.iterator();

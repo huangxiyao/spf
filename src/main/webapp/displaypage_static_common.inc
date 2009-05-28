@@ -8,6 +8,17 @@
     PortletWindowBean portletWindow = (PortletWindowBean)portletWindowBeans.get(portletPlaceholder.getPlaceholderUID());
 
     request.setAttribute("portletWindow", portletWindow);
+
+	// HPWeb change: add <div> element if the applyPortletDivsFlag is true
+	// and if the applyAllPortletsFlag is true, or it is the last portlet.
+    if (applyPortletDivsFlag &&
+		(applyAllPortletsFlag ||
+    	(portletPlaceholder.getPlaceholderIndex() == (numPortlets - 1))))
+	{
+%>
+	<div class="lastColumnPortlet">
+<%
+	}
 %>
     <%@include file="display_portlet.inc" %>
 	
@@ -19,5 +30,16 @@
 	  <br />
 <%
     }
+
+	// HPWeb change: add closing <div>
+    if (applyPortletDivsFlag &&
+		(applyAllPortletsFlag ||
+    	(portletPlaceholder.getPlaceholderIndex() == (numPortlets - 1))))
+	{
+
+%>
+	</div>
+<%
+	}
   }
 %>

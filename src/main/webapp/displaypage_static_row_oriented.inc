@@ -26,8 +26,18 @@
 			  {
 				  maxPanelWidth = dividerPanel.getPanelWidth();
 			  }
+
+  			  // HPWeb change: set flags to apply div to last portlet in row
+  			  // only.
+  			  boolean applyPortletDivsFlag = false;
+  			  boolean applyAllPortletsFlag = false;
+		      if (dividerPanel.getPanelIndex() == (numPanels - 1)) {
+			    // Last portlet on row
+  			  	applyPortletDivsFlag = true;
+			  }
 %>
-			  <td width=<%= dividerPanel.getPanelWidth() %><%= pageBean.usesPercentageWidths() ? "%" : "" %> valign="top" align="left">
+			  <%-- HPWeb change:  remove left align attribute --%>
+			  <td width=<%= dividerPanel.getPanelWidth() %><%= pageBean.usesPercentageWidths() ? "%" : "" %> valign="top">
 
 			    <%@ include file="displaypage_static_common.inc" %>
 				
