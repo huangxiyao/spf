@@ -9,12 +9,12 @@
 	http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 	<bean id="htmlViewerConfigController"
-		class="com.hp.it.spf.xa.htmlviewer.portlet.web.ConfigController">
+		class="com.hp.it.spf.htmlviewer.portlet.web.ConfigController">
 		<property name="viewName" value="config" />
 	</bean>
 
 	<bean id="htmlViewerViewController"
-		class="com.hp.it.spf.xa.htmlviewer.portlet.web.ViewController">
+		class="com.hp.it.spf.htmlviewer.portlet.web.ViewController">
 		<property name="viewName" value="view" />
 	</bean>
 
@@ -39,7 +39,7 @@
 		parent="defaultExceptionHandlerTemplate">
 		<property name="exceptionMappings">
 			<props>
-				<prop key="com.hp.it.spf.xa.htmlviewer.portlet.exception.InternalErrorException">
+				<prop key="com.hp.it.spf.htmlviewer.portlet.exception.InternalErrorException">
 					systemError
 				</prop>
 			</props>
