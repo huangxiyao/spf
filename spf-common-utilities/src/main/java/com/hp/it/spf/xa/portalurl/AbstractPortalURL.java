@@ -170,7 +170,14 @@ abstract class AbstractPortalURL implements PortalURL {
 		if (siteMarkerEnd != -1) {
 			siteMarkerEnd += siteMarker.length();
 			if (siteMarkerEnd < siteRootUrl.length()) {
-				int siteNameEnd = siteRootUrl.indexOf('/', siteMarkerEnd);
+				int i = siteRootUrl.indexOf('/', siteMarkerEnd);
+				int j = siteRootUrl.indexOf('?', siteMarkerEnd);
+				int k = siteRootUrl.indexOf('#', siteMarkerEnd);
+				if ((i == -1) || (j > -1 && j < i))
+					i = j;
+				if ((i == -1) || (k > -1 && k < i))
+					i = k;
+				int siteNameEnd = i;
 				if (siteNameEnd == -1) {
 					foundSite = true;
 					siteRootUrl += '/';

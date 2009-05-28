@@ -31,10 +31,9 @@ public class AbstractPortalURLTest extends TestCase {
 
 		url = new TestURL("http://my_host:my_port/portal/site/my_site", null,
 				"my_folder/my_page", true, -1, -1);
-		assertEquals(
-				"Render URL",
-				"https://my_host/portal/site/my_site/my_folder/my_page/",
-				url.createBaseUrl(false).toString());
+		assertEquals("Render URL",
+				"https://my_host/portal/site/my_site/my_folder/my_page/", url
+						.createBaseUrl(false).toString());
 
 		url = new TestURL("https://my_host:my_port/portal/site/my_site/", null,
 				"/my_folder/my_page", false, -1, -1);
@@ -68,8 +67,7 @@ public class AbstractPortalURLTest extends TestCase {
 
 		url = new TestURL("http://my_host:my_port/portal/site/my_site",
 				"another_site", "my_folder/my_page", true, -1, -1);
-		assertEquals(
-				"Render URL",
+		assertEquals("Render URL",
 				"https://my_host/portal/site/another_site/my_folder/my_page/",
 				url.createBaseUrl(false).toString());
 
@@ -112,6 +110,25 @@ public class AbstractPortalURLTest extends TestCase {
 				"Portal URL with no friendly URI",
 				"http://my_host:my_port/portal/site/my_site/template.MY_PAGE/extra/path/",
 				url.createBaseUrl(false).toString());
+		url = new TestURL("http://my_host/portal/site/my_site?a=b", null, null,
+				false, -1, -1);
+		assertEquals(
+				"Portal URL with no friendly URI, based on site root URL ending with query string",
+				"http://my_host/portal/site/my_site/", url.createBaseUrl(false)
+						.toString());
+		url = new TestURL("http://my_host/portal/site/my_site#anchor", null,
+				null, false, -1, -1);
+		assertEquals(
+				"Portal URL with no friendly URI, based on site root URL ending with anchor",
+				"http://my_host/portal/site/my_site/", url.createBaseUrl(false)
+						.toString());
+		url = new TestURL("http://my_host/portal/site/my_site#anchor?a=b/c", null,
+				null, false, -1, -1);
+		assertEquals(
+				"Portal URL with no friendly URI, based on site root URL ending with anchor and query string",
+				"http://my_host/portal/site/my_site/", url.createBaseUrl(false)
+						.toString());
+
 	}
 
 	public void testCreateBaseUrlWithNonstandardPort() throws Exception {
