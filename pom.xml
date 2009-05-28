@@ -99,6 +99,11 @@
 			<artifactId>spf-portlet-utilities</artifactId>
 			<version>1.0.5-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>1.0.5-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>htmlviewer</finalName>
