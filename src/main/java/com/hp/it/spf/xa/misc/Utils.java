@@ -407,8 +407,11 @@ public class Utils {
 						String path = "";
 						int j = uri.indexOf('/');
 						int k = uri.indexOf('?');
+						int l = uri.indexOf('#');
 						if ((j == -1) || (k > -1 && k < j))
 							j = k;
+						if ((j == -1) || (l > -1 && l < j))
+							j = l;						
 						if (j == -1) {
 							siteDNS = uri;
 						} else {
@@ -417,14 +420,17 @@ public class Utils {
 						}
 						if (siteDNS.equals("")) {
 							if ((i + 6) < siteURL.length()) {
-								int n = siteURL.indexOf('/', i + 6);
-								int m = siteURL.indexOf('?', i + 6);
-								if ((n == -1) || (m > -1 && m < n))
-									n = m;
-								if (n == -1) {
+								int m = siteURL.indexOf('/', i + 6);
+								int n = siteURL.indexOf('?', i + 6);
+								int o = siteURL.indexOf('#', i + 6);
+								if ((m == -1) || (n > -1 && n < m))
+									m = n;
+								if ((m == -1) || (o > -1 && o < m))
+									m = o;
+								if (m == -1) {
 									siteDNS = siteURL.substring(i + 6);
 								} else {
-									siteDNS = siteURL.substring(i + 6, n);
+									siteDNS = siteURL.substring(i + 6, m);
 								}
 							} else {
 								siteDNS = ""; // should never happen

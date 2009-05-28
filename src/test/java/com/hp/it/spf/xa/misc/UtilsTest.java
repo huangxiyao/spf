@@ -109,6 +109,18 @@ public class UtilsTest extends TestCase {
     	url = Utils.getPortalSiteURL("http://host/portal/site/site1/path1/?a=b", f, null, -1, "site2/path2?c=d");
     	System.out.println("testGetPortalSiteURL.30 got: " + url);
     	assertEquals("http://host/portal/site/site2/path2?c=d", url);
+    	url = Utils.getPortalSiteURL("http://host:333/portal/site/sitename#anchor", null, null, 0, "/friendly/url");
+    	System.out.println("testGetPortalSiteURL.31 got: " + url);
+    	assertEquals("http://host:333/portal/site/sitename/friendly/url", url);
+    	url = Utils.getPortalSiteURL("https://host/portal/site/sitename/some/friendly/url/#anchor", f, null, 81, "/other/friendly/url/#other");
+    	System.out.println("testGetPortalSiteURL.32 got: " + url);
+    	assertEquals("http://host:81/portal/site/sitename/other/friendly/url/#other", url);
+    	url = Utils.getPortalSiteURL("http://host/portal/site/site1#anchor", f, null, -1, "site2");
+    	System.out.println("testGetPortalSiteURL.33 got: " + url);
+    	assertEquals("http://host/portal/site/site2/", url);
+    	url = Utils.getPortalSiteURL("http://host/portal/site/site1#anchor", f, null, -1, "site2#other");
+    	System.out.println("testGetPortalSiteURL.34 got: " + url);
+    	assertEquals("http://host/portal/site/site2/#other", url);
     }
 
 }
