@@ -406,6 +406,9 @@ public class Utils {
 						String siteDNS = "";
 						String path = "";
 						int j = uri.indexOf('/');
+						int k = uri.indexOf('?');
+						if ((j == -1) || (k > -1 && k < j))
+							j = k;
 						if (j == -1) {
 							siteDNS = uri;
 						} else {
@@ -416,9 +419,7 @@ public class Utils {
 							if ((i + 6) < siteURL.length()) {
 								int n = siteURL.indexOf('/', i + 6);
 								int m = siteURL.indexOf('?', i + 6);
-								if (n == -1)
-									n = m;
-								else if (m > -1 && m < n)
+								if ((n == -1) || (m > -1 && m < n))
 									n = m;
 								if (n == -1) {
 									siteDNS = siteURL.substring(i + 6);
