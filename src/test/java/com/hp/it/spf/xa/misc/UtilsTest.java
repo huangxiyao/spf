@@ -90,6 +90,13 @@ public class UtilsTest extends TestCase {
     	url = Utils.getPortalSiteURL("https://host:12345/something", f, null, 0, null);
     	System.out.println("testGetPortalSiteURL.24 got: " + url);
     	assertEquals("http://host/something", url);
+    	
+    	url = Utils.getPortalSiteURL("http://host:333/portal/site/sitename?a=b", null, null, 0, "/friendly/url");
+    	System.out.println("testGetPortalSiteURL.25 got: " + url);
+    	assertEquals("http://host:333/portal/site/sitename/friendly/url", url);
+    	url = Utils.getPortalSiteURL("https://host/portal/site/sitename/some/friendly/url/?a=b", f, null, 81, "/other/friendly/url/?c=d");
+    	System.out.println("testGetPortalSiteURL.26 got: " + url);
+    	assertEquals("http://host:81/portal/site/sitename/other/friendly/url/?c=d", url);
     }
 
 }

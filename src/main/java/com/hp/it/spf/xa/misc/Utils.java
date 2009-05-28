@@ -401,31 +401,36 @@ public class Utils {
 			if (uri != null) {
 				uri = uri.trim();
 				if (uri.length() > 0) {
-					int j = siteURL.indexOf("/site/");
-					if (j != -1) {
+					int i = siteURL.indexOf("/site/");
+					if (i != -1) {
 						String siteDNS = "";
 						String path = "";
-						int i = uri.indexOf('/');
-						if (i == -1) {
+						int j = uri.indexOf('/');
+						if (j == -1) {
 							siteDNS = uri;
 						} else {
-							siteDNS = uri.substring(0, i);
-							path = uri.substring(i);
+							siteDNS = uri.substring(0, j);
+							path = uri.substring(j);
 						}
 						if (siteDNS.equals("")) {
-							if ((j + 6) < siteURL.length()) {
-								int k = siteURL.indexOf('/', j + 6);
-								if (k == -1) {
-									siteDNS = siteURL.substring(j + 6);
+							if ((i + 6) < siteURL.length()) {
+								int n = siteURL.indexOf('/', i + 6);
+								int m = siteURL.indexOf('?', i + 6);
+								if (n == -1)
+									n = m;
+								else if (m > -1 && m < n)
+									n = m;
+								if (n == -1) {
+									siteDNS = siteURL.substring(i + 6);
 								} else {
-									siteDNS = siteURL.substring(j + 6, k);
+									siteDNS = siteURL.substring(i + 6, n);
 								}
 							} else {
 								siteDNS = ""; // should never happen
 							}
 						}
 						if (!siteDNS.equals(""))
-							siteURL = siteURL.substring(0, j).trim() + "/site/"
+							siteURL = siteURL.substring(0, i).trim() + "/site/"
 									+ siteDNS.trim() + "/" + path.trim();
 					}
 				}
