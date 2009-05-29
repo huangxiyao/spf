@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-common-utilities</artifactId>
-	<name>SPF common utilities</name>
+	<name>SPF common utilities.</name>
 	<version>1.0.5-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
