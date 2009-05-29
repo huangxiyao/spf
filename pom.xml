@@ -60,7 +60,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
-			<version>1.0.4</version>
+			<version>1.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
@@ -70,7 +70,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-hpp</artifactId>
-			<version>1.0.4</version>
+			<version>1.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
