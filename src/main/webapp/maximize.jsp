@@ -31,12 +31,17 @@ maintenance for this software.
 		</td>
 	</tr>
 	<tr>
-		<td width="100%" style="padding:15px">
+		<%-- HPWeb change: change to 0px from 15px --%>
+		<td width="100%" style="padding:0px">
 			<%
 				if (portletWindow.isChromeDisplayed()) {
 			%>
-			<%-- Include Chrome Style To Display Portlet Window --%>
-			<vgn-portal:includeStyle friendlyID="chrome"/>
+			<%-- HPWeb change: add <div> --%>
+			<div class="lastColumnPortlet">
+				<%-- Include Chrome Style To Display Portlet Window --%>
+				<vgn-portal:includeStyle friendlyID="chrome"/>
+			<%-- HPWeb change: add </div> --%>
+			</div>
 			<%
 			}
 			else {
