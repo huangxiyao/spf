@@ -13,7 +13,8 @@ PERFORMANCE, AND QUALITY.
 --%>
 <vgn-portal:includeStyle friendlyID="page_controls"/>
 
-<table border="0" cellspacing="10" cellpadding="0" <%= pageBean.usesPercentageWidths() ? " width=100%" : "" %> height="240">
+<%-- HPWeb change: set cellspacing 0 instead of 10px --%>
+<table border="0" cellspacing="0" cellpadding="0" <%= pageBean.usesPercentageWidths() ? " width=100%" : "" %> height="240">
 
 <%
   if (pageBean.isColumnOriented())
