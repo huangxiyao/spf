@@ -8,10 +8,14 @@
   while (pageDividerIterator.hasNext())
   {
     PageDividerBean pageDivider = (PageDividerBean)pageDividerIterator.next();
+    
+    // HPWeb change: Add right padding to all but the rightmost column.
+    int pageDividerPadding = 10;
+    if (pageDivider.getDividerIndex() == (numDividers - 1))
+    	pageDividerPadding = 0;
 %>
-	<%-- HPWeb change: remove left align attribute --%>
-    <td width=<%= pageDivider.getDividerWidth() %><%= pageBean.usesPercentageWidths() ? "%" : "" %> valign="top">
-  
+	<%-- HPWeb change: remove left align attribute, add right padding --%>
+    <td style="padding-right: <%= pageDividerPadding %>px;" width=<%= pageDivider.getDividerWidth() %><%= pageBean.usesPercentageWidths() ? "%" : "" %> valign="top">
 <%--
   the nested table that follows this line is necessary for the case when
   an absolute-defined panel has at least two modules in it, and is set
@@ -87,8 +91,7 @@
     {
 	  PageDividerBean pageDivider = (PageDividerBean)pageDividerIterator.next();
 %>
-	  <%-- HPWeb change: set vertical divider to 10px height instead of 1px --%>
-      <td><img src="<%= imagePath %>/misc/spacer.gif" width="<%= pageDivider.getDividerWidth() %>" height="10" border="0" alt="">
+      <td><img src="<%= imagePath %>/misc/spacer.gif" width="<%= pageDivider.getDividerWidth() %>" height="1" border="0" alt="">
       </td>
 <%
     }

@@ -16,7 +16,9 @@
     	(portletPlaceholder.getPlaceholderIndex() == (numPortlets - 1))))
 	{
 %>
+	<%-- No longer necessary - DSJ 2009/6/2
 	<div class="lastColumnPortlet">
+	--%>
 <%
 	}
 %>
@@ -38,7 +40,9 @@
 	{
 
 %>
+	<%-- No longer necessary - DSJ 2009/6/2
 	</div>
+	--%>
 <%
 	}
   }
