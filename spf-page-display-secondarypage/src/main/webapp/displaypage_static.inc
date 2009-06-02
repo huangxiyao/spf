@@ -13,7 +13,8 @@ PERFORMANCE, AND QUALITY.
 --%>
 <vgn-portal:includeStyle friendlyID="page_controls"/>
 
-<%-- HPWeb change: set cellspacing 0 instead of 10px --%>
+<%-- HPWeb change: set cellspacing 0 instead of 10px, add blank line --%>
+<br/>
 <table border="0" cellspacing="0" cellpadding="0" <%= pageBean.usesPercentageWidths() ? " width=100%" : "" %> height="240">
 
 <%
