@@ -37,11 +37,15 @@ maintenance for this software.
 				if (portletWindow.isChromeDisplayed()) {
 			%>
 			<%-- HPWeb change: add <div> --%>
+			<%-- Not needed anymore - QC #60 - DSJ 2009/6/2
 			<div class="lastColumnPortlet">
+			--%>
 				<%-- Include Chrome Style To Display Portlet Window --%>
 				<vgn-portal:includeStyle friendlyID="chrome"/>
 			<%-- HPWeb change: add </div> --%>
+			<%-- Not needed anymore - QC #60 - DSJ 2009/6/2
 			</div>
+			--%>
 			<%
 			}
 			else {
