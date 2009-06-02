@@ -6,10 +6,16 @@
   while (pageDividerIterator.hasNext())
   {
     PageDividerBean pageDivider = (PageDividerBean)pageDividerIterator.next();
+
+    // HPWeb change: Add right padding to all but the rightmost column.
+    int pageDividerPadding = 10;
+    if (pageDivider.getDividerIndex() == (numDividers - 1))
+    	pageDividerPadding = 0;
 %>
 
     <tr>
-	  <td width="100%" valign="top">
+	  <%-- HPWeb change: remove left align attribute, add right padding --%>
+	  <td style="padding-bottom: <%= pageDividerPadding %>px;" width="100%" valign="top">
 	    <table border="0" width="100%" cellpadding="0" cellspacing="0">
 		  <tr>
 <%
@@ -36,9 +42,13 @@
   			  	applyPortletDivsFlag = true;
   			    applyAllPortletsFlag = true;
 			  }
+			  // HPWeb change: Add right padding to all but the rightmost column.
+			  int dividerPanelPadding = 10;
+			  if (dividerPanel.getPanelIndex() == (numPanels - 1))
+			    dividerPanelPadding = 0;
 %>
-			  <%-- HPWeb change:  remove left align attribute --%>
-			  <td width=<%= dividerPanel.getPanelWidth() %><%= pageBean.usesPercentageWidths() ? "%" : "" %> valign="top">
+			  <%-- HPWeb change:  remove left align attribute, add right padding --%>
+			  <td style="padding-right: <%= dividerPanelPadding %>px;" width=<%= dividerPanel.getPanelWidth() %><%= pageBean.usesPercentageWidths() ? "%" : "" %> valign="top">
 
 			    <%@ include file="displaypage_static_common.inc" %>
 				
@@ -49,7 +59,9 @@
 		      if (dividerPanel.getPanelIndex() != (numPanels - 1))
 			  {
 %>
+				<%-- HPWeb change: not necessary, we use right-padding above.
 			    <td><img src="<%= imagePath %>/misc/spacer.gif" width=10 height=1 border="0" alt=""></td>
+				--%>
 <%
 			  }
 			}  // end panel loop
@@ -62,8 +74,7 @@
         {
 %>
           <tr>
-          	<%-- HPWeb change: set height of vertical divider to 10px instead of 1px --%>
-            <td><img src="<%= imagePath %>/misc/spacer.gif" width="<%= maxPanelWidth %>" height="10" border="0" alt=""></td>
+            <td><img src="<%= imagePath %>/misc/spacer.gif" width="<%= maxPanelWidth %>" height="1" border="0" alt=""></td>
           </tr>
 <%
         }
