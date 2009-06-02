@@ -34,6 +34,7 @@
 		      if (dividerPanel.getPanelIndex() == (numPanels - 1)) {
 			    // Last portlet on row
   			  	applyPortletDivsFlag = true;
+  			    applyAllPortletsFlag = true;
 			  }
 %>
 			  <%-- HPWeb change:  remove left align attribute --%>
@@ -61,7 +62,8 @@
         {
 %>
           <tr>
-            <td><img src="<%= imagePath %>/misc/spacer.gif" width="<%= maxPanelWidth %>" height="1" border="0" alt=""></td>
+          	<%-- HPWeb change: set height of vertical divider to 10px instead of 1px --%>
+            <td><img src="<%= imagePath %>/misc/spacer.gif" width="<%= maxPanelWidth %>" height="10" border="0" alt=""></td>
           </tr>
 <%
         }

@@ -87,7 +87,8 @@
     {
 	  PageDividerBean pageDivider = (PageDividerBean)pageDividerIterator.next();
 %>
-      <td><img src="<%= imagePath %>/misc/spacer.gif" width="<%= pageDivider.getDividerWidth() %>" height=1 border="0" alt="">
+	  <%-- HPWeb change: set vertical divider to 10px height instead of 1px --%>
+      <td><img src="<%= imagePath %>/misc/spacer.gif" width="<%= pageDivider.getDividerWidth() %>" height="10" border="0" alt="">
       </td>
 <%
     }
