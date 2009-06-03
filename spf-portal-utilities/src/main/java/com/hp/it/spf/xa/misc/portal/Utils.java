@@ -947,11 +947,17 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		// was null/blank. So we must remove it now.
 		if ((uri == null) || (uri.trim().length() == 0)) {
 			if (siteURL != null) {
-				int j = siteURL.indexOf("/site/");
-				if ((j != -1) && ((j + 6) < siteURL.length())) {
-					int i = siteURL.indexOf('/', j + 6);
+				int n = siteURL.indexOf("/site/");
+				if ((n != -1) && ((n + 6) < siteURL.length())) {
+					int i = siteURL.indexOf('/', n + 6);
+					int j = siteURL.indexOf('?', n + 6);
+					int k = siteURL.indexOf('#', n + 6);
+					if ((i == -1) || (j > -1 && j < i))
+						i = j;
+					if ((i == -1) || (k > -1 && k < i))
+						i = k;
 					if (i != -1) {
-						siteURL = siteURL.substring(0, i + 1);
+						siteURL = siteURL.substring(0, i) + '/';
 					}
 				}
 			}
