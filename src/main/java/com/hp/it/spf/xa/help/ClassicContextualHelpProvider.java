@@ -781,7 +781,7 @@ public abstract class ClassicContextualHelpProvider extends
 		html
 				.append("    document.write('<iframe id=\""
 						+ id
-						+ "HelpFrame\" src=\"javascript:false;\" style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
+						+ "HelpFrame\" style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
 		html.append("</script>");
 
 		// Next, add the noscript for unscripted browsers. Use the noscript URL
