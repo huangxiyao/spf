@@ -109,12 +109,11 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "/* To workaround IE6 <SELECT> bug - credit for this solution goes to http://www.hedgerwow.com/360/bugs/css-select-free.html */\n"
 			+ ".select-ie6 {\n" + "    position: absolute;\n"
 			+ "    z-index: 10;\n" + "    cursor: move;\n"
-			+ "    overflow: hidden;\n" + "    width: 33em;\n" + "}\n"
-			+ ".select-ie6 iframe {\n" + "    display: none;\n"
-			+ "    display: block;\n" + "    position:absolute;\n"
-			+ "    top: 0;\n" + "    left: 0;\n" + "    z-index: -1;\n"
-			+ "    filter: mask();\n" + "    width: 3000px;\n"
-			+ "    height: 3000px;\n" + "}\n" + "</style>";
+			+ "    overflow: hidden;\n" + "}\n" + ".select-ie6 iframe {\n"
+			+ "    display: none;\n" + "    display: block;\n"
+			+ "    position:absolute;\n" + "    top: 0;\n" + "    left: 0;\n"
+			+ "    z-index: -1;\n" + "    filter: mask();\n"
+			+ "    height: 9999px;\n" + "}\n" + "</style>";
 
 	/**
 	 * The JavaScript string for the classic contextual help popup open, close,
@@ -715,10 +714,15 @@ public abstract class ClassicContextualHelpProvider extends
 
 		// Make the width.
 		String widthAttr = "";
-		if (this.width > 0)
+		String widthStyleAttr = "";
+		if (this.width > 0) {
 			widthAttr = "width=\"" + this.width + "\" ";
-		if ("".equals(widthAttr) && (DEFAULT_WIDTH > 0))
+			widthStyleAttr = "style=\"width: " + this.width + "px;\" ";
+		}
+		if ("".equals(widthAttr) && (DEFAULT_WIDTH > 0)) {
 			widthAttr = "width=\"" + DEFAULT_WIDTH + "\" ";
+			widthStyleAttr = "style=\"width: " + DEFAULT_WIDTH + "px;\" ";
+		}
 
 		// Make the border style.
 		String borderStyleAttr = "";
@@ -834,8 +838,8 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("</tr></table>\n");
 		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
 		// DSJ 2009/6/3
-		html
-				.append("<!--[if lte IE 6.5]><iframe></iframe><![endif]--></div>\n");
+		html.append("<!--[if lte IE 6.5]><iframe " + widthStyleAttr
+				+ "></iframe><![endif]--></div>\n");
 		html.append("</div>");
 
 		// Finally, write script which adds event for close button.
