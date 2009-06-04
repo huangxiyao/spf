@@ -260,10 +260,10 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "            if (wframe != null) { \n"
 			+ "                wframe.style.top = o.offsetTop; \n"
 			+ "                wframe.style.left = o.offsetLeft; \n"
-			+ "                wframe.style.width=o.offsetWidth; \n"
-			+ "                wframe.style.height=o.offsetHeight; \n"
+			+ "                wframe.style.width = o.offsetWidth; \n"
+			+ "                wframe.style.height = o.offsetHeight; \n"
 			+ "                wframe.style.display = \"block\"; \n"
-			+ "                wframe.style.zIndex=4999; \n"
+			+ "                wframe.style.zIndex = 4999; \n"
 			+ "            } \n"
 			+ "        } \n"
 			+ "    } \n"
@@ -271,14 +271,20 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "        var e = window.event ? window.event : ev; \n"
 			+ "        var t = e.target ? e.target : e.srcElement; \n"
 			+ "        var w = document.getElementById(t.id + 'Help'); \n"
-			+ "        var mouseX = e.pageX ? e.pageX : e.clientX; \n"
-			+ "        var mouseY = e.pageY ? e.pageY : e.clientY; \n"
+			// Fix for QC CR#65 - use clientX and clientY in all circumstances -
+			// they are the coordinates relative to the viewport while pageX and
+			// pageY are non-IE and are coordinates relative to the top of the
+			// page - it is viewport-relative that we want. DSJ 2009/6/3
+			+ "        // var mouseX = e.pageX ? e.pageX : e.clientX; \n"
+			+ "        // var mouseY = e.pageY ? e.pageY : e.clientY; \n"
+			+ "        var mouseX = e.clientX; \n"
+			+ "        var mouseY = e.clientY; \n"
 
 			// use the lastShow variable to close the last popup window, if any,
 			// before opening the new popup window.
 			+ "        if (lastShow != null) { \n"
 			+ "            lastShow.style.display = \"none\"; \n"
-			+ "            lastShow.style.zIndex=0; \n"
+			+ "            lastShow.style.zIndex = 0; \n"
 			+ "            hideFrame(lastShow); \n"
 			+ "        } \n"
 
@@ -288,7 +294,7 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "            lastShow = w; \n"
 			+ "            w.style.display = \"block\"; \n"
 			+ "            w.style.left = mouseX + \"px\"; \n"
-			+ "            w.style.zIndex=5999; \n"
+			+ "            w.style.zIndex = 4999; \n"
 			+ "            var spaceNeeded; \n"
 			+ "            var spaceAvail; \n"
 			+ "            if (document.documentElement && document.documentElement.clientWidth) { \n"
@@ -828,7 +834,8 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("</tr></table>\n");
 		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
 		// DSJ 2009/6/3
-		html.append("<!--[if lte IE 6.5]><iframe></iframe><![endif]--></div>\n");
+		html
+				.append("<!--[if lte IE 6.5]><iframe></iframe><![endif]--></div>\n");
 		html.append("</div>");
 
 		// Finally, write script which adds event for close button.
