@@ -6,6 +6,7 @@ This JSP references styles defined in either <site>SystemError.css or the
 default file, systemError.css.  These are assumed to be secondary support
 files in this component. --%>
 
+<%@ page import="com.epicentric.site.Site"%>
 <%@ page import="com.epicentric.template.Style"%>
 <%@ page import="com.vignette.portal.util.WebUtils"%>
 <%@ page import="com.hp.it.spf.xa.i18n.portal.I18nUtility"%>
@@ -22,7 +23,10 @@ files in this component. --%>
 <%-- Prepare general variables --%>
 <%
     Style _thisStyleObject = portalContext.getCurrentStyle();
-    String i18nID = _thisStyleObject.getUID();
+	String i18nID = null;
+	if (_thisStyleObject != null) {
+    	i18nID = _thisStyleObject.getUID();
+	}
 	HashMap map = (HashMap)portalContext.getPortalRequest().getSession().getAttribute(ExceptionUtil.SESSION_ATTR_SYSTEM_ERROR_DATA);
 %>
 
@@ -41,7 +45,7 @@ files in this component. --%>
 		// Get display message from resource bundle.
 
 		errorMessage = I18nUtility.getValue(i18nID, 
-			"default_error_message",
+			"The service or information you requested is not available at this time. Please try again later.",
 			null, portalContext);
 	}
 %>
@@ -61,7 +65,7 @@ files in this component. --%>
 		// Get display message from resource bundle.
 
 		errorTitle = I18nUtility.getValue(i18nID, 
-			"default_error_title",
+			"Could not open page",
 			null, portalContext);
 	}
 %>
@@ -87,7 +91,7 @@ files in this component. --%>
 	String errorCodeMessage = "";
     if (errorCode != null && errorCode.length() != 0) {
 		errorCodeMessage = I18nUtility.getValue(i18nID,
-			"error_code_message_format",
+			"(Error: {0})",
 			null, portalContext);
 		errorCodeMessage =
 			MessageFormat.format(errorCodeMessage, new String[] {errorCode});
@@ -96,7 +100,11 @@ files in this component. --%>
 
 <%-- Prepare CSS URL --%>
 <%
-	String cssFile = portalContext.getCurrentSite().getDNSName() + "SystemError.css";
+	Site _thisSiteObject = portalContext.getCurrentSite();
+	String cssFile = null;
+	if (_thisSiteObject != null) {
+		cssFile = _thisSiteObject.getDNSName() + "SystemError.css";
+	}
 	if (I18nUtility.getLocalizedFileName(portalContext, cssFile, false) == null) 
 		cssFile = "systemError.css";
 	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile, false);
