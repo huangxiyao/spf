@@ -106,7 +106,7 @@ public abstract class ClassicContextualHelpProvider extends
 	 * help.
 	 */
 	protected static String CLASSIC_CONTEXTUAL_HELP_STYLE = "<style>\n"
-			+ "/* To workaround IE6 <SELECT> bug - credit for this solution goes to http://www.hedgerwow.com/360/bugs/css-select-free.html */\n"
+			+ "/* To workaround IE6 <SELECT> bug */\n"
 			+ ".select-ie6 {\n" + "    position: absolute;\n"
 			+ "    z-index: 10;\n" + "    cursor: move;\n"
 			+ "    overflow: hidden;\n" + "}\n" + ".select-ie6 iframe {\n"
@@ -777,12 +777,9 @@ public abstract class ClassicContextualHelpProvider extends
 				.append("classicContextualHelpUtil.addEvent(document.getElementById('"
 						+ id + "'), 'click', showObject);\n");
 		// Add iframe to avoid IE select bug
-		html.append("if (isMSIE() == true) \n");
-		html
-				.append("    document.write('<iframe id=\""
-						+ id
-						+ "HelpFrame\" style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
-		html.append("</script>");
+		// html.append("if (isMSIE() == true) \n");
+		// html.append("    document.write('<iframe id=\"" + id	+ "HelpFrame\" src=\"javascript:false;\" style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
+		// html.append("</script>");
 
 		// Next, add the noscript for unscripted browsers. Use the noscript URL
 		// if one was returned.
@@ -839,7 +836,7 @@ public abstract class ClassicContextualHelpProvider extends
 		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
 		// DSJ 2009/6/3
 		html.append("<!--[if lte IE 6.5]><iframe " + widthStyleAttr
-				+ "></iframe><![endif]--></div>\n");
+				+ "src=\"javascript:false;\"></iframe><![endif]--></div>\n");
 		html.append("</div>");
 
 		// Finally, write script which adds event for close button.
