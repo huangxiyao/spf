@@ -102,6 +102,21 @@ public abstract class ClassicContextualHelpProvider extends
 	protected static String DEFAULT_HELP_STYLE = "background-color:white;color:black;font-weight:normal";
 
 	/**
+	 * The CSS string for static CSS classes used by the classic contextual
+	 * help.
+	 */
+	protected static String CLASSIC_CONTEXTUAL_HELP_STYLE = "<style>\n"
+			+ "/* To workaround IE6 <SELECT> bug - credit for this solution goes to http://www.hedgerwow.com/360/bugs/css-select-free.html */\n"
+			+ ".select-ie6 {\n" + "    position: absolute;\n"
+			+ "    z-index: 10;\n" + "    cursor: move;\n"
+			+ "    overflow: hidden;\n" + "    width: 33em;\n" + "}\n"
+			+ ".select-ie6 iframe {\n" + "    display: none;\n"
+			+ "    display: block;\n" + "    position:absolute;\n"
+			+ "    top: 0;\n" + "    left: 0;\n" + "    z-index: -1;\n"
+			+ "    filter: mask();\n" + "    width: 3000px;\n"
+			+ "    height: 3000px;\n" + "}\n" + "</style>";
+
+	/**
 	 * The JavaScript string for the classic contextual help popup open, close,
 	 * and drag-and-drop behavior. The popup itself is not defined in this
 	 * JavaScript.
@@ -216,7 +231,7 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "        document.onmouseup = null; \n"
 			+ "        document.onmousedown = null; \n"
 			+ "    } \n"
-			
+
 			+ "    function hideFrame(o) {\n"
 			+ "        if (isMSIE() == true && o != null) {\n"
 			+ "            var wframe = document.getElementById(o.id+'HelpFrame'); \n"
@@ -358,12 +373,10 @@ public abstract class ClassicContextualHelpProvider extends
 			// These variables are used to get mouse position, calculate and
 			// change div position.
 			+ "    var mousex = 0,mousey = 0,grabx = 0,graby = 0,orix = 0,oriy = 0,elex = 0,eley = 0; \n"
-			+ "    var dragobj = null; \n"
-			+ "    var lastShow = null;\n"
+			+ "    var dragobj = null; \n" + "    var lastShow = null;\n"
 
 			// Update the mousex,mousey when mouse is moving
-			+ "    document.onmousemove = update; \n"
-			+ "    update(); \n\n"
+			+ "    document.onmousemove = update; \n" + "    update(); \n\n"
 
 			+ "} \n" + "</script>";
 
@@ -655,9 +668,12 @@ public abstract class ClassicContextualHelpProvider extends
 
 		// If common JavaScript has not previously been returned, then include
 		// it now. Bump the counter.
+		// DSJ 2009/6/3 - add common style definition too, if not already set.
+		// Fix for QC CR# 64.
 		StringBuffer html = new StringBuffer();
 		if (count == 0) {
 			html.append(CLASSIC_CONTEXTUAL_HELP_JS);
+			html.append(CLASSIC_CONTEXTUAL_HELP_STYLE);
 		}
 		++count;
 
@@ -776,6 +792,10 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("onmousedown=\"grab(this)\" ");
 		html
 				.append("style=\"cursor:pointer;position:absolute;background-color:white;display:none;top:200px;left:200px\">\n");
+		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
+		// DSJ
+		// 2009/6/3
+		html.append("<div class=\"select-ie6\">\n");
 		html.append("<table " + borderStyleAttr + widthAttr
 				+ "cellpadding=2 cellspacing=0>\n");
 		// Write title bar with title string and close button, with surrounding
@@ -806,6 +826,9 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("</p></td></tr>\n");
 		html.append("</table></td>\n");
 		html.append("</tr></table>\n");
+		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
+		// DSJ 2009/6/3
+		html.append("<!--[if lte IE 6.5]><iframe></iframe><![endif]--></div>\n");
 		html.append("</div>");
 
 		// Finally, write script which adds event for close button.
