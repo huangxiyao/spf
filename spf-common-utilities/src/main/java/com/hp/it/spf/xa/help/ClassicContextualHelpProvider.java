@@ -106,7 +106,7 @@ public abstract class ClassicContextualHelpProvider extends
 	 * help.
 	 */
 	protected static String CLASSIC_CONTEXTUAL_HELP_STYLE = "<style>\n"
-			+ "/* To workaround IE6 <SELECT> bug */\n"
+			+ "/* Workaround for IE6 <SELECT> bug */\n"
 			+ ".select-ie6 {\n" + "    position: absolute;\n"
 			+ "    z-index: 10;\n" + "    cursor: move;\n"
 			+ "    overflow: hidden;\n" + "}\n" + ".select-ie6 iframe {\n"
