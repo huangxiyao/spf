@@ -779,7 +779,7 @@ public abstract class ClassicContextualHelpProvider extends
 		// Add iframe to avoid IE select bug
 		// html.append("if (isMSIE() == true) \n");
 		// html.append("    document.write('<iframe id=\"" + id	+ "HelpFrame\" src=\"javascript:false;\" style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
-		// html.append("</script>");
+		html.append("</script>");
 
 		// Next, add the noscript for unscripted browsers. Use the noscript URL
 		// if one was returned.
