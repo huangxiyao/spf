@@ -148,19 +148,19 @@
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-system-error-secondarypage</artifactId>
-			<version>1.0.5-SNAPSHOT</version>
+			<version>1.0.5</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-page-display-secondarypage</artifactId>
-			<version>1.0.5-SNAPSHOT</version>
+			<version>1.0.5</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-maximize-secondarypage</artifactId>
-			<version>1.0.4-SNAPSHOT</version>
+			<version>1.0.4</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
@@ -184,7 +184,8 @@
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-site-picker-secondarypage</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.0</version>
+			<type>car</type>
 		</dependency>
 	<!-- Commenting this out since we can't do bulk import with it present...
 		<dependency>
