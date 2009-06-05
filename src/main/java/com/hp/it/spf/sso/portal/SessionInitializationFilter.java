@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.misc.portal.Utils;
+import com.hp.it.spf.xa.misc.portal.Consts;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
@@ -155,7 +156,7 @@ public class SessionInitializationFilter implements Filter {
         if (req.getSession()
                .getAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR) != null) {
             HashMap map = new HashMap(3);
-            map.put("errorCode", "Error system-user_synch_failure");
+            map.put(ExceptionUtil.ERROR_CODE_ATTR, "system-user_synch_failure");
             req.getSession().setAttribute(ExceptionUtil.SESSION_ATTR_SYSTEM_ERROR_DATA, map);
 
             if (req.getRequestURI().toUpperCase().indexOf("ERROR") == -1) {
@@ -163,9 +164,18 @@ public class SessionInitializationFilter implements Filter {
                                                                       null,
                                                                       "Error system-user_synch_failure",
                                                                       null);
-
-                LOG.error("catched by filter");
-                res.sendRedirect(uri.toString());
+                if (uri != null) {
+                    LOG.error("caught by filter - redirecting to system error page");
+                    res.sendRedirect(uri.toString());
+                } else {
+                    LOG.error("caught by filter - redirecting to system error page default");
+                	String defaultUri = req.getContextPath();
+                	defaultUri += "/site/";
+                	defaultUri += Consts.SPF_CORE_SITE + "/";
+                	defaultUri += Consts.PAGE_FRIENDLY_URI_SYSTEM_ERROR;
+                	defaultUri = Utils.slashify(defaultUri);
+                	res.sendRedirect(defaultUri);
+                }
                 return true;
             }
         }
