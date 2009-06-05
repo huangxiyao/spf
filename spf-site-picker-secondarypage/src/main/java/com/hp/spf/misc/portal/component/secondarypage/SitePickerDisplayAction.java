@@ -50,9 +50,10 @@ public class SitePickerDisplayAction extends BaseAction {
 				.getResponse();
 
 		try {
-			response.sendRedirect(errorPageURI.toString());
+			String errorPage = Utils.slashify(errorPageURI.toString());
+			response.sendRedirect(errorPage);
 			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-				LOG.debug("Redirect to:" + errorPageURI.toString());
+				LOG.debug("Redirect to: " + errorPage);
 			}
 		} catch (IOException ex) {
 			LOG.error(ex);
