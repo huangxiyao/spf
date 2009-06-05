@@ -3,7 +3,7 @@
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-portal-utilities</artifactId>
 	<name>SPF portal utilities</name>
-	<version>1.0.7-SNAPSHOT</version>
+	<version>1.0.7</version>
 	<description>
 		Utilities for the portal side of the Shared Portal Framework.
 		These are currently based on Vignette Portal. They currently
@@ -27,9 +27,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-utilities</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-utilities</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-utilities</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-utilities-1.0.7</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-utilities-1.0.7</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-utilities-1.0.7</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
