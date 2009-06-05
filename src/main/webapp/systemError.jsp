@@ -15,19 +15,22 @@ files in this component. --%>
 <%@ page import="java.text.MessageFormat"%>
 
 <%@ taglib uri="/spf-i18n-portal.tld" prefix="spf-i18n-portal"%>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="vgn-tags" prefix="vgn-portal"%>
 
 <vgn-portal:defineObjects />
 
 <%-- Prepare general variables --%>
 <%
-    Style _thisStyleObject = portalContext.getCurrentStyle();
 	String i18nID = null;
-	if (_thisStyleObject != null) {
-    	i18nID = _thisStyleObject.getUID();
+	HashMap map = null;
+	if (portalContext != null) {
+		map = (HashMap)portalContext.getPortalRequest().getSession().getAttribute(ExceptionUtil.SESSION_ATTR_SYSTEM_ERROR_DATA);
+		Style _thisStyleObject = portalContext.getCurrentStyle();
+		if (_thisStyleObject != null) {
+	    	i18nID = _thisStyleObject.getUID();
+		}
 	}
-	HashMap map = (HashMap)portalContext.getPortalRequest().getSession().getAttribute(ExceptionUtil.SESSION_ATTR_SYSTEM_ERROR_DATA);
 %>
 
 <%-- Prepare error message string --%>
@@ -100,19 +103,24 @@ files in this component. --%>
 
 <%-- Prepare CSS URL --%>
 <%
-	Site _thisSiteObject = portalContext.getCurrentSite();
 	String cssFile = null;
-	if (_thisSiteObject != null) {
-		cssFile = _thisSiteObject.getDNSName() + "SystemError.css";
+	if (portalContext != null) {
+		Site _thisSiteObject = portalContext.getCurrentSite();
+		if (_thisSiteObject != null) {
+			cssFile = _thisSiteObject.getDNSName() + "SystemError.css";
+		}
 	}
 	if (I18nUtility.getLocalizedFileName(portalContext, cssFile, false) == null) 
 		cssFile = "systemError.css";
 	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile, false);
+	String cssLink = "";
+	if (cssURL != null) {
+		cssLink = "<link href=\"" + cssURL + "\" rel=\"stylesheet\" type=\"text/css\">";
+	}
 %>
 
 <%-- Output page data --%>
-<link href="<%= cssURL %>" rel="stylesheet" type="text/css">
-
+<%= cssLink %>
 <div style="padding-top: 10px; margin-left: 10px">
 <h3 class="spf-systemerror-title"><%= errorTitle %></h3>
 <table border="0" cellspacing="0">
