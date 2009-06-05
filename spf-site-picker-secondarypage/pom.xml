@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
-			<version>1.0.4</version>
+			<version>1.0.7</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
