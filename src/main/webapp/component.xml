@@ -10,14 +10,14 @@
 	<epideploy:detail>
 		<style-info apply-template-header="false"
 			description="Shared Portal Framework secondary page for site picker to redirect request to SPF system error page."
-			friendly-id="PUBLIC_SPF_SITEPICKER" id="spf-site-picker-secondarypage"
+			friendly-id="PUBLIC_SPF_SITE_PICKER" id="spf-site-picker-secondarypage"
 			is-system="false" processing-type="ACTION_BASED" template-default="false"
 			template-uid="template0025" title="Shared Portal Framework - Site Picker"
 			visible="true">
 			<actions>
 				<action id="1" type="PRE_DISPLAY">
 					<class>
-						com.hp.spf.misc.portal.component.secondarypage.SpfSitePickerDisplayAction
+						com.hp.spf.misc.portal.component.secondarypage.SitePickerDisplayAction
 					</class>
 				</action>
 			</actions>
