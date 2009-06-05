@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-page-display-secondarypage</artifactId>
-	<version>1.0.5</version>
+	<version>1.0.6-SNAPSHOT</version>
 	<packaging>car</packaging>
 	<name>SPF page display secondary page</name>
 	<description>
@@ -22,9 +22,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-page-display-secondarypage</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-page-display-secondarypage-1.0.5</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-page-display-secondarypage-1.0.5</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/spf-page-display-secondarypage-1.0.5</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-page-display-secondarypage</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-page-display-secondarypage</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-page-display-secondarypage</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
