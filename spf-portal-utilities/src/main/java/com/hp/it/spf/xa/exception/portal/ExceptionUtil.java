@@ -73,24 +73,26 @@ public class ExceptionUtil {
 			PortalContext portalContext, String errorTitle, String errorCode,
 			String errorMessage) {
 
-		PortalURI systemErrorPage = portalContext
-				.createDisplayURI(Consts.PAGE_FRIENDLY_ID_SYSTEM_ERROR);
+		PortalURI systemErrorPage = null;
+		if (portalContext != null) {
+			systemErrorPage = portalContext
+					.createDisplayURI(Consts.PAGE_FRIENDLY_ID_SYSTEM_ERROR);
 
-		// Use map object to store title, error code, and error message to
-		// pass to JSP.
-		HttpSession session = portalContext.getPortalRequest().getSession();
-		HashMap map = new HashMap(3);
-		if (errorTitle != null) {
-			map.put(PAGE_TITLE_ATTR, errorTitle);
+			// Use map object to store title, error code, and error message to
+			// pass to JSP.
+			HttpSession session = portalContext.getPortalRequest().getSession();
+			HashMap map = new HashMap(3);
+			if (errorTitle != null) {
+				map.put(PAGE_TITLE_ATTR, errorTitle);
+			}
+			if (errorCode != null) {
+				map.put(ERROR_CODE_ATTR, errorCode);
+			}
+			if (errorMessage != null) {
+				map.put(ERROR_MESSAGE_ATTR, errorMessage);
+			}
+			session.setAttribute(SESSION_ATTR_SYSTEM_ERROR_DATA, map);
 		}
-		if (errorCode != null) {
-			map.put(ERROR_CODE_ATTR, errorCode);
-		}
-		if (errorMessage != null) {
-			map.put(ERROR_MESSAGE_ATTR, errorMessage);
-		}
-		session.setAttribute(SESSION_ATTR_SYSTEM_ERROR_DATA, map);
-
 		return systemErrorPage;
 	}
 }
