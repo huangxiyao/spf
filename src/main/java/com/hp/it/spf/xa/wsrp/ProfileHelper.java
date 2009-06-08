@@ -32,12 +32,13 @@ import org.w3c.dom.Node;
  * AttributeValue: String | Map | List
  * List: "[" (AttributeValue ", ")* "]
  * </code>
- * 
+ *
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  * @author Oliver, Kaijian Ding, Ye Liu
  * @version 1.0
  */
-public class ProfileHelper {
+public class ProfileHelper
+{
 
 
 	/**
@@ -71,7 +72,7 @@ public class ProfileHelper {
 	 * @param profile
 	 *            profile map to copy data from
 	 * @return map containing only entries with String values.
-	 * @throws ParserConfigurationException
+	 * @throws javax.xml.parsers.ParserConfigurationException
 	 */
 	public Document profileToLegacyXml(Map profile) throws ParserConfigurationException {
 		if (profile == null) {
@@ -130,8 +131,12 @@ public class ProfileHelper {
 	 * @return profile map String representation
 	 */
 	public String profileToString(Map profile) {
+		return profileToString(profile, new UnicodeEscapeValueEncoder());
+	}
+
+	public String profileToString(Map profile, ValueEncoder encoder) {
 		StringBuffer sb = new StringBuffer();
-		writeMap(sb, profile);
+		writeMap(sb, profile, encoder);
 		return sb.toString();
 	}
 
@@ -147,40 +152,45 @@ public class ProfileHelper {
 	 *             If the string <tt>s</tt> has incorrect format
 	 */
 	public Map profileFromString(String s) {
+		return profileFromString(s, new UnicodeEscapeValueEncoder());
+	}
+
+	public Map profileFromString(String s, ValueEncoder encoder) {
 		Stack stack = new Stack();
-		readMap(stack, s, 0);
+		readMap(stack, s, 0, encoder);
 		return (Map) stack.pop();
 	}
-	
+
 	//FIXME this is a special way to escape '&'
 	public String spfSpecialEscape(String input) {
 		return input.replaceAll("&", "#__38__#");
 	}
-	
+
 	//FIXME this is a special way to unescape '&'
 	public String spfSpecialUnescape(String input) {
 		return input.replaceAll("#__38__#", "&");
 	}
 
-	void writeObject(StringBuffer sb, Object obj) {
+	void writeObject(StringBuffer sb, Object obj, ValueEncoder encoder) {
 		if (obj == null) {
 			sb.append("");
 		} else if (obj instanceof Map) {
-			writeMap(sb, (Map) obj);
+			writeMap(sb, (Map) obj, encoder);
 		} else if (obj instanceof List) {
-			writeList(sb, (List) obj);
+			writeList(sb, (List) obj, encoder);
 		} else {
-			escape(sb, String.valueOf(obj));
+//			escape(sb, String.valueOf(obj));
+			encoder.appendEncoded(sb, String.valueOf(obj));
 		}
 	}
 
-	private void writeMap(StringBuffer sb, Map map) {
+	private void writeMap(StringBuffer sb, Map map, ValueEncoder encoder) {
 		sb.append('{');
 		if (map != null && !map.isEmpty()) {
 			for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
 				Map.Entry entry = (Map.Entry) it.next();
 				sb.append(entry.getKey()).append('=');
-				writeObject(sb, entry.getValue());
+				writeObject(sb, entry.getValue(), encoder);
 				if (it.hasNext()) {
 					sb.append(", ");
 				}
@@ -189,11 +199,11 @@ public class ProfileHelper {
 		sb.append('}');
 	}
 
-	private void writeList(StringBuffer sb, List lst) {
+	private void writeList(StringBuffer sb, List lst, ValueEncoder encoder) {
 		sb.append('[');
 		if (lst != null && !lst.isEmpty()) {
 			for (Iterator it = lst.iterator(); it.hasNext();) {
-				writeObject(sb, it.next());
+				writeObject(sb, it.next(), encoder);
 				if (it.hasNext()) {
 					sb.append(", ");
 				}
@@ -202,6 +212,7 @@ public class ProfileHelper {
 		sb.append(']');
 	}
 
+/*
 	private void escape(StringBuffer sb, String s) {
 		if (s == null || s.length() == 0) {
 			return;
@@ -216,8 +227,9 @@ public class ProfileHelper {
 			}
 		}
 	}
+*/
 
-	int readObject(Stack stack, String s, int pos) {
+	int readObject(Stack stack, String s, int pos, ValueEncoder encoder) {
 		if (s == null) {
 			throw new IllegalArgumentException("String cannot be null");
 		}
@@ -227,9 +239,9 @@ public class ProfileHelper {
 		} else {
 			char c = s.charAt(pos);
 			if (c == '[') {
-				return readList(stack, s, pos);
+				return readList(stack, s, pos, encoder);
 			} else if (c == '{') {
-				return readMap(stack, s, pos);
+				return readMap(stack, s, pos, encoder);
 			} else if (!stack.isEmpty()) {
 				if (stack.peek() instanceof List) {
 					// look for end of element or end of the list
@@ -242,7 +254,8 @@ public class ProfileHelper {
 						throw new IllegalArgumentException(
 								"Error parsing list - missing closing ']'");
 					}
-					stack.push(unescape(s, pos, posEnd));
+//					stack.push(unescape(s, pos, posEnd));
+					stack.push(encoder.decodeFragment(s, pos, posEnd));
 					return posEnd;
 				} else if (stack.peek() instanceof Map) {
 					// look for end of entry or end of the map
@@ -255,18 +268,20 @@ public class ProfileHelper {
 						throw new IllegalArgumentException(
 								"Error parsing map - missing closing '}'");
 					}
-					stack.push(unescape(s, pos, posEnd));
+//					stack.push(unescape(s, pos, posEnd));
+					stack.push(encoder.decodeFragment(s, pos, posEnd));
 					return posEnd;
 				}
 			} else {
-				stack.push(unescape(s, pos, s.length()));
+//				stack.push(unescape(s, pos, s.length()));
+				stack.push(encoder.decodeFragment(s, pos, s.length()));
 				return s.length();
 			}
 		}
 		throw new IllegalStateException("How do we get here?");
 	}
 
-	private int readMap(Stack stack, String s, int pos) {
+	private int readMap(Stack stack, String s, int pos, ValueEncoder encoder) {
 		if (s.charAt(pos) != '{') {
 			throw new IllegalArgumentException("Error parsing map: "
 					+ s.substring(pos));
@@ -280,7 +295,7 @@ public class ProfileHelper {
 			String name = (String) stack.pop();
 			// skip '='
 			pos += 1;
-			pos = readObject(stack, s, pos);
+			pos = readObject(stack, s, pos, encoder);
 			Object value = stack.pop();
 			map.put(name, value);
 			// skip ", "
@@ -310,7 +325,7 @@ public class ProfileHelper {
 		return posEnd;
 	}
 
-	private int readList(Stack stack, String s, int pos) {
+	private int readList(Stack stack, String s, int pos, ValueEncoder encoder) {
 		if (s.charAt(pos) != '[') {
 			throw new IllegalArgumentException("Error parsing list: "
 					+ s.substring(pos));
@@ -320,7 +335,7 @@ public class ProfileHelper {
 		// skip '['
 		pos += 1;
 		while (pos < s.length() && !eqAt(s, pos, ']')) {
-			pos = readObject(stack, s, pos);
+			pos = readObject(stack, s, pos, encoder);
 			list.add(stack.pop());
 			// skip ", "
 			if (pos + 2 < s.length() && eqAt(s, pos, ',')
@@ -339,6 +354,7 @@ public class ProfileHelper {
 		return pos;
 	}
 
+/*
 	private String unescape(String s, int startPos, int endPos) {
 		if (s == null || s.length() == 0) {
 			return s;
@@ -360,6 +376,7 @@ public class ProfileHelper {
 		}
 		return sb.toString();
 	}
+*/
 
 	private boolean eqAt(String s, int pos, char c) {
 		return s.charAt(pos) == c && (pos == 0 || s.charAt(pos - 1) != '\\');
