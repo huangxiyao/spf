@@ -1,0 +1,49 @@
+<!--
+ Copyright 1999-2004 Vignette Corporation.
+ All rights reserved.
+
+ THIS PROGRAM IS CONFIDENTIAL AND AN UNPUBLISHED WORK AND TRADE
+ SECRET OF THE COPYRIGHT HOLDER, AND DISTRIBUTED ONLY UNDER RESTRICTION.
+
+ EXCEPT AS EXPLICITLY STATED IN A WRITTEN AGREEMENT BETWEEN THE PARTIES,
+ THE SOFTWARE IS PROVIDED AS-IS, WITHOUT WARRANTIES OF ANY KIND, EXPRESS
+ OR IMPLIED, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT,
+ PERFORMANCE, AND QUALITY.
+-->
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>System Starting...</title>
+
+<style type="text/css">
+${SYSTEM_CSS}
+</style>
+<meta http-equiv="refresh" content="10; URL="/>
+</head>
+
+<body>
+
+	<!-- ----------------------------------- -->
+	<!-- SPF change to standardize messaging -->
+	<!-- ----------------------------------- -->
+
+	<h1>System starting...</h1>
+
+	<hr size="1" noshade="noshade" />
+
+	<table border="0"><tr><td valign="top">
+		<img src="${WEB_ROOT}/diag/in_progress.gif" height="18" width="20" alt="starting..."/>
+	</td><td style="padding-top: 5px">
+		<div style="margin:.5em 0em;">
+			<div style="font-weight:bold; margin:3px 0px 5px;">This system is currently starting up.</div>
+			Please be patient.  This process may take a few minutes.
+		</div>
+	</td></tr></table>
+
+	<hr size="1" noshade="noshade" />
+
+</body>
+</html>
+

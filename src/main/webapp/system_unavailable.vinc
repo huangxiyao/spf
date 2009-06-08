@@ -1,0 +1,36 @@
+<!--
+ Copyright 1999-2004 Vignette Corporation.
+ All rights reserved.
+
+ THIS PROGRAM IS CONFIDENTIAL AND AN UNPUBLISHED WORK AND TRADE
+ SECRET OF THE COPYRIGHT HOLDER, AND DISTRIBUTED ONLY UNDER RESTRICTION.
+
+ EXCEPT AS EXPLICITLY STATED IN A WRITTEN AGREEMENT BETWEEN THE PARTIES,
+ THE SOFTWARE IS PROVIDED AS-IS, WITHOUT WARRANTIES OF ANY KIND, EXPRESS
+ OR IMPLIED, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT,
+ PERFORMANCE, AND QUALITY.
+-->
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- ------------------------------------------------------------------- -->
+<!-- SPF changes to standardize error display per SPF standard messaging -->
+<!-- ------------------------------------------------------------------- -->
+
+<head>
+<title>Could Not Open page</title>
+</head>
+
+<body>
+
+	<h1>Could not open page</h1>
+
+	The service or information you requested is not available at this time. <br/>
+	Please try again later. <br/>
+	<br/>
+	<span style="font-size:smaller;">(Error: portappl-system_unavailable)</span>
+
+</body>
+</html>
