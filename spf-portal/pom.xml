@@ -194,7 +194,8 @@
 				<configuration>
 					<dependentWarExcludes>
 						WEB-INF/web.xml,
-						WEB-INF/weblogic.xml
+						WEB-INF/weblogic.xml,
+						WEB-INF/lib/spring.jar
 	       			 </dependentWarExcludes>
 				</configuration>
 			</plugin>
