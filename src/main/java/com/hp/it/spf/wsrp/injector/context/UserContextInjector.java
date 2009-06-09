@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
@@ -21,6 +22,10 @@ import javax.xml.soap.SOAPMessage;
 import org.apache.axis.AxisFault;
 import org.apache.axis.MessageContext;
 import org.apache.axis.handlers.BasicHandler;
+import org.apache.axis.message.Text;
+import org.apache.axis.utils.XMLUtils;
+import org.w3c.dom.CDATASection;
+import org.w3c.dom.DOMException;
 
 import com.epicentric.common.website.MenuItemNode;
 import com.epicentric.common.website.MenuItemUtils;
@@ -168,12 +173,14 @@ public class UserContextInjector extends BasicHandler {
 	 *            user profile map
 	 * @throws SOAPException
 	 *             If an error occurs while manipulating the header
+	 * @throws ParserConfigurationException 
+	 * @throws DOMException 
 	 * 
 	 * @see com.hp.it.spf.xa.wsrp.ProfileHelper for more information of the
 	 *      string encoding of the profile
 	 */
 	private void injectUserContext(SOAPEnvelope envelope, Map userContextKeys,
-			Map userProfile) throws SOAPException {
+			Map userProfile) throws SOAPException, DOMException, ParserConfigurationException {
 		Map userContext = new HashMap();
 		userContext.put(Consts.PORTAL_CONTEXT_KEY, userContextKeys);
 		userContext.put(Consts.USER_PROFILE_KEY, userProfile);
@@ -188,8 +195,10 @@ public class UserContextInjector extends BasicHandler {
 		if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 			LOG.debug("UserContextInjector userProfile " + PROFILE_HELPER.profileToString(userContext));
 		}
-		// FIXME this is a special way to escape special character
-		userContextElement.addTextNode(PROFILE_HELPER.spfSpecialEscape(PROFILE_HELPER.profileToString(userContext)));
+		// encapsulate user context in CDATA section
+		String userContextStr = PROFILE_HELPER.profileToString(userContext);
+		CDATASection userContextCDATA = XMLUtils.newDocument().createCDATASection(userContextStr);
+		userContextElement.appendChild(new Text(userContextCDATA));
 	}
 
 	/**
