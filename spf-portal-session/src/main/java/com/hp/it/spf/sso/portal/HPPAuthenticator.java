@@ -4,11 +4,9 @@
  */
 package com.hp.it.spf.sso.portal;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,7 +15,6 @@ import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
-import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
@@ -35,6 +32,10 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 
     private static final LogWrapper LOG = AuthenticatorHelper.getLog(HPPAuthenticator.class);
 
+    private static String clHeaderList = null;
+
+    private String clHeaderHpp = null;
+    
     /**
      * This is the constructor for HPP Authenticator. First, it will call the
      * constructor of AbstractAuthenticator which is its father class to do some
@@ -48,6 +49,12 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      */
     public HPPAuthenticator(HttpServletRequest request) {
         super(request);
+        
+        // retrieve the cl_header list
+        if (clHeaderList == null) {
+            clHeaderList = getProperty(AuthenticationConsts.HEADER_CL_HEADER_LIST_PROPERTY_NAME);
+        }
+        clHeaderHpp = getValue(AuthenticationConsts.HEADER_CL_HEADER_PROPERTY_NAME);
     }
 
     /**
@@ -55,9 +62,6 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      */
     @SuppressWarnings("unchecked")
     protected void mapHeaderToUserProfileMap() {
-        // retrieve HPP cookie account values
-        userProfile.putAll(getCookieValuesAsMap());
-        
         super.mapHeaderToUserProfileMap();
 
         // Set language, change language from HPP format to ISO standard
@@ -93,7 +97,15 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         String temp = getProperty(fieldName);
         String value = null;
         if (temp != null) {
-            value = (String)userProfile.get(temp);
+            if (clHeaderList.indexOf(temp) != -1) {
+                // Return field value from CL Header
+                value = AuthenticatorHelper.getValuesFromCLHeader(clHeaderHpp,
+                                                                  temp);
+            } else {
+                value = AuthenticatorHelper.getRequestHeader(request,
+                                                             temp,
+                                                             true);
+            }
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("HPP getValue: " + fieldName + "=" + value);
@@ -103,11 +115,29 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     
     @SuppressWarnings("unchecked")
     private void setPhone() {
-        String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);        
+        String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);
+        String country = getValue(AuthenticationConsts.HEADER_PHONE_COUNTRY_CODE);
+        String area = getValue(AuthenticationConsts.HEADER_PHONE_AREA_CODE);
         String ext = getValue(AuthenticationConsts.HEADER_PHONE_EXT);
-        
-        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, number);        
-        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext);       
+
+        StringBuffer phone = new StringBuffer("");
+        if ((country != null) && !("".equals(country.trim()))) {
+            phone.append("+").append(country.trim()).append(" ");
+        }
+        if ((area != null) && !("".equals(area.trim()))) {
+            phone.append(area.trim()).append(" ");
+        }
+        if ((number != null) && !("".equals(number.trim()))) {
+            phone.append(number.trim());
+        }
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, phone.toString());
+
+        if ((ext != null) && !("".equals(ext.trim()))) {
+            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT,
+                            ext.trim());
+        } else {
+            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, "");
+        }
     }
 
     /**
@@ -146,70 +176,5 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         request.setAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE,
                              EUserIdentifierType.EXTERNAL_USER);
         return super.getUserProfile();
-    }
-
-    /**
-     * Retrieve all cookie account values as a map.
-     * <p>
-     * It retrieves Account-Cookie, Account-BusCookie, Account-HomeCookie and CL_Cookie
-     * values as a map from http cookie.
-     * </p>
-     * 
-     * @return cookie account value map or an empty map
-     */
-    private Map<String, String> getCookieValuesAsMap() {
-        Map<String, String> map = new HashMap<String, String>();
-
-        String ac = AuthenticatorHelper.getCookieValue(request,
-                                                       AuthenticationConsts.ACCOUNT_COOKIE);
-        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("Retrieve ACCOUNT_COOKIE: " + ac);
-        }
-        map.putAll(convertCookieValueToMap(ac));
-        String ahc = AuthenticatorHelper.getCookieValue(request,
-                                                        AuthenticationConsts.ACCOUNT_HOMECOOKIE);
-        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("Retrieve ACCOUNT_HOMECOOKIE: " + ahc);
-        }
-        map.putAll(convertCookieValueToMap(ahc));
-        String absc = AuthenticatorHelper.getCookieValue(request,
-                                                         AuthenticationConsts.ACCOUNT_BUSCOOKIE);
-        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("Retrieve ACCOUNT_BUSCOOKIE: " + absc);
-        }
-        map.putAll(convertCookieValueToMap(absc));
-        String cl_cookie = AuthenticatorHelper.getCookieValue(request,
-                                                         AuthenticationConsts.CL_COOKIE);
-        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("Retrieve CL_COOKIE: " + cl_cookie);
-        }
-        map.putAll(convertCookieValueToMap(cl_cookie));
-
-        return map;
-    }
-
-    /**
-     * Convert String which format is
-     * <code>|key=value|key1=value1|key2=value2</code> to map
-     * 
-     * @param cookieValue string value
-     * @return cookie value map or an empty map
-     */
-    private Map<String, String> convertCookieValueToMap(String cookieValue) {
-        Map<String, String> map = new HashMap<String, String>();
-        if (cookieValue != null && !"".equals(cookieValue.trim())) {
-            cookieValue = Utils.decodeBase64(Utils.trimUnwantedSmPadding(cookieValue));
-            StringTokenizer st = new StringTokenizer(cookieValue, "|");
-            while (st.hasMoreTokens()) {
-                String[] key_value = st.nextToken().split("=", 2);
-                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-                    LOG.debug("Retrieve key_value: " + key_value);
-                }
-                if (key_value.length == 2) {
-                    map.put(key_value[0], key_value[1].trim());
-                }
-            }
-        }
-        return map;
     }
 }
