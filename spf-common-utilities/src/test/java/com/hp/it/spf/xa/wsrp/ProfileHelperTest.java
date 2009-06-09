@@ -28,32 +28,32 @@ public class ProfileHelperTest extends TestCase {
 	   Stack stack = new Stack();
 	   ProfileHelper helper = new ProfileHelper();
 
-	   helper.readObject(stack, "abc", 0, new DefaultValueEncoder());
+	   helper.readObject(stack, "abc", 0);
 	   assertEquals("reading simple string", "abc", stack.pop());
 	   assertTrue("Stack empty", stack.isEmpty());
 
-	   helper.readObject(stack, "[abc]", 0, new DefaultValueEncoder());
+	   helper.readObject(stack, "[abc]", 0);
 	   assertTrue("Object is a list", stack.peek() instanceof List);
 	   List list = (List) stack.pop();
 	   assertEquals("List size", 1, list.size());
 	   assertEquals("Element content", "abc", list.get(0));
 	   assertTrue("Stack empty", stack.isEmpty());
 
-	   helper.readObject(stack, "[a, b, c]", 0, new DefaultValueEncoder());
+	   helper.readObject(stack, "[a, b, c]", 0);
 	   assertTrue("Object is a list", stack.peek() instanceof List);
 	   list = (List) stack.pop();
 	   assertEquals("List size", 3, list.size());
-	   assertEquals("List content", Arrays.asList("a", "b", "c"), list);
+	   assertEquals("List content", Arrays.asList(new String[] {"a", "b", "c"}), list);
 	   assertTrue("Stack empty", stack.isEmpty());
 
-	   helper.readObject(stack, "{a=1}", 0, new DefaultValueEncoder());
+	   helper.readObject(stack, "{a=1}", 0);
 	   assertTrue("Object is a map", stack.peek() instanceof Map);
 	   Map map = (Map) stack.pop();
 	   assertEquals("Map size", 1, map.size());
 	   assertEquals("Value of 'a'", "1", map.get("a"));
 	   assertTrue("Stack empty", stack.isEmpty());
 
-	   helper.readObject(stack, "{a=1, b=2}", 0, new DefaultValueEncoder());
+	   helper.readObject(stack, "{a=1, b=2}", 0);
 	   assertTrue("Object is a map", stack.peek() instanceof Map);
 	   map = (Map) stack.pop();
 	   assertEquals("Map size", 2, map.size());
@@ -66,19 +66,19 @@ public class ProfileHelperTest extends TestCase {
 	   Stack stack = new Stack();
 	   ProfileHelper helper = new ProfileHelper();
 
-	   helper.readObject(stack, "[a, , c]", 0, new DefaultValueEncoder());
+	   helper.readObject(stack, "[a, , c]", 0);
 	   List list = (List) stack.pop();
 	   assertEquals("List size", 3, list.size());
-	   assertEquals("List content", Arrays.asList("a", "", "c"), list);
+	   assertEquals("List content", Arrays.asList(new String[] {"a", "", "c"}), list);
 	   assertTrue("Stack empty", stack.isEmpty());
 
-	   helper.readObject(stack, "[a, ]", 0, new DefaultValueEncoder());
+	   helper.readObject(stack, "[a, ]", 0);
 	   list = (List) stack.pop();
 	   assertEquals("List size", 2, list.size());
-	   assertEquals("List content", Arrays.asList("a", ""), list);
+	   assertEquals("List content", Arrays.asList(new String[] {"a", ""}), list);
 	   assertTrue("Stack empty", stack.isEmpty());
 
-	   helper.readObject(stack, "{a=1, b=, c=3}", 0, new DefaultValueEncoder());
+	   helper.readObject(stack, "{a=1, b=, c=3}", 0);
 	   Map map = (Map) stack.pop();
 	   assertEquals("Map size", 3, map.size());
 	   assertEquals("Value of 'a'", "1", map.get("a"));
@@ -86,7 +86,7 @@ public class ProfileHelperTest extends TestCase {
 	   assertEquals("Value of 'c'", "3", map.get("c"));
 	   assertTrue("Stack empty", stack.isEmpty());
 
-	   helper.readObject(stack, "{a=1, b=}", 0, new DefaultValueEncoder());
+	   helper.readObject(stack, "{a=1, b=}", 0);
 	   map = (Map) stack.pop();
 	   assertEquals("Map size", 2, map.size());
 	   assertEquals("Value of 'a'", "1", map.get("a"));
@@ -97,41 +97,10 @@ public class ProfileHelperTest extends TestCase {
 	public void testComplexWrite() {
 	   ProfileHelper helper = new ProfileHelper();
 	   StringBuffer sb = new StringBuffer();
-	   helper.writeObject(sb, createProfile(), new DefaultValueEncoder());
+	   helper.writeObject(sb, createProfile());
 	   System.out.println(sb);
 	}
 
-	public void testNonAsciiValues() throws Exception {
-		ProfileHelper helper = new ProfileHelper();
-		Map<String, String> profile = new HashMap<String, String>();
-		profile.put("FirstName", "W\u0142adys\u0142aw");
-		profile.put("LastName", "Jagie\u0142\u0142o");
-		profile.put("Role", "King of Poland");
-
-		String encodedString = helper.profileToString(profile, new UnicodeEscapeValueEncoder());
-		assertTrue("FirstName was encoded", encodedString.indexOf("W\\u0142adys\\u0142aw") != -1);
-		assertTrue("LastName was encoded", encodedString.indexOf("Jagie\\u0142\\u0142o") != -1);
-		assertTrue("Role was not encoded", encodedString.indexOf("King of Poland") != -1);
-
-		Map decodedProfile = helper.profileFromString(encodedString, new UnicodeEscapeValueEncoder());
-		assertEquals("FirstName", "W\u0142adys\u0142aw", decodedProfile.get("FirstName"));
-		assertEquals("LastName", "Jagie\u0142\u0142o", decodedProfile.get("LastName"));
-		assertEquals("Role", "King of Poland", decodedProfile.get("Role"));
-	}
-
-	public void testComplexProfileWithUnicodeEscapeEncodingHelper() {
-		ProfileHelper helper = new ProfileHelper();
-		Map profile = createProfile();
-		profile.put("FirstName", "W\u0142adys\u0142aw");
-		profile.put("LastName", "Jagie\u0142\u0142o");
-		
-		String encodedProfile = helper.profileToString(profile, new UnicodeEscapeValueEncoder());
-		Map decodedProfile = helper.profileFromString(encodedProfile, new UnicodeEscapeValueEncoder());
-
-		assertEquals("Encoded and decoded profile", profile.toString(), decodedProfile.toString());
-	}
-
-	@SuppressWarnings("unchecked")
 	private Map createProfile() {
 	   Map profile = new HashMap();
 	   profile.put("UserId", "123");
