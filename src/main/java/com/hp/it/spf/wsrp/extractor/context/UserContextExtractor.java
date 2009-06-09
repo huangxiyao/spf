@@ -185,8 +185,6 @@ public class UserContextExtractor implements SOAPHandler {
 			if (headerElement.hasChildNodes()) {
 				String userContextString = headerElement.getFirstChild().getNodeValue();
 				try {
-				    // FIXME this is a special way to unescape special character
-				    userContextString = PROFILE_HELPER.spfSpecialUnescape(userContextString);
 					return PROFILE_HELPER.profileFromString(userContextString);
 				}
 				catch (IllegalArgumentException e) {
