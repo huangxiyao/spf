@@ -33,13 +33,13 @@ public class AuthenticationConsts {
     
     static final String PHONE_EXT_SPLIT = "ext.";
     
-    static final String ACCOUNT_COOKIE = "Account-Cookie";
+    static final String ACCOUNT_HEADER = "ACCOUNT_HEADER";
     
-    static final String ACCOUNT_HOMECOOKIE = "Account-HomeCookie";
+    static final String ACCOUNT_HOMEHEADER = "ACCOUNT_HOMEHEADER";
     
-    static final String ACCOUNT_BUSCOOKIE = "Account-BusCookie";
+    static final String ACCOUNT_BUSHEADER = "ACCOUNT_BUSHEADER";
     
-    static final String CL_COOKIE = "CL_Cookie";
+    static final String CL_HEADER = "CL_HEADER";
     
     public static final String USER_IDENTIFIER_TYPE =  Consts.UNSTICKY_SESSION_ATTR_PREFIX + "USERIDENTIFIERTYPE";
     
