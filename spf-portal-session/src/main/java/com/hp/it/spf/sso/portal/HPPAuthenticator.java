@@ -4,9 +4,11 @@
  */
 package com.hp.it.spf.sso.portal;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +17,7 @@ import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
@@ -31,10 +34,6 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     private static final long serialVersionUID = 1L;
 
     private static final LogWrapper LOG = AuthenticatorHelper.getLog(HPPAuthenticator.class);
-
-    private static String clHeaderList = null;
-
-    private String clHeaderHpp = null;
     
     /**
      * This is the constructor for HPP Authenticator. First, it will call the
@@ -49,12 +48,6 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      */
     public HPPAuthenticator(HttpServletRequest request) {
         super(request);
-        
-        // retrieve the cl_header list
-        if (clHeaderList == null) {
-            clHeaderList = getProperty(AuthenticationConsts.HEADER_CL_HEADER_LIST_PROPERTY_NAME);
-        }
-        clHeaderHpp = getValue(AuthenticationConsts.HEADER_CL_HEADER_PROPERTY_NAME);
     }
 
     /**
@@ -62,6 +55,9 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      */
     @SuppressWarnings("unchecked")
     protected void mapHeaderToUserProfileMap() {
+        // retrieve HPP account values from http header
+        userProfile.putAll(this.getAccountHeaderValuesAsMap());
+        
         super.mapHeaderToUserProfileMap();
 
         // Set language, change language from HPP format to ISO standard
@@ -81,9 +77,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     }
 
     /**
-     * Return corresponding field value in request header, If field is in
-     * cl_header,get its value from CL_HEADER Otherwise, return the decoded
-     * value in request header.
+     * Return corresponding field value carried in request header from user profile map.
      * 
      * @param fieldName field name in request header
      * @return corresponding field in request header, null if field not found
@@ -97,15 +91,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         String temp = getProperty(fieldName);
         String value = null;
         if (temp != null) {
-            if (clHeaderList.indexOf(temp) != -1) {
-                // Return field value from CL Header
-                value = AuthenticatorHelper.getValuesFromCLHeader(clHeaderHpp,
-                                                                  temp);
-            } else {
-                value = AuthenticatorHelper.getRequestHeader(request,
-                                                             temp,
-                                                             true);
-            }
+            value = (String)userProfile.get(temp);
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("HPP getValue: " + fieldName + "=" + value);
@@ -115,29 +101,11 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     
     @SuppressWarnings("unchecked")
     private void setPhone() {
-        String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);
-        String country = getValue(AuthenticationConsts.HEADER_PHONE_COUNTRY_CODE);
-        String area = getValue(AuthenticationConsts.HEADER_PHONE_AREA_CODE);
+        String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);        
         String ext = getValue(AuthenticationConsts.HEADER_PHONE_EXT);
-
-        StringBuffer phone = new StringBuffer("");
-        if ((country != null) && !("".equals(country.trim()))) {
-            phone.append("+").append(country.trim()).append(" ");
-        }
-        if ((area != null) && !("".equals(area.trim()))) {
-            phone.append(area.trim()).append(" ");
-        }
-        if ((number != null) && !("".equals(number.trim()))) {
-            phone.append(number.trim());
-        }
-        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, phone.toString());
-
-        if ((ext != null) && !("".equals(ext.trim()))) {
-            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT,
-                            ext.trim());
-        } else {
-            userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, "");
-        }
+        
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, number);        
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext);       
     }
 
     /**
@@ -176,5 +144,73 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         request.setAttribute(AuthenticationConsts.USER_IDENTIFIER_TYPE,
                              EUserIdentifierType.EXTERNAL_USER);
         return super.getUserProfile();
+    }
+    
+    /**
+     * Retrieve all account values from request as a map.
+     * <p>
+     * It retrieves Account-Header, Account-BusHeader, Account-HomeHeader and CL_Header
+     * values as a map from http request.
+     * </p>
+     * 
+     * @return account value map or an empty map
+     */
+    private Map<String, String> getAccountHeaderValuesAsMap() {
+        Map<String, String> map = new HashMap<String, String>();
+
+        String ac = AuthenticatorHelper.getRequestHeader(request,
+                                                         getProperty(AuthenticationConsts.ACCOUNT_HEADER),
+                                                         true);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Retrieve ACCOUNT_HEADER: " + ac);
+        }
+        map.putAll(convertAccountHeaderValueToMap(ac));
+        String ahc = AuthenticatorHelper.getRequestHeader(request,
+                                                          getProperty(AuthenticationConsts.ACCOUNT_HOMEHEADER),
+                                                          true);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Retrieve ACCOUNT_HOMEHEADER: " + ahc);
+        }
+        map.putAll(convertAccountHeaderValueToMap(ahc));
+        String absc = AuthenticatorHelper.getRequestHeader(request,
+                                                           getProperty(AuthenticationConsts.ACCOUNT_BUSHEADER),
+                                                           true);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Retrieve ACCOUNT_BUSHEADER: " + absc);
+        }
+        map.putAll(convertAccountHeaderValueToMap(absc));
+        String cl_header = AuthenticatorHelper.getRequestHeader(request,
+                                                                getProperty(AuthenticationConsts.CL_HEADER),
+                                                                true);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Retrieve CL_HEADER: " + cl_header);
+        }
+        map.putAll(convertAccountHeaderValueToMap(cl_header));
+
+        return map;
+    }
+
+    /**
+     * Convert String which format is
+     * <code>|key=value|key1=value1|key2=value2</code> to map
+     * 
+     * @param value string value
+     * @return value map or an empty map
+     */
+    private Map<String, String> convertAccountHeaderValueToMap(String value) {
+        Map<String, String> map = new HashMap<String, String>();
+        if (value != null && !"".equals(value.trim())) {            
+            StringTokenizer st = new StringTokenizer(value, "|");
+            while (st.hasMoreTokens()) {
+                String[] key_value = st.nextToken().split("=", 2);
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug("Retrieve key_value: " + key_value);
+                }
+                if (key_value.length == 2) {
+                    map.put(key_value[0].trim(), key_value[1].trim());
+                }
+            }
+        }
+        return map;
     }
 }

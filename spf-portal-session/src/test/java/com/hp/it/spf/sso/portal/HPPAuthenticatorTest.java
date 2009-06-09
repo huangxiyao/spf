@@ -67,8 +67,9 @@ public class HPPAuthenticatorTest {
      */
     @Test
     public void testMapHeaderToUserProfileMap() {
-        HPPAuthenticator authenticator = new HPPAuthenticator(hppRequest);
+        HPPAuthenticator authenticator = new HPPAuthenticator(hppRequest);       
         authenticator.mapHeaderToUserProfileMap();
+        
         assertTrue(authenticator.userProfile.size() > 0);
         
         String profileid = authenticator.getValue(AuthenticationConsts.HEADER_PROFILE_ID_PROPERTY_NAME);
