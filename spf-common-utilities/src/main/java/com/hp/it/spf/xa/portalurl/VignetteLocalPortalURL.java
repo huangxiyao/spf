@@ -21,7 +21,7 @@ class VignetteLocalPortalURL extends AbstractPortalURL {
 
 	protected void addPrivateParameters(StringBuilder result,
 			Map.Entry<String, PortletParameters> portletParameters,
-			String portletFriendlyId) {
+			String portletFriendlyId, boolean isActionURL) {
 		addParameters(result, portletFriendlyId, portletParameters.getValue()
 				.getPrivateParameters(), ".prp_");
 	}

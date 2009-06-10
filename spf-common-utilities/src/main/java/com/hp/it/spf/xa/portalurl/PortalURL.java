@@ -119,11 +119,14 @@ public interface PortalURL {
 	 * <tt>paramName</tt> and same <tt>portletFriendlyId</tt> will be
 	 * overwritten.
 	 * <p>
-	 * <b>Note:</b> This method is for setting portlet <i>private</i> render
+	 * <b>Note:</b> This method is for setting portlet <i>private</i>
 	 * parameters. To pass <i>public</i> render parameters to portlets instead,
 	 * use a method like {@link #setPublicParameter(String, String, String)}.
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
+	 * 
+	 * The private parameters will be set as action parameters when action URL is created,
+	 * and this is only relevant to the remote portlets.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -150,11 +153,14 @@ public interface PortalURL {
 	 * method, any previous value(s) set for the same <tt>paramName</tt> and
 	 * same <tt>portletFriendlyId</tt> will be overwritten.
 	 * <p>
-	 * <b>Note:</b> This method is for setting portlet <i>private</i> render
+	 * <b>Note:</b> This method is for setting portlet <i>private</i> 
 	 * parameters. To pass <i>public</i> render parameters to portlets instead,
 	 * use a method like {@link #setPublicParameter(String, String, String)}.
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
+	 * 
+	 * The private parameters will be set as action parameters when action URL is created,
+	 * and this is only relevant to the remote portlets.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -181,6 +187,8 @@ public interface PortalURL {
 	 * instead, use a method like {@link #setParameter(String, String, String)}.
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
+	 * 
+	 * The use of these parameters when creating action URL is "undefined and may lead to unexpected results" 
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -209,6 +217,8 @@ public interface PortalURL {
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
 	 * 
+	 * The use of these parameters when creating action URL is "undefined and may lead to unexpected results"
+	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
 	 * @param paramName
@@ -235,6 +245,8 @@ public interface PortalURL {
 	 * instead, use a method like {@link #setParameter(String, String, String)}.
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
+	 * 
+	 * The use of these parameters when creating action URL is "undefined and may lead to unexpected results"
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -275,6 +287,9 @@ public interface PortalURL {
 	 * with the given <tt>portletFriendlyId</tt>. You can only do this once
 	 * with any one <code>PortalURL</code> object, since setting an action URL
 	 * irreversibly changes the state of the object.
+	 * 
+	 * The private parameters will be set as action parameters when action URL is created,
+	 * and this is only relevant to the remote portlets.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console

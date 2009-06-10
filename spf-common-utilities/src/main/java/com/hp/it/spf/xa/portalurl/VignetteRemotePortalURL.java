@@ -26,7 +26,7 @@ class VignetteRemotePortalURL extends AbstractPortalURL {
 
 	protected void addPrivateParameters(StringBuilder result,
 			Map.Entry<String, PortletParameters> portletParameters,
-			String portletFriendlyId) {
+			String portletFriendlyId, boolean isActionURL) {
 		Map<String, List<String>> parameters = portletParameters.getValue()
 				.getPrivateParameters();
 		if (parameters.isEmpty()) {
@@ -36,12 +36,16 @@ class VignetteRemotePortalURL extends AbstractPortalURL {
 		result.append('&').append(PARAM_NAME_PREFIX).append(".prp_").append(
 				portletFriendlyId);
 		result.append('=');
-		addNavigationalStateValue(result, parameters);
+		addNavigationalStateValue(result, parameters, isActionURL);
 	}
 
 	private void addNavigationalStateValue(StringBuilder result,
-			Map<String, List<String>> parameters) {
-		result.append("wsrp-navigationalState");
+			Map<String, List<String>> parameters, boolean isActionURL) {
+		if (isActionURL) {
+			result.append("wsrp-interactionState");
+		} else {
+			result.append("wsrp-navigationalState");
+		}
 
 		// everything following 'wsrp-navigationalState' must be URL-encoded -
 		// we create it through
