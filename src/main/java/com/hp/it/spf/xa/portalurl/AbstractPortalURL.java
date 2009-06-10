@@ -798,7 +798,7 @@ abstract class AbstractPortalURL implements PortalURL {
 
 	protected abstract void addPrivateParameters(StringBuilder result,
 			Map.Entry<String, PortletParameters> portletParameters,
-			String portletFriendlyId);
+			String portletFriendlyId, boolean isActionURL);
 
 	protected abstract void addPublicParameters(StringBuilder result,
 			Map.Entry<String, PortletParameters> portletParameters,
@@ -905,7 +905,7 @@ abstract class AbstractPortalURL implements PortalURL {
 
 			addStateAndModeToUrlFragment(result, portletParameters.getValue());
 			addPublicParameters(result, portletParameters, portletFriendlyId);
-			addPrivateParameters(result, portletParameters, portletFriendlyId);
+			addPrivateParameters(result, portletParameters, portletFriendlyId, false);
 		}
 
 		if (portletParametersSpecified || isActionUrl) {
@@ -925,7 +925,7 @@ abstract class AbstractPortalURL implements PortalURL {
 				addPublicParameters(result, portletParameters,
 						portletFriendlyId);
 				addPrivateParameters(result, portletParameters,
-						portletFriendlyId);
+						portletFriendlyId, isActionUrl);
 			}
 			result.append("&javax.portlet.endCacheTok=com.vignette.cachetoken");
 		}
