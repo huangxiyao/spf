@@ -93,11 +93,14 @@ public interface PortalURL {
 	 * and same <tt>portletFriendlyId</tt>, use the companion
 	 * {@link #setParameter(String, String, String[])} method.
 	 * <p>
-	 * <b>Note:</b> This method is for setting portlet <i>private</i> render
+	 * <b>Note:</b> This method is for setting portlet <i>private</i> 
 	 * parameters. To pass <i>public</i> render parameters to portlets instead,
 	 * use a method like {@link #setPublicParameter(String, String, String)}.
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
+	 * 
+	 * The private parameters will be set as action parameters when action URL is created,
+	 * and this is only relevant to the remote portlets.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
