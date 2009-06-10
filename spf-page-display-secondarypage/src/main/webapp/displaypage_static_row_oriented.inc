@@ -1,96 +1,57 @@
-   
 <%
   List pageDividers = pageBean.getPageDividers();
-  int numDividers = pageDividers.size();
   Iterator pageDividerIterator = pageDividers.iterator();
   while (pageDividerIterator.hasNext())
-  {
+  { // begin row loop
     PageDividerBean pageDivider = (PageDividerBean)pageDividerIterator.next();
-
-    // HPWeb change: Add right padding to all but the rightmost column.
-    int pageDividerPadding = 10;
-    if (pageDivider.getDividerIndex() == (numDividers - 1))
-    	pageDividerPadding = 0;
 %>
-
-    <tr>
-	  <%-- HPWeb change: remove left align attribute, add right padding --%>
-	  <td style="padding-bottom: <%= pageDividerPadding %>px;" width="100%" valign="top">
-	    <table border="0" width="100%" cellpadding="0" cellspacing="0">
-		  <tr>
+  <tr>
+    <td width="100%" valign="top">
+      <table border="0" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
 <%
-		    int maxPanelWidth = 0;
+	int maxPanelWidth = 0;
 
-		    List dividerPanels = pageDivider.getPanels();
-			int numPanels = dividerPanels.size();
-			Iterator dividerPanelIterator = dividerPanels.iterator();
-			while (dividerPanelIterator.hasNext())
-			{
-			  PagePanelBean dividerPanel = (PagePanelBean)dividerPanelIterator.next();
+	// Reset flag for indicating at least one portlet is enabled in this panel.
+	boolean portletEnabledFlag = false;
 
-			  if (maxPanelWidth < dividerPanel.getPanelWidth())
-			  {
-				  maxPanelWidth = dividerPanel.getPanelWidth();
-			  }
+    List dividerPanels = pageDivider.getPanels();
+	Iterator dividerPanelIterator = dividerPanels.iterator();
+	while (dividerPanelIterator.hasNext())
+	{ // begin panel loop
+		PagePanelBean dividerPanel = (PagePanelBean)dividerPanelIterator.next();
+		if (maxPanelWidth < dividerPanel.getPanelWidth())
+		{
+			maxPanelWidth = dividerPanel.getPanelWidth();
+		}
 
-  			  // HPWeb change: set flags to apply div to last portlet in row
-  			  // only.
-  			  boolean applyPortletDivsFlag = false;
-  			  boolean applyAllPortletsFlag = false;
-		      if (dividerPanel.getPanelIndex() == (numPanels - 1)) {
-			    // Last portlet on row
-  			  	applyPortletDivsFlag = true;
-  			    applyAllPortletsFlag = true;
-			  }
-			  // HPWeb change: Add right padding to all but the rightmost column.
-			  int dividerPanelPadding = 10;
-			  if (dividerPanel.getPanelIndex() == (numPanels - 1))
-			    dividerPanelPadding = 0;
+	    // Add right padding to all but the rightmost column.
+		int dividerPanelPadding = 10;
+		if (!dividerPanelIterator.hasNext())
+			dividerPanelPadding = 0;
 %>
-			  <%-- HPWeb change:  remove left align attribute, add right padding --%>
-			  <td style="padding-right: <%= dividerPanelPadding %>px;" width=<%= dividerPanel.getPanelWidth() %><%= pageBean.usesPercentageWidths() ? "%" : "" %> valign="top">
-
-			    <%@ include file="displaypage_static_common.inc" %>
-				
-			  </td>
-
-	          <%-- Add some horizontal space between panels --%>
+          <td style="padding-right: <%= dividerPanelPadding %>px;" width=<%= dividerPanel.getPanelWidth() %><%= pageBean.usesPercentageWidths() ? "%" : "" %> valign="top">
+            <%@ include file="displaypage_static_common.inc" %>
+          </td>
 <%
-		      if (dividerPanel.getPanelIndex() != (numPanels - 1))
-			  {
+	} // end panel loop
 %>
-				<%-- HPWeb change: not necessary, we use right-padding above.
-			    <td><img src="<%= imagePath %>/misc/spacer.gif" width=10 height=1 border="0" alt=""></td>
-				--%>
-<%
-			  }
-			}  // end panel loop
-%>
-          </tr>
-
-        <%-- loop to maintain width of absolute-width dividers --%>
-<%
-        if (pageBean.usesPercentageWidths())
-        {
-%>
-          <tr>
-            <td><img src="<%= imagePath %>/misc/spacer.gif" width="<%= maxPanelWidth %>" height="1" border="0" alt=""></td>
-          </tr>
-<%
-        }
-%>
+        </tr>
       </table>
     </td>
   </tr>
-
 <%
-  if (pageDivider.getDividerIndex() != (numDividers - 1))
-  {
+	// Add vertical spacer between rows if there is another row coming up and at least
+	// one portlet was enabled in this row.
+	if (pageDividerIterator.hasNext() && portletEnabledFlag)
+	{
 %>
-	<!-- vertical spacer between divs/rows - begins -->
-	<!-- vertical spacer between divs/rows - ends -->
+  <tr>
+    <td>
+      <br>
+    </td>
+  </tr>
 <%
 	}
-  } // end divider loop
+  } // end row loop
 %>
-
