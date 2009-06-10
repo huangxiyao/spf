@@ -1,20 +1,17 @@
-
   <tr>
-   
 <%
   List pageDividers = pageBean.getPageDividers();
   int numDividers = pageDividers.size();
   Iterator pageDividerIterator = pageDividers.iterator();
   while (pageDividerIterator.hasNext())
-  {
+  { // begin column loop
     PageDividerBean pageDivider = (PageDividerBean)pageDividerIterator.next();
     
-    // HPWeb change: Add right padding to all but the rightmost column.
+    // Add right padding to all but the rightmost column.
     int pageDividerPadding = 10;
     if (pageDivider.getDividerIndex() == (numDividers - 1))
     	pageDividerPadding = 0;
 %>
-	<%-- HPWeb change: remove left align attribute, add right padding --%>
     <td style="padding-right: <%= pageDividerPadding %>px;" width=<%= pageDivider.getDividerWidth() %><%= pageBean.usesPercentageWidths() ? "%" : "" %> valign="top">
 <%--
   the nested table that follows this line is necessary for the case when
@@ -28,75 +25,56 @@
       <table cellspacing="0" cellpadding="0" border="0" width="100%">
         <tr>
           <td>
-
 <%
-		  // HPWeb change: added following lines to set flags to
-		  // apply div to all portlets in the last column only.
+	List dividerPanels = pageDivider.getPanels();
+	Iterator dividerPanelIterator = dividerPanels.iterator();
+	while (dividerPanelIterator.hasNext())
+	{ // begin panel loop
+		PagePanelBean dividerPanel = (PagePanelBean)dividerPanelIterator.next();
 
-		  boolean applyPortletDivsFlag = false;
-		  boolean applyAllPortletsFlag = false;
-		  if (pageDivider.getDividerIndex() == (numDividers - 1))
-		  {
-		      applyPortletDivsFlag = true;
-		      applyAllPortletsFlag = true;
-		  }
-
-		    List dividerPanels = pageDivider.getPanels();
-			int numPanels = dividerPanels.size();
-			Iterator dividerPanelIterator = dividerPanels.iterator();
-			while (dividerPanelIterator.hasNext())
-			{
-			  PagePanelBean dividerPanel = (PagePanelBean)dividerPanelIterator.next();
+		// Reset flag for indicating at least one portlet has displayed in this panel.
+		boolean portletEnabledFlag = false;
 %>   
-			  <%@ include file="displaypage_static_common.inc" %>
-
-			  <%-- Add some vertical space between panels --%>
+            <%@ include file="displaypage_static_common.inc" %>
 <%
-		      if (dividerPanel.getPanelIndex() != (numPanels - 1))
-			  {
+		// Add vertical spacer between panels if there is another coming up and at least
+		// one portlet was enabled in this one.
+		if (dividerPanelIterator.hasNext() && portletEnabledFlag)
+		{
 %>
-			    <br/>
+            <br>
 <%
-			  }
-			}  // end panel loop
+		}
+	}  // end panel loop
 %>
-
           </td>
         </tr>
       </table>
     </td>
 <%
-	if (pageDivider.getDividerIndex() != (numDividers - 1))
-	{
+  } // end column loop
 %>
-      <!-- horizontal spacer between div/column layouts - begins -->
-
-	  <!-- horizontal spacer between div/column layouts - ends -->
-<%
-	}
-  } // end divider loop
-%>
-
   </tr>
-
-  <%-- loop to maintain width of absolute-width dividers --%>
 <%
+  // loop to maintain width of absolute-width dividers
+  // Vignette OOB had this -- do we still need it?  DSJ 2009/Jun/9
   if (pageBean.usesPercentageWidths())
   {
 %>
-    <tr>
+  <tr>
 <%
     pageDividerIterator = pageBean.getPageDividers().iterator();
     while (pageDividerIterator.hasNext())
     {
 	  PageDividerBean pageDivider = (PageDividerBean)pageDividerIterator.next();
 %>
-      <td><img src="<%= imagePath %>/misc/spacer.gif" width="<%= pageDivider.getDividerWidth() %>" height="1" border="0" alt="">
-      </td>
+    <td>
+      <img src="<%= imagePath %>/misc/spacer.gif" width="<%= pageDivider.getDividerWidth() %>" height="1" border="0" alt="">
+    </td>
 <%
     }
 %>
-    </tr>
+  </tr>
 <%
   }
 %>
