@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.wsrp</groupId>
 	<artifactId>spf-portal-wsrp</artifactId>
-	<version>1.0.7</version>
+	<version>1.0.8-SNAPSHOT</version>
 	<name>spf-portal-wsrp</name>
 	<description>
 		Vignette Portal does not allow sending different sets of profile
@@ -143,8 +143,8 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-wsrp-1.0.7</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-wsrp-1.0.7</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-wsrp-1.0.7</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-wsrp</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-wsrp</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-wsrp</url>
 	</scm>
 </project>
