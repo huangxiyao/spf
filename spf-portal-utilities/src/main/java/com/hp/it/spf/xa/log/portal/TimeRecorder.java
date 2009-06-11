@@ -130,11 +130,25 @@ public class TimeRecorder {
 	List<OperationData> getRecordedData() {
 		List<OperationData> result = new ArrayList<OperationData>();
 
+		//Log the main thread operations first for readability of the log
 		result.addAll(getThreadOperationList(mMainThread));
+
+		for (Map.Entry<Thread, List<OperationData>> threadOperations : mThreadOperations.entrySet()) {
+			Thread thread = threadOperations.getKey();
+			// We already logged for the main thread so we ignore it
+			if (!mMainThread.equals(thread)) {
+				List<OperationData> operations = threadOperations.getValue();
+				if (operations != null) {
+					result.addAll(operations);
+				}
+			}
+		}
+/*
 		Thread thread = findLongestNotMainRunningThread();
 		if (thread != null) {
 			result.addAll(getThreadOperationList(thread));
 		}
+*/
 
 		return result;
 	}

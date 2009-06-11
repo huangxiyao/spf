@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
@@ -105,24 +106,32 @@ public class TimeRecorderTest extends TestCase
 		recorder.recordEnd(Operation.REQUEST);
 
 
-		Map<Operation, OperationData> resultMap = convert(recorder.getRecordedData());
+		Map<Operation, List<OperationData>> resultMap = convert(recorder.getRecordedData());
 
+		assertTrue("Profile call captured", resultMap.containsKey(Operation.PROFILE_CALL));
 		assertTrue("Profile call time",
-				resultMap.get(Operation.PROFILE_CALL).getExecutionTime() >= (profileEnd-profileStart));
-		assertTrue("Only longest WSRP call time recorded",
-				resultMap.get(Operation.WSRP_CALL).getExecutionTime() >= (wsrp[1][1]-wsrp[1][0]));
+				resultMap.get(Operation.PROFILE_CALL).get(0).getExecutionTime() >= (profileEnd-profileStart));
+		assertTrue("Both WSRP calls captured",
+				resultMap.containsKey(Operation.WSRP_CALL)
+						&& resultMap.get(Operation.WSRP_CALL).size() == 2);
+		assertTrue("Request time captured", resultMap.containsKey(Operation.REQUEST));
 		assertTrue("Request time",
-				resultMap.get(Operation.REQUEST).getExecutionTime() >= ((profileEnd-profileStart) + (wsrp[1][1]-wsrp[1][0])));
+				resultMap.get(Operation.REQUEST).get(0).getExecutionTime() >= ((profileEnd-profileStart) +
+						(Math.max(wsrp[1][1]-wsrp[1][0], wsrp[0][1]-wsrp[0][0]))));
 	}
 
-	private Map<Operation, OperationData> convert(List<OperationData> data)
+	private Map<Operation, List<OperationData>> convert(List<OperationData> data)
 	{
-		Map<Operation, OperationData> result = new HashMap<Operation, OperationData>();
+		Map<Operation, List<OperationData>> result = new HashMap<Operation, List<OperationData>>();
 		for (OperationData operationData : data) {
 			if (result.containsKey(operationData.getOperation())) {
-				fail("Only single entry expected for each operation: " + operationData.getOperation());
+				result.get(operationData.getOperation()).add(operationData);
 			}
-			result.put(operationData.getOperation(), operationData);
+			else {
+				List<OperationData> l = new ArrayList<OperationData>(2);
+				l.add(operationData);
+				result.put(operationData.getOperation(), l);
+			}
 		}
 		return result;
 	}

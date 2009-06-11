@@ -4,6 +4,8 @@ import org.apache.axis.handlers.BasicHandler;
 import org.apache.axis.MessageContext;
 import org.apache.axis.AxisFault;
 import org.apache.axis.Message;
+import org.apache.axis.message.RPCParam;
+import org.xml.sax.SAXException;
 import com.hp.it.spf.xa.log.portal.TimeRecorder;
 import com.hp.it.spf.xa.log.portal.Operation;
 import com.hp.it.spf.xa.misc.portal.RequestContext;
@@ -16,6 +18,12 @@ import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPBody;
 import javax.servlet.http.HttpServletRequest;
+
+import oasis.names.tc.wsrp.v2.types.NamedString;
+import oasis.names.tc.wsrp.v2.types.GetMarkup;
+import oasis.names.tc.wsrp.v2.types.PerformBlockingInteraction;
+import oasis.names.tc.wsrp.v2.types.HandleEvents;
+import oasis.names.tc.wsrp.v2.types.GetResource;
 
 /**
  * A handler capturing WSRP execution time. This class relies on {@link TimeRecorder} to
@@ -38,7 +46,8 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 			// RequestContext may be null for console requests
 			if (requestContext != null) {
 				if (!messageContext.getPastPivot()) {
-					requestContext.getTimeRecorder().recordStart(Operation.WSRP_CALL);
+					requestContext.getTimeRecorder().recordStart(Operation.WSRP_CALL,
+							getPortletFriendlyId(messageContext));
 				}
 				else {
 					requestContext.getTimeRecorder().recordEnd(Operation.WSRP_CALL);
@@ -50,6 +59,51 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 			// logging infrastructure and probably does not impact proper application operation
 			LOG.error("Error occured while recording time", e);
 		}
+	}
+
+	private String getPortletFriendlyId(MessageContext messageContext) throws AxisFault, SAXException, SOAPException
+	{
+		// Portlet friendly Id is stored in ClientAttributes structure which is only present in
+		// WSRP V2
+		if (! Predicates.isWsrpV2(messageContext)) {
+			return null;
+		}
+
+		RPCParam rpcParam = Utils.getWsrpCallRPCParam(messageContext.getMessage());
+		if (rpcParam != null) {
+			Object value = rpcParam.getObjectValue();
+			if (value != null) {
+				NamedString[] clientAttributes = null;
+
+				if (value instanceof GetMarkup) {
+					clientAttributes = ((GetMarkup) value).getMarkupParams()
+							.getClientData().getClientAttributes();
+				} else if (value instanceof PerformBlockingInteraction) {
+					clientAttributes = ((PerformBlockingInteraction) value).getMarkupParams()
+							.getClientData().getClientAttributes();
+				} else if (value instanceof HandleEvents) {
+					clientAttributes = ((HandleEvents) value).getMarkupParams()
+							.getClientData().getClientAttributes();
+				} else if (value instanceof GetResource) {
+					clientAttributes = ((GetResource) value).getResourceParams()
+							.getClientData().getClientAttributes();
+				}
+
+				if (clientAttributes != null) {
+					for (NamedString ns : clientAttributes) {
+						if ("com.vignette.portal.portlet.friendlyid".equals(ns.getName())) {
+							return ns.getValue();
+						}
+					}
+				}
+			} else {
+				LOG.error("Parameter value of WSRP call is null");
+			}
+		} else {
+			LOG.error("Unable to find WSRP RPCParam parameter");
+		}
+
+		return null;
 	}
 
 	@Override
