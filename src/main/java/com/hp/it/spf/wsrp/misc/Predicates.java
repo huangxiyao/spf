@@ -24,6 +24,15 @@ public class Predicates {
 
 	/**
 	 * @param messageContext web service message context
+	 * @return <tt>true</tt> if the web service call is WSRP 2.0
+	 */
+	public static boolean isWsrpV2(MessageContext messageContext) {
+		String actionURI = messageContext.getSOAPActionURI();
+		return actionURI != null && actionURI.startsWith("urn:oasis:names:tc:wsrp:v2:");
+	}
+
+	/**
+	 * @param messageContext web service message context
 	 * @return <tt>true</tt> if the web service request is targeted to OpenPortal WSRP producer
 	 */
 	public static boolean isOpenPortalProducer(MessageContext messageContext) {
@@ -70,5 +79,5 @@ public class Predicates {
 						"performBlockingInteraction",
 						"handleEvents",
 						"getResource");
-	}                                           
+	}
 }
