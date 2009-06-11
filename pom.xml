@@ -113,17 +113,17 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>1.0.5</version>
+			<version>1.0.7</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
-			<version>1.0.6</version>
+			<version>1.0.8</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-filters</artifactId>
-			<version>1.0.5</version>
+			<version>1.0.7</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
