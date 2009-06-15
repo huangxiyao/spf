@@ -34,8 +34,8 @@ import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
 /**
- * AbstractAuthenticator is the super authenticator and defines common process logic. 
- * All other authenticators will be extended from this class.
+ * AbstractAuthenticator is the super authenticator and defines common process
+ * logic. All other authenticators will be extended from this class.
  * <p>
  * This class defines the public process of doing session initialization.
  * </p>
@@ -154,11 +154,13 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 }
                 AuthenticatorHelper.cleanupSession(request);
             } else {
-            	// fetch userProfile from session
-            	userProfile = (Map)request.getSession().getAttribute(AuthenticationConsts.USER_PROFILE_KEY);
-            	// get groups from userProfile
-            	List<String> sessionGroups = (List<String>)userProfile.get(AuthenticationConsts.KEY_USER_GROUPS);
-            	refreshLocaleGroups(sessionGroups);
+                // fetch userProfile from session
+                userProfile = (Map)request.getSession()
+                                          .getAttribute(AuthenticationConsts.USER_PROFILE_KEY);
+                // get groups from userProfile
+                List<String> sessionGroups = (List<String>)userProfile.get(AuthenticationConsts.KEY_USER_GROUPS);
+                refreshLocaleRelatedAttributes(sessionGroups);
+
                 userName = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
                 return;
             }
@@ -176,55 +178,86 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             userName = ssoUser.getUserName();
         } catch (Exception ex) {
             userName = null;
-            LOG.error("Invoke Authenticator.execute error: " + ex.getMessage(), ex);
+            LOG.error("Invoke Authenticator.execute error: " + ex.getMessage(),
+                      ex);
             request.getSession()
                    .setAttribute(AuthenticationConsts.SESSION_ATTR_SSO_ERROR,
                                  "1");
-			RequestContext.getThreadInstance().getDiagnosticContext().setError(ErrorCode.AUTH001, ex.toString());
+            RequestContext.getThreadInstance()
+                          .getDiagnosticContext()
+                          .setError(ErrorCode.AUTH001, ex.toString());
         }
     }
 
     /**
-     * This method is used to update user's locale groups if locale in response has been changed.
-     * It will get country and langauge from session and find out if they are different with the one from locale resolver
-     * if different, update the groups in vignette and save back to session
+     * This method is used to update user's locale groups and timezone which is
+     * determined by locale if locale in response has been changed. It will get
+     * country and langauge from session and find out if they are different with
+     * the one from locale resolver if different, update the groups in vignette
+     * and save back to session
      */
     @SuppressWarnings("unchecked")
-    protected void refreshLocaleGroups(List<String> sessionGroups) {
-    	Set<String> inputGroups = new HashSet<String>();
-    	String language = "";
-    	String country = "";
-    	Iterator<String> iterator = sessionGroups.iterator();
-    	while(iterator.hasNext()) {
-    		String group = iterator.next();
-    		if (!group.startsWith(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX)
-    				&& !group.startsWith(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX)) {
-    			// find all groups which are not locale groups
-    			inputGroups.add(group);
-    		}
-    		if (group.startsWith(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX)) {
-    			language = group.replace(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX, "");
-    		}
-    		if (group.startsWith(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX)) {
-    			country = group.replace(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX, "");
-    		}
-    	}
-    	Locale reqLocale = (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE);
-    	// if locale change
-    	if (!(reqLocale.getLanguage().equalsIgnoreCase(language)
-    			&& reqLocale.getCountry().equalsIgnoreCase(country))) {
-    		// add new locale group to the final group set
-    		inputGroups.addAll(getLocaleGroups());
-    		ssoUser.setGroups(inputGroups);
+    protected void refreshLocaleRelatedAttributes(List<String> sessionGroups) {
+        Set<String> inputGroups = new HashSet<String>();
+        String language = "";
+        String country = "";
+        Iterator<String> iterator = sessionGroups.iterator();
+        while (iterator.hasNext()) {
+            String group = iterator.next();
+            if (!group.startsWith(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX)
+                && !group.startsWith(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX)) {
+                // find all groups which are not locale groups
+                inputGroups.add(group);
+            }
+            if (group.startsWith(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX)) {
+                language = group.replace(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX,
+                                         "");
+            }
+            if (group.startsWith(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX)) {
+                country = group.replace(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX,
+                                        "");
+            }
+        }
+        Locale reqLocale = (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE);
+        // if locale change
+        if (!(reqLocale.getLanguage().equalsIgnoreCase(language) && reqLocale.getCountry()
+                                                                             .equalsIgnoreCase(country))) {
+            // add new locale group to the final group set
+            inputGroups.addAll(getLocaleGroups());
+            ssoUser.setGroups(inputGroups);
             try {
-        		// Retrieve user from session, in current situation user will not be null
+                // Retrieve user from session, in current situation user will
+                // not be null
                 User currentUser = SessionUtils.getCurrentUser(request.getSession());
-				updateVAPUserGroups(currentUser);
-				saveUserProfile2Session(currentUser);
-			} catch (EntityPersistenceException ex) {
-				LOG.error("Invoke Authenticator.execute error: updateVAPUserGroups error: " + ex.getMessage(), ex);
-			}
-    	}
+                updateVAPUserGroups(currentUser);
+                saveUserProfile2Session(currentUser);
+
+                // refresh User timezone
+                String timezone = getProperty(getValue(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
+                boolean needRefreshTZ = false;
+                if (timezone == null || "".equals(timezone.trim())) {
+                    // refresh User timezone according to the resolved locale
+                    timezone = AuthenticatorHelper.getUserTimeZoneByLocale(reqLocale);
+                    needRefreshTZ = true;
+                } else if (!timezone.equals(userProfile.get(AuthenticationConsts.KEY_TIMEZONE))) {
+                    // header timezone now is set, but previous round it was not
+                    // set and locale based timezone was retrieved
+                    // meanwhile, the timezone header in the user profile map also need to be updated.
+                    userProfile.put(getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME),
+                                    getValue(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
+                    needRefreshTZ = true;
+                }
+                if (needRefreshTZ) {
+                    userProfile.put(AuthenticationConsts.KEY_TIMEZONE, timezone);
+                    AuthenticatorHelper.updateVAPUserTimeZone(currentUser,
+                                                              timezone);
+                }
+            } catch (EntityPersistenceException ex) {
+                LOG.error("Invoke Authenticator.execute error: updateVAPUserGroups error: "
+                                  + ex.getMessage(),
+                          ex);
+            }
+        }
     }
 
     /**
@@ -236,13 +269,15 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         userProfile.put(AuthenticationConsts.KEY_PROFILE_ID,
                         getValue(AuthenticationConsts.HEADER_PROFILE_ID_PROPERTY_NAME));
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("userProfile.PROFILE_ID=" + userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
+            LOG.debug("userProfile.PROFILE_ID="
+                      + userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
         }
-        
+
         userProfile.put(AuthenticationConsts.KEY_USER_NAME,
                         getValue(AuthenticationConsts.HEADER_USER_NAME_PROPERTY_NAME));
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("userProfile.USERNAME=" + userProfile.get(AuthenticationConsts.KEY_USER_NAME));
+            LOG.debug("userProfile.USERNAME="
+                      + userProfile.get(AuthenticationConsts.KEY_USER_NAME));
         }
 
         // set email
@@ -260,7 +295,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         userProfile.put(AuthenticationConsts.KEY_LAST_NAME,
                         getValue(AuthenticationConsts.HEADER_LAST_NAME_PROPERTY_NAME));
         userProfile.put(AuthenticationConsts.KEY_COUNTRY,
-                        getValue(AuthenticationConsts.HEADER_COUNTRY_PROPERTY_NAME));        
+                        getValue(AuthenticationConsts.HEADER_COUNTRY_PROPERTY_NAME));
 
         // Set language, if null, set to default EN
         String language = getValue(AuthenticationConsts.HEADER_LANGUAGE_PROPERTY_NAME);
@@ -288,8 +323,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         // Set timezone, default value if timezone not found
         String tz = getProperty(getValue(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
         if (tz == null || ("").equals(tz.trim())) {
+            Locale reqLocale = (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE);
             userProfile.put(AuthenticationConsts.KEY_TIMEZONE,
-                            AuthenticationConsts.DEFAULT_TIMEZONE);
+                            AuthenticatorHelper.getUserTimeZoneByLocale(reqLocale));
         } else {
             userProfile.put(AuthenticationConsts.KEY_TIMEZONE, tz);
         }
@@ -344,9 +380,10 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             // set last login date if user is same
             if (userProfile.get(AuthenticationConsts.KEY_LAST_LOGIN_DATE) == null) {
                 Date lastLoginDate = (Date)vapUser.getProperty(AuthenticationConsts.PROPERTY_LAST_LOGIN_DATE_ID);
-                userProfile.put(AuthenticationConsts.KEY_LAST_LOGIN_DATE, lastLoginDate);
+                userProfile.put(AuthenticationConsts.KEY_LAST_LOGIN_DATE,
+                                lastLoginDate);
             }
-            
+
             // set user groups
             userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
                             Collections.list(Collections.enumeration(AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser)))));
@@ -356,8 +393,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     }
 
     /**
-     * If this user is first time login, create it in Vignette If error occurred,
-     * an error flag will be set in the session.
+     * If this user is first time login, create it in Vignette If error
+     * occurred, an error flag will be set in the session.
      * 
      * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
      *      #createVAPUser(com.hp.it.spf.sso.portal.SSOUser)
@@ -403,7 +440,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             // Update user's info if needed
             if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                 LOG.debug("update basic info for " + ssoUser.getUserName());
-            }            
+            }
             AuthenticatorHelper.updateVAPUser(vapUser, ssoUser);
 
             // if user is not logged in, get the groups and
@@ -483,13 +520,16 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         // If profile ID is different, return true
         if (!profileIdVap.equals(userProfile.get(AuthenticationConsts.KEY_PROFILE_ID))) {
             if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-                LOG.debug("profile_id_vap:" + profileIdVap + "; profileid:" + userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
-            }            
+                LOG.debug("profile_id_vap:"
+                          + profileIdVap
+                          + "; profileid:"
+                          + userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
+            }
             return true;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("same user in session: " + profileIdVap);
-        }        
+        }
         return false;
     }
 
@@ -575,7 +615,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                 LOG.debug("Not found this user in SP, now creating this user"
                           + ssoUser.getUserName());
-            }            
+            }
             vapUser = createVAPUser();
         } else { // Try to update user info if needed
             vapUser = updateVAPUser(vapUser);
@@ -591,12 +631,14 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * @return user profile map or an empty map
      */
     protected Map<String, Object> getUserProfile() {
-        TimeRecorder timeRecorder = RequestContext.getThreadInstance().getTimeRecorder();
+        TimeRecorder timeRecorder = RequestContext.getThreadInstance()
+                                                  .getTimeRecorder();
         String profileId = (String)userProfile.get(AuthenticationConsts.KEY_PROFILE_ID);
         IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl(AuthenticationConsts.USER_PROFILE_RETRIEVER);
         try {
-            timeRecorder.recordStart(Operation.PROFILE_CALL);            
-            Map<String, Object> userProfile = retriever.getUserProfile(profileId, request);
+            timeRecorder.recordStart(Operation.PROFILE_CALL);
+            Map<String, Object> userProfile = retriever.getUserProfile(profileId,
+                                                                       request);
             timeRecorder.recordEnd(Operation.PROFILE_CALL);
             return userProfile;
         } catch (UserProfileException ex) {
@@ -617,22 +659,23 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     protected abstract Set getUserGroups();
 
     /**
-     * This is the method used to retrieve locale groups info and return
-     * as a Set
+     * This is the method used to retrieve locale groups info and return as a
+     * Set
      * 
      * @return retrieved groups set or an empty set
      */
     @SuppressWarnings("unchecked")
-    protected Set getLocaleGroups() {        
+    protected Set getLocaleGroups() {
         Set<String> group = new HashSet<String>();
-        
+
         // set group according to user locale retrieved by locale resolver
         Locale reqLocale = (Locale)request.getAttribute(AuthenticationConsts.SSO_USER_LOCALE);
         String language = reqLocale.getLanguage().toUpperCase();
         group.add(AuthenticationConsts.LOCAL_PORTAL_LANG_PREFIX + language);
         String country = reqLocale.getCountry().trim().toUpperCase();
         if (country.length() > 0) {
-            group.add(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX + country);
+            group.add(AuthenticationConsts.LOCAL_PORTAL_COUNTRY_PREFIX
+                      + country);
         }
 
         return group;
@@ -654,7 +697,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * 
      * @param fieldName field in request header
      * @return corresponding field in request header
-	 * @see com.hp.it.spf.sso.portal.AuthenticatorHelper#getRequestHeader(javax.servlet.http.HttpServletRequest, String)
+     * @see com.hp.it.spf.sso.portal.AuthenticatorHelper#getRequestHeader(javax.servlet.http.HttpServletRequest,
+     *      String)
      */
     protected String getValue(String fieldName) {
         return AuthenticatorHelper.getRequestHeader(request,
@@ -688,7 +732,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     public String getUserName() {
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
             LOG.debug("Return userName: " + userName);
-        }        
+        }
         return userName;
     }
 }

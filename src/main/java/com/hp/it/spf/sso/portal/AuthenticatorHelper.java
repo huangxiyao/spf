@@ -10,6 +10,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -184,6 +185,40 @@ public class AuthenticatorHelper {
         }
     }
 
+    /**
+     * This method is used to update the current user's timezone and save to VAP
+     * database.
+     * 
+     * @param user
+     *            User from Vignette
+     * @param spfTimeZone
+     *            spf user time zone
+     * @throws UniquePropertyValueConflictException
+     *             if failed
+     * @throws EntityPersistenceException
+     *             if failed
+     */
+    static void updateVAPUserTimeZone(User user, String spfTimeZone) {
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("updating vap user start");
+        }
+        String username  = (String)user.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID);
+        // Setting VAP User object
+        try {
+            user.setProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID, spfTimeZone);
+            user.setProperty(AuthenticationConsts.PROPERTY_TIMEZONE_ID, 
+                             AuthenticatorHelper.getTimeZoneOffset(spfTimeZone));
+                        
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug("Updated user's timezone, user: " + username);
+            }
+        } catch (UniquePropertyValueConflictException e) {
+            LOG.error("Required unique values conflict when updating user's timezone, user:" + username, e);          
+        } catch (EntityPersistenceException e) {
+            LOG.error("Entity Persistence Exception when updating user:" + username, e);
+        }
+    }
+    
     /**
      * This method is used to add user to group. User will only be added to
      * groups already exist in VAP
@@ -897,5 +932,64 @@ public class AuthenticatorHelper {
      */
     public static LogWrapper getLog(Class cls) {
         return new LogWrapper(cls, cls.getName());
+    }
+    
+    /**
+     * Get correct spf timezone of the SSO Guest user by locale.
+     *  
+     * @param locale user locale, if locale is not specified, the defalut locale("America/Los_Angeles") will be returned.
+     * @return SSO guest user's configed locale with the specified locale
+     */
+    public static String getUserTimeZoneByLocale(Locale locale) {
+        if (locale == null) {
+            return AuthenticationConsts.DEFAULT_TIMEZONE;
+        }
+        
+        String language = locale.getLanguage().trim().toLowerCase();
+        String country = locale.getCountry().trim().toLowerCase();
+        
+        String ssousername = null;
+
+        // search sso_guest_user_<locale> user
+        ssousername = AuthenticationConsts.ANON_USER_NAME_PREFIX
+                      + language
+                      + "-"
+                      + country;
+        User vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID,
+                                                                  ssousername);
+        if (vapUser != null) {
+            String timezone = (String)vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID);
+            return timezone;
+        }
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("User" + ssousername + "not found.");
+        }
+        
+        // search sso_guest_user_<language_from_locale> user
+        ssousername = AuthenticationConsts.ANON_USER_NAME_PREFIX + language;
+        vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID,
+                                                             ssousername);        
+        if (vapUser != null) {
+            String timezone = (String)vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID);
+            return timezone;
+        }
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("User" + ssousername + "not found.");
+        }
+        
+        // for default user
+        ssousername = AuthenticationConsts.ANON_USER_NAME_PREFIX
+                      + AuthenticationConsts.DEFAULT_LANGUAGE;
+        vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID,
+                                                             ssousername);
+        if (vapUser != null) {
+            String timezone = (String)vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID);
+            return timezone;
+        }
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("User" + ssousername + "not found.");
+        }
+
+        return AuthenticationConsts.DEFAULT_TIMEZONE;        
     }
 }
