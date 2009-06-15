@@ -154,7 +154,7 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 * will be <b>kept</b> after logout from the portal. (This is for portal
 	 * session attributes only, not portlet.)
 	 */
-	public final static String STICKY_SESSION_ATTR_PREFIX = "SPF_RETAIN";
+	public final static String STICKY_SESSION_ATTR_PREFIX = "SPF_RETAIN_";
 
 	/**
 	 * Prefix your portal session attribute names with this string, and they
