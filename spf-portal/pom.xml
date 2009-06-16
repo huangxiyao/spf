@@ -71,7 +71,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
-			<version>1.0.7</version>
+			<version>1.0.9-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -90,7 +90,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-filters</artifactId>
-			<version>1.0.7</version>
+			<version>1.0.8-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.sso</groupId>
 			<artifactId>spf-portal-session</artifactId>
-			<version>1.0.5</version>
+			<version>1.0.6-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>spf-common-utilities</artifactId>
