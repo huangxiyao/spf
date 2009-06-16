@@ -183,7 +183,7 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 * every request and read by the SPF return page to determine where to
 	 * redirect.
 	 */
-	public static final String SESSION_ATTR_RETURN_URL = UNSTICKY_SESSION_ATTR_PREFIX
+	public static final String SESSION_ATTR_RETURN_URL = STICKY_SESSION_ATTR_PREFIX
 			+ "RETURN_URL";
 
 }
