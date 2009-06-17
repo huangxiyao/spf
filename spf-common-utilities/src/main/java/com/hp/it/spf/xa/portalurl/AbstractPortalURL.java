@@ -530,7 +530,7 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * {@link #setParameter(String, String)}.
 	 * <p>
 	 * Use of this method is undefined and may produce unexpected results, if
-	 * you set your <code>PortalURL</code> to be a resource URL.
+	 * you set your <code>PortalURL</code> to be a resource or action URL.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -567,7 +567,7 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * {@link #setParameter(String, String)}.
 	 * <p>
 	 * Use of this method is undefined and may produce unexpected results, if
-	 * you set your <code>PortalURL</code> to be a resource URL.
+	 * you set your <code>PortalURL</code> to be a resource or action URL.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -604,7 +604,7 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * {@link #setParameter(String, String)}.
 	 * <p>
 	 * Use of this method is undefined and may produce unexpected results, if
-	 * you set your <code>PortalURL</code> to be a resource URL.
+	 * you set your <code>PortalURL</code> to be a resource or action URL.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
