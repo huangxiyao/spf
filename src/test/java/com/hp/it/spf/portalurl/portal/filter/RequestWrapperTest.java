@@ -53,6 +53,19 @@ public class RequestWrapperTest
 	}
 
 	@Test
+	public void testReplacePortletIdsInQueryStringForResourceUrl() {
+		String queryString = "a=1&b=2";
+		RequestWrapper wrapper = createWrapper(queryString);
+
+		assertThat("All values replaced",
+				wrapper.replacePortletIds("a=1&spf_p.tpst=p1_ws_BI&spf_p.rst_p1=xyz&b=2"),
+				is("a=1" +
+						"&javax.portlet.tpst=uid1_ws_BI" +
+						"&javax.portlet.rst_uid1=xyz" +
+						"&b=2"));
+	}
+
+	@Test
 	public void testGetQueryString() {
 		RequestWrapper wrapper = createWrapper(null);
 		assertThat("Null returned when no parameters", wrapper.getQueryString(), nullValue());
@@ -95,6 +108,25 @@ public class RequestWrapperTest
 				TestHelper.array("b%3D2"), resultParamMap.get("javax.portlet.prp_uid3"));
 		assertArrayEquals("javax.portlet.endCacheTok param",
 				TestHelper.array("com.vignette.cachetoken"), resultParamMap.get("javax.portlet.endCacheTok"));
+	}
+
+	@Test
+	public void testReplacePortletIdsInParamMapForResourceUrl() {
+		String queryString = "a=1&spf_p.tpst=p1_ws_BI&spf_p.rst_p1=xyz&b=2";
+		RequestWrapper wrapper = createWrapper(queryString);
+		Map<String, String[]> paramMap = TestHelper.convertQueryString(queryString);
+
+		Map<String, String[]> resultParamMap = wrapper.replacePortletIds(paramMap);
+		for (Map.Entry<String, String[]> param : resultParamMap.entrySet()) {
+			assertThat("spf_p prefixed parameters removed", param.getKey(), not(containsString("spf_p.")));
+		}
+
+		assertArrayEquals("a param", TestHelper.array("1"), paramMap.get("a"));
+		assertArrayEquals("b param", TestHelper.array("2"), paramMap.get("b"));
+		assertArrayEquals("javax.portlet.tpst param",
+				TestHelper.array("uid1_ws_BI"), resultParamMap.get("javax.portlet.tpst"));
+		assertArrayEquals("javax.portlet.rst_uid1 param",
+				TestHelper.array("xyz"), resultParamMap.get("javax.portlet.rst_uid1"));
 	}
 
 
