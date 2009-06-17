@@ -1197,16 +1197,22 @@ developer's guides for the portlet and portal utilities.</p>
 <p>For purposes of this discussion, a <i>portlet URL</i> is a URL
 which points to a portal page and targets one or more portlets on that
 page. The page could be within the current portal site, or in another
-site hosted by the same SPF portal server, and it could target action
-processing within one of those portlets besides just rendering.</p>
+site hosted by the same SPF portal server, and the URL could target
+action processing or resource handling (JSR-168) within one of those
+portlets besides just rendering.</p>
 
 <p>The SPF common utilities' <code>PortalURLFactory</code> and <code>PortalURL</code>
 let you generate portlet URLs as well as portal URLs. You need to know
 the portlet ID (ie the Vignette friendly ID) for the portlet(s) you want
-to target. You can set the portlet mode and window state, and target one
-portlet for action processing. You can also set portlet parameters
-(including public render parameters) for any or all portlet(s) on the
-page.</p>
+to target, as well as the page ID (ie the Vignette friendly URL) for the
+page they are on. You can set the portlet mode and window state, and
+target one portlet for action processing. You can also set portlet
+parameters (including public render parameters) for any or all
+portlet(s) on the page. Alternatively, you can target one portlet for
+resource handling. (At present only JSR-168 style resource handling is
+supported. This lets you create URLs for accessing servlets and static
+files like images inside your portlet application. True JSR-286 resource
+URLs for performing ResourceRequests are not supported.)</p>
 
 <p>In contrast, the various portal and portlet <code>Utils</code>
 methods do not support portlet URLs.</p>
@@ -1445,9 +1451,9 @@ the <code>PortalURL</code> interface:</p>
 	<dt>{@link
 	com.hp.it.spf.xa.portalurl.PortalURL#setParameters(String,Map)}</dt>
 	<dd>
-	<p>These methods let you set <i>portlet parameters</i>. The first
-	string is the portlet ID (ie the Vignette "friendly ID") of the portlet
-	in question. You can provide a {@link java.util.Map} of your
+	<p>These methods let you set <i>portlet private parameters</i>. The
+	first string is the portlet ID (ie the Vignette "friendly ID") of the
+	portlet in question. You can provide a {@link java.util.Map} of your
 	parameters, or set them individually. As usual, each parameter has a
 	name and one (or more) values. To set a single parameter with a single
 	value, use {@link
@@ -1501,17 +1507,48 @@ the <code>PortalURL</code> interface:</p>
 	<dd>
 	<p>You can target a particular portlet's action phase with this
 	method. The string is the portlet ID (ie the Vignette "friendly ID") of
-	the portlet in question. <b>Note:</b> You can only use this method
-	once; an {@link java.lang.IllegalStateException} is thrown if you use
-	it again.</p>
+	the portlet in question. <b>Note:</b> You can only use this method (or
+	the <code>setAsResourceURL</code> method below) once; an {@link
+	java.lang.IllegalStateException} is thrown if you use it after action
+	or resource handling has already been set. Also note that when you
+	target action processing, any public render parameters you set on the <code>PortalURL</code>
+	will have undefined behavior.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setAsResourceURL(String,String)}</dt>
+	<dd>
+	<p>You can target a resource inside a particular portlet with this
+	method.</p>
+	<blockquote>
+	<p><b>Note:</b> This will let a resource packaged inside that
+	portlet's application be accessed via the <code>PortalURL</code>. For
+	example, you can execute a servlet inside the application, or download
+	an image or other static file from it. This is JSR-168 style resource
+	handling from the portlet application, not JSR-286 style resource
+	serving directly from the portlet.</p>
+	</blockquote>
+	<p>The first string is the portlet ID (ie the Vignette "friendly
+	ID") of the portlet in question. The second string is the resource URL
+	for accessing the desired resource inside that portlet's running
+	portlet application. For local portlets you can use a relative URL; for
+	remote portlets it should be an absolute URL to the producer server. In
+	either case the portlet application's context path needs to lead the
+	URL path.</p>
+	<p><b>Note:</b> You can only use this method (or the <code>setAsActionURL</code>
+	method above) once; an {@link java.lang.IllegalStateException} is
+	thrown if you use it after action or resource handling has already been
+	set. Also note that when you target resource handling, any portlet
+	parameters (public or private), portlet mode or window state you set on
+	the <code>PortalURL</code> will have undefined behavior.</p>
 	</dd>
 </dl>
 
 <p>In this example, we construct a secure Forums URL as in the
 previous section. Then we target the forum-display portlet (friendly ID:
-<code>forum-display</code>) and pass it a private render parameter (name
-<code>forumName</code>, value <code>HP-UX_Forum</code>). We also
-maximize its window state. Like this:</p>
+<code>forum-display</code>) on the forums page (friendly URL: <code>/forums</code>),
+and pass it a private render parameter (name <code>forumName</code>,
+value <code>HP-UX_Forum</code>). We also maximize its window state. Like
+this:</p>
 
 <blockquote><pre>
 import com.hp.it.spf.xa.portalurl.PortalURLFactory;
@@ -1522,13 +1559,42 @@ try {
    url.setParameter("forum-display", "forumName", "HP-UX_Forum");
    url.setWindowState(WindowState.MAXIMIZED);
 } catch (IllegalArgumentException e) {
-   // there was a problem with the siteRootURL
+   // there was a problem with the one of the method parameters
 }
 </pre></blockquote>
 
 <p>So now we can use <code>url.toString()</code> to get the <code>PortalURL</code>
 as a string, and display it to the user (eg, as the <code>HREF</code>
 attribute for an <code>&lt;A&gt;</code>).</p>
+
+<p>In another example, here we construct a URL for running <code>someServlet</code>
+in the <code>forum-display</code> portlet's application, passing the
+servlet some parameter. We use resource handling for this:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+import com.hp.it.spf.xa.portalurl.PortalURL;
+...
+// craft the URL for someServlet - for example:
+String resource = request.getScheme() + "://";
+resource += request.getServerName() + ":";
+resource += request.getServerPort();
+resource += request.getContextPath();
+resource += "/someServlet?someParameter=" + someValue;
+// now create the PortalURL for accessing someServlet through the portal
+try {
+   PortalURL url = PortalURLFactory.createPageURL(siteRootURL, "/forums");
+   url.setAsResourceURL("forum-display", resource);
+} catch (IllegalArgumentException e) {
+   // there was a problem with one of the method parameters
+} catch (IllegalStateException e) {
+   // the url was already set as an action or resource URL
+}
+</pre></blockquote>
+
+<p>So now we can use <code>url.toString()</code> to get the <code>PortalURL</code>
+as a string pointing to the <code>someServlet</code> resource via the
+portal. We can use this in a redirect, hyperlink, etc.</p>
 
 <a name="url.portal.friendlyUri">
 <h4>3.2.3. Common friendly URIs</h4>
@@ -1981,6 +2047,13 @@ String defaultID = PropertyResourceBundleManager.getString("my_config", Locale.J
 		<td>S. Jorgenson</td>
 		<td>Updated TBD URL's for property file templates, with pointers
 		to SPF portlet config JAR.</td>
+	</tr>
+	<tr>
+		<td>1.2</td>
+		<td>Jun 16 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Added JSR-168 resource handling to <code>PortalURL</code>
+		classes.</td>
 	</tr>
 </table>
 <p></p>

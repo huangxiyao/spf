@@ -20,12 +20,16 @@
  * parameters and passing in additional render parameters to the other portlets.</li>
  * <li>Generate a URL to a portlet requesting a window state change</li>
  * <li>Generate a URL to a portlet requesting a portlet mode change</li>
+ * <li>Generate a URL to a portlet resource (servlet or static file like an image).  This is a JSR-168 resource 
+ * URL, not a JSR-286 ResourceRequest URL.</li>
  * </ul>
  * <p>
  * <b>Important:</b> The classes from this package can be used by portlet and portal components.
  * They do not depend on any Vignette Portal classes.
  * <p>
  * <b>Usage</b>
+ * <p>
+ * For example, for a render URL:
  * <p>
  * <pre>
  * // create PortalURL using one of the factory methods
@@ -40,6 +44,24 @@
  * ...
  * // get the URL to present to the user (eg in redirect, form action, hyperlink, etc)
  * String href = url.toString();
+ * </pre>
+ * <p>
+ * And another example, for a resource URL (for a resource inside this portlet application):
+ * <p>
+ * <pre>
+ * // create PortalURL using one of the factory methods
+ * PortalURL url = PortalURLFactory.createPageURL(...);
+ * // create your URL for the resource
+ * String resource = request.getScheme() + "://";
+ * resource += request.getServerName() + ":";
+ * resource += request.getServerPort();
+ * resource += request.getContextPath();  // for a different portlet app, use a different path
+ * resource += "/my_resource";  // an image, servlet, whatever
+ * // set the PortalURL as a resource URL for the targeted portlet (by friendly ID)
+ * url.setAsResourceURL(portletFriendlyId, resource);
+ * ...
+ * // get the URL to present to the user (eg in redirect, form action, hyperlink, etc)
+ * String redirectLocation = url.toString();
  * </pre>
  */
 package com.hp.it.spf.xa.portalurl;
