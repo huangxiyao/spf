@@ -176,7 +176,7 @@ public class AdmissionControlFilter implements Filter {
 			if (poolHostname != null) {
 				LOG.debug("-- Exit 5 AdmissionControlFilter.doFilter");
 				LOG
-						.info("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [site closed or closing]");
+						.debug("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [site closed or closing]");
 				this.redirect(request, response, poolHostname, poolID,
 						thisSiteHostname);
 				return;
@@ -189,7 +189,7 @@ public class AdmissionControlFilter implements Filter {
 			if (poolHostname != null) {
 				LOG.debug("-- Exit 6 AdmissionControlFilter.doFilter");
 				LOG
-						.info("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [load redistribution]");
+						.debug("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [load redistribution]");
 				this.redirect(request, response, poolHostname, poolID,
 						thisSiteHostname);
 				return;
@@ -206,7 +206,7 @@ public class AdmissionControlFilter implements Filter {
 				this.admitClient(request, poolID, thisSiteHostname);
 				LOG.debug("-- Exit 7 AdmissionControlFilter.doFilter");
 				LOG
-						.info("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [site affinity]");
+						.debug("- AdmissionControlFilter.doFilter: outcome: [redirected]; reason: [site affinity]");
 				this.redirect(request, response, thisSiteHostname, poolID,
 						thisSiteHostname);
 				return;
@@ -218,7 +218,7 @@ public class AdmissionControlFilter implements Filter {
 		// (if any).
 
 		LOG.debug("-- Exit 8 AdmissionControlFilter.doFilter");
-		LOG.info("- AdmissionControlFilter.doFilter: outcome: [admitted]");
+		LOG.debug("- AdmissionControlFilter.doFilter: outcome: [admitted]");
 		this.setSiteCookie(response, poolID);
 		this.setClosingTime(request);
 		this.admitClient(request, poolID, thisSiteHostname);
