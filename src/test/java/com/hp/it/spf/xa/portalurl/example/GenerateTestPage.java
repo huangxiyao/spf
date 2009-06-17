@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Date;
-import java.lang.reflect.Field;
 
 import com.hp.it.spf.xa.portalurl.PortalURL;
 import com.hp.it.spf.xa.portalurl.PortalURLFactory;
@@ -115,7 +114,17 @@ public class GenerateTestPage
 		out.printf("<li><a href='%s'>total recall test!!!</a></li>%n",
 				totalRecallUrl(siteRootUrl, pageFriendlyId, portletIds));
 
+		out.printf("<li><a href='%s'>resource URL</a></li>%n",
+				resourceUrl(siteRootUrl, pageFriendlyId, portletIds[0]));
+
 		out.println("</ul>");
+	}
+
+	private static PortalURL resourceUrl(String siteRootUrl, String pageFriendlyId, String portletFriendlyId)
+	{
+		PortalURL url = PortalURLFactory.createPageURL(siteRootUrl, pageFriendlyId);
+		url.setAsResourceURL(portletFriendlyId, "http://localhost:9011/spftestportlets/dices_optical_illusion.jpg");
+		return url;
 	}
 
 	private static PortalURL totalRecallUrl(String siteRootUrl, String pageFriendlyId, String[] portletIds)
