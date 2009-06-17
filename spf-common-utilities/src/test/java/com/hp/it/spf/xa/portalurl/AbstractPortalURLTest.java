@@ -16,14 +16,15 @@ public class AbstractPortalURLTest extends TestCase {
 		assertEquals(
 				"Render URL",
 				"http://my_host:my_port/portal/site/my_site/my_folder/my_page/",
-				url.createBaseUrl(false).toString());
+				url.toString());
 
 		url = new TestURL("http://my_host:my_port/portal/site/my_site/", null,
 				"/my_folder/my_page", false, -1, -1);
+		url.setAsActionURL("myPortlet");
 		assertEquals(
 				"Action URL",
-				"http://my_host:my_port/portal/site/my_site/template.PAGE/action.process/my_folder/my_page/",
-				url.createBaseUrl(true).toString());
+				"http://my_host:my_port/portal/site/my_site/template.PAGE/action.process/my_folder/my_page/?javax.portlet.action=true&spf_p.tpst=myPortlet&javax.portlet.begCacheTok=com.vignette.cachetoken&javax.portlet.endCacheTok=com.vignette.cachetoken",
+				url.toString());
 	}
 
 	public void testCreateBaseUrlSameSiteDifferentProtocol() throws Exception {
@@ -32,15 +33,15 @@ public class AbstractPortalURLTest extends TestCase {
 		url = new TestURL("http://my_host:my_port/portal/site/my_site", null,
 				"my_folder/my_page", true, -1, -1);
 		assertEquals("Render URL",
-				"https://my_host/portal/site/my_site/my_folder/my_page/", url
-						.createBaseUrl(false).toString());
+				"https://my_host/portal/site/my_site/my_folder/my_page/", url.toString());
 
 		url = new TestURL("https://my_host:my_port/portal/site/my_site/", null,
 				"/my_folder/my_page", false, -1, -1);
+		url.setAsActionURL("myPortlet");
 		assertEquals(
 				"Action URL",
-				"http://my_host/portal/site/my_site/template.PAGE/action.process/my_folder/my_page/",
-				url.createBaseUrl(true).toString());
+				"http://my_host/portal/site/my_site/template.PAGE/action.process/my_folder/my_page/?javax.portlet.action=true&spf_p.tpst=myPortlet&javax.portlet.begCacheTok=com.vignette.cachetoken&javax.portlet.endCacheTok=com.vignette.cachetoken",
+				url.toString());
 	}
 
 	public void testCreateBaseUrlDifferentSiteSameProtocol() throws Exception {
@@ -51,14 +52,15 @@ public class AbstractPortalURLTest extends TestCase {
 		assertEquals(
 				"Render URL",
 				"https://my_host:my_port/portal/site/2nd_site/my_folder/my_page/",
-				url.createBaseUrl(false).toString());
+				url.toString());
 
 		url = new TestURL("http://my_host:my_port/portal/site/my_site/",
 				"another_site", "/my_folder/my_page", false, -1, -1);
+		url.setAsActionURL("myPortlet");
 		assertEquals(
 				"Action URL",
-				"http://my_host:my_port/portal/site/another_site/template.PAGE/action.process/my_folder/my_page/",
-				url.createBaseUrl(true).toString());
+				"http://my_host:my_port/portal/site/another_site/template.PAGE/action.process/my_folder/my_page/?javax.portlet.action=true&spf_p.tpst=myPortlet&javax.portlet.begCacheTok=com.vignette.cachetoken&javax.portlet.endCacheTok=com.vignette.cachetoken",
+				url.toString());
 	}
 
 	public void testCreateBaseUrlDifferentSiteDifferentProtocol()
@@ -69,29 +71,30 @@ public class AbstractPortalURLTest extends TestCase {
 				"another_site", "my_folder/my_page", true, -1, -1);
 		assertEquals("Render URL",
 				"https://my_host/portal/site/another_site/my_folder/my_page/",
-				url.createBaseUrl(false).toString());
+				url.toString());
 
 		url = new TestURL("https://my_host:my_port/portal/site/my_site/",
 				"another_site", "/my_folder/my_page", false, -1, -1);
+		url.setAsActionURL("myPortlet");
 		assertEquals(
 				"Action URL",
-				"http://my_host/portal/site/another_site/template.PAGE/action.process/my_folder/my_page/",
-				url.createBaseUrl(true).toString());
+				"http://my_host/portal/site/another_site/template.PAGE/action.process/my_folder/my_page/?javax.portlet.action=true&spf_p.tpst=myPortlet&javax.portlet.begCacheTok=com.vignette.cachetoken&javax.portlet.endCacheTok=com.vignette.cachetoken",
+				url.toString());
 	}
 
 	public void testCreateBaseUrlWithPortalParameters() throws Exception {
 		AbstractPortalURL url;
 
 		url = new TestURL("http://my_host:my_port/portal/site/my_site", null,
-				"template.MY_PAGE/action.process/", false, -1, -1);
+				"template.MY_PAGE", false, -1, -1);
 		String[] values = new String[] { "one", "two" };
 		url.setParameter("greeting", "hello world");
 		url.setParameter("farewell", "goodbye world");
 		url.setParameter("numbers", values);
 		assertEquals(
 				"Portal URL",
-				"http://my_host:my_port/portal/site/my_site/template.MY_PAGE/action.process/?greeting=hello+world&farewell=goodbye+world&numbers=one&numbers=two",
-				url.createBaseUrl(false).toString());
+				"http://my_host:my_port/portal/site/my_site/template.MY_PAGE/?greeting=hello+world&farewell=goodbye+world&numbers=one&numbers=two",
+				url.toString());
 	}
 
 	public void testCreateBaseUrlFromRequestUrl() throws Exception {
@@ -101,33 +104,29 @@ public class AbstractPortalURLTest extends TestCase {
 				"http://my_host:my_port/portal/site/my_site/some/extra/path?and=stuff",
 				null, null, false, -1, -1);
 		assertEquals("Portal URL with no friendly URI",
-				"http://my_host:my_port/portal/site/my_site/", url
-						.createBaseUrl(false).toString());
+				"http://my_host:my_port/portal/site/my_site/", url.toString());
 		url = new TestURL(
 				"http://my_host:my_port/portal/site/my_site/some/extra/path?and=stuff",
 				null, "/template.MY_PAGE/extra/path", false, -1, -1);
 		assertEquals(
 				"Portal URL with no friendly URI",
 				"http://my_host:my_port/portal/site/my_site/template.MY_PAGE/extra/path/",
-				url.createBaseUrl(false).toString());
+				url.toString());
 		url = new TestURL("http://my_host/portal/site/my_site?a=b", null, null,
 				false, -1, -1);
 		assertEquals(
 				"Portal URL with no friendly URI, based on site root URL ending with query string",
-				"http://my_host/portal/site/my_site/", url.createBaseUrl(false)
-						.toString());
+				"http://my_host/portal/site/my_site/", url.toString());
 		url = new TestURL("http://my_host/portal/site/my_site#anchor", null,
 				null, false, -1, -1);
 		assertEquals(
 				"Portal URL with no friendly URI, based on site root URL ending with anchor",
-				"http://my_host/portal/site/my_site/", url.createBaseUrl(false)
-						.toString());
+				"http://my_host/portal/site/my_site/", url.toString());
 		url = new TestURL("http://my_host/portal/site/my_site#anchor?a=b/c", null,
 				null, false, -1, -1);
 		assertEquals(
 				"Portal URL with no friendly URI, based on site root URL ending with anchor and query string",
-				"http://my_host/portal/site/my_site/", url.createBaseUrl(false)
-						.toString());
+				"http://my_host/portal/site/my_site/", url.toString());
 
 	}
 
@@ -138,37 +137,34 @@ public class AbstractPortalURLTest extends TestCase {
 				"switched_site", "other/stuff", true, 81, 444);
 		assertEquals("HTTPS portal URL with port 444",
 				"https://my_host:444/portal/site/switched_site/other/stuff/",
-				url.createBaseUrl(false).toString());
+				url.toString());
 
 		url = new TestURL("https://my_host/portal/site/my_site/some/stuff",
 				"switched_site", "other/stuff", false, 81, 444);
 		assertEquals("HTTP portal URL with port 81",
-				"http://my_host:81/portal/site/switched_site/other/stuff/", url
-						.createBaseUrl(false).toString());
+				"http://my_host:81/portal/site/switched_site/other/stuff/", url.toString());
 
 		url = new TestURL("https://my_host/portal/site/my_site/some/stuff",
 				"switched_site", "other/stuff", false, 81, 444);
 		assertEquals("HTTP portal URL with port 81",
-				"http://my_host:81/portal/site/switched_site/other/stuff/", url
-						.createBaseUrl(false).toString());
+				"http://my_host:81/portal/site/switched_site/other/stuff/", url.toString());
 
 		url = new TestURL("http://my_host:81/portal/site/my_site/some/stuff",
 				"switched_site", "other/stuff", true, 81, 444);
 		assertEquals("HTTPS portal URL with port 444 (previous port exists)",
 				"https://my_host:444/portal/site/switched_site/other/stuff/",
-				url.createBaseUrl(false).toString());
+				url.toString());
 
 		url = new TestURL("http://my_host:82/portal/site/my_site/some/stuff",
 				"switched_site", "other/stuff", false, 81, 444);
 		assertEquals("HTTP portal URL - same scheme, no change",
-				"http://my_host:82/portal/site/switched_site/other/stuff/", url
-						.createBaseUrl(false).toString());
+				"http://my_host:82/portal/site/switched_site/other/stuff/", url.toString());
 
 		url = new TestURL("https://my_host:445/portal/site/my_site/some/stuff",
 				"switched_site", "other/stuff", true, 81, 444);
 		assertEquals("HTTPS portal URL - same scheme, no change",
 				"https://my_host:445/portal/site/switched_site/other/stuff/",
-				url.createBaseUrl(false).toString());
+				url.toString());
 	}
 
 	public void testInvalidSiteRootUrl() throws Exception {
@@ -271,6 +267,10 @@ public class AbstractPortalURLTest extends TestCase {
 		protected void addPublicParameters(StringBuilder result,
 				Map.Entry<String, PortletParameters> portletParameters,
 				String portletFriendlyId) {
+		}
+		
+		protected StringBuilder createResourceUrl() {
+			return new StringBuilder();
 		}
 	}
 }

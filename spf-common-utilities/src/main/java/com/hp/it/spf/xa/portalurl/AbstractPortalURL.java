@@ -19,8 +19,13 @@ import com.hp.it.spf.xa.misc.Utils;
  * providing a template method for the URL rendering. This class will create
  * Vignette-specific URLs as the classes inherit from it. It reproduces the URL
  * format as expected by Vignette.
+ * <p>
+ * <b>Note:</b> As of SPF version 1.1 this class is a JSR-168 implementation,
+ * so for resource URLs it builds URLs for servlets and static resources inside
+ * portlet applications, rather than URLs for JSR-286 resource-serving portlets.
  * 
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
+ * @author Scott Jorgenson (scott.jorgenson@hp.com)
  */
 abstract class AbstractPortalURL implements PortalURL {
 
@@ -34,7 +39,17 @@ abstract class AbstractPortalURL implements PortalURL {
 	protected int mNonstandardHttpsPort = 0;
 
 	protected Map<String, PortletParameters> mPortletParameters = new LinkedHashMap<String, PortletParameters>();
+
 	protected String mActionPortletFriendlyId = null;
+
+	/**
+	 * @since SPF 1.1
+	 */
+	protected String mResourcePortletFriendlyId = null;
+	/**
+	 * @since SPF 1.1
+	 */
+	protected String mResourceId = null;
 
 	// added attribute for portal parameter support - DSJ 2009/1/28
 	protected Map<String, List<String>> mPortalParameters = new LinkedHashMap<String, List<String>>();
@@ -72,7 +87,8 @@ abstract class AbstractPortalURL implements PortalURL {
 
 	/**
 	 * Checks validity of page friendly URI (no restrictions currently) and
-	 * returns normalized value (trimmed if not null).
+	 * returns normalized value (trimmed if not null, with any consecutive
+	 * slashes removed).
 	 * 
 	 * @param pageFriendlyUri
 	 *            page friendly URI as defined in portal console for navigation
@@ -86,7 +102,7 @@ abstract class AbstractPortalURL implements PortalURL {
 		if (pageFriendlyUri != null) {
 			pageFriendlyUri = pageFriendlyUri.trim();
 		}
-		return (pageFriendlyUri);
+		return (Utils.slashify(pageFriendlyUri));
 	}
 
 	/**
@@ -116,7 +132,8 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * (trimmed); it must be either a relative URL (ie starts with "/") or an
 	 * absolute URL (ie starts with "http://" or "https://"); and it must
 	 * contain a site DNS name (ie "/site/something"). The normalized value is:
-	 * trimmed and anything after the site name is removed.
+	 * trimmed and anything after the site name is removed; also any consecutive
+	 * slashes are removed.
 	 * 
 	 * @param siteRootUrl
 	 *            site root URL
@@ -217,6 +234,51 @@ abstract class AbstractPortalURL implements PortalURL {
 							+ portletFriendlyId);
 		}
 		return (portletFriendlyId.trim());
+	}
+
+	/**
+	 * Checks validity of resource ID and returns a trimmed value. This is a
+	 * JSR-168 implementation. The resource ID is considered to be a URL
+	 * (absolute or relative) for a servlet or static resource file in the
+	 * portlet application.
+	 * 
+	 * @param resourceId
+	 *            resource ID requested for the resource URL
+	 * @throws IllegalArgumentException
+	 *             if parameter is null, empty, or neither a relative nor
+	 *             absolute HTTP/HTTPS URL
+	 */
+	private String checkResourceId(String resourceId) {
+		if (resourceId == null || resourceId.trim().equals("")) {
+			throw new IllegalArgumentException(
+					"resourceId cannot be null or empty: " + resourceId);
+		}
+		int pathBegin = 0;
+		if (!resourceId.startsWith("/")) {
+			final String protoEndMarker = "://";
+			final String https = "https";
+			final String http = "http";
+			int protoEnd = resourceId.indexOf(protoEndMarker);
+			if ((protoEnd == -1)
+					|| (!resourceId.substring(0, protoEnd).equalsIgnoreCase(
+							http) && !resourceId.substring(0, protoEnd)
+							.equalsIgnoreCase(https))) {
+				throw new IllegalArgumentException(
+						"resourceId must be a relative or absolute HTTP or HTTPS URL: "
+								+ resourceId);
+			}
+			protoEnd += protoEndMarker.length();
+			if (protoEnd >= resourceId.length()) {
+				throw new IllegalArgumentException(
+						"resourceId is a malformed URL: " + resourceId);
+			}
+			pathBegin = resourceId.indexOf('/', protoEnd);
+			if ((pathBegin == -1) || (pathBegin == protoEnd)) {
+				throw new IllegalArgumentException(
+						"resourceId parameter is a malformedURL: " + resourceId);
+			}
+		}
+		return (resourceId.trim());
 	}
 
 	/**
@@ -340,6 +402,11 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * use a method like {@link #setPublicParameter(String, String, String)}.
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
+	 * <p>
+	 * <b>Note:</b> This parameter will be set as an action parameter when an
+	 * action URL is set (only in the case of remote portlets). If a resource
+	 * URL is set, the result of setting parameters is undefined (this is a
+	 * JSR-168 implementation of resource URL, not JSR-286).
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -374,6 +441,11 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * use a method like {@link #setPublicParameter(String, String, String)}.
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
+	 * <p>
+	 * <b>Note:</b> These parameters will be set as action parameters when an
+	 * action URL is set (only in the case of remote portlets). If a resource
+	 * URL is set, the result of setting parameters is undefined (this is a
+	 * JSR-168 implementation of resource URL, not JSR-286).
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -408,6 +480,11 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * use a method like {@link #setPublicParameter(String, String, String)}.
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
+	 * <p>
+	 * <b>Note:</b> These parameters will be set as action parameters when an
+	 * action URL is set (only in the case of remote portlets). If a resource
+	 * URL is set, the result of setting parameters is undefined (this is a
+	 * JSR-168 implementation of resource URL, not JSR-286).
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -451,6 +528,9 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * instead, use a method like {@link #setParameter(String, String, String)}.
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
+	 * <p>
+	 * Use of this method is undefined and may produce unexpected results, if
+	 * you set your <code>PortalURL</code> to be a resource URL.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -485,6 +565,9 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * instead, use a method like {@link #setParameter(String, String, String)}.
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
+	 * <p>
+	 * Use of this method is undefined and may produce unexpected results, if
+	 * you set your <code>PortalURL</code> to be a resource URL.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -519,6 +602,9 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * instead, use a method like {@link #setParameter(String, String, String)}.
 	 * To pass <i>portal</i> query parameters, use a method like
 	 * {@link #setParameter(String, String)}.
+	 * <p>
+	 * Use of this method is undefined and may produce unexpected results, if
+	 * you set your <code>PortalURL</code> to be a resource URL.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -549,6 +635,9 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * Sets a <tt>windowState</tt> targeted at the portlet with the given
 	 * <tt>portletFriendlyId</tt>. If the given <tt>windowState</tt> is
 	 * null, then {@link javax.portlet.WindowState#NORMAL} is presumed.
+	 * <p>
+	 * Use of this method is undefined and may produce unexpected results, if
+	 * you set your <code>PortalURL</code> to be a resource URL.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -567,6 +656,9 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * Sets a <tt>portletMode</tt> targeted at the portlet with the given
 	 * <tt>portletFriendlyId</tt>. If the given <tt>portletMode</tt> is
 	 * null, then {@link javax.portlet.PortletMode#VIEW} is presumed.
+	 * <p>
+	 * Use of this method is undefined and may produce unexpected results, if
+	 * you set your <code>PortalURL</code> to be a resource URL.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -583,9 +675,17 @@ abstract class AbstractPortalURL implements PortalURL {
 
 	/**
 	 * Makes this <code>PortalURL</code> an action URL targeted at the portlet
-	 * with the given <tt>portletFriendlyId</tt>. You can only do this once
-	 * with any one <code>PortalURL</code> object, since setting an action URL
-	 * irreversibly changes the state of the object.
+	 * with the given <tt>portletFriendlyId</tt>. You can use either this or
+	 * {@link #setAsResourceURL(String, String)} at most once with any one
+	 * <code>PortalURL</code> object, since setting an action URL or resource
+	 * URL irreversibly changes the state of the object.
+	 * <p>
+	 * Note that when you use this method to make this <code>portalURL</code>
+	 * be an action URL, any private parameters you set (eg using
+	 * {@link #setParameter(String, String, String)}) will be treated as action
+	 * parameters (only in the case of remote portlets). Any public parameters
+	 * you set (eg using {@link #setPublicParameter(String, String, String)})
+	 * will have undefined results.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
@@ -600,8 +700,68 @@ abstract class AbstractPortalURL implements PortalURL {
 					"Target portlet for action URL has already been set to "
 							+ mActionPortletFriendlyId);
 		}
+		if (mResourcePortletFriendlyId != null) {
+			throw new IllegalStateException(
+					"Target portlet for resource URL has already been set to "
+							+ mResourcePortletFriendlyId);
+		}
 		mActionPortletFriendlyId = portletFriendlyId;
 	}
+
+	/**
+	 * Makes this <code>PortalURL</code> a resource URL for the given resource
+	 * ID, targeted at the portlet with the given <tt>portletFriendlyId</tt>.
+	 * The current implementation is JSR-168 compliant but does not support
+	 * JSR-286 resource serving.
+	 * <p>
+	 * The given resource ID would typically be a URL for a servlet, image, or
+	 * other static file inside the portlet application.
+	 * <ul>
+	 * <li>A relative URL will be assumed to be relative to the portal server,
+	 * so provide an absolute URL if your portlet may be remoted.</li>
+	 * <li>The resource ID must already contain whatever parameters and
+	 * formatting the resource needs - eg if the resource is a servlet which
+	 * expects to find request parameters in its query string, you should add
+	 * that query string to the resource ID before passing it to this method.</li>
+	 * </ul>
+	 * <p>
+	 * You can use either this method or {@link #setAsActionURL(String)} at most
+	 * once with any one <code>PortalURL</code> object, since setting a
+	 * resource URL or action URL changes the state of the object irreversibly.
+	 * <p>
+	 * Any parameters (private or public), portlet mode or window state you set
+	 * (eg using {@link #setParameter(String, String)} or
+	 * {@link #setPortletMode(String, PortletMode)}) will have undefined
+	 * results.
+	 * 
+	 * @param portletFriendlyId
+	 *            the portlet friendly ID as configured in the portal console
+	 * @param resourceID
+	 *            the resource ID (JSR-286) or servlet or static resource URL
+	 *            path (JSR-168) for the resource to serve at that portlet
+	 * @throws IllegalStateException
+	 *             if action or resource URL has already been set
+	 * @since SPF 1.1
+	 */
+	public void setAsResourceURL(String portletFriendlyId, String resourceId)
+			throws IllegalStateException {
+		portletFriendlyId = checkPortletFriendlyId(portletFriendlyId);
+		resourceId = checkResourceId(resourceId);
+		if (mActionPortletFriendlyId != null) {
+			throw new IllegalStateException(
+					"Target portlet for action URL has already been set to "
+							+ mActionPortletFriendlyId);
+		}
+		if (mResourcePortletFriendlyId != null) {
+			throw new IllegalStateException(
+					"Target portlet for resource URL has already been set to "
+							+ mResourcePortletFriendlyId);
+		}
+		mResourcePortletFriendlyId = portletFriendlyId;
+		mResourceId = resourceId;
+	}
+
+	// //////////////////////////////////////////////////////////////////////////////
 
 	private List<String> getPortletParamValueList(String portletFriendlyId,
 			String paramName, boolean isPublic) {
@@ -642,23 +802,20 @@ abstract class AbstractPortalURL implements PortalURL {
 	}
 
 	/**
-	 * Creates the base URL for the <code>PortalURL</code> - specifically,
-	 * creates the portal URL itself, without any portlet-targeted data set yet.
+	 * Creates the site root URL string for a render, action or resource
+	 * <code>PortalURL</code>.
 	 * 
-	 * @param isActionUrl
-	 *            indicates whether to build a portlet action URL or not
-	 * @return the base (portal) URL, ready to add portlet-targeted data
+	 * @return the site root URL, ready for building into a base URL.
 	 */
-	protected StringBuilder createBaseUrl(boolean isActionUrl) {
+	protected StringBuilder createSiteRootUrl() {
 
 		StringBuilder result = new StringBuilder();
 
 		// if the home URL contains protocol we will rewrite it to reflect the
 		// mSecure flag - note this parsing assumes the validations done by the
 		// constructor in the checkSiteRootUrl method (see) - note that
-		// rewriting
-		// the URL includes setting the scheme consistent with the mSecure flag
-		// and setting the port to any non-standard port.
+		// rewriting the URL includes setting the scheme consistent with the
+		// mSecure flag and setting the port to any non-standard port.
 		int nonStandardPort = 0;
 		int pathBegin = 0;
 		int protoEnd = 0;
@@ -717,42 +874,19 @@ abstract class AbstractPortalURL implements PortalURL {
 		if (result.charAt(result.length() - 1) != '/') {
 			result.append('/');
 		}
+		return (result);
+	}
 
-		// if this is a portlet action URL or there are portlet parameters,
-		// specify the necessary Vignette page template
-		if (isActionUrl || !mPortletParameters.isEmpty()) {
-			// WindowState.MAXIMIZED uses a special secondary page
-			Iterator<PortletParameters> portletParameters = mPortletParameters
-					.values().iterator();
-			if (portletParameters.hasNext()
-					&& WindowState.MAXIMIZED.equals(portletParameters.next()
-							.getWindowState())) {
-				result.append("template.MAXIMIZE/");
-			} else {
-				result.append("template.PAGE/");
-			}
+	/**
+	 * Creates a query string containing any portal parameters, including the
+	 * initial '?' character. If no portal parameters were set, then an empty
+	 * string is returned.
+	 * 
+	 * @return the portal query string (including '?'), or empty
+	 */
+	protected StringBuilder createPortalQueryString() {
 
-			if (isActionUrl) {
-				result.append("action.process/");
-			}
-		}
-
-		// if there is a page friendly URI, put that next (note this could
-		// conflict with the above; we will assume the caller knows what he is
-		// doing)
-		if (mPageFriendlyUri != null) {
-			if (mPageFriendlyUri.charAt(0) == '/') {
-				result.append(mPageFriendlyUri.subSequence(1, mPageFriendlyUri
-						.length()));
-			} else {
-				result.append(mPageFriendlyUri);
-			}
-		}
-
-		// terminate portal URL path with a "/" character
-		if (result.charAt(result.length() - 1) != '/') {
-			result.append('/');
-		}
+		StringBuilder result = new StringBuilder();
 
 		// added following block for portal parameter support - DSJ 2009/1/28
 		boolean portalParametersSpecified = !mPortalParameters.isEmpty();
@@ -767,9 +901,156 @@ abstract class AbstractPortalURL implements PortalURL {
 			}
 			result.deleteCharAt(result.length() - 1); // snip off final '&'
 		}
-
-		return result;
+		return (result);
 	}
+
+	/**
+	 * Creates a query string for portlet action or render. The query string
+	 * contains any necessary portlet action or render targets, parameters,
+	 * modes or window states, including the initial '?' character. If no
+	 * portlet action, parameters, modes or window states were set, or this is a
+	 * resource URL, then an empty string is returned.
+	 * 
+	 * @return the portlet render or action query string (including '?'), or
+	 *         empty
+	 */
+	protected StringBuilder createRenderOrActionQueryString() {
+
+		boolean isActionUrl = mActionPortletFriendlyId != null;
+		boolean isResourceUrl = mResourcePortletFriendlyId != null;
+		boolean isRenderUrl = !isActionUrl && !isResourceUrl;
+		boolean portletParametersSpecified = !mPortletParameters.isEmpty();
+		StringBuilder result = new StringBuilder();
+		Iterator<Map.Entry<String, PortletParameters>> portletParameterEntries = mPortletParameters
+				.entrySet().iterator();
+
+		if (isActionUrl) {
+			// if this is an action URL we mark it with javax.portlet.action
+			// parameter and we have to specify the target portlet for the
+			// action (there is always only one) with ".tpst" parameter
+			result.append('?');
+			result.append("javax.portlet.action=true");
+			result.append('&').append(PARAM_NAME_PREFIX).append(".tpst=")
+					.append(mActionPortletFriendlyId);
+		} else if (isRenderUrl && portletParametersSpecified) {
+			// if this is a render URL containing parameters, we take the first
+			// portlet from the list and make it the target for this request
+			// using ".tpst" parameter; once we have the target we add the rest
+			// for this portlet (state, mode, public and private parameters)
+			Map.Entry<String, PortletParameters> portletParameters = portletParameterEntries
+					.next();
+			String portletFriendlyId = portletParameters.getKey();
+			result.append('?');
+			result.append(PARAM_NAME_PREFIX).append(".tpst=").append(
+					portletFriendlyId);
+			addStateAndModeToUrlFragment(result, portletParameters.getValue());
+			addPublicParameters(result, portletParameters, portletFriendlyId);
+			addPrivateParameters(result, portletParameters, portletFriendlyId,
+					false);
+		}
+
+		if ((isRenderUrl && portletParametersSpecified) || isActionUrl) {
+			result.append("&javax.portlet.begCacheTok=com.vignette.cachetoken");
+			// we now have to add the remaining portlet information unless this
+			// is a render URL with no remaining portlet information.
+			while (portletParameterEntries.hasNext()) {
+				Map.Entry<String, PortletParameters> portletParameters = portletParameterEntries
+						.next();
+				String portletFriendlyId = portletParameters.getKey();
+				addWindowStateAndPortletMode(result, portletFriendlyId,
+						portletParameters.getValue());
+				addPublicParameters(result, portletParameters,
+						portletFriendlyId);
+				addPrivateParameters(result, portletParameters,
+						portletFriendlyId, isActionUrl);
+			}
+			result.append("&javax.portlet.endCacheTok=com.vignette.cachetoken");
+		}
+		return (result);
+	}
+
+	/**
+	 * Creates the URL string for a render or action <code>PortalURL</code>,
+	 * including the site root URL plus any needed friendly URL, secondary page,
+	 * portal parameters, or portlet parameters. If this <code>PortalURL</code>
+	 * is set as a resource URL, this returns empty.
+	 * 
+	 * @return the render or action URL, or empty if this object is a resource
+	 *         URL
+	 */
+	protected StringBuilder createRenderOrActionUrl() {
+
+		boolean isActionUrl = mActionPortletFriendlyId != null;
+		boolean isResourceUrl = mResourcePortletFriendlyId != null;
+		boolean isRenderUrl = !isActionUrl && !isResourceUrl;
+		boolean portletParametersSpecified = !mPortletParameters.isEmpty();
+		StringBuilder result = new StringBuilder();
+		if (isResourceUrl) {
+			return (result);
+		}
+
+		// get the site root URL string and make sure it ends with '/'
+		result.append(createSiteRootUrl());
+		if (result.charAt(result.length() - 1) != '/') {
+			result.append('/');
+		}
+
+		// if this is a portlet action URL or there are portlet parameters,
+		// specify the necessary Vignette page template
+		if (isActionUrl || (isRenderUrl && portletParametersSpecified)) {
+			// WindowState.MAXIMIZED uses a special secondary page
+			Iterator<PortletParameters> portletParameters = mPortletParameters
+					.values().iterator();
+			if (portletParameters.hasNext()
+					&& WindowState.MAXIMIZED.equals(portletParameters.next()
+							.getWindowState())) {
+				result.append("template.MAXIMIZE/");
+			} else {
+				result.append("template.PAGE/");
+			}
+			if (isActionUrl) {
+				result.append("action.process/");
+			}
+		}
+
+		// if there is a page friendly URI, put that next
+		if ((mPageFriendlyUri != null) && (mPageFriendlyUri.length() > 0)) {
+			if (mPageFriendlyUri.charAt(0) == '/') {
+				if (mPageFriendlyUri.length() > 1) {
+					result.append(mPageFriendlyUri.subSequence(1,
+							mPageFriendlyUri.length()));
+				}
+			} else {
+				result.append(mPageFriendlyUri);
+			}
+		}
+
+		// terminate portal URL path with a "/" character
+		if (result.charAt(result.length() - 1) != '/') {
+			result.append('/');
+		}
+
+		// merge and add portal parameters and/or portlet parameters, if any
+		result.append(mergeQueryStrings(createPortalQueryString(),
+				createRenderOrActionQueryString()));
+
+		// finished creating render or action URL
+		return (result);
+	}
+
+	/**
+	 * Creates the URL string for a portlet resource <code>PortalURL</code>,
+	 * including the site root URL plus any needed friendly URL, secondary page,
+	 * portal parameters, and portlet resource ID. If this
+	 * <code>PortalURL</code> is not set as a resource URL, this returns
+	 * empty.
+	 * <p>
+	 * The implementation of a resource URL is quite different between Vignette
+	 * local and remote portlets, so this is an abstract method.
+	 * 
+	 * @return the resource URL, or empty if this object is not a resource URL
+	 */
+	protected abstract StringBuilder createResourceUrl();
 
 	// added method for portal parameter support - DSJ 2009/1/28
 	private void addParameters(StringBuilder result,
@@ -804,7 +1085,7 @@ abstract class AbstractPortalURL implements PortalURL {
 			Map.Entry<String, PortletParameters> portletParameters,
 			String portletFriendlyId);
 
-	private void addWindowStateAndPortletMode(StringBuilder result,
+	protected void addWindowStateAndPortletMode(StringBuilder result,
 			String portletFriendlyId, PortletParameters portletParameters) {
 		if (!WindowState.NORMAL.equals(portletParameters.getWindowState())
 				|| !PortletMode.VIEW.equals(portletParameters.getPortletMode())) {
@@ -845,92 +1126,37 @@ abstract class AbstractPortalURL implements PortalURL {
 	}
 
 	/**
+	 * Merges 2 query strings. Each given query string is assumed to either be
+	 * null or empty, or a valid query string - beginning with '?' and
+	 * containing at least one name-value pair.
+	 */
+	protected StringBuilder mergeQueryStrings(StringBuilder q1, StringBuilder q2) {
+		if ((q1 == null) || (q1.length() == 0)) {
+			return (q2);
+		}
+		if ((q2 == null) || (q2.length() == 0)) {
+			return (q1);
+		}
+		q2.setCharAt(0, '&');
+		q1.append(q2);
+		return (q1);
+	}
+
+	/**
 	 * Gets the string representation of this <code>PortalURL</code>, which
-	 * is a URL string containing all of the parameters set in the constructor
-	 * and subsequent method calls.
+	 * is a URL string containing all of the relevant parameters set in the
+	 * constructor and subsequent method calls. The string will be
+	 * Vignette-compliant and will be ready to use in hyperlinks, form actions,
+	 * redirects, etc.
 	 */
 	@Override
 	public String toString() {
-		boolean isActionUrl = mActionPortletFriendlyId != null;
-		boolean portletParametersSpecified = !mPortletParameters.isEmpty();
-
-		// Get the base portal URL for this PortalURL object.
-		StringBuilder result = createBaseUrl(isActionUrl);
-		boolean queryStarted = result.indexOf("?") >= 0;
-
-		Iterator<Map.Entry<String, PortletParameters>> portletParameterEntries = mPortletParameters
-				.entrySet().iterator();
-
-		if (isActionUrl) {
-			// if this is an action URL we mark it with javax.portlet.action
-			// parameter and we have
-			// to specify the target portlet for the action (there is always
-			// only one) with ".tpst" parameter
-
-			// added following for portal parameter support - DSJ 2009/1/28
-			if (!queryStarted) {
-				result.append('?');
-			} else {
-				result.append('&');
-			}
-			result.append("javax.portlet.action=true");
-			// result.append("?javax.portlet.action=true");
-			// end DSJ 2009/1/28
-			result.append('&').append(PARAM_NAME_PREFIX).append(".tpst=")
-					.append(mActionPortletFriendlyId);
-		} else if (portletParameterEntries.hasNext()) {
-
-			// If this is not an action URL we take the first portlet from the
-			// list and make it
-			// as the target for this request using ".tpst" parameter
-
-			Map.Entry<String, PortletParameters> portletParameters = portletParameterEntries
-					.next();
-			String portletFriendlyId = portletParameters.getKey();
-
-			// added following line for portal parameter support - DSJ 2009/1/28
-			// added following for portal parameter support - DSJ 2009/1/28
-			if (!queryStarted) {
-				result.append('?');
-			} else {
-				result.append('&');
-			}
-			result.append(PARAM_NAME_PREFIX).append(".tpst=").append(
-					portletFriendlyId);
-			// result.append('?').append(PARAM_NAME_PREFIX).append(".tpst=").append(portletFriendlyId);
-			// end DSJ 2009/1/28
-
-			// once we have the target we add the rest for this portlet (state,
-			// mode, public and private parameters)
-
-			addStateAndModeToUrlFragment(result, portletParameters.getValue());
-			addPublicParameters(result, portletParameters, portletFriendlyId);
-			addPrivateParameters(result, portletParameters, portletFriendlyId, false);
+		boolean isResourceUrl = mResourcePortletFriendlyId != null;
+		if (isResourceUrl) {
+			return createResourceUrl().toString();
+		} else {
+			return createRenderOrActionUrl().toString();
 		}
-
-		if (portletParametersSpecified || isActionUrl) {
-			result.append("&javax.portlet.begCacheTok=com.vignette.cachetoken");
-
-			// If we have more than one portlet in this URL we now have to add
-			// its information
-			// (state, mode, public and private parameters) between VAP's marker
-			// parameters
-
-			while (portletParameterEntries.hasNext()) {
-				Map.Entry<String, PortletParameters> portletParameters = portletParameterEntries
-						.next();
-				String portletFriendlyId = portletParameters.getKey();
-				addWindowStateAndPortletMode(result, portletFriendlyId,
-						portletParameters.getValue());
-				addPublicParameters(result, portletParameters,
-						portletFriendlyId);
-				addPrivateParameters(result, portletParameters,
-						portletFriendlyId, isActionUrl);
-			}
-			result.append("&javax.portlet.endCacheTok=com.vignette.cachetoken");
-		}
-
-		return (result.toString());
 	}
 
 	/**

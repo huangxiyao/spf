@@ -6,12 +6,17 @@ import java.net.URLEncoder;
 import java.io.UnsupportedEncodingException;
 
 /**
- * A concrete {@link PortalURL} which implements local portlet handling for
- * portlet parameters.
+ * A concrete {@link PortalURL} which implements Vignette local portlet handling
+ * for portlet parameters and resource URL's.
  * 
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
+ * @author Scott Jorgenson (scott.jorgenson@hp.com)
  */
 class VignetteLocalPortalURL extends AbstractPortalURL {
+
+	/**
+	 * Call the superclass constructor to build this object.
+	 */
 	protected VignetteLocalPortalURL(String siteRootUrl,
 			String anotherSiteName, String pageFriendlyUri, boolean secure,
 			int nonStandardHttpPort, int nonStandardHttpsPort) {
@@ -19,6 +24,36 @@ class VignetteLocalPortalURL extends AbstractPortalURL {
 				nonStandardHttpPort, nonStandardHttpsPort);
 	}
 
+	/**
+	 * Create a resource URL string for a Vignette local portlet. This is a
+	 * JSR-168 implementation, in which a portlet resource URL is a servlet,
+	 * image or other static file typically in the portlet application. JSR-286
+	 * true portlet resource serving is not supported by this implementation.
+	 * <p>
+	 * A Vignette local portlet resource URL is just the resource ID that was
+	 * set earlier (using
+	 * {@link AbstractPortalURL#setAsResourceURL(String, String)}), which was
+	 * either a relative or absolute HTTP or HTTPS URL. So this method just
+	 * returns the resource ID that was set.
+	 * <p>
+	 * If the current <code>PortalURL</code> was not set as a resource URL,
+	 * this method returns empty.
+	 * 
+	 * @return the resource URL string for the local Vignette portlet
+	 */
+	protected StringBuilder createResourceUrl() {
+		boolean isResourceUrl = mResourcePortletFriendlyId != null;
+		StringBuilder result = new StringBuilder();
+		if (!isResourceUrl) {
+			return (result);
+		}
+		result.append(mResourceId);
+		return (result);
+	}
+
+	/**
+	 * Add private parameters in the format for Vignette local portlets.
+	 */
 	protected void addPrivateParameters(StringBuilder result,
 			Map.Entry<String, PortletParameters> portletParameters,
 			String portletFriendlyId, boolean isActionURL) {
@@ -26,6 +61,9 @@ class VignetteLocalPortalURL extends AbstractPortalURL {
 				.getPrivateParameters(), ".prp_");
 	}
 
+	/**
+	 * Add public parameters in the format for Vignette local portlets.
+	 */
 	protected void addPublicParameters(StringBuilder result,
 			Map.Entry<String, PortletParameters> portletParameters,
 			String portletFriendlyId) {
