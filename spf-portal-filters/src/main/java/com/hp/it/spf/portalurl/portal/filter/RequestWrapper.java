@@ -84,6 +84,10 @@ class RequestWrapper extends HttpServletRequestWrapper
 			result = result.replaceAll(
 					"spf_p\\.tpst=" + portletFriendlyId,
 					"javax\\.portlet\\.tpst=" + portletUid);
+			// the parameter javax.portlet.tpst value contains portlet id for resource URLs
+			result = result.replaceAll(
+					"spf_p\\.tpst=" + portletFriendlyId + "_ws_BI",
+					"javax\\.portlet\\.tpst=" + portletUid + "_ws_BI");
 			// the parameter javax.portlet.pst value contains portlet id
 			result = result.replaceAll(
 					"spf_p\\.pst=" + portletFriendlyId,
@@ -96,6 +100,10 @@ class RequestWrapper extends HttpServletRequestWrapper
 			result = result.replaceAll(
 					"spf_p\\.pbp_" + portletFriendlyId + "=",
 					"javax\\.portlet\\.pbp_" + portletUid + "=");
+			// parameters starting with javax.portlet.rst_ contain portlet-specific values
+			result = result.replaceAll(
+					"spf_p\\.rst_" + portletFriendlyId + "=",
+					"javax\\.portlet\\.rst_" + portletUid + "=");
 			// parameters starting with javax.portlet.prp_ contain portlet-specific values
 			result = result.replaceAll(
 					"spf_p\\.prp_" + portletFriendlyId + "_",
@@ -153,20 +161,30 @@ class RequestWrapper extends HttpServletRequestWrapper
 					result.put("javax.portlet.pst", paramValue);
 				}
 			}
-			// for parameters starting with "spf_p.prp_" and "spf_p.pbp" we have to rename parameters
-			// but keeping values the same
-			else if (paramName.startsWith("spf_p.prp_") || paramName.startsWith("spf_p.pbp_")) {
-				boolean isPublicRenderParameter = paramName.startsWith("spf_p.pbp_");
+			// for parameters starting with "spf_p.prp_", "spf_p.pbp_" and "spf_p.rst_"
+			// we have to rename parameters but keeping values the same
+			else if (paramName.startsWith("spf_p.prp_")
+					|| paramName.startsWith("spf_p.pbp_")
+					|| paramName.startsWith("spf_p.rst_"))
+			{
 				String newParamName = paramName;
 				for (Iterator<Map.Entry<String, String>> it2 = mPortletFriendlyIdToUidMap.entrySet().iterator(); it2.hasNext(); ) {
 					Map.Entry<String, String> entry = it2.next();
 					String friendlyId = entry.getKey();
 					String uid = entry.getValue();
-					String namePrefix = (isPublicRenderParameter ? "spf_p.pbp_" : "spf_p.prp_") + friendlyId;
-					if (paramName.startsWith(namePrefix)) {
-						newParamName =
-								(isPublicRenderParameter ? "javax.portlet.pbp_" : "javax.portlet.prp_") + 
-								uid + paramName.substring(namePrefix.length());
+
+					// Below we replace "spf_p.<prefix><friendlyId><postfix>"
+					// with "javax.portlet.<prefix><uid><postfix>
+					// where prefix is everything between "." and "_" and should really be one of:
+					// prp_, pbp_, rst_
+					newParamName =
+							paramName.replaceAll(
+									"^spf_p\\.([^_]+_)" + friendlyId + "(.*$)",
+									"javax\\.portlet\\.$1" + uid + "$2");
+
+					// If new param name starts with 'j' this means we did the replacement
+					// so no need to look further
+					if (newParamName.charAt(0) == 'j') {
 						break;
 					}
 				}

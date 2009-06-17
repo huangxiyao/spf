@@ -58,6 +58,7 @@ public class PortalURLRewriterFilter implements Filter
 
 		Enumeration portletRenderParamNames = getParameterNamesByPrefix(request, "spf_p.prp_");
 		Enumeration portletPublicRenderParamNames = getParameterNamesByPrefix(request, "spf_p.pbp_");
+		Enumeration portletResourceParamNames = getParameterNamesByPrefix(request, "spf_p.rst_");
 		Enumeration portletStates = getParameterValues(request, "spf_p.pst");
 
 		Set<String> portletFriendlyIds = new HashSet<String>();
@@ -76,6 +77,10 @@ public class PortalURLRewriterFilter implements Filter
 
 		if (portletPublicRenderParamNames != null && portletPublicRenderParamNames.hasMoreElements()) {
 			addPortletFriendlyIdsFromParamNames(portletFriendlyIds, portletPublicRenderParamNames, "spf_p.pbp_");
+		}
+
+		if (portletResourceParamNames != null && portletResourceParamNames.hasMoreElements()) {
+			addPortletFriendlyIdsFromParamNames(portletFriendlyIds, portletResourceParamNames, "spf_p.rst_");
 		}
 
 		Map<String, String> portletFriendlyIdToUidMap = buildPortletFriendlyIdToUIDMap(portletFriendlyIds);

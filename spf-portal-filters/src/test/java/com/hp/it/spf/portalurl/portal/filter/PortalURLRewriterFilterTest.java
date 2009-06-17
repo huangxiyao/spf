@@ -60,7 +60,15 @@ public class PortalURLRewriterFilterTest
 
 	@Test
 	public void doFilterWithPortletParams() throws Exception {
-		HttpServletRequest request = TestHelper.createMockRequest("a=1&spf_p.tpst=p1&spf_p.prp_p1=c%3D3&javax.portlet.begCacheTok=com.vignette.cachetoken&spf_p.pst=p2_ws_MX&spf_p.pst=p3_pm_ED&spf_p.pbp_p2=a%3D1&spf_p.prp_p3=b%3D2&javax.portlet.endCacheTok=com.vignette.cachetoken");
+		HttpServletRequest request = TestHelper.createMockRequest("a=1" +
+				"&spf_p.tpst=p1" +
+				"&spf_p.prp_p1=c%3D3" +
+				"&javax.portlet.begCacheTok=com.vignette.cachetoken" +
+				"&spf_p.pst=p2_ws_MX" +
+				"&spf_p.pst=p3_pm_ED" +
+				"&spf_p.pbp_p2=a%3D1" +
+				"&spf_p.prp_p3=b%3D2" +
+				"&javax.portlet.endCacheTok=com.vignette.cachetoken");
 		HttpServletResponse response = TestHelper.createMockResponse();
 		TestChain chain = new TestChain();
 		TestPortalURLRewriterFilter filter = new TestPortalURLRewriterFilter();
@@ -71,7 +79,30 @@ public class PortalURLRewriterFilterTest
 				filter.getPortletFriendlyIds(), notNullValue());
 		assertThat("Created RequestWrapper",
 				chain.getRequest(), instanceOf(RequestWrapper.class));
+
 		Set<String> expectedIds = new HashSet<String>(Arrays.asList("p1", "p2", "p3"));
+		assertThat("All portlet ID found", filter.getPortletFriendlyIds(), is(expectedIds));
+	}
+
+	@Test
+	public void doFilterForResourceUrl() throws Exception {
+		//normally only one portlet id is present but I want to test that it can be extracted from
+		//two locations - tpst and rst_ parameters
+		HttpServletRequest request = TestHelper.createMockRequest("a=1" +
+				"&spf_p.tpst=p1_ws_BI" +
+				"&spf_p.rst_p2=wsrp-url%3Dhttp%253A%252F%252F16.158.82.187%253A7002%252Fjsr168portlets%252FbinaryDocDisplay%26wsrp-requiresRewrite%3Dfalse");
+		HttpServletResponse response = TestHelper.createMockResponse();
+		TestChain chain = new TestChain();
+		TestPortalURLRewriterFilter filter = new TestPortalURLRewriterFilter();
+
+		filter.doFilter(request, response, chain);
+
+		assertThat("build ID to UID map called",
+				filter.getPortletFriendlyIds(), notNullValue());
+		assertThat("Created RequestWrapper",
+				chain.getRequest(), instanceOf(RequestWrapper.class));
+
+		Set<String> expectedIds = new HashSet<String>(Arrays.asList("p1", "p2"));
 		assertThat("All portlet ID found", filter.getPortletFriendlyIds(), is(expectedIds));
 	}
 
