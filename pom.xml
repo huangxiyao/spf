@@ -56,7 +56,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>1.0.7</version>
+			<version>1.0.8-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
