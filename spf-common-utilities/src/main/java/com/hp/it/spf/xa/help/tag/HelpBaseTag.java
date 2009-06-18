@@ -397,6 +397,8 @@ public abstract class HelpBaseTag extends TagSupport {
 			linkContent = "<img src=\"" + imgUrl + "\" ";
 			if (imgAlt != null) {
 				linkContent += "alt=\"" + imgAlt + "\" ";
+				// Duplicate the alt text into the title attribute.
+				linkContent += "title=\"" + imgAlt + "\" ";
 			}
 			linkContent += "style=\"cursor:pointer\" border=\"0\">";
 		}
