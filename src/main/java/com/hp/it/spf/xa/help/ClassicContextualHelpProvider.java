@@ -106,14 +106,14 @@ public abstract class ClassicContextualHelpProvider extends
 	 * help.
 	 */
 	protected static String CLASSIC_CONTEXTUAL_HELP_STYLE = "<style>\n"
-			+ "/* Workaround for IE6 <SELECT> bug */\n"
-			+ ".select-ie6 {\n" + "    position: absolute;\n"
-			+ "    z-index: 10;\n" + "    cursor: move;\n"
-			+ "    overflow: hidden;\n" + "}\n" + ".select-ie6 iframe {\n"
-			+ "    display: none;\n" + "    display: block;\n"
-			+ "    position:absolute;\n" + "    top: 0;\n" + "    left: 0;\n"
-			+ "    z-index: -1;\n" + "    filter: mask();\n"
-			+ "    height: 9999px;\n" + "}\n" + "</style>";
+			+ "/* Workaround for IE6 <SELECT> bug */\n" + ".select-ie6 {\n"
+			+ "    position: absolute;\n" + "    z-index: 10;\n"
+			+ "    cursor: move;\n" + "    overflow: hidden;\n" + "}\n"
+			+ ".select-ie6 iframe {\n" + "    display: none;\n"
+			+ "    display: block;\n" + "    position:absolute;\n"
+			+ "    top: 0;\n" + "    left: 0;\n" + "    z-index: -1;\n"
+			+ "    filter: mask();\n" + "    height: 9999px;\n" + "}\n"
+			+ "</style>";
 
 	/**
 	 * The JavaScript string for the classic contextual help popup open, close,
@@ -710,7 +710,7 @@ public abstract class ClassicContextualHelpProvider extends
 
 		// Make the close button image URL and alt message.
 		String closeButtonUrl = getCloseImageURL();
-		String closeButtonAlt = getCloseImageAlt();
+		String closeButtonAlt = normalize(getCloseImageAlt());
 
 		// Make the width.
 		String widthAttr = "";
@@ -778,7 +778,9 @@ public abstract class ClassicContextualHelpProvider extends
 						+ id + "'), 'click', showObject);\n");
 		// Add iframe to avoid IE select bug
 		// html.append("if (isMSIE() == true) \n");
-		// html.append("    document.write('<iframe id=\"" + id	+ "HelpFrame\" src=\"javascript:false;\" style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
+		// html.append(" document.write('<iframe id=\"" + id + "HelpFrame\"
+		// src=\"javascript:false;\"
+		// style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
 		html.append("</script>");
 
 		// Next, add the noscript for unscripted browsers. Use the noscript URL
@@ -817,10 +819,16 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("<td " + titleStyleAttr + ">&nbsp;</td>\n");
 		html.append("<td " + titleStyleAttr + ">");
 		html.append("<img id=\"" + id + "HelpClose\" ");
-		html.append("src=\"" + closeButtonUrl + "\" ");
-		html.append("style=\"cursor:pointer\" alt=\"" + closeButtonAlt + "\" ");
-		html
-				.append("width=\"15\" height=\"15\" align=right border=\"0\"/ ></td>\n");
+		html.append("src=\"" + closeButtonUrl + "\" style=\"cursor:pointer\" ");
+		if (closeButtonAlt != null) {
+			// Add alt text for the close image if there is any.
+			html.append("alt=\"" + closeButtonAlt + "\" ");
+			// Duplicate the alt text into the title attribute.
+			html.append("title=\"" + closeButtonAlt + "\" ");
+		}
+		// Don't specify size since we can't know the size of the image
+		// html.append("width=\"15\" height=\"15\" ");
+		html.append("align=right border=\"0\"/ ></td>\n");
 		html.append("</tr>\n");
 		html.append("<tr height=2><td " + titleStyleAttr
 				+ "colspan=4 /></tr>\n");
@@ -920,5 +928,22 @@ public abstract class ClassicContextualHelpProvider extends
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Normalize blank string values to null - so the return is either a
+	 * non-blank string, or null.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	protected String normalize(String value) {
+		if (value != null) {
+			value = value.trim();
+			if (value.equals("")) {
+				value = null;
+			}
+		}
+		return value;
 	}
 }
