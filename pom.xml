@@ -24,7 +24,7 @@ return secondary page. </description>
   	<dependency>
   		<groupId>com.hp.it.spf.comps</groupId>
   		<artifactId>spf-return-secondarypagetype</artifactId>
-  		<version>1.0.1</version>
+  		<version>1.0.2</version>
   		<type>car</type>
   		<scope>provided</scope>
   	</dependency>
