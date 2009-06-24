@@ -1,27 +1,31 @@
 package com.hp.it.spf.wsrp.rewriter.impl;
 
-import com.hp.it.spf.wsrp.rewriter.IRewriter;
-import com.hp.it.spf.wsrp.misc.Predicates;
-import org.apache.axis.MessageContext;
-import org.apache.commons.fileupload.RequestContext;
-import org.apache.commons.fileupload.FileUpload;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import oasis.names.tc.wsrp.v2.types.PerformBlockingInteraction;
-import oasis.names.tc.wsrp.v2.types.GetResource;
-import oasis.names.tc.wsrp.v2.types.InteractionParams;
-import oasis.names.tc.wsrp.v2.types.ResourceParams;
-import oasis.names.tc.wsrp.v2.types.UploadContext;
-import oasis.names.tc.wsrp.v2.types.NamedString;
-
-import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.ByteArrayInputStream;
+import java.util.List;
+
+import oasis.names.tc.wsrp.v2.types.GetResource;
+import oasis.names.tc.wsrp.v2.types.InteractionParams;
+import oasis.names.tc.wsrp.v2.types.NamedString;
+import oasis.names.tc.wsrp.v2.types.PerformBlockingInteraction;
+import oasis.names.tc.wsrp.v2.types.ResourceParams;
+import oasis.names.tc.wsrp.v2.types.UploadContext;
+
+import org.apache.axis.MessageContext;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUpload;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.RequestContext;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+
+import com.hp.it.spf.wsrp.misc.Predicates;
+import com.hp.it.spf.wsrp.rewriter.IRewriter;
 
 /**
  * Rewrites upload contexts and form parameters values provided by Vignette into the format expected
@@ -165,7 +169,12 @@ public class UploadRewriter implements IRewriter {
 	private NamedString createFormParameter(FileItem item) {
 		NamedString formField = new NamedString();
 		formField.setName(item.getFieldName());
-		formField.setValue(item.getString());
+		try {
+			formField.setValue(item.getString("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			//it should never happen
+			throw new RuntimeException(e);
+		}
 		return formField;
 	}
 
