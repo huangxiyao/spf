@@ -25,7 +25,7 @@
 athpCanonical.poolHostnames=spp-pro-athp.austin.hp.com
 hppCanonical.poolHostnames=spp-pro-hpp.austin.hp.com
 hppSpfLpdn.poolHostnames=h20558.www2.hp.com
-hppSp4tsLpdn.poolHostnames=TBD
+hppSp4tsLpdn.poolHostnames=h20564.www2.hp.com
 #
 # [id.]thisSiteHostnames
 #   The comma-delimited list of site hostnames for the particular pool
@@ -39,7 +39,7 @@ hppSp4tsLpdn.poolHostnames=TBD
 athpCanonical.thisSiteHostnames=spp-pro-site1-athp.austin.hp.com
 hppCanonical.thisSiteHostnames=spp-pro-site1-hpp.austin.hp.com
 hppSpfLpdn.thisSiteHostnames=h20560.www2.hp.com
-hppSp4tsLpdn.thisSiteHostnames=TBD
+hppSp4tsLpdn.thisSiteHostnames=h20565.www2.hp.com
 #
 # [id.]otherSiteHostnames
 #   The comma-delimited list of site hostnames for the particular pool
@@ -52,7 +52,7 @@ hppSp4tsLpdn.thisSiteHostnames=TBD
 athpCanonical.otherSiteHostnames=spp-pro-site2-athp.austin.hp.com
 hppCanonical.otherSiteHostnames=spp-pro-site2-hpp.austin.hp.com
 hppSpfLpdn.otherSiteHostnames=h20559.www2.hp.com
-hppSp4tsLpdn.otherSiteHostnames=TBD
+hppSp4tsLpdn.otherSiteHostnames=h20566.www2.hp.com
 #
 # [id.]siteCookieName
 #   The name to use when setting a session cookie which records which 
