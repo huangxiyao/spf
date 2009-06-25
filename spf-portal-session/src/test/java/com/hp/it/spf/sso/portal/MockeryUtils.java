@@ -192,6 +192,7 @@ public class MockeryUtils {
                 allowing(request).getHeader("Account-Header");will(returnValue("=?UTF-8?B?fGhwcHByb2ZpbGVJZD02Y2IyM2YxMjAzZmM2NzJjMWEzMWZkMjY0OTkyMDUyNA0KfHNpZ25Jbk5hbWU9bGl1eWVfY2FmDQp8Zmlyc3ROYW1lPVllDQp8bGFzdG5hbWU9TGl1DQp8ZW1haWw9bGl1eWVAaHAuY29tDQp8bGFuZ2NvZGU9MTMNCnxjb250YWN0UHJlZkVtYWlsPU4NCnxjb250YWN0UHJlZlBvc3Q9Tg0KfGNvbnRhY3RQcmVmVGVsZXBob25lPU4=?="));
                 allowing(request).getHeader("Account-HomeHeader");will(returnValue("=?UTF-8?B?fFRlbGVDaXR5Q0Q9MDIxDQp8aG9tZVRlbGVwaG9uZUNvdW50cnlDb2RlPTg2DQp8aG9tZVRlbGVwaG9uZU51bWJlcj0xMjM0NTY3OA0KfGhvbWVQb3N0YWxjb2RlPTAyMQ0KfGhvbWVBZGRyZXNzTGluZTE9aG9tZV9hZGRyZXNzMQ0KfGhvbWVBZGRyZXNzTGluZTI9aG9tZV9hZGRyZXNzMg0KfGhvbWVDaXR5PWhvbWVfY2l0eQ0KfGhvbWVTdGF0ZT0NCnxob21lQ291bnRyeUNvZGU9Q04NCnxob21lQ291bnR5PUNODQp8aG9tZVppcENvZGVQb3N0Q29kZT0wMjENCnxob21lVGVsZXBob25lQ2l0eUNvZGU9MDIxDQp8aG9tZVRlbGVwaG9uZU51bWJlcj04NigwMjEpMTIzNDU2Nzg=?="));
                 allowing(request).getHeader("Account-BusHeader");will(returnValue(""));
+                allowing(request).getHeader("CL_TimezoneHeader");will(returnValue("=?UTF-8?B?VVRDLTc=?="));
                 allowing(request).getHeader("prefeml");will(returnValue("=?UTF-8?B?WQ==?="));
                 allowing(request).getHeader("prefphn");will(returnValue("=?UTF-8?B?Tg==?="));
                 allowing(request).getHeader("prefpst");will(returnValue("=?UTF-8?B?Tg==?="));
@@ -263,6 +264,7 @@ public class MockeryUtils {
                 allowing(request).getHeader("Account-Header");will(returnValue("=?UTF-8?B?fGhwcHByb2ZpbGVJZD02Y2IyM2YxMjAzZmM2NzJjMWEzMWZkMjY0OTkyMDUyNA0KfHNpZ25Jbk5hbWU9bGl1eWVfY2FmDQp8Zmlyc3ROYW1lPVllDQp8bGFzdG5hbWU9TGl1DQp8ZW1haWw9bGl1eWVAaHAuY29tDQp8bGFuZ2NvZGU9MTMNCnxjb250YWN0UHJlZkVtYWlsPU4NCnxjb250YWN0UHJlZlBvc3Q9Tg0KfGNvbnRhY3RQcmVmVGVsZXBob25lPU4=?="));
                 allowing(request).getHeader("Account-HomeHeader");will(returnValue("=?UTF-8?B?fFRlbGVDaXR5Q0Q9MDIxDQp8aG9tZVRlbGVwaG9uZUNvdW50cnlDb2RlPTg2DQp8aG9tZVRlbGVwaG9uZU51bWJlcj0xMjM0NTY3OA0KfGhvbWVQb3N0YWxjb2RlPTAyMQ0KfGhvbWVBZGRyZXNzTGluZTE9aG9tZV9hZGRyZXNzMQ0KfGhvbWVBZGRyZXNzTGluZTI9aG9tZV9hZGRyZXNzMg0KfGhvbWVDaXR5PWhvbWVfY2l0eQ0KfGhvbWVTdGF0ZT0NCnxob21lQ291bnRyeUNvZGU9Q04NCnxob21lQ291bnR5PUNODQp8aG9tZVppcENvZGVQb3N0Q29kZT0wMjENCnxob21lVGVsZXBob25lQ2l0eUNvZGU9MDIxDQp8aG9tZVRlbGVwaG9uZU51bWJlcj04NigwMjEpMTIzNDU2Nzg=?="));
                 allowing(request).getHeader("Account-BusHeader");will(returnValue(""));
+                allowing(request).getHeader("CL_TimezoneHeader");will(returnValue("=?UTF-8?B?VVRDLTc=?="));
                 allowing(request).getHeader("prefeml");will(returnValue("=?UTF-8?B?WQ==?="));
                 allowing(request).getHeader("prefphn");will(returnValue("=?UTF-8?B?Tg==?="));
                 allowing(request).getHeader("prefpst");will(returnValue("=?UTF-8?B?Tg==?="));

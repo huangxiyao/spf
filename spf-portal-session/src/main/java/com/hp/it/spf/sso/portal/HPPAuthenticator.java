@@ -17,7 +17,6 @@ import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
-import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
@@ -34,7 +33,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     private static final long serialVersionUID = 1L;
 
     private static final LogWrapper LOG = AuthenticatorHelper.getLog(HPPAuthenticator.class);
-    
+
     /**
      * This is the constructor for HPP Authenticator. First, it will call the
      * constructor of AbstractAuthenticator which is its father class to do some
@@ -57,7 +56,13 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     protected void mapHeaderToUserProfileMap() {
         // retrieve HPP account values from http header
         userProfile.putAll(this.getAccountHeaderValuesAsMap());
-        
+
+        // retrieve timezone from CL_TimezoneHeader and save it to the user profile map
+        // it should be done before the super mapHeaderToUserProfileMap method.
+        String timezone = getCLTimeZoneHeaderValue();
+        userProfile.put(getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME),
+                        timezone);
+
         super.mapHeaderToUserProfileMap();
 
         // Set language, change language from HPP format to ISO standard
@@ -77,7 +82,8 @@ public class HPPAuthenticator extends AbstractAuthenticator {
     }
 
     /**
-     * Return corresponding field value carried in request header from user profile map.
+     * Return corresponding field value carried in request header from user
+     * profile map.
      * 
      * @param fieldName field name in request header
      * @return corresponding field in request header, null if field not found
@@ -98,14 +104,14 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         }
         return value;
     }
-    
+
     @SuppressWarnings("unchecked")
     private void setPhone() {
-        String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);        
+        String number = getValue(AuthenticationConsts.HEADER_PHONE_NUMBER_NAME);
         String ext = getValue(AuthenticationConsts.HEADER_PHONE_EXT);
-        
-        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, number);        
-        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext);       
+
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER, number);
+        userProfile.put(AuthenticationConsts.KEY_PHONE_NUMBER_EXT, ext);
     }
 
     /**
@@ -124,7 +130,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
         } else if (AuthenticatorHelper.loggedIntoFed(request)) {
             groups.add(AuthenticationConsts.LOCAL_FED_NAME);
         }
-        
+
         // retrieve groups from UserGroupRetriever
         IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(AuthenticationConsts.HPP_USER_GROUP_RETRIEVER);
         groups.addAll(retriever.getGroups(userProfile, request));
@@ -145,12 +151,12 @@ public class HPPAuthenticator extends AbstractAuthenticator {
                              EUserIdentifierType.EXTERNAL_USER);
         return super.getUserProfile();
     }
-    
+
     /**
      * Retrieve all account values from request as a map.
      * <p>
-     * It retrieves Account-Header, Account-BusHeader, Account-HomeHeader and CL_Header
-     * values as a map from http request.
+     * It retrieves Account-Header, Account-BusHeader, Account-HomeHeader and
+     * CL_Header values as a map from http request.
      * </p>
      * 
      * @return account value map or an empty map
@@ -199,7 +205,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
      */
     private Map<String, String> convertAccountHeaderValueToMap(String value) {
         Map<String, String> map = new HashMap<String, String>();
-        if (value != null && !"".equals(value.trim())) {            
+        if (value != null && !"".equals(value.trim())) {
             StringTokenizer st = new StringTokenizer(value, "|");
             while (st.hasMoreTokens()) {
                 String[] key_value = st.nextToken().split("=", 2);
@@ -212,5 +218,18 @@ public class HPPAuthenticator extends AbstractAuthenticator {
             }
         }
         return map;
+    }
+
+    /**
+     * Retrieve CL_TimezoneHeader from http request.
+     * 
+     * @return CL_TimezoneHeader value or null if not carried in the http
+     *         request.
+     */
+    private String getCLTimeZoneHeaderValue() {
+        String cl_tzheader = AuthenticatorHelper.getRequestHeader(request,
+                                                                  getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME),
+                                                                  true);
+        return cl_tzheader;
     }
 }

@@ -154,12 +154,16 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 }
                 AuthenticatorHelper.cleanupSession(request);
             } else {
+                // keep the current HTTP header user profile
+                Map httpHeaderUserProfile = userProfile;
+
                 // fetch userProfile from session
                 userProfile = (Map)request.getSession()
                                           .getAttribute(AuthenticationConsts.USER_PROFILE_KEY);
                 // get groups from userProfile
                 List<String> sessionGroups = (List<String>)userProfile.get(AuthenticationConsts.KEY_USER_GROUPS);
-                refreshLocaleRelatedAttributes(sessionGroups);
+                refreshLocaleRelatedAttributes(sessionGroups,
+                                               httpHeaderUserProfile);
 
                 userName = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
                 return;
@@ -197,7 +201,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * and save back to session
      */
     @SuppressWarnings("unchecked")
-    protected void refreshLocaleRelatedAttributes(List<String> sessionGroups) {
+    protected void refreshLocaleRelatedAttributes(List<String> sessionGroups,
+                                                  Map httpHeaderUserProfile) {
         Set<String> inputGroups = new HashSet<String>();
         String language = "";
         String country = "";
@@ -233,7 +238,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 saveUserProfile2Session(currentUser);
 
                 // refresh User timezone
-                String timezone = getProperty(getValue(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
+                String timezone = (String)httpHeaderUserProfile.get(getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
                 boolean needRefreshTZ = false;
                 if (timezone == null || "".equals(timezone.trim())) {
                     // refresh User timezone according to the resolved locale
@@ -242,7 +247,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 } else if (!timezone.equals(userProfile.get(AuthenticationConsts.KEY_TIMEZONE))) {
                     // header timezone now is set, but previous round it was not
                     // set and locale based timezone was retrieved
-                    // meanwhile, the timezone header in the user profile map also need to be updated.
+                    // meanwhile, the timezone header in the user profile map
+                    // also need to be updated.
                     userProfile.put(getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME),
                                     getValue(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
                     needRefreshTZ = true;
