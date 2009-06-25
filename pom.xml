@@ -77,7 +77,7 @@ return secondary page type. This Vignette component provides the display action 
 	<dependency>
 		<groupId>com.hp.it.spf.sso</groupId>
 		<artifactId>spf-portal-session</artifactId>
-		<version>1.0.6</version>
+		<version>1.0.7</version>
 		<scope>provided</scope>
 	</dependency>
   </dependencies>
