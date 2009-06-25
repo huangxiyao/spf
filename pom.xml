@@ -8,7 +8,7 @@
 	<groupId>com.hp.it.spf.apps</groupId>
 	<artifactId>spf-portletdriver</artifactId>
 	<packaging>war</packaging>
-	<version>1.0.8</version>
+	<version>1.0.9-SNAPSHOT</version>
 	<name>Modified OpenPortal WSRP Producer</name>
 	<description>
 		This project creates OpenPortal-based WSRP producer including SPF libraries 
@@ -121,8 +121,8 @@
 		<finalName>portletdriver</finalName>
 	</build>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portletdriver-1.0.8</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portletdriver-1.0.8</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/spf-portletdriver-1.0.8</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portletdriver</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portletdriver</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portletdriver</url>
 	</scm>
 </project>
