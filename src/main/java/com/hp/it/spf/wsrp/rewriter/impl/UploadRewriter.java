@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -148,18 +147,28 @@ public class UploadRewriter implements IRewriter {
 	 * @return UploadContext with data from the item
 	 */
 	private UploadContext createUploadContext(FileItem item) {
-		UploadContext newUploadContext = new UploadContext();
-		newUploadContext.setMimeType(item.getContentType());
-		newUploadContext.setUploadData(item.get());
-		NamedString contenType = new NamedString();
-		contenType.setName("Content-Type");
-		contenType.setValue(item.getContentType());
-		NamedString contentDisposition = new NamedString();
-		contentDisposition.setName("Content-Disposition");
-		contentDisposition.setValue(String.format("form-data; name=\"%s\"; filename=\"%s\"", item.getFieldName(), item.getName()));
-		newUploadContext.setMimeAttributes(new NamedString[] { contenType, contentDisposition });
-		return newUploadContext;
-	}
+        UploadContext newUploadContext = new UploadContext();
+        newUploadContext.setMimeType(item.getContentType());
+        newUploadContext.setUploadData(item.get());
+        NamedString contenType = new NamedString();
+        contenType.setName("Content-Type");
+        contenType.setValue(item.getContentType());
+        NamedString contentDisposition = new NamedString();
+        contentDisposition.setName("Content-Disposition");
+        try {
+            // convert the filename to ascii characters
+            contentDisposition.setValue(String.format("form-data; name=\"%s\"; filename=\"%s\"",
+                                                      item.getFieldName(),
+                                                      new String(item.getName().getBytes("UTF-8"),
+                                                                 "iso-8859-1")));
+        } catch (UnsupportedEncodingException ex) {
+            //it should never happen
+            throw new RuntimeException(ex);
+        }
+        newUploadContext.setMimeAttributes(new NamedString[] {contenType,
+                                                              contentDisposition});
+        return newUploadContext;
+    }
 
 	/**
 	 * Creates form parameter based on the data in the given item.
