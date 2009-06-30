@@ -55,8 +55,30 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 
 	/**
 	 * The name of the submit button image for the classic locale selector form.
+	 * If this image file exists in the current component, it is used for the
+	 * &lt;img&gt; tag.
 	 */
-	protected static String SUBMIT_BUTTON_IMG_NAME = "btn_submit.gif";
+	private static String SUBMIT_BUTTON_IMG_NAME = "btn_submit.gif";
+
+	/**
+	 * The HTTP HP.com URL for the HP.com classic submit-button image. If the
+	 * {@link #SUBMIT_BUTTON_IMG_NAME} image file does not exist in the current
+	 * component, this URL is used instead (when the current request was HTTP).
+	 */
+	private static String SUBMIT_BUTTON_IMG_HTTP_URL = "http://welcome.hp-ww.com/img/hpweb_1-2_arrw_sbmt.gif";
+
+	/**
+	 * The HTTPS HP.com URL for the HP.com classic submit-button image. If the
+	 * {@link #SUBMIT_BUTTON_IMG_NAME} image file does not exist in the current
+	 * component, this URL is used instead (when the current request was HTTPS).
+	 */
+	private static String SUBMIT_BUTTON_IMG_HTTPS_URL = "https://secure.hp-ww.com/img/hpweb_1-2_arrw_sbmt.gif";
+
+	/**
+	 * The message key for the tooltip string for the HP.com classic
+	 * submit-button image.
+	 */
+	private static String SUBMIT_BUTTON_IMG_ALT = "localeSelector.submit.alt";
 
 	/**
 	 * The default style to apply to the label. Currently null.
@@ -469,9 +491,11 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 
 		// button column
 		String imgLink = getSubmitImageURL();
+		String imgAlt = getSubmitImageAlt();
 		html.append("<td " + labelStyleAttr + "valign=\"middle\">\n");
 		html.append("<input type=\"image\" name=\"btn_" + widgetName
-				+ "\" src=\"" + imgLink + "\">\n");
+				+ "\" src=\"" + imgLink + "\" alt=\"" + imgAlt + "\" title=\""
+				+ imgAlt + "\">\n");
 		html.append("</td>\n");
 
 		// end selector table layout
@@ -487,29 +511,52 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	 * component. This image may be localized if desired; this method looks for
 	 * the particular localized image (loaded in the current portal component's
 	 * secondary support files) which is the best-candidate given the current
-	 * locale. If the image is not found there, then a URL pointing to
-	 * <code>/images/btn_submit.gif</code> under the portal root path is
-	 * assumed and returned.
+	 * locale. If the image is not found there, then an appropriate HP.com image
+	 * URL is returned: the value of either {@link #SUBMIT_BUTTON_IMG_HTTP_URL}
+	 * or {@link #SUBMIT_BUTTON_IMG_HTTPS_URL}, depending on the scheme used in
+	 * the current request.
 	 */
 	private String getSubmitImageURL() {
-		String url = "/images/" + SUBMIT_BUTTON_IMG_NAME;
+		String url = SUBMIT_BUTTON_IMG_HTTP_URL;
 		if (portalContext != null) {
 			if (I18nUtility.getLocalizedFileName(portalContext,
 					SUBMIT_BUTTON_IMG_NAME) != null) {
 				url = I18nUtility.getLocalizedFileURL(portalContext,
 						SUBMIT_BUTTON_IMG_NAME);
 			} else {
-				url = portalContext.getPortalHttpRoot() + "/" + url;
-				// make sure the path includes the portal application context
-				// root
-				String contextPath = portalContext.getPortalRequest()
-						.getContextPath();
-				if (!url.startsWith(contextPath)) {
-					return Utils.slashify(contextPath + "/" + url);
+				HttpServletRequest request = portalContext
+						.getHttpServletRequest();
+				if (request != null) {
+					if ("https".equalsIgnoreCase(request.getScheme())) {
+						url = SUBMIT_BUTTON_IMG_HTTPS_URL;
+					}
 				}
+				// Now return HP.com image URL by default.
+				// url = portalContext.getPortalHttpRoot() + "/" + url;
+				// String contextPath = portalContext.getPortalRequest()
+				// .getContextPath();
+				// if (!url.startsWith(contextPath)) {
+				// return Utils.slashify(contextPath + "/" + url);
+				// }
 			}
 		}
 		return Utils.slashify(url);
 	}
 
+	/**
+	 * A method to generate the tooltip string for the classic locale selector's
+	 * submit button. This string is presumed to exist in the message catalog
+	 * for the current portal component, under the
+	 * <code>localeSelector.submit.alt</code> message key. If the message does
+	 * not exist, then an empty string is returned (ie there is no default
+	 * message).
+	 */
+	private String getSubmitImageAlt() {
+		String alt = "";
+		if (portalContext != null) {
+			alt = I18nUtility
+					.getValue(SUBMIT_BUTTON_IMG_ALT, "", portalContext);
+		}
+		return alt;
+	}
 }
