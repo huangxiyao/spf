@@ -46,7 +46,7 @@ public class ClassicContextualHelpProvider extends
 	/**
 	 * The portal context for this classic contextual help provider.
 	 */
-	private PortalContext portalContext = null;
+	protected PortalContext portalContext = null;
 
 	/**
 	 * <p>
