@@ -58,27 +58,27 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	 * If this image file exists in the current component, it is used for the
 	 * &lt;img&gt; tag.
 	 */
-	private static String SUBMIT_BUTTON_IMG_NAME = "btn_submit.gif";
+	protected static String SUBMIT_BUTTON_IMG_NAME = "btn_submit.gif";
 
 	/**
 	 * The HTTP HP.com URL for the HP.com classic submit-button image. If the
 	 * {@link #SUBMIT_BUTTON_IMG_NAME} image file does not exist in the current
 	 * component, this URL is used instead (when the current request was HTTP).
 	 */
-	private static String SUBMIT_BUTTON_IMG_HTTP_URL = "http://welcome.hp-ww.com/img/hpweb_1-2_arrw_sbmt.gif";
+	protected static String SUBMIT_BUTTON_IMG_HTTP_URL = "http://welcome.hp-ww.com/img/hpweb_1-2_arrw_sbmt.gif";
 
 	/**
 	 * The HTTPS HP.com URL for the HP.com classic submit-button image. If the
 	 * {@link #SUBMIT_BUTTON_IMG_NAME} image file does not exist in the current
 	 * component, this URL is used instead (when the current request was HTTPS).
 	 */
-	private static String SUBMIT_BUTTON_IMG_HTTPS_URL = "https://secure.hp-ww.com/img/hpweb_1-2_arrw_sbmt.gif";
+	protected static String SUBMIT_BUTTON_IMG_HTTPS_URL = "https://secure.hp-ww.com/img/hpweb_1-2_arrw_sbmt.gif";
 
 	/**
 	 * The message key for the tooltip string for the HP.com classic
 	 * submit-button image.
 	 */
-	private static String SUBMIT_BUTTON_IMG_ALT = "localeSelector.submit.alt";
+	protected static String SUBMIT_BUTTON_IMG_ALT = "localeSelector.submit.alt";
 
 	/**
 	 * The default style to apply to the label. Currently null.
@@ -516,7 +516,7 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	 * or {@link #SUBMIT_BUTTON_IMG_HTTPS_URL}, depending on the scheme used in
 	 * the current request.
 	 */
-	private String getSubmitImageURL() {
+	protected String getSubmitImageURL() {
 		String url = SUBMIT_BUTTON_IMG_HTTP_URL;
 		if (portalContext != null) {
 			if (I18nUtility.getLocalizedFileName(portalContext,
@@ -551,7 +551,7 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	 * not exist, then an empty string is returned (ie there is no default
 	 * message).
 	 */
-	private String getSubmitImageAlt() {
+	protected String getSubmitImageAlt() {
 		String alt = "";
 		if (portalContext != null) {
 			alt = I18nUtility
