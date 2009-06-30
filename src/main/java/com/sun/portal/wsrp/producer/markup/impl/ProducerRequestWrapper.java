@@ -154,8 +154,7 @@ public class ProducerRequestWrapper extends HttpServletRequestWrapper {
                         try {
                             headers.addHeader( attribute.getName(), new String(attribute.getValue().getBytes(_request.getCharacterEncoding()), "iso-8859-1") );
                         } catch (UnsupportedEncodingException ex) {
-                            // TODO Auto-generated catch block
-                            ex.printStackTrace();
+                            // it should never happen
                         }
                     }
                 }
