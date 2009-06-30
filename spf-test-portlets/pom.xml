@@ -6,6 +6,7 @@
 	<packaging>war</packaging>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>SPF Test Portlets</name>
+	<description>SPF Test Portlets</description>
     <parent>
     	<artifactId>spf-pom</artifactId>
     	<groupId>com.hp.it.spf.tools</groupId>
