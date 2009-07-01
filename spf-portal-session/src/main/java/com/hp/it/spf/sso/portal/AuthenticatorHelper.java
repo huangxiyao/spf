@@ -641,14 +641,14 @@ public class AuthenticatorHelper {
             if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                 LOG.debug("Session Attribute:" + next);
             }
-            if (next.indexOf(AuthenticationConsts.PARAMETER_PREFIX) >= 0) {
+            //if (next.indexOf(AuthenticationConsts.PARAMETER_PREFIX) >= 0) {
                 if (next.indexOf(AuthenticationConsts.RETAINED_PARAMETER_PREFIX) < 0) {
                     session.removeAttribute(next);
                     if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                         LOG.debug("Removed Session Attribute:" + next);
                     }
                 }
-            }
+            //}
         }
         
         // reset vignette session info to the guest user state
