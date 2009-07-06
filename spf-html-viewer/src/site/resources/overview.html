@@ -279,6 +279,16 @@ the OpenPortal portlet container, so this means deploying it into the
 application server where OpenPortal is running. The deployment
 procedures are the same as for any other JSR-168 portlet application.</p>
 
+<blockquote>
+<p>Note:</p>
+When you download the WAR from the repository, it may be named
+<code>spf-html-viewer-<i>&lt;version&gt;</i>.war</code>.
+However the WebLogic context root for the application is <code>htmlviewer</code>.
+Some versions of OpenPortal will not support WAR files named differently
+than the context root, or WAR filenames including hyphen characters. In
+such cases, you should rename the WAR file manually to <code>htmlviewer.war</code>
+before deploying it.</blockquote>
+
 <a name="overview.installation.i18n_portlet_config">
 <h4>1.1.2 Installation of <code>i18n_portlet_config.properties</code>
 (optional)</h4>
@@ -503,8 +513,8 @@ server should be using Java 1.5 minimum.</p>
 <h2>2. Using the <code>htmlviewer</code> portlet</h2>
 </a>
 
-<p>This chapter tells you how to use the HTML viewer
-portlet to render your content.</p>
+<p>This chapter tells you how to use the HTML viewer portlet to
+render your content.</p>
 
 <hr>
 
