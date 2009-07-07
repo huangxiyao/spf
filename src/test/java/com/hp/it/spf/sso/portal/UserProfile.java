@@ -22,7 +22,7 @@ public class UserProfile {
     
     // init userProfile map
     static {
-        userProfile.put(AuthenticationConsts.KEY_PROFILE_ID, "6cb23f1203fc672c1a31fd2649920524");
+        userProfile.put(AuthenticationConsts.KEY_PROFILE_ID, "aca249720c9b91b4d0c0d26c1c751f21");
         userProfile.put(AuthenticationConsts.KEY_USER_NAME, "vignetteAdmin");
         userProfile.put(AuthenticationConsts.KEY_EMAIL, "SP-VIGNETTE-ADMIN@groups.hp.com");
         userProfile.put(AuthenticationConsts.KEY_FIRST_NAME, "Vignette");
