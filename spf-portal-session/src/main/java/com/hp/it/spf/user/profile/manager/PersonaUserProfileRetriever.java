@@ -66,7 +66,7 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
             Map<String, Collection<ICompoundUserAttributeValue>> compound = user.getCompoundAttributeValues();
 			convertCompoundValues(userProfiles, compound);
 		} catch (Exception ex) {
-            throw new UserProfileException("Retrieve user profile from Persona error.", ex);
+            throw new UserProfileException("Retrieve user profile from Persona error." + ex.getMessage(), ex);
         }
         return userProfiles;
     }
