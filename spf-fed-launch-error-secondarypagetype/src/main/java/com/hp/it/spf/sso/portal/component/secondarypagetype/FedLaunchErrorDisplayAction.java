@@ -83,8 +83,7 @@ public class FedLaunchErrorDisplayAction extends BaseAction {
 			return null;
 		} catch (Exception ex) {
 			// redirect to system error page if anything unusual happens
-			LOG.error("FedLaunchErrorDisplayAction error: " + ex);
-			LogHelper.logStackTrace(this, ex);
+			LOG.error("FedLaunchErrorDisplayAction error: " + ex, ex);
 			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
 					null, null);
 		}
