@@ -77,7 +77,7 @@ public class ReturnDisplayAction extends BaseAction {
 			// redirect user to the return URL
 			context.getPortalResponse().getResponse().sendRedirect(url);
 		} catch (Exception e) {
-			LOG.error("ReturnDisplayAction error: " + e);
+			LOG.error("ReturnDisplayAction error: " + e, e);
 			return ExceptionUtil.redirectSystemErrorPage(context, null);
 		}
 		return null;
