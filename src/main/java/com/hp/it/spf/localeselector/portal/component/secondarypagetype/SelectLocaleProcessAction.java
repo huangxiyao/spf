@@ -6,6 +6,7 @@ package com.hp.it.spf.localeselector.portal.component.secondarypagetype;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -114,17 +115,26 @@ public class SelectLocaleProcessAction extends BaseAction {
 									+ I18nUtility.localeToHPPLanguage(plocale));
 					try {
 						updateLocaleInHPP(portalContext, request, plocale);
-					} catch (PassportServiceException e) {
-						Object obj = e.getFaults().get(0);
-						if (obj instanceof Fault) {
-							LOG
-									.error("SelectLocaleProcessAction: update user's locale into HPP failed. The failure has been ignored. More detail: "
-											+ ((Fault) obj).getDescription());
-						} else {
+					} catch (PassportServiceException pse) {
+						boolean gotFaults = false;
+						List faults = pse.getFaults();
+						if ((faults != null) && (faults.size() > 0)) {
+							for (int i = 0; i < faults.size(); i++) {
+								Object obj = faults.get(i);
+								if (obj instanceof Fault) {
+									LOG
+											.error("SelectLocaleProcessAction: update user's locale into HPP failed. The failure has been ignored. More detail: "
+													+ ((Fault) obj)
+															.getDescription());
+									gotFaults = true;
+								}
+							}
+						}
+						if (!gotFaults) {
 							LOG
 									.error(
 											"SelectLocaleProcessAction: update user's locale into HPP failed. The failure has been ignored.",
-											e);
+											pse);
 						}
 						sFlag = false;
 					} catch (Exception e) {
@@ -132,6 +142,7 @@ public class SelectLocaleProcessAction extends BaseAction {
 								.error(
 										"SelectLocaleProcessAction: update user's locale into HPP failed. The failure has been ignored.",
 										e);
+						sFlag = false;
 					}
 				} else {
 					LOG
@@ -152,8 +163,7 @@ public class SelectLocaleProcessAction extends BaseAction {
 			return null;
 		} catch (Exception ex) {
 			// redirect to system error page if anything unusual happens
-			LOG.error("SetLocaleProcessAction error: " + ex);
-			LogHelper.logStackTrace(this, ex);
+			LOG.error("SetLocaleProcessAction error: " + ex, ex);
 			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
 					null, null);
 		}
