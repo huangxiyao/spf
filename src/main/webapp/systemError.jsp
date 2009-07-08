@@ -48,8 +48,9 @@ files in this component. --%>
 		// Get display message from resource bundle.
 
 		errorMessage = I18nUtility.getValue(i18nID, 
+			"default_error_message",
 			"The service or information you requested is not available at this time. Please try again later.",
-			null, portalContext);
+			portalContext);
 	}
 %>
 
@@ -68,8 +69,9 @@ files in this component. --%>
 		// Get display message from resource bundle.
 
 		errorTitle = I18nUtility.getValue(i18nID, 
+			"default_error_title",
 			"Could not open page",
-			null, portalContext);
+			portalContext);
 	}
 %>
 
@@ -94,8 +96,9 @@ files in this component. --%>
 	String errorCodeMessage = "";
     if (errorCode != null && errorCode.length() != 0) {
 		errorCodeMessage = I18nUtility.getValue(i18nID,
+			"error_code_message_format",
 			"(Error: {0})",
-			null, portalContext);
+			portalContext);
 		errorCodeMessage =
 			MessageFormat.format(errorCodeMessage, new String[] {errorCode});
 	}
