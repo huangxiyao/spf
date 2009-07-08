@@ -67,8 +67,7 @@ public class FedLogoutConfirmationDisplayAction extends BaseAction {
 			return null;
 		} catch (Exception ex) {
 			// redirect to system error page if anything unusual happens
-			LOG.error("FedLogoutConfirmationDisplayAction error: " + ex);
-			LogHelper.logStackTrace(this, ex);
+			LOG.error("FedLogoutConfirmationDisplayAction error: " + ex, ex);
 			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
 					null, null);
 		}
