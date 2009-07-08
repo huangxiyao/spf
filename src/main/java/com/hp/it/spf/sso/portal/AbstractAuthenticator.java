@@ -157,14 +157,16 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 // keep the current HTTP header user profile
                 Map httpHeaderUserProfile = userProfile;
 
-                // fetch userProfile from session
+                // fetch userProfile from session, only need to refresh this user profile map
                 userProfile = (Map)request.getSession()
                                           .getAttribute(AuthenticationConsts.USER_PROFILE_KEY);
                 // get groups from userProfile
                 List<String> sessionGroups = (List<String>)userProfile.get(AuthenticationConsts.KEY_USER_GROUPS);
-                refreshLocaleRelatedAttributes(sessionGroups,
-                                               httpHeaderUserProfile);
+                refreshLocaleRelatedGroups(sessionGroups);
 
+                // refresh user timezone
+                refreshUserTimezone(userProfile, httpHeaderUserProfile);
+                
                 userName = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
                 return;
             }
@@ -194,15 +196,13 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     }
 
     /**
-     * This method is used to update user's locale groups and timezone which is
-     * determined by locale if locale in response has been changed. It will get
+     * This method is used to update user's locale groups. It will get
      * country and langauge from session and find out if they are different with
      * the one from locale resolver if different, update the groups in vignette
      * and save back to session
      */
     @SuppressWarnings("unchecked")
-    protected void refreshLocaleRelatedAttributes(List<String> sessionGroups,
-                                                  Map httpHeaderUserProfile) {
+    protected void refreshLocaleRelatedGroups(List<String> sessionGroups) {
         Set<String> inputGroups = new HashSet<String>();
         String language = "";
         String country = "";
@@ -236,28 +236,6 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 User currentUser = SessionUtils.getCurrentUser(request.getSession());
                 updateVAPUserGroups(currentUser);
                 saveUserProfile2Session(currentUser);
-
-                // refresh User timezone
-                String timezone = (String)httpHeaderUserProfile.get(getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
-                boolean needRefreshTZ = false;
-                if (timezone == null || "".equals(timezone.trim())) {
-                    // refresh User timezone according to the resolved locale
-                    timezone = AuthenticatorHelper.getUserTimeZoneByLocale(reqLocale);
-                    needRefreshTZ = true;
-                } else if (!timezone.equals(userProfile.get(AuthenticationConsts.KEY_TIMEZONE))) {
-                    // header timezone now is set, but previous round it was not
-                    // set and locale based timezone was retrieved
-                    // meanwhile, the timezone header in the user profile map
-                    // also need to be updated.
-                    userProfile.put(getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME),
-                                    getValue(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
-                    needRefreshTZ = true;
-                }
-                if (needRefreshTZ) {
-                    userProfile.put(AuthenticationConsts.KEY_TIMEZONE, timezone);
-                    AuthenticatorHelper.updateVAPUserTimeZone(currentUser,
-                                                              timezone);
-                }
             } catch (EntityPersistenceException ex) {
                 LOG.error("Invoke Authenticator.execute error: updateVAPUserGroups error: "
                                   + ex.getMessage(),
@@ -266,6 +244,50 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         }
     }
 
+    /**
+     * Refresh user timezone in the session if timezone is changed or timezone's offset is changed.
+     * 
+     * @param sessionUserProfile user profile saved in session
+     * @param headerUserProfile user profile constructed by the http header
+     */
+    @SuppressWarnings("unchecked")
+    protected void refreshUserTimezone(Map sessionUserProfile, Map headerUserProfile) {
+        String headerTimezone = (String)headerUserProfile.get(AuthenticationConsts.KEY_TIMEZONE);
+        String sessionTimezone = (String)sessionUserProfile.get(AuthenticationConsts.KEY_TIMEZONE);
+        
+        User currentUser = SessionUtils.getCurrentUser(request.getSession());
+        boolean needRefreshTZ = false;
+        if (headerTimezone.equals(sessionTimezone)) {
+            // due to thread reason, when this method is being invoked, there will be a thread
+            // already modified the vignette datebase, but the value in this end user's session 
+            // is not refreshed, so the timezone should be checked between session and database again.
+            String vgnTimezone = (String)currentUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID);
+            if (headerTimezone.equals(vgnTimezone)) {
+                // if timezone is same, then check their offset is same or not
+                Integer tzVap = new Integer("0");
+                if (currentUser.getProperty(AuthenticationConsts.PROPERTY_TIMEZONE_ID) != null) {
+                    tzVap = (Integer)currentUser.getProperty(AuthenticationConsts.PROPERTY_TIMEZONE_ID);
+                }
+                if (!AuthenticatorHelper.getTimeZoneOffset(headerTimezone).equals(tzVap)) {
+                    needRefreshTZ = true;
+                }
+            } else {
+                needRefreshTZ = true;
+            }
+        } else {
+            needRefreshTZ = true;
+        }
+        // refresh timezone in the session
+        if (needRefreshTZ) {
+            // the timezone http header in the user profile map also need to be updated.
+            userProfile.put(getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME),
+                            getValue(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
+            userProfile.put(AuthenticationConsts.KEY_TIMEZONE, headerTimezone);            
+            AuthenticatorHelper.updateVAPUserTimeZone(currentUser,
+                                                      headerTimezone);
+        }
+    }
+    
     /**
      * Retrieve user profile attributes from http header, and put them into
      * userProfile map
@@ -540,45 +562,42 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     }
 
     /**
-     * Check if the lastChangeDate indicates the User profile is updated
+     * Check if the lastChangeDate indicates the User profile is updated.
+     * <p>
+     * The lastChangeDate retrieved from http request header should always be compared with
+     * the same value in User Profile map saved in the http session.
+     * </p>
+     * <p>
+     * Compare with the value in Vignette user object is not correct. Since some of the threads
+     * may update the vignette database first. then the lastChangeDate in the db is modified.
+     * Thus, this method will return false, which will cause user doesn't be updated in the session.
+     * </p>
      * 
      * @return <code>true</code> if lastChangeDate shows the user profile is
      *         changed. Otherwise, <code>false</code>
      */
     protected boolean isUserRecentUpdated() {
-        // Retrieve timeZone, lastChangeDate from userProfile map
-        String timeZone = (String)userProfile.get(AuthenticationConsts.KEY_TIMEZONE);
         Date lastChangeDate = (Date)userProfile.get(AuthenticationConsts.KEY_LAST_CHANGE_DATE);
 
-        // Retrieve current user from session
-        User currUser = SessionUtils.getCurrentUser(request.getSession());
+        // Retrieve current user profile from session  
+        @SuppressWarnings("unchecked")
+        Map sessionUserProfile = (Map)request.getSession().getAttribute(AuthenticationConsts.USER_PROFILE_KEY);
 
-        Date lastChangeDateVap = null;
-        Integer tzVap = null;
+        Date lastChangeDateInSession = null;
         // Retrieve user's current timezone offset and last change date
-        if (currUser != null) {
-            if (currUser.getProperty(AuthenticationConsts.PROPERTY_LAST_CHANGE_DATE_ID) != null) {
-                lastChangeDateVap = ((Date)currUser.getProperty(AuthenticationConsts.PROPERTY_LAST_CHANGE_DATE_ID));
-            }
-            if (currUser.getProperty(AuthenticationConsts.PROPERTY_TIMEZONE_ID) != null) {
-                tzVap = (Integer)currUser.getProperty(AuthenticationConsts.PROPERTY_TIMEZONE_ID);
-            }
+        if (sessionUserProfile != null) {
+            if (sessionUserProfile.get(AuthenticationConsts.KEY_LAST_CHANGE_DATE) != null) {
+                lastChangeDateInSession = ((Date)sessionUserProfile.get(AuthenticationConsts.KEY_LAST_CHANGE_DATE));
+            }            
         }
-        // Retrieve timezone offset from request header
-        Integer tzOffSet = new Integer("0");
-        if (timeZone == null) {
-            tzOffSet = tzVap;
-        } else {
-            tzOffSet = AuthenticatorHelper.getTimeZoneOffset(timeZone);
-        }
+
         // Judge
-        if (lastChangeDate == null || timeZone == null) {
+        if (lastChangeDate == null) {
             return false;
-        } else if (lastChangeDateVap == null || tzVap == null) {
+        } else if (lastChangeDateInSession == null) {
             return true;
         } else {
-            return lastChangeDate.after(lastChangeDateVap)
-                   || !tzVap.equals(tzOffSet);
+            return lastChangeDate.after(lastChangeDateInSession);
         }
     }
 
