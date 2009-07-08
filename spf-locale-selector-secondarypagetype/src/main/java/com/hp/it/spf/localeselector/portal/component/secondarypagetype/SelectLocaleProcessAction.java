@@ -109,21 +109,29 @@ public class SelectLocaleProcessAction extends BaseAction {
 
 				// set locale into HPP
 				if (isAuthenticatedByHPP(request)) {
+					LOG
+							.info("SelectLocaleProcessAction: updating user's locale into HPP. HPP language code: "
+									+ I18nUtility.localeToHPPLanguage(plocale));
 					try {
-						LOG
-								.info("SelectLocaleProcessAction: updating user's locale into HPP. HPP language code: "
-										+ I18nUtility
-												.localeToHPPLanguage(plocale));
 						updateLocaleInHPP(portalContext, request, plocale);
 					} catch (PassportServiceException e) {
 						Object obj = e.getFaults().get(0);
 						if (obj instanceof Fault) {
 							LOG
-									.error("SelectLocaleProcessAction: update user's locale into HPP failed."
-											+ " More detail: "
+									.error("SelectLocaleProcessAction: update user's locale into HPP failed. The failure has been ignored. More detail: "
 											+ ((Fault) obj).getDescription());
+						} else {
+							LOG
+									.error(
+											"SelectLocaleProcessAction: update user's locale into HPP failed. The failure has been ignored.",
+											e);
 						}
 						sFlag = false;
+					} catch (Exception e) {
+						LOG
+								.error(
+										"SelectLocaleProcessAction: update user's locale into HPP failed. The failure has been ignored.",
+										e);
 					}
 				} else {
 					LOG
@@ -171,8 +179,8 @@ public class SelectLocaleProcessAction extends BaseAction {
 	 * Check if the user is authenticated against HPP.
 	 */
 	private boolean isAuthenticatedByHPP(HttpServletRequest request) {
-		
-		 return AuthenticationUtility.loggedIntoHPP(request)
+
+		return AuthenticationUtility.loggedIntoHPP(request)
 				|| AuthenticationUtility.loggedIntoFed(request);
 	}
 
