@@ -86,8 +86,7 @@ public class SelectLocaleRedirectProcessAction extends BaseAction {
 			return null;
 		} catch (Exception ex) {
 			// redirect to system error page if anything unusual happens
-			LOG.error("SelectLocaleRedirectProcessAction error: " + ex);
-			LogHelper.logStackTrace(this, ex);
+			LOG.error("SelectLocaleRedirectProcessAction error: " + ex, ex);
 			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
 					null, null);
 		}
