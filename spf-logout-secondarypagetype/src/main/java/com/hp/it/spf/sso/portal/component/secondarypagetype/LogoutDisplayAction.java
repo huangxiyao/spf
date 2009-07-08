@@ -129,8 +129,7 @@ public class LogoutDisplayAction extends BaseAction {
 			return null;
 		} catch (Exception ex) {
 			// redirect to system error page if anything unusual happens
-			LOG.error("LogoutDisplayAction error: " + ex);
-			LogHelper.logStackTrace(this, ex);
+			LOG.error("LogoutDisplayAction error: " + ex, ex);
 			return ExceptionUtil.redirectSystemErrorPage(portalContext, null,
 					null, null);
 		}
