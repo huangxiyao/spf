@@ -197,7 +197,7 @@
                 description="A user's alias."
                 type="java.lang.String"
                 field-length="64"
-                editable="false"
+                editable="true"
                 searchable="true"
                 displayable="true"
                 required="true"
