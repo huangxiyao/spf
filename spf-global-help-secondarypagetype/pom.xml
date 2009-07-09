@@ -4,7 +4,7 @@
 	<artifactId>spf-global-help-secondarypagetype</artifactId>
 	<packaging>car</packaging>
 	<name>SPF global help secondary page type</name>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4</version>
 	<description>
 		Classes and other artifacts for the Shared Portal Framework
 		global help secondary page type. This Vignette component
@@ -22,9 +22,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-global-help-secondarypagetype</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-global-help-secondarypagetype-1.0.3</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-global-help-secondarypagetype-1.0.3</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/spf-global-help-secondarypagetype-1.0.3</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-global-help-secondarypagetype-1.0.4</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-global-help-secondarypagetype-1.0.4</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/tags/spf-global-help-secondarypagetype-1.0.4</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
