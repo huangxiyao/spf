@@ -3,7 +3,7 @@
     <groupId>com.hp.it.spf.tools</groupId>
     <artifactId>spf-portal-tools</artifactId>
     <name>SPF portal tools</name>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <description>Tools for administrating SPF portal and/or portlet resources. Includes the
         localization helper scripts for SPF, and more.
     </description>
