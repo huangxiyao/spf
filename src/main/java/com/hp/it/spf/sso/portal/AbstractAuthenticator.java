@@ -252,6 +252,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      */
     @SuppressWarnings("unchecked")
     protected void refreshUserTimezone(Map sessionUserProfile, Map headerUserProfile) {
+        // User timezone in the user profile map should always have a valid value, therefor, don't need
+        // to check the value is null or blank
         String headerTimezone = (String)headerUserProfile.get(AuthenticationConsts.KEY_TIMEZONE);
         String sessionTimezone = (String)sessionUserProfile.get(AuthenticationConsts.KEY_TIMEZONE);
         
