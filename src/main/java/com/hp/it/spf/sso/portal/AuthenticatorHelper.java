@@ -960,10 +960,12 @@ public class AuthenticatorHelper {
                                                                   ssousername);
         if (vapUser != null) {
             String timezone = (String)vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID);
-            return timezone;
+            if (timezone!=null && timezone.trim().length()>0) {
+                return timezone;
+            }
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("User" + ssousername + "not found.");
+            LOG.debug("User" + ssousername + "not found or its timezone is null/blank.");
         }
         
         // search sso_guest_user_<language_from_locale> user
@@ -972,10 +974,12 @@ public class AuthenticatorHelper {
                                                              ssousername);        
         if (vapUser != null) {
             String timezone = (String)vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID);
-            return timezone;
+            if (timezone!=null && timezone.trim().length()>0) {
+                return timezone;
+            }
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("User" + ssousername + "not found.");
+            LOG.debug("User" + ssousername + "not found or its timezone is null/blank.");
         }
         
         // for default user
@@ -985,10 +989,12 @@ public class AuthenticatorHelper {
                                                              ssousername);
         if (vapUser != null) {
             String timezone = (String)vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID);
-            return timezone;
+            if (timezone!=null && timezone.trim().length()>0) {
+                return timezone;
+            }
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("User" + ssousername + "not found.");
+            LOG.debug("User" + ssousername + "not found or its timezone is null/blank.");
         }
 
         return AuthenticationConsts.DEFAULT_TIMEZONE;        
