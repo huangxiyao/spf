@@ -4,7 +4,7 @@
 	<artifactId>spf-global-help-secondarypagetype</artifactId>
 	<packaging>car</packaging>
 	<name>SPF global help secondary page type</name>
-	<version>1.0.3</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<description>
 		Classes and other artifacts for the Shared Portal Framework
 		global help secondary page type. This Vignette component
