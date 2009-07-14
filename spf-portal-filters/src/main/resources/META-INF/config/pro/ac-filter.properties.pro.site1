@@ -104,7 +104,7 @@ hppSp4tsLpdn.otherSiteHostnames=h20566.www2.hp.com
 #   particular pool ID. There is no default (ie, by default, query string will
 #   not be supported for staff users).
 #
-#REPLACE.privilegedClientQueryKey=REPLACE-IF-WANTED-ELSE-DELETE-LINE
+*.privilegedClientQueryKey=spf.passkey
 #
 # [id.]siteClosingGracePeriod
 #   The number of seconds to wait between the stopping of the open-sign
