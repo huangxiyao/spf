@@ -113,7 +113,7 @@ hppSp4tsLpdn.otherSiteHostnames=h20566.www2.hp.com
 #   is zero.  You should set this to your GSLB or SLB healthcheck interval
 #   (generally there is no reason to set it longer than that).
 #
-*.siteClosingGracePeriod=40
+*.siteClosingGracePeriod=60
 #
 # [id.]siteClosedGracePeriod
 #   The number of seconds to wait between entry into the "closing" state, and
