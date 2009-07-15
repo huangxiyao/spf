@@ -104,10 +104,10 @@ athpCanonical.otherSiteHostnames=spp-itg-site2-athp.austin.hp.com
 #   The number of seconds to wait between the stopping of the open-sign
 #   application and the entry of the site into the "closing" state, when in the
 #   particular pool ID. Until then, it is still considered "open". The default
-#   is zero.  You should set this to your GSLB or SLB healthcheck interval
+#   is zero.  You should set this to your combined load-balancer delay
 #   (generally there is no reason to set it longer than that).
 #
-*.siteClosingGracePeriod=60
+*.siteClosingGracePeriod=75
 #
 # [id.]siteClosedGracePeriod
 #   The number of seconds to wait between entry into the "closing" state, and
