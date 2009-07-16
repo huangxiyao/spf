@@ -123,6 +123,10 @@
 					<artifactId>cas-persona</artifactId>
 					<groupId>com.hp.it.cas.persona</groupId>
 				</exclusion>
+				<exclusion>
+					<artifactId>wsdl4j</artifactId>
+					<groupId>wsdl4j</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -202,11 +206,6 @@
 			<version>1.2.14</version>
 		</dependency>
 		<dependency>
-			<groupId>wsdl4j</groupId>
-			<artifactId>wsdl4j</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.1.1</version>
@@ -224,8 +223,7 @@
 						WEB-INF/lib/spring.jar,
 						WEB-INF/lib/commons-lang.jar,
 						WEB-INF/lib/commons-logging.jar,
-						WEB-INF/lib/log4j.jar,
-						WEB-INF/lib/wsdl4j.jar
+						WEB-INF/lib/log4j.jar
 	       			 </dependentWarExcludes>
 				</configuration>
 			</plugin>
