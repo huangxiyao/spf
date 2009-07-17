@@ -282,9 +282,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         // refresh timezone in the session
         if (needRefreshTZ) {
             // the timezone http header in the user profile map also need to be updated.
-            userProfile.put(getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME),
-                            getValue(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME));
-            userProfile.put(AuthenticationConsts.KEY_TIMEZONE, headerTimezone);            
+            sessionUserProfile.put(getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME),
+                                   headerUserProfile.get(getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME)));
+            sessionUserProfile.put(AuthenticationConsts.KEY_TIMEZONE, headerTimezone);            
             AuthenticatorHelper.updateVAPUserTimeZone(currentUser,
                                                       headerTimezone);
         }
