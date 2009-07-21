@@ -933,10 +933,9 @@ into your portlet WAR where they traditionally go:</p>
 	you use Spring's {@link
 	org.springframework.context.support.ReloadableResourceBundleMessageSource}
 	class, you would put this into your application context configuration
-	(eg either your application-wide <code>applicationContext.xml</code> or
-	your portlet-specific version of that file) for a bundle of message
-	properties with basename of <code>messages</code> (eg <code>messages.properties</code>,
-	<code>messages_fr_FR.properties</code>, etc):</p>
+	for a bundle of message properties with basename of <code>messages</code>
+	(eg <code>messages.properties</code>, <code>messages_fr_FR.properties</code>,
+	etc):</p>
 
 	<blockquote><pre>
 	&lt;bean id="messageSource"
@@ -951,6 +950,16 @@ into your portlet WAR where they traditionally go:</p>
 		&lt;/property&gt;
 	&lt;/bean&gt;
 	</pre></blockquote>
+
+	<blockquote>
+	<p><b>Note:</b> Whatever your message source configuration, be sure
+	to put it into the root application context file for your portlet
+	application. Do not put it into an application context file you have
+	defined specifically for a portlet. Doing so will work with the Spring
+	standard message API's and tags, but not with the SPF ones. Putting
+	your message source configuration into the root application context
+	file will work with both the Spring-standard and SPF API's and tags.</p>
+	</blockquote>
 	</li>
 
 	<li>
@@ -1062,6 +1071,16 @@ filesystem to which the portlet JVM has at least read access.</p>
 		&lt;/property&gt;
 	&lt;/bean&gt;
 	</pre></blockquote>
+
+	<blockquote>
+	<p><b>Note:</b> Whatever your message source configuration, be sure
+	to put it into the root application context file for your portlet
+	application. Do not put it into an application context file you have
+	defined specifically for a portlet. Doing so will work with the Spring
+	standard message API's and tags, but not with the SPF ones. Putting
+	your message source configuration into the root application context
+	file will work with both the Spring-standard and SPF API's and tags.</p>
+	</blockquote>
 	</li>
 
 	<li>
@@ -5081,10 +5100,11 @@ configure the filter, in your <code>portlet.xml</code>:</p>
 &lt;/filter-mapping&gt;
 </pre></blockquote>
 
-<p>The <code>MapAttributeFilter</code> is part of the <code>spf-portlet-filters</code> artifact
-(Maven group ID <code>com.hp.it.spf.sso</code> and available at the same repository as the SPF portlet
-utilities).  Your portlet application must include <code>spf-portlet-filters</code> in order to load
-and run the <code>MapAttributeFilter</code>.</p>
+<p>The <code>MapAttributeFilter</code> is part of the <code>spf-portlet-filters</code>
+artifact (Maven group ID <code>com.hp.it.spf.sso</code> and available at
+the same repository as the SPF portlet utilities). Your portlet
+application must include <code>spf-portlet-filters</code> in order to
+load and run the <code>MapAttributeFilter</code>.</p>
 </blockquote>
 
 <blockquote>
@@ -6945,7 +6965,9 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		<td>2.2</td>
 		<td>Jul 21 2009</td>
 		<td>S. Jorgenson</td>
-		<td>Added dependency info about <code>spf-portlet-filters</code>.</td>
+		<td>Added dependency info about <code>spf-portlet-filters</code>.  Added note about
+		configuring message sources in root application context for the portlet application, 
+		not application context for the portlet.</td>
 	</tr>
 
 </table>
