@@ -5080,6 +5080,11 @@ configure the filter, in your <code>portlet.xml</code>:</p>
     &lt;portlet-name&gt;*&lt;/portlet-name&gt; 
 &lt;/filter-mapping&gt;
 </pre></blockquote>
+
+<p>The <code>MapAttributeFilter</code> is part of the <code>spf-portlet-filters</code> artifact
+(Maven group ID <code>com.hp.it.spf.xa</code> and available at the same repository as the SPF portlet
+utilities).  Your portlet application must include <code>spf-portlet-filters</code> in order to load
+and run the <code>MapAttributeFilter</code>.</p>
 </blockquote>
 
 <blockquote>
@@ -6935,6 +6940,12 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		<td>Jun 11 2009</td>
 		<td>S. Jorgenson</td>
 		<td>Fixed broken link.</td>
+	</tr>
+	<tr>
+		<td>2.2</td>
+		<td>Jul 21 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Added dependency info about <code>spf-portlet-filters</code>.</td>
 	</tr>
 
 </table>
