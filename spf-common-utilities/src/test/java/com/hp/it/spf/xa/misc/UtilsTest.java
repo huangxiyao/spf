@@ -24,13 +24,13 @@ public class UtilsTest extends TestCase {
     	url = Utils.getPortalSiteURL("/portal/site/abc/template.PAGE", null, null, 0, null);
     	System.out.println("testGetPortalSiteURL.3 got: " + url);
     	assertEquals("/portal/site/abc/template.PAGE", url);
-    	url = Utils.getPortalSiteURL("/portal/site/abc/template.PAGE", t, "host", 8002, null);
+    	url = Utils.getPortalSiteURL("/portal/site/abc/template.PAGE?a=b", t, "host", 8002, null);
     	System.out.println("testGetPortalSiteURL.4 got: " + url);
-    	assertEquals("/portal/site/abc/template.PAGE", url);
+    	assertEquals("/portal/site/abc/template.PAGE?a=b", url);
     	url = Utils.getPortalSiteURL("/portal/site/abc/template.PAGE", null, null, 0, "");
     	System.out.println("testGetPortalSiteURL.5 got: " + url);
     	assertEquals("/portal/site/abc/template.PAGE", url);
-    	url = Utils.getPortalSiteURL("/portal/site/abc/template.PAGE", t, "host", 8002, "foo");
+    	url = Utils.getPortalSiteURL("/portal/site/abc/template.PAGE?a=b", t, "host", 8002, "foo");
     	System.out.println("testGetPortalSiteURL.6 got: " + url);
     	assertEquals("/portal/site/foo/", url);
     	url = Utils.getPortalSiteURL("/portal/site/abc/template.PAGE", t, "host", 0, "foo/template.ANOTHER_PAGE/?a=b");
