@@ -242,7 +242,7 @@ public class Utils {
 	 * <li> when the given URI is <code>xyz</code>, the returned URL is
 	 * <code>/portal/site/xyz/</code></li>
 	 * <li> when the given URI is <code>xyz/template.ABC</code>, the returned
-	 * URL is <code>http://host.hp.com/portal/site/xyz/template.ABC</code></li>
+	 * URL is <code>/portal/site/xyz/template.ABC</code></li>
 	 * </ul>
 	 * <p>
 	 * As another example, say that the given portal URL is
