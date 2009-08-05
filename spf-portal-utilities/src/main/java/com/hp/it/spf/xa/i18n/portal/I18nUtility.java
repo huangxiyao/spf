@@ -11,6 +11,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -163,6 +164,31 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * Vignette, is ignored.)
 	 * </p>
 	 * <p>
+	 * The boolean parameter controls whether the default and additional locales
+	 * are expanded or not into the returned collection. Expansion means
+	 * automatically generating a simple language-only locale for the language
+	 * of each full language-country locale in the collection. For example, if
+	 * the default locale is Chinese - China (<code>zh-CN</code>) and
+	 * Chinese - Taiwan (<code>zh-TW</code>) and Japanese - Japan (<code>ja-JP</code>)
+	 * are additional locales, the expanded locale collection would be:
+	 * </p>
+	 * <ul>
+	 * <li>Chinese - China (<code>zh-CN</code>)</li>
+	 * <li>Chinese - Taiwan (<code>zh-TW</code>)</li>
+	 * <li>Japanese - Japan (<code>ja-JP</code>)</li>
+	 * <li>Chinese (<code>zh</code>)</li>
+	 * <li>Japanese (<code>ja</code>)</li>
+	 * </ul>
+	 * <p>
+	 * The unexpanded collection would be just the exact default and additional
+	 * locales - ie the first 3 locales listed above. (Note that the method
+	 * masks expanded locales against the whole set of locales registered in the
+	 * Vignette server, too. Any simple locale yielded by expansion which is not
+	 * registered with Vignette is ignored. In the above example, if Japanese
+	 * were not registered with Vignette, then Japanese (<code>ja</code>)
+	 * would be absent from the expanded collection.)
+	 * </p>
+	 * <p>
 	 * There should always be at least one locale enabled (ie the default locale
 	 * for the site, which in turn defaults to the platform default locale) and
 	 * thus present in the return from this method. An empty collection is
@@ -171,17 +197,39 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * 
 	 * @param request
 	 *            The portal request.
+	 * @param expandLocales
+	 *            Whether or not to expand each full locale into an additional
+	 *            simple locale for that language. Expansion into a simple
+	 *            locale is only done if that simple locale is supported in the
+	 *            portal registered locales.
 	 * @return The locales enabled for the portal site indicated in the request.
+	 *         This list may or may not be expanded per the boolean parameter.
 	 */
-	public static Collection getAvailableLocales(HttpServletRequest request) {
+	public static Collection getAvailableLocales(HttpServletRequest request,
+			boolean expandLocales) {
 		Collection availableLocales = new HashSet();
 		if (request != null) {
 			Site currentSite = Utils.getEffectiveSite(request);
 			if (currentSite != null) {
-				availableLocales = getAvailableLocales(currentSite);
+				availableLocales = getAvailableLocales(currentSite,
+						expandLocales);
 			}
 		}
 		return availableLocales;
+	}
+
+	/**
+	 * Similar to the companion
+	 * {@link #getAvailableLocales(HttpServletRequest, boolean)} method, where
+	 * the locale list is not expanded.
+	 * 
+	 * @param request
+	 *            The portal request
+	 * @return The locales enabled for the portal site indicated in the request.
+	 *         These locales are <b>not</b> expanded.
+	 */
+	public static Collection getAvailableLocales(HttpServletRequest request) {
+		return getAvailableLocales(request, false);
 	}
 
 	/**
@@ -200,6 +248,31 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * Vignette, is ignored.)
 	 * </p>
 	 * <p>
+	 * The boolean parameter controls whether the default and additional locales
+	 * are expanded or not into the returned collection. Expansion means
+	 * automatically generating a simple language-only locale for the language
+	 * of each full language-country locale in the collection. For example, if
+	 * the default locale is Chinese - China (<code>zh-CN</code>) and
+	 * Chinese - Taiwan (<code>zh-TW</code>) and Japanese - Japan (<code>ja-JP</code>)
+	 * are additional locales, the expanded locale collection would be:
+	 * </p>
+	 * <ul>
+	 * <li>Chinese - China (<code>zh-CN</code>)</li>
+	 * <li>Chinese - Taiwan (<code>zh-TW</code>)</li>
+	 * <li>Japanese - Japan (<code>ja-JP</code>)</li>
+	 * <li>Chinese (<code>zh</code>)</li>
+	 * <li>Japanese (<code>ja</code>)</li>
+	 * </ul>
+	 * <p>
+	 * The unexpanded collection would be just the exact default and additional
+	 * locales - ie the first 3 locales listed above. (Note that the method
+	 * masks expanded locales against the whole set of locales registered in the
+	 * Vignette server, too. Any simple locale yielded by expansion which is not
+	 * registered with Vignette is ignored. In the above example, if Japanese
+	 * were not registered with Vignette, then Japanese (<code>ja</code>)
+	 * would be absent from the expanded collection.)
+	 * </p>
+	 * <p>
 	 * There should always be at least one locale enabled (ie the default locale
 	 * for the site, which in turn defaults to the platform default locale) and
 	 * thus present in the return from this method. An empty collection is
@@ -210,15 +283,19 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            A portal site.
 	 * @return The locales enabled for that site.
 	 */
-	public static Collection getAvailableLocales(Site site) {
+	public static Collection getAvailableLocales(Site site,
+			boolean expandLocales) {
 		Collection availableLocales = new HashSet();
 
 		if (site != null) {
+			// setup by getting the Vignette registered locales to use as a mask
+			Collection registeredLocales = I18nUtils.getRegisteredLocales();
+
 			// get additional locales for the site from properties file, and
 			// mask against server-registered locales
 			Collection siteLocales = getSiteAdditionalLocales(site);
 			if (siteLocales != null) {
-				siteLocales.retainAll(I18nUtils.getRegisteredLocales());
+				siteLocales.retainAll(registeredLocales);
 				availableLocales = siteLocales;
 			}
 
@@ -229,8 +306,50 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 					&& !availableLocales.contains(defaultLocale)) {
 				availableLocales.add(defaultLocale);
 			}
+
+			// expand the locales according to the boolean parameter
+			if (expandLocales) {
+				Collection expandedLocales = new HashSet();
+				Iterator availableLocalesIterator = availableLocales.iterator();
+				Locale locale, expandedLocale;
+				String lang, cc;
+				while (availableLocalesIterator.hasNext()) {
+					locale = (Locale) availableLocalesIterator.next();
+					lang = locale.getLanguage();
+					if ((lang != null) && (lang.equals("")))
+						lang = null;
+					cc = locale.getCountry();
+					if ((cc != null) && (cc.equals("")))
+						cc = null;
+					if (lang != null && cc != null) {
+						expandedLocale = new Locale(lang);
+						expandedLocales.add(expandedLocale);
+					}
+				}
+				expandedLocales.retainAll(registeredLocales);
+				Iterator expandedLocalesIterator = expandedLocales.iterator();
+				while (expandedLocalesIterator.hasNext()) {
+					expandedLocale = (Locale) expandedLocalesIterator.next();
+					if (expandedLocale != null && !availableLocales.contains(expandedLocale)) {
+						availableLocales.add(expandedLocale);
+					}
+				}
+			}
 		}
 		return availableLocales;
+	}
+
+	/**
+	 * Similar to the companion {@link #getAvailableLocales(Site, boolean)}
+	 * method, where the locale list is not expanded.
+	 * 
+	 * @param request
+	 *            The portal request
+	 * @return The locales enabled for the portal site indicated in the request.
+	 *         These locales are <b>not</b> expanded.
+	 */
+	public static Collection getAvailableLocales(Site site) {
+		return getAvailableLocales(site, false);
 	}
 
 	/**
@@ -277,7 +396,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 				String[] strLocales = value.split(",");
 				if (strLocales != null) {
 					int len = strLocales.length;
-					locales = new ArrayList(len);
+					locales = new HashSet();
 					Locale tempLocale = null;
 					for (int i = 0; i < len; i++) {
 						tempLocale = languageTagToLocale(strLocales[i].trim());
