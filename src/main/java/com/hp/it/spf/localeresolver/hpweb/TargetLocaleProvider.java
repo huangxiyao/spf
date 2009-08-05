@@ -62,14 +62,31 @@ public abstract class TargetLocaleProvider {
 
 	private static final String ALLOW_LOCALE_SESSION_ATTR = Consts.STICKY_SESSION_ATTR_PREFIX
 			+ "ALLOW_LOCALE";
+
 	protected HttpServletRequest request;
+	protected boolean expandLocales = false;
 
 	/**
 	 * Constructor for the target locale provider, given the current HTTP
-	 * servlet request.
+	 * servlet request. Target locales will not be expanded when this
+	 * constructor is used, so the returned target locales will include only
+	 * those exact locales that obtain in the target.
 	 */
 	public TargetLocaleProvider(HttpServletRequest request) {
 		this.request = request;
+	}
+
+	/**
+	 * Constructor for the target locale provider, given the current HTTP
+	 * servlet request and a flag indicating whether target locales should be
+	 * expanded or not. Expanded locales will include a simple locale for every
+	 * full locale that obtains in the target, even if that simple locale does
+	 * not itself obtain in the target.
+	 */
+	public TargetLocaleProvider(HttpServletRequest request,
+			boolean expandLocales) {
+		this.request = request;
+		this.expandLocales = expandLocales;
 	}
 
 	/**
