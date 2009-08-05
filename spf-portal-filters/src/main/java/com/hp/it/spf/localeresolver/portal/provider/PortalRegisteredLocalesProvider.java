@@ -25,13 +25,21 @@ public class PortalRegisteredLocalesProvider extends TargetLocaleProvider {
 	public PortalRegisteredLocalesProvider(HttpServletRequest request) {
 		super(request);
 	}
-	
+
+	public PortalRegisteredLocalesProvider(HttpServletRequest request,
+			boolean expandLocales) {
+		super(request, expandLocales);
+	}
+
 	/**
-	 * @return all locales that the current portal site allows. May return an
+	 * @return All locales that the current portal site allows, possibly
+	 *         expanded to include a simple locale for each allowed full locale,
+	 *         depending on how the provider was constructed. May return an
 	 *         empty list.
 	 */
 	public Collection getAllowedLocales() {
-		Collection locales = I18nUtility.getAvailableLocales(request);
+		Collection locales = I18nUtility.getAvailableLocales(request,
+				this.expandLocales);
 		if (locales == null) {
 			locales = Collections.EMPTY_LIST;
 		}
@@ -39,7 +47,7 @@ public class PortalRegisteredLocalesProvider extends TargetLocaleProvider {
 	}
 
 	/**
-	 * @return all locales that the current portal server supports. May return
+	 * @return All locales that the current portal server supports. May return
 	 *         an empty list.
 	 */
 	public Collection getAllLocales() {
