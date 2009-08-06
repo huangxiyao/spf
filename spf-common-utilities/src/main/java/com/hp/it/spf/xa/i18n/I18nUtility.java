@@ -302,8 +302,7 @@ public class I18nUtility {
 		if ((Locale.TAIWAN.getLanguage().equalsIgnoreCase(language))
 				&& (Locale.TAIWAN.getCountry().equalsIgnoreCase(country)))
 			return HPP_TRAD_CHINESE_LANG;
-		if ((Locale.CHINA.getLanguage().equalsIgnoreCase(language))
-				&& (Locale.CHINA.getCountry().equalsIgnoreCase(country)))
+		if (Locale.CHINA.getLanguage().equalsIgnoreCase(language))
 			return HPP_SIMP_CHINESE_LANG;
 		return language;
 	}
