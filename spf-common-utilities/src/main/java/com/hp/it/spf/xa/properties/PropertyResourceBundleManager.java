@@ -9,11 +9,11 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
+import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,7 +28,7 @@ import com.hp.it.spf.xa.misc.Utils;
  * files.
  * </p>
  * 
- * @author <link href="ying-zhiw@hp.com">Oliver</link>
+ * @author <link href="ying-zhi.wu@hp.com">Oliver</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @version TBD
  */
@@ -36,28 +36,13 @@ public class PropertyResourceBundleManager {
 	private static final Log LOG = LogFactory
 			.getLog(PropertyResourceBundleManager.class);
 
-    // in-memory cache of ResourceBundle objects --
-    // use ConcurrentHashMap because it is internally synchronized so none of
-    // the logic in this class needs to be explicitly synchronized
-    // DSJ 2009/8/11
+	// in-memory cache of ResourceBundle objects --
+	// use ConcurrentHashMap because it is internally synchronized so none of
+	// the logic in this class needs to be explicitly synchronized
+	// DSJ 2009/8/11
 	private static final Map p_map = new ConcurrentHashMap();
 
 	private static final String SUFFIX = ".properties";
-	
-	// reload check period, if the last check time expires, then file needs checking
-	// for modification.
-	private static int reloadCheckPeriod;	
-    static {
-	    ResourceBundle rb = ResourceBundle.getBundle("PropertyResourceBundle_config");
-	    int configedReloadCheckTime = -1;
-	    try {
-	        configedReloadCheckTime = new Integer(rb.getString("reload.checkperiod").trim()).intValue();
-	    } catch (Exception ex) {
-	        LOG.warn("Retrieve reload time from resource bundle error, message:" + ex.getMessage(), ex);
-	    }	    
-	    reloadCheckPeriod = configedReloadCheckTime;
-	    LOG.info("resource bundle manager reload check period set to " + reloadCheckPeriod);
-	}
 
 	/**
 	 * <p>
@@ -108,31 +93,12 @@ public class PropertyResourceBundleManager {
 		// otherwise use the given property file - DSJ 2008/8/6
 		if (loc != null)
 			propertiesName = getFileNameFromCandidates(propertiesName, loc);
-
 		// lookup and return the resultant property file from cache
-	    if (p_map.containsKey(propertiesName)) {
-	        try {
-	            // if check time expires and the file is modified
-	            if (needCheckFileChanges(propertiesName) && isModified(propertiesName)) {
-	                synchronized (p_map) {
-	                    // double check
-	                    if (needCheckFileChanges(propertiesName) && isModified(propertiesName)) {
-	                        return updateResourceBundleInMap(propertiesName);
-	                    } 
-	                }
-	            }           
-	        } catch (Exception e) {
-	            return null;
-	        }	        
-	    } else {
-	        synchronized (p_map) {
-	            // double check
-	            if (!p_map.containsKey(propertiesName)) {
-	                return setResourceBundleIntoMap(propertiesName);
-	            } 
-            }		        
-	    }  	
-	    return getResourceBundleFromMap(propertiesName);
+		if (p_map.containsKey(propertiesName)) {
+			return getResourceBundleFromMap(propertiesName);
+		} else {
+			return setResourceBundleIntoMap(propertiesName);
+		}
 	}
 
 	/**
@@ -363,7 +329,16 @@ public class PropertyResourceBundleManager {
 	 * @return ResourceBundle
 	 */
 	private static ResourceBundle getResourceBundleFromMap(String filename) {
-	    return (ResourceBundle) ((Object[]) p_map.get(filename))[0];
+		try {
+			// if the file is modified
+			if (isModified(filename)) {
+				return updateResourceBundleInMap(filename);
+			} else {
+				return (ResourceBundle) ((Object[]) p_map.get(filename))[0];
+			}
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	/**
@@ -397,9 +372,7 @@ public class PropertyResourceBundleManager {
 				ResourceBundle rb = new PropertyResourceBundle(in);
 				// get lastModified
 				Long lastModified = new Long(file.lastModified());
-				// save currect time millis to the map
-				Long lastCheckTime = new Long(System.currentTimeMillis());
-				p_map.put(filename, new Object[] { rb, lastModified, lastCheckTime });
+				p_map.put(filename, new Object[] { rb, lastModified });
 				return rb;
 			} catch (Exception e) {
 				LOG.warn("Problem loading properties file: " + file
@@ -455,32 +428,6 @@ public class PropertyResourceBundleManager {
 	}
 
 	/**
-	 * If the last check time expires, the specified file needs to be checked for modification.
-	 * 
-	 * @param filename resource bundle file name
-	 * @return {@code true} if check time expires, otherwise, {@code false}
-	 * @throws Exception
-	 */
-	private static boolean needCheckFileChanges(String filename) throws Exception {
-	    // if reloadCheckPeriod is set to minus, that means always need checking
-	    if (reloadCheckPeriod < 0) {
-	        return true;
-	    }
-	    // the last check time saved in map
-        Object[] obj = ((Object[]) p_map.get(filename));
-        long savedLastCheckTime = ((Long) obj[2]).longValue();
-        
-        long currectTime = System.currentTimeMillis();
-        // reload check period is specified in seconds, need to be converted to milliseconds
-        if ((savedLastCheckTime + (reloadCheckPeriod * 1000)) < currectTime) {
-            // check time expires
-            return true;
-        } else {
-            return false;
-        }
-	}
-	
-	/**
 	 * get File object with filename
 	 * 
 	 * @param filename
@@ -497,12 +444,4 @@ public class PropertyResourceBundleManager {
 		File file = new File(url.getPath());
 		return file;
 	}
-
-    public static int getReloadCheckPeriod() {
-        return reloadCheckPeriod;
-    }
-
-    public static void setReloadCheckPeriod(int reloadCheckPeriod) {
-        PropertyResourceBundleManager.reloadCheckPeriod = reloadCheckPeriod;
-    }
 }
