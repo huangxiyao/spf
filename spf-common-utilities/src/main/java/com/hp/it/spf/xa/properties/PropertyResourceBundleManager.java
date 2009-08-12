@@ -9,7 +9,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
@@ -36,8 +36,11 @@ public class PropertyResourceBundleManager {
 	private static final Log LOG = LogFactory
 			.getLog(PropertyResourceBundleManager.class);
 
-	// in-memory cache of ResourceBundle objects
-	private static final Map p_map = new HashMap();
+	// in-memory cache of ResourceBundle objects --
+	// use ConcurrentHashMap because it is internally synchronized so none of
+	// the logic in this class needs to be explicitly synchronized
+	// DSJ 2009/8/11
+	private static final Map p_map = new ConcurrentHashMap();
 
 	private static final String SUFFIX = ".properties";
 
@@ -56,7 +59,7 @@ public class PropertyResourceBundleManager {
 	 *            A properties file name.
 	 * @return The resource bundle (null if not found).
 	 */
-	public static synchronized ResourceBundle getBundle(String propertiesName) {
+	public static ResourceBundle getBundle(String propertiesName) {
 		return getBundle(propertiesName, null);
 	}
 
@@ -80,7 +83,7 @@ public class PropertyResourceBundleManager {
 	 *            A locale to use to find the best candidate.
 	 * @return The resource bundle (null if not found).
 	 */
-	public static synchronized ResourceBundle getBundle(String propertiesName,
+	public static ResourceBundle getBundle(String propertiesName,
 			Locale loc) {
 		// if propertiesName is not passed, then return null
 		if (propertiesName == null || "".equals(propertiesName.trim()))
