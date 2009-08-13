@@ -341,7 +341,7 @@ public class PropertyResourceBundleManager {
 	 * properties base filename for the given locale, hot-refreshing the cache
 	 * from the classloader as needed. Return null if not found in the cache.
 	 * 
-	 * @param basePropertiesFilename
+	 * @param basePropertiesFilename (with or without extension)
 	 * @param loc
 	 * @return
 	 */
@@ -407,7 +407,7 @@ public class PropertyResourceBundleManager {
 	 * the given properties base filename for the given locale, and load it into
 	 * the cache. Return null if the file is not found.
 	 * 
-	 * @param basePropertiesFilename
+	 * @param basePropertiesFilename (with or without extension)
 	 * @param loc
 	 * @return
 	 */
@@ -470,9 +470,9 @@ public class PropertyResourceBundleManager {
 
 	/**
 	 * Look in the in-memory cache for the given filename and return its bundle
-	 * (refreshed from filesystem as needed) or null if not found.
+	 * or null if not found or the retention period has expired.
 	 * 
-	 * @param filename
+	 * @param filename (with extension)
 	 * @return
 	 */
 	private static ResourceBundle getBundleFromMap(String filename) {
@@ -481,7 +481,7 @@ public class PropertyResourceBundleManager {
 		// the final component is an empty string are omitted." Here this is
 		// indicated when the candidate filename ends with "_" (see calling
 		// method: getFileFromCandidates). So return short in that case.
-		if (filename.endsWith("_"))
+		if (getFilenameWithoutExtension(filename).endsWith("_"))
 			return null;
 
 		// lookup the filename in the in-memory cache (return null if not found)
@@ -489,37 +489,22 @@ public class PropertyResourceBundleManager {
 		if (info == null)
 			return null;
 		ResourceBundle rb = info.rb;
-		long mtime = info.mtime;
 		long ctime = info.ctime;
 
-		// if it is still recent, return the bundle from the cache
+		// if it is still recent, return the bundle from the cache - otherwise
+		// return null
 		if (!isExpired(ctime))
 			return rb;
-
-		// otherwise look it up on the filesystem using the classloader
-		File file = getFile(filename);
-		// if not found on the filesystem, remove it from cache and return null
-		if (file == null) {
-			p_map.remove(filename);
+		else
 			return null;
-		}
-		// if found on the filesystem and not modified, update the check-time in
-		// cache and return the cached bundle
-		if (!isModified(file, mtime)) {
-			info.ctime = System.currentTimeMillis();
-			p_map.put(filename, info);
-			return rb;
-		}
-		// if found on the filesystem and modified
-		return setBundleIntoMap(filename, file);
 	}
 
 	/**
 	 * Look in the filesystem (via the classloader) for the given filename and
 	 * return its bundle (loaded into cache as a side-effect) or null if not
-	 * found.
+	 * found. If the file was already in cache and not stale 
 	 * 
-	 * @param filename
+	 * @param filename (with extension)
 	 * @return
 	 */
 	private static ResourceBundle getBundleFromFile(String filename) {
@@ -528,11 +513,37 @@ public class PropertyResourceBundleManager {
 		// the final component is an empty string are omitted." Here this is
 		// indicated when the candidate filename ends with "_" (see calling
 		// method: getFileFromCandidates). So return short in that case.
-		if (filename.endsWith("_"))
+		if (getFilenameWithoutExtension(filename).endsWith("_"))
 			return null;
 
 		// use classloader to lookup file on the classpath
 		File file = getFile(filename);
+
+		// lookup the filename in the in-memory cache and if it exists then
+		// refresh cache as needed and return from cache.
+		PropertyResourceBundleInfo info = p_map.get(filename);
+		if (info != null) {
+			ResourceBundle rb = info.rb;
+			long mtime = info.mtime;
+			// if not found on the filesystem, remove it from cache and return
+			// null
+			if (file == null) {
+				p_map.remove(filename);
+				return null;
+			}
+			// if found on the filesystem and not modified, update the
+			// check-time in
+			// cache and return the cached bundle
+			if (!isModified(file, mtime)) {
+				info.ctime = System.currentTimeMillis();
+				p_map.put(filename, info);
+				return rb;
+			}
+		}
+
+		// if not found on the filesystem, return null - otherwise file was on
+		// the filesystem and either not in cache or cache was
+		// stale - so return the file contents and load cache as side-effect
 		if (file != null)
 			return setBundleIntoMap(filename, file);
 		else
@@ -544,7 +555,7 @@ public class PropertyResourceBundleManager {
 	 * cache. Return the resource bundle that was loaded or null if there was a
 	 * problem.
 	 * 
-	 * @param filename
+	 * @param filename (with extension)
 	 * @param file
 	 * @return
 	 */
@@ -649,13 +660,12 @@ public class PropertyResourceBundleManager {
 	 * null if the file is not found, or is not a file, or is not readable, or
 	 * any exception occurs.
 	 * 
-	 * @param filename
+	 * @param filename (with extension)
 	 * @return File
 	 */
 	private static File getFile(String filename) {
 		URL url = null;
 		File file = null;
-		filename = getFilenameWithExtension(filename);
 		// use the context classloader to lookup the file in the filesystem -
 		// return null if not found
 		try {
