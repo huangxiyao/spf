@@ -342,7 +342,8 @@ public class PropertyResourceBundleManager {
 	 * properties base filename for the given locale, hot-refreshing the cache
 	 * from the classloader as needed. Return null if not found in the cache.
 	 * 
-	 * @param basePropertiesFilename (with or without extension)
+	 * @param basePropertiesFilename
+	 *            (with or without extension)
 	 * @param loc
 	 * @return
 	 */
@@ -408,7 +409,8 @@ public class PropertyResourceBundleManager {
 	 * the given properties base filename for the given locale, and load it into
 	 * the cache. Return null if the file is not found.
 	 * 
-	 * @param basePropertiesFilename (with or without extension)
+	 * @param basePropertiesFilename
+	 *            (with or without extension)
 	 * @param loc
 	 * @return
 	 */
@@ -473,7 +475,8 @@ public class PropertyResourceBundleManager {
 	 * Look in the in-memory cache for the given filename and return its bundle
 	 * or null if not found or the retention period has expired.
 	 * 
-	 * @param filename (with extension)
+	 * @param filename
+	 *            (with extension)
 	 * @return
 	 */
 	private static ResourceBundle getBundleFromMap(String filename) {
@@ -503,9 +506,10 @@ public class PropertyResourceBundleManager {
 	/**
 	 * Look in the filesystem (via the classloader) for the given filename and
 	 * return its bundle (loaded into cache as a side-effect) or null if not
-	 * found. If the file was already in cache and not stale 
+	 * found. If the file was already in cache and not stale
 	 * 
-	 * @param filename (with extension)
+	 * @param filename
+	 *            (with extension)
 	 * @return
 	 */
 	private static ResourceBundle getBundleFromFile(String filename) {
@@ -556,7 +560,8 @@ public class PropertyResourceBundleManager {
 	 * cache. Return the resource bundle that was loaded or null if there was a
 	 * problem.
 	 * 
-	 * @param filename (with extension)
+	 * @param filename
+	 *            (with extension)
 	 * @param file
 	 * @return
 	 */
@@ -568,24 +573,23 @@ public class PropertyResourceBundleManager {
 		try {
 			in = new BufferedInputStream(Utils
 					.getResourceAsStream(getFilenameWithExtension(filename)));
-			rb = new PropertyResourceBundle(in);
-			
 		} catch (Exception e) {
-			LOG.warn("Problem parsing property file: " + filename + ": "
+			LOG.warn("Problem opening property file: " + filename + ": "
 					+ e.getMessage(), e);
 			return null;
-		} finally {
-		    // release the file InputStream
-		    if (in != null) {
-		        try {
-                    in.close();
-                } catch (IOException e) {
-                    LOG.warn("close input stream of "
-                             + filename
-                             + " error. "
-                             + e.getMessage(), e);
-                }
-		    }
+		}
+		try {
+			rb = new PropertyResourceBundle(in);
+		} catch (Exception e) {
+			LOG.warn("Problem reading or parsing property file: " + filename
+					+ ": " + e.getMessage(), e);
+			return null;
+		}
+		try {
+			in.close();
+		} catch (Exception e) {
+			LOG.warn("Problem closing property file: " + filename + ": "
+					+ e.getMessage(), e);
 		}
 		// next cache the properties file and return it
 		PropertyResourceBundleInfo info = new PropertyResourceBundleInfo();
@@ -675,7 +679,8 @@ public class PropertyResourceBundleManager {
 	 * null if the file is not found, or is not a file, or is not readable, or
 	 * any exception occurs.
 	 * 
-	 * @param filename (with extension)
+	 * @param filename
+	 *            (with extension)
 	 * @return File
 	 */
 	private static File getFile(String filename) {
