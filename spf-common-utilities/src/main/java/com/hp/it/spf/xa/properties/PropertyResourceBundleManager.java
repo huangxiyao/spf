@@ -7,6 +7,7 @@ package com.hp.it.spf.xa.properties;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
@@ -563,14 +564,28 @@ public class PropertyResourceBundleManager {
 		// first load the properties file from the filesystem (return null if
 		// error)
 		ResourceBundle rb = null;
+		InputStream in = null;
 		try {
-			InputStream in = new BufferedInputStream(Utils
+			in = new BufferedInputStream(Utils
 					.getResourceAsStream(getFilenameWithExtension(filename)));
 			rb = new PropertyResourceBundle(in);
+			
 		} catch (Exception e) {
 			LOG.warn("Problem parsing property file: " + filename + ": "
 					+ e.getMessage(), e);
 			return null;
+		} finally {
+		    // release the file InputStream
+		    if (in != null) {
+		        try {
+                    in.close();
+                } catch (IOException e) {
+                    LOG.warn("close input stream of "
+                             + filename
+                             + " error. "
+                             + e.getMessage(), e);
+                }
+		    }
 		}
 		// next cache the properties file and return it
 		PropertyResourceBundleInfo info = new PropertyResourceBundleInfo();
