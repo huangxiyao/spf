@@ -188,16 +188,20 @@ public class PropertyResourceBundleManager {
 		basePropertiesFilename = basePropertiesFilename.trim();
 		if (basePropertiesFilename.length() == 0)
 			return null;
-		// lookup and return the resultant property file (taking locale into
+		// lookup and return the appropriate properties (taking locale into
 		// account) using memory cache and/or filesystem (depending on state)
-		ResourceBundle rb = getBestBundleFromMap(basePropertiesFilename, loc);
-		if (rb == null)
-			rb = getBestBundleFromFile(basePropertiesFilename, loc);
-		if (rb == null)
+		PropertyResourceBundleInfo info = getBestInfoFromMap(
+				basePropertiesFilename, loc);
+		if (info == null)
+			info = getBestInfoFromFile(basePropertiesFilename, loc);
+		if ((info == null) || (info.rb == null)) {
 			LOG.warn("Cannot find property file "
 					+ getFilenameWithExtension(basePropertiesFilename)
-					+ " using cache or context classloader.");
-		return rb;
+					+ " in cache or classpath.");
+			return null;
+		} else {
+			return info.rb;
+		}
 	}
 
 	/**
@@ -338,22 +342,23 @@ public class PropertyResourceBundleManager {
 	}
 
 	/**
-	 * Use the in-memory cache to find the best-fit version of the given
-	 * properties base filename for the given locale, hot-refreshing the cache
-	 * from the classloader as needed. Return null if not found in the cache.
+	 * Search the in-memory cache for information about the best-fit file for
+	 * the given properties base filename and locale, taking the cache retention
+	 * period into account. Return null if not found in the cache or the
+	 * retention period has expired.
 	 * 
 	 * @param basePropertiesFilename
 	 *            (with or without extension)
 	 * @param loc
 	 * @return
 	 */
-	private static ResourceBundle getBestBundleFromMap(
+	private static PropertyResourceBundleInfo getBestInfoFromMap(
 			String basePropertiesFilename, Locale loc) {
 
 		// by default use given base filename as the actual filename
 		String filename = getFilenameWithExtension(basePropertiesFilename);
 		String basename = getFilenameWithoutExtension(basePropertiesFilename);
-		ResourceBundle rb = null;
+		PropertyResourceBundleInfo info = null;
 
 		// if given a locale, search in map for best candidate -- this follows
 		// the Java-standard lookup sequence and filenaming conventions based on
@@ -366,18 +371,18 @@ public class PropertyResourceBundleManager {
 			// try basename_lang_cc_var (given locale)
 			filename = basename + "_" + lang + "_" + cc + "_" + var;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromMap(filename)) != null)
-				return rb;
+			if ((info = getInfoFromMap(filename)) != null)
+				return info;
 			// try basename_lang_cc (given locale)
 			filename = basename + "_" + lang + "_" + cc;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromMap(filename)) != null)
-				return rb;
+			if ((info = getInfoFromMap(filename)) != null)
+				return info;
 			// try basename_lang (given locale)
 			filename = basename + "_" + lang;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromMap(filename)) != null)
-				return rb;
+			if ((info = getInfoFromMap(filename)) != null)
+				return info;
 			// try default locale next
 			Locale defLoc = Locale.getDefault();
 			String defLang = defLoc.getLanguage();
@@ -386,41 +391,44 @@ public class PropertyResourceBundleManager {
 			// try basename_lang_cc_var (default locale)
 			filename = basename + "_" + defLang + "_" + defCc + "_" + defVar;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromMap(filename)) != null)
-				return rb;
+			if ((info = getInfoFromMap(filename)) != null)
+				return info;
 			// try basename_lang_cc (default locale)
 			filename = basename + "_" + defLang + "_" + defCc;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromMap(filename)) != null)
-				return rb;
+			if ((info = getInfoFromMap(filename)) != null)
+				return info;
 			// try basename_lang (default locale)
 			filename = basename + "_" + defLang;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromMap(filename)) != null)
-				return rb;
+			if ((info = getInfoFromMap(filename)) != null)
+				return info;
 		}
 
-		// if no bundle returned yet, search in map for base filename
-		return getBundleFromMap(filename);
+		// if no info returned yet, search in map for base filename
+		return getInfoFromMap(filename);
 	}
 
 	/**
-	 * Use the filesystem (via the classloader) to find the best-fit version of
-	 * the given properties base filename for the given locale, and load it into
-	 * the cache. Return null if the file is not found.
+	 * Use the filesystem (via the classloader) to find the best-fit file for
+	 * the given properties base filename and locale. If info for that file is
+	 * found in the in-memory cache and the file has not changed, return the
+	 * info from the cache. Otherwise (ie if the file is not in cache or it has
+	 * changed) load the file info into cache before returning it. Return null
+	 * if the file is not found.
 	 * 
 	 * @param basePropertiesFilename
 	 *            (with or without extension)
 	 * @param loc
 	 * @return
 	 */
-	private static ResourceBundle getBestBundleFromFile(
+	private static PropertyResourceBundleInfo getBestInfoFromFile(
 			String basePropertiesFilename, Locale loc) {
 
 		// by default use given base filename as the actual filename
 		String filename = getFilenameWithExtension(basePropertiesFilename);
 		String basename = getFilenameWithoutExtension(basePropertiesFilename);
-		ResourceBundle rb = null;
+		PropertyResourceBundleInfo info = null;
 
 		// if given a locale, search for best candidate -- this follows
 		// the Java-standard lookup sequence and filenaming conventions based on
@@ -433,18 +441,18 @@ public class PropertyResourceBundleManager {
 			// try basename_lang_cc_var (given locale)
 			filename = basename + "_" + lang + "_" + cc + "_" + var;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromFile(filename)) != null)
-				return rb;
+			if ((info = getInfoFromFile(filename)) != null)
+				return info;
 			// try basename_lang_cc (given locale)
 			filename = basename + "_" + lang + "_" + cc;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromFile(filename)) != null)
-				return rb;
+			if ((info = getInfoFromFile(filename)) != null)
+				return info;
 			// try basename_lang (given locale)
 			filename = basename + "_" + lang;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromFile(filename)) != null)
-				return rb;
+			if ((info = getInfoFromFile(filename)) != null)
+				return info;
 			// try default locale next
 			Locale defLoc = Locale.getDefault();
 			String defLang = defLoc.getLanguage();
@@ -453,33 +461,37 @@ public class PropertyResourceBundleManager {
 			// try basename_lang_cc_var (default locale)
 			filename = basename + "_" + defLang + "_" + defCc + "_" + defVar;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromFile(filename)) != null)
-				return rb;
+			if ((info = getInfoFromFile(filename)) != null)
+				return info;
 			// try basename_lang_cc (default locale)
 			filename = basename + "_" + defLang + "_" + defCc;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromFile(filename)) != null)
-				return rb;
+			if ((info = getInfoFromFile(filename)) != null)
+				return info;
 			// try basename_lang (default locale)
 			filename = basename + "_" + defLang;
 			filename = getFilenameWithExtension(filename);
-			if ((rb = getBundleFromFile(filename)) != null)
-				return rb;
+			if ((info = getInfoFromFile(filename)) != null)
+				return info;
 		}
 
-		// if no bundle returned yet, search in map for base filename
-		return getBundleFromFile(filename);
+		// if no info returned yet, search for base filename and if still not
+		// found, enter info for a null file into the map
+		if ((info = getInfoFromFile(filename)) != null)
+			return info;
+		else
+			return setInfoInMap(filename, null);
 	}
 
 	/**
-	 * Look in the in-memory cache for the given filename and return its bundle
-	 * or null if not found or the retention period has expired.
+	 * Look in the in-memory cache for the given filename and return its info or
+	 * null if not found or the retention period has expired.
 	 * 
 	 * @param filename
 	 *            (with extension)
 	 * @return
 	 */
-	private static ResourceBundle getBundleFromMap(String filename) {
+	private static PropertyResourceBundleInfo getInfoFromMap(String filename) {
 
 		// from ResourceBundle getBundle Javadoc: "Candidate bundle names where
 		// the final component is an empty string are omitted." Here this is
@@ -492,27 +504,25 @@ public class PropertyResourceBundleManager {
 		PropertyResourceBundleInfo info = p_map.get(filename);
 		if (info == null)
 			return null;
-		ResourceBundle rb = info.rb;
-		long ctime = info.ctime;
 
-		// if it is still recent, return the bundle from the cache - otherwise
-		// return null
-		if (!isExpired(ctime))
-			return rb;
+		// if it is still recent, return the info from the cache - else null
+		if (!isExpired(info))
+			return info;
 		else
 			return null;
 	}
 
 	/**
 	 * Look in the filesystem (via the classloader) for the given filename and
-	 * return its bundle (loaded into cache as a side-effect) or null if not
-	 * found. If the file was already in cache and not stale
+	 * return its info (loaded into cache as a side-effect) or null if not
+	 * found. If the file was already in cache and not stale, though, just
+	 * return its info from cache.
 	 * 
 	 * @param filename
 	 *            (with extension)
 	 * @return
 	 */
-	private static ResourceBundle getBundleFromFile(String filename) {
+	private static PropertyResourceBundleInfo getInfoFromFile(String filename) {
 
 		// from ResourceBundle getBundle Javadoc: "Candidate bundle names where
 		// the final component is an empty string are omitted." Here this is
@@ -521,115 +531,138 @@ public class PropertyResourceBundleManager {
 		if (getFilenameWithoutExtension(filename).endsWith("_"))
 			return null;
 
-		// use classloader to lookup file on the classpath
+		// lookup the filename in the in-memory cache and on the classpath
 		File file = getFile(filename);
-
-		// lookup the filename in the in-memory cache and if it exists then
-		// refresh cache as needed and return from cache.
 		PropertyResourceBundleInfo info = p_map.get(filename);
 		if (info != null) {
-			ResourceBundle rb = info.rb;
-			long mtime = info.mtime;
-			// if not found on the filesystem, remove it from cache and return
-			// null
-			if (file == null) {
-				p_map.remove(filename);
-				return null;
-			}
+			// if not found on the filesystem, load null file info into cache
+			// and return into
+			if (file == null)
+				return setInfoInMap(filename, null);
 			// if found on the filesystem and not modified, update the
-			// check-time in
-			// cache and return the cached bundle
-			if (!isModified(file, mtime)) {
-				info.ctime = System.currentTimeMillis();
-				p_map.put(filename, info);
-				return rb;
+			// check-time in cache and return it
+			if (!isModified(file, info)) {
+				return resetInfoInMap(filename, info);
 			}
 		}
 
 		// if not found on the filesystem, return null - otherwise file was on
-		// the filesystem and either not in cache or cache was
-		// stale - so return the file contents and load cache as side-effect
+		// the filesystem and either not in cache or cache was stale - so return
+		// info from filesystem and load cache as side-effect
 		if (file != null)
-			return setBundleIntoMap(filename, file);
+			return setInfoInMap(filename, file);
 		else
 			return null;
 	}
 
 	/**
-	 * Add the given file information for the given filename to the in-memory
-	 * cache. Return the resource bundle that was loaded or null if there was a
-	 * problem.
+	 * Update the last-check-time for the given info in the in-memory cache and
+	 * return it.
+	 * 
+	 * @param filename
+	 *            (with extension)
+	 * @param info
+	 * @return
+	 */
+	private static PropertyResourceBundleInfo resetInfoInMap(String filename,
+			PropertyResourceBundleInfo info) {
+		info.ctime = System.currentTimeMillis();
+		p_map.put(filename, info);
+		return info;
+	}
+
+	/**
+	 * Add info for the given filename and file handle to the in-memory cache
+	 * and return the info. If the given file handle is null, or there is a
+	 * problem determining the file info, then null file info is set into the
+	 * cache and returned.
 	 * 
 	 * @param filename
 	 *            (with extension)
 	 * @param file
+	 *            (may be null)
 	 * @return
 	 */
-	private static ResourceBundle setBundleIntoMap(String filename, File file) {
-		// first load the properties file from the filesystem (return null if
-		// error)
-		ResourceBundle rb = null;
+	private static PropertyResourceBundleInfo setInfoInMap(String filename,
+			File file) {
+
+		// initialize new bundle info
+		PropertyResourceBundleInfo info = new PropertyResourceBundleInfo();
+		info.rb = null;
+		info.mtime = 0;
+		info.ctime = System.currentTimeMillis();
+
+		// if file handle is null it means file did not exist so set
+		// initialized bundle info into map and return
+		if (file == null) {
+			p_map.put(filename, info);
+			return info;
+		}
+
+		// otherwise load the properties file from the filesystem and set it
+		// into the map and return (if error, then set initialized bundle info
+		// into map and return)
 		InputStream in = null;
 		try {
 			in = new BufferedInputStream(Utils
 					.getResourceAsStream(getFilenameWithExtension(filename)));
 		} catch (Exception e) {
-			LOG.warn("Problem opening property file: " + filename + ": "
+			LOG.warn("Problem opening property file " + filename + ": "
 					+ e.getMessage(), e);
-			return null;
+			p_map.put(filename, info);
+			return info;
 		}
+		ResourceBundle rb = null;
 		try {
 			rb = new PropertyResourceBundle(in);
 		} catch (Exception e) {
-			LOG.warn("Problem reading or parsing property file: " + filename
+			LOG.warn("Problem reading or parsing property file " + filename
 					+ ": " + e.getMessage(), e);
-			return null;
+			p_map.put(filename, info);
+			return info;
 		}
 		try {
 			in.close();
 		} catch (Exception e) {
-			LOG.warn("Problem closing property file: " + filename + ": "
+			LOG.warn("Problem closing property file " + filename + ": "
 					+ e.getMessage(), e);
 		}
 		// next cache the properties file and return it
-		PropertyResourceBundleInfo info = new PropertyResourceBundleInfo();
 		info.rb = rb;
 		info.mtime = file.lastModified();
-		info.ctime = System.currentTimeMillis();
 		p_map.put(filename, info);
-		return rb;
+		return info;
 	}
 
 	/**
-	 * Return true if the given last-check-time has expired yet -- ie, the
-	 * current clocktime is later than that last-check-time plus the retention
-	 * period. The retention period is configured in the
+	 * Return true if the given bundle info has expired yet -- ie, the current
+	 * clocktime is later than that last-check-time plus the retention period.
+	 * The retention period is configured in the
 	 * <code>propertyresourcebundlemanager.properties</code> file, as
 	 * described in the class documentation (see). A negative retention period
 	 * means no last-check-time in cache ever expires.
 	 * 
-	 * @param ctimeFromCache
-	 *            The last-check-time from cache.
+	 * @param info
 	 * @return
 	 */
-	private static boolean isExpired(long ctimeFromCache) {
+	private static boolean isExpired(PropertyResourceBundleInfo info) {
 		if (reloadCheckMillis < 0)
 			return false;
+		long ctimeFromCache = info.ctime;
 		long now = System.currentTimeMillis();
 		return ctimeFromCache + reloadCheckMillis < now;
 	}
 
 	/**
 	 * Return true if the given file has a different modify-timestamp than the
-	 * given one from cache.
+	 * given info from cache.
 	 * 
 	 * @param file
-	 *            The file on disk.
-	 * @param mtimeFromCache
-	 *            The modify-timestamp from cache for the file of the same name.
+	 * @param info
 	 * @return
 	 */
-	private static boolean isModified(File file, long mtimeFromCache) {
+	private static boolean isModified(File file, PropertyResourceBundleInfo info) {
+		long mtimeFromCache = info.mtime;
 		long mtime = file.lastModified();
 		return mtimeFromCache != mtime;
 	}
@@ -639,8 +672,8 @@ public class PropertyResourceBundleManager {
 	 * exist. This method is idempotent.
 	 * 
 	 * @param filename
-	 *            properties file name
-	 * @return real filename
+	 *            properties file name (with or without extension)
+	 * @return properties file name with extension
 	 */
 	private static String getFilenameWithExtension(String filename) {
 		// if file suffix does not exist, then append suffix
@@ -659,8 +692,8 @@ public class PropertyResourceBundleManager {
 	 * occurs at most once).
 	 * 
 	 * @param filename
-	 *            properties file name
-	 * @return base filename
+	 *            properties file name (with or without extension)
+	 * @return properties file name without extension
 	 */
 	private static String getFilenameWithoutExtension(String filename) {
 		// if file suffix exists, chop it off
@@ -681,7 +714,7 @@ public class PropertyResourceBundleManager {
 	 * 
 	 * @param filename
 	 *            (with extension)
-	 * @return File
+	 * @return file handle
 	 */
 	private static File getFile(String filename) {
 		URL url = null;
