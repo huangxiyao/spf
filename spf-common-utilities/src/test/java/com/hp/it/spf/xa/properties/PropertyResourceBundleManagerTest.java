@@ -93,16 +93,28 @@ public class PropertyResourceBundleManagerTest extends TestCase {
         assertSame(rb_zh, rb_zh_CN); 
         assertEquals("zh", rb_zh_CN.getString("locale"));
         
-        /* issue here
+
          
         // change the reloadCheckMillis to 0, force time to expire.
         dynModifyReloadCheckMillisValue(0);
+        // sleep 1 milliseconds to avoid an issue
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         ResourceBundle rb_zh_CN_Refresh = PropertyResourceBundleManager.getBundle(propertiesFilename, Locale.CHINA);
         System.out.println(rb_zh);
         System.out.println(rb_zh_CN_Refresh);
         assertNotSame(rb_zh, rb_zh_CN_Refresh); 
         assertEquals("zh_CN", rb_zh_CN_Refresh.getString("locale"));
-        
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         // though the zh_CN is loaded, zh is still in cache and not modified
         ResourceBundle rb_zh_After_zh_CN_loaded = PropertyResourceBundleManager.getBundle(propertiesFilename, new Locale("zh"));
         System.out.println(rb_zh);
@@ -110,7 +122,7 @@ public class PropertyResourceBundleManagerTest extends TestCase {
         assertSame(rb_zh, rb_zh_After_zh_CN_loaded);
         
             
-        */
+   
     }
     
     /**
