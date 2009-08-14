@@ -606,6 +606,7 @@ public class PropertyResourceBundleManager {
 		try {
 			in = new BufferedInputStream(Utils
 					.getResourceAsStream(getFilenameWithExtension(filename)));
+			// in = new BufferedInputStream(file.toURL().openStream());
 		} catch (Exception e) {
 			LOG.warn("Problem opening property file " + filename + ": "
 					+ e.getMessage(), e);
@@ -734,12 +735,18 @@ public class PropertyResourceBundleManager {
 		// now instantiate a File object for the file - return null if failure
 		try {
 			file = new File(url.getPath());
-			// the following predicates should always be true at this point, but
-			// serve to test for SecurityException and to make sure
-			if (file.exists() && file.isFile() && file.canRead())
-				return file;
-			else
-				return null;
+			// the following predicates are used here just to test for
+			// SecurityException, so return the file whether they evaluate true
+			// or false - because if the file was found by the classloader
+			// inside a JAR, these predicates will always return false - so we
+			// cannot reliably use them to make sure the file exists, is not a
+			// directory, and is readable - anyway when the file is used to
+			// create a resource bundle later, then if those conditions are
+			// false, it will be caught at that point
+			file.exists();
+			file.isFile();
+			file.canRead();
+			return file;
 		} catch (Exception e) {
 			LOG.warn("Problem instantiating property file " + filename + ": "
 					+ e.getMessage(), e);
