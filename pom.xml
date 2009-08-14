@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.wsrp</groupId>
 			<artifactId>spf-portlet-wsrp</artifactId>
-			<version>1.0.7</version>
+			<version>1.0.8</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.hp.it.spf.xa</groupId>
