@@ -1,24 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE weblogic-web-app PUBLIC
-    "-//BEA Systems, Inc.//DTD Web Application 8.1//EN"
-    "http://www.bea.com/servers/wls810/dtd/weblogic810-web-jar.dtd">
-<weblogic-web-app>
-	<session-descriptor>
-		<session-param>
-			<param-name>PersistentStoreType</param-name>
-			<param-value>replicated_if_clustered</param-value>
-		</session-param>
-	</session-descriptor>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<weblogic-web-app xmlns="http://www.bea.com/ns/weblogic/90">
+
 	<jsp-descriptor>
-		<jsp-param>
-			<param-name>keepgenerated</param-name>
-			<param-value>true</param-value>
-		</jsp-param>
+		<keepgenerated>true</keepgenerated>
+		<page-check-seconds>2700</page-check-seconds>
+		<debug>false</debug>
 	</jsp-descriptor>
-	<!--  
-		<container-descriptor>
-		<prefer-web-inf-classes>true</prefer-web-inf-classes>
-		</container-descriptor>
-	-->
+
+	<container-descriptor>
+		<servlet-reload-check-secs>2700</servlet-reload-check-secs>
+		<resource-reload-check-secs>2700</resource-reload-check-secs>
+	</container-descriptor>
+
+	<session-descriptor>
+		<timeout-secs>2700</timeout-secs>
+		<invalidation-interval-secs>60</invalidation-interval-secs>
+		<persistent-store-type>memory</persistent-store-type>
+	</session-descriptor>
+
 	<context-root>htmlviewer</context-root>
+
 </weblogic-web-app>
