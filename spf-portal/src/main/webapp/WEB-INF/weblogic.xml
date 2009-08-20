@@ -54,9 +54,14 @@
 				has a side-effect of resolving the CR (ie modified support files in Vignette
 				become visible within 1 minute, instead of requiring server restart).  
 				DSJ 2008/3/20
+				Changed it back to -1 now, to avoid WLS 10 recompile issue with JSP 2 tags.
+				Retested and found that visibility of modified support files is not affected
+				by this either -- we are using a newer version of Vignette now so maybe they
+				fixed that.
+				DSJ 2009/8/20
 			-->
 			<param-name>pageCheckSeconds</param-name>
-			<param-value>60</param-value>
+			<param-value>-1</param-value>
 		</jsp-param>
 		<jsp-param>
 			<param-name>verbose</param-name>
