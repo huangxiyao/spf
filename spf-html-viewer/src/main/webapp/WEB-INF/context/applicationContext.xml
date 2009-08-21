@@ -24,15 +24,8 @@
 
 	<!-- Message sources -->
 	<bean id="messageSource"
-		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-		<property name="cacheSeconds" value="1"></property>
-		<property name="basenames">
-			<list>
-				<value>
-					WEB-INF/classes/html_viewer_messages
-				</value>
-			</list>
-		</property>
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="html_viewer_messages"></property>
 	</bean>
 
 	<!-- WPAP logging interceptor -->
