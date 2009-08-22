@@ -14,10 +14,10 @@
 		- web app. Applied by WebAppRootListener.
 	-->
 	<!--
-	<context-param>
+		<context-param>
 		<param-name>webAppRootKey</param-name>
 		<param-value>hpd.root</param-value>
-	</context-param>
+		</context-param>
 	-->
 	<!--
 		- Used by Spring's SingletonBeanFactoryLocator.  Combined with the
@@ -28,10 +28,10 @@
 		- contextConfigLocation.
 	-->
 	<!--
-	<context-param>
+		<context-param>
 		<param-name>parentContextKey</param-name>
 		<param-value>com.vignette.hpd</param-value>
-	</context-param>
+		</context-param>
 	-->
 
 	<!--
@@ -41,10 +41,10 @@
 		- application context.
 	-->
 	<!--
-	<context-param>
+		<context-param>
 		<param-name>locatorFactorySelector</param-name>
 		<param-value>classpath*:vgnHpdBeanRefFactory.xml</param-value>
-	</context-param>
+		</context-param>
 	-->
 
 	<!--
@@ -55,18 +55,20 @@
 		- contexts will be merged.
 	-->
 	<!--
-	<context-param>
+		<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:VgnWebContext.xml</param-value>
-	</context-param>
+		</context-param>
 	-->
 	<!--END HPD Context Params -->
-	
+
 	<!-- Persona configuration file -->
 	<context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:StandaloneUserService-jndi.xml</param-value>
-    </context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:StandaloneUserService-jndi.xml
+		</param-value>
+	</context-param>
 
 	<!-- BEGIN HPD Filters  -->
 	<!-- Set up HPD reader and writer filters.-->
@@ -120,8 +122,14 @@
 			</param-value>
 		</init-param>
 		<init-param>
-			<param-name>expandTargetLocales</param-name>
-			<param-value>true</param-value>
+			<param-name>languageDefaultLocales</param-name>
+			<!-- following are the HP.com language default locales -->
+			<param-value>
+				en-US, bg-BG, cs-CZ, da-DK, de-DE, el-GR, es-MX, et-EE,
+				fi-FI, fr-FR, he-IL, hr-HR, hu-HU, it-IT, ja-JP, ko-KR,
+				lt-LT, lv-LV, nl-NL, no-NO, pl-PL, pt-PT, ro-RO, ru-RU,
+				sk-SK, sl-SL, sv-SE, tr-TR, zh-CN
+			</param-value>
 		</init-param>
 		<init-param>
 			<param-name>defaultLocaleProviderFactory</param-name>
@@ -179,8 +187,14 @@
 			</param-value>
 		</init-param>
 		<init-param>
-			<param-name>expandTargetLocales</param-name>
-			<param-value>true</param-value>
+			<param-name>languageDefaultLocales</param-name>
+			<!-- following are the HP.com language default locales -->
+			<param-value>
+				en-US, bg-BG, cs-CZ, da-DK, de-DE, el-GR, es-MX, et-EE,
+				fi-FI, fr-FR, he-IL, hr-HR, hu-HU, it-IT, ja-JP, ko-KR,
+				lt-LT, lv-LV, nl-NL, no-NO, pl-PL, pt-PT, ro-RO, ru-RU,
+				sk-SK, sl-SL, sv-SE, tr-TR, zh-CN
+			</param-value>
 		</init-param>
 		<init-param>
 			<param-name>defaultLocaleProviderFactory</param-name>
@@ -215,7 +229,7 @@
 			com.hp.it.spf.portalurl.portal.filter.PortalURLRewriterFilter
 		</filter-class>
 	</filter>
-	
+
 	<filter>
 		<filter-name>RememberReturnURLFilter</filter-name>
 		<filter-class>
@@ -632,7 +646,7 @@
 		<dispatcher>INCLUDE</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
-	
+
 	<filter-mapping>
 		<filter-name>RememberReturnURLFilter</filter-name>
 		<servlet-name>controller</servlet-name>
@@ -652,11 +666,15 @@
 	</listener>
 
 	<listener>
-		<listener-class>com.hp.it.spf.xa.management.portal.ManagementListener</listener-class>
+		<listener-class>
+			com.hp.it.spf.xa.management.portal.ManagementListener
+		</listener-class>
 	</listener>
 
 	<listener>
-		<listener-class>com.hp.it.spf.xa.axis.portal.AxisInitializationListener</listener-class>
+		<listener-class>
+			com.hp.it.spf.xa.axis.portal.AxisInitializationListener
+		</listener-class>
 	</listener>
 
 	<!-- BEGIN HPD Listeners   -->
@@ -688,12 +706,14 @@
 	-->
 
 	<!-- END HPD Listeners   -->
-	
+
 	<!-- enable loading spring context -->
 	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
 	</listener>
-	
+
 	<!-- GLOBAL APPLICATION LISTENERS - END -->
 
 	<!-- END-USER WEBSITE SERVLET DEFINITIONS - BEGIN -->
@@ -1368,25 +1388,25 @@
 
 	<!-- ERROR TO CUSTOMIZED PAGE MAPPINGS - BEGIN -->
 	<error-page>
-        <error-code>403</error-code>
-        <location>/error/error_403.html</location>
-    </error-page>
-    <error-page>
-        <error-code>404</error-code>
-        <location>/error/error_404.html</location>
-    </error-page>
-    <error-page>
-        <error-code>500</error-code>
-        <location>/error/error_500.html</location>
-    </error-page>
-    <error-page>
-        <error-code>502</error-code>
-        <location>/error/error_502.html</location>
-    </error-page>
-    <error-page>
-        <error-code>503</error-code>
-        <location>/error/error_503.html</location>
-    </error-page>
+		<error-code>403</error-code>
+		<location>/error/error_403.html</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/error_404.html</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/error_500.html</location>
+	</error-page>
+	<error-page>
+		<error-code>502</error-code>
+		<location>/error/error_502.html</location>
+	</error-page>
+	<error-page>
+		<error-code>503</error-code>
+		<location>/error/error_503.html</location>
+	</error-page>
 	<!-- ERROR TO CUSTOMIZED PAGE MAPPINGS - END -->
 
 	<!-- END-USER WEBSITE TAGLIBS - BEGIN -->
