@@ -6,7 +6,6 @@
 package com.hp.it.spf.localeresolver.filter;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -108,37 +107,20 @@ public class LocaleFilter implements Filter {
 		try {
 			String className;
 
-			// Initialize the target locales provider factory. This factory's
-			// constructor takes a boolean parameter indicating whether target
-			// locales should be expanded to include simple locales for each
-			// full locale for the target. The boolean parameter comes from
-			// another (optional) filter init param.
-			String expandLocales = configuration
-					.getInitParameter("expandTargetLocales");
+			// Initialize target locale provider (for getting locales acceptable
+			// to this target)
 			className = configuration
 					.getInitParameter("targetLocaleProviderFactory");
 			if (className == null) {
 				throw new NullPointerException(
 						"targetLocaleProviderFactory must be specified.");
 			}
-			Class factoryClass = Class.forName(className);
-			Class[] factoryConstructorFormalParams = { java.lang.Boolean.class };
-			// If the factory constructor supports a boolean parameter, map the
-			// init param into it. If not, call the empty constructor.
-			try {
-				Constructor factoryConstructor = factoryClass
-						.getConstructor(factoryConstructorFormalParams);
-				Object[] factoryConstructorActualParams = { new Boolean(expandLocales) };
-				languageNegotiator
-						.setTargetLocaleProviderFactory((TargetLocaleProviderFactory) factoryConstructor
-								.newInstance(factoryConstructorActualParams));
-			} catch (NoSuchMethodException e) {
-				languageNegotiator
-						.setTargetLocaleProviderFactory((TargetLocaleProviderFactory) factoryClass
-								.newInstance());
-			}
+			languageNegotiator
+					.setTargetLocaleProviderFactory((TargetLocaleProviderFactory) Class
+							.forName(className).newInstance());
 
-			// Initialize the default locale provider factory.
+			// Initialize default locale provider (for getting default locale
+			// for this target)
 			className = configuration
 					.getInitParameter("defaultLocaleProviderFactory");
 			if (className != null) {
@@ -147,13 +129,22 @@ public class LocaleFilter implements Filter {
 								.forName(className).newInstance());
 			}
 
-			// Initialize the HPP locale provider factory.
+			// Initialize HPP locale provider (for getting locale from HPP user
+			// profile)
 			className = configuration
 					.getInitParameter("passportLocaleProviderFactory");
 			if (className != null) {
 				languageNegotiator
 						.setPassportLocaleProviderFactory((LocaleProviderFactory) Class
 								.forName(className).newInstance());
+			}
+
+			// Initialize default locale map for languages
+			String languageDefaultLocales = configuration
+					.getInitParameter("languageDefaultLocales");
+			if (languageDefaultLocales != null) {
+				languageNegotiator
+						.setDefaultCountriesForLanguages(languageDefaultLocales);
 			}
 		} catch (Exception ex) {
 			throw new ServletException(ex);
