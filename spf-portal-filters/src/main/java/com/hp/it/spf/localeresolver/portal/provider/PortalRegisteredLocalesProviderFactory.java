@@ -20,33 +20,8 @@ import com.hp.it.spf.localeresolver.hpweb.TargetLocaleProviderFactory;
 public class PortalRegisteredLocalesProviderFactory implements
 		TargetLocaleProviderFactory {
 
-	private boolean expandLocales = false;
-
 	/**
-	 * Creates a target locale provider factory which is configured not to
-	 * generate expanded locales.
-	 */
-	public PortalRegisteredLocalesProviderFactory() {
-		expandLocales = false;
-	}
-
-	/**
-	 * Creates a target locale provider factory which is configured to generate
-	 * expanded locales or not.
-	 * 
-	 * @param expandTargetLocales
-	 *            true if expanded locales should be generated, otherwise false
-	 *            (same effect as the no-argument constructor in this case)
-	 */
-	public PortalRegisteredLocalesProviderFactory(Boolean expandTargetLocales) {
-		if (expandTargetLocales != null) {
-			expandLocales = expandTargetLocales.booleanValue();
-		}
-	}
-
-	/**
-	 * Creates a new target locale provider specific to the request, and
-	 * configured whether to return expanded locales or not.
+	 * Creates a new target locale provider specific to the request.
 	 * 
 	 * @param request
 	 *            the http servlet request
@@ -54,6 +29,6 @@ public class PortalRegisteredLocalesProviderFactory implements
 	 */
 	public TargetLocaleProvider getTargetLocaleProvider(
 			HttpServletRequest request) {
-		return new PortalRegisteredLocalesProvider(request, expandLocales);
+		return new PortalRegisteredLocalesProvider(request);
 	}
 }

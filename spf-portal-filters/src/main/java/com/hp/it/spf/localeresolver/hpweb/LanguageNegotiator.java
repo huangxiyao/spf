@@ -6,14 +6,20 @@
 package com.hp.it.spf.localeresolver.hpweb;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Locale;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.util.StringUtils;
 import com.hp.it.spf.localeresolver.http.ContentNegotiator;
 import com.hp.it.spf.localeresolver.http.Negotiators;
 import com.hp.it.spf.localeresolver.http.NoAcceptableLanguageException;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.misc.portal.Consts;
 
 /**
@@ -44,9 +50,10 @@ public class LanguageNegotiator implements ContentNegotiator {
 			.getName()
 			+ ".ALLOWED_LOCALES";
 
-	private TargetLocaleProviderFactory targetLocaleProviderFactory;
-	private LocaleProviderFactory passportLocaleProviderFactory;
-	private LocaleProviderFactory defaultLocaleProviderFactory;
+	private TargetLocaleProviderFactory targetLocaleProviderFactory = null;
+	private LocaleProviderFactory passportLocaleProviderFactory = null;
+	private LocaleProviderFactory defaultLocaleProviderFactory = null;
+	private Map defaultCountriesForLanguages = new Hashtable();
 
 	private final CookieLocaleSaver cookieLocaleSaver = new CookieLocaleSaver();
 
@@ -88,6 +95,75 @@ public class LanguageNegotiator implements ContentNegotiator {
 	}
 
 	/**
+	 * Sets the mapping of languages to their default full locales, based on an
+	 * input string of one or more, comma-delimited RFC 3066 language tags. The
+	 * language in each tag is set to map to the full locale represented by each
+	 * tag. For example, the input parameter <code>zh-CN,ja-JP</code> causes
+	 * language <code>zh</code> (Chinese) to map to the full locale
+	 * <code>zh-CN</code> (China Chinese), and language <code>ja</code>
+	 * (Japanese) to map to the full locale <code>ja-JP</code> (Japan
+	 * Japanese). Any invalid tags or language-only tags in the input string are
+	 * ignored.
+	 * 
+	 * @param languageDefaultLocales
+	 *            An input string of RFC 3066 language tags, as described above.
+	 */
+	public void setDefaultCountriesForLanguages(String languageDefaultLocales) {
+
+		Collection locales = new HashSet();
+		if (languageDefaultLocales != null) {
+			Locale locale;
+			String[] strLocales = languageDefaultLocales.split(",");
+			for (int i = 0; i < strLocales.length; i++) {
+				locale = I18nUtility.languageTagToLocale(strLocales[i].trim());
+				if (locale != null) {
+					locales.add(locale);
+				}
+			}
+		}
+		setDefaultCountriesForLanguages(locales);
+	}
+
+	/**
+	 * Sets the mapping of languages to their default countries, based on an
+	 * input collection of full locales. The language in the input full locale
+	 * is set to map to the country of that full locale. For example, the input
+	 * collection of China Chinese (<code>zh-CN</code>) and Japan Japanese (<code>ja-JP</code>)
+	 * causes language <code>zh</code> (Chinese) to map to country
+	 * <code>CN</code> (China), and language <code>ja</code> (Japanese) to
+	 * map to country <code>JP</code> (Japan). Any language-only locales in
+	 * the input collection are ignored.
+	 * 
+	 * @param languageDefaultLocales
+	 *            An input collection of full locales, as described above.
+	 */
+	public void setDefaultCountriesForLanguages(
+			Collection languageDefaultLocales) {
+
+		if (languageDefaultLocales != null) {
+			Locale locale;
+			String language, country;
+			Iterator i = languageDefaultLocales.iterator();
+			while (i.hasNext()) {
+				try {
+					locale = (Locale) i.next();
+				} catch (ClassCastException e) {
+					locale = null;
+				}
+				if (locale != null) {
+					language = locale.getLanguage();
+					country = locale.getCountry();
+					if (StringUtils.hasText(language)
+							&& StringUtils.hasText(country)) {
+						this.defaultCountriesForLanguages.put(language
+								.toLowerCase(), country.toUpperCase());
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Resolves the locale from the request and returns true if an acceptable
 	 * locale was resolved (false otherwise). The resolved locale is set into a
 	 * request attribute as a side-effect. See the class documentation above for
@@ -107,11 +183,11 @@ public class LanguageNegotiator implements ContentNegotiator {
 
 			// if a target locale provider factory has been specified (required)
 			if (targetLocaleProviderFactory != null) {
-				// setup - get target locales - by default, this gets the allowed
-				// locales for the target, but if special query parameter is
-				// present (or was present in previous request in this session),
-				// then that can override that and get all locales known to the
-				// target instead.
+				// setup - get target locales - by default, this gets the
+				// allowed locales for the target, but if special query
+				// parameter is present (or was present in previous request in
+				// this session), then that can override that and get all
+				// locales known to the target instead.
 				TargetLocaleProvider targetLocaleProvider = targetLocaleProviderFactory
 						.getTargetLocaleProvider(request);
 				Collection targetLocales = targetLocaleProvider.getLocales();
@@ -122,12 +198,12 @@ public class LanguageNegotiator implements ContentNegotiator {
 						request);
 				Collection urlLocales = urlLocaleProvider.getLocales();
 				negotiatedLocale = Negotiators.resolveLocale(urlLocales,
-						targetLocales);
+						targetLocales, defaultCountriesForLanguages);
 				if (negotiatedLocale == null) {
 					// check cookies
 					negotiatedLocale = Negotiators.resolveLocale(
 							new CookieLocaleProvider(request).getLocales(),
-							targetLocales);
+							targetLocales, defaultCountriesForLanguages);
 
 					if (negotiatedLocale == null) {
 						if (passportLocaleProviderFactory != null) {
@@ -135,14 +211,16 @@ public class LanguageNegotiator implements ContentNegotiator {
 							negotiatedLocale = Negotiators.resolveLocale(
 									passportLocaleProviderFactory
 											.getLocaleProvider(request)
-											.getLocales(), targetLocales);
+											.getLocales(), targetLocales,
+									defaultCountriesForLanguages);
 						}
 
 						if (negotiatedLocale == null) {
 							// check user agent
 							negotiatedLocale = Negotiators.resolveLocale(
 									new UserAgentLocaleProvider(request)
-											.getLocales(), targetLocales);
+											.getLocales(), targetLocales,
+									defaultCountriesForLanguages);
 
 							if (negotiatedLocale == null
 									&& defaultLocaleProviderFactory != null) {
