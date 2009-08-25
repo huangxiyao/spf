@@ -95,7 +95,9 @@ public class AuthenticatorHelper {
         Map userProperties = new HashMap();
         // Setting VAP User object
         userProperties.put(AuthenticationConsts.PROPERTY_PROFILE_ID, ssoUser.getProfileId());
-        userProperties.put(AuthenticationConsts.PROPERTY_USER_NAME_ID, ssoUser.getUserName());
+        // For CR 885, change the user name to lower case when creating the user
+        userProperties.put(AuthenticationConsts.PROPERTY_USER_NAME_ID, ssoUser.getUserName().toLowerCase());
+        
         userProperties.put(AuthenticationConsts.PROPERTY_DOMAIN_ID, realmId);
         userProperties.put(AuthenticationConsts.PROPERTY_EMAIL_ID, ssoUser.getEmail().toLowerCase());
         userProperties.put(AuthenticationConsts.PROPERTY_FIRSTNAME_ID, ssoUser.getFirstName());
