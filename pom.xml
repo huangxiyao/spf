@@ -151,7 +151,7 @@
 		<dependency>
 			<groupId>com.hp.it.cas.persona</groupId>
 			<artifactId>cas-persona</artifactId>
-			<version>2.0.0</version>
+			<version>2.0.1</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>spring-beans</artifactId>
