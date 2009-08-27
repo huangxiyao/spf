@@ -4,7 +4,7 @@
 	<artifactId>spf-html-viewer</artifactId>
 	<packaging>war</packaging>
 	<name>SPF HTML viewer portlet</name>
-	<version>1.0.14</version>
+	<version>1.0.15-SNAPSHOT</version>
 	<description>
 		Shared Portal Framework portlet application implementing the
 		HTMLViewer portlet: a JSR-168 portlet which interpolates and
@@ -24,9 +24,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-html-viewer-1.0.14</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-html-viewer-1.0.14</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/spf-html-viewer-1.0.14</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-html-viewer</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-html-viewer</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-html-viewer</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
