@@ -10,7 +10,7 @@
 	<artifactId>spf-portal-components</artifactId>
 	<packaging>car</packaging>
 	<name>SPF portal components</name>
-	<version>1.0.12</version>
+	<version>1.0.13-SNAPSHOT</version>
 	<description>
 		All Vignette portal components for the Shared Portal Framework.
 		This artifact builds a composite CAR containing the CAR files
@@ -23,9 +23,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-components-1.0.12</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-components-1.0.12</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-components-1.0.12</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-components</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-components</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-components</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
