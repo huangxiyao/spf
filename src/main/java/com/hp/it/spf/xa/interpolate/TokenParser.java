@@ -242,6 +242,7 @@ public abstract class TokenParser {
 	private static final String LOWERCASE = "lower";
 
 	private ResourceBundle subsFileBundle = null;
+	private boolean subsFileLoaded = false;
 
 	/**
 	 * This class attribute holds the base filename of the token-substitution
@@ -1817,19 +1818,22 @@ public abstract class TokenParser {
 	 * @see {@link com.hp.it.spf.xa.properties.PropertyResourceBundleManager}
 	 */
 	private String getIncludeValue(String key) {
-		try {
-			if (this.subsFileBundle == null) {
-				this.subsFileBundle = new PropertyResourceBundle(
-						getIncludeFileAsStream(this.subsFilePath));
+		if (!this.subsFileLoaded) {
+			try {
+				if (this.subsFileBundle == null) {
+					this.subsFileBundle = new PropertyResourceBundle(
+							getIncludeFileAsStream(this.subsFilePath));
+				}
+			} catch (Exception e) {
 			}
-		} catch (Exception e) {
-		}
-		try {
-			if (this.subsFileBundle == null) {
-				this.subsFileBundle = PropertyResourceBundleManager
-						.getBundle(this.subsFilePath);
+			try {
+				if (this.subsFileBundle == null) {
+					this.subsFileBundle = PropertyResourceBundleManager
+							.getBundle(this.subsFilePath);
+				}
+			} catch (Exception e) {
 			}
-		} catch (Exception e) {
+			this.subsFileLoaded = true;
 		}
 		try {
 			if (this.subsFileBundle != null) {
