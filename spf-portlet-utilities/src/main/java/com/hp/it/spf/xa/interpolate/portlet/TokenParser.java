@@ -6,6 +6,7 @@ package com.hp.it.spf.xa.interpolate.portlet;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+import java.util.ResourceBundle;
 import java.util.Locale;
 import java.io.InputStream;
 import org.apache.commons.logging.Log;
@@ -81,6 +82,31 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	/**
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portlet request
+	 * and response, where the given key/value pairs will be used for token
+	 * substitution. This overrides the default token-substitutions property
+	 * file, <code>default_includes.properties</code>. The key/value pairs
+	 * are only actually used if subsequent {@link #parseInclude(String)} calls
+	 * find any <code>{INCLUDE:key}</code> tokens.
+	 * </p>
+	 * 
+	 * @param pRequest
+	 *            The portlet request
+	 * @param pResponse
+	 *            The portlet response
+	 * @param pSubsFileBundle
+	 *            The key/value pairs to use for <code>{INCLUDE:key}</code>
+	 *            token substitution if needed.
+	 */
+	public TokenParser(PortletRequest pRequest, PortletResponse pResponse,
+			ResourceBundle pSubsFileBundle) {
+		this.request = pRequest;
+		this.response = pResponse;
+		this.subsFileBundle = pSubsFileBundle;
+	}
+
+	/**
+	 * <p>
+	 * Constructs a new <code>TokenParser</code> for the given portlet request
 	 * and response, and overriding the token-substitutions property file. The
 	 * given file, instead of the default (<code>default_includes.properties</code>)
 	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find
@@ -102,6 +128,39 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		if (pSubsFilePath != null) {
 			this.subsFilePath = pSubsFilePath;
 		}
+	}
+
+	/**
+	 * <p>
+	 * Constructs a new <code>TokenParser</code> for the given portlet
+	 * request, response, and locale, where the given key/value pairs will be
+	 * used for token substitution. This overrides the default
+	 * token-substitutions property file,
+	 * <code>default_includes.properties</code>. The key/value pairs are only
+	 * actually used if subsequent {@link #parseInclude(String)} calls find any
+	 * <code>{INCLUDE:key}</code> tokens. In addition, the given locale will
+	 * be used instead of the one in the portlet request during the parsing (but
+	 * if the given locale is null, then the one in the portlet request will be
+	 * used).
+	 * </p>
+	 * 
+	 * @param pRequest
+	 *            The portlet request
+	 * @param pResponse
+	 *            The portlet response
+	 * @param pLocale
+	 *            The locale to use (if null, uses the one in the portlet
+	 *            request)
+	 * @param pSubsFileBundle
+	 *            The key/value pairs to use for <code>{INCLUDE:key}</code>
+	 *            token substitution if needed.
+	 */
+	public TokenParser(PortletRequest pRequest, PortletResponse pResponse,
+			Locale pLocale, ResourceBundle pSubsFileBundle) {
+		this.request = pRequest;
+		this.response = pResponse;
+		this.locale = pLocale;
+		this.subsFileBundle = pSubsFileBundle;
 	}
 
 	/**
@@ -308,7 +367,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	protected String getSiteName() {
 		if (request == null) {
 			return null;
-		}		
+		}
 		return Utils.getPortalSiteName(request);
 	}
 
@@ -402,8 +461,9 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	}
 
 	/**
-	 * Get the page ID (ie the Vignette page friendly ID) from the portlet request provided to the constructor.  
-	 * Returns null if this has not been set in the request, or the request provided to the constructor was null.
+	 * Get the page ID (ie the Vignette page friendly ID) from the portlet
+	 * request provided to the constructor. Returns null if this has not been
+	 * set in the request, or the request provided to the constructor was null.
 	 */
 	protected String getPageID() {
 		if (request == null) {
@@ -411,7 +471,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		}
 		return Utils.getPortalPageID(request);
 	}
-	
+
 	/**
 	 * <p>
 	 * Parses the given string, performing all of the token substitutions and
