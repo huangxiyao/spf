@@ -4,6 +4,7 @@
  */
 package com.hp.it.spf.xa.interpolate.portal;
 
+import java.util.ResourceBundle;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -59,6 +60,28 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	/**
 	 * <p>
 	 * Constructs a new <code>TokenParser</code> for the given portal context,
+	 * where the given key/value pairs will be used for token substitution. This
+	 * overrides the default token-substitutions property file,
+	 * <code>default_includes.properties</code>. The key/value pairs are only
+	 * actually used if subsequent {@link #parseInclude(String)} calls find any
+	 * <code>{INCLUDE:key}</code> tokens.
+	 * </p>
+	 * 
+	 * @param portalContext
+	 *            The portal context
+	 * @param theSubsFileBundle
+	 *            The key/value pairs to use for <code>{INCLUDE:key}</code>
+	 *            token substitution if needed.
+	 */
+	public TokenParser(PortalContext portalContext,
+			ResourceBundle theSubsFileBundle) {
+		this.portalContext = portalContext;
+		this.subsFileBundle = theSubsFileBundle;
+	}
+
+	/**
+	 * <p>
+	 * Constructs a new <code>TokenParser</code> for the given portal context,
 	 * and overriding the token-substitutions property file. The given file,
 	 * instead of the default (<code>default_includes.properties</code>)
 	 * will be assumed, if subsequent {@link #parseInclude(String)} calls find
@@ -76,6 +99,35 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		if (theSubsFilePath != null) {
 			this.subsFilePath = theSubsFilePath;
 		}
+	}
+
+	/**
+	 * <p>
+	 * Constructs a new <code>TokenParser</code> for the given portal context
+	 * and locale, where the given key/value pairs will be used for token
+	 * substitution. This overrides the default token-substitutions property
+	 * file, <code>default_includes.properties</code>. The key/value pairs
+	 * are only actually used if subsequent {@link #parseInclude(String)} calls
+	 * find any <code>{INCLUDE:key}</code> tokens. In addition, the given
+	 * locale will be used instead of the one in the portal context during the
+	 * parsing (but if the given locale is null, then the one in the portal
+	 * context will be used).
+	 * </p>
+	 * 
+	 * @param portalContext
+	 *            The portal context
+	 * @param pLocale
+	 *            The locale to use (if null, uses the one in the portal
+	 *            context)
+	 * @param theSubsFileBundle
+	 *            The key/value pairs to use for <code>{INCLUDE:key}</code>
+	 *            token substitution if needed.
+	 */
+	public TokenParser(PortalContext portalContext, Locale pLocale,
+			ResourceBundle theSubsFileBundle) {
+		this.portalContext = portalContext;
+		this.locale = pLocale;
+		this.subsFileBundle = theSubsFileBundle;
 	}
 
 	/**
@@ -289,7 +341,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * Get the page ID for the current portal request from the portal context
-	 * provided to the constructor.  Returns null if this has not been set in the
+	 * provided to the constructor. Returns null if this has not been set in the
 	 * request, or the portal context provided to the constructor was null.
 	 * 
 	 * @return page ID
@@ -300,7 +352,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		}
 		return Utils.getPageID(portalContext);
 	}
-	
+
 	/**
 	 * Get the portal site URL for the portal site and page indicated by the
 	 * given scheme, port, and URI, from the portal context returned to the
