@@ -241,12 +241,12 @@ public abstract class TokenParser {
 	private static final String UPPERCASE = "upper";
 	private static final String LOWERCASE = "lower";
 
-	private ResourceBundle subsFileBundle = null;
 	private boolean subsFileLoaded = false;
 
 	/**
-	 * This class attribute holds the base filename of the token-substitution
-	 * file to use.
+	 * The base filename of the <code>{INCLUDE:<i>key</i>}</code>
+	 * token-substitution file to use. If a {@link #subsFileBundle} is set, this
+	 * is ignored.
 	 */
 	protected String subsFilePath = DEFAULT_SUBS_PATHNAME;
 
@@ -254,6 +254,13 @@ public abstract class TokenParser {
 	 * The locale to use instead of the one in the current request.
 	 */
 	protected Locale locale = null;
+
+	/**
+	 * The key-value pairs to be used for <code>{INCLUDE:<i>key</i>}</code>
+	 * token substitution. This overrides the {@link #subsFilePath} if it is
+	 * set.
+	 */
+	protected ResourceBundle subsFileBundle = null;
 
 	/**
 	 * <p>
