@@ -324,7 +324,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			fileName = Utils.slashify(resourceBundleDir + "/" + fileName);
 			try {
 				return new FileInputStream(fileName);
-			} catch (FileNotFoundException e) { // should never happen
+			} catch (Exception e) { // should never happen
 			}
 		}
 		fileName = getLocalizedFileName(pReq, pBaseFileName, pLocale,
@@ -460,7 +460,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			try {
 				return new FileInputStream(Utils.slashify(resourceBundleDir
 						+ "/" + fileName));
-			} catch (FileNotFoundException e) {
+			} catch (Exception e) {
 				return pContext.getResourceAsStream(Utils.slashify("/"
 						+ fileName));
 			}
