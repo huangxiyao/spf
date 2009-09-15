@@ -8,8 +8,9 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 import javax.portlet.PortletPreferences;
-import junit.framework.TestCase;
-import org.springframework.mock.web.portlet.MockRenderRequest;
+import junit.framework.TestCase; 
+// import org.springframework.mock.web.portlet.MockRenderRequest;
+import com.hp.it.spf.htmlviewer.portlet.web.MockRenderRequest;
 import org.springframework.mock.web.portlet.MockRenderResponse;
 import org.springframework.web.portlet.ModelAndView;
 
@@ -39,37 +40,6 @@ public class ViewControllerTest extends TestCase {
 	}
 
 	/**
-	 * Test get relative html name.
-	 * 
-	 * @throws Exception
-	 *             the exception
-	 */
-	public void testGetRelativeHtmlName() throws Exception {
-		MockRenderRequest renderRequest = new MockRenderRequest();
-		PortletPreferences pp = renderRequest.getPreferences();
-		pp.setValue(Consts.VIEW_FILENAME, "test.html");
-		assertEquals("test.html", viewController
-				.getFilename(renderRequest));
-	}
-
-	/**
-	 * Test execute.
-	 * 
-	 * @throws Exception
-	 *             the exception
-	 */
-	public void testExecute() throws Exception {
-		MockRenderRequest renderRequest = new MockRenderRequest();
-		MockRenderResponse renderResponse = new MockRenderResponse();
-		ModelAndView modelAndView = (ModelAndView) viewController.execute(
-				renderRequest, renderResponse, "file content");
-		assertEquals("view", modelAndView.getViewName());
-		Map map = modelAndView.getModel();
-		String content = (String) map.get(Consts.VIEW_CONTENT);
-		assertEquals("file content", content);
-	}
-
-	/**
 	 * Test handle render request internal.
 	 * 
 	 * @throws Exception
@@ -80,6 +50,7 @@ public class ViewControllerTest extends TestCase {
 		MockRenderResponse renderResponse = new MockRenderResponse();
 		renderRequest.addPreferredLocale(new Locale("zh", "CN"));
 		PortletPreferences pp = renderRequest.getPreferences();
+		pp.setValue(Consts.CHECK_SECONDS, "10");
 		pp.setValue(Consts.VIEW_FILENAME, "/html/test_basic.html");
 		ModelAndView modelAndView = (ModelAndView) viewController
 				.handleRenderRequest(renderRequest, renderResponse);
@@ -91,22 +62,50 @@ public class ViewControllerTest extends TestCase {
 				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Hello world!</p><p>Upper language: ZH<br>Lower country: cn</p></body></html>",
 				content);
 
+		// test that cache is in effect for 10 seconds by pausing 4 seconds and changing
+		// preferences and making sure the changes don't take effect yet
+		Thread.sleep(4000);
 		pp.setValue(Consts.VIEW_FILENAME, "/html/test_url_1.html");
+		pp.setValue(Consts.CHECK_SECONDS, "0");
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(
 				renderRequest, renderResponse);
 		map = modelAndView.getModel();
 		content = (String) map.get(Consts.VIEW_CONTENT);
 		System.out.println("testHandleRenderRequestInternal.2 got: " + content);
 		assertEquals(
-				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1> Here is an image tag: <img src=\"/images/test_zh.gif\"><br>Here it is again, with the URL encoded: <img src=\"%2Fimages%2Ftest_zh.gif\"></body></html>",
+				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Hello world!</p><p>Upper language: ZH<br>Lower country: cn</p></body></html>",
 				content);
 
-		pp.setValue(Consts.VIEW_FILENAME, "test_url_2.html");
+		// now wait another 4 seconds and test that changes still haven't taken effect
+		Thread.sleep(4000);
 		modelAndView = (ModelAndView) viewController.handleRenderRequest(
 				renderRequest, renderResponse);
 		map = modelAndView.getModel();
 		content = (String) map.get(Consts.VIEW_CONTENT);
 		System.out.println("testHandleRenderRequestInternal.3 got: " + content);
+		assertEquals(
+				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Hello world!</p><p>Upper language: ZH<br>Lower country: cn</p></body></html>",
+				content);
+		
+		// now wait another 4 seconds and test that above preference changes have 
+		// finally taken effect
+		Thread.sleep(4000);
+		modelAndView = (ModelAndView) viewController.handleRenderRequest(
+				renderRequest, renderResponse);
+		map = modelAndView.getModel();
+		content = (String) map.get(Consts.VIEW_CONTENT);
+		System.out.println("testHandleRenderRequestInternal.4 got: " + content);
+		assertEquals(
+				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1> Here is an image tag: <img src=\"/images/test_zh.gif\"><br>Here it is again, with the URL encoded: <img src=\"%2Fimages%2Ftest_zh.gif\"></body></html>",
+				content);
+
+		// cache was set to 0 above, so no caching here on out
+		pp.setValue(Consts.VIEW_FILENAME, "test_url_2.html");
+		modelAndView = (ModelAndView) viewController.handleRenderRequest(
+				renderRequest, renderResponse);
+		map = modelAndView.getModel();
+		content = (String) map.get(Consts.VIEW_CONTENT);
+		System.out.println("testHandleRenderRequestInternal.5 got: " + content);
 		assertEquals(
 				"<html><head><title>Hello world!</title></head><body><h1>Hello world!</h1> Here is an image tag: <img src=\"/images/nonexistent.gif\"><br>Here is the site URL: <br>Here is a site page URL: test/template.PAGE<br></body></html>",
 				content);
@@ -116,7 +115,7 @@ public class ViewControllerTest extends TestCase {
 				renderRequest, renderResponse);
 		map = modelAndView.getModel();
 		content = (String) map.get(Consts.VIEW_CONTENT);
-		System.out.println("testHandleRenderRequestInternal.4 got: " + content);
+		System.out.println("testHandleRenderRequestInternal.6 got: " + content);
 		assertEquals(
 				"<html><body>Everybody sees this part.  Only logged-out users see this.</body></html>",
 				content);
@@ -126,7 +125,7 @@ public class ViewControllerTest extends TestCase {
 				renderRequest, renderResponse);
 		map = modelAndView.getModel();
 		content = (String) map.get(Consts.VIEW_CONTENT);
-		System.out.println("testHandleRenderRequestInternal.5 got: " + content);
+		System.out.println("testHandleRenderRequestInternal.7 got: " + content);
 		assertEquals(
 				"<html><body>Template ID: FRIENDLY_ID<br>Portal URL: /template.FRIENDLY_ID?lang=zh&cc=CN<br></body></html>",
 				content);
@@ -137,7 +136,7 @@ public class ViewControllerTest extends TestCase {
 				renderRequest, renderResponse);
 		map = modelAndView.getModel();
 		content = (String) map.get(Consts.VIEW_CONTENT);
-		System.out.println("testHandleRenderRequestInternal.6 got: " + content);
+		System.out.println("testHandleRenderRequestInternal.8 got: " + content);
 		assertEquals(
 				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: Did we find this (Chinese)?</p><p>Upper language: ZH<br>Lower country: cn</p></body></html>",
 				content);
@@ -148,7 +147,7 @@ public class ViewControllerTest extends TestCase {
 				renderRequest, renderResponse);
 		map = modelAndView.getModel();
 		content = (String) map.get(Consts.VIEW_CONTENT);
-		System.out.println("testHandleRenderRequestInternal.7 got: " + content);
+		System.out.println("testHandleRenderRequestInternal.9 got: " + content);
 		assertEquals(
 				"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1><p>Language: zh-CN</p><p>A token: What about this (Chinese)?</p><p>Upper language: ZH<br>Lower country: cn</p></body></html>",
 				content);
@@ -158,7 +157,7 @@ public class ViewControllerTest extends TestCase {
 				renderRequest, renderResponse);
 		map = modelAndView.getModel();
 		content = (String) map.get(Consts.VIEW_CONTENT);
-		System.out.println("testHandleRenderRequestInternal.8 got: " + content);
+		System.out.println("testHandleRenderRequestInternal.10 got: " + content);
 		assertEquals(
 				"<html><body>Template ID: CHINESE_FRIENDLY_ID<br>Portal URL: /template.CHINA_FRIENDLY_ID<br></body></html>",
 				content);
@@ -168,7 +167,7 @@ public class ViewControllerTest extends TestCase {
 				renderRequest, renderResponse);
 		map = modelAndView.getModel();
 		content = (String) map.get(Consts.VIEW_CONTENT);
-		System.out.println("testHandleRenderRequestInternal.9 got: " + content);
+		System.out.println("testHandleRenderRequestInternal.11 got: " + content);
 		assertEquals(
 				"<html><body>Template ID: CHINESE_FRIENDLY_ID</body></html>",
 				content);
@@ -180,7 +179,7 @@ public class ViewControllerTest extends TestCase {
 					renderRequest, renderResponse);
 			map = modelAndView.getModel();
 			content = (String) map.get(Consts.VIEW_CONTENT);
-			System.out.println("testHandleRenderRequestInternal.10 got: "
+			System.out.println("testHandleRenderRequestInternal.12 got: "
 					+ content);
 			assertEquals(
 					"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1> Here is an image tag: <img src=\"/relay/images/test_ext_zh_CN.gif\"></body></html>",

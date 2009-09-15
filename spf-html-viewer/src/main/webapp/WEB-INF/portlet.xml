@@ -48,6 +48,10 @@
 				<name>launchButtonless</name>
 				<read-only>false</read-only>
 			</preference>
+			<preference>
+				<name>checkSeconds</name>
+				<read-only>false</read-only>
+			</preference>
 		</portlet-preferences>
 	</portlet>
 	

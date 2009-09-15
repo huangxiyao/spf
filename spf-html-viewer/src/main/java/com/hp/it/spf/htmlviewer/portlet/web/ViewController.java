@@ -4,52 +4,62 @@
  **/
 package com.hp.it.spf.htmlviewer.portlet.web;
 
-import javax.portlet.PortletPreferences;
+import java.util.ResourceBundle;
+
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.springframework.web.portlet.ModelAndView;
+import org.springframework.web.portlet.mvc.AbstractController;
 
 import com.hp.frameworks.wpa.portlet.transaction.Transaction;
 import com.hp.frameworks.wpa.portlet.transaction.TransactionImpl;
 import com.hp.it.spf.htmlviewer.portlet.exception.InternalErrorException;
 import com.hp.it.spf.htmlviewer.portlet.util.Consts;
 import com.hp.it.spf.htmlviewer.portlet.util.Utils;
-import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
-import com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController;
+import com.hp.it.spf.htmlviewer.portlet.util.ViewData;
+import com.hp.it.spf.htmlviewer.portlet.util.ViewDataCache;
+import com.hp.it.spf.xa.interpolate.portlet.TokenParser;
 import com.hp.websat.timber.model.StatusIndicator;
 
 /**
- * The controller class for <code>view</code> mode of the
- * <code>html-viewer</code> portlet. <code>html-viewer</code> is a JSR-168
- * portlet. Its <code>view</code> mode displays the proper localized version
- * of a configured HTML file, interpolated by the portlet
- * {@link com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} via the
- * {@link com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController}.
+ * <p>
+ * The controller class for <code>view</code> mode of the HTML viewer portlet.
+ * The HTML viewer is a JSR-286 portlet. Its <code>view</code> mode displays
+ * the proper localized version of a configured HTML file (called a <i>view file</i>),
+ * interpolated according to the SPF token language supported by
+ * {@link com.hp.it.spf.xa.interpolate.portlet.TokenParser}.
+ * </p>
+ * <p>
  * In <code>config</code> mode, the portlet administrator is able to specify
- * the HTML file to display, as well as an option to rewrite hyperlinks in the
- * HTML file so that they launch a buttonless child window.
+ * the HTML file to display, as well as other criteria such as a
+ * token-substitutions file for the <code>{INCLUDE:<i>key</i>}</code> token
+ * (called an <i>includes file</i>). These are stored as JSR 286 portlet
+ * configuration preferences, which this <code>view</code> mode controller
+ * accesses in order to identify the content to render.
+ * </p>
+ * <p>
+ * As of SPF 1.2, caching is supported for all of the external resources used by
+ * this <code>view</code> mode controller: the portlet preferences, the view
+ * file content, and the includes file content. A new portlet preference
+ * controls the retention period for the cache.
+ * </p>
  * 
- * @author <link href="xiao-bing.zuo@hp.com">Zuo Xiaobing</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
- * @version TBD
- * @see <code>com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController</code>
- * <code>com.hp.it.spf.xa.interpolate.portlet.FileInterpolator</code>
+ * @version SPF 1.2
+ * @see <code>com.hp.it.spf.htmlviewer.portlet.util.ViewData</code>
+ * <code>com.hp.it.spf.htmlviewer.portlet.util.ViewDataCache</code>
  */
-public class ViewController extends FileInterpolatorController {
-
-	/**
-	 * Constructor which sets the token-substitutions filename to
-	 * <code>html_viewer_includes.properties</code>.
-	 */
-	public ViewController() {
-		// Override the default token-substitutions filename with a default for
-		// this portlet.
-		this.includeFileName = "html_viewer_includes";
-	}
+public class ViewController extends AbstractController {
 
 	/** The view name. */
 	private String viewName = "view";
+
+	/**
+	 * Empty constructor.
+	 */
+	public ViewController() {
+	}
 
 	/**
 	 * Sets the view name.
@@ -63,131 +73,109 @@ public class ViewController extends FileInterpolatorController {
 
 	/**
 	 * <p>
-	 * Gets the base filename of the view file resource bundle to interpolate
-	 * and display, from the portlet preferences where the portlet config mode
-	 * stored it (in the preference element named
-	 * {@link com.hp.it.spf.htmlviewer.portlet.util.Consts#VIEW_FILENAME}).
-	 * Throws an
+	 * Invoked during the render phase, this method gets the view data for the
+	 * request, uses the portlet
+	 * {@link com.hp.it.spf.xa.interpolate.portlet.TokenParser} to interpolate
+	 * it, and finishes by returning the interpolated content inside the model.
+	 * The interpolated content is returned as the
+	 * {@link com.hp.it.spf.htmlviewer.portlet.util.Consts.VIEW_CONTENT} model
+	 * attribute.
+	 * </p>
+	 * <p>
+	 * The view and includes filenames are defined in the portlet configuration
+	 * preferences. The default includes filename is
+	 * {@link com.hp.it.spf.htmlviewer.portlet.util.Consts#DEFAULT_INCLUDES_FILENAME} (<code>html_viewer_includes.properties</code>).
+	 * Interpolation primarily involves applying the SPF token language defined
+	 * by <code>TokenParser</code>, but also involves rewriting anchor tags
+	 * according to the launch-buttonless configuration preference, if set. See
+	 * the documentation for {@link ConfigController} for more information about
+	 * the configuration preferences which control how this <code>view</code>
+	 * controller operates.
+	 * </p>
+	 * <p>
+	 * As of SPF 1.2, a view data cache is used for the view data, so that in
+	 * most normal operations, portlet preferences and the filesystem are not
+	 * used since the data is entirely in cache. When the cache is initially
+	 * empty, and also when the cache is invalidated, then the view data is
+	 * obtained from portlet preferences and the filesystem and backfilled into
+	 * the cache. The cache retention period is defined by the check-seconds
+	 * configuration preference, and may be set to cache forever (value:
+	 * <code>-1</code>), never cache (value: <code>0</code>), or cache for
+	 * a positive number of seconds.
+	 * </p>
+	 * <p>
+	 * If an exception occurs during this method, it will be caught and handled
+	 * locally if it is recoverable. If it is not recoverable - for example,
+	 * when the view filename is undefined or the view file cannot be found - an
 	 * {@link com.hp.it.spf.htmlviewer.portlet.exception.InternalErrorException}
-	 * if the filename cannot be found.
+	 * will be generated; this method will allow that to propagate back to
+	 * Spring. The HTML viewer portlet's Spring configuration is setup to
+	 * forward such <code>InternalErrorExceptions</code> into the proper JSP
+	 * automatically, using
+	 * {@link com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver}.
 	 * </p>
 	 * <p>
-	 * This method, as a side-effect, also gets the name of the token
-	 * substitutions file to use, also from the portlet preferences where the
-	 * config mode stored it (in the element named
-	 * {@link com.hp.it.spf.htmlviewer.portlet.util.Consts#INCLUDES_FILENAME}).
-	 * This is an optional element; if not found, then the default
-	 * <code>html_viewer_includes.properties</code> set by the constructor is
-	 * retained.
-	 * </p>
-	 * <p>
-	 * The render-phase controller in the abstract superclass calls this method
-	 * at the beginning of its execution, before interpolating the content.
+	 * This method uses WPAP Timber logging to record the outcome.
 	 * </p>
 	 * 
 	 * @param request
 	 *            The render request.
-	 * @return The base filename.
+	 * @param response
+	 *            The render response.
+	 * @return ModelAndView The Spring model and view, containing the
+	 *         interpolated content.
 	 * @throws Exception
-	 *             Any exception.
+	 *             Some exception.
 	 */
-	public String getFilename(RenderRequest request) throws Exception {
+	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
+			RenderResponse response) throws Exception {
 
-		// Get the portlet preferences.
-		PortletPreferences pp = request.getPreferences();
-		String viewFilename = pp.getValue(Consts.VIEW_FILENAME, null);
-		String includesFilename = pp.getValue(Consts.INCLUDES_FILENAME, null);
+		// Setup for WPAP logging; assume OK for now.
+		Transaction trans = TransactionImpl.getTransaction(request);
+		if (trans != null)
+			trans.setStatusIndicator(StatusIndicator.OK);
 
-		// Check the view filename for possible errors. Otherwise finalize it by
-		// making a valid relative path out of it.
-		viewFilename = Utils.slashify(viewFilename);
-		String errorCode = Utils.checkViewFilenameForErrors(request,
-				viewFilename);
-		if (errorCode != null) {
-			// Force error code to internal error, so proper error
-			// message for view mode displays.
+		// Get the current view data, loading and backfilling into cache as
+		// needed.
+		ViewData data = ViewDataCache.getViewData(request);
+
+		// Check for errors and warnings; branch to error view. No need
+		// for explicit logging here; the WPAP logging interceptor will handle
+		// it from the thrown exception.
+		if ((data == null) || (!data.ok())) {
 			throw new InternalErrorException(request,
 					Consts.ERROR_CODE_INTERNAL);
 		}
 
-		// Don't prepend html/ folder automatically anymore, so as not to lock
-		// the administrator into any fixed folder structure.
-		// DSJ 2009/3/30
-		// viewFilename = Utils.slashify(VIEW_FILE_DEFAULT_FOLDER +
-		// viewFilename);
+		// Interpolate the view content.
+		ResourceBundle includesContent = data.getIncludesContent();
+		TokenParser t = new TokenParser(request, response, includesContent);
+		String viewContent = t.parse(data.getViewContent());
 
-		// Finalize the includes filename by setting it into the class attribute
-		// if defined.
-		includesFilename = Utils.slashify(includesFilename);
-		if (includesFilename != null) {
-			this.includeFileName = includesFilename;
-		}
-
-		return (viewFilename);
-	}
-
-	/**
-	 * <p>
-	 * Parses the given file content (already interpolated by the portlet
-	 * FileInterpolator) to rewrite hyperlinks according to the
-	 * launch-buttonless config option, then sets the content into the model for
-	 * display by the JSP. The model attribute name used for it is
-	 * <code>viewContent</code>, so that is the request attribute which the
-	 * JSP should display. However, an <code>InternalErrorException</code> is
-	 * thrown if the given file content is null or empty.
-	 * </p>
-	 * <p>
-	 * The render-phase controller in the abstract superclass calls this method
-	 * at the end of its execution, after interpolating the content.
-	 * </p>
-	 * 
-	 * @param request
-	 *            The render request.
-	 * @param fileContent
-	 *            The interpolated file content.
-	 * @param response
-	 *            The render response.
-	 * @return The model containing the file content to display, inside the
-	 *         <code>viewContent</code> attribute.
-	 * @throws Exception
-	 *             Some exception.
-	 */
-	protected ModelAndView execute(RenderRequest request,
-			RenderResponse response, String fileContent) throws Exception {
-
-		Transaction trans = TransactionImpl.getTransaction(request);
-		if (trans != null)
-			trans.setStatusIndicator(StatusIndicator.OK); // Assume OK for
-		// now.
-
-		if (fileContent != null) {
-			fileContent = fileContent.trim();
-			if (fileContent.length() == 0) {
-				// Warning if the file is blank/empty before or after
-				// interpolation. Record this in the WPAP transaction object for
-				// logging purposes.
-				if (trans != null) {
-					trans.addContextInfo("fileContent", "empty");
-					trans.setStatusIndicator(StatusIndicator.WARNING);
-				}
-			}
-		} else {
-			// Error if file content is null (this means the file was not found
-			// or could not be read/parsed). No need for explicit logging here;
-			// the WPAP logging interceptor will handle it from the thrown
-			// exception.
+		// Error if view content is null; branch to error view. No need for
+		// explicit logging here; the WPAP logging interceptor will handle
+		// it from the thrown exception.
+		if (viewContent == null) {
 			throw new InternalErrorException(request,
-					Consts.ERROR_CODE_VIEW_FILE_NULL);
+					Consts.ERROR_CODE_INTERNAL);
 		}
-
-		// If launch-buttonless, update the file content accordingly.
+		// Warning if the view content is blank/empty before or after
+		// interpolation. Record this in the WPAP transaction object for
+		// logging purposes.
+		viewContent = viewContent.trim();
+		if (viewContent.length() == 0) {
+			if (trans != null) {
+				trans.addContextInfo("viewContent", "empty");
+				trans.setStatusIndicator(StatusIndicator.WARNING);
+			}
+		}
 		ModelAndView modelView = new ModelAndView(viewName);
-		PortletPreferences pp = request.getPreferences();
-		String buttonLess = pp.getValue(Consts.LAUNCH_BUTTONLESS, null);
-		if (buttonLess != null && buttonLess.equals("true")) {
+
+		// If launch-buttonless, update the view content accordingly.
+		if (data.getLaunchButtonless()) {
 			modelView.addObject(Consts.LAUNCH_BUTTONLESS, "true");
-			fileContent = Utils.addButtonlessChildLauncher(response,
-					fileContent);
+			viewContent = Utils.addButtonlessChildLauncher(response,
+					viewContent);
 			if (trans != null) {
 				trans.addContextInfo("launchButtonless", "true");
 				trans.setStatusIndicator(StatusIndicator.FYI);
@@ -195,7 +183,7 @@ public class ViewController extends FileInterpolatorController {
 		}
 
 		// Set the file content to display into the model.
-		modelView.addObject(Consts.VIEW_CONTENT, fileContent);
+		modelView.addObject(Consts.VIEW_CONTENT, viewContent);
 		return modelView;
 	}
 }

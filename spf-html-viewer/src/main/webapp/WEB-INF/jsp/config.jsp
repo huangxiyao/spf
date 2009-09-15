@@ -101,6 +101,18 @@
 				</span>
 			</td>			
 		</tr>
+		<tr>
+			<td nowrap>
+				<span class="spf-htmlviewer-config-label">
+					<spf-i18n-portlet:message key="config.checkseconds">
+						<spf-i18n-portlet:classicContextualHelpParam titleKey="config.checkseconds.help.title" contentKey="config.checkseconds.help.content"/>
+					</spf-i18n-portlet:message>&nbsp;&nbsp;
+				</span>
+			</td>					
+			<td>
+				<input type="text" name="<%= Consts.CHECK_SECONDS %>" value="<%= renderRequest.getAttribute(Consts.CHECK_SECONDS) %>">
+			</td>
+		</tr>
 		<tr>	
 			<td>
 				&nbsp;

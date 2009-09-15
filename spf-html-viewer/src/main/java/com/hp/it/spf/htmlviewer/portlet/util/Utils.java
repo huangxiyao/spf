@@ -74,11 +74,33 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 	 */
 	public static String checkIncludesFilenameForErrors(PortletRequest request,
 			String includesFilename) {
-		// Added check for parent directory reference.
-		// DSJ 2009/3/30
 		if ((includesFilename != null)
 				&& (includesFilename.indexOf("..") != -1)) {
 			return Consts.ERROR_CODE_INCLUDES_FILENAME_PATH;
+		}
+		return null;
+	}
+
+	/**
+	 * Checks the indicated check-seconds option for error conditions given the
+	 * particular request, returning the particular error code for the first
+	 * error condition found, or null if no errors are found. The only checked
+	 * error condition is a non-integer value.
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @param checkSeconds
+	 *            The check-seconds option.
+	 * @return error code (or null if no errors found).
+	 */
+	public static String checkSecondsForErrors(PortletRequest request,
+			String checkSeconds) {
+		if ((checkSeconds != null) && (checkSeconds.trim().length() > 0)) {
+			try {
+				Integer.parseInt(checkSeconds);
+			} catch (NumberFormatException e) {
+				return Consts.ERROR_CODE_CHECK_SECONDS_VALUE;
+			}
 		}
 		return null;
 	}
@@ -107,8 +129,7 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 			if (is == null) {
 				// if not found, check for filename in default folder -
 				// DSJ 2009/3/30
-				viewFilename = FileInterpolatorController.VIEW_FILE_DEFAULT_FOLDER
-						+ viewFilename;
+				viewFilename = Consts.VIEW_FILE_DEFAULT_FOLDER + viewFilename;
 				viewFilename = slashify(viewFilename);
 				is = I18nUtility.getLocalizedFileStream(request, viewFilename,
 						false);
