@@ -157,7 +157,10 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 	public static String checkIncludesFilenameForWarnings(
 			PortletRequest request, String includesFilename) {
 		// includes file is optional, so return if not defined
-		if (includesFilename == null || (includesFilename.trim().length() == 0)) {
+		if (includesFilename == null
+				|| (includesFilename.trim().length() == 0)
+				|| (includesFilename.trim()
+						.equals(Consts.DEFAULT_INCLUDES_FILENAME))) {
 			return null;
 		}
 		// see if we can load a property resource bundle for it off the

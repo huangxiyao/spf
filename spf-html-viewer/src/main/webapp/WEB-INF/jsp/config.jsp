@@ -69,7 +69,7 @@
 				</span>
 			</td>					
 			<td>
-				<input type="text" name="<%= Consts.VIEW_FILENAME %>" value="<%= renderRequest.getAttribute(Consts.VIEW_FILENAME) %>">
+				<input type="text" name="<%= Consts.VIEW_FILENAME %>" value="<%= renderRequest.getAttribute(Consts.VIEW_FILENAME) %>" size="50">
 			</td>
 		</tr>
 		<tr>
@@ -81,7 +81,7 @@
 				</span>
 			</td>					
 			<td>
-				<input type="text" name="<%= Consts.INCLUDES_FILENAME %>" value="<%= renderRequest.getAttribute(Consts.INCLUDES_FILENAME) %>">
+				<input type="text" name="<%= Consts.INCLUDES_FILENAME %>" value="<%= renderRequest.getAttribute(Consts.INCLUDES_FILENAME) %>" size="50">
 			</td>
 		</tr>
 		<tr>	
@@ -104,13 +104,12 @@
 		<tr>
 			<td nowrap>
 				<span class="spf-htmlviewer-config-label">
-					<spf-i18n-portlet:message key="config.checkseconds">
-						<spf-i18n-portlet:classicContextualHelpParam titleKey="config.checkseconds.help.title" contentKey="config.checkseconds.help.content"/>
-					</spf-i18n-portlet:message>&nbsp;&nbsp;
+					<spf-help-portlet:classicContextualHelp anchorKey="config.checkseconds.text1" titleKey="config.checkseconds.help.title" contentKey="config.checkseconds.help.content"/>&nbsp;&nbsp;
 				</span>
 			</td>					
 			<td>
-				<input type="text" name="<%= Consts.CHECK_SECONDS %>" value="<%= renderRequest.getAttribute(Consts.CHECK_SECONDS) %>">
+				<input type="text" name="<%= Consts.CHECK_SECONDS %>" value="<%= renderRequest.getAttribute(Consts.CHECK_SECONDS) %>" size="5">&nbsp;&nbsp;
+				<spf-i18n-portlet:message key="config.checkseconds.text2" />
 			</td>
 		</tr>
 		<tr>	

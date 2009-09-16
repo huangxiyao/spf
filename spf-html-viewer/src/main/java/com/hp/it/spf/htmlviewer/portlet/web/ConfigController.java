@@ -55,6 +55,8 @@ public class ConfigController extends AbstractController {
 	/** The view name. */
 	private String viewName = "config";
 
+	private String ACTION_FLAG = "action";
+
 	/**
 	 * Empty constructor.
 	 */
@@ -74,9 +76,8 @@ public class ConfigController extends AbstractController {
 	/**
 	 * <p>
 	 * Invoked during the render phase, this method gets the current
-	 * configuration information from the view data, and sets that information
-	 * into the model, for rendering in the JSP. The information set into the
-	 * model includes:
+	 * configuration information, and sets that information into the model, for
+	 * rendering in the JSP. The information set into the model includes:
 	 * </p>
 	 * 
 	 * <dl>
@@ -86,9 +87,9 @@ public class ConfigController extends AbstractController {
 	 * display during <code>view</code> mode. Its value is set into the model
 	 * element named
 	 * {@link com.hp.it.spf.htmlviewer.portlet.util.Consts#VIEW_FILENAME} (taken
-	 * from the portlet preference element of the same name). If no view
-	 * filename has yet been set in the preferences, then the default value put
-	 * into the model is blank.</dd>
+	 * from the portlet preference element of the same name). The view filename
+	 * is obtained from a render parameter set by the action phase; otherwise it
+	 * is obtained from the current view data (portlet preferences).</dd>
 	 * </p>
 	 * <p>
 	 * <dt>The token substitutions (ie includes) filename (optional).</dt>
@@ -96,10 +97,10 @@ public class ConfigController extends AbstractController {
 	 * view file content during <code>view</code> mode. Its value is set into
 	 * the model element named
 	 * {@link com.hp.it.spf.htmlviewer.portlet.util.Consts#INCLUDES_FILENAME}
-	 * (taken from the portlet preference element of the same name). If no view
-	 * filename has yet been set in the preferences, then the default value put
-	 * into the model is
-	 * {@link com.hp.it.spf.htmlviewer.portlet.util.Consts#DEFAULT_INCLUDES_FILENAME} (<code>html_viewer_includes.properties</code>).</dd>
+	 * (taken from the portlet preference element of the same name). The
+	 * includes filename is obtained from a render parameter set by the action
+	 * phase; otherwise it is obtained from the current view data (portlet
+	 * preferences).
 	 * </p>
 	 * <p>
 	 * <dt>The launch-buttonless option (optional).</dt>
@@ -110,7 +111,9 @@ public class ConfigController extends AbstractController {
 	 * (taken from the portlet preference element of the same name) and will be
 	 * either <code>true</code> or <code>false</code>. If the option has
 	 * not yet been set in the preferences, then the default value put into the
-	 * model is <code>false</code>.</dd>
+	 * model is <code>false</code>. The launch-buttonless option is obtained
+	 * from a render parameter set by the action phase; otherwise it is obtained
+	 * from the current view data (portlet preferences).</dd>
 	 * </p>
 	 * <p>
 	 * <dt>The check-seconds option (optional).</dt>
@@ -120,7 +123,10 @@ public class ConfigController extends AbstractController {
 	 * named {@link com.hp.it.spf.htmlviewer.portlet.util.Consts#CHECK_SECONDS}
 	 * (taken from the portlet preference element of the same name). If the
 	 * option has not yet been set in the preferences, then the default value
-	 * put into the model is <code>0</code> (ie, no caching).</dd>
+	 * put into the model is <code>900</code> (ie, cache for 15 minutes). The
+	 * check-seconds option is obtained from a render parameter set by the
+	 * action phase; otherwise it is obtained from the current view data
+	 * (portlet preferences).</dd>
 	 * </p>
 	 * <p>
 	 * <dt>Any error message from a preceding action phase.</dt>
@@ -199,94 +205,145 @@ public class ConfigController extends AbstractController {
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 
-		String errorCode = null;
-		String warnCode = null;
-		String infoCode = null;
+		ArrayList<String> errorCodes = new ArrayList<String>();
+		ArrayList<String> warnCodes = new ArrayList<String>();
+		ArrayList<String> infoCodes = new ArrayList<String>();
+		String[] aErrorCodes, aWarnCodes, aInfoCodes;
+		String errorMsg, warnMsg, infoMsg, errorCode, warnCode;
+		String viewFilename, includesFilename, launchButtonless, checkSeconds;
+		ModelAndView modelView = new ModelAndView(viewName);
 
 		// Setup for WPAP logging; assume OK for now.
 		Transaction trans = TransactionImpl.getTransaction(request);
 		if (trans != null)
 			trans.setStatusIndicator(StatusIndicator.OK);
 
-		// Get the current view data, loading and backfilling into cache as
-		// needed. Throw exception if we can't get the data or there is a fatal
-		// error (ie cannot read data from database).
-		ModelAndView modelView = new ModelAndView(viewName);
-		ViewData data = ViewDataCache.getViewData(request);
-		if ((data == null) || (data.error())) {
-			throw new InternalErrorException(request,
-					Consts.ERROR_CODE_INTERNAL);
+		// Processing differs somewhat if we are following a preceding action
+		// phase or not. When following an action phase, we want to render the
+		// user inputs even if invalid, so we get the model data from the render
+		// parameters set by the action phase. We also need to copy along any
+		// errors recorded during the action phase so that they can be rendered
+		// too. When not following an action phase, though, we must get the
+		// model data from the view data cache (reading from portlet preferences
+		// and backfilling into cache as needed).
+		if (request.getParameter(ACTION_FLAG) != null) {
+
+			// Get the model data from the render parameters, and copy it into
+			// the model.
+			viewFilename = request.getParameter(Consts.VIEW_FILENAME);
+			if (viewFilename == null) 
+				viewFilename = "";
+			modelView.addObject(Consts.VIEW_FILENAME, viewFilename);
+			
+			includesFilename = request.getParameter(Consts.INCLUDES_FILENAME);
+			if (includesFilename == null)
+				includesFilename = "";
+			modelView.addObject(Consts.INCLUDES_FILENAME, includesFilename);
+			
+			checkSeconds = request.getParameter(Consts.CHECK_SECONDS);
+			modelView.addObject(Consts.CHECK_SECONDS, checkSeconds);
+
+			launchButtonless = request.getParameter(Consts.LAUNCH_BUTTONLESS);
+			modelView.addObject(Consts.LAUNCH_BUTTONLESS, launchButtonless);
+
+			// Get any status codes from the render parameters and copy their
+			// messages into the model. Currently only error and info status
+			// might be passed from the action phase, but check for warnings
+			// too.
+			if ((aErrorCodes = request.getParameterValues(Consts.ERROR_CODE)) != null) {
+				for (int i = 0; i < aErrorCodes.length; i++) {
+					errorCodes.add(aErrorCodes[i]);
+				}
+			}
+			if ((aWarnCodes = request.getParameterValues(Consts.WARN_CODE)) != null) {
+				for (int i = 0; i < aWarnCodes.length; i++) {
+					warnCodes.add(aWarnCodes[i]);
+				}
+			}
+			if ((aInfoCodes = request.getParameterValues(Consts.INFO_CODE)) != null) {
+				for (int i = 0; i < aInfoCodes.length; i++) {
+					infoCodes.add(aInfoCodes[i]);
+				}
+			}
+
+		} else {
+
+			// Get the data from the current view data cache, and copy it into
+			// the model. Throw an exception if we fail to get the data or there
+			// was an error loading it (eg unable to read portlet preferences
+			// database).
+			ViewData data = ViewDataCache.getViewData(request);
+			if ((data == null) || (data.error())) {
+				throw new InternalErrorException(request,
+						Consts.ERROR_CODE_INTERNAL);
+			}
+			viewFilename = data.getViewFilename();
+			if (viewFilename == null) 
+				viewFilename = "";
+			modelView.addObject(Consts.VIEW_FILENAME, viewFilename);
+
+			includesFilename = data.getIncludesFilename();
+			if (includesFilename == null)
+				includesFilename = "";
+			modelView.addObject(Consts.INCLUDES_FILENAME, includesFilename);
+
+			launchButtonless = String.valueOf(data.getLaunchButtonless());
+			modelView.addObject(Consts.LAUNCH_BUTTONLESS, launchButtonless);
+
+			checkSeconds = String.valueOf(data.getCheckSeconds());
+			modelView.addObject(Consts.CHECK_SECONDS, checkSeconds);
 		}
 
-		// Copy the current view data into the model.
-		String viewFilename = data.getViewFilename();
-		String includesFilename = data.getIncludesFilename();
-		String launchButtonless = String.valueOf(data.getLaunchButtonless());
-		String checkSeconds = String.valueOf(data.getCheckSeconds());
-		modelView.addObject(Consts.VIEW_FILENAME, viewFilename);
-		modelView.addObject(Consts.INCLUDES_FILENAME, includesFilename);
-		modelView.addObject(Consts.LAUNCH_BUTTONLESS, launchButtonless);
-		modelView.addObject(Consts.CHECK_SECONDS, checkSeconds);
-
-		// Get any status codes passed from action phase and copy their messages
-		// into the model. Currently only error and info status might be passed
-		// from the action phase, but check for warnings too.
-		if ((errorCode = request.getParameter(Consts.ERROR_CODE)) != null) {
-			String errorMsg = I18nUtility.getMessage(request, errorCode);
-			addMessage(modelView, Consts.ERROR_MESSAGES, errorMsg);
-			if (trans != null)
-				trans.setStatusIndicator(StatusIndicator.ERROR);
-		}
-		if ((warnCode = request.getParameter(Consts.WARN_CODE)) != null) {
-			String warnMsg = I18nUtility.getMessage(request, warnCode);
-			addMessage(modelView, Consts.WARN_MESSAGES, warnMsg);
-			if (trans != null)
-				trans.setStatusIndicator(StatusIndicator.WARNING);
-		}
-		if ((infoCode = request.getParameter(Consts.INFO_CODE)) != null) {
-			String infoMsg = I18nUtility.getMessage(request, infoCode);
-			addMessage(modelView, Consts.INFO_MESSAGES, infoMsg);
-		}
-
-		// Check the view data for exception conditions and add messages to the
-		// model as needed. Some view data exception conditions are considered
-		// just warnings, while others are considered errors. Most, but not all,
-		// of these conditions also cause data.warning() to return true.
+		// Next, check the view data for exception conditions and add
+		// messages to the model as needed (some of these conditions might
+		// already have been reported as errors over them if that is the case).
+		// Some view data exception conditions are considered just warnings,
+		// while others are considered errors.
 		if ((errorCode = Utils
 				.checkViewFilenameForErrors(request, viewFilename)) != null) {
-			String errorMsg = I18nUtility.getMessage(request, errorCode);
-			addMessage(modelView, Consts.ERROR_MESSAGES, errorMsg);
-			if (trans != null)
-				trans.setStatusIndicator(StatusIndicator.ERROR);
+			errorCodes.add(errorCode);
 		}
 		if ((errorCode = Utils.checkIncludesFilenameForErrors(request,
 				includesFilename)) != null) {
-			String errorMsg = I18nUtility.getMessage(request, errorCode);
-			addMessage(modelView, Consts.ERROR_MESSAGES, errorMsg);
-			if (trans != null)
-				trans.setStatusIndicator(StatusIndicator.ERROR);
+			errorCodes.add(errorCode);
 		}
 		if ((errorCode = Utils.checkSecondsForErrors(request, checkSeconds)) != null) {
-			String errorMsg = I18nUtility.getMessage(request, errorCode);
-			addMessage(modelView, Consts.ERROR_MESSAGES, errorMsg);
-			if (trans != null)
-				trans.setStatusIndicator(StatusIndicator.ERROR);
+			errorCodes.add(errorCode);
 		}
 		if ((warnCode = Utils.checkViewFilenameForWarnings(request,
 				viewFilename)) != null) {
-			String warnMsg = I18nUtility.getMessage(request, warnCode);
-			addMessage(modelView, Consts.WARN_MESSAGES, warnMsg);
-			if (trans != null)
-				trans.setStatusIndicator(StatusIndicator.WARNING);
+			warnCodes.add(warnCode);
 		}
 		if ((warnCode = Utils.checkIncludesFilenameForWarnings(request,
 				includesFilename)) != null) {
-			String warnMsg = I18nUtility.getMessage(request, warnCode);
-			addMessage(modelView, Consts.WARN_MESSAGES, warnMsg);
+			warnCodes.add(warnCode);
+		}
+
+		// Finally, convert all the error codes to messages. If there were no
+		// errors, convert all the warning codes and info codes to messages.
+		// (When there are errors, we only report errors, not warnings or
+		// infos.) Set the messages into the model for rendering in the view.
+		if (!errorCodes.isEmpty()) {
+			for (int i = 0; i < errorCodes.size(); i++) {
+				errorMsg = I18nUtility.getMessage(request, errorCodes.get(i));
+				addMessage(modelView, Consts.ERROR_MESSAGES, errorMsg);
+			}
+			if (trans != null)
+				trans.setStatusIndicator(StatusIndicator.ERROR);
+			return modelView;
+		}
+		if (!warnCodes.isEmpty()) {
+			for (int i = 0; i < warnCodes.size(); i++) {
+				warnMsg = I18nUtility.getMessage(request, warnCodes.get(i));
+				addMessage(modelView, Consts.WARN_MESSAGES, warnMsg);
+			}
 			if (trans != null)
 				trans.setStatusIndicator(StatusIndicator.WARNING);
 		}
-
+		for (int i = 0; i < infoCodes.size(); i++) {
+			infoMsg = I18nUtility.getMessage(request, infoCodes.get(i));
+			addMessage(modelView, Consts.INFO_MESSAGES, infoMsg);
+		}
 		return modelView;
 	}
 
@@ -305,19 +362,21 @@ public class ConfigController extends AbstractController {
 	 * request parameter, and the new check-seconds option is expected to be in
 	 * the {@link com.hp.it.spf.htmlviewer.portlet.util.Consts#CHECK_SECONDS}
 	 * request parameter. They are edit-checked and persisted into portlet
-	 * preference elements of the same name.
+	 * preference elements of the same name. They are also copied into render
+	 * parameters of the same name, for the render phase to display.
 	 * </p>
 	 * <p>
 	 * If any error occurs, this method throws an appropriate exception which
 	 * Spring can forward to the appropriate error-handling JSP (if configured).
-	 * However, an
-	 * {@link com.hp.it.spf.htmlviewer.portlet.exception.InputErrorException} on
-	 * the part of the administrator is caught, not thrown, by this method. The
-	 * portlet preferences are not stored when this happens; instead, the method
-	 * sets the {@link com.hp.it.spf.htmlviewer.portlet.util.Consts#ERROR_CODE}
-	 * render parameter with the relevant error code and returns, allowing
-	 * Spring to proceed into the render phase as usual. The render phase will
-	 * be responsible for printing error messages for these errors in the render
+	 * However, any
+	 * {@link com.hp.it.spf.htmlviewer.portlet.exception.InputErrorException}
+	 * conditions on the part of the administrator are caught, not thrown, by
+	 * this method. The portlet preferences are not stored when this happens;
+	 * instead, the method sets the
+	 * {@link com.hp.it.spf.htmlviewer.portlet.util.Consts#ERROR_CODE} render
+	 * parameter with the relevant error code(s) and returns, allowing Spring to
+	 * proceed into the render phase as usual. The render phase will be
+	 * responsible for printing error messages for these errors in the render
 	 * UI.
 	 * </p>
 	 * <p>
@@ -351,21 +410,46 @@ public class ConfigController extends AbstractController {
 	protected void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 
+		ArrayList<String> errorCodes = new ArrayList<String>();
 		Transaction trans = TransactionImpl.getTransaction(request);
 		try {
-			String viewFilename = request.getParameter(Consts.VIEW_FILENAME);
-			String includesFilename = request
-					.getParameter(Consts.INCLUDES_FILENAME);
+			// Get the parameters and stage them to be copied to render phase.
+			String viewFilename = Utils.slashify(request
+					.getParameter(Consts.VIEW_FILENAME));
+			if (viewFilename == null)
+				viewFilename = "";
+			response.setRenderParameter(Consts.VIEW_FILENAME, viewFilename);
+
+			String includesFilename = Utils.slashify(request
+					.getParameter(Consts.INCLUDES_FILENAME));
+			if (includesFilename == null)
+				includesFilename = "";
+			response.setRenderParameter(Consts.INCLUDES_FILENAME,
+					includesFilename);
+
+			String checkSeconds = request.getParameter(Consts.CHECK_SECONDS);
+			if ((checkSeconds == null) || (checkSeconds.trim().length() == 0))
+				checkSeconds = Consts.DEFAULT_CHECK_SECONDS;
+			response.setRenderParameter(Consts.CHECK_SECONDS, checkSeconds);
+
 			String launchButtonless = request
 					.getParameter(Consts.LAUNCH_BUTTONLESS);
-			String checkSeconds = request.getParameter(Consts.CHECK_SECONDS);
+			if (launchButtonless != null
+					&& launchButtonless.equals(Consts.LAUNCH_BUTTONLESS)) {
+				launchButtonless = "true";
+			} else {
+				launchButtonless = "false";
+			}
+			response.setRenderParameter(Consts.LAUNCH_BUTTONLESS,
+					launchButtonless);
+			response.setRenderParameter(ACTION_FLAG, "true");
 
 			// First edit-check the view filename value. If errors found, do not
 			// store any of the new preferences.
 			String errorCode = Utils.checkViewFilenameForErrors(request,
 					viewFilename);
 			if (errorCode != null) {
-				throw new InputErrorException(request, errorCode);
+				errorCodes.add(errorCode);
 			}
 
 			// Next edit-check the includes filename value. If errors found, do
@@ -373,26 +457,20 @@ public class ConfigController extends AbstractController {
 			errorCode = Utils.checkIncludesFilenameForErrors(request,
 					includesFilename);
 			if (errorCode != null) {
-				throw new InputErrorException(request, errorCode);
+				errorCodes.add(errorCode);
 			}
 
 			// Next edit-check the check-seconds value (it must be an integer).
 			// If error found, do not store any of the new preferences.
 			errorCode = Utils.checkSecondsForErrors(request, checkSeconds);
 			if (errorCode != null) {
-				throw new InputErrorException(request, errorCode);
-			}
-			if ((checkSeconds == null) || (checkSeconds.trim().length() == 0)) {
-				checkSeconds = Consts.DEFAULT_CHECK_SECONDS;
+				errorCodes.add(errorCode);
 			}
 
-			// Next determine the launch-buttonless value. No error conditions
-			// possible here.
-			if (launchButtonless != null
-					&& launchButtonless.equals(Consts.LAUNCH_BUTTONLESS)) {
-				launchButtonless = "true";
-			} else {
-				launchButtonless = "false";
+			// Throw exception if there were any edit-check failures above.
+			if (!errorCodes.isEmpty()) {
+				errorCodes.add(Consts.ERROR_CODE_PREFS_UNSAVED);
+				throw new InputErrorException(request);
 			}
 
 			// Save the view data to portlet preferences, flush the cache, and
@@ -406,7 +484,7 @@ public class ConfigController extends AbstractController {
 						Consts.ERROR_CODE_INTERNAL);
 			}
 			response.setRenderParameter(Consts.INFO_CODE,
-					Consts.INFO_CODE_PREFS_SAVED);
+					new String[] { Consts.INFO_CODE_PREFS_SAVED });
 
 			// Log success to WPAP logs, recording the parameters as context
 			// info.
@@ -414,10 +492,12 @@ public class ConfigController extends AbstractController {
 				trans.addContextInfo("viewFilename", viewFilename);
 				trans.addContextInfo("includesFilename", includesFilename);
 				trans.addContextInfo("launchButtonless", launchButtonless);
+				trans.addContextInfo("checkSeconds", checkSeconds);
 				trans.setStatusIndicator(StatusIndicator.OK);
 			}
 		} catch (InputErrorException e) {
-			response.setRenderParameter(Consts.ERROR_CODE, e.getErrorCode());
+			response.setRenderParameter(Consts.ERROR_CODE, errorCodes
+					.toArray(new String[] {}));
 
 			// Log error to WPAP logs. Do not generate an error/error-trace
 			// however since those are only for system errors and this is a user

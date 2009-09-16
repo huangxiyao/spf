@@ -98,11 +98,12 @@ public class ViewData {
 			this.locale = request.getLocale();
 			try {
 				PortletPreferences pp = request.getPreferences();
+				// When getting strings, apply defaults later
 				this.viewFilename = Utils.slashify(pp.getValue(
-						Consts.VIEW_FILENAME, Consts.DEFAULT_VIEW_FILENAME));
+						Consts.VIEW_FILENAME, ""));
 				this.includesFilename = Utils.slashify(pp.getValue(
-						Consts.INCLUDES_FILENAME,
-						Consts.DEFAULT_INCLUDES_FILENAME));
+						Consts.INCLUDES_FILENAME, ""));
+				// When getting other attributes, apply defaults now
 				this.launchButtonless = Boolean.valueOf(pp.getValue(
 						Consts.LAUNCH_BUTTONLESS,
 						Consts.DEFAULT_LAUNCH_BUTTONLESS));
@@ -244,9 +245,9 @@ public class ViewData {
 	 * Returns true if there was a non-fatal but unusual condition encountered
 	 * when this <code>ViewData</code> object was created (ie loaded).
 	 * Typically this happens when the content files for the view and include
-	 * preferences could not be found or read, or were empty. When true is
-	 * returned by the <code>warning()</code> method, the {@link #ok()} method
-	 * will return false, and vice-versa.
+	 * preferences could not be found or read. When true is returned by the
+	 * <code>warning()</code> method, the {@link #ok()} method will return
+	 * false, and vice-versa.
 	 * 
 	 * @return true if there was a non-fatal warning during load, false
 	 *         otherwise
@@ -365,10 +366,6 @@ public class ViewData {
 			return;
 		}
 
-		// Make note of whether the includes file is the default one or not.
-		boolean isDefault = this.includesFilename
-				.equals(Consts.DEFAULT_VIEW_FILENAME);
-
 		// Get input stream for the view filename. Skip load and flag warning if
 		// file not found.
 		InputStream viewStream = I18nUtility.getLocalizedFileStream(request,
@@ -419,26 +416,26 @@ public class ViewData {
 	 */
 	private void loadIncludesContent(PortletRequest request) {
 
-		// Skip load if includes filename is not defined - since includes files
-		// are optional, this is not a warning.
-		if ((this.includesFilename == null)
-				|| (this.includesFilename.length() == 0))
-			return;
+		String includesFilename = this.includesFilename;
+		boolean isDefault = false;
+
+		// If includes filename is not defined, revert to the default.
+		if ((includesFilename == null) || (includesFilename.length() == 0)) {
+			includesFilename = Consts.DEFAULT_INCLUDES_FILENAME;
+			isDefault = true;
+		}
+
 		// Skip load and flag warning if includes filename is improper.
 		if (includesFilename.indexOf("..") != -1) {
 			handleWarning("Includes filename used illegal .. reference.");
 			return;
 		}
 
-		// Make note of whether the includes file is the default one or not.
-		boolean isDefault = this.includesFilename
-				.equals(Consts.DEFAULT_INCLUDES_FILENAME);
-
 		// Get input stream for the includes filename. If this succeeds, try
 		// making a resource bundle from it. If that succeeds, return (no
 		// warning if empty), but if it fails, flag a warning and return.
 		InputStream includesStream = I18nUtility.getLocalizedFileStream(
-				request, this.includesFilename, this.locale, true);
+				request, includesFilename, this.locale, true);
 		if (includesStream != null) {
 			try {
 				this.includesContent = new PropertyResourceBundle(
@@ -447,7 +444,7 @@ public class ViewData {
 			} catch (Exception e) {
 				handleWarning(
 						"An eligible includes file was found (in either the portlet bundle directory or the portlet application), but could not be loaded, for the base file: "
-								+ this.includesFilename, e);
+								+ includesFilename, e);
 				return;
 			}
 		}
@@ -458,7 +455,7 @@ public class ViewData {
 		// unless it was for the default includes file (which is OK if it does
 		// not exist).
 		this.includesContent = PropertyResourceBundleManager
-				.getBundle(this.includesFilename);
+				.getBundle(includesFilename);
 		if ((this.includesContent == null) && !isDefault) {
 			handleWarning("No eligible includes file was found (in either the portlet bundle directory, the portlet application, or the classpath) for the base file: "
 					+ this.includesFilename);

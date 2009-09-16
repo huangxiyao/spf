@@ -18,11 +18,6 @@ public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 	public static final String VIEW_FILENAME = "viewFilename";
 
 	/**
-	 * Default view filename that will be assumed.
-	 */
-	public static final String DEFAULT_VIEW_FILENAME = "";
-
-	/**
 	 * Token substitutions filename portlet preference, request parameter, and
 	 * model attribute.
 	 */
@@ -53,7 +48,7 @@ public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 	 * Default check-seconds value that will be assumed. Negative means that
 	 * view resources are cached forever; zero means there are not cached.
 	 */
-	public static final String DEFAULT_CHECK_SECONDS = "0";
+	public static final String DEFAULT_CHECK_SECONDS = "900";
 
 	/** Error code render parameter. */
 	public static final String ERROR_CODE = "errorCode";
@@ -106,6 +101,9 @@ public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 	/** Status code: portlet preferences saved. */
 	public static final String INFO_CODE_PREFS_SAVED = "info.saved";
 
+	/** Status code: portlet preferences not saved. */
+	public static final String ERROR_CODE_PREFS_UNSAVED = "error.notSaved";
+	
 	/**
 	 * Default folder for view files underneath portlet bundle directory or
 	 * portlet application root.
