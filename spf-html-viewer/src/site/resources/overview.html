@@ -172,6 +172,7 @@ and Developer's Guide</h1>
 			the portlet instance</a></li>
 		</ul>
 		</li>
+		<li>2.5. <a href="#using.logs">Reading the logs</a></li>
 	</ul>
 	</li>
 	<li>3. <a href="#history">Document History</a></li>
@@ -441,12 +442,13 @@ interpolation</a> engine to parse your view files and perform dynamic
 substitutions for certain special markup tokens you can use when <a
 	href="#using.authoring.file">authoring the view file</a>. If you use
 the <code>{INCLUDE:<i>key</i>}</code> token, then you will need to
-configure a <i>token substitutions</i> property file to define your
-key-value pair(s). By default, this property file is named <code>html_viewer_includes.properties</code>.</p>
+configure an <i>includes</i> (aka <i>token substitutions</i>) property
+file to define your key-value pair(s). By default, this property file is
+named <code>html_viewer_includes.properties</code>.</p>
 
 <blockquote>
-<p><b>Note:</b> You only need to concern yourself with the token
-substitutions property file if you use the special <code>{INCLUDE:<i>key</i>}</code>
+<p><b>Note:</b> You only need to concern yourself with the includes
+property file if you use the special <code>{INCLUDE:<i>key</i>}</code>
 markup token in your view file. <i>Otherwise you can skip this.</i></p>
 </blockquote>
 
@@ -454,8 +456,8 @@ markup token in your view file. <i>Otherwise you can skip this.</i></p>
 
 <ul>
 	<li>
-	<p>Download the template for the token substitutions property file
-	from SPF team Maven 2 repository. The template file is named <code>default_includes.properties</code>
+	<p>Download the template for the includes file from SPF team Maven
+	2 repository. The template file is named <code>default_includes.properties</code>
 	but you will rename it. It is delivered inside the <code>spf-portlet-config.jar</code>
 	file (often a version number is affixed to the end of the JAR file
 	name). You can download that JAR file from the SPF Maven repository
@@ -493,7 +495,9 @@ markup token in your view file. <i>Otherwise you can skip this.</i></p>
 		</li>
 	</ul>
 	<p>When you <a href="#using.creating.configure">configure the
-	portlet instance</a>, you will tell it where to find the file.</p>
+	portlet instance</a>, you will tell it the filename and location relative
+	to where you put it. The portlet will then search in the above
+	locations for it.</p>
 	</li>
 </ul>
 
@@ -505,7 +509,8 @@ markup token in your view file. <i>Otherwise you can skip this.</i></p>
 
 <p>All of the runtime dependencies for the HTML viewer portlet are
 contained inside the <code>htmlviewer.war</code>. Your application
-server should be using Java 1.5 minimum.</p>
+server should be using Java 1.5 minimum and your portlet container needs
+to support JSR-286.</p>
 
 <hr>
 
@@ -582,9 +587,10 @@ view file.</p>
 
 <blockquote>
 <p><b>Note:</b> Be advised that if you use the <code>{INCLUDE:<i>key</i>}</code>
-token, you will want to create a <i>token substitutions property
-file</i> to go with it. That is where you will define the key-value pairs
-you reference from your view file. See the discussion about <a
+token, you will want to create an <i>includes file</i> (aka token
+substitutions file) to go with it. This is a simple property file where
+you will define the key-value pairs you reference from your view file.
+See the discussion about <a
 	href="#overview.installation.html_viewer_includes">installing <code>html_viewer_includes.properties</code></a>
 above.</p>
 </blockquote>
@@ -708,13 +714,13 @@ can upgrade to it without first adding your custom file.</p>
 </blockquote>
 
 <blockquote>
-<p><b>Note:</b> If you have a <i>token substitutions</i> property
-file, you can install it as an internal or external resource file, too.
-See the discussion about <a
-	href="#overview.installation.html_viewer_includes">installing <code>html_viewer_includes.properties</code></a>
-above, and <a href="#using.creating.configure">configuring the
-portlet instance</a> below. As above, we recommend your put your token
-substitutions file outside of the WAR.</p>
+<p><b>Note:</b> If you have an <i>includes file</i>, you can install
+it as an internal or external resource file, too. See the discussion
+about <a href="#overview.installation.html_viewer_includes">installing
+<code>html_viewer_includes.properties</code></a> above, and <a
+	href="#using.creating.configure">configuring the portlet instance</a>
+below. As above, we recommend your put your includes file outside of the
+WAR.</p>
 </blockquote>
 
 <blockquote>
@@ -924,6 +930,11 @@ markup token, then when you create the portlet instance for that
 content, be sure to enter a <i>portlet friendly ID</i> which matches
 that token. In Vignette console, the portlet friendly ID is entered on
 the <b>Basics</b> tab of the portlet instance.</p>
+<p>As of version 1.0.15 of the HTML viewer portlet application, the
+portlet friendly ID is also used in the logs, to differentiate between
+log entries for different portlet instances (see <a href="#using.logs">reading
+the logs</a> below). So it is a good idea to specify a good friendly ID even
+if your view content does not use that token.</p>
 </blockquote>
 
 <a name="using.creating.configure">
@@ -943,7 +954,9 @@ if invoked. The <code>config</code> mode view will remind you to specify
 at least a view file when you first enter the mode.</p>
 </blockquote>
 
-<p>In the configuration view, there are 3 input elements:</p>
+<p>In the configuration view, there are 4 input elements (as of this
+writing - until the 1.0.15 version of the HTML viewer application, there
+were only the first 3):</p>
 
 <dl>
 	<dt><b>View file:</b></dt>
@@ -964,21 +977,20 @@ at least a view file when you first enter the mode.</p>
 	</p>
 	</dd>
 
-	<dt><b>Token substitutions file:</b></dt>
+	<dt><b>Includes file</b> (ie token substitutions file):</dt>
 	<dd>
 	<p><b>Optional.</b> You only care about this input element if your
 	view file content uses the special <code>{INCLUDE:<i>key</i>}</code>
-	token to dynamically insert key-value pairs from the <i>token
-	substitutions property file</i>; <b>and</b> that property file is named
-	something other than the default (<code>html_viewer_includes.properties</code>)
-	or exists in a subfolder. If so, then enter the filename here. Include
-	the file extension, and any subfolder relative to the classloader
-	folder, <code>htmlviewer.war</code> root, or <i>portlet resource
-	bundle folder</i> where the file is located. (The file may be located in
-	any folder searched by the system classloader, such as your "global
-	resources" folder configured on the JVM classpath; or it may be
-	anywhere inside the WAR or underneath the portlet resource bundle
-	folder. See the discussion about <a
+	token to dynamically insert key-value pairs from the <i>includes
+	file</i>; <b>and</b> that property file is named something other than the
+	default (<code>html_viewer_includes.properties</code>) or exists in a
+	subfolder. If so, then enter the filename here. Include the file
+	extension, and any subfolder relative to the classloader folder, <code>htmlviewer.war</code>
+	root, or <i>portlet resource bundle folder</i> where the file is
+	located. (The file may be located in any folder searched by the system
+	classloader, such as your "global resources" folder configured on the
+	JVM classpath; or it may be anywhere inside the WAR or underneath the
+	portlet resource bundle folder. See the discussion about <a
 		href="#overview.installation.html_viewer_includes">installing <code>html_viewer_includes.properties</code></a>
 	earlier in this guide.)</p>
 
@@ -998,6 +1010,22 @@ at least a view file when you first enter the mode.</p>
 	<p>To enable this optional feature, click the checkmark in the
 	configuration view. This feature is off by default.</p>
 	</dd>
+
+	<dt><b>Cache duration</b> (new to version 1.0.15):</dt>
+	<dd>
+	<p><b>Optional.</b> As of version 1.0.15 of the portlet
+	application, the HTML viewer portlet caches all of the resources it
+	uses to render the view content - the view file, includes file, and the
+	values of the these configuration input elements. This may improve the
+	HTML viewer portlet's performance under heavy loads.</p>
+	<p>The cache duration input element lets you specify the number of
+	seconds until the cache will be refreshed. By default, the cache
+	duration is 900 seconds (15 minutes) but if you want to enter an
+	alternative value, you can enter any positive number of seconds here.
+	Enter a negative number (eg <code>-1</code>) to cache forever, and
+	enter zero (<code>0</code>) to disable the cache (which is the
+	pre-1.0.15 behavior).</p>
+	</dd>
 </dl>
 
 <p>Be sure to click the <code>Save</code> button to save your
@@ -1014,6 +1042,61 @@ preview the portlet to see and test your rendered content.</p>
 	without any restart or reconfiguration of the portlet required.</li>
 </ul>
 
+<hr>
+
+<a name="using.logs">
+<h3>2.5. Reading the logs</h3>
+</a>
+
+<p>The HTML viewer portlet uses WPAP (Timber) application logging.
+Configuration for these logs is in <code>logger.xml</code>, inside the <code>htmlviewer</code>
+portlet WAR file. The out-of-the-box configuration generates <b>business
+activity</b>, <b>performance</b>, <b>error</b> and <b>error trace</b> logs
+from which you can see how the portlet has been behaving. All HTML
+viewer portlet instances in the consuming portal write to these same
+logs.</p>
+<p>As of version 1.0.15 of the HTML viewer portlet application, the
+logging has been enhanced to include more data. Context information has
+been added to all the log records, including the portlet friendly ID
+(allowing you to distinguish between portlet instances in the log files)
+and whether the data rendered came from the cache or the source. For
+example, here is a business log record as of version 1.0.15 (the record
+has been wrapped here for readability):</p>
+
+<blockquote><pre>
+09/17/2009, 19:13:04 | 12532147846432971 | 12532147846432971 | 
+epi:user.standard;654e687954b2df310152dd6cb053ce01 | 
+257dc89c9d78647ad00bb72db053ce01-56a6ec2482b21250e00bb72db053ce01-2636b6e39487235532e82a10b053ce01 | 
+RENDER_PHASE | view | normal |  | en_US | {portletID:hmLogin},{contentFrom:cache} |  | OK | 0.008
+</pre></blockquote>
+
+<p>This log record was for the <code>hmLogin</code> portlet instance
+(friendly ID) and indicates the content (US English) was served
+succesfully (OK) from cache in 8 milliseconds.</p>
+<p>Application errors like missing or unreadable view files are now
+logged, as well. For example, when a portlet instance is configured to
+point to a non-existent view file, it has no content it can display.
+When a user views the portlet anyway, it will render a
+service-unavailable error message, and the business log entry will look
+like this (as of version 1.0.15):</p>
+
+<blockquote><pre>
+09/17/2009, 19:19:21 | 12532151611575614 | 12532151611575614 | 
+epi:user.standard;654e687954b2df310152dd6cb053ce01 | 
+257dc89c9d78647ad00bb72db053ce01-671d9ad3f4880aa391c6b510b053ce01-eae66195bd3b616d45c1fbecb053ce01 | 
+RENDER_PHASE | view | normal |  | en_US | {portletID:fmHelp},{contentFrom:source},
+{error.nullFile:viewFilename not found or readable: forums/html/forumsHelp1.html} |  | FATAL | 0.061
+</pre></blockquote>
+
+<p>This log record was for the <code>fmHelp</code> portlet instance
+(friendly ID) and indicates there was a FATAL error due to the view file
+(<code>forums/html/forumsHelp1.html</code>) not being found. The error
+and error trace logs will contain further information.</p>
+
+<p>The out-of-the-box HTML viewer configuration puts these log files
+into <code>/opt/sasuapps/sp/logs/htmlviewer/main</code> (where <code>htmlviewer</code>
+is the context root for the application, and <code>/opt/sasuapps/sp/logs/</code>
+is the WPAP Timber log root defined in the HTML viewer application's <code>web.xml</code>).</p>
 <hr>
 
 <a name="history">
@@ -1068,9 +1151,9 @@ preview the portlet to see and test your rendered content.</p>
 		<td>Sep 17 2009</td>
 		<td>S. Jorgenson</td>
 		<td>Documented new configuration option for the cache retention
-		period. Corrected the documentation to say that HTML viewer is a
-		JSR-286 portlet, not JSR-168, and requires a JSR-286-compatible
-		container.</td>
+		period. Documented new logging section. Corrected the documentation to
+		say that HTML viewer is a JSR-286 portlet, not JSR-168, and requires a
+		JSR-286-compatible container.</td>
 	</tr>
 </table>
 <p></p>
