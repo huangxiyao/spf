@@ -185,8 +185,8 @@ and Developer's Guide</h1>
 
 <p>This is the administration guide and developer's guide for the <b>Shared
 Portal Framework (SPF) HTML viewer portlet</b>. The HTML viewer portlet is a
-JSR-168 (JSR-286-compatible) portlet for displaying an arbitrary content
-file you provide (called a <i>view file</i>).</p>
+JSR-286 portlet for displaying an arbitrary content file you provide
+(called a <i>view file</i>).</p>
 
 <ul>
 	<li>
@@ -271,13 +271,13 @@ The <code>htmlviewer</code> WAR is distributed through Maven 2:</p>
 <p>To get the HTML viewer portlet, download the latest released
 version of <code>htmlviewer.war</code> from the repository.</p>
 
-<p>To install it, deploy it into your JSR-168-compliant portlet
+<p>To install it, deploy it into your JSR-286-compliant portlet
 application server. It can be local to the portal application, or
 remoted with the support of a WSRP portlet container. For the Shared
 Portal Framework platform, we will generally use remote portlets with
 the OpenPortal portlet container, so this means deploying it into the
 application server where OpenPortal is running. The deployment
-procedures are the same as for any other JSR-168 portlet application.</p>
+procedures are the same as for any other JSR-286 portlet application.</p>
 
 <blockquote>
 <p><b>Note:</b> When you download the WAR from the repository, it
@@ -1062,6 +1062,15 @@ preview the portlet to see and test your rendered content.</p>
 		<td>Jul 6 2009</td>
 		<td>S. Jorgenson</td>
 		<td>Added note about renaming WAR file for OpenPortal.</td>
+	</tr>
+	<tr>
+		<td>1.5</td>
+		<td>Sep 17 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Documented new configuration option for the cache retention
+		period. Corrected the documentation to say that HTML viewer is a
+		JSR-286 portlet, not JSR-168, and requires a JSR-286-compatible
+		container.</td>
 	</tr>
 </table>
 <p></p>
