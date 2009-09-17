@@ -9,7 +9,9 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.web.portlet.ModelAndView;
@@ -191,7 +193,9 @@ public class ConfigController extends AbstractController {
 	 * a positive number of seconds.
 	 * </p>
 	 * <p>
-	 * This method uses WPAP Timber logging to record the outcome.
+	 * This method uses WPAP Timber logging to record the outcome. In the case
+	 * of an business-logic error during this controller, the WPAP Timber error
+	 * logs will include diagnostics about the error.
 	 * </p>
 	 * 
 	 * @param request
@@ -205,80 +209,59 @@ public class ConfigController extends AbstractController {
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 
-		ArrayList<String> errorCodes = new ArrayList<String>();
-		ArrayList<String> warnCodes = new ArrayList<String>();
-		ArrayList<String> infoCodes = new ArrayList<String>();
-		String[] aErrorCodes, aWarnCodes, aInfoCodes;
-		String errorMsg, warnMsg, infoMsg, errorCode, warnCode;
+		LinkedHashMap<String, String> errors = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> warnings = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> infos = new LinkedHashMap<String, String>();
+		String errorCode, warnCode;
 		String viewFilename, includesFilename, launchButtonless, checkSeconds;
 		ModelAndView modelView = new ModelAndView(viewName);
 
-		// Setup for WPAP logging; assume OK for now.
+		// Setup for WPAP logging; assume OK for now. Put portlet friendly ID
+		// (if any) into the log context data.
 		Transaction trans = TransactionImpl.getTransaction(request);
-		if (trans != null)
+		if (trans != null) {
+			String portletID = Utils.getPortalPortletID(request);
+			trans.addContextInfo("portletID", portletID);
 			trans.setStatusIndicator(StatusIndicator.OK);
+		}
 
-		// Processing differs somewhat if we are following a preceding action
-		// phase or not. When following an action phase, we want to render the
-		// user inputs even if invalid, so we get the model data from the render
-		// parameters set by the action phase. We also need to copy along any
-		// errors recorded during the action phase so that they can be rendered
-		// too. When not following an action phase, though, we must get the
-		// model data from the view data cache (reading from portlet preferences
-		// and backfilling into cache as needed).
+		// When following an action phase, we want to render the user inputs
+		// even if invalid, so we get the model data from the render parameters
+		// set by the action phase. When not following an action phase, though,
+		// we must get the model data from the view data cache (reading from
+		// portlet preferences and backfilling into cache as needed).
 		if (request.getParameter(ACTION_FLAG) != null) {
 
 			// Get the model data from the render parameters, and copy it into
 			// the model.
 			viewFilename = request.getParameter(Consts.VIEW_FILENAME);
-			if (viewFilename == null) 
+			if (viewFilename == null)
 				viewFilename = "";
 			modelView.addObject(Consts.VIEW_FILENAME, viewFilename);
-			
+
 			includesFilename = request.getParameter(Consts.INCLUDES_FILENAME);
 			if (includesFilename == null)
 				includesFilename = "";
 			modelView.addObject(Consts.INCLUDES_FILENAME, includesFilename);
-			
+
 			checkSeconds = request.getParameter(Consts.CHECK_SECONDS);
 			modelView.addObject(Consts.CHECK_SECONDS, checkSeconds);
 
 			launchButtonless = request.getParameter(Consts.LAUNCH_BUTTONLESS);
 			modelView.addObject(Consts.LAUNCH_BUTTONLESS, launchButtonless);
 
-			// Get any status codes from the render parameters and copy their
-			// messages into the model. Currently only error and info status
-			// might be passed from the action phase, but check for warnings
-			// too.
-			if ((aErrorCodes = request.getParameterValues(Consts.ERROR_CODE)) != null) {
-				for (int i = 0; i < aErrorCodes.length; i++) {
-					errorCodes.add(aErrorCodes[i]);
-				}
-			}
-			if ((aWarnCodes = request.getParameterValues(Consts.WARN_CODE)) != null) {
-				for (int i = 0; i < aWarnCodes.length; i++) {
-					warnCodes.add(aWarnCodes[i]);
-				}
-			}
-			if ((aInfoCodes = request.getParameterValues(Consts.INFO_CODE)) != null) {
-				for (int i = 0; i < aInfoCodes.length; i++) {
-					infoCodes.add(aInfoCodes[i]);
-				}
-			}
-
 		} else {
 
 			// Get the data from the current view data cache, and copy it into
 			// the model. Throw an exception if we fail to get the data or there
-			// was an error loading it (eg unable to read portlet preferences
-			// database).
+			// was a fatal error loading it (eg unable to read portlet
+			// preferences database).
 			ViewData data = ViewDataCache.getViewData(request);
-			if ((data == null) || (data.error())) {
-				throw new InternalErrorException(request,
-						Consts.ERROR_CODE_INTERNAL);
+			if ((data == null) || (data.fatal())) {
+				throw new InternalErrorException(request, data.getErrors());
 			}
 			viewFilename = data.getViewFilename();
-			if (viewFilename == null) 
+			if (viewFilename == null)
 				viewFilename = "";
 			modelView.addObject(Consts.VIEW_FILENAME, viewFilename);
 
@@ -294,56 +277,59 @@ public class ConfigController extends AbstractController {
 			modelView.addObject(Consts.CHECK_SECONDS, checkSeconds);
 		}
 
-		// Next, check the view data for exception conditions and add
-		// messages to the model as needed (some of these conditions might
-		// already have been reported as errors over them if that is the case).
-		// Some view data exception conditions are considered just warnings,
-		// while others are considered errors.
+		// Next, check the view data for exception conditions and queue up any
+		// that are found. Some conditions are considered just warnings, while
+		// others are considered errors.
 		if ((errorCode = Utils
 				.checkViewFilenameForErrors(request, viewFilename)) != null) {
-			errorCodes.add(errorCode);
+			errors.put(errorCode, Utils.getDiagnostic(errorCode, viewFilename));
 		}
 		if ((errorCode = Utils.checkIncludesFilenameForErrors(request,
 				includesFilename)) != null) {
-			errorCodes.add(errorCode);
+			errors.put(errorCode, Utils.getDiagnostic(errorCode,
+					includesFilename));
 		}
 		if ((errorCode = Utils.checkSecondsForErrors(request, checkSeconds)) != null) {
-			errorCodes.add(errorCode);
+			errors.put(errorCode, Utils.getDiagnostic(errorCode, checkSeconds));
 		}
 		if ((warnCode = Utils.checkViewFilenameForWarnings(request,
 				viewFilename)) != null) {
-			warnCodes.add(warnCode);
+			warnings.put(warnCode, Utils.getDiagnostic(warnCode, viewFilename));
 		}
 		if ((warnCode = Utils.checkIncludesFilenameForWarnings(request,
 				includesFilename)) != null) {
-			warnCodes.add(warnCode);
+			warnings.put(warnCode, Utils.getDiagnostic(warnCode,
+					includesFilename));
 		}
 
-		// Finally, convert all the error codes to messages. If there were no
-		// errors, convert all the warning codes and info codes to messages.
-		// (When there are errors, we only report errors, not warnings or
-		// infos.) Set the messages into the model for rendering in the view.
-		if (!errorCodes.isEmpty()) {
-			for (int i = 0; i < errorCodes.size(); i++) {
-				errorMsg = I18nUtility.getMessage(request, errorCodes.get(i));
-				addMessage(modelView, Consts.ERROR_MESSAGES, errorMsg);
-			}
+		// Also, if following an action phase, get any status codes from the
+		// render parameters and queue them up too. messages into the model.
+		// Currently only error and info status might be passed from the action
+		// phase, but check for warnings too.
+		if (request.getParameter(ACTION_FLAG) != null) {
+			getActionStatus(request, Consts.ERROR_CODE, errors);
+			getActionStatus(request, Consts.WARN_CODE, warnings);
+			getActionStatus(request, Consts.INFO_CODE, infos);
+		}
+
+		// Finally, convert all the queued errors to UI messages. If there were
+		// no errors, convert all the warning codes and info codes to UI
+		// messages. (When there are errors, we only report errors, not warnings
+		// or infos.) Set the messages into the model for rendering in the view.
+		// This also sets the reported errors or warnings/infos as context items
+		// for logging.
+		if (!errors.isEmpty()) {
+			addMessages(request, modelView, Consts.ERROR_MESSAGES, errors);
 			if (trans != null)
 				trans.setStatusIndicator(StatusIndicator.ERROR);
 			return modelView;
 		}
-		if (!warnCodes.isEmpty()) {
-			for (int i = 0; i < warnCodes.size(); i++) {
-				warnMsg = I18nUtility.getMessage(request, warnCodes.get(i));
-				addMessage(modelView, Consts.WARN_MESSAGES, warnMsg);
-			}
+		if (!warnings.isEmpty()) {
+			addMessages(request, modelView, Consts.WARN_MESSAGES, warnings);
 			if (trans != null)
 				trans.setStatusIndicator(StatusIndicator.WARNING);
 		}
-		for (int i = 0; i < infoCodes.size(); i++) {
-			infoMsg = I18nUtility.getMessage(request, infoCodes.get(i));
-			addMessage(modelView, Consts.INFO_MESSAGES, infoMsg);
-		}
+		addMessages(request, modelView, Consts.INFO_MESSAGES, infos);
 		return modelView;
 	}
 
@@ -410,8 +396,18 @@ public class ConfigController extends AbstractController {
 	protected void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 
-		ArrayList<String> errorCodes = new ArrayList<String>();
+		LinkedHashMap<String, String> errors = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> infos = new LinkedHashMap<String, String>();
+
+		// Setup for WPAP logging; assume OK for now. Put portlet friendly ID
+		// (if any) into the log context data.
 		Transaction trans = TransactionImpl.getTransaction(request);
+		if (trans != null) {
+			String portletID = Utils.getPortalPortletID(request);
+			trans.addContextInfo("portletID", portletID);
+			trans.setStatusIndicator(StatusIndicator.OK);
+		}
+
 		try {
 			// Get the parameters and stage them to be copied to render phase.
 			String viewFilename = Utils.slashify(request
@@ -449,7 +445,8 @@ public class ConfigController extends AbstractController {
 			String errorCode = Utils.checkViewFilenameForErrors(request,
 					viewFilename);
 			if (errorCode != null) {
-				errorCodes.add(errorCode);
+				errors.put(errorCode, Utils.getDiagnostic(errorCode,
+						viewFilename));
 			}
 
 			// Next edit-check the includes filename value. If errors found, do
@@ -457,20 +454,21 @@ public class ConfigController extends AbstractController {
 			errorCode = Utils.checkIncludesFilenameForErrors(request,
 					includesFilename);
 			if (errorCode != null) {
-				errorCodes.add(errorCode);
+				errors.put(errorCode, Utils.getDiagnostic(errorCode,
+						includesFilename));
 			}
 
 			// Next edit-check the check-seconds value (it must be an integer).
 			// If error found, do not store any of the new preferences.
 			errorCode = Utils.checkSecondsForErrors(request, checkSeconds);
 			if (errorCode != null) {
-				errorCodes.add(errorCode);
+				errors.put(errorCode, Utils.getDiagnostic(errorCode,
+						checkSeconds));
 			}
 
 			// Throw exception if there were any edit-check failures above.
-			if (!errorCodes.isEmpty()) {
-				errorCodes.add(Consts.ERROR_CODE_PREFS_UNSAVED);
-				throw new InputErrorException(request);
+			if (!errors.isEmpty()) {
+				throw new InputErrorException(request, errors);
 			}
 
 			// Save the view data to portlet preferences, flush the cache, and
@@ -479,12 +477,12 @@ public class ConfigController extends AbstractController {
 			ViewData data = new ViewData(request, viewFilename,
 					includesFilename, Boolean.parseBoolean(launchButtonless),
 					Integer.parseInt(checkSeconds));
-			if ((data == null) || (data.error())) {
-				throw new InternalErrorException(request,
-						Consts.ERROR_CODE_INTERNAL);
+			if ((data == null) || (data.fatal())) {
+				throw new InternalErrorException(request, data.getErrors());
 			}
-			response.setRenderParameter(Consts.INFO_CODE,
-					new String[] { Consts.INFO_CODE_PREFS_SAVED });
+			infos.put(Consts.INFO_CODE_PREFS_SAVED, Utils.getDiagnostic(
+					Consts.INFO_CODE_PREFS_SAVED, null));
+			setActionStatus(response, Consts.INFO_CODE, infos);
 
 			// Log success to WPAP logs, recording the parameters as context
 			// info.
@@ -493,17 +491,11 @@ public class ConfigController extends AbstractController {
 				trans.addContextInfo("includesFilename", includesFilename);
 				trans.addContextInfo("launchButtonless", launchButtonless);
 				trans.addContextInfo("checkSeconds", checkSeconds);
-				trans.setStatusIndicator(StatusIndicator.OK);
 			}
 		} catch (InputErrorException e) {
-			response.setRenderParameter(Consts.ERROR_CODE, errorCodes
-					.toArray(new String[] {}));
-
-			// Log error to WPAP logs. Do not generate an error/error-trace
-			// however since those are only for system errors and this is a user
-			// error.
-			if (trans != null)
-				trans.setStatusIndicator(StatusIndicator.ERROR);
+			errors.put(Consts.ERROR_CODE_PREFS_UNSAVED, Utils
+					.getDiagnostic(Consts.ERROR_CODE_PREFS_UNSAVED, null));
+			setActionStatus(response, Consts.ERROR_CODE, errors);
 		}
 		// Note: exceptions thrown back to Spring are automatically logged by
 		// WPAP (transaction logging interceptor) to the error/error-trace logs,
@@ -511,33 +503,96 @@ public class ConfigController extends AbstractController {
 	}
 
 	/**
-	 * Add an error, warning, or info message to the model if it is not already
-	 * there, while retaining what is already there.
+	 * Add error, warning, or info UI messages to the model, skipping any
+	 * duplicates. Also add diagnostic context info about the error, warning, or
+	 * info to the transaction so it can be logged.
 	 */
 	@SuppressWarnings("unchecked")
-	private void addMessage(ModelAndView model, String msgType, String errMsg) {
-		if (model != null && errMsg != null) {
-			errMsg = errMsg.trim();
-			if (errMsg.length() > 0) {
-				Map modelMap = model.getModel();
-				ArrayList<String> errMsgs = null;
-				try {
-					errMsgs = (ArrayList<String>) modelMap.get(msgType);
-				} catch (ClassCastException e) {
-					// should never happen
+	private void addMessages(RenderRequest request, ModelAndView model,
+			String statusType, LinkedHashMap<String, String> statusItems) {
+		Map modelMap;
+		ArrayList<String> msgs;
+		String statusCode, statusDiagnostic, msg;
+		Iterator i = statusItems.keySet().iterator();
+		Transaction trans = TransactionImpl.getTransaction(request);
+		while (i.hasNext()) {
+			statusCode = (String) i.next();
+			statusDiagnostic = statusItems.get(statusCode);
+			msg = I18nUtility.getMessage(request, statusCode);
+			if (msg != null) {
+				msg = msg.trim();
+				if (msg.length() > 0) {
+					modelMap = model.getModel();
+					msgs = (ArrayList<String>) modelMap.get(statusType);
+					if (msgs == null) {
+						msgs = new ArrayList<String>();
+					}
+					// suppress duplicates
+					for (int j = 0; j < msgs.size(); j++) {
+						if (msg.equals(msgs.get(j)))
+							return;
+					}
+					// add unique message and context info
+					msgs.add(msg);
+					model.addObject(statusType, msgs);
+					if (trans != null) {
+						trans.addContextInfo(statusCode, statusDiagnostic);
+					}
 				}
-				if (errMsgs == null) {
-					errMsgs = new ArrayList<String>();
-				}
-				// suppress duplicate messages
-				for (int i = 0; i < errMsgs.size(); i++) {
-					if (errMsg.equals(errMsgs.get(i)))
-						return;
-				}
-				errMsgs.add(errMsg);
-				model.addObject(msgType, errMsgs);
 			}
 		}
 	}
 
+	/**
+	 * Get the action status info for a particular type from the render
+	 * parameters, where the action phase set it, and split into code and
+	 * diagnostic message. Return the results.
+	 */
+	private void getActionStatus(RenderRequest request, String statusType,
+			LinkedHashMap<String, String> statusItems) {
+		String[] statusItemArray = request.getParameterValues(statusType);
+		String statusItem, statusCode, statusDiagnostic;
+		int j;
+		if (statusItemArray != null) {
+			for (int i = 0; i < statusItemArray.length; i++) {
+				statusItem = statusItemArray[i];
+				if ((j = statusItem.indexOf(':')) == -1) {
+					statusCode = statusItem;
+					statusDiagnostic = null;
+				} else {
+					statusCode = statusItem.substring(0, j);
+					if (j + 1 < statusItem.length())
+						statusDiagnostic = statusItem.substring(j + 1);
+					else
+						statusDiagnostic = null;
+				}
+				statusItems.put(statusCode, statusDiagnostic);
+			}
+		}
+	}
+
+	/**
+	 * Set the action status info (consisting of code and diagnostic message)
+	 * for a particular type into a render parameter for that type.
+	 */
+	private void setActionStatus(ActionResponse response, String statusType,
+			LinkedHashMap<String, String> statusItems) {
+		if (statusItems != null) {
+			String[] statusItemArray = new String[statusItems.size()];
+			Iterator i = statusItems.keySet().iterator();
+			String statusCode, statusDiagnostic, statusItem;
+			int j = 0;
+			while (i.hasNext()) {
+				statusCode = (String) i.next();
+				statusDiagnostic = statusItems.get(statusCode);
+				if (statusDiagnostic == null) {
+					statusItem = statusCode;
+				} else {
+					statusItem = statusCode + ':' + statusDiagnostic;
+				}
+				statusItemArray[j++] = statusItem;
+			}
+			response.setRenderParameter(statusType, statusItemArray);
+		}
+	}
 }

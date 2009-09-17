@@ -115,7 +115,9 @@ public class ViewController extends AbstractController {
 	 * {@link com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver}.
 	 * </p>
 	 * <p>
-	 * This method uses WPAP Timber logging to record the outcome.
+	 * This method uses WPAP Timber logging to record the outcome. In the case
+	 * of an business-logic error during this controller, the WPAP Timber error
+	 * logs will include diagnostics about the error.
 	 * </p>
 	 * 
 	 * @param request
@@ -130,10 +132,14 @@ public class ViewController extends AbstractController {
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 
-		// Setup for WPAP logging; assume OK for now.
+		// Setup for WPAP logging; assume OK for now. Put portlet friendly ID
+		// (if any) into the log context data.
 		Transaction trans = TransactionImpl.getTransaction(request);
-		if (trans != null)
+		if (trans != null) {
+			String portletID = Utils.getPortalPortletID(request);
+			trans.addContextInfo("portletID", portletID);
 			trans.setStatusIndicator(StatusIndicator.OK);
+		}
 
 		// Get the current view data, loading and backfilling into cache as
 		// needed.
@@ -143,8 +149,7 @@ public class ViewController extends AbstractController {
 		// for explicit logging here; the WPAP logging interceptor will handle
 		// it from the thrown exception.
 		if ((data == null) || (!data.ok())) {
-			throw new InternalErrorException(request,
-					Consts.ERROR_CODE_INTERNAL);
+			throw new InternalErrorException(request, data.getErrors());
 		}
 
 		// Interpolate the view content.
@@ -152,27 +157,22 @@ public class ViewController extends AbstractController {
 		TokenParser t = new TokenParser(request, response, includesContent);
 		String viewContent = t.parse(data.getViewContent());
 
-		// Error if view content is null; branch to error view. No need for
-		// explicit logging here; the WPAP logging interceptor will handle
-		// it from the thrown exception.
-		if (viewContent == null) {
-			throw new InternalErrorException(request,
-					Consts.ERROR_CODE_INTERNAL);
-		}
 		// Warning if the view content is blank/empty before or after
 		// interpolation. Record this in the WPAP transaction object for
-		// logging purposes.
+		// logging purposes, but proceed.
+		if (viewContent == null)
+			viewContent = "";
 		viewContent = viewContent.trim();
 		if (viewContent.length() == 0) {
 			if (trans != null) {
-				trans.addContextInfo("viewContent", "empty");
-				trans.setStatusIndicator(StatusIndicator.WARNING);
+				trans.addContextInfo("viewContent", "(empty)");
+				trans.setStatusIndicator(StatusIndicator.FYI);
 			}
 		}
 		ModelAndView modelView = new ModelAndView(viewName);
 
 		// If launch-buttonless, update the view content accordingly.
-		if (data.getLaunchButtonless()) {
+		if (data.getLaunchButtonless() && viewContent.length() > 0) {
 			modelView.addObject(Consts.LAUNCH_BUTTONLESS, "true");
 			viewContent = Utils.addButtonlessChildLauncher(response,
 					viewContent);

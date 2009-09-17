@@ -8,9 +8,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.portlet.PortletRequest;
 
+import com.hp.frameworks.wpa.portlet.transaction.Transaction;
+import com.hp.frameworks.wpa.portlet.transaction.TransactionImpl;
 import com.hp.it.spf.xa.misc.portlet.Utils;
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
 import com.hp.it.spf.htmlviewer.portlet.util.ViewData;
+import com.hp.websat.timber.model.StatusIndicator;
 
 /**
  * <p>
@@ -69,12 +72,19 @@ public class ViewDataCache {
 		if (request == null) {
 			return null;
 		}
+
+		// setup for WPAP logging
+		Transaction trans = TransactionImpl.getTransaction(request);
+
 		// get cache key and lookup data in cache
 		String cacheKey = getCacheKey(request);
 		ViewData data = cache.get(cacheKey);
 		// return from cache if the data exists, was loaded OK, and is still
 		// fresh
 		if ((data != null) && (data.ok()) && (!data.expired())) {
+			if (trans != null) {
+				trans.addContextInfo("contentFrom", "cache");
+			}
 			return data;
 		}
 		// if the data did not exist, had an error or warning when loaded, or is
@@ -84,6 +94,9 @@ public class ViewDataCache {
 		data = new ViewData(request);
 		if ((data != null) && (data.ok())) {
 			cache.put(cacheKey, data);
+		}
+		if (trans != null) {
+			trans.addContextInfo("contentFrom", "source");
 		}
 		return data;
 	}

@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.LinkedHashMap;
 import java.util.PropertyResourceBundle;
 
 import javax.portlet.ReadOnlyException;
@@ -69,13 +70,11 @@ public class ViewData {
 	// cache metadata
 	private Locale locale = null;
 	private long createMillis = System.currentTimeMillis();
-	private boolean error = false;
-	private boolean warning = false;
-
-	// portlet log
-	private Log portletLog = LogFactory.getLog(ViewData.class);
+	private boolean fatal = false;
+	private LinkedHashMap<String, String> errors = new LinkedHashMap<String, String>();
 
 	/**
+	 * <p>
 	 * Initialize the <code>ViewData</code> object from the portlet
 	 * preferences for the given request. First the portlet preferences are
 	 * fetched and stored inside the <code>ViewData</code> object. Then the
@@ -87,6 +86,11 @@ public class ViewData {
 	 * directory or portlet application, or the classpath. The content is <b>not</b>
 	 * interpolated, so that it can be re-used with many different users and
 	 * requests.
+	 * </p>
+	 * <p>
+	 * Use the instance methods to find out whether the creation of the object
+	 * succeeded or whether there was a fatal (or non-fatal) error.
+	 * </p>
 	 * 
 	 * @param request
 	 *            the user request
@@ -112,21 +116,23 @@ public class ViewData {
 							.parseInt(pp.getValue(Consts.CHECK_SECONDS,
 									Consts.DEFAULT_CHECK_SECONDS));
 				} catch (NumberFormatException e) {
-					// Don't flag a warning since there is a reasonable default.
+					// Don't flag an error since there is a reasonable default.
 					this.checkSeconds = Integer
 							.parseInt(Consts.DEFAULT_CHECK_SECONDS);
 				}
 			} catch (Exception e) {
-				handleError("Unable to read portlet preferences.", e);
+				setFatal(Consts.ERROR_CODE_INTERNAL,
+						"Unable to read portlet preferences; reason: " + e);
+			} finally {
+				// Now load the content corresponding to the preferences.
+				loadViewContent(request);
+				loadIncludesContent(request);
 			}
 		}
-
-		// Now load the content corresponding to the preferences.
-		loadViewContent(request);
-		loadIncludesContent(request);
 	}
 
 	/**
+	 * <p>
 	 * Initialize the <code>ViewData</code> object from the given parameters,
 	 * storing them to portlet preferences as a side-effect. First the
 	 * parameters are stored inside the <code>ViewData</code> object. Then
@@ -138,6 +144,12 @@ public class ViewData {
 	 * directory or portlet application, or the classpath. The content is <b>not</b>
 	 * interpolated, so that it can be re-used with many different users and
 	 * requests.
+	 * </p>
+	 * <p>
+	 * Use the instance methods to find out whether the creation of the object
+	 * (and save to the database) succeeded or whether there was a fatal (or
+	 * non-fatal) error.
+	 * </p>
 	 * 
 	 * @param request
 	 *            the user request
@@ -173,13 +185,14 @@ public class ViewData {
 						.toString(this.checkSeconds));
 				pp.store();
 			} catch (Exception e) {
-				handleError("Unable to save portlet preferences.", e);
+				setFatal(Consts.ERROR_CODE_INTERNAL,
+						"Unable to save portlet preferences; reason: " + e);
+			} finally {
+				// Lastly load the content corresponding to the preferences.
+				loadViewContent(request);
+				loadIncludesContent(request);
 			}
 		}
-
-		// Lastly load the content corresponding to the preferences.
-		loadViewContent(request);
-		loadIncludesContent(request);
 	}
 
 	/**
@@ -214,52 +227,48 @@ public class ViewData {
 
 	/**
 	 * Returns true if this <code>ViewData</code> object was created (loaded)
-	 * without any errors or warnings. When true is returned, both
-	 * {@link #error()} and {@link #warning()} will return false. Conversely,
-	 * when false is returned by the <code>ok()</code> method, either
-	 * {@link #error()} or {@link #warning()} or both will return true.
+	 * without any fatal or non-fatal errors. If false is returned, that means
+	 * there were fatal or non-fatal errors. In that case, you can use the
+	 * {@link #getErrors()} method to get the set of errors, and the
+	 * {@link #fatal()} method to check whether any were fatal.
 	 * 
-	 * @return true if there was no error or warning during load, false
-	 *         otherwise
+	 * @return true if there was no error during load, false otherwise
 	 */
 	public boolean ok() {
-		return !this.error && !this.warning;
+		return this.errors.isEmpty() && !this.fatal;
 	}
 
 	/**
-	 * Returns true if there was a fatal error when this <code>ViewData</code>
-	 * object was created (ie loaded). Typically this happens when the database
-	 * for the portlet preferences could not be accessed. The attributes
-	 * returned by the <code>ViewData</code> getter methods should be
-	 * considered corrupt and not be used. When true is returned by the
-	 * <code>error()</code> method, the {@link #ok()} method will return
-	 * false, and vice-versa.
+	 * Returns true if a fatal error was encountered when this
+	 * <code>ViewData</code> object was created (loaded). You can use the
+	 * {@link #getErrors()} method to get the full set of errors (some of which
+	 * may have been fatal and some of which may have been non-fatal).
 	 * 
 	 * @return true if there was a fatal error during load, false otherwise
 	 */
-	public boolean error() {
-		return this.error;
+	public boolean fatal() {
+		return !this.errors.isEmpty() && this.fatal;
 	}
 
 	/**
-	 * Returns true if there was a non-fatal but unusual condition encountered
-	 * when this <code>ViewData</code> object was created (ie loaded).
-	 * Typically this happens when the content files for the view and include
-	 * preferences could not be found or read. When true is returned by the
-	 * <code>warning()</code> method, the {@link #ok()} method will return
-	 * false, and vice-versa.
+	 * Returns the set of errors encountered when this <code>ViewData</code>
+	 * object was created (loaded). The keys in the map are the error codes;
+	 * each one points to an internal diagnostic message containing further
+	 * information. Generally the diagnostic messages are not end-user-friendly
+	 * and are not localized; they should be used for logging/reporting purposes
+	 * only. If there were no errors, the returned map is empty.
 	 * 
-	 * @return true if there was a non-fatal warning during load, false
-	 *         otherwise
+	 * @return the map of errors (empty if none)
 	 */
-	public boolean warning() {
-		return this.warning;
+	public LinkedHashMap<String,String> getErrors() {
+		return this.errors;
 	}
 
 	/**
 	 * Returns the base view filename that was loaded into this
 	 * <code>ViewData</code> object. This corresponds with the base view
-	 * filename preference in the portlet preferences.
+	 * filename preference in the portlet preferences. If there was a fatal
+	 * error during load, this value may be unreliable.
 	 * 
 	 * @return the base view filename (relative to the portlet bundle folder or
 	 *         portlet application)
@@ -271,7 +280,8 @@ public class ViewData {
 	/**
 	 * Returns the base include filename that was loaded into this
 	 * <code>ViewData</code> object. This corresponds with the base include
-	 * filename preference in the portlet preferences.
+	 * filename preference in the portlet preferences. If there was a fatal
+	 * error during load, this value may be unreliable.
 	 * 
 	 * @return the base include filename (relative to the portlet bundle folder,
 	 *         portlet application, or classpath)
@@ -283,7 +293,8 @@ public class ViewData {
 	/**
 	 * Returns the launch-buttonless value that was loaded into this
 	 * <code>ViewData</code> object. This corresponds with the
-	 * launch-buttonless preference in the portlet preferences.
+	 * launch-buttonless preference in the portlet preferences. If there was a
+	 * fatal error during load, this value may be unreliable.
 	 * 
 	 * @return the launch-buttonless value
 	 */
@@ -296,7 +307,8 @@ public class ViewData {
 	 * <code>ViewData</code> object. This is the number of seconds for which
 	 * this <code>ViewData</code> object is considered valid from its
 	 * creation/load. This corresponds with the check-seconds preference in the
-	 * portlet preferences.
+	 * portlet preferences. If there was a fatal error during load, this value
+	 * may be unreliable.
 	 * 
 	 * @return the check-seconds value
 	 */
@@ -322,7 +334,8 @@ public class ViewData {
 	 * this <code>ViewData</code> object. This is the best-fit localized
 	 * content for the base view filename in the portlet preferences given the
 	 * locale. It is uninterpolated so that it can be reused by many different
-	 * users and requests.
+	 * users and requests. If there was an error during load, this content may
+	 * be unreliable.
 	 * 
 	 * @return the localized, uninterpolated view file content
 	 */
@@ -335,7 +348,8 @@ public class ViewData {
 	 * into this <code>ViewData</code> object. This is the best-fit localized
 	 * content for the base includes filename in the portlet preferences given
 	 * the locale. It is uninterpolated so that it can be reused by many
-	 * different users and requests.
+	 * different users and requests. If there was an error during load, this
+	 * content may be unreliable.
 	 * 
 	 * @return the localized, uninterpolated includes file content
 	 */
@@ -358,11 +372,11 @@ public class ViewData {
 
 		// Skip load and flag warning if view filename is improper.
 		if ((viewFilename == null) || (viewFilename.length() == 0)) {
-			handleWarning("View filename was undefined.");
+			setError(Consts.ERROR_CODE_VIEW_FILENAME_NULL);
 			return;
 		}
 		if (viewFilename.indexOf("..") != -1) {
-			handleWarning("View filename used illegal .. reference.");
+			setError(Consts.ERROR_CODE_VIEW_FILENAME_PATH, viewFilename);
 			return;
 		}
 
@@ -376,8 +390,7 @@ public class ViewData {
 			viewStream = I18nUtility.getLocalizedFileStream(request,
 					viewFilename, this.locale, true);
 			if (viewStream == null) {
-				handleWarning("No eligible view file was found (in either the portlet bundle directory or the portlet application) for the base file: "
-						+ this.viewFilename + " or: " + viewFilename);
+				setError(Consts.ERROR_CODE_VIEW_FILE_NULL, this.viewFilename);
 				return;
 			}
 		}
@@ -394,9 +407,8 @@ public class ViewData {
 			}
 			is.close();
 		} catch (IOException e) {
-			handleWarning(
-					"An eligible view file was found (in either the portlet bundle directory or the portlet application), but it could not be read, for the base file: "
-							+ viewFilename, e);
+			setError(Consts.ERROR_CODE_INTERNAL, "Unable to read view file: "
+					+ viewFilename + "; reason: " + e);
 			return;
 		}
 
@@ -427,7 +439,7 @@ public class ViewData {
 
 		// Skip load and flag warning if includes filename is improper.
 		if (includesFilename.indexOf("..") != -1) {
-			handleWarning("Includes filename used illegal .. reference.");
+			setError(Consts.ERROR_CODE_INCLUDES_FILENAME_PATH, includesFilename);
 			return;
 		}
 
@@ -442,9 +454,9 @@ public class ViewData {
 						includesStream);
 				return;
 			} catch (Exception e) {
-				handleWarning(
-						"An eligible includes file was found (in either the portlet bundle directory or the portlet application), but could not be loaded, for the base file: "
-								+ includesFilename, e);
+				setError(Consts.ERROR_CODE_INTERNAL,
+						"Unable to read includes file: " + includesFilename
+								+ "; reason: " + e);
 				return;
 			}
 		}
@@ -457,81 +469,53 @@ public class ViewData {
 		this.includesContent = PropertyResourceBundleManager
 				.getBundle(includesFilename);
 		if ((this.includesContent == null) && !isDefault) {
-			handleWarning("No eligible includes file was found (in either the portlet bundle directory, the portlet application, or the classpath) for the base file: "
-					+ this.includesFilename);
+			setError(Consts.ERROR_CODE_INCLUDES_FILE_NULL, includesFilename);
 		}
 		return;
 	}
 
 	/**
-	 * Flag an error.
-	 */
-	private void handleError() {
-		error = true;
-	}
-
-	/**
-	 * Flag an error and log an error message if error logging is enabled.
+	 * Flag a non-fatal error and store the given diagnostics.
 	 * 
-	 * @param msg
-	 *            log message
+	 * @param warnCode
+	 *            the diagnostic error code
 	 */
-	private void handleError(String msg) {
-		if (portletLog.isErrorEnabled()) {
-			portletLog.error(msg);
-		}
-		error = true;
+	private void setError(String errorCode) {
+		setError(errorCode, null);
 	}
 
 	/**
-	 * Flag an error and log an error message and caught exception, if error
-	 * logging is enabled.
+	 * Flag a non-fatal error and store the given diagnostics.
 	 * 
-	 * @param msg
-	 *            log message
-	 * @param ex
-	 *            caught exception
+	 * @param errorCode
+	 *            the diagnostic error code
+	 * @param errorParam
+	 *            a diagnostic error parameter
 	 */
-	private void handleError(String msg, Exception e) {
-		if (portletLog.isErrorEnabled()) {
-			portletLog.error(msg, e);
-		}
-		error = true;
+	private void setError(String errorCode, String errorParam) {
+		this.errors.put(errorCode, Utils.getDiagnostic(errorCode, errorParam));
 	}
 
 	/**
-	 * Flag a warning.
-	 */
-	private void handleWarning() {
-		warning = true;
-	}
-
-	/**
-	 * Flag a warning and log a warning message if warning logging is enabled.
+	 * Flag a fatal error and store the given diagnostics.
 	 * 
-	 * @param msg
-	 *            log message
+	 * @param errorCode
+	 *            the diagnostic error code
 	 */
-	private void handleWarning(String msg) {
-		if (portletLog.isWarnEnabled()) {
-			portletLog.warn(msg);
-		}
-		warning = true;
+	private void setFatal(String errorCode) {
+		setFatal(errorCode, null);
 	}
 
 	/**
-	 * Flag a warning and log a warning message and caught exception, if warning
-	 * logging is enabled.
+	 * Flag a fatal error and store the given diagnostics.
 	 * 
-	 * @param msg
-	 *            log message
-	 * @param ex
-	 *            caught exception
+	 * @param errorCode
+	 *            the diagnostic error code
+	 * @param errorParam
+	 *            a diagnostic error parameter
 	 */
-	private void handleWarning(String msg, Exception e) {
-		if (portletLog.isWarnEnabled()) {
-			portletLog.warn(msg, e);
-		}
-		warning = true;
+	private void setFatal(String errorCode, String errorParam) {
+		setError(errorCode, errorParam);
+		this.fatal = true;
 	}
 }

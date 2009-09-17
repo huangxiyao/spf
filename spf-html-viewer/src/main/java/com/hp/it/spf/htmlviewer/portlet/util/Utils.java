@@ -33,6 +33,25 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 	}
 
 	/**
+	 * Returns the hardcoded diagnostic message for the given status code and
+	 * status parameter.
+	 * 
+	 * @param statusCode
+	 *            An error, warning, or info code.
+	 * @param statusParam
+	 *            A parameter for the diagnostic message to incorporate.
+	 * @return diagnostic message
+	 */
+	public static String getDiagnostic(String statusCode, String statusParam) {
+		String diagnosticFormat = Consts.DIAGNOSTIC_FORMATS.get(statusCode);
+		String diagnostic = statusParam;
+		if (diagnosticFormat != null) {
+			diagnostic = String.format(diagnosticFormat, statusParam);
+		}
+		return diagnostic;
+	}
+
+	/**
 	 * Checks the indicated view file name for error conditions given the
 	 * particular request, returning the particular error code for the first
 	 * error condition found, or null if no errors are found. The checked error
