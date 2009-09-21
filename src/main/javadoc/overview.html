@@ -135,6 +135,9 @@ table.props td {
 			of the SPF common utilities JAR</a></li>
 			<li>1.1.2. <a href="#overview.installation.config.portalurl">Installation
 			of <code>portalurl.properties</code> (optional)</a></li>
+			<li>1.1.3. <a
+				href="#overview.installation.config.propertyresourcebundlemanager">Installation
+			of <code>propertyresourcebundlemanager.properties</code> (optional)</a></li>
 		</ul>
 		</li>
 		<li>1.2. <a href="#overview.dependencies">Dependencies</a></li>
@@ -233,6 +236,8 @@ table.props td {
 			<li>4.2.2 <a
 				href="#properties.propertyResourceBundleManager.getString">Getting
 			a single property (<code>PropertyResourceBundleManager.getString</code>)</a></li>
+			<li>4.2.3. <a href="#properties.config">Configuring <code>propertyresourcebundlemanager.properties</code>
+			(optional)</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -382,6 +387,72 @@ your portal is using non-standard HTTP or HTTPS ports (eg in a sandbox).</p>
 	system classloader, you may be able to do both: include a <code>portalurl.properties</code>
 	inside your application, and also let the administrator optionally
 	override it when needed, by putting a <code>portalurl.properties</code>
+	outside of the WAR. For this to work, your classloader must search the
+	external folders in the classpath before searching inside the WAR. If
+	you are interested in this "mixed" deployment, be sure to test it out
+	first, as actual behavior may vary by environment (application server,
+	etc).</p>
+	</blockquote>
+	</li>
+</ul>
+
+<a name="overview.installation.config.propertyresourcebundlemanager">
+<h4>1.1.3 Installation of <code>propertyresourcebundlemanager.properties</code>
+(optional)</h4>
+</a>
+
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>propertyresourcebundlemanager.properties</code>
+if you will be <a href="#properties">using <code>PropertyResourceBundleManager</code>
+to access configuration properties</a> <b>and</b> you want to override the
+default behavior (eg the cache duration).</p>
+</blockquote>
+
+<p>To install this file:</p>
+
+<ul>
+	<li>
+	<p>Download the template for <code>propertyresourcebundlemanager.properties</code>
+	from the appropriate SPF configuration template JAR file. For portlet
+	applications, use the template in the <code>spf-portlet-config.jar</code>,
+	where you can find on the SPF team's Maven 2 repository here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+	(browse for the latest version - the JAR file may have the version
+	number affixed to the file name). SPF portal developers should use the
+	template in the <code>spf-portal-config.jar</code>, here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config/</a>.
+	In either case, extract the template from the JAR file once you have
+	downloaded it.</p>
+	</li>
+	<li>
+	<p>Customize the properties in the file as needed - see
+	instructions for <a href="#properties.config">configuring the <code>propertyresourcebundlemanager.properties</code></a>.</p>
+	</li>
+	<li>
+	<p>Include the customized file, named <code>propertyresourcebundlemanager.properties</code>,
+	with your application (ie for portlet developers, we are talking about
+	the portlet application; for portal component developers, we are
+	talking about the Vignette portal application). You can put the file
+	anywhere that the system classloader searches: inside your application
+	(eg in <code>/WEB-INF/classes</code>) or in any folder outside of the
+	WAR which is named in the classpath of the JVM. If you need to make the
+	configuration easily performable by an administrator, we recommend the
+	latter approach; otherwise the former is easier because you can then
+	just deliver the file inside the WAR.</p>
+
+	<p>If you are interested in externalizing the <code>propertyresourcebundlemanager.properties</code>,
+	check how your application server is configured. If you are using an
+	application server hosting environment, like DASH or SASU, they
+	probably will have provided you a "global resources" folder on the
+	server filesystem and in the JVM classpath. You would put the <code>propertyresourcebundlemanager.properties</code>
+	file there, if you wanted it to be external to your WAR (eg so the
+	administrator can easily customize it).</p>
+
+	<blockquote>
+	<p><b>Note:</b> Depending on the search order performed by your
+	system classloader, you may be able to do both: include a <code>propertyresourcebundlemanager.properties</code>
+	inside your application, and also let the administrator optionally
+	override it when needed, by putting a <code>propertyresourcebundlemanager.properties</code>
 	outside of the WAR. For this to work, your classloader must search the
 	external folders in the classpath before searching inside the WAR. If
 	you are interested in this "mixed" deployment, be sure to test it out
@@ -1827,14 +1898,14 @@ of this class are:</p>
 	<li>Maintains a hot-reloadable in-memory cache of your properties
 	- each time you call <code>PropertyResourceBundleManager</code> it
 	returns refreshed values if the file on disk has changed (or been
-	removed). So administrators can change your application properties
-	without having to restart.</li>
+	removed) and the cache has expired. So administrators can change your
+	application properties without having to restart. The cache lifetime is
+	configurable with <a href="#properties.config"><code>propertyresourcebundlemanager.properties</code></a>.</li>
 	<li>Optionally lets you localize your property files so you can
 	apply a different configuration for users with different locales.</li>
 	<li>Logs a warning if your file was not found or could not be
 	opened or read (the exception is logged too), using Apache commons
-	logging (so the log message goes to your underlying log framework - eg
-	WPA Portlet Edition's Timber logging framework).</li>
+	logging (so the log message goes to your underlying log framework).</li>
 </ul>
 
 <a name="properties.propertyResourceBundleManager.getBundle">
@@ -1842,11 +1913,13 @@ of this class are:</p>
 </a>
 
 <p>Use these methods to get back a Java {@link
-java.util.ResourceBundle} containing all the latest properties in your
+java.util.ResourceBundle} containing all the properties in your
 configuration file. For performance this uses an in-memory cache of your
 properties, which is automatically refreshed from disk if the file
-changed. (If it is removed on disk, the cache is automatically dropped
-too.)</p>
+changed and the cache has expired. (If it is removed on disk, the cache
+is automatically dropped too.) The cache lifetime is configurable with <a
+	href="#properties.config"><code>propertyresourcebundlemanager.properties</code></a>
+(see).</p>
 
 <dl>
 	<dt>{@link
@@ -1996,6 +2069,42 @@ String defaultID = PropertyResourceBundleManager.getString("my_config", Locale.J
 
 <p>Please see the method documentation for more information.</p>
 
+<a name="properties.config">
+<h4>4.2.3. Configuring <code>propertyresourcebundlemanager.properties</code>
+(optional)</h4>
+</a>
+
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>propertyresourcebundlemanager.properties</code>
+if you will be <a href="#properties">accessing configuration
+properties with <code>PropertyResourceBundleManager</code></a> <b>and</b>
+you need to override the default behavior (eg the cache duration).</p>
+</blockquote>
+
+<p>The <code>propertyresourcebundlemanager.properties</code> file
+lets you configure the behavior of the <code>PropertyResourceBundleManager</code>.
+At present, only one configuration item is available.</p>
+
+<dl>
+	<dt><code>reload.checkPeriod</code></dt>
+	<dd>
+	<p>This property is set to an integer (number of seconds) and
+	indicates how long the <code>PropertyResourceBundleManager</code>
+	in-memory cache should retain the results of a prior file lookup. A <i>positive</i>
+	integer means file lookup results will be cached for that many seconds.
+	A <i>negative</i> integer means they will be cached forever (until
+	restart). Zero disables the cache, so that the filesystem is checked
+	each time. The default period is 900 seconds. Caching may improve
+	performance of your application under heavy loads.</p>
+	<p>For example, to cache for an hour:</p>
+
+	<blockquote><pre>
+reload.checkPeriod = 3600
+	</pre></blockquote>
+	</dd>
+
+</dl>
+
 <hr>
 
 <!--
@@ -2054,6 +2163,14 @@ String defaultID = PropertyResourceBundleManager.getString("my_config", Locale.J
 		<td>S. Jorgenson</td>
 		<td>Added JSR-168 resource handling to <code>PortalURL</code>
 		classes.</td>
+	</tr>
+	<tr>
+		<td>1.3</td>
+		<td>Sep 21 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Added <code>propertyresourcebundlemanager.properties</code>
+		and <code>reload.checkPeriod</code> to <code>PropertyResourceBundleManager</code>
+		discussion.</td>
 	</tr>
 </table>
 <p></p>

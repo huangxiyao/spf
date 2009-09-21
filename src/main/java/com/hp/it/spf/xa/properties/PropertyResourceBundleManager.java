@@ -55,9 +55,17 @@ import com.hp.it.spf.xa.i18n.I18nUtility;
  * localized file). The cache is retained and used if there have been no
  * changes, and refreshed if there have been changes.
  * </p>
+ * <p>
+ * A positive value for <code>reload.checkPeriod</code> means to cache bundle
+ * lookup results for at least that many seconds. A negative value means to
+ * cache forever (until restart). A zero value disables the cache; bundle
+ * lookups will go against the filesystem every time. The default cache period
+ * is currently the value of the
+ * {@link PropertyResourceBundleManager#DEFAULT_RELOAD_CHECK_PERIOD} constant.
+ * </p>
  * 
- * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
+ * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @version TBD
  */
 public class PropertyResourceBundleManager {
@@ -81,7 +89,7 @@ public class PropertyResourceBundleManager {
 	// (prior versions of this class did not support the retention period
 	// feature -- ie their retention period was zero -- so set our default to
 	// zero so the prior behavior reverts by default)
-	protected static final int DEFAULT_RELOAD_CHECK_PERIOD = 0;
+	protected static final int DEFAULT_RELOAD_CHECK_PERIOD = 900;
 
 	// name of property file configuring minimum retention interval
 	private static final String CONFIG_FILE = "propertyresourcebundlemanager.properties";
@@ -135,12 +143,12 @@ public class PropertyResourceBundleManager {
 	 * <p>
 	 * Get the current resource bundle for the given properties file, without
 	 * localization. This method uses the in-memory "hot" cache (refreshed if
-	 * the file on disk is updated within the configured retention interval).
-	 * The search for the properties file occurs everywhere within the current
-	 * classpath using the standard system class loader. The method returns null
-	 * if the properties file cannot be found or has been removed from disk. If
-	 * there was a problem opening or reading the properties file, a warning is
-	 * also logged (using Apache commons logging).
+	 * the file on disk is updated and the configurable cache lifetime has
+	 * expired). The search for the properties file occurs everywhere within the
+	 * current classpath using the standard system class loader. The method
+	 * returns null if the properties file cannot be found or has been removed
+	 * from disk. If there was a problem opening or reading the properties file,
+	 * a warning is also logged (using Apache commons logging).
 	 * </p>
 	 * 
 	 * @param propertiesFilename
@@ -159,11 +167,11 @@ public class PropertyResourceBundleManager {
 	 * <p>
 	 * Get the current resource bundle for the given base properties file and
 	 * locale. This method uses the in-memory "hot" cache (refreshed if the file
-	 * on disk is updated within the configured retention interval). The search
-	 * for the properties file occurs everywhere within the current classpath
-	 * using the standard system class loader. The search includes looking for
-	 * the best-fit localized version of the properties file, using the standard
-	 * lookup sequence based on the given locale (see
+	 * on disk is updated and the configurable cache lifetime has expired). The
+	 * search for the properties file occurs everywhere within the current
+	 * classpath using the standard system class loader. The search includes
+	 * looking for the best-fit localized version of the properties file, using
+	 * the standard lookup sequence based on the given locale (see
 	 * {@link java.util.ResourceBundle}). The method returns null if the
 	 * best-fit properties file cannot be found or has been removed from disk.
 	 * If there was a problem opening or reading the properties file, a warning
@@ -209,13 +217,13 @@ public class PropertyResourceBundleManager {
 	 * <p>
 	 * Retrieve a property value from the current resource bundle for the given
 	 * properties file and key, without localization. This method uses the
-	 * in-memory "hot" cache (refreshed if the file on disk is updated within
-	 * the configured retention interval). The search for the properties file
-	 * occurs everywhere within the current classpath using the standard system
-	 * class loader. The method returns null if the properties file cannot be
-	 * found or has been removed from disk, or if the key is not found in it. If
-	 * there was a problem opening or reading the properties file, a warning is
-	 * also logged (using Apache commons logging).
+	 * in-memory "hot" cache (refreshed if the file on disk is updated and the
+	 * configurable cache lifetime has expired). The search for the properties
+	 * file occurs everywhere within the current classpath using the standard
+	 * system class loader. The method returns null if the properties file
+	 * cannot be found or has been removed from disk, or if the key is not found
+	 * in it. If there was a problem opening or reading the properties file, a
+	 * warning is also logged (using Apache commons logging).
 	 * </p>
 	 * 
 	 * @param propertiesFilename
@@ -237,8 +245,8 @@ public class PropertyResourceBundleManager {
 	 * Retrieve a property value (or the given default) from the current
 	 * resource bundle for the given properties file and key, without
 	 * localization. This method uses the in-memory "hot" cache (refreshed if
-	 * file on disk is updated within the configured retention interval). The
-	 * search for the properties file occurs everywhere within the current
+	 * file on disk is updated and the configurable cache lifetime has expired).
+	 * The search for the properties file occurs everywhere within the current
 	 * classpath using the standard system class loader. The method returns the
 	 * given default value if the properties file cannot be found or has been
 	 * removed from disk, or if the key is not found in it. If there was a
@@ -267,16 +275,16 @@ public class PropertyResourceBundleManager {
 	 * <p>
 	 * Retrieve a property value from the current resource bundle for the given
 	 * base properties file, key and locale. This method uses the in-memory
-	 * "hot" cache (refreshed if the file on disk is updated within the
-	 * configured retention interval). The search for the properties file occurs
-	 * everywhere within the current classpath using the standard system class
-	 * loader. The search includes looking for the best-fit localized version of
-	 * the properties file, using the standard lookup sequence based on the
-	 * given locale (see {@link java.util.ResourceBundle}). The method returns
-	 * null if the best-fit properties file cannot be found or has been removed
-	 * from disk, or if the key is not found in it. If there was a problem
-	 * opening or reading the properties file, a warning is also logged (using
-	 * Apache commons logging).
+	 * "hot" cache (refreshed if the file on disk is updated and the
+	 * configurable cache lifetime has expired). The search for the properties
+	 * file occurs everywhere within the current classpath using the standard
+	 * system class loader. The search includes looking for the best-fit
+	 * localized version of the properties file, using the standard lookup
+	 * sequence based on the given locale (see {@link java.util.ResourceBundle}).
+	 * The method returns null if the best-fit properties file cannot be found
+	 * or has been removed from disk, or if the key is not found in it. If there
+	 * was a problem opening or reading the properties file, a warning is also
+	 * logged (using Apache commons logging).
 	 * </p>
 	 * 
 	 * @param basePropertiesFilename
@@ -301,9 +309,9 @@ public class PropertyResourceBundleManager {
 	 * Retrieve a property value (or the given default) from the current
 	 * resource bundle for the given base properties file, key and locale. This
 	 * method uses the in-memory "hot" cache (refreshed if file on disk is
-	 * updated within the configured retention interval). The search for the
-	 * properties file occurs everywhere within the current classpath using the
-	 * standard system class loader. The search includes looking for the
+	 * updated and the configurable cache lifetime has expired). The search for
+	 * the properties file occurs everywhere within the current classpath using
+	 * the standard system class loader. The search includes looking for the
 	 * best-fit localized version of the properties file, using the standard
 	 * lookup sequence based on the given locale (see
 	 * {@link java.util.ResourceBundle}). The method returns the given default
@@ -517,7 +525,7 @@ public class PropertyResourceBundleManager {
 		if (info == null) {
 			return null;
 		}
-		
+
 		// if it is still recent, return the info from the cache - else null
 		if (!isExpired(info)) {
 			return info;
