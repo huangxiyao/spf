@@ -15,9 +15,8 @@
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal</artifactId>
-			<version>7.4.2-Patch0909</version>
+			<version>7.4.2.615224</version>
 			<type>war</type>
-			<classifier>Patch0909</classifier>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
