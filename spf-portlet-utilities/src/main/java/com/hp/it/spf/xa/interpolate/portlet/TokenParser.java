@@ -473,6 +473,34 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	}
 
 	/**
+	 * Get the navigation item ID for the current operative navigation item,
+	 * from the portlet request provided to the constructor. Returns null if
+	 * this has not been set in the request, or the request provided to the
+	 * constructor was null. The current implementation returns the navigation
+	 * item name, as the Vignette navigation item UID is an unfriendly value and
+	 * is not provided by SPF in the request.
+	 */
+	protected String getNavItemID() {
+		if (request == null) {
+			return null;
+		}
+		return Utils.getPortalNavItemID(request);
+	}
+
+	/**
+	 * Get the navigation item friendly URL from the current operative
+	 * navigation item, from the portlet request provided to the constructor.
+	 * Returns null if this has not been set in the request, or the request
+	 * provided to the constructor was null.
+	 */
+	protected String getNavItemURL() {
+		if (request == null) {
+			return null;
+		}
+		return Utils.getPortalNavItemURL(request);
+	}
+
+	/**
 	 * <p>
 	 * Parses the given string, performing all of the token substitutions and
 	 * interpolations supported by this class and the parent class. For a list

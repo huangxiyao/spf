@@ -535,7 +535,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * this method just returns the portlet ID from the given request. The
 	 * method returns null if no portlet ID was recorded in the request.
 	 * 
-	 * @param request The portlet request.
+	 * @param request
+	 *            The portlet request.
 	 * @return The portlet friendly ID for this portlet instance.
 	 */
 	public static String getPortalPortletID(PortletRequest request) {
@@ -561,12 +562,14 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * Portal, this is the "page friendly ID" configured by the portal
 	 * administrator on the portlet instance. The SPF framework propagates the
 	 * page ID from the from the portal to the portlet, where it is made
-	 * accessible in the request. So this method just returns the page ID
-	 * from the given request. The method returns null if no page ID was
-	 * recorded in the request.
+	 * accessible in the request. So this method just returns the page ID from
+	 * the given request. The method returns null if no page ID was recorded in
+	 * the request.
 	 * 
-	 * @param request The portlet request.
-	 * @return The page friendly ID for the page containing this portlet instance.
+	 * @param request
+	 *            The portlet request.
+	 * @return The page friendly ID for the page containing this portlet
+	 *         instance.
 	 */
 	public static String getPortalPageID(PortletRequest request) {
 		if (request != null) {
@@ -574,13 +577,141 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 			if (o != null) {
 				try {
 					Map contextMap = (Map) o;
-					return (String) contextMap
-							.get(Consts.KEY_PORTAL_PAGE_ID);
+					return (String) contextMap.get(Consts.KEY_PORTAL_PAGE_ID);
 				} catch (Exception e) { // should never happen
 				}
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * <p>
+	 * Get the current navigation item ID from the given portlet request. The
+	 * navigation item ID is the identifier within the portal site for the
+	 * navigation item pointing to the page on which this portlet instance
+	 * appears (thus it is not an element from the portlet application itself;
+	 * it is an element from the portal). There could be multiple navigation
+	 * items pointing to the page, but this method only operates on the current
+	 * one (ie the one invoked by the user to request the page).
+	 * </p>
+	 * <p>
+	 * For Vignette Portal, the navigation item ID returned is actually the
+	 * "navigation item name" configured by the portal administrator. (Vignette
+	 * does not support a friendly ID for navigation items, and the navigation
+	 * item UID is unfriendly and not available to the portlet in SPF.) The SPF
+	 * framework propagates the navigation item name from the portal to the
+	 * portlet, where it is made accessible in the request. So this method just
+	 * returns the navigation item name from the given request. The method
+	 * returns null if no navigation item name was recorded in the request.
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @return The navigation item name for the current operative navigation
+	 *         item for the page containing this portlet instance.
+	 */
+	public static String getPortalNavItemID(PortletRequest request) {
+		if (request != null) {
+			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
+			if (o != null) {
+				try {
+					Map contextMap = (Map) o;
+					return (String) contextMap
+							.get(Consts.KEY_NAVIGATION_ITEM_NAME);
+				} catch (Exception e) { // should never happen
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * <p>
+	 * Get the current navigation item URL from the given portlet request. This
+	 * is the URL path for the navigation item relative to the portal site,
+	 * which points to the page on which this portlet instance appears (thus it
+	 * is not an element from the portlet application itself; it is an element
+	 * from the portal). There could be multiple navigation items pointing to
+	 * the page, but this method only operates on the current one (ie the one
+	 * invoked by the user to request the page).
+	 * </p>
+	 * <p>
+	 * For Vignette Portal, we return the "friendly URL" path used by the user
+	 * to request the page. The SPF framework propagates the whole current
+	 * request URL from the portal to the portlet, where it is made accessible
+	 * in the request. So this method just returns the portion of the path of
+	 * that URL which represents the navigation item friendly URL.
+	 * </p>
+	 * <p>
+	 * <blockquote> <b>Note:</b> Generally, the value returned by this method
+	 * will match the friendly URL path as configured in Vignette by the portal
+	 * administrator for the current navigation item, since generally that is
+	 * the exact friendly URL used by the user in a request. However for the
+	 * default page (ie home page) of a site, Vignette allows that page to be
+	 * accessed whenever the current request contains any unrecognized or blank
+	 * friendly URL. So when this portlet instance is contained on the default
+	 * or home page of a site, the friendly URL returned by this method will not
+	 * necessarily match any friendly URL configured in Vignette.</blockquote>
+	 * </p>
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @return The navigation item friendly URL path, for the current operative
+	 *         navigation item for the page containing this portlet instance.
+	 */
+	public static String getPortalNavItemURL(PortletRequest request) {
+		String requestURL = getPortalRequestURL(request);
+		String navItemURL = null;
+		String remainder;
+		int i, j;
+
+		// return null if request URL is undefined or blank
+		if (requestURL == null)
+			return null;
+		requestURL = requestURL.trim();
+		if (requestURL.length() == 0)
+			return null;
+
+		// discard query string (if any) from request URL
+		i = requestURL.indexOf('?');
+		if (i != -1)
+			requestURL = requestURL.substring(0, i);
+
+		// find end of site URL in request URL - return null if can't be found
+		if (requestURL.endsWith("/site/"))
+			return null;
+		if ((i = requestURL.indexOf("/site/")) == -1)
+			return null;
+
+		// find path after end of site URL in request URL - return blank if
+		// can't be found
+		i = requestURL.indexOf('/', i + 6);
+		if ((i == -1) || (i == requestURL.length() - 1))
+			return "";
+		remainder = requestURL.substring(i + 1);
+
+		// if template friendly ID exists, subtract it out - return blank if
+		// nothing left
+		if (remainder.startsWith("template.")) {
+			i = remainder.indexOf('/');
+			if ((i == -1) || (i == remainder.length() - 1))
+				return "";
+			remainder = remainder.substring(i + 1);
+		}
+
+		// if action.process exists, subtract it out - return blank if nothing
+		// left
+		if (remainder.startsWith("action.process")) {
+			i = remainder.indexOf('/');
+			if ((i == -1) || (i == remainder.length() - 1))
+				return "";
+			remainder = remainder.substring(i + 1);
+		}
+
+		// remainder is the friendly URL - remove leading and trailing slash if
+		// any, and return
+		navItemURL = remainder;
+		return navItemURL;
 	}
 
 	/**

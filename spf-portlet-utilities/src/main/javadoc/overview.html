@@ -328,8 +328,8 @@ table.props td {
 			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</a></li>
 			<li>4.5.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-			<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{SITE:<i>site-names</i></code>},
-			<code>{INCLUDE:<i>key</i>}</code>)</a></li>
+			<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{NAV:<i>items</i>}</code>,
+			<code>{SITE:<i>site-names</i></code>}, <code>{INCLUDE:<i>key</i>}</code>)</a></li>
 			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>{AFTER:<i>date</i>}</code>,
 			<code>{BEFORE:<i>date</i>}</code>, <code>{SITE-NAME}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</a></li>
 		</ul>
@@ -4765,8 +4765,8 @@ This text is for everybody.&lt;BR&gt;
 
 <a name="file.author.token.consolidate">
 <h4>4.5.4. Consolidating content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{SITE:<i>site-names</i>}</code>,
-<code>{INCLUDE:<i>key</i>}</code>)</h4>
+<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{NAV:<i>items</i>}</code>,
+<code>{SITE:<i>site-names</i>}</code>, <code>{INCLUDE:<i>key</i>}</code>)</h4>
 </a>
 
 <p>The following tokens may be used to consolidate content, either
@@ -4873,6 +4873,58 @@ url.hp=http://www.hp.com
 	the SPF team on their Maven 2 repository, here: <a
 		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
 	(browse for the latest version).</p>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#nav"><code>{NAV:<i>items</i>}...{/NAV}</code></a></dt>
+	<dd>
+	<p>Use this container token to put content for multiple portal
+	navigation items into the same uninterpolated content string (or file).
+	When it is interpolated, only the section for the current navigation
+	item will be included.</p>
+
+	<p>The <code><i>items</i></code> parameter lists the <i>substrings</i>
+	of desired navigation item names and/or friendly URLs. The navigation
+	item name or friendly URL for the current operative navigation item
+	must <i>contain</i> (case-insensitive) at least one of the listed item
+	names or friendly URLs. Use the <code>|</code> character to delimit
+	multiple item names or friendly URLs in the <code><i>items</i></code>
+	parameter. (In the SPF portal, the navigation item name and friendly
+	URL are Vignette properties, assigned by the administrator. The SPF
+	transmites this to the portlet where it can be accessed.)</p>
+
+	<p>For example:</p>
+	<blockquote><pre>
+This text is for everybody.&lt;BR&gt;
+{NAV:manuals|parts|repairs}
+This text is only for pages accessed with the "manuals", "parts", or "repairs" navigation items.
+{NAV:manuals}Additional text only for pages accessed with the "manuals" navigation item.{/NAV}
+{/NAV}
+</pre></blockquote>
+
+	<p>The actual navigation item names and friendly URLs will vary;
+	they are setup by the administrator. They are not listed here.</p>
+
+	<blockquote>
+	<p><b>Note:</b> In Vignette, friendly URLs are only unique within a
+	site, and navigation item names are not unique at all. Be advised.
+	Unfortunately Vignette does not provide a friendly unique ID for
+	navigation items.</p>
+	<p><b>Note:</b> The friendly URL here actually corresponds with the
+	friendly URL as carried in the actual request URL to the portal. This
+	may not exactly match the friendly URL on the navigation item in
+	Vignette, because Vignette does not require friendly URLs to exactly
+	match. For example, Vignette only requires that the configured
+	navigation item friendly URL match the beginning of a friendly URL in
+	the request. Thus you can use the <code>{NAV}</code> token to specify
+	additional path beyond the configured friendly URL, if desired. As
+	another example, Vignette defaults requests without any friendly URL
+	(or with an unrecognized friendly URL) to the home page for your site.
+	So for portlets on a home page, the actual friendly URL in the request,
+	which your <code>{NAV}</code> markup is compared against, may be quite
+	different than the friendly URL for the home page navigation item
+	configured in Vignette.</p>
+	</blockquote>
 	</dd>
 
 	<dt><a
@@ -5738,10 +5790,10 @@ appropriate:</p>
 </a>
 
 <p>Use {@link com.hp.it.spf.xa.misc.portlet.Utils} to access portal
-request data, including the portal site name, the portlet ID, and the
-URL's for the current portal request and the portal site home page. Be
-sure you have configured the SPF <code>MapAttributeFilter</code> as <a
-	href="#portal.kinds">shown above</a>.</p>
+request data, including the current portal site name, page ID, portlet
+ID, navigation item, and the URL's for the current portal request and
+the portal site home page. Be sure you have configured the SPF <code>MapAttributeFilter</code>
+as <a href="#portal.kinds">shown above</a>.</p>
 
 <a name="portal.request.site">
 <h4>5.3.1. Accessing the portal site name (<code>Utils.getPortalSiteName</code>)</h4>
@@ -5753,7 +5805,7 @@ to get the name of the current portal site. SPF is a portal-hosting
 platform for hosting numerous individual portal sites - this method will
 return the name of your site, as assigned by the portal administrator.
 Note that in Vignette, this is the "site DNS name". For example (where <code>request</code>
-is the {@link com.hp.it.spf.xa.misc.portlet.PortletRequest}):</p>
+is the <code>PortletRequest</code>):</p>
 
 <blockquote><pre>
 import com.hp.it.spf.xa.misc.portlet.Utils;
@@ -5763,8 +5815,71 @@ String siteName = Utils.getPortalSiteName(request);
 
 <p>Please see the method documentation for more information.</p>
 
+<a name="portal.request.page">
+<h4>5.3.2. Accessing the portal page ID (<code>Utils.getPortalPageID</code>)</h4>
+</a>
+
+<p>Use {@link
+com.hp.it.spf.xa.misc.portlet.Utils#getPortalPageID(PortletRequest)} to
+get the ID for the current portal page. This method currently returns
+the Vignette "friendly ID" for the page, as configured in Vignette
+console by the portal administrator. For example (where <code>request</code>
+is the <code>PortletRequest</code>):</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+String pageID = Utils.getPortalPageID(request);
+</pre></blockquote>
+
+<p>Please see the method documentation for more information.</p>
+
+<a name="portal.request.nav">
+<h4>5.3.3. Accessing the portal navigation item (<code>Utils.getPortalNavItemID</code>,
+<code>Utils.getPortalNavItemURL</code>)</h4>
+</a>
+
+<p>There are a couple of methods for accessing information about the
+current operative navigation item (that is, the navigation item
+corresponding to the URL by which the current portal page was
+requested). {@link
+com.hp.it.spf.xa.misc.portlet.Utils#getPortalNavItemID(PortletRequest)}
+returns the navigation item name, as configured in Vignette console by
+the portal administrator. Note that this is not a unique value;
+unfortunately Vignette does not provide a friendly unique ID for
+navigation items. For example (where <code>request</code> is the <code>PortletRequest</code>):</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+String navItemName = Utils.getPortalNavItemID(request);
+</pre></blockquote>
+
+<p>The navigation item friendly URL is accessible via {@link
+com.hp.it.spf.xa.misc.portlet.Utils#getPortalNavItemURL(PortletRequest)}.
+This returns the navigation item friendly URL specified in the current
+portal request. Generally this matches what is configured in Vignette
+console by the portal administrator, but not necessarily due to how
+Vignette treats navigation item friendly URLs. For example, Vignette
+allows the friendly URL used in the request to contain additional path
+beyond what is configured, so this method will return that as well, not
+just what is configured. As another example, Vignette defaults requests
+with blank or unrecognized friendly URLs to the site home page, so this
+method will return the value actually used in the case of a home page
+request, not necessarily what is configured.</p>
+
+<p>For example (where <code>request</code> is the <code>PortletRequest</code>):</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portlet.Utils;
+...
+String friendlyURL = Utils.getPortalNavItemURL(request);
+</pre></blockquote>
+
+<p>Please see the method documentation for more information.</p>
+
 <a name="portal.request.portlet">
-<h4>5.3.2. Accessing the portlet ID (<code>Utils.getPortalPortletID</code>)</h4>
+<h4>5.3.4. Accessing the portlet ID (<code>Utils.getPortalPortletID</code>)</h4>
 </a>
 
 <p>Use {@link
@@ -6965,9 +7080,10 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		<td>2.2</td>
 		<td>Jul 21 2009</td>
 		<td>S. Jorgenson</td>
-		<td>Added dependency info about <code>spf-portlet-filters</code>.  Added note about
-		configuring message sources in root application context for the portlet application, 
-		not application context for the portlet.</td>
+		<td>Added dependency info about <code>spf-portlet-filters</code>.
+		Added note about configuring message sources in root application
+		context for the portlet application, not application context for the
+		portlet.</td>
 	</tr>
 
 </table>
