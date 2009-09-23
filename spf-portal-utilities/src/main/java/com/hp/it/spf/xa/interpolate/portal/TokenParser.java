@@ -13,6 +13,8 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.epicentric.common.website.MenuItemNode;
+import com.epicentric.common.website.MenuItemUtils;
 import com.epicentric.common.website.SessionUtils;
 import com.epicentric.user.User;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
@@ -351,6 +353,44 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 			return null;
 		}
 		return Utils.getPageID(portalContext);
+	}
+
+	/**
+	 * Get the navigation item ID for the current operative navigation item,
+	 * from the portal context provided to the constructor. Returns null if
+	 * there is no known current navigation item, or the portal context provided
+	 * to the constructor was null. The current implementation returns the
+	 * navigation item name as the Vignette navigation item UID is an unfriendly
+	 * value.
+	 */
+	protected String getNavItemID() {
+		if (portalContext == null) {
+			return null;
+		}
+		MenuItemNode currentNavItem = MenuItemUtils
+				.getSelectedMenuItemNode(portalContext);
+		if (currentNavItem != null) {
+			return currentNavItem.getTitle();
+		}
+		return null;
+	}
+
+	/**
+	 * Get the navigation item friendly URL from the current operative
+	 * navigation item, from the portal context provided to the constructor.
+	 * Returns null if there is no known current navigation item, or the portal
+	 * context provided to the constructor was null.
+	 */
+	protected String getNavItemURL() {
+		if (portalContext == null) {
+			return null;
+		}
+		MenuItemNode currentNavItem = MenuItemUtils
+				.getSelectedMenuItemNode(portalContext);
+		if (currentNavItem != null) {
+			return currentNavItem.getFriendlyURI();
+		}
+		return null;
 	}
 
 	/**
