@@ -55,7 +55,7 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{SITE-URL}</code></li>
  * <li><code>{SITE-URL:<i>spec</i>}</code></li>
  * <li><code>{URL-ENCODE:<i>string</i>}</code></li>
- * <li><code>{NAV:<i>ids</i>}</code></li>
+ * <li><code>{NAV-ITEM:<i>ids</i>}</code></li>
  * <li><code>{PAGE:<i>ids</i>}</code></li>
  * <li><code>{SITE:<i>names</i>}</code></li>
  * <li><code>{GROUP:<i>groups</i>}</code></li>
@@ -174,7 +174,7 @@ public abstract class TokenParser {
 	 * This class attribute is the name of the container token for a navigation
 	 * item section.
 	 */
-	private static final String TOKEN_NAV_CONTAINER = "NAV";
+	private static final String TOKEN_NAVITEM_CONTAINER = "NAV-ITEM";
 
 	/**
 	 * This class attribute is the name of the container token for a page
@@ -1454,11 +1454,11 @@ public abstract class TokenParser {
 
 	/**
 	 * <p>
-	 * Parses the string for any <code>{NAV:<i>ids</i>}</code> content; such
+	 * Parses the string for any <code>{NAV-ITEM:<i>ids</i>}</code> content; such
 	 * content is deleted if the navigation item ID for the current page does
 	 * not qualify (otherwise only the special markup is removed). The <i>ids</i>
 	 * may include one or more navigation item IDs, delimited by "|" for a
-	 * logical-or. <code>{NAV:<i>ids</i>}</code> markup may be nested for
+	 * logical-or. <code>{NAV-ITEM:<i>ids</i>}</code> markup may be nested for
 	 * logical-and (however since any one request is only for one page, the
 	 * desire to logical-and seems unlikely).
 	 * </p>
@@ -1478,10 +1478,10 @@ public abstract class TokenParser {
 	 * 
 	 * <pre>
 	 *  This content always displays.
-	 *  {NAV:download}
+	 *  {NAV-ITEM:download}
 	 *  This content displays only on pages where the navigation item ID 
 	 *  (name or friendly URL) contains download.
-	 *  {/NAV}
+	 *  {/NAV-ITEM}
 	 * </pre>
 	 * 
 	 * <p>
@@ -1518,7 +1518,7 @@ public abstract class TokenParser {
 	 * item name is obtained from the {@link #getNavItemID()} method, and the
 	 * current navigation item friendly URL is obtained from the
 	 * {@link #getNavItemURL()} method. If both return null or empty values, all
-	 * <code>{NAV}</code>-enclosed sections are removed from the content.
+	 * <code>{NAV-ITEM}</code>-enclosed sections are removed from the content.
 	 * </p>
 	 * 
 	 * @param content
@@ -1567,7 +1567,7 @@ public abstract class TokenParser {
 			}
 		}
 
-		return parseContainerToken(content, TOKEN_NAV_CONTAINER,
+		return parseContainerToken(content, TOKEN_NAVITEM_CONTAINER,
 				new NavItemContainerMatcher(getNavItemID(), getNavItemURL()));
 	}
 
