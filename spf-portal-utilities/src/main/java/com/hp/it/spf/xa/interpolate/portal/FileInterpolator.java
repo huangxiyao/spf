@@ -464,7 +464,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{NAV:<i>items</i>}...{/NAV}</code></dt>
+ * <dt><code>{NAV-ITEM:<i>items</i>}...{/NAV-ITEM}</code></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -476,19 +476,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * In the <code><i>items</i></code> parameter to the
- * <code>{NAV:<i>items</i>}</code> token, you can list just a single item,
+ * <code>{NAV-ITEM:<i>items</i>}</code> token, you can list just a single item,
  * or multiple (use the <code>|</code> character to delimit them). Each item
  * can be a navigation item name or friendly URL (or substring thereof). The
- * content enclosed by the <code>{NAV:<i>items</i>}</code> and
- * <code>{/NAV}</code> tokens is omitted from the returned content unless the
+ * content enclosed by the <code>{NAV-ITEM:<i>items</i>}</code> and
+ * <code>{/NAV-ITEM}</code> tokens is omitted from the returned content unless the
  * navigation item operative for the request matches one of those values. The
  * match is a case-insensitive substring match.
  * </p>
  * <p>
- * The content enclosed by the <code>{NAV:<i>items</i>}</code> and
- * <code>{/NAV}</code> tokens can be anything, including any of the special
+ * The content enclosed by the <code>{NAV-ITEM:<i>items</i>}</code> and
+ * <code>{/NAV-ITEM}</code> tokens can be anything, including any of the special
  * tokens supported by this class (including other
- * <code>{NAV:<i>items</i>}...{/NAV}</code> tokens - ie you can "nest" them.
+ * <code>{NAV-ITEM:<i>items</i>}...{/NAV-ITEM}</code> tokens - ie you can "nest" them.
  * </p>
  * <p>
  * For example, the following markup selectively includes or omits the content
@@ -498,12 +498,12 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * <pre>
  * This content is for all requests using this file to show.
- * {NAV:item_A|item_B}
+ * {NAV-ITEM:item_A|item_B}
  * This content is only for requests for navigation items item_A or item_B.
- * {NAV:item_B}
+ * {NAV-ITEM:item_B}
  * This content is only for requests for navigation item item_B.
- * {/NAV}
- * {/NAV}
+ * {/NAV-ITEM}
+ * {/NAV-ITEM}
  * </pre>
  * 
  * </p>
