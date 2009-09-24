@@ -328,7 +328,7 @@ table.props td {
 			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</a></li>
 			<li>4.5.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-			<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{NAV:<i>items</i>}</code>,
+			<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{NAV-ITEM:<i>items</i>}</code>,
 			<code>{SITE:<i>site-names</i></code>}, <code>{INCLUDE:<i>key</i>}</code>)</a></li>
 			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>{AFTER:<i>date</i>}</code>,
 			<code>{BEFORE:<i>date</i>}</code>, <code>{SITE-NAME}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</a></li>
@@ -362,9 +362,13 @@ table.props td {
 		<ul>
 			<li>5.3.1. <a href="#portal.request.site">Accessing the
 			portal site name (<code>Utils.getPortalSiteName</code>)</a></li>
-			<li>5.3.2. <a href="#portal.request.portlet">Accessing the
+			<li>5.3.2. <a href="#portal.request.page">Accessing the
+			portal page ID (<code>Utils.getPortalPageID</code>)</a></li>
+			<li>5.3.3. <a href="#portal.request.nav">Accessing the
+			portal navigation item (<code>Utils.getPortalNavItemID</code>, <code>Utils.getPortalNavItemURL</code>)</a></li>
+			<li>5.3.4. <a href="#portal.request.portlet">Accessing the
 			portlet ID (<code>Utils.getPortalPortletID</code>)</a></li>
-			<li>5.3.3. <a href="#portal.request.url">Accessing portal
+			<li>5.3.5. <a href="#portal.request.url">Accessing portal
 			URL's (<code>Utils.getPortalRequestURL</code>, <code>Utils.getPortalSiteURL</code>)</a></li>
 		</ul>
 		</li>
@@ -4765,7 +4769,7 @@ This text is for everybody.&lt;BR&gt;
 
 <a name="file.author.token.consolidate">
 <h4>4.5.4. Consolidating content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{NAV:<i>items</i>}</code>,
+<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{NAV-ITEM:<i>items</i>}</code>,
 <code>{SITE:<i>site-names</i>}</code>, <code>{INCLUDE:<i>key</i>}</code>)</h4>
 </a>
 
@@ -4876,7 +4880,7 @@ url.hp=http://www.hp.com
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#nav"><code>{NAV:<i>items</i>}...{/NAV}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#nav"><code>{NAV-ITEM:<i>items</i>}...{/NAV-ITEM}</code></a></dt>
 	<dd>
 	<p>Use this container token to put content for multiple portal
 	navigation items into the same uninterpolated content string (or file).
@@ -4896,10 +4900,10 @@ url.hp=http://www.hp.com
 	<p>For example:</p>
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{NAV:manuals|parts|repairs}
+{NAV-ITEM:manuals|parts|repairs}
 This text is only for pages accessed with the "manuals", "parts", or "repairs" navigation items.
-{NAV:manuals}Additional text only for pages accessed with the "manuals" navigation item.{/NAV}
-{/NAV}
+{NAV-ITEM:manuals}Additional text only for pages accessed with the "manuals" navigation item.{/NAV-ITEM}
+{/NAV-ITEM}
 </pre></blockquote>
 
 	<p>The actual navigation item names and friendly URLs will vary;
@@ -4916,13 +4920,13 @@ This text is only for pages accessed with the "manuals", "parts", or "repairs" n
 	Vignette, because Vignette does not require friendly URLs to exactly
 	match. For example, Vignette only requires that the configured
 	navigation item friendly URL match the beginning of a friendly URL in
-	the request. Thus you can use the <code>{NAV}</code> token to specify
-	additional path beyond the configured friendly URL, if desired. As
-	another example, Vignette defaults requests without any friendly URL
+	the request. Thus you can use the <code>{NAV-ITEM}</code> token to
+	specify additional path beyond the configured friendly URL, if desired.
+	As another example, Vignette defaults requests without any friendly URL
 	(or with an unrecognized friendly URL) to the home page for your site.
 	So for portlets on a home page, the actual friendly URL in the request,
-	which your <code>{NAV}</code> markup is compared against, may be quite
-	different than the friendly URL for the home page navigation item
+	which your <code>{NAV-ITEM}</code> markup is compared against, may be
+	quite different than the friendly URL for the home page navigation item
 	configured in Vignette.</p>
 	</blockquote>
 	</dd>
@@ -7084,6 +7088,14 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		Added note about configuring message sources in root application
 		context for the portlet application, not application context for the
 		portlet.</td>
+	</tr>
+	<tr>
+		<td>2.3</td>
+		<td>Sep 23 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Added documentation for <code>{NAV-ITEM}</code> token and
+		also for <code>Utils.getPortalPageID</code>, <code>Utils.getPortalNavItemID</code>,
+		and <code>Utils.getPortalNavItemURL</code> methods.</td>
 	</tr>
 
 </table>

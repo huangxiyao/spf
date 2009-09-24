@@ -498,7 +498,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
- * <dt><a name="nav"><code>{NAV:<i>items</i>}...{/NAV}</code></a></dt>
+ * <dt><a name="nav"><code>{NAV-ITEM:<i>items</i>}...{/NAV-ITEM}</code></a></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -510,20 +510,21 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * <p>
  * In the <code><i>items</i></code> parameter to the
- * <code>{NAV:<i>items</i>}</code> token, you can list just a single item,
- * or multiple (use the <code>|</code> character to delimit them). Each item
- * can be a navigation item name or friendly URL (or substring thereof), as
+ * <code>{NAV-ITEM:<i>items</i>}</code> token, you can list just a single
+ * item, or multiple (use the <code>|</code> character to delimit them). Each
+ * item can be a navigation item name or friendly URL (or substring thereof), as
  * configured in the portal for your portlet. The content enclosed by the
- * <code>{NAV:<i>items</i>}</code> and <code>{/NAV}</code> tokens is
- * omitted from the returned content unless the navigation item operative for
- * the request matches one of those values. The match is a case-insensitive
- * substring match.
+ * <code>{NAV-ITEM:<i>items</i>}</code> and <code>{/NAV-ITEM}</code>
+ * tokens is omitted from the returned content unless the navigation item
+ * operative for the request matches one of those values. The match is a
+ * case-insensitive substring match.
  * </p>
  * <p>
- * The content enclosed by the <code>{NAV:<i>items</i>}</code> and
- * <code>{/NAV}</code> tokens can be anything, including any of the special
- * tokens supported by this class (including other
- * <code>{NAV:<i>items</i>}...{/NAV}</code> tokens - ie you can "nest" them.
+ * The content enclosed by the <code>{NAV-ITEM:<i>items</i>}</code> and
+ * <code>{/NAV-ITEM}</code> tokens can be anything, including any of the
+ * special tokens supported by this class (including other
+ * <code>{NAV-ITEM:<i>items</i>}...{/NAV-ITEM}</code> tokens - ie you can
+ * "nest" them.
  * </p>
  * <p>
  * For example, the following markup selectively includes or omits the content
@@ -533,12 +534,12 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  * <pre>
  * This content is for all requests using this file to show.
- * {NAV:item_A|item_B}
+ * {NAV-ITEM:item_A|item_B}
  * This content is only for requests for navigation items item_A or item_B.
- * {NAV:item_B}
+ * {NAV-ITEM:item_B}
  * This content is only for requests for navigation item item_B.
- * {/NAV}
- * {/NAV}
+ * {/NAV-ITEM}
+ * {/NAV-ITEM}
  * </pre>
  * 
  * </p>
