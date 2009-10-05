@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<bean id="htmlViewerConfigController"
+		class="com.hp.it.spf.htmlviewer.portlet.web.ConfigController">
+		<property name="viewName" value="config" />
+	</bean>
+
+	<bean id="htmlViewerViewController"
+		class="com.hp.it.spf.htmlviewer.portlet.web.ViewController">
+		<property name="viewName" value="view" />
+	</bean>
+
+	<!-- Portlet mode-to-controller mapping -->
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="order" value="1" />
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="htmlViewerViewController" />
+				</entry>
+				<entry key="vignette:config">
+					<ref bean="htmlViewerConfigController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- Exception handling -->
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="com.hp.it.spf.htmlviewer.portlet.exception.InternalErrorException">
+					systemError
+				</prop>
+			</props>
+		</property>
+	</bean>
+</beans>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+             version="2.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+    <portlet>
+        <portlet-name>PrefTestPortlet</portlet-name>
+        <portlet-class>com.hp.it.spf.apps.preftest.portlet.PrefTestPortlet</portlet-class>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+            <portlet-mode>vignette:config</portlet-mode>
+            <portlet-mode>CONFIG</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Preference Test Portlet</title>
+        </portlet-info>
+        <portlet-preferences>
+            <preference>
+                <name>IamReadOnly</name>
+                <value>YesIamTrulyReadOnly</value>
+                <read-only>true</read-only>
+            </preference>
+            <preference>
+                <name>IamReadWrite</name>
+                <value>YesIamReadWrite</value>
+                <read-only>false</read-only>
+            </preference>
+        </portlet-preferences>
+    </portlet>
+    
+    <portlet>
+        <portlet-name>SessionTestPortlet</portlet-name>
+        <display-name>Session Test Portlet</display-name>
+        <portlet-class>com.hp.it.spf.apps.sessiontest.portlet.SessionTestPortlet</portlet-class>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+            <portlet-mode>vignette:config</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Session Test Portlet</title>
+            <short-title>Session Test Portlet</short-title>
+        </portlet-info>
+    </portlet>
+
+    <portlet>
+        <portlet-name>PortalURLTestPortlet</portlet-name>
+        <portlet-class>com.hp.it.spf.apps.portalurltest.portlet.PortalURLTestPortlet</portlet-class>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+            <portlet-mode>HELP</portlet-mode>
+            <portlet-mode>EDIT</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>PortalURL Test Portlet</title>
+        </portlet-info>
+        <supported-public-render-parameter>pubRenderParam</supported-public-render-parameter>
+    </portlet>
+
+    <portlet>
+        <portlet-name>CloneBeforeWriteTestPortlet</portlet-name>
+        <portlet-class>com.hp.it.spf.apps.clonebeforewritetest.portlet.CloneBeforeWriteTestPortlet</portlet-class>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>CloneBeforeWrite Test Portlet</title>
+        </portlet-info>
+        <supported-publishing-event>
+            <!--<name>updatePreference</name>-->
+            <qname xmlns:ns1="com.hp.it.spf.apps.clonebeforewritetestportlet">ns1:updatePreference</qname>
+        </supported-publishing-event>
+    </portlet>
+
+    <portlet>
+        <portlet-name>CloneBeforeWriteEventReceiverPortlet</portlet-name>
+        <portlet-class>com.hp.it.spf.apps.clonebeforewritetest.portlet.CloneBeforeWriteEventReceiverPortlet</portlet-class>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>CloneBeforeWrite Test Portlet (Event Receiver)</title>
+        </portlet-info>
+        <supported-processing-event>
+            <!--<name>updatePreference</name>-->
+            <qname xmlns:ns1="com.hp.it.spf.apps.clonebeforewritetestportlet">ns1:updatePreference</qname>
+        </supported-processing-event>
+    </portlet>
+
+    <portlet>
+        <portlet-name>UploadPortlet</portlet-name>
+        <portlet-class>com.hp.it.spf.apps.uploadtest.portlet.UploadPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>UploadPortlet</title>
+        </portlet-info>
+    </portlet>
+
+    <portlet>
+        <portlet-name>DisplayProfileTestPortlet</portlet-name>
+        <portlet-class>com.hp.it.spf.apps.displayprofiletest.portlet.DisplayProfileTestPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Display Profile Test Portlet</title>
+        </portlet-info>
+    </portlet>
+
+    <custom-portlet-mode>
+        <portlet-mode>vignette:config</portlet-mode>
+    </custom-portlet-mode>
+    
+    <custom-portlet-mode>
+        <portlet-mode>CONFIG</portlet-mode>
+    </custom-portlet-mode>
+    
+    <filter>
+        <display-name>MapAttributeFilter</display-name>
+        <filter-name>MapAttributeFilter</filter-name>
+        <filter-class>com.hp.it.spf.sso.portlet.filter.MapAttributeFilter</filter-class>
+        <lifecycle>ACTION_PHASE</lifecycle>
+        <lifecycle>RENDER_PHASE</lifecycle>
+        <lifecycle>RESOURCE_PHASE</lifecycle>
+        <lifecycle>EVENT_PHASE</lifecycle>
+    </filter>
+    <filter-mapping>
+        <filter-name>MapAttributeFilter</filter-name>
+        <portlet-name>*</portlet-name>
+    </filter-mapping>
+
+    <!--<default-namespace>com.hp.it.spf.apps.clonebeforewritetestportlet</default-namespace>-->
+
+    <event-definition>
+        <!--<name>updatePreference</name>-->
+        <qname xmlns:ns1="com.hp.it.spf.apps.clonebeforewritetestportlet">ns1:updatePreference</qname>
+        <value-type>java.lang.Boolean</value-type>
+    </event-definition>
+
+    <public-render-parameter>
+        <identifier>pubRenderParam</identifier>
+        <name>pubRenderParam</name>
+    </public-render-parameter>
+    
+</portlet-app>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+	<display-name>HTMLViewer</display-name>
+
+	<description>
+		This is a WPAP/Spring portlet application which contains the
+		Shared Portal Framework HTMLViewer portlet.
+	</description>
+
+	<!-- Spring application context location -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/context/applicationContext.xml
+		</param-value>
+	</context-param>
+	
+	<!-- WPAP log root -->
+	<context-param>
+		<param-name>timberLogRoot</param-name>
+		<param-value>/opt/sasuapps/sp/logs</param-value>
+	</context-param>
+
+	<!-- Spring application context loader -->
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	
+	<!-- WPAP log configuration listener -->
+	<listener>
+		<listener-class>
+			com.hp.frameworks.wpa.portlet.logging.LoggingConfigListener
+		</listener-class>
+	</listener>
+	
+	<!-- Spring view renderer servlet, for helping Spring portlet render views (eg JSP) -->
+	<servlet>
+		<servlet-name>ViewRendererServlet</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.ViewRendererServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<!-- SPF file-relay servlet, for hosting file-download from the portlet bundle directory -->
+	<servlet>
+		<servlet-name>FileRelayServlet</servlet-name>
+		<servlet-class>
+			com.hp.it.spf.xa.relay.servlet.RelayServlet
+		</servlet-class>
+	</servlet>
+	
+	<!-- Spring view renderer servlet mapping -->
+	<servlet-mapping>
+		<servlet-name>ViewRendererServlet</servlet-name>
+		<url-pattern>/WEB-INF/servlet/view</url-pattern>
+	</servlet-mapping>
+
+	<!-- SPF file-relay servlet mapping -->
+	<servlet-mapping>
+		<servlet-name>FileRelayServlet</servlet-name>
+		<url-pattern>/relay/*</url-pattern>
+	</servlet-mapping>
+</web-app>
