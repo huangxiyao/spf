@@ -1,9 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.hp.it.spf.xa</groupId>
+		<artifactId>spf-common-parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
+	</parent>
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-common-utilities</artifactId>
 	<name>SPF common utilities.</name>
-	<version>1.0.12-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -65,11 +69,6 @@
 		creation (targeting URLs with parameters to portlets), etc.
 	</description>
 	<inceptionYear>December 2008</inceptionYear>
-	<parent>
-		<artifactId>spf-pom</artifactId>
-		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.2</version>
-	</parent>
 	<ciManagement>
 		<system>Hudson</system>
 		<url>
@@ -77,9 +76,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-common-utilities</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-common-utilities</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-common-utilities</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/common/spf-common-utilities</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/common/spf-common-utilities</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/common/spf-common-utilities</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
