@@ -1,0 +1,22 @@
+<html>
+<body>
+<p>This package contains Spring Portlet MVC handler classes to help
+portlet applications manage their exception workflow.</p>
+
+<a name="SimpleMappingExceptionResolver">
+<h3>SimpleMappingExceptionResolver</h3>
+</a>
+<p>The {@link
+com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver}
+class extends the Spring framework's {@link
+org.springframework.web.portlet.handler.SimpleMappingExceptionResolver}.
+It sets the thrown exception object into a request attribute where the
+{@link com.hp.it.spf.xa.exception.portlet.ExceptionUtil} can access it,
+then calls the superclass to resolve the view for the exception. This
+way the view will be able to access the exception data via the {@link
+com.hp.it.spf.xa.exception.portlet.ExceptionUtil} - eg to get the
+exception's error code, localized message, etc.</p>
+</p>
+</body>
+</html>
+

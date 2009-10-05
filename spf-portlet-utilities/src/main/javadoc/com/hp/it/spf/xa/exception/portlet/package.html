@@ -1,0 +1,37 @@
+<html>
+<body>
+<p>This package contains exception classes and utilities for portlet
+applications to use.</p>
+
+<a name="SPFExceptionHierarchy">
+<h3>SPFException, BusinessException, and SystemException</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.exception.portlet.SPFException} class
+is the root of an exception class hierachy. Portlet developers are
+encouraged to subclass their exceptions from one of the members of this
+hierarchy, though this is not required:</p>
+<dl>
+	<dt>{@link com.hp.it.spf.xa.exception.portlet.BusinessException}</dt>
+	<dd>Represents a <i>business exception</i> of some kind: an error
+	which was caused by the user and which the user can repair if explained
+	to him.</dd>
+	<dt>{@link com.hp.it.spf.xa.exception.portlet.SystemException}</dt>
+	<dd>Represents a <i>system exception</i> of some kind: an error
+	which was caused by some failure within the system, and which the user
+	generally cannot repair.</dd>
+</dl>
+<p>These exceptions can be characterized by error code and error
+message, and can chain together; they can also be localized with
+user-suitable messages for display.</p>
+
+<a name="ExceptionUtil">
+<h3>ExceptionUtil</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.exception.portlet.ExceptionUtil}
+class is a utility class for accessing information about exceptions
+which have been set into the request (eg by the SPF {@link
+com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver}).
+</p>
+</body>
+</html>
+

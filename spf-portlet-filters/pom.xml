@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.it.spf.sso</groupId>
+	<artifactId>spf-portlet-filters</artifactId>
+	<version>1.0.11-SNAPSHOT</version>
+	<name>spf-portlet-filters</name>
+	<description>Vignette Portal does not allow sending different sets of profile attributes for different sites, and the profile structure supported by Vignette Portal must be predefined. In SPF, this issue was addressed by injecting user profile information into the WSRP SOAP request. The injection occurred in the consumer by a project called wsrp-injector. On the producer side, the profile was extracted from WSRP SOAP request by another project called wsrp-extractor. This project provides a filter to transfer the user profile from http request to portlet request and made available to the portlets as a map.</description>
+	<parent>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<artifactId>spf-pom</artifactId>
+		<version>1.0.2</version>
+	</parent>
+	<dependencies>
+		<dependency>
+			<groupId>javax.portlet</groupId>
+			<artifactId>portlet-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>1.0.11</version>
+		</dependency>
+	</dependencies>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-portlet-filters</url>
+	</ciManagement>
+	<scm>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portlet-filters</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portlet-filters</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portlet-filters</url>
+	</scm>
+</project>

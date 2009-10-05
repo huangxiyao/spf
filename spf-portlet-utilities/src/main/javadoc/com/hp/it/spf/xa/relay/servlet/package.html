@@ -1,0 +1,175 @@
+<html>
+<body>
+<p>This package contains Java classes used exclusively by and for
+the SPF <i>file relay servlet</i> - the servlet which hosts downloads of
+external supporting resource files from the <i>portlet resource
+bundle folder</i>. SPF portlet developers generally will not use these
+classes directly. However, if they are going to have external supporting
+resources, they will need to properly configure and deploy this servlet.
+The steps are as follows:</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portlet developers who will not have external
+supporting resources can completely disregard all of this.</p>
+</blockquote>
+
+<a name="web.xml">
+<h3>1. Configuring <code>web.xml</code></h3>
+</a>
+
+<p>The relay servlet class is {@link RelayServlet} and it is
+contained inside the SPF portlet utilities JAR. You need to add a
+deployment descriptor for the servlet into your application's <code>web.xml</code>
+file. (Which application? We recommend using your portlet application,
+but see <a href="#deployment">assembling the application</a>, below, for
+other options.) The deployment descriptor just looks like this:</p>
+
+<blockquote><pre>
+	&lt;servlet&gt;
+		&lt;servlet-name&gt;FileRelayServlet&lt;/servlet-name&gt;
+		&lt;servlet-class&gt;
+			com.hp.it.spf.xa.relay.servlet.RelayServlet
+		&lt;/servlet-class&gt;
+	&lt;/servlet&gt;
+	&lt;servlet-mapping&gt;
+		&lt;servlet-name&gt;FileRelayServlet&lt;/servlet-name&gt;
+		&lt;!-- You can use a different mapping if desired --&gt;
+		&lt;url-pattern&gt;/relay/*&lt;/url-pattern&gt;
+	&lt;/servlet-mapping&gt;
+</pre></blockquote>
+
+<p>As noted in the above comment, you can use a different path for
+the relay servlet mapping. If you do provide a different one, you will
+have to do extra configuration in <a
+	href="#i18n_portlet_config.properties"><code>i18n_portlet_config.properties</code></a>
+(see below).</p>
+
+<a name="init_relay.properties">
+<h3>2. Configuring <code>init_relay.properties</code> (optional)</h3>
+</a>
+
+<p>The relay servlet only lets users access files with certain
+permitted file extensions. The permitted file extensions are listed in a
+properties file, <code>init_relay.properties</code>. For each listed
+file extension, a MIME type is also listed - this is the value which the
+relay servlet will use for the <code>Content-Type:</code> HTTP response
+header during the download.</p>
+
+<blockquote>
+<p><b>Note:</b> A file inside the SPF portlet utilities JAR, <code>init_relay_default.properties</code>,
+defines a default set of these file extensions and MIME types. You
+should find that most general-purpose file extensions are listed there
+(for popular image formats like GIF and JPEG, popular video formats like
+MPEG, plain and enhanced text like HTML, MS Word and PDF, etc). And note
+that the text formats are assumed to be UTF-8 encoded, so the <code>init_relay_default.properties</code>
+specifies <code>;charset=utf-8</code> on their MIME types accordingly.</p>
+
+<p>If you are happy with this set of relay servlet properties, then
+you can skip this step - there is nothing you need to do.</p>
+</blockquote>
+
+<p>If you need to override the <code>init_relay_default.properties</code>,
+you can get a template for <code>init_relay.properties</code> from <b><font
+	color="blue">TBD</font></b>. Follow the instructions in the property file
+to set the desired file extensions and their MIME types. (You can also
+see the instructions for <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.other.init_relay">configuring
+<code>init_relay.properties</code></a> in the SPF Portlet Utilities
+Developers Guide.)</p>
+
+<p>Then deploy your <code>init_relay.properties</code> with your
+application, where the classloader will find it. This will override <code>init_relay_default.properties</code>
+in its entirety. See the <a href="#deployment">deployment discussion
+below</a>. (You can also see the instructions for <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#overview.installation.init_relay">installing
+<code>init_relay.properties</code></a> in the SPF Portlet Utilities
+Developer's Guide.)</p>
+
+<a name="i18n_portlet_config.properties">
+<h3>3. Configuring <code>i18n_portlet_config.properties</code>
+(optional)</h3>
+</a>
+
+<p>The relay servlet needs to know the location of the <i>portlet
+resource bundle folder</i>, unless you are using the default location
+(indicated by {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}). Also,
+the SPF portlet utilities need to know the location of the relay
+servlet, unless you are using the default location (indicated by {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} and {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_INCLUDED_DEFAULT}).
+(This is so that, for example, {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility#getLocalizedFileURL(PortletRequest,PortletResponse,String)}
+can build a proper URL pointing at the servlet.)</p>
+
+<blockquote>
+<p><b>Note:</b> So if you use the default locations for the portlet
+bundle folder and the relay servlet path, you can skip configuring <code>i18n_portlet_config.properties</code>.</p>
+</blockquote>
+
+<p>You can get a default copy of <code>i18n_portlet_config.properties</code>
+from <b><font color="blue">TBD</font></b>. Follow the instructions in
+the property file to set the portlet bundle folder and relay servlet
+path as needed. (You can also see the instructions for <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.other.i18n_portlet_config">configuring
+<code>i18n_portlet_config.properties</code></a> in the SPF Portlet Utilities
+Developers Guide.)</p>
+
+<p>Then deploy your <code>i18n_portlet_config.properties</code> with
+both the relay servlet, and your portlet application, where the
+classloader will find it. See the <a href="#deployment">deployment
+discussion below</a>. (You can also see the instructions for <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#overview.installation.i18n_portlet_config">installing
+<code>i18n_portlet_config.properties</code></a> in the SPF Portlet Utilities
+Developer's Guide.)</p>
+
+<a name="deployment">
+<h3>4. Assembling the application</h3>
+</a>
+
+<p>We recommend including the relay servlet as part of your portlet
+application. In other words, you would do all the above steps for <a
+	href="#web.xml"><code>web.xml</code></a>, <a
+	href="#i18n_portlet_config.properties"><code>i18n_portlet_config.properties</code></a>,
+and <a href="#init_relay.properties"><code>init_relay.properties</code></a>
+with your portlet WAR. Note that the properties files may be deployed
+inside your WAR, or in a "global resources" folder outside the WAR, as
+discussed in the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#overview.installation.i18n_portlet_config">SPF
+Portlet Utilities Developer's Guide</a>. Deployed inside the portlet
+application, the relay servlet will then function as a portlet resource,
+over WSRP and through the portal as with other portlet application
+resources. Relay servlet URLs returned from the <code>I18nUtility</code>
+will already be portlet-encoded for this.</p>
+
+<p>However you can deploy the relay servlet inside a different Web
+application instead. The requirements are:</p>
+
+<ul>
+	<li>The relay servlet Web application must have access to the same
+	<i>portlet resource bundle folder</i> (and all the supporting resource
+	files therein) that your portlet application does.</li>
+	<li>You must configure the new, non-default relay servlet location
+	in <code>i18n_portlet_config.properties</code>. (And if your portlet
+	bundle folder is also non-default, configure that there too.)</li>
+	<li>You must deploy identical copies of that <code>i18n_portlet_config.properties</code>
+	to your portlet application and the relay servlet application.</li>
+	<li>Finally, your relay servlet Web application must be accessible
+	to the user browser via the base relay servlet URL which you configured
+	in <code>i18n_portlet_config.properties</code>.</li>
+</ul>
+
+<p>Whichever application you deploy the servlet in:</p>
+
+<ul>
+	<li>Put the SPF portlet utilities JAR in the <code>/WEB-INF/lib/</code></li>
+	<li>If you are providing <a href="#init_relay.properties"><code>init_relay.properties</code></a>
+	and/or <a href="#i18n_portlet_config.properties"><code>i18n_portlet_config.properties</code></a>,
+	put that somewhere the system classloader can find it (eg, inside your
+	WAR in the <code>/WEB-INF/classes</code> folder - or you can put them
+	outside, as external resources, in the "global resources" folder
+	configured on your JVM classpath).</li>
+</ul>
+</body>
+</html>
+
