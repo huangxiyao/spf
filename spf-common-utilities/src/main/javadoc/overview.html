@@ -1,0 +1,2182 @@
+<html>
+<head>
+<title>Shared Portal Framework - Common Utilities - Developer's
+Guide</title>
+</head>
+<body>
+<p>This artifact contains common utilities (Java API's and JSP tags)
+for both Vignette portal components, and Java portlets, built using the
+Shared Portal Framework (SPF).</p>
+
+<style type="text/css">
+body {
+	padding: 0;
+	font-family: Verdana, Sans-serif;
+	font-size: small;
+}
+
+h1 {
+	font-family: Georgia, Serif;
+	font-size: 200%;
+	color: #404040;
+	margin-top: 5px;
+}
+
+h2 {
+	font-family: Georgia, Serif;
+	font-size: 175%;
+	color: #404040;
+	page-break-before: always;
+}
+
+h3 {
+	font-family: Verdana, Sans-serif;
+	font-size: 150%;
+	font-weight: bold;
+	color: #404040;
+	margin-top: 20px;
+}
+
+h4 {
+	font-family: Verdana, Sans-serif;
+	font-size: 125%;
+	font-weight: bold;
+	color: #404040;
+	margin-top: 20px;
+}
+
+li {
+	margin-left: -10px;
+}
+
+ol li {
+	margin-bottom: 20px;
+}
+
+code {
+	color: #990000;
+	font-size: 110%
+}
+
+pre {
+	color: #990000;
+	font-size: 110%;
+}
+
+.byline {
+	font-style: italic;
+	font-size: 90%;
+	color: gray;
+	margin-top: -10px;
+	border-bottom: solid black 1px;
+}
+
+.codeSample {
+	color: #990000;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: small;
+	border: solid #990000 1px;
+	padding: 5px;
+}
+
+.leftFloatingImage {
+	float: left;
+	margin: 0 10px 10px 0;
+}
+
+.rightFloatingImage {
+	float: right;
+	margin: 0 0 10px 10px;
+}
+
+.toc {
+	list-style-type: none;
+}
+
+ul.toc ul {
+	list-style-type: none;
+}
+
+table.props td,table.props th {
+	padding: 5px;
+	background-color: #F0F0F0
+}
+
+table.props th {
+	font-size: 11px;
+	font-weight: bold;
+	text-align: right;
+}
+
+table.props td {
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.style1 {
+	border-style: solid;
+	border-width: 1px;
+}
+</style>
+
+<a name="top">
+<h1>Shared Portal Framework - Common Utilities - Developer's Guide</h1>
+</a>
+
+<a name="toc">
+<h2>Table of Contents</h2>
+</a>
+
+<ul class="toc">
+	<li>1. <a href="#overview">Overview</a>
+	<ul>
+		<li>1.1. <a href="#overview.installation">Installation</a>
+		<ul>
+			<li>1.1.1. <a href="#overview.installation.jar">Installation
+			of the SPF common utilities JAR</a></li>
+			<li>1.1.2. <a href="#overview.installation.config.portalurl">Installation
+			of <code>portalurl.properties</code> (optional)</a></li>
+			<li>1.1.3. <a
+				href="#overview.installation.config.propertyresourcebundlemanager">Installation
+			of <code>propertyresourcebundlemanager.properties</code> (optional)</a></li>
+		</ul>
+		</li>
+		<li>1.2. <a href="#overview.dependencies">Dependencies</a></li>
+		<li>1.3. <a href="#overview.other">Other libraries for SPF
+		developers</a></li>
+	</ul>
+	</li>
+	<li>2. <a href="#i18n">Internationalization</a>
+	<ul>
+		<li>2.1. <a href="#i18n.convert">Converting between different
+		representations of locale</a>
+		<ul>
+			<li>2.1.1. <a href="#i18n.convert.hpp">Converting HP
+			Passport language codes (<code>I18nUtility.localeToHPPLanguage</code>,
+			<code>I18nUtility.hppLanguageToLocale</code>)</a></li>
+			<li>2.1.2. <a href="#i18n.convert.rfc3066">Converting RFC
+			3066 language tags (<code>I18nUtility.localeToLanguageTag</code>, <code>I18nUtility.languageTagToLocale</code>)</a></li>
+		</ul>
+		</li>
+		<li>2.2. <a href="#i18n.display">Getting localized strings
+		for common objects</a>
+		<ul>
+			<li>2.2.1. <a href="#i18n.display.username">Getting
+			localized user (person) name (<code>I18nUtility.getUserDisplayName</code>)</a></li>
+			<li>2.2.2. <a href="#i18n.display.timezone">Getting
+			localized time zone name (<code>I18nUtility.getLongTimezoneDisplayName</code>,
+			<code>I18nUtility.getShortTimezoneDisplayName</code>)</a></li>
+			<li>2.2.3. <a href="#i18n.display.locale">Getting localized
+			locale name (<code>I18nUtility.getLocaleDisplayName</code>)</a></li>
+			<li>2.2.4. <a href="#i18n.display.date">Getting localized
+			dates (<code>I18nUtility.getShortDisplayDate</code>, <code>I18nUtility.getMediumDisplayDate</code>,
+			<code>I18nUtility.getLongDisplayDate</code>, <code>I18nUtility.getFullDisplayDate</code>)</a></li>
+			<li>2.2.5. <a href="#i18n.display.other">Getting localized
+			strings for other objects (numbers, currency, etc)</a></li>
+		</ul>
+		</li>
+		<li>2.3. <a href="#i18n.manipulate">Operating with multiple
+		locales</a>
+		<ul>
+			<li>2.3.1. <a href="#i18n.manipulate.sort">Sorting locales (<code>I18nUtility.sortLocales</code>)</a></li>
+		</ul>
+		</li>
+		<li>2.4. <a href="#i18n.other">Other internationalization
+		topics</a>
+		<ul>
+			<li>2.4.1. <a href="#i18n.other.portlet">Internationalization
+			topics for portlet developers</a></li>
+			<li>2.4.2. <a href="#i18n.other.portal">Internationalization
+			topics for portal component developers</a></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>3. <a href="#url">Portal and Portlet URLs</a>
+	<ul>
+		<li>3.1. <a href="#url.kinds">About portal and portlet URLs</a>
+		<ul>
+			<li>3.1.1. <a href="#url.kinds.portal">URLs for portal pages</a></li>
+			<li>3.1.2. <a href="#url.kinds.portlet">URLs targeting
+			portlets</a></li>
+		</ul>
+		</li>
+		<li>3.2. <a href="#url.portal">Producing portal and portlet
+		URLs</a>
+		<ul>
+			<li>3.2.1. <a href="#url.portal.portalUrlFactory">Using the
+			<code>PortalURLFactory</code></a></li>
+			<li>3.2.2. <a href="#url.portal.portalUrl">Using the <code>PortalURL</code></a></li>
+			<li>3.2.3. <a href="#url.portal.friendlyUri">Common friendly
+			URIs</a></li>
+		</ul>
+		</li>
+		<li>3.3. <a href="#url.other.config.portalurl">Configuring <code>portalurl.properties</code>
+		(optional)</a></li>
+	</ul>
+	</li>
+	<li>4. <a href="#properties">Configuration File Management</a>
+	<ul>
+		<li>4.1. <a href="#properties.where">Where to put your
+		configuration files</a>
+		<ul>
+			<li>4.1.1 <a href="#properties.where.internal">Internal
+			resources (WAR/CAR)</a></li>
+			<li>4.1.2 <a href="#properties.where.external">External
+			resources (global and instance resource folders)</a></li>
+			<li>4.1.3 <a href="#properties.where.both">Mixing internal
+			and external resources</a></li>
+		</ul>
+		</li>
+		<li>4.2. <a href="#properties.propertyResourceBundleManager">Accessing
+		your property files (<code>PropertyResourceBundleManager</code>)</a>
+		<ul>
+			<li>4.2.1 <a
+				href="#properties.propertyResourceBundleManager.getBundle">Getting
+			a bundle of properties (<code>PropertyResourceBundleManager.getBundle</code>)</a></li>
+			<li>4.2.2 <a
+				href="#properties.propertyResourceBundleManager.getString">Getting
+			a single property (<code>PropertyResourceBundleManager.getString</code>)</a></li>
+			<li>4.2.3. <a href="#properties.config">Configuring <code>propertyresourcebundlemanager.properties</code>
+			(optional)</a></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<!-- 
+	<li>5. <a href="#env">Environment</a>
+	<ul>
+		<li>5.1. <a href="#env.kinds">About environment data</a></li>
+		<li>5.2. <a href="#env.environment">Accessing WebLogic
+		environment data (<code>Environment</code>)</a></li>
+	</ul>
+	</li>
+-->
+	<li>5. <a href="#history">Document History</a></li>
+</ul>
+
+<hr>
+
+<a name="overview">
+<h2>1. Overview</h2>
+</a>
+
+<p>This is the developer's guide for the <b>Shared Portal
+Framework (SPF) common utilities</b>. The SPF common utilities are a
+collection of Java classes and JSP tag libraries providing useful
+functionality for SPF developers - <b>both</b> developers of Java
+portlet applications, <b>and</b> Vignette portal components. These
+utilities fall into the following areas:</p>
+
+<ul>
+	<li><a href="#i18n">Internationalization</a> - the SPF common
+	utilities provide Java API's for miscellaneous generic
+	internationalization functionality, not provided by the JDK and not
+	specific to either portal components or portlets. These include methods
+	for converting locales, displaying localized objects, and manipulating
+	locales.</li>
+	<li><a href="#url">Portal and Portlet URLs</a> - the SPF common
+	utilities utilities provide Java API's for creating URLs pointing to
+	arbitrary pages in your (or another) portal site. You can also target
+	portlets on those pages and pass them specific parameters.</li>
+	<li><a href="#properties">Property File Management</a> - the SPF
+	common utilities let you load your property files from inside or
+	outside of your application, and provide a management class (Java API)
+	for them which makes them hot-reloadable. So you can change your
+	property files without restarting.</li>
+	<li><a href="#env">Environment</a> - the SPF common utilities
+	provide Java classes for accessing information about the managed
+	environment (ie WebLogic cluster and managed servers).</li>
+</ul>
+
+<p>Besides the SPF common utilities, SPF portlet and portal
+developers will want to use the specific SPF utility libraries for those
+respective architectures. See <a href="#overview.other">other
+libraries</a>, below.</p>
+
+<hr>
+
+<a name="overview.installation">
+<h3>1.1. Installation</h3>
+</a>
+
+<a name="overview.installation.jar">
+<h4>1.1.1 Installation of the SPF common utilities JAR</h4>
+</a>
+
+<p>The SPF common utilities are distributed in Java JAR format. The
+base JAR filename is <code>spf-common-utilities.jar</code>; typically a
+version number is included (for example, <code>spf-common-utilities-1.0.0.jar</code>).
+The SPF portlet utilities are distributed through Maven 2:</p>
+
+<ul>
+	<li>The current Maven 2 repository is <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-common-utilities/"><code>http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-common-utilities/</code></a></li>
+	<li>The group ID is <code>com.hp.it.spf.xa</code>
+	<li>The artifact ID is <code>spf-common-utilities</code>
+</ul>
+
+<p>To get the SPF common utilities, download the latest released
+version from the repository.</p>
+
+<ul>
+	<li>If you are a <b>portlet</b> developer: As usual with any JAR
+	file, include the SPF common utilities JAR in your portlet
+	application's <code>/WEB-INF/lib</code> folder.</li>
+	<li>If you are a <b>portal component</b> developer: The SPF
+	Vignette portal WAR will already provide the JAR, so you only need to
+	get it for compiling your code. You should not put it inside your CAR
+	file. (If you are using Maven, specify scope <code>provided</code> on
+	the SPF common utilities.)</li>
+</ul>
+
+<a name="overview.installation.config.portalurl">
+<h4>1.1.2 Installation of <code>portalurl.properties</code>
+(optional)</h4>
+</a>
+
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>portalurl.properties</code>
+if you will be <a href="#url">making portal or portlet URLs</a> <b>and</b>
+you are using <i>local</i> Java portlets instead of WSRP-remoted ones, <i>or</i>
+your portal is using non-standard HTTP or HTTPS ports (eg in a sandbox).</p>
+</blockquote>
+
+<p>To install this file:</p>
+
+<ul>
+	<li>
+	<p>Download the template for <code>portalurl.properties</code> from
+	the appropriate SPF configuration template JAR file. For portlet
+	applications, use the template in the <code>spf-portlet-config.jar</code>,
+	where you can find on the SPF team's Maven 2 repository here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+	(browse for the latest version - the JAR file may have the version
+	number affixed to the file name). SPF portal developers should use the
+	template in the <code>spf-portal-config.jar</code>, here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config/</a>.
+	In either case, extract the template from the JAR file once you have
+	downloaded it.</p>
+	</li>
+	<li>
+	<p>Customize the properties in the file as needed - see
+	instructions for <a href="#url.other.config.portalurl">configuring
+	the <code>portalurl.properties</code></a>.</p>
+	</li>
+	<li>
+	<p>Include the customized file, named <code>portalurl.properties</code>,
+	with your application (ie for portlet developers, we are talking about
+	the portlet application; for portal component developers, we are
+	talking about the Vignette portal application). You can put the file
+	anywhere that the system classloader searches: inside your application
+	(eg in <code>/WEB-INF/classes</code>) or in any folder outside of the
+	WAR which is named in the classpath of the JVM. If you need to make the
+	configuration easily performable by an administrator, we recommend the
+	latter approach; otherwise the former is easier because you can then
+	just deliver the file inside the WAR.</p>
+
+	<p>If you are interested in externalizing the <code>portalurl.properties</code>,
+	check how your application server is configured. If you are using an
+	application server hosting environment, like DASH or SASU, they
+	probably will have provided you a "global resources" folder on the
+	server filesystem and in the JVM classpath. You would put the <code>portalurl.properties</code>
+	file there, if you wanted it to be external to your WAR (eg so the
+	administrator can easily customize it).</p>
+
+	<blockquote>
+	<p><b>Note:</b> Depending on the search order performed by your
+	system classloader, you may be able to do both: include a <code>portalurl.properties</code>
+	inside your application, and also let the administrator optionally
+	override it when needed, by putting a <code>portalurl.properties</code>
+	outside of the WAR. For this to work, your classloader must search the
+	external folders in the classpath before searching inside the WAR. If
+	you are interested in this "mixed" deployment, be sure to test it out
+	first, as actual behavior may vary by environment (application server,
+	etc).</p>
+	</blockquote>
+	</li>
+</ul>
+
+<a name="overview.installation.config.propertyresourcebundlemanager">
+<h4>1.1.3 Installation of <code>propertyresourcebundlemanager.properties</code>
+(optional)</h4>
+</a>
+
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>propertyresourcebundlemanager.properties</code>
+if you will be <a href="#properties">using <code>PropertyResourceBundleManager</code>
+to access configuration properties</a> <b>and</b> you want to override the
+default behavior (eg the cache duration).</p>
+</blockquote>
+
+<p>To install this file:</p>
+
+<ul>
+	<li>
+	<p>Download the template for <code>propertyresourcebundlemanager.properties</code>
+	from the appropriate SPF configuration template JAR file. For portlet
+	applications, use the template in the <code>spf-portlet-config.jar</code>,
+	where you can find on the SPF team's Maven 2 repository here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+	(browse for the latest version - the JAR file may have the version
+	number affixed to the file name). SPF portal developers should use the
+	template in the <code>spf-portal-config.jar</code>, here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config/</a>.
+	In either case, extract the template from the JAR file once you have
+	downloaded it.</p>
+	</li>
+	<li>
+	<p>Customize the properties in the file as needed - see
+	instructions for <a href="#properties.config">configuring the <code>propertyresourcebundlemanager.properties</code></a>.</p>
+	</li>
+	<li>
+	<p>Include the customized file, named <code>propertyresourcebundlemanager.properties</code>,
+	with your application (ie for portlet developers, we are talking about
+	the portlet application; for portal component developers, we are
+	talking about the Vignette portal application). You can put the file
+	anywhere that the system classloader searches: inside your application
+	(eg in <code>/WEB-INF/classes</code>) or in any folder outside of the
+	WAR which is named in the classpath of the JVM. If you need to make the
+	configuration easily performable by an administrator, we recommend the
+	latter approach; otherwise the former is easier because you can then
+	just deliver the file inside the WAR.</p>
+
+	<p>If you are interested in externalizing the <code>propertyresourcebundlemanager.properties</code>,
+	check how your application server is configured. If you are using an
+	application server hosting environment, like DASH or SASU, they
+	probably will have provided you a "global resources" folder on the
+	server filesystem and in the JVM classpath. You would put the <code>propertyresourcebundlemanager.properties</code>
+	file there, if you wanted it to be external to your WAR (eg so the
+	administrator can easily customize it).</p>
+
+	<blockquote>
+	<p><b>Note:</b> Depending on the search order performed by your
+	system classloader, you may be able to do both: include a <code>propertyresourcebundlemanager.properties</code>
+	inside your application, and also let the administrator optionally
+	override it when needed, by putting a <code>propertyresourcebundlemanager.properties</code>
+	outside of the WAR. For this to work, your classloader must search the
+	external folders in the classpath before searching inside the WAR. If
+	you are interested in this "mixed" deployment, be sure to test it out
+	first, as actual behavior may vary by environment (application server,
+	etc).</p>
+	</blockquote>
+	</li>
+</ul>
+
+<hr>
+
+<a name="overview.dependencies">
+<h3>1.2. Dependencies</h3>
+</a>
+
+<p>The SPF common utilities depend the basic J2EE technologies for
+portal/portlet development:</p>
+
+<ul>
+	<li>Java Servlet</li>
+	<li>Java Portlet</li>
+	<li>JSP</li>
+</ul>
+
+<p>In addition, the SPF common utilities depend on Apache commons
+logging.</p>
+
+<p>All of these dependencies are managed through Maven. For a list
+of the exact current dependencies, see the Maven POM for the SPF common
+utilities. You can download it from the Maven repository mentioned
+above.</p>
+
+<ul>
+	<li>If you are a <b>portlet</b> developer: As usual, all of these
+	JAR dependencies also need to be included when you build your portlet
+	application's <code>/WEB-INF/lib</code>.</li>
+	<li>If you are a <b>portal component</b> developer: The SPF
+	Vignette portal WAR will already provide the needed dependencies for
+	SPF common utilities, so you only need to get it for compiling your
+	code. You should not put it inside your CAR file. (If you are using
+	Maven, specify scope <code>provided</code> on the SPF common
+	utilities.)</li>
+</ul>
+
+<hr>
+
+<a name="overview.other">
+<h3>1.3. Other libraries for SPF developers</h3>
+</a>
+
+<p>Developers of <b>Java portlet applications</b> for the SPF portal
+will find many more utilities available to them, in the SPF portlet
+utilities artifact. Please see the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#top">SPF
+Portlet Utilities Developer's Guide</a>.</p>
+
+<p>Developers of <b>Vignette portal components</b> for the SPF
+portal will find many more utilities available to them, in the SPF
+portal utilities artifact. Please see the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/overview-summary.html#top">SPF
+Portal Utilities Developer's Guide</a>.</p>
+
+<hr>
+
+<a name="i18n">
+<h2>2. Internationalization</h2>
+</a>
+
+<p>The SPF common utilities include an internationalization library,
+the common {@link com.hp.it.spf.xa.i18n.I18nUtility}, <code>com.hp.it.spf.xa.i18n.I18nUtility</code>,
+which provides general-purpose methods that are (1) common to both Java
+portlets and Vignette portal components developed in the Shared Portal
+Framework, and (2) not found elsewhere in the other technologies
+available to those developers (WPA Portlet Edition and Spring Portlet
+MVC for SPF portlet developers, and the Vignette application libraries
+for portal developers). Currently this grab-bag of methods includes:</p>
+
+<ul>
+	<li>methods for converting between different representations of
+	locale;</li>
+	<li>methods for generating SPF-standard localized names for
+	various objects (eg for display to the user); and</li>
+	<li>methods for manipulating (eg sorting) collections of locales
+	in SPF-standard ways.</li>
+</ul>
+
+<blockquote>
+<p><b>Note:</b> The SPF portlet and portal utilities provide
+extension classes for the common <code>I18nUtility</code>:</p>
+<ul>
+	<li>the portlet {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility},
+	<code>com.hp.it.spf.xa.i18n.portlet.I18nUtility</code>, containing
+	internationalization methods specifically for Java portlets in SPF</li>
+	<li>the portal {@link com.hp.it.spf.xa.i18n.portal.I18nUtility}, <code>com.hp.it.spf.xa.i18n.portal.I18nUtility</code>,
+	containing internationalization methods specifically for Vignette
+	portal components in SPF</li>
+</ul>
+<p>SPF developers should import and use the following methods via
+the appropriate subclass, in order to have full access to all of the
+SPF-provided internationalization API's.</p>
+</blockquote>
+<hr>
+
+<a name="i18n.convert">
+<h3>2.1. Converting between different representations of locale</h3>
+</a>
+
+<p>In SPF, the Java {@link java.util.Locale} object is the canonical
+form for a locale. However there are 4 related representations for
+locale that SPF developers may need to be concerned with:</p>
+
+<ul>
+	<li>
+	<p>The <a
+		href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+	639-1</a> standard represents each language with a simple 2-character code,
+	like <code>ja</code> for Japanese and <code>zh</code> for Chinese.
+	Similarly, the <a
+		href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
+	3166-1</a> standard represents countries with a simple 2-character code.</p>
+	<p>These language and country codes are the constituent elements of
+	a Java <code>Locale</code> (we are disregarding the variant element
+	here as it is not used in SPF). You pass them to the constructor, and
+	get them back with the {@link java.util.Locale#getLanguage()} and
+	{@link java.util.Locale#getCountry()} methods. So the SPF need offer
+	nothing extra to convert between <code>Locale</code> and these
+	ISO-standard language and country codes.</p>
+	</li>
+
+	<li>
+	<p>The <a href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a>
+	standard represents the constituent elements of a <code>Locale</code>
+	in string form, like <code>ja</code> for generic Japanese, <code>ja-JP</code>
+	for Japanese in Japan, etc.</p>
+	<p>Often this standard is used to represent locales in other
+	systems your SPF application might interface with. The SPF provides
+	methods to convert between <code>Locale</code> and RFC 3066.</p>
+	</li>
+
+	<li>
+	<p>Finally, HP Passport (the identity and authentication service
+	provider for Shared Portal Framework public users) represents the
+	locale as a single language code (the <code>langCode</code> element of
+	the HPP core user profile). This is a 2-character code that is
+	generally the same as the ISO 639-1 standard, except for using custom
+	values for Simplified and Traditional Chinese (since those are
+	different character sets but in ISO 639-1 they share the same code, <code>zh</code>
+	- hence HPP uses the custom values of <code>12</code> and <code>13</code>
+	for them).</p>
+	<p>HP Passport user data, which Shared Portal Framework puts into
+	the SPF <i>user profile map</i>, will include this HPP language code,
+	so if you are going to interpret it you will need to convert. Also if
+	you are using HPP Web Services to get or specify an HPP language code,
+	you will need to convert from the canonical SPF representation which is
+	Java <code>Locale</code>. The SPF provides converter methods for this.</p>
+	</li>
+</ul>
+
+<a name="i18n.convert.hpp">
+<h4>2.1.1. Converting HP Passport language codes (<code>I18nUtility.localeToHPPLanguage</code>,
+<code>I18nUtility.hppLanguageToLocale</code>)</h4>
+</a>
+
+<p>The SPF common utilities {@link com.hp.it.spf.xa.I18nUtility}
+class provides the following methods for converting between HP Passport
+language codes and the SPF-canonical representation of locale, which is
+a Java {@link java.util.Locale} object. <b>Note:</b> All strings in
+these methods are case-insensitive, as per the ISO standards.</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#localeToHPPLanguage(Locale)}</dt>
+	<dd>
+	<p>Returns the HPP language code for the given locale, taking into
+	account the fact that HPP uses non-ISO-standard language codes for
+	Simplified and Traditional Chinese. You give this method a <code>Locale</code>
+	and it returns you the equivalent form for the HPP <code>langCode</code>
+	core profile attribute. Because HPP languages are generic (not
+	country-specific), any country code in your locale will generally be
+	ignored (except that for Chinese, SPF uses the country codes for Taiwan
+	and China to infer Traditional and Simplified Chinese respectively).</p>
+
+	<p>For example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.localeToHPPLanguage({@link
+		java.util.Locale#FRENCH})</code></dt>
+		<dd>returns <code>fr</code>
+		<dt><code>I18nUtility.localeToHPPLanguage({@link
+		java.util.Locale#CANADA_FRENCH})</code></dt>
+		<dd>also returns <code>fr</code>
+		<dt><code>I18nUtility.localeToHPPLanguage({@link
+		java.util.Locale#SIMPLIFIED_CHINESE})</code></dt>
+		<dd>returns the HPP-internal value for Simplified Chinese, which
+		is the value of the {@link
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_SIMP_CHINESE_LANG} constant.</dd>
+		<dt><code>I18nUtility.localeToHPPLanguage({@link
+		java.util.Locale#TRADITIONAL_CHINESE})</code></dt>
+		<dd>returns the HPP-internal value for Traditional Chinese, which
+		is the value of the {@link
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_TRAD_CHINESE_LANG} constant.</dd>
+	</dl>
+	<p></p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#hppLanguageToLocale(String)}</dt>
+	<dd>
+	<p>Returns the <code>Locale</code> for the given HPP language code
+	(ie HPP <code>langCode</code> core profile attribute), again taking
+	into account the fact that HPP uses non-ISO-standard language codes for
+	Simplified and Traditional Chinese. You give this method an HPP
+	language code and it returns you the equivalent <code>Locale</code>.
+	Note this will be a generic locale (ie no country specified within it)
+	except for Simplified and Traditional Chinese (as noted above, SPF uses
+	the country codes for Taiwan and China - rather than the locale variant
+	- to distinguish Simplified and Traditional Chinese).</p>
+
+	<p>For example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.hppLanguageToLocale("fr")</code></dt>
+		<dd>returns {@link java.util.Locale#FRENCH}</dd>
+		<dt><code>I18nUtility.hppLanguageToLocale({@link
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_SIMP_CHINESE_LANG})</code></dt>
+		<dd>returns {@link java.util.Locale#SIMPLIFIED_CHINESE}</dd>
+		<dt><code>I18nUtility.hppLanguageToLocale({@link
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_TRAD_CHINESE_LANG})</code></dt>
+		<dd>returns {@link java.util.Locale#TRADITIONAL_CHINESE}</dd>
+	</dl>
+	<p></p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#hppLanguageToLocale(String,String)}</dt>
+	<dd>
+	<p>Same as {@link
+	com.hp.it.spf.xa.i18n.I18nUtility#hppLanguageToLocale(String)}, except
+	you can pass the HPP country code (ie HPP <code>residentCountryCode</code>
+	core profile attribute) as well. Thus this method will return a full,
+	country-specific locale. Note that in the case of Simplified and
+	Traditional Chinese, the given country code will be ignored since SPF
+	must force the country in the locale to China or Taiwan, respectively,
+	to respresent those character sets.</p>
+
+	<p>For example:</p>
+	<dl>
+		<dt><code>I18nUtility.hppLanguageToLocale("fr", "CA")</code></dt>
+		<dd>returns {@link java.util.Locale#CANADA_FRENCH}</dd>
+		<dt><code>I18nUtility.hppLanguageToLocale({@link
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_SIMP_CHINESE_LANG}, "<i>anything</i>")</code></dt>
+		<dd>returns {@link java.util.Locale#SIMPLIFIED_CHINESE}</dd>
+		<dt><code>I18nUtility.hppLanguageToLocale({@link
+		com.hp.it.spf.xa.i18n.I18nUtility#HPP_TRAD_CHINESE_LANG}, "<i>anything</i>")</code></dt>
+		<dd>returns {@link java.util.Locale#TRADITIONAL_CHINESE}</dd>
+	</dl>
+	<p></p>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<a name="i18n.convert.rfc3066">
+<h4>2.1.2. Converting RFC 3066 language tags (<code>I18nUtility.localeToLanguageTag</code>,
+<code>I18nUtility.languageTagToLocale</code>)</h4>
+</a>
+
+<p>The SPF common utilities {@link com.hp.it.spf.xa.I18nUtility}
+class also provides the following methods for converting between <a
+	href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tags
+and the SPF-canonical representation of locale, which is a Java {@link
+java.util.Locale} object. <b>Note:</b> All strings in these methods are
+case-insensitive, as per the respective standards.</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#localeToLanguageTag(Locale)}</dt>
+	<dd>
+	<p>Returns the RFC 3066 language tag for the given locale. For
+	example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.localeToLanguageTag({@link
+		java.util.Locale#FRENCH})</code></dt>
+		<dd>returns <code>fr</code>
+		<dt><code>I18nUtility.localeToLanguageTag({@link
+		java.util.Locale#CANADA_FRENCH})</code></dt>
+		<dd>returns <code>fr-CA</code>
+		<dt><code>I18nUtility.localeToLanguageTag({@link
+		java.util.Locale#SIMPLIFIED_CHINESE})</code></dt>
+		<dd>returns <code>zh-CN</code></dd>
+		<dt><code>I18nUtility.localeToLanguageTag({@link
+		java.util.Locale#TRADITIONAL_CHINESE})</code></dt>
+		<dd>returns <code>zh-TW</code></dd>
+	</dl>
+	<p></p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#languageTagToLocale(String)}</dt>
+	<dd>
+	<p>Returns the <code>Locale</code> for the given RFC 3066 language
+	tag. For example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.languageTagToLocale("fr")</code></dt>
+		<dd>returns {@link java.util.Locale#FRENCH}</dd>
+		<dt><code>I18nUtility.languageTagToLocale("fr-CA")</code></dt>
+		<dd>returns {@link java.util.Locale#CANADA_FRENCH}</dd>
+		<dt><code>I18nUtility.languageTagToLocale("zh-CN")</code></dt>
+		<dd>returns {@link java.util.Locale#SIMPLIFIED_CHINESE}</dd>
+		<dt><code>I18nUtility.languageTagToLocale("zh-TW")</code></dt>
+		<dd>returns {@link java.util.Locale#TRADITIONAL_CHINESE}</dd>
+	</dl>
+	<p></p>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<hr>
+
+<a name="i18n.display">
+<h3>2.2. Getting localized strings for common objects</h3>
+</a>
+
+<p>To help you with localized display of common objects, the {@link
+com.hp.it.spf.xa.i18n.I18nUtility} library provides methods for
+generating localized name strings for people, time zones, and locales
+themselves.</p>
+
+<a name="i18n.display.username">
+<h4>2.2.1. Getting localized user (person) name (<code>I18nUtility.getUserDisplayName</code>)</h4>
+</a>
+
+<p>The customary order of a person's given and family names within
+his or her full name can vary by locale. In Chinese, Japanese, Korean,
+Vietnamese, and Hungarian cultures, it is generally customary to use the
+family name first, and the given name last (called <i>Eastern order</i>).
+Elsewhere, it is generally customary to use the opposite sequence
+(called <i>Western order</i>). If you need to display the user's name,
+the SPF common utilities provide a method which returns the full name in
+the proper order for you:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getUserDisplayName(String,String,Locale)}</dt>
+	<dd>
+	<p>The arguments are:</p>
+	<ul>
+		<li>
+		<p>The first string is for the user's first name (ie given name).</p>
+		</li>
+		<li>
+		<p>The second string is for the user's last name (ie family name).</p>
+		</li>
+		<li>
+		<p>The {@link java.util.Locale} is the locale in which to render
+		the name.</p>
+		</li>
+	</ul>
+	<p>For example:</p>
+	<dl>
+		<dt><code>I18nUtility.getUserDisplayName("Xiaoping",
+		"Deng", Locale.ENGLISH)</code></dt>
+		<dd>returns <code>Xiaoping Deng</code></dd>
+		<dt><code>I18nUtility.getUserDisplayName("Xiaoping",
+		"Deng", Locale.CHINESE)</code></dt>
+		<dd>returns <code>Deng Xiaoping</code></dd>
+	</dl>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<blockquote>
+<p><b>Note:</b> The name order is controlled by the language code in
+the locale, not by the country code. Thus any English-language locale
+(even one for the country China) in the above example would return <code>Xiaoping
+Deng</code>, while any Chinese-language locale (even one for the country USA)
+would return <code>Deng Xiaoping</code>.</p>
+
+<p><b>Note:</b>The name order policy comes from the <code>userDisplayName.reverse.lang</code>
+property in the <code>i18n_config.properties</code> file. (Portlet
+developers: do not confuse this with the <code>i18n_portlet_config.properties</code>
+file.) <code>i18n_config.properties</code> is included inside the SPF
+common utilities JAR and should not need to be modified. It is loaded
+from the classpath too, so if you want to override it, you may be able
+to provide a substitute one if you can put it in a location where the
+JVM classloader will search <b>before</b> looking inside the JAR. Your
+classloader search sequence may vary; test it first before relying on
+this.</p>
+</blockquote>
+
+<a name="i18n.display.timezone">
+<h4>2.2.2. Getting localized time zone name (<code>I18nUtility.getLongTimezoneDisplayName</code>,
+<code>I18nUtility.getShortTimezoneDisplayName</code>)</h4>
+</a>
+
+<p>Localized timezone names in Java come in both short and long
+forms. However, for timezones which periodically observe summary
+(daylight) time, another factor in the timezone name besides locale is
+the time of year for which you need the name (eg, for the North American
+Pacific timezone, the English long name is <code>Pacific Daylight
+Time</code> in the summer, and <code>Pacific Standard Time</code> in the
+winter). Although the JDK provides all the API's necessary to let you
+determine the proper localized timezone name yourself, they can be a
+little cumbersome to use. So the SPF common utilities provide these
+convenience methods for you:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLongTimezoneDisplayName(TimeZone,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLongTimezoneDisplayName(Date,TimeZone,Locale)}</dt>
+	<dd>
+	<p>The arguments are:</p>
+	<ul>
+		<li>The {@link java.util.TimeZone} in question.</li>
+		<li>The {@link java.util.Locale} in which to localize the
+		timezone name.</li>
+		<li>By default, the name of the timezone at the current time of
+		year is returned. If you need to get the name of the timezone at a
+		particular time of year, you can provide an optional {@link
+		java.util.Date} object; the name of the timezone at that time of year
+		will be returned.</li>
+	</ul>
+	<p>For example, this code returns <code>Pacific Standard
+	Time</code> when executed in the winter, and <code>Pacific Daylight
+	Time</code> when executed in the summer:</p>
+	<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility; // or import portal I18nUtility instead, if portal component
+...
+TimeZone tz = new TimeZone("America/Los_Angeles");
+String name = I18nUtility.getLongTimezoneDisplayName(tz, Locale.ENGLISH);
+</pre></blockquote>
+
+	<p>But if we have a <code>Date</code> for which we need to get the
+	localized timezone name, we should not base that name on the current
+	time of year; we should base it on the time of year of that <code>Date</code>.
+	Here is the code for that (where <code>date</code> is the date in
+	question):</p>
+
+	<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portlet.I18nUtility; // or import portal I18nUtility instead, if portal component
+...
+TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
+String name = I18nUtility.getLongTimezoneDisplayName(date, tz, Locale.GERMAN);
+</pre></blockquote>
+
+	<p>If the <code>date</code> were sometime in the winter, then the
+	returned timezone name would be <code>Pazifische Normalzeit</code>
+	(notice that the locale in this example was German).</p>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getShortTimezoneDisplayName(TimeZone,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getShortTimezoneDisplayName(Date,TimeZone,Locale)}</dt>
+	<dd>
+	<p>These methods are the same as the ones above, except they return
+	the localized timezone name in its short form: for example, <code>PST</code>
+	for the North American Pacific timezone, in the winter, in English.</p>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<blockquote>
+<p><b>Note:</b> The SPF uses the translations built-into the JDK to
+get the localized values; they are not custom translations.</p>
+</blockquote>
+
+<a name="i18n.display.locale">
+<h4>2.2.3. Getting localized locale name (<code>I18nUtility.getLocaleDisplayName</code>)</h4>
+</a>
+
+<p>Although the JDK provides all the API's necessary to let you
+determine the proper localized name for a locale yourself, the SPF
+provides an API to do this for you, since HP.com UI standards dictate a
+certain format. These API's provide localized names in that HP.com
+standard format.</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLocaleDisplayName(Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLocaleDisplayName(Locale,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLocaleDisplayName(Locale,Locale,int)}</dt>
+	<dd>
+	<p>The arguments are:</p>
+	<ul>
+		<li>
+		<p>The first {@link java.util.Locale} is the locale for which you
+		need the name.</p>
+		</li>
+		<li>
+		<p>The optional second {@link java.util.Locale} is the locale in
+		which you want the first locale's name to be translated. In this way,
+		you can get the name of one locale, localized for another locale. If
+		you do not provide this second locale, the returned name is localized
+		for that same locale.</p>
+		</li>
+		<li>
+		<p>When given a generic (ie language-only) locale, this method
+		returns the translated name of that language. When given a
+		country-specific locale, the method returns a string containing both
+		the translated language name and country name. Which comes first? By
+		default, the language is first. With the optional <code>int</code>
+		parameter, you can pass a control bit {@link
+		com.hp.it.spf.xa.i18n.I18nUtility#LOCALE_BY_COUNTRY} which reverses
+		that order, returning the country name first. <b>Note:</b> Country
+		name first is the current HP.com Web standard, so you should be sure
+		to specify this control flag in that case.</p>
+		</li>
+	</ul>
+	<p>The returned string is formatted according to the HP.com Web
+	standards for display of locale name: a hyphen character is used to
+	separate the country and language names, with no whitespace. For
+	example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.getLocaleDisplayName(Locale.GERMANY)</code></dt>
+		<dd>returns <code>Deutsch-Deutschland</code></dd>
+		<dt><code>I18nUtility.getLocaleDisplayName(Locale.GERMANY,
+		Locale.FRENCH)</code></dt>
+		<dd>returns <code>allemand-Allemagne</code></dd>
+		<dt><code>I18nUtility.getLocaleDisplayName(Locale.GERMANY,
+		Locale.GERMANY, I18nUtility.LOCALE_BY_COUNTRY)</code></dt>
+		<dd>returns <code>Deutschland-Deutsch</code> (the current HP.com
+		Web standard)</dd>
+	</dl>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<blockquote>
+<p><b>Note:</b> The SPF uses the translations built-into the JDK to
+get the localized values; they are not custom translations.</p>
+</blockquote>
+
+
+<a name="i18n.display.date">
+<h4>2.2.4. Getting localized dates (<code>I18nUtility.getShortDisplayDate</code>,
+<code>I18nUtility.getMediumDisplayDate</code>, <code>I18nUtility.getLongDisplayDate</code>,
+<code>I18nUtility.getFullDisplayDate</code>)</h4>
+</a>
+
+<p>Dates are frequently displayed in different, customary formats
+depending on the locale. Localized, formatted date strings in Java come
+in four forms: short, medium, long, and full. Although the JDK provides
+all the API's necessary to let you generate arbitrary-format date
+strings, the SPF common utilities provide the following convenience
+methods for you:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getShortDisplayDate(Date,TimeZone,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getMediumDisplayDate(Date,TimeZone,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLongDisplayDate(Date,TimeZone,Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getFullDisplayDate(Date,TimeZone,Locale)}</dt>
+	<dd>
+	<p>These methods return the Java-default formatted date strings in
+	each of the four styles: short (corresponding to {@link
+	java.text.DateFormat#SHORT}), medium ({@link
+	java.text.DateFormat#MEDIUM}), long ({@link
+	java.text.DateFormat#LONG}), and full ({@link
+	java.text.DateFormat#FULL}). The arguments are simply the {@link
+	java.util.Date} in question, the {@link java.util.TimeZone} for that
+	date, and the {@link java.util.Locale} in which to localize it.</p>
+
+	<p>For example (where the <code>date</code> is for February 14,
+	2009, at 10:56:55 PM in the North American Pacific timezone, and <code>tz</code>
+	is that timezone):</p>
+	<dl>
+		<dt><code>I18nUtility.getShortDisplayDate(date, tz,
+		Locale.US)</code></dt>
+		<dd>returns <code>2/14/09 10:56 PM</code></dd>
+		<dt><code>I18nUtility.getShortDisplayDate(date, tz,
+		Locale.GERMANY)</code></dt>
+		<dd>returns <code>14.02.09 22:56</code></dd>
+		<dt><code>I18nUtility.getMediumDisplayDate(date, tz,
+		Locale.US)</code></dt>
+		<dd>returns <code>Feb 14, 2009 10:56:55 PM</code></dd>
+		<dt><code>I18nUtility.getMediumDisplayDate(date, tz,
+		Locale.GERMANY)</code></dt>
+		<dd>returns <code>14.02.2009 22:56:55</code></dd>
+
+		<dt><code>I18nUtility.getLongDisplayDate(date, tz,
+		Locale.US)</code></dt>
+		<dd>returns <code>February 14, 2009 10:56:55 PM PST</code></dd>
+		<dt><code>I18nUtility.getLongDisplayDate(date, tz,
+		Locale.GERMANY)</code></dt>
+		<dd>returns <code>14. Februar 2009 22:56:55 PST</code></dd>
+		<dt><code>I18nUtility.getFullDisplayDate(date, tz,
+		Locale.US)</code></dt>
+		<dd>returns <code>Saturday, February 14, 2009 10:56:55 PM
+		PST</code></dd>
+		<dt><code>I18nUtility.getFullDisplayDate(date, tz,
+		Locale.GERMANY)</code></dt>
+		<dd>returns <code>Samstag, 14. Februar 2009 22.56 Uhr PST</code></dd>
+	</dl>
+	<p>If you need different date string formats, please use the Java
+	API's directly.</p>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<blockquote>
+<p><b>Note:</b> The SPF uses the translations and default
+date-format patterns built-into the JDK to get the localized values;
+they are not custom SPF translations or formats.</p>
+</blockquote>
+
+<a name="i18n.display.other">
+<h4>2.2.5. Getting localized strings for other objects (numbers,
+currency, etc)</h4>
+</a>
+
+<p>Use the standard Java-supplied functionality to get localized
+decimal numbers, integers, percentages, currency, etc. The SPF does not
+currently provide any convenience methods for them.</p>
+
+<hr>
+
+<a name="i18n.manipulate">
+<h3>2.3. Operating with multiple locales</h3>
+</a>
+
+<p>The SPF common utilities' {@link
+com.hp.it.spf.xa.i18n.I18nUtility} class provides a few methods for
+operating on collections of locales.</p>
+
+<a name="i18n.manipulate.sort">
+<h4>2.3.1. Sorting locales (<code>I18nUtility.sortLocales</code>)</h4>
+</a>
+
+<p>You can sort collections of locales with these methods:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, Locale)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, Locale, int)}</dt>
+	<dd>
+	<p>These methods return a {@link java.util.Collection} of {@link
+	java.util.Locale} objects, sorted by their localized display names (see
+	the discussion on <a href="#i18n.display.locale">localized display
+	names</a> above). The arguments are:</p>
+	<ul>
+		<li>
+		<p>The <code>Collection</code> of <code>Locale</code> objects to
+		sort. Note the sort is non-destructive - it does not change this
+		argument.</p>
+		</li>
+		<li>
+		<p>The locales are sorted by their <i>display names</i>, not by
+		language code or anything else. By default, the English names for the
+		locales are used, but you can provide an optional <code>Locale</code>
+		object as the second argument. This locale is used to localize the
+		display names for purposes of the sort, so that the sort is in
+		localized sequence.</p>
+		</li>
+		<li>
+		<p>As noted, the locales are sorted by their display names. By
+		default, this is an ascending sort, with the language name considered
+		over the country name. However there are 2 optional control flags you
+		can provide to the <code>int</code> argument, to override that:</p>
+		<dl>
+			<dt>{@link com.hp.it.spf.xa.i18n.I18nUtility#LOCALE_DESCENDING}</dt>
+			<dd>Use this control flag to perform a descending sort.</dd>
+			<dt>{@link com.hp.it.spf.xa.i18n.I18nUtility#LOCALE_BY_COUNTRY}</dt>
+			<dd>Use this control flag to consider country name over language
+			name during the sort. (Note this is the current HP.com Web standard.)</dd>
+		</dl>
+		<p>The <code>int</code> flag operates as a bitmask, and these
+		control flags are bits that can be set in the mask. If you need to
+		specify only one of the flags, just pass its value as the <code>int</code>
+		argument. If you need to specify both, bitwise-or them together.</p>
+		</li>
+	</ul>
+	<p>For example (where <code>locales</code> is our collection of
+	unsorted locales):</p>
+	<dl>
+		<dt><code>I18nUtility.sortLocales(locales)</code></dt>
+		<dd>returns the locales sorted ascending by their English names,
+		with language over country</dd>
+		<dt><code>I18nUtility.sortLocales(locales,
+		Locale.JAPANESE)</code></dt>
+		<dd>returns the locales sorted ascending by their Japanese names,
+		with language over country</dd>
+		<dt><code>I18nUtility.sortLocales(locales,
+		Locale.JAPANESE, I18nUtility.LOCALE_BY_COUNTRY)</code></dt>
+		<dd>returns the locales sorted ascending by their Japanese names,
+		with country over language (this is the current HP.com Web standard)</dd>
+		<dt><code>I18nUtility.sortLocales(locales,
+		Locale.JAPANESE, I18nUtility.LOCALE_BY_COUNTRY |
+		I18nUtility.LOCALE_DESCENDING)</code></dt>
+		<dd>returns the locales sorted descending by their Japanese
+		names, with country over language</dd>
+	</dl>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<hr>
+
+<a name="i18n.other">
+<h3>2.4. Other internationalization topics</h3>
+</a>
+
+<a name="i18n.other.portlet">
+<h4>2.4.1. Internationalization topics for portlet developers</h4>
+</a>
+
+<p>The <i>SPF portlet utilities</i> provide an extension of the <code>com.hp.it.spf.xa.i18n.I18nUtility</code>
+class which provides additional, portlet-specific internationalization
+functionality, such as access to message resources and localized
+supporting files. Please see the internationalization chapter in the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n">SPF
+Portlet Utilities Developer's Guide</a>.</p>
+
+<a name="i18n.other.portal">
+<h4>2.4.2. Internationalization topics for portal component
+developers</h4>
+</a>
+
+<p>The <i>SPF portal utilities</i> provide an extension of the <code>com.hp.it.spf.xa.i18n.I18nUtility</code>
+class which provides additional, Vignette-specific internationalization
+functionality, such as access to message resources and localized
+supporting files. Please see the internationalization chapter in the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/overview-summary.html#i18n">SPF
+Portal Utilities Developer's Guide</a>.</p>
+
+<hr>
+
+<a name="url">
+<h2>3. Portal and Portlet URLs</h2>
+</a>
+
+<p>Whether writing Java portlets or Vignette portal components that
+will run in the Shared Portal Framework environment, developers often
+need to create URL's pointing at pages within the portal site and even
+targeting portlets within that page: passing parameters, specifying
+portlet mode, etc. The SPF common utilities give both portlet and portal
+developers the tools to do this, with the {@link
+com.hp.it.spf.xa.portalurl.PortalURL} interface and the {@link
+com.hp.it.spf.xa.portalurl.PortalURLFactory}.</p>
+
+<blockquote>
+<p><b>Note:</b> The SPF portal utilities' {@link
+com.hp.it.spf.xa.misc.portal.Utils} class, and the SPF portlet
+utilities' {@link com.hp.it.spf.xa.misc.portlet.Utils} class, both
+provide alternative methods (named <code>getPortalSiteURL</code>) for
+generating portal URLs, but you cannot target portlets with them. So the
+<code>PortalURL</code> classes are the recommended method.</p>
+</blockquote>
+
+<hr>
+
+<a name="url.kinds">
+<h3>3.1. About portal and portlet URLs</h3>
+</a>
+
+<a name="url.kinds.portal">
+<h4>3.1.1. URLs for portal pages</h4>
+</a>
+
+<p>For purposes of this discussion, a <i>portal URL</i> is a URL
+which points to a portal page. The page could be within the current
+portal site, or in another site hosted by the same SPF portal server.</p>
+
+<p>The SPF common utilities' <code>PortalURLFactory</code> and <code>PortalURL</code>
+let you generate relative or absolute portal URLs, for the current or
+another portal site, pointing to any particular page on that site by its
+path (eg, in Vignette, the friendly URI for a navigation item, the
+template friendly name for a secondary page, or etc). You can set portal
+query parameters into the portal URL, and (for an absolute URL) you can
+set the scheme/protocol too (if you have a non-standard port configured
+in <code>portalurl.properties</code>, this will be included).</p>
+
+<p>The SPF portlet utilities' {@link
+com.hp.it.spf.xa.misc.portlet.Utils} class includes alternative methods
+for generating portal URLs, such as <code>Utils.getPortalSiteURL(PortletRequest)</code>
+and <code>Utils.getPortalSiteURL(PortletRequest,Boolean,String,int,String)</code>.
+So, too, do the SPF portal utilities' {@link
+com.hp.it.spf.xa.misc.portal.Utils} class (eg, <code>Utils.getPortalSiteURL(HttpServletRequest)</code>
+and <code>Utils.getPortalSiteURL(HttpServletRequest,Boolean,String,int,String)</code>.
+With these methods, you can build an absolute URL for this or another
+portal site, and you can specify the path for a particular page, and
+optionally switch the scheme/protocol, too (any non-standard port
+configured in <code>portalurl.properties</code> will automatically be
+included). You can't set portal query parameters explicitly, but you can
+include them on the end of your path (eg Vignette friendly URI) which
+you pass to the method. You can also set an arbitrary port or host,
+something the <code>PortalURL</code> classes do not support. However you
+cannot target portlets with them. If you are interested in using those <code>getPortalSiteURL</code>
+methods instead, to generate your portal URLs, please see the respective
+developer's guides for the portlet and portal utilities.</p>
+
+<a name="url.kinds.portlet">
+<h4>3.1.1. URLs targeting portlets</h4>
+</a>
+
+<p>For purposes of this discussion, a <i>portlet URL</i> is a URL
+which points to a portal page and targets one or more portlets on that
+page. The page could be within the current portal site, or in another
+site hosted by the same SPF portal server, and the URL could target
+action processing or resource handling (JSR-168) within one of those
+portlets besides just rendering.</p>
+
+<p>The SPF common utilities' <code>PortalURLFactory</code> and <code>PortalURL</code>
+let you generate portlet URLs as well as portal URLs. You need to know
+the portlet ID (ie the Vignette friendly ID) for the portlet(s) you want
+to target, as well as the page ID (ie the Vignette friendly URL) for the
+page they are on. You can set the portlet mode and window state, and
+target one portlet for action processing. You can also set portlet
+parameters (including public render parameters) for any or all
+portlet(s) on the page. Alternatively, you can target one portlet for
+resource handling. (At present only JSR-168 style resource handling is
+supported. This lets you create URLs for accessing servlets and static
+files like images inside your portlet application. True JSR-286 resource
+URLs for performing ResourceRequests are not supported.)</p>
+
+<p>In contrast, the various portal and portlet <code>Utils</code>
+methods do not support portlet URLs.</p>
+
+<hr>
+
+<a name="url.portal">
+<h3>3.2. Producing portal and portlet URLs</h3>
+</a>
+
+<p>First, you use the {@link
+com.hp.it.spf.xa.portalurl.PortalURLFactory} to create a {@link
+com.hp.it.spf.xa.portalurl.PortalURL} instance for your desired base
+URL. Then you use the methods in that interface to set portal query
+parameters and/or target portlets (set render parameters, portlet modes,
+etc).</p>
+
+<blockquote>
+<p><b>Note:</b> As discussed above, the SPF portal and portlet
+utilities' <code>Utils</code> classes also provide methods for
+generating portal URLs (not portlet URLs). They are not discussed
+further in this guide. Please see the SPF portlet or portal utilities
+developer guides for documentation about them.</p>
+</blockquote>
+
+<a name="url.portal.portalUrlFactory">
+<h4>3.2.1. Using the <code>PortalURLFactory</code></h4>
+</a>
+
+<p>The {@link com.hp.it.spf.xa.portalurl.PortalURLFactory} provides
+the static <code>PortalURLFactory.createPageURL</code> methods for
+getting the desired {@link com.hp.it.spf.xa.portalurl.PortalURL}
+instance:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURLFactory#createPageURL(String,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURLFactory#createPageURL(String,String,boolean)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURLFactory#createPageURL(String,String,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURLFactory#createPageURL(String,String,String,boolean)}</dt>
+</dl>
+
+<p>With the <code>createPageURL</code> methods, you make the base <code>PortalURL</code>
+instance, minus any parameters and portlets. The <code>PortalURLFactory</code>
+will generate the <code>PortalURL</code> accordingly, assuming either a
+<i>local</i> or <i>remote</i> portlet. Whether the <code>PortalURLFactory</code>
+returns a <code>PortalURL</code> for local or remote, depends on the <code>portalurl.remote</code>
+property of <code>portalurl.properties</code>. See <a
+	href="#url.other.config.portalurl">configuring <code>portalurl.properties</code></a>,
+below.</p>
+
+<p>The arguments are:</p>
+
+<ul>
+	<li>
+	<p>The first string argument is the <i>site root URL</i> (ie, site
+	home page URL). This can be a relative or absolute URL pointing to any
+	portal site on the current SPF portal server. Typically you would use
+	your current portal site. You can pass the site home page URL exactly,
+	or you can pass any page URL for any page in that site (the additional
+	page-specific path and parameters you provide, if any, will be ignored
+	- the factory uses this only to obtain the site root URL for your <code>PortalURL</code>).
+	This argument is required.</p>
+
+	<p>How do you get the site root URL to pass?</p>
+	<ul>
+		<li>
+		<p>For Java portlet developers, there are API's in the SPF portlet
+		utilities {@link com.hp.it.spf.xa.misc.portlet.Utils} class which let
+		you get the current portal request URL or current portal site URL. For
+		example, <code>Utils.getPortalRequestURL(PortletRequest)</code> and <code>Utils.getPortalSiteURL(PortletRequest)</code>.
+		Any of those methods would work.</p>
+		</li>
+		<li>
+		<p>Vignette portal component developers can use any of a few
+		methods in the Vignette published API which return site root URLs,
+		such as {@link
+		com.vignette.portal.website.enduser.PortalContext#getSiteURI(String)}.
+		You can also use the API's in the SPF portal utilities {@link
+		com.hp.it.spf.xa.misc.portal.Utils} class, which let you get the
+		current portal request URL or site URL, similar to portlets. For
+		example, <code>Utils.getRequestURL(HttpServletRequest)</code> and <code>Utils.getPortalSiteURL(HttpServletRequest)</code>.
+		Any of those methods would work.</p>
+		</li>
+	</ul>
+	</li>
+
+	<li>
+	<p>The second string argument is an optional <i>page URI</i> such
+	as a Vignette friendly URI for a navigation item related to the page;
+	or a Vignette template friendly name for a secondary page. The factory
+	joins this URI with your site root URL to make a full page URL for your
+	desired page. If you do not provide this argument, then the <code>PortalURL</code>
+	will point to the home page.</p>
+	</li>
+
+	<li>
+	<p>The third string argument is an optional <i>site name</i> (ie in
+	Vignette, a "site DNS name") to use for the URL. If you do not provide
+	this argument, the <code>PortalURL</code> will point to the same portal
+	site as referenced in the site root URL. But you can switch to another
+	site with this argument.</p>
+	</li>
+
+	<li>
+	<p>The optional boolean argument only applies when you have
+	provided an absolute site root URL above - ie a site root URL
+	specifying scheme/protocol, host, and possibly port number. The boolean
+	argument indicates whether the created <code>PortalURL</code> should be
+	secure or not. If set to <code>true</code> then an HTTPS <code>PortalURL</code>
+	will be created; if set to <code>false</code> then an HTTP <code>PortalURL</code>
+	will be created. If this results in a different scheme/protocol than
+	was used in the site root URL, then the port number in the <code>PortalURL</code>
+	will be set consistent with the new scheme:</p>
+	<ul>
+		<li>any previous port number in the site root URL will be omitted
+		from the <code>PortalURL</code></li>
+		<li>any non-standard port number defined in <code>portalurl.properties</code>
+		will be included in the <code>PortalURL</code> (see <a
+			href="#url.other.config.portalurl">configuring <code>portalurl.properties</code></a>,
+		below)</li>
+	</ul>
+	<p><b>Note:</b> If the provided site root URL argument is a
+	relative URL, this boolean argument has no effect.</p>
+	</li>
+</ul>
+
+<p>The arguments provided to the factory are validated, and an
+{@link java.lang.IllegalArgumentException} will be thrown if any appear
+to be invalid. Note this just checks the syntax of the arguments you
+provide; it does not validate that the portal site, page URI, etc
+actually exist.</p>
+
+<p>For example, here we make a <code>PortalURL</code> pointing
+simply to the current site's home page. (In this example, <code>siteRootURL</code>
+is the home page URL for the current site. The procedure for getting the
+site root URL varies between Vignette portal components and Java
+portlets, so is not shown here. See the discussion above about the site
+root URL argument.)</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+import com.hp.it.spf.xa.portalurl.PortalURL;
+...
+try {
+   PortalURL url = PortalURLFactory.createPageURL(siteRootURL, null);
+} catch (IllegalArgumentException e) {
+   // there was a problem with the siteRootURL
+}
+</pre></blockquote>
+
+<p>In the above example, if the <code>siteRootURL</code> was <code>http://portal.hp.com/portal/site/abc</code>,
+then <code>PortalURL.toString()</code> will return <code>http://portal.hp.com/portal/site/abc/</code>.</p>
+
+<p>Here we make a <code>PortalURL</code> object for the current
+site's Forums page, where <code>/forums</code> is assumed to be the
+Vignette "friendly URI" for that page:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+import com.hp.it.spf.xa.portalurl.PortalURL;
+...
+try {
+   PortalURL url = PortalURLFactory.createPageURL(siteRootURL, "/forums");
+} catch (IllegalArgumentException e) {
+   // there was a problem with the siteRootURL
+}
+</pre></blockquote>
+
+<p>In the above example, if the <code>siteRootURL</code> was <code>http://portal.hp.com/portal/site/abc</code>,
+then <code>PortalURL.toString()</code> will return <code>http://portal.hp.com/portal/site/abc/forums/</code>.</p>
+
+<p>Here we force use of a secure HTTPS URL for the Forums page. This
+assumes the <code>siteRootURL</code> is an absolute URL to begin with.
+Note that the port in the <code>PortalURL</code> will be reset (and set
+to a non-standard HTTPS port in <code>portalurl.properties</code>, if
+any) unless the <code>siteRootURL</code> was an HTTPS URL to begin with.</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+import com.hp.it.spf.xa.portalurl.PortalURL;
+...
+try {
+   PortalURL url = PortalURLFactory.createPageURL(siteRootURL, "/forums", true);
+} catch (IllegalArgumentException e) {
+   // there was a problem with the siteRootURL
+}
+</pre></blockquote>
+
+<p>In the above example, if the <code>siteRootURL</code> was <code>http://portal.hp.com:8080/portal/site/abc</code>,
+then <code>PortalURL.toString()</code> will return <code>https://portal.hp.com/portal/site/abc/forums/</code>.
+But if <code>portalurl.properties</code> had defined <code>portalurl.port.https=444</code>,
+then <code>PortalURL.toString()</code> would return <code>https://portal.hp.com:444/portal/site/abc/forums/</code>.</p>
+
+<a name="url.portal.portalUrl">
+<h4>3.2.2. Using the <code>PortalURL</code></h4>
+</a>
+
+<p>Once you have gotten your {@link
+com.hp.it.spf.xa.portalurl.PortalURL} object from the {@link
+com.hp.it.spf.xa.portalurl.PortalURLFactory}, you can use its {@link
+com.hp.it.spf.xa.portalurl.PortalURL#toString()} method to get it in
+string form (as in the above examples). But so far it will just be a
+base URL. To set portal query parameters or target portlets with
+parameters, modes, window states, etc, you use the following methods in
+the <code>PortalURL</code> interface:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String[])}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameters(Map)}</dt>
+	<dd>
+	<p>These methods let you set <i>portal query parameters</i>. You
+	can provide a {@link java.util.Map} of your parameters, or set them
+	individually. As usual, each parameter has a name and one (or more)
+	values. To set a single parameter with a single value, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String)}. To
+	set a single parameter with multiple values, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String[])}. To
+	set many parameters, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(Map)} where each map
+	entry uses the parameter name as a key, and a single string or array of
+	strings as the value. Note that each time you call these methods, any
+	previous parameter(s) of the same name(s) are cleared.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String[])}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameters(String,Map)}</dt>
+	<dd>
+	<p>These methods let you set <i>portlet private parameters</i>. The
+	first string is the portlet ID (ie the Vignette "friendly ID") of the
+	portlet in question. You can provide a {@link java.util.Map} of your
+	parameters, or set them individually. As usual, each parameter has a
+	name and one (or more) values. To set a single parameter with a single
+	value, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String)}.
+	To set a single parameter with multiple values, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String[])}.
+	To set many parameters, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,Map)} where
+	each map entry uses the parameter name as a key, and a single string or
+	array of strings as the value. Note that each time you call these
+	methods, any previous parameter(s) of the same name(s) are cleared.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameter(String,String,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameter(String,String,String[])}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setPublicParameters(String,Map)}</dt>
+	<dd>
+	<p>These methods let you set <i>portlet public render
+	parameters</i>. The first string is the portlet ID (ie the Vignette
+	"friendly ID") of the portlet in question. You can provide a {@link
+	java.util.Map} of your parameters, or set them individually. As usual,
+	each parameter has a name and one (or more) values. To set a single
+	parameter with a single value, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String)}.
+	To set a single parameter with multiple values, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,String,String[])}.
+	To set many parameters, use {@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setParameter(String,Map)} where
+	each map entry uses the parameter name as a key, and a single string or
+	array of strings as the value. Note that each time you call these
+	methods, any previous parameter(s) of the same name(s) are cleared.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setPortletMode(String,PortletMode)}</dt>
+	<dd>
+	<p>You can specify a portlet mode with this method. The string is
+	the portlet ID (ie the Vignette "friendly ID") of the portlet in
+	question.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setWindowState(String,WindowState)}</dt>
+	<dd>
+	<p>You can specify a window state with this method. The string is
+	the portlet ID (ie the Vignette "friendly ID") of the portlet in
+	question.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setAsActionURL(String)}</dt>
+	<dd>
+	<p>You can target a particular portlet's action phase with this
+	method. The string is the portlet ID (ie the Vignette "friendly ID") of
+	the portlet in question. <b>Note:</b> You can only use this method (or
+	the <code>setAsResourceURL</code> method below) once; an {@link
+	java.lang.IllegalStateException} is thrown if you use it after action
+	or resource handling has already been set. Also note that when you
+	target action processing, any public render parameters you set on the <code>PortalURL</code>
+	will have undefined behavior.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.portalurl.PortalURL#setAsResourceURL(String,String)}</dt>
+	<dd>
+	<p>You can target a resource inside a particular portlet with this
+	method.</p>
+	<blockquote>
+	<p><b>Note:</b> This will let a resource packaged inside that
+	portlet's application be accessed via the <code>PortalURL</code>. For
+	example, you can execute a servlet inside the application, or download
+	an image or other static file from it. This is JSR-168 style resource
+	handling from the portlet application, not JSR-286 style resource
+	serving directly from the portlet.</p>
+	</blockquote>
+	<p>The first string is the portlet ID (ie the Vignette "friendly
+	ID") of the portlet in question. The second string is the resource URL
+	for accessing the desired resource inside that portlet's running
+	portlet application. For local portlets you can use a relative URL; for
+	remote portlets it should be an absolute URL to the producer server. In
+	either case the portlet application's context path needs to lead the
+	URL path.</p>
+	<p><b>Note:</b> You can only use this method (or the <code>setAsActionURL</code>
+	method above) once; an {@link java.lang.IllegalStateException} is
+	thrown if you use it after action or resource handling has already been
+	set. Also note that when you target resource handling, any portlet
+	parameters (public or private), portlet mode or window state you set on
+	the <code>PortalURL</code> will have undefined behavior.</p>
+	</dd>
+</dl>
+
+<p>In this example, we construct a secure Forums URL as in the
+previous section. Then we target the forum-display portlet (friendly ID:
+<code>forum-display</code>) on the forums page (friendly URL: <code>/forums</code>),
+and pass it a private render parameter (name <code>forumName</code>,
+value <code>HP-UX_Forum</code>). We also maximize its window state. Like
+this:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+import com.hp.it.spf.xa.portalurl.PortalURL;
+...
+try {
+   PortalURL url = PortalURLFactory.createPageURL(siteRootURL, "/forums", true);
+   url.setParameter("forum-display", "forumName", "HP-UX_Forum");
+   url.setWindowState(WindowState.MAXIMIZED);
+} catch (IllegalArgumentException e) {
+   // there was a problem with the one of the method parameters
+}
+</pre></blockquote>
+
+<p>So now we can use <code>url.toString()</code> to get the <code>PortalURL</code>
+as a string, and display it to the user (eg, as the <code>HREF</code>
+attribute for an <code>&lt;A&gt;</code>).</p>
+
+<p>In another example, here we construct a URL for running <code>someServlet</code>
+in the <code>forum-display</code> portlet's application, passing the
+servlet some parameter. We use resource handling for this:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+import com.hp.it.spf.xa.portalurl.PortalURL;
+...
+// craft the URL for someServlet - for example:
+String resource = request.getScheme() + "://";
+resource += request.getServerName() + ":";
+resource += request.getServerPort();
+resource += request.getContextPath();
+resource += "/someServlet?someParameter=" + someValue;
+// now create the PortalURL for accessing someServlet through the portal
+try {
+   PortalURL url = PortalURLFactory.createPageURL(siteRootURL, "/forums");
+   url.setAsResourceURL("forum-display", resource);
+} catch (IllegalArgumentException e) {
+   // there was a problem with one of the method parameters
+} catch (IllegalStateException e) {
+   // the url was already set as an action or resource URL
+}
+</pre></blockquote>
+
+<p>So now we can use <code>url.toString()</code> to get the <code>PortalURL</code>
+as a string pointing to the <code>someServlet</code> resource via the
+portal. We can use this in a redirect, hyperlink, etc.</p>
+
+<a name="url.portal.friendlyUri">
+<h4>3.2.3. Common friendly URIs</h4>
+</a>
+
+<p>Common friendly URI's for secondary pages in the SPF portal are
+defined in the {@link com.hp.it.spf.xa.misc.Consts} class - they are
+ones beginning with <code>PAGE_FRIENDLY_URI_*</code>. If you need to
+build portal URLs which point to any of those pages, you can pass the
+desired constant value into the <a href="#url.portal.portalUrlFactory"><code>PortalURLFactory.createPageURL</code></a>
+method.</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portlet developers should import the SPF portlet
+utilities' {@link com.hp.it.spf.xa.misc.portlet.Consts} class to get
+access to these constants. SPF portal component developers should import
+the similar {@link com.hp.it.spf.xa.misc.portal.Consts} class in the SPF
+portal utilities.</p>
+</blockquote>
+
+<hr>
+
+<a name="url.other.config.portalurl">
+<h3>3.3. Configuring <code>portalurl.properties</code> (optional)</h3>
+</a>
+
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>portalurl.properties</code>
+if you will be <a href="#url">making portal or portlet URLs</a> <b>and</b>
+you are using <i>local</i> Java portlets instead of WSRP-remoted ones, <i>or</i>
+your portal is using non-standard HTTP or HTTPS ports (eg in a sandbox).</p>
+</blockquote>
+
+<p>The <code>portalurl.properties</code> file lets you configure
+whether local portlet URLs or remote portlet URLs are created, and
+whether non-standard HTTP or HTTPS ports are used in your portal and
+portlet URLs.</p>
+
+<dl>
+	<dt><code>portalurl.remote</code></dt>
+	<dd>
+	<p>This property is set to either <code>true</code> or <code>false</code>
+	and indicates whether the portlets for which you will be generating
+	URLs are deployed <i>local</i> or <i>remote</i> from the portal. The
+	default is <code>true</code> so you only need to set this property if
+	you are targeting local portlets. For example, to enable local portlet
+	URL creation:</p>
+
+	<blockquote><pre>
+portalurl.remote=false
+	</pre></blockquote>
+
+	<p><b>Note:</b> A mix of local and remote portlets is not currently
+	supported; they must be all one or the other.</p>
+	</dd>
+
+	<dt><code>portalurl.port.http</code></dt>
+	<dd>
+	<p>This property indicates whether the portal/portlet URLs you will
+	be generating should use a non-standard HTTP port. If you are only
+	using HTTPS, or your portal Web server is running on the standard HTTP
+	port (80), you do not need to set the property; otherwise, set it to
+	the non-standard HTTP port number the portal Web server is using. For
+	example:</p>
+
+	<blockquote><pre>
+portalurl.port.http=81
+	</pre></blockquote>
+
+	<p><b>Note to portlet developers:</b> A mix of portals using your
+	portlet and running on different HTTP ports is not currently supported;
+	they all must be using the same HTTP port.</p>
+	</dd>
+
+	<dt><code>portalurl.port.https</code></dt>
+	<dd>
+	<p>This property indicates whether the portal/portlet URLs you will
+	be generating should use a non-standard HTTPS port. If you are only
+	using HTTP, or your portal is running on the standard HTTPS port (443),
+	you do not need to set the property; otherwise, set it to the
+	non-standard HTTPS port number the portal Web server is using. For
+	example:</p>
+
+	<blockquote><pre>
+portalurl.port.https=444
+	</pre></blockquote>
+
+	<p><b>Note to portlet developers:</b> A mix of portals using your
+	portlet and running on different HTTPS ports is not currently
+	supported; they all must be using the same HTTPS port.</p>
+	</dd>
+</dl>
+
+<hr>
+
+<a name="properties">
+<h2>4. Configuration File Management</h2>
+</a>
+
+<p>It is not uncommon for Java applications to have configuration
+properties stored in Java {@link java.util.Properties} files, XML files,
+or other formats. This chapter explains your options for where you put
+your configuration files. And for <code>Properties</code> files, it
+describes an SPF common utilities class, {@link
+com.hp.it.spf.xa.properties.PropertyResourceBundleManager}, which we
+recommend for accessing those files from your runtime code.</p>
+
+<blockquote>
+<p><b>Note:</b> Message properties are not the topic of this
+chapter. See the appropriate respective SPF Developer's Guide for
+information on how to manage your message properties:</p>
+
+<ul>
+	<li>Java portlet developers using SPF should refer to the
+	internationalization chapter in the <a
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n">SPF
+	Portlet Utilities Developer's Guide</a>.</li>
+	<li>Vignette portal component developers for SPF should refer to
+	the internationalization chapter in the <a
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/overview-summary.html#i18n">SPF
+	Portal Utilities Developer's Guide</a>.</li>
+</ul>
+</blockquote>
+
+<hr>
+
+<a name="properties.where">
+<h3>4.1. Where to put your configuration files</h3>
+</a>
+
+<p>With the Shared Portal Framework, you have a choice where you put
+your configuration files: inside or outside of your archive file (WAR
+for portlet developers, CAR for Vignette component developers).</p>
+
+<a name="properties.where.internal">
+<h4>4.1.1. Internal resources (WAR, CAR)</h4>
+</a>
+
+<p>Portlet developers may choose to put their configuration files
+into their portlet application (WAR), and likewise portal developers may
+put them into their Vignette component archive (CAR). We call these <i>internal
+resources</i>. If you decide to have internal resources, just follow the
+usual conventions for WAR and CAR packaging regarding where to put your
+files; SPF itself establishes no guidelines here.</p>
+
+<p>But be aware that using internal resources can make it difficult
+to administrate those files later (eg change their property values
+post-release). The WAR or CAR needs to be exploded, the file modified,
+and the WAR or CAR rebuilt and re-deployed by the administrator with
+each such change. And the next version of the WAR or CAR built in
+development may now lack those configuration changes, entailing further
+work to sync-up the changes with development, and risking rollback of
+the changes until then, should the out-of-sync WAR/CAR inadvertently get
+deployed.</p>
+
+<a name="properties.where.external">
+<h4>4.1.2. External resources (global and instance resource
+folders)</h4>
+</a>
+
+<p>So, in the Shared Portal Framework, you may put your
+configuration files outside of your WAR/CAR, into a well-known <i>resource
+folder</i> on the server - we call these <i>external resources</i>. You can
+then configure that resource folder into your JVM classpath, and use the
+system classloader to open the files at runtime. Since the files are
+outside of the WAR or CAR, it now becomes much easier to modify them
+during production, and to do so without causing any sync-up impacts on
+development.</p>
+
+<p>If you are using an application-hosting service (like SASU), they
+may already have defined for you a standard path from which to load
+external resources. In SASU, <code>/opt/sasuapps/sp/global_resources</code>
+is the default location for external resources, so generally that is
+where you would put your external resource files. Like this:</p>
+
+<blockquote><pre>
+    /opt/sasuapps/sp/global_resources/ &lt;-- this is in the classpath
+        my_properties.properties
+        my_config.xml
+        ...
+</pre></blockquote>
+
+<blockquote>
+<p><b>Note:</b> These are called "global resources" because this
+folder is generally shared by all the managed server(s) on the physical
+server. If your configuration properties must be different for each
+managed server, you should create a set of "instance resources" folders
+instead, one for each managed server, so that each may get a different
+version of the configuration. Then make sure that <b>both</b> your
+global and the appropriate instance resource folders are added into the
+classpath for each respective managed server JVM.</p>
+</blockquote>
+
+<a name="properties.where.both">
+<h4>4.1.3. Mixing internal and external resources</h4>
+</a>
+
+<p>You can use both the internal and external resource approaches,
+if you prefer. This means having identically-named configuration files,
+containing the same configuration keys (though possibly different
+values), in both internal and external locations. For example, using
+this approach, you can keep a "default" / "fallback" configuration
+inside your WAR or CAR, and override it as needed from the outside.</p>
+
+<p>Whether this works or not depends on how you lookup the
+configuration file at runtime, and whether that lookup searches the
+outside first or not. If you are loading from the classpath, using the
+system classloader, for example, you will need to test to see where it
+looks first: inside your WAR in places like <code>/WEB-INF/classes</code>,
+or in the additional locations configured in the classpath such as your
+<i>global resources folder</i>. This can vary by environment (eg
+application server) and you may or may not be able to control that
+search order, so please test it first to avoid any surprises.</p>
+
+<hr>
+
+<a name="properties.propertyResourceBundleManager">
+<h3>4.2. Accessing your property files (<code>PropertyResourceBundleManager</code>)</h3>
+</a>
+
+<p>For configuration files which adhere to the Java standard {@link
+java.util.Properties} format, the SPF common utilities provide a helpful
+management class called {@link
+com.hp.it.spf.xa.properties.PropertyResourceBundleManager}. The features
+of this class are:</p>
+
+<ul>
+	<li>Loads property files from anywhere in the classpath, both <i>internal
+	resources</i> and <i>external resources</i>.</li>
+	<li>Maintains a hot-reloadable in-memory cache of your properties
+	- each time you call <code>PropertyResourceBundleManager</code> it
+	returns refreshed values if the file on disk has changed (or been
+	removed) and the cache has expired. So administrators can change your
+	application properties without having to restart. The cache lifetime is
+	configurable with <a href="#properties.config"><code>propertyresourcebundlemanager.properties</code></a>.</li>
+	<li>Optionally lets you localize your property files so you can
+	apply a different configuration for users with different locales.</li>
+	<li>Logs a warning if your file was not found or could not be
+	opened or read (the exception is logged too), using Apache commons
+	logging (so the log message goes to your underlying log framework).</li>
+</ul>
+
+<a name="properties.propertyResourceBundleManager.getBundle">
+<h4>4.2.1. Getting a bundle of properties (<code>PropertyResourceBundleManager.getBundle</code>)</h4>
+</a>
+
+<p>Use these methods to get back a Java {@link
+java.util.ResourceBundle} containing all the properties in your
+configuration file. For performance this uses an in-memory cache of your
+properties, which is automatically refreshed from disk if the file
+changed and the cache has expired. (If it is removed on disk, the cache
+is automatically dropped too.) The cache lifetime is configurable with <a
+	href="#properties.config"><code>propertyresourcebundlemanager.properties</code></a>
+(see).</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.properties.PropertyResourceBundleManager#getBundle(String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.properties.PropertyResourceBundleManager#getBundle(String,Locale)}</dt>
+	<dd>
+	<p>The arguments are:</p>
+	<ul>
+		<li>
+		<p>The string name of your properties file. The file must be in
+		Java {@link java.util.Properties} format, with an extension of <code>.properties</code>.
+		It can be an internal or external resource file; you can put it
+		anywhere the system classloader will be able to find it. (For an
+		internal resource, it could go into your <code>/WEB-INF/classes</code>,
+		for example. For an external resource, it could go into your <i>global
+		resource folder</i>.) If your file cannot be found or is unloadable, a
+		warning message is logged to your underlying log framework, and the
+		method returns null.</p>
+		</li>
+
+		<li>
+		<p>An optional {@link java.util.Locale} for finding a
+		best-candidate localized version of your properties file. If you
+		provide this locale, then your filename string is treated as a base
+		name for a resource bundle of localized files; the method then uses
+		the Java standard {@link java.util.ResourceBundle} search sequence to
+		look for the best-fitting file in the bundle for your locale's
+		language, country, and variant.</p>
+
+		<p>As usual with <code>ResourceBundle</code>, your files must all
+		share the same base name, and be tagged with locale like this:</p>
+
+		<blockquote><pre>
+my_config.properties         &lt;-- the base file
+my_config_ja.properties      &lt;-- the same file with property values for Japanese
+my_config_zh_CN.properties   &lt;-- the same file with property values for China - Chinese
+my_config_zh_TW.properties   &lt;-- the same file with property values for for Taiwan - Chinese
+		</pre></blockquote>
+
+		<blockquote>
+		<p><b>Note:</b> Although you can load your message properties this
+		way, the Shared Portal Framework gives you better ways to get your
+		messages (see the developer guides <a href="#properties">referenced
+		above</a>). The {@link
+		com.hp.it.spf.xa.properties.PropertyResourceBundleManager#getBundle(String,Locale)}
+		method is really intended for configuration properties whose values
+		vary by locale.</p>
+		</blockquote>
+	</ul>
+	<p>For example, to get a <code>ResourceBundle</code> for the <code>my_config.properties</code>
+	file:</p>
+	<blockquote><pre>
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+...
+ResourceBundle properties = PropertyResourceBundleManager.getBundle("my_config");
+if (properties == null) {
+... // properties failed to load
+}
+</pre></blockquote>
+	<p>Notice that the given filename does not need to include the <code>.properties</code>
+	extension; it is assumed (but you can provide it if you want). In the
+	following example, we get the values for Japan for these properties:</p>
+	<blockquote><pre>
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+...
+ResourceBundle properties = PropertyResourceBundleManager.getBundle("my_config", Locale.JAPAN);
+if (properties == null) {
+... // properties failed to load
+}
+</pre></blockquote>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<a name="properties.propertyResourceBundleManager.getString">
+<h4>4.2.2. Getting a single property (<code>PropertyResourceBundleManager.getString</code>)</h4>
+</a>
+
+<p>If you just need to get a single property, you can use these
+methods as a shortcut. They are equivalent to using <a
+	href="#properties.propertyResourceBundleManager.getBundle"><code>PropertyResourceBundleManager.getBundle</code></a>,
+and then getting the property value from {@link
+java.util.ResourceBundle#getString(String)}.</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.properties.PropertyResourceBundleManager#getString(String,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.properties.PropertyResourceBundleManager#getString(String,String,String)}</dt>
+	<dd>
+	<p>The arguments are:</p>
+	<ul>
+		<li>
+		<p>The name of the properties file. This is the first string. For
+		more on this argument, see the <a
+			href="#properties.propertyResourceBundleManager.getBundle"><code>PropertyResourceBundleManager.getBundle</code></a>
+		discussion above.</p>
+		</li>
+		<li>
+		<p>The property key to retrieve. This is the second string.</p>
+		</li>
+		<li>
+		<p>An optional default value to return if the properties file
+		cannot be found or loaded, or if the property key is not found in that
+		file. If you don't provide a default value, then null is returned in
+		those cases.</p>
+		</li>
+	</ul>
+	</dd>
+
+	<dt>{@link
+	com.hp.it.spf.xa.properties.PropertyResourceBundleManager#getString(String,Locale,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.properties.PropertyResourceBundleManager#getString(String,Locale,String,String)}</dt>
+	<dd>
+	<p>The arguments are the same as the string-argument methods above,
+	except here you can pass a {@link java.util.Locale} as well. The
+	best-fit localized version of your properties file will be used as the
+	source for the returned property value. For more on this argument, see
+	the <a href="#properties.propertyResourceBundleManager.getBundle"><code>PropertyResourceBundleManager.getBundle</code></a>
+	discussion above.</p>
+	</dd>
+</dl>
+
+<p>For example, here we get the value for the <code>id.default</code>
+property from the <code>my_config.properties</code> file:</p>
+<blockquote><pre>
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+...
+String defaultID = PropertyResourceBundleManager.getString("my_config", "id.default");
+if (defaultID == null) {
+... // properties failed to load or key not found
+}
+</pre></blockquote>
+
+<p>In the following example, we get the <code>id.default</code>
+value for Japan, with <code>XYZ</code> returned by default if the
+particular property or file cannot be found:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
+...
+String defaultID = PropertyResourceBundleManager.getString("my_config", Locale.JAPAN, "id.default", "XYZ");
+</pre></blockquote>
+
+<p>Please see the method documentation for more information.</p>
+
+<a name="properties.config">
+<h4>4.2.3. Configuring <code>propertyresourcebundlemanager.properties</code>
+(optional)</h4>
+</a>
+
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>propertyresourcebundlemanager.properties</code>
+if you will be <a href="#properties">accessing configuration
+properties with <code>PropertyResourceBundleManager</code></a> <b>and</b>
+you need to override the default behavior (eg the cache duration).</p>
+</blockquote>
+
+<p>The <code>propertyresourcebundlemanager.properties</code> file
+lets you configure the behavior of the <code>PropertyResourceBundleManager</code>.
+At present, only one configuration item is available.</p>
+
+<dl>
+	<dt><code>reload.checkPeriod</code></dt>
+	<dd>
+	<p>This property is set to an integer (number of seconds) and
+	indicates how long the <code>PropertyResourceBundleManager</code>
+	in-memory cache should retain the results of a prior file lookup. A <i>positive</i>
+	integer means file lookup results will be cached for that many seconds.
+	A <i>negative</i> integer means they will be cached forever (until
+	restart). Zero disables the cache, so that the filesystem is checked
+	each time. The default period is 900 seconds. Caching may improve
+	performance of your application under heavy loads.</p>
+	<p>For example, to cache for an hour:</p>
+
+	<blockquote><pre>
+reload.checkPeriod = 3600
+	</pre></blockquote>
+	</dd>
+
+</dl>
+
+<hr>
+
+<!--
+<a name="env">
+<h2>5. Environment</h2>
+</a>
+
+<font color="red"><b>TBD</b></font>
+
+<hr>
+
+<a name="env.kinds">
+<h3>5.1. About environment data</h3>
+</a>
+
+<font color="red"><b>TBD</b></font>
+
+<hr>
+
+<a name="env.environment">
+<h3>5.2. Accessing WebLogic environment data (<code>Environment</code>)</h3>
+</a>
+
+<font color="red"><b>TBD</b></font>
+
+<hr>
+-->
+
+<a name="history">
+<h2>5. Document History</h2>
+</a>
+
+<table border="1">
+	<tr>
+		<th>Version</th>
+		<th>Date</th>
+		<th>Editor</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>1.0</td>
+		<td>Feb 15 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Initial release.</td>
+	</tr>
+	<tr>
+		<td>1.1</td>
+		<td>Apr 7 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Updated TBD URL's for property file templates, with pointers
+		to SPF portlet config JAR.</td>
+	</tr>
+	<tr>
+		<td>1.2</td>
+		<td>Jun 16 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Added JSR-168 resource handling to <code>PortalURL</code>
+		classes.</td>
+	</tr>
+	<tr>
+		<td>1.3</td>
+		<td>Sep 21 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Added <code>propertyresourcebundlemanager.properties</code>
+		and <code>reload.checkPeriod</code> to <code>PropertyResourceBundleManager</code>
+		discussion.</td>
+	</tr>
+</table>
+<p></p>
+
+<hr>
+
+<h2>- End -</h2>
+</body>
+</html>

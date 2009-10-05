@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.it.spf.xa</groupId>
+	<artifactId>spf-common-hpp</artifactId>
+	<name>SPF common HPP WebServices client</name>
+	<version>1.0.11-SNAPSHOT</version>
+	<description>Client API library for HPP WebServices offered by Shared Portal Framework.  This project is used by the SPF portal and portlet frameworks, and is offered to feature-services for their use as well.  This client is current as of the HPP W/S 5.0 "Corralco" release.  Please note: this client is offered on a "best-effort" basis only.  If you use this client, you should understand that the HPP (not SPF) team owns these Web Services, and that this client will not necessarily be kept up-to-date with all subsequent HPP W/S releases and features (only those needed by the framework).</description>
+	<inceptionYear>December 2008</inceptionYear>
+	<parent>
+		<artifactId>spf-pom</artifactId>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<version>1.0.2</version>
+	</parent>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-common-hpp</url>
+	</ciManagement>
+	<scm>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-common-hpp</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-common-hpp</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-common-hpp</url>
+	</scm>
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
+	<dependencies>
+		<dependency>
+			<groupId>castor</groupId>
+			<artifactId>castor</artifactId>
+			<version>0.9.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis-jaxrpc</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis-saaj</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>dnsjava</groupId>
+			<artifactId>dnsjava</artifactId>
+			<version>2.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-discovery</groupId>
+			<artifactId>commons-discovery</artifactId>
+			<version>0.2</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.8.1</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>1.0.11</version>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,30 @@
+<html>
+<body>
+<p>This package contains plain Java classes related to property file
+management, usable in both portlet applications and portal components in
+the Shared Portal Framework.</p>
+
+<a name="PropertyResourceBundleManager">
+<h3>PropertyResourceBundleManager</h3>
+</a>
+<p>The {@link
+com.hp.it.spf.xa.properties.PropertyResourceBundleManager} class
+provides hot-reloadable cached access to property files:</p>
+
+<ul>
+	<li>The property files may be localized and tagged by locale, in
+	the manner of {@link java.util.ResourceBundle}, but that is optional.</li>
+	<li>Property files are loaded using the system classloader, and
+	thus may be located anywhere inside or outside the application (ie
+	portal Web application or portlet application), so long as any
+	non-standard location for class loading has been configured on the JVM
+	classpath.</li>
+	<li>Property files are loaded once and then cached indefinitely
+	until the file on disk changes or is removed. The cache is then
+	refreshed automatically at the time of the next access.</li>
+</ul>
+
+<p>Please see the class for more information.</p>
+
+</body>
+</html>

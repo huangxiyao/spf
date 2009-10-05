@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+  <body>
+    <menu name="Project Documentation" inherit="bottom">
+      <item name="Developer Guide" href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html"/>
+    </menu>
+    <menu ref="reports"/>
+  </body>
+</project>
