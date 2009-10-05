@@ -1,0 +1,12 @@
+############################################################
+# Filename: ContainerConfig.properties
+#
+# This property contains the value of Portlet Container Home.
+#
+# For example:
+#
+#       com.sun.portal.portletcontainer.dir=/opt/sasuapps/sp/OpenPortal
+#
+#
+##### ADD YOUR CONFIGURATION BELOW #####
+com.sun.portal.portletcontainer.dir=

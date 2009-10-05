@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<weblogic-web-app xmlns="http://www.bea.com/ns/weblogic/90">
+
+	<session-descriptor>
+		<timeout-secs>2700</timeout-secs>
+		<invalidation-interval-secs>60</invalidation-interval-secs>
+		<persistent-store-type>memory</persistent-store-type>
+		<cookie-name>HP_SPF_SID</cookie-name>
+		<cookie-path>/</cookie-path>
+		<cookie-max-age-secs>-1</cookie-max-age-secs>
+		<cookie-comment>HP Shared Portal Framework - HTTP session tracking cookie</cookie-comment>
+		<tracking-enabled>true</tracking-enabled>
+		<url-rewriting-enabled>false</url-rewriting-enabled>
+	</session-descriptor>
+
+	<jsp-descriptor>
+		<encoding>UTF-8</encoding>
+		<!--
+			For QXCR1000790406 - changed pageCheckSeconds for production, from -1 to 60.
+			This enables JSP modification checking in WebLogic.  For some reason, this 
+			has a side-effect of resolving the CR (ie modified support files in Vignette
+			become visible within 1 minute, instead of requiring server restart).  
+			DSJ 2008/3/20
+			Re-tested and this problem is no longer happening with value -1 so set this
+			back to -1.
+			DSJ 2009/8/21 
+		-->
+		<page-check-seconds>-1</page-check-seconds>
+		<verbose>false</verbose>
+		<keepgenerated>false</keepgenerated>
+		<debug>false</debug>
+		<precompile>false</precompile>
+	</jsp-descriptor>
+
+	<container-descriptor>
+		<redirect-with-absolute-url>false</redirect-with-absolute-url>
+		<servlet-reload-check-secs>-1</servlet-reload-check-secs>
+		<resource-reload-check-secs>-1</resource-reload-check-secs>
+		<prefer-web-inf-classes>true</prefer-web-inf-classes>
+	</container-descriptor>
+	
+	<charset-params>
+		<input-charset>
+			<resource-path>*</resource-path>
+			<java-charset-name>UTF-8</java-charset-name>
+		</input-charset>
+	</charset-params>
+	
+	<context-root>portal</context-root>
+
+</weblogic-web-app>

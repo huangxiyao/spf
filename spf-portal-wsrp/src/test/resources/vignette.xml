@@ -1,0 +1,94 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Header>
+		<ns1:signature xmlns:ns1="http://security.vignette.com"
+			soapenv:actor="" soapenv:mustUnderstand="0">
+			<version>1.1</version>
+			<time>1231997104647</time>
+			<subject>Vignette_Portal_1067621978102
+			</subject>
+			<extended>ZYV0BNYAAAAAAEE4KKQAAAA</extended>
+			<data>gz2YajYZ2gEm1SSG3SsGMw==</data>
+		</ns1:signature>
+	</soapenv:Header>
+	<soapenv:Body>
+		<performBlockingInteraction xmlns="urn:oasis:names:tc:wsrp:v2:types">
+			<registrationContext>
+				<registrationHandle>ZYV0BNYAAAAAAEE4KKQAAAA
+				</registrationHandle>
+			</registrationContext>
+			<portletContext>
+				<portletHandle>UploadPortlet.UploadPortlet
+				</portletHandle>
+			</portletContext>
+			<runtimeContext>
+				<userAuthentication>wsrp:password</userAuthentication>
+				<portletInstanceKey>
+					ecd3696c7ee73d9de1f0cf310a25e901-b807ca2e0f0eb5d3ec8f1f13cd15e901-4631e28c658b89b2ec8f1f13cd15e901
+				</portletInstanceKey>
+				<namespacePrefix>V_4631e28c658b89b2ec8f1f13cd15e901
+				</namespacePrefix>
+				<templates>
+					<defaultTemplate xsi:nil="true" />
+					<blockingActionTemplate>wsrp_rewrite?wsrp-urlType=blockingAction&amp;wsrp-mode={wsrp-mode}&amp;wsrp-windowState={wsrp-windowState}&amp;wsrp-navigationalState={wsrp-navigationalState}&amp;wsrp-navigationalValues={wsrp-navigationalValues}&amp;wsrp-interactionState={wsrp-interactionState}/wsrp_rewrite</blockingActionTemplate>
+                    <renderTemplate>wsrp_rewrite?wsrp-urlType=render&amp;wsrp-mode={wsrp-mode}&amp;wsrp-windowState={wsrp-windowState}&amp;wsrp-navigationalState={wsrp-navigationalState}&amp;wsrp-navigationalValues={wsrp-navigationalValues}/wsrp_rewrite</renderTemplate>
+                    <resourceTemplate>wsrp_rewrite?wsrp-urlType=resource&amp;wsrp-url={wsrp-url}&amp;wsrp-resourceID={wsrp-resourceID}&amp;wsrp-resourceState={wsrp-resourceState}&amp;wsrp-resourceCacheability={wsrp-resourceCacheability}&amp;wsrp-preferOperation={wsrp-preferOperation}&amp;wsrp-requiresRewrite={wsrp-requiresRewrite}/wsrp_rewrite</resourceTemplate>
+                    <secureDefaultTemplate xsi:nil="true"/>
+                    <secureBlockingActionTemplate>wsrp_rewrite?wsrp-urlType=blockingAction&amp;wsrp-mode={wsrp-mode}&amp;wsrp-windowState={wsrp-windowState}&amp;wsrp-navigationalState={wsrp-navigationalState}&amp;wsrp-navigationalValues={wsrp-navigationalValues}&amp;wsrp-interactionState={wsrp-interactionState}/wsrp_rewrite</secureBlockingActionTemplate>
+                    <secureRenderTemplate>wsrp_rewrite?wsrp-urlType=render&amp;wsrp-mode={wsrp-mode}&amp;wsrp-windowState={wsrp-windowState}&amp;wsrp-navigationalState={wsrp-navigationalState}&amp;wsrp-navigationalValues={wsrp-navigationalValues}/wsrp_rewrite</secureRenderTemplate>
+                    <secureResourceTemplate>wsrp_rewrite?wsrp-urlType=resource&amp;wsrp-url={wsrp-url}&amp;wsrp-resourceID={wsrp-resourceID}&amp;wsrp-resourceState={wsrp-resourceState}&amp;wsrp-resourceCacheability={wsrp-resourceCacheability}&amp;wsrp-preferOperation={wsrp-preferOperation}&amp;wsrp-requiresRewrite={wsrp-requiresRewrite}/wsrp_rewrite</secureResourceTemplate>
+                </templates>
+                <sessionParams sessionID="epi:user.standard;22e9b53cd770499db193561024836ff0"/>
+            </runtimeContext>
+            <userContext>
+                <userContextKey>epi:user.standard;22e9b53cd770499db193561024836ff0</userContextKey>
+            </userContext>
+            <markupParams>
+                <secureClientCommunication>false</secureClientCommunication>
+                <locales>fr-FR</locales>
+                <mimeTypes>text/html</mimeTypes>
+                <mimeTypes>text/plain</mimeTypes>
+                <mimeTypes>application/xhtml+xml</mimeTypes>
+                <mimeTypes>text/vnd.wap.wml</mimeTypes>
+                <mode>wsrp:view</mode>
+                <windowState>wsrp:normal</windowState>
+                <clientData requestVerb="POST">
+                    <userAgent>Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; .NET CLR 1.0.3705; .NET CLR 1.1.4322; InfoPath.2; MAXTHON 2.0) __SPF3301823</userAgent>
+                    <clientAttributes name="com.vignette.portal.portlet.friendlyid">
+                        <value>uploadportlet1</value>
+                    </clientAttributes>
+                    <clientAttributes name="com.vignette.portal.site.dns">
+                        <value>demo</value>
+                    </clientAttributes>
+                    <clientAttributes name="com.vignette.portal.site.title">
+                        <value>demo</value>
+                    </clientAttributes>
+                    <clientAttributes name="com.vignette.portal.site.uid">
+                        <value>ecd3696c7ee73d9de1f0cf310a25e901</value>
+                    </clientAttributes>
+                    <clientAttributes name="com.vignette.portal.portlet.configuredtitle">
+                        <value>UploadPortlet</value>
+                    </clientAttributes>
+                </clientData>
+                <navigationalContext opaqueValue=""/>
+                <markupCharacterSets>UTF-8</markupCharacterSets>
+                <validNewModes>wsrp:view</validNewModes>
+                <validNewModes>vignette:config</validNewModes>
+                <validNewModes>vignette:about</validNewModes>
+                <validNewModes>vignette:edit_defaults</validNewModes>
+                <validNewModes>wsrp:help</validNewModes>
+                <validNewModes>wsrp:preview</validNewModes>
+                <validNewWindowStates>wsrp:normal</validNewWindowStates>
+                <validNewWindowStates>wsrp:maximized</validNewWindowStates>
+                <validNewWindowStates>wsrp:minimized</validNewWindowStates>
+                <validNewWindowStates>wsrp:solo</validNewWindowStates>
+                <validNewWindowStates>vignette:raw</validNewWindowStates>
+                <validNewWindowStates>vignette:binary</validNewWindowStates>
+            </markupParams>
+            <interactionParams>
+                <portletStateChange>cloneBeforeWrite</portletStateChange>
+                <interactionState/>
+            </interactionParams>
+        </performBlockingInteraction>
+    </soapenv:Body>
+</soapenv:Envelope>

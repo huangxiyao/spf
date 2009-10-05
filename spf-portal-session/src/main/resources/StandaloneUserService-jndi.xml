@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context-2.5.xsd
+		http://www.springframework.org/schema/jee		http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+		http://www.springframework.org/schema/security	http://www.springframework.org/schema/security/spring-security-2.0.xsd
+		"
+	> 
+
+	<context:property-placeholder location="classpath:StandaloneUserService.properties"/>
+
+<!-- Data source -->
+
+	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/cas-persona"/>
+
+<!-- DAO -->
+
+	<bean id="securityDaoFactory" class="com.hp.it.cas.security.dao.SecurityDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+	
+	<bean id="securityCustomDaoFactory" class="com.hp.it.cas.security.custom.dao.SecurityCustomDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+	
+	<bean id="personaDaoFactory" class="com.hp.it.cas.persona.dao.PersonaDaoFactory">
+		<constructor-arg ref="securityDaoFactory"/>
+		<constructor-arg ref="securityCustomDaoFactory"/>
+	</bean>
+
+<!-- Service -->
+
+	<bean id="userAttributeValueService" class="com.hp.it.cas.persona.uav.service.impl.UserAttributeValueService">
+		<constructor-arg ref="personaDaoFactory"/>
+	</bean>
+	
+	<bean id="userService" class="com.hp.it.cas.persona.user.service.impl.UserService">
+		<constructor-arg ref="userAttributeValueService"/>
+	</bean>
+
+	<bean id="standaloneUserService" class="com.hp.it.cas.persona.user.service.standalone.StandaloneUserService">
+		<constructor-arg value="${applicationPortfolioIdentifier}"/>			<!-- EXTERNALIZE -->
+		<constructor-arg value="${applicationPassword}"/>		<!-- EXTERNALIZE -->
+		<constructor-arg ref="userService"/>
+		<constructor-arg ref="authenticationManager"/>
+	</bean>
+	
+<!-- Method security -->
+
+	<security:global-method-security secured-annotations="enabled"/>
+	<security:authentication-manager alias="authenticationManager"/>
+
+	<bean id="applicationAuthenticationProvider" class="com.hp.it.cas.persona.security.ApplicationAuthenticationProvider">		
+		<security:custom-authentication-provider/>		
+	</bean>
+</beans>
