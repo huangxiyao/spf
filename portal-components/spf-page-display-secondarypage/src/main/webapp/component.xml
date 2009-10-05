@@ -18,6 +18,9 @@
 					secure="false" template-default="true" template-uid="template0018"
 					title="Shared Portal Framework - Page Display" visible="true">
 			<actions>
+				<action id="spf_pda" type="PRE_DISPLAY">
+					<class>com.hp.it.spf.pagedisplay.portal.component.secondarypage.PageDisplayAction</class>
+				</action>
 				<group-reference group-id="INHERIT_ALL"/>
 			</actions>
 		</style-info>

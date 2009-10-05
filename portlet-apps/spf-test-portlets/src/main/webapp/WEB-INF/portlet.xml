@@ -10,6 +10,7 @@
             <mime-type>text/html</mime-type>
             <portlet-mode>VIEW</portlet-mode>
             <portlet-mode>vignette:config</portlet-mode>
+            <portlet-mode>CONFIG</portlet-mode>
         </supports>
         <portlet-info>
             <title>Preference Test Portlet</title>
@@ -120,6 +121,10 @@
 
     <custom-portlet-mode>
         <portlet-mode>vignette:config</portlet-mode>
+    </custom-portlet-mode>
+    
+    <custom-portlet-mode>
+        <portlet-mode>CONFIG</portlet-mode>
     </custom-portlet-mode>
     
     <filter>

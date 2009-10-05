@@ -46,7 +46,12 @@
         	<artifactId>jstl</artifactId>
         	<version>1.2</version>
         </dependency>
-        
+        <dependency>
+			<groupId>com.hp.it.spf.sso</groupId>
+			<artifactId>spf-portlet-filters</artifactId>
+			<version>1.0.10</version> 
+			<scope>runtime</scope>
+        </dependency>
 	</dependencies>
 	<build>
 		<finalName>spftestportlets</finalName>

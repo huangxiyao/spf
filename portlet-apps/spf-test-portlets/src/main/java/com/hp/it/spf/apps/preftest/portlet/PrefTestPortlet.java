@@ -37,6 +37,12 @@ public class PrefTestPortlet extends GenericPortlet
 	{
 		showView(request, response);
 	}
+	
+	@RenderMode(name = "config")
+	public void showConfigLocal(RenderRequest request, RenderResponse response) throws PortletException, IOException
+	{
+		showConfig(request, response);
+	}
 
 	@Override
 	public void processAction(ActionRequest request, ActionResponse response) throws ValidatorException, IOException, ReadOnlyException
