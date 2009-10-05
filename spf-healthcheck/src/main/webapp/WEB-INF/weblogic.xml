@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<weblogic-web-app xmlns="http://www.bea.com/ns/weblogic/90">
+
+   <session-descriptor>
+      <tracking-enabled>false</tracking-enabled>
+      <cookies-enabled>false</cookies-enabled>
+      <url-rewriting-enabled>false</url-rewriting-enabled>
+   </session-descriptor>
+
+   <jsp-descriptor>
+      <keepgenerated>true</keepgenerated>
+      <page-check-seconds>-1</page-check-seconds>
+      <debug>false</debug>
+   </jsp-descriptor>
+
+   <container-descriptor>
+      <servlet-reload-check-secs>-1</servlet-reload-check-secs>
+      <resource-reload-check-secs>-1</resource-reload-check-secs>
+   </container-descriptor>
+   
+   <context-root>healthcheck</context-root>
+
+</weblogic-web-app>

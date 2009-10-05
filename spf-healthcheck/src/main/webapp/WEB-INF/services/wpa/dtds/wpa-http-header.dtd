@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	DTD for the WPA HTTP Header Preprocessor Configuration File, Version 1.0
+
+	To support validation of your configuration file and for
+	admin plug-in compatibility, include the
+	following DOCTYPE element at the beginning of your file
+	(after the "xml" declaration):
+
+	<!DOCTYPE http-header-mappings PUBLIC "WPA_HTTP_HEADER_DTD"
+		"http://websat.cup.hp.com/dtds/wpa-http-header.dtd">
+-->
+
+
+
+<!-- 
+	The "http-header-mappings" element is the root of the 
+	configuration file hierarchy, and can contain any number
+	of "http-header-mapping" elements.
+-->
+<!ELEMENT http-header-mappings (http-header-mapping*)>
+
+
+<!--
+	Each "http-header-mapping" element describes how, for a
+	particular portal context, the HTTP header/cookie values
+	should be mapped to the designated JavaBean.  The
+	"http-header-mapping" element defines the JavaBean and
+	where is should be stored - the nested "value" elements
+	describe the mappings between individual HTTP headers/cookies
+	and the corresponding bean properties.
+
+	The following attributes are defined:
+
+	portal		Value indicating which portal context this mapping
+				applies to.  The portal context for a particular
+				request is specified in the struts-config.xml file.
+
+	className	The fully-qualified name of the JavaBean that will
+				receive the HTTP header/cookie values.
+
+	key			The name of the request/session attribute that the
+				JavaBean should be stored under after it has been
+				populated.
+
+	scope		Value indicating which scope the JavaBean should
+				be stored in.  Can be either "request" or "session".
+-->
+<!ELEMENT http-header-mapping (value*)>
+<!ATTLIST http-header-mapping portal 	CDATA 				#REQUIRED>
+<!ATTLIST http-header-mapping className	CDATA 				#REQUIRED>
+<!ATTLIST http-header-mapping key 		CDATA 				#REQUIRED>
+<!ATTLIST http-header-mapping scope 	(request|session)	"request">
+
+
+
+<!--
+	The "value" element establishes the mapping between a
+	specific HTTP header/cookie and the corresponding property 
+	of the bean defined in the "http-header-mapping" element.  
+	Any number of "value"s can be specified for a single 
+	"http-header-mapping" element.  
+
+	The following attributes are defined:
+
+	name		The name of the HTTP header/cookie to read.
+
+	type		The type of HTTP value to read, this can be
+				either "header" or "cookie".
+
+	property	The name of JavaBean property that this
+				HTTP header/cookie should be written to.	
+-->
+<!ELEMENT value EMPTY>
+<!ATTLIST value name 		CDATA 			#REQUIRED>
+<!ATTLIST value	type 		(header|cookie)	#REQUIRED>
+<!ATTLIST value	property	CDATA 			#REQUIRED>
