@@ -1,0 +1,21 @@
+/* This file contains the default CSS styles for the SPF authorization
+error secondary page.  Use this file as a template to define your own
+style for this page.  Name your new file "<site>AuthError.css" (where
+<site> is your site DNS name in Vignette) and upload it as a new
+secondary support file into the SPF authorization error secondary page
+component, using the Vignette console. */
+
+.spf-autherror-title {
+	font-size: larger;
+	font-weight: bold;
+	margin-top: 0;
+}
+
+.spf-autherror-message {
+	margin-top: 0;
+}
+
+.spf-autherror-code {
+	margin-top: 0;
+	font-size: smaller;
+}

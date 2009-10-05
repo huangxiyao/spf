@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold" 
+	component-id="spf-return-secondarypagetype" 
+	component-type="Secondary Page Types" 
+	description="Shared Portal Framework secondary page type for processing return from a 3rd party site." 
+	epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0" 
+	title="Shared Portal Framework - Return Process" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:detail>
+		<template-info allow-guest-access="true" 
+			description="Shared Portal Framework secondary page type for processing return from a 3rd party site." 
+			friendly-id="PUBLIC_SPF_RETURN" header-filename="" 
+			id="spf-return-secondarypagetype" is-system="false" 
+			system-secondary-page-type="false" 
+			title="Shared Portal Framework - Return Process" 
+			type="templatetype_page_content_include" visible="true">
+			<actions>
+				<action id="1" type="PRE_DISPLAY">
+					<class>
+						com.hp.it.spf.sso.portal.component.secondarypagetype.ReturnDisplayAction
+					</class>
+				</action>
+			</actions>
+		</template-info>
+	</epideploy:detail>
+</epideploy:component>

@@ -1,0 +1,68 @@
+<!--                              -->
+<!-- Sample global help HTML file --> <!--                              -->
+
+<!-- This is a template for the global help HTML file.  Delete these comments and modify the rest of this file as needed for the portal. You can use any HTML, CSS, and JavaScript you like (but don't use the html, head, title, body, or any other page-wide tags).  You can also   use any ospecial markup tokens supported by global help in the Shared Portal Framework - see the usage documentation.  When you are  finished, name the file:  - If your global help is for a particular portal site, name the file <site-name>GlobalHelp.html where <site-name> is the site name for the site in Vignette.  - If your global help is for all portal sites which don't have site- particular global help, name the file globalHelp.html.  Then upload this file to the Shared Portal Framework's Global Help Page component in Vignette console.  Upload it as a secondary support file.  The component will discover and display your file at runtime. -->
+
+<!--                              -->
+
+<!-- You can refer to external CSS in this file.  Create your styles in a CSS file.  Then give the file an appropriate name. Eg, if you  are providing styles just for a particular portal site, name the file <site-name>GlobalHelp.css where <site-name> is the site name for the site in Vignette.  Or if you are providing styles for all sites without site-specific styles, name it globalHelp.css.  Then upload it as a  secondary support file into the Global Help Page component in Vignette. And put a token to resolve it below, like this one (be sure to set the filename in the token to match the name you chose): -->
+
+<link href="{CONTENT-URL:globalHelp.css}" rel="stylesheet" type="text/css"/>
+
+<!--                              -->
+
+<!-- Here is an example of a print hyperlink, for printing the global help content. -->
+
+<div id="spf-globalhelp-print">
+	<script type="text/javascript" language="javascript" charset="utf-8">
+    // <![CDATA[
+    document.writeln('<a class="spf-globalhelp-link" href="#" onclick="window.print();return false;">Print</a>');
+    // ]]>
+	</script>
+	<noscript>Pour imprimer ce document, appuyez sur les touches Ctrl+P de votre clavier.</noscript>
+</div>
+
+<!-- Here is some sample help content referring to styles in the above CSS. -->
+
+<h1 class="spf-globalhelp-content-header"><a name="index">Pr&eacute;cisez le titre de l'aide ici.</a></h1>
+
+<strong>
+<ul>
+	<li><a class="spf-globalhelp-link" href="#topic1">Pr&eacute;cisez ici le texte du lien vers la rubrique 1</a>
+	<ul>
+		<li><a class="spf-globalhelp-link" href="#topic1.1">Pr&eacute;cisez ici le texte du lien vers le chapitre 1,1</a></li>
+		<li><a class="spf-globalhelp-link" href="#topic1.2">Pr&eacute;cisez ici le texte du lien vers le chapitre 1,2</a></li>
+	</ul>
+	</li>
+	<li><a class="spf-globalhelp-link" href="#topic2">Pr&eacute;cisez ici le texte du lien vers la rubrique 2</a></li>
+	<li><a class="spf-globalhelp-link" href="#">Etc.</a></li>
+</ul>
+</strong>
+
+<p class="spf-globalhelp-section-separator"></p>
+
+<h2><a class="spf-globalhelp-subject" name="topic1">Rubrique 1</a></h2>
+
+<h3><a class="spf-globalhelp-subject" name="topic1.1">Chapitre 1.1</a></h3>
+
+<p class="spf-globalhelp-body">Dans ce chapitre, pr&eacute;cisez le contenu de l'aide. </p>
+
+<p><a class="spf-globalhelp-link" href="#index">Retour &agrave; l'index</a></p>
+
+<h3><a class="spf-globalhelp-subject" name="topic1.2">Chapitre 1.2</a></h3>
+
+<p class="spf-globalhelp-body">Dans ce chapitre, pr&eacute;cisez le contenu de l'aide. </p>
+
+<p><a class="spf-globalhelp-link" href="#index">Retour &agrave; l'index</a></p>
+
+<p class="spf-globalhelp-section-separator"></p>
+
+<h2><a class="spf-globalhelp-subject" name="topic2">Rubrique 2</a></h2>
+
+<p class="spf-globalhelp-body">Dans ce chapitre, pr&eacute;cisez le contenu de l'aide. </p>
+
+<p><a class="spf-globalhelp-link" href="#index">Retour &agrave; l'index</a></p>
+
+<!-- You can also refer to external JavaScript in this file.  Put your  JavaScript in a JS file.  Then give the file an appropriate name.  Eg,  if you are providing JavaScript just for a particular portal site, name the file <site-name>GlobalHelp.js where <site-name> is the site name  for the site in Vignette.  Or if you are providing scripts for all sites without site-specific scripts, name it globalHelp.js.  Then upload the file as a secondary support file into the Global Help Page component in Vignette.  And put a token to resolve it below, like this one (be sure to set the filename in the token to match the filename you chose): -->
+
+<!-- Not used in this demo <script src="{CONTENT-URL:globalHelp.js}" type="text/javascript" language="javascript" charset="utf-8"/> -->

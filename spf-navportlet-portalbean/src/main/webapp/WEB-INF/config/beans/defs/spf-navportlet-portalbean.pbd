@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<PORTALBEAN
+		ID="spf-navportlet-portalbean"
+		CLASS="com.hp.it.spf.navportlet.portal.component.portalbean.NavPortletBean"
+		TYPE_UID="c56d32feb0fce0e2743292844c6f0101"
+		VERSION="2"
+		CATEGORY="ENDUSER"
+		DISPLAYCATEGORY="applications"
+		>
+
+	<TITLE>SPF Navigator Portlet</TITLE>
+
+	<NAME>spf-navportlet-portalbean</NAME>
+
+	<ABSTRACT>SPF Navigator Portlet renders portal navigation tree's node and its children.</ABSTRACT>
+
+	<DATA>
+		<FIELD NAME="JSPDirName" VALUE="spf-navportlet"></FIELD>
+	</DATA>
+
+	<VIEW ID="MY_PORTAL_VIEW"></VIEW>
+
+	<VIEW ID="ADMIN_BEAN_EDIT_VIEW"></VIEW>
+
+	<VIEW ID="ADMIN_BEAN_EDIT_PROCESS_VIEW"></VIEW>
+
+</PORTALBEAN>

@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.it.spf.comps</groupId>
+	<artifactId>spf-auth-error-secondarypagetype</artifactId>
+	<packaging>car</packaging>
+	<name>SPF authorization error secondary page type</name>
+	<version>1.0.3-SNAPSHOT</version>
+	<description>
+		Classes and other artifacts for the Shared Portal Framework
+		authorization error secondary page type. This page type should
+		be setup as the authorization error target in SiteMinder, for
+		example. It may have other uses, too.
+	</description>
+	<inceptionYear>January 2009</inceptionYear>
+	<parent>
+		<artifactId>spf-pom</artifactId>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<version>1.0.2</version>
+	</parent>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-auth-error-secondarypagetype</url>
+	</ciManagement>
+	<scm>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-auth-error-secondarypagetype</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-auth-error-secondarypagetype</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-auth-error-secondarypagetype</url>
+	</scm>
+	<organization>
+		<name>Shared Portal Framework: TSG IT</name>
+	</organization>
+	<dependencies>
+	</dependencies>
+</project>

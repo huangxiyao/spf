@@ -1,0 +1,21 @@
+/* This file contains the default CSS styles for the SPF system error
+secondary page.  Use this file as a template to define your own styles
+for your own site.  Name your new file "<site>SystemError.css" (where
+<site> is your site DNS name in Vignette) and upload it as a new
+secondary support file into the SPF system error secondary page component
+using the Vignette console. */
+
+.spf-systemerror-title {
+	font-size: larger;
+	font-weight: bold;
+	margin-top: 0;
+}
+
+.spf-systemerror-message {
+	margin-top: 0;
+}
+
+.spf-systemerror-code {
+	margin-top: 0;
+	font-size: smaller;
+}
