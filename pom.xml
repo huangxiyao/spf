@@ -20,8 +20,8 @@
 
 	<scm>
 		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portql</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portql</url>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portal</url>
 	</scm>
 	
 	<modules>
