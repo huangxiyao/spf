@@ -3,24 +3,23 @@
     <groupId>com.hp.it.spf.tools</groupId>
     <artifactId>spf-portal-tools</artifactId>
     <name>SPF portal tools</name>
-    <version>1.0.2-SNAPSHOT</version>
     <description>Tools for administrating SPF portal and/or portlet resources. Includes the
         localization helper scripts for SPF, and more.
     </description>
     <inceptionYear>March 2009</inceptionYear>
     <parent>
-        <artifactId>spf-pom</artifactId>
-        <groupId>com.hp.it.spf.tools</groupId>
-        <version>1.0.2</version>
+		<groupId>com.hp.it.spf.portal</groupId>
+		<artifactId>spf-portal-parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
     </parent>
     <ciManagement>
         <system>Hudson</system>
         <url>http://samson.atl.hp.com:8080/hudson/job/spf-portal-tools</url>
     </ciManagement>
     <scm>
-        <connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-tools-1.0.0</connection>
-        <developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-tools-1.0.0</developerConnection>
-        <url>https://samson.atl.hp.com/svn/spf/source/tags/spf-portal-tools-1.0.0</url>
+        <connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-tools</connection>
+        <developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-tools</developerConnection>
+        <url>https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-tools</url>
     </scm>
     <organization>
         <name>Shared Portal Framework: TSG IT</name>
@@ -47,7 +46,7 @@
         <dependency>
             <groupId>com.hp.it.spf.sso</groupId>
             <artifactId>spf-portal-session</artifactId>
-            <version>1.0.3</version>
+            <version>${version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
