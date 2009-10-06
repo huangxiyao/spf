@@ -3,7 +3,6 @@
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-portlet-utilities</artifactId>
 	<name>SPF portlet utilities</name>
-	<version>1.0.13-SNAPSHOT</version>
 	<description>
 		Utilities for the portlet side of the Shared Portal Framework.
 		Currently includes concrete utility classes for portlet file
@@ -17,9 +16,9 @@
 	</description>
 	<inceptionYear>December 2008</inceptionYear>
 	<parent>
-		<artifactId>spf-pom</artifactId>
-		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.2</version>
+		<groupId>com.hp.it.spf.portlet</groupId>
+		<artifactId>spf-portlet-parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
@@ -28,9 +27,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portlet-utilities</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portlet-utilities</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portlet-utilities</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portlet-utilities</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portlet-utilities</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portlet-utilities</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
@@ -89,7 +88,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>1.0.12-SNAPSHOT</version>
+			<version>${spf.common.version}</version>
 		</dependency>
 		<!-- 	<dependency>
 			<groupId>com.hp.websat</groupId>

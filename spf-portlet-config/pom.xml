@@ -7,15 +7,14 @@
 	</description>
 	<inceptionYear>April 2009</inceptionYear>
 	<parent>
-		<artifactId>spf-pom</artifactId>
-		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.2</version>
+		<groupId>com.hp.it.spf.portlet</groupId>
+		<artifactId>spf-portlet-parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-portlet-config</artifactId>
 	<name>SPF portlet configuration templates</name>
-	<version>1.0.0-SNAPSHOT</version>
 	<ciManagement>
 		<system>Hudson</system>
 		<url>
@@ -23,9 +22,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portlet-config</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portlet-config</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portlet-config</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet/spf-portlet-config</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet/spf-portlet-config</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portlet/spf-portlet-config</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
@@ -63,17 +62,17 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>1.0.12-SNAPSHOT</version>
+			<version>${spf.common.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portlet-utilities</artifactId>
-			<version>1.0.4-SNAPSHOT</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-hpp</artifactId>
-			<version>1.0.11-SNAPSHOT</version>
+			<version>${spf.common.version}</version>
 		</dependency>
 	</dependencies>
 </project>
