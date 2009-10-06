@@ -4,7 +4,6 @@
 	<artifactId>spf-locale-widget-styletype</artifactId>
 	<packaging>car</packaging>
 	<name>SPF locale widget style type</name>
-	<version>1.0.3-SNAPSHOT</version>
 	<description>
 		Artifacts for the Shared Portal Framework locale widget style
 		type. Locale widgets include the locale selector and locale
@@ -12,9 +11,9 @@
 	</description>
 	<inceptionYear>January 2009</inceptionYear>
 	<parent>
-		<artifactId>spf-pom</artifactId>
-		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.2</version>
+		<groupId>com.hp.it.spf.portal</groupId>
+		<artifactId>spf-portal-components-parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
@@ -23,9 +22,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-locale-widget-styletype</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-locale-widget-styletype</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-locale-widget-styletype</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-locale-widget-styletype</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-locale-widget-styletype</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-locale-widget-styletype</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
