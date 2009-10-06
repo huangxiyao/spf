@@ -2,7 +2,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.wsrp</groupId>
 	<artifactId>spf-portal-wsrp</artifactId>
-	<version>1.0.13-SNAPSHOT</version>
 	<name>spf-portal-wsrp</name>
 	<description>
 		Vignette Portal does not allow sending different sets of profile
@@ -15,9 +14,9 @@
 		spf-portlet-wsrp.
 	</description>
 	<parent>
-		<groupId>com.hp.it.spf.tools</groupId>
-		<artifactId>spf-pom</artifactId>
-		<version>1.0.2</version>
+		<groupId>com.hp.it.spf.portal</groupId>
+		<artifactId>spf-portal-parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -113,17 +112,17 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>1.0.11</version>
+			<version>${spf.common.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-utilities</artifactId>
-			<version>1.0.14</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portal-filters</artifactId>
-			<version>1.0.11</version>
+			<version>${version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
@@ -143,8 +142,8 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-wsrp</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-wsrp</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-wsrp</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-wsrp</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-wsrp</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-wsrp</url>
 	</scm>
 </project>
