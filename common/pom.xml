@@ -5,6 +5,12 @@
 		<groupId>com.hp.it.spf.xa</groupId>
 		<artifactId>spf-common-parent</artifactId>
 		<version>1.2.0-SNAPSHOT</version>
+		<!-- 
+			relativePath to parent is only needed in the aggregator POM to allow build all modules
+			including parent, even though the parent's snapshot has not been built yet in the CI
+			and is not available in the repository.
+		-->
+		<relativePath>spf-common-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>com.hp.it.spf.xa</groupId>
