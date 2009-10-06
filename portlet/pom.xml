@@ -1,13 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<!--
+
 	<parent>
 		<groupId>com.hp.it.spf.portlet</groupId>
 		<artifactId>spf-portlet-parent</artifactId>
 		<version>1.2.0-SNAPSHOT</version>
+		<!-- 
+			relativePath to parent is only needed in the aggregator POM to allow build all modules
+			including parent, even though the parent's snapshot has not been built yet in the CI
+			and is not available in the repository.
+		-->
 		<relativePath>spf-portlet-parent/pom.xml</relativePath>
 	</parent>
--->
 
     <version>1.2.0-SNAPSHOT</version>
 	<groupId>com.hp.it.spf.portlet</groupId>
@@ -15,15 +19,14 @@
 	<packaging>pom</packaging>
 	<name>SPF portlet aggregator POM</name>
 
-<!--
 	<scm>
-		<connection>scm:svn:file:///c:/home/hp/CxP/multi_module_repo/trunk</connection>
-		<developerConnection>scm:svn:file:///c:/home/hp/CxP/multi_module_repo/trunk</developerConnection>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portlet</url>
 	</scm>
--->  
 	
 	<modules>
-		<!--<module>spf-portlet-parent</module>-->
+		<module>spf-portlet-parent</module>
 		<module>pc-database-persistence</module>
 		<module>spf-portlet-config</module>
 		<module>spf-portlet-container</module>
