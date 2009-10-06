@@ -1,16 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<inceptionYear>February 2009</inceptionYear>
 	<parent>
-		<artifactId>spf-pom</artifactId>
-		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.2</version>
+		<groupId>com.hp.it.spf.portal</groupId>
+		<artifactId>spf-portal-components-parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.comps</groupId>
 	<artifactId>spf-portal-components</artifactId>
 	<packaging>car</packaging>
 	<name>SPF portal components</name>
-	<version>1.0.13-SNAPSHOT</version>
 	<description>
 		All Vignette portal components for the Shared Portal Framework.
 		This artifact builds a composite CAR containing the CAR files
@@ -23,9 +22,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-components</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-components</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-components</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-portal-components</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-portal-components</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-portal-components</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
@@ -46,152 +45,152 @@
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-auth-error-secondarypage</artifactId>
-			<version>1.0.4</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-auth-error-secondarypagetype</artifactId>
-			<version>1.0.2</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-fed-launch-error-secondarypage</artifactId>
-			<version>1.0.5</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-fed-launch-error-secondarypagetype</artifactId>
-			<version>1.0.4</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-fed-logout-confirm-secondarypage</artifactId>
-			<version>1.0.5</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-fed-logout-confirm-secondarypagetype</artifactId>
-			<version>1.0.4</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-global-help-secondarypage</artifactId>
-			<version>1.0.4</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-global-help-secondarypagetype</artifactId>
-			<version>1.0.4</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-locale-indicator-classic-style</artifactId>
-			<version>1.0.3</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-locale-selector-classic-style</artifactId>
-			<version>1.0.4</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-locale-selector-secondarypage</artifactId>
-			<version>1.0.3</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-locale-selector-secondarypagetype</artifactId>
-			<version>1.0.4</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-locale-widget-styletype</artifactId>
-			<version>1.0.2</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-logout-secondarypage</artifactId>
-			<version>1.0.4</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-logout-secondarypagetype</artifactId>
-			<version>1.0.5</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-portal-pulse-secondarypage</artifactId>
-			<version>1.0.3</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-portal-pulse-secondarypagetype</artifactId>
-			<version>1.0.4</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-system-error-secondarypage</artifactId>
-			<version>1.0.6</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-page-display-secondarypage</artifactId>
-			<version>1.0.6</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-maximize-secondarypage</artifactId>
-			<version>1.0.4</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-hpweb-layout-config-style</artifactId>
-			<version>1.0.3</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-return-secondarypage</artifactId>
-			<version>1.0.2</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-return-secondarypagetype</artifactId>
-			<version>1.0.4</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-site-picker-secondarypage</artifactId>
-			<version>1.0.0</version>
+			<version>${version}</version>
 			<type>car</type>
 		</dependency>
 	<!-- Commenting this out since we can't do bulk import with it present...
 		<dependency>
 			<groupId>com.hp.it.spf.comps</groupId>
 			<artifactId>spf-navportlet-portalbean</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1${version}</version>
 			<type>car</type>
 		</dependency>
 	-->
