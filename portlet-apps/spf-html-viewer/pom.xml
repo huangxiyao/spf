@@ -4,7 +4,6 @@
 	<artifactId>spf-html-viewer</artifactId>
 	<packaging>war</packaging>
 	<name>SPF HTML viewer portlet</name>
-	<version>1.0.15-SNAPSHOT</version>
 	<description>
 		Shared Portal Framework portlet application implementing the
 		HTMLViewer portlet: a JSR-168 portlet which interpolates and
@@ -13,9 +12,9 @@
 	</description>
 	<inceptionYear>December 2008</inceptionYear>
 	<parent>
-		<artifactId>spf-pom</artifactId>
-		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.2</version>
+		<groupId>com.hp.it.spf.portlet</groupId>
+		<artifactId>spf-portlet-apps-parent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
@@ -24,9 +23,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-html-viewer</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-html-viewer</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-html-viewer</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet-apps/spf-html-viewer</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet-apps/spf-html-viewer</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portlet-apps/spf-html-viewer</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
@@ -65,7 +64,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.sso</groupId>
 			<artifactId>spf-portlet-filters</artifactId>
-			<version>1.0.10</version>
+			<version>${spf.portlet.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -97,12 +96,12 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portlet-utilities</artifactId>
-			<version>1.0.13-SNAPSHOT</version>
+			<version>${spf.portlet.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>1.0.12-SNAPSHOT</version>
+			<version>${spf.common.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
