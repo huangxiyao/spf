@@ -14,6 +14,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-portlet-config</artifactId>
+	<packaging>jar</packaging>
 	<name>SPF portlet configuration templates</name>
 	<ciManagement>
 		<system>Hudson</system>
