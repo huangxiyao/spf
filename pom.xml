@@ -7,6 +7,7 @@
 	</parent>
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-common-utilities</artifactId>
+	<packaging>jar</packaging>
 	<name>SPF common utilities.</name>
 	<dependencies>
 		<dependency>
