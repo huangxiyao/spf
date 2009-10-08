@@ -2,6 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.openportal</groupId>
 	<artifactId>spf-portlet-container</artifactId>
+	<packaging>jar</packaging>
 	<name>spf-portlet-container</name>
 	<description>This project provides some SPF-customized features for the OpenPortal portlet container.</description>
 	<parent>
