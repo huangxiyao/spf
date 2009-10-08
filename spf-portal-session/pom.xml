@@ -2,6 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.sso</groupId>
 	<artifactId>spf-portal-session</artifactId>
+	<packaging>jar</packaging>
 	<name>sso session-initialization</name>
 	<description>This session initialization project provides the followinng features:
 1. SSO Authenticator module/filter; 

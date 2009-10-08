@@ -2,6 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.hp.it.spf.tools</groupId>
     <artifactId>spf-portal-tools</artifactId>
+	<packaging>jar</packaging>
     <name>SPF portal tools</name>
     <description>Tools for administrating SPF portal and/or portlet resources. Includes the
         localization helper scripts for SPF, and more.

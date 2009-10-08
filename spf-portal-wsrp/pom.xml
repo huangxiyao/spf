@@ -2,6 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.wsrp</groupId>
 	<artifactId>spf-portal-wsrp</artifactId>
+	<packaging>jar</packaging>
 	<name>spf-portal-wsrp</name>
 	<description>
 		Vignette Portal does not allow sending different sets of profile
