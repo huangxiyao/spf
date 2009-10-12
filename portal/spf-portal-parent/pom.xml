@@ -16,7 +16,7 @@
 
 	<properties>
 		<spf.common.version>1.2.0-SNAPSHOT</spf.common.version>
-		<!--<spf.portal-helper-apps.version>1.2.0-SNAPSHOT</spf.portal-helper-apps.version>-->
+		<spf.portal-helper-apps.version>1.2.0-SNAPSHOT</spf.portal-helper-apps.version>
 	</properties>
 
 	<ciManagement>

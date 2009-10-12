@@ -76,14 +76,12 @@
 			<artifactId>spf-portal-filters</artifactId>
 			<version>${version}</version>
 		</dependency>
-		<!--
 		<dependency>
 			<groupId>com.hp.it.spf.apps</groupId>
 			<artifactId>spf-healthcheck</artifactId>
 			<version>${spf.portal-helper-apps.version}</version>
 			<type>war</type>
 		</dependency>
-	-->
 		<dependency>
 			<groupId>com.hp.it.spf.sso</groupId>
 			<artifactId>spf-portal-session</artifactId>
