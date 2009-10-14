@@ -259,7 +259,7 @@ JSR-286 portlet for displaying an arbitrary content file you provide
 <h4>1.1.1 Installation of the <code>htmlviewer</code> WAR</h4>
 </a>
 <p>The HTML viewer portlet is distributed as a complete portlet
-application, in J2EE WAR format. The WAR filename is <code>htmlviewer.jar</code>.
+application, in J2EE WAR format. The WAR filename is <code>htmlviewer.war</code>.
 The <code>htmlviewer</code> WAR is distributed through Maven 2:</p>
 
 <ul>
@@ -272,23 +272,87 @@ The <code>htmlviewer</code> WAR is distributed through Maven 2:</p>
 <p>To get the HTML viewer portlet, download the latest released
 version of <code>htmlviewer.war</code> from the repository.</p>
 
-<p>To install it, deploy it into your JSR-286-compliant portlet
-application server. It can be local to the portal application, or
-remoted with the support of a WSRP portlet container. For the Shared
-Portal Framework platform, we will generally use remote portlets with
-the OpenPortal portlet container, so this means deploying it into the
-application server where OpenPortal is running. The deployment
-procedures are the same as for any other JSR-286 portlet application.</p>
+<p>The HTML viewer is a JSR-286 portlet application, so it needs a
+JSR-286-compliant portlet container. It can be local to the portal
+application, or remoted with the support of a WSRP portlet container. <b>Note:</b>
+For the Shared Portal Framework platform, we will generally use the
+remoted approach, employing the SPF-integrated OpenPortal portlet
+container (installation of this container and the application server in
+which it runs is not covered here). The remainder of these instructions
+will assume use of the SPF-integrated OpenPortal container.</p>
 
-<blockquote>
-<p><b>Note:</b> When you download the WAR from the repository, it
-may be named <code>spf-html-viewer-<i>&lt;version&gt;</i>.war</code>.
-However the WebLogic context root for the application is <code>htmlviewer</code>.
-Some versions of OpenPortal will not support WAR files named differently
-than the context root, or WAR filenames including hyphen characters. In
-such cases, you should rename the WAR file manually to <code>htmlviewer.war</code>
-before deploying it.</p>
-</blockquote>
+<p>The deployment procedures for the HTML viewer WAR are generally
+the same as for any other JSR-286 portlet application. For the
+SPF-integrated OpenPortal container, general detailed deployment
+instructions are documented elsewhere in the SPF administration
+documentation. For your convenience, here are the steps in summary:</p>
+
+<ol>
+	<li>
+	<p>Login to the OpenPortal portlet driver console.</p>
+	</li>
+
+	<li>
+	<p>On the "Portlets" tab of the console, create your producer or
+	find an existing producer to use.</p>
+	<blockquote>
+	<p><b>Important:</b> make sure the producer is <b>enabled</b> and
+	has <b>registration required</b>. The latter prepares the system to
+	manage portlet preferences for each instance - a prerequisite for the
+	HTML viewer portlet. If using an existing producer where registration
+	was not required, you can change it - however you will have to delete
+	and re-create any remote portlet server (RPS) and associated portlet
+	instances in Vignette.</p>
+	</blockquote>
+	</li>
+
+	<li>
+	<p>On the "Admin" tab of the console, deploy the HTML viewer WAR.</p>
+	<blockquote>
+	<p><b>Important:</b> make sure the WAR filename is <code>htmlviewer.war</code>
+	first, if it is not already so. (This is because at least some versions
+	of OpenPortal require the filename to match the context root declared
+	in the deployment descriptor, which is <code>htmlviewer</code>.) After
+	downloading it above, it may be a different name, so rename it to <code>htmlviewer.war</code>
+	accordingly before deploying it. Also note that if you are updating an
+	existing deployment, you should <b>not</b> undeploy the existing
+	portlet from OpenPortal first.</p>
+	</blockquote>
+	</li>
+
+	<li>
+	<p>Login to the application server (WebLogic) console.</p>
+	</li>
+
+	<li>
+	<p>Deploy the <code>htmlviewer.war</code> to the desired targets as
+	usual for a Web application. You will find the <code>htmlviewer.war</code>
+	already staged for deployment by OpenPortal.</p>
+	<blockquote>
+	<p><b>Important:</b> you must deploy to WebLogic the version of the
+	WAR which OpenPortal staged, since OpenPortal rewrites some of the
+	deployment descriptor during the OpenPortal deployment step (above).</p>
+	</blockquote>
+	</li>
+
+	<li>
+	<p>Done. You can now create and configure one or more instances of
+	the HTML viewer portlet in Vignette console using the typical
+	procedures for doing so.</p>
+	<blockquote>
+	<p><b>Note:</b> on the <b>Details</b> tab for the portlet in
+	Vignette console, you will be prompted for a view filename (and
+	optional includes filename). See <a href="#using">Using the <code>htmlviewer</code>
+	portlet</a> below for detailed instructions. Be aware that, unless you have
+	<a href="#overview.installation.i18n_portlet_config">installed and
+	configured <code>i18n_portlet_config.properties</code></a> (below) to point
+	to a different location, the portlet will assume the view and include
+	files are under <code>/opt/sasuapps/sp/global_resources/portlet/i18n/</code>.
+	Also note that, until you configure a view file, the portlet's view
+	mode will display a generic internal error message (with error code <code>error.internal</code>).
+	</p>
+	</li>
+</ol>
 
 <a name="overview.installation.i18n_portlet_config">
 <h4>1.1.2 Installation of <code>i18n_portlet_config.properties</code>
@@ -1154,6 +1218,12 @@ is the WPAP Timber log root defined in the HTML viewer application's <code>web.x
 		period. Documented new logging section. Corrected the documentation to
 		say that HTML viewer is a JSR-286 portlet, not JSR-168, and requires a
 		JSR-286-compatible container.</td>
+	</tr>
+	<tr>
+		<td>1.6</td>
+		<td>Oct 14 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Improved installation instructions.</td>
 	</tr>
 </table>
 <p></p>
