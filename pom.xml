@@ -43,6 +43,8 @@
 		<module>spf-logout-secondarypage</module>
 		<module>spf-logout-secondarypagetype</module>
 		<module>spf-maximize-secondarypage</module>
+        <module>spf-mypages-maximize-secondarypage</module>
+        <module>spf-mypages-page-display-secondarypage</module>
 		<module>spf-navportlet-portalbean</module>
 		<module>spf-page-display-secondarypage</module>
 		<module>spf-portal-components</module>

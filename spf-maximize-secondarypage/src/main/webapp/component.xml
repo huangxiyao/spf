@@ -15,6 +15,10 @@
 					secure="false" template-default="true" template-uid="template0017"
 					title="Shared Portal Framework - Default Maximize" visible="true">
 			<actions>
+                <action id="spf_pda" type="PRE_DISPLAY">
+                    <!-- This class is defined in spf-portal-utilities modules -->
+                    <class>com.hp.it.spf.xa.portletdata.portal.PortletDataPreDisplayAction</class>
+                </action>
 				<group-reference group-id="INHERIT_ALL"/>
 			</actions>
 		</style-info>
