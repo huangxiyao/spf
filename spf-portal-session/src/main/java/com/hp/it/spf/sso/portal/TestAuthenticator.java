@@ -229,8 +229,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 
 	/**
 	 * This method is used to perform all related tasks. 1. If act as anon user
-	 * 2. act as normal user 3. pass user info to portlet 4. pass context map to
-	 * portlet
+	 * 2. act as normal user 
 	 * 
 	 * @see com.hp.it.spf.sso.portal.IAuthenticator#execute()
 	 */
@@ -249,22 +248,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 			super.execute();
 			request.getSession().setAttribute(SANDBOX_USERNAME, userName);
 		}
-		
-		// pass user info to local portlet
-		boolean islocalMode = "true"
-				.equalsIgnoreCase(getProperty("local_mode"));
-		String portlets = getProperty("portlets");
-		// portlets are divided by ,
-		if (islocalMode && portlets != null) {
-			StringTokenizer st = new StringTokenizer(portlets, ",");
-			while (st.hasMoreElements()) {
-				String portlet = (String) st.nextElement();
-				// pass userProfile to portlets in vignette way
-				request.setAttribute(VIGNETTE_PREFIX + portlet
-						+ ".javax.portlet.userinfo", request.getSession()
-						.getAttribute(AuthenticationConsts.USER_PROFILE_KEY));
-			}
-		}
+
 		User user = SessionUtils.getCurrentUser(request.getSession());
 		if (user != null) {
 			if (!user.isGuestUser()) {

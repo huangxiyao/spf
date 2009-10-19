@@ -134,5 +134,11 @@
 			<version>10.0.1.0</version>
 			<scope>provided</scope>
 		</dependency>
+        <dependency>
+            <groupId>vignette</groupId>
+            <artifactId>vgn-portal-cache</artifactId>
+            <version>7.4.2</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 </project>
