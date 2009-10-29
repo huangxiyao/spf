@@ -83,6 +83,22 @@
 		<lifecycle>EVENT_PHASE</lifecycle>
 	</filter>
 	
+	<filter>
+		<display-name>SPF Requestparam Extractor Filter</display-name>
+		<filter-name>RequestParamExtractorFilter</filter-name>
+		<filter-class>
+			com.hp.it.spf.request.portlet.filter.RequestParamExtractorFilter
+		</filter-class>
+		<lifecycle>ACTION_PHASE</lifecycle>
+		<lifecycle>RENDER_PHASE</lifecycle>
+		<lifecycle>RESOURCE_PHASE</lifecycle>
+		<lifecycle>EVENT_PHASE</lifecycle>
+		<init-param>
+			<name>PARAM_OVERWRITE</name>
+			<value>true</value>
+		</init-param> 
+	</filter>
+	
 	<!-- WPAP logging filter mapping -->
 	<filter-mapping>
 		<filter-name>TransactionLoggingFilter</filter-name>
@@ -92,6 +108,10 @@
 	<!-- SPF attribute map filter mapping -->
 	<filter-mapping>
 		<filter-name>MapAttributeFilter</filter-name>
+		<portlet-name>*</portlet-name>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>RequestParamExtractorFilter</filter-name>
 		<portlet-name>*</portlet-name>
 	</filter-mapping>
 </portlet-app>

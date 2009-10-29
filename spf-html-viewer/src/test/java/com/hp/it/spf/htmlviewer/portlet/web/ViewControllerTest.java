@@ -9,7 +9,6 @@ import java.util.Locale;
 import java.util.Map;
 import javax.portlet.PortletPreferences;
 import junit.framework.TestCase; 
-// import org.springframework.mock.web.portlet.MockRenderRequest;
 import com.hp.it.spf.htmlviewer.portlet.web.MockRenderRequest;
 import org.springframework.mock.web.portlet.MockRenderResponse;
 import org.springframework.web.portlet.ModelAndView;
@@ -185,6 +184,19 @@ public class ViewControllerTest extends TestCase {
 					"<html><head><title>Hello world (Chinese)!</title></head><body><h1>Hello world (Chinese)!</h1> Here is an image tag: <img src=\"/relay/images/test_ext_zh_CN.gif\"></body></html>",
 					content);
 		}
+		
+		
+		pp.setValue(Consts.VIEW_FILENAME, "/html/test_nested_token_4.html");
+		//pp.setValue(Consts.INCLUDES_FILENAME, "html_viewer_includes.properties");
+		renderRequest.setParameter("SMAUTHREASON", "50004");
+		modelAndView = (ModelAndView)viewController.handleRenderRequest( 
+			renderRequest, renderResponse);
+		map = modelAndView.getModel();
+		content = (String) map.get(Consts.VIEW_CONTENT);
+		System.out.println("testHandleRenderRequestInternal.13 got: " + content);
+		assertEquals(
+				"<html><body>Exist Token Check : <br>We are inside existense box</br><br> Value received : 50004<br></body></html>",
+				content);
 	}
 
 	protected static boolean fileExists(String pPath) {

@@ -54,7 +54,7 @@ public class ViewController extends AbstractController {
 
 	/** The view name. */
 	private String viewName = "view";
-
+	
 	/**
 	 * Empty constructor.
 	 */
@@ -151,7 +151,7 @@ public class ViewController extends AbstractController {
 		if ((data == null) || (!data.ok())) {
 			throw new InternalErrorException(request, data.getErrors());
 		}
-
+		
 		// Interpolate the view content.
 		ResourceBundle includesContent = data.getIncludesContent();
 		TokenParser t = new TokenParser(request, response, includesContent);
