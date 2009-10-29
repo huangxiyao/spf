@@ -4,23 +4,19 @@
  */
 package com.hp.it.spf.xa.interpolate.portal;
 
+import java.util.Enumeration;
 import java.util.ResourceBundle;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.epicentric.common.website.MenuItemNode;
 import com.epicentric.common.website.MenuItemUtils;
-import com.epicentric.common.website.SessionUtils;
-import com.epicentric.user.User;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.misc.CompositeEnumeration;
 import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
-import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
 
 /**
@@ -246,6 +242,73 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 			return null;
 		}
 	}
+
+	
+
+	/** 
+	 * 
+	 * Returns the value of the given property.[ request attribute/param ]
+	 * Note : The attributes which do not contain the string values would be ignored.
+	 * 
+	 * @param keyName request property name
+	 * 
+	 * @return The value of the property.
+	 */
+	@Override
+	protected String getRequestPropertyValue(String keyName)
+	{
+		if (portalContext == null || keyName == null) {
+			return null;
+		}
+
+		try {
+			HttpServletRequest request = portalContext.getHttpServletRequest();
+			Object value = request.getAttribute(keyName);
+			if (value != null && value instanceof String) {
+				return (String) value;
+			}
+			value = request.getParameter(keyName);
+			if (value != null && value instanceof String) {
+				return (String) value;
+			}
+			value = request.getSession().getAttribute(keyName);
+			if (value != null && value instanceof String) {
+				return (String) value;
+			}
+			return null;
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
+
+	/** 
+	 * Returns the Collection of Request property names.[attributes/params]
+	 * 
+	 *
+	 * @return Enumeration of String objects containing the request property names 
+	 * 	   [ parameter-names/attribute-names]	 * 
+	 */
+	@Override
+	protected Enumeration<String> getRequestPropertyNames()
+	{
+
+		if (portalContext == null) {
+			return null;
+		}
+
+		try {
+			HttpServletRequest request = portalContext.getHttpServletRequest();
+			return new CompositeEnumeration<String>(request.getAttributeNames(),
+					new CompositeEnumeration<String>(request.getParameterNames(),
+							request.getSession().getAttributeNames()));
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+
 
 	/**
 	 * Get the locale from the one provided to the constructor, or if that is
