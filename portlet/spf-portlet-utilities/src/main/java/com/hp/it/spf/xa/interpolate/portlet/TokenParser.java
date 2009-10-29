@@ -6,13 +6,14 @@ package com.hp.it.spf.xa.interpolate.portlet;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+import javax.portlet.PortletSession;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import java.io.InputStream;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+import com.hp.it.spf.xa.misc.CompositeEnumeration;
 import com.hp.it.spf.xa.misc.portlet.Consts;
 import com.hp.it.spf.xa.misc.portlet.Utils;
 
@@ -281,6 +282,62 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		} catch (ClassCastException e) {
 			return null;
 		}
+	}
+	
+	
+	/** 
+	 * 
+	 * Returns the only String type Object's value of the given request property[attribute/param].
+	 * Note : The attributes which do not contain the string values would be ignored.
+	 * 
+	 * @param keyName
+	 * 		Request Property Name 
+	 * @return The String value of the property
+	 */
+	@Override
+	protected String getRequestPropertyValue(String keyName)
+	{
+		if (request == null || keyName == null) {
+			return null;
+		}
+		Object value = request.getAttribute(keyName);
+		if (value != null && value instanceof String) {
+			return (String) value;
+		}
+		value = request.getParameter(keyName);
+		if (value != null && value instanceof String) {
+			return (String) value;
+		}
+		value = request.getPortletSession().getAttribute(keyName, PortletSession.PORTLET_SCOPE);
+		if (value != null && value instanceof String) {
+			return (String) value;
+		}
+		value = request.getPortletSession().getAttribute(keyName, PortletSession.APPLICATION_SCOPE);
+		if (value != null && value instanceof String) {
+			return (String) value;
+		}
+		return null;
+	}
+
+
+	/** 
+	 * 
+	 * Returns the Collection of Request property names.[attributes/params]
+	 * 
+	 * @return Enumeration of String objects containing the request property names
+	 * 	   [attribute-names/parameter-names]	 * 
+	 * 
+	 */
+	@Override
+	protected Enumeration<String> getRequestPropertyNames()
+	{
+		return new CompositeEnumeration<String>(request.getAttributeNames(),
+				new CompositeEnumeration<String>(request.getParameterNames(),
+						//   new CompositeEnumeration<String>(Collections.enumeration(request.getPublicParameterMap().keySet()),
+						new CompositeEnumeration<String>(request.getPortletSession().getAttributeNames(),
+								request.getPortletSession().getAttributeNames(PortletSession.APPLICATION_SCOPE))
+
+				));
 	}
 
 	/**

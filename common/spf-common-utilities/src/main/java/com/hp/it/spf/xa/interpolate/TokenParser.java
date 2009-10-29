@@ -5,15 +5,12 @@
  */
 package com.hp.it.spf.xa.interpolate;
 
-import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.PropertyResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.Locale;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.text.ParsePosition;
 import java.io.InputStream;
 import java.net.URLEncoder;
 
@@ -59,7 +56,9 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{PAGE:<i>ids</i>}</code></li>
  * <li><code>{SITE:<i>names</i>}</code></li>
  * <li><code>{GROUP:<i>groups</i>}</code></li>
+ * <li><code>{EXIST:<i>key</i>}</code></li>
  * <li><code>{USER-PROPERTY:<i>key</i>}</code></li>
+ * <li><code>{VALUE:<i>key</i>}</code></li>
  * <li><code>{CONTENT-URL:<i>path</i>}</code></li>
  * <li><code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code></li>
  * <li><code>{BEFORE:<i>date</i>}</code></li>
@@ -149,6 +148,12 @@ public abstract class TokenParser {
 	 * This class attribute is the user property token.
 	 */
 	private static final String TOKEN_USER_PROPERTY = "USER-PROPERTY";
+	
+	/**
+	 * This class attribute is the token for a request property value to be substituted 
+	 * from the request[param/attribute].
+	 */
+	private static final String TOKEN_VALUE_PROPERTY = "VALUE";
 
 	/**
 	 * This class attribute is the token for the current portal site name.
@@ -193,6 +198,12 @@ public abstract class TokenParser {
 	 * section.
 	 */
 	private static final String TOKEN_GROUP_CONTAINER = "GROUP";
+
+	/**
+	 * This class attribute is the name of the container token for an Exist
+	 * section. 
+	 */
+	private static final String TOKEN_EXIST_CONTAINER = "EXIST";
 
 	/**
 	 * This class attribute is the name of the container token for a logged-in
@@ -444,6 +455,30 @@ public abstract class TokenParser {
 	 * @return array of groups
 	 */
 	protected abstract boolean getLoginStatus();
+	
+	/**
+	 * Return the request property names in the following precedence order.
+	 * Different action by portal and portlet , so therefore this is an abstract method.
+	 * Portal side the order would be: [ request attribute , request parameter , session attribute  ]
+	 * Portlet side, the order would be: [ request attribute , request parameter , public render parameter , 
+	 * portlet-scoped session attribute , application-scoped session attribute ].
+	 * 
+	 * @return Enumeration of String Objects containing request property-Names[attribute-names & parameter-names]
+	 */
+	protected abstract Enumeration<String> getRequestPropertyNames();
+	
+	
+	/**
+	 * Returns the value of the property from request in the following precedence order.
+	 * Different action by portal and portlet , so therefore this is an abstract method.
+	 * Portal side the order would be: [ request attribute , request parameter , session attribute  ]
+	 * Portlet side, the order would be: [ request attribute , request parameter , public render parameter , 
+	 * portlet-scoped session attribute , application-scoped session attribute ].
+	 *
+	 * @param key request property name
+	 * @return String value of key[attribute / param]
+	 */
+	protected abstract String getRequestPropertyValue(String key);
 
 	/**
 	 * An inner class for deciding whether a content section enclosed within a
@@ -519,13 +554,14 @@ public abstract class TokenParser {
 		content = parseLoggedInContainer(content);
 		content = parseLoggedOutContainer(content);
 
-		// Then the parameterized containers.
+		// Then the parameterized containers.		
 		content = parseBeforeContainer(content);
 		content = parseAfterContainer(content);
 		content = parseSiteContainer(content);
 		content = parsePageContainer(content);
 		content = parseNavItemContainer(content);
-		content = parseGroupContainer(content);
+		content = parseGroupContainer(content);	
+		content = parseExistContainer(content);
 
 		// Do the elemental tokens second:
 		// Starting with the unparameterized tokens...
@@ -540,6 +576,7 @@ public abstract class TokenParser {
 		// Then the parameterized tokens.
 		content = parseInclude(content);
 		content = parseUserProperty(content);
+		content = parseValue(content);
 		content = parseNoLocalizedContentURL(content);
 		content = parseLocalizedContentURL(content);
 		content = parseRequestURL(content);
@@ -1217,6 +1254,71 @@ public abstract class TokenParser {
 		return parseElementalToken(content, TOKEN_USER_PROPERTY,
 				new UserPropertyValueProvider());
 	}
+	
+	
+	
+	/**
+	 * <p>
+	 * Parses the given string, converting the
+	 * <code>{VALUE:<i>key</i>}</code> token into the value for that
+	 * key in the request[attribute/param]. 
+	 * </p>
+	 * <p>
+	 * Actual implementation depends on portal or portlet context. Portal side the precedence order to fetch the value would be: 
+	 * 	<br>request attribute <br>request parameter <br>session attribute 
+	 * </p>
+	 * <p>
+	 * For example, in the portal context:
+	 * <code>The value token implementation : {VALUE:key}</code> is
+	 * returned as: <code>The value token implementation : keyValue</code> assuming
+	 * the <code>key</code> property in the portal request is set to
+	 * "keyValue" value. 
+	 * </p>
+	 * <p>
+	 * An example for the portlet context remains same: The only difference is the precedence
+	 * order in which the value is picked up. Here , the precedence order to fetch the value would be:
+	 * 	<br>request attribute <br>request parameter <br>public render parameter 
+	 * 	<br>portlet-scoped session attribute <br>application-scoped session attribute
+	 * </p>
+	 * <p>
+	 * For example, in the portlet context:
+	 * <code>The value token implementation : {VALUE:key}</code> is
+	 * returned as: <code>The value token implementation : keyValue</code> assuming
+	 * the <code>key</code> property in the portlet request is set to
+	 * "keyValue" value.
+	 * </p>
+	 * <p>
+	 * If the given key property is not found (or the value is null), then the token is replaced
+	 * by blank. If you provide null content, null is returned.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
+	 * </p>
+	 * 
+	 * @param content
+	 *            The content string.
+	 * @return The interpolated string. 
+	 */
+	public String parseValue(String content)
+	{
+
+		/**
+		 * Value provider for a Value Property.
+		 */
+		class RequestPropertyValueProvider extends ValueProvider
+		{
+			protected String getValue(String keyName)
+			{
+				return getRequestPropertyValue(keyName);
+			}
+		}
+
+		return parseElementalToken(content, TOKEN_VALUE_PROPERTY,
+				new RequestPropertyValueProvider());
+	}
+
 
 	/**
 	 * <p>
@@ -1814,6 +1916,99 @@ public abstract class TokenParser {
 		return parseContainerToken(content, TOKEN_GROUP_CONTAINER,
 				new GroupContainerMatcher(getGroups()));
 	}
+	
+	
+	
+	/**
+	 * <p>
+	 * Parses the string for any <code>{EXIST:<i>key</i>}</code> content;
+	 * such content is deleted if the key is not present in the request[attribute/param] ,
+	 * (otherwise only the special markup is removed). The <i>key</i> 
+	 * includes one request property name. <code>{EXIST:<i>key</i>}</code> 
+	 * </p>
+	 * 
+	 * <p>
+	 * For example, consider the following content string:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 *  {EXIST:key}
+	 *    This content is displayed indicating key existence in the request.
+	 *  {/EXIST}
+	 * </pre>
+	 * 
+	 * <p>
+	 * If the current request includes <code>key=<i>keyvalue</i></code>, 
+	 * the returned content string is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 *  
+	 *    This content is displayed indicating key existence in the request.
+	 * </pre>
+	 * 
+	 * <p>
+	 * If the current request doesn't include <code>key=<i>keyvalue</i></code>, 
+	 * the returned content string is:
+	 * </p>
+	 * 
+	 * <pre>
+	 *  This content is for everyone.
+	 *  
+	 * </pre>
+	 * 
+	 * <p>
+	 * If you provide null content, null is returned. The current request properties are
+	 * obtained from the {@link #getRequestPropertyNames()} method; if it returns null or
+	 * empty Enumeration Object, all <code>{EXIST}</code>-enclosed sections are removed
+	 * from the content.
+	 * </p>
+	 * <p>
+	 * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+	 * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if
+	 * you prefer.
+	 * </p>
+	 * 
+	 * @param content the string content
+	 * @return The interpolated string
+	 */
+
+	public String parseExistContainer(String content)
+	{
+
+		/**
+		 *
+		 * @author mukesh
+		 *
+		 */
+		class ExistContainerMatcher extends ContainerMatcher
+		{
+
+			protected ExistContainerMatcher(Enumeration<String> enumeration)
+			{
+				super(enumeration);
+			}
+
+			protected boolean match(String containerKey)
+			{
+				Boolean matchExistence = false;
+
+				for (Enumeration e = (Enumeration) subjectOfComparison; e.hasMoreElements();) {
+					String elementName = (String) e.nextElement();
+					if (elementName.equalsIgnoreCase(containerKey)) {
+						matchExistence = true;
+					}
+				}
+				return matchExistence;
+			}
+		}
+
+		return parseContainerToken(content, TOKEN_EXIST_CONTAINER, new ExistContainerMatcher(getRequestPropertyNames()));
+
+	}
+
 
 	/**
 	 * <p>
