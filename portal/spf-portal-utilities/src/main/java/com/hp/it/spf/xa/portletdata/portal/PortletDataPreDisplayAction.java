@@ -26,7 +26,6 @@ import com.epicentric.common.website.MenuItemNode;
 import com.epicentric.common.website.MenuItemUtils;
 import com.epicentric.mypage.internal.MyPageNode;
 import com.epicentric.mypage.MyPage;
-import com.hp.it.spf.xa.portletdata.portal.PortletDataCollector;
 import com.hp.it.spf.xa.misc.Consts;
 
 /**
@@ -201,7 +200,7 @@ public class PortletDataPreDisplayAction extends BaseAction {
 		// which, once having MyPage, retrieves the page definition using PageManager.
 		Page result = null;
 		MenuItemNode node = MenuItemUtils.getSelectedMenuItemNode(portalContext);
-		if (node != null || node instanceof MyPageNode) {
+		if (node != null && node instanceof MyPageNode) {
 			MyPageNode myPageNode = (MyPageNode) node;
 			MyPage myPage = myPageNode.getMyPage();
 			if (myPage != null) {
