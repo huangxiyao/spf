@@ -5,6 +5,7 @@
 package com.hp.it.spf.xa.help;
 
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -683,7 +684,7 @@ public abstract class ClassicContextualHelpProvider extends
 		++count;
 
 		// Make the element ID.
-		String id = "classicContextualHelp" + count;
+		String id = "classicContextualHelp" + UUID.randomUUID().toString();
 
 		// Make the link, title, and help contents.
 		String link = this.linkContent;
