@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<!DOCTYPE taglib
+		  PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+		  "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>1.2</jsp-version>
+    <short-name>Vignette Portal Java Portlet Taglib</short-name>
+	<uri>http://java.sun.com/portlet_2_0</uri> 
+	<display-name>Vignette Portal Java Portlet Taglib</display-name> 
+	<description>This taglib is an implementation of the Java Portlet taglib found in the Java Portlet specification.  It's packaged and released with the Vignette Application Portal Server.</description> 
+  
+    <tag> 
+      <name>defineObjects</name> 
+	  <tag-class>com.vignette.portal.portlet.jsrcontainer.internal.standardcontainer.invocation.apiimpl.taglib.DefineObjectsTag</tag-class> 
+<tei-class>com.vignette.portal.portlet.jsrcontainer.internal.standardcontainer.invocation.apiimpl.taglib.DefineObjectsTag$TEI</tei-class> 
+	  <body-content>empty</body-content> 
+	  <display-name>Define Objects</display-name> 
+	  <description>Defines implicit objects for the RenderRequest, RenderResponse, and PortletConfig instances associated with the portlet request.</description> 
+	</tag> 
+
+    <tag> 
+      <name>actionURL</name> 
+	  <tag-class>com.vignette.portal.portlet.jsrcontainer.internal.standardcontainer.invocation.apiimpl.taglib.ActionURLTag</tag-class> 
+<tei-class>com.vignette.portal.portlet.jsrcontainer.internal.standardcontainer.invocation.apiimpl.taglib.BaseURLTag$TEI</tei-class> 
+	  <body-content>JSP</body-content> 
+	  <display-name>Action URL</display-name> 
+	  <description>Creates a Portlet Action URL.</description> 
+      <attribute>
+        <name>windowState</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>Indicates the window state that the portlet should have when the Action URL is executed.</description> 
+      </attribute>
+      <attribute>
+        <name>portletMode</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>Indicates the portlet mode that the portlet should have when the Action URL is executed.</description> 
+      </attribute>
+      <attribute>
+        <name>secure</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>Indicates whether the resulting request should be secure or insecure.</description> 
+      </attribute>
+      <attribute>
+        <name>var</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>Name of the exported scoped variable to contain the Action URL.</description> 
+      </attribute>
+      <attribute>
+        <name>copyCurrentRenderParameters</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>Indicates if the current requests render parameters need to be set into the url.</description> 
+      </attribute>
+      <attribute>
+        <name>escapeXml</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+        <description>Deterrmines whether characters in the resulting output should be converted to their corresponding character entity codes.</description> 
+      </attribute>
+      <attribute>
+        <name>name</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+        <description>Specifies the name of the action that can be used by GenericPortlet to dispatch to methods annotated with ProcessAction.</description> 
+      </attribute>
+	</tag> 
+
+	<tag> 
+          <name>renderURL</name> 
+	  <tag-class>com.vignette.portal.portlet.jsrcontainer.internal.standardcontainer.invocation.apiimpl.taglib.RenderURLTag</tag-class>
+          <tei-class>com.vignette.portal.portlet.jsrcontainer.internal.standardcontainer.invocation.apiimpl.taglib.BaseURLTag$TEI</tei-class>  
+	  <body-content>JSP</body-content> 
+	  <display-name>Render URL</display-name> 
+	  <description>Creates a Portlet Render URL.</description> 
+      <attribute>
+        <name>windowState</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>Indicates the window state that the portlet should have when the Render URL is executed.</description> 
+      </attribute>
+      <attribute>
+        <name>portletMode</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>Indicates the portlet mode that the portlet should have when the Render URL is executed.</description> 
+      </attribute>
+      <attribute>
+        <name>secure</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>Indicates whether the resulting request should be secure or insecure.</description> 
+      </attribute>
+      <attribute>
+        <name>var</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>Name of the exported scoped variable to contain the Render URL.</description> 
+      </attribute>
+      <attribute>
+        <name>copyCurrentRenderParameters</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+        <description>Indicates if the current requests render parameters need to be set into the url.</description> 
+      </attribute>
+        <attribute>
+        <name>escapeXml</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+        <description>Deterrmines whether characters in the resulting output should be converted to their corresponding character entity codes.</description> 
+      </attribute>
+      </tag> 
+	<tag> 
+      <name>resourceURL</name> 
+	  <tag-class>com.vignette.portal.portlet.jsrcontainer.internal.standardcontainer.invocation.apiimpl.taglib.ResourceURLTag</tag-class>
+	  <tei-class>com.vignette.portal.portlet.jsrcontainer.internal.standardcontainer.invocation.apiimpl.taglib.BaseURLTag$TEI</tei-class>  
+	  <body-content>JSP</body-content> 
+	  <display-name>Resource URL</display-name> 
+	  <description>Creates a Portlet Resource URL.</description> 
+      <attribute>
+        <name>secure</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>Indicates whether the resulting request should be secure or insecure.</description> 
+      </attribute>
+      <attribute>
+        <name>var</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>Name of the exported scoped variable to contain the Render URL.</description> 
+      </attribute>
+      <attribute>
+        <name>id</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+		<description>sets the Resource Id to the URL.</description> 
+      </attribute>
+      <attribute>
+        <name>escapeXml</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+        <description>Deterrmines whether characters in the resulting output should be converted to their corresponding character entity codes.</description> 
+      </attribute>
+      <attribute>
+        <name>cacheability</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+        <description>Defines the Cacheability of the mark up returned by this url.</description> 
+      </attribute>
+
+	</tag> 
+
+
+    <tag>
+        <name>namespace</name>
+        <tag-class>com.vignette.portal.portlet.jsrcontainer.internal.standardcontainer.invocation.apiimpl.taglib.NamespaceTag</tag-class>
+        <body-content>empty</body-content>
+	    <display-name>Namespace</display-name> 
+	    <description>Produces a unique value for the current portlet.</description> 
+    </tag>
+
+    <tag>
+        <name>param</name>
+        <tag-class>com.vignette.portal.portlet.jsrcontainer.internal.standardcontainer.invocation.apiimpl.taglib.ParamTag</tag-class>
+        <body-content>empty</body-content>
+	    <display-name>URL Parameter</display-name> 
+	    <description>Add a request parameter to the URL defined by the parent ActionURL or RenderURL tag.</description> 
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+			<description>The name of the parameter to add to the parent URL.</description> 
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+			<description>The value of the parameter to add to the parent URL.</description> 
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>property</name>
+        <tag-class>com.vignette.portal.portlet.jsrcontainer.internal.standardcontainer.invocation.apiimpl.taglib.PropertyTag</tag-class>
+        <body-content>empty</body-content>
+	    <display-name>URL Property</display-name> 
+	    <description>Add a request property to the URL defined by the parent ActionURL, RenderURL or ResourceURL tag.</description> 
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+			<description>The name of the property to add to the parent URL.</description> 
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+			<description>The value of the property to add to the parent URL.</description> 
+        </attribute>
+    </tag>
+
+
+</taglib>

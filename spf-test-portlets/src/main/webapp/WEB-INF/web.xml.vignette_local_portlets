@@ -5,7 +5,7 @@
 <!-- ADDED BY VIGNETTE PORTLET PACKAGING TOOL.  DO NOT EDIT --><context-param>
 <description>The context root to which this web application is deployed.  Used by the Portal JSR 168 implementation.</description>
 <param-name>contextPath</param-name>
-<param-value>PortalURLTestPortlet</param-value>
+<param-value>spftestportlets</param-value>
 </context-param>
 <!-- END THIS VIGNETTE PACKAGING TOOL ADDITION. -->
 <!-- ADDED BY VIGNETTE PORTLET PACKAGING TOOL.  DO NOT EDIT -->
@@ -43,7 +43,7 @@
 	<jsp-config>
 		<taglib>
 			<taglib-uri>http://java.sun.com/portlet_2_0</taglib-uri>
-			<taglib-location>/WEB-INF/tld/Portlet20.tld</taglib-location>
+			<taglib-location>/WEB-INF/vgn_tld/portlet20.tld</taglib-location>
 		</taglib>
 	</jsp-config>
 </web-app>
