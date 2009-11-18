@@ -22,6 +22,12 @@ package are:</p>
 	<dt><code>{EMAIL}</code></dt>
 	<dd>Replaced with the email address for the user in the current
 	portlet request.</dd>
+	<dt><code>{EXIST:<i>key</i>}</code></dt>
+	<dd>Includes the surrounded content if the current request[PortalRequest/ PortletRequest]
+	object contains the property with "key" name.</dd>
+	<dt><code>{VALUE:<i>key</i>}</code></dt>
+	<dd>Replaced with the value for the <code><i>key</i></code>
+	property as found in request object [ PortalRequest/PortletRequest ].</dd>
 	<dt><code>{GROUP:<i>groups</i>}</code></dt>
 	<dd>Includes the surrounded content if the user in the current
 	portlet request is a member of one of the named <code><i>groups</i></code>.
