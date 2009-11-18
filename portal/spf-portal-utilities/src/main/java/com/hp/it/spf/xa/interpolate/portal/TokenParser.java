@@ -4,6 +4,7 @@
  */
 package com.hp.it.spf.xa.interpolate.portal;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.Locale;
@@ -247,8 +248,11 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/** 
 	 * 
-	 * Returns the value of the given property.[ request attribute/param ]
+	 * Returns the String type Object's value for the given request property[attribute/param].
 	 * Note : The attributes which do not contain the string values would be ignored.
+	 * 
+	 * In-case the attribute contains the String[] type object the value returned would be the first element.
+	 * e.g. <i>key = {"value1","value2"}</i> , The value returned would be "value1" .
 	 * 
 	 * @param keyName request property name
 	 * 
@@ -264,11 +268,16 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 		try {
 			HttpServletRequest request = portalContext.getHttpServletRequest();
 			Object value = request.getAttribute(keyName);
-			if (value != null && value instanceof String) {
-				return (String) value;
+			if (value != null) {
+				if (value instanceof String) {
+					return (String) value;
+				}
+				else if (value instanceof String[] && ((String[]) value).length > 0) {
+					return ((String[]) value)[0];
+				}
 			}
 			value = request.getParameter(keyName);
-			if (value != null && value instanceof String) {
+			if (value != null) {
 				return (String) value;
 			}
 			value = request.getSession().getAttribute(keyName);
@@ -284,20 +293,19 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 
 	/** 
-	 * Returns the Collection of Request property names.[attributes/params]
-	 * 
+	 * Returns the Enumeration of Request property names.[attributes/params]
+	 * The request property key names are picked up from request attributes, request parameters, session attributes.
 	 *
 	 * @return Enumeration of String objects containing the request property names 
 	 * 	   [ parameter-names/attribute-names]	 * 
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	protected Enumeration<String> getRequestPropertyNames()
 	{
-
 		if (portalContext == null) {
 			return null;
 		}
-
 		try {
 			HttpServletRequest request = portalContext.getHttpServletRequest();
 			return new CompositeEnumeration<String>(request.getAttributeNames(),

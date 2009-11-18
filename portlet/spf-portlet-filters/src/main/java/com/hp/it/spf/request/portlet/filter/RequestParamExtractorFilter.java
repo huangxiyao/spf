@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.Set;
+import java.util.HashSet;
 
 import com.hp.it.spf.xa.misc.portlet.Utils;
 
@@ -64,7 +67,7 @@ public class RequestParamExtractorFilter
 		ResourceFilter
 {
 
-	private FilterConfig filterConfig;
+	protected FilterConfig filterConfig;
 
 	public void init(FilterConfig filterConfig) throws PortletException
 	{
@@ -100,22 +103,33 @@ public class RequestParamExtractorFilter
 		addParametersToAttribute(resourceRequest);
 		filterChain.doFilter(resourceRequest, resourceResponse);
 	}
-
+	
+	/**
+	 * This method adds the extracted parameters to request Attribute.
+	 * The filterConfig parameter "PARAM_OVERWRITE" is initialized in the "web.xml"
+	 * Based on this parameter value method either overwrites/doesn't overwrite the existing attributes.
+	 *  
+	 * @param portletRequest portlet request which will contain the attribute mapped from portal
+	 * request query string parameters
+	 */
 	protected void addParametersToAttribute(PortletRequest portletRequest)
 	{
-
-		if ("true".equalsIgnoreCase(filterConfig.getInitParameter("PARAM_OVERWRITE")) && filterConfig.getInitParameter("PARAM_OVERWRITE") != null) {
-			for (Map.Entry<String, String> param : extractParametersFromPortalURL(portletRequest).entrySet()) {
-				portletRequest.setAttribute(param.getKey(), param.getValue());
+		Map<String, String[]> parametersFromPortalURL = extractParametersFromPortalURL(portletRequest);
+		if (!parametersFromPortalURL.isEmpty()) {
+			if ("true".equalsIgnoreCase(filterConfig.getInitParameter("PARAM_OVERWRITE"))) 
+			{
+				for (Map.Entry<String, String[]> param : parametersFromPortalURL.entrySet()) {
+					portletRequest.setAttribute(param.getKey(), param.getValue());
+				}
 			}
-		}
-		else {
-			Enumeration<String> attributeNames = portletRequest.getAttributeNames();
+			else {
+				Set<String> lowerCaseAttributeNames = new HashSet<String>();
+				for (Enumeration<String> attrNameEnum = portletRequest.getAttributeNames(); attrNameEnum.hasMoreElements(); ) {
+					lowerCaseAttributeNames.add(attrNameEnum.nextElement().toLowerCase());
+				}
 
-			for (Map.Entry<String, String> param : extractParametersFromPortalURL(portletRequest).entrySet()) {
-				while (attributeNames.hasMoreElements()) {
-					String name = attributeNames.nextElement();
-					if (!name.equalsIgnoreCase(param.getKey())) {
+				for (Map.Entry<String, String[]> param : parametersFromPortalURL.entrySet()) {
+					if (!lowerCaseAttributeNames.contains(param.getKey().toLowerCase())) {
 						portletRequest.setAttribute(param.getKey(), param.getValue());
 					}
 				}
@@ -123,30 +137,67 @@ public class RequestParamExtractorFilter
 		}
 	}
 
-	private Map<String, String> extractParametersFromPortalURL(PortletRequest portletRequest)
+	/**
+	 * This method extracts the parameters from PortalURL.
+	 * Creates a Map of all the extracted parameters and returns the Map.
+	 * 
+	 * The query string may contain repeated values for the same name, eg: <i>color=red&color=blue</i>  
+	 * According to the HTTP RFC, in this case all the values need to be returned. The method stores the values
+	 * in the array and returns the values in the String[]
+	 * 
+	 * If PortalURL doesn't contain any query string parameter this method returns an empty map.
+	 * 
+	 * @param portletRequest portlet request
+	 * @return Map containing key/value pairs retrieved from PortalURL query-string
+	 */
+	protected Map<String, String[]> extractParametersFromPortalURL(PortletRequest portletRequest)
 	{
 
 		String portalURL = Utils.getPortalRequestURL(portletRequest);
+		Map<String, String[]> map = new HashMap<String, String[]>();
+
 		int ix = portalURL.indexOf('?');
-		portalURL = portalURL.substring(ix + 1);
-		Map<String, String> paramMap = new HashMap<String, String>();
-		while (portalURL.indexOf('&') != -1 && portalURL.indexOf('=') != -1) {
-			ix = portalURL.indexOf('=');
-			int ixOfAnd = portalURL.indexOf('&');
-			paramMap.put(portalURL.substring(0, ix), portalURL.substring(ix + 1, ixOfAnd));
-			portalURL = portalURL.substring(ixOfAnd + 1);
+//		if (ix >= 0 && ix < portalURL.length() - 1) {
+		if (ix != -1) {
+			portalURL = portalURL.substring(ix + 1);
+
+			if (portalURL.length() != -1 && portalURL != "") {
+				StringTokenizer st = new StringTokenizer(portalURL, "&");
+				while (st.hasMoreTokens()) {
+					String keyValPairs = st.nextToken();
+					int ixOfEqual = keyValPairs.indexOf('=');
+					String key = keyValPairs.substring(0, ixOfEqual);
+					String value = keyValPairs.substring(ixOfEqual + 1);
+					if (map.containsKey(key)) {
+						String[] valueArray = map.get(key);
+						String[] tempArray = appendValue(valueArray, value);
+						map.put(key, tempArray);
+					}
+					else {
+						map.put(key, new String[]{value});
+					}
+				}
+			}
 		}
-		if (portalURL.indexOf('=') != -1) {
-			ix = portalURL.indexOf('=');
-			paramMap.put(portalURL.substring(0, ix), portalURL.substring(ix + 1));
+		return map;
+	}
+
+	private String[] appendValue(String[] valueArray, String value)
+	{
+//						List<String> tempList = new ArrayList<String>(Arrays.asList(valueArray));
+//						tempList.add(value);
+//						map.put(key, tempList.toArray(new String[tempList.size()]));
+		String[] tempArray = new String[valueArray.length + 1];
+		for (int index = 0; index < valueArray.length; index++) {
+			tempArray[index] = valueArray[index];
 		}
-		return paramMap;
+		tempArray[valueArray.length] = value;
+		return tempArray;
 	}
 
 	public void destroy()
 	{
 
 	}
-
 
 }

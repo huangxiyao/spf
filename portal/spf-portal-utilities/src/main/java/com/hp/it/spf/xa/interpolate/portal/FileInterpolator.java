@@ -222,6 +222,86 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * </dd>
  * 
+ * <dt><code>{EXIST:<i>property-name</i>}...{/EXIST}</code></dt>
+ * <dd> 
+ * <p>
+ * Parses the string for any <code>{EXIST:<i>property-name</i>}</code> content;
+ * such content is deleted if the key is not present in the request[attribute/param] ,
+ * (otherwise only the special markup is removed). The <i>key</i> 
+ * includes one request property name. <code>{EXIST:<i>key</i>}</code> 
+ * </p>
+ * 
+ * <p>
+ * For example, consider the following content string:
+ * </p>
+ * <p>
+ * <pre>
+ *  This content is for everyone.
+ *  {EXIST:key}
+ *    This content is displayed indicating key existence in the request.
+ *  {/EXIST}
+ * </pre>
+ * </p>
+ * 
+ * <p>
+ * If the current request includes <code>key=<i>keyvalue</i></code>, 
+ * the returned content string is:
+ * </p>
+ * 
+ * <pre>
+ *  This content is for everyone.
+ *  
+ *    This content is displayed indicating key existence in the request.
+ * </pre>
+ * 
+ * <p>
+ * If the current request doesn't include <code>key=<i>keyvalue</i></code>, 
+ * the returned content string is:
+ * </p>
+ * 
+ * <pre>
+ *  This content is for everyone.
+ *  
+ * </pre>
+ * </dd> 
+ * 
+ * <dt><code>{VALUE:<i>key</i>}</code></dt>
+ * <dd>
+ * <p>
+ * Parses the given string, converting the
+ * <code>{VALUE:<i>key</i>}</code> token into the value for that
+ * key in the request[attribute/param]. 
+ * </p>
+ * <p>
+ * Actual implementation depends on portal or portlet context. Portal side the precedence order to fetch the value would be: 
+ * 	<br>request attribute <br>request parameter <br>session attribute 
+ * </p>
+ * <p>
+ * For example, in the portal context:
+ * <code>The value token implementation : {VALUE:key}</code> is
+ * returned as: <code>The value token implementation : keyValue</code> assuming
+ * the <code>key</code> property in the portal request is set to
+ * "keyValue" value. 
+ * </p>
+ * <p>
+ * An example for the portlet context remains same: The only difference is the precedence
+ * order in which the value is picked up. Here , the precedence order to fetch the value would be:
+ * 	<br>request attribute <br>request parameter <br>public render parameter 
+ * 	<br>portlet-scoped session attribute <br>application-scoped session attribute
+ * </p>
+ * <p>
+ * For example, in the portlet context:
+ * <code>The value token implementation : {VALUE:key}</code> is
+ * returned as: <code>The value token implementation : keyValue</code> assuming
+ * the <code>key</code> property in the portlet request is set to
+ * "keyValue" value.
+ * </p>
+ * <p>
+ * If the given key property is not found (or the value is null), then the token is replaced
+ * by blank. If you provide null content, null is returned.
+ * </p>
+ * </dd>
+ * 
  * <dt><code>{HPP-LANGUAGE-CODE}</code></dt>
  * <dt><code>{HPP-LANGUAGE-CODE:<i>case</i>}</code></dt>
  * <dd>

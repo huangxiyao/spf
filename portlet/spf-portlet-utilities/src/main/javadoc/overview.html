@@ -322,10 +322,12 @@ table.props td {
 			<code>{LANGUAGE-CODE:<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>,
 			<code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG}</code>,
 			<code>{LANGUAGE-TAG:<i>case</i>}</code>, <code>{HPP-LANGUAGE-CODE}</code>,
-			<code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>)</a></li>
+			<code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>,
+			<code>{VALUE:<i>requestKey</i>}</code>)</a></li>
 			<li>4.5.3. <a href="#file.author.token.auth">Permissioning
 			content for authorized users (<code>{LOGGED-IN}</code>, <code>{LOGGED-OUT}</code>,
-			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</a></li>
+			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>, 
+			<code>{EXIST:<i>property-name</i>}</code>)</a></li>
 			<li>4.5.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
 			<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{NAV-ITEM:<i>items</i>}</code>,
@@ -3579,7 +3581,7 @@ The token language supports the following basic capabilities:</p>
 	<li><a href="#file.author.token.user">inserting user
 	information</a>, such as name, email, language, or any other user property</li>
 	<li><a href="#file.author.token.auth">permissioning content</a> so
-	it is included only for authorized users (based on groups, roles, or
+	it is included only for authorized users (based on groups, roles, request-property or
 	logged-in status)</li>
 	<li><a href="#file.author.token.consolidate">consolidating
 	content</a> for ease of management (eg offloading common content into a
@@ -4445,7 +4447,7 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 <code>{LANGUAGE-CODE}</code>, <code>{LANGUAGE-CODE<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>,
 <code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>,
 <code>{HPP-LANGUAGE-CODE}</code>, <code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>,
-<code>{USER-PROPERTY:<i>key</i>}</code>)</h4>
+<code>{USER-PROPERTY:<i>key</i>}</code>, <code>{VALUE:<i>requestKey</i>}</code>)</h4>
 </a>
 
 <p>The following tokens can be used to interpolate information about
@@ -4622,12 +4624,39 @@ The phone number we have on record for you is: {USER-PROPERTY:PhoneNumber}
 	container token - <a href="#file.author.token.auth">see below</a>.)</p>
 	<p></p>
 	</dd>
+	
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#value"><code>{VALUE:<i>requestKey</i>}</code></a></dt>
+	<dd>
+	<p>Use this token to insert the property value either from <i>Portal Request</i> or <i>Portlet Request</i>.
+	for the user into the interpolated content. The <code><i>property-key</i></code>
+	is the name of the property.</p>
+	<p>These request property value would be picked up from request properties in the following precedence order.
+	<b>Portal Request</b>
+	request attribute, request parameter, session attribute 
+	<b>Portlet Request</b>
+	request attribute, request parameter, public render parameter, portlet-scoped session attribute, application-scoped session attribute
+	</p>
+
+	<blockquote>
+	<p><b>Note:</b> In the <code><i>requestKey</i></code> for the <code>{VALUE:<i>requestKey</i>}</code>
+	token, you must use the literal property name exactly.</p>
+	</blockquote>
+
+	<p>For an example, suppose we intend to display the value from request named as <code>requestKey</code>, So we can
+	reference the requestKey's value in our interpolated text as follows:</p>
+	<blockquote><pre>
+The request property value for 'requestKey' is : {VALUE:requestKey}
+	</pre></blockquote>
+	<p></p>
+	</dd>
 
 </dl>
 
 <a name="file.author.token.auth">
 <h4>4.5.3. Permissioning content for authorized users (<code>{LOGGED-IN}</code>,
-<code>{LOGGED-OUT}</code>, <code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>)</h4>
+<code>{LOGGED-OUT}</code>, <code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>, 
+<code>{EXIST:<i>property-name</i>}</code>)</h4>
 </a>
 
 <p>The following tokens may be used to permission content against
@@ -4764,6 +4793,36 @@ This text is for everybody.&lt;BR&gt;
 	be different. Please see the JSR portlet specification for more
 	information.)</p>
 	</dd>
+	
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#exist"><code>{EXIST:<i>property-name</i>}...{/EXIST}</code></a></dt>
+	<dd>
+	<p>Use this container token to permission the content inside the
+	container based on the user's current request property. Use <code><i>property-name</i></code>
+	to ensure that the user is permissioned to view the content enclosed. The current user request [ Portal / Portlet ] 
+	must have the request property present for <code><i>property-name</i></code> in order for the wrapped content to be
+	included in the output. property-name are case-insensitive. For example:</p>
+
+	<blockquote><pre>
+This text is for everybody.&lt;BR&gt;
+{EXIST:requestKey}This text is visible only in-case 'requestKey' is present either as request attribute or request parameter.{/EXIST}
+	</pre></blockquote>
+	
+	<p>The existence of request property names would be decided based on the key-names retrieved from the following request properties.
+	<b>Portal Request</b>
+	request attribute, request parameter, session attribute 
+	<b>Portlet Request</b>
+	request attribute, request parameter, public render parameter, portlet-scoped session attribute, application-scoped session attribute
+	</p>
+	<p>If the "property-name" is present in the request, the interpolated content would be included in the output.</p>
+	
+	<blockquote>
+	<p><b>Note:</b> In the <code><i>requestKey</i></code> for the <code>{EXIST:<i>requestKey</i>}</code>
+	token, you must use the literal request property name.</p>
+	</blockquote>
+
+	</dd>
+	
 
 </dl>
 

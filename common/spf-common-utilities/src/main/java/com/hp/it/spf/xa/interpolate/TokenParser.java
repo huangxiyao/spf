@@ -1270,7 +1270,10 @@ public abstract class TokenParser {
 	 * <p>
 	 * For example, in the portal context:
 	 * <code>The value token implementation : {VALUE:key}</code> is
-	 * returned as: <code>The value token implementation : keyValue</code> assuming
+	 * returned as: 
+	 * </p>
+	 * <pre><code>The value token implementation : keyValue</code></pre> 
+	 * <p>assuming
 	 * the <code>key</code> property in the portal request is set to
 	 * "keyValue" value. 
 	 * </p>
@@ -1283,8 +1286,12 @@ public abstract class TokenParser {
 	 * <p>
 	 * For example, in the portlet context:
 	 * <code>The value token implementation : {VALUE:key}</code> is
-	 * returned as: <code>The value token implementation : keyValue</code> assuming
-	 * the <code>key</code> property in the portlet request is set to
+	 * returned as: 
+	 * </p>
+	 * <pre><code>The value token implementation : keyValue</code>
+	 * </pre> 
+	 * <p>
+	 * assuming the <code>key</code> property in the portlet request is set to
 	 * "keyValue" value.
 	 * </p>
 	 * <p>
@@ -1974,18 +1981,14 @@ public abstract class TokenParser {
 	 * @param content the string content
 	 * @return The interpolated string
 	 */
-
 	public String parseExistContainer(String content)
 	{
 
 		/**
-		 *
-		 * @author mukesh
-		 *
+		 * This container matcher class deals with <code>{EXIST:<i>key</i>}</code> token implementation.
 		 */
 		class ExistContainerMatcher extends ContainerMatcher
 		{
-
 			protected ExistContainerMatcher(Enumeration<String> enumeration)
 			{
 				super(enumeration);
@@ -1993,8 +1996,7 @@ public abstract class TokenParser {
 
 			protected boolean match(String containerKey)
 			{
-				Boolean matchExistence = false;
-
+				boolean matchExistence = false;
 				for (Enumeration e = (Enumeration) subjectOfComparison; e.hasMoreElements();) {
 					String elementName = (String) e.nextElement();
 					if (elementName.equalsIgnoreCase(containerKey)) {
@@ -2004,9 +2006,7 @@ public abstract class TokenParser {
 				return matchExistence;
 			}
 		}
-
 		return parseContainerToken(content, TOKEN_EXIST_CONTAINER, new ExistContainerMatcher(getRequestPropertyNames()));
-
 	}
 
 

@@ -7,6 +7,8 @@ package com.hp.it.spf.xa.interpolate.portlet;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
+
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.Locale;
@@ -251,7 +253,7 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * @return The input stream
 	 */
 	protected InputStream getIncludeFileAsStream(String subsFilePath) {
-
+	    	
 		if (request == null) {
 			return null;
 		}
@@ -287,8 +289,11 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	
 	/** 
 	 * 
-	 * Returns the only String type Object's value of the given request property[attribute/param].
+	 * Returns the String type Object's value for the given request property[attribute/param].
 	 * Note : The attributes which do not contain the string values would be ignored.
+	 * 
+	 * In-case the attribute contains the String[] type object, the value returned would be the first element.
+	 * e.g. <i>key = {"value1","value2"}</i> , The value returned would be "value1" .
 	 * 
 	 * @param keyName
 	 * 		Request Property Name 
@@ -301,11 +306,16 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 			return null;
 		}
 		Object value = request.getAttribute(keyName);
-		if (value != null && value instanceof String) {
-			return (String) value;
+		if (value != null) {
+			if (value instanceof String) {
+				return (String) value;
+			}
+			else if (value instanceof String[] && ((String[]) value).length > 0) {
+				return ((String[]) value)[0];
+			}
 		}
 		value = request.getParameter(keyName);
-		if (value != null && value instanceof String) {
+		if (value != null) {
 			return (String) value;
 		}
 		value = request.getPortletSession().getAttribute(keyName, PortletSession.PORTLET_SCOPE);
@@ -322,22 +332,23 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/** 
 	 * 
-	 * Returns the Collection of Request property names.[attributes/params]
+	 * Returns the Enumeration of Request property names.[attributes & params].
+	 * The property key names are retrieved from request attributes, request parameters, public parameters, 
+	 * portlet-scope session attributes, application-scope session attributes.
 	 * 
 	 * @return Enumeration of String objects containing the request property names
-	 * 	   [attribute-names/parameter-names]	 * 
-	 * 
+	 * 	   [attribute-names/parameter-names]	 
 	 */
 	@Override
 	protected Enumeration<String> getRequestPropertyNames()
 	{
-		return new CompositeEnumeration<String>(request.getAttributeNames(),
-				new CompositeEnumeration<String>(request.getParameterNames(),
-						//   new CompositeEnumeration<String>(Collections.enumeration(request.getPublicParameterMap().keySet()),
-						new CompositeEnumeration<String>(request.getPortletSession().getAttributeNames(),
-								request.getPortletSession().getAttributeNames(PortletSession.APPLICATION_SCOPE))
+	    return new CompositeEnumeration<String>(request.getAttributeNames(),
+		    new CompositeEnumeration<String>(request.getParameterNames(),
+			    new CompositeEnumeration<String>(Collections.enumeration(request.getPublicParameterMap().keySet()),
+				    new CompositeEnumeration<String>(request.getPortletSession().getAttributeNames(),
+					    request.getPortletSession().getAttributeNames(PortletSession.APPLICATION_SCOPE))
 
-				));
+			    )));
 	}
 
 	/**
