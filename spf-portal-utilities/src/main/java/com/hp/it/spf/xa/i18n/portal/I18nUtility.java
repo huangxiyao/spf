@@ -1778,7 +1778,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			// substitute parameters
 			value = MessageFormat.format(value, pArgs);
 			GlobalHelpUtility g = new GlobalHelpUtility();
-			value = g.parseGlobalHelpTokens(value, gArgs, pEscape);
+			value = g.parseGlobalHelpTokens(value, gArgs, false);
 			ContextualHelpUtility c = new ContextualHelpUtility();
 			value = c.parseContextualHelpTokens(value, cArgs, pEscape);
 			return value;
