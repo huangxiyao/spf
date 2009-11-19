@@ -14,6 +14,7 @@ package com.hp.it.spf.sso.portal.component.secondarypagetype;
 import java.io.InputStream;
 import java.util.Properties;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -27,6 +28,28 @@ import com.vignette.portal.website.enduser.PortalURI;
 import com.vignette.portal.website.enduser.components.ActionException;
 import com.vignette.portal.website.enduser.components.BaseAction;
 
+/**
+ * Pre-display action for secondary page used by external applications to as return page
+ * to the portal. Its goal is to redirect the user to the appropriate page based on data
+ * available to it (session attribute, cookie).
+ *
+ * As part of HPP SSO Federation tasks, a cookie is created for each partner
+ * accessing the partner portal site in the
+ * <code> com.hp.it.spf.misc.portal.filter.RememberReturnURLFilter </code>
+ *
+ * This cookie contains the "last visited site" DNS name. ReturnDisplayAction
+ * uses the cookie as one of the rule to get the redirect URL. The following
+ * rules are applied to retrieve the redirect URL.
+ *
+ * <pre>
+ * 		if(most-visited-site-URL present in SESSION)
+ * 			redirect the user to the most-visited-site-URL
+ * 		else if(most-visited-site-URL present in COOKIE)
+ * 			redirect the user to the most-visited-site-URL
+ * 		else if(most-visited-site-URL present in REQUEST)
+ * 			redirect the user to the most-visited-site-URL
+ * </pre> 
+ */
 public class ReturnDisplayAction extends BaseAction {
 
 	private static final String PROPERTY_FILE = "spf-return-config.properties";
@@ -37,10 +60,10 @@ public class ReturnDisplayAction extends BaseAction {
 			ReturnDisplayAction.class);
 
 	/**
-	 * Get the return URL from session and redirect the user to it. If it is not
-	 * found in session, then redirect the user to the site home page URL.
+	 * Method checks for the return URL in this order Session, Cookie, Request.
+	 * Once the return URL is obtained, redirect the user to that URL.
 	 * 
-	 * @param portalContext
+	 * @param context
 	 *            The encapsulated PortalContext object of current secondary
 	 *            page.
 	 * @return PortalURI The address where user is redirected to after
@@ -56,15 +79,64 @@ public class ReturnDisplayAction extends BaseAction {
 					.getRequest();
 			HttpSession session = request.getSession();
 
-			// Get the return URL form session
-			String url = (String) session
-					.getAttribute(Consts.SESSION_ATTR_RETURN_URL);
+			/*
+			 * Get the return URL from SESSION if exists
+			 */
+			String url = (String) session.getAttribute(Consts.SESSION_ATTR_RETURN_URL);
+
 			if (url == null) {
-				LOG
-						.info("ReturnDisplayAction: no return URL found - redirecting to site home page.");
-				// if the return URL is null, set it to the site home page URL
-				url = Utils.getEffectiveSiteURL(request);
+
+				/*
+				 * Get the return URL from the COOKIE if exists
+				 */
+
+				// Get HP_SPF_SITE cookie
+				Cookie siteCookie = Utils.getCookie(Consts.COOKIE_NAME_SITE, request.getCookies());
+
+				if (siteCookie != null) {
+					// Inside because Cookie exists
+
+					// Get the cookie value
+					String siteCookieValue = siteCookie.getValue();
+
+					if (siteCookieValue != null && siteCookieValue.length() > 0) {
+
+						// if the cookie value is not the default site (spf)
+						if (!siteCookieValue.trim().equals(
+								com.hp.it.spf.xa.misc.Consts.SPF_CORE_SITE)) {
+							// Set the site URL
+							url = context.getSiteURI(siteCookieValue.trim());
+						} else {
+							// Set the default site (spf)
+							url = context.getSiteURI(com.hp.it.spf.xa.misc.Consts.SPF_CORE_SITE);
+						}
+
+					}
+
+				} else {
+
+					// Inside because cookie does not exists
+
+					/*
+					 * Get the return URL from the REQUEST finally
+					 */
+
+					url = Utils.getEffectiveSiteURL(request);
+
+					//In case still the url is null, do below	
+					if (url == null) {
+
+						// Set the default site (spf)
+						url = context.getSiteURI(com.hp.it.spf.xa.misc.Consts.SPF_CORE_SITE);
+
+					}
+
+				}
+
 			}
+
+			// In debug mode to write to log file only if needed
+			LOG.debug("SPFDEBUG (ReturnDisplayAction): Return URL before redirecting := " + url);
 
 			// Must sleep for a while to allow HPP time to recalculate any
 			// headers.
@@ -74,16 +146,18 @@ public class ReturnDisplayAction extends BaseAction {
 			if (millis > 0) {
 				Thread.sleep(millis);
 			}
+
 			// redirect user to the return URL
 			context.getPortalResponse().getResponse().sendRedirect(url);
+
 		} catch (Exception e) {
 			LOG.error("ReturnDisplayAction error: " + e, e);
 			return ExceptionUtil.redirectSystemErrorPage(context, null);
 		}
-		return null;
-	}
 
-	// //////////////////
+		return null;
+
+	}
 
 	private int getWaitMillis(PortalContext context) {
 		String filename = PROPERTY_FILE;

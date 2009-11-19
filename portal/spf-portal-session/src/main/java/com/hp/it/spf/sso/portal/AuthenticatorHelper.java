@@ -834,7 +834,7 @@ public class AuthenticatorHelper {
      * @param maxAge
      * @return
      */
-    static Cookie newCookie(String name, String value, String domain,
+    public static Cookie newCookie(String name, String value, String domain,
             String path, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         if (domain != null && !"".equals(domain)) {
