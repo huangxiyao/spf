@@ -36,6 +36,7 @@ import com.epicentric.page.Page;
  * @author <link href="ye.liu@hp.com">Liu Ye</link>
  * @version TBD
  */
+
 public class Utils extends com.hp.it.spf.xa.misc.Utils {
 
 	/**
@@ -65,9 +66,9 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * Get the value of the given request header from the given request. This
 	 * method returns no decoded, trimmed string; the value is returned raw
 	 * (compare with the companion
-	 * <code>getRequestHeader(HttpServletRequest,String,boolean)</code>
-	 * method). If the header does not exist, or the given parameters are null,
-	 * then null is returned.
+	 * <code>getRequestHeader(HttpServletRequest,String,boolean)</code> method).
+	 * If the header does not exist, or the given parameters are null, then null
+	 * is returned.
 	 * 
 	 * @param request
 	 *            Current request
@@ -210,9 +211,9 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * <p>
 	 * Returns true if the current portal site indicated by the given request is
 	 * federated, otherwise false. This method uses the companion
-	 * <code>isFederatedSite(String)</code> method (see). The site name is
-	 * taken from the URL in the given request, as per the Vignette portal
-	 * standard for keeping "site DNS name" in the URL path.
+	 * <code>isFederatedSite(String)</code> method (see). The site name is taken
+	 * from the URL in the given request, as per the Vignette portal standard
+	 * for keeping "site DNS name" in the URL path.
 	 * </p>
 	 * 
 	 * @param request
@@ -244,17 +245,16 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * The "site DNS name" in a Vignette URL is the second element in the
 	 * portal-root-relative path (ie the first element in the additional-path or
 	 * path info). For example, in the URL
-	 * <code>http://host.hp.com/portal/site/abc/template.SOMETHING</code>,
-	 * the portal-root-relative path is
-	 * <code>/site/abc/template.SOMETHING</code>, and so the site name is
-	 * <code>site</code>.
+	 * <code>http://host.hp.com/portal/site/abc/template.SOMETHING</code>, the
+	 * portal-root-relative path is <code>/site/abc/template.SOMETHING</code>,
+	 * and so the site name is <code>site</code>.
 	 * <p>
 	 * <p>
 	 * This method returns null if the site cannot be determined from the given
 	 * request. <b>Note:</b> This method does not use Vignette's
-	 * <code>SessionInfo</code> in case it is null (that is the case before
-	 * the Vignette session initialization module runs, and sometimes this code
-	 * may need to run before then). It just parses the URL.
+	 * <code>SessionInfo</code> in case it is null (that is the case before the
+	 * Vignette session initialization module runs, and sometimes this code may
+	 * need to run before then). It just parses the URL.
 	 * </p>
 	 * 
 	 * @param request
@@ -292,7 +292,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * current secondary page or its secondary page type. This method returns
 	 * null if the page ID cannot be determined with that logic.
 	 * 
-	 * @param context The current portal context.
+	 * @param context
+	 *            The current portal context.
 	 * @return The page ID as defined above.
 	 */
 	public static String getPageID(PortalContext context) {
@@ -329,9 +330,9 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * the Vignette portal and SPF standards.
 	 * </p>
 	 * <ul>
-	 * <li> Generally, this method returns the Vignette "site DNS name", using
+	 * <li>Generally, this method returns the Vignette "site DNS name", using
 	 * {@link #getSiteDNS(HttpServletRequest)}.</li>
-	 * <li> However, this method also takes into account the SPF standard for
+	 * <li>However, this method also takes into account the SPF standard for
 	 * overriding the "site DNS name". In SPF, any URL for the "core" SPF site
 	 * {@link Consts#CORE_SPF_SITE} may contain the effective Vignette "site DNS
 	 * name" in a query parameter named {@link Consts#PARAM_EFFECTIVE_SITE}. If
@@ -342,9 +343,9 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * <p>
 	 * This method returns null if the site cannot be determined from the given
 	 * request. <b>Note:</b> This method does not use Vignette's
-	 * <code>SessionInfo</code> in case it is null (that is the case before
-	 * the Vignette session initialization module runs, and sometimes this code
-	 * may need to run before then). It just parses the URL.
+	 * <code>SessionInfo</code> in case it is null (that is the case before the
+	 * Vignette session initialization module runs, and sometimes this code may
+	 * need to run before then). It just parses the URL.
 	 * </p>
 	 * 
 	 * @param request
@@ -375,21 +376,21 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * <p>
 	 * Get the effective Vignette <code>Site</code> object for the request,
 	 * using {@link #getEffectiveSiteDNS(HttpServletRequest)} to determine the
-	 * proper site. Normally this is just the <code>Site</code> corresponding
-	 * to the site name (ie "site DNS name", as Vignette calls it) in the
-	 * current request. But if the current site is the core SPF site whose name
-	 * is {@link Consts#CORE_SPF_SITE}, and an effective-site parameter (named
+	 * proper site. Normally this is just the <code>Site</code> corresponding to
+	 * the site name (ie "site DNS name", as Vignette calls it) in the current
+	 * request. But if the current site is the core SPF site whose name is
+	 * {@link Consts#CORE_SPF_SITE}, and an effective-site parameter (named
 	 * {@link Consts#PARAM_EFFECTIVE_SITE} exists on the request, that is the
 	 * effective site and its <code>Site</code> is returned.
 	 * </p>
 	 * <p>
 	 * This method returns null if the site cannot be determined from the given
 	 * request. <b>Note:</b> This method does not use Vignette's
-	 * <code>SessionInfo</code> in case it is null (that is the case before
-	 * the Vignette session initialization module runs, and sometimes this code
-	 * may need to run before then). It just parses the URL for the site, then
-	 * uses Vignette's static <code>SiteManager</code> singleton to
-	 * instantiate the <code>Site</code>.
+	 * <code>SessionInfo</code> in case it is null (that is the case before the
+	 * Vignette session initialization module runs, and sometimes this code may
+	 * need to run before then). It just parses the URL for the site, then uses
+	 * Vignette's static <code>SiteManager</code> singleton to instantiate the
+	 * <code>Site</code>.
 	 * </p>
 	 * 
 	 * @param HttpServletRequest
@@ -701,21 +702,21 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * method does, and modifies its scheme, hostname, and/or port as follows:
 	 * </p>
 	 * <ul>
-	 * <li>if the given security scheme is <code>true</code>, then the
-	 * scheme in the returned URL is forced to <code>https://</code>; if it
-	 * is <code>false</code>, it is forced to <code>http://</code>;
-	 * otherwise the current request scheme is retained</li>
+	 * <li>if the given security scheme is <code>true</code>, then the scheme in
+	 * the returned URL is forced to <code>https://</code>; if it is
+	 * <code>false</code>, it is forced to <code>http://</code>; otherwise the
+	 * current request scheme is retained</li>
 	 * <li>if the given hostname is not blank or null, then the hostname in the
 	 * returned URL is set to it</li>
-	 * <li>if the given port is a positive number, then the port in the
-	 * returned URL is set to it</li>
+	 * <li>if the given port is a positive number, then the port in the returned
+	 * URL is set to it</li>
 	 * </ul>
 	 * 
 	 * @param request
 	 *            The current request.
 	 * @param secure
-	 *            If true, force use of <code>https</code>; if false, force
-	 *            use of <code>http</code>. If null, use the current scheme.
+	 *            If true, force use of <code>https</code>; if false, force use
+	 *            of <code>http</code>. If null, use the current scheme.
 	 * @param port
 	 *            The port to use (an integer; if non-positive, use the current
 	 *            port).
@@ -787,8 +788,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 *            a friendly URI or template friendly ID). (The part before the
 	 *            first <code>/</code> is considered the site name.)
 	 * @param secure
-	 *            If true, force use of <code>https</code>; if false, force
-	 *            use of <code>http</code>. If null, use the current scheme.
+	 *            If true, force use of <code>https</code>; if false, force use
+	 *            of <code>http</code>. If null, use the current scheme.
 	 * @param port
 	 *            The port to use (an integer; if non-positive, use the current
 	 *            port).
@@ -843,8 +844,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * <p>
 	 * The scheme to use can be indicated by the optional boolean parameter. If
 	 * it is true, then <code>https://</code> is used; if it is false, then
-	 * <code>http://</code> is used; and if it is null, then the same scheme
-	 * is used as was used by the browser in the current request.
+	 * <code>http://</code> is used; and if it is null, then the same scheme is
+	 * used as was used by the browser in the current request.
 	 * </p>
 	 * </li>
 	 * <li>
@@ -868,10 +869,10 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * site-relative URI string, as follows:
 	 * </p>
 	 * <ul>
-	 * <li> if the given URI starts with <code>/</code> then the returned URL
-	 * is for the current portal site (ie the one in the request), and the given
+	 * <li>if the given URI starts with <code>/</code> then the returned URL is
+	 * for the current portal site (ie the one in the request), and the given
 	 * URI is used as additional path for it</li>
-	 * <li> otherwise the first part of the given URI (up to the first
+	 * <li>otherwise the first part of the given URI (up to the first
 	 * <code>/</code>) is used as the site name (ie the Vignette "site DNS
 	 * name") in the returned URL, and the remainder of the given URI is used as
 	 * additional path for it</li>
@@ -887,38 +888,38 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * <code>abc</code> site at <code>http://host.hp.com</code>. Then:
 	 * </p>
 	 * <ul>
-	 * <li> when the given URI is null, the given hostname is null, the given
+	 * <li>when the given URI is null, the given hostname is null, the given
 	 * scheme is null, and the given port is 0, the returned URL is for the
 	 * current portal site home page, using the current scheme and port:
 	 * <code>http://host.hp.com/portal/site/abc/</code></li>
-	 * <li> when the given URI is <code>/template.ABC</code> instead, the
+	 * <li>when the given URI is <code>/template.ABC</code> instead, the
 	 * returned URL is for that page at the current portal site (again using the
 	 * current scheme and port):
 	 * <code>http://host.hp.com/portal/site/abc/template.ABC</code></li>
-	 * <li> when the given URI is <code>xyz</code> instead, the returned URL
-	 * is for the <code>xyz</code> portal site home page (again with current
-	 * scheme and port): <code>http://host.hp.com/portal/site/xyz</code></li>
-	 * <li> when the given URI is <code>xyz/template.ABC</code> instead, the
-	 * returned URL is for that page at the <code>xyz</code> portal site
-	 * (again with current scheme and port):
+	 * <li>when the given URI is <code>xyz</code> instead, the returned URL is
+	 * for the <code>xyz</code> portal site home page (again with current scheme
+	 * and port): <code>http://host.hp.com/portal/site/xyz</code></li>
+	 * <li>when the given URI is <code>xyz/template.ABC</code> instead, the
+	 * returned URL is for that page at the <code>xyz</code> portal site (again
+	 * with current scheme and port):
 	 * <code>http://host.hp.com/portal/site/xyz/template.ABC</code></li>
-	 * <li> when the given URI is null, the given hostname is null, the given
+	 * <li>when the given URI is null, the given hostname is null, the given
 	 * security scheme is true, and the given port is 8002, the returned URL is
-	 * for the current portal site home, using <code>https</code> at port
-	 * 8002: <code>https://host.hp.com:8002/portal/site/abc/</code></li>
-	 * <li>when the given URI is <code>/template.ABC</code>, the given
-	 * security scheme is true, the given hostname is
-	 * <code>another.hp.com</code>, and the given port is 0, the returned URL
-	 * is for that page at the current portal site, on the other host, using
-	 * <code>https</code> at the default port (443):
-	 * <code>https://another.hp.com/portal/site/abc/</code></li>
+	 * for the current portal site home, using <code>https</code> at port 8002:
+	 * <code>https://host.hp.com:8002/portal/site/abc/</code></li>
+	 * <li>when the given URI is <code>/template.ABC</code>, the given security
+	 * scheme is true, the given hostname is <code>another.hp.com</code>, and
+	 * the given port is 0, the returned URL is for that page at the current
+	 * portal site, on the other host, using <code>https</code> at the default
+	 * port (443): <code>https://another.hp.com/portal/site/abc/</code></li>
 	 * </ul>
 	 * <p>
 	 * This method returns null given a null request.
 	 * </p>
 	 * <p>
-	 * <b>Note:</b> This method does not check if the given URI actually exists /
-	 * is valid in the portal; it just makes a URL of the proper format for it.
+	 * <b>Note:</b> This method does not check if the given URI actually exists
+	 * / is valid in the portal; it just makes a URL of the proper format for
+	 * it.
 	 * </p>
 	 * 
 	 * @param request
@@ -927,8 +928,8 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 *            The hostname to use (if null, use the hostname already in the
 	 *            URL).
 	 * @param secure
-	 *            If true, force use of <code>https</code>; if false, force
-	 *            use of <code>http</code>. If null, use the current scheme.
+	 *            If true, force use of <code>https</code>; if false, force use
+	 *            of <code>http</code>. If null, use the current scheme.
 	 * @param port
 	 *            The port to use (an integer; if non-positive, use the current
 	 *            port).
@@ -1008,4 +1009,34 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	public static String getSiteURL(HttpServletRequest request, String uri) {
 		return getPortalSiteURL(request, uri);
 	}
+
+	/**
+	 * Get the cookie matching the cookieName from the array of cookies present
+	 * in the request.
+	 *
+	 * @param cookieName
+	 *            The name of the cookie
+	 * @param cookies
+	 *            Array of cookies stored in the request
+	 * 
+	 * @return cookie matching the cookieName
+	 */
+	public static Cookie getCookie(String cookieName, Cookie[] cookies) {
+
+		if (cookies != null) {
+
+			// Trim any trailing spaces
+			cookieName = cookieName.trim();
+
+			for (int cnt = 0; cnt < cookies.length; cnt++) {
+				if (cookies[cnt].getName().trim().equals(cookieName)) {
+					return cookies[cnt];
+				}
+			}
+		}
+
+		return null;
+
+	}
+
 }

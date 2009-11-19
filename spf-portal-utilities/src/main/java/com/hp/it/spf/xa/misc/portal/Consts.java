@@ -21,6 +21,11 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String COOKIE_NAME_SMSESSION = "SMSESSION";
 
 	/**
+	 * Added as part of HPP SSO FEDERATION
+	 */
+	public static final String COOKIE_NAME_SITE = "HP_SPF_SITE";
+
+	/**
 	 * The name of the SPF-wide locale tracking cookie.
 	 */
 	public static final String COOKIE_NAME_SPF_LOCALE = "HP_SPF_LOCALE";
@@ -102,16 +107,16 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String PROPERTY_TIMEZONE_ID = "timezone";
 
 	/**
-	 * The Vignette User object property for first (given) name. <b>Note:</b>
-	 * In SPF we use the custom user profile map for user properties, not the
+	 * The Vignette User object property for first (given) name. <b>Note:</b> In
+	 * SPF we use the custom user profile map for user properties, not the
 	 * Vignette User object. To find user properties, you generally should use
 	 * the user profile map instead of the User object.
 	 */
 	public static final String PROPERTY_FIRSTNAME_ID = "firstname";
 
 	/**
-	 * The Vignette User object property for last (family) name. <b>Note:</b>
-	 * In SPF we use the custom user profile map for user properties, not the
+	 * The Vignette User object property for last (family) name. <b>Note:</b> In
+	 * SPF we use the custom user profile map for user properties, not the
 	 * Vignette User object. To find user properties, you generally should use
 	 * the user profile map instead of the User object.
 	 */
@@ -142,10 +147,10 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String PROPERTY_EMAIL_ID = "email";
 
 	/**
-	 * The Vignette User object property for last used site DNS name. <b>Note:</b>
-	 * In SPF we use the custom user profile map for user properties, not the
-	 * Vignette User object. To find user properties, you generally should use
-	 * the user profile map instead of the User object.
+	 * The Vignette User object property for last used site DNS name.
+	 * <b>Note:</b> In SPF we use the custom user profile map for user
+	 * properties, not the Vignette User object. To find user properties, you
+	 * generally should use the user profile map instead of the User object.
 	 */
 	public static final String PROPERTY_PRIMARY_SITE_ID = "primary_site_id";
 
