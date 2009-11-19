@@ -4,8 +4,11 @@
 package com.hp.it.spf.request.portlet.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Set;
@@ -39,7 +42,7 @@ import javax.portlet.filter.ResourceFilter;
  * <p>
  * An additional capability of overriding the existing request attributes is provided ,
  * in case a naming conflict exists.
- * We would have to place <code>PARAM_OVERWRITE</code> in initialization configuration of
+ * We would have to place <code>paramOverwrite</code> in initialization configuration of
  * RequestParamExtractorFilter. Default behavior is "false" , which would not overwrite the
  * existing attribute in-case an attribute already exists with the same name.
  * </P>
@@ -52,7 +55,7 @@ import javax.portlet.filter.ResourceFilter;
  * </p>
  * <p>
  * Scenario 2 : let's say there is already an attribute present with name "param1" in request attribute.
- * <br><code>PARAM_OVERWRITE</code> is set to "true" in porlet.xml.
+ * <br><code>paramOverwrite</code> is set to "true" in porlet.xml.
  * <br><code>param1=<i>value1</i></code> and <code>param2=<i>value2</i></code> would be added to request attribute.
  * </p>
  *
@@ -106,7 +109,7 @@ public class RequestParamExtractorFilter
 	
 	/**
 	 * This method adds the extracted parameters to request Attribute.
-	 * The filterConfig parameter "PARAM_OVERWRITE" is initialized in the "web.xml"
+	 * The filterConfig parameter "paramOverwrite" is initialized in the "web.xml"
 	 * Based on this parameter value method either overwrites/doesn't overwrite the existing attributes.
 	 *  
 	 * @param portletRequest portlet request which will contain the attribute mapped from portal
@@ -116,7 +119,7 @@ public class RequestParamExtractorFilter
 	{
 		Map<String, String[]> parametersFromPortalURL = extractParametersFromPortalURL(portletRequest);
 		if (!parametersFromPortalURL.isEmpty()) {
-			if ("true".equalsIgnoreCase(filterConfig.getInitParameter("PARAM_OVERWRITE"))) 
+			if ("true".equalsIgnoreCase(filterConfig.getInitParameter("paramOverwrite"))) 
 			{
 				for (Map.Entry<String, String[]> param : parametersFromPortalURL.entrySet()) {
 					portletRequest.setAttribute(param.getKey(), param.getValue());
@@ -155,44 +158,50 @@ public class RequestParamExtractorFilter
 
 		String portalURL = Utils.getPortalRequestURL(portletRequest);
 		Map<String, String[]> map = new HashMap<String, String[]>();
+		try{
+			int ix = portalURL.indexOf('?');
+			if (ix >= 0 && ix < portalURL.length() - 1) {
+				portalURL = portalURL.substring(ix + 1);
 
-		int ix = portalURL.indexOf('?');
-//		if (ix >= 0 && ix < portalURL.length() - 1) {
-		if (ix != -1) {
-			portalURL = portalURL.substring(ix + 1);
-
-			if (portalURL.length() != -1 && portalURL != "") {
-				StringTokenizer st = new StringTokenizer(portalURL, "&");
-				while (st.hasMoreTokens()) {
-					String keyValPairs = st.nextToken();
-					int ixOfEqual = keyValPairs.indexOf('=');
-					String key = keyValPairs.substring(0, ixOfEqual);
-					String value = keyValPairs.substring(ixOfEqual + 1);
-					if (map.containsKey(key)) {
-						String[] valueArray = map.get(key);
-						String[] tempArray = appendValue(valueArray, value);
-						map.put(key, tempArray);
-					}
-					else {
-						map.put(key, new String[]{value});
+				if (portalURL.length() != -1 && portalURL != "") {
+					StringTokenizer st = new StringTokenizer(portalURL, "&");
+					while (st.hasMoreTokens()) {
+						String keyValPairs = st.nextToken();
+						int ixOfEqual = keyValPairs.indexOf('=');
+						String key = keyValPairs.substring(0, ixOfEqual);
+						String value = keyValPairs.substring(ixOfEqual + 1);
+						if (map.containsKey(key)) {
+							String[] valueArray = map.get(key);
+							String[] tempArray = appendValue(valueArray, value);
+							map.put(key, tempArray);
+						}
+						else {
+							map.put(key, new String[]{value});
+						}
 					}
 				}
 			}
 		}
+		catch(Exception e){
+			// This exception handling is placed here to handle the malformed URL cases.
+			// Mal-formed URL can explicitly come in-case user manually adds some parameters to PortalURL.
+			// We would simply return the map of the parameters calculated till the exception occurs.
+		}
 		return map;
 	}
 
+	/**
+	 * This method appends the value to String Array, which can be placed in the map.
+	 * 
+	 * @param valueArray - retrieved from the map
+	 * @param value		 - value to add
+	 * @return	String[] - new Array with the "value" 
+	 */
 	private String[] appendValue(String[] valueArray, String value)
 	{
-//						List<String> tempList = new ArrayList<String>(Arrays.asList(valueArray));
-//						tempList.add(value);
-//						map.put(key, tempList.toArray(new String[tempList.size()]));
-		String[] tempArray = new String[valueArray.length + 1];
-		for (int index = 0; index < valueArray.length; index++) {
-			tempArray[index] = valueArray[index];
-		}
-		tempArray[valueArray.length] = value;
-		return tempArray;
+		List<String> tempList = new ArrayList<String>(Arrays.asList(valueArray));
+		tempList.add(value);
+		return tempList.toArray(new String[tempList.size()]);
 	}
 
 	public void destroy()
