@@ -342,12 +342,14 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	@Override
 	protected Enumeration<String> getRequestPropertyNames()
 	{
+		if (request == null) {
+			return null;
+		}
 	    return new CompositeEnumeration<String>(request.getAttributeNames(),
 		    new CompositeEnumeration<String>(request.getParameterNames(),
 			    new CompositeEnumeration<String>(Collections.enumeration(request.getPublicParameterMap().keySet()),
 				    new CompositeEnumeration<String>(request.getPortletSession().getAttributeNames(),
 					    request.getPortletSession().getAttributeNames(PortletSession.APPLICATION_SCOPE))
-
 			    )));
 	}
 
