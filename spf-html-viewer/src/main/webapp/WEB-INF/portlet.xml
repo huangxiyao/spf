@@ -94,7 +94,7 @@
 		<lifecycle>RESOURCE_PHASE</lifecycle>
 		<lifecycle>EVENT_PHASE</lifecycle>
 		<init-param>
-			<name>PARAM_OVERWRITE</name>
+			<name>paramOverwrite</name>
 			<value>true</value>
 		</init-param> 
 	</filter>
