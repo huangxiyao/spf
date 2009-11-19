@@ -60,9 +60,9 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 		System.out
 				.println("1.5: Change the reloadCheckMillis to 0, force time to expire, but the resource bundle is not modified, so make sure same bundle from cache is returned.");
 		dynModifyReloadCheckMillisValue(0);
-		// force thread to sleep 1 millisec, then do the test
+		// force thread to sleep 100 millis to avoid timing issue, then do the test
 		try {
-			Thread.sleep(1);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
 		ResourceBundle rbAfterPropertyNOChangedForceRefresh = PropertyResourceBundleManager
@@ -90,9 +90,9 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 		dynModifyReloadCheckMillisValue(0);
 		modifyValueInProperties(propertiesFilename.concat(fileExtension),
 				checkPeriodKey, "100000");
-		// force thread to sleep 1 millisec, then do the test
+		// force thread to sleep 100 millis to avoid timing issue, then do the test
 		try {
-			Thread.sleep(1);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
 		ResourceBundle rbAfterPropertyChangedForceRefresh = PropertyResourceBundleManager
@@ -111,9 +111,9 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 				.println("1.8: Remove resource bundle file from filesystem, then force refresh the cache, and make sure null is returned.");
 		removeFile(propertiesFilename.concat(fileExtension));
 		dynModifyReloadCheckMillisValue(0);
-		// again force thread to sleep 1 millisec, then do the test
+		// again force thread to sleep 100 millis to avoid timing issue, then do the test
 		try {
-			Thread.sleep(1);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
 		ResourceBundle rbAfterFileRemovedAndCacheRefresh = PropertyResourceBundleManager
@@ -133,9 +133,9 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 		System.out
 				.println("1.10: Now file is recovered, force refresh the cache, and make sure bundle is returned.");
 		dynModifyReloadCheckMillisValue(0);
-		// again force thread to sleep 1 millisec, then do the test
+		// again force thread to sleep 1 millis to avoid timing issue, then do the test
 		try {
-			Thread.sleep(1);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
 		ResourceBundle rbAfterFileRestoredAndRefresh = PropertyResourceBundleManager
@@ -173,9 +173,9 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 				.println("2.3: Repeat 2.2 but force time to expire and make sure zh-CN is still returned.");
 		// change the reloadCheckMillis to 0, force time to expire.
 		dynModifyReloadCheckMillisValue(0);
-		// sleep 1 milliseconds to avoid an issue
+		// sleep 100 millis to avoid timing issue
 		try {
-			Thread.sleep(1);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
 		ResourceBundle rb_zh_CN_Refresh = PropertyResourceBundleManager
