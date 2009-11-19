@@ -7,12 +7,13 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.epicentric.entity.Entity;
 import com.epicentric.user.User;
 
 public class I18nUtils {
 
 	static Locale _locale = Locale.ENGLISH;
-	public static Locale getUserLocale(User user){
+	public static Locale getUserLocale(Entity user){
 		return _locale;
 	}
 	
@@ -20,7 +21,7 @@ public class I18nUtils {
 		return new Localizer(session, request);
 	}
 	
-	public static void setUserLocale(User user, Locale locale){
+	public static void setUserLocale(Entity user, Locale locale){
 		_locale = locale;
 	}
 	
