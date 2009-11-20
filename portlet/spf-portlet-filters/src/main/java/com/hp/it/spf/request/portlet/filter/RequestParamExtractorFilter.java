@@ -185,7 +185,8 @@ public class RequestParamExtractorFilter
 		catch(Exception e){
 			// This exception handling is placed here to handle the malformed URL cases.
 			// Mal-formed URL can explicitly come in-case user manually adds some parameters to PortalURL.
-			// We would simply return the map of the parameters calculated till the exception occurs.
+			// We would simply clear the map & return an empty map in this case
+			map.clear();
 		}
 		return map;
 	}
