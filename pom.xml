@@ -3,16 +3,16 @@
 	<groupId>com.hp.it.spf.tools</groupId>
 	<artifactId>spf-pom</artifactId>
 	<name>Shared Portal Framework super POM</name>
-	<version>1.2.0-SNAPSHOT</version>
+	<version>1.2.0</version>
 	<packaging>pom</packaging>
 	<description>
 		This POM encapsulates all the reporting features of the shared
 		portal framework.
 	</description>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-pom</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-pom</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-pom</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-pom-1.2.0</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/spf-pom-1.2.0</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/tags/spf-pom-1.2.0</url>
 	</scm>
 	
 	<ciManagement>
