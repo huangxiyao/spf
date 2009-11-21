@@ -13,7 +13,8 @@
 # 2.1   12/13/07        DSJ updated for QXCR1000756101
 # 2.2   1/2/08          DSJ updated again for QXCR1000756101
 # 3.0   02/16/09        DSJ updated for Shared Portal Framework
-# 3.1   04/01/09        DSJ updated for Hebrew
+# 3.1   04/01/09        DSJ updated to duplicate files for Hebrew
+# 3.2   11/20/09        DSJ updated to duplicate files for Hong Kong Chinese
 #
 ################################################################
 package main;
@@ -47,7 +48,7 @@ $all_xlated_files_re = "_[a-zA-Z]{2}\.[^\.]*\$";
 $all_xlated_text_files_re = "^.*_[a-zA-Z]{2}\.($msg_ext_re|$nonmsg_ext_re)\$";
 $all_xlated_media_files_re = "^.*_[a-zA-Z]{2}\.($media_ext_re)\$";
 $all_nonnormal_xlated_files_re = "_($nonnormal_tags_re)\.[^\.]*\$";
-@all_multicode_locale_res = ("he|iw", "yi|ji", "id|in"); 
+@all_multicode_locale_res = ("he|iw", "yi|ji", "id|in", "zh_HK|zh_TW"); 
 
 @no_xlate_msg_keys = ("description", "[^\=]*_comment");
 
@@ -574,7 +575,7 @@ sub duplicate_files  {
       $from_file = "$from_dir/$filename";
       if ( -f $from_file && $filename =~ /$re1/i )  {
          foreach $locs (@loc_res)  {
-            if ($filename =~ /_($locs)\.[^\.]*$/)  {
+            if ($filename =~ /_($locs)\.[^\.]*$/i)  {
                foreach $loc (split (/\|/, $locs))  {
                   $to_file = $from_file;
                   $to_file =~ s/${re2}(\.[^\.]*)$/_${loc}$1/;
