@@ -63,7 +63,8 @@
 # 1.0   05/05/07        GWM first version
 # 2.0   06/22/07        DSJ overhaul
 # 3.0   02/16/09        DSJ updated for Shared Portal Framework
-# 3.1   04/01/09        DSJ updated for Hebrew
+# 3.1   04/01/09        DSJ updated to duplicate files for Hebrew
+# 3.2   11/20/09        DSJ updated to duplicate files for Hong Kong Chinese
 #
 ################################################################
 package main;
@@ -189,7 +190,7 @@ EOF
    
    print "----- Duplicating translated files for locales with multiple codes.\n";
    &duplicate_files ($in_text_pdir, $all_text_files_re,
-                     "_[a-zA-Z]{2}", @all_multicode_locale_res);
+                     "(?:_[a-zA-Z]{2}){1,2}", @all_multicode_locale_res);
                      
    # Fifth, convert non-ASCII characters in the properties files (which are all
    # assumed to be UTF8) to proper Java \u notation.  This means running Java
