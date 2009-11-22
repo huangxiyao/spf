@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>${spf.common.version}</version>
+			<version>1.2.0</version>
 		</dependency>
 	</dependencies>
 </project>
