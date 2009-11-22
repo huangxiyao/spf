@@ -4,6 +4,7 @@
 	<artifactId>spf-open-sign</artifactId>
 	<packaging>war</packaging>
 	<name>SPF open-sign</name>
+	<version>1.2.0-SNAPSHOT</version>
 	<description>Web application for the Shared Portal Framework open-sign. When this application is
 		running, it means the SPF site (cluster) is open. When this application is not
 		running, it means the SPF site (cluster) is closed.</description>
@@ -11,7 +12,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>spf-portal-helper-apps-parent</artifactId>
-		<version>1.2.0-SNAPSHOT</version>
+		<version>1.2.1</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
