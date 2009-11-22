@@ -14,8 +14,8 @@
 	<name>SPF Portal Parent POM</name>
 
 	<properties>
-		<spf.common.version>1.2.0-SNAPSHOT</spf.common.version>
-		<spf.portal.version>1.2.0-SNAPSHOT</spf.portal.version>
+		<spf.common.version>1.2.0</spf.common.version>
+		<spf.portal.version>1.2.0</spf.portal.version>
 	</properties>
 
 	<ciManagement>
