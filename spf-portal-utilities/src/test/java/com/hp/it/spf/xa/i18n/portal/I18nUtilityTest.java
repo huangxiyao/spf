@@ -82,8 +82,7 @@ public class I18nUtilityTest {
 		SessionUtils.setCurrentUser(mockHttpSession, user);
 		String returnValue = I18nUtility.getValue("componentid", "key", "default value", mockPortalContext, null, null, null, true, false);
 		assertNotNull(returnValue);
-		assertEquals("Test &amp; Test", returnValue);
-		System.out.println(returnValue);
+		assertEquals("Value not escaped properly", "Test &amp; Test", returnValue);
 	}
 	
 	@Test
@@ -103,8 +102,7 @@ public class I18nUtilityTest {
 		SessionUtils.setCurrentUser(mockHttpSession, user);
 		String returnValue = I18nUtility.getValue("componentid", "clean_key", "default value", mockPortalContext, null, null, null, true, false);
 		assertNotNull(returnValue);
-		assertEquals("Test and Test", returnValue);
-		System.out.println(returnValue);		
+		assertEquals("Value not escaped properly", "Test and Test", returnValue);
 	}
 	@Test
 	public void thatGetValueReturnsEscapedLessThanSymbol(){
@@ -123,8 +121,7 @@ public class I18nUtilityTest {
 		SessionUtils.setCurrentUser(mockHttpSession, user);
 		String returnValue = I18nUtility.getValue("componentid", "lt_key", "default value", mockPortalContext, null, null, null, true, false);
 		assertNotNull(returnValue);
-		assertEquals("Test &lt; Test", returnValue);
-		System.out.println(returnValue);		
+		assertEquals("Value not escaped properly", "Test &lt; Test", returnValue);
 	}
 	
     /**
