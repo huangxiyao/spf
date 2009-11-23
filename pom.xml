@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.portlet</groupId>
 		<artifactId>spf-portlet-parent</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.1-SNAPSHOT</version>
 		<!-- 
 			relativePath to parent is only needed in the aggregator POM to allow build all modules
 			including parent, even though the parent's snapshot has not been built yet in the CI
@@ -13,16 +13,16 @@
 		<relativePath>spf-portlet-parent/pom.xml</relativePath>
 	</parent>
 
-    <version>1.2.0</version>
+    <version>1.2.1-SNAPSHOT</version>
 	<groupId>com.hp.it.spf.portlet</groupId>
 	<artifactId>portlet</artifactId>
 	<packaging>pom</packaging>
 	<name>SPF portlet aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portlet-1.2.0</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portlet-1.2.0</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/portlet-1.2.0</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portlet</url>
 	</scm>
 	
 	<modules>
