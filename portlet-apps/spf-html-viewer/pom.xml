@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.portlet</groupId>
 		<artifactId>spf-portlet-apps-parent</artifactId>
-		<version>1.2.0-SNAPSHOT</version>
+		<version>1.2.0</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
@@ -23,9 +23,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet-apps/spf-html-viewer</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet-apps/spf-html-viewer</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portlet-apps/spf-html-viewer</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portlet-apps-1.2.0/spf-html-viewer</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portlet-apps-1.2.0/spf-html-viewer</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/tags/portlet-apps-1.2.0/spf-html-viewer</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
