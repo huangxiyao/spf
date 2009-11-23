@@ -11,9 +11,9 @@
 		ExceptionUtil in the portal utilities.
 	</description>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-system-error-secondarypage</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-system-error-secondarypage</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-system-error-secondarypage</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-components-1.2.0/spf-system-error-secondarypage</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-components-1.2.0/spf-system-error-secondarypage</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/tags/portal-components-1.2.0/spf-system-error-secondarypage</url>
 	</scm>
 	<ciManagement>
 		<system>Hudson</system>
@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>spf-portal-components-parent</artifactId>
-		<version>1.2.0-SNAPSHOT</version>
+		<version>1.2.0</version>
 	</parent>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
