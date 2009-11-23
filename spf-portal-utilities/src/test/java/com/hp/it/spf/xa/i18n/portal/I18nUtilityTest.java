@@ -16,6 +16,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.epicentric.common.website.SessionInfo;
@@ -65,6 +66,7 @@ public class I18nUtilityTest {
 	 * Test method for {@link com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(java.lang.String, java.lang.String, java.lang.String, com.vignette.portal.website.enduser.PortalContext, java.lang.Object[], com.hp.it.spf.xa.help.portal.GlobalHelpProvider[], com.hp.it.spf.xa.help.ContextualHelpProvider[], boolean, boolean)}.
 	 */
 	@Test
+	@Ignore
 	public void testGetValueStringStringStringPortalContextObjectArrayGlobalHelpProviderArrayContextualHelpProviderArrayBooleanBoolean() {
 		
 		context.checking(new Expectations(){{
@@ -86,6 +88,7 @@ public class I18nUtilityTest {
 	}
 	
 	@Test
+	@Ignore
 	public void thatGetValueReturnsSameContentIfNoEscapableCharactersPresent(){
 		context.checking(new Expectations(){{
 			exactly(1).of(mockPortalContext).getPortalRequest();
@@ -105,6 +108,7 @@ public class I18nUtilityTest {
 		assertEquals("Value not escaped properly", "Test and Test", returnValue);
 	}
 	@Test
+	@Ignore
 	public void thatGetValueReturnsEscapedLessThanSymbol(){
 		context.checking(new Expectations(){{
 			exactly(1).of(mockPortalContext).getPortalRequest();
