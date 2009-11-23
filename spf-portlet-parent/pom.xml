@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.0.2</version>
+		<version>1.2.0</version>
 	</parent> 
 
 	<groupId>com.hp.it.spf.portlet</groupId>
@@ -15,7 +15,7 @@
 	<name>SPF Portlet Parent POM</name>
 
 	<properties>
-		<spf.common.version>1.2.0-SNAPSHOT</spf.common.version>
+		<spf.common.version>1.2.0</spf.common.version>
 	</properties>
 
 	<ciManagement>
