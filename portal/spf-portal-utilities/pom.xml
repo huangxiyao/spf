@@ -18,7 +18,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>spf-portal-parent</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.1-SNAPSHOT</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
@@ -27,9 +27,9 @@
 		</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-1.2.0/spf-portal-utilities</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-1.2.0/spf-portal-utilities</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/portal-1.2.0/spf-portal-utilities</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-utilities</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-utilities</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-utilities</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
