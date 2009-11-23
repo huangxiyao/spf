@@ -8,7 +8,7 @@
     <parent>
 		<groupId>com.hp.it.spf.portlet</groupId>
 		<artifactId>spf-portlet-apps-parent</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.1-SNAPSHOT</version>
     </parent> 
 	<dependencies>
 		<dependency>
