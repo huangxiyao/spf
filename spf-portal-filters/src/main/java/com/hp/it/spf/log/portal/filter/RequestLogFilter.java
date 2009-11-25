@@ -98,7 +98,7 @@ public class RequestLogFilter implements Filter {
 	}
 
 	private void initDiagnosticContext(HttpServletRequest request, DiagnosticContext diagnosticContext) {
-		diagnosticContext.set("Web Server Name", "TBD");
+		diagnosticContext.set("Web Server Name", getWebServerName(request));
 		diagnosticContext.set("Portal Server Name", Environment.singletonInstance.getManagedServerName());
 		diagnosticContext.set("Nav Item Name", getMenuItemName(request));
 
@@ -112,6 +112,30 @@ public class RequestLogFilter implements Filter {
 				diagnosticContext.copyFrom(savedDiagnosticContext);
 			}
 		}
+	}
+
+	/**
+	 * Retrieves the web server name based on the value of <code>SRPHostName</code> request header.
+	 * If the header contains fully-qualified host name this method returns only the first part
+	 * (up to '.'). If the header is not present the method returns empty string.
+	 *
+	 * @param request portal request
+	 * @return web server host name or empty string if SRPHostName header is not present
+	 */
+	private String getWebServerName(HttpServletRequest request)
+	{
+		String srpName = request.getHeader("SRPHostName");
+		if (srpName != null) {
+			int pos = srpName.indexOf('.');
+			if (pos > 0) {
+				return srpName.substring(0, pos);
+			}
+			else {
+				return srpName;
+			}
+		}
+
+		return "";
 	}
 
 	/**
