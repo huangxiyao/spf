@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sun.portal.portletcontainer</groupId>
-	<artifactId>pc-database-persistence</artifactId>
+	<artifactId>spf-pc-database-persistence</artifactId>
 	<packaging>jar</packaging>
-	<name>pc-database-persistence</name>
+	<name>spf-pc-database-persistence</name>
 	<description>As the target portlet applications will be deployed in the clustered environment, the producer as well as the underlying portlet container should store their data in a way that is cluster-friendly, e.g. when a portlet preference value is updated this change must be visible on all the servers running this portlet application, but openportal portlet container does not provide a database persistence implementation. This project just provides the database persitence feature with our own implementation.</description>
 	<parent>
 		<groupId>com.hp.it.spf.portlet</groupId>
