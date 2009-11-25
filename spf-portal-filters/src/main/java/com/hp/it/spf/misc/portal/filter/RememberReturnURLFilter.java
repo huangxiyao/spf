@@ -22,16 +22,17 @@ import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.website.enduser.PortalContext;
 
 /**
- * Filter used to save user navigation state.
- * The data saved by this filter is used by <tt>PUBLIC_SPF_RETURN</tt> secondary page
- * (implemented in com.hp.it.spf.sso.portal.component.secondarypagetype.ReturnDisplayAction
+ * Filter used to save user navigation state. The data saved by this filter is
+ * used by <tt>PUBLIC_SPF_RETURN</tt> secondary page (implemented in
+ * com.hp.it.spf.sso.portal.component.secondarypagetype.ReturnDisplayAction
  * class). Currently the filter saves 2 types of data:
  * <ul>
- * <li>current URL - is saved in a session attribute. If the users hit the secondary page
- * above during the session, they will be redirect to last visited portal URL saved in session. </li>
- * <li>current site DNS name - is saved in a cookie. If the users hit the secondary page
- * above once their session expired and if they have this cookie set, they will be redirected
- * to that site-in-cookie's home page.</li>
+ * <li>current URL - is saved in a session attribute. If the users hit the
+ * secondary page above during the session, they will be redirect to last
+ * visited portal URL saved in session.</li>
+ * <li>current site DNS name - is saved in a cookie. If the users hit the
+ * secondary page above once their session expired and if they have this cookie
+ * set, they will be redirected to that site-in-cookie's home page.</li>
  * </ul>
  */
 public class RememberReturnURLFilter implements Filter {
@@ -41,14 +42,13 @@ public class RememberReturnURLFilter implements Filter {
 			RememberReturnURLFilter.class);
 
 	/**
-	 * This filter performs the setting up of the Return URL in the
-	 * Session and also the User's last visited site DNS name in the
-	 * SPF site Cookie.
+	 * This filter performs the setting up of the Return URL in the Session and
+	 * also the User's last visited site DNS name in the SPF site Cookie.
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		if (request instanceof HttpServletRequest) {
-			
+
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpServletResponse resp = (HttpServletResponse) response;
 
@@ -61,14 +61,14 @@ public class RememberReturnURLFilter implements Filter {
 	}
 
 	/**
-	 * Saves the current URL as session attribute so if external applications call
-	 * <tt>PUBLIC_SPF_RETURN</tt> secondary page during the current session, the page
-	 * will redirect the user to that URL.
-	 *
-	 * @param request portal request
+	 * Saves the current URL as session attribute so if external applications
+	 * call <tt>PUBLIC_SPF_RETURN</tt> secondary page during the current
+	 * session, the page will redirect the user to that URL.
+	 * 
+	 * @param request
+	 *            portal request
 	 */
-	private void saveCurrentUrlInSession(HttpServletRequest request)
-	{
+	private void saveCurrentUrlInSession(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		// save the current URL to session
 		PortalContext context = (PortalContext) request.getAttribute("portalContext");
@@ -82,8 +82,7 @@ public class RememberReturnURLFilter implements Filter {
 						String currentURL = Utils.getRequestURL(request);
 						if (session != null) {
 							session.setAttribute(
-									Consts.SESSION_ATTR_RETURN_URL,
-									currentURL);
+									Consts.SESSION_ATTR_RETURN_URL, currentURL);
 						}
 					}
 				}
@@ -93,20 +92,20 @@ public class RememberReturnURLFilter implements Filter {
 
 	/**
 	 * Saves current site's DNS name in cookie os if external applications call
-	 * <tt>PUBLIC_SPF_RETURN</tt> secondary page and the cookie exists, the user will
-	 * be redirected to that site's home (root) page.
-	 * The cookie is created only if it not exists or if its value is different from the current
-	 * site.
-	 *
-	 * @param request current request
-	 * @param response response to which cookie will be added.
+	 * <tt>PUBLIC_SPF_RETURN</tt> secondary page and the cookie exists, the user
+	 * will be redirected to that site's home (root) page. The cookie is created
+	 * only if it not exists or if its value is different from the current site.
+	 * 
+	 * @param request
+	 *            current request
+	 * @param response
+	 *            response to which cookie will be added.
 	 */
 	private void saveCurrentSiteInCookie(HttpServletRequest request, HttpServletResponse response)
 	{
 		/*
-		 * Below code is written as part of HPP SSO Federation
-		 * Set the cookie HP_SPF_SITE with the "last visited site"
-		 * DNS name as value
+		 * Below code is written as part of HPP SSO Federation Set the cookie
+		 * HP_SPF_SITE with the "last visited site" DNS name as value
 		 */
 
 		// Get the user's current site name from the request
@@ -117,21 +116,17 @@ public class RememberReturnURLFilter implements Filter {
 			// Get the user's current site DNS name
 			String currentSiteName = currentSite.getDNSName();
 			// In debug mode to write to log file only if needed
-			LOG.debug("SPFDEBUG (RememberReturnURLFilter): Create a cookie for" +
-						" the site DNS := "	+ currentSiteName);
+			LOG.debug("SPFDEBUG (RememberReturnURLFilter): Create a cookie for"
+					+ " the site DNS := " + currentSiteName);
 
 			/*
-			 * Create a SPF cookie for the user only when the
-			 * current site is not the default site "spf".
-			 * Create the cookie only if it does not exists
-			 * or in case exists does not have the currentSiteName
-			 * value
-			 *
+			 * Create a SPF cookie for the user only when the current site is
+			 * not the default site "spf". Create the cookie only if it does not
+			 * exists or in case exists does not have the currentSiteName value
 			 */
 			if (currentSiteName != null
-					&& !currentSiteName
-							.equals(com.hp.it.spf.xa.misc.Consts.SPF_CORE_SITE)
-					&& shouldCreateSiteCookie(request, currentSiteName)) {
+					&& !currentSiteName.equals(com.hp.it.spf.xa.misc.Consts.SPF_CORE_SITE)
+					&& shouldCreateOrUpdateSiteCookie(request, currentSiteName)) {
 
 				HttpServletResponse res = (HttpServletResponse) response;
 
@@ -158,22 +153,23 @@ public class RememberReturnURLFilter implements Filter {
 	}
 
 	/**
-	 * Boolean to decide whether SPF can create a cookie (HP_SPF_SITE) if it
+	 * Boolean to decide whether SPF can create/update a cookie (HP_SPF_SITE) if it
 	 * does not exist and in case exists should not contain the value of user's
 	 * currentSiteName.
-	 *
+	 * 
 	 * @param req
 	 *            Request object
 	 * @param currentSiteName
-	 *            The user's current site DNS name
-	 * @return boolean indicating whether to create a HP_SPF_SITE cookie or not
+	 *            The user's current site DNS name for which cookie will be
+	 *            created
+	 * @return true if HP_SPF_SITE cookie need to be created/updated; false otherwise
 	 */
-	private boolean shouldCreateSiteCookie(HttpServletRequest req, String currentSiteName) {
+	private boolean shouldCreateOrUpdateSiteCookie(HttpServletRequest req,
+			String currentSiteName) {
 
-		boolean returnFlag = false;
-
+		// Return false in case the request is null
 		if (req == null) {
-			return returnFlag;
+			return false;
 		}
 
 		Cookie[] cookies = req.getCookies();
@@ -181,20 +177,38 @@ public class RememberReturnURLFilter implements Filter {
 		if (cookies != null) {
 
 			for (int cnt = 0; cnt < cookies.length; cnt++) {
+				Cookie cookie = cookies[cnt];
 
-				// Check whether the cookie is HP_SPF_SITE, then go inside
-				if (cookies[cnt] != null && Consts.COOKIE_NAME_SITE.equals(cookies[cnt].getName()))
-				{
-					// Return true if the cookie value does not matches with the
-					// current site DNS name
-					if (!cookies[cnt].getValue().trim().equals(currentSiteName.trim())) {
-						returnFlag = true;
+				if (cookie != null) {
+
+					if (Consts.COOKIE_NAME_SITE.equals(cookie.getName())) {
+
+						/*
+						 * Inside when the cookie is HP_SPF_SITE.
+						 * 
+						 * If the value of the cookie is currentSiteName, then
+						 * return false indicating the cookie already exists for
+						 * current site.
+						 * 
+						 * Otherwise the cookie needs to be updated, therefore return true.
+						 */
+						if (cookie.getValue() != null
+								&& cookie.getValue().trim().equals(currentSiteName.trim()))
+						{
+							return false;
+						}
+						else {
+							return true;
+						}
 					}
-					break;
 				}
 			}
 		}
 
-		return returnFlag;
+		/*
+		 * Return true in case the control reaches this point as it means the
+		 * cookie is not yet created
+		 */
+		return true;
 	}
 }
