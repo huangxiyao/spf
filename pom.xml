@@ -27,7 +27,7 @@
 	
 	<modules>
 		<module>spf-portlet-parent</module>
-		<module>pc-database-persistence</module>
+		<module>spf-pc-database-persistence</module>
 		<module>spf-portlet-config</module>
 		<module>spf-portlet-container</module>
 		<module>spf-portlet-filters</module>
