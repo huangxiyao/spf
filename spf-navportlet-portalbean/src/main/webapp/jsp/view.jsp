@@ -46,6 +46,11 @@
 
 	String bgColorDescription = bean.getDescriptionBackgroundColor();
 	if (bgColorDescription == null) bgColorDescription = "";
+	String bgColorDescriptionStyle = 
+		("".equals(bgColorDescription) ? "" :
+			"background-color: " + 
+			(bgColorDescription.startsWith("#") ? "" : "#") + 
+			bgColorDescription + ";");
 
 	String securityMessage1 = "";
 
@@ -213,7 +218,7 @@
 			<tr class="colorDCDCDCbg">
 				<td style="padding-left:8px;padding-top:8px;text-align:left;vertical-align:bottom;"><%=description.replaceAll("\r\n", "<br>").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")%></td>
 			<%}else{ %>
-			<tr class="<%=bgColorDescription%>">
+			<tr style="<%=bgColorDescriptionStyle%>">
 				<td style="padding-left:1px;padding-top:8px;text-align:left;vertical-align:bottom;"><%=description.replaceAll("\r\n", "<br>").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")%></td>	
 			<%}%>
 				
@@ -221,7 +226,7 @@
 			<%if (bgColorDescription.equals("")) {%>
 			<tr class="colorDCDCDCbg">	
 			<%}else{ %>
-			<tr class="<%=bgColorDescription%>">
+			<tr style="<%=bgColorDescriptionStyle%>">
 			<%}%>
 				<td style="height:4px;"><spacer type="block" width="1" height="1"></td>
 			</tr>

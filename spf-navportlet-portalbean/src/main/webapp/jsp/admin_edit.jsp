@@ -124,6 +124,10 @@
 				<label for="noheader">&nbsp;No Menu Header</label>
 			</td>
 		</tr>
+		<tr>
+			<td class="epi-formLabel">Description Background Color:</td>
+			<td><input type="text" value="<%= descriptionBackgroundColor %>" name="descriptionBackgroundColor" size="6" maxlength="6"/></td>
+		</tr>
 	</table>
 	<p/>
 
@@ -175,10 +179,6 @@
 		<tr>
 			<td class="epi-formLabel">Link Background Color:</td>
 			<td><input type="text" value="<%= backgroundColor %>" name="backgroundColor" size="6" maxlength="6"/></td>
-		</tr>
-		<tr>
-			<td class="epi-formLabel">Description Background Color:</td>
-			<td><input type="text" value="<%= descriptionBackgroundColor %>" name="descriptionBackgroundColor" size="6" maxlength="6"/></td>
 		</tr>
 		<tr>
 			<td colspan="2" align="center"><input class="epi-button" type="submit" value="Save Info" name="submit" /></td>
