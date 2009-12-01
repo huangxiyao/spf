@@ -125,9 +125,6 @@
 
 	MenuItemNode thisNode = menuItemHelper.findMenuItemByName(portalContext, menuItem);
 
-
-	String color = MenuItemUtils.getSelectedMenuItemNode(portalContext).getColor();
-
 	if(linespacing)
 	%><!-- linespace ok --><%
 	if(!linespacing)
@@ -178,7 +175,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td bgcolor="#<%=color%>" style="height:4px;"><spacer type="block" width="1" height="1"></td>
+							<td class="theme" style="height:4px;"><spacer type="block" width="1" height="1"></td>
 						</tr>
 					</table>
 				</td>
@@ -196,7 +193,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td bgcolor="#<%=color%>"	style="height:2px;"><spacer type="block" width="1" height="1"></td>
+				<td class="theme" style="height:2px;"><spacer type="block" width="1" height="1"></td>
 			</tr>
 		</table>
 	<%}
@@ -311,7 +308,7 @@
 				if (underlineLinks)	{
 				%>
 				<tr>
-					<td colspan="2" bgcolor="#<%=color%>" style="height:4px;"><spacer type="block" width="1" height="1"></td>
+					<td class="theme" colspan="2" style="height:4px;"><spacer type="block" width="1" height="1"></td>
 				</tr>
 				<%
 				}
@@ -359,7 +356,7 @@
 				if (underlineLinks)	{
 				%>
 				<tr>
-					<td colspan="2" bgcolor="#<%=color%>" style="height:4px;"><spacer type="block" width="1" height="1"></td>
+					<td class="theme" colspan="2" style="height:4px;"><spacer type="block" width="1" height="1"></td>
 				</tr>
 				<%
 				}
@@ -405,7 +402,7 @@
 					if (underlineLinks)	{
 					%>
 					<tr>
-						<td colspan="2" bgcolor="#<%=color%>" style="height:4px;"><spacer type="block" width="1" height="1"></td>
+						<td class="theme" colspan="2" style="height:4px;"><spacer type="block" width="1" height="1"></td>
 					</tr>
 					<%
 					}
@@ -438,7 +435,7 @@
 					</td>
 					</tr>
 					<tr>
-						<td bgcolor="#<%=color%>"	style="height:2px;"><spacer type="block" width="1" height="1"></td>
+						<td class="theme" style="height:2px;"><spacer type="block" width="1" height="1"></td>
 					</tr>
 					</table>
 					<table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -491,7 +488,7 @@
 								if (underlineLinks)	{
 								%>
 								<tr>
-									<td bgcolor="#<%=color%>" style="height:4px;"><spacer type="block" width="1" height="1"></td>
+									<td class="theme" style="height:4px;"><spacer type="block" width="1" height="1"></td>
 								</tr>
 								<%
 								}
