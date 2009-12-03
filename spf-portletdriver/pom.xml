@@ -30,12 +30,6 @@
 			<groupId>com.hp.it.spf.wsrp</groupId>
 			<artifactId>spf-portlet-wsrp</artifactId>
 			<version>${version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.hp.it.spf.xa</groupId>
-					<artifactId>spf-common-utilities</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.portal.portletcontainer</groupId>
