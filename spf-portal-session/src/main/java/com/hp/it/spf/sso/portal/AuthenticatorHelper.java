@@ -472,7 +472,7 @@ public class AuthenticatorHelper {
      *            HttpServletRequest object
      * @return true for this user from HPP siteminder, otherwise false
      */
-    static boolean isFromHPP(HttpServletRequest request) {
+    public static boolean isFromHPP(HttpServletRequest request) {
         return isFromHPPGeneral(request) && !Utils.isFederatedSite(request);
     }
 
@@ -483,7 +483,7 @@ public class AuthenticatorHelper {
      *            HttpServletRequest object
      * @return true for this user from AtHP siteminder, otherwise false
      */
-    static boolean isFromAtHP(HttpServletRequest request) {
+    public static boolean isFromAtHP(HttpServletRequest request) {
         String authSource = request
                 .getHeader(AuthenticationConsts.AUTH_SOURCE_TAGE);
         return AuthenticationConsts.SP_FROM_ATHP.equals(authSource);
@@ -496,7 +496,7 @@ public class AuthenticatorHelper {
      *            HttpServletRequest object
      * @return true for this user from from Federated IDM, otherwise false
      */
-    static boolean isFromFed(HttpServletRequest request) {
+    public static boolean isFromFed(HttpServletRequest request) {
         return isFromHPPGeneral(request) && Utils.isFederatedSite(request);
     }
 
@@ -508,7 +508,7 @@ public class AuthenticatorHelper {
      *            HttpServletRequest object
      * @return true for this user from from general HPP, otherwise false
      */
-    private static boolean isFromHPPGeneral(HttpServletRequest request) {
+    public static boolean isFromHPPGeneral(HttpServletRequest request) {
         String authSource = request
                 .getHeader(AuthenticationConsts.AUTH_SOURCE_TAGE);
         return AuthenticationConsts.SP_FROM_HPP.equals(authSource);
