@@ -49,12 +49,6 @@
         	<version>1.0.2</version>
         	<scope>provided</scope>
         </dependency>
-        <dependency>
-        	<groupId>com.hp.it.spf.xa</groupId>
-        	<artifactId>spf-common-utilities</artifactId>
-        	<version>${spf.common.version}</version>
-        	<scope>provided</scope>
-        </dependency>
 	</dependencies>
 	<ciManagement>
 		<system>Hudson</system>
