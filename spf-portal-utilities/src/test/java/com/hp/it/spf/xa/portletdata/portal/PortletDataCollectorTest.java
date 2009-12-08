@@ -1,31 +1,31 @@
 package com.hp.it.spf.xa.portletdata.portal;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.core.Is.*;
-import static org.hamcrest.core.IsSame.*;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.Mockery;
-import org.jmock.Expectations;
-import org.jmock.lib.legacy.ClassImposteriser;
+import static org.hamcrest.core.IsSame.sameInstance;
+import static org.junit.Assert.assertThat;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Cookie;
 
-import com.hp.it.spf.xa.misc.Consts;
-import com.vignette.portal.website.enduser.PortalContext;
-import com.epicentric.site.Site;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.epicentric.common.website.MenuItemNode;
 import com.epicentric.navigation.MenuItem;
 import com.epicentric.page.Page;
-
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Arrays;
+import com.epicentric.site.Site;
+import com.hp.it.spf.xa.misc.Consts;
+import com.vignette.portal.website.enduser.PortalContext;
 
 /**
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
@@ -71,7 +71,7 @@ public class PortletDataCollectorTest
 		assertThat("FirstName still present", retrievedProfile.get("FirstName"), is("John"));
 		assertThat("LastName still present", retrievedProfile.get("LastName"), is("Doe"));
 	}
-
+	
 	@Test
 	public void testGetPortalSiteNameEmptyWithoutPortalContext() {
 		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
@@ -232,8 +232,23 @@ public class PortletDataCollectorTest
 		assertThat("Returns page friendly ID",
 				mCollector.getPageFriendlyId(request), is("MY_SUPER_PAGE"));
 	}
+	
+	@Test
+	public void testLastSessionCleanupDate() {
+		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
+		final HttpSession session = mContext.mock(HttpSession.class);
+		final String lastSessionCleanupDate = String.valueOf(System.currentTimeMillis());
+		
+		mContext.checking(new Expectations() {{
+			allowing(request).getSession(); will(returnValue(session));
+			allowing(session).getAttribute(Consts.KEY_LAST_PORTAL_SESSION_CLEANUP_DATE);
+				will(returnValue(String.valueOf(lastSessionCleanupDate)));
+		}});
 
-
+		assertThat("Returns last session cleanup date",
+				mCollector.getLastSessionCleanupDate(request), is(lastSessionCleanupDate));
+	}
+	
 	private class PortletDataCollectorMock extends PortletDataCollector {
 		private MenuItemNode mNode;
 
