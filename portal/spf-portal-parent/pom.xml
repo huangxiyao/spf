@@ -15,7 +15,7 @@
 	<name>SPF Portal Parent POM</name>
 
 	<properties>
-		<spf.common.version>1.2.0</spf.common.version>
+		<spf.common.version>1.2.1-SNAPSHOT</spf.common.version>
 		<spf.portal-helper-apps.version>1.2.0</spf.portal-helper-apps.version>
 	</properties>
 

@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.portlet.context.PortletApplicationContextUtils;
@@ -712,6 +713,19 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		// any, and return
 		navItemURL = remainder;
 		return navItemURL;
+	}
+	
+	/**
+	 * Returns Diagnostic ID, containing SessionId + RequestId + PortletId.
+	 * Converting PortletRequest object to HttpServletRequest object to get the attributes.
+	 * @param portletRequest portlet request.
+	 * @return Diagnostic ID.
+	 */
+	public static String getDiagnosticId(PortletRequest portletRequest)
+	{
+		//FIXME (slawek) - slawek needs to add support for local portlets
+		HttpServletRequest request = (HttpServletRequest) portletRequest.getAttribute("javax.portlet.portletc.httpServletRequest");
+		return com.hp.it.spf.xa.misc.Utils.getDiagnosticId(request);
 	}
 
 	/**
