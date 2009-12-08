@@ -3,11 +3,10 @@
 	<parent>
 		<groupId>com.hp.it.spf.xa</groupId>
 		<artifactId>spf-common-parent</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-common-utilities</artifactId>
-  <version>1.2.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>SPF common utilities.</name>
 	<dependencies>

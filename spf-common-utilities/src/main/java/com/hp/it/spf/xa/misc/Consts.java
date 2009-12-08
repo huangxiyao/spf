@@ -492,5 +492,10 @@ public class Consts {
 	 * HPP and AtHP versions) to record the target URL.
 	 */
 	public final static String PARAM_SM_TARGET = "TARGET";
+	
+	/**
+	 * The name of the Diagnostic Id which is used in MDC, in request attribute and in diagnostic context.
+	 */
+	public final static String DIAGNOSTIC_ID = "SPF_DC_ID";
 
 }

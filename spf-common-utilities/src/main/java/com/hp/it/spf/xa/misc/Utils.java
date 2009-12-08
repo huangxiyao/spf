@@ -12,6 +12,8 @@ import java.io.UnsupportedEncodingException;
 import com.sun.mail.util.ASCIIUtility;
 import com.sun.mail.util.BASE64DecoderStream;
 import com.hp.it.spf.xa.portalurl.PortalURLFactory;
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * A base class for miscellaneous utility methods for both portal and portlet
@@ -482,5 +484,16 @@ public class Utils {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns Diagnostic ID, containing SessionId + RequestId + PortletId from the HTTP header.
+	 * @param request HttpServletRequest request.
+	 * @return Diagnostic ID.
+	 */
+	public static String getDiagnosticId(HttpServletRequest request)
+	{
+		//FIXME (slawek) - slawek needs to add support for local portlets
+		return request.getHeader(Consts.DIAGNOSTIC_ID);
 	}
 }
