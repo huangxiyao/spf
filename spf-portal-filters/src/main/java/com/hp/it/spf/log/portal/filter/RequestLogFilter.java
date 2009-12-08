@@ -24,6 +24,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.util.Map;
 
@@ -42,11 +43,26 @@ public class RequestLogFilter implements Filter {
 	private static final String MDC_SITE_NAME = "SiteName";
 	private static final String MDC_LOGIN_ID = "LoginId";
 	private static final String MDC_PORTAL_SESSION_ID = "PortalSessionId";
+	
+	/**
+	 * Name of the Diagnostic Id used in MDC.
+	 */
+	private static final String MDC_ID = Consts.DIAGNOSTIC_ID;
+	
+	/**
+	 * Name of the HTTP header set by the web server and containing unique ID for this request.
+	 */
+	private static final String SPF_DC_RID_HEADER_NAME = "SPF_DC_RID";
+
+	/**
+	 * Name of the session cookie carrying the value of diagnostic session ID.
+	 */
+	private static final String SPF_DC_SID_COOKIE_NAME = "SPF_DC_SID";
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
 	{
 		boolean isTopLevelRequest = (request.getAttribute(FILTER_APPLIED_KEY) == null);
-
+		
 		if (isTopLevelRequest) {
 			request.setAttribute(FILTER_APPLIED_KEY, Boolean.TRUE);
 			
@@ -55,6 +71,7 @@ public class RequestLogFilter implements Filter {
 			TimeRecorder timeRecorder = requestContext.getTimeRecorder();
 			DiagnosticContext diagnosticContext = requestContext.getDiagnosticContext();
 			initDiagnosticContext((HttpServletRequest) request, diagnosticContext);
+			setDiagnosticCookie((HttpServletRequest) request, (HttpServletResponse) response);
 
 			try {
 				timeRecorder.recordStart(Operation.REQUEST, ((HttpServletRequest) request).getRequestURI());
@@ -93,7 +110,7 @@ public class RequestLogFilter implements Filter {
 			}
 		}
 		else {
-			chain.doFilter(request, response);
+			chain.doFilter(request, response);			
 		}
 	}
 
@@ -101,6 +118,7 @@ public class RequestLogFilter implements Filter {
 		diagnosticContext.set("Web Server Name", getWebServerName(request));
 		diagnosticContext.set("Portal Server Name", Environment.singletonInstance.getManagedServerName());
 		diagnosticContext.set("Nav Item Name", getMenuItemName(request));
+		diagnosticContext.set(MDC_ID, (String) MDC.get(MDC_ID));
 
 		HttpSession session = request.getSession(false);
 		if (session != null) {
@@ -174,18 +192,59 @@ public class RequestLogFilter implements Filter {
 		String siteName = getSiteName(request);
 		String loginId = getLoginId(request);
 		String sessionId = getSessionId(request);
-
+		String sessionIdHashValue = getSessionIdHashValue(request);	  
+		String requestId = getRequestId(request);
+		
+		MDC.put(MDC_ID, sessionIdHashValue + "+" + requestId);
+		request.setAttribute(MDC_ID, MDC.get(MDC_ID));
+				
 		if (siteName != null) {
 			MDC.put(MDC_SITE_NAME, siteName);
 		}
 		if (loginId != null) {
 			MDC.put(MDC_LOGIN_ID, loginId);
 		}
-		if (sessionId != null) {
-			MDC.put(MDC_PORTAL_SESSION_ID, sessionId);
+		if (sessionId != null) {		    
+		    	MDC.put(MDC_PORTAL_SESSION_ID, sessionId);			
 		}
+			
+	}
+	
+	/**
+	 * Returns hash value of weblogic JSESSIONID.
+	 * Weblogic appends server informations in JSESSIONID, so here we are taking hash value till "!".
+	 * Hence in case of switch from primary server to secondary server, this value will be same for that session.
+	 * @param request portal request
+	 * @return sessionId hash value.
+	 */	
+	private String getSessionIdHashValue(HttpServletRequest request)
+	{
+	    String sessionId = request.getSession().getId();
+	    if (sessionId == null) {
+		return null;
+	    }
+	    else {
+		return Integer.toHexString(Math.abs(sessionId.substring(0,sessionId.indexOf("!")).hashCode()));
+	    }	    
 	}
 
+	/**
+	 * Gets the value of the request header set in the web server.
+	 * @param request portal request
+	 * @return request id set by the web server, if not null, else system current time in milliseconds.	 
+	 */
+	
+	private String getRequestId(HttpServletRequest request) {
+		String reqId = request.getHeader(SPF_DC_RID_HEADER_NAME);
+	    
+		if (reqId == null || "".equals(reqId)) {
+			return Long.toHexString(System.currentTimeMillis());
+		}
+		else {
+			return reqId;
+		}
+	}
+	
 	private String getSessionId(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		if (session == null) {
@@ -215,11 +274,34 @@ public class RequestLogFilter implements Filter {
 		}
 		return siteName;
 	}
+	
+	/**
+	 * Gets all the cookies from the request. 
+	 * If the cookie is not set, add the session cookie in the response.
+	 * The session cookie contains hash value of the session.
+	 * @param request portal request
+	 * @param response  
+	 */
+	private void setDiagnosticCookie(HttpServletRequest request, HttpServletResponse response) {
+	    boolean cookieAlreadySet = false;
+	    Cookie[] cookies = request.getCookies();
+	    if (cookies != null) {
+		for (int i = 0, cookieCount = cookies.length; i < cookieCount && !cookieAlreadySet; i++) {
+			if (SPF_DC_SID_COOKIE_NAME.equals(cookies[i].getName())) {
+				cookieAlreadySet = true;
+			}
+		}
+	    }
+	    if (!cookieAlreadySet) {
+		response.addCookie(new Cookie(SPF_DC_SID_COOKIE_NAME, getSessionIdHashValue(request)));
+	    }			
+	}
 
 	private void cleanMDC() {
 		MDC.remove(MDC_SITE_NAME);
 		MDC.remove(MDC_LOGIN_ID);
 		MDC.remove(MDC_PORTAL_SESSION_ID);
+		MDC.remove(MDC_ID);
 	}
 
 	/**
