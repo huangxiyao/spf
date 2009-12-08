@@ -259,5 +259,10 @@ public class AuthenticationConsts {
     public final static String USER_PROFILE_RETRIEVER = "user_profile_retriever";
     public final static String HPP_USER_GROUP_RETRIEVER = "hpp_user_group_retriever";
     public final static String ATHP_USER_GROUP_RETRIEVER = "athp_user_group_retriever";
+    
+    /**
+     * Key of portal session attribute storing the latest date/time when AuthenticatorHelper.cleanupSession() is called 
+     */
+    public static final String LAST_PORTAL_SESSION_CLEAN_UP_DATE = Consts.KEY_LAST_PORTAL_SESSION_CLEANUP_DATE;
 }
 

@@ -137,22 +137,34 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             if (isDiffUser()) {
                 userProfile.put(AuthenticationConsts.KEY_LAST_LOGIN_DATE,
                                 new Date());
-                AuthenticatorHelper.cleanupSession(request);
+                
+                // cleanup session when switching users from one authenticated user to another but not cleanup session 
+                // when an anonymous user logs in as an authenticated user per CR 86
+                User currentUser = SessionUtils.getCurrentUser(request.getSession());
+                if (currentUser != null) {
+	                String currUserName = (String)currentUser.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID);
+	                if (!currUserName.startsWith(AuthenticationConsts.ANON_USER_NAME_PREFIX)) {
+	                	AuthenticatorHelper.cleanupSession(request);
+	                }
+                }
             } else if (isUserRecentUpdated()) {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("User is updated.");
                 }
-                AuthenticatorHelper.cleanupSession(request);
+                // not cleanup session per CR 86
+                //AuthenticatorHelper.cleanupSession(request);
             } else if (AuthenticatorHelper.isForceInitSession(request)) {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("Force initSession tag found.");
                 }
-                AuthenticatorHelper.cleanupSession(request);
+                // not cleanup session per CR 86
+                //AuthenticatorHelper.cleanupSession(request);
             } else if (AuthenticatorHelper.isSiteChanged(request)) {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("Site is changed.");
                 }
-                AuthenticatorHelper.cleanupSession(request);
+                // not cleanup session per CR 86
+                //AuthenticatorHelper.cleanupSession(request);
             } else {
                 // keep the current HTTP header user profile
                 Map httpHeaderUserProfile = userProfile;
@@ -592,20 +604,14 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 lastChangeDateInSession = ((Date)sessionUserProfile.get(AuthenticationConsts.KEY_LAST_CHANGE_DATE));
             }            
         }
-        
-        Map<String, Object> up = getUserProfile();
 
         // Judge
         if (lastChangeDate == null) {
             return false;
         } else if (lastChangeDateInSession == null) {
             return true;
-        } else if( lastChangeDate.after(lastChangeDateInSession)){
-            return true;
-        } else if( null == up ){
-        		return true;
-       	} else {
-        	return !up.equals(sessionUserProfile);
+        } else {
+            return lastChangeDate.after(lastChangeDateInSession);
         }
     }
 
