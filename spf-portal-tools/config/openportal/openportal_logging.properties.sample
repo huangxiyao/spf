@@ -18,10 +18,14 @@ handlers=java.util.logging.FileHandler
 java.util.logging.FileHandler.pattern = 
 java.util.logging.FileHandler.limit = 10000000
 java.util.logging.FileHandler.count = 25
-java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+#java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+# Use SPF formatter to include diagnostic ID in the log files
+java.util.logging.FileHandler.formatter = com.hp.it.spf.openportal.log.SimpleLogFormatter
 
 java.util.logging.ConsoleHandler.level=INFO
-java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
+#java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
+# Use SPF formatter to include diagnostic ID in the log files
+java.util.logging.ConsoleHandler.formatter = com.hp.it.spf.openportal.log.SimpleLogFormatter
 
 javax.management.level=INFO
 javax.management.remote.level=INFO
