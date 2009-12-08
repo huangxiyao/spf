@@ -4,15 +4,19 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>1.2.0</version>
+		<version>2.0.0</version>
 	</parent> 
 
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-common-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.2.1-SNAPSHOT</version>
+	<version>${spf.common.version}</version>
 	<name>SPF Common Parent POM</name>
-
+	
+	<properties>
+		<spf.common.version>2.0.0-SNAPSHOT</spf.common.version>
+	</properties>
+	
 	<ciManagement>
 		<system>Hudson</system>
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-common-parent</url>
