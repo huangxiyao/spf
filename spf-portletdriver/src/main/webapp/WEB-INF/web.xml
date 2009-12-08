@@ -61,6 +61,14 @@
 	</filter>
 	<!--//portletdriver add-->
 
+	<!--SPF Filter add-->
+	<filter>
+		<!--PortletAppEngine Filter-->
+		<filter-name>LogDiagnosticIdFilter</filter-name>
+		<filter-class>com.hp.it.spf.openportal.filter.LogDiagnosticIdFilter</filter-class>
+	</filter>
+	<!--//SPF Filter add-->
+
 	<!--producer.war-->
 	<filter>
 		<filter-name>ProducerFilter</filter-name>
@@ -76,6 +84,13 @@
 		<dispatcher>INCLUDE</dispatcher>
 	</filter-mapping>
 	<!--//portletdriver add-->
+
+	<!--SPF Filter add-->
+	<filter-mapping>
+		<filter-name>LogDiagnosticIdFilter</filter-name>
+		<url-pattern>/wsrp/*</url-pattern>
+	</filter-mapping>
+	<!--//SPF Filter add-->
 
 	<!--producer.war-->
 	<filter-mapping>
