@@ -1,19 +1,24 @@
 /**
   Shared Portal Framework portlet filters.
- <body>
+<body>
 	<h3>Portlet session cleanup filter</h3>
 	
 	<p>{@link com.hp.it.spf.session.portlet.filter.SessionCleanupFilter}, a portlet filter, is the primary class 
 	of interest to portlet applications. It reads a time stamp value from request and compares with the value from
-	portlet session to determine whether to perform certain portlet session cleanup which is configurable via an optional initialization parameter. 
-	This class could be extended to customize what session attributes need to be removed and/or retained.</p>
+	portlet session to determine whether to perform certain portlet session cleanup, for both APPLICATION_SCOPE and 
+	PORTLET_SCOPE session attributes.</p>
 	
-	<p>
-	This portlet filter cleans up APPLICATION_SCOPE and PORTLET_SCOPE sessions of a portlet. 
-	The filter has one optional init-param cleanupPortletSession, which has a String value of mode1 or mode2,
-	the value is case-insensitive. The default value is mode1 if not specified. If the class is extended, the 
-	values are not limited to mode1 and mode2. The extender can specify any desired value.  
-	</p>
+	<p>The filter takes one	initialization parameter, <em>portletSessionCleanupMode</em>.	It has two possible values, 
+	spf.keepStickySessionAttributesOnly	or spf.removeNonStickySessionAttributesOnly. If the former is used, all portlet 
+	session attributes except sticky session attributes will be removed for both application and portlet scopes. 
+	This is default behavior if init-param is not specified. If the latter is used, then only unsticky session attributes 
+	will be removed.</P>  
+	
+	<p>This class could be extended to customize what session attributes need to be removed and/or retained by overriding
+	<em>canSessionAttributeBeRemoved</em> method to suit different application needs. If the filter does have been extended,
+	then the value for portletSessioCleanMode is not limited by above two values. Application Development can choose whatever
+	value he/she prefers.</p>
+	
 	<p/>
 	<p>
 	This filter can be used and configured in three possible ways to achieve how a portlet's session attributes 
@@ -33,11 +38,12 @@
 	<p>If portlet session cleanup is desired, a portlet application will typically: </p>
 	<ol>
 		<li>Use and configure the {@link com.hp.it.spf.session.portlet.filter.SessionCleanupFilter} in the application's 
-			<code>portlet.xml</code> including an initialization parameter, the value of which is default to true if not specified.</li>
+			<code>portlet.xml</code> including an initialization parameter.</li>
 	
-		<li>Optionally, extend the {@link com.hp.it.spf.session.portlet.filter.SessionCleanupFilter} and override predicate method 
-		which determine whether to cleanup the specified session attribute and then configure the extended filter 
-		in the application's <code>portlet.xml</code> including an optional initialization parameter.</li>
+		<li>Optionally, extend the {@link com.hp.it.spf.session.portlet.filter.SessionCleanupFilter} and override canSessionAttributeBeRemoved method 
+		which determine whether to cleanup the specified session attribute based on combination of session attribute name, session attribute value, 
+		init-param value and portlet session scope. And then configure the extended filter 
+		in the application's <code>portlet.xml</code> including an initialization parameter.</li>
 			
 	</ol>
 	
@@ -54,7 +60,7 @@
 
 	&lt;init-param&gt;
 		&lt;param-name&gt;portletSessionCleanupMode&lt;/param-name&gt;
-		&lt;param-value&gt;mode1&lt;/param-value&gt;
+		&lt;param-value&gt;spf.keepStickySessionAttributesOnly&lt;/param-value&gt;
 	&lt;/init-param&gt;
 &lt;/filter&gt;
 
@@ -63,5 +69,6 @@
 		&lt;portlet-name&gt;Your-Specific-Portlet-Name&lt;/portlet-name&gt;
 &lt;/filter-mapping&gt;
 </body>
+
  */
 package com.hp.it.spf.session.portlet.filter;
