@@ -592,20 +592,14 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 lastChangeDateInSession = ((Date)sessionUserProfile.get(AuthenticationConsts.KEY_LAST_CHANGE_DATE));
             }            
         }
-        
-        Map<String, Object> up = getUserProfile();
 
         // Judge
         if (lastChangeDate == null) {
             return false;
         } else if (lastChangeDateInSession == null) {
             return true;
-        } else if( lastChangeDate.after(lastChangeDateInSession)){
-            return true;
-        } else if( null == up ){
-        		return true;
-       	} else {
-        	return !up.equals(sessionUserProfile);
+        } else {
+            return lastChangeDate.after(lastChangeDateInSession);
         }
     }
 
