@@ -27,11 +27,14 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public final static String PARAM_FRAGMENT = "fragment";
 	
 	/**
-	 * The key of session attribute storing when last portlet session clean up was done
-	 * This key is also used as a request attribute to be passed to portlet producer in WSRP requests 
-	 * scope and portlet scope sessions 
+	 * The key of portlet scope session attribute storing when last portlet scope portlet session clean up was done
 	 */
-	public final static String KEY_LAST_PORTLET_SESSION_CLEANUP_DATE = STICKY_SESSION_ATTR_PREFIX + "LastSessionCleanupDate";	
+	public final static String KEY_LAST_PORTLET_SCOPE_SESSION_CLEANUP_DATE = STICKY_SESSION_ATTR_PREFIX + "LastPortletScopeSessionCleanupDate";	
 	
+	/**
+	 * The key of application scope session attribute storing when last application scope portlet session clean up was done
+	 */
+	public final static String KEY_LAST_APP_SCOPE_SESSION_CLEANUP_DATE = STICKY_SESSION_ATTR_PREFIX + "LastAppScopeSessionCleanupDate";	
 
+	
 }
