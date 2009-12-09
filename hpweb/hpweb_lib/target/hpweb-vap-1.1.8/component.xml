@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component
+	build-version="gold"
+	component-id="hpweblib"
+	component-type="Generic Component"
+	description="HPWeb layout components class library"
+	epi-build="570014"
+	epi-version="7.4"
+	major-version="1"
+	minor-version="0"
+	title="HPWeb layout components class library" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+</epideploy:component>

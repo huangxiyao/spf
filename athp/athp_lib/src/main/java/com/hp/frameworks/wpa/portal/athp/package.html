@@ -1,0 +1,895 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us" >
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252" >
+<title>@hp Layout VAP Components Developer's Guide</title>
+
+
+</head>
+
+<body>
+
+<p>Model objects used by the @hp layout.</p>
+<style type="text/css">
+
+body {
+	padding:0;
+	font-family: Verdana,Sans-serif;
+	font-size: small;
+}
+
+h1 {
+	font-family: Georgia,Serif;
+	font-size: 160%;
+	color:#404040;
+	margin-top: 5px;
+}
+
+h2 {
+	font-family: Georgia,Serif;
+	font-size: 130%;
+	color:#404040;
+	page-break-before: always;
+}
+
+h3 {
+	font-family: Verdana,Sans-serif;
+	font-size: small;
+	font-weight: bold;
+	color:#404040;	
+	margin-top: 20px;
+}
+
+
+li {
+	margin-left: -10px;
+}
+
+ol li {
+	margin-bottom: 20px;
+}
+
+code {
+	color: #990000;
+	font-size: small;	
+}
+
+pre {
+	color: #990000;	
+	font-size: small;
+}
+
+.byline {
+	font-style: italic;
+	font-size: 90%;
+	color: gray;
+	margin-top: -10px;
+	border-bottom: solid black 1px;
+}
+
+.codeSample {
+	color: #990000;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: small;
+	border: solid #990000 1px;
+	padding: 5px;
+}
+
+.leftFloatingImage {
+	float: left;
+	margin: 0 10px 10px 0;
+}
+
+.rightFloatingImage {
+	float: right;
+	margin: 0 0 10px 10px;
+}
+
+.toc {
+	list-style-type: none;
+}
+
+ul.toc ul {
+	list-style-type: none;
+}
+
+table.props td, table.props th {
+	padding: 5px;
+	background-color: #F0F0F0
+}
+table.props th {
+	font-size: 11px;
+	font-weight: bold;
+	text-align: right;
+}
+
+table.props td {
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.style1 {
+	border-style: solid;
+	border-width: 1px;
+}
+
+</style>
+
+<h1>&#64;hp Layout VAP Components Developer's Guide</h1>
+<div class="byline" ></div>
+<h2>Table of Contents</h2>
+<ul class="toc">
+	<li>1. <a href="#overview">Overview</a></li>
+	<li>2. <a href="#systemRequirements">System Requirements</a></li>
+
+	<li>3. <a href="#installation">Installation</a></li>
+		<ul>
+			<li>3.1 <a href="#pageDisplayIssue">Vignette Page Display Issue</a></li>
+		</ul>
+	<li>4. <a href="#usage">Usage</a></li>
+	<li>5. <a href="#components">@hp Components</a></li>
+	<ul>
+		<li>5.1 <a href="#styleTypes">Style Types</li>
+		<li>5.2 <a href="#themes">Themes</li>
+		<li>5.3 <a href="#grids">Grids</li>
+		<li>5.4 <a href="#styles">Styles</li>
+	</ul>
+	<li>6. <a href="#layoutCustomization">Layout Customization</a></li>
+	<li>7. <a href="#configurationReference">Configuration Reference</a> 
+	<ul>
+		<li>7.1 <a href="#bodyStyleDisabled">Body Style Disabled Flag</a></li>
+		<li>7.2 <a href="#title">Title</a></li>
+		<li>7.3 <a href="#secondaryTitle">Secondary Title</a></li>
+		<li>7.4 <a href="#tertiaryTitle">Tertiary Title</a></li>
+		<li>7.5 <a href="#greetingMessage">Greeting Message</a></li>
+		<li>7.6 <a href="#warningMessage">Warning Message</a></li>
+		<li>7.7 <a href="#loginUrl">Login URL</a></li>
+		<li>7.8 <a href="#logoutUrl">Logout URL</a></li>
+		<li>7.9 <a href="#siteSearchID">Site Search ID</a></li>
+		<li>7.10 <a href="#siteSearchLabel">Site Search Label</a></li>
+		<li>7.11 <a href="#myLinksDisabled">My Links Disabled Flag</a></li>
+		<li>7.12 <a href="#breadcrumbs">Breadcrumbs</a></li>
+		<li>7.13 <a href="#generateBreadcrumbs">Generate Breadcrumbs</a></li>
+		<li>7.14 <a href="#horizontalMenuStyle">Horizontal Menu Style Flag</a></li>
+		<li>7.15 <a href="#topMenu">Top Menu</a></li>
+		<li>7.16 <a href="#leftMenu">Left Menu</a></li>
+		<li>7.17 <a href="#feedbackUrl">Feedback URL</a></li>
+		<li>7.18 <a href="#supportUrl">Support URL</a></li>
+		<li>7.19 <a href="#targetFrame">Target Frame</a></li>
+		<li>7.20 <a href="#confidentialLabel">Confidential Label Flag</a></li>
+		<li>7.21 <a href="#publicLabel">Public Label Flag</a></li>
+		<li>7.22 <a href="#revisionDateDisplayed">Revision Date Displayed Flag</a></li>
+		<li>7.23 <a href="#versionNumber">Version Number</a></li>
+		<li>7.24 <a href="#metaElements">Meta Elements</a></li>
+		<li>7.25 <a href="#windowTitle">Window Title</a></li>
+	</ul></li>
+</ul>
+<h2 id="overview">1. Overview</h2>
+<p>Portal applications running on the Vignette Application Portal (VAP) product 
+that require the look-and-feel of the @hp UI standards can make use
+of the @hp VAP components.&nbsp; 
+Using the &#64;hp layout allows developers to focus solely on rendering the main 
+content portion of the page without having to worry about the details of 
+standard header, footer and navigation menu (commonly referred to as the 
+'c-frame').
+For more information about the &#64;hp standard see the
+<a href="http://intranet.hp.com/HPIT/GetConnected/">&#64;hp Get Connected</a> site.</p>
+<p>Everything outlined in red in the picture below will be rendered by the &#64;hp 
+layout.&nbsp; Everything NOT outlined in red is referred to as the &quot;page 
+content&quot;.</p>
+<div><img src="doc-files/cframe.jpg" alt=""> </div>
+<p>The &#64;hp layout is supported by the following components to render the 
+layout and various @hp 
+design elements in the layout:</p>
+<ul>
+	<li>Theme component</li>
+	<ul>
+		<li>@hp Theme</li>
+	</ul>
+	<li>Grid components</li>
+	<ul>
+		<li>@hp Layout Horizontal Navigation Grid</li>
+		<li>@hp Layout Split Navigation Grid</li>
+		<li>@hp Layout System Grid</li>
+	</ul>
+	<li>Style type component</li>
+	<ul>
+		<li>@hp Layout Config Style Type</li>
+	</ul>
+	<li>Style components</li>
+	<ul>
+		<li>@hp Layout Header Style</li>
+		<li>@hp Layout Footer Style</li>
+		<li>@hp Layout Horizontal Navigation Style</li>
+		<li>@hp Layout Vertical Navigation Style</li>
+		<li>@hp Layout Config Style</li>
+	</ul>
+</ul>	
+See the <a href="#components">@hp Components</a> section for more information.
+
+<h2 id="systemRequirements">2. System Requirements</h2>
+<p>The @hp components runs on Vignette Application Portal (VAP) product 
+version 7.4 and above.  Java Servlet 2.4, JSP 2.0 and JSTL 1.1 are required.</p>
+
+<h2 id="installation">3. Installation</h2>
+<p>The @hp layout components are packaged in a <i>AtHPComponents-&lt;version&gt;.car</i> 
+file is downloadable from the 
+<a href="http://dl.frameworks.hp.com/soa_fw/downloads/public/wpap/athp-vap/">WPA 
+&#64;hp VAP Components Downloads directory</a>.&nbsp;&nbsp; 
+Download the latest version to a local temporary directory.&nbsp;&nbsp; </p>
+<p>Use the VAP Server Console to install/import the components.&nbsp;&nbsp; 
+After they are imported, share each @hp component to the site(s) where they will 
+be used; otherwise, they won't be accessible. Since the @hp Components contain class 
+JAR files the application server has to be restarted twice to load the classes.
+</p>
+
+<h3 id="pageDisplayIssue">3.1 Vignette Page Display Issue</h3>
+
+<p>There is a known Vignette issue under certain conditions with the default 
+Page Display secondary page and it affects the @hp layout horizontal
+menu display.
+</p>
+
+<p>To fix this problem perform the following to use the standard Page 
+Display secondary page:
+
+<ol>
+<li>
+Go to <code>Server Console -&gt; Components -&gt; Pages -&gt; 
+Secondary Page List </code>.  On the page, click on the 
+<code>"Page Display" secondary page</code> checkbox,
+select <code>"Share to..."</code> from the combo box
+and then the <code>"Do It"</code> button.  Then select the site(s) that 
+you want to share to.
+</li>
+<li>
+Go to the <code>Site Console</code> for that site <code>-&gt; Site Settings -&gt; 
+Appearance -&gt; Secondary Pages -&gt;</code>.   For the <code>"Page Display" Page 
+Type</code> ensure you select <code>"Page Display"</code> in the 
+<code>Use Secondary Page</code> column.
+</li>
+</ol>
+</p>
+
+
+<h2 id="usage">4. Usage</h2>
+
+<p>Use the VAP Admin Console to apply the @hp layout to a site or a set of pages 
+by setting its theme to @hp Theme and its grid to one of the @hp grids. 
+You can customize the @hp layout to your portal and pages through
+component properties or  programmatically.  Component properties customization 
+involves setting layout
+properties in the @hp Components while programmatic 
+customization involves setting layout properties to the <code>AtHPModel</code>
+named request-scoped bean. See the <a href="#layoutCustomization">Layout 
+Customization</a> section for more information.</p>
+
+<h2 id="components">5. @hp Components</h2>
+<h3 id="styleTypes">5.1 Style Types</h3>
+<p>All of the page elements in the @hp c-frame match with the style types provided by VAP.  
+The @hp components include implementations for each of the following VAP style types:<br>
+<ul>
+<li>Header</li>
+<li>Footer</li>
+<li>Horizontal Navigation</li>
+<li>Vertical Navigation</li>
+<li>HP Layout Config</li>
+</ul>
+
+The HP Layout Config Style Type is provided for a style instance, e.g. @hp Layout Config Style, 
+to hold custom code for programmatic layout configuration. 
+</p>
+
+<h3 id="themes">5.2 Themes</h3>
+<p>@hp components include the @hp Theme that aggregates the following styles: 
+</p>
+<ul>
+<li>@hp Header Style</li> 
+<li>@hp Footer Style</li>
+<li>@hp Vertical Navigation Style</li>
+<li>@hp Horizontal Navigation Style</li>
+<li>@hp Layout Config Style</li>
+</ul></p>
+<h3 id="grids">5.3 Grids</h3>
+<p>Three @hp grids are provided:
+<ul>
+<li><b>@hp System Grid</b> - This grid is used for system pages and pages that do not 
+require any navigation. Neither the top horizontal navigation nor the left vertical 
+navigation is displayed on this grid.</li>
+<li><b>@hp Horizontal Navigation Grid</b> - This grid is used for pages that require a 
+top horizontal navigation but no left vertical navigation.
+<li><b>@hp Split Navigation Grid</b> - This grid is used for pages that require a top
+horizontal navigation and a left vertical navigation.
+</li>
+</ul>
+
+</p>
+
+<h3 id="styles">5.4 Styles</h3>
+<h4 id="athpHeaderStyle">5.4.1 @hp Header Style</h4>
+<p>The @hp Header Style displays:<br>
+<ul>
+<li>@hp standard banner</a>
+<li>Page title, welcome message, warning message</li>
+<li>Breadcrumbs</a>
+</ul>
+</p>
+<h4 id="footerStyle">5.4.2 @hp Footer Style</h4>
+<p>The @hp Footer Style displays:
+<ul>
+<li>Privacy link, terms and conditions link, feedback link, support link, etc</li>
+</ul>
+</p>
+
+<h4 id="horizontalNavStyle">5.4.3 @hp Horizontal Navigation Style</h4>
+<p>The @hp Horizontal Navigation Style displays the the first and second levels
+navigation items as configured in the Vignette Admin Console in the 
+top horizontal navigation menu.
+Per @hp web standards, a maximum of two levels is displayed.  
+The navigation split level, if set in the Vignette Admin Console, is ignored.</p>
+
+<h4 id="verticalNavStyle">5.4.4 @hp Vertical Navigation Style</h4>
+<p>The @hp Vertical Navigation Style displays up to two 
+levels of navigation per @hp web standards.  The default behavior is to display the 
+third and fourth navigation levels for the current page as configured in the
+Vignette Admin Console.  
+If the current page is a first level navigation item, then the left menu will 
+show its second and third level navigation items.
+The left menu can be created programmatically during run-time, overriding the
+default behavior.
+See the <a href="#leftMenu">Left Menu</a> configuration property for more 
+information.</p>
+</p>
+
+<h4 id="layoutConfigStyle">5.4.5 @hp Layout Config Style</h4>
+<p>The @hp Layout Config Style is the style where to include code for customizing the @hp layout. 
+<b>It must not contain HTML that outputs HTTP responses.</b>
+Each @hp grid includes this style at the beginning of the grid's execution, so that the layout
+properties may be initialized before the @hp layout accesses them for rendering.</p>
+
+<p>The custom code goes into the primary JSP file, <code>athp_layout_config.jsp</code>.
+Also included is the <code>sample_athp_layout_config.jsp</code> file which
+contains sample customizations.   See the next section for more 
+information on layout customization.
+</p>
+
+<p>Additionally, customized code for including in the <code>&lt;head&gt;</code> 
+element can be placed  in the <code>athp_layout_config_head.jsp</code> file. 
+Code such as javascript code  and CSS styles can be placed in this file. </p>
+
+<h2 id="layoutCustomization">6. Layout Customization</h2>
+<p>A good portion of the markup rendered by the @hp layout is static HTML, 
+however, there are a number of design elements which are typically customized 
+on a site-by-site or even page-by-page basis.  One item that is most typically 
+customized is the page title.</p>
+
+<p>For most of the configurable page elements, there are two different mechanisms 
+available for specifying a custom value: 1) a mechanism utilizing 
+&#64;hp component properties, and 2) a programmatic mechanism utilizing 
+the <code>AtHPModel</code> request-scoped attribute object.  A property with 
+a non-null value in the <code>AtHPModel</code> object will take precedence 
+over a value in the component property. It is up to the application developer 
+to choose which approach is preferred. The general rule is to use
+component properties for static constant values and the programmatic mechanism 
+for dynamic run-time values. It is not necessary to set values for all of the 
+properties. Some properties can be enabled to auto-generate values at run-time, 
+e.g. <a href="#leftMenu">Left Menu</a> property and <a href="#breadcrumbs">
+Breadcrumbs</a> property.</p>
+
+<h3 id="declarativeCustomization">6.1 Customization in Component Properties</h3>
+<p>This approach involves setting property values in the  @hp components. 
+See <a href="#configurationReference">Configuration Reference</a> for the list 
+of properties and components.
+</p>
+<h3 id="programmaticCustomization">6.2 Programmatic Customization</h3>
+<p>
+The <code>com.hp.frameworks.wpa.portal.athp.AtHPModel</code> bean type contains 
+properties which are customizations
+to the @hp layout. The programmatic approach involves setting the property values 
+on the <code>AtHPModel</code> named 
+request-scoped attribute bean of that type.  Each @hp grid provides an integration 
+point by including the @hp Layout Config Style.   The  <code>athp_layout_config.jsp</code> 
+primary file in the @hp Layout Config Style is where a portal can place 
+its layout customization code.
+</p>
+
+<p>The following sample code references the <code>AtHPModel</code> bean, and 
+set @hp properties on it.</p>
+<p class="codeSample">
+&lt;jsp:useBean id="AtHPModel" scope="request"
+        class="com.hp.frameworks.wpa.portal.athp.AtHPModel" /&gt;
+<br><br>
+&lt;jsp:setProperty name="AtHPModel" property="title" value="My Page Title" /&gt;<br>
+&lt;jsp:setProperty name="AtHPModel" property="feedbackUrl" value="http://myfeedback.hp.com" /&gt;<br>
+</p>
+
+<h2 id="configurationReference">7. Configuration Reference</h2>
+<p>The following sections describe all of the configurable page elements along 
+with the corresponding property names in component properties files and
+<code>AtHPModel</code> object.</p>
+
+<h3 id="bodyStyleDisabled">7.1 Body Style Disabled Flag</h3>
+<p>The boolean value of this property determines whether or not the standard &#64;hp 
+body content styles are disabled.&nbsp; A value of 
+&quot;true&quot; will prevent the <em>header_body.css</em> file from being 
+automatically included.&nbsp; If 
+no value is supplied for this property, a value of &quot;false&quot; is assumed and the 
+body styles will be enabled.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.bodyStyleDisabled (AtHP Header)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setBodyStyleDisabled(boolean)}</td>
+	</tr>
+</table>
+<h3 id="title">7.2 Title</h3>
+<p>The value of this property will be rendered as the page title (sometimes 
+referred to as the page header or banner).&nbsp; Note that this is 
+different than the browser window title, which is set using the 
+<a href="#windowTitle">Window Title</a> property.
+If no title string is provided, the  default title is the browser window title.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setTitle(String)}</td>
+	</tr>
+</table>
+<h3 id="secondaryTitle">7.3 Secondary Title</h3>
+<p>The value of this property will be rendered as the secondary page title 
+rendered immediately after the value of the <em>title</em> property.&nbsp; This 
+is an optional page element.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setSecondaryTitle(String)}</td>
+	</tr>
+</table>
+<h3 id="tertiaryTitle">7.4 Tertiary Title</h3>
+<p>The value of this property will be rendered as the tertiary page title 
+rendered immediately after the value of the <em>secondaryTitle</em> property.&nbsp; 
+Note that the value of this property will only be used if a value is also 
+provided for the <em>secondaryTitle</em> property.&nbsp; This is an optional 
+page element.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setTertiaryTitle(String)}</td>
+	</tr>
+</table>
+<h3 id="greetingMessage">7.5 Greeting Message</h3>
+<p>The value of this property will be rendered as the greeting message displayed 
+beneath the top banner.&nbsp; This is an optional page element.&nbsp; If no 
+value is specified, no greeting message will be rendered.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setGreetingMessage(String)}</td>
+	</tr>
+</table>
+<h3 id="warningMessage">7.6 Warning Message</h3>
+<p>The value of this property will be rendered as the warning message displayed 
+beneath the top banner.&nbsp; This is an optional page element.&nbsp; If no 
+value is specified, no warning message will be rendered.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setWarningMessage(String)}</td>
+	</tr>
+</table>
+<h3 id="loginUrl">7.7 Login URL</h3>
+<p>The value of this property will be used as the destination URL for the &quot;Log 
+On&quot; hyperlink.&nbsp; This is an optional page element.&nbsp; If not value is 
+specified, the &quot;Log On&quot; hyperlink will not be displayed.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.loginUrl (AtHP Header)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setLoginUrl(String)}</td>
+	</tr>
+</table>
+<h3 id="logoutUrl">7.8 Logout URL</h3>
+<p>The value of this property will be used as the destination URL for the page 
+the user is directed to after logging out via the &quot;Log Off&quot; button.&nbsp; This 
+is an optional page element.&nbsp; If a value is specified for this property, a 
+value must also be specified for the <em>loginUrl</em> property.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.logoutUrl (AtHP Header)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setLogoutUrl(String)}</td>
+	</tr>
+</table>
+<h3 id="siteSearchID">7.9 Site Search ID</h3>
+<p>The value of this property will be used as the search ID to use when 
+searching the local site.&nbsp; This is an optional page element.&nbsp; Setting 
+a value for the site search ID will cause radio buttons to be displayed beneath 
+the search box in the top banner that will allow the user to select between 
+searching the entire intranet or just the local site.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.siteSearchID (AtHP Header)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setSiteSearchID(String)}</td>
+	</tr>
+</table>
+<h3 id="siteSearchLabel">7.10 Site Search Label</h3>
+<p>The value of this property will be used as the text for the site search 
+label. This text is displayed next to the site search radio button within the 
+search box.&nbsp; If a value is specified for this property, a value must also 
+be specified for the <em>siteSearchID</em> property.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.siteSearchLabel (AtHP Header)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setSiteSearchLabel(String)}</td>
+	</tr>
+</table>
+<h3 id="myLinksDisabled">7.11 My Links Disabled Flag</h3>
+<p>The boolean value of this property is used to indicate whether or not the &quot;My 
+Links&quot; hyperlink should be displayed as part of the banner.&nbsp; A value of 
+&quot;true&quot; indicates that the &quot;My Links&quot; hyperlink should not be displayed, while a 
+value of &quot;false&quot; (the default) indicates that the &quot;My Links&quot; hyperlink should be 
+displayed.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.myLinksDisabled (AtHP Header)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setMyLinksDisabled(boolean)}</td>
+	</tr>
+</table>
+<h3 id="breadcrumbs" style="width: 1148px">7.12 Breadcrumbs</h3>
+<p>Breadcrumbs are used to represent the current page's location in the site 
+hierarchy and are displayed immediately beneath the top navigation menu.&nbsp; Breadcrumbs 
+are automatically generated by the @hp Horizontal Navigation component if the
+<a href="#generateBreadcrumbs">Generate Breadcrumbs</a> property is to 
+<code>true</code>.&nbsp;&nbsp; 
+It also can be set by retrieving its List property and adding breadcrumb strings
+to it (sample code below).</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#getBreadcrumbItems()}</td>
+	</tr>
+</table>
+<p class="codeSample">
+&lt;jsp:useBean id="AtHPModel" scope="request"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class="com.hp.frameworks.wpa.portal.athp.AtHPModel" /&gt;<br><br>
+        
+&lt;jsp:scriptlet&gt;<br><br>
+List breadcrumbs = AtHPModel.getBreadcrumbItems();<br>
+<br>
+// Breadcrumb 1<br>
+breadcrumbs.add("Breadcrumb1");<br>
+<br>
+// Breadcrumb 2<br>
+breadcrumbs.add("Breadcrumb2");<br>
+<br>
+&lt;/jsp:scriptlet&gt;
+</p>
+
+<h3 id="generateBreadcrumbs" style="width: 1148px">7.13 Generate Breadcrumbs</h3>
+<p>The value of this boolean property will generate the default breadcrumb items 
+for rendering if the value is set to <code>true</code>. The list of breadcrumb items 
+consists of parent navigation items along with the current page item. 
+If no value is supplied for this property no breadcrumb item is generated.</p>
+
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.generateBreadcrumbs (AtHP Header)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setGenerateBreadcrumbs(boolean)}</td>
+	</tr>
+</table>
+<h3 id="horizontalMenuStyle">7.14 Horizontal Menu Style Flag</h3>
+<p>The boolean value of this property indicates whether or not the 2nd-level of 
+the top navigation menu should be rendered horizontally.&nbsp; A value of &quot;true&quot; 
+indicates that the 2nd-level menu items should be rendered as a horizontal menu 
+while a value of &quot;false&quot; (the default) indicates that the 2nd-level menu items 
+should be rendered as a vertical menu.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.horizontalMenuStyle (AtHP Horizontal Navigation)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setHorizontalMenuStyle(boolean)}</td>
+	</tr>
+</table>
+<h3 id="topMenu">7.15 Top Menu</h3>
+<p>The menu items displayed within the top (horizontal) navigation menu is constructed from 
+the navigation tree of the portal created from the VAP Admin Console.&nbsp;&nbsp; 
+There is no programmatic customization.&nbsp;&nbsp;&nbsp; 
+Per @hp web standards, at most two levels of menu are displayed.&nbsp; A menu item 
+is either a link or separator (VAP Spacer item type, 2nd level only).&nbsp; 
+If a top-level menu item has 
+sub-menu items but the user does not have permission to access any of the items,&nbsp;&nbsp;then 
+the top-level menu item is not shown.</p>
+<p>The following shows a sample horizontal menu:</p>
+<div><img src="doc-files/topmenu.jpg" alt="" class="style1"></div>
+<h3 id="leftMenu">7.16 Left Menu</h3>
+<p>The menu items displayed in the left vertical navigation can be specified 
+in one of two different ways: 1) the default, allow the @hp layout to generate 
+the menu as configured from the VAP Admin Console, or 2) programmatically 
+using the <code>leftMenuItems</code> property. If the <code>leftMenuItems</code>
+property is set then it will be used.</a></p>
+
+<p>The menu items displayed is either a link, label, separator, or spacer type. 
+Per @hp web standards, at most two levels are displayed.</p>
+
+<p>In programmatically setting the menu, the <code>leftMenuItems</code> property 
+accepts a list of {@link com.hp.frameworks.wpa.portal.athp.MenuItem} objects.  
+Note that only objects of type 
+{@link com.hp.frameworks.wpa.portal.athp.MenuItem} should be added to the list.</p>
+
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#getLeftMenuItems()}</td>
+	</tr>
+</table>
+<p>The following example shows how to programmatically configure a sample menu.</p>
+
+<p class="codeSample">
+&lt;jsp:useBean id="AtHPModel" scope="request"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class="com.hp.frameworks.wpa.portal.athp.AtHPModel" /&gt;<br><br>
+        
+&lt;jsp:scriptlet&gt;<br><br>
+
+List leftMenu = AtHPModel.getLeftMenuItems();<br>
+<br>
+// Label menu item<br>
+MenuItem item = new MenuItem("id1", "text item 1");<br>
+leftMenu.add(item);<br>
+<br>
+// Separator menu item<br>
+item = new MenuItem();<br>
+item.setSpacer("true");<br>
+leftMenu.add(item);<br>
+<br>
+// Link menu items<br>
+item = new MenuItem("id2", "hp support", "http://support.hp.com", "_new");<br>
+leftMenu.add(item);<br>
+item = new MenuItem("id3", "hp shopping", "http://shopping.hp.com", "_new");<br>
+leftMenu.add(item);<br>
+<br>
+// Separator menu item<br>
+item = new MenuItem();<br>
+item.setSeparator("true");<br>
+leftMenu.add(item);<br>
+<br>
+// Label menu item with submenu<br>
+item = new MenuItem("id4", "external sites");<br>
+leftMenu.add(item);<br>
+<br>
+MenuItem child = new MenuItem("id4_1", "espn", "http://espn.com", "_new");<br>
+item.getSubMenuItems().add(child);<br>
+child = new MenuItem("id4_2", "cnn", "http://cnn.com", "_new");<br>
+item.getSubMenuItems().add(child);<br>
+<br>
+&lt;/jsp:scriptlet&gt
+</p>
+<p>In the example above, the menu items have been specified as follows:</p>
+<ul>
+	<li>A non-clickable menu item with id &quot;id1&quot; displaying the text &quot;text 
+	item 1&quot;</li>
+	<li>A menu spacer</li>
+	<li>A clickable menu item with id &quot;id2&quot; displaying the text &quot;hp support&quot; 
+	that opens to a new browser window with target &quot;_new&quot;</li>
+	<li>A clickable menu item with id &quot;id3&quot; displaying the text &quot;hp shopping&quot; 
+	that opens to a new browser window with target &quot;_new&quot;</li>
+	<li>A menu separator</li>
+	<li>A non-clickable menu item label with &quot;id4&quot; displaying the text &quot;external 
+	sites&quot; that has an expanded sub-menu</li>
+	<li>A clickable sub-menu item with parent id &quot;id4&quot; and id &quot;id4_1&quot; displaying 
+	the text &quot;espn&quot; that opens to a new browser window with target &quot;_new&quot;</li>
+	<li>A clickable sub-menu item with parent id &quot;id4&quot; and id &quot;id4_2&quot; displaying 
+	the text &quot;cnn&quot; that opens to a new browser window with target &quot;_new&quot;</li>
+</ul>
+<p>The contents of this menu would be rendered as follows:</p>
+<div><img src="doc-files/leftmenu.jpg" alt="" class="style1"><p>&nbsp;</div>
+<h3 id="feedbackUrl">7.17 Feedback URL</h3>
+<p>The value of this property is used as the destination URL for the feedback 
+link in the page footer.&nbsp; If no value is supplied for this property the 
+feedback hyperlink will point to the default feedback page.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.feedbackUrl (AtHP Footer)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setFeedbackUrl(String)}</td>
+	</tr>
+</table>
+<h3 id="supportUrl">7.18 Support URL</h3>
+<p>The value of this property is used as the destination URL for the support link 
+in the page footer.&nbsp; If no value is supplied for this property the support 
+hyperlink will point to the default support page.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.supportUrl (AtHP Footer)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setSupportUrl(String)}</td>
+	</tr>
+</table>
+<h3 id="targetFrame">7.19 Target Frame</h3>
+<p>The value of this property is used as the name of the window/frame in which 
+the feedback and support URLs will be opened.&nbsp; If no value is specified for 
+this property the feedback and support pages will be opened in the current 
+window/frame.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.targetFrame (AtHP Footer)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setTargetFrame(String)}</td>
+	</tr>
+</table>
+<h3 id="confidentialLabel">7.20 Confidential Label Flag</h3>
+<p>The boolean value of this property is used to determine whether or not the 
+&quot;HP Confidential&quot; label is rendered as part of the page footer.&nbsp; A value of 
+&quot;true&quot; indicates that the &quot;HP Confidential&quot; label should be rendered.&nbsp; If 
+neither the <em>confidentialLabel</em> or <em>publicLabel</em> properties are 
+set to &quot;true&quot;, the default &quot;HP Restricted&quot; label will be rendered.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.confidentialLabel (AtHP Footer)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setConfidentialLabel(boolean)}</td>
+	</tr>
+</table>
+<h3 id="publicLabel">7.21 Public Label Flag</h3>
+<p>The boolean value of this property is used to determine whether or not the 
+&quot;HP Public&quot; label is rendered as part of the page footer.&nbsp; A value of 
+&quot;true&quot; indicates that the &quot;HP Public&quot; label should be rendered.&nbsp; If neither 
+the <em>confidentialLabel</em> or <em>publicLabel</em> properties are set to 
+&quot;true&quot;, the default &quot;HP Restricted&quot; label will be rendered.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.publicLabel (AtHP Footer)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setPublicLabel(boolean)}</td>
+	</tr>
+</table>
+<h3 id="revisionDateDisplayed">7.22 Revision Date Displayed Flag</h3>
+<p>The boolean value of this property is used to determine whether or not the 
+page revision date should be rendered as part of the page footer.&nbsp; A value 
+of &quot;true&quot; indicates that the page revision date should be displayed while a 
+value of &quot;false&quot; (the default) indicates that the page revision date should not 
+be displayed.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.revisionDateDisplayed (AtHP Footer)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setRevisionDateDisplayed(boolean)}</td>
+	</tr>
+</table>
+<h3 id="versionNumber">7.23 Version Number</h3>
+<p>The value of this property is displayed as the page version number in the 
+page footer.&nbsp; This is an optional page element.&nbsp; If not value is 
+specified for this property, not version string will be displayed.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>athp.versionNumber (AtHP Footer)</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setVersionNumber(String)}</td>
+	</tr>
+</table>
+<h3 id="metaElements">7.24 Meta Elements</h3>
+<p>This property will add additional <code>&lt;meta name=&quot;&lt;name&gt;&quot; 
+contents=&quot;&lt;value&gt;&quot;&gt;</code> elements to the <code>&lt;head&gt;</code> 
+element.&nbsp; Retrieve the <code>java.util.Properties</code> object and use the
+<code>setProperty(name, value)</code> method to include additional <code>&lt;meta&gt;</code> 
+elements.</p>
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#getMetaInfos()}</td>
+	</tr>
+</table>
+<p class="codeSample">
+&lt;jsp:useBean id="AtHPModel" scope="request"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class="com.hp.frameworks.wpa.portal.athp.AtHPModel" /&gt;<br><br>
+        
+&lt;jsp:scriptlet&gt;<br><br>
+
+Properties metaInfos = AtHPModel.getMetaInfos();<br/>
+metaInfos.setProperty(&quot;robots&quot;, &quot;noindex,nofollow&quot;);<br/>
+metaInfos.setProperty(&quot;country&quot;, &quot;us&quot;);<br/><br/>
+
+&lt;/jsp:scriptlet&gt;<br><br>
+</p>
+
+<h3 id="windowTitle">7.25 Window Title</h3>
+<p>The value of this property will be rendered as the browser window title 
+which is displayed in the title bar of the user's browser. If no value is specified 
+for this property the Vignette JSP custom tag 
+<code>&lt;vgn-portal:pageContentTitle /&gt;</code> will be used to render 
+the window title.</p>
+
+<table class="props">
+	<tr>
+		<th>Message Key (Component):</th>
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>AtHPModel Property:</th>
+		<td>{@link com.hp.frameworks.wpa.portal.athp.AtHPModel#setWindowTitle(String)}</td>
+	</tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,2085 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us" >
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252" >
+<title>HPWeb Layout VAP Components Developer's Guide</title>
+
+
+</head>
+
+<body>
+
+<p>Model objects used by the HPWeb layout.</p>
+<style type="text/css">
+
+body {
+	padding:0;
+	font-family: Verdana,Sans-serif;
+	font-size: small;
+}
+
+h1 {
+	font-family: Georgia,Serif;
+	font-size: 160%;
+	color:#404040;
+	margin-top: 5px;
+}
+
+h2 {
+	font-family: Georgia,Serif;
+	font-size: 130%;
+	color:#404040;
+	page-break-before: always;
+}
+
+h3 {
+	font-family: Verdana,Sans-serif;
+	font-size: small;
+	font-weight: bold;
+	color:#404040;	
+	margin-top: 20px;
+}
+
+h4 {
+	font-family: Verdana,Sans-serif;
+	font-size: small;
+	font-weight: normal;
+	color:#404040;	
+	margin-top: 20px;
+}
+
+
+li {
+	margin-left: -10px;
+}
+
+ol li {
+	margin-bottom: 20px;
+}
+
+code {
+	color: #990000;
+	font-size: small;	
+}
+
+pre {
+	color: #990000;	
+	font-size: small;
+}
+
+.byline {
+	font-style: italic;
+	font-size: 90%;
+	color: gray;
+	margin-top: -10px;
+	border-bottom: solid black 1px;
+}
+
+.codeSample {
+	color: #990000;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: small;
+	border: solid #990000 1px;
+	padding: 5px;
+}
+
+.leftFloatingImage {
+	float: left;
+	margin: 0 10px 10px 0;
+}
+
+.rightFloatingImage {
+	float: right;
+	margin: 0 0 10px 10px;
+}
+
+.toc {
+	list-style-type: none;
+}
+
+ul.toc ul {
+	list-style-type: none;
+}
+
+table.props td, table.props th {
+	padding: 5px;
+	background-color: #F0F0F0
+}
+table.props th {
+	font-size: 11px;
+	font-weight: bold;
+	text-align: right;
+}
+
+table.props td {
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.style1 {
+	border-style: solid;
+	border-width: 1px;
+}
+
+</style>
+
+<h1>HPWeb VAP Components Developer's Guide</h1>
+<div class="byline" ></div>
+<h2>Table of Contents</h2>
+<ul class="toc">
+	<li>1. <a href="#overview">Overview</a></li>
+	<li>2. <a href="#systemRequirements">System Requirements</a></li>
+
+	<li>3. <a href="#installation">Installation</a></li>
+		<ul>
+			<li>3.1 <a href="#pageDisplayIssue">Vignette Page Display Issue</a></li>
+		</ul>
+	<li>4. <a href="#usage">Usage</a></li>
+	<li>5. <a href="#components">HPWeb Components</a></li>
+		<ul>
+			<li>5.1 <a href="#styleTypes">Style Types</a></li>
+			<li>5.2 <a href="#themes">Themes</a></li>
+			<li>5.3 <a href="#grids">Grids</a></li>
+			<li>5.4 <a href="#styles">Styles</a></li>
+		</ul>
+	<li>6. <a href="#layoutCustomization">Layout Customization</a></li>
+		<ul>
+			<li>6.1 <a href="#declarativeCustomization">Customization in Component Properties</a></li>
+			<li>6.2 <a href="#programmaticCustomization">Programmatic Customization</a></li>
+			<li>6.3 <a href="#hpwebEnhancedLayout">HPWeb Enhanced Layout</a></li>
+		</ul>
+	<li>7. <a href="#configurationReference">Configuration Reference</a>
+		<ul>
+			<li>7.1 <a href="#themeColor">Theme Color</a></li>
+			<li>7.2 <a href="#headerStyle">Header Style</a></li>
+			<li>7.3 <a href="#pageWidth">Page Width</a></li>
+			<li>7.4 <a href="#username">Username</a></li>
+			<li>7.5 <a href="#signinUrl">HP Passport Sign-in URL</a></li>
+			<li>7.6 <a href="#signoutUrl">HP Passport Sign-out URL</a></li>
+			<li>7.7 <a href="#registerUrl">HP Passport Register URL</a></li>
+			<li>7.8 <a href="#profileUrl">HP Passport Edit Profile URL</a></li>
+			<li>7.9 <a href="#myAccountUrl">My Account URL</a></li>
+			<li>7.10 <a href="#localeSelector">Locale Selector</a></li>
+			<li>7.11 <a href="#sectionTitle">Section Title</a></li>
+			<li>7.12 <a href="#contactText">Context Text</a></li>
+			<li>7.13 <a href="#contactUrl">Contact HP URL</a></li>
+			<li>7.14 <a href="#liveChatText">Live Chat Text</a></li>
+			<li>7.15 <a href="#liveChatUrl">Live Chat URL</a></li>
+			<li>7.16 <a href="#buyingOptionsText">Buying Options Text</a></li>
+			<li>7.17 <a href="#buyingOptionsUrl">Buying Options URL</a></li>
+			<li>7.18 <a href="#orderStatusText">Order Status Text</a></li>
+			<li>7.19 <a href="#orderStatusUrl">Order Status URL</a></li>
+			<li>7.20 <a href="#customerServiceText">Customer Service Text</a></li>
+			<li>7.21 <a href="#customerServiceUrl">Customer Service URL</a></li>
+			<li>7.22 <a href="#cartText">Cart Text</a></li>
+			<li>7.23 <a href="#cartUrl">Cart URL</a></li>
+			<li>7.24 <a href="#cartItemText">Cart Item Text</a></li>
+			<li>7.25 <a href="#cartItemCount">Cart Item Count</a></li>
+			<li>7.26 <a href="#exploreUrl">Explore URL</a></li>
+			<li>7.27 <a href="#communitiesUrl">Communities URL</a></li>
+			<li>7.28 <a href="#searchWidget">Search Widget</a></li>
+			<li>7.29 <a href="#searchUrl">Search URL</a></li>
+			<li>7.30 <a href="#searchReturnText">Search Return Text</a></li>
+			<li>7.31 <a href="#searchContactUrl">Search Contact URL</a></li>
+			<li>7.32 <a href="#searchReturnUrl">Search Return URL</a></li>
+			<li>7.33 <a href="#searchOmnitureTag">Search Omniture Tag</a></li>
+			<li>7.34 <a href="#searchAudience">Search Audience</a></li>
+			<li>7.35 <a href="#windowTitle">Window Title</a></li>
+			<li>7.36 <a href="#title">Title</a></li>
+			<li>7.37 <a href="#tagline">Tagline</a></li>
+			<li>7.38 <a href="#breadcrumbItems">Breadcrumb Items</a></li>
+			<li>7.39 <a href="#generateBreadcrumbs">Generate Breadcrumb Items</a></li>
+			<li>7.40 <a href="#topPromotion">Top Promotion</a></li>
+			<li>7.41 <a href="#leftMenuTitle">Left Menu Title</a></li>
+			<li>7.42 <a href="#leftMenuTitleUrl">Left Menu Title URL</a></li>
+			<li>7.43 <a href="#leftMenu">Left Menu</a></li>
+			<li>7.44 <a href="#leftPromotion">Left Promotion</a></li>
+			<li>7.45 <a href="#privacyUrl">Privacy URL</a></li>
+			<li>7.46 <a href="#imprintUrl">Imprint URL</a></li>
+			<li>7.47 <a href="#termsUrl">Terms/Conditions URL</a></li>
+			<li>7.48 <a href="#saleTermsUrl">Sale Terms/Conditions URL</a></li>
+			<li>7.49 <a href="#feedbackUrl">Feedback URL</a></li>
+			<li>7.50 <a href="#feedbackText">Feedback Text</a></li>
+			<li>7.51 <a href="#siteMapUrl">Site Map URL</a></li>
+			<li>7.52 <a href="#metricsUrl">Metrics Script URL</a></li>			
+			<li>7.53 <a href="#metaElements">Meta Elements</a></li>			
+			<li>7.54 <a href="#helpText">Help Link Text</a></li>			
+			<li>7.55 <a href="#helpUrl">Help Link Url</a></li>			
+			<li>7.56 <a href="#boundingBox">Portlet Chrome Bounding Box</a></li>			
+			<li>7.57 <a href="#headerLevel">Portlet Chrome Header Level</a></li>			
+		</ul>
+	</li>
+	<li>8. <a href="#misc">Misc</a>
+		<ul>
+			<li>8.1 <a href="#locale">Locale</a></li>			
+			<li>8.2 <a href="#indexing">Search Engine Indexing</a></li>			
+		</ul>
+	</li>
+</ul>
+<h2 id="overview">1. Overview</h2>
+<p>Portal applications running on the Vignette Application Portal (VAP) product 
+that require the look-and-feel of the HPWeb UI standards can make use of the HPWeb 
+VAP components.&nbsp; 
+Using the HPWeb VAP Components allow developers to focus solely on rendering the main 
+content portion of the page without having to worry about the details of 
+a standard header, footer and navigation menu (commonly referred to as the 
+'c-frame').&nbsp; For more information about the HPWeb 1.2 standard see the
+<a href="http://www.hp.com/hpweb/">HP Web Standards</a> site.</p>
+<p>Everything outlined in red in the picture below will be rendered by the HPWeb 
+layout.&nbsp; Everything NOT outlined in red is referred to as the &quot;page 
+content&quot;.</p>
+<div><img src="doc-files/cframe.jpg" alt=""> </div>
+<p>The HPWeb layout is supported by the following components to render the 
+layout and various HPWeb design elements in the layout:</p>
+<ul>
+	<li>Theme component
+		<ul>
+			<li>HPWeb Layout Theme</li>
+		</ul>
+	</li>
+	<li>Grid components
+		<ul>
+			<li>HPWeb Layout System Grid</li>
+			<li>HPWeb Layout Horizontal Navigation Grid</li>
+			<li>HPWeb Layout Vertical Navigation Grid</li>
+			<li>HPWeb Layout Split Navigation Grid</li>
+		</ul>
+	</li>
+	<li>Style type component
+		<ul>
+			<li>HP Layout Config Style Type</li>
+		</ul>
+	</li>
+	<li>Style components
+		<ul>
+			<li>HPWeb Layout Account Controls Style</li>
+			<li>HPWeb Layout Header Style</li>
+			<li>HPWeb Layout Footer Style</li>
+			<li>HPWeb Layout Horizontal Navigation Style</li>
+			<li>HPWeb Layout Vertical Navigation Style</li>
+			<li>HPWeb Layout Portlet Chrome Styles</li>
+				<ul>
+					<li>Introduction Box Style</li>
+					<li>Level Alpha Header Style</li>
+					<li>Level Beta Header Style</li>
+					<li>Level Beta Header with Bevel Style</li>
+					<li>Level Gamma Header Style</li>
+					<li>Chromeless (Callout) Style</li>
+				</ul>	
+			<li>HPWeb Layout Config Style</li>
+		</ul>
+	</li>
+</ul>
+See the <a href="#components">HPWeb Components</a> section for 
+more information.
+
+<h2 id="systemRequirements">2. System Requirements</h2>
+<p>The HPWeb components runs on Vignette Application Portal (VAP) product 
+version 7.4 and above.&nbsp;  Java Servlet 2.4, JSP 2.0 and JSTL 1.1 are required.  
+<br><br>The following JARs are required and expected to be in the portal
+application's <code>/WEB-INF/lib</code> directory:
+<ul>
+<li><code>jstl.jar (version 1.1.x)</code></li>
+<li><code>oro.jar (version 2.0.x)</code></li>
+<li><code>standard.jar (version 1.1.x)</code></li>
+</ul>
+Since the VAP product provides these JARs, the HPWeb Components CAR file will not include them.
+
+<h2 id="installation">3. Installation</h2>
+<p>The HPWeb components are packaged in a <i>HPWebComponents-&lt;version&gt;.car</i> 
+file which is downloadable from the 
+<a href="http://dl.frameworks.hp.com/soa_fw/downloads/public/wpap/hpweb-vap/">WPA HPWeb VAP Components Downloads directory</a>.&nbsp;&nbsp; 
+Download the latest CAR file version to a local temporary directory.&nbsp;&nbsp; </p>
+<p>Use the VAP Server Console to install/import the components.&nbsp;&nbsp; 
+After they are imported, share each HPWeb component to the site(s) where they will 
+be used; otherwise, they won't be accessible. Since the HPWeb Components contain 
+class JAR files the application server has to be restarted twice to load
+the classes.</p>
+<p>Note:  Installation of the HPWeb libraries will placed the following JARs into the portal web application's 
+<code>/WEB-INF/lib</code> directory:
+<ul>
+<li><code>hpweb-core.jar</code></li>
+<li><code>hpweb-resources.jar</code></li>
+<li><code>hpweb-vap.jar</code></li>
+<li><code>wpa-layout-manager.jar</code></li>
+</ul>
+</p>
+
+<h3 id="pageDisplayIssue">3.1 Vignette Page Display Issue</h3>
+
+<p>There is a known Vignette issue under certain conditions using the default 
+configured DHTML Page Display secondary page and it affects the 
+HPWeb horizontal navigation and portlet horizontal positioning on  IE6 and Firefox 
+browsers.
+</p>
+
+<p>If you do not plan to implement your own Page Display secondary
+page, then perform the following steps to use the Page 
+Display secondary page instead of the DHTML Page Display secondary page:
+
+<ol>
+<li>
+Go to <code>Server Console -&gt; Components -&gt; Pages -&gt; 
+Secondary Page List </code>.  On the page, click on the 
+<code>"Page Display" secondary page</code> checkbox,
+select <code>"Share to..."</code> from the combo box
+and then the <code>"Do It"</code> button.  Then select the site(s) that 
+you want to share to.
+</li>
+<li>
+Go to the <code>Site Console</code> for that site <code>-&gt; Site Settings -&gt; 
+Appearance -&gt; Secondary Pages -&gt;</code>.   For the <code>"Page Display" Page 
+Type</code> ensure you select <code>"Page Display"</code> in the 
+<code>Use Secondary Page</code> column.
+</li>
+</ol>
+</p>
+
+<h2 id="usage">4. Usage</h2>
+<p>Use the VAP Site Console to apply the HPWeb layout to a site or a set of pages by setting its theme to HPWeb Theme 
+and its grid to one of the HPWeb grids.  You can customize the HPWeb layout to your portal and pages through
+the component properties or programmatically.  Component properties customization involves setting layout properties in
+the HPWeb Components while programmatic customization involves setting layout properties to the 
+<code>HPWebModel</code> named request-scoped bean.   
+See the <a href="#layoutCustomization">Layout Customization</a> section for more information.</p>
+
+<h2 id="components">5. HPWeb Components</h2>
+<h3 id="styleTypes">5.1 Style Types</h3>
+<p>All of the page elements in the HPWeb c-frame match with the style types provided by VAP, except
+for the HP Layout Config style type.  The HPWeb components include implementations 
+for each of the following VAP style types:<br>
+<ul><li>Account Controls</li>
+<li>Header</li>
+<li>Footer</li>
+<li>Horizontal Navigation</li>
+<li>Vertical Navigation</li>
+<li>Portlet Chrome</li>
+<li>HP Layout Config</li>
+</ul></p>
+The HP Layout Config Style Type is provided for a style instance, e.g. HPWeb Layout Config Style,
+to hold custom code for programmatic layout configuration.
+
+<h3 id="themes">5.2 Themes</h3>
+<p>HPWeb components include the HPWeb Theme that aggregates the following styles: 
+</p>
+<ul><li>HPWeb Account Controls Style</li>
+<li>HPWeb Header Style</li> 
+<li>HPWeb Footer Style</li>
+<li>HPWeb Vertical Navigation Style</li>
+<li>HPWeb Horizontal Navigation Style</li>
+<li>HPWeb Layout Config Style</li>
+</ul></p>
+
+<h3 id="grids">5.3 Grids</h3>
+<p>Four HPWeb grids are provided:
+<ul>
+<li><b>HPWeb System Grid</b> - This grid is used for system pages and pages that do not require any navigation.
+Neither the vertical navigation nor the horizontal navigation is displayed on this grid.</li>
+<li><b>HPWeb Horizontal Navigation Grid</b> - This grid is used for pages that require a horizontal navigation
+menu but no vertical navigation menu.
+<li><b>HPWeb Vertical Navigation Grid</b> - This grid is used for pages that require a vertical navigation menu
+but no horizontal navigation menu.</li>
+<li><b>HPWeb Split Navigation Grid</b> - This grid is used for pages that require both horizontal and vertical
+navigation menus.  Depending on the navigation split level that is set in the VAP Site Console, the navigation items above the navigation split
+level are displayed in the horizontal menu while the navigation items below the navigation split level 
+are displayed in the vertical navigation menu.</li>
+</ul>
+</p>
+
+<h3 id="styles">5.4 Styles</h3>
+<h4 id="accountsControlStyle">5.4.1 HPWeb Account Controls Style</h4>
+<p>
+This top-most level style on the page displays:<br>
+<ul>
+<li>Welcome message</li>
+<li>Navigation controls that are common throughout the site including sign-in/sign-out link 
+and register/edit profile link</li>
+<li>User locale text or placeholder for locale selector html</li>
+</ul>
+The <a href="#pageWidth">Page Width</a> configuration property affects whether the navigation controls are displayed in the accounts
+controls area or in the header area.
+</p>
+<h4 id="hpwebHeaderStyle">5.4.2 HPWeb Header Style</h4>
+<p>The HPWeb Header Style implements the stretch HP logo style that displays:<br>
+<ul>
+<li>Stetch HP logo with section title, contact HP link, sign-in/sign-out link, register/edit profile link,
+live chat link, shopping cart links, etc</li>
+<li>HP-company wide links and search area</li>
+<li>Page title, title tagline, breadcrumbs, and top promotion area</li>
+</ul>
+</p>
+<h4 id="footerStyle">5.4.3 HPWeb Footer Style</h4>
+<p>The HPWeb Footer Style displays:
+<ul>
+<li>Privacy link, terms and conditions link, feedback link, site map link, etc</li>
+</ul>
+</p>
+<h4 id="horizontalNavStyle">5.4.4 HPWeb Horizontal Navigation Style</h4>
+<p>The HPWeb Horizontal Navigation Style displays a three-level horizontal navigation
+as configured in the VAP Site Console for the site.   It is placed below the 
+HP-company wide links area and above the page title of the header.
+</p>
+
+<div><img src="doc-files/horz_nav.jpg"></div>
+
+<p>
+It is composed of:
+<ul>
+<li>Primary navigation display as tabs</li>
+<li>Secondary navigation display as buttons for the selected (parent) tab</li>
+<li>Third-level navigation display as a flyout menu of items under the hovered (parent) button</li>
+</ul>
+The site help link is displayed in the rightmost portion of the secondary navigation
+and is enabled by setting the <a href="#helpText">Help Text</a> and 
+<a href="#helpUrl">Help Url</a> properties.
+</p>
+
+<h4 id="verticalNavStyle">5.4.5 HPWeb Vertical Navigation Style</h4>
+<p>The HPWeb Vertical Navigation Style displays:
+<ul>
+<li>Left menu title/link</li>
+<li>Navigation left menu as configured in VAP Site Console, or created programmatically during run-time</li>
+<li>Left promotion area</li>
+</ul>
+</p>
+
+<h4 id="layoutConfigStyle">5.4.6 HPWeb Layout Config Style</h4>
+<p>The HPWeb Layout Config Style is the style where to include code for customizing the HPWeb layout. 
+<b>It must not contain HTML that outputs HTTP responses.</b>
+Each HPWeb grid includes this style at the beginning of the grid's execution, so that the layout
+properties may be initialized before the HPWeb layout accesses them for rendering.</p>
+
+<p>The custom code goes into the primary JSP file, <code>hpweb_layout_config.jsp</code>.
+Also included is the sample file, <code>sample_hpweb_layout_config.jsp</code>, which
+contains many sample customizations, including HPP Central Forms integration.   See
+the next section for more information on layout customization.
+</p>
+
+<p>Additionally, customized code for including in the &lt;head&gt; element can be
+placed in the <code>hpweb_layout_config_head.jsp</code> file.  Code such as
+javascript code and CSS styles can be placed in this file.  A sample file,
+<code>sample_hpweb_layout_config_head.jsp</code> is included.
+</p>
+
+<h4 id="verticalNavStyle">5.4.7 HPWeb Portlet Chrome Styles</h4>
+<p>The HPWeb portlet chromes are used to display portlets in different 
+hierarchical levels on a page.    The different portlet header levels are
+the same as the enhanced hierarchy header elements described 
+in the <a href="https://h10014.www1.hp.com/hpweb/newstandards/definitions/hierarchy.html">
+HP Web Standards</a> site.</p>
+The following portlet chromes are provided:
+<ul>
+<li>Introduction Box</li>
+<li>Level Alpha Header</li>
+<li>Level Beta Header</li>
+<li>Level Beta Header with Bevel</li>
+<li>Level Gamma Header</li>
+<li>Chromeless (Callout)</li>
+</ul>
+</p>
+
+<div><img src="doc-files/portlet_chromes.jpg"></div>
+
+<p>
+The portlet title string displayed in the chrome header is retrieved from the
+<code>title</code> property of the portlet in VAP, and if it does not have
+a value,  the portlet name in VAP is used.
+The Chromeless portlet chrome does not display a portlet title.
+The header markup, e.g. <code>&lt;h2&gt;</code>, for the portlet title string 
+is configurable with the <a href="#headerLevel">Portlet Chrome Header Level</a> property.
+</p>
+<p>
+Level Alpha Header, Level Beta Header, and Level Beta Header with Bevel
+portlet chromes can be configured to have a gray outline around the
+portlet content or <i>bounding box</i>.  To enable a bounding box,
+set the <a href="#boundingBox">Portlet Chrome Bounding Box</a>
+property to <code>true</code>.
+</p>
+
+<p>
+If a portlet returns an exception, the default logic will display 
+an error message and optionally an error code, if it exists, in the portlet content.   
+The error message is retrieved 
+from the properties using the return string from the
+<code>portletRenderException.getName()</code>  method call as the key, and
+the error code is the return string from the <code>portletRenderException.getErrorParameters()</code>
+method call.  The properties are retrieved from the secondary page that the
+portlet chrome is contained in.
+This is the default error display that is implemented in the <code>portlet_render_error_inc.jsp</code>
+file, and it can be replaced with custom error display code.
+</p>
+
+<h2 id="layoutCustomization">6. Layout Customization</h2>
+<p>A good portion of the markup rendered by the HPWeb layout is static HTML, 
+however, there are a number of design elements which are typically customized on 
+a site-by-site or even page-by-page basis.&nbsp; One item that is most 
+typically customized is the page title.</p>
+<p>For most of the configurable page elements, there are two different mechanisms 
+available for specifying a custom value: 1) a mechanism utilizing HPWeb component properties, and  
+2) a programmatic mechanism utilizing the <code>HPWebModel</code> request-scoped attribute object.&nbsp; 
+<b>A property with a non-null value in the <code>HPWebModel</code> object will take precedence over a value in the component property.</b>
+It is up to the application developer  to choose which approach is preferred.  The general rule is to use the component properties
+for static constant values and the programmatic mechanism for dynamic run-time values.
+It is not necessary to set values for all of the properties.  Some properties can be enabled to
+auto-generate values at run-time, e.g. <a href="#leftMenu">Left Menu</a> and <a href="#breadcrumbItems">Breadcrumb Items</a>.</p>
+
+<h3 id="declarativeCustomization">6.1 Customization in Component Properties</h3>
+<p>This approach involves setting property values in the HPWeb components.
+See <a href="#configurationReference">Configuration Reference</a> for the list of properties and 
+components.
+</p>
+<h3 id="programmaticCustomization">6.2 Programmatic Customization</h3>
+<p>
+The <code>com.hp.frameworks.wpa.portal.hpweb.HPWebModel</code> bean type contains properties which are customizations
+to the HPWeb layout. The programmatic approach involves setting the property values on the <code>HPWebModel</code> named 
+request-scoped attribute bean of that type.  Each HPWeb grid provides an integration point by including
+the HPWeb Layout Config Style.  The <code>hpweb_layout_config.jsp</code> primary file in the HPWeb Layout Config Style is
+where a portal can place its layout customization code.
+</p>
+
+<p>The following sample code references the <code>HPWebModel</code> bean, and set HPWeb properties on it.</p>
+<p class="codeSample">
+&lt;jsp:useBean id="HPWebModel" scope="request"
+        class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" /&gt;
+<br><br>
+&lt;jsp:setProperty name="HPWebModel" property="themeColor" value="#0066FF" /&gt;<br>
+&lt;jsp:setProperty name="HPWebModel" property="topPromotion" value="This is a top promotion" /&gt;<br>
+</p>
+
+<h3 id="hpwebEnhancedLayout">6.3 HPWeb Enhanced Layout</h3>
+<p>Starting with the HPWeb Hockney release in August 2007, the HPWeb team defined a 
+new, &quot;enhanced&quot; version of the HPWeb design guidelines.&nbsp; The enhanced 
+version of the HPWeb layout relies on standards-based HTML and CSS for 
+positioning instead of the HTML tables that are used for the the traditional 
+layout.&nbsp; Additionally, the enhanced layout provides a more contemporary 
+look for some of the standard page elements like the left navigation menu, 
+content units and tab sets.</p>
+
+<p>The HPWeb Components supports to the latest enhanced layout standards with the
+HPWeb JasperJohns release (September 2008);
+however, it will not include earlier HPWeb standards like
+the &quot;classic&quot; layout of the HPWeb design guidelines and
+the &quot;jewel logo&quot; (versus the supported &quot;stretch logo) header style.</p>
+
+<p>When using the enhanced layout, there is one supported header styles:
+the stretch logo style (shown in the screenshot below).</p>
+<div><img src="doc-files/cframeenhancedstretch.jpg"></div>
+<p>Furthermore, when using the stretch logo style, two different page widths can 
+be selected: a &quot;narrow&quot; page width (740 pixels) or a &quot;wide&quot; page width (974 
+pixels). The narrow page style is shown above and the wide page style is shown 
+below.</p>
+<div><img src="doc-files/cframeenhancedstretchwide.jpg"></div>
+<p>When using the stretch logo header style, the layout will default to the wide 
+page style but developers can force the use of the narrow page style via the 
+<a href="#pageWidth">Page Width</a> property.</p>
+
+<h2 id="configurationReference">7. Configuration Reference</h2>
+<p>The following sections describe all of the configurable page elements along 
+with their corresponding property names in the component properties and 
+<code>HPWebModel</code> property setter methods.   Note that the 
+<code>HPWebModel</code> object is a JavaBean object.  When you
+want to access the bean property in JSP using the JSP <code>&lt;jsp:getProperty&gt;</code> 
+tag or expression language, the bean property name is <code>xyzProperty</code> 
+when the setter method name is <code>setXyzProperty()</code>.
+</p>
+
+<p>There are a number of layout variations to choose from and not all of the 
+configuration properties listed below are applicable to each variation. Consult 
+the &quot;Applies To&quot; field in each of the sections below to learn which layout 
+styles a particular configuration item applies to. For reference, here are the 
+layout variations that are available:</p>
+<ul>
+	<li>Enhanced Layout (HPWeb Hockney release and later)<ul>
+		<li>Stretch Logo (enabled via <a href="#headerStyle">Header Style</a> 
+		configuration property)<ul>
+			<li>Wide Page (default width when stretch logo header enabled)</li>
+			<li>Narrow Page (enabled via the <a href="#pageWidth">Page Width</a> 
+			configuration property)</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+</ul>
+<h3 id="themeColor">7.1 Theme Color</h3>
+<p>The HPWeb theme color to be applied to the page. Valid values are listed 
+below:</p>
+<ul>
+	<li><code>#990000</code> - Burgundy</li>
+	<li><code>#CC0066</code> - Magenta</li>
+	<li><code>#336666</code> - Sea Foam</li>
+	<li><code>#003366</code> - Navy</li>
+	<li><code>#336633</code> - Evergreen</li>
+	<li><code>#EB5F01</code> - Tangerine</li>
+	<li><code>#0066FF</code> - Blue</li>
+	<li><code>#4FAF00</code> - Lime</li>
+	<li><code>#FFCC00</code> - Yellow</li>
+	<li><code>#FF0000</code> - Compaq Red</li>
+</ul>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.theme&quot; (HPWeb Grid)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.hpweb.HPWebModel#setThemeColor(String)}</td>
+	</tr>
+</table>
+
+<h3 id="headerStyle">7.2 Header Style</h3>
+<p>
+The enhanced design standards define a header style with the top bar (containing
+the HP Passport links and the country/language indicator), &quot;stretch&quot; 
+design treatment for the logo/title area (which also contains the &quot;Contact HP&quot; 
+link), and global navigation and search bar.</p>
+
+<p><img src="doc-files/stretch.png" alt="" class="style1"></p>
+<p>At this point, the only valid value and default value for the header style property is &quot;stretch&quot;.</p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.headerStyle&quot; (HPWeb Grid)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.hpweb.HPWebModel#setHeaderStyle(String)}</td>
+	</tr>
+</table>
+
+<h3 id="pageWidth">7.3 Page Width</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header, 
+the page width property is used to indicate whether the narrow (740 pixels) or 
+wide (974 pixels) page style should be used. The default value of this property 
+is &quot;wide&quot;. A value of &quot;narrow&quot; should be specified to force the rendering of the 
+narrow page width. Other than the width of the rendering area, the primary 
+difference between these two options is that the sets of links (&quot;Live Chat&quot;, 
+&quot;Other ways to buy&quot;, &quot;Order Status&quot;, etc.) which are rendered in the logo area 
+of the wide page width are not available in the narrow page width.</p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.pageWidth&quot; (HPWeb Grid)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setPageWidth(String)}</td>
+	</tr>
+</table>
+
+<h3 id="username">7.4 Username</h3>
+<p>If specified, the username will be rendered as part of the welcome message at 
+the top left of the page.&nbsp; A non-empty value for the username property 
+indicates that the user is logged-in and will determine whether the 
+sign-in/register links are displayed or whether the sign-out/profile links are 
+displayed.</p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setUsername(String)}</td>
+	</tr>
+</table>
+
+
+
+
+
+
+<h3 id="signinUrl">7.5 HP Passport Sign-in URL</h3>
+<p>The fully-qualified URL to the HP Passport sign-in page.&nbsp; This URL will 
+be used in conjunction with the &quot;Sign-in&quot; link rendered at the top of the page.&nbsp; 
+The value for this property is also used to indicate whether or not the page 
+should render any of the HP Passport-related links: a non-null value indicates 
+that the page is integrated with HP Passport while a null value indicates that 
+none of the HP Passport-related links should be rendered.</p>
+
+
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSignInUrl(String)}</td>
+	</tr>
+</table>
+
+
+
+
+<h3 id="signoutUrl">7.6 HP Passport Sign-out URL</h3>
+<p>The fully-qualified URL to the HP Passport sign-out page.&nbsp; This URL will 
+be used in conjunction with the &quot;Sign-out&quot; hyperlink rendered at the top of the 
+page.&nbsp; The &quot;Sign-out&quot; hyperlink is only rendered when the &quot;signInUrl&quot; and 
+&quot;username&quot; properties both contain non-null values.</p>
+
+
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSignOutUrl(String)}</td>
+	</tr>
+</table>
+
+
+<h3 id="registerUrl">7.7 HP Passport Register URL</h3>
+<p>The fully-qualified URL to the HP Passport registration page.&nbsp; This URL will 
+be used in conjunction with the &quot;Register&quot; hyperlink rendered at the top of the 
+page.&nbsp; The &quot;Register&quot; hyperlink is only rendered when the &quot;signInUrl&quot; 
+property contains a non-null value and 
+&quot;username&quot; property is empty (indicating that the user is not 
+logged-in).</p>
+
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setRegisterUrl(String)}</td>
+	</tr>
+</table>
+
+
+
+<h3 id="profileUrl">7.8 HP Passport Edit Profile URL</h3>
+
+<p>The fully-qualified URL to the HP Passport profile page.&nbsp; This URL will 
+be used in conjunction with the &quot;Edit your profile&quot; hyperlink rendered at the top of the 
+page.&nbsp; The &quot;Edit your profile&quot; hyperlink is only rendered when the &quot;signInUrl&quot; 
+and 
+&quot;username&quot; properties both contain non-null values.</p>
+
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setProfileUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="myAccountUrl">7.9 My Account Profile URL</h3>
+
+<p>When using the enhanced layout with the stretch logo header developers have 
+the option of replacing the HP Passport &quot;Register&quot; and &quot;My Profile&quot; links with a 
+link that reads &quot;My Account&quot;. This property is used to specify the destination 
+URL for the &quot;My Account&quot; link.&nbsp; If a value is specified for this property, 
+the &quot;My Account&quot; link will be rendered in place of the HP Passport &quot;Register&quot; 
+and &quot;My Profile&quot; links. If no value is specified for this property, the &quot;My 
+Account&quot; link will not be rendered.</p>
+
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout w/ Stretch 
+		Logo Header (wide page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.myAccountUrl&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setMyAccountUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="localeSelector">7.10 Locale Selector</h3>
+<p>By default, the user's current language and country are displayed at the 
+top-right of the page.&nbsp; Application developers have the option of 
+displaying a custom widget in this location that will let users select their own 
+language/country settings.&nbsp; If specified, the developer-supplied locale 
+selector will be rendered in place of the default language/country indicator 
+text.</p>
+<p>Note that the value for this property can be a string of HTML elements, where the
+characters will not be HTML-escaped.</p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.localeSelector&quot; (HPWeb Account Controls)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setLocaleSelector(String)}</td>
+	</tr>
+</table>
+
+<h3 id="sectionTitle">7.11 Section Title</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header, 
+the section title property can be used to specify the text that is displayed 
+immediately to the right of the HP logo. This is an optional page element.</p>
+
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.sectionTitle&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSectionTitle(String)}</td>
+	</tr>
+</table>
+
+<h3 id="contactText">7.12 Contact Text</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header, this property is used to specify the 
+text for the contact HP link that is rendered to the right of the HP logo.&nbsp; If no 
+value is specified for this property the string &quot;Contact HP&quot; (or the 
+appropriately localized equivalent) will be used.</p>
+
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.contactText&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setContactText(String)}</td>
+	</tr>
+</table>
+
+<h3 id="contactUrl">7.13 Contact HP URL</h3>
+<p>This property is used to specify the fully-qualified URL to the contact 
+information page.&nbsp; This URL will be used in conjunction with the &quot;Contact 
+HP&quot; hyperlink that is displayed beneath the top navigation menu.&nbsp; If no 
+value is specified for this property the URL to the standard HP.com contact page 
+will be used.</p>
+
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.contactUrl&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setContactUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="liveChatText">7.14 Live Chat Text</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header developers have the option of displaying a 
+&quot;Live Chat&quot; link within the stretch logo area.&nbsp; This property is used to specify the text of the 
+&quot;Live Chat&quot; link.&nbsp; This is an optional page element.&nbsp; If no value is 
+supplied for the <em>liveChatUrl</em> property, this text will 
+not be rendered.&nbsp; If a value for the <em>liveChatUrl</em> property is 
+specified, a value <strong>must</strong> also be specified for this property. </p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.liveChatText&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setLiveChatText(String)}</td>
+	</tr>
+</table>
+<h3 id="liveChatUrl">7.15 Live Chat URL</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header developers have the option of displaying a 
+&quot;Live Chat&quot; link within the stretch logo area.&nbsp; This property is used to specify the 
+URL of the 
+&quot;Live Chat&quot; link.&nbsp; This is an optional page element.&nbsp; If no value is 
+supplied for this property, the link will not be rendered.&nbsp; If a value for the 
+this property is 
+specified, a value <strong>must</strong> also be specified for the <em>
+liveChatText </em>property. </p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.liveChatUrl&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setLiveChatUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="buyingOptionsText">7.16 Buying Options Text</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header developers have the option of displaying a 
+&quot;Buying Options&quot; link within the stretch logo area.&nbsp; This property is used to specify the text of the 
+&quot;Buying Options&quot; link.&nbsp; This is an optional page element.&nbsp; If no value is 
+supplied for the <em>buyingOptUrl</em> property, this text will 
+not be rendered.&nbsp; If a value for the <em>buyingOptUrl</em> property is 
+specified, a value <strong>must</strong> also be specified for this property. </p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.buyingOptText&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setBuyingOptText(String)}</td>
+	</tr>
+</table>
+<h3 id="buyingOptionsUrl">7.17 Buying Options URL</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header developers have the option of displaying a 
+&quot;Buying Options&quot; link within the stretch logo area.&nbsp; This property is used to specify the 
+URL of the 
+&quot;Buying Options&quot; link.&nbsp; This is an optional page element.&nbsp; If no value is 
+supplied for this property, the link will not be rendered.&nbsp; If a value for the 
+this property is 
+specified, a value <strong>must</strong> also be specified for the <em>
+buyingOptText </em>property. </p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.buyingOptUrl&quot;</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setBuyingOptUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="orderStatusText">7.18 Order Status Text</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header developers have the option of displaying a 
+&quot;Order Status&quot; link within the stretch logo area.&nbsp; This property is used to specify the text of the 
+&quot;Order Status&quot; link.&nbsp; This is an optional page element.&nbsp; If no value is 
+supplied for the <em>orderStatusUrl</em> property, this text will 
+not be rendered.&nbsp; If a value for the orderStatus<em>Url</em> property is 
+specified, a value <strong>must</strong> also be specified for this property. </p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.orderStatusText&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setOrderStatusText(String)}</td>
+	</tr>
+</table>
+<h3 id="orderStatusUrl">7.19 Order Status URL</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header developers have the option of displaying a 
+&quot;Order Status&quot; link within the stretch logo area.&nbsp; This property is used to specify the 
+URL of the 
+&quot;Order Status&quot; link.&nbsp; This is an optional page element.&nbsp; If no value is 
+supplied for this property, the link will not be rendered.&nbsp; If a value for the 
+this property is 
+specified, a value <strong>must</strong> also be specified for the <em>
+orderStatusText </em>property. </p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.orderStatusUrl&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setOrderStatusUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="customerServiceText">7.20 Customer Service Text</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header developers have the option of displaying a 
+&quot;Customer Service&quot; link within the stretch logo area.&nbsp; This property is used to specify the text of the 
+&quot;Customer Service&quot; link.&nbsp; This is an optional page element.&nbsp; If no value is 
+supplied for the <em>custSvcUrl</em> property, this text will 
+not be rendered.&nbsp; If a value for the custSvc<em>Url</em> property is 
+specified, a value <strong>must</strong> also be specified for this property. </p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.custSvcText&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setCustSvcText(String)}</td>
+	</tr>
+</table>
+<h3 id="customerServiceUrl">7.21 Customer Service URL</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header developers have the option of displaying a 
+&quot;Customer Service&quot; link within the stretch logo area.&nbsp; This property is used to specify the 
+URL of the 
+&quot;Customer Service&quot; link.&nbsp; This is an optional page element.&nbsp; If no value is 
+supplied for this property, the link will not be rendered.&nbsp; If a value for the 
+this property is 
+specified, a value <strong>must</strong> also be specified for the <em>
+custSvcText </em>property. </p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.custSvcUrl&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setCustSvcUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="cartText">7.22 Cart Text</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header 
+developers have the option of displaying a &quot;Shopping Cart&quot; link within the 
+stretch logo area.&nbsp; This property is used to specify the text of the 
+&quot;Shopping Cart&quot; link.&nbsp; If no value is supplied for the <em>cartUrl</em> property, this text will 
+not be rendered.&nbsp; If a value for the <em>cartUrl</em> property is 
+specified, a value <strong>must</strong> also be specified for this property. </p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.cartText&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setCartText(String)}</td>
+	</tr>
+</table>
+
+<h3 id="cartUrl">7.23 Cart URL</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header developers have the option of displaying a 
+&quot;Shopping Cart&quot; link within the stretch logo area.&nbsp; This property is used to specify the 
+URL of the 
+&quot;Shopping Cart&quot; link.&nbsp; This is an optional page element.&nbsp; If no value is 
+supplied for this property, the link will not be rendered.&nbsp; If a value for the 
+this property is 
+specified, a value <strong>must</strong> also be specified for the cart<em>Text </em>property. </p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.cartUrl&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setCartUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="cartItemText">7.24 Cart Item Text</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header 
+developers have the option of displaying text within the 
+stretch logo area that indicates the number of items currently in the user's 
+shopping cart.&nbsp; This property is used to specify the text of the 
+cart item count text.&nbsp; If no value is supplied for the <em>cartUrl</em> 
+property, this text will not be rendered.&nbsp; If no value is specified for 
+this property, the cart item count text will not be displayed.</p>
+<p>The string specified for this property should include a {0} replacement 
+token, for example: &quot;{0} items in cart&quot;. At runtime, the value of the <em>
+cartItemCount</em> property will be substituted in place of the replacement 
+token to create the rendered string.</p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.cartItemText&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setCartItemText(String)}</td>
+	</tr>
+</table>
+
+<h3 id="cartItemCount">7.25 Cart Item Count</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header 
+developers have the option of displaying text within the 
+stretch logo area that indicates the number of items currently in the user's 
+shopping cart.&nbsp; This property is used to specify the number of items in the 
+user's cart.&nbsp; If no value is supplied for the <em>cartUrl</em> 
+property, this text will not be rendered.&nbsp; The value specified for this 
+property is used in conjunction with the text specified by the <em>cartItemText</em> 
+property. If no value is specified for 
+the <em>cartItemText</em> property this property is ignored. The default value 
+is 0.</p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced 
+		Layout w/ Stretch Logo Header (wide 
+		page only)</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.cartItemCount&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setCartItemCount(int)}</td>
+	</tr>
+</table>
+<h3 id="exploreUrl">7.26 Explore URL</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header 
+developers have the option of displaying a link that reads either &quot;Solutions&quot; or 
+&quot;Explore&quot; in the global navigation area. By default, the link text will read 
+&quot;Solutions&quot; and the link URL will point to the default solutions gateway page. 
+If specified, the value of this property will be used as the URL for the link 
+and the text will be changed to read &quot;Explore&quot;.</p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.exploreUrl&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setExploreUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="communitiesUrl">7.27 Communities URL</h3>
+<p>When using the enhanced layout in conjunction with the stretch logo header 
+developers have the option of displaying a link that reads &quot;Communities&quot; in the global navigation area. By default, 
+this link is not rendered. 
+However, if a value is specified for this property, the &quot;Communities&quot; link will 
+be rendered using the provided URL.</p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.communitiesUrl&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setCommunitiesUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="searchWidget">7.28 Search Widget</h3>
+<p>By default, a search form will be rendered beneath the top navigation menu 
+that allows users to post search queries to the standard HP.com search engine.&nbsp; 
+Applications that have specialized search needs have the option of providing 
+their own search form.&nbsp; If specified, the developer-supplied search form 
+will be rendered in place of the default search form.</p>
+<p>Note that the value for this property can be a string of HTML elements, where the
+characters will not be HTML-escaped.</p>
+<table class="props">
+	<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.searchWidget&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>	
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSearchWidget(String)}</td>
+	</tr>
+</table>
+
+
+<h3 id="searchUrl">7.29 Search URL</h3>
+<p>When the default search form is rendered, this property can be used to 
+override the action URL to which the form will be posted.&nbsp; If no value is 
+supplied the default value of &quot;http://www.hp.com/search&quot; will be used.</p>
+
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.searchUrl&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSearchUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="searchReturnText">7.30 Search Return Text</h3>
+<p>The value of this property is passed to the HP.com search engine and is 
+rendered on the search results as the text of the hyperlink that will return the 
+user to the page where they initiated the search.&nbsp; An example value might 
+be something like &quot;Return to the HP Shopping site&quot;.&nbsp; This value <strong>
+must</strong> be supplied whenever the 
+default search form is used. This value is set as a hidden form field named &quot;hpn&quot; 
+within the search form.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.searchReturnText&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSearchReturnText(String)}</td>
+	</tr>
+</table>
+
+<h3 id="searchContactUrl">7.31 Search Contact URL</h3>
+<p>When the default search form is used, the value of this property is passed to 
+the HP.com search engine and is used as the URL for the &quot;Contact HP&quot; hyperlink 
+rendered on the search results page.&nbsp; If no value is provided, the search 
+results page will render a &quot;Contact HP&quot; hyperlink to points to the country 
+gateway contact page. If supplied, this value is set as a hidden form field 
+named &quot;hpa&quot; within the search form.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.searchContactUrl&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSearchContactUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="searchReturnUrl">7.32 Search Return URL</h3>
+<p>When the default search form is used, the value of this property is passed to 
+the HP.com search engine and is used as the URL for the hyperlink on the search 
+results page that will return the user to the site where the search originated.&nbsp; 
+If no value is provided, the search engine will default to using the URL from 
+which search query was posted.&nbsp; If supplied, this value is set as a hidden 
+form field named &quot;hpr&quot; within the search form.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.searchReturnUrl&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSearchReturnUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="searchOmnitureTag">7.33 Search Omniture Tag</h3>
+<p>When the default search form is used, the value of this property will be 
+passed to the HP.com search engine as the Omniture account identifier for the 
+current site.&nbsp; This is an optional value.&nbsp; If supplied, this value is 
+set as a hidden form field named &quot;hpo&quot; within the search form.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.searchOmnitureTag&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSearchOmnitureTag(String)}</td>
+	</tr>
+</table>
+
+<h3 id="searchAudience">7.34 Search Audience</h3>
+<p>When the default search form is used, the value of this property will be 
+passed to HP.com search engine as the audience tag.&nbsp; This is an optional 
+value.&nbsp; If supplied, this value is set as a hidden form field named &quot;h_audience&quot; 
+within the search form.&nbsp; For more information on the audience tag, see the
+<a href="http://www.hp.com/searchtools/contextual_builder.html">Contextual Site 
+Builder</a> page.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.searchAudience&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSearchAudience(String)}</td>
+	</tr>
+</table>
+
+<h3 id="windowTitle">7.35 Window Title</h3>
+<p>The value of this property will be rendered as the browser window title which is displayed 
+in the title bar of the user's browser. If no value is specified for this property
+the Vignette JSP custom tag <code>&lt;vgn-portal:pageContentTitle /&gt;</code> 
+will be used to render the window title.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setWindowTitle(String)}</td>
+	</tr>
+</table>
+
+<h3 id="title">7.36 Title</h3>
+<p>The value of this property will be rendered as the page title (sometimes 
+referred to as the page header or primary header).&nbsp; Note that this is 
+different than the browser title which is displayed in the title bar of the 
+user's browser and specified using the <a href="#windowTitle">Window Title</a> 
+property.
+If no value is specified for this property, the string of the
+<code>title</code> message key, or, if empty,
+the navigation item name for the current page will be used.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.title&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setTitle(String)}</td>
+	</tr>
+</table>
+
+<h3 id="tagline">7.37 Tagline</h3>
+<p>The value of this property will be rendered as the tagline text immediately 
+beneath the page title.&nbsp; This is an optional page element.&nbsp; If no 
+value is specified, no tagline will be rendered.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.tagline&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setTagline(String)}</td>
+	</tr>
+</table>
+
+
+<h3 id="breadcrumbItems">7.38 Breadcrumb Items</h3>
+<p>Breadcrumbs are used to represent the current page's location in the site 
+hierarchy and are displayed immediately above the page header.&nbsp; Breadcrumbs 
+are optional page element.&nbsp; </p>
+<p>Breadcrumbs can be automatically generated by setting the <a href="#generateBreadcrumbs">Generate Breadcrumbs Items</a>
+property to <code>true</code> on the <code>HPWebModel</code> object.  The HPWeb
+layout will generate the breadcrumbs for the navigation items leading
+to the current page.</p>
+
+<p>Alternatively breadcrumbs can be specified programmatically 
+using the <em>breadcrumbItems</em> property on the <code>HPWebModel</code> 
+object. The <em>breadcrumbItems</em> property accepts a list of {@link 
+com.hp.frameworks.wpa.hpweb.MenuItem} objects.&nbsp; Note that <strong>only</strong> 
+objects of type <code>com.hp.frameworks.wpa.hpweb.MenuItem</code> should be 
+added to the list.</p>
+<p>The following example shows how to programmatically add two breadcrumbs to 
+the <code>HPWebModel</code>.</p>
+<p class="codeSample">
+&lt;jsp:useBean id="HPWebModel" scope="request"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" /&gt;<br><br>
+        
+&lt;jsp:scriptlet&gt;<br><br>
+List breadcrumbs = HPWebModel.getBreadcrumbItems();<br>
+<br>
+// Breadcrumb 1<br>
+MenuItem item = new MenuItem();<br>
+item.setTitle(&quot;Breadcrumb 1&quot;);<br>
+item.setUrl(&quot;http://www.hp.com&quot;);<br>
+breadcrumbs.add(item);<br>
+<br>
+// Breadcrumb 2<br>
+item = new MenuItem();<br>
+item.setTitle(&quot;Breadcrumb 2&quot;);<br>
+item.setUrl(&quot;http://www.hp.com&quot;);<br>
+breadcrumbs.add(item);<br>
+<br>
+&lt;/jsp:scriptlet&gt;</p>
+
+<p>Note that the only properties of the <code>MenuItem</code> class that have 
+any impact on the rendering of the breadcrumbs are the <em>title</em> and <em>
+url</em> properties.&nbsp; </p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#getBreadcrumbItems()}</td>
+	</tr>
+</table>
+
+
+<h3 id="generateBreadcrumbs">7.39 Generate Breadcrumb Items</h3>
+<p>The value of this boolean property will generate the default breadcrumb items for rendering
+if the value 
+is set to <code>true</code>. The list of breadcrumb items consists of parent navigation items to the 
+current page. If no value is supplied for this property no breadcrumb items are generated.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.generateBreadcrumbs&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setGenerateBreadcrumbs(boolean)}</td>
+	</tr>
+</table>
+
+<h3 id="topPromotion">7.40 Top Promotion</h3>
+<p>The value of this property will be rendered within the top promotion area to 
+the right of the page title.&nbsp; The top promotion is an optional page 
+element.&nbsp; If no value is supplied for this property it will not be 
+rendered.</p>
+<p>Note that the value for this property can be a string of HTML elements, where the
+characters will not be HTML-escaped.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.topPromotion&quot; (HPWeb Header)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setTopPromotion(String)}</td>
+	</tr>
+</table>
+
+
+<h3 id="leftMenuTitle">7.41 Left Menu Title</h3>
+<p>The value of this property is used as the title text for the left navigation 
+menu.&nbsp; A non-empty value <strong>must</strong> be supplied for this 
+property.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.leftMenuTitle&quot; (HPWeb Vertical Navigation)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setLeftMenuTitle(String)}</td>
+	</tr>
+</table>
+
+<h3 id="leftMenuTitleUrl">7.42 Left Menu Title URL</h3>
+<p>The value of this property is used as the URL for the left menu title 
+hyperlink.&nbsp; This is an optional property.&nbsp; If no value is specified 
+for this property, the left navigation menu title will be rendered as 
+non-clickable text.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.leftMenuTitleUrl&quot; (HPWeb Vertical Navigation)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setLeftMenuTitleUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="leftMenu">7.43 Left Menu</h3>
+<p>The menu items displayed within the left navigation menu can be specified in 
+one of two different ways: 1) the default, allow the HPWeb layout to generate the
+menu as configured from the VAP Site Console,
+or 2) programmatically using the<em> leftMenuItems</em> property. 
+If the <em>leftMenuItems</em> property is set then it will be used.</p>
+
+<p>In programmatically setting the menu, the <em>leftMenuItems</em> property 
+accepts a list of {@link 
+com.hp.frameworks.wpa.hpweb.MenuItem} objects.&nbsp; Note that <strong>only</strong> 
+objects of type ({@link com.hp.frameworks.wpa.hpweb.MenuItem}) should be 
+added to the list.</p>
+<p>The following example shows how to programmatically configure a sample 
+menu.</p>
+<p class="codeSample">
+&lt;jsp:useBean id="HPWebModel" scope="request"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" /&gt;<br><br>
+        
+&lt;jsp:scriptlet&gt;<br><br>
+
+List leftMenu = HPWebModel.getLeftMenuItems();<br>
+<br>
+// Non-clickable menu text<br>
+MenuItem item = new MenuItem();<br>
+item.setTitle(&quot;Heading 1&quot;);<br>
+leftMenu.add(item);<br>
+<br>
+// Nested menu link<br>
+MenuItem child = new MenuItem();<br>
+child.setTitle(&quot;Link 1&quot;);<br>
+child.setUrl(&quot;http://www.hp.com&quot;);<br>
+item.getSubMenuItems().add(child);<br>
+<br>
+// Separator<br>
+leftMenu.add(new MenuItem());<br>
+<br>
+// Top-level menu link<br>
+item = new MenuItem();<br>
+item.setTitle(&quot;Link 2&quot;);<br>
+item.setUrl(&quot;http://www.hp.com&quot;);<br>
+leftMenu.add(item);<br><br>
+
+&lt;/jsp:scriptlet&gt;</p>
+
+<p>It would be rendered as follows:</p>
+<p><img src="doc-files/menucontentsenhanced.jpg" alt="" class="style1"></p>
+
+<p>Note that a <code>MenuItem</code> with an empty title string will be rendered 
+as a menu separator.&nbsp; The <code>MenuItem</code> class has a <em>
+subMenuItems</em> property which is itself a list of <code>MenuItem</code> 
+objects.&nbsp; The <em>subMenuItems</em> property can be used to create menu 
+items that are nested beneath another item in the menu.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#getLeftMenuItems()}</td>
+	</tr>
+</table>
+
+
+<h3 id="leftPromotion">7.44 Left Promotion</h3>
+<p>The value of this property will be rendered within the left promotion area 
+below the left navigation menu.&nbsp; The left promotion is an optional page 
+element.&nbsp; If no value is supplied for this property it will not be 
+rendered.</p>
+<p>Note that the value for this property can be a string of HTML elements, where the
+characters will not be HTML-escaped.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.leftPromotion&quot; (HPWeb Vertical Navigation)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setLeftPromotion(String)}</td>
+	</tr>
+</table>
+
+
+<h3 id="privacyUrl">7.45 Privacy URL&nbsp;</h3>
+<p>The value of this property will be used as the URL for the &quot;Privacy 
+statement&quot; hyperlink that is rendered in the page footer.&nbsp; If no value is 
+supplied for this property, the URL to the default HP.com privacy statement will 
+be used.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.privacyUrl&quot; (HPWeb Footer)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setPrivacyUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="imprintUrl">7.46 Imprint URL</h3>
+<p>The &quot;Imprint&quot; link is a required element for all pages rendered specifically 
+for Germany.&nbsp; The value of this property will be used as the URL for the 
+&quot;Imprint&quot; (or &quot;Impressum&quot;) link that is rendered in the page footer when the 
+user's locale indicates the Germany country code.&nbsp; If no value is supplied 
+for this property, the default imprint page URL (http://www.hp.com/de/impressum) 
+will be used when necessary.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.imprintUrl&quot; (HPWeb Footer)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setImprintUrl(String)}</td>
+	</tr>
+</table>
+
+
+<h3 id="termsUrl">7.47 Terms/Conditions URL</h3>
+<p>The value of this property will be used as the URL for the &quot;Using this 
+site means you accept its terms&quot; hyperlink that is rendered in the page footer.&nbsp; If no value is 
+supplied for this property, the URL to the default HP.com terms/conditions statement will 
+be used.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.termsUrl&quot; (HPWeb Footer)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setTermsUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="saleTermsUrl">7.48 Sales Terms/Conditions URL</h3>
+<p>The value of this property will be used as the URL for the &quot;Terms and 
+conditions of sale and service&quot; hyperlink that is rendered in the page footer.&nbsp; 
+This is an optional page element.&nbsp; If no value is supplied for this 
+property, the &quot;Terms and conditions of sale and service&quot; hyperlink will not be 
+rendered.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.saleTermsUrl&quot; (HPWeb Footer)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSaleTermsUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="feedbackUrl">7.49 Feedback URL</h3>
+<p>The value of this property will be used as the URL for the feedback hyperlink 
+rendered in the page footer.&nbsp; This is an optional page element.&nbsp; If no 
+value is supplied for this property, the feedback hyperlink will not be 
+rendered.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.feedbackUrl&quot; (HPWeb Footer)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setFeedbackUrl(String)}</td>
+	</tr>
+</table>
+
+
+
+<h3 id="feedbackText">7.50 Feedback Text</h3>
+<p>The value of this property will be used as the text for the feedback 
+hyperlink rendered in the page footer.&nbsp; This is an optional page element.&nbsp; 
+If no value is supplied for the <em>feedbackUrl</em> property, this text will 
+not be rendered.&nbsp; If a value for the <em>feedbackUrl</em> property is 
+specified, a value <strong>must</strong> also be specified for this property.</p>
+
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.feedbackText&quot; (HPWeb Footer)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setFeedbackText(String)}</td>
+	</tr>
+</table>
+
+<h3 id="siteMapUrl">7.51 Site Map URL</h3>
+<p>The value of this property will be used as the URL for the site map hyperlink rendered in the page footer.&nbsp; This is an optional page element.&nbsp; 
+If no value is supplied for the this property, the link will not be rendered.</p>
+
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.siteMapUrl&quot; (HPWeb Footer)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setSiteMapUrl(String)}</td>
+	</tr>
+</table>
+
+
+
+<h3 id="metricsUrl">7.52 Metrics Script URL</h3>
+<p>The value of this property will be used as the URL to the Omniture metrics 
+collection script that will be inserted at the bottom of the page.&nbsp; If no 
+value is supplied for this property, the URL to the default Omniture metrics 
+collection script for the current locale will be used.</p>
+
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.metricsUrl&quot; (HPWeb Footer)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setMetricsUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="metaElements">7.53 Meta Elements</h3>
+<p>This property will add additional <code>&lt;meta name=&quot;&lt;name&gt;&quot; 
+contents=&quot;&lt;value&gt;&quot;&gt;</code> elements to the <code>&lt;head&gt;</code> 
+element.&nbsp; Retrieve the <code>java.util.Properties</code> object and use the
+<code>setProperty(name, value)</code> method to include additional <code>&lt;meta&gt;</code> 
+elements.</p>
+
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>none</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#getMetaInfos()}</td>
+	</tr>
+</table>
+
+<p>
+The following meta elements are included on each page:
+
+<ul>
+<li>&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+<li>&lt;meta http-equiv="Content-Style-Type" content="text/css"&gt;
+<li>&lt;meta http-equiv="Cache-Control" content="no-cache"&gt;
+<li>&lt;meta name="target_country" content="<code>${languageTag}</code>"&gt;
+	<ul>
+	<li>See the <a href="#locale">Locale</a> section.
+	</ul>
+<li>&lt;meta name="hp_design_version" content="hpweb.1.2j"&gt;
+</ul>
+</p>
+
+<h3 id="helpText">7.54 Help Link Text</h3>
+<p>This is the text of the "Help" link that is positioned in the rightmost 
+portion of the the horizontal secondary navigation.  Both the help text 
+and url must be specified for the link to appear.</p>
+
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.helpText&quot; (HPWeb Horizontal Navigation)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setHelpText(String)}</td>
+	</tr>
+</table>
+
+<h3 id="helpUrl">7.55 Help Link URL</h3>
+<p>This is the url of the "Help" link that is positioned in the rightmost 
+portion of the the horizontal secondary navigation.  Both the help text 
+and url must be specified for the link to appear.</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.helpUrl&quot; (HPWeb Horizontal Navigation)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#setHelpUrl(String)}</td>
+	</tr>
+</table>
+
+<h3 id="boundingBox">7.56 Portlet Chrome Bounding Box</h3>
+<p>
+This is a boolean value to indicate whether a bounding box is used to enclose 
+the portlet content. The default value is <code>false</code>.
+</p>
+
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.boundingBox&quot; (HPWeb Portlet Chromes - Alpha, Beta, Beta with Bevel level headers only)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>none</td>
+	</tr>
+</table>
+
+<h3 id="headerLevel">7.57 Portlet Chrome Header Level</h3>
+<p>
+This value indicates which header markup should be applied to the portlet title text.  
+For example, a value of 2 means that the title text will be marked up using the &lt;h2&gt; tag.  
+Valid values are 2 through 6.  The default value is 2.
+</p>
+<table class="props">
+<tr>
+		<th>Applies To:</th>		
+		<td style="font-family:Verdana, sans-serif">Enhanced Layout</td>
+	</tr>
+
+	<tr>
+		<th>Message Key (Component):</th>		
+		<td>&quot;hpweb.headerLevel&quot; (HPWeb Portlet Chromes)</td>
+	</tr>
+	<tr>
+		<th>HPWebModel Property:</th>		
+		<td>none</td>
+	</tr>
+</table>
+
+<h2 id="misc">8. Misc</h2>
+
+<h3 id="locale">8.1 Locale</h3>
+<p>
+HPWeb layout will access the locale for the current user from one of the 
+following sources and in the following order:  authenticated user or 
+guest user, current site default locale, default locale, or null object.
+</p>
+
+<p>
+The {@link java.util.Locale} object property will be used to help
+perform the following functions:
+<ul>
+<li>Set the language attribute value (RFC 3066 language tag) in 
+the &lt;html&gt; element.
+<li>Add a <code>&lt;meta name="target_country" 
+contents="${languageTag}"&gt;</code> 
+element in the &lt;head&gt; element.
+<li>Retrieve messages used by the HPWeb layout in the current locale.  
+</ul>
+</p>
+
+<h3 id="indexing">8.2 Search Engine Indexing</h3>
+<p>
+Search engine indexing is enabled using start and stop indexing tags
+around the page content, and the page title, breadcrumbs, and tagline.
+</p>
+
+</body>
+</html>

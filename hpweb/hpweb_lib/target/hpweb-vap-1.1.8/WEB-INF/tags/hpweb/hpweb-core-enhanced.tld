@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<description>WPA Core Tags for HPWeb Enhanced</description>
+	<tlib-version>1.0</tlib-version>
+	<short-name>hpweb-core-enhanced</short-name>
+	<uri>http://frameworks.hp.com/wpa/hpweb-core-enhanced</uri>
+
+	<tag-file>
+		<name>welcome</name>
+		<path>/WEB-INF/tags/hpweb/WelcomeStretch.tag</path>
+	</tag-file>	
+	
+	<tag-file>
+		<name>logo</name>
+		<path>/WEB-INF/tags/hpweb/LogoStretch.tag</path>
+	</tag-file>	
+
+	<tag-file>
+		<name>topNavSearch</name>
+		<path>/WEB-INF/tags/hpweb/TopNavSearchStretch.tag</path>
+	</tag-file>
+
+	<tag-file>
+		<name>title</name>
+		<path>/WEB-INF/tags/hpweb/TitleStretch.tag</path>
+	</tag-file>
+			
+	<tag-file>
+		<name>topNav</name>
+		<path>/WEB-INF/tags/hpweb/TopNavEnhanced.tag</path>
+	</tag-file>
+			
+	<tag-file>
+		<name>contactSearch</name>
+		<path>/WEB-INF/tags/hpweb/ContactSearchEnhanced.tag</path>
+	</tag-file>	
+	
+	<tag-file>
+		<name>logoTitle</name>
+		<path>/WEB-INF/tags/hpweb/LogoTitleEnhanced.tag</path>
+	</tag-file>	
+	
+	<tag-file>
+		<name>leftMenu</name>
+		<path>/WEB-INF/tags/hpweb/LeftMenuEnhanced.tag</path>
+	</tag-file>	
+	
+	<tag-file>
+		<name>leftMenuItem</name>
+		<path>/WEB-INF/tags/hpweb/LeftMenuItemEnhanced.tag</path>
+	</tag-file>	
+
+	<tag-file>
+		<name>footer</name>
+		<path>/WEB-INF/tags/hpweb/FooterEnhanced.tag</path>
+	</tag-file>	
+			
+</taglib>
