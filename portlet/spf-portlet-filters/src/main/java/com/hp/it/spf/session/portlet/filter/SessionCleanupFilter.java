@@ -46,7 +46,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * 
  *	<p>This class could be extended to customize what session attributes need to be removed and/or retained by overriding
  *	<em>canSessionAttributeBeRemoved</em> method to suit different application needs. If the filter does have been extended,
- *	then the value for portletSessioCleanMode is not limited by above two values. Application Developmenter can choose whatever
+ *	then the value for portletSessioCleanMode is not limited by above two values. Application Developer can choose whatever
  *	value he/she prefers.</p>
  *	<p/>
  *	<p>
