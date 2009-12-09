@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component 
+	build-version="Gold" 
+	component-id="HPWebPortletChromeless" 
+	component-type="Styles" 
+	description="HPWeb portlet chrome displays no chrome with portlet content text." 
+	epi-build="570014" 
+	epi-version="7.4" 
+	major-version="1" 
+	minor-version="0" 
+	title="HPWeb Layout Portlet Chrome - Chromeless" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	
+		<epideploy:required-component 
+			component-id="template0001" 
+			component-type="Style Types" 
+			major-version="7" 
+			minor-version="4" />
+
+		<epideploy:detail>
+			<style-info 
+				apply-template-header="true" 
+				description="HPWeb portlet chrome displays no chrome with portlet content text." 
+				friendly-id="hpwebportletchromeless" 
+				id="HPWebPortletChromeless" 
+				is-system="false" 
+				primary-filename="hpweb_chromeless.jsp" 
+				processing-type="JSP_BASED" 
+				template-default="false" 
+				template-uid="template0001" 
+				title="HPWeb Layout Portlet Chrome - Chromeless" 
+				visible="true" />
+		</epideploy:detail>
+
+</epideploy:component>

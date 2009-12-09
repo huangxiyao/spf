@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component 
+	build-version="Gold" 
+	component-id="HPWebHeader" 
+	component-type="Styles" 
+	description="HPWeb layout header displays the HP logo section, company wide links, search area, page title, breadcrumbs, and top promotion area." 
+	epi-build="570014" 
+	epi-version="7.4" 
+	major-version="1" 
+	minor-version="0" 
+	title="HPWeb Layout Header" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	
+		<epideploy:required-component 
+			component-id="template0008" 
+			component-type="Style Types" 
+			major-version="7" 
+			minor-version="4" />
+
+		<epideploy:detail>
+			<style-info 
+				apply-template-header="true" 
+				description="HPWeb layout header displays the HP logo section, company wide links, search area, page title, breadcrumbs, and top promotion area." 
+				friendly-id="hpwebheader" 
+				id="HPWebHeader" 
+				is-system="false" 
+				primary-filename="hpweb_header.jsp" 
+				processing-type="JSP_BASED" 
+				template-default="false" 
+				template-uid="template0008" 
+				title="HPWeb Layout Header" 
+				visible="true" />
+		</epideploy:detail>
+
+</epideploy:component>

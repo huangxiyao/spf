@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.hp.frameworks</groupId>
+		<artifactId>wpa-layout-vap</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<!-- Change this version number with new releases of 
+		car package.  Only need to change the version
+		number in this POM only.  -->
+
+	<properties>
+		<HPComponentsVersion>1.1.0</HPComponentsVersion>
+	</properties>
+
+	<groupId>com.hp.frameworks</groupId>
+	<artifactId>wpa-common-layout-vap</artifactId>
+	<packaging>pom</packaging>
+
+	<!-- This version doesn't normally need to change. -->
+	<version>1.0.0</version>
+
+	<name>HP Layout Common VAP Components</name>
+	<url>http://frameworks.hp.com</url>
+
+	<modules>
+		<!-- Style type components -->
+		<module>style_types/layout_config</module>
+
+	</modules>
+
+</project>

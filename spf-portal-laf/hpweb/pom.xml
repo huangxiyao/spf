@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.hp.frameworks</groupId>
+		<artifactId>wpa-layout-vap</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<!-- Change this version number with new releases of 
+		'HPWebComponents' car package.  Only need to change the version
+		number in this POM only.  -->
+
+	<properties>
+		<HPWebComponentsVersion>1.1.8</HPWebComponentsVersion>
+	</properties>
+
+	<groupId>com.hp.frameworks</groupId>
+	<artifactId>wpa-hpweb-vap</artifactId>
+	<packaging>pom</packaging>
+
+
+	<!-- This version number normally doesn't need to change. -->
+	<version>1.0.0</version>
+
+	<name>HPWeb VAP Components</name>
+	<url>http://frameworks.hp.com</url>
+
+	<modules>
+		<!-- HPWeb VAP class library module -->
+		<module>hpweb_lib</module>
+
+		<!-- Style components -->
+		<module>styles/layout_config</module>
+		<module>styles/account_controls</module>
+		<module>styles/footer</module>
+		<module>styles/header</module>
+		<module>styles/horizontal_navigation</module>
+		<!--
+		<module>styles/locale_indicator</module>
+		-->
+		<module>styles/vertical_navigation</module>
+		
+		<module>styles/portlet_chrome/intro_box_chrome</module>
+		<module>styles/portlet_chrome/level_a_chrome</module>
+		<module>styles/portlet_chrome/level_b_chrome</module>
+		<module>styles/portlet_chrome/level_bevel_b_chrome</module>
+		<module>styles/portlet_chrome/level_c_chrome</module>
+		<module>styles/portlet_chrome/chromeless</module>
+
+		<!-- Style type components -->
+		<!--
+		<module>styletypes/locale_controls</module>
+		-->
+
+		<!-- Grid components -->
+		<module>grids/horz_nav_grid</module>
+		<module>grids/split_nav_grid</module>
+		<module>grids/system_grid</module>
+		<module>grids/vert_nav_grid</module>
+
+		<!-- Theme components -->
+		<module>themes/hpweb_theme</module>
+
+		<!-- 'package_all' master car component need to be last module -->
+		<module>package_all</module>
+
+	</modules>
+
+  	<reporting>
+    	<plugins>
+      		<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-javadoc-plugin</artifactId>
+        		<configuration>
+          			<aggregate>true</aggregate>		  
+          			<windowtitle>${name} ${HPWebComponentsVersion} Developer's Guide</windowtitle>
+        		</configuration>
+      		</plugin>
+    	</plugins>
+  	</reporting>  
+  
+</project>
