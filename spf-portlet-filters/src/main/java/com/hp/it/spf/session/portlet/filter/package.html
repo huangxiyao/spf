@@ -11,7 +11,10 @@
 	session attributes except sticky session attributes will be removed for both application and portlet scopes. 
 	This is default behavior if init-param is not specified. If the latter is used, then only unsticky session attributes 
 	will be removed.</P>  
-	
+
+	<p>After cleanup, it will add two different session attributes in portlet scope amd application scope session to record
+	last session cleanup were done.</p>
+  	
 	<p>This class could be extended to customize what session attributes need to be removed and/or retained by overriding
 	<em>canSessionAttributeBeRemoved</em> method to suit different application needs. If the filter does have been extended,
 	then the value for portletSessioCleanMode is not limited by above two values. Application Development can choose whatever

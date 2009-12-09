@@ -35,12 +35,15 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  *	portlet session to determine whether to perform certain portlet session cleanup, for both APPLICATION_SCOPE and 
  *	PORTLET_SCOPE session attributes.</p>
  *	
- *	<p>The filter takes one	initialization parameter, <em>portletSessionCleanupMode</em>.	It has two possible values, 
+ *	<p>The filter takes one	initialization parameter, <em>portletSessionCleanupMode</em>. It has two possible values, 
  *	spf.keepStickySessionAttributesOnly	or spf.removeNonStickySessionAttributesOnly. If the former is used, all portlet 
  *	session attributes except sticky session attributes will be removed for both application and portlet scopes. 
  *	This is default behavior if init-param is not specified. If the latter is used, then only unsticky session attributes 
  *	will be removed.</P>  
  *	
+ *	<p>After cleanup, it will add two different session attributes in portlet scope amd application scope session to record
+ *		last session cleanup were done.</p>
+ * 
  *	<p>This class could be extended to customize what session attributes need to be removed and/or retained by overriding
  *	<em>canSessionAttributeBeRemoved</em> method to suit different application needs. If the filter does have been extended,
  *	then the value for portletSessioCleanMode is not limited by above two values. Application Development can choose whatever
@@ -181,30 +184,46 @@ public class SessionCleanupFilter implements ActionFilter, RenderFilter, EventFi
 	private void cleanupSession(PortletRequest portletRequest)
 	{
 		PortletSession portletSession = portletRequest.getPortletSession();
-		Long lastPortletSessionCleanupDate = (Long)portletSession
-			.getAttribute(Consts.KEY_LAST_PORTLET_SESSION_CLEANUP_DATE, 
-							PortletSession.PORTLET_SCOPE);
+		Long lastPortletScopeSessionCleanupDate = (Long)portletSession
+						.getAttribute(Consts.KEY_LAST_PORTLET_SCOPE_SESSION_CLEANUP_DATE, 
+									PortletSession.PORTLET_SCOPE);
 
+		Long lastAppScopeSessionCleanupDate = (Long)portletSession
+						.getAttribute(Consts.KEY_LAST_APP_SCOPE_SESSION_CLEANUP_DATE, 
+									PortletSession.APPLICATION_SCOPE);
+		
 		long lastPortalSessionCleanupDate = 0;
 		lastPortalSessionCleanupDate  = Utils.getLastSessionCleanupDate(portletRequest);
 		log.info("From WSRP portlet request, lastPortalSessionCleanupDate = " + lastPortalSessionCleanupDate);
 		
 		// determine whether to clean
 		if (lastPortalSessionCleanupDate > 0 ) { // exists portalSessionCleanupDate from request
-			if (lastPortletSessionCleanupDate == null // first time 
-					|| lastPortalSessionCleanupDate > lastPortletSessionCleanupDate) { // subsequent times
+			if (lastPortletScopeSessionCleanupDate == null // first time 
+					|| lastPortalSessionCleanupDate > lastPortletScopeSessionCleanupDate) { // subsequent times
 				
-				log.info("Performing portlet session clean up...");
+				log.info("Performing portlet scope session clean up...");
 				
 				// determine what to clean
 				String mode = filterConfig.getInitParameter(INIT_PARAM);
 				cleanupSessionAttributes(portletSession, mode, PortletSession.PORTLET_SCOPE);
-				cleanupSessionAttributes(portletSession, mode, PortletSession.APPLICATION_SCOPE);
-
-				portletSession.setAttribute(Consts.KEY_LAST_PORTLET_SESSION_CLEANUP_DATE, 
-							Long.valueOf(System.currentTimeMillis()), 
-							PortletSession.PORTLET_SCOPE);
+				portletSession.setAttribute(Consts.KEY_LAST_PORTLET_SCOPE_SESSION_CLEANUP_DATE, 
+											Long.valueOf(System.currentTimeMillis()), 
+											PortletSession.PORTLET_SCOPE);
 			}
+
+		    // try to cleanup application scope session attributes
+		    if (lastAppScopeSessionCleanupDate == null // first time
+		            || lastPortalSessionCleanupDate > lastAppScopeSessionCleanupDate) { // subsequent times
+		        log.info("Performing portlet application scope session clean up...");
+
+		        // determine what to clean
+		        String mode = filterConfig.getInitParameter(INIT_PARAM);
+		        cleanupSessionAttributes(portletSession, mode, PortletSession.APPLICATION_SCOPE);
+		        portletSession.setAttribute(Consts.KEY_LAST_APP_SCOPE_SESSION_CLEANUP_DATE, 
+		        							Long.valueOf(System.currentTimeMillis()), 
+		        							PortletSession.APPLICATION_SCOPE);
+
+		    }
 		}
 	}
 	
