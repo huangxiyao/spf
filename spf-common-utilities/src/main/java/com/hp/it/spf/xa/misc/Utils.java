@@ -487,13 +487,24 @@ public class Utils {
 	}
 	
 	/**
-	 * Returns Diagnostic ID, containing SessionId + RequestId + PortletId from the HTTP header.
+	 * Returns Diagnostic ID which should be used in the log files to enable end-to-end tracing
+	 * of log messages through various portal-portlet layers.
+	 *
 	 * @param request HttpServletRequest request.
 	 * @return Diagnostic ID.
 	 */
 	public static String getDiagnosticId(HttpServletRequest request)
 	{
-		//FIXME (slawek) - slawek needs to add support for local portlets
+		// Diagnostic ID is set as request attribute either by RequestLogFilter or by PortletDataPreDisplayAction
+		// if this method is invoked by local portlets.
+		String diagnosticId = (String) request.getAttribute(Consts.DIAGNOSTIC_ID);
+		if (diagnosticId != null) {
+			return diagnosticId;
+		}
+
+		// If we don't have anything this would mean the method is called either before RequestLogFilter
+		// was applied (if called by a portal component) or we are on the portlet side, in a portlet
+		// being called remotely. In both cases let's fall back to HTTP header.
 		return request.getHeader(Consts.DIAGNOSTIC_ID);
 	}
 }
