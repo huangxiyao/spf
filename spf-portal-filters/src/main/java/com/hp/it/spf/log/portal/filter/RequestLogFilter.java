@@ -43,16 +43,6 @@ public class RequestLogFilter implements Filter {
 	private static final String MDC_SITE_NAME = "SiteName";
 	private static final String MDC_LOGIN_ID = "LoginId";
 	private static final String MDC_PORTAL_SESSION_ID = "PortalSessionId";
-	
-	/**
-	 * Name of the Diagnostic Id used in MDC.
-	 */
-	private static final String MDC_ID = Consts.DIAGNOSTIC_ID;
-	
-	/**
-	 * Name of the HTTP header set by the web server and containing unique ID for this request.
-	 */
-	private static final String SPF_DC_RID_HEADER_NAME = "SPF_DC_RID";
 
 	/**
 	 * Name of the session cookie carrying the value of diagnostic session ID.
@@ -118,7 +108,7 @@ public class RequestLogFilter implements Filter {
 		diagnosticContext.set("Web Server Name", getWebServerName(request));
 		diagnosticContext.set("Portal Server Name", Environment.singletonInstance.getManagedServerName());
 		diagnosticContext.set("Nav Item Name", getMenuItemName(request));
-		diagnosticContext.set(MDC_ID, (String) MDC.get(MDC_ID));
+		diagnosticContext.set(Consts.DIAGNOSTIC_ID, (String) MDC.get(Consts.DIAGNOSTIC_ID));
 
 		HttpSession session = request.getSession(false);
 		if (session != null) {
@@ -192,22 +182,22 @@ public class RequestLogFilter implements Filter {
 		String siteName = getSiteName(request);
 		String loginId = getLoginId(request);
 		String sessionId = getSessionId(request);
-		String sessionIdHashValue = getSessionIdHashValue(request);	  
+		String sessionIdHashValue = getSessionIdHashValue(request);
 		String requestId = getRequestId(request);
-		
-		MDC.put(MDC_ID, sessionIdHashValue + "+" + requestId);
-		request.setAttribute(MDC_ID, MDC.get(MDC_ID));
-				
+
+		MDC.put(Consts.DIAGNOSTIC_ID, sessionIdHashValue + "+" + requestId);
+		request.setAttribute(Consts.DIAGNOSTIC_ID, MDC.get(Consts.DIAGNOSTIC_ID));
+
 		if (siteName != null) {
 			MDC.put(MDC_SITE_NAME, siteName);
 		}
 		if (loginId != null) {
 			MDC.put(MDC_LOGIN_ID, loginId);
 		}
-		if (sessionId != null) {		    
-		    	MDC.put(MDC_PORTAL_SESSION_ID, sessionId);			
+		if (sessionId != null) {
+			MDC.put(MDC_PORTAL_SESSION_ID, sessionId);
 		}
-			
+
 	}
 	
 	/**
@@ -219,13 +209,13 @@ public class RequestLogFilter implements Filter {
 	 */	
 	private String getSessionIdHashValue(HttpServletRequest request)
 	{
-	    String sessionId = request.getSession().getId();
-	    if (sessionId == null) {
-		return null;
-	    }
-	    else {
-		return Integer.toHexString(Math.abs(sessionId.substring(0,sessionId.indexOf("!")).hashCode()));
-	    }	    
+		String sessionId = request.getSession().getId();
+		if (sessionId == null) {
+			return null;
+		}
+		else {
+			return Integer.toHexString(Math.abs(sessionId.substring(0, sessionId.indexOf("!")).hashCode()));
+		}
 	}
 
 	/**
@@ -235,8 +225,11 @@ public class RequestLogFilter implements Filter {
 	 */
 	
 	private String getRequestId(HttpServletRequest request) {
-		String reqId = request.getHeader(SPF_DC_RID_HEADER_NAME);
-	    
+		// The web server should have send us the HTTP header SPF_DC_ID
+		String reqId = request.getHeader(Consts.DIAGNOSTIC_ID);
+
+		// Either the web server is not setup properly or this is a direct access to the app server.
+		// In both cases we still want the diagnostic ID.
 		if (reqId == null || "".equals(reqId)) {
 			return Long.toHexString(System.currentTimeMillis());
 		}
@@ -280,28 +273,28 @@ public class RequestLogFilter implements Filter {
 	 * If the cookie is not set, add the session cookie in the response.
 	 * The session cookie contains hash value of the session.
 	 * @param request portal request
-	 * @param response  
+	 * @param response portal response to which the cookie will be added if not present yet  
 	 */
 	private void setDiagnosticCookie(HttpServletRequest request, HttpServletResponse response) {
-	    boolean cookieAlreadySet = false;
-	    Cookie[] cookies = request.getCookies();
-	    if (cookies != null) {
-		for (int i = 0, cookieCount = cookies.length; i < cookieCount && !cookieAlreadySet; i++) {
-			if (SPF_DC_SID_COOKIE_NAME.equals(cookies[i].getName())) {
-				cookieAlreadySet = true;
+		boolean cookieAlreadySet = false;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (int i = 0, cookieCount = cookies.length; i < cookieCount && !cookieAlreadySet; i++) {
+				if (SPF_DC_SID_COOKIE_NAME.equals(cookies[i].getName())) {
+					cookieAlreadySet = true;
+				}
 			}
 		}
-	    }
-	    if (!cookieAlreadySet) {
-		response.addCookie(new Cookie(SPF_DC_SID_COOKIE_NAME, getSessionIdHashValue(request)));
-	    }			
+		if (!cookieAlreadySet) {
+			response.addCookie(new Cookie(SPF_DC_SID_COOKIE_NAME, getSessionIdHashValue(request)));
+		}
 	}
 
 	private void cleanMDC() {
 		MDC.remove(MDC_SITE_NAME);
 		MDC.remove(MDC_LOGIN_ID);
 		MDC.remove(MDC_PORTAL_SESSION_ID);
-		MDC.remove(MDC_ID);
+		MDC.remove(Consts.DIAGNOSTIC_ID);
 	}
 
 	/**
