@@ -25,11 +25,11 @@
 
 		<supported-locale>en</supported-locale>
 
-		<resource-bundle>NoFilterPortletMessages</resource-bundle>
+		<resource-bundle>NoFilterAppliedPortletMessages</resource-bundle>
 	</portlet>
 
 	<portlet>
-        <portlet-name>KeepSPFRetainOnly</portlet-name>
+        <portlet-name>KeepStickyOnly</portlet-name>
 		<portlet-class>
 			com.hp.frameworks.wpa.portlet.WPADispatcherPortlet
 		</portlet-class>
@@ -46,11 +46,11 @@
 		</supports>
 
 		<supported-locale>en</supported-locale>
-		<resource-bundle>FilterNoInitPortletMessages</resource-bundle>
+		<resource-bundle>FilterAppliedMode1PortletMessages</resource-bundle>
 	</portlet>
 
 	<portlet>
-        <portlet-name>ClearSPFOnly</portlet-name>
+        <portlet-name>RemoveUnstickyOnly</portlet-name>
 		<portlet-class>
 			com.hp.frameworks.wpa.portlet.WPADispatcherPortlet
 		</portlet-class>
@@ -68,7 +68,7 @@
 
 		<supported-locale>en</supported-locale>
 
-		<resource-bundle>FilterInitFalsePortletMessages</resource-bundle>
+		<resource-bundle>FilterAppliedMode2PortletMessages</resource-bundle>
 		
 	</portlet>
 
@@ -81,8 +81,8 @@
 	    <lifecycle>RENDER_PHASE</lifecycle>      
 	</filter> 
 	<filter>
-	    <display-name>Session Cleanup Filter True</display-name> 
-	    <filter-name>SessionCleanupFilterTrue</filter-name> 
+	    <display-name>Session Cleanup Filter Mode1</display-name> 
+	    <filter-name>SessionCleanupFilterMode1</filter-name> 
 	    <filter-class>com.hp.it.spf.session.portlet.filter.SessionCleanupFilter</filter-class> 
 	    <lifecycle>ACTION_PHASE</lifecycle>      
 	    <lifecycle>RENDER_PHASE</lifecycle>      
@@ -93,8 +93,8 @@
 	</filter> 
 
 	<filter>
-	    <display-name>Session Cleanup Filter False</display-name> 
-	    <filter-name>SessionCleanupFilterFalse</filter-name> 
+	    <display-name>Session Cleanup Filter Mode2</display-name> 
+	    <filter-name>SessionCleanupFilterMode2</filter-name> 
 	    <filter-class>com.hp.it.spf.session.portlet.filter.SessionCleanupFilter</filter-class> 
 	    <lifecycle>ACTION_PHASE</lifecycle>      
 	    <lifecycle>RENDER_PHASE</lifecycle>      
@@ -106,20 +106,18 @@
 	
 
 	<!-- SPF attribute map filter mapping -->
-	<!-- 
 	<filter-mapping>
     	<filter-name>MapAttributeFilter</filter-name> 
     	<portlet-name>*</portlet-name> 
 	</filter-mapping>
-	-->
 	<filter-mapping>
-		<filter-name>SessionCleanupFilterTrue</filter-name>
-		<portlet-name>KeepSPFRetainOnly</portlet-name>
+		<filter-name>SessionCleanupFilterMode1</filter-name>
+		<portlet-name>KeepStickyOnly</portlet-name>
 	</filter-mapping>
 
 	<filter-mapping>
-		<filter-name>SessionCleanupFilterFalse</filter-name>
-		<portlet-name>ClearSPFOnly</portlet-name>
+		<filter-name>SessionCleanupFilterMode2</filter-name>
+		<portlet-name>RemoveUnstickyOnly</portlet-name>
 	</filter-mapping>
 		
 </portlet-app>
