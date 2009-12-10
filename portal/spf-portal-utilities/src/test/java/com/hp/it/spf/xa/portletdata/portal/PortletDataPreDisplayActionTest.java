@@ -14,6 +14,7 @@ import com.vignette.portal.website.enduser.PortalContext;
 import com.vignette.portal.website.enduser.PortalRequest;
 import com.vignette.portal.website.enduser.components.ActionException;
 import com.epicentric.page.PageException;
+import com.hp.it.spf.xa.misc.Consts;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -36,6 +37,7 @@ public class PortletDataPreDisplayActionTest
 		final Map<String, String> contextMap = asMap("key1", "value1", "key2", "value2");
 		final Map userProfile = asMap("FirstName", "Jane", "LastName", "Smith");
 		final Set<String> pagePortletUids = new HashSet<String>(Arrays.asList("portlet1uid", "portlet2uid"));
+		final String diagnosticId = "diagnostic_id";
 		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
 		final PortalContext portalContext = mContext.mock(PortalContext.class);
 		final PortalRequest portalRequest = mContext.mock(PortalRequest.class);
@@ -48,11 +50,14 @@ public class PortletDataPreDisplayActionTest
 			allowing(portalRequest).getRequest(); will(returnValue(request));
 			allowing(dataCollector).retrieveUserProfile(request); will(returnValue(userProfile));
 			allowing(dataCollector).retrieveUserContextKeys(request); will(returnValue(contextMap));
+			allowing(request).getAttribute(Consts.DIAGNOSTIC_ID); will(returnValue(diagnosticId));
 
 			oneOf(request).setAttribute("com.vignette.portal.attribute.portlet.portlet1uid_name.javax.portlet.userinfo", userProfile);
 			oneOf(request).setAttribute("com.vignette.portal.attribute.portlet.portlet1uid_name.ContextMap", contextMap);
+			oneOf(request).setAttribute("com.vignette.portal.attribute.portlet.portlet1uid_name.SPF_DC_ID", diagnosticId);
 			oneOf(request).setAttribute("com.vignette.portal.attribute.portlet.portlet2uid_name.javax.portlet.userinfo", userProfile);
 			oneOf(request).setAttribute("com.vignette.portal.attribute.portlet.portlet2uid_name.ContextMap", contextMap);
+			oneOf(request).setAttribute("com.vignette.portal.attribute.portlet.portlet2uid_name.SPF_DC_ID", diagnosticId);
 		}});
 
 		action.execute(portalContext);

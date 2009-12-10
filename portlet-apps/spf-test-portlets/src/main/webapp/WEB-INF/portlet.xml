@@ -119,6 +119,20 @@
         </portlet-info>
     </portlet>
 
+    <portlet>
+        <portlet-name>DiagnosticIdTestPortlet</portlet-name>
+        <portlet-class>com.hp.it.spf.apps.diagnosticidtest.portlet.DiagnosticIdTestPortlet</portlet-class>
+        <expiration-cache>0</expiration-cache>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Diagnostic ID Test Portlet</title>
+        </portlet-info>
+    </portlet>
+
     <custom-portlet-mode>
         <portlet-mode>vignette:config</portlet-mode>
     </custom-portlet-mode>

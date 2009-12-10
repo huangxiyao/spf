@@ -723,9 +723,22 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 */
 	public static String getDiagnosticId(PortletRequest portletRequest)
 	{
-		//FIXME (slawek) - slawek needs to add support for local portlets
+		// For local portlets the diagnostic ID should have been set by PortletDataPreDisplayAction
+		// secondary page, used to share data with local portlets.
+		String localPortletDiagnosticId = (String) portletRequest.getAttribute(com.hp.it.spf.xa.misc.Consts.DIAGNOSTIC_ID);
+		if (localPortletDiagnosticId != null) {
+			return localPortletDiagnosticId;
+		}
+
+		// If we don't have anything for local portlets, let's assume this is a remote portlet
+		// and delegate to the helper method which can take the HttpServletRequest.
+		// "javax.portlet.portletc.httpServletRequest" attribute is where OpenPortal binds the
+		// incoming HttpServletRequest.
 		HttpServletRequest request = (HttpServletRequest) portletRequest.getAttribute("javax.portlet.portletc.httpServletRequest");
-		return com.hp.it.spf.xa.misc.Utils.getDiagnosticId(request);
+		if (request != null) {
+			return com.hp.it.spf.xa.misc.Utils.getDiagnosticId(request);
+		}
+		return null;
 	}
 
 	/**

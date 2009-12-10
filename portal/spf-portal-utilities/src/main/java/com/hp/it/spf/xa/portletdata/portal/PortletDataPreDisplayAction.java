@@ -27,6 +27,7 @@ import com.epicentric.common.website.MenuItemUtils;
 import com.epicentric.mypage.internal.MyPageNode;
 import com.epicentric.mypage.MyPage;
 import com.hp.it.spf.xa.misc.Consts;
+import com.hp.it.spf.xa.misc.Utils;
 
 /**
  * Pre-display action executed for pages rendering portlets, used to share data between portal and
@@ -109,6 +110,9 @@ public class PortletDataPreDisplayAction extends BaseAction {
 							portletAttributeName(portletName, USER_PROFILE_ATTR_NAME), userProfile);
 					request.setAttribute(
 							portletAttributeName(portletName, CONTEXT_MAP_ATTR_NAME), contextMap);
+					request.setAttribute(
+							portletAttributeName(portletName,  Consts.DIAGNOSTIC_ID),
+							Utils.getDiagnosticId(request));
 
 					if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 						LOG.debug("Set attribute '" + portletAttributeName(portletName, USER_PROFILE_ATTR_NAME) +
