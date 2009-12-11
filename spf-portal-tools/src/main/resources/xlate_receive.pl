@@ -304,7 +304,7 @@ EOF
    
    print "----- Duplicating translated files for locales with multiple codes.\n";
    &duplicate_files ($in_media_pdir, $all_media_files_re,
-                     "_[a-zA-Z]{2}", @all_multicode_locale_res);
+                     "(?:_[a-zA-Z]{2}){1,2}", @all_multicode_locale_res);
 
    # Next, winnow media files down to just the translated versions, not base
    # versions or anything else.  Remove all the rest.
