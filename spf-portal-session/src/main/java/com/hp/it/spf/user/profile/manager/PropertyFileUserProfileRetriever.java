@@ -17,6 +17,9 @@ import java.io.IOException;
 /**
  * Test user profile retriever which reads the profile attributes from available in class path
  * property file named <code>{site name}_{user profile ID}.properties</code>.
+ * <p>
+ * <strong>IMPORTANT:</strong> This class is a smaple/test implementation and should not be used in production environment.
+ * </p>
  *
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
  */

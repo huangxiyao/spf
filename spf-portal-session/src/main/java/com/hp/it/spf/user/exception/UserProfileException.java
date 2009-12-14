@@ -5,7 +5,7 @@
 package com.hp.it.spf.user.exception;
 
 /**
- * UPS webservice exception wrapper
+ * Thrown when an error occurs while retrieving user profile. 
  * 
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @version 1.0
