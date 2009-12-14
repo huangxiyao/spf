@@ -14,11 +14,29 @@ import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
 /**
- * This is factory class to create implementation class of <tt>IUserProfileRetriever</tt>.
+ * Factory class used by {@link com.hp.it.spf.sso.portal.AbstractAuthenticator}
+ * to create implementation classes of <tt>IUserProfileRetriever</tt>.
  * <p>
- * This class use a map to maintain all loaded UserProfileRetrievers with the specified
- * key. If the key's value stored in properties file is not changed, then the cached one
- * will be retrieved.
+ * The fully qualified name of the class implementing {@link com.hp.it.spf.user.profile.manager.IUserProfileRetriever}
+ * interface must be configured in the SPF configuration file called <tt>SharedPortalSSO.properties</tt>,
+ * as the value for key <code>user_profile_retriever</code>. If this property is not specified
+ * the default, no-op implementation {@link com.hp.it.spf.user.profile.manager.DefaultUserProfileRetriever}
+ * will be used.
+ * </p>
+ * <p>
+ * In case profile should be retrieved from several sources, this can be either implemented directly
+ * in the retriever or {@link com.hp.it.spf.user.profile.manager.CompoundUserProfileRetriever} class
+ * can be used. It allows additional configuration - the list of fully qualified names of the classes
+ * implementing the profile retriever interface. The list is specified as the value for the key
+ * <code>user_profile_retriever.delegates</code>. The class names should be separated by a comma.
+ * <code>CompoundUserProfileRetriever</code> invokes the retriever implementations in the order
+ * in which they were specified in the configuration file, merging profile maps returned by each of them. 
+ * </p>
+ * <p>
+ * This class caches internally the loaded IUserProfileRetriever implementations. It also monitors
+ * the configuration file for changes. If the value corresponding to the profile retriver class
+ * name key changes, the implementation class will be reloaded. Otherwise, the cached implementation
+ * will be used. 
  * </p>
  * 
  * @author <link href="ying-zhiw@hp.com">Oliver</link>

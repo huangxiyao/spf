@@ -13,6 +13,11 @@ import com.hp.it.spf.user.exception.UserProfileException;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
+/**
+ * {@link com.hp.it.spf.user.profile.manager.IUserProfileRetriever} implementation which is able
+ * to merge user profile maps retrieved by a set of delegates. The retrievers are invoked in order
+ * in which they are specified in the <code>deleteClassNames</code> constructor parameter.
+ */
 public class CompoundUserProfileRetriever implements IUserProfileRetriever {
     private static final LogWrapper LOG = AuthenticatorHelper.getLog(CompoundUserProfileRetriever.class);
     
@@ -22,23 +27,26 @@ public class CompoundUserProfileRetriever implements IUserProfileRetriever {
      * Parse all delegate classes from delegateClassNames parameter, then instantiated them
      * in sequence.
      * 
-     * @param delegateClassNames delegated class names seperated by comma
-     * @throws ClassNotFoundException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
+     * @param delegateClassNames fully qualified delegate class names seperated by comma
+     * @throws ClassNotFoundException If a class specified in <code>delegateClassNames</code> parameter
+	 * could not be found
+     * @throws InstantiationException If a class specified in <code>delegateClassNames</code> parameter
+	 * could not be instantiated
+     * @throws IllegalAccessException If a class specified in <code>delegateClassNames</code> parameter
+	 * is not public
      */
     @SuppressWarnings("unchecked")
-    public CompoundUserProfileRetriever(String delegateClassNames) throws ClassNotFoundException,
-                                                                InstantiationException,
-                                                                IllegalAccessException {
+    public CompoundUserProfileRetriever(String delegateClassNames)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException
+	{
         StringTokenizer st = new StringTokenizer(delegateClassNames, ",");
         while (st.hasMoreTokens()) {
             String delegatedClassName = st.nextToken().trim();
+			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+				LOG.debug("Instantiating profile retriever delegate class: " + delegatedClassName);
+			}
             Class clazz = Class.forName(delegatedClassName);
             IUserProfileRetriever retriever = (IUserProfileRetriever)clazz.newInstance();
-            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-                LOG.debug("Retrieved delegated class: " + delegatedClassName);
-            }
             retrievers.add(retriever);
         }
     }
