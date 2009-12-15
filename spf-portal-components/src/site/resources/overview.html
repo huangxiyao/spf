@@ -1,0 +1,519 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Shared Portal Framework - Vignette Portal Components Guide</title>
+</head>
+<body>
+<style type="text/css">
+body {
+	padding: 0;
+	font-family: Verdana, Sans-serif;
+	font-size: small;
+}
+
+h1 {
+	font-family: Georgia, Serif;
+	font-size: 200%;
+	color: #404040;
+	margin-top: 5px;
+}
+
+h2 {
+	font-family: Georgia, Serif;
+	font-size: 175%;
+	color: #404040;
+	page-break-before: always;
+}
+
+h3 {
+	font-family: Verdana, Sans-serif;
+	font-size: 150%;
+	font-weight: bold;
+	color: #404040;
+	margin-top: 20px;
+}
+
+h4 {
+	font-family: Verdana, Sans-serif;
+	font-size: 125%;
+	font-weight: bold;
+	color: #404040;
+	margin-top: 20px;
+}
+
+li {
+	margin-left: -10px;
+}
+
+ol li {
+	margin-bottom: 20px;
+}
+
+code {
+	color: #990000;
+	font-size: 110%
+}
+
+pre {
+	color: #990000;
+	font-size: 110%;
+}
+
+.byline {
+	font-style: italic;
+	font-size: 90%;
+	color: gray;
+	margin-top: -10px;
+	border-bottom: solid black 1px;
+}
+
+.codeSample {
+	color: #990000;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: small;
+	border: solid #990000 1px;
+	padding: 5px;
+}
+
+.leftFloatingImage {
+	float: left;
+	margin: 0 10px 10px 0;
+}
+
+.rightFloatingImage {
+	float: right;
+	margin: 0 0 10px 10px;
+}
+
+.toc {
+	list-style-type: none;
+}
+
+ul.toc ul {
+	list-style-type: none;
+}
+
+table.props td,table.props th {
+	padding: 5px;
+	background-color: #F0F0F0
+}
+
+table.props th {
+	font-size: 11px;
+	font-weight: bold;
+	text-align: right;
+}
+
+table.props td {
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.style1 {
+	border-style: solid;
+	border-width: 1px;
+}
+</style>
+
+<a name="top"><h1>Shared Portal Framework - Vignette Portal Components Guide</h1> </a>
+
+<a name="toc"><h2>Table of Contents</h2> </a>
+
+<ul class="toc">
+	<li>1. <a href="#overview">Overview</a></li>
+	<li>
+		2. <a href="#secondarypagetypesandpages">Secondary Page Types and Secondary Pages</a>
+		<ul>
+			<li>2.1. <a href="#spf-auth-error">Authorization Error</a></li>
+			<li>2.2. <a href="#spf-fed-launch-error">Fedaration Launch Error</a></li>
+			<li>2.3. <a href="#spf-fed-logout-confirm">Fedaration Logout Confirmation</a></li>
+			<li>2.4. <a href="#spf-global-help">Global Help</a></li>
+			<li>2.5. <a href="#spf-locale-selector">Locale Selector</a></li>
+			<li>2.6. <a href="#spf-logout">Logout</a></li>
+			<li>2.7. <a href="#spf-page-display">Portlet Display</a></li>
+			<li>2.8. <a href="#spf-portal-pulse">Portal Pulse</a></li>
+			<li>2.9. <a href="#spf-return">Return</a></li>
+			<li>2.10. <a href="#spf-site-picker">Site Picker</a></li>
+			<li>2.11. <a href="#spf-system-error">System Error</a></li>
+		</ul>
+	</li>
+	<li>
+		3. <a href="#styletypesandstyles">Style Types and Styles</a>
+		<ul>
+			<li>3.1. <a href="#spf-hpweb-layout-config">HPWeb Layout Config Style</a></li>
+			<li>3.2. <a href="#spf-locale-widget">Locale Widgets</a></li>
+		</ul>
+	</li>
+	<li>
+		4. <a href="#portalbeans">Portal Beans</a>
+		<ul>
+			<li>4.1. <a href="#spf-navportlet">Navigator Portlet</a></li>
+		</ul>
+	</li>
+</ul>
+
+<hr />
+
+<a name="overview"><h2>1. Overview</h2> </a>
+
+<p>
+	While the majority of Shared Portal Framework's functionality is packaged as JAR files
+	and deployed along with Vignette Portal libraries, some of it complies to Vignette components
+	architecture, and as such is deployed as Component Archive (CAR) files. These components plug
+	seamlessly into the portal application and can leverage all the services provided by it such as,
+	for example, security.
+</p>
+<p>
+	The following sections describe SPF components. Those include secondary page types and secondary
+	pages, style types and styles and portal beans. Some of them are standalone (i.e. they do not
+	extend any of the built-in components), and some are specializations of out-of-the-box provided
+	types. The majority of SPF components are localized through resource bundles.
+</p>
+<p>
+	The detailed information on how to implement Vignette Portal Components is provided in
+	<em>Vignette Portal Developer's Guide</em>. 
+</p>
+
+<a name="secondarypagetypesandpages"><h2>2. Secondary Page Types and Secondary Pages</h2></a>
+
+<p>
+	A secondary page defines the functionality of each Portal page. Every request is for exactly
+	one secondary page which corresponds to the functionality of that request. Vignette Portal
+	provides several built-in secondary pages (e.g. portlet display). It also allows the application
+	teams to extend portal functionality by providing application-specific pages. A <em>Secondary page
+	type</em> is an abstract component that defines a specific kind of functionality. A <em>secondary
+	page</em> is a component that fully implements the functionality of its given type. There may
+	exist several secondary pages for the given page type in the same portal application. Which page
+	is used for its corresponding type is configured in Vignette Console. The pages and their
+	corresponding types are implemented as a set of Java classes and JSP files, and are described
+	with <code>component.xml</code> Vignette Component Archive descriptor file.
+</p>
+
+<a name="spf-auth-error"><h3>2.1. Authorization Error</h3></a>
+<p>
+	SPF artifacts: <code>spf-auth-error-secondarypagetype</code> and <code>spf-auth-error-secondarypage</code>
+</p>
+<p>
+	This page is used when authorization error occurs, i.e. the end user is trying
+	to access a page or resource she is not allowed to. It does not extend any of existing Vignette
+	Portal pages. Currently this page is only configured for authorization errors detected by
+	SiteMinder (HP Passport or @HP). For finer-grained authorization
+	errors Vignette Portal built-in page is used as Vignette does not allow to customize it.
+	To use this page with SiteMinder it must be configured there as authorization error target.
+	The URL of the page is <code>/portal/site/spf/template.PUBLIC_SPF_AUTH_ERROR</code>.
+</p>
+
+<a name="spf-fed-launch-error"><h3>2.2. Federation Launch Error</h3></a>
+<p>
+	SPF artifacts: <code>spf-fed-launch-error-secondarypagetype</code> and <code>spf-fed-launch-error-secondarypage</code>
+</p>
+<p>
+	Some of the sites using SPF may be HP Passport federated. For such sites the authentication is not managed
+	directly by the portal or HP Passport, but is rather handled by another authentication service
+	(e.g. running outside of HP, within end user's network). Once the user is authenticated there,
+	the user's identity is securely propagated to HP Passport and the portal and user session is
+	automatically and transparently created.
+</p>
+<p>
+	Fedaration Launch Error page is used when HP Passport cannot assert the identity of the user
+	based on the information provided by the actual authentication service. This page must be
+	configured in HP Passport as federation error target. Its URL is <code>/portal/site/spf/template.PUBLIC_SPF_FED_ERROR</code>. 
+</p>
+
+<a name="spf-fed-logout-confirm"><h3>2.3. Federation Logout Confirmation</h3></a>
+<p>
+	SPF artifacts: <code>spf-fed-logout-confirm-secondarypagetype</code> and <code>spf-fed-logout-confirm-secondarypage</code>
+</p>
+<p>
+	This page is presented to the end user upon signing out from HP Passport federated site (for
+	high level description of federation see <a href="#spf-fed-launch-error">Federation Launch Error</a>
+	section). Normally it's never explicitely used. Instead the user is redirected to this page
+	automatically by <a href="#spf-logout">Logout</a> secondary page when the latter is invoked for
+	federated site. In addition to some explanation text the page shows a link to the site root
+	URL.
+</p>
+
+<a name="spf-global-help"><h3>2.4. Global Help</h3></a>
+<p>
+	SPF artifacts: <code>spf-global-help-secondarypagetype</code> and <code>spf-global-help-secondarypage</code>
+</p>
+<p>
+	This page displays the global help for the portal site. If all the sites use the same help
+	content, it can be defined in <code>globalHelp.html</code> file. If each site has different
+	help - <code>{site}GlobalHelp.html</code> can be used where {site}
+	is the site DNS name as defined in Vignette Console (e.g. for "acme-hpp" the file would be
+	"acme-hppGlobalHelp.html"). The help content files are deployed as secondary support files
+	for this page. They can contain HTML augmented with interpolation tokens as described in
+	<a href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html">FileInterpolator</a>
+	documentation. Finally, the help files can be localized, in which case they should be named
+	<code>globalHelp_{locale}.html</code> or <code>{site}globalHelp_{locale}.html</code>.
+	The URL of the global help page is <code>/portal/site/{site}/template.PUBLIC_SPF_GLOBAL_HELP</code>.
+</p>
+
+<a name="spf-locale-selector"><h3>2.5. Locale Selector</h3></a>
+<p>
+	SPF artifacts: <code>spf-locale-selector-secondarypagetype</code> and <code>spf-locale-selector-secondarypage</code>
+</p>
+<p>
+	This secondary page is a target of the <a href="#spf-locale-widget">locale selector</a>
+	form's action and is used to persist the user's locale selection into various locations.
+	On each invocation it will update the locale used to render the portal pages in the current session.
+	Moreover, it will also set standard HP.com <code>lang</code> and <code>cc</code> cookies.
+	Finally, if the user is authenticated in HP Passport, the user's language will also be updated there.
+</p>
+<p>
+	The page can take optional request parameter <code>spfLocaleSelectorTarget</code> containing
+	the URL to which it should redirect the user. If this parameter is not present it will attempt
+	to infer the location based on HTTP Referer header, and eventually fall back into current site's
+	root URL.
+</p>
+<p>
+	The URL of the page is <code>/portal/site/{site}/PUBLIC_SPF_SELECT_LOCALE</code> where {site}
+	is the DNS site name.
+</p>
+
+<a name="spf-logout"><h3>2.6. Logout</h3></a>
+<p>
+	SPF artifacts: <code>spf-logout-secondarypagetype</code>, <code>spf-logout-secondarypage</code>
+</p>
+<p>
+	This page is used as the target for the portal logout link. The behavior of the page depends
+	on how the user authenticated to get into the site. If @HP authentication was used, user is
+	redirected to standard @HP logout confirmation page. If HP Passport authentication was used,
+	user is redirected to the site root URL. Note that if this URL is protected by HPP SiteMinder,
+	it will result in additional redirection to the login page configured in SiteMinder. Finally,
+	for the federated sites, the page will redirect the user to <a href="#spf-fed-logout-confirm">Federation
+	Logout Confirmation</a> page.
+</p>
+<p>
+	This page is needed to handle SiteMinder requirement to have a single logout URL regardless
+	of SPF site being used. This URL must be configured in the web agent. When invoked, SiteMinder
+	will recognize it and perform signle sign-on session invalidation. The URL of the page is
+	<code>/portal/site/spf/template.SPF_LOGOUT</code>.
+</p>
+
+<a name="spf-page-display"><h3>2.7. Portlet Display</h3></a>
+<p>
+	SPF artifacts: <code>spf-page-display-secondarypage</code>, <code>spf-maximize-secondarypage</code>,
+	<code>spf-mypages-page-display-secondarypage</code>, <code>spf-mypages-maximize-secondarypage</code>
+</p>
+<p>
+	Portlet display pages are used by Vignette Portal to render pages for which the layout along
+	with the contained portlets were configured using Vignette Console or Manage My Pages screen.
+	When a portlet's window state is set to maximized (i.e. the maximized portlet takes all
+	the real estate of the page content area) the <em>maximize</em> flavor of the page display is used.
+</p>
+<p>
+	SPF defines its own secondary pages for Vignette Portal built-in portlet display secondary page
+	types for 2 reasons. First, this allows to customize and localize portlet rendering error messages.
+	Secondly, this enables the framework to propagate data, such as user profile information, from
+	portal to portlets which are deployed locally into Vignette portlet container (which is different
+	from the model when portlets are deployed in a remotely located WSRP producer).
+</p>
+<p>
+	These pages must be configured in Vignette Console as default secondary pages for the corresponding
+	built-in secondary page types ("Page Display", "Maximize", "My Pages - Page Display" and "My Pages - Maximize").
+	The default secondary pages are configured in Vignette Server
+	Console, Server Settings - Server Defaults - Site & Appearance - Default Secondary Pages.
+	The site-specific configuration is done in Site Console, Site Settings - Appearance - Secondary Pages.
+</p>
+
+<a name="spf-portal-pulse"><h3>2.8. Portal Pulse</h3></a>
+<p>
+	SPF artifacts: <code>spf-portal-pulse-secondarypagetype</code>, <code>spf-portal-pulse-secondarypage</code>
+</p>
+<p>
+	This page performs health checks for various portal components as configured in <code>pulse.xml</code> file.
+	The file must be available as a resource in class path. Currently the following checks are
+	supported: HPP_WEB_SERVICE_CHECK (HP Passport login using HPP Web Services), VIGNETTE_DATABASE_CHECK
+	(basic query) and WEB_PAGE_CHECK (http/https request to a configured URL and checking for the
+	configured pattern in the response). A sample pulse.xml file looks as follows:
+</p>
+<pre>
+&lt;portal-pulse&gt;
+	&lt;!-- To enable HPP Web Service check-task (no params are needed here) 
+	uncomment the next line --&gt;
+	&lt;!--
+	&lt;monitoring-check-task name=&quot;HPP_WEB_SERVICE_CHECK&quot;/&gt;
+	--&gt;
+	
+	&lt;!-- To enable Vignette database check-task (no params are needed here) 
+	keep it uncomment, to disable Vignette database check-task, just comment 
+	it --&gt;
+	&lt;monitoring-check-task name=&quot;VIGNETTE_DATABASE_CHECK&quot;/&gt;
+	
+	&lt;!-- To enable Web page check-task for arbitrary Web page (params required)
+	uncomment the next lines--&gt;
+	&lt;!--
+	&lt;monitoring-check-task name=&quot;WEB_PAGE_CHECK&quot;&gt;
+			&lt;init-param&gt;
+				&lt;param-name&gt;url&lt;/param-name&gt;
+				&lt;param-value&gt;some value&lt;/param-value&gt;
+			&lt;/init-param&gt;
+			&lt;init-param&gt;
+				&lt;param-name&gt;pattern&lt;/param-name&gt;
+				&lt;param-value&gt;some value&lt;/param-value&gt;
+			&lt;/init-param&gt;
+	&lt;/monitoring-check-task&gt;
+	--&gt;
+&lt;/portal-pulse&gt; 
+</pre>
+<p>
+	The result of the checks is printed out by the page. In addition, HTTP response header
+	<code>X-Site-Available</code> is set to <code>no</code> if any of the checks fail, or
+	<code>yes</code> otherwise - this allows the page to be easily integrated with load balancer
+	for layer 7 health checks.
+</p>
+<p>
+	The URL of the page is <code>/portal/site/spf/template.PUBLIC_SPF_PORTAL_PULSE</code>.
+</p>
+
+<a name="spf-return"><h3>2.9. Return</h3></a>
+<p>
+	SPF artifacts: <code>spf-return-secondarypagetype</code>, <code>spf-return-secondarypage</code>
+</p>
+<p>
+	This page is used as a return page to the portal, if the user needs to be redirected either to
+	most recently visited page (kept in the portal session) or to most recently visited site (kept in
+	a cookie). The page implements the following redirection logic.
+</p>
+<p>
+	If the user has visited the portal in the current session, the most recently visited portal URL
+	was stored in the session - hitting this page redirects the user to that URL. This capability
+	is used, for example, for the integration with HP Passport Central Forms (providing user edit profile
+	capability). HPP CF can only have one return URL per application, but SPF users may come from
+	any of the SPF-hosted sites. Using this page as HPP CF return page ensures consistent user
+	experience - user is redirected to the URL from which she left when clicking on any of HPP CF
+	links visible in the portal.
+</p>
+<p>
+	In addition to the most recently URL stored in the session, SPF will also store a persistent
+	cookie containing the name of the most recently visited site. If the URL is not present in
+	the session, the page redirects the user to the root of the site stored in the cookie.
+	This capability is used, when the user is trying to access any of the portal partner applications
+	(HP applications the portal links to, which are also protected by HP Passport), when no valid
+	portal session exists for this user (e.g. session expired or bookmark was used to access the application).
+	In such a case the HPP SiteMinder is configured for this application to redirect the user to
+	portal Return secondary page. The page will then redirect the user to most recently visited site's
+	root URL. What happen next depends on the HPP SiteMinder configuration for that site.
+	For non-federated site, the site root URL is either not protected and hosts the login form
+	or, if protected, HPP SiteMinder is configured to redirect the user to the login page.
+	For the federated site, HPP SiteMinder should be configured to redirect the user to the site's
+	federation launch URL.
+</p>
+<p>
+	The URL of this page is <code>/portal/site/spf/template.PUBLIC_SPF_RETURN</code>.
+</p>
+
+<a name="spf-site-picker"><h3>2.10. Site Picker</h3></a>
+<p>
+	SPF artifact: <code>spf-site-picker-secondarypage</code>
+</p>
+<p>
+	The Vignette Portal built-in Site Picker page shows a list of sites the user can access along
+	with the links to get to them. In general SPF does not support this functionality. This page
+	can be used to overwrite the default Site Picker. Any attempt to access it results in a redirection
+	to SPF <a href="#spf-system-error">System Error</a> page.
+</p>
+<p>
+	This page must be configured in Vignette Console as default secondary page for the built-in
+	"Site Picker" page type. The default secondary pages are configured in Vignette Server
+	Console, Server Settings - Server Defaults - Site & Appearance - Default Secondary Pages.
+	The site-specific configuration is done in Site Console, Site Settings - Appearance - Secondary Pages.
+</p>
+
+<a name="spf-system-error"><h3>2.11. System Error</h3></a>
+<p>
+	SPF artifact: <code>spf-system-error-secondarypage</code>
+</p>
+<p>
+	This page overrides the built-in system error page. It is localized and in addition is also
+	rendering error code if one was provided by SPF modules.
+</p>
+<p>
+	This page must be configured in Vignette Console as default secondary page for the built-in
+	"Error Page" page type. The default secondary pages are configured in Vignette Server
+	Console, Server Settings - Server Defaults - Site & Appearance - Default Secondary Pages.
+	The site-specific configuration is done in Site Console, Site Settings - Appearance - Secondary Pages.
+</p>
+
+
+<a name="styletypesandstyles"><h2>3. Style Types and Styles</h2></a>
+
+<p>
+	A <em>style type</em> is an abstraction that corresponds to a particular region of a web page, such as header,
+	footer or the navigation. A portal page can have several style types. Each style type can have
+	many styles. A <em>style</em> is an implementation of a style type having a specific appearance
+	and function. Styles control the rendering of their style type's portion of the page. The location
+	of each style within a page is determined by the page's <em>grid</em> defining the overall page layout.
+	Which style is used for which style type is configured through Vignette Console, when specifying
+	the given <em>theme</em> Associated Styles.
+</p>
+
+<a name="spf-hpweb-layout-config"><h3>3.1. HPWeb Layout Config Style</h3></a>
+<p>
+	SPF artifact: <code>spf-hpweb-layout-config-style</code>
+</p>
+<p>
+	This is a sample style used to configure <a href="http://intranet.hp.com/Sites/SOA/TechnicalDocs/WPAPortlet/Pages/hpweb_vap.aspx">WPA
+	HPWeb Layout</a> components (see "Layout Customization" section in the referenced guide).
+	The SPF style implementation puts embeds into each rendered page diagnostic context information
+	(wrapped in HTML comments) such as symbolic web and application server names, diagnostic ID allowing
+	to filter log files for the current user session or request, etc... The actual sites using
+	HPWeb components would include in their implementation of the style additional configuration
+	steps.
+</p>
+<p>
+	To use this style for a given theme, it must be associated with "HP Layout Config Style Type"
+	in Vignette Console.
+</p>
+
+<a name="spf-locale-widget"><h3>3.2. Locale Widgets</h3></a>
+<p>
+	SPF artifacts: <code>spf-locale-widget-styletype</code>, <code>spf-locale-indicator-classic-style</code>,
+	<code>spf-locale-selector-classic-style</code>
+</p>
+<p>
+	SPF locale handling is configurable and complies with HP standards and supported locales.
+	Locale Indicator widget can be used to show the locale used to render the current page. Locale
+	selector renders a form allowing the end user to choose a locale. It is also paired with
+	<a href="#spf-locale-selector">Locale Selector</a> secondary page which persits the user selection.
+	The selector shows only the list of locales configured specifically for the given site
+	(through <code>site_locale_support.properties</code> resource file available in the classpath)
+	and masked against supported locales as configured in Vignette Console.
+</p>
+<p>
+	Each entry of <code>site_locale_support.properties</code> has a format: "{site}={<a href="http://www.ietf.org/rfc/rfc3066.txt">RFC3066</a> languageTag 1},{RFC3066 languageTag 2}"
+	or "{site}=ALL", where {site} is the name of the portal site and ALL enables all Vignette
+	Portal registered locales.
+</p>
+
+<a name="portalbeans"><h2>4. Portal Beans</h2></a>
+
+<p>
+	<em>PortalBean</em> portlets are Vignette proprietary technology predating Java Portlet Specification.
+	They are developped using Vignette API. Although Vignette continues to support them, new portlets
+	should be built using standard specification.
+</p>
+
+<a name="spf-navportlet"><h3>4.1. Navigator Portlet</h3></a>
+<p>
+	SPF artifact: <code>spf-navportlet-portalbean</code>
+</p>
+<p>
+	Navigator Portlet allows rendering, in any portal page region, a navigation node or one level of a navigation tree
+	as defined in Vignette Site Console. The node to be rendered is configured in the portlet
+	"Details" screen by specifying the node name (as defined in the navigation tree). Additional
+	rendering properties can also be defined on that screen.
+</p>
+<p>
+	The portlet is implemented as a PortalBean as it requires information about site navigation
+	tree structure, and this is only available through Vignette API, currently not invokable
+	from standard Java portlets.
+</p>
+<p>
+	While the standard SPF build process packages all the components in <code>spf-portal-components.car</code>
+	Navigator Portlet is not included there and its CAR file must be deployed separately.
+</p>
+</body>
+</html>
