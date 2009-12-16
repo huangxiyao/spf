@@ -292,6 +292,13 @@ table.props td {
 	Logout Confirmation</a> page.
 </p>
 <p>
+	For the HP Passport sign-out scenario the page type stores in the user session attribute
+	called <code>SPF_STATUS_MSG</code> a "You are now signed-out" message prior to the redirection.
+	This message can be localized through the page resource bundle by providing translations
+	for the key <code>logout.confirmation.text</code>. This message can be then shown on the page
+	following the logout action by the page or grid developers.
+</p>
+<p>
 	This page is needed to handle SiteMinder requirement to have a single logout URL regardless
 	of SPF site being used. This URL must be configured in the web agent. When invoked, SiteMinder
 	will recognize it and perform signle sign-on session invalidation. The URL of the page is
