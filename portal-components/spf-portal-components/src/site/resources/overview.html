@@ -110,8 +110,7 @@ table.props td {
 }
 
 .style1 {
-	border-style: solid;
-	border-width: 1px;
+	border: 1px solid;
 }
 </style>
 
@@ -168,6 +167,12 @@ table.props td {
 	pages, style types and styles and portal beans. Some of them are standalone (i.e. they do not
 	extend any of the built-in components), and some are specializations of out-of-the-box provided
 	types. The majority of SPF components are localized through resource bundles.
+</p>
+<p>
+	The application teams can develop site-specific secondary pages and style types for any
+	of the built-in or SPF-provided secondary page types and style types. This allows to create
+	and manage specialized versions of these components which override the resource bundles and JSP
+	pages for the corresponding types, while inheriting the Java code from them.
 </p>
 <p>
 	The detailed information on how to implement Vignette Portal Components is provided in
@@ -268,8 +273,8 @@ table.props td {
 	root URL.
 </p>
 <p>
-	The URL of the page is <code>/portal/site/{site}/PUBLIC_SPF_SELECT_LOCALE</code> where {site}
-	is the DNS site name.
+	The URL of the page is <code>/portal/site/{site}/template.PUBLIC_SPF_SELECT_LOCALE</code>
+	where {site} is the DNS site name.
 </p>
 
 <a name="spf-logout"><h3>2.6. Logout</h3></a>
@@ -305,10 +310,11 @@ table.props td {
 </p>
 <p>
 	SPF defines its own secondary pages for Vignette Portal built-in portlet display secondary page
-	types for 2 reasons. First, this allows to customize and localize portlet rendering error messages.
+	types for several reasons. First, this allows to customize and localize portlet rendering error messages.
 	Secondly, this enables the framework to propagate data, such as user profile information, from
 	portal to portlets which are deployed locally into Vignette portlet container (which is different
-	from the model when portlets are deployed in a remotely located WSRP producer).
+	from the model when portlets are deployed in a remotely located WSRP producer). Finally, it enables
+	the HP Web Standards compliant layout of the portlets on the pages.
 </p>
 <p>
 	These pages must be configured in Vignette Console as default secondary pages for the corresponding
