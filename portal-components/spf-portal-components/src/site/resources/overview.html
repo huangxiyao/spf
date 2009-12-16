@@ -222,7 +222,8 @@ table.props td {
 <p>
 	Fedaration Launch Error page is used when HP Passport cannot assert the identity of the user
 	based on the information provided by the actual authentication service. This page must be
-	configured in HP Passport as federation error target. Its URL is <code>/portal/site/spf/template.PUBLIC_SPF_FED_ERROR</code>. 
+	configured in HP Passport as federation error target. Its URL is <code>/portal/site/{site}/template.PUBLIC_SPF_FED_ERROR</code>,
+	where {site} is site DNS name as defined in Vignette Console. 
 </p>
 
 <a name="spf-fed-logout-confirm"><h3>2.3. Federation Logout Confirmation</h3></a>
