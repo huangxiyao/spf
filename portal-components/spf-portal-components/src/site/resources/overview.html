@@ -169,7 +169,7 @@ table.props td {
 	types. The majority of SPF components are localized through resource bundles.
 </p>
 <p>
-	The application teams can develop site-specific secondary pages and style types for any
+	The application teams can develop site-specific secondary pages and styles for any
 	of the built-in or SPF-provided secondary page types and style types. This allows to create
 	and manage specialized versions of these components which override the resource bundles and JSP
 	pages for the corresponding types, while inheriting the Java code from them.
@@ -205,7 +205,8 @@ table.props td {
 	SiteMinder (HP Passport or @HP). For finer-grained authorization
 	errors Vignette Portal built-in page is used as Vignette does not allow to customize it.
 	To use this page with SiteMinder it must be configured there as authorization error target.
-	The URL of the page is <code>/portal/site/spf/template.PUBLIC_SPF_AUTH_ERROR</code>.
+	The URL of the page is <code>/portal/site/{site}/template.PUBLIC_SPF_AUTH_ERROR</code>,
+	where {site} is site DNS name as defined in Vignette Console.
 </p>
 
 <a name="spf-fed-launch-error"><h3>2.2. Federation Launch Error</h3></a>
@@ -234,9 +235,9 @@ table.props td {
 	This page is presented to the end user upon signing out from HP Passport federated site (for
 	high level description of federation see <a href="#spf-fed-launch-error">Federation Launch Error</a>
 	section). Normally it's never explicitely used. Instead the user is redirected to this page
-	automatically by <a href="#spf-logout">Logout</a> secondary page when the latter is invoked for
-	federated site. In addition to some explanation text the page shows a link to the site root
-	URL.
+	automatically (/portal/site/{site}/template.PUBLIC_SPF_FED_LOGOUT) by <a href="#spf-logout">Logout</a>
+	secondary page when the latter is invoked for federated site. In addition to some explanation
+	text the page shows a link to the site root URL.
 </p>
 
 <a name="spf-global-help"><h3>2.4. Global Help</h3></a>
@@ -449,6 +450,11 @@ table.props td {
 	"Error Page" page type. The default secondary pages are configured in Vignette Server
 	Console, Server Settings - Server Defaults - Site & Appearance - Default Secondary Pages.
 	The site-specific configuration is done in Site Console, Site Settings - Appearance - Secondary Pages.
+</p>
+<p>
+	This page can be also explicitely invoked by the application code. Its URL is
+	<code>/portal/site/{site}/template.PUBLIC_SPF_SYSTEM_ERROR</code> or <code>/portal/site/spf/template.PUBLIC_SPF_SYSTEM_ERROR</code>
+	depending on the error use case.
 </p>
 
 
