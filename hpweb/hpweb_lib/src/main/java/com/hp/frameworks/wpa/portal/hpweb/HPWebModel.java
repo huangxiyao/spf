@@ -28,7 +28,7 @@ public class HPWebModel extends com.hp.frameworks.wpa.hpweb.HPWebModel {
 	private String localeSelector;
 	private boolean generateBreadcrumbs = false;
 	private Properties metaInfos;
-	private String helpUrl
+	private String helpUrl;
 	private String helpText;
 	private List topMenuItems = new ArrayList();
 
