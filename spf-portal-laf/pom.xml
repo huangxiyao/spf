@@ -3,12 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.hp.it.spf.comps</groupId>
-	<artifactId>spf-portal-laf</artifactId>
+	<groupId>com.hp.frameworks</groupId>
+	<artifactId>spf-layout-laf</artifactId>
 	<packaging>pom</packaging>
 
 	<!-- This version number doesn't need to change. -->
-	<version>1.0.0</version>
+	<version>2.0.0-SNAPSHOT</version>
 
 	<name>HP Layout VAP Components</name>
 	<url>http://frameworks.hp.com</url>

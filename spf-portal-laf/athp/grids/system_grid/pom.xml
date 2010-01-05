@@ -5,8 +5,8 @@
 
 	<parent>
 		<groupId>com.hp.frameworks</groupId>
-		<artifactId>wpa-athp-vap</artifactId>
-		<version>1.0.0</version>
+		<artifactId>spf-athp-laf</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>AtHPSystemGrid</artifactId>
