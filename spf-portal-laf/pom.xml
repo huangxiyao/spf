@@ -19,6 +19,49 @@
 		<module>athp</module>
 	</modules>
 
+	<scm>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/spf-portal-laf</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/spf-portal-laf</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/spf-portal-laf</url>
+	</scm>
+	
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-layout-laf</url>
+	</ciManagement>
+
+	<organization>
+		<name>Shared Portal Framework: EB IT</name>
+	</organization>
+
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Internal Releases</name>
+			<url>
+				http://samson.atl.hp.com:8081/nexus/content/repositories/releases
+			</url>
+		</repository>
+
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Internal Snapshots</name>
+			<url>
+				http://samson.atl.hp.com:8081/nexus/content/repositories/snapshots
+			</url>
+		</snapshotRepository>
+
+		<site>
+			<id>cas.sdk</id>
+			<name>CAS SDK</name>
+			<!--
+				<url>scp://samson.atl.hp.com:/var/www/sdk/${project.artifactId}/${project.version}</url>
+			-->
+			<url>
+				file:/var/www/sdk/${project.artifactId}/${project.version}
+			</url>
+		</site>
+	</distributionManagement>
 	<build>
 		<!-- For reuse, these plugins are here in this parent POM
 			for use by the submodules. -->
