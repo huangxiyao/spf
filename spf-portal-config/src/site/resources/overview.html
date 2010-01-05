@@ -1,0 +1,361 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Shared Portal Framework - Portal Configuration</title>
+</head>
+<body>
+<style type="text/css">
+body {
+	padding: 0;
+	font-family: Verdana, Sans-serif;
+	font-size: small;
+}
+
+h1 {
+	font-family: Georgia, Serif;
+	font-size: 200%;
+	color: #404040;
+	margin-top: 5px;
+}
+
+h2 {
+	font-family: Georgia, Serif;
+	font-size: 175%;
+	color: #404040;
+	page-break-before: always;
+}
+
+h3 {
+	font-family: Verdana, Sans-serif;
+	font-size: 150%;
+	font-weight: bold;
+	color: #404040;
+	margin-top: 20px;
+}
+
+h4 {
+	font-family: Verdana, Sans-serif;
+	font-size: 125%;
+	font-weight: bold;
+	color: #404040;
+	margin-top: 20px;
+}
+
+li {
+	margin-left: -10px;
+}
+
+ol li {
+	margin-bottom: 20px;
+}
+
+code {
+	color: #990000;
+	font-size: 110%
+}
+
+pre {
+	color: #990000;
+	font-size: 110%;
+}
+
+.byline {
+	font-style: italic;
+	font-size: 90%;
+	color: gray;
+	margin-top: -10px;
+	border-bottom: solid black 1px;
+}
+
+.codeSample {
+	color: #990000;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: small;
+	border: solid #990000 1px;
+	padding: 5px;
+}
+
+.leftFloatingImage {
+	float: left;
+	margin: 0 10px 10px 0;
+}
+
+.rightFloatingImage {
+	float: right;
+	margin: 0 0 10px 10px;
+}
+
+.toc {
+	list-style-type: none;
+}
+
+ul.toc ul {
+	list-style-type: none;
+}
+
+table.props td,table.props th {
+	padding: 5px;
+	background-color: #F0F0F0
+}
+
+table.props th {
+	font-size: 11px;
+	font-weight: bold;
+	text-align: right;
+}
+
+table.props td {
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.style1 {
+	border: 1px solid;
+}
+</style>
+
+<a name="top"><h1>Shared Portal Framework - Portal Configuration</h1> </a>
+
+<a name="toc"><h2>Table of Contents</h2> </a>
+
+<ul class="toc">
+	<li>1. <a href="#overview">Overview</a></li>
+	<li>2. <a href="#vapconfig">Vignette Configuration Files</a></li>
+	<li>3. <a href="#globalfiles">Global Files</a></li>
+	<li>4. <a href="#instancefiles">Server Instance-Specific Files</a></li>
+</ul>
+
+<hr />
+
+<a name="overview"><h2>1. Overview</h2> </a>
+<p>
+	In addition to the Vignette Console used for the general portal configuration, Vignette Portal
+	as well as Shared Portal Framework modules offer additional configuration parameters managed
+	through a set of configuration files. In the majority of cases these configuration files follow
+	Java Properties format. Moreover, while Vignette Portal configuration updates usually require
+	server restart, SPF configuration file changes are detected automatically and the files are
+	reloaded without requiring the restart.
+</p>
+<p>
+	The configuration files are divided into 2 groups. First group contains all the files which
+	are global to all server instances. It is crucial that the content for these files be exactly
+	the same for all the servers otherwise unexepected application behavior can be experienced.
+	In the 2nd group are all the files which are specific to the given server instance.
+</p>
+<p>
+	The SPF configuration files must be available as resources in the server classpath. Usually
+	the server startup arguments' classpath refer to 2 directories. One contains the global files,
+	and another one - instance-specific files.
+</p>
+<p>
+	Additional information about SPF Configuration File Management can be found in
+	<a href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#properties">Common Utilities Developer's Guide</a>.
+</p>
+
+<a name="vapconfig"><h2>2. Vignette Configuration Files</h2></a>
+<p>
+	Vignette has several configuration files located in <code>{VAP_INSTALL_DIR}/config</code>.
+	Their content is described in
+	<a href="file://g1w1545g.austin.hp.com/SharedPortalFramework/documentation/vignette_docs/portal7.4/portalconfigguide.pdf">Vignette Portal Configuration Guide</a>.
+	Usually only 2 of them are updated to fit the application needs. All other updates are already
+	provided as part of SPF installation package.
+</p>
+<p>
+	<code>properties.txt</code> is where the main Vignette Portal configuration is stored. It contains,
+	for example, the details about the database access - the JDBC driver class name, the database URL,
+	the user and the password the portal would used to connect to the database. It has many other
+	configuration properties which drive the behavior of various Vignette components.
+	For the details, please refer to the configuration guide above.
+</p>
+<p>
+	<code>log4j.properties</code> is the file containing the configuration for Vignette Portal
+	logging subsystem. Vignette Portal implements logging using <a href="http://logging.apache.org/log4j/">Log4J</a> library.
+	This file allows to configure the general logging levels but also logger-specific levels.
+	It enables also to define the destinations for the log messages (e.g. files, sockets, email, ...).
+	This file follow the format as defined by log4j <a href="http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PropertyConfigurator.html"><code>PropertyConfigurator</code></a> class.
+</p>
+
+<a name="globalfiles"><h2>3. Global Files</h2></a>
+
+<a name="ac-filter"><h3>3.1. ac-filter.properties</h3></a>
+<p>
+	Admission Control filter is an SPF module used when portal is deployed in site-to-site (two data centers)
+	active-active mode. In such a deployment the application has a global URL (e.g. app.hp.com) and
+	site-specific URLs (e.g. app.site1.hp.com and app.site2.hp.com). The role of the filter
+	is to ensure that before the portal user session is created the user is redirected to
+	global URL so that Global Load Balancer (acting as DNS server) can properly distribute
+	traffic between sites and prevent the user from accessing a site which is down or closed
+	(i.e. available only for support team). Once the portal user session is created in a given site,
+	the user is redirected to that site's URL - that's how the filter supports site stickiness.
+</p>
+<p>
+	The filter is configured using <code>ac-filter.properties</code> file. It contains information
+	about global and site-specific hostnames, plus additional parameters allowing to configure
+	a cookie used to track the site hosting user session, access parameters for privileged access
+	(support team), etc...
+</p>
+<p>
+	The format and the content is described in the comments of
+	<a href="https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-filters/src/main/resources/META-INF/config/ac-filter.properties">SPF-bundled sample file</a>.
+</p>
+
+<a name="default_includes"><h3>3.2. default_includes.properties</h3></a>
+<p>
+	SPF provides utility classes which allow to define text containing tokens which are dynamically
+	replaced when the text is rendered, based on the current request context (e.g. user information,
+	locale, ...). This feature is called <em>Text Interpolation</em> and is used to define global
+	help files or HTML Viewer portlet content files. The detailed information about it is available
+	in <a href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#file">Common Utilities Developer's Guide</a>.
+</p>
+<p>
+	<code>default_includes.properties</code> file enables to define default substitution tokens.
+	For example a token defined in this file as <code>url.hp=http://www.hp.com/?lang={LANGUAGE_CODE}</code>
+	can be referenced anywhere the text interpolation is used as <code>{INCLUDE:url.hp}</code>.
+</p>
+<p>
+	The format and the content is described in the comments of
+	<a href="https://samson.atl.hp.com/svn/spf/source/trunk/common/spf-common-utilities/src/main/resources/META-INF/config/default_includes.properties">SPF-bundled sample file</a>.
+</p>
+
+<a name="portalurl"><h3>3.3. portalurl.properties</h3></a>
+<p>
+	Java portlet specification provides a standard way to create URLs which are targeted to
+	the portlet creating them. Unfortunately there is no vendor-independent way to create URLs
+	which are targeted to another portal page passing in parameters for the portlets on that page.
+	SPF encapsulates such URL creation in its <a href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/com/hp/it/spf/xa/portalurl/package-summary.html">PortalURL</a> API.
+</p>
+<p>
+	The use of this API is also described in <a href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#url">Common Utilities Developer's Guide</a>.
+	The API requires some optional configuration which is defined in <code>portalurl.properties</code>
+	file described in the guide as well.
+</p>
+
+<a name="propertyresourcebundlemanager"><h3>3.4. propertyresourcebundlemanager.properties</h3></a>
+<p>
+	SPF configuration files are loaded using utility class called
+	<a href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/com/hp/it/spf/xa/properties/PropertyResourceBundleManager.html"><code>PropertyResourceBundleManager</code></a>.
+	The advantage of using this class comparing to plain resource bundles is that it's able to
+	detect underlying file changes and reload the file automatically. More information about
+	how to use this class is available in <a href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#properties.propertyResourceBundleManager">Common Utilities Developer's Guide</a>.
+</p>
+<p>
+	<code>propertyresourcebundlemanager.properties</code> is an optional configuration file allowing
+	to specify the interval at which the manager will look for the underlying (i.e. loaded using the manager)
+	file changes. 
+</p>
+
+<a name="sharedportalsso"><h3>3.5. SharedPortalSSO.properties</h3></a>
+<p>
+	SPF SSO module is responsible for proper user session initialization. It includes support for
+	HP Passport, Federated HP Passport and @HP authentication services. It also allows to retrieve,
+	from an external data source (database, a web service), user profile information (using
+	<a href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-session/site/apidocs/com/hp/it/spf/user/profile/manager/package-summary.html"><code>IUserProfileRetriever</code></a>
+	implementations) as well as a set of groups the user is a member of (groups drive access control in
+	the Portal; retrieval implemented through <a href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-session/site/apidocs/com/hp/it/spf/user/group/manager/package-summary.html"><code>IUserGroupRetriever</code></a>). 
+</p>
+<p>
+	As several of these components are pluggable, which implementation is used for each of them
+	in a given SPF deployment is specified in <code>SharedPortalSSO.properties</code> configuration
+	file. The format and the content is described in the comments of
+	<a href="https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-session/src/main/resources/META-INF/config/SharedPortalSSO.properties">SPF-bundled sample file</a>.   
+</p>
+
+<a name="site_federation"><h3>3.6. site_federation.properties</h3></a>
+<p>
+	HP Passport federation is a feature allowing the integration between user's company authentication
+	service and HP Passport authentication service. Putting in place such an integration requires
+	configuration work on both HP Passport and user's authentication service.
+	Once this integration is in place the user can sign in to the portal using her company's 
+	authentication service. The federation will then ensure that the user identity flows securely
+	between user's company systems and HP Passport protecting SPF portals.
+</p>
+<p>
+	As the federated Portal sites are handled slightly differently from plain portal sites (i.e.
+	sites for which users authenticate in HP Passport or @HP), it's necessary to specify which
+	sites are federated. This is done in <code>site_federation.properties</code>. Its format and content
+	are described in <a href="https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-utilities/src/main/resources/META-INF/config/site_federation.properties">SPF-bundled sample file</a>.
+</p>
+
+<a name="site_locale_support"><h3>3.7. site_locale_support.properties</h3></a>
+<p>
+	Vignette Portal provides capability to localize sites it hosts. On top of that SPF allows
+	each site to be localized in a specific set of languages (each site can have a different set).
+	It also provides tools such as a secondary page and locale selector widget allowing the user to
+	choose the locale from the supported set and then persists this information in the user profile,
+	cookie and potenitally HP Passport.
+</p>
+<p>
+	<code>site_locale_support.properties</code> file is used to specify which locales are supported
+	by which portal site. Its format and content are described in
+	<a href="https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-utilities/src/main/resources/META-INF/config/site_locale_support.properties">SPF-bundled sample file</a>.
+</p>
+
+<a name="ugsparameters"><h3>3.8. UGSParameters.properties</h3></a>
+<p>
+	<em>User Group Service</em> is part of HP Passport identity management offerings. Based on a set
+	of rules defined for a given application it is able to calculate for a given user profile
+	the list of groups this user is a member of. This is service may be invoked (if configured so
+	in <a href="#sharedportalsso">SharedPortalSSO.properties</a>) during user session initialization.
+	Upon its invocation the user in Vignette Portal is updated with the list of retireved groups,
+	which are then used to manage access control to various portal resources.
+</p>
+<p>
+	The information about the location of the web service SPF is connecting is specified in
+	<code>UGSParameters.properties</code>. Its format and content are described in
+	<a href="https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-session/src/main/resources/META-INF/config/UGSParameters.properties">SPF-bundled sample file</a>. 
+</p>
+
+<a name="wsparameters"><h3>3.9. wsParameters.properties</h3></a>
+<p>
+	SPF integrates HP Passport web service client. It allows programmatic interaction with
+	HPP authentication and user management services. This feature is used by SPF to retrieve
+	HPP user groups for HPP-protected sites. It can also by used by application team implementing
+	user management pages which rely on data stored in HPP database.
+</p>
+<p>
+	The location of the web service as well as other connection parameters are specified in
+	<code>wsParameters.properties</code>. Its format and content are described in
+	<a href="https://samson.atl.hp.com/svn/spf/source/trunk/common/spf-common-hpp/src/main/resources/META-INF/config/wsParameters.properties">SPF-bundled sample file</a>.
+</p>
+
+<a name="instancefiles"><h2>4. Server Instance-Specific Files</h2></a>
+
+<a name="healthcheck"><h3>4.1. healthcheck.properties</h3></a>
+<p>
+	SPF Portal provides a health check secondary page called <a href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-components/site/overview.html#spf-portal-pulse">Portal Pulse</a>.
+	In addition it also has a small web application called Open Sign which, if running, indicated that
+	the portal is open to end users. With these 2 mechanisms it is possible for the portal to run
+	correctly but being unavailable for end users (Open Sign stopped) due to some maintance work.
+	The Pulse page and Open Sign application are invoked (through HTTP connection) by SPF Healthcheck
+	application. The status resulting from this combined invocation is then relayed to the load
+	balancers which decide whether to route the traffic to the given managed server or not.
+</p>
+<p>
+	The information required by the Healthcheck application to connect to Portal Pulse page and
+	Open Sign application is specified in <code>healthcheck.properties</code>.
+	Its format and content are described in
+	<a href="https://samson.atl.hp.com/svn/spf/source/trunk/portal-helper-apps/spf-healthcheck/src/main/webapp/META-INF/config/instance/healthcheck.properties">SPF-bundled sample file</a>.
+</p>
+
+<a name="spfmanagement"><h3>4.2. spfmanagement.properties</h3></a>
+<p>
+	While Vignette Portal <a href="#vapconfig"><code>log4j.properties</code></a> allows to specify
+	loggers and their levels statically (i.e. the setting will be used everytime the server starts;
+	the server need to be restarted to take into account any changes there),
+	SPF provides also a way to change logging levels dynamically without requiring the server restart.
+	This is done using JMX technology and tools such as JDK-bundled
+	<a href="http://java.sun.com/j2se/1.5.0/docs/guide/management/jconsole.html">JConsole</a>.
+	The console allows to query and update logging levels of different loggers present in the application
+	(including Vignette and SPF modules). The changes are temporary and lost upon server restart,
+	but they allow efficient troubleshooting without requiring the managed server restart.
+</p>
+<p>
+	Currently no other than logging above and JVM monitoring management features are supported in SPF.
+</p>
+<p>
+	The port on which the management server is running as well as other configuration information
+	is specified in <code>spfmanagement.properties</code>. Its format and content are described in
+	<a href="https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal-utilities/src/main/resources/META-INF/config/instance/spfmanagement.properties">SPF-bundled sample file</a>.
+</p>
+</body>
+</html>
