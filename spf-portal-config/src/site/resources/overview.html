@@ -121,8 +121,27 @@ table.props td {
 <ul class="toc">
 	<li>1. <a href="#overview">Overview</a></li>
 	<li>2. <a href="#vapconfig">Vignette Configuration Files</a></li>
-	<li>3. <a href="#globalfiles">Global Files</a></li>
-	<li>4. <a href="#instancefiles">Server Instance-Specific Files</a></li>
+	<li>
+		3. <a href="#globalfiles">Global Files</a>
+		<ul>
+			<li>3.1. <a href="#ac-filter">ac-filter.properties</a></li>
+			<li>3.2. <a href="#default_includes">default_includes.properties</a></li>
+			<li>3.3. <a href="#portalurl">portalurl.properties</a></li>
+			<li>3.4. <a href="#propertyresourcebundlemanager">propertyresourcebundlemanager.properties</a></li>
+			<li>3.5. <a href="#sharedportalsso">SharedPortalSSO.properties</a></li>
+			<li>3.6. <a href="#site_federation">site_federation.properties</a></li>
+			<li>3.7. <a href="#site_locale_support">site_locale_support.properties</a></li>
+			<li>3.8. <a href="#ugsparameters">UGSParameters.properties</a></li>
+			<li>3.9. <a href="#wsparameters">wsParameters.properties</a></li>
+		</ul>
+	</li>
+	<li>
+		4. <a href="#instancefiles">Server Instance-Specific Files</a>
+	    <ul>
+			<li>4.1. <a href="#healthcheck">healthcheck.properties</a></li>
+			<li>4.2. <a href="#spfmanagement">spfmanagement.properties</a></li>
+	    </ul>
+	</li>
 </ul>
 
 <hr />
@@ -179,6 +198,9 @@ table.props td {
 
 <a name="ac-filter"><h3>3.1. ac-filter.properties</h3></a>
 <p>
+	SPF artifact: <code>spf-portal-filters</code>
+</p>
+<p>
 	Admission Control filter is an SPF module used when portal is deployed in site-to-site (two data centers)
 	active-active mode. In such a deployment the application has a global URL (e.g. app.hp.com) and
 	site-specific URLs (e.g. app.site1.hp.com and app.site2.hp.com). The role of the filter
@@ -201,6 +223,9 @@ table.props td {
 
 <a name="default_includes"><h3>3.2. default_includes.properties</h3></a>
 <p>
+	SPF artifact: <code>spf-common-utilities</code>
+</p>
+<p>
 	SPF provides utility classes which allow to define text containing tokens which are dynamically
 	replaced when the text is rendered, based on the current request context (e.g. user information,
 	locale, ...). This feature is called <em>Text Interpolation</em> and is used to define global
@@ -219,6 +244,9 @@ table.props td {
 
 <a name="portalurl"><h3>3.3. portalurl.properties</h3></a>
 <p>
+	SPF artifact: <code>spf-common-utilities</code>
+</p>
+<p>
 	Java portlet specification provides a standard way to create URLs which are targeted to
 	the portlet creating them. Unfortunately there is no vendor-independent way to create URLs
 	which are targeted to another portal page passing in parameters for the portlets on that page.
@@ -231,6 +259,9 @@ table.props td {
 </p>
 
 <a name="propertyresourcebundlemanager"><h3>3.4. propertyresourcebundlemanager.properties</h3></a>
+<p>
+	SPF artifact: <code>spf-common-utilities</code>
+</p>
 <p>
 	SPF configuration files are loaded using utility class called
 	<a href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/com/hp/it/spf/xa/properties/PropertyResourceBundleManager.html"><code>PropertyResourceBundleManager</code></a>.
@@ -245,6 +276,9 @@ table.props td {
 </p>
 
 <a name="sharedportalsso"><h3>3.5. SharedPortalSSO.properties</h3></a>
+<p>
+	SPF artifact: <code>spf-portal-session</code>
+</p>
 <p>
 	SPF SSO module is responsible for proper user session initialization. It includes support for
 	HP Passport, Federated HP Passport and @HP authentication services. It also allows to retrieve,
@@ -262,6 +296,9 @@ table.props td {
 
 <a name="site_federation"><h3>3.6. site_federation.properties</h3></a>
 <p>
+	SPF artifact: <code>spf-portal-utilities</code>
+</p>
+<p>
 	HP Passport federation is a feature allowing the integration between user's company authentication
 	service and HP Passport authentication service. Putting in place such an integration requires
 	configuration work on both HP Passport and user's authentication service.
@@ -278,6 +315,9 @@ table.props td {
 
 <a name="site_locale_support"><h3>3.7. site_locale_support.properties</h3></a>
 <p>
+	SPF artifact: <code>spf-portal-utilities</code>
+</p>
+<p>
 	Vignette Portal provides capability to localize sites it hosts. On top of that SPF allows
 	each site to be localized in a specific set of languages (each site can have a different set).
 	It also provides tools such as a secondary page and locale selector widget allowing the user to
@@ -291,6 +331,9 @@ table.props td {
 </p>
 
 <a name="ugsparameters"><h3>3.8. UGSParameters.properties</h3></a>
+<p>
+	SPF artifact: <code>spf-portal-session</code>
+</p>
 <p>
 	<em>User Group Service</em> is part of HP Passport identity management offerings. Based on a set
 	of rules defined for a given application it is able to calculate for a given user profile
@@ -307,6 +350,9 @@ table.props td {
 
 <a name="wsparameters"><h3>3.9. wsParameters.properties</h3></a>
 <p>
+	SPF artifact: <code>spf-common-hpp</code>
+</p>
+<p>
 	SPF integrates HP Passport web service client. It allows programmatic interaction with
 	HPP authentication and user management services. This feature is used by SPF to retrieve
 	HPP user groups for HPP-protected sites. It can also by used by application team implementing
@@ -321,6 +367,9 @@ table.props td {
 <a name="instancefiles"><h2>4. Server Instance-Specific Files</h2></a>
 
 <a name="healthcheck"><h3>4.1. healthcheck.properties</h3></a>
+<p>
+	SPF artifact: <code>spf-healthcheck</code>
+</p>
 <p>
 	SPF Portal provides a health check secondary page called <a href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-components/site/overview.html#spf-portal-pulse">Portal Pulse</a>.
 	In addition it also has a small web application called Open Sign which, if running, indicated that
@@ -338,6 +387,9 @@ table.props td {
 </p>
 
 <a name="spfmanagement"><h3>4.2. spfmanagement.properties</h3></a>
+<p>
+	SPF artifact: <code>spf-portal-utilities</code>
+</p>
 <p>
 	While Vignette Portal <a href="#vapconfig"><code>log4j.properties</code></a> allows to specify
 	loggers and their levels statically (i.e. the setting will be used everytime the server starts;
