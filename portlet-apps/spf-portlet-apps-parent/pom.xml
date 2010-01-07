@@ -28,5 +28,69 @@
 		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet-apps/spf-portlet-apps-parent</developerConnection>
 		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portlet-apps/spf-portlet-apps-parent</url>
 	</scm>
+	<profiles>
+		<profile>
+			<id>vignette</id>
+			<repositories>
+				<repository>
+					<id>com.hp.frameworks</id>
+					<name>SOA Frameworks Repo</name>
+					<url>http://dl.frameworks.hp.com/maven2-repo/</url>
+				</repository>
+			</repositories>
+
+			<pluginRepositories>
+				<pluginRepository>
+					<id>com.hp.frameworks</id>
+					<name>SOA Frameworks Repo</name>
+					<url>http://dl.frameworks.hp.com/maven2-repo/</url>
+				</pluginRepository>
+			</pluginRepositories>
+
+			<dependencies>
+				<dependency>
+					<groupId>vignette</groupId>
+					<artifactId>vgn-jsr-container-taglib</artifactId>
+					<version>7.4.2</version>
+				</dependency>
+			</dependencies>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<webXml>target/vignette-resources/web.xml</webXml>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>com.hp.frameworks</groupId>
+						<artifactId>maven-vignette-plugin</artifactId>
+						<!--
+						This version of the plug-in uses ${project.artifactId} instead of
+						${project.build.finalName} as the value of contextPath init param
+					 	in the generated web.xml. This means that if finalName is not the same
+						as artifactId for the portlet application, the generated web.xml
+						must be updated before the portlet application can be successfully
+						deployed.
+						-->
+						<version>3.0.1</version>
+						<configuration>
+							<securityFilterEnabled>true</securityFilterEnabled>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>assemble</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	
 </project>
