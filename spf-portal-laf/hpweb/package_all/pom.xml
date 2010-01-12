@@ -18,6 +18,7 @@
 	<name>HPWeb VAP All Components</name>
 	<packaging>car</packaging>
 
+	<!-- 
 	<dependencies>
 
     	<dependency>
@@ -31,7 +32,7 @@
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>hpweb-laf</artifactId>
 			<version>${HPWebComponentsVersion}</version>
-			
+			<type>car</type>
     	</dependency>
 
     	<dependency>
@@ -153,7 +154,7 @@
 			<type>car</type>
     	</dependency>
 	</dependencies>
-
+	 -->
 	<build>
 		<plugins>
 			<plugin>
