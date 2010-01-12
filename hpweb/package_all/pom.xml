@@ -31,7 +31,7 @@
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>hpweb-laf</artifactId>
 			<version>${HPWebComponentsVersion}</version>
-			<type>car</type>
+			
     	</dependency>
 
     	<dependency>
