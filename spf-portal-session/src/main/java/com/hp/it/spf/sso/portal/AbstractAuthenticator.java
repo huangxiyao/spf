@@ -137,16 +137,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             if (isDiffUser()) {
                 userProfile.put(AuthenticationConsts.KEY_LAST_LOGIN_DATE,
                                 new Date());
-                
-                // cleanup session when switching users from one authenticated user to another but not cleanup session 
-                // when an anonymous user logs in as an authenticated user per CR 86
-                User currentUser = SessionUtils.getCurrentUser(request.getSession());
-                if (currentUser != null) {
-	                String currUserName = (String)currentUser.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID);
-	                if (!currUserName.startsWith(AuthenticationConsts.ANON_USER_NAME_PREFIX)) {
-	                	AuthenticatorHelper.cleanupSession(request);
-	                }
-                }
+                AuthenticatorHelper.cleanupSession(request);
             } else if (isUserRecentUpdated()) {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("User is updated.");
