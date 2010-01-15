@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.portlet</groupId>
 		<artifactId>spf-portlet-parent</artifactId>
-		<version>2.0.0</version>
+		<version>2.0.1-SNAPSHOT</version>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -92,8 +92,8 @@
 	<ciManagement>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portlet-2.0.0/spf-portlet-wsrp</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portlet-2.0.0/spf-portlet-wsrp</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/portlet-2.0.0/spf-portlet-wsrp</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet/spf-portlet-wsrp</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet/spf-portlet-wsrp</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet/spf-portlet-wsrp</url>
 	</scm>		
 </project>
