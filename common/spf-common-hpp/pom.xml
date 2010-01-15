@@ -16,7 +16,7 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-common-hpp</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source//common/spf-common-hpp/tags/common-2.0.0</connection>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/common/spf-common-hpp/tags/common-2.0.0</connection>
 		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/common-2.0.0</developerConnection>
 		<url>https://samson.atl.hp.com/svn/spf/source/tags/common-2.0.0</url>
 	</scm>
