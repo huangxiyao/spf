@@ -16,16 +16,16 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>spf-portal-parent</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>2.0.0</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
 		<url>http://samson.atl.hp.com:8080/hudson/view/com.hp.it.spf.xa/job/spf-portal-session-2.0</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal-session</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal-session</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal-session</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0/spf-portal-session</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0/spf-portal-session</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0/spf-portal-session</url>
 	</scm>
 	<dependencies>
 		<dependency>
