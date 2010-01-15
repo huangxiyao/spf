@@ -20,9 +20,9 @@
 	<name>SPF portlet applications aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet-apps</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet-apps</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portlet-apps</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet-apps</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet-apps</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet-apps</url>
 	</scm>
 	
 	<modules>
