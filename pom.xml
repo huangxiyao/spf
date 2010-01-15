@@ -5,10 +5,12 @@
 	<name>Shared Portal Framework super POM</name>
 	<version>2.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
 	<description>
 		This POM encapsulates all the reporting features of the shared
 		portal framework.
 	</description>
+
 	<scm>
 		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/spf-pom</connection>
 		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/spf-pom</developerConnection>
