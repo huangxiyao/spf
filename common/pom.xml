@@ -19,9 +19,9 @@
 	<name>SPF common aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/${BRANCH}/common/tags/common-2.0.0</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/${BRANCH}/common/tags/common-2.0.0</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/${BRANCH}/common/tags/common-2.0.0</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/common/tags/common-2.0.0</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/common/tags/common-2.0.0</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/common/tags/common-2.0.0</url>
 	</scm>
 	
 	<modules>
