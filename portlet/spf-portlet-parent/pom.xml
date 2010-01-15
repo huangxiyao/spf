@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>2.0.0</version>
 	</parent> 
 
 	<groupId>com.hp.it.spf.portlet</groupId>
@@ -15,17 +15,15 @@
 	<name>SPF Portlet Parent POM</name>
 
 	<properties>
-		<spf.common.version>2.0.0-SNAPSHOT</spf.common.version>
+		<spf.common.version>2.0.0</spf.common.version>
 	</properties>
 
 	<ciManagement>
-		<system>Hudson</system>
-		<url>http://samson.atl.hp.com:8080/hudson/job/spf-portlet-parent</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet/spf-portlet-parent</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet/spf-portlet-parent</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portlet/spf-portlet-parent</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet/spf-portlet-parent</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet/spf-portlet-parent</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet/spf-portlet-parent</url>
 	</scm>
 	
 </project>

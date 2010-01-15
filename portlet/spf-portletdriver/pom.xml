@@ -127,8 +127,8 @@
 		<finalName>portletdriver</finalName>
 	</build>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet/spf-portletdriver</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/portlet/trunk/spf-portletdriver</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portlet/spf-portletdriver</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet/spf-portletdriver</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/portlet/branches/spf-2.0/spf-portletdriver</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet/spf-portletdriver</url>
 	</scm>
 </project>
