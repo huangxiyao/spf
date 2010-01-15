@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.xa</groupId>
 		<artifactId>spf-common-parent</artifactId>
-		<version>2.0.0</version>
+		<version>2.0.1-SNAPSHOT</version>
 		<!-- 
 			relativePath to parent is only needed in the aggregator POM to allow build all modules
 			including parent, even though the parent's snapshot has not been built yet in the CI
@@ -19,9 +19,9 @@
 	<name>SPF common aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/common-2.0.0</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/common-2.0.0</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/common-2.0.0</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/common</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/common</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/common</url>
 	</scm>
 	
 	<modules>
