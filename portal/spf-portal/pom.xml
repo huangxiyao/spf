@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>spf-portal-parent</artifactId>
-		<version>2.0.0</version>
+		<version>2.0.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.apps</groupId>
@@ -230,8 +230,8 @@
 	</build>
 
   <scm>
-    <connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0/spf-portal</connection>
-    <developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0/spf-portal</developerConnection>
-    <url>https://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0/spf-portal</url>
+    <connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal</connection>
+    <developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal</developerConnection>
+    <url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal</url>
   </scm>
 </project>

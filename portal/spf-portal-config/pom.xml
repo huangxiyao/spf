@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>spf-portal-parent</artifactId>
-		<version>2.0.0</version>
+		<version>2.0.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hp.it.spf.xa</groupId>
@@ -17,9 +17,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-portal-config-2.0</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0</connection>
-		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0</developerConnection>
-		<url>http://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0</url>
+		<connection>scm:svn:http://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal-config</connection>
+		<developerConnection>scm:svn:http://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal-config</developerConnection>
+		<url>http://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal-config</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>

@@ -18,16 +18,16 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>spf-portal-parent</artifactId>
-		<version>2.0.0</version>
+		<version>2.0.1-SNAPSHOT</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities-2.0</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0/spf-portal-utilities</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0/spf-portal-utilities</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/portal-2.0.0/spf-portal-utilities</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal-utilities</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal-utilities</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal/spf-portal-utilities</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
