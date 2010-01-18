@@ -48,7 +48,7 @@ import com.vignette.portal.website.enduser.components.BaseAction;
  * 			redirect the user to the most-visited-site-URL
  * 		else if(most-visited-site-URL present in REQUEST)
  * 			redirect the user to the most-visited-site-URL
- * </pre> 
+ * </pre>
  */
 public class ReturnDisplayAction extends BaseAction {
 
@@ -56,8 +56,11 @@ public class ReturnDisplayAction extends BaseAction {
 
 	private static final String WAIT_SECONDS_PROPERTY = "wait.seconds";
 
-	private static final LogWrapper LOG = new LogWrapper(
-			ReturnDisplayAction.class);
+	private static final LogWrapper LOG = new LogWrapper(ReturnDisplayAction.class);
+
+	private static final String UNKNOWN_SITE_PAGE_URI = "public/unknownsite";
+
+	private static final String SPF_SITE = "portal/site/spf";
 
 	/**
 	 * Method checks for the return URL in this order Session, Cookie, Request.
@@ -75,8 +78,7 @@ public class ReturnDisplayAction extends BaseAction {
 
 		try {
 			// Get the HttpServletRequest from portalContext
-			HttpServletRequest request = context.getPortalRequest()
-					.getRequest();
+			HttpServletRequest request = context.getPortalRequest().getRequest();
 			HttpSession session = request.getSession();
 
 			/*
@@ -107,8 +109,10 @@ public class ReturnDisplayAction extends BaseAction {
 							// Set the site URL
 							url = context.getSiteURI(siteCookieValue.trim());
 						} else {
-							// Set the default site (spf)
-							url = context.getSiteURI(com.hp.it.spf.xa.misc.Consts.SPF_CORE_SITE);
+							// Set the default site (spf)public page for
+							// redirection
+							url = appendUnknownSitePage(context
+									.getSiteURI(com.hp.it.spf.xa.misc.Consts.SPF_CORE_SITE));
 						}
 
 					}
@@ -123,11 +127,13 @@ public class ReturnDisplayAction extends BaseAction {
 
 					url = Utils.getEffectiveSiteURL(request);
 
-					//In case still the url is null, do below	
-					if (url == null) {
+					// In case the url is null or the request url is SPF site,
+					// do below
+					if (url == null || (url != null && url.trim().indexOf(SPF_SITE) != -1)) {
 
-						// Set the default site (spf)
-						url = context.getSiteURI(com.hp.it.spf.xa.misc.Consts.SPF_CORE_SITE);
+						// Set the default site (spf)public page for redirection
+						url = appendUnknownSitePage(context
+								.getSiteURI(com.hp.it.spf.xa.misc.Consts.SPF_CORE_SITE));
 
 					}
 
@@ -163,31 +169,54 @@ public class ReturnDisplayAction extends BaseAction {
 		String filename = PROPERTY_FILE;
 		Properties properties = new Properties();
 		int seconds = 0;
-		LOG
-				.debug("ReturnDisplayAction: loading properties from secondary support file: "
-						+ filename);
-		InputStream file = I18nUtility.getLocalizedFileStream(context,
-				filename, false);
+		LOG.debug("ReturnDisplayAction: loading properties from secondary support file: "
+				+ filename);
+		InputStream file = I18nUtility.getLocalizedFileStream(context, filename, false);
 		if (file != null) {
 			try {
 				properties.load(file);
 				// Expect value in seconds.
-				seconds = Integer.parseInt(properties
-						.getProperty(WAIT_SECONDS_PROPERTY));
+				seconds = Integer.parseInt(properties.getProperty(WAIT_SECONDS_PROPERTY));
 				if (seconds < 0) {
 					seconds = 0;
 				}
 			} catch (Exception e) {
-				LOG
-						.error("ReturnDisplayAction: error loading secondary support file "
-								+ filename + ": " + e);
+				LOG.error("ReturnDisplayAction: error loading secondary support file " + filename
+						+ ": " + e);
 			}
 		} else {
-			LOG.error("ReturnDisplayAction: missing secondary support file "
-					+ filename);
+			LOG.error("ReturnDisplayAction: missing secondary support file " + filename);
 		}
 		// Return value in milliseconds.
 		return seconds * 1000;
+	}
+
+	/**
+	 * Appends the "unknown site" page URI that is created in SPF to show it to
+	 * the users when the SPF cookie containing the user's last visited site
+	 * does not exist. This page can be customizable according to the business
+	 * needs and hence the user is redirected to this page.
+	 * 
+	 * @param uri
+	 *            encoded string representing the SPF site URI
+	 * @return URL containing the public page of SPF appended to the uri
+	 */
+
+	private static String appendUnknownSitePage(String uri) {
+
+		if (uri == null) {
+			return null;
+		}
+
+		StringBuffer sb = new StringBuffer(uri.trim());
+		if (!uri.trim().endsWith("/")) {
+			sb.append("/");
+		}
+
+		sb.append(UNKNOWN_SITE_PAGE_URI);
+
+		return sb.toString();
+
 	}
 
 }
