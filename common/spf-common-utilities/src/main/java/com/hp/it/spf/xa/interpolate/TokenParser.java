@@ -5,7 +5,10 @@
  */
 package com.hp.it.spf.xa.interpolate;
 
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.PropertyResourceBundle;
 import java.util.Locale;
@@ -547,7 +550,7 @@ public abstract class TokenParser {
 		if (content == null) {
 			return null;
 		}
-
+		
 		// Start parsing and substituting the tokens:
 		// For efficiency, do containers first:
 		// Starting with the unparameterized containers...
@@ -560,7 +563,7 @@ public abstract class TokenParser {
 		content = parseSiteContainer(content);
 		content = parsePageContainer(content);
 		content = parseNavItemContainer(content);
-		content = parseGroupContainer(content);	
+		content = parseGroupContainer(content);
 		content = parseExistContainer(content);
 
 		// Do the elemental tokens second:
@@ -1989,7 +1992,7 @@ public abstract class TokenParser {
 		 */
 		class ExistContainerMatcher extends ContainerMatcher
 		{
-			protected ExistContainerMatcher(Enumeration<String> enumeration)
+			protected ExistContainerMatcher(List<String> enumeration)
 			{
 				super(enumeration);
 			}
@@ -1997,8 +2000,8 @@ public abstract class TokenParser {
 			protected boolean match(String containerKey)
 			{
 				boolean matchExistence = false;
-				for (Enumeration e = (Enumeration) subjectOfComparison; e.hasMoreElements();) {
-					String elementName = (String) e.nextElement();
+				for (Iterator<String> it = ((List<String>)subjectOfComparison).iterator() ; it.hasNext() ; ){
+					String elementName = (String)it.next();
 					if (elementName.equalsIgnoreCase(containerKey)) {
 						matchExistence = true;
 					}
@@ -2006,7 +2009,8 @@ public abstract class TokenParser {
 				return matchExistence;
 			}
 		}
-		return parseContainerToken(content, TOKEN_EXIST_CONTAINER, new ExistContainerMatcher(getRequestPropertyNames()));
+		return parseContainerToken(content, TOKEN_EXIST_CONTAINER, 
+				new ExistContainerMatcher(Collections.list(getRequestPropertyNames())));
 	}
 
 

@@ -185,9 +185,8 @@ public class ViewControllerTest extends TestCase {
 					content);
 		}
 		
-		
-		pp.setValue(Consts.VIEW_FILENAME, "/html/test_nested_token_4.html");
-		//pp.setValue(Consts.INCLUDES_FILENAME, "html_viewer_includes.properties");
+		pp.setValue(Consts.VIEW_FILENAME, "/html/test_exist_value_token.html");
+		pp.setValue(Consts.INCLUDES_FILENAME, "/properties/test_exist_value.properties");
 		renderRequest.setParameter("SMAUTHREASON", "50004");
 		modelAndView = (ModelAndView)viewController.handleRenderRequest( 
 			renderRequest, renderResponse);
@@ -195,7 +194,19 @@ public class ViewControllerTest extends TestCase {
 		content = (String) map.get(Consts.VIEW_CONTENT);
 		System.out.println("testHandleRenderRequestInternal.13 got: " + content);
 		assertEquals(
-				"<html><body>Exist Token Check : <br>We are inside existense box</br><br> Value received : 50004<br></body></html>",
+				"<html><body>click forgot password.</body></html>",
+				content);
+
+		pp.setValue(Consts.VIEW_FILENAME, "/html/test_nested_token_4.html");
+		pp.setValue(Consts.INCLUDES_FILENAME, "/properties/test_includes_4.properties");
+		renderRequest.setParameter("id", "1000");
+		modelAndView = (ModelAndView)viewController.handleRenderRequest( 
+			renderRequest, renderResponse);
+		map = modelAndView.getModel();
+		content = (String) map.get(Consts.VIEW_CONTENT);
+		System.out.println("testHandleRenderRequestInternal.14 got: " + content);
+		assertEquals(
+				"<html><body><a href=\"/public/test/topIssuesResults/?spf.test.id=1000\">link1</a><a href=\"/public/test/topIssuesResults/?spf.test.id=1000\">link2</a><a href=\"/public/test/topIssuesResults/home.html\">link3</a></body></html>",
 				content);
 	}
 
