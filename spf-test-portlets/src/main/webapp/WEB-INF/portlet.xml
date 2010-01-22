@@ -28,6 +28,20 @@
             </preference>
         </portlet-preferences>
     </portlet>
+
+	<portlet>
+        <portlet-name>PerformancePortlet</portlet-name>
+        <portlet-class>com.hp.it.spf.apps.performance.portlet.PerformancePortlet</portlet-class>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+            <portlet-mode>vignette:config</portlet-mode>
+            <portlet-mode>CONFIG</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Performance Measure Portlet</title>
+        </portlet-info>
+    </portlet>
     
     <portlet>
         <portlet-name>SessionTestPortlet</portlet-name>
