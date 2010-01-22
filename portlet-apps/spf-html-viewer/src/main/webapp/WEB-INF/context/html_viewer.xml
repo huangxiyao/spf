@@ -30,6 +30,9 @@
 				<entry key="vignette:config">
 					<ref bean="htmlViewerConfigController" />
 				</entry>
+				<entry key="config">
+					<ref bean="htmlViewerConfigController" />
+				</entry>
 			</map>
 		</property>
 	</bean>
