@@ -26,6 +26,7 @@
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 			<portlet-mode>vignette:config</portlet-mode>
+			<portlet-mode>config</portlet-mode>
 		</supports>
 
 		<supported-locale>en</supported-locale>
