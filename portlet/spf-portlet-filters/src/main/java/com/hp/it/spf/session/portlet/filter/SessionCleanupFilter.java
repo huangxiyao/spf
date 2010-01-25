@@ -54,7 +54,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  *	(for both Application Scope and Portlet scope) are cleaned up as outlined below.</p>
  *	<p/> 
  *	<ul>
- *	<li> Scenario 1) The filter is not used at all. Then there is no seesion cleanup performed for a portlet.</li>
+ *	<li> Scenario 1) The filter is not used at all. Then there is no session cleanup performed for a portlet.</li>
  *	<li> Scenario 2) The filter is used and configured without init-param or with an init-param which has 
  *			a value of spf.keepStickySessionAttributesOnly, all session attributes except those with a key starting with SPF_RETAIN_ will be cleaned up.</li>
  *	<li> Scenario 3) The filter is used and configured with init-param which has a value of spf.removeNonStickySessionAttributesOnly, then only those session 
