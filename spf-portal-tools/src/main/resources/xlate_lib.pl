@@ -27,7 +27,7 @@ use integer;
 
 $msg_ext_re = "properties";
 $nonmsg_ext_re = "html|htm|xml|txt|css|js|rtf";
-$image_ext_re = "jpg|gif|tif";
+$image_ext_re = "jpg|gif|tif|png";
 $misc_ext_re = "pdf|doc|mpg|wav|psd|wmv|avi|ppt";
 $media_ext_re = "$image_ext_re|$misc_ext_re";
 $text_ext_re = "$msg_ext_re|$nonmsg_ext_re";
