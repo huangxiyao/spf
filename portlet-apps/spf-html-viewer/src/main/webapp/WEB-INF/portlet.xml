@@ -64,9 +64,7 @@
 	<filter>
 		<display-name>WPA Transaction Logging Filter</display-name>
 		<filter-name>TransactionLoggingFilter</filter-name>
-		<filter-class>
-			com.hp.frameworks.wpa.portlet.transaction.TransactionLoggingFilter
-		</filter-class>
+		<filter-class>com.hp.frameworks.wpa.portlet.transaction.TransactionLoggingFilter</filter-class>
 		<lifecycle>ACTION_PHASE</lifecycle>
 		<lifecycle>RENDER_PHASE</lifecycle>
 	</filter>
@@ -75,9 +73,7 @@
 	<filter>
 		<display-name>SPF Map Attribute Filter</display-name>
 		<filter-name>MapAttributeFilter</filter-name>
-		<filter-class>
-			com.hp.it.spf.sso.portlet.filter.MapAttributeFilter
-		</filter-class>
+		<filter-class>com.hp.it.spf.sso.portlet.filter.MapAttributeFilter</filter-class>
 		<lifecycle>ACTION_PHASE</lifecycle>
 		<lifecycle>RENDER_PHASE</lifecycle>
 		<lifecycle>RESOURCE_PHASE</lifecycle>
@@ -87,9 +83,7 @@
 	<filter>
 		<display-name>SPF Requestparam Extractor Filter</display-name>
 		<filter-name>RequestParamExtractorFilter</filter-name>
-		<filter-class>
-			com.hp.it.spf.request.portlet.filter.RequestParamExtractorFilter
-		</filter-class>
+		<filter-class>com.hp.it.spf.request.portlet.filter.RequestParamExtractorFilter</filter-class>
 		<lifecycle>ACTION_PHASE</lifecycle>
 		<lifecycle>RENDER_PHASE</lifecycle>
 		<lifecycle>RESOURCE_PHASE</lifecycle>
