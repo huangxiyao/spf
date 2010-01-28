@@ -38,6 +38,16 @@ other options.) The deployment descriptor just looks like this:</p>
 	&lt;/servlet-mapping&gt;
 </pre></blockquote>
 
+<p>If the relay servlet is part of a portlet application <em>deployed locally
+(i.e. not WSRP)</em> Vignette Security Filter, usually present in the application,
+will block requests to the servlet if it uses the URL pattern above
+(<code>/relay</code>). This filter expects the servlet path to have an extension
+and it must be different from jsp, html, xhtml and shtml. As <code>/relay</code> has no extension
+it will be blocked.</p>
+
+<p>To work around this issue a URL pattern should contain a dot. We recommend using
+<code>/relay.resource</code>.</p>
+
 <p>As noted in the above comment, you can use a different path for
 the relay servlet mapping. If you do provide a different one, you will
 have to do extra configuration in <a
