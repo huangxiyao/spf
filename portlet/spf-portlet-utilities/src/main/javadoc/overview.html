@@ -319,14 +319,13 @@ table.props td {
 			<code>{SITE-URL:<i>spec</i>}</code>)</a></li>
 			<li>4.5.2. <a href="#file.author.token.user">Displaying user
 			information (<code>{NAME}</code>, <code>{EMAIL}</code>, <code>{LANGUAGE-CODE}</code>,
-			<code>{LANGUAGE-CODE:<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>,
-			<code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG}</code>,
-			<code>{LANGUAGE-TAG:<i>case</i>}</code>, <code>{HPP-LANGUAGE-CODE}</code>,
-			<code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>,
-			<code>{VALUE:<i>requestKey</i>}</code>)</a></li>
+			<code>{LANGUAGE-CODE:<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>, <code>{COUNTRY-CODE:<i>case</i>}</code>, 
+			<code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>,
+			<code>{HPP-LANGUAGE-CODE}</code>, <code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>,
+			<code>{USER-PROPERTY:<i>key</i>}</code>, <code>{VALUE:<i>property-name</i>}</code>)</a></li>
 			<li>4.5.3. <a href="#file.author.token.auth">Permissioning
 			content for authorized users (<code>{LOGGED-IN}</code>, <code>{LOGGED-OUT}</code>,
-			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>, 
+			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>,
 			<code>{EXIST:<i>property-name</i>}</code>)</a></li>
 			<li>4.5.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
@@ -3581,8 +3580,8 @@ The token language supports the following basic capabilities:</p>
 	<li><a href="#file.author.token.user">inserting user
 	information</a>, such as name, email, language, or any other user property</li>
 	<li><a href="#file.author.token.auth">permissioning content</a> so
-	it is included only for authorized users (based on groups, roles, request-property or
-	logged-in status)</li>
+	it is included only for authorized users (based on groups, roles,
+	request-property or logged-in status)</li>
 	<li><a href="#file.author.token.consolidate">consolidating
 	content</a> for ease of management (eg offloading common content into a
 	separate properties file)</li>
@@ -4445,9 +4444,10 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 <a name="file.author.token.user">
 <h4>4.5.2. Displaying user information (<code>{NAME}</code>, <code>{EMAIL}</code>,
 <code>{LANGUAGE-CODE}</code>, <code>{LANGUAGE-CODE<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>,
-<code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>,
-<code>{HPP-LANGUAGE-CODE}</code>, <code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>,
-<code>{USER-PROPERTY:<i>key</i>}</code>, <code>{VALUE:<i>requestKey</i>}</code>)</h4>
+<code>{COUNTRY-CODE:<i>case</i>}</code>, 
+<code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>, <code>{HPP-LANGUAGE-CODE}</code>,
+<code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>,
+<code>{VALUE:<i>property-name</i>}</code>)</h4>
 </a>
 
 <p>The following tokens can be used to interpolate information about
@@ -4624,38 +4624,35 @@ The phone number we have on record for you is: {USER-PROPERTY:PhoneNumber}
 	container token - <a href="#file.author.token.auth">see below</a>.)</p>
 	<p></p>
 	</dd>
-	
+
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#value"><code>{VALUE:<i>requestKey</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#value"><code>{VALUE:<i>property-name</i>}</code></a></dt>
 	<dd>
-	<p>Use this token to insert the property value either from <i>Portal Request</i> or <i>Portlet Request</i>.
-	for the user into the interpolated content. The <code><i>property-key</i></code>
-	is the name of the property.</p>
-	<p>These request property value would be picked up from request properties in the following precedence order.
-	<b>Portal Request</b>
-	request attribute, request parameter, session attribute 
-	<b>Portlet Request</b>
-	request attribute, request parameter, public render parameter, portlet-scoped session attribute, application-scoped session attribute
-	</p>
+	<p>Use this token to insert the value of a request or session
+	attribute or parameter named by the <code><i>property-name</i></code>.
+	The following attributes and parameters are checked, in this order:</p>
 
-	<blockquote>
-	<p><b>Note:</b> In the <code><i>requestKey</i></code> for the <code>{VALUE:<i>requestKey</i>}</code>
-	token, you must use the literal property name exactly.</p>
-	</blockquote>
+	<p>request attribute,<br>
+	request parameter,<br>
+	public render parameter,<br>
+	portlet-scoped session attribute,<br>
+	application-scoped session attribute</p>
 
-	<p>For an example, suppose we intend to display the value from request named as <code>requestKey</code>, So we can
-	reference the requestKey's value in our interpolated text as follows:</p>
+	<p>For an example, suppose we intend to display the value from
+	request named <code>requestKey</code>. So we can reference this value
+	in our text as follows:</p>
 	<blockquote><pre>
 The request property value for 'requestKey' is : {VALUE:requestKey}
 	</pre></blockquote>
-	<p></p>
+	<p>If the <code><i>property-name</i></code> does not exist in the
+	request or session, then a blank is inserted.</p>
 	</dd>
 
 </dl>
 
 <a name="file.author.token.auth">
 <h4>4.5.3. Permissioning content for authorized users (<code>{LOGGED-IN}</code>,
-<code>{LOGGED-OUT}</code>, <code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>, 
+<code>{LOGGED-OUT}</code>, <code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>,
 <code>{EXIST:<i>property-name</i>}</code>)</h4>
 </a>
 
@@ -4793,37 +4790,29 @@ This text is for everybody.&lt;BR&gt;
 	be different. Please see the JSR portlet specification for more
 	information.)</p>
 	</dd>
-	
+
 	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#exist"><code>{EXIST:<i>property-name</i>}...{/EXIST}</code></a></dt>
 	<dd>
 	<p>Use this container token to permission the content inside the
-	container based on the user's current request property. Use <code><i>property-name</i></code>
-	to ensure that the user is permissioned to view the content enclosed. The current user request [ Portal / Portlet ] 
-	must have the request property present for <code><i>property-name</i></code> in order for the wrapped content to be
-	included in the output. property-name are case-insensitive. For example:</p>
+	container based on whether certain attributes or parameters exist in
+	the user's current request or session. The <code><i>property-name</i></code>
+	is case-insensitive. For example:</p>
 
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{EXIST:requestKey}This text is visible only in-case 'requestKey' is present either as request attribute or request parameter.{/EXIST}
+{EXIST:requestKey}This text is visible only in-case 'requestKey' is present either as an attribute or parameter.{/EXIST}
 	</pre></blockquote>
-	
-	<p>The existence of request property names would be decided based on the key-names retrieved from the following request properties.
-	<b>Portal Request</b>
-	request attribute, request parameter, session attribute 
-	<b>Portlet Request</b>
-	request attribute, request parameter, public render parameter, portlet-scoped session attribute, application-scoped session attribute
-	</p>
-	<p>If the "property-name" is present in the request, the interpolated content would be included in the output.</p>
-	
-	<blockquote>
-	<p><b>Note:</b> In the <code><i>requestKey</i></code> for the <code>{EXIST:<i>requestKey</i>}</code>
-	token, you must use the literal request property name.</p>
-	</blockquote>
 
+	<p>The engine looks for the <code><i>property-name</i></code>
+	anywhere in the current request attributes or parameters (including
+	public render parameters, private render parameters, and action
+	parameters), and anywhere in the current session (both portlet-scoped
+	and application-scoped session). If an attribute or parameter named by
+	the <code><i>property-name</i></code> exists in any of those places,
+	the surrounded content is included in the output; otherwise it is
+	omitted from the output.</p>
 	</dd>
-	
-
 </dl>
 
 <a name="file.author.token.consolidate">
