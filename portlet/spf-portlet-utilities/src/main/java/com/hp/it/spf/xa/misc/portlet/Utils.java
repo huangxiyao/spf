@@ -579,7 +579,6 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		return lastPortalSessionCleanupDate;
 	}
 
-	
 	/**
 	 * Get the current page ID from the given portlet request. The page ID is
 	 * the unique identifier within the portal site for the page on which this
