@@ -382,7 +382,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 								+ " properties file");
 			} else {
 				try {
-					value = rb.getString(pSite.getDNSName().toLowerCase());
+					value = rb.getString(pSite.getDNSName());
 				} catch (Exception ex) {
 				}
 			}
