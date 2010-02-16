@@ -4,7 +4,7 @@
 	<artifactId>spf-healthcheck</artifactId>
 	<packaging>war</packaging>
 	<name>SPF healthcheck application</name>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>2.0.2-SNAPSHOT</version>
 	<description>Shared Portal Framework Web application which performs automated healthchecks against
 		the SPF portal and the SPF open-sign, and relays the status to the
 		load-balancers (or any other interested clients).</description>
@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>spf-portal-helper-apps-parent</artifactId>
-		<version>2.0.1-SNAPSHOT</version>
+		<version>2.0.2-SNAPSHOT</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>

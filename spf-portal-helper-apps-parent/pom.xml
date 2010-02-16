@@ -4,18 +4,18 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>2.0.1</version>
+		<version>2.0.2-SNAPSHOT</version>
 	</parent> 
 
 	<groupId>com.hp.it.spf.portal</groupId>
 	<artifactId>spf-portal-helper-apps-parent</artifactId>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>2.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>SPF Portal Parent POM</name>
 
 	<properties>
-		<spf.common.version>2.0.0</spf.common.version>
-		<spf.portal.version>2.0.0</spf.portal.version>
+		<spf.common.version>2.0.2-SNAPSHOT</spf.common.version>
+		<spf.portal.version>2.0.2-SNAPSHOT</spf.portal.version>
 	</properties>
 
 	<ciManagement>
