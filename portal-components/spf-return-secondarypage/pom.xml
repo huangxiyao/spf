@@ -13,6 +13,8 @@ return secondary page. </description>
 		<version>2.0.1-SNAPSHOT</version>
   </parent>
   <ciManagement>
+  	<system>Hudson</system>
+  	<url>https://samson.atl.hp.com:8080/hudson/job/spf-return-secondarypage</url>
   </ciManagement>
   <organization>
   	<name>Shared Portal Framework: TSG IT</name>

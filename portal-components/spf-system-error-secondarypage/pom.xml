@@ -11,11 +11,15 @@
 		ExceptionUtil in the portal utilities.
 	</description>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal-components/spf-system-error-secondarypage</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal-components/spf-system-error-secondarypage</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portal-components/spf-system-error-secondarypage</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-system-error-secondarypage</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-system-error-secondarypage</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-system-error-secondarypage</url>
 	</scm>
 	<ciManagement>
+		<system>Hudson</system>
+		<url>
+			http://samson.atl.hp.com:8080/hudson/job/spf-system-error-secondarypage
+		</url>
 	</ciManagement>
 	<inceptionYear>January 2009</inceptionYear>
 	<parent>
