@@ -498,4 +498,26 @@ public class Consts {
 	 */
 	public final static String DIAGNOSTIC_ID = "SPF_DC_ID";
 
+	/**
+	 * Prefix your portal/portlet session attribute names with this string, and they
+	 * will be <b>kept</b> after logout from the portal. (This is for portal
+	 * session attributes only, not portlet.)
+	 */
+	public final static String STICKY_SESSION_ATTR_PREFIX = "SPF_RETAIN_";
+
+	/**
+	 * Prefix your portal/portlet session attribute names with this string, and they
+	 * will be <b>removed</b> for you upon logout from the portal. (This is for
+	 * portal session attributes only, not portlet.)
+	 */
+	public final static String UNSTICKY_SESSION_ATTR_PREFIX = "SPF_";
+	
+	/**
+	 * The key of session attribute storing when portal session clean up was done
+	 * This key is also used as a request attribute to be passed to portlet producer in WSRP requests 
+	 * scope and portlet scope sessions 
+	 */
+	public final static String KEY_LAST_PORTAL_SESSION_CLEANUP_DATE = UNSTICKY_SESSION_ATTR_PREFIX + "LastSessionCleanupDate";
+	
+
 }
