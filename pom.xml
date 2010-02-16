@@ -20,9 +20,9 @@
 	<name>SPF portlet aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/portlet</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portlet</url>
 	</scm>
 	
 	<modules>
