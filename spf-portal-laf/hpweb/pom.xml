@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.hp.frameworks</groupId>
 		<artifactId>spf-layout-laf</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>2.0.2-SNAPSHOT</version>
 	</parent>
 
 	<!-- Change this version number with new releases of 
@@ -23,7 +23,7 @@
 
 
 	<!-- This version number normally doesn't need to change. -->
-	<version>2.0.0-SNAPSHOT</version>
+	<version>2.0.2-SNAPSHOT</version>
 
 	<name>HPWeb VAP Components</name>
 	<url>http://frameworks.hp.com</url>
