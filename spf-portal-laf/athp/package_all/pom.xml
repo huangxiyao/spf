@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- This pom creates the AtHPComponents.car file which contains all the 
+		AtHP individual component car files, e.g. header style component.
+	-->
+
+	<parent>
+		<groupId>com.hp.frameworks</groupId>
+		<artifactId>spf-athp-laf</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>AtHPComponents</artifactId>
+	<packaging>car</packaging>
+	<version>${AtHPComponentsVersion}</version>
+	<name>AtHP VAP All Components</name>
+
+	<dependencies>
+	
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>HPLayoutConfigStyleType</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+			<type>car</type>
+    	</dependency>
+
+		<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>athp-vap</artifactId>
+			<version>${AtHPComponentsVersion}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>AtHPHorizontalNavGrid</artifactId>
+			<version>${AtHPComponentsVersion}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>AtHPSplitNavGrid</artifactId>
+			<version>${AtHPComponentsVersion}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>AtHPSystemGrid</artifactId>
+			<version>${AtHPComponentsVersion}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>AtHPFooter</artifactId>
+			<version>${AtHPComponentsVersion}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>AtHPHeader</artifactId>
+			<version>${AtHPComponentsVersion}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>AtHPHorizontalNavigation</artifactId>
+			<version>${AtHPComponentsVersion}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>AtHPLayoutConfig</artifactId>
+			<version>${AtHPComponentsVersion}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>AtHPVerticalNavigation</artifactId>
+			<version>${AtHPComponentsVersion}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>AtHPTheme</artifactId>
+			<version>${AtHPComponentsVersion}</version>
+			<type>car</type>
+    	</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+    			<groupId>com.hp.it.spf.tools</groupId>
+    			<artifactId>spf-maven-car-plugin</artifactId>
+    			<version>2.0.0-SNAPSHOT</version>
+    			<extensions>true</extensions>
+    			<configuration>
+        			<composite>true</composite>
+    			</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.hp.frameworks</groupId>
+		<artifactId>spf-hpweb-laf</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>HPWebPortletChromeIntroBox</artifactId>
+	<packaging>car</packaging>
+	<version>${HPWebComponentsVersion}</version>
+	<name>HPWeb Portlet Chrome Introduction Header VAP Component</name>
+
+	<build>
+		<plugins>
+
+			<!-- Use antrun to copy common JSP files from parent dir
+				to build directory for packaging into car file. -->
+
+			<plugin>
+    			<artifactId>maven-antrun-plugin</artifactId>
+    			<version>1.3</version>
+    			<executions>
+        			<execution>
+            			<phase>compile</phase>
+            			<configuration>
+                			<tasks>
+
+								<copy todir="${project.build.directory}/${project.artifactId}-${project.version}" flatten="true">
+
+										flatten="true">
+									<fileset dir="..">
+										<include name="*.jsp" />
+									</fileset>
+								</copy>
+                			</tasks>
+                		</configuration>
+            			<goals>
+                			<goal>run</goal>
+            			</goals>
+        			</execution>
+    			</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

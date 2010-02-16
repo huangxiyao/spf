@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component 
+	build-version="gold" 
+	component-id="AtHPTheme" 
+	component-type="Themes" 
+	description="@hp layout theme consists of @hp header, horizontal navigation, vertical left navigation, and footer." 
+	epi-build="570014" 
+	epi-version="7.4" 
+	major-version="1" 
+	minor-version="0" 
+	title="@hp Layout Theme" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:required-component component-id="AtHPLayoutConfig" component-type="Styles" major-version="-1" minor-version="-1"/>
+	<epideploy:required-component component-id="AtHPFooter" component-type="Styles" major-version="-1" minor-version="-1"/>
+	<epideploy:required-component component-id="AtHPHeader" component-type="Styles" major-version="-1" minor-version="-1"/>
+	<epideploy:required-component component-id="AtHPHorizontalNavigation" component-type="Styles" major-version="-1" minor-version="-1"/>
+	<epideploy:required-component component-id="AtHPVerticalNavigation" component-type="Styles" major-version="-1" minor-version="-1"/>
+
+	<epideploy:detail>
+	  <theme>
+	   <uid>AtHPTheme</uid>
+	   <title>&#64;hp Theme</title>
+	   <description>&#64;hp layout theme.</description>
+	   <friendly-id>athp_theme</friendly-id>
+	   <is-system>false</is-system>
+	   <visible>true</visible>
+	  
+	   <style>
+		<template-uid>template0041</template-uid>
+		<style-uid>t0041style0003</style-uid>
+	   </style>
+	   <style>
+		<template-uid>template0035</template-uid>
+		<style-uid>AtHPFooter</style-uid>
+	   </style>
+	   <style>
+		<template-uid>template0008</template-uid>
+		<style-uid>AtHPHeader</style-uid>
+	   </style>
+	   <style>
+		<template-uid>template0002</template-uid>
+		<style-uid>AtHPHorizontalNavigation</style-uid>
+	   </style>
+	   <style>
+		<template-uid>template0003</template-uid>
+		<style-uid>AtHPVerticalNavigation</style-uid>
+	   </style>
+	   <style>
+		<template-uid>HPLayoutConfigStyleType</template-uid>
+		<style-uid>AtHPLayoutConfig</style-uid>
+	   </style>
+	  </theme>
+	 </epideploy:detail>
+</epideploy:component>

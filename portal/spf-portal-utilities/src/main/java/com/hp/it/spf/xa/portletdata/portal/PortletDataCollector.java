@@ -1,19 +1,20 @@
 package com.hp.it.spf.xa.portletdata.portal;
 
-import com.hp.it.spf.xa.misc.Consts;
-import com.vignette.portal.website.enduser.PortalContext;
-import com.vignette.portal.log.LogConfiguration;
-import com.vignette.portal.log.LogWrapper;
-import com.epicentric.site.Site;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.epicentric.common.website.MenuItemNode;
 import com.epicentric.common.website.MenuItemUtils;
 import com.epicentric.page.Page;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpSession;
-import java.util.Map;
-import java.util.HashMap;
+import com.epicentric.site.Site;
+import com.hp.it.spf.xa.misc.portal.Consts;
+import com.vignette.portal.log.LogConfiguration;
+import com.vignette.portal.log.LogWrapper;
+import com.vignette.portal.website.enduser.PortalContext;
 
 /**
  * Collects the data which is shared with portlet. Is used for remote (WSRP) and local (JSR 286) portlets.
@@ -37,15 +38,16 @@ public class PortletDataCollector
 	 */
 	public Map<String, String> retrieveUserContextKeys(HttpServletRequest request) {
 		Map<String, String> userContext = new HashMap<String, String>();
-
-		userContext.put(Consts.KEY_PORTAL_SITE_URL, com.hp.it.spf.xa.misc.portal.Utils.getSiteURL(request));
+		
+		userContext.put(Consts.KEY_PORTAL_SITE_URL, com.hp.it.spf.xa.misc.portal.Utils.getPortalSiteURL(request));
 		userContext.put(Consts.KEY_PORTAL_REQUEST_URL, com.hp.it.spf.xa.misc.portal.Utils.getRequestURL(request));
 		userContext.put(Consts.KEY_PORTAL_SITE_NAME, getPortalSiteName(request));
 		userContext.put(Consts.KEY_PORTAL_SESSION_ID, getPortalSessionId(request));
 		userContext.put(Consts.KEY_SESSION_TOKEN, getHppSessionToken(request));
 		userContext.put(Consts.KEY_NAVIGATION_ITEM_NAME, getNavigationItemName(request));
 		userContext.put(Consts.KEY_PORTAL_PAGE_ID, getPageFriendlyId(request));
-
+		// add last session cleanup date in usercontext to be passed to portlets per CR 86
+		userContext.put(Consts.KEY_LAST_PORTAL_SESSION_CLEANUP_DATE, getLastSessionCleanupDate(request));
 		return userContext;
 	}
 
@@ -196,5 +198,22 @@ public class PortletDataCollector
 			return page.getFriendlyID(portalContext);
 		}
 	}
-
+	
+	/**
+	 * Retrieves the last session clean up date stored in the http session.
+	 * @param request
+	 *            incoming user request
+	 * @return last session clean up date from <tt>HttpSession</tt> object or empty string
+	 * if none could be found
+	 */
+	String getLastSessionCleanupDate(HttpServletRequest request) {
+		// synchronize this as multiple WSRP threads will access the request in
+		// parallel and we don't know the underlying request implementation
+		synchronized (request) {
+			HttpSession session = request.getSession();
+			String epoch = (String)session.getAttribute(Consts.KEY_LAST_PORTAL_SESSION_CLEANUP_DATE);
+			if (epoch == null) epoch = "";
+			return epoch;
+		}
+	}
 }

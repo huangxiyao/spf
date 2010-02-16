@@ -46,7 +46,11 @@ public class ANONAuthenticator extends AbstractAuthenticator {
 
     /**
      * This method will retrieve the correct username for anonymous user
-     * 
+     * This method can be called either when a user comes in as an anonymous user initially or switches from
+	 * an authenticated user to an anonymous user (by logging out). In either case, a new anonysmous
+	 * profile is created for the user. However, only in the second case, will the user session be cleaned up
+	 * before anonymous user profile is created.
+	 *
      * @see com.hp.it.spf.sso.portal.IAuthenticator#execute()
      * @see com.hp.it.spf.sso.portal.AuthenticatorHelper
      *      #isVAPLoggedIn(javax.servlet.http.HttpServletRequest)
@@ -75,7 +79,9 @@ public class ANONAuthenticator extends AbstractAuthenticator {
                     return;
                 }
             }
-            AuthenticatorHelper.cleanupSession(request);
+            else { // Cleanup session only when user switching from authenticated to anonymous per CR 86
+            	AuthenticatorHelper.cleanupSession(request);
+            }
         }
 
         String language = reqLocale.getLanguage();

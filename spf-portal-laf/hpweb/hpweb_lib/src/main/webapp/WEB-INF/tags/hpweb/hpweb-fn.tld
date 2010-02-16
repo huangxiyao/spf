@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<description>WPA JSTL Functions</description>
+	<tlib-version>1.0</tlib-version>
+	<short-name>hpweb-fn</short-name>
+	<uri>http://frameworks.hp.com/wpa/hpweb-fn</uri>
+
+	<function>
+		<description>
+			Returns the closest long to the argument. The result is rounded to an integer by adding 1/2, taking the floor of the result, and casting the result to type long
+		</description>
+		<name>round</name>
+		<function-class>
+			com.hp.frameworks.wpa.hpweb.taglib.functions.Functions
+		</function-class>
+		<function-signature>
+			long round(double)
+		</function-signature>
+		<example>
+			${hpweb:round(someValue / 3)}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+			Returns a flag indicating whether or not the locale used by the given localization context uses a left-to-right writing system.
+		</description>
+		<name>isLocaleLTR</name>
+		<function-class>
+			com.hp.frameworks.wpa.hpweb.taglib.functions.Functions
+		</function-class>
+		<function-signature>
+			boolean isLocaleLeftToRight(javax.servlet.jsp.jstl.fmt.LocalizationContext)
+		</function-signature>
+		<example>
+			${hpweb:isLocaleLTR(locCtxt)}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+			Returns the result of doing a MessageFormat.format against the supplied pattern and param values.
+		</description>
+		<name>format</name>
+		<function-class>
+			com.hp.frameworks.wpa.hpweb.taglib.functions.Functions
+		</function-class>
+		<function-signature>
+			java.lang.String format(java.lang.String, java.lang.String)
+		</function-signature>
+		<example>
+			${hpweb:format(pattern, param)}
+		</example>
+	</function>	
+</taglib>
+

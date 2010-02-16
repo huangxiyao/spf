@@ -1,0 +1,118 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.hp.frameworks</groupId>
+	<artifactId>spf-layout-laf</artifactId>
+	<packaging>pom</packaging>
+
+	<!-- This version number doesn't need to change. -->
+	<version>2.0.0-SNAPSHOT</version>
+
+	<name>HP Layout VAP Components</name>
+	<url>http://frameworks.hp.com</url>
+
+	<modules>
+		<module>common</module>
+		<module>hpweb</module>
+		<module>athp</module>
+	</modules>
+
+	<scm>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/spf-portal-laf</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/spf-portal-laf</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/spf-portal-laf</url>
+	</scm>
+	
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://samson.atl.hp.com:8080/hudson/job/spf-layout-laf</url>
+	</ciManagement>
+
+	<organization>
+		<name>Shared Portal Framework: EB IT</name>
+	</organization>
+
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Internal Releases</name>
+			<url>
+				http://samson.atl.hp.com:8081/nexus/content/repositories/releases
+			</url>
+		</repository>
+
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Internal Snapshots</name>
+			<url>
+				http://samson.atl.hp.com:8081/nexus/content/repositories/snapshots
+			</url>
+		</snapshotRepository>
+
+		<site>
+			<id>cas.sdk</id>
+			<name>CAS SDK</name>
+			<!--
+				<url>scp://samson.atl.hp.com:/var/www/sdk/${project.artifactId}/${project.version}</url>
+			-->
+			<url>
+				file:/var/www/sdk/${project.artifactId}/${project.version}
+			</url>
+		</site>
+	</distributionManagement>
+	<build>
+		<!-- For reuse, these plugins are here in this parent POM
+			for use by the submodules. -->
+
+    	<plugins>
+
+			<!-- Require Java 1.5 compiler because hpweb java classes
+				depend on vgn-portal-core.jar, which contains
+				1.5 classes.
+			-->
+
+			<plugin>
+          		<groupId>org.apache.maven.plugins</groupId>
+          		<artifactId>maven-compiler-plugin</artifactId>
+          		<configuration>
+            		<source>1.4</source>
+            		<target>1.5</target>
+          		</configuration>
+        	</plugin>
+        	
+        	<plugin>
+    			<groupId>com.hp.it.spf.tools</groupId>
+    			<artifactId>spf-maven-car-plugin</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<extensions>true</extensions>
+            	<configuration>
+					<archiveClasses>true</archiveClasses>
+                	<archive>
+            			<addMavenDescriptor>false</addMavenDescriptor>
+          			</archive>
+            	</configuration>
+			</plugin>
+
+    	</plugins>
+    	
+	</build>
+	
+	<pluginRepositories>
+		<pluginRepository>
+			<id>com.hp.it.spf</id>
+			<name>SPF Snapshot Repo</name>
+			<url>http://samson.atl.hp.com:8081/nexus/content/repositories/snapshots</url>
+		</pluginRepository>
+		<!--
+		<pluginRepository>
+			<id>com.hp.frameworks</id>
+			<name>SOA Frameworks Repo</name>
+			<url>http://dl.frameworks.hp.com/maven2-repo/</url>
+		</pluginRepository>
+		-->
+	</pluginRepositories>
+	
+	
+</project>

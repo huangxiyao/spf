@@ -556,6 +556,32 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
+	 * Get the last portal session clean date from the given portlet request.
+	 * The value is in the format of System.currentTimeMillis(). 
+	 * 
+	 * @param request
+	 *            The portlet request.
+	 * @return The last portal session clean date.
+	 */
+	@SuppressWarnings("unchecked")
+	public static long getLastSessionCleanupDate(PortletRequest request) {
+		long lastPortalSessionCleanupDate = 0;
+		if (request != null) {
+			Object o = request.getAttribute(Consts.PORTAL_CONTEXT_KEY);
+			if (o != null) {
+				try {
+					Map contextMap = (Map) o;
+					lastPortalSessionCleanupDate = Long.parseLong((String)contextMap
+							.get(Consts.KEY_LAST_PORTAL_SESSION_CLEANUP_DATE));
+		
+				} catch (Exception e) { // should never happen
+				}
+			}
+		}
+		return lastPortalSessionCleanupDate;
+	}
+
+	/**
 	 * Get the current page ID from the given portlet request. The page ID is
 	 * the unique identifier within the portal site for the page on which this
 	 * portlet instance appears (thus it is not an element from the portlet

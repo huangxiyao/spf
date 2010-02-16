@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "/WEB-INF/dtd/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="WPAP_DEBUG_APPENDER"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="3" />
+		<param name="File"
+			value="${LOG_ROOT}/${CONTEXT}/debug/debug.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{MM/dd/yyyy, HH:mm:ss} | %p | %c | %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="WPAP_BUSINESS_APPENDER"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="3" />
+		<param name="File"
+			value="${LOG_ROOT}/${CONTEXT}/main/business/business.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %X{SESSION_ID} | %X{CLIENT_ID} | %X{PORTLET_NAME} | %X{REQUEST_TYPE} | %X{PORTLET_MODE} | %X{WINDOW_STATE} | %X{PAGE_ID} | %X{LOCALE} | %X{CONTEXT_INFO} | %X{ERROR_CODE} | %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="WPAP_ERROR_APPENDER"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="3" />
+		<param name="File"
+			value="${LOG_ROOT}/${CONTEXT}/main/error/error.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %m | %X{CONTEXT_INFO} %n" />
+		</layout>
+	</appender>
+
+	<appender name="WPAP_ERRORTRACE_APPENDER"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="3" />
+		<param name="File"
+			value="${LOG_ROOT}/${CONTEXT}/main/errortrace/errortrace.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="WPAP_PERFORMANCE_APPENDER"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="3" />
+		<param name="File"
+			value="${LOG_ROOT}/${CONTEXT}/main/performance/performance.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{MM/dd/yyyy, HH:mm:ss} | %X{TRANSACTION_ID} | %X{SESSION_ID} | %X{PORTLET_NAME} | %X{REQUEST_TYPE} | %m%n" />
+		</layout>
+	</appender>
+
+	<!-- Loggers -->
+
+	<logger name="com.hp.websat.timber.business" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="WPAP_BUSINESS_APPENDER" />
+	</logger>
+
+	<logger name="com.hp.websat.timber.error" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="WPAP_ERROR_APPENDER" />
+	</logger>
+
+	<logger name="com.hp.websat.timber.errortrace" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="WPAP_ERRORTRACE_APPENDER" />
+	</logger>
+
+	<logger name="com.hp.websat.timber.performance" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="WPAP_PERFORMANCE_APPENDER" />
+	</logger>
+
+	<category name="com.hp.it.sessionCleanup.web.controller" additivity="false">
+		<priority value="debug" />
+		<appender-ref ref="WPAP_DEBUG_APPENDER" />
+	</category>
+
+	<root>
+		<level value="off" />
+		<appender-ref ref="WPAP_DEBUG_APPENDER" />
+	</root>
+</log4j:configuration>
+
