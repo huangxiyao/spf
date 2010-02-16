@@ -142,15 +142,15 @@ public class AuthenticationConsts {
     
     public static final String KEY_USER_NAME = Consts.KEY_USER_NAME;
     
-    static final String KEY_FIRST_NAME = Consts.KEY_FIRST_NAME;
+    public static final String KEY_FIRST_NAME = Consts.KEY_FIRST_NAME;
     
-    static final String KEY_LAST_NAME = Consts.KEY_LAST_NAME;
+    public static final String KEY_LAST_NAME = Consts.KEY_LAST_NAME;
     
-    static final String KEY_EMAIL = Consts.KEY_EMAIL;
+    public static final String KEY_EMAIL = Consts.KEY_EMAIL;
     
-    static final String KEY_LANGUAGE = Consts.KEY_LANGUAGE;
+    public static final String KEY_LANGUAGE = Consts.KEY_LANGUAGE;
     
-    static final String KEY_COUNTRY = Consts.KEY_COUNTRY;
+    public static final String KEY_COUNTRY = Consts.KEY_COUNTRY;
     
     static final String KEY_LAST_LOGIN_DATE = Consts.KEY_LAST_LOGIN_DATE;
     
@@ -158,27 +158,27 @@ public class AuthenticationConsts {
     
     static final String KEY_LAST_CHANGE_DATE = Consts.KEY_LAST_CHANGE_DATE;
     
-    static final String KEY_EMAIL_PREF = Consts.KEY_EMAIL_PREF;
+    public static final String KEY_EMAIL_PREF = Consts.KEY_EMAIL_PREF;
     
-    static final String KEY_PHONE_PREF = Consts.KEY_PHONE_PREF;
+    public static final String KEY_PHONE_PREF = Consts.KEY_PHONE_PREF;
     
-    static final String KEY_POSTAL_PREF = Consts.KEY_POSTAL_PREF;
+    public static final String KEY_POSTAL_PREF = Consts.KEY_POSTAL_PREF;
     
-    static final String KEY_SECURITY_LEVEL = Consts.KEY_SECURITY_LEVEL;
+    public static final String KEY_SECURITY_LEVEL = Consts.KEY_SECURITY_LEVEL;
     
-    static final String KEY_PHONE_NUMBER = Consts.KEY_PHONE_NUMBER;
+    public static final String KEY_PHONE_NUMBER = Consts.KEY_PHONE_NUMBER;
     
-    static final String KEY_PHONE_NUMBER_EXT = Consts.KEY_PHONE_NUMBER_EXT;
+    public static final String KEY_PHONE_NUMBER_EXT = Consts.KEY_PHONE_NUMBER_EXT;
     
-    static final String KEY_MAIL_STOP = Consts.KEY_MAIL_STOP;
+    public static final String KEY_MAIL_STOP = Consts.KEY_MAIL_STOP;
     
-    static final String KEY_STREET = Consts.KEY_STREET;
+    public static final String KEY_STREET = Consts.KEY_STREET;
     
-    static final String KEY_CITY = Consts.KEY_CITY;
+    public static final String KEY_CITY = Consts.KEY_CITY;
     
-    static final String KEY_ZIP = Consts.KEY_ZIP;
+    public  static final String KEY_ZIP = Consts.KEY_ZIP;
     
-    static final String KEY_STATE = Consts.KEY_STATE;
+    public static final String KEY_STATE = Consts.KEY_STATE;
     
     static final String KEY_USER_GROUPS = Consts.KEY_USER_GROUPS;    
 

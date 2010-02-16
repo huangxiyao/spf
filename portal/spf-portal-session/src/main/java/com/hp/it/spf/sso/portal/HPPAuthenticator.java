@@ -16,6 +16,7 @@ import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
+import com.hp.it.spf.user.profile.manager.HPPWebServiceUserProfileRetriever;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
@@ -79,6 +80,15 @@ public class HPPAuthenticator extends AbstractAuthenticator {
                         getValue(AuthenticationConsts.HEADER_POSTAL_CONTACT_PREF_PROPERTY_NAME));
 
         setPhone();
+
+        if (AuthenticatorHelper.isVAPLoggedIn(request)) {
+        	if (isDiffUser() || isUserRecentUpdated()) {
+		        // populate userProfile attributes from HPP WebServices retriever, if attributes already exist, 
+        		// their values will be overridden by data by HPP/WS. If not, the new attributes will be added.
+		        String userIdentifier = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
+		        userProfile.putAll(new HPPWebServiceUserProfileRetriever().getUserProfile(userIdentifier, request));
+        	}
+        }
     }
 
     /**
