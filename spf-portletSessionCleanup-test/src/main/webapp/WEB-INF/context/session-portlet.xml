@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx	http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+
+	<!-- ==================================================== Controllers and TXN helper -->
+	
+	<bean id="sessionDisplayController"
+		class="com.hp.it.sessionCleanup.web.controller.SessionDisplayController">
+	</bean>
+
+	<bean id="portletModeParameterHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+		<property name="order" value="1" />
+		<property name="interceptors">
+			<list>
+				<ref bean="parameterMappingInterceptor" />
+			</list>
+		</property>
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view">
+					<map>
+						<entry key="storeSession">
+							<ref bean="sessionDisplayController" />
+						</entry>
+						<entry key="displaySession">
+							<ref bean="sessionDisplayController" />
+						</entry>
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="order" value="2" />
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="sessionDisplayController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- ==================================================== Validators -->
+
+
+</beans>
