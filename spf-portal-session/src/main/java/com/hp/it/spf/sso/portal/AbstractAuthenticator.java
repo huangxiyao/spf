@@ -142,17 +142,20 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("User is updated.");
                 }
-                AuthenticatorHelper.cleanupSession(request);
+                // not cleanup session per CR 86
+                //AuthenticatorHelper.cleanupSession(request);
             } else if (AuthenticatorHelper.isForceInitSession(request)) {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("Force initSession tag found.");
                 }
-                AuthenticatorHelper.cleanupSession(request);
+                // not cleanup session per CR 86
+                //AuthenticatorHelper.cleanupSession(request);
             } else if (AuthenticatorHelper.isSiteChanged(request)) {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug("Site is changed.");
                 }
-                AuthenticatorHelper.cleanupSession(request);
+                // not cleanup session per CR 86
+                //AuthenticatorHelper.cleanupSession(request);
             } else {
                 // keep the current HTTP header user profile
                 Map httpHeaderUserProfile = userProfile;

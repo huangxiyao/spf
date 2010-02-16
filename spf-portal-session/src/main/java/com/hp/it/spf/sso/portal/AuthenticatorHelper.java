@@ -644,15 +644,17 @@ public class AuthenticatorHelper {
             if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                 LOG.debug("Session Attribute:" + next);
             }
-            //if (next.indexOf(AuthenticationConsts.PARAMETER_PREFIX) >= 0) {
-                if (next.indexOf(AuthenticationConsts.RETAINED_PARAMETER_PREFIX) < 0) {
-                    session.removeAttribute(next);
-                    if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-                        LOG.debug("Removed Session Attribute:" + next);
-                    }
+            // remove SPF_ only session attributes excluding SPF_RETAIN_ and other session attributes per CR 86
+            if (next.startsWith(AuthenticationConsts.PARAMETER_PREFIX) && 
+            		!next.startsWith(AuthenticationConsts.RETAINED_PARAMETER_PREFIX)) {
+                session.removeAttribute(next);
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug("Removed Session Attribute:" + next);
                 }
-            //}
+            }
         }
+        // set a session attribute to record last session cleanup time per CR 86
+        session.setAttribute(AuthenticationConsts.LAST_PORTAL_SESSION_CLEAN_UP_DATE, String.valueOf(System.currentTimeMillis()));
         
         // reset vignette session info to the guest user state
         SessionInfo sessionInfo = (SessionInfo)session

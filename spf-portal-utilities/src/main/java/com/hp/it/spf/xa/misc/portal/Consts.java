@@ -155,20 +155,6 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String PROPERTY_PRIMARY_SITE_ID = "primary_site_id";
 
 	/**
-	 * Prefix your portal session attribute names with this string, and they
-	 * will be <b>kept</b> after logout from the portal. (This is for portal
-	 * session attributes only, not portlet.)
-	 */
-	public final static String STICKY_SESSION_ATTR_PREFIX = "SPF_RETAIN_";
-
-	/**
-	 * Prefix your portal session attribute names with this string, and they
-	 * will be <b>removed</b> for you upon logout from the portal. (This is for
-	 * portal session attributes only, not portlet.)
-	 */
-	public final static String UNSTICKY_SESSION_ATTR_PREFIX = "SPF_";
-
-	/**
 	 * The name of the session attribute containing transient status message.
 	 * Used by logout secondary page type action to set a logout message; can be
 	 * retrieved and removed by a JSP to display.
