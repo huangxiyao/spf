@@ -20,9 +20,9 @@
 	</modules>
 
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/spf-portal-laf</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/spf-portal-laf</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/branches/spf-2.0/spf-portal-laf</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-laf</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-laf</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/spf-portal-laf</url>
 	</scm>
 	
 	<ciManagement>
