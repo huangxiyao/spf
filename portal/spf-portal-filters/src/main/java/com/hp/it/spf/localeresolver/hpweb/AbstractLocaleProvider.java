@@ -5,13 +5,15 @@
 
 package com.hp.it.spf.localeresolver.hpweb;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import com.hp.it.spf.xa.misc.portal.Consts;
+
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 
 /**
  * Abstract base class for HP.com standard locale handling. Subclasses must
@@ -45,12 +47,20 @@ public abstract class AbstractLocaleProvider implements LocaleProvider {
     protected abstract String getLanguage();
 
     public Collection getLocales() {
-        Set locales = new HashSet();
+        List<Locale> locales = new ArrayList<Locale>();
         String language = getLanguage();
 
         if (language != null) {
+        	
+        	// if language contains country code, add the resulting locale in the first position of the collection
+        	if (language.length() > 2 || language.indexOf("-") > 0) {
+        		Locale locale = I18nUtility.languageTagToLocale(language);
+        		locales.add(locale);
+        		
+        	}
+        	
             // hp.com and others botch the language to be more than just the
-            // language
+            // language, and add the resulting locale in the second position
             if (language.length() > 2) {
                 language = language.substring(0, 2);
             }
@@ -61,15 +71,15 @@ public abstract class AbstractLocaleProvider implements LocaleProvider {
                 String country = getCountry();
 
                 if (country == null) {
-                    locales = Collections.singleton(new Locale(language));
+                    locales.add(new Locale(language));
                 } else {
                     country = country.toUpperCase(); // ISO-3166
-                    locales = Collections
-                            .singleton(COUNTRIES.contains(country) ? new Locale(
-                                    language, country)
+                    locales.add(COUNTRIES.contains(country) 
+                    				? new Locale(language, country)
                                     : new Locale(language));
                 }
             }
+            
         }
 
         return locales;
