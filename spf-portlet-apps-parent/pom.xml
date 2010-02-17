@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>2.0.2-SNAPSHOT</version>
+		<version>2.1.0-SNAPSHOT</version>
 	</parent> 
 
 	<groupId>com.hp.it.spf.portlet</groupId>
@@ -15,8 +15,8 @@
 	<name>SPF Portlet Applications Parent POM</name>
 
 	<properties>
-		<spf.common.version>2.0.2-SNAPSHOT</spf.common.version>
-		<spf.portlet.version>2.0.2-SNAPSHOT</spf.portlet.version>
+		<spf.common.version>2.1.0-SNAPSHOT</spf.common.version>
+		<spf.portlet.version>2.1.0-SNAPSHOT</spf.portlet.version>
 	</properties>
 
 	<ciManagement>
