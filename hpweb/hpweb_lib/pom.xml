@@ -119,7 +119,7 @@
 		<!--  local copy of hpweb-core.jar is packaged in car, and not
 				the same version as defined version.  -->
 		<hpweb-core-version>4.4.3</hpweb-core-version>
-		<hpweb-resources-version>4.4.3a</hpweb-resources-version>
+		<hpweb-resources-version>4.4.4</hpweb-resources-version>
 		<wpa-layout-manager-version>4.2.0</wpa-layout-manager-version>
 	</properties>
 	
