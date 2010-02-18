@@ -98,13 +98,13 @@ public class SelectLocaleProcessAction extends BaseAction {
 				LOG
 						.info("SelectLocaleProcessAction: updating user's locale into HP.com standard cookie(s).");
 				addCookie(response, Consts.PARAM_HPCOM_LANGUAGE, 
-						I18nUtility.localeToLanguageTag(plocale),
+						I18nUtility.localeToLanguageTag(plocale).toLowerCase(),
 						 1 * SECONDS_PER_YEAR);
 				
 				if (hasCountry(plocale)) {
 					// country is not null, set country cookie
 					addCookie(response, Consts.PARAM_HPCOM_COUNTRY, plocale
-							.getCountry(), 1 * SECONDS_PER_YEAR);
+							.getCountry().toLowerCase(), 1 * SECONDS_PER_YEAR);
 				} else {
 					// country is null, delete country cookie
 					delCookie(response, Consts.PARAM_HPCOM_COUNTRY);
