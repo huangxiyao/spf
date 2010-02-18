@@ -306,7 +306,7 @@ public class LanguageNegotiator implements ContentNegotiator {
 					deleteCookie(response, Consts.COOKIE_NAME_HPCOM_COUNTRY);
 				} else {
 					addCookie(response, Consts.COOKIE_NAME_HPCOM_COUNTRY,
-							locale.getCountry());
+							locale.getCountry().toLowerCase());
 				}
 			}
 		}
