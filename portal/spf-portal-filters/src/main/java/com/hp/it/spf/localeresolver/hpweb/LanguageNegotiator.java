@@ -299,8 +299,8 @@ public class LanguageNegotiator implements ContentNegotiator {
 		void saveLocale(HttpServletRequest request,
 				HttpServletResponse response, Locale locale) {
 			if (locale != null) {
-				addCookie(response, Consts.COOKIE_NAME_HPCOM_LANGUAGE, locale
-						.getLanguage());
+				addCookie(response, Consts.COOKIE_NAME_HPCOM_LANGUAGE, 
+						I18nUtility.localeToLanguageTag(locale).toLowerCase());
 
 				if (locale.getCountry() == null) {
 					deleteCookie(response, Consts.COOKIE_NAME_HPCOM_COUNTRY);
