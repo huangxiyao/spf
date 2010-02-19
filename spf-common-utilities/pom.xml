@@ -83,7 +83,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<version>2.1.0-SNAPSHOT</version>
 	<description>
 		Common utilities for both portal and portlet sides of the Shared
 		Portal Framework. Currently includes common and abstract
@@ -109,4 +108,14 @@
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
 	</organization>
+	<reporting>
+    	<plugins>
+      		<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-javadoc-plugin</artifactId>
+		        <version>2.6.1</version>
+	      </plugin>
+    	</plugins>
+	</reporting>
+	
 </project>
