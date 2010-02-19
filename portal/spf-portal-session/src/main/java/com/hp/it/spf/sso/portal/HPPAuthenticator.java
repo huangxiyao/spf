@@ -83,10 +83,16 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 
         if (AuthenticatorHelper.isVAPLoggedIn(request)) {
         	if (isDiffUser() || isUserRecentUpdated()) {
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug("Before HPP W/S call, time (ms): " + System.currentTimeMillis());
+                }
 		        // populate userProfile attributes from HPP WebServices retriever, if attributes already exist, 
         		// their values will be overridden by data by HPP/WS. If not, the new attributes will be added.
 		        String userIdentifier = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
 		        userProfile.putAll(new HPPWebServiceUserProfileRetriever().getUserProfile(userIdentifier, request));
+		        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+		            LOG.debug("After HPP W/S call, time (ms): " + System.currentTimeMillis());
+		        }
         	}
         }
     }
