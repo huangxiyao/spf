@@ -21,7 +21,11 @@ import com.hp.it.cas.persona.user.service.ICompoundUserAttributeValue;
 import com.hp.it.cas.persona.user.service.IUser;
 import com.hp.it.cas.persona.user.service.IUserService;
 import com.hp.it.spf.sso.portal.AuthenticationConsts;
+import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.hp.it.spf.user.exception.UserProfileException;
+import com.hp.it.spf.user.group.manager.UGSUserGroupRetriever;
+import com.vignette.portal.log.LogConfiguration;
+import com.vignette.portal.log.LogWrapper;
 
 /**
  * This is a concrete class of IUserProfileRetriever interface.
@@ -30,6 +34,8 @@ import com.hp.it.spf.user.exception.UserProfileException;
  * @version 1.0
  */
 public class PersonaUserProfileRetriever implements IUserProfileRetriever {
+    private static final LogWrapper LOG = AuthenticatorHelper.getLog(PersonaUserProfileRetriever.class);
+
     /**
      * Retrieve user profiles from Persona according to the specified user
      * identifier.
@@ -60,6 +66,7 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
 
             // retrieve simple attribute values and convert key from Integer type to String type
             Map<String, Collection<String>> simple = user.getSimpleAttributeValues();
+            
 			convertSimpleValues(userProfiles, simple);
 
 			// retrieve compound attribute values and convert key from Integer type to String type
@@ -119,6 +126,15 @@ public class PersonaUserProfileRetriever implements IUserProfileRetriever {
 			// convert the Collection to List in case it's not a list
 			if (originalValue != null) {
 				List<String> attributeValue = new ArrayList<String>(originalValue);
+	            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+	            	if( null != attributeValue ){
+		            	for (String s : attributeValue){
+		            		LOG.debug("Persona Attribute:  " + s);
+		            	}
+	            	}else{
+	            		LOG.debug("convertSimpleValues:  Somehow unable to convert persona attribute to arraylist");
+	            	}
+	            }
 				userProfile.put(attributeName, attributeValue);
 			}
 			else {
