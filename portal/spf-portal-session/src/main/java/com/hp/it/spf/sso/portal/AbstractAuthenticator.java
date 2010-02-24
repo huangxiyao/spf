@@ -131,9 +131,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      */
     @SuppressWarnings("unchecked")
     public void execute() {
-    	if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("Entering AbstractAuthenticator.execute, time (ms): " + System.currentTimeMillis());
-        }
+    	long startTime = System.currentTimeMillis();
         mapHeaderToUserProfileMap();
 
         if (AuthenticatorHelper.isVAPLoggedIn(request)) {
@@ -200,7 +198,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                           .setError(ErrorCode.AUTH001, ex.toString());
         }
     	if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("Exiting AbstractAuthenticator.execute, time (ms): " + System.currentTimeMillis());
+            LOG.debug(String.format("Time spent on AbstractAuthenticator.execute (sec): %s for user: %s", (System.currentTimeMillis()-startTime)/1000, userName));
         }
     }
 
