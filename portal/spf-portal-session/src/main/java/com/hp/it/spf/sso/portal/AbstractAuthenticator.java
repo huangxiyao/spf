@@ -132,32 +132,45 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     @SuppressWarnings("unchecked")
     public void execute() {
     	long startTime = System.currentTimeMillis();
+    	String userIdentifier = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug(String.format("Entering AbstractAuthenticator, userid: %s", userIdentifier));
+        }
         mapHeaderToUserProfileMap();
 
         if (AuthenticatorHelper.isVAPLoggedIn(request)) {
+            if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug(String.format("User is Logged in, user: %s", userIdentifier));
+            }
             if (isDiffUser()) {
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug(String.format("Different User, userid: %s", userIdentifier));
+                }
                 userProfile.put(AuthenticationConsts.KEY_LAST_LOGIN_DATE,
                                 new Date());
                 AuthenticatorHelper.cleanupSession(request);
             } else if (isUserRecentUpdated()) {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-                    LOG.debug("User is updated.");
+                    LOG.debug(String.format("User is updated, userid: %s", userIdentifier));
                 }
                 // not cleanup session per CR 86
                 //AuthenticatorHelper.cleanupSession(request);
             } else if (AuthenticatorHelper.isForceInitSession(request)) {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-                    LOG.debug("Force initSession tag found.");
+                    LOG.debug(String.format("Force initSession tag found, userid: %s", userIdentifier));
                 }
                 // not cleanup session per CR 86
                 //AuthenticatorHelper.cleanupSession(request);
             } else if (AuthenticatorHelper.isSiteChanged(request)) {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-                    LOG.debug("Site is changed.");
+                    LOG.debug(String.format("Site is changed, userid: %s", userIdentifier));
                 }
                 // not cleanup session per CR 86
                 //AuthenticatorHelper.cleanupSession(request);
             } else {
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug(String.format("Other Cases, userid: %s", userIdentifier));
+                }
                 // keep the current HTTP header user profile
                 Map httpHeaderUserProfile = userProfile;
 
@@ -553,19 +566,22 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         User currentUser = SessionUtils.getCurrentUser(request.getSession());
         if (currentUser.getProperty(AuthenticationConsts.PROPERTY_PROFILE_ID) != null) {
             profileIdVap = (String)currentUser.getProperty(AuthenticationConsts.PROPERTY_PROFILE_ID);
+            
         }
         // If profile ID is different, return true
         if (!profileIdVap.equals(userProfile.get(AuthenticationConsts.KEY_PROFILE_ID))) {
             if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-                LOG.debug("profile_id_vap:"
-                          + profileIdVap
-                          + "; profileid:"
-                          + userProfile.get(AuthenticationConsts.KEY_PROFILE_ID));
+                LOG.debug(String.format("profile_id_vap: %s; profileid: %s; userId: %s", 
+                          profileIdVap,
+                          userProfile.get(AuthenticationConsts.KEY_PROFILE_ID),
+                          userProfile.get(AuthenticationConsts.KEY_USER_NAME)));
             }
             return true;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("same user in session: " + profileIdVap);
+            LOG.debug(String.format("same user in session, profileid: %s; userid: %s", 
+            			profileIdVap, 
+            			userProfile.get(AuthenticationConsts.KEY_USER_NAME)));
         }
         return false;
     }
