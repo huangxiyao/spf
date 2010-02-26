@@ -132,13 +132,14 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
     @SuppressWarnings("unchecked")
     public void execute() {
     	long startTime = System.currentTimeMillis();
-    	String userIdentifier = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
+    	
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug(String.format("Entering AbstractAuthenticator, userid: %s", userIdentifier));
+            LOG.debug(String.format("Entering AbstractAuthenticator, userid: %s", ssoUser!=null?ssoUser.getUserName():"null"));
         }
         mapHeaderToUserProfileMap();
 
         if (AuthenticatorHelper.isVAPLoggedIn(request)) {
+        	String userIdentifier = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
             if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                 LOG.debug(String.format("User is Logged in, user: %s", userIdentifier));
             }
@@ -188,6 +189,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                 return;
             }
         } else {
+        	if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                LOG.debug(String.format("User is logging in as: %s", ssoUser!=null?ssoUser.getUserName():"null"));
+            }
             userProfile.put(AuthenticationConsts.KEY_LAST_LOGIN_DATE,
                             new Date());
         }
