@@ -81,17 +81,19 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 
         setPhone();
 
-        if (AuthenticatorHelper.isVAPLoggedIn(request)) {
-        	if (isDiffUser() || isUserRecentUpdated()) {
-                long startTime = System.currentTimeMillis();
-		        // populate userProfile attributes from HPP WebServices retriever, if attributes already exist, 
-        		// their values will be overridden by data by HPP/WS. If not, the new attributes will be added.
-		        String userIdentifier = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
-		        userProfile.putAll(new HPPWebServiceUserProfileRetriever().getUserProfile(userIdentifier, request));
-		        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-		            LOG.debug(String.format("Time Spent on HPP WS call (sec): %s for user: %s", (System.currentTimeMillis()-startTime)/1000, userIdentifier));
-		        }
-        	}
+        // populate userProfile attributes from HPP WebServices retriever, for the following conditions
+        // 1 - user is not logged in
+        // 2 - user is logged in but as a different user or his/her profile is recently updated
+        if (!AuthenticatorHelper.isVAPLoggedIn(request) || 
+        		(AuthenticatorHelper.isVAPLoggedIn(request) && (isDiffUser() || isUserRecentUpdated()))) {
+            long startTime = System.currentTimeMillis();
+	        String userIdentifier = (String)userProfile.get(AuthenticationConsts.KEY_USER_NAME);
+	        //if attributes already exist, 
+			// their values will be overridden by data by HPP/WS. If not, the new attributes will be added.
+	        userProfile.putAll(new HPPWebServiceUserProfileRetriever().getUserProfile(userIdentifier, request));
+	        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+	            LOG.debug(String.format("Time Spent on HPP WS call (sec): %s for user: %s", (System.currentTimeMillis()-startTime)/1000, userIdentifier));
+	        }
         }
     }
 
