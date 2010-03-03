@@ -41,6 +41,7 @@
 				<version>2.0-beta-9</version>
 				<configuration>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<preparationGoals>clean install</preparationGoals>
 				</configuration>
 			</plugin>
 		</plugins>
