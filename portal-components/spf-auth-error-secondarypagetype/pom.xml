@@ -14,16 +14,16 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>spf-portal-components-parent</artifactId>
-		<version>2.1.0</version>
+		<version>2.1.1-SNAPSHOT</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-auth-error-secondarypagetype</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-components-2.1.0/spf-auth-error-secondarypagetype</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-components-2.1.0/spf-auth-error-secondarypagetype</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/portal-components-2.1.0/spf-auth-error-secondarypagetype</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-auth-error-secondarypagetype</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-auth-error-secondarypagetype</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-auth-error-secondarypagetype</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
