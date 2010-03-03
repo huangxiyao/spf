@@ -13,16 +13,16 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>spf-portal-components-parent</artifactId>
-		<version>2.1.0-SNAPSHOT</version>
+		<version>2.1.0</version>
 	</parent>
 	<ciManagement>
 		<system>Hudson</system>
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-locale-indicator-classic-style</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-locale-indicator-classic-style</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-locale-indicator-classic-style</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portal-components/spf-locale-indicator-classic-style</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-components-2.1.0/spf-locale-indicator-classic-style</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/portal-components-2.1.0/spf-locale-indicator-classic-style</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/tags/portal-components-2.1.0/spf-locale-indicator-classic-style</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
