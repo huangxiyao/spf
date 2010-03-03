@@ -3,13 +3,13 @@
 	<parent>
 		<groupId>com.hp.it.spf.xa</groupId>
 		<artifactId>spf-common-parent</artifactId>
-		<version>2.1.0</version>
+		<version>2.1.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>spf-common-hpp</artifactId>
 	<packaging>jar</packaging>
 	<name>SPF common HPP WebServices client</name>
-	<version>2.1.0</version>
+	<version>2.1.1-SNAPSHOT</version>
 	<description>Client API library for HPP WebServices offered by Shared Portal Framework.  This project is used by the SPF portal and portlet frameworks, and is offered to feature-services for their use as well.  This client is current as of the HPP W/S 5.0 "Corralco" release.  Please note: this client is offered on a "best-effort" basis only.  If you use this client, you should understand that the HPP (not SPF) team owns these Web Services, and that this client will not necessarily be kept up-to-date with all subsequent HPP W/S releases and features (only those needed by the framework).</description>
 	<inceptionYear>December 2008</inceptionYear>
 	<ciManagement>
@@ -17,9 +17,9 @@
 		<url>http://samson.atl.hp.com:8080/hudson/job/spf-common-hpp</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/common-2.1.0/spf-common-hpp</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/tags/common-2.1.0/spf-common-hpp</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/tags/common-2.1.0/spf-common-hpp</url>
+		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/common/spf-common-hpp</connection>
+		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/common/spf-common-hpp</developerConnection>
+		<url>https://samson.atl.hp.com/svn/spf/source/trunk/common/spf-common-hpp</url>
 	</scm>
 	<organization>
 		<name>Shared Portal Framework: TSG IT</name>
