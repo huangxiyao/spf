@@ -24,7 +24,7 @@ public class UserProfileConsts {
 	public static final String BUSINESS_CITY = AuthenticationConsts.KEY_CITY; 
 	public static final String BUSINESS_STATE = AuthenticationConsts.KEY_STATE;
 	public static final String BUSINESS_POSTAL_CODE = AuthenticationConsts.KEY_ZIP;
-	public static final String BUSINESS_COUNTRY_CODE = AuthenticationConsts.KEY_COUNTRY;
+	public static final String BUSINESS_COUNTRY_CODE = "BusCountryCode"; 
 	public static final String EMAIL = AuthenticationConsts.KEY_EMAIL;
 	public static final String BUSINESS_TELEPHONE_NUMBER = AuthenticationConsts.KEY_PHONE_NUMBER;
 	public static final String BUSINESS_TELEPHONE_EXTENSION = AuthenticationConsts.KEY_PHONE_NUMBER_EXT;
