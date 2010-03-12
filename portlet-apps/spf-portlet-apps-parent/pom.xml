@@ -31,22 +31,6 @@
 	<profiles>
 		<profile>
 			<id>vignette</id>
-			<repositories>
-				<repository>
-					<id>com.hp.frameworks</id>
-					<name>SOA Frameworks Repo</name>
-					<url>http://dl.frameworks.hp.com/maven2-repo/</url>
-				</repository>
-			</repositories>
-
-			<pluginRepositories>
-				<pluginRepository>
-					<id>com.hp.frameworks</id>
-					<name>SOA Frameworks Repo</name>
-					<url>http://dl.frameworks.hp.com/maven2-repo/</url>
-				</pluginRepository>
-			</pluginRepositories>
-
 			<dependencies>
 				<dependency>
 					<groupId>vignette</groupId>
@@ -67,15 +51,7 @@
 					<plugin>
 						<groupId>com.hp.frameworks</groupId>
 						<artifactId>maven-vignette-plugin</artifactId>
-						<!--
-						This version of the plug-in uses ${project.artifactId} instead of
-						${project.build.finalName} as the value of contextPath init param
-					 	in the generated web.xml. This means that if finalName is not the same
-						as artifactId for the portlet application, the generated web.xml
-						must be updated before the portlet application can be successfully
-						deployed.
-						-->
-						<version>3.0.1</version>
+						<version>3.1.3</version>
 						<configuration>
 							<securityFilterEnabled>true</securityFilterEnabled>
 						</configuration>
