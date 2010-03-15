@@ -100,6 +100,9 @@ ro	RO	Europe/Bucharest	Romanian - Romania
 sr		Europe/Belgrade	Serbian (generic)
 sr	RS	Europe/Belgrade	Serbian - Serbia
 sr	ME	Europe/Belgrade	Serbian - Montenegro
+th		Asia/Bangkok	Thai (generic) 	
 th	TH	Asia/Bangkok	Thai - Thailand
-vi	VN	Asia/Hanoi	Vietnamese - Vietnam
-uk	VN	Europe/Kyiv	Ukrainian - Ukraine 
+vi		Asia/Saigon	Vietnamese (generic)
+vi	VN	Asia/Saigon	Vietnamese - Vietnam
+uk		Europe/Kiev	Ukrainian (generic) 
+uk	UA	Europe/Kiev	Ukrainian - Ukraine
