@@ -34,6 +34,7 @@
 		<module>spf-portal-tools</module>
 		<module>spf-portal-utilities</module>
 		<module>spf-portal-wsrp</module>
+		<module>spf-portal-hpweb</module>
 	</modules>
 
 	<build>
