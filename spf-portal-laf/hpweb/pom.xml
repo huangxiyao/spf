@@ -14,7 +14,7 @@
 		number in this POM only.  -->
 
 	<properties>
-		<HPWebComponentsVersion>2.1.0-SNAPSHOT</HPWebComponentsVersion>
+		<HPWebComponentsVersion>2.1.0</HPWebComponentsVersion>
 	</properties>
 
 	<groupId>com.hp.frameworks</groupId>
