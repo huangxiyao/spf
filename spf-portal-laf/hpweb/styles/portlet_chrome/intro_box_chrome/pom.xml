@@ -11,7 +11,6 @@
 
 	<artifactId>HPWebPortletChromeIntroBox</artifactId>
 	<packaging>car</packaging>
-	<version>${HPWebComponentsVersion}</version>
 	<name>HPWeb Portlet Chrome Introduction Header VAP Component</name>
 
 	<build>

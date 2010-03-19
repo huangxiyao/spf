@@ -61,7 +61,7 @@
         		<artifactId>maven-javadoc-plugin</artifactId>
         		<configuration>
           			<aggregate>true</aggregate>		  
-          			<windowtitle>${name} ${AtHPComponentsVersion} Developer's Guide</windowtitle>		  
+          			<windowtitle>${name} ${project.version}} Developer's Guide</windowtitle>		  
         		</configuration>
       		</plugin>
     	</plugins>

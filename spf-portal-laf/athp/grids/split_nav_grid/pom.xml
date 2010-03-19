@@ -11,7 +11,6 @@
 
 	<artifactId>AtHPSplitNavGrid</artifactId>
 	<packaging>car</packaging>
-	<version>${AtHPComponentsVersion}</version>
 	<name>AtHP Split Nav Grid VAP Component</name>
 
 	<build>

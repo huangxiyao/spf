@@ -11,7 +11,6 @@
 
 	<artifactId>HPWebHeader</artifactId>
 	<packaging>car</packaging>
-	<version>${HPWebComponentsVersion}</version>
 	<name>HPWeb Header VAP Component</name>
 
 </project>

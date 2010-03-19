@@ -9,9 +9,9 @@
 		<version>2.1.0-SNAPSHOT</version>
 	</parent>
 
+	<groupId>com.hp.frameworks</groupId>
 	<artifactId>AtHPHorizontalNavGrid</artifactId>
 	<packaging>car</packaging>
-	<version>${AtHPComponentsVersion}</version>
 	<name>AtHP Horizontal Nav Grid VAP Component</name>
 
 	<build>
