@@ -11,7 +11,6 @@
 
 	<artifactId>HPWebSplitNavGrid</artifactId>
 	<packaging>car</packaging>
-	<version>${HPWebComponentsVersion}</version>
 	<name>HPWeb Split Nav Grid VAP Component</name>
 
 	<build>

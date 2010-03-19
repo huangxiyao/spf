@@ -11,7 +11,6 @@
 
 	<artifactId>HPWebLayoutConfig</artifactId>
 	<packaging>car</packaging>
-	<version>${HPWebComponentsVersion}</version>
 	<name>HPWeb Layout Config VAP Component</name>
 
 </project>

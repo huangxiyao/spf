@@ -11,7 +11,6 @@
 
 	<artifactId>hpweb-laf</artifactId>
 	<packaging>car</packaging>
-	<version>${HPWebComponentsVersion}</version>
 	<name>HPWeb Class Library VAP Component</name>
 	
 	<dependencies>
@@ -138,7 +137,7 @@
 		        <outputFileNameMapping>@{artifactId}@.@{extension}@</outputFileNameMapping>
           		<archive>
             		<manifestEntries>
-              			<hpweb-laf>${HPWebComponentsVersion}</hpweb-laf>
+              			<hpweb-laf>${project.version}</hpweb-laf>
               			<hpweb-core>${hpweb-core-version}</hpweb-core>
               			<hpweb-resources>${hpweb-resources-version}</hpweb-resources>
               			<wpa-layout-manager>${wpa-layout-manager-version}</wpa-layout-manager>

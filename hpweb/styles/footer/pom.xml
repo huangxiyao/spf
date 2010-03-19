@@ -11,7 +11,6 @@
 
 	<artifactId>HPWebFooter</artifactId>
 	<packaging>car</packaging>
-	<version>${HPWebComponentsVersion}</version>
 	<name>HPWeb Footer VAP Component</name>
 
 </project>

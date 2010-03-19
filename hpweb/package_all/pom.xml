@@ -14,7 +14,6 @@
 	</parent>
 
 	<artifactId>HPWebComponents</artifactId>
-	<version>${HPWebComponentsVersion}</version>
 	<name>HPWeb VAP All Components</name>
 	<packaging>car</packaging>
 
@@ -30,126 +29,126 @@
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>hpweb-laf</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebAccountControls</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebFooter</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebHeader</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebHorizontalNav</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebLayoutConfig</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebVerticalNav</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebPortletChromeIntroBox</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebPortletChromeLevelA</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebPortletChromeLevelB</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebPortletChromeLevelBBevel</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebPortletChromeLevelC</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebPortletChromeless</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebHorizontalNavGrid</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebSplitNavGrid</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebSystemGrid</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebVerticalNavGrid</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
         	<artifactId>HPWebTheme</artifactId>
-			<version>${HPWebComponentsVersion}</version>
+			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
 	</dependencies>

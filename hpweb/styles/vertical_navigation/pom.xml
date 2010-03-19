@@ -11,7 +11,6 @@
 
 	<artifactId>HPWebVerticalNav</artifactId>
 	<packaging>car</packaging>
-	<version>${HPWebComponentsVersion}</version>
 	<name>HPWeb Vertical Nav VAP Component</name>
 
 </project>
