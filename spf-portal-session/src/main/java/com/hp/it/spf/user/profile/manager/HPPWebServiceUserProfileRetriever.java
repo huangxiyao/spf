@@ -17,6 +17,7 @@ import com.hp.globalops.hppcbl.passport.PassportServiceException;
 import com.hp.globalops.hppcbl.passport.manager.PassportParametersManager;
 import com.hp.globalops.hppcbl.webservice.AdminViewUserResponseElement;
 import com.hp.globalops.hppcbl.webservice.AdminViewUserResultTypeChoice;
+import com.hp.globalops.hppcbl.webservice.LoginResponseElement;
 import com.hp.globalops.hppcbl.webservice.PrivateData;
 import com.hp.globalops.hppcbl.webservice.ProfileExtended;
 import com.hp.globalops.hppcbl.webservice.ProfilePrivate;
@@ -64,18 +65,29 @@ public class HPPWebServiceUserProfileRetriever implements IUserProfileRetriever 
     	Map<String, Object> userProfiles = new HashMap<String, Object>();
     	try {
     		passportService.setVersion("2"); // enables persistence and retrieval of business data fields
-    		String adminSessionToken = (passportService.login(wsManager.getAdminUser(),
-                            wsManager.getAdminPassword())).getSessionToken();
-
-    		retrieveUserProfiles(passportService, adminSessionToken, userIdentifier, userProfiles);
+    		String adminSessionToken = null;
+    		LoginResponseElement loginResponse = passportService.login(wsManager.getAdminUser(),
+                    wsManager.getAdminPassword());
     		
-    		
+    		if (loginResponse != null) {
+    			adminSessionToken = loginResponse.getSessionToken();
+    			
+    			if (adminSessionToken != null) {
+    				retrieveUserProfiles(passportService, adminSessionToken, userIdentifier, userProfiles);
+    			}
+    			else {
+    				LOG.error("Retrieve user profile failed: HPP Webservices did not return admin Session token");
+    			}
+    		}
+    		else {
+    			LOG.error("Retrieve user profile failed: HPP Webservices did not response to login request");
+    		}
     	} catch (PassportServiceException pse) {
-    		LOG.error("Invoke HPP webservice failed, and got PassportServiceException", pse);
-    		throw new UserProfileException(pse);
+    		LOG.error("Invoke HPP web Services failed, and got PassportServiceException", pse);
+    		throw new UserProfileException("Invoke HPP web Services failed, and got PassportServiceException", pse);
     	} catch (Exception ex) {
-    		LOG.error("Invoke HPP webservice failed and got other Exception", ex);
-    		throw new UserProfileException(ex);
+    		LOG.error("Invoke HPP web Services failed and got other Exception", ex);
+    		throw new UserProfileException("Invoke HPP web Services failed and got other Exception",ex);
     	}
         return userProfiles;
     }
