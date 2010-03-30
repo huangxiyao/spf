@@ -91,8 +91,12 @@ public class HppHeaderLocaleProvider extends AbstractLocaleProvider implements L
         } else {
             preferredLanguage = this.preferredLanguageExtractor.toString();
         }
-        if (preferredCountry == null) {
+        // if country can not be determined from CL Header, look at special case for Chinese which
+        // uses the proprietary code
+        if (preferredCountry == null) { 
 	        if (I18nUtility.HPP_TRAD_CHINESE_LANG.equals(preferredLanguage)) {
+	        	// since the proprietary code alone, "12" in this case, won't be able to determine
+	        	// it is TAIWAN or HONGKONG, default to TAIWAN
 	            preferredCountry = TAIWAN;
 	        } else if (I18nUtility.HPP_SIMP_CHINESE_LANG.equals(preferredLanguage)) {
 	            preferredCountry = CHINA;
