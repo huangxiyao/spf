@@ -83,7 +83,7 @@ public class I18nUtilityTest extends TestCase {
 
         locale = new Locale("zh", "hk");
         hppCode = I18nUtility.localeToHPPLanguage(locale);
-        assertEquals("13", hppCode);
+        assertEquals("12", hppCode);
     }
 
     public void testHppLanguageToISOLanguage() {

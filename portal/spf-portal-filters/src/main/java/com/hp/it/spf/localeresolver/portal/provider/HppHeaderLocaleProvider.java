@@ -91,10 +91,12 @@ public class HppHeaderLocaleProvider extends AbstractLocaleProvider implements L
         } else {
             preferredLanguage = this.preferredLanguageExtractor.toString();
         }
-        if (I18nUtility.HPP_TRAD_CHINESE_LANG.equals(preferredLanguage)) {
-            preferredCountry = TAIWAN;
-        } else if (I18nUtility.HPP_SIMP_CHINESE_LANG.equals(preferredLanguage)) {
-            preferredCountry = CHINA;
+        if (preferredCountry == null) {
+	        if (I18nUtility.HPP_TRAD_CHINESE_LANG.equals(preferredLanguage)) {
+	            preferredCountry = TAIWAN;
+	        } else if (I18nUtility.HPP_SIMP_CHINESE_LANG.equals(preferredLanguage)) {
+	            preferredCountry = CHINA;
+	        }
         }
         return preferredCountry;
     }

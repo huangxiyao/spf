@@ -76,6 +76,16 @@ public class I18nUtility {
 	public static final String HPP_SIMP_CHINESE_LANG = "13";
 
 	/**
+	 * HPP language code for HongKong
+	 */
+	public static final String HPP_LANG_CODE_HONG_KONG = "zh";
+
+	/**
+	 * HPP country code for HongKong
+	 */
+	public static final String HPP_COUNTRY_CODE_HONG_KONG = "HK";
+
+	/**
 	 * A control flag for the <code>sortLocales</code> methods, to
 	 * sort/display country first and language second.
 	 */
@@ -224,9 +234,10 @@ public class I18nUtility {
 	 * null, a generic (ie language-only) locale is returned. And if the HPP
 	 * proprietary language codes for Traditional or Simplified Chinese are
 	 * provided (see {@link #HPP_TRAD_CHINESE_LANG} and
-	 * {@link #HPP_SIMP_CHINESE_LANG}), the returned locale must assume Taiwan
-	 * Chinese ({@link java.util.Locale#TAIWAN}) or China Chinese ({@link java.util.Locale#CHINA})
-	 * respectively, regardless of the given country code.
+	 * {@link #HPP_SIMP_CHINESE_LANG}), the returned locale will be based on language code and 
+	 * country code if the HPP proprietary language code is for Traditional Chinese, and default 
+	 * to Taiwan Chinese if the country code is null, and based on language code only if the HPP 
+	 * proprietary language code is for Simplified Chinese.
 	 * </p>
 	 * 
 	 * @param pHppLangCode
@@ -243,7 +254,11 @@ public class I18nUtility {
 		pHppLangCode = pHppLangCode.trim().toLowerCase();
 		Locale locale = null;
 		if (HPP_TRAD_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
-			locale = Locale.TAIWAN;
+			if (pHppCountryCode != null && pHppCountryCode.equalsIgnoreCase(HPP_COUNTRY_CODE_HONG_KONG)) {
+				locale = new Locale(HPP_LANG_CODE_HONG_KONG, HPP_COUNTRY_CODE_HONG_KONG);
+			} else {
+				locale = Locale.TAIWAN;
+			}
 		} else if (HPP_SIMP_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
 			locale = Locale.CHINA;
 		} else {
@@ -282,11 +297,12 @@ public class I18nUtility {
 	 * Transform a locale into the HP Passport language code. Returns null if
 	 * given a null locale. Generally the returned HPP language code corresponds
 	 * directly with the ISO language code inside the locale. However if the
-	 * locale is Taiwan Chinese ({@link java.util.Locale#TAIWAN}) or China
-	 * Chinese ({@link java.util.Locale#CHINA}), the returned HPP language
-	 * code will be the HPP proprietary value for Traditional or Simplified
-	 * Chinese respectively (see {@link #HPP_TRAD_CHINESE_LANG} and
-	 * {@link #HPP_SIMP_CHINESE_LANG}).
+	 * locale is Taiwan Chinese ({@link java.util.Locale#TAIWAN}) or HongKong Chinese, 
+	 * the returned HPP language code will be the HPP proprietary value for Traditional Chinese
+	 * {@link #HPP_TRAD_CHINESE_LANG}, and if the locale is China Chinese 
+	 * ({@link java.util.Locale#CHINA}), the returned HPP 
+	 * language code will be the HPP proprietary value for Simplified
+	 * Chinese {@link #HPP_SIMP_CHINESE_LANG}).
 	 * </p>
 	 * 
 	 * @param pLocale
@@ -301,6 +317,9 @@ public class I18nUtility {
 		String country = pLocale.getCountry().trim().toUpperCase();
 		if ((Locale.TAIWAN.getLanguage().equalsIgnoreCase(language))
 				&& (Locale.TAIWAN.getCountry().equalsIgnoreCase(country)))
+			return HPP_TRAD_CHINESE_LANG;
+		if ((HPP_LANG_CODE_HONG_KONG.equalsIgnoreCase(language))
+				&& (HPP_COUNTRY_CODE_HONG_KONG.equalsIgnoreCase(country)))
 			return HPP_TRAD_CHINESE_LANG;
 		if (Locale.CHINA.getLanguage().equalsIgnoreCase(language))
 			return HPP_SIMP_CHINESE_LANG;
