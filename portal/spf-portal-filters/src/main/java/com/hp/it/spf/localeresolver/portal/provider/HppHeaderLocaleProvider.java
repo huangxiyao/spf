@@ -18,92 +18,100 @@ import com.hp.it.spf.xa.misc.portal.Utils;
  * @author <link href="marc.derosa@hp.com"></link>
  * @version $Revision 0$ $Date. 01/01/2007$
  */
-public class HppHeaderLocaleProvider extends AbstractLocaleProvider implements LocaleProvider {
-    private static final String CL_HEADER = "CL_Header";
-    private static final String PREFERRED_LANG = "preferredlanguage";
-    private static final String RESIDENT_COUNTRY = "hpresidentcountrycode";
-    private static final String CHINESE = "zh";
-    private static final String TAIWAN = "tw";
-    private static final String CHINA = "cn";
-    private Object preferredLanguageExtractor;
-    private HttpServletRequest request;
+public class HppHeaderLocaleProvider extends AbstractLocaleProvider implements
+		LocaleProvider {
+	private static final String CL_HEADER = "CL_Header";
+	private static final String PREFERRED_LANG = "preferredlanguage";
+	private static final String RESIDENT_COUNTRY = "hpresidentcountrycode";
+	private static final String CHINESE = "zh";
+	private static final String TAIWAN = "tw";
+	private static final String CHINA = "cn";
+	private static final String HONGKONG = "hk";
+	private static final String MACAU = "mo";
+	private Object preferredLanguageExtractor;
+	private HttpServletRequest request;
 
-    /**
-     * @param request the http servlet request
-     */
-    public HppHeaderLocaleProvider(HttpServletRequest request) {
-        this.request = request;
-    }
-    
-    private boolean userNotLoggedIn() {
-        Cookie cookie = WebUtils.getCookie(request, Consts.COOKIE_NAME_SMSESSION);
-        return (cookie == null);
-    }
+	/**
+	 * @param request
+	 *            the http servlet request
+	 */
+	public HppHeaderLocaleProvider(HttpServletRequest request) {
+		this.request = request;
+	}
 
-    /**
-     * Enables this class to be tested easily at the moment but could have other
-     * uses if this resolver set up becomes general use.
-     * @param extractor a user provided object the other member of this class are responsible
-     * for casting to extract the infomation from the extractor
-     */
-    public void setPreferredLanguageExtractor(Object extractor) {
-        this.preferredLanguageExtractor = extractor;
-    }
-    
-    /**
-     * @return a two character ansi language code
-     */
-    public String getLanguage() {
-        if (userNotLoggedIn()) {
-            return null;
-        }
-        String preferredLanguage;
-        if (this.preferredLanguageExtractor == null) {
-            String decodedHeaderInfo = Utils.getRequestHeader(request, CL_HEADER, true);
-            preferredLanguage = Utils.getValueFromCLHeader(decodedHeaderInfo,
-                    PREFERRED_LANG);
-        } else {
-            preferredLanguage = this.preferredLanguageExtractor.toString();
-        }
-        
-        if (I18nUtility.HPP_TRAD_CHINESE_LANG.equals(preferredLanguage) 
-                || I18nUtility.HPP_SIMP_CHINESE_LANG.equals(preferredLanguage)) {
-            preferredLanguage = CHINESE;
-        }
-        return preferredLanguage;
-    }
-    
-    /**
-     * @return a two character ansi country code
-     */
-    public String getCountry() {
-        if (userNotLoggedIn()) {
-            return null;
-        }
-        String preferredCountry = "";
-        String preferredLanguage = "";
-        if (this.preferredLanguageExtractor == null) {
-            String decodedHeaderInfo = Utils.getRequestHeader(request, CL_HEADER, true);
-            preferredLanguage = Utils.getValueFromCLHeader(decodedHeaderInfo,
-                    PREFERRED_LANG);
-            preferredCountry = Utils.getValueFromCLHeader(decodedHeaderInfo,
-                    RESIDENT_COUNTRY);
-        } else {
-            preferredLanguage = this.preferredLanguageExtractor.toString();
-        }
-        // if country can not be determined from CL Header, look at special case for Chinese which
-        // uses the proprietary code
-        if (preferredCountry == null || preferredCountry.length() == 0) { 
-	        if (I18nUtility.HPP_TRAD_CHINESE_LANG.equals(preferredLanguage)) {
-	        	// since the proprietary code alone, "12" in this case, won't be able to determine
-	        	// it is TAIWAN or HONGKONG, default to TAIWAN
-	            preferredCountry = TAIWAN;
-	        } else if (I18nUtility.HPP_SIMP_CHINESE_LANG.equals(preferredLanguage)) {
-	            preferredCountry = CHINA;
-	        }
-        }
-        return preferredCountry;
-    }
+	private boolean userNotLoggedIn() {
+		Cookie cookie = WebUtils.getCookie(request,
+				Consts.COOKIE_NAME_SMSESSION);
+		return (cookie == null);
+	}
 
+	/**
+	 * Enables this class to be tested easily at the moment but could have other
+	 * uses if this resolver set up becomes general use.
+	 * 
+	 * @param extractor
+	 *            a user provided object the other member of this class are
+	 *            responsible for casting to extract the infomation from the
+	 *            extractor
+	 */
+	public void setPreferredLanguageExtractor(Object extractor) {
+		this.preferredLanguageExtractor = extractor;
+	}
+
+	/**
+	 * @return a two character ansi language code
+	 */
+	public String getLanguage() {
+		if (userNotLoggedIn()) {
+			return null;
+		}
+		String preferredLanguage;
+		if (this.preferredLanguageExtractor == null) {
+			String decodedHeaderInfo = Utils.getRequestHeader(request,
+					CL_HEADER, true);
+			preferredLanguage = Utils.getValueFromCLHeader(decodedHeaderInfo,
+					PREFERRED_LANG);
+		} else {
+			preferredLanguage = this.preferredLanguageExtractor.toString();
+		}
+
+		if (I18nUtility.HPP_TRAD_CHINESE_LANG.equals(preferredLanguage)
+				|| I18nUtility.HPP_SIMP_CHINESE_LANG.equals(preferredLanguage)) {
+			preferredLanguage = CHINESE;
+		}
+		return preferredLanguage;
+	}
+
+	/**
+	 * @return a two character ansi country code
+	 */
+	public String getCountry() {
+		if (userNotLoggedIn()) {
+			return null;
+		}
+		String preferredCountry = "";
+		String preferredLanguage = "";
+		if (this.preferredLanguageExtractor == null) {
+			String decodedHeaderInfo = Utils.getRequestHeader(request,
+					CL_HEADER, true);
+			preferredLanguage = Utils.getValueFromCLHeader(decodedHeaderInfo,
+					PREFERRED_LANG);
+			preferredCountry = Utils.getValueFromCLHeader(decodedHeaderInfo,
+					RESIDENT_COUNTRY);
+		} else {
+			preferredLanguage = this.preferredLanguageExtractor.toString();
+		}
+		// if country can not be determined from CL Header, look at special case
+		// for Chinese which
+		// uses the proprietary code
+		if (I18nUtility.HPP_TRAD_CHINESE_LANG.equals(preferredLanguage)) {
+			if (!HONGKONG.equalsIgnoreCase(preferredCountry) && !MACAU.equalsIgnoreCase(preferredCountry)) {
+				preferredCountry = TAIWAN;
+			}
+		} else if (I18nUtility.HPP_SIMP_CHINESE_LANG.equals(preferredLanguage)) {
+			preferredCountry = CHINA;
+		}
+		return preferredCountry;
+	}
 
 }
