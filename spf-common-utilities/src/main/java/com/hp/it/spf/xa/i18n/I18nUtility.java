@@ -76,18 +76,23 @@ public class I18nUtility {
 	public static final String HPP_SIMP_CHINESE_LANG = "13";
 
 	/**
-	 * HPP language code for HongKong
+	 * ISO language code for HongKong
 	 */
-	public static final String HPP_LANG_CODE_HONG_KONG = "zh";
+	private static final String ISO_LANG_CODE_CHINESE = "zh";
 
 	/**
-	 * HPP country code for HongKong
+	 * ISO country code for HongKong
 	 */
-	public static final String HPP_COUNTRY_CODE_HONG_KONG = "HK";
+	private static final String ISO_COUNTRY_CODE_HONG_KONG = "HK";
 
 	/**
-	 * A control flag for the <code>sortLocales</code> methods, to
-	 * sort/display country first and language second.
+	 * ISO country code for Macau
+	 */
+	private static final String ISO_COUNTRY_CODE_MACAU = "MO";
+	
+	/**
+	 * A control flag for the <code>sortLocales</code> methods, to sort/display
+	 * country first and language second.
 	 */
 	public static final int LOCALE_BY_COUNTRY = 1;
 
@@ -231,14 +236,24 @@ public class I18nUtility {
 	 * null if given a null language code; the given country code is optional
 	 * and ignored if null. The returned locale generally corresponds directly
 	 * with the given language and country codes. However if the country code is
-	 * null, a generic (ie language-only) locale is returned. And if the HPP
-	 * proprietary language codes for Traditional or Simplified Chinese are
-	 * provided (see {@link #HPP_TRAD_CHINESE_LANG} and
-	 * {@link #HPP_SIMP_CHINESE_LANG}), the returned locale will be based on language code and 
-	 * country code if the HPP proprietary language code is for Traditional Chinese, and default 
-	 * to Taiwan Chinese if the country code is null, and based on language code only if the HPP 
-	 * proprietary language code is for Simplified Chinese.
+	 * null, a generic (ie language-only) locale is returned.
 	 * </p>
+	 * <blockquote>
+	 * <p>
+	 * <b>Note:</b> Traditional and Simplified Chinese are handled as special
+	 * cases. If the HPP proprietary language code for Simplified Chinese is
+	 * provided (see {@link #HPP_SIMP_CHINESE_LANG}), the returned locale will
+	 * always be China Chinese. And if the HPP proprietary language code for
+	 * Traditional Chinese is provided (see {@link #HPP_TRAD_CHINESE_LANG}), the
+	 * returned locale will always be Taiwan Chinese (unless the provided
+	 * country code is Hong Kong or Macau - in that case, the returned locale will be
+	 * Hong Kong Chinese or Macau Chinese). (This is done because in SPF we typically do not use
+	 * the 'variant' element of Java locale, only the language and country
+	 * elements; and this is the only way of representing the distinction
+	 * between Traditional and Simplified Chinese with language and country
+	 * elements only.)
+	 * </p>
+	 * </blockquote>
 	 * 
 	 * @param pHppLangCode
 	 *            An HPP language code.
@@ -254,10 +269,14 @@ public class I18nUtility {
 		pHppLangCode = pHppLangCode.trim().toLowerCase();
 		Locale locale = null;
 		if (HPP_TRAD_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
-			if (pHppCountryCode != null && pHppCountryCode.equalsIgnoreCase(HPP_COUNTRY_CODE_HONG_KONG)) {
-				locale = new Locale(HPP_LANG_CODE_HONG_KONG, HPP_COUNTRY_CODE_HONG_KONG);
-			} else {
-				locale = Locale.TAIWAN;
+			if (pHppCountryCode != null) {
+				if (pHppCountryCode.equalsIgnoreCase(ISO_COUNTRY_CODE_HONG_KONG)) {
+					locale = new Locale(ISO_LANG_CODE_CHINESE, ISO_COUNTRY_CODE_HONG_KONG);
+				} else if (pHppCountryCode.equalsIgnoreCase(ISO_COUNTRY_CODE_MACAU)) {
+					locale = new Locale(ISO_LANG_CODE_CHINESE, ISO_COUNTRY_CODE_MACAU);
+				} else {
+					locale = Locale.TAIWAN;
+				}
 			}
 		} else if (HPP_SIMP_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
 			locale = Locale.CHINA;
@@ -280,8 +299,8 @@ public class I18nUtility {
 	 * code. However, if the HPP proprietary language codes for Traditional or
 	 * Simplified Chinese (see {@link #HPP_TRAD_CHINESE_LANG} and
 	 * {@link #HPP_SIMP_CHINESE_LANG}) are provided, the returned locale must
-	 * assume Taiwan Chinese ({@link java.util.Locale#TAIWAN}) or China
-	 * Chinese ({@link java.util.Locale#CHINA}) respectively.
+	 * assume Taiwan Chinese ({@link java.util.Locale#TAIWAN}) or China Chinese
+	 * ({@link java.util.Locale#CHINA}) respectively.
 	 * </p>
 	 * 
 	 * @param pHppLangCode
@@ -297,12 +316,12 @@ public class I18nUtility {
 	 * Transform a locale into the HP Passport language code. Returns null if
 	 * given a null locale. Generally the returned HPP language code corresponds
 	 * directly with the ISO language code inside the locale. However if the
-	 * locale is Taiwan Chinese ({@link java.util.Locale#TAIWAN}) or HongKong Chinese, 
-	 * the returned HPP language code will be the HPP proprietary value for Traditional Chinese
-	 * {@link #HPP_TRAD_CHINESE_LANG}, and if the locale is China Chinese 
-	 * ({@link java.util.Locale#CHINA}), the returned HPP 
-	 * language code will be the HPP proprietary value for Simplified
-	 * Chinese {@link #HPP_SIMP_CHINESE_LANG}).
+	 * locale is Taiwan Chinese ({@link java.util.Locale#TAIWAN}), Hong Kong
+	 * Chinese or Macau Chinese, the returned HPP language code will be the HPP proprietary value
+	 * for Traditional Chinese {@link #HPP_TRAD_CHINESE_LANG}, and if the locale
+	 * is China Chinese ({@link java.util.Locale#CHINA}), the returned HPP
+	 * language code will be the HPP proprietary value for Simplified Chinese
+	 * {@link #HPP_SIMP_CHINESE_LANG}).
 	 * </p>
 	 * 
 	 * @param pLocale
@@ -318,8 +337,11 @@ public class I18nUtility {
 		if ((Locale.TAIWAN.getLanguage().equalsIgnoreCase(language))
 				&& (Locale.TAIWAN.getCountry().equalsIgnoreCase(country)))
 			return HPP_TRAD_CHINESE_LANG;
-		if ((HPP_LANG_CODE_HONG_KONG.equalsIgnoreCase(language))
-				&& (HPP_COUNTRY_CODE_HONG_KONG.equalsIgnoreCase(country)))
+		if ((ISO_LANG_CODE_CHINESE.equalsIgnoreCase(language))
+				&& (ISO_COUNTRY_CODE_HONG_KONG.equalsIgnoreCase(country)))
+			return HPP_TRAD_CHINESE_LANG;
+		if ((ISO_LANG_CODE_CHINESE.equalsIgnoreCase(language))
+				&& (ISO_COUNTRY_CODE_MACAU.equalsIgnoreCase(country)))
 			return HPP_TRAD_CHINESE_LANG;
 		if (Locale.CHINA.getLanguage().equalsIgnoreCase(language))
 			return HPP_SIMP_CHINESE_LANG;
@@ -334,8 +356,8 @@ public class I18nUtility {
 	 * Generally the returned ISO language code corresponds directly with the
 	 * given HPP language code. Note that if the HPP language code is for
 	 * Traditional or Simplified Chinese (see {@link #HPP_TRAD_CHINESE_LANG} and
-	 * {@link #HPP_SIMP_CHINESE_LANG}), then the ISO language code for Chinese ({@link java.util.Locale#CHINESE})
-	 * must be returned without distinction.
+	 * {@link #HPP_SIMP_CHINESE_LANG}), then the ISO language code for Chinese (
+	 * {@link java.util.Locale#CHINESE}) must be returned without distinction.
 	 * </p>
 	 * 
 	 * @param pHppLangCode
@@ -426,9 +448,9 @@ public class I18nUtility {
 	 * ascending order by language first, country second, and variant third.
 	 * They are sorted alphabetically according to the display names for those
 	 * elements in the system default locale (ie,
-	 * {@link java.util.Locale#getDefault()}). The method returns the
-	 * collection in the form of an {@link java.util.ArrayList}. If the
-	 * collection did not purely contain locales, it is returned unsorted.
+	 * {@link java.util.Locale#getDefault()}). The method returns the collection
+	 * in the form of an {@link java.util.ArrayList}. If the collection did not
+	 * purely contain locales, it is returned unsorted.
 	 * </p>
 	 * 
 	 * @param locales
@@ -617,24 +639,34 @@ public class I18nUtility {
 	 * </p>
 	 * 
 	 * <p>
-	 * For example: in <code>/files/html</code> consider that we have the
-	 * files <code>foo.htm</code>, <code>foo_fr_CA.htm</code>, and
+	 * For example: in <code>/files/html</code> consider that we have the files
+	 * <code>foo.htm</code>, <code>foo_fr_CA.htm</code>, and
 	 * <code>foo_fr.htm</code>. Then:
 	 * </p>
 	 * 
 	 * <dl>
-	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", Locale.FRENCH, true)</code></dt>
+	 * <dt>
+	 * <code>getLocalizedFileName("/files", "html/foo.htm", Locale.FRENCH, true)</code>
+	 * </dt>
 	 * <dd>returns <code>html/foo_fr.htm</code></dd>
-	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", Locale.FRANCE, true)</code></dt>
+	 * <dt>
+	 * <code>getLocalizedFileName("/files", "html/foo.htm", Locale.FRANCE, true)</code>
+	 * </dt>
 	 * <dd>returns <code>html/foo_fr.htm</code></dd>
-	 * <dt><code>getLocalizedFileName("/files", "/html/foo.htm", Locale.CANADA_FRENCH,
+	 * <dt>
+	 * <code>getLocalizedFileName("/files", "/html/foo.htm", Locale.CANADA_FRENCH,
 	 * true)</code></dt>
 	 * <dd>returns <code>/html/foo_fr_CA.htm</code></dd>
-	 * <dt><code>getLocalizedFileName("/files", "/html/foo.htm", Locale.ITALIAN, true)</code></dt>
+	 * <dt>
+	 * <code>getLocalizedFileName("/files", "/html/foo.htm", Locale.ITALIAN, true)</code>
+	 * </dt>
 	 * <dd>returns <code>/html/foo.htm</code></dd>
-	 * <dt><code>getLocalizedFileName("/files", "html/foo.htm", null, false)</code></dt>
+	 * <dt>
+	 * <code>getLocalizedFileName("/files", "html/foo.htm", null, false)</code></dt>
 	 * <dd>returns <code>html/foo.htm</code></dd>
-	 * <dt><code>getLocalizedFileName("/files", "html/bar.htm", Locale.FRENCH, true)</code></dt>
+	 * <dt>
+	 * <code>getLocalizedFileName("/files", "html/bar.htm", Locale.FRENCH, true)</code>
+	 * </dt>
 	 * <dd>returns <code>null</code></dd>
 	 * <dt><code>getLocalizedFileName("/files", "foo.htm", null, false)</code></dt>
 	 * <dd>returns <code>null</code></dd>
@@ -644,9 +676,8 @@ public class I18nUtility {
 	 * On case-sensitive filesystems, lowercase is assumed for the langage and
 	 * variant codes, and uppercase is assumed for the country code. Thus in the
 	 * above examples, different results would obtain if <code>foo_fr.htm</code>
-	 * and/or <code>foo_fr_CA.htm</code> were tagged with uppercase language
-	 * or lowercase country. Be sure your resource bundles follow the
-	 * convention.
+	 * and/or <code>foo_fr_CA.htm</code> were tagged with uppercase language or
+	 * lowercase country. Be sure your resource bundles follow the convention.
 	 * </p>
 	 * 
 	 * @param pPath
@@ -796,10 +827,10 @@ public class I18nUtility {
 	 * <p>
 	 * Return the locale display name, localized for that same locale. For a
 	 * country-specific locale, this will be in the format:
-	 * <code><i>language</i>-<i>country</i></code>. For a generic locale
-	 * (ie language only, no country), this will be in the format:
-	 * <code><i>language</i></code>. In either case, if there is a variant
-	 * in the locale, it will be included parenthetically at the end:
+	 * <code><i>language</i>-<i>country</i></code>. For a generic locale (ie
+	 * language only, no country), this will be in the format:
+	 * <code><i>language</i></code>. In either case, if there is a variant in
+	 * the locale, it will be included parenthetically at the end:
 	 * <code><i>language</i>-<i>country</i> (<i>variant</i>)</code> or
 	 * <code><i>language</i> (<i>variant</i>)</code>. Returns null if the
 	 * parameter is null. This uses the translations built into the JVM for the
@@ -819,10 +850,10 @@ public class I18nUtility {
 	 * Return the display name of one locale, localized for another locale. For
 	 * a country-specific locale, this will be in the format
 	 * <code><i>language</i>-
-	 * <i>country</i></code>. For a generic locale
-	 * (ie language only, no country), this will be in the format
-	 * <code><i>language</i></code>. In either case, if there is a variant
-	 * in the locale, it will be included parenthetically at the end:
+	 * <i>country</i></code>. For a generic locale (ie language only, no
+	 * country), this will be in the format <code><i>language</i></code>. In
+	 * either case, if there is a variant in the locale, it will be included
+	 * parenthetically at the end:
 	 * <code><i>language</i>-<i>country</i> (<i>variant</i>)</code> or
 	 * <code><i>language</i> (<i>variant</i>)</code>. Returns null if the
 	 * parameter is null. This uses the translations built into the JVM for the
@@ -850,11 +881,11 @@ public class I18nUtility {
 	 * <ul>
 	 * <li>
 	 * <p>
-	 * By default (ie, when the flags are <code>0</code>), the language is
-	 * given priority in the display name. For a country-specific locale, this
-	 * will be in the format: <code><i>language</i>-<i>country</i></code>.
-	 * For a generic locale (ie language only, no country), this will be in the
-	 * format: <code><i>language</i></code>.
+	 * By default (ie, when the flags are <code>0</code>), the language is given
+	 * priority in the display name. For a country-specific locale, this will be
+	 * in the format: <code><i>language</i>-<i>country</i></code>. For a generic
+	 * locale (ie language only, no country), this will be in the format:
+	 * <code><i>language</i></code>.
 	 * </p>
 	 * </li>
 	 * <li>
@@ -862,8 +893,8 @@ public class I18nUtility {
 	 * When the flags (a bitmask) include the {@link #LOCALE_BY_COUNTRY} bit,
 	 * the country is given priority. For a country-specific locale, it will be
 	 * in the format: <code><i>country-language</i></code>. For a generic
-	 * locale, it will be just: <code><i>language</i></code>. Note this is
-	 * the current HP.com Web standard.
+	 * locale, it will be just: <code><i>language</i></code>. Note this is the
+	 * current HP.com Web standard.
 	 * </p>
 	 * </li>
 	 * </ul>
@@ -872,9 +903,9 @@ public class I18nUtility {
 	 * parenthetically at the end:
 	 * <code><i>language</i>-<i>country</i> (<i>variant</i>)</code>,
 	 * <code><i>country</i>-<i>language</i> (<i>variant</i>)</code>, or
-	 * <code><i>language</i> (<i>variant</i>)</code> as appropriate.
-	 * Returns null if the parameter is null. This uses the translations built
-	 * into the JVM for the {@link java.util.Locale} class.
+	 * <code><i>language</i> (<i>variant</i>)</code> as appropriate. Returns
+	 * null if the parameter is null. This uses the translations built into the
+	 * JVM for the {@link java.util.Locale} class.
 	 * </p>
 	 * 
 	 * @param locale
@@ -927,14 +958,14 @@ public class I18nUtility {
 	 * order according to the given locale. Returns null if both of the name
 	 * parameters are null. Defaults to the customary Western order (given name
 	 * first, then family name). In locales whose language codes are configured
-	 * in the <code>i18n_config.properties</code> file, the East Asian order
-	 * is used (family name first, then given name).
+	 * in the <code>i18n_config.properties</code> file, the East Asian order is
+	 * used (family name first, then given name).
 	 * </p>
 	 * <p>
 	 * The <code>i18n_config.properties</code> file can be located anywhere
 	 * accessible to the system classloader. The property within that file which
-	 * is used by this method is {@link #I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS}.
-	 * For configuring the property file, please see the file itself - it is
+	 * is used by this method is {@link #I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS}
+	 * . For configuring the property file, please see the file itself - it is
 	 * contained inside the SPF common utilities JAR, and generally should never
 	 * need to be customized by application developers or administrators.
 	 * </p>
@@ -1016,8 +1047,8 @@ public class I18nUtility {
 	/**
 	 * Returns the given message string, with any of the special no-localization
 	 * tokens (<code>&lt;No_Localization&gt;</code> and the corresponding end
-	 * token <code>&lt;/No_Localization&gt;</code>) removed. These tokens may
-	 * be embedded in message properties to indicate to the translator that no
+	 * token <code>&lt;/No_Localization&gt;</code>) removed. These tokens may be
+	 * embedded in message properties to indicate to the translator that no
 	 * translation should be performed. Since the translator will typically
 	 * leave that markup in there, this method will be used to remove it. Note:
 	 * the content surrounded by the tokens is retained; only the tokens
