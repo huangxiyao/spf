@@ -269,13 +269,12 @@ public class I18nUtility {
 		pHppLangCode = pHppLangCode.trim().toLowerCase();
 		Locale locale = null;
 		if (HPP_TRAD_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
+		    	locale = Locale.TAIWAN;  // Assume Taiwan, and override if special conditions occur
 			if (pHppCountryCode != null) {
 				if (pHppCountryCode.equalsIgnoreCase(ISO_COUNTRY_CODE_HONG_KONG)) {
 					locale = new Locale(ISO_LANG_CODE_CHINESE, ISO_COUNTRY_CODE_HONG_KONG);
 				} else if (pHppCountryCode.equalsIgnoreCase(ISO_COUNTRY_CODE_MACAU)) {
 					locale = new Locale(ISO_LANG_CODE_CHINESE, ISO_COUNTRY_CODE_MACAU);
-				} else {
-					locale = Locale.TAIWAN;
 				}
 			}
 		} else if (HPP_SIMP_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
