@@ -19,6 +19,7 @@
 	<packaging>pom</packaging>
 	<name>SPF common aggregator POM</name>
 
+
 	<scm>
 		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/common</connection>
 		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/common</developerConnection>
