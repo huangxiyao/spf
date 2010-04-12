@@ -119,8 +119,8 @@
 					<groupId>com.hp.it.spf.xa</groupId>
 				</exclusion>
 				<exclusion>
-					<artifactId>cas-persona</artifactId>
-					<groupId>com.hp.it.cas.persona</groupId>
+					<artifactId>security</artifactId>
+					<groupId>com.hp.it.118361</groupId>
 				</exclusion>
 				<exclusion>
 					<artifactId>wsdl4j</artifactId>
@@ -148,9 +148,9 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.it.cas.persona</groupId>
-			<artifactId>cas-persona</artifactId>
-			<version>2.0.1</version>
+			<groupId>com.hp.it.118361</groupId>
+			<artifactId>security</artifactId>
+			<version>2.1.0</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>spring-beans</artifactId>
@@ -230,8 +230,8 @@
 	</build>
 
   <scm>
-    <connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal</connection>
-    <developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal</developerConnection>
-    <url>https://samson.atl.hp.com/svn/spf/source/trunk/portal/spf-portal</url>
+    <connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/portal/spf-portal</connection>
+    <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/portal/spf-portal</developerConnection>
+    <url>https://code1.corp.hp.com/svn/spf/source/trunk/portal/spf-portal</url>
   </scm>
 </project>
