@@ -105,7 +105,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.118361</groupId>
-			<artifactId>security</artifactId>
+			<artifactId>security-service</artifactId>
 			<version>2.1.0</version>
 			<scope>provided</scope>
 		</dependency>
