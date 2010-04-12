@@ -119,7 +119,7 @@
 					<groupId>com.hp.it.spf.xa</groupId>
 				</exclusion>
 				<exclusion>
-					<artifactId>security</artifactId>
+					<artifactId>security-service</artifactId>
 					<groupId>com.hp.it.118361</groupId>
 				</exclusion>
 				<exclusion>
@@ -149,8 +149,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hp.it.118361</groupId>
-			<artifactId>security</artifactId>
-			<version>2.1.0</version>
+			<artifactId>security-service</artifactId>
+			<version>2.1.1</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>spring-beans</artifactId>
