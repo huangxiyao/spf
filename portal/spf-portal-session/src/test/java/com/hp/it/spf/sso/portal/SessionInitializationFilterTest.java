@@ -13,6 +13,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.epicentric.template.Style;
@@ -109,6 +110,7 @@ public class SessionInitializationFilterTest {
         assertTrue(true);
     }
 
+    @Ignore
     @Test
     public void testDoFilter() throws IOException, ServletException {
         UserManager.createUser(user, guestUser);

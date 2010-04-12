@@ -12,6 +12,7 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -43,6 +44,7 @@ public class HPPWebServiceUserProfileRetrieverTest {
 		request = new MockHttpServletRequest();
 	}
 	
+	@Ignore
 	@Test
 	public void testGetUserProfile() throws PassportServiceException {
 		context.checking(new Expectations() {{

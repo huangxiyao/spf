@@ -13,6 +13,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -65,6 +66,7 @@ public class HPPAuthenticatorTest {
     /**
      * Test method for {@link com.hp.it.spf.sso.portal.HPPAuthenticator#mapHeaderToUserProfileMap()}.
      */
+    @Ignore
     @Test
     public void testMapHeaderToUserProfileMap() {
         HPPAuthenticator authenticator = new HPPAuthenticator(hppRequest);       
