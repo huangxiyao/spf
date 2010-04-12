@@ -56,9 +56,7 @@
 			<!--
 				<url>scp://samson.atl.hp.com:/var/www/sdk/${project.artifactId}/${project.version}</url>
 			-->
-			<url>
-				file:/var/www/sdk/${project.artifactId}/${project.version}
-			</url>
+			<url>file:/opt/sasuapps/casfw/local/var/${project.artifactId}/${project.version}</url>
 		</site>
 	</distributionManagement>
 	<build>
