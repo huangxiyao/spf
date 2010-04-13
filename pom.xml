@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 
 	<!-- This version number doesn't need to change. -->
-	<version>2.1.6-SNAPSHOT</version>
+	<version>2.1.6</version>
 
 	<name>HP Layout VAP Components</name>
 	<url>http://frameworks.hp.com</url>
