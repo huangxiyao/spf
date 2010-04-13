@@ -12,15 +12,12 @@
 		number in this POM only.  -->
 
 	<properties>
-		<HPComponentsVersion>2.1.0-SNAPSHOT</HPComponentsVersion>
+		<HPComponentsVersion>2.1.6</HPComponentsVersion>
 	</properties>
 
 	<groupId>com.hp.frameworks</groupId>
 	<artifactId>spf-common-layout-laf</artifactId>
 	<packaging>pom</packaging>
-
-	<!-- This version doesn't normally need to change. -->
-	<version>2.1.0</version>
 
 	<name>HP Layout Common VAP Components</name>
 	<url>http://frameworks.hp.com</url>
