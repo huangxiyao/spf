@@ -87,9 +87,9 @@
 	<ciManagement>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet/pc-database-persistence</connection>
-		<developerConnection>scm:svn:https://samson.atl.hp.com/svn/spf/source/trunk/portlet/pc-database-persistence</developerConnection>
-		<url>https://samson.atl.hp.com/svn/spf/source/trunk/portlet/pc-database-persistence</url>
+		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/portlet/pc-database-persistence</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/portlet/pc-database-persistence</developerConnection>
+		<url>https://code1.corp.hp.com/svn/spf/source/trunk/portlet/pc-database-persistence</url>
 	</scm>
 	<build>
 		<finalName>spf-pc-database-persistence</finalName>
