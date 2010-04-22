@@ -106,3 +106,5 @@ vi		Asia/Saigon	Vietnamese (generic)
 vi	VN	Asia/Saigon	Vietnamese - Vietnam
 uk		Europe/Kiev	Ukrainian (generic) 
 uk	UA	Europe/Kiev	Ukrainian - Ukraine
+ar		Asia/Riyadh	Arabic (Generic)
+ar	SA	Asia/Riyadh	Arabic - Saudi Arabia
