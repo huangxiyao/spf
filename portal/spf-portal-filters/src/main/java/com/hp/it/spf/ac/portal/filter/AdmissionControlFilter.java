@@ -386,14 +386,15 @@ public class AdmissionControlFilter implements Filter {
 			if (value == null)
 				value = this.getThisSiteHostname(poolID);
 
-			cookie = new Cookie(name, value);
-			if (domain != null)
-				cookie.setDomain(domain);
-			if (path != null)
-				cookie.setPath(path);
-			cookie.setMaxAge(-1); // Set as a session-only cookie
-
-			response.addCookie(cookie);
+			if (value != null) {
+				cookie = new Cookie(name, value);
+				if (domain != null)
+					cookie.setDomain(domain);
+				if (path != null)
+					cookie.setPath(path);
+				cookie.setMaxAge(-1); // Set as a session-only cookie
+				response.addCookie(cookie);
+			}
 		}
 
 	} // end method setSiteCookie
