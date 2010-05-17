@@ -13,7 +13,7 @@
 	</container-descriptor>
 
 	<session-descriptor>
-		<timeout-secs>2700</timeout-secs>
+		<timeout-secs>7200</timeout-secs>
 		<invalidation-interval-secs>60</invalidation-interval-secs>
 		<persistent-store-type>memory</persistent-store-type>
 	</session-descriptor>
