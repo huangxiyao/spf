@@ -51,18 +51,18 @@
 		<module>package_all</module>
 
 	</modules>
-
-  	<reporting>
-    	<plugins>
-      		<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-javadoc-plugin</artifactId>
-        		<configuration>
-          			<aggregate>true</aggregate>		  
-          			<windowtitle>${name} ${project.version}} Developer's Guide</windowtitle>		  
-        		</configuration>
-      		</plugin>
-    	</plugins>
-  	</reporting>  
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+				<aggregate>true</aggregate>
+				<windowtitle>${name} ${project.version} Developer's Guide</windowtitle>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
   
 </project>
