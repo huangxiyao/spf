@@ -35,7 +35,7 @@
 		<dependency>
 			<groupId>com.hp.frameworks</groupId>
 			<artifactId>hpweb-resources</artifactId>
-			<version>${hpweb-resources-version}</version>
+			<version>4.4.5</version>
 		</dependency>
 
 		<dependency>
