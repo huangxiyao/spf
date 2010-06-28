@@ -60,11 +60,11 @@
  * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
  * ...
  * &lt;spf-i18n-portal:i18nValue
- * 	stringID=&quot;component-id&quot;
- * 	key=&quot;message-key&quot;
- * 	defaultValue=&quot;default-value&quot;
- * 	escape=&quot;true-or-false&quot;
- * 	filterSpan=&quot;true-or-false&quot;
+ * 	stringID=&quot;&lt;component-id&gt;&quot;
+ * 	key=&quot;&lt;message-key&gt;&quot;
+ * 	defaultValue=&quot;&lt;default-value&gt;&quot;
+ * 	escape=&quot;&lt;true-or-false&gt;&quot;
+ * 	filterSpan=&quot;&lt;true-or-false&gt;&quot;
  * 	/&gt;
  * </pre>
  * 
@@ -209,7 +209,7 @@
  * <pre>
  * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
  * ...
- * &lt;spf-i18n-portal:i18nParam value=&quot;string;&quot; /&gt;
+ * &lt;spf-i18n-portal:i18nParam value=&quot;&lt;string&gt;&quot; /&gt;
  * </pre>
  * 
  * </blockquote>
@@ -286,18 +286,18 @@
  * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
  * ...
  * &lt;spf-i18n-portal:i18nClassicContextualHelpParam
- * 	title=&quot;help-title&quot;
- * 	titleKey=&quot;help-title-message-key&quot;
- * 	content=&quot;help-content&quot;
- * 	contentKey=&quot;help-content-message-key&quot;
- * 	noScriptHref=&quot;uri&quot;
- * 	width=&quot;pixels&quot;
- * 	borderStyle=&quot;inline-style&quot;
- * 	borderClass=&quot;css-classname&quot;
- * 	titleStyle=&quot;inline-style&quot;
- * 	titleClass=&quot;css-classname&quot;
- * 	contentStyle=&quot;inline-style&quot;
- * 	contentClass=&quot;css-classname&quot;
+ * 	title=&quot;&lt;help-title&gt;&quot;
+ * 	titleKey=&quot;&lt;help-title-message-key&gt;&quot;
+ * 	content=&quot;&lt;help-content&gt;&quot;
+ * 	contentKey=&quot;&lt;help-content-message-key&gt;&quot;
+ * 	noScriptHref=&quot;&lt;uri&gt;&quot;
+ * 	width=&quot;&lt;pixels&gt;&quot;
+ * 	borderStyle=&quot;&lt;inline-style&gt;&quot;
+ * 	borderClass=&quot;&lt;css-classname&gt;&quot;
+ * 	titleStyle=&quot;&lt;inline-style&gt;&quot;
+ * 	titleClass=&quot;&lt;css-classname&gt;&quot;
+ * 	contentStyle=&quot;&lt;inline-style&gt;&quot;
+ * 	contentClass=&quot;&lt;css-classname&gt;&quot;
  * 	/&gt;
  * </pre>
  * 
@@ -612,8 +612,8 @@
  * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
  * ...
  * &lt;spf-i18n-portal:i18nClassicGlobalHelpParam
- * 	fragment=&quot;fragment-name&quot;
- * 	windowFeatures=popup-window-features&quot;
+ * 	fragment=&quot;&lt;fragment-name&gt;&quot;
+ * 	windowFeatures=&quot;&lt;popup-window-features&gt;&quot;
  * 	/&gt;
  * </pre>
  * 
@@ -762,8 +762,8 @@
  * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
  * ...
  * &lt;spf-i18n-portal:localizedFileURL
- * 	file=&quot;base-file&quot;
- * 	fileKey=&quot;localized-file-message-key&quot;
+ * 	file=&quot;&lt;base-file&gt;&quot;
+ * 	fileKey=&quot;&lt;localized-file-message-key&gt;&quot;
  * 	/&gt;
  * </pre>
  * 
@@ -845,6 +845,165 @@
  * <p>
  * You must provide one of these attributes, or there will be an error. If you
  * provide both, the <code>file</code> attribute takes precedence.
+ * </p>
+ * </dd>
+ * </dl>
+ * 
+ * <hr>
+ * <a name="indicator">
+ * <h3>&lt;spf-i18n-portal:classicLocaleIndicator&gt;</h3>
+ * </a>
+ * <p>
+ * Usage:
+ * </p>
+ * 
+ * <blockquote>
+ * 
+ * <pre>
+ * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
+ * ...
+ * &lt;spf-i18n-portal:classicLocaleIndicator
+ *    order=&quot;&lt;spec&gt;&quot;
+ *    displayInLocale=&quot;&lt;language-tag&gt;&quot;
+ *    /&gt;
+ * </pre>
+ * 
+ * </blockquote>
+ * 
+ * <p>
+ * Use this tag to express a "classic" HPWeb-compliant locale indicator string.
+ * This is just a simple text string displaying the user's current resolved
+ * locale, localized for that locale. See <a href=
+ * "https://h10014.www1.hp.com/hpweb/newstandards/definitions/country.html"
+ * >https://h10014.www1.hp.com/hpweb/newstandards/definitions/country.html</a>
+ * for a description of this standard.
+ * </p>
+ * <p>
+ * For example, when the current resolved locale is <code>de-DE</code> (German
+ * for Germany), the tag expresses the string <code>Deutschland-Deutsch</code>
+ * by default, which complies with the HPWeb standard. Using the attributes, you
+ * can reverse the name display order and/or alter the localization of the
+ * emitted string; for example, the following expresses
+ * <code>German-Germany</code>:
+ * </p>
+ * 
+ * <pre>
+ * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
+ * ...
+ * &lt;spf-i18n-portal:classicLocaleIndicator
+ *    order=&quot;language-country&quot;
+ *    displayInLocale=&quot;en&quot;
+ *    /&gt;
+ * </pre>
+ * 
+ * Here are the tag attributes: </p>
+ * 
+ * <dl>
+ * <dt><code>order="<i>spec</i>"</code></dt>
+ * <dd>
+ * <p>
+ * By default the expression of a full (ie country-specific) locale places the
+ * country name first, and language name second. Use
+ * <code>order="language-country"</code> to reverse this order.
+ * <code>order="country-language"</code> explicitly yields the default behavior.
+ * </p>
+ * </dd>
+ * <dt><code>displayInLocale="<i>language-tag</i>"</code></dt>
+ * <dd>
+ * <p>
+ * By default the locale name is expressed in its own native language. However
+ * you can specify an alternate language explicitly, by passing its language tag
+ * with this attribute. The language tag must be an RFC 3066 format tag - for
+ * example, <code>displayInLocale="en"</code> for English,
+ * <code>displayInLocale="en-US"</code> for US English, etc.
+ * <code>displayInLocale="current"</code> is an explicit way of yielding the
+ * default behavior.
+ * </p>
+ * </dd>
+ * </dl>
+ * 
+ * <hr>
+ * <a name="selector">
+ * <h3>&lt;spf-i18n-portal:classicLocaleSelector&gt;</h3>
+ * </a>
+ * <p>
+ * Usage:
+ * </p>
+ * 
+ * <blockquote>
+ * 
+ * <pre>
+ * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
+ * ...
+ * &lt;spf-i18n-portal:classicLocaleSelector
+ *    label=&quot;&lt;string&gt;&quot;
+ *    labelKey=&quot;&lt;message-key&gt;&quot;
+ *    order=&quot;&lt;spec&gt;&quot;
+ *    displayInLocale=&quot;&lt;language-tag&gt;&quot;
+ *    sortInLocale=&quot;&lt;language-tag&gt;&quot;
+ *    labelStyle=&quot;&lt;css-style-properties&gt;&quot;
+ *    labelClass=&quot;&lt;css-classname&gt;&quot;
+ *    listStyle=&quot;&lt;css-style-properties&gt;&quot;
+ *    listClass=&quot;&lt;css-classname&gt;&quot;
+ *    escape=&quot;&lt;true-or-false&gt;&quot;
+ *    filterSpan=&quot;&lt;true-or-false&gt;&quot;
+ *    /&gt;
+ * </pre>
+ * 
+ * </blockquote>
+ * 
+ * <p>
+ * Use this tag to express a "classic" HPWeb-compliant locale selector form,
+ * including the label, the pull-down menu of available locales, and a form
+ * action tied to the appropriate SPF-provided secondary page process action
+ * which persists a locale selection in the SPF-standard manner. See <a href=
+ * "https://h10014.www1.hp.com/hpweb/newstandards/definitions/country.html"
+ * >https://h10014.www1.hp.com/hpweb/newstandards/definitions/country.html</a>
+ * for a description of the look-and-feel standard.
+ * </p>
+ * <p>
+ * <font style="background: red"><b>LEFT OFF HERE</b></font>
+ * </p>
+ * <p>
+ * For example, when the current resolved locale is <code>de-DE</code> (German
+ * for Germany), the tag expresses the string <code>Deutschland-Deutsch</code>
+ * by default, which complies with the HPWeb standard. Using the attributes, you
+ * can reverse the name display order and/or alter the localization of the
+ * emitted string; for example, the following expresses
+ * <code>German-Germany</code>:
+ * </p>
+ * 
+ * <pre>
+ * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
+ * ...
+ * &lt;spf-i18n-portal:classicLocaleIndicator
+ *    order=&quot;language-country&quot;
+ *    displayInLocale=&quot;en&quot;
+ *    /&gt;
+ * </pre>
+ * 
+ * Here are the tag attributes: </p>
+ * 
+ * <dl>
+ * <dt><code>order="<i>spec</i>"</code></dt>
+ * <dd>
+ * <p>
+ * By default the expression of a full (ie country-specific) locale places the
+ * country name first, and language name second. Use
+ * <code>order="language-country"</code> to reverse this order.
+ * <code>order="country-language"</code> explicitly yields the default behavior.
+ * </p>
+ * </dd>
+ * <dt><code>displayInLocale="<i>language-tag</i>"</code></dt>
+ * <dd>
+ * <p>
+ * By default the locale name is expressed in its own native language. However
+ * you can specify an alternate language explicitly, by passing its language tag
+ * with this attribute. The language tag must be an RFC 3066 format tag - for
+ * example, <code>displayInLocale="en"</code> for English,
+ * <code>displayInLocale="en-US"</code> for US English, etc.
+ * <code>displayInLocale="current"</code> is an explicit way of yielding the
+ * default behavior.
  * </p>
  * </dd>
  * </dl>
