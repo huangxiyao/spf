@@ -911,10 +911,11 @@
  * <dt><code>displayInLocale="<i>language-tag</i>"</code></dt>
  * <dd>
  * <p>
- * By default the locale name is expressed in its own native language. However
- * you can specify an alternate language explicitly, by passing its language tag
- * with this attribute. The language tag must be an RFC 3066 format tag - for
- * example, <code>displayInLocale="en"</code> for English,
+ * By default the locale name is expressed in its own native language (ie, the
+ * language of the current locale). However you can specify an alternate
+ * language explicitly, by passing its language tag with this attribute. The
+ * language tag must be an RFC 3066 format tag - for example,
+ * <code>displayInLocale="en"</code> for English,
  * <code>displayInLocale="en-US"</code> for US English, etc.
  * <code>displayInLocale="current"</code> is an explicit way of yielding the
  * default behavior.
@@ -941,9 +942,9 @@
  *    order=&quot;&lt;spec&gt;&quot;
  *    displayInLocale=&quot;&lt;language-tag&gt;&quot;
  *    sortInLocale=&quot;&lt;language-tag&gt;&quot;
- *    labelStyle=&quot;&lt;css-style-properties&gt;&quot;
+ *    labelStyle=&quot;&lt;inline-style&gt;&quot;
  *    labelClass=&quot;&lt;css-classname&gt;&quot;
- *    listStyle=&quot;&lt;css-style-properties&gt;&quot;
+ *    listStyle=&quot;&lt;inline-style&gt;&quot;
  *    listClass=&quot;&lt;css-classname&gt;&quot;
  *    escape=&quot;&lt;true-or-false&gt;&quot;
  *    filterSpan=&quot;&lt;true-or-false&gt;&quot;
@@ -955,58 +956,342 @@
  * <p>
  * Use this tag to express a "classic" HPWeb-compliant locale selector form,
  * including the label, the pull-down menu of available locales, and a form
- * action tied to the appropriate SPF-provided secondary page process action
- * which persists a locale selection in the SPF-standard manner. See <a href=
+ * action which points to the SPF-provided secondary page process action for
+ * persisting a locale selection in the SPF-standard manner. See <a href=
  * "https://h10014.www1.hp.com/hpweb/newstandards/definitions/country.html"
  * >https://h10014.www1.hp.com/hpweb/newstandards/definitions/country.html</a>
  * for a description of the look-and-feel standard.
  * </p>
  * <p>
- * <font style="background: red"><b>LEFT OFF HERE</b></font>
+ * The list of available locales used to populate the selector is taken from
+ * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility#getAvailableLocales(javax.servlet.http.HttpServletRequest)}
+ * . Basically this is the default locale for your portal site, plus any
+ * additional locales which you listed for your portal site in the
+ * <code>site_locale_support.properties</code> file. This properties file is
+ * typically stored on the portal server's filesystem in the global resources
+ * directory (eg <code>/opt/sasuapps/sp/global_resources/</code> in production),
+ * though it can be stored in any directory listed in the portal server's
+ * classpath. The format of the file is:
  * </p>
+ * <blockquote>
+ * 
+ * <pre>
+ * &lt;site-name&gt; = &lt;language-tag&gt;, &lt;language-tag&gt;, ...
+ * </pre>
+ * 
+ * </blockquote>
  * <p>
- * For example, when the current resolved locale is <code>de-DE</code> (German
- * for Germany), the tag expresses the string <code>Deutschland-Deutsch</code>
- * by default, which complies with the HPWeb standard. Using the attributes, you
- * can reverse the name display order and/or alter the localization of the
- * emitted string; for example, the following expresses
- * <code>German-Germany</code>:
+ * The <i>site-name</i> is your Vignette "site DNS name", and each
+ * <i>language-tag</i> is an RFC 3066 style string representing an ISO 639-1
+ * language code and, optionally, an ISO 3166-1 country code as well. For
+ * example:
  * </p>
+ * <blockquote>
+ * 
+ * <pre>
+ * my_site = zh-CN, ja, fr
+ * </pre>
+ * 
+ * </blockquote>
+ * <p>
+ * indicating that China Chinese, Japanese and French are the additional,
+ * non-default locales for the <code>my_site</code> portal site. (As for the
+ * default locale, that is configured through the Vignette site console in the
+ * usual manner. Vignette does not natively support the concept of different
+ * sets of locales for different portal sites, and thus
+ * <code>site_locale_support.properties</code> is an SPF-provided extension to
+ * the native Vignette capability.) These 3, together with the site default
+ * locale, would be the options listed in the locale selector expressed by this
+ * tag.
+ * </p>
+ * <blockquote>
+ * <p>
+ * <b>Note:</b> Only locales registered with Vignette at the server level are
+ * recognized in <code>site_locale_support.properties</code> - any others are
+ * ignored. Duplicate locales in <code>site_locale_support.properties</code> are
+ * ignored too. You do not have to list the default locale in
+ * <code>site_locale_support.properties</code> as the tag will automatically get
+ * that from Vignette; if you list it in the property file anyway, it will be
+ * recognized as duplicate and ignored. Note that changes to
+ * <code>site_locale_support.properties</code> take effect in a running portal
+ * environment within 15 minutes, with no restart required.
+ * </p>
+ * </blockquote>
+ * <p>
+ * For example, consider the case where the site default locale (in Vignette
+ * site console) for <code>my_site</code> is US English, and
+ * <code>site_locale_support.properties</code> contains the following:
+ * </p>
+ * <blockquote>
+ * 
+ * <pre>
+ * my_site = zh-CN, zh-TW, zh-HK, ja-JP, ko-KR
+ * </pre>
+ * 
+ * </blockquote>
+ * <p>
+ * Also imagine that your component's message resource bundle contains a message
+ * like this (in the base file):
+ * </p>
+ * <blockquote>
+ * 
+ * <pre>
+ * localeSelector.label = Language:
+ * </pre>
+ * 
+ * </blockquote>
+ * <p>
+ * Now imagine that we want to generate a locale selector using the above
+ * message string (localized for the user's current locale) as the label for the
+ * pull-down widget. We also want each locale named in the pull-down list to be
+ * rendered in its own native language, but we want them to be sorted in order
+ * of the current locale. (In reality, you would probably want the options to be
+ * <i>either</i> both localized and sorted in the current locale, <i>or</i> each
+ * localized in its own language and then all sorted together cross-locale. So
+ * this is not necessarily a realistic example, but helps to demonstrate use of
+ * the tag.) The following JSP code in your component JSP would satisfy these
+ * requirements:
+ * </p>
+ * <blockquote>
  * 
  * <pre>
  * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
  * ...
- * &lt;spf-i18n-portal:classicLocaleIndicator
- *    order=&quot;language-country&quot;
- *    displayInLocale=&quot;en&quot;
+ * &lt;spf-i18n-portal:classicLocaleSelector
+ *    labelKey=&quot;localeSelector.label&quot;
+ *    displayInLocale=&quot;various&quot;
+ *    sortInLocale=&quot;current&quot;
  *    /&gt;
  * </pre>
  * 
- * Here are the tag attributes: </p>
- * 
+ * </blockquote>
+ * <p>
+ * and the resulting locale selector would render as follows (this is when the
+ * user's current locale is US English; the label string and sort order would
+ * differ in other locales, though each displayed locale name in the select list
+ * would continue to be rendered in its own language):
+ * </p>
+ * <img src="../doc-files/classicLocaleSelector.jpg">
+ * <p>
+ * Note that the current locale is pre-selected in the option list, as
+ * illustrated above with US-English in the example. Note also that submit image
+ * points at the companion <i>locale selector secondary page</i> assumed to
+ * exist in your portal site. This Vignette secondary page is a process-only
+ * action which, when the user clicks on the submit image:
+ * </p>
+ * <ol>
+ * <li>collects the user selection from the form,</li>
+ * <li>sets the HP.com-standard <code>lang</code> cookie (and <code>cc</code>
+ * cookie as well, in the case of a country-specific locale),</li>
+ * <li>uses HP Passport Web Services to write the language back into the current
+ * user's profile in the HPP database (only if the user is currently logged-in
+ * to HPP - if for some reason this writeback fails, an error is logged to the
+ * Vignette log but no error is presented in the UI), and</li>
+ * <li>redirects to the same page URL used by the user to access the page in
+ * which you rendered the selector widget in the first place.</li>
+ * </ol>
+ * <p>
+ * The name of the secondary page is <b>Shared Portal Framework - Locale
+ * Selector Secondary Page</b> (component ID
+ * <code>spf-locale-selector-secondarypage</code>) and it is an instance of a
+ * secondary page type of the same name (component ID
+ * <code>spf-locale-selector-secondarypagetype</code>). SPF provides these and
+ * they exist in every SPF Vignette portal environment, but they need to have
+ * been configured to work properly:
+ * </p>
+ * <ol>
+ * <li>The SPF locale selector secondary page must have been configured as the
+ * default secondary page to use for the SPF locale selector secondary page
+ * type, in the Vignette server console.</li>
+ * <li>In addition, the secondary page must have been shared to your portal site
+ * by the Vignette server administrator.</li>
+ * <li>And lastly, in Vignette site console for your site, you should have again
+ * configured the SPF locale selector secondary page as the instance to use for
+ * the secondary page type. Also you should have applied your site's grid and
+ * theme to it. (You do these steps in <b>Site Settings &gt; Appearance &gt;
+ * Secondary Pages</b>.)</li>
+ * </ol>
+ * <p>
+ * <p>
+ * This tag is just a wrapper around the
+ * {@link com.hp.it.spf.xa.i18n.portal.ClassicLocaleSelectorProvider} Java
+ * class. Most functionality of the Java API can be performed via this tag. The
+ * tag attributes are:
+ * </p>
  * <dl>
+ * <dt><code>label="<i>string</i>"</code><br>
+ * <code>labelKey="<i>message-key</i>"</code></dt>
+ * <dd>
+ * <p>
+ * Use one of these attributes to provide a label for the pull-down menu. The
+ * <code>label</code> attribute lets you provide the label string directly.
+ * Alternatively, the <code>labelKey</code> attribute lets you provide the key
+ * for a message property containing the label string. This key is used to
+ * lookup the label string from your component's message resource bundle as
+ * described <a href="#message">above</a>.
+ * </p>
+ * <p>
+ * The HPWeb "classic" standard for a locale selector always is supposed to
+ * include a label of some kind. Thus it is an error if a non-blank label string
+ * is not provided to the tag through one or the other of these attributes (eg
+ * you do not provide either attribute, or you provide the <code>labelKey</code>
+ * attribute but your message is not found or blank). If for some reason you
+ * provide both attributes, the <code>label</code> attribute takes precedence.
+ * </p>
+ * 
+ * <blockquote>
+ * <p>
+ * <b>Tip 1:</b> Your label can contain HTML markup if desired (but see tip 2
+ * below - and for applying CSS to your label, see the <code>labelStyle</code>
+ * and/or <code>labelClass</code> attributes instead). Conversely, if you need
+ * to use HTML-sensitive characters in your label string/message (like the &lt;
+ * character) and do not wish that to be interpreted by the browser as HTML
+ * markup, then you need to use the <code>escape="true"</code> attribute as well
+ * - see below.
+ * </p>
+ * <p>
+ * <b>Tip 2:</b> <font color="red"><b>Coming soon:</b></font> For accessibility
+ * purposes, your label is not only expressed by this JSP tag - it is also
+ * marked explicitly as a label for the selector widget, using the HTML-standard
+ * <code>&lt;label for="..."&gt;</code> tag. So choose a label which will make
+ * sense for accessibility purposes as well as for visible display.
+ * </p>
+ * <p>
+ * <b>Tip 3:</b> If you need to render a classic locale selector without a
+ * visible label, use
+ * {@link com.hp.it.spf.xa.i18n.portal.ClassicLocaleSelectorProvider} directly.
+ * It lets you do that although the tag does not.
+ * </p>
+ * </blockquote>
+ * 
  * <dt><code>order="<i>spec</i>"</code></dt>
  * <dd>
  * <p>
- * By default the expression of a full (ie country-specific) locale places the
- * country name first, and language name second. Use
+ * By default, each full (ie country-specific) locale in the selector list will
+ * be displayed country name first, and language name second (as per the HPWeb
+ * "classic" standard). This is also the order used for sorting. Use
  * <code>order="language-country"</code> to reverse this order.
  * <code>order="country-language"</code> explicitly yields the default behavior.
+ * Regardless, the sort order of locales in the list is always ascending.
  * </p>
  * </dd>
+ * 
  * <dt><code>displayInLocale="<i>language-tag</i>"</code></dt>
  * <dd>
  * <p>
- * By default the locale name is expressed in its own native language. However
- * you can specify an alternate language explicitly, by passing its language tag
- * with this attribute. The language tag must be an RFC 3066 format tag - for
+ * By default, each locale in the selector list is expressed in the language of
+ * the current locale (as per the HPWeb "classic" standard). However you can
+ * specify an alternate language explicitly, by passing its language tag with
+ * this attribute. The language tag must be an RFC 3066 format tag - for
  * example, <code>displayInLocale="en"</code> for English,
  * <code>displayInLocale="en-US"</code> for US English, etc.
- * <code>displayInLocale="current"</code> is an explicit way of yielding the
- * default behavior.
+ * <code>displayInLocale="various"</code> is a special value requesting that
+ * each locale be expressed in its own native language.
+ * <code>displayInLocale="current"</code> is another special value, which just
+ * yields the default behavior.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>sortInLocale="<i>language-tag</i>"</code></dt>
+ * <dd>
+ * <p>
+ * Locale options in the selector list are sorted by locale name, where the
+ * locale name is localized according to this attribute. By default, the current
+ * locale is used for sorting (as per the HPWeb "classic" standard). However you
+ * can specify an alternate language explicitly, by passing its language tag
+ * with this attribute. The language tag must be an RFC 3066 format tag - for
+ * example, <code>sortInLocale="en"</code> for English,
+ * <code>sortInLocale="en-US"</code> for US English, etc.
+ * <code>sortInLocale="current"</code> is another special value, which just
+ * yields the default behavior. Regardless, the sort order of locales is always
+ * ascending.
+ * </p>
+ * <p>
+ * <font color="red"><b>Coming soon:</b></font>
+ * <code>sortInLocale="various"</code> is a special value requesting that each
+ * locale be localized into its own native language for purposes of sorting (the
+ * resulting sort thus transcends any one locale, and is conducted in the
+ * Unicode character collating sequence).
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>labelStyle="<i>inline-style</i>"</code><br>
+ * <code>labelClass="<i>css-classname</i>"</code></dt>
+ * <dd>
+ * <p>
+ * By default, no explicit CSS styling is applied to the label you provide. You
+ * can use either of these attributes to provide an explicit style instead.
+ * </p>
+ * <p>
+ * The <code>labelStyle</code> attribute works like the <code>style</code>
+ * attribute of most HTML tags - it lets you provide a set of CSS properties
+ * inline with your tag. The <code>labelClass</code> attribute works like the
+ * <code>class</code> attribute of most HTML tags - it lets you refer to a CSS
+ * class defined elsewhere in your JSP or in an included CSS sheet. Typically
+ * you would use only one or the other, though the tag will let you provide
+ * both. If you do use both, then CSS properties defined in
+ * <code>labelStyle</code> override the same properties defined in the
+ * <code>labelClass</code> class, as usual with CSS. Similarly, CSS properties
+ * defined in either override any defined elsewhere on the page so far as the
+ * label is concerned.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>listStyle="<i>inline-style</i>"</code><br>
+ * <code>listClass="<i>css-classname</i>"</code></dt>
+ * <dd>
+ * <p>
+ * The HPWeb "classic" locale selector is basically an HTML &lt;select&gt;
+ * widget.By default, no explicit CSS styling is applied to that &lt;select&gt;
+ * widget. You can use either of these attributes to provide an explicit style
+ * instead.
+ * </p>
+ * 
+ * <p>
+ * The <code>listStyle</code> attribute works like the <code>style</code>
+ * attribute of most HTML tags - it lets you provide a set of CSS properties
+ * inline with your tag. The <code>listClass</code> attribute works like the
+ * <code>class</code> attribute of most HTML tags - it lets you refer to a CSS
+ * class defined elsewhere in your JSP or in an included CSS sheet. Typically
+ * you would use only one or the other, though the tag will let you provide
+ * both. If you do use both, then CSS properties defined in
+ * <code>listStyle</code> override the same properties defined in the
+ * <code>listClass</code> class, as usual with CSS. Similarly, CSS properties
+ * defined in either override any defined elsewhere on the page for tables.
+ * </p>
+ * 
+ * <p>
+ * The CSS properties you can define are the ones which are relevant to
+ * &lt;select&gt; widgets. You can set <code>listStyle=""</code> to cancel any
+ * default style.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>escape="<i>true-or-false</i>"</code></dt>
+ * <dd>
+ * <p>
+ * By default, your label content is expressed as-is, which means that any
+ * HTML-sensitive characters in it (like &;lt; or &gt; or etc) are treated as
+ * HTML. If you want them to display literally instead, use
+ * <code>escape="true"</code>. The default behavior can explicitly be invoked
+ * using <code>escape="false"</code>.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>filterSpan="<i>true-or-false</i>"</code></dt>
+ * <dd>
+ * <p>
+ * Similarly, the <code>filterSpan</code> attribute indicates whether to remove
+ * any <code>&lt;SPAN&gt;</code> tags which Vignette may have inserted. Vignette
+ * does this automatically, to help assistive devices such as readers. Normally
+ * the <code>&lt;SPAN&gt;</code> tags are invisible, but just in case this
+ * causes display problems in your portal site, the
+ * <code>filterSpan="true"</code> attribute setting lets you suppress those
+ * <code>&lt;SPAN&gt;</code> tags. By default they are not suppressed.
  * </p>
  * </dd>
  * </dl>
+ * 
  */
 package com.hp.it.spf.xa.i18n.portal.tag;
 
