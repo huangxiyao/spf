@@ -629,11 +629,35 @@
  * </p>
  * <blockquote>
  * <p>
- * <b>Note:</b> Your portal site must implement a global help secondary page
- * instance (template friendly ID <code>PUBLIC_SPF_GLOBAL_HELP</code>) for this
- * to work.
+ * <b>Note:</b> Unlike
+ * <code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code>, which
+ * injects both the hyperlink and the DHTML for your help overlay into your
+ * message - see above - this tag only injects a hyperlink into your message,
+ * which points to your site's presumed global help secondary page in the
+ * "classic" manner (ie a child popup browser window, with window features set
+ * to your specifications: buttonless, no address bar, etc). Your portal site
+ * must therefore implement a global help secondary page instance for this to
+ * point to.
  * </p>
- * </blockquote>
+ * <ul>
+ * <li>It must be an instance of the SPF-provided global help secondary page
+ * type (which you will find in Vignette server console, named <b>Shared Portal
+ * Framework - Global Help Secondary Page</b> with component ID
+ * <code>spf-global-help-secondarypage</code>).</li>
+ * <li>It must use the template friendly ID <code>PUBLIC_SPF_GLOBAL_HELP</code>
+ * as with all global help secondary page instances.</li>
+ * <li>It must contain a <code>globalHelp.html</code> file containing your help
+ * content.</li>
+ * <li>It must contain a primary JSP which interpolates and expresses the
+ * <code>globalHelp.html</code> file.</li>
+ * <li>Your global help secondary page must be shared to your portal site, by
+ * the Vignette server administrator.</li>
+ * <li>And it must be configured as the secondary page to use for that secondary
+ * page type; your site's grid and theme should also be applied to it. You do
+ * this in your Vignette site console, in <b>Site Settings</b> &gt;
+ * <b>Appearance</b> &gt; <b>Secondary Pages</b>.</li>
+ * <li>For more information, see the SPF Global Help Developer's Guide.</li>
+ * </p> </blockquote>
  * <p>
  * For example, let's say you need to produce a UI message in your portal
  * component looking like this (where "browser requirements" is a hyperlink
@@ -678,14 +702,26 @@
  * for the popup. It also assumes the existence of a document fragment,
  * <code>#brower_reqs</code>, which the global help secondary page will jump to
  * when the popup opens. Thus global help content can contain a section about
- * browser requirements marked with that fragment name, such that clicking the
- * "browser requirements" link in the message will open the popup, fill it with
- * the global help content, and jump to that portion of the content.
+ * browser requirements marked with that fragment name.
  * </p>
+ * <p>
+ * The end result is that when the user clicks the "browser requirements"
+ * hyperlink injected into your message with the above code, the following
+ * happens (not illustrated here):
+ * </p>
+ * <ol>
+ * <li>A child browser window (popup window) will open.</li>
+ * <li>The popup window will conform to the specified window features (in this
+ * case, the default features - see below - since no override was specified in
+ * the example).</li>
+ * <li>The popup window open your site's global help secondary page instance.</li>
+ * <li>Furthermore it will jump to the <code>browser_reqs</code> section of the
+ * content in that page (by default it would just go to the top of the page).</li>
+ * </ol>
  * <p>
  * The global help popup requires JavaScript to function. In an unscripted
  * browser, clicking the "browser requirements" link would open the same global
- * help secondary page, but in the same browser window.
+ * help secondary page, but in the same browser window instead of a popup.
  * </p>
  * 
  * <p>
