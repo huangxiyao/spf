@@ -112,11 +112,12 @@
  * the image is already hosted on a Web server elsewhere, you can just use that
  * URL. Or if you want to host the image out of your portal component, store the
  * image as a <i>secondary support file</i> into your component, and you will be
- * able to then generate a URL for it (using Vignette standard APIs, or an
- * SPF-provided API like
- * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocalizedFileURL(com.vignette.portal.website.enduser.PortalContext, String)}
- * ). As for the image's alt text, that can be a message property in your
- * component's resource bundle like above:
+ * able to then generate a URL for it through the tag. (In the case of localized
+ * images, store all of them properly tagged by locale: eg
+ * <code>filename.gif</code> for the base image, <code>filename_zh.gif</code>
+ * for the default Chinese image, <code>filename_zh_HK.gif</code> for the Hong
+ * Kong Chinese image, etc.) As for the image's alt text, that can be a message
+ * property in your component's resource bundle like above:
  * </p>
  * <blockquote>
  * 
@@ -127,13 +128,13 @@
  * </blockquote>
  * 
  * <p>
- * Then use the following in your JSP to express this image with the appropriate
- * contextual help markup (text, HTML, CSS and JavaScript) attached to it. Note:
- * this demonstration expresses the contextual help layer using the built-in
+ * In this example, we will assume that the image (named <code>key.gif</code>)
+ * has been stored into the component as a secondary support file. Then use the
+ * following in your JSP to express this image with the appropriate contextual
+ * help markup (text, HTML, CSS and JavaScript) attached to it. Note: this
+ * demonstration expresses the contextual help layer using the built-in
  * "default" style; see the discussion on tag attributes for how to override
- * that and provide your own style. The <code>url</code> variable below is
- * assumed to be filled with the URL of the linked image, using one of the
- * methods mentioned above (not shown here).
+ * that and provide your own style.
  * </p>
  * 
  * <blockquote>
@@ -142,7 +143,7 @@
  * &lt;%@ taglib prefix=&quot;spf-help-portal&quot; uri=&quot;/spf-help-portal.tld&quot; %&gt;
  * ...
  * &lt;spf-help-portal:classicContextualHelp
- * 	anchorImg=&quot;&lt;%= url %&gt;&quot; anchorImgAltKey=&quot;key.help.alt&quot;
+ * 	anchorImgKey=&quot;key.gif&quot; anchorImgAltKey=&quot;key.help.alt&quot;
  * 	titleKey=&quot;key.help.title&quot; contentKey=&quot;key.help.content&quot;
  * 	/&gt;
  * </pre>
@@ -150,9 +151,11 @@
  * </blockquote>
  * 
  * <p>
- * So then, when the user clicked on the <img src="../doc-files/key.gif"
- * alt="Click for more information">, the contextual help layer would appear,
- * looking like this:
+ * This JSP tag renders the image with your alt text like this: <img
+ * src="../doc-files/key.gif" alt="Click for more information"> where both the
+ * image and alt text are properly localized for the user. And when the user
+ * clicks on the image, the contextual help layer would appear, looking like
+ * this:
  * </p>
  * 
  * <img src="../doc-files/contextualHelp.jpg">
@@ -164,13 +167,76 @@
  * image would display, with no contextual-help link around it at all).
  * </p>
  * 
- * LEFT OFF HERE
- * 
  * <p>
  * Here are the tag attributes:
  * </p>
  * 
  * <dl>
+ * <dt><code>anchor="<i>link-text</i>"</code><br>
+ * <code>anchorKey="<i>link-message-key</i>"</code></dt>
+ * <dd>
+ * <p>
+ * If your link is a text link, use one of these 2 attributes to specify it.
+ * With <code>anchor</code> you pass the actual text string for the link. With
+ * <code>anchorKey</code> you pass a message key for a message in your portal
+ * component's resource bundle. If for some reason you pass both, then
+ * <code>anchor</code> will take precedence.
+ * </p>
+ * <p>
+ * If your link is an image, use <code>anchorImg</code> or
+ * <code>anchorImgKey</code> instead (see below). You must use one of these 4
+ * attributes or there will be an error.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>anchorImg="<i>link-image-URL</i>"</code><br>
+ * <code>anchorImgKey="<i>link-image-message-key</i>"</code></dt>
+ * <dd>
+ * <p>
+ * If your link is an image, use one of these 2 attributes to provide the URL
+ * for it. With <code>anchorImg</code> you pass the actual URL for the link
+ * image. This can be an HTTP or HTTPS URL pointing at any image anywhere.
+ * </p>
+ * <p>
+ * With <code>anchorImgKey</code> you pass the filename of a <i>secondary
+ * support file</i> in your portal component, which is the image to use. This
+ * can be a base filename for a localized bundle of images, in which case the
+ * best-candidate localized image URL will be automatically expressed given the
+ * user's current locale. The localized image files should all be stored as
+ * secondary support files in the component, and tagged with locale as per the
+ * Java standard for {@link java.util.ResourceBundle}): eg
+ * <code>filename.gif</code> for the base file (this is also the filename you
+ * would pass to the <code>anchorImgKey</code> tag attribute),
+ * <code>filename_fr.gif</code> for the default French version of the image,
+ * <code>filename_fr_CA.gif</code> for the Canadian French version of the image,
+ * etc.
+ * </p>
+ * <p>
+ * If for some reason you provide both <code>anchorImg</code> and
+ * <code>anchorImgKey</code> the former will take priority. If you need to link
+ * text, not an image, then use <code>anchor</code> or <code>anchorKey</code>
+ * instead of these attributes. You must use one of these 4 attributes or the
+ * tag will yield an error.
+ * </p>
+ * <p>
+ * To optionally provide alt text for the image, use <code>anchorImgAlt</code>
+ * or <code>anchorImgAltKey</code> (see below).
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>anchorImgAlt="<i>link-image-alt-text</i>"</code><br>
+ * <code>anchorImgAltKey="<i>link-image-alt-message-key</i>"</code></dt>
+ * <dd>
+ * <p>
+ * Use one of these attributes to provide alt text for a linked image. (With a
+ * text link, these attributes have no function.) With <code>anchorImgAlt</code>
+ * you pass the actual text string to use for the alt. With
+ * <code>anchorImgAltKey</code> you provide the keyname for a message property
+ * in your component's resource bundle. If for some reason you provide both
+ * attributes, <code>anchorImgAlt</code> will take priority.
+ * </p>
+ * </dd>
+ * 
  * <dt><code>title="<i>help-title</i>"</code><br>
  * <code>titleKey="<i>help-title-message-key</i>"</code></dt>
  * <dd>
@@ -182,9 +248,7 @@
  * (so it is your responsibility to have already generated that string,
  * localized as needed). The <code>titleKey</code> is a message key for the
  * title - the tag looks inside your current component's message resource bundle
- * to retrieve the title (using the key itself as the default, if the message is
- * not found). The message lookup proceeds as described <a
- * href="#message">above</a>.
+ * to retrieve the title.
  * </p>
  * </dd>
  * 
@@ -199,9 +263,7 @@
  * main help content (so it is your responsibility to have already generated
  * that string, localized as needed). The <code>contentKey</code> is a message
  * key for that - the tag looks inside your current component's message resource
- * bundle to retrieve the main help content (using the key itself as the
- * default, if the message is not found). The message lookup proceeds as
- * described <a href="#message">above</a>.
+ * bundle to retrieve the main help content.
  * </p>
  * </dd>
  * 
@@ -342,40 +404,38 @@
  * <code>contentStyle=""</code> to cancel the default style.
  * </p>
  * </dd>
+ * 
+ * <dt><code>escape="<i>true-or-false</i>"</code></dt>
+ * <dd>
+ * <p>
+ * The <code>escape</code> attribute is used as a switch to control the
+ * HTML-escaping policy for all message text in this contextual help instance.
+ * By default, the expressed message strings for link, title, image alt, and
+ * content do not escape any HTML special characters they may contain, such as
+ * <code>&lt;</code>. This lets you put HTML markup in your messages and have it
+ * render as such in the browser. If you need the HTML special characters to be
+ * converted into their corresponding character entities, so that they display
+ * literally in the browser instead, use the <code>escape="true"</code>
+ * attribute on the tag.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>filterSpan="<i>true-or-false</i>"</code></dt>
+ * <dd>
+ * <p>
+ * Similarly, the <code>filterSpan</code> attribute indicates whether to remove
+ * any <code>&lt;SPAN&gt;</code> tags which Vignette may have inserted. Vignette
+ * does this automatically, to help assistive devices such as readers. Normally
+ * the <code>&lt;SPAN&gt;</code> tags are invisible, but some browsers in some
+ * contexts (eg the HTML <code>&lt;TITLE&gt;</code> tag) will display these
+ * erroneously. The <code>filterSpan="true"</code> attribute setting lets you
+ * suppress those <code>&lt;SPAN&gt;</code> tags. By default they are not
+ * suppressed.
+ * </p>
+ * </dd>
+ * 
  * </dl>
  * 
- * <p>
- * A single message may contain multiple occurrences of
- * <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code> markup. You
- * just provide one
- * <code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code> tag for
- * each one, in order. Any extra tags you provide go unused. Conversely, any
- * <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code> markup in the
- * message, for which you did not provide a
- * <code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code>, is
- * removed (leaving the contents behind).
- * </p>
- * <blockquote>
- * <p>
- * <b>Note:</b> Due to current limitations, you cannot inject both contextual
- * help and global help into the same message.
- * </p>
- * </blockquote>
- * 
- * <p>
- * Injecting contextual help into a message is useful because it lets you embed
- * contextual help in the middle of a message (ie in the middle of a phrase or
- * sentence), without having to break the message apart and risk making it
- * untranslatable. Note that if you do have contextual help to wrap around a
- * whole message (or around some other element, like an image), then you may be
- * more interested in using the standalone contextual help approach, instead of
- * contextual help injection. For example,
- * <code>&lt;spf-help-portal:classicContextualHelp&gt;</code> is an SPF JSP tag
- * for expressing standalone contextual help in the "classic" manner. See the
- * documentation.
- * </p>
- * 
- * <blockquote>
  * <p>
  * <b>Note:</b> The classic rendition of contextual help utilizes an "X" image
  * on which the user can click to close the window. This is a GIF image which
@@ -395,12 +455,11 @@
  * <code>contextualHelp.close.alt</code>. If you do not, a blank ALT text will
  * be used by default.
  * </p>
- * </blockquote>
  * 
  * <hr>
  * <a name="classicGlobalHelpParam">
  * <h3>
- * &lt;spf-i18n-portal:i18nClassicGlobalHelpParam&gt;</h3> </a>
+ * &lt;spf-help-portal:classicGlobalHelp&gt;</h3> </a>
  * <p>
  * Usage:
  * </p>
@@ -408,9 +467,17 @@
  * <blockquote>
  * 
  * <pre>
- * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
+ * &lt;%@ taglib prefix=&quot;spf-help-portal&quot; uri=&quot;/spf-help-portal.tld&quot; %&gt;
  * ...
- * &lt;spf-i18n-portal:i18nClassicGlobalHelpParam
+ * &lt;spf-help-portal:classicGlobalHelp
+ * 	anchor=&quot;&lt;link-text&gt;&quot;
+ * 	anchorKey=&quot;&lt;link-message-key&gt;&quot;
+ * 	anchorImg=&quot;&lt;link-image-URL&gt;&quot;
+ * 	anchorImgKey=&quot;&lt;link-image-message-key&gt;&quot;
+ * 	anchorImgAlt=&quot;&lt;link-image-alt-text&gt;&quot;
+ * 	anchorImgAltKey=&quot;&lt;link-image-alt-message-key&gt;&quot;
+ * 	escape=&quot;&lt;true-or-false&gt;&quot;
+ * 	filterSpan=&quot;&lt;true-or-false&gt;&quot;
  * 	fragment=&quot;&lt;fragment-name&gt;&quot;
  * 	windowFeatures=&quot;&lt;popup-window-features&gt;&quot;
  * 	/&gt;
@@ -419,24 +486,28 @@
  * </blockquote>
  * 
  * <p>
- * You use this tag inside the <a href="#message">
- * <code>&lt;spf-i18n-portal:i18nValue&gt;</code></a> tag body, to inject a
- * hyperlink into the message value which points to the "classic" rendition of
- * the global help secondary page. If you don't know what is meant by
- * "global help" or the "classic" rendition or "inject", see the discussion in
- * the SPF Portal Utilities Developer's Guide.
+ * You use this tag to generate a "classic" global help link pointing to your
+ * portal site's <i>global help secondary page</i> in a child (popup) window of
+ * your specification. The link can be a whole text string or an image. The
+ * result is a "standalone" global help link in your Vignette portal component's
+ * rendering. If you need to "inject" a global help link into a surrounding
+ * message instead, use the
+ * <code>&lt;spf-i18n-portal:i18nClassicGlobalHelpParam&gt;</code> tag instead
+ * (see the discussion in {@link com.hp.it.spf.xa.i18n.portal.tag}). If you
+ * don't know what is meant by "global help" or the "classic" rendition, or
+ * "standalone" or "inject", see the discussion in the SPF Portal Utilities
+ * Developer's Guide.
  * </p>
  * <blockquote>
  * <p>
  * <b>Note:</b> Unlike
- * <code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code>, which
- * injects both the hyperlink and the DHTML for your help overlay into your
- * message - see above - this tag only injects a hyperlink into your message,
- * which points to your site's presumed global help secondary page in the
- * "classic" manner (ie a child popup browser window, with window features set
- * to your specifications: eg buttonless, no address bar, etc). Your portal site
- * must therefore implement a global help secondary page instance for this to
- * point to.
+ * <code>&lt;spf-help-portal:classicContextualHelp&gt;</code>, which emits both
+ * the hyperlink and the DHTML for your help overlay - see above - this tag only
+ * emits a hyperlink, which points to your site's presumed global help secondary
+ * page in the "classic" manner (ie a child popup browser window, with window
+ * features set to your specifications: eg buttonless, no address bar, etc).
+ * Your portal site must therefore implement a global help secondary page
+ * instance for this to point to.
  * </p>
  * <ul>
  * <li>It must be an instance of the SPF-provided global help secondary page
@@ -457,21 +528,25 @@
  * <li>For more information, see the SPF Global Help Developer's Guide.</li>
  * </p> </blockquote>
  * <p>
- * For example, let's say you need to produce a UI message in your portal
- * component looking like this (where "managing your profile" is a hyperlink
- * pointing to your site's global help secondary page rendered within a
- * classic-style popup window):
- * </p>
- * <blockquote> Read more about <font color="blue"><u>managing your
- * profile</u></font>.</blockquote>
- * <p>
- * Using global help injection, you can have the following in your component's
- * message properties:
+ * For example, let's say you need to link this image <img
+ * src="../doc-files/more_info.gif"> (which may be localized) to your site's
+ * global help secondary page rendered within a classic-style popup window.
+ * First you will need the image URL and optionally some alt text for it. If the
+ * image is hosted on a Web server elsewhere, you can just use that URL. Or if
+ * you want to host the image our of your portal component, store the image as a
+ * <i>secondary support file</i> into your component, and you will then be able
+ * to generate a URL for it through the tag. (In the case of localized images
+ * such as this one, store all of the localized images, properly tagged by
+ * locale: eg <code>filename.gif</code> for the base image,
+ * <code>filename_zh.gif</code> for the default Chinese image,
+ * <code>filename_zh_HK.gif</code> for the Hong Kong Chinese image, etc.) As for
+ * the image's alt text, that can be a message property in your component's
+ * resource bundle:
  * </p>
  * <blockquote>
  * 
  * <pre>
- * key=Read more about &lt;global_help&gt;managing your profile&lt;/global_help&gt;.
+ * key=More information
  * </pre>
  * 
  * </blockquote>
@@ -482,13 +557,13 @@
  * <blockquote>
  * 
  * <pre>
- * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
+ * &lt;%@ taglib prefix=&quot;spf-help-portal&quot; uri=&quot;/spf-help-portal.tld&quot; %&gt;
  * ...
- * &lt;spf-i18n-portal:i18nValue key=&quot;key&quot;&gt;
- * 	&lt;spf-i18n-portal:i18nClassicGlobalHelpParam
- * 		fragment=&quot;#profile&quot;
- * 		windowFeatures=&quot;width=974;height=610;menubar=no;status=no;toolbar=no&quot;/&gt;
- * &lt;/spf-i18n-portal:i18nValue&gt;
+ * &lt;spf-help-portal:classicGlobalHelp
+ * 	anchorImgKey=&quot;more_info.gif&quot; anchorImgAltKey=&quot;key&quot;
+ * 	fragment=&quot;#profile&quot;
+ * 	windowFeatures=&quot;width=974;height=610;menubar=no;status=no;toolbar=no;scrollbars=yes&quot;/&gt;
+ * 	/&gt;
  * </pre>
  * 
  * </blockquote>
@@ -503,9 +578,12 @@
  * method - see any JavaScript documentation for more information.)
  * </p>
  * <p>
- * The end result is that when the user clicks the "managing your profile"
- * hyperlink injected into your message with the above code, the following
- * happens:
+ * The end result is that the image and alt text will be rendered to the user
+ * like this <img src="../doc-files/more_info.gif" alt="More information">
+ * properly localized for the user's current locale based on the translations
+ * available among your message properties and <code>more_info.gif</code>
+ * secondary support files. And when the user clicks the linked image, the
+ * following happens:
  * </p>
  * <ol>
  * <li>A child browser window (popup window) will open.</li>
@@ -530,6 +608,71 @@
  * </p>
  * 
  * <dl>
+ * <dt><code>anchor="<i>link-text</i>"</code><br>
+ * <code>anchorKey="<i>link-message-key</i>"</code></dt>
+ * <dd>
+ * <p>
+ * If your link is a text link, use one of these 2 attributes to specify it.
+ * With <code>anchor</code> you pass the actual text string for the link. With
+ * <code>anchorKey</code> you pass a message key for a message in your portal
+ * component's resource bundle. If for some reason you pass both, then
+ * <code>anchor</code> will take precedence.
+ * </p>
+ * <p>
+ * If your link is an image, use <code>anchorImg</code> or
+ * <code>anchorImgKey</code> instead (see below). You must use one of these 4
+ * attributes or there will be an error.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>anchorImg="<i>link-image-URL</i>"</code><br>
+ * <code>anchorImgKey="<i>link-image-message-key</i>"</code></dt>
+ * <dd>
+ * <p>
+ * If your link is an image, use one of these 2 attributes to provide the URL
+ * for it. With <code>anchorImg</code> you pass the actual URL for the link
+ * image. This can be an HTTP or HTTPS URL pointing at any image anywhere.
+ * </p>
+ * <p>
+ * With <code>anchorImgKey</code> you pass the filename of a <i>secondary
+ * support file</i> in your portal component, which is the image to use. This
+ * can be a base filename for a localized bundle of images, in which case the
+ * best-candidate localized image URL will be automatically expressed given the
+ * user's current locale. The localized image files should all be stored as
+ * secondary support files in the component, and tagged with locale as per the
+ * Java standard for {@link java.util.ResourceBundle}): eg
+ * <code>filename.gif</code> for the base file (this is also the filename you
+ * would pass to the <code>anchorImgKey</code> tag attribute),
+ * <code>filename_fr.gif</code> for the default French version of the image,
+ * <code>filename_fr_CA.gif</code> for the Canadian French version of the image,
+ * etc.
+ * </p>
+ * <p>
+ * If for some reason you provide both <code>anchorImg</code> and
+ * <code>anchorImgKey</code> the former will take priority. If you need to link
+ * text, not an image, then use <code>anchor</code> or <code>anchorKey</code>
+ * instead of these attributes. You must use one of these 4 attributes or the
+ * tag will yield an error.
+ * </p>
+ * <p>
+ * To optionally provide alt text for the image, use <code>anchorImgAlt</code>
+ * or <code>anchorImgAltKey</code> (see below).
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>anchorImgAlt="<i>link-image-alt-text</i>"</code><br>
+ * <code>anchorImgAltKey="<i>link-image-alt-message-key</i>"</code></dt>
+ * <dd>
+ * <p>
+ * Use one of these attributes to provide alt text for a linked image. (With a
+ * text link, these attributes have no function.) With <code>anchorImgAlt</code>
+ * you pass the actual text string to use for the alt. With
+ * <code>anchorImgAltKey</code> you provide the keyname for a message property
+ * in your component's resource bundle. If for some reason you provide both
+ * attributes, <code>anchorImgAlt</code> will take priority.
+ * </p>
+ * </dd>
+ * 
  * <dt><code>fragment="<i>fragment-name</i>"</code></dt>
  * <dd>
  * <p>
@@ -544,7 +687,6 @@
  * A string of JavaScript <code>window.open()</code> feature specifications to
  * be used in the popup window in place of the default features. This is
  * optional. The default features are:
- * </p>
  * <ul>
  * <li>410 pixels by 610 pixels (width by height)</li>
  * <li>no menu bar</li>
@@ -554,38 +696,38 @@
  * <li>no buttons</li>
  * <li>resizeable</li>
  * </ul>
- * </p></dd>
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>escape="<i>true-or-false</i>"</code></dt>
+ * <dd>
+ * <p>
+ * The <code>escape</code> attribute is used as a switch to control the
+ * HTML-escaping policy for the link and image alt text. By default, the
+ * expressed message strings do not escape any HTML special characters they may
+ * contain, such as <code>&lt;</code>. This lets you put HTML markup in your
+ * messages and have it render as such in the browser. If you need the HTML
+ * special characters to be converted into their corresponding character
+ * entities, so that they display literally in the browser instead, use the
+ * <code>escape="true"</code> attribute on the tag.
+ * </p>
+ * </dd>
+ * 
+ * <dt><code>filterSpan="<i>true-or-false</i>"</code></dt>
+ * <dd>
+ * <p>
+ * Similarly, the <code>filterSpan</code> attribute indicates whether to remove
+ * any <code>&lt;SPAN&gt;</code> tags which Vignette may have inserted. Vignette
+ * does this automatically, to help assistive devices such as readers. Normally
+ * the <code>&lt;SPAN&gt;</code> tags are invisible, but some browsers in some
+ * contexts (eg the HTML <code>&lt;TITLE&gt;</code> tag) will display these
+ * erroneously. The <code>filterSpan="true"</code> attribute setting lets you
+ * suppress those <code>&lt;SPAN&gt;</code> tags. By default they are not
+ * suppressed.
+ * </p>
+ * </dd>
+ * 
  * </dl>
- * 
- * <p>
- * A single message may contain multiple occurrences of
- * <code>&lt;global_help&gt;...&lt;/global_help&gt;</code> markup. You just
- * provide one <code>&lt;spf-i18n-portal:i18nClassicGlobalHelpParam&gt;</code>
- * tag for each one, in order. Any extra tags you provide go unused. Conversely,
- * any <code>&lt;global_help&gt;...&lt;/global_help&gt;</code> markup in the
- * message, for which you did not provide a
- * <code>&lt;spf-i18n-portal:i18nClassicGlobalHelpParam&gt;</code>, is removed
- * (leaving the contents behind).
- * </p>
- * <blockquote>
- * <p>
- * <b>Note:</b> Due to current limitations, you cannot inject both contextual
- * help and global help into the same message.
- * </p>
- * </blockquote>
- * 
- * <p>
- * Injecting "classic"-style global help into a message is useful because it
- * lets you embed a global help popup in the middle of a message (ie in the
- * middle of a phrase or sentence), without having to break the message apart
- * and risk making it untranslatable. Note that if you wish to wrap a global
- * help popup hyperlink around a whole message (or around some other element,
- * like an image), then you may be more interested in using the standalone
- * global help approach, instead of global help injection. For example,
- * <code>&lt;spf-help-portal:classicGlobalHelp&gt;</code> is an SPF JSP tag for
- * expressing standalone global help in the "classic" popup manner. See the
- * documentation.
- * </p>
  * 
  */
 package com.hp.it.spf.xa.help.portal.tag;

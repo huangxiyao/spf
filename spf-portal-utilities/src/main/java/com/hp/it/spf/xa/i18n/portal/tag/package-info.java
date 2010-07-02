@@ -663,7 +663,8 @@
  * pointing to your site's global help secondary page rendered within a
  * classic-style popup window):
  * </p>
- * <blockquote> Read more about <font color="blue"><u>managing your profile</u></font>.</blockquote>
+ * <blockquote> Read more about <font color="blue"><u>managing your
+ * profile</u></font>.</blockquote>
  * <p>
  * Using global help injection, you can have the following in your component's
  * message properties:
@@ -687,21 +688,20 @@
  * &lt;spf-i18n-portal:i18nValue key=&quot;key&quot;&gt;
  * 	&lt;spf-i18n-portal:i18nClassicGlobalHelpParam
  * 		fragment=&quot;#profile&quot;
- * 		windowFeatures=&quot;width=974;height=610;menubar=no;status=no;toolbar=no&quot;/&gt;
+ * 		windowFeatures=&quot;width=974;height=610;menubar=no;status=no;toolbar=no;scrollbars=yes&quot;/&gt;
  * &lt;/spf-i18n-portal:i18nValue&gt;
  * </pre>
  * 
  * </blockquote>
  * 
  * <p>
- * Note this assumes the existence of a document fragment,
- * <code>#profile</code>, inside your global help content. This will cause
- * the popup to jump to that position in the the global help secondary page when
- * the popup opens. This example also shows how you can pass in window feature
- * specifications to size the window and enable or disable its features as
- * desired. (The syntax for window features is just that of the JavaScript
- * <code>window.open(...)</code> method - see any JavaScript documentation for
- * more information.)
+ * Note this assumes the existence of a document fragment, <code>#profile</code>
+ * , inside your global help content. This will cause the popup to jump to that
+ * position in the the global help secondary page when the popup opens. This
+ * example also shows how you can pass in window feature specifications to size
+ * the window and enable or disable its features as desired. (The syntax for
+ * window features is just that of the JavaScript <code>window.open(...)</code>
+ * method - see any JavaScript documentation for more information.)
  * </p>
  * <p>
  * The end result is that when the user clicks the "managing your profile"
@@ -745,7 +745,6 @@
  * A string of JavaScript <code>window.open()</code> feature specifications to
  * be used in the popup window in place of the default features. This is
  * optional. The default features are:
- * </p>
  * <ul>
  * <li>410 pixels by 610 pixels (width by height)</li>
  * <li>no menu bar</li>
@@ -755,7 +754,8 @@
  * <li>no buttons</li>
  * <li>resizeable</li>
  * </ul>
- * </p></dd>
+ * </p>
+ * </dd>
  * </dl>
  * 
  * <p>
