@@ -635,7 +635,7 @@
  * message - see above - this tag only injects a hyperlink into your message,
  * which points to your site's presumed global help secondary page in the
  * "classic" manner (ie a child popup browser window, with window features set
- * to your specifications: buttonless, no address bar, etc). Your portal site
+ * to your specifications: eg buttonless, no address bar, etc). Your portal site
  * must therefore implement a global help secondary page instance for this to
  * point to.
  * </p>
@@ -646,10 +646,9 @@
  * <code>spf-global-help-secondarypage</code>).</li>
  * <li>It must use the template friendly ID <code>PUBLIC_SPF_GLOBAL_HELP</code>
  * as with all global help secondary page instances.</li>
- * <li>It must contain a <code>globalHelp.html</code> file containing your help
- * content.</li>
- * <li>It must contain a primary JSP which interpolates and expresses the
- * <code>globalHelp.html</code> file.</li>
+ * <li>Its primary JSP should express your sitewide help content, typically as
+ * suggested by the SPF Global Help Developer's Guide (though if you want to
+ * express your content a different way, that is fine).</li>
  * <li>Your global help secondary page must be shared to your portal site, by
  * the Vignette server administrator.</li>
  * <li>And it must be configured as the secondary page to use for that secondary
@@ -660,13 +659,11 @@
  * </p> </blockquote>
  * <p>
  * For example, let's say you need to produce a UI message in your portal
- * component looking like this (where "browser requirements" is a hyperlink
- * pointing to the global help secondary page rendered within a classic-style
- * popup window):
+ * component looking like this (where "managing your profile" is a hyperlink
+ * pointing to your site's global help secondary page rendered within a
+ * classic-style popup window):
  * </p>
- * <blockquote>
- * <code>Read about <font color="blue"><u>browser requirements</u></font> for this site</code>
- * </blockquote>
+ * <blockquote> Read more about <font color="blue"><u>managing your profile</u></font>.</blockquote>
  * <p>
  * Using global help injection, you can have the following in your component's
  * message properties:
@@ -674,15 +671,12 @@
  * <blockquote>
  * 
  * <pre>
- * key=Read about &lt;global_help&gt;browser requirements&lt;/global_help&gt; for this site
+ * key=Read more about &lt;global_help&gt;managing your profile&lt;/global_help&gt;.
  * </pre>
  * 
  * </blockquote>
  * <p>
- * Then use the following in your JSP to express this message with the
- * appropriate markup (text, HTML, CSS, and JavaScript) injected into it for
- * rendering the classic-style global help popup when the "browser requirements"
- * link is clicked.
+ * Then use the following in your JSP:
  * </p>
  * 
  * <blockquote>
@@ -691,36 +685,44 @@
  * &lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
  * ...
  * &lt;spf-i18n-portal:i18nValue key=&quot;key&quot;&gt;
- * 	&lt;spf-i18n-portal:i18nClassicGlobalHelpParam fragment=&quot;browser_reqs&quot; /&gt;
+ * 	&lt;spf-i18n-portal:i18nClassicGlobalHelpParam
+ * 		fragment=&quot;#profile&quot;
+ * 		windowFeatures=&quot;width=974;height=610;menubar=no;status=no;toolbar=no&quot;/&gt;
  * &lt;/spf-i18n-portal:i18nValue&gt;
  * </pre>
  * 
  * </blockquote>
  * 
  * <p>
- * Note this example assumes use of the default, "classic" style window features
- * for the popup. It also assumes the existence of a document fragment,
- * <code>#brower_reqs</code>, which the global help secondary page will jump to
- * when the popup opens. Thus global help content can contain a section about
- * browser requirements marked with that fragment name.
+ * Note this assumes the existence of a document fragment,
+ * <code>#profile</code>, inside your global help content. This will cause
+ * the popup to jump to that position in the the global help secondary page when
+ * the popup opens. This example also shows how you can pass in window feature
+ * specifications to size the window and enable or disable its features as
+ * desired. (The syntax for window features is just that of the JavaScript
+ * <code>window.open(...)</code> method - see any JavaScript documentation for
+ * more information.)
  * </p>
  * <p>
- * The end result is that when the user clicks the "browser requirements"
+ * The end result is that when the user clicks the "managing your profile"
  * hyperlink injected into your message with the above code, the following
- * happens (not illustrated here):
+ * happens:
  * </p>
  * <ol>
  * <li>A child browser window (popup window) will open.</li>
  * <li>The popup window will conform to the specified window features (in this
- * case, the default features - see below - since no override was specified in
- * the example).</li>
+ * case: 974 by 410 pixels, with no buttons or bars except scrollbars).</li>
  * <li>The popup window open your site's global help secondary page instance.</li>
- * <li>Furthermore it will jump to the <code>browser_reqs</code> section of the
+ * <li>Furthermore it will jump to the <code>#profile</code> section of the
  * content in that page (by default it would just go to the top of the page).</li>
+ * <li>For example, the popup window could look like this (note that all of the
+ * content inside the window comes from your site's global help secondary page
+ * and so will vary based on your secondary page content, grid and theme).</li>
  * </ol>
+ * <img src="../doc-files/globalHelp.jpg">
  * <p>
  * The global help popup requires JavaScript to function. In an unscripted
- * browser, clicking the "browser requirements" link would open the same global
+ * browser, clicking the "managing your profile" link would open the same global
  * help secondary page, but in the same browser window instead of a popup.
  * </p>
  * 
@@ -749,6 +751,8 @@
  * <li>no menu bar</li>
  * <li>no tool bar</li>
  * <li>no status bar</li>
+ * <li>no scrollbars</li>
+ * <li>no buttons</li>
  * <li>resizeable</li>
  * </ul>
  * </p></dd>
