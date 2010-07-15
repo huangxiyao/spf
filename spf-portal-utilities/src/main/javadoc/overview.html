@@ -141,11 +141,11 @@ later.
 		<li>1.2. <a href="#overview.other">Other libraries for SPF
 		portal component developers</a>
 		<ul>
-			<li>1.3.1. <a href="#overview.other.vignette.javadocs">Vignette
+			<li>1.2.1. <a href="#overview.other.vignette.javadocs">Vignette
 			Portal Published API</a></li>
-			<li>1.3.2. <a href="#overview.other.vignette.devguide">Vignette
+			<li>1.2.2. <a href="#overview.other.vignette.devguide">Vignette
 			Portal Developer's Guide</a></li>
-			<li>1.3.2. <a href="#overview.other.spf.common">SPF Common
+			<li>1.2.2. <a href="#overview.other.spf.common">SPF Common
 			Utilities</a></li>
 		</ul>
 		</li>
@@ -400,251 +400,103 @@ later.
 
 <hr>
 
-LEFT OFF HERE
 <a name="overview">
 <h2>1. Overview</h2>
 </a>
 
 <p>This is the developer's guide for the <b>Shared Portal
-Framework (SPF) portlet utilities</b>. The SPF portlet utilities are a
-collection of Java classes and JSP tag libraries providing useful
-functionality for SPF Java portlet developers in the following areas:</p>
+Framework (SPF) portal utilities</b>. The SPF portal utilities are a
+collection of Java classes and JSP tag libraries for use by developers
+of SPF-based Vignette portal components. Currently the utilities provide
+useful functionality in the following areas:</p>
 
 <ul>
-	<li><a href="#i18n">Internationalization</a> - the SPF portlet
+	<li><a href="#i18n">Internationalization</a> - the SPF portal
 	utilities provide Java classes and JSP tags for handling all kinds of
 	UI resources in your code (messages, images, etc) so that they can be
 	localized</li>
-	<li><a href="#help">Online Help</a> - the SPF portlet utilities
+	<li><a href="#help">Online Help</a> - the SPF portal utilities
 	provide Java classes and JSP tags which make it easier for you to
 	develop online help</li>
-	<li><a href="#file">Text Interpolation</a> - the SPF portlet
+	<li><a href="#file">Text Interpolation</a> - the SPF portal
 	utilities provide Java classes for interpolating and displaying text
 	(including special markup tokens) from files or strings to users
-	(saving you time when developing portlets that mostly display static
-	text)</li>
-	<li><a href="#portal">Portal Data</a> - the SPF portlet utilities
-	provide Java classes for accessing data passed by the SPF (Vignette)
+	(saving you time when developing portal components that mostly display
+	static text)</li>
+	<li><a href="#portal">Portal Data</a> - the SPF portal utilities
+	provide Java classes for accessing data provided by SPF to Vignette
 	portal</li>
-	<li><a href="#error">Error Handling</a> - the SPF portlet
-	utilities provide Java classes to assist you with error handling,
-	especially system error handling (saving you time developing rote
-	handlers for system errors)</li>
+	<li><a href="#error">Error Handling</a> - the SPF portal utilities
+	provide Java classes to assist you with system error handling</li>
 </ul>
 
-<p>The SPF portlet utilities augment HP IT's WPAP (Web Presentation
-Architecture - Portlet Edition) framework, which in turn augments the
-Spring consortium's Portlet MVC framework. These are all among the
-several SPF artifacts for SPF developers. See <a href="#overview.other">other
-libraries</a>.</p>
-
-<hr>
-
-<a name="overview.installation">
-<h3>1.1. Installation</h3>
-</a>
-<a name="overview.installation.jar">
-<h4>1.1.1 Installation of the SPF portlet utilities JAR</h4>
-</a>
-
-<p>The SPF portlet utilities are distributed in Java JAR format. The
-base JAR filename is <code>spf-portlet-utilities.jar</code>; typically a
-version number is included (for example, <code>spf-portlet-utilities-1.0.0.jar</code>).
-The SPF portlet utilities are distributed through Maven 2:</p>
-
-<ul>
-	<li>The current Maven 2 repository is <a
-		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-utilities/"><code>http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-utilities/</code></a></li>
-	<li>The group ID is <code>com.hp.it.spf.xa</code>
-	<li>The artifact ID is <code>spf-portlet-utilities</code>
-</ul>
-
-<p>To get the SPF portlet utilities, download the latest released
-version from the repository. As usual with any JAR file, include it in
-your portlet application's <code>/WEB-INF/lib</code> folder.</p>
-
-<a name="overview.installation.i18n_portlet_config">
-<h4>1.1.2 Installation of <code>i18n_portlet_config.properties</code>
-(optional)</h4>
-</a>
-
-<blockquote>
-<p><b>Note:</b> You only need to concern yourself with <code>i18n_portlet_config.properties</code>
-if you have <a href="#i18n.location.external">external supporting
-resources</a> <b>and</b> you are either putting the <i>portlet resource
-bundle folder</i> in a non-default location, <b>or</b> you are deploying the
-<i>file relay servlet</i> in a non-default location.</p>
-</blockquote>
-
-<p>To install this file:</p>
-
-<ul>
-	<li>
-	<p>Download the template for <code>i18n_portlet_config.properties</code>.
-	It is packaged with the rest of the SPF portlet configuration file
-	templates, in the <code>spf-portlet-config.jar</code>. Download the
-	latest version of this JAR (typically a version number is affixed to
-	the JAR filename) and extract the <code>i18n_portlet_config.properties</code>
-	template file from it.</p>
-
-	<p>You can get the latest <code>spf-portlet-config.jar</code> from
-	the SPF team on their Maven 2 repository, here: <a
-		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
-	(browse for the latest version).</p>
-	</li>
-
-	<li>
-	<p>Customize the properties in the file as needed - see
-	instructions for <a href="#i18n.other.i18n_portlet_config">configuring
-	the <code>i18n_portlet_config.properties</code></a>.</p>
-	</li>
-
-	<li>
-	<p>Include the customized file, named <code>i18n_portlet_config.properties</code>,
-	with your portlet application. You can put the file anywhere that the
-	system classloader searches: inside your portlet application (eg in <code>/WEB-INF/classes</code>)
-	or in any folder outside of the WAR which is named in the classpath for
-	your JVM. If you need to make the configuration easily performable by
-	an administrator, we recommend the latter; otherwise the former is
-	easier because it is one-time setup.</p>
-
-	<p>If you are interested in externalizing the <code>i18n_portlet_config.properties</code>
-	from the portlet WAR, check how your application server is configured.
-	If you are using an application server hosting environment, like DASH
-	or SASU, they probably will have provided you a "global resources"
-	folder on the server filesystem and in the JVM classpath. You would put
-	the <code>i18n_portlet_config.properties</code> file there, if you
-	wanted it to be external to your portlet WAR (eg so the administrator
-	can easily customize it).</p>
-
-	<blockquote>
-	<p><b>Note:</b> Depending on the search order performed by your
-	system classloader, you may be able to do <b>both</b>: include a <code>i18n_portlet_config.properties</code>
-	inside your application, and also let the administrator optionally
-	override it when needed, by putting an <code>i18n_portlet_config.properties</code>
-	outside of the WAR. For this to work, your classloader must search the
-	external folders in the classpath <b>before</b> searching inside the
-	WAR. If you are interested in this "mixed" deployment of <code>i18n_portlet_config.properties</code>,
-	be sure to test it out first, as actual behavior may vary by
-	environment (application server, etc).</p>
-	</blockquote>
-	</li>
-</ul>
-
-<a name="overview.installation.init_relay">
-<h4>1.1.3 Installation of <code>init_relay.properties</code>
-(optional)</h4>
-</a>
-
-<blockquote>
-<p><b>Note:</b> You only need to concern yourself with <code>init_relay.properties</code>
-if you have <a href="#i18n.location.external">external supporting
-resources</a> <b>and</b> you are dis-satisfied with the configuration in <code>init_relay_default.properties</code>
-(which is delivered inside the SPF portlet utilities JAR). See the
-discussion in the <a
-	href="com/hp/it/spf/xa/relay/servlet/package-summary.html#init_relay.properties">package
-description</a> for the relay servlet.</p>
-</blockquote>
-
-<p>To install this file:</p>
-
-<ul>
-	<li>
-	<p>Download the template for <code>init_relay.properties</code>. It
-	is packaged with the rest of the SPF portlet configuration file
-	templates, in the <code>spf-portlet-config.jar</code>. Download the
-	latest version of this JAR (typically a version number is affixed to
-	the JAR filename) and extract the <code>init_relay.properties</code>
-	template file from it.</p>
-
-	<p>You can get the latest <code>spf-portlet-config.jar</code> from
-	the SPF team on their Maven 2 repository, here: <a
-		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
-	(browse for the latest version).</p>
-	</li>
-
-	<li>
-	<p>Customize the properties in the file as needed - see
-	instructions for <a href="#i18n.other.init_relay">configuring the <code>init_relay.properties</code></a>.</p>
-	</li>
-
-	<li>
-	<p>Include the customized file, named <code>init_relay.properties</code>,
-	with your relay servlet application (eg, your portlet application, if
-	that is where you are deploying the relay servlet). You can put the
-	file anywhere that the system classloader searches: inside your portlet
-	application (eg in <code>/WEB-INF/classes</code>) or in any folder
-	outside of the WAR which is named in the classpath for your JVM. See
-	the discussion on this point above, in regard to <a
-		href="#overview.installation.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
-	- the same comments apply to <code>init_relay.properties</code>.</p>
-	</li>
-</ul>
+<p>The SPF portal utilities augment Vignette's own published portal
+API's and JSP tags, which cover many other areas. See <a
+	href="#overview.other">other libraries</a>. As a portal component
+developer, you will use both the Vignette interfaces, and (where useful)
+the SPF interfaces documented here.</p>
 
 <hr>
 
 <a name="overview.dependencies">
-<h3>1.2. Dependencies</h3>
+<h3>1.1. Dependencies</h3>
 </a>
 
-<p>The SPF portlet utilities depend on WPAP and all of the various
-technologies upon which WPAP in turn depends:</p>
+<p>The SPF portal utilities depend on the Vignette Portal API's and
+the standard Java servlet and JSP technologies. In addition, the SPF
+portal utilities depend on the SPF common utilities (these are common
+utilities for both portlet and portal components in the Shared Portal
+Framework).</p>
 
-<ul>
-	<li>Spring Portlet MVC</li>
-	<li>Java Portlet</li>
-	<li>Java Servlet</li>
-	<li>JSP</li>
-</ul>
-
-<p>In addition, the SPF portlet utilities depend on the SPF commmon
-utilities (common utilities for both portlet and portal components in
-the Shared Portal Framework).</p>
-
-<p>All of these dependencies are managed through Maven. For a list
-of the exact current dependencies, see the Maven POM for the SPF portlet
-utilities. You can download it from the Maven repository mentioned
-above. As usual, all of these JAR dependencies also need to be included
-when you build your portlet application's <code>/WEB-INF/lib</code>.</p>
+<p>The SPF portal utilities are a provided dependency for your
+Vignette components in the Shared Portal Framework runtime environment.
+In your Vignette component Maven artifact, just add SPF portal utilities
+as a "provided" type of dependency to your POM.</p>
 
 <hr>
 
 <a name="overview.other">
-<h3>1.3. Other libraries for SPF portlet developers</h3>
+<h3>1.2. Other libraries for SPF portal component developers</h3>
 </a>
-<a name="overview.other.wpap">
-<h4>1.3.1. WPA Portlet Edition</h4>
-</a>
-
-<p>The SPF portlet utilities augment HP IT's WPA Portlet Edition
-framework. Several facilities which SPF portlet developers will use
-(such as Timber for logging) are provided by WPAP. See the developer's
-site for WPA Portlet Edition here: <a
-	href="http://intranet.hp.com/Sites/SOA/TechnicalDocs/WPAPortlet/Pages/framework.aspx"><code>http://intranet.hp.com/Sites/SOA/TechnicalDocs/WPAPortlet/Pages/framework.aspx</code></a></p>
-
-<a name="overview.other.spring">
-<h4>1.3.2. Spring Portlet MVC</h4>
+<a name="overview.other.vignette.javadocs">
+<h4>1.2.1. Vignette Portal Published API</h4>
 </a>
 
-<p>WPAP in turn augments the open-source Spring Portlet MVC
-framework. The basic workflow of an SPF portlet, for example, is
-typically provided by Spring Portlet MVC. See the Spring Portlet MVC
-developer's site here: <a
-	href="http://static.springframework.org/spring/docs/2.0.x/reference/portlet.html"><code>http://static.springframework.org/spring/docs/2.0.x/reference/portlet.html</code></a></p>
+<p>Vignette Portal provides a library of Java API's which your
+portal components can call. For example, these provide access to the
+portal context (through the <code>PortalContext</code> object), metadata
+about components (through the <code>Site</code>, <code>Style</code>, and
+other objects), and more.</p>
 
-<a name="overview.other.portlet">
-<h4>1.3.3. Portlet 2.0 (JSR 286)</h4>
+<p>Developer documentation (JavaDocs) describing the Vignette Portal
+API's are available at the Vignette Web site.</p>
+
+<ol>
+</ol>
+
+<p>Copies of the Vignette JavaDocs may also be hosted by the SPF
+team on their Web site. Check with the SPF team for the location.</p>
+
+<a name="overview.other.vignette.devguide">
+<h4>1.2.2. Vignette Portal Developer's Guide</h4>
 </a>
 
-<p>The SPF portlet utilities are compatible with JSR 286, the
-Portlet 2.0 specification. They are built with the Portlet 2.0 API's.
-Most features rely only on JSR 168 (Portlet 1.0); but some key features
-(notably, access to use data) do require Portlet 2.0. Please use the
-Portlet 2.0 API's for your project. Except where noted in this guide,
-only JSR 168 is required.</p>
+<p>Besides the JavaDocs describing the Vignette-provided Java API's,
+Vignette also makes available a Developer's Guide discussing the
+Vignette component model (sites, secondary pages, styles, etc), how to
+develop JSP's and action classes for components, available JSP tags you
+can use in your component JSP's, and more. The Developer's Guide is also
+available at the Vignette Web site.</p>
+
+<ol>
+</ol>
+
+<p>A copy of the Vignette Portal Developer's Guide may also be
+hsoted by the SPF team on their Web site. Check with the SPF team for
+the location.</p>
 
 <a name="overview.other.spf.common">
-<h4>1.3.4. SPF Common Utilities</h4>
+<h4>1.2.3. SPF Common Utilities</h4>
 </a>
 
 <p>The SPF common utilities, used both by SPF portlets and portal
@@ -665,83 +517,11 @@ for SPF portlet developers, including:</p>
 </ul>
 
 <p>These functionalities are in a separate package so that they can
-be used by SPF's Vignette portal components as well. In some cases they
-are inherited into the SPF portlet utilities (so you get them too when
-you import the SPF portlet utility class), and in other cases you have
-to import them directly.</p>
+be used by SPF-based portlet applications as well. See the SPF Common
+Utilities Developer's Guide here: <a
+	href="http://samson.atl.hp.com:8080/hudson/view/SPF/job/SPF-common/com.hp.it.spf.xa$spf-common-utilities/javadoc/"><code>http://samson.atl.hp.com:8080/hudson/view/SPF/job/SPF-common/com.hp.it.spf.xa$spf-common-utilities/javadoc/</code></a></p>
 
-<p>See the SPF Common Utilities Developer's Guide here: <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#top"><code>http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html</code></p>
-
-<a name="overview.other.spf.htmlviewer">
-<h4>1.3.5. SPF <code>htmlviewer</code> Portlet</h4>
-</a>
-
-<p>The Shared Portal Framework includes a portlet application, <code>htmlviewer</code>,
-which you can use with minimal customization. This portlet renders a
-text file, such as an HTML file (containing arbitrary HTML, JavaScript,
-and/or CSS), to the user.</p>
-
-<ul>
-	<li>The file rendered is the best-fit localized version available
-	for the user amongst a bundle of files located inside the application
-	WAR, or on the server filesystem outside of it (eg where deposited an
-	administrator).</li>
-
-	<li>The file may also include <i>special markup tokens</i> for
-	certain dynamic functionality, as per the SPF portlet utilities' <a
-		href="#file">text interpolation</a> capabilities. For example, you can
-	permission content in the file by group or role; include
-	possibly-localized images and other static resources; etc.</li>
-
-	<li>The <code>htmlviewer</code> portlet's <code>view</code> mode
-	renders the file, and its <code>config</code> mode lets the portlet
-	administrator configure the portlet (eg specify which bundle of HTML
-	files to render).</li>
-</ul>
-
-<p>The <code>htmlviewer</code> portlet is often a quick and easy
-basis for developing a simple, static or mostly-static portlet for your
-SPF portal site. You don't write any code or configure any Spring or
-portlet XML files; you just supply the text files for it to display.</p>
-
-<p>For more information, see the SPF HTML Viewer Portlet
-Administration and Developer's Guide here: <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-html-viewer/site/overview.html"><code>http://samson.atl.hp.com:8080/hudson/job/spf-html-viewer/site/overview.html</code></a></p>
-
-<!-- The following is not true anymore; we have moved the classes into
-the portlet WAR and not made them available for extension any longer.
-DSJ 2009/5/28 -->
-<!-- 
-<blockquote>
-<p><b>Note:</b> The Java classes for the <code>htmlviewer</code>
-portlet are actually contained inside the SPF portlet utilities, so if
-necessary you can extend them for your own Web application. This is not
-covered in this guide. Please see the package, class and method
-documentation for the following packages in the SPF portlet utilities,
-if you are interested in this option:</p>
-
-<dl>
-	<dt>{@link com.hp.it.spf.xa.htmlviewer.portlet.web}</dt>
-	<dd>This package contains the Spring controller classes for the <code>htmlviewer</code>
-	portlet. The {@link
-	com.hp.it.spf.xa.htmlviewer.portlet.web.ViewController} is the <code>view</code>
-	mode controller, and the {@link
-	com.hp.it.spf.xa.htmlviewer.portlet.web.ConfigController} is the <code>config</code>
-	mode controller.</dd>
-	<dt>{@link com.hp.it.spf.xa.htmlviewer.portlet.util}</dt>
-	<dd>This package contains utility methods and constants used by
-	the <code>htmlviewer</code> portlet classes and JSP's.</dd>
-	<dt>{@link com.hp.it.spf.xa.htmlviewer.portlet.exception}</dt>
-	<dd>This package contains exception classes used by the <code>htmlviewer</code>
-	portlet classes and JSP's.
-</dl>
-
-<p>All other artifacts for the portlet - its JSP's, message
-properties, deployment descriptor, etc - are inside the <code>htmlviewer</code>
-WAR, for your reference.</p>
-</blockquote>
--->
+LEFT OFF HERE
 
 <hr>
 
