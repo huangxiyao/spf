@@ -521,28 +521,27 @@ be used by SPF-based portlet applications as well. See the SPF Common
 Utilities Developer's Guide here: <a
 	href="http://samson.atl.hp.com:8080/hudson/view/SPF/job/SPF-common/com.hp.it.spf.xa$spf-common-utilities/javadoc/"><code>http://samson.atl.hp.com:8080/hudson/view/SPF/job/SPF-common/com.hp.it.spf.xa$spf-common-utilities/javadoc/</code></a></p>
 
-LEFT OFF HERE
-
 <hr>
 
 <a name="i18n">
 <h2>2. Internationalization</h2>
 </a>
 
-<p>Spring Portlet MVC (the basis of the SPF portlet utilities and
-WPAP) provides basic support for internationalizing text strings
-(message resources) in your portlet application. The SPF portlet
-utilities (primarily the {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility} class) extend the Spring
-functionality primarily in these directions:</p>
+<p>The Vignette Portal API provides basic support for
+internationalizing text strings (message resources) in your portal
+component. The SPF portal utilities (primarily the {@link
+com.hp.it.spf.xa.i18n.portal.I18nUtility} class) extend the native
+Vignette functionality primarily in these directions:</p>
 
 <ul>
 	<li>internationalizing access to other static resources (images,
 	PDF's, etc)</li>
 	<li>injecting contextual help into your message resources</li>
 	<li>placing no-localization reminders into your message resources</li>
-	<li>supporting placement of all of these resources both internal
-	and external to your portlet application</li>
+	<li>controlling whether or not HTML metacharacters (&lt; &gt; and
+	etc) in message strings are escaped
+	<li>controlling whether or not Vignette injects <code>&lt;SPAN&gt;</code>
+	tags into your message strings
 	<li>miscellaneous useful methods, inherited from the common {@link
 	com.hp.it.spf.xa.i18n.I18nUtility} class (see <a
 		href="#i18n.other.common">using the common <code>I18nUtility</code></a>
@@ -557,8 +556,8 @@ functionality primarily in these directions:</p>
 <h3>2.1. Kinds of resources</h3>
 </a>
 
-<p>With the SPF portlet utilities, you can internationalize access
-to your text strings (message resources) and other static resources
+<p>With the SPF portal utilities, you can internationalize access to
+your text strings (message resources) and other static resources
 (supporting resources like images, HTML, PDF, etc), so that they can be
 localized.</p>
 
@@ -569,10 +568,8 @@ localized.</p>
 <p><i>Message resources</i> (sometimes just called messages) are
 text strings used in your UI. They are managed in Java message property
 files as per the usual Java {@link java.util.ResourceBundle} standard.
-If your application's messages are going to be sourced elsewhere - in a
-database, an XML file, etc - you will have to arrange to export them
-into Java message property format before they can be accessed through
-SPF (or Spring).</p>
+As per Vignette Portal standards, your message property files are named
+after your portal component's component ID.</p>
 
 <p>SPF has a well-defined process for localizing your message
 resources: translating them from a <i>base locale</i> (typically US
@@ -583,7 +580,7 @@ English) into the various other locales you need. See <a
 <h4>2.1.2. Supporting resources (images, HTML, PDF, etc)</h4>
 </a>
 
-<p>In addition to message resources, the SPF portlet utilities
+<p>In addition to message resources, the SPF portal utilities
 provide a solution for internationalized access to <i>supporting
 resources</i>: static files like images, HTML, PDF, MS Word documents, etc.</p>
 
@@ -620,14 +617,13 @@ their locale, as follows:</p>
 </ul>
 
 <p>For example, here is a collection of files constituting a message
-resource bundle, where <code>messages.properties</code> is the <i>base
-filename</i>:</p>
+resource bundle for the portal component whose component ID is <code>my-component</code>:</p>
 
 <blockquote><pre>
-messages.properties         &lt;-- the base file
-messages_ja_JP.properties   &lt;-- the same file localized for Japan - Japanese
-messages_zh_CN.properties   &lt;-- the same file localized for China - Chinese
-messages_zh_TW.properties   &lt;-- the same file localized for Taiwan - Chinese
+my-component.properties         &lt;-- the base file
+my-component_ja_JP.properties   &lt;-- the same file localized for Japan - Japanese
+my-component_zh_CN.properties   &lt;-- the same file localized for China - Chinese
+my-component_zh_TW.properties   &lt;-- the same file localized for Taiwan - Chinese
 </pre></blockquote>
 
 <p>Here is a collection of files constituting an image resource
@@ -658,275 +654,62 @@ picture_zh_TW.jpg   &lt;-- the same file localized for Taiwan - Chinese
 </pre></blockquote>
 
 <p>As with the Java standard for {@link java.util.ResourceBundle},
-all of the SPF (and Spring) internationalization utilities will search
-for the most-specific match for the user's locale first, ultimately
-falling back upon your base file.</p>
+all of the SPF internationalization utilities will search for the
+most-specific match for the user's locale first, ultimately falling back
+upon your base file.</p>
 
 <hr>
 <a name="i18n.location">
 <h3>2.2. Where to put your resources</h3>
 </a>
 
-<p>You have a choice where you put your resource bundles. You may
-put them into your portlet application (WAR) where they would
-traditionally go (we call these <i>internal resources</i>). But you may
-also put them outside, into a well-known folder on the portlet server
-called the <i>portlet resource bundle folder</i> - we call these <i>external
-resources</i>.</p>
+<p>As is standard with Vignette portal components, your message
+resources must be named with the component ID of the component, tagged
+per locale as above, and placed in the <code>WEB-INF/i18n/</code> folder
+within the component CAR. This is where Vignette knows to search for
+message resources; it is also where your message resources will be
+displayable, editable, uploadable and downloadable via the Vignette
+console (under the <b>Language</b> tab for your component).</p>
 
-<a name="i18n.location.internal">
-<h4>2.2.1. Internal resources (portlet application)</h4>
-</a>
+<p>Your supporting resources should be managed as <i>secondary
+support files</i> within your component. This means they should be placed in
+the <code>WEB-INF/</code> folder (there is no particular naming
+convention required for the filenames, other than tagging them per
+locale as above). There they will be uploadable and downloadable via the
+Vignette console (under the <b>Support Files</b> tab for your
+component).</p>
 
-<p>You may put your message properties and supporting resource files
-into your portlet WAR where they traditionally go:</p>
+<p>For example, here are the resource files used in the example
+above, placed into their proper locations within your portal component
+CAR (standard files such as <code>component.xml</code> and your primary
+JSP are not shown):</p>
 
-<ol>
-	<li>
-	<p>Your message properties would go into your <code>WEB-INF/</code>
-	folder, under some appropriate sub-path accessible to your Spring
-	configuration. For example:</p>
-
-	<blockquote><pre>
-	<i>&lt;root&gt;</i>
-	    WEB-INF/
-	        i18n/
-       	        messages.properties
-       	        messages_fr_FR.properties
-       			...
-	</pre></blockquote>
-
-	<p>Also, be sure to configure Spring properly in your portlet
-	application, so that can find those message properties. For example, if
-	you use Spring's {@link
-	org.springframework.context.support.ReloadableResourceBundleMessageSource}
-	class, you would put this into your application context configuration
-	for a bundle of message properties with basename of <code>messages</code>
-	(eg <code>messages.properties</code>, <code>messages_fr_FR.properties</code>,
-	etc):</p>
-
-	<blockquote><pre>
-	&lt;bean id="messageSource"
-		class="org.springframework.context.support.ReloadableResourceBundleMessageSource"&gt;
-		&lt;property name="basenames"&gt;
-			&lt;list&gt;
-				&lt;value&gt;
-					WEB-INF/i18n/messages
-				&lt;/value&gt;
-				...  &lt;-- other message bundles in the basenames list go here
-			&lt;/list&gt;
-		&lt;/property&gt;
-	&lt;/bean&gt;
-	</pre></blockquote>
-
-	<blockquote>
-	<p><b>Note:</b> Whatever your message source configuration, be sure
-	to put it into the root application context file for your portlet
-	application. Do not put it into an application context file you have
-	defined specifically for a portlet. Doing so will work with the Spring
-	standard message API's and tags, but not with the SPF ones. Putting
-	your message source configuration into the root application context
-	file will work with both the Spring-standard and SPF API's and tags.</p>
-	</blockquote>
-	</li>
-
-	<li>
-	<p>Your other static resource files (images, videos, PDF's, etc)
-	would go into respective folders at the root of your portlet WAR. For
-	example, if you have a bundle of HTML files (<code>text.html</code>, <code>text_es_MX.html</code>,
-	etc) and a bundle of images (<code>picture.jpg</code>, <code>picture_ja.jpg</code>,
-	etc), they could go into your portlet WAR as follows:</p>
-
-	<blockquote><pre>
-	<i>&lt;root&gt;</i>
-	    html/
-	        text.html
-	        text_es_MX.html
-	        ...
-	    images/
-	        picture.jpg
-	        picture_ja.jpg
-	        ...
-	</pre></blockquote>
-	</li>
-</ol>
-
-<p>Then when you use the standard Spring message API's, or the SPF
-portlet message API's in {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility}, or the tag libraries for
-either, they will find your message resources inside your portlet WAR.
-And when you use the localized file access API's in <code>I18nUtility</code>,
-they will find your static resource files there likewise.</p>
-
-<a name="i18n.location.external">
-<h4>2.2.2. External resources (portlet resource bundle folder)</h4>
-</a>
-
-<p>You may instead put your messages and other resources <i>outside</i>
-of your portlet WAR. Why? Doing so may have some advantages - for
-example, it may make for easier administration of the resources.
-Currently the SPF supports you putting them into what is called the <i>portlet
-resource bundle folder</i>, which is any folder on the portlet server's
-filesystem to which the portlet JVM has at least read access.</p>
-
-<ol>
-	<li>
-	<p>Put the path for your portlet bundle folder into the classpath
-	of your server's JVM. Or, put some parent path for it into the
-	classpath. If you are using an application-hosting service (like SASU),
-	they may already have defined for you a standard path from which to
-	load so-called "global resources" (like externally-administered
-	configuration files), and they may have put that into the classpath
-	already. In any event, we recommend making the portlet bundle folder be
-	a subfolder of your "global resources" classpath folder.</p>
-
-	<p>For example, if you are using SASU, it may be that <code>/opt/sasuapps/sp/global_resources</code>
-	is already your assigned classpath folder for all global resources (eg
-	configuration files). If that is the case, we recommend creating the
-	subfolder <code>portlet/i18n/</code> underneath it, so that <code>/opt/sasuapps/sp/global_resources/portlet/i18n/</code>
-	is your portlet bundle folder (which matches the default assumed by the
-	SPF portlet utilities, see point 3 below).</p>
-	</li>
-
-	<li>
-	<p>Put your message properties and other resource files into your
-	portlet bundle folder. We recommend you use subfolders for further
-	organization - for example, you could put message properties in the
-	portlet bundle folder proper; images in its <code>images/</code>
-	subfolder; etc. Like this (example):</p>
-
-	<blockquote><pre>
-    /opt/sasuapps/sp/global_resources/ &lt;-- this is in the classpath
-        ...                            &lt;-- misc other external config files can go here, like i18n_portlet_config.properties
-        portlet/i18n/                  &lt;-- this is your portlet bundle folder
-            html/                      &lt;-- this is your portlet bundle HTML subfolder
-                text.html
-                text_es_MX.html
-                ...
-            images/                    &lt;-- this is your portlet bundle images subfolder
-                picture.jpg
-                picture_ja.jpg
-                ...
-            messages.properties
-            messages_fr_FR.properties
+<blockquote><pre>
+<i>&lt;root&gt;</i>
+    WEB-INF/
+        i18n/
+            my-component.properties
+            my-component_ja_JP.properties
             ...
-	</pre></blockquote>
-	</li>
+        picture.jpg
+        picture_ja_JP.jpg
+        ...
+</pre></blockquote>
 
-	<li>
-	<p>Configure Spring properly so it can find those externalized
-	message properties relative to the classpath. We recommend you use
-	Spring's {@link
-	org.springframework.context.support.ReloadableResourceBundleMessageSource}
-	class, since that makes your message properties hot-reloadable (ie your
-	administrator can update your message bundles without restarting the
-	JVM). Your Spring application context configuration would look similar
-	to the one for <a href="#i18n.location.internal">internal resources</a>
-	- but be sure to specify loading from the <code>classpath:</code> and
-	specify a positive <code>cacheSeconds</code>, like this:</p>
+<p>Your resources therefore are parts of your component. You can
+build them into your component CAR in the lab, and/or manipulate them
+(upload, download, edit, etc) via the Vignette console at runtime. If
+you change them through the console (eg edit message properties or
+upload new message resource or supporting resource files), no restarts
+are required for the changes to take effect - the SPF portal utilities'
+internationalization methods will reflect your changes immediately.</p>
 
-	<blockquote><pre>
-	&lt;bean id="messageSource"
-		class="org.springframework.context.support.ReloadableResourceBundleMessageSource"&gt;
-		&lt;property name="cacheSeconds" value="1"/&gt;
-		&lt;property name="basenames"&gt;
-			&lt;list&gt;
-				&lt;value&gt;
-					classpath:portlet/i18n/messages
-				&lt;/value&gt;
-				...  &lt;-- other message bundles in the basenames list go here
-			&lt;/list&gt;
-		&lt;/property&gt;
-	&lt;/bean&gt;
-	</pre></blockquote>
-
-	<blockquote>
-	<p><b>Note:</b> Whatever your message source configuration, be sure
-	to put it into the root application context file for your portlet
-	application. Do not put it into an application context file you have
-	defined specifically for a portlet. Doing so will work with the Spring
-	standard message API's and tags, but not with the SPF ones. Putting
-	your message source configuration into the root application context
-	file will work with both the Spring-standard and SPF API's and tags.</p>
-	</blockquote>
-	</li>
-
-	<li>
-	<p>If you chose a non-default location for the portlet bundle
-	folder, configure it in <a href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
-	(see below). The default location is hardcoded in {@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT}, which is
-	<code>/opt/sasuapps/sp/global_resources/portlet/i18n</code> (as in the
-	above example) at this time of writing.</p>
-	</li>
-
-	<li>
-	<p>Finally, if you have non-message static resources (images, etc)
-	in your portlet bundle folder, and you will be using {@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility} to make URL's for them (eg
-	to render in the browser), note that SPF uses a <i>file relay
-	servlet</i> (see <a href="#i18n.supporting.relay">discussion below</a>) to
-	service those URL's. Deploy that relay servlet in any Web application
-	which is <i>both</i> accessible to the end-user browser, and has access
-	to the portlet bundle folder. For example, if you are using local
-	portlets, you could deploy it in your portal application. By default,
-	SPF assumes you have deployed it in your portlet application, mapped
-	under the hardcoded {@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} path. See
-	the <a href="#i18n.supporting.relay">discussion below</a> for more
-	information about deploying this servlet. If you deploy it in a
-	non-default location, you will need to configure that in <a
-		href="#i18n.other.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>,
-	too.</p>
-	</li>
-</ol>
-
-<p>Then when you use the standard Spring message API's, or the SPF
-portlet message API's in {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility}, or the tag libraries for
-either, they will find your message resources in your portlet bundle
-folder. And when you use the localized file access API's in <code>I18nUtility</code>,
-they will find your static resource files there likewise.</p>
-
-<a name="i18n.location.both">
-<h4>2.2.3. Mixing internal and external resources</h4>
-</a>
-
-<p>Note that you can mix both the internal and external approaches
-for resource management, if you like:</p>
-
-<ul>
-	<li>
-	<p>If you want to put some resource bundles inside your portlet WAR
-	while keeping others external, you can do that. For example, you can
-	keep your message bundles inside the WAR while keeping all your images
-	in the portlet bundle folder.</p>
-	</li>
-	<li>
-	<p>If you want to split a bundle across locations - eg keeping the
-	English (base) files inside the portlet WAR and only keeping your
-	localized versions outside - you can also do that.</p>
-	</li>
-	<li>
-	<p>Finally, you can even have identically-named bundle files in
-	both locations. For example, you can keep a "default" / "fallback" set
-	of bundles inside your portlet WAR, and put "overrides" for them
-	outside. SPF will search the portlet bundle folder first, only
-	falling-back to look inside the portlet WAR if the resource was not
-	found outside.</p>
-
-	<blockquote>
-	<p>There are some caveats to this regarding message properties,
-	however. SPF uses Spring for access to message resources, and Spring
-	searches these in the order set by the system classloader. For the
-	"fallback" approach to work, this classloader needs to check inside
-	your portlet application <i>last</i>, only after having <i>first</i>
-	checked the classpath. You may or may not be able to control the load
-	order used by the system classloader in your application server. Test
-	it.</p>
-	</blockquote>
-	</li>
-</ul>
+<blockquote>
+<p><b>Note:</b> Unlike with the SPF portlet utilities, placing
+resource files in the global resources folder is not supported. For
+Vignette portal components, your resources must be within the component
+itself.
+</blockquote>
 
 <hr>
 <a name="i18n.messages.java">
@@ -936,58 +719,81 @@ for resource management, if you like:</p>
 <p>Once your message resources have been created and placed <a
 	href="#i18n.location">as discussed above</a>, you can begin to access
 best-fit localized text strings for your user from them in your Java
-code. You may use either the standard Spring API's for doing this, or
-(recommended) the SPF API's.</p>
-
-<p><b>Note:</b> In either case, be sure you have configured Spring
-to load your message resource, as described above. And (if your message
-resources are external to your portlet WAR) be sure you have configured
-the <i>portlet resource bundle folder</i> where you put them, in your
-JVM classpath.</p>
+code. You may use either the standard published Vignette API's for doing
+this (such as <code>com.epicentric.common.website.I18nUtils.getValue(...)</code>),
+or (recommended) the SPF portal API's.</p>
 
 <p><b>Note:</b> In both cases, JSP tag libraries are available for
 you to use instead of the raw Java API's. See the <a
 	href="#i18n.messages.tags">discussion on this</a> below.</p>
 
-<a name="i18n.messages.java.spring.getMessage">
-<h4>2.3.1. Using Spring (eg <code>MessageSource.getMessage</code>)</h4>
+<a name="i18n.messages.java.vignette.getMessage">
+<h4>2.3.1. Using Vignette (eg <code>com.epicentric.common.website.I18nUtils.getValue</code>)</h4>
 </a>
 
-<p>See the Spring documentation for any class implementing {@link
-org.springframework.context.MessageSource} - for example, {@link
-org.springframework.context.ApplicationContext}. You use one of the <code>getMessage</code>
-API's, such as {@link
-org.springframework.context.ApplicationContext#getMessage(String,Object[],String,Locale)}.</p>
+<p>See the Vignette Portal published API documentation - for
+example, see the Vignette-provided JavaDocs for any of the <code>com.epicentric.common.website.I18nUtils.getValue(...)</code>.
+API's.</p>
 
-<p><b>Note:</b> If you use the Spring API's, you will not benefit
-from any of the <a href="#i18n.messages.java.spf.getMessage">enhanced
-message capabilities</a> supported by the SPF portlet utilities' {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility} class.</p>
+<p><b>Note:</b> If you use the Vignette native API's, you will not
+benefit from any of the <a href="#i18n.messages.java.spf.getMessage">enhanced
+message capabilities</a> supported by the SPF portal utilities' {@link
+com.hp.it.spf.xa.i18n.portal.I18nUtility} class.</p>
 
 <a name="i18n.messages.java.spf.getMessage">
-<h4>2.3.2. Using SPF (<code>I18nUtility.getMessage</code>)</h4>
+<h4>2.3.2. Using SPF (<code>I18nUtility.getValue</code>)</h4>
 </a>
 
-<p>SPF's <code>I18nUtility.getMessage</code> API's wrap around
-Spring and provide the following extra capability:</p>
+<p>SPF's <code>I18nUtility.getValue</code> API's wrap around
+Vignette and provide numerous extra capabilities not supported by the
+published native Vignette Portal API:</p>
 
 <ul>
+	<li>
+	<p>The Vignette-provided <code>com.epicentric.common.website.I18nUtils.getValue</code>
+	methods have deprecated the ability to control whether HTML
+	metacharacters such as <code>&lt;</code> and <code>&gt;</code> are
+	escaped (for literal display). Using Vignette's published API, returned
+	message strings will always be escaped, causing you to have to perform
+	a separate "de-escape" step when your message string actually contains
+	HTML. In contrast, the SPF-provided <code>I18nUtility.getValue</code>
+	methods give you full control over this.</p>
+	</li>
+	<li>
+	<p>Similarly, the Vignette-provided <code>com.epicentric.common.website.I18nUtils.getValue</code>
+	API's sometimes inject <code>&lt;SPAN
+	lang="..."&gt;...&lt;/SPAN&gt;</code> markup around returned message strings.
+	While ostensibly useful for accessibility purposes, this can sometimes
+	interfere with proper display of the message (for example, when the
+	message is used for an HTML title element). While the Vignette-provided
+	API's do not let you turn this off, the SPF-provided <code>I18nUtility.getValue</code>
+	methods give you full control over this.</p>
+	</li>
+	<li>
+	<p>The Vignette-provided <code>com.epicentric.common.website.I18nUtils.getValue</code>
+	methods do not provide a way to substitute string parameters into a
+	message string. After calling the Vignette method, you need to make a
+	second call (eg, to the Java-standard <code>MessageFormat</code> class)
+	to interpolate string parameters into your message. In contrast, the
+	SPF-provided <code>I18nUtility.getValue</code> methods give you full
+	control over this.</p>
+	</li>
 	<li>
 	<p>In the <a href="#i18n.l10n.spf">SPF localization process</a>,
 	you can mark sections of your messages which you do <b>not</b> want the
 	translators to localize, using the special <code>&lt;no_localization&gt;...&lt;/no_localization&gt;</code>
-	tags. The SPF <code>I18nUtility.getMessage</code> API's automatically
-	remove these for you; Spring does not.</p>
+	tags. The SPF <code>I18nUtility.getValue</code> API's automatically
+	remove these for you; Vignette does not.</p>
 	<p>For example, in your message properties you can have:</p>
 	<blockquote><pre>
 key=This part should be translated &lt;no_localization&gt;but this part should not&lt;/no_localization&gt;.
 </pre></blockquote>
-	<p>SPF's <code>I18nUtility.getMessage</code> API's will
-	automatically remove the special <code>&lt;no_localization&gt;...&lt;/no_localization&gt;</code>
+	<p>SPF's <code>I18nUtility.getValue</code> API's will automatically
+	remove the special <code>&lt;no_localization&gt;...&lt;/no_localization&gt;</code>
 	markup from this, if the translator did not do so already.</p>
 	</li>
 	<li>
-	<p>The SPF <code>I18nUtility.getMessage</code> API's let you <i>inject</i>
+	<p>The SPF <code>I18nUtility.getValue</code> API's let you <i>inject</i>
 	<a href="#help.kinds.contextual">contextual help</a> into the middle of
 	a message. This can be very useful when you need to use contextual
 	help, because by definition contextual help is typically help content
@@ -996,82 +802,121 @@ key=This part should be translated &lt;no_localization&gt;but this part should n
 	the text unit needing it, the broader text might become difficult to
 	translate correctly. Leaving the text intact, and injecting the
 	contextual help into it, is the proper way to do it, and is supported
-	by the SPF <code>I18nUtility.getMessage</code> API's.</p>
+	by the SPF <code>I18nUtility.getValue</code> API's.</p>
 	<p>For example, you can have the following in your message
 	properties:</p>
 	<blockquote><pre>
 key=Here is some &lt;contextual_help&gt;help&lt;/contextual_help&gt; for you.
 </pre></blockquote>
-	<p>The SPF <code>I18nUtility.getMessage</code> API's will
+	<p>The SPF <code>I18nUtility.getValue</code> API's will
 	automatically inject the contextual help which you provide around the
 	content surrounded by the special <code>&lt;contextual_help&gt;...&lt;/contextual_help&gt;</code>
 	markup ("help" in this example). More on this below.</p>
 	</li>
+	<li>
+	<p>Similarly, the SPF <code>I18nUtility.getValue</code> API's let
+	you inject <a href="#help.kinds.global">global help</a> hyperlinks into
+	the middle of a message. For example, you can have the following in
+	your message properties:</p>
+	<blockquote><pre>
+key=Have questions?  &lt;global_help&gt;Read help&lt;/global_help&gt; about this portal site.
+</pre></blockquote>
+	<p>The SPF <code>I18nUtility.getValue</code> API's will
+	automatically inject the global help hyperlink around the content
+	surrounded with <code>&lt;global_help&gt;...&lt;/global_help&gt;</code>
+	("Read help" in this example). This links to your portal site's
+	instance of the <b>SPF global help secondary page type</b>, which your
+	portal site is presumed to provide. More on this below.</p>
+	</li>
 </ul>
 
-<p>The <code>I18nUtility.getMessage</code> API's are:</p>
+<p>The <code>I18nUtility.getValue</code> API's are:</p>
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String)}</dt>
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(String,PortalContext)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,boolean)}</dt>
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(String,PortalContext,Object[])}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,ContextualHelpProvider[])}</dt>
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(String,String,PortalContext)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,Locale)}</dt>
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(String,String,PortalContext,Object[])}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,Object[])}</dt>
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(String,String,PortalContext,Object[],GlobalHelpProvider[],ContextualHelpProvider[],boolean,boolean)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,String)}</dt>
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(String,String,String,Locale)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#getMessage(PortletRequest,String,String,Object[],ContextualHelpProvider[],Locale,boolean)}</dt>
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(String,String,String,Locale,Object[])}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(String,String,String,Locale,Object[],GlobalHelpProvider[],ContextualHelpProvider[],boolean,boolean)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(String,String,String,PortalContext)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(String,String,String,PortalContext,Object[])}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getValue(String,String,String,PortalContext,Object[],GlobalHelpProvider[],ContextualHelpProvider[],boolean,boolean)}</dt>
 </dl>
 
-<p>The last one is the core API which all the others feed into. Here
-is a summary of the parameters it takes; the others take a subset of
-these. See the method documentation for more information.</p>
+<p>The methods take various parameters. Here is a summary
+description; please see the documentation for each method for more
+information.</p>
+
 <ul>
 	<li>
-	<p>The current {@link javax.portlet.PortletRequest} (required).</p>
+	<p>The desired message key (a required <code>String</code>).</p>
 	</li>
 
 	<li>
-	<p>The desired message key (required).</p>
+	<p>An optional <code>String</code> giving the default message
+	value. This is returned automatically to you if the given message key
+	is not found. (If you do not provide the default value, then the
+	message key itself is returned in that case.)</p>
 	</li>
 
 	<li>
-	<p>A <code>String</code> default message value, to be returned
-	automatically to you if the given message key is not found. (If no
-	explicit default value is provided, then the message key itself is
-	returned in that case.)</p>
+	<p>An optional <code>String</code> component ID for a portal
+	component whose resource bundle you want to read from. If you do not
+	provide a component ID, then you must provide the current <code>PortalContext</code>
+	and the current component in that context will be assumed - this is the
+	typical model-of-use, actually.</p>
 	</li>
 
 	<li>
-	<p>An <code>Object[]</code> array containing any objects whose <code>toString</code>
-	values should be inserted into any {@link java.text.MessageFormat}
-	placeholders in the message. For example, in your message properties
-	you can have:</p>
+	<p>An optional <code>Locale</code> for which to return the
+	best-candidate localized value for the message. Determination of
+	best-candidate proceeds against the message files in your indicated
+	component, using the Java-standard <code>ResourceBundle</code> search
+	logic. If you do not provide a <code>Locale</code>, then you must
+	provide the current <code>PortalContext</code> and the current locale
+	indicated in that context will be assumed - that is the typical
+	model-of-use, actually.</p>
+	</li>
+
+	<li>
+	<p>An optional <code>Object[]</code> array containing any objects
+	whose <code>toString</code> values should be inserted into any {@link
+	java.text.MessageFormat} placeholders in the message. For example, in
+	your message properties you can have:</p>
 
 	<blockquote><pre>
 	key=Your user ID is {0}.
 	</pre></blockquote>
 
-	<p>Then in your Java code, where <code>request</code> is the <code>PortletRequest</code>
+	<p>Then in your Java code, where <code>ctx</code> is the <code>PortalContext</code>
 	and <code>userID</code> is the user ID:</p>
 
 	<blockquote><pre>
-import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 ...
 String[] args = new String[] { userID };
-String msg = I18nUtility.getMessage(request, "key", args);
+String msg = I18nUtility.getValue("key", ctx, args);
 	</pre></blockquote>
 	</li>
 
 	<li>
-	<p>A <code>ContextualHelpProvider[]</code> array containing any
-	contextual help you wish to inject into the message. (What is
-	contextual help, and what does it mean to inject it? See the <a
+	<p>An optional <code>ContextualHelpProvider[]</code> array
+	containing any contextual help you wish to inject into the message.
+	(What is contextual help, and what does it mean to inject it? See the <a
 		href="#help.kinds.contextual">introduction to contextual help</a>
 	later in this document.)</p>
 
@@ -1080,7 +925,7 @@ String msg = I18nUtility.getMessage(request, "key", args);
 	yet):</p>
 
 	<img
-		src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelpLink.jpg">
+		src="com/hp/it/spf/xa/i18n/portal/doc-files/contextualHelpLink.jpg">
 
 	<p>Using the SPF <code>I18nUtility.getMessage</code> API's, you can
 	have the following in your message properties:</p>
@@ -1093,8 +938,8 @@ key=Your sign-in is &lt;contextual_help&gt;secure&lt;/contextual_help&gt;
 		href="#help.contextual.java"><code>ContextualHelpProvider</code></a>
 	(such as a <a
 		href="#help.contextual.java.classicContextualHelpProvider"><code>ClassicContextualHelpProvider</code></a>)
-	and pass it in this array. The <code>I18nUtility.getMessage</code>
-	method will wrap the contextual-help HTML which that <code>ContextualHelpProvider</code>
+	and pass it in this array. The <code>I18nUtility.getValue</code> method
+	will wrap the contextual-help HTML which that <code>ContextualHelpProvider</code>
 	yields, around the part of the message surrounded by the special
 	&lt;contextual_help&gt;...&lt;/contextual_help&gt; markup - ie the word
 	"secure". So then you can just output that message and it will contain
@@ -1109,31 +954,30 @@ key.help.title=Service Portal and your security
 key.help.content=Internet security is important to us...
 		</pre></blockquote>
 
-	<p>And your code would look like this, where <code>request</code>
-	and <code>response</code> are your {@link javax.portlet.PortletRequest}
-	and {@link javax.portlet.PortletResponse}, respectively. <b>Note:</b>
+	<p>And your code would look like this, where <code>ctx</code> is
+	your Vignette-provided <code>PortalContext</code> object. <b>Note:</b>
 	this demonstration uses a <a
 		href="#help.contextual.java.classicContextualHelpProvider"><code>ClassicContextualHelpProvider</code></a>
 	and does not override any of the default style.</p>
 
 	<blockquote><pre>
-import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
-import com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.help.portal.ClassicContextualHelpProvider;
 ...
 // First get the title for the contextual help.
-String helpTitle = I18nUtility.getMessage(request, "key.help.title");
+String helpTitle = I18nUtility.getValue("key.help.title", ctx);
 // Now get the main content for the contextual help.
-String helpContent = I18nUtility.getMessage(request, "key.help.content");
+String helpContent = I18nUtility.getValue("key.help.content", ctx);
 // Now make the classic contextual help object.  Note we don't have to set
 // the link content, as I18nUtility will infer that from the special markup
 // in the message.
-ClassicContextualHelpProvider cchp = new ClassicContextualHelpProvider(request, response);
+ClassicContextualHelpProvider cchp = new ClassicContextualHelpProvider(ctx);
 cchp.setTitleContent(helpTitle);
 cchp.setHelpContent(helpContent);
 // Now get the main message, with the contextual help embedded automatically
 // inside it.
 ClassicContextualHelpProvider[] cchps = new ClassicContextualHelpProvider[] {cchp};
-String msg = I18nUtility.getMessage(request, "key", cchps);
+String msg = I18nUtility.getValue("key", null, ctx, null, null, cchps, false, false);
 		</pre></blockquote>
 
 	<p>So then you could output the <code>msg</code> string to the user
@@ -1141,68 +985,142 @@ String msg = I18nUtility.getMessage(request, "key", cchps);
 	when the user clicked on the "secure" hyperlink, it would look like
 	this:</p>
 
-	<img src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelp.jpg"></li>
+	<img src="com/hp/it/spf/xa/i18n/portal/doc-files/contextualHelp.jpg">
 
-	<p>Please see the <code>I18nUtility.getMessage</code> method
+	<p>Please see the <code>I18nUtility.getValue</code> method
 	documentation for more details about passing contextual help providers.
 	Also see the discussion on <a href="#help.kinds.contextual">contextual
 	help</a> later in this guide and in the JavaDocs - eg see the {@link
-	com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider}
+	com.hp.it.spf.xa.help.portal.ClassicContextualHelpProvider}
 	documentation.</p>
 
 	<p>Also, note that the above example illustrates the use of the
 	SPF-provided "classic" rendition of contextual help (ie the {@link
-	com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} class).
-	The SPF contextual-help framework is extensible to custom formats of
+	com.hp.it.spf.xa.help.portal.ClassicContextualHelpProvider} class). The
+	SPF contextual-help framework is extensible to custom formats of
 	contextual help, where you write and then utilize your own contextual
 	help provider - see the discussion below about <a
 		href="#help.contextual.java.contextualHelpProvider">creating your
 	own contextual help provider</a>.</p>
 
 	<blockquote>
-	<p><b>Note:</b> The classic rendition of contextual help utilizes
+	<p><b>Note 1:</b> The classic rendition of contextual help utilizes
 	an "X" image on which the user can click to close the window. This is a
-	GIF image which you must supply (either inside your portlet
-	application, or in the external resource bundle folder). You can
-	localize the image if desired. Name the base file for the image <code>btn_close.gif</code>
-	and put it in the <code>images/</code> subfolder (of your portlet WAR
-	or the external folder). Management of this image is the same as for
-	any other supporting resource file.</p>
-
-	<p>The SPF portlet utilities JAR contains a sample <code>btn_close.gif</code>.
-	(It is the same one shown in the example above.)</p>
+	GIF image which you can supply if desired (the SPF Vignette portal
+	application provides a default for you, looking as in this example).
+	Name the base file for the image <code>btn_close.gif</code>, localize
+	it if desired, and put the image bundle into your component CAR as
+	supporting resource files (ie <i>secondary support files</i>) as
+	explained earlier.</p>
 	</blockquote>
 
+	<blockquote>
+	<p><b>Note 2:</b> Due to a current limitation, you cannot inject
+	both global help and contextual help into the same message.</p>
+	</blockquote>
+	</li>
+
 	<li>
-	<p>A <code>Locale</code> for which to find the best-fitting message
-	resource. (By default, the method uses the locale contained inside your
-	<code>PortletRequest</code>.)</p>
+	<p>An optional <code>GlobalHelpProvider[]</code> array containing
+	any global help hyperlink(s) that you wish to inject into the message.
+	When clicked, the global help hyperlink will open your portal site's
+	global help secondary page, in a child window styled with the window
+	parameters you specify. (You must have provided a secondary page for
+	the SPF-provided <b>global help secondary page type</b> containing your
+	desired content. What is global help, and what does it mean to inject
+	it? See the <a href="#help.kinds.global">introduction to global
+	help</a> later in this document.)</p>
+	<p>For example, say you want "Read help" in the following message
+	to be linked to your site's global help secondary page:</p>
+
+	<blockquote><pre>
+	<u><font color="blue">Read help</font></u> to learn more about this Web site.
+	</pre></blockquote>
+
+	<p>Using global help injection, you can have the following in your
+	component's message properties:</p>
+
+	<blockquote><pre>
+	key=&lt;global_help&gt;Read help&lt;/global_help&gt; to learn more about this Web site.
+	</pre></blockquote>
+
+	<p>Then your component Java code would look like this, where <code>ctx</code>
+	is your Vignette-provided <code>PortalContext</code> object. <b>Note:</b>
+	this demonstration uses a <a
+		href="#help.contextual.java.classicGlobalHelpProvider"><code>ClassicGlobalHelpProvider</code></a>
+	and does not override any of the default style.</p>
+
+	<blockquote><pre>
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider;
+...
+ClassicGlobalHelpProvider cghp = new ClassicGlobalHelpProvider(ctx);
+ClassicGlobalHelpProvider[] cghps = new ClassicGlobalHelpProvider[] {cghp};
+String msg = I18nUtility.getValue("key", null, ctx, null, cghps, null, false, false);
+	</pre></blockquote>
+
+	<p>So then you could output the <code>msg</code> string to the user
+	- it would look like above when rendered in the user's browser. And
+	when the user clicked on the "Read help" hyperlink, it would open your
+	site's global help secondary page in a classic-style child popup
+	window.</p>
+
+	<p>Please see the <code>I18nUtility.getValue</code> method
+	documentation for more details about passing global help providers.
+	Also see the discussion on <a href="#help.global.java">global help</a>
+	later in this guide and in the JavaDocs - eg see the {@link
+	com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider} documentation.</p>
+
+	<p>Also, note that the above example illustrates the use of the
+	SPF-provided "classic" presentation of a global help hyperlink and
+	popup window (ie the {@link
+	com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider} class). The SPF
+	global-help framework is extensible to custom presentations of global
+	help, where you write and then utilize your own provider - see the
+	discussion below about <a href="#help.global.java.globalHelpProvider">creating
+	your own global help provider</a>.</p>
+
+	<blockquote>
+	<p><b>Note:</b> Due to a current limitation, you cannot inject both
+	global help and contextual help into the same message.</p>
+	</blockquote>
 	</li>
 
 	<li>
 	<p>A <code>boolean</code> switch which controls whether to escape
 	any HTML meta-characters, like <code>&lt;</code> and <code>&gt;</code>,
-	found in the message string. For example, if your message property is
-	this:</p>
+	found in the message string. By default, they are not escaped (the
+	opposite of the Vignette-standard <code>I18nUtils.getValue</code>
+	behavior).</p>
+	<p>For example, if your message property is this:</p>
 
 	<blockquote><pre>
 key=This is an HTML &lt;head&gt; tag.
 </pre></blockquote>
 
 	<p>Then the following code would escape the HTML inside the message
-	string (where <code>request</code> is your current {@link
-	javax.portlet.PortletRequest}:</p>
+	string (where <code>ctx</code> is your current Vignette-supplied <code>PortalContext</code>
+	object):</p>
 
 	<blockquote><pre>
-import com.hp.it.spf.xa.i18n.portlet.I18nUtility;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 ...
-String msg = I18nUtility.getMessage(request, "key", true);
+String msg = I18nUtility.getValue("key", null, ctx, null, null, null, true, false);
 // Now msg is: This is an HTML&amp;lt;head&amp;gt; tag.
 	</pre></blockquote>
 
 	<p>If you use this with a message string that contains contextual
 	help, note that this policy will apply to the contextual help's title
 	and content as well.</p>
+	</li>
+
+	<li>
+	<p>Another <code>boolean</code> switch letting you enable or
+	disable the generation of Vignette-injected <code>&lt;SPAN
+	lang="..."&gt;...&lt;/SPAN&gt;</code> tags around portions of your content.
+	Vignette does this in some circumstances, so this boolean lets you
+	permit or disable that. It is rare that you need to use this switch, as
+	the default Vignette behavior is usually adequate.</p>
 	</li>
 </ul>
 
@@ -1215,31 +1133,34 @@ String msg = I18nUtility.getMessage(request, "key", true);
 <p>Once your message resources have been created and placed <a
 	href="#i18n.location">as discussed above</a>, you can begin to access
 best-fit localized text strings for your user from them in your JSP's.
-You may use either the standard Spring JSP tag libraries for doing this,
-or (recommended) the SPF ones.</p>
-
-<p><b>Note:</b> In either case, be sure you have configured Spring
-to load your message resource, as described above. And (if your message
-resources are external to your portlet WAR) be sure you have configured
-the <i>portlet resource bundle folder</i> where you put them, in your
-JVM classpath. See the <a href="#i18n.location">discussion above</a>.</p>
+You may use either the standard Vignette-provided JSP tags for doing
+this (such as <code>&lt;vgn-portal:i18nValue&gt;</code>) or
+(recommended) the SPF-provided tags.</p>
 
 <p><b>Note:</b> In both cases, raw Java API's are available for you
 to use if you prefer, instead of the JSP tag libraries. See the <a
 	href="#i18n.messages.java">API descriptions</a> above.</p>
 
-<a name="i18n.messages.jsp.spring.message">
-<h4>2.4.1. Using Spring (<code>&lt;spring:message&gt;</code>)</h4>
+<a name="i18n.messages.jsp.vignette.message">
+<h4>2.4.1. Using Vignette (eg <code>&lt;vgn-portal:i18nValue&gt;</code>)</h4>
 </a>
 
-<p>See the Spring documentation for any Spring JSP tag interface for
-{@link org.springframework.context.MessageSource} - for example, <a
-	href="http://static.springframework.org/spring/docs/1.1.5/taglib/tag/MessageTag.html"><code>&lt;spring:message&gt;</code></a>.
-</p>
+<p>Vignette makes a couple of JSP tags available for
+internationalized access to your portal component's message resources:</p>
 
-<p><b>Note:</b> If you use the Spring tags, you will not benefit
+<ul>
+	<li><code>&lt;vgn-portal:i18nValue&gt;</code></li>
+	<li><code>&lt;vgn-portal:i18nParam&gt;</code></li>
+</ul>
+
+<p>See the Vignette Portal Developer's Guide for how to use these
+tags.</p>
+
+<p><b>Note:</b> If you use the Vignette tags, you will not benefit
 from any of the <a href="#i18n.messages.jsp.spf.message">enhanced
-message capabilities</a> supported by the SPF portlet utility tags.</p>
+message capabilities</a> supported by the SPF tags.</p>
+
+LEFT OFF HERE
 
 <a name="i18n.messages.jsp.spf.message">
 <h4>2.4.2. Using SPF (<code>&lt;spf-i18n-portlet:message&gt;</code>,
