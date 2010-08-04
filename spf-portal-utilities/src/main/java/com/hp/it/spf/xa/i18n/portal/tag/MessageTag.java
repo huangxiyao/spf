@@ -238,15 +238,16 @@ public class MessageTag extends MessageBaseTag {
 	/**
 	 * <p>
 	 * Gets the message string for the
-	 * <code>&lt;spf-i18n-portlet:message&gt;</code> tag attributes,
-	 * substituting any string or contextual help parameters provided in any
-	 * child <code>&lt;spf-i18n-portlet:param&gt;</code> or
-	 * <code>&lt;spf-i18n-portlet:contextualHelpParam&gt;</code> tags. If the
+	 * <code>&lt;spf-i18n-portal:i18nValue&gt;</code> tag attributes,
+	 * substituting any string, contextual or global help parameters provided in any
+	 * child <code>&lt;spf-i18n-portal:i18nParam&gt;</code>,
+	 * <code>&lt;spf-i18n-portal:contextualHelpParam&gt;</code>, or
+	 * <code>&lt;spf-i18n-portal:globalHelpParam&gt;</code> tags. If the
 	 * message string cannot be found, then the key itself is returned.
 	 * </p>
 	 * <p>
-	 * This method uses the full
-	 * <code>I18nUtility.getMessage(PortletRequest,String,String,Object[],ContextualHelpProvider[],Locale,boolean)</code>
+	 * This method uses the
+	 * <code>I18nUtility.getValue</code>
 	 * method to do its work - please see the documentation for that method for
 	 * a detailed description of the behavior. The parameters provided to the
 	 * I18nUtility are taken from the tag attributes for the current tag and its
