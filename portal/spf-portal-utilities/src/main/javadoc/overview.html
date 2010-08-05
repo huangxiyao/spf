@@ -208,7 +208,7 @@ later.
 		<ul>
 			<li>2.7.1. <a href="#i18n.locale.selector.java">Using <code>ClassicLocaleSelectorProvider</code></a></li>
 			<li>2.7.2. <a href="#i18n.locale.selector.jsp">Using <code>&lt;spf-i18n-portal:classicLocaleSelector&gt;</code></a></li>
-			<li>2.7.3. <a href="#i18n.locale.selector.style">Using the <code>spf-classic-locale-selector-style</code></a></li>
+			<li>2.7.3. <a href="#i18n.locale.selector.style">Using the <code>spf-locale-selector-classic-style</code></a></li>
 			<li>2.7.4. <a href="#i18n.locale.selector.extend">Extending
 			<code>LocaleSelectorProvider</code> to create a custom rendition</a></li>
 			<li>2.7.5. <a href="#i18n.locale.selector.process">Using the
@@ -1752,7 +1752,7 @@ attributes.</p>
 which wraps around <a href="#i18n.supporting.java.getLocalizedFileURL"><code>I18nUtility.getLocalizedFileURL</code></a>
 to offer most of the same capabilities. It is thoroughly documented in
 the <a
-	href="com/hp/it/spf/xa/i18n/portal/tag/package-summary.html#getLocalizedFileURL">package
+	href="com/hp/it/spf/xa/i18n/portal/tag/package-summary.html#localizedFileURL">package
 description</a>. Briefly:</p>
 
 <dl>
@@ -1834,7 +1834,7 @@ generate the locale selector for your portal site. This includes:</p>
 	<dt>
 	<p>A Java class (<a href="#i18n.locale.selector.java"><code>ClassicLocaleSelectorProvider</code></a>),
 	JSP tag (<a href="#i18n.locale.selector.jsp"><code>&lt;spf-i18n-portal:classicLocaleSelector&gt;</code></a>),
-	and Vignette component (<a href="#i18n.locale.selector.style"><code>spf-classic-locale-selector-style</code></a>)
+	and Vignette component (<a href="#i18n.locale.selector.style"><code>spf-locale-selector-classic-style</code></a>)
 	for expressing the HTML for an HPWeb "classic"-style locale selector
 	input form.</p>
 	</dt>
@@ -1858,7 +1858,7 @@ generate the locale selector for your portal site. This includes:</p>
 	the list, and desired decorative CSS to add to the widget.) If you
 	would rather surface the classic locale selector through Vignette, as a
 	style in your grid, you can use the <a
-		href="#i18n.locale.selector.style"><code>spf-classic-locale-selector-style</code></a>
+		href="#i18n.locale.selector.style"><code>spf-locale-selector-classic-style</code></a>
 	instead of coding your own component using the class or tag.</p>
 	</dd>
 
@@ -1913,8 +1913,10 @@ expressed wherever you would like the locale selector to appear, in your
 portal component JSP.</p>
 
 <blockquote>
-<p><b>Note:</b> A <a href="#i18n.locale.selector.jsp">JSP tag</a>
-for this same functionality is also available (see next section).</p>
+<p><b>Note:</b> A <a href="#i18n.locale.selector.jsp">JSP tag</a>, <code>&lt;spf-i18n-portal:classicLocaleSelector&gt;</code>,
+offering most of the same functionality is also available (see next
+section). There are some differences; with the tag, a label is required
+whereas with <code>ClassicLocaleSelectorProvider</code> it is optional.</p>
 </blockquote>
 
 <p>For example, say you wanted to produce a classic locale selector
@@ -1976,7 +1978,7 @@ and <code>spf-locale-selector-secondarypage</code></a> in Vignette, for the
 processing logic (invoked when the user clicks the submit button) to
 work. Note that processing logic will redirect the user to the original
 URL for the page that included your portal component (this URL is
-obtained by SPF automatically, using {@link
+obtained by the locale selector automatically, using {@link
 com.hp.it.spf.xa.misc.portal.Utils#getRequestURL(HttpServletRequest)}.
 So when the user clicks the submit button, he or she will return to the
 same page (with the new locale selection in effect for this and
@@ -2130,9 +2132,32 @@ the class JavaDoc for more information.</p>
 	default behavior as with <code>setDisplayLocale</code>. As above, the
 	Unicode collating sequence will then be used to sort them.</p>
 	</dd>
-
-	LEFT OFF HERE
-
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portal.ClassicLocaleSelectorProvider#getHTML(boolean)}<br>
+	{@link
+	com.hp.it.spf.xa.i18n.portal.ClassicLocaleSelectorProvider#getHTML(boolean,boolean)}</dt>
+	<dd>
+	<p>After using the constructor and setters above, you use either of
+	these methods to generate and return to you the HTML for the locale
+	selector. This string is ready for you to express in your JSP.</p>
+	<ul>
+		<li>The first parameter is a switch controlling whether to
+		HTML-escape your label content. By default it is not escaped, so any
+		HTML tags in your label content are rendered by the browser. Pass <code>true</code>
+		to have them display literally instead.</li>
+		<li>The second parameter is another switch controlling whether
+		any <code>&lt;SPAN&gt;</code> tags that may be present in your label
+		content are stripped-out. By default they are retained, but pass <code>true</code>
+		if you want them to be removed. (When you generated your label content
+		string, you may have included in it one or more messages - in that
+		case, Vignette may have automatically inserted <code>&lt;SPAN
+		LANG="..."&gt;...&lt;/SPAN&gt;</code> tags in your messages. These ostensibly
+		help with accessibility, but in some rare cases can have side-effects
+		depending on what other HTML markup you use. So you can use the second
+		boolean parameter in the <code>getHTML</code> method to take out the <code>&lt;SPAN&gt;</code>
+		tags if they are causing a problem.)</li>
+	</ul>
+	</dd>
 </dl>
 </blockquote>
 
@@ -2140,9 +2165,186 @@ the class JavaDoc for more information.</p>
 <h4>2.7.2. Using <code>&lt;spf-i18n-portal:classicLocaleSelector&gt;</code></h4>
 </a>
 
+<p>You use the <code>&lt;spf-i18n-portal:classicLocaleSelector&gt;</code>
+tag to express an HPWeb "classic" version of a locale selector form into
+your portal component JSP.</p>
+
+<blockquote>
+<p><b>Note:</b> <code>&lt;spf-i18n-portal:classicLocaleSelector&gt;</code>
+is a wrapper for a <a href="#i18n.locale.selector.java">Java class</a>,
+<code>ClassicLocaleSelectorProvider</code> (see above), which you can
+call directly instead, if desired. The Java class provides a little more
+flexibility than the tag (eg with the <code>ClassicLocaleSelectorProvider</code>
+a label is optional; with the tag it is required).</p>
+</blockquote>
+
+<p>Usage for the <code>&lt;spf-i18n-portal:classicLocaleSelector&gt;</code>
+is:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
+...
+&lt;spf-i18n-portal:classicLocaleSelector
+   label="<i>string</i>"
+   labelKey="<i>message-key</i>"
+   order="<i>spec</i>"
+   displayInLocale="<i>language-tag</i>"
+   sortInLocale="<i>language-tag</i>"
+   labelStyle="<i>inline-style</i>"
+   labelClass="<i>css-classname</i>"
+   listStyle="<i>inline-style</i>"
+   listClass="<i>css-classname</i>"
+   escape="<i>true-or-false</i>"
+   filterSpan="<i>true-or-false</i>"
+   /&gt;
+</pre></blockquote>
+
+<p>Either the <code>label</code> or <code>labelKey</code> attributes
+must be provided, because with this tag, a label to go with the locale
+selector is required. (If you need no label, use the <a
+	href="#i18n.locale.selector.java">Java class</a> directly, which has no
+such limitation. The reasons for this difference in behavior are
+unclear.) The other tag attributes are optional. Read the full tag
+documentation in the <a
+	href="com/hp/it/spf/xa/i18n/portal/tag/package-summary.html#selector">package
+description</a> for information on each attribute.</p>
+
+<p>Here is an example. Say you wanted to produce a classic locale
+selector widget including a <code>Language:</code> label, with each
+locale option displayed country first (eg "Australia-English") and
+localized according to its own locale, then sorted according to the
+current locale. (In reality, you would probably want the options to be <i>either</i>
+both lcoalized and sorted in the current locale, or each localized in
+its own language and then all sorted together cross-locale. So this is
+not necessarily a realistic example, but helps to demonstrate the
+capabilities of the tag.) First, add the label to your portal
+component's message resource bundle, using whatever message key name you
+like. For example (in your base message properties):</p>
+
+<blockquote><pre>
+localeSelector.label = Language: 
+</pre></blockquote>
+
+<p>Next use the following JSP markup in your portal component's JSP:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
+...
+&lt;spf-i18n-portal:classicLocaleSelector
+   labelKey=&quot;localeSelector.label&quot;
+   displayInLocale=&quot;various&quot;
+   sortInLocale=&quot;current&quot;
+   /&gt;
+</pre></blockquote>
+
+<p>The resulting locale selector would render as follows. Note the
+illustration below is for when the user's current locale is US English;
+the label string, default (ie pre-selected) value, and sort order would
+differ in other locales, though each displayed locale name in the select
+list would continue to be rendered in its own language.</p>
+
+<img
+	src="com/hp/it/spf/xa/i18n/portal/doc-files/classicLocaleSelector.jpg">
+
+<blockquote>
+<p><b>Note 1:</b> The actual list of locale options is something you
+<a href="#i18n.other.locale.config">configure for Vignette</a> - see
+separate discussion below. Also, be sure to <a
+	href="#i18n.locale.selector.process">configure the <code>spf-locale-selector-secondarypagetype</code>
+and <code>spf-locale-selector-secondarypage</code></a> in Vignette, for the
+processing logic (invoked when the user clicks the submit button) to
+work. Note that processing logic will redirect the user to the original
+URL for the page that included your portal component (this URL is
+obtained by the locale selector automatically, using {@link
+com.hp.it.spf.xa.misc.portal.Utils#getRequestURL(HttpServletRequest)}.
+So when the user clicks the submit button, he or she will return to the
+same page (with the new locale selection in effect for this and
+subsequent pages) after the selection is silently persisted.</p>
+</blockquote>
+
+<blockquote>
+<p><b>Note 2:</b> The submit button image is, by default, rendered
+from the HP.com servers at <a
+	href="http://welcome.hp-ww.com/img/hpweb_1-2_arrw_sbmt.gif">http://welcome.hp-ww.com/img/hpweb_1-2_arrw_sbmt.gif</a>.
+However you can override this with your own submit button image if
+desired. Name your image file <code>btn_submit.gif</code> and include it
+among the secondary support files in your component. You can actually
+include a whole bundle of localized submit button images, each tagged by
+locale appropriately and sharing that same basename.</p>
+
+<p>The alt text for the submit button image can be provided by you
+inside your portal component, if desired. (By default, there is no alt
+text.) Just add the <code>localeSelector.submit.alt</code> message key
+to your current portal component's message resource bundle, like this:</p>
+
+<blockquote><pre>
+localeSelector.submit.alt = Change country and language
+</pre></blockquote>
+</blockquote>
+
+<p>See the full tag documentation in the <a
+	href="com/hp/it/spf/xa/i18n/portal/tag/package-summary.html#selector">package
+description</a> for more information about the <code>&lt;spf-i18n-portal:classicLocaleSelector&gt;</code>
+tag.</p>
+
 <a name="i18n.locale.selector.style">
-<h4>2.7.3. Using the <code>spf-classic-locale-selector-style</code></h4>
+<h4>2.7.3. Using the <code>spf-locale-selector-classic-style</code></h4>
 </a>
+
+<p>If you are developing your own Vignette grid, Shared Portal
+Framework provides a style type and style component for the HPWeb
+"classic" locale selector which you can plug right in. The style type is
+<code>spf-locale-widget-styletype</code>, the <code>Shared Portal
+Framework - Locale Widget Style Type</code>. This style type has 2 styles
+provided by SPF:</p>
+
+<ul>
+	<li><code>spf-locale-selector-classic-style</code>, the <code>Shared
+	Portal Framework - Classic Locale Selector Style</code> (described here)</li>
+	<li><code>spf-locale-indicator-classic-style</code>, the <code>Shared
+	Portal Framework - Classic Locale Indicator Style</code> (described <a
+		href="#i18n.locale.indicator.style">below</a>)</li>
+</ul>
+
+<p>When your portal site is <a href="#i18n.other.locale.config">configured</a>
+with 2 or more available locales, the <code>spf-locale-selector-classic-style</code>
+uses the JSP tag described <a href="#i18n.locale.selector.jsp">above</a>
+to emit your portal site's locale selector in the HPWeb "classic"
+fashion. This locale selector:</p>
+
+<ul>
+	<li>includes a properly-localized label: <code>Select:</code></li>
+	<li>renders with the default behavior of the JSP tag in other
+	respects - for example, locales are each displayed in native language,
+	country first, and (<font color="red"><b>coming soon</b></font>) sorted
+	universally in Unicode sequence.</li>
+</ul>
+
+<p>If your portal site is <a href="#i18n.other.locale.config">configured</a>
+with just one available locale (ie, your site default locale, with no
+additional locales declared in <code>site_locale_support.properties</code>),
+though, this <code>spf-locale-selector-classic-style</code> degenerates
+into a locale indicator for the current locale, since no locale
+selection is possible for the user in this case.</p>
+
+<p>The <code>spf-locale-selector-classic-style</code> and its
+companion style type, <code>spf-locale-widget-styletype</code>, are
+provided in the main SPF components distribution, and included in each
+SPF portal runtime environment. To use them:</p>
+
+<ul>
+	<li>Define your Vignette grid to include a position for the <code>spf-locale-widget-styletype</code>,
+	as usual in Vignette grid programming.</li>
+	<li>Create a Vignette theme for that grid, and set <code>spf-locale-selector-classic-style</code>
+	to be the style instance to use for the <code>spf-locale-widget-styletype</code>.</li>
+	<li>For your portal site administrator to have access to the style
+	type and style (eg to change theme settings in the runtime
+	environment), the SPF Vignette server administrator should share the <code>spf-locale-selector-classic-style</code>,
+	<code>spf-locale-indicator-classic-style</code>, and <code>spf-locale-widget-styletype</code>
+	to your portal site.</li>
+</ul>
+
+LEFT OFF HERE
 
 <a name="i18n.locale.selector.extend">
 <h4>2.7.4. Extending <code>LocaleSelectorProvider</code> to create
@@ -2158,14 +2360,15 @@ and <code>spf-locale-selector-secondarypage</code></h4>
 <a name="i18n.locale.indicator">
 <h3>2.8. Generating the locale indicator</h3>
 </a> <a name="i18n.locale.indicator.java">
-<h4>2.8.1. Generating the locale indicator with Java code </code>
+<h4>2.8.1. Generating the locale indicator with Java code
+</code>
 </h4>
 </a>
 <a name="i18n.locale.indicator.jsp">
 <h4>2.8.2. Using <code>&lt;spf-i18n-portal:classicLocaleIndicator&gt;</code></h4>
 </a>
 <a name="i18n.locale.indicator.style">
-<h4>2.8.3. Using the <code>spf-classic-locale-indicator-style</code></h4>
+<h4>2.8.3. Using the <code>spf-locale-indicator-classic-style</code></h4>
 </a>
 
 <hr>

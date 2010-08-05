@@ -1113,6 +1113,34 @@
  * </p>
  * <img src="../doc-files/classicLocaleSelector.jpg">
  * <p>
+ * The submit button image shown above is the default. It is linked
+ * automatically by the tag, to point to the image location on the HP.com Web
+ * servers at <a
+ * href="http://welcome.hp-ww.com/img/hpweb_1-2_arrw_sbmt.gif">http
+ * ://welcome.hp-ww.com/img/hpweb_1-2_arrw_sbmt.gif</a>. However you can
+ * override this with your own submit button image if desired. Name your image
+ * file <code>btn_submit.gif</code> and include it among the secondary support
+ * files in your component. You can actually include a whole bundle of localized
+ * submit button images, each tagged by locale appropriately and sharing that
+ * same basename.
+ * </p>
+ * 
+ * <p>
+ * The alt text for the submit button image can be provided by you inside your
+ * portal component, if desired. (By default, there is no alt text.) Just add
+ * the <code>localeSelector.submit.alt</code> message key to your current portal
+ * component's message resource bundle, like this:
+ * </p>
+ * 
+ * <blockquote>
+ * 
+ * <pre>
+ * localeSelector.submit.alt = Change country and language
+ * </pre>
+ * 
+ * </blockquote>
+ * 
+ * <p>
  * Note that the current locale is pre-selected in the option list, as
  * illustrated above with US-English in the example. Note also that submit image
  * points at the companion <i>locale selector secondary page</i> assumed to
