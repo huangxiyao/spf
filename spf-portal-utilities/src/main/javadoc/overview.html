@@ -243,7 +243,7 @@ later.
 			<li>2.10.4. <a href="#i18n.other.locale.config">Configuring
 			site default locale and additional locales (<code>site_locale_support.properties</code>)</a></li>
 			<li>2.10.5. <a href="#i18n.other.common">Using the common <code>I18nUtility</code></a></li>
-			<li>2.10.6. <a href="#i18n.other.locale.resolve">A word
+			<li>2.10.6. <a href="#i18n.other.locale.resolver">A word
 			about the locale resolver</a></li>
 		</ul>
 		</li>
@@ -2344,30 +2344,174 @@ SPF portal runtime environment. To use them:</p>
 	to your portal site.</li>
 </ul>
 
-LEFT OFF HERE
-
 <a name="i18n.locale.selector.extend">
 <h4>2.7.4. Extending <code>LocaleSelectorProvider</code> to create
 a custom rendition</h4>
 </a>
 
+<p>If the HPWeb "classic" rendering of a locale selector does not
+suit your requirements, you can get a head-start building your own
+locale selector by extending the SPF-provided {@link
+com.hp.it.spf.xa.i18n.portal.LocaleSelectorProvider} abstract base
+class. Once you have implemented your concrete locale selector provider
+class, you call its (inherited) {@link
+com.hp.it.spf.xa.i18n.portal.LocaleSelectorProvider#getHTML(boolean)} or
+{@link
+com.hp.it.spf.xa.i18n.portal.LocaleSelectorProvider#getHTML(boolean,boolean)}
+methods to get the locale selector HTML string for expressing in your
+JSP. (You could also write a JSP tag to wrap your class.)</p>
+
+<p>Basically, <code>LocaleSelectorProvider</code> generates the HTML
+for the <i>non-visible</i> parts of an SPF-standard locale selection
+form. The form's action is targeted at your portal site's <a
+	href="#i18n.locale.selector.process">SPF locale selector secondary
+page</a>. And a hidden form parameter is defined containing your current
+page URL (obtained by SPF using {@link
+com.hp.it.spf.xa.misc.portal.Utils#getRequestURL(HttpServletRequest)}
+automatically) as the target URL to which the secondary page should
+redirect (after persisting the locale selection).</p>
+
+<p>What you do is subclass <code>LocaleSelectorProvider</code> and
+then implement the {@link
+com.hp.it.spf.xa.i18n.portal.LocaleSelectorProvider#getWidgetHTML(String,Collection,Locale,boolean,boolean)}
+method (and any custom methods, like attribute setters, which you need).
+<code>getWidgetHTML</code>'s job is to return the <i>visible</i> parts
+of the form. <code>LocaleSelectorProvider</code> will embed the string
+you return from <code>getWidgetHTML</code> into the rest of the <code>&lt;FORM&gt;</code>
+markup which it automatically generates. Since <code>LocaleSelectorProvider</code>
+targets the form at the locale selector secondary page, which needs to
+get the user's chosen locale from your visible elements of the form,
+therefore your <code>getWidgetHTML</code> return string <b>must</b>
+minimally define some kind of form parameter containing the user's
+chosen locale. For example, your <code>getWidgetHTML</code>
+implementation could include a <code>&lt;SELECT&gt;</code> element for
+the chosen locale in the return string, or an <code>&lt;INPUT&gt;</code>
+element of some kind. In any case:</p>
+
+<ol>
+	<li>
+	<p>Your form parameter <b>must</b> be declared to have a name
+	matching the <code>String</code> argument to <code>getWidgetHTML</code>.
+	That is, you must take the <code>String</code> argument to <code>getWidgetHTML</code>
+	and use it as the HTML form parameter name for the user's locale
+	selection in your returned string.</p>
+	</li>
+	<li>
+	<p>Additionally, your form parameter's value (in your returned
+	string from <code>getWidgetHTML</code>) <b>must</b> be an RFC 3066
+	language tag representing the user's locale selection. The language tag
+	must be comprised of the ISO 639-1 language code and, optionally, the
+	ISO 3166-1 country code. For example, <code>fr-CH</code> for Swiss
+	French and <code>en</code> for generic English are both valid language
+	tags. (In your implementation of <code>getWidgetHTML</code>, you may
+	find {@link
+	com.hp.it.spf.xa.i18n.I18nUtility#localeToLanguageTag(Locale)} helpful
+	for generating language tags for the available <code>Locale</code>
+	options.)</p>
+	</li>
+</ol>
+
+<p>Put another way, the <code>LocaleSelectorProvider.getHTML</code>
+methods return the HTML for the whole locale selector form, with your <code>getWidgetHTML</code>
+string embedded inside it like this:</p>
+
+<blockquote><pre>
+&lt;form action="<i>points to locale selector secondary page</i>" method="post"&gt;
+   &lt;input type="hidden" value="<i>the current page URL</i>"&gt;
+   &lt;-- your getWidgetHTML return string goes here; somewhere in it you must  --&gt;
+   &lt;-- define a form parameter named with the String passed to getWidgetHTML --&gt;
+   &lt;-- and whose value when submitted is the user's chosen locale, in        --&gt;
+   &lt;-- language-tag format (eg "zh-CN")                                      --&gt;
+&lt;/form&gt;
+</pre></blockquote>
+
+<p>Here are the parameters to the <code>getWidgetHTML</code> method:</p>
+
+<ul>
+	<li>
+	<p>The <code>String</code> is the name you must use for the form
+	parameter.</p>
+	</li>
+	<li>
+	<p>The <code>Collection</code> is a collection of all of the
+	available locales which you have <a href="#i18n.other.locale.config">configured</a>
+	for the current portal site. The locales are passed as <code>Locale</code>
+	objects (ie this is a <code>Collection</code> of <code>Locale</code> -
+	it is not declared in the <code>getWidgetHTML</code> signature as <code>Collection&lt;Locale&gt;</code>
+	for backward-compatibility to Java 1.4). As provided, the collection is
+	unsorted.</p>
+	</li>
+	<li>
+	<p>The <code>Locale</code> is the user's current locale, as
+	determined by the <a href="#i18n.other.locale.resolver">SPF locale
+	resolver</a> as usual.</p>
+	</li>
+	<li>
+	<p>Finally, the 2 boolean switches are advice to you.</p>
+	<ul>
+		<li>
+		<p>The first switch indicates whether any visible text in your <code>getWidgetHTML</code>
+		return string should be HTML-escaped or not. If <code>true</code>, it
+		means you should HTML-escape your visible text; if <code>false</code>,
+		do not. To help you perform a requested HTML-escape, there are many
+		utility methods available in the Java world; one such is the
+		SPF-provided {@link com.hp.it.spf.xa.misc.Utils#escapeXml(String)}
+		method. If you are getting all your visible text from message
+		resources, though, note you can just pass this switch through into the
+		SPF message retrieval utility you choose to use, such as <a
+			href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getValue</code></a>;
+		it will honor the flag for you, automatically.</p>
+		</li>
+		<li>
+		<p>The second switch indicates whether any Vignette-generated <code>&lt;SPAN&gt;</code>
+		tags should be removed from your visible text, or retained. If <code>true</code>,
+		you should remove them; if <code>false</code>, do not. {@link
+		com.hp.it.spf.xa.i18n.portal.I18nUtility#filterSpan(String)} can help
+		with removing them, but you will probably rather just pass this switch
+		through into the SPF message retrieval utility you choose to use, as
+		above; the utility will then honor the flag for you, automatically.</p>
+		</li>
+	</ul>
+	<p>Note that in reality, these switches are themselves just
+	passed-through by <code>LocaleSelectorProvider</code> from its <code>getHTML</code>
+	methods to your <code>getWidgetHTML</code> implementation. So depending
+	on how you plan to set those switches when you call <code>getHTML</code>
+	in your portal component, you can ignore them or even apply a different
+	semantic entirely.</p>
+	<li>
+	<p><b>Note:</b> The <code>PortalContext</code> object is not an
+	argument to the <code>getWidgetHTML</code> method, but it is passed to
+	the constructor, which places it in the protected class attribute,
+	{@link
+	com.hp.it.spf.xa.i18n.portal.LocaleSelectorProvider#portalContext}. So
+	if your implementation of <code>getWidgetHTML</code> needs a <code>PortalContext</code>,
+	that's where it can find it.</p>
+	</li>
+</ul>
+
 <a name="i18n.locale.selector.process">
 <h4>2.7.5. Using the <code>spf-locale-selector-secondarypagetype</code>
 and <code>spf-locale-selector-secondarypage</code></h4>
+
+<p>All of the above variations in the locale selector share a common
+trait: they all point to SPF-provided processing logic for persisting
+the user's locale selection when activated. That is, they all produce
+HTML forms that, when submitted, invoke the SPF-provided locale selector
+secondary page at your portal site, which persists the locale selection
+and then redirects to your page. This section describes a bit about how
+this works, and what configuration you need to do for it to work.</p>
+
+LEFT OFF HERE
 
 <hr>
 
 <a name="i18n.locale.indicator">
 <h3>2.8. Generating the locale indicator</h3>
 </a> <a name="i18n.locale.indicator.java">
-<h4>2.8.1. Generating the locale indicator with Java code
-</code>
-</h4>
-</a>
-<a name="i18n.locale.indicator.jsp">
+<h4>2.8.1. Generating the locale indicator with Java code </code></h4>
+</a> <a name="i18n.locale.indicator.jsp">
 <h4>2.8.2. Using <code>&lt;spf-i18n-portal:classicLocaleIndicator&gt;</code></h4>
-</a>
-<a name="i18n.locale.indicator.style">
+</a> <a name="i18n.locale.indicator.style">
 <h4>2.8.3. Using the <code>spf-locale-indicator-classic-style</code></h4>
 </a>
 
@@ -6334,8 +6478,7 @@ those extensions.</p>
 
 <a name="error.about">
 <h3>6.1. About error handling and the Shared Portal Framework</h3>
-</a>
-<a name="error.about.other">
+</a> <a name="error.about.other">
 <h4>6.1.1. Error handling with WPA Portlet Edition and Spring
 Portlet MVC</h4>
 </a>
@@ -6806,8 +6949,7 @@ Spring <code>SimpleMappingExceptionResolver</code>. See the <a
 
 <a name="error.spf.examples">
 <h3>6.4. Some examples</h3>
-</a>
-<a name="error.spf.examples.business">
+</a> <a name="error.spf.examples.business">
 <h4>6.4.1. An example of business error handling</h4>
 </a>
 
