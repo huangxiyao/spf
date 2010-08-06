@@ -218,8 +218,7 @@ later.
 		<li>2.8. <a href="#i18n.locale.indicator">Generating the
 		locale indicator</a>
 		<ul>
-			<li>2.8.1. <a href="#i18n.locale.indicator.java">Generating
-			the locale indicator with Java code</a></li>
+			<li>2.8.1. <a href="#i18n.locale.indicator.java">Using <code>I18nUtility.getLocaleDisplayName</code></a></li>
 			<li>2.8.2. <a href="#i18n.locale.indicator.jsp">Using <code>&lt;spf-i18n-portal:classicLocaleIndicator&gt;</code></a></li>
 			<li>2.8.3. <a href="#i18n.locale.indicator.style">Using the
 			<code>spf-classic-locale-indicator-style</code></a></li>
@@ -2324,8 +2323,9 @@ fashion. This locale selector:</p>
 with just one available locale (ie, your site default locale, with no
 additional locales declared in <code>site_locale_support.properties</code>),
 though, this <code>spf-locale-selector-classic-style</code> degenerates
-into a locale indicator for the current locale, since no locale
-selection is possible for the user in this case.</p>
+into a <a href="#i18n.locale.indicator">locale indicator</a> for the
+current locale, since no locale selection is possible for the user in
+this case.</p>
 
 <p>The <code>spf-locale-selector-classic-style</code> and its
 companion style type, <code>spf-locale-widget-styletype</code>, are
@@ -2333,15 +2333,25 @@ provided in the main SPF components distribution, and included in each
 SPF portal runtime environment. To use them:</p>
 
 <ul>
-	<li>Define your Vignette grid to include a position for the <code>spf-locale-widget-styletype</code>,
-	as usual in Vignette grid programming.</li>
-	<li>Create a Vignette theme for that grid, and set <code>spf-locale-selector-classic-style</code>
-	to be the style instance to use for the <code>spf-locale-widget-styletype</code>.</li>
-	<li>For your portal site administrator to have access to the style
-	type and style (eg to change theme settings in the runtime
-	environment), the SPF Vignette server administrator should share the <code>spf-locale-selector-classic-style</code>,
-	<code>spf-locale-indicator-classic-style</code>, and <code>spf-locale-widget-styletype</code>
-	to your portal site.</li>
+	<li>
+	<p>Define your Vignette grid to include a position for the <code>spf-locale-widget-styletype</code>,
+	as usual in Vignette grid programming.</p>
+	</li>
+	<li>
+	<p>Create a Vignette theme for that grid, and set <code>spf-locale-selector-classic-style</code>
+	to be the style instance to use for the <code>spf-locale-widget-styletype</code>.</p>
+	</li>
+	<li>
+	<p>For your portal site administrator to have access to the styles
+	(eg to change theme settings in the runtime environment), the SPF
+	Vignette server administrator should share the <code>spf-locale-selector-classic-style</code>
+	and <code>spf-locale-indicator-classic-style</code> to your portal
+	site. In the Vignette server console, go to <b>Components &gt;
+	Styles &gt; Style List</b>, checkmark the 2 styles, and use <b>Share
+	to...</b>. This should already have been done for you when your portal site
+	was first setup. (It should not be necessary to share the style type to
+	your site, just the styles.)</p>
+	</li>
 </ul>
 
 <a name="i18n.locale.selector.extend">
@@ -2501,19 +2511,180 @@ secondary page at your portal site, which persists the locale selection
 and then redirects to your page. This section describes a bit about how
 this works, and what configuration you need to do for it to work.</p>
 
-LEFT OFF HERE
+<p>The locale persistence logic is provided by two SPF Vignette
+portal components:</p>
+
+<ul>
+	<li>The <b>Shared Portal Framework - Locale Selector Process</b>
+	secondary page (component ID <code>spf-locale-selector-secondarypage</code>)</li>
+	<li>The <b>Shared Portal Framework - Locale Selector Process</b>
+	secondary page type (component ID <code>spf-locale-selector-secondarypagetype</code>)</li>
+</ul>
+
+<p>The <code>spf-locale-selector-secondarypage</code> is an instance
+of the <code>spf-locale-selector-secondarypagetype</code>. Both
+components are included among the SPF portal components present in every
+SPF Vignette portal runtime environment. You just need to make them
+available within your portal site. In Vignette console:</p>
+
+<ol>
+	<li>
+	<p>The SPF locale selector secondary page must have been configured
+	as the default secondary page to use for the SPF locale selector
+	secondary page type. In the Vignette server console, go to <b>Server
+	Settings &gt; Server Defaults &gt; Site &amp; Appearance &gt; Default
+	Secondary Pages</b> to make this configuration. In most cases, this will
+	already have been done for you during SPF server setup.</p>
+	</li>
+	<li>
+	<p>The SPF locale selector secondary page must have been shared to
+	your portal site. In the Vignette server console, go to <b>Components
+	&gt; Pages &gt; Secondary Page List</b>, checkmark the <b>Shared Portal
+	Framework - Locale Selector Process</b>, and <b>Share to...</b>. This
+	should already have been done for you when your portal site was first
+	setup. (It should not be necessary to share the secondary page type to
+	your site, just the secondary page.)</p>
+	</li>
+	<li>
+	<p>Finally, in your portal site, you must apply your site's grid
+	and theme to the secondary page, and again make sure that the secondary
+	page is configured to be used for that secondary page type. In the
+	Vignette site console for your site, go to <b>Site Settings &gt;
+	Appearance &gt; Secondary Pages</b> to do this.</p>
+	</li>
+	<li>
+	<p>Done - no further configuration or customization is needed.
+	</li>
+</ol>
+
+<p>When invoked from one of the locale selectors discussed in the
+previous sections, the locale selector secondary page will get the
+user's chosen locale from request parameters in the usual manner. It
+will persist the locale selection so that it takes effect through the <a
+	href="#i18n.other.locale.resolver">SPF locale resolver</a> for the
+remainder of the session in an HP.com-compliant manner. And finally it
+will redirect to a target page whose URL is also provided through a
+request parameter (the locale selector form always sets that parameter
+to the URL for the current page). Here are some details you don't really
+need to know:</p>
+
+<ul>
+	<li>
+	<p>The secondary page expects the request parameter containing the
+	chosen locale to be named with the value of {@link
+	com.hp.it.spf.xa.misc.Consts.PARAM_SELECT_LOCALE} and to contain the
+	chosen locale in RFC 3066 format like <code>zh-CN</code> for China
+	Chinese, <code>de</code> for generic German, etc.</p>
+	</li>
+	<li>
+	<p>Since the processing logic will end in a redirect, it also
+	expects the redirect target URL to be provided in another request
+	parameter, named with the value of {@link
+	com.hp.it.spf.xa.misc.Consts.PARAM_SELECT_LOCALE_TARGET}.</p>
+	</li>
+	<li>
+	<p>After double-checking that the chosen locale really is one of
+	the available locales you have <a href="#i18n.other.locale.config">configured</a>
+	for your portal site, the secondary page sets the HP.com <code>lang</code>
+	cookie for 1 year with the language of the chosen locale. If there is a
+	country in the chosen locale, that is also set for 1 year, into the
+	HP.com <code>cc</code> cookie (if there is no country in the chosen
+	locale, any previous HP.com <code>cc</code> cookie is deleted). Since
+	the <a href="#i18n.other.locale.resolver">SPF locale resolver</a>
+	inputs these cookies, this ensures they will take effect for the rest
+	of the session and into the future, for up to a year, not just in HPSC
+	but in all other HP.com-compliant Web sites too.</p>
+	</li>
+	<li>
+	<p>If the user is currently logged-into HP Passport, the secondary
+	page also writes-back the chosen locale to the HPP profile. Only the
+	HPP profile's language attribute is updated, not the
+	country-of-residence attribute. Since the <a
+		href="#i18n.other.locale.resolver">SPF locale resolver</a> also takes
+	the HPP profile as an input (only when the cookies don't exist), this
+	ensures the locale preference will take effect when the user logs-in
+	indefinitely into the future, even if the cookies are no longer
+	present. It also ensures that any background activity performed against
+	the HPP profile (eg bulk mailing, and not just in HPSC but any HPP
+	profile-facing application) takes the user's preferred language into
+	account, too.</p>
+	</li>
+	<li>
+	<p>Finally, the secondary page redirects to the target URL it was
+	passed from the locale selector form. As discussed earlier, in practice
+	the form will always have set this to your current page, so that is
+	where the user will be redirected.</p>
+	</li>
+</ul>
 
 <hr>
 
 <a name="i18n.locale.indicator">
 <h3>2.8. Generating the locale indicator</h3>
-</a> <a name="i18n.locale.indicator.java">
-<h4>2.8.1. Generating the locale indicator with Java code </code></h4>
-</a> <a name="i18n.locale.indicator.jsp">
+</a>
+
+<p>A <i>locale indicator</i> is just a very simple widget - in the
+HPWeb "classic" rendering, it is just a text string - stating what the
+current locale is. Whereas the <a href="#i18n.locale.selector">locale
+selector</a> is placed in a portal component where you want the user to be
+able to change his or her current locale, the locale indicator is placed
+where you just want a simple statement of what the current locale is.
+SPF provides the necessary tools for generating the locale indicator for
+your portal site.</p>
+
+<a name="i18n.locale.indicator.java">
+<h4>2.8.1. Using <code>I18nUtility.getLocaleDisplayName</code></h4>
+</a>
+
+<p>The HPWeb "classic"-style locale indicator is just a simple text
+string, like "Deutschland-Deutsch" or "Germany-German". To generate an
+HPWeb classic locale indicator in Java, you can use one of the <code>I18nUtility.getLocaleDisplayName</code>
+methods:</p>
+
+{@link
+com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocaleDisplayName(Locale)}<br>
+{@link
+com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocaleDisplayName(Locale,Locale)}<br>
+{@link
+com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocaleDisplayName(Locale,Locale,int)}
+
+<p>Each method returns a localized text string, ready for expressing
+into your JSP, stating the name of the given <code>Locale</code>. The
+hypen character is used as a separator between country and language
+names, as per the HPWeb standard.</p>
+
+<ul>
+	<li>
+	<p>The first <code>Locale</code> parameter is the given locale.</p>
+	</li>
+	<li>
+	<p>The second, optional <code>Locale</code> parameter is the locale
+	in which to localize the given locale's name. By default, this is
+	assumed to be the same as the given locale.</p>
+	</li>
+	<li>
+	<p>The integer parameter is actually a bitmask indicating the
+	desired order (country-first, or language-first) of country and
+	language in the name of a full locale. By default, language will be
+	first (eg "Deutsch-Deutschland"). Pass {@link
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#LOCALE_BY_COUNTRY} for
+	country-first, which is the HPWeb standard. This has no effect on a
+	generic (ie language-only) locale.</p>
+	</li>
+</ul>
+
+LEFT OFF HERE
+
+<a name="i18n.locale.indicator.jsp">
 <h4>2.8.2. Using <code>&lt;spf-i18n-portal:classicLocaleIndicator&gt;</code></h4>
-</a> <a name="i18n.locale.indicator.style">
+</a>
+<p></p>
+
+<a name="i18n.locale.indicator.style">
 <h4>2.8.3. Using the <code>spf-locale-indicator-classic-style</code></h4>
 </a>
+
+<p></p>
 
 <hr>
 
