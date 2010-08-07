@@ -2648,6 +2648,12 @@ com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocaleDisplayName(Locale,Locale)}<br
 {@link
 com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocaleDisplayName(Locale,Locale,int)}
 
+<blockquote>
+<p><b>Note:</b> Alternatively there is an <a
+	href="#i18n.locale.indicator.jsp">JSP tag</a> you can use for
+generating an HPWeb classic locale indicator.</p>
+</blockquote>
+
 <p>Each method returns a localized text string, ready for expressing
 into your JSP, stating the name of the given <code>Locale</code>. The
 hypen character is used as a separator between country and language
@@ -2673,14 +2679,33 @@ names, as per the HPWeb standard.</p>
 	</li>
 </ul>
 
-LEFT OFF HERE
-
 <a name="i18n.locale.indicator.jsp">
 <h4>2.8.2. Using <code>&lt;spf-i18n-portal:classicLocaleIndicator&gt;</code></h4>
 </a>
-<p></p>
 
-<a name="i18n.locale.indicator.style">
+<p>You use the <code>&lt;spf-i18n-portal:classicLocaleIndicator&gt;</code>
+tag to express an HPWeb "classic" locale indicator (text string like
+"United States-English") into your portal component JSP.</p>
+
+<blockquote>
+<p><b>Note:</b> <code>&lt;spf-i18n-portal:classicLocaleIndicator&gt;</code>
+is a wrapper for a <a href="#i18n.locale.indicator.java">Java method</a>,
+<code>I18nUtility.getLocaleDisplayName</code> (see above), which you can
+call directly instead, if desired.</p>
+</blockquote>
+
+<p>Usage for this JSP tag is:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
+...
+&lt;spf-i18n-portal:classicLocaleIndicator
+   order="<i>spec</i>"
+   displayInLocale="<i>language-tag</i>"
+   /&gt;
+</pre></blockquote>
+
+LEFT OFF HERE <a name="i18n.locale.indicator.style">
 <h4>2.8.3. Using the <code>spf-locale-indicator-classic-style</code></h4>
 </a>
 
