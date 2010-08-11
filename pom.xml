@@ -26,21 +26,18 @@
 	</organization>
 
 	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>Internal Releases</name>
-			<url>
-				http://samson.atl.hp.com:8081/nexus/content/repositories/releases
-			</url>
-		</repository>
+	
+        <snapshotRepository>
+            <id>snapshot</id>
+            <name>Internal Snapshots</name>
+            <url>${distributeSnapshotUrl}</url>
+        </snapshotRepository>
 
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>Internal Snapshots</name>
-			<url>
-				http://samson.atl.hp.com:8081/nexus/content/repositories/snapshots
-			</url>
-		</snapshotRepository>
+		<repository>
+			<id>release</id>
+			<name>Internal Releases</name>
+			<url>${distributeReleaseUrl}</url>
+		</repository>
 
 		<site>
 			<id>cas.sdk</id>
