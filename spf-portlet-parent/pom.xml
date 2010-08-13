@@ -15,7 +15,7 @@
 	<name>SPF Portlet Parent POM</name>
 
 	<properties>
-		<spf.common.version>2.1.1</spf.common.version>
+		<spf.common.version>2.1.2-SNAPSHOT</spf.common.version>
 	</properties>
 
 	<ciManagement>
