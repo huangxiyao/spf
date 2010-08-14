@@ -514,7 +514,6 @@
 					<groupId>com.hp.it.spf.tools</groupId>
 					<artifactId>spf-maven-car-plugin</artifactId>
 					<extensions>true</extensions>
-					<version>2.1.1</version>
 				</plugin>
 
 			</plugins>
