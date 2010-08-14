@@ -30,6 +30,10 @@
 		<module>spf-portlet-wsrp</module>
 		<module>spf-portletdriver</module>
 	</modules>
+	
+	<properties>
+		<spf.common.version>2.1.2-SNAPSHOT</spf.common.version>
+	</properties>
 
 	<distributionManagement>
 		<site>
