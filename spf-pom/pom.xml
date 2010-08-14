@@ -29,6 +29,22 @@
 		<name>Shared Portal Framework: TSG IT</name>
 	</organization>
 
+	<properties>
+		<javaVersion>1.5</javaVersion>
+		<springFrameworkVersion>2.5.6</springFrameworkVersion>
+		<jmockVersion>2.5.1</jmockVersion>
+		<!-- Proposed for next Maven release as project/build/sourceEncoding. In 
+			the meantime, some plugins already recognize this. -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- 2.5 fixes a bug in Maven 2.0.9 where paths containing spaces blow 
+			up -->
+		<!-- NOTE: darin.buck@hp.com: Javadoc plugin version 2.4 seems to be the 
+			only one that doesn't display the "prime the pump" problem out of (2.3, 2.4, 
+			2.5, 2.6, 2.6.1) -->
+		<mavenJavadocPluginVersion>2.4</mavenJavadocPluginVersion>
+	</properties>
+
 	<distributionManagement>
 
 		<snapshotRepository>
@@ -44,6 +60,95 @@
 		</repository>
 
 	</distributionManagement>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.5</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock</artifactId>
+				<version>${jmockVersion}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock-junit4</artifactId>
+				<version>${jmockVersion}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock-legacy</artifactId>
+				<version>${jmockVersion}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- Spring framework -->
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-mock</artifactId>
+				<version>2.0.8</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>1.1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>sun-javamail</groupId>
+				<artifactId>mail</artifactId>
+				<version>1.4</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>2.5</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet.jsp</groupId>
+				<artifactId>jsp-api</artifactId>
+				<version>2.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.portlet</groupId>
+				<artifactId>portlet-api</artifactId>
+				<version>2.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>1.4</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<pluginManagement>
@@ -116,7 +221,7 @@
 
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
-                <version>${mavenJavadocPluginVersion}</version>
+				<version>${mavenJavadocPluginVersion}</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
 					<docfilessubdirs>true</docfilessubdirs>
@@ -127,7 +232,7 @@
 				</configuration>
 			</plugin>
 
-			<!--  Generate Sonar report link in site reports -->
+			<!-- Generate Sonar report link in site reports -->
 			<plugin>
 				<groupId>org.codehaus.sonar-plugins</groupId>
 				<artifactId>maven-report</artifactId>
