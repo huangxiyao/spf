@@ -50,4 +50,45 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>vignette</id>
+			<dependencies>
+				<dependency>
+					<groupId>vignette</groupId>
+					<artifactId>vgn-jsr-container-taglib</artifactId>
+					<version>7.4.2</version>
+				</dependency>
+			</dependencies>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<webXml>target/vignette-resources/web.xml</webXml>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>com.hp.frameworks</groupId>
+						<artifactId>maven-vignette-plugin</artifactId>
+						<version>3.1.3</version>
+						<configuration>
+							<securityFilterEnabled>true</securityFilterEnabled>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>assemble</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
