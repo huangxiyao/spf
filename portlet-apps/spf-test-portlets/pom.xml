@@ -16,11 +16,6 @@
 	<name>SPF Test Portlets</name>
 	<description>SPF Test Portlets</description>
 
-	<properties>
-		<spf.common.version>2.1.1</spf.common.version>
-		<spf.portlet.version>2.1.1</spf.portlet.version>
-	</properties>
-
 	<dependencies>
 
 		<dependency>
