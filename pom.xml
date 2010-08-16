@@ -110,7 +110,7 @@
 		<pluginRepository>
 			<id>com.hp.it.spf</id>
 			<name>SPF Snapshot Repo</name>
-			<url>http://samson.atl.hp.com:8081/nexus/content/repositories/snapshots</url>
+			<url>http://repo1.corp.hp.com/nexus/content/repositories/snapshots</url>
 		</pluginRepository>
 		<!--
 		<pluginRepository>
