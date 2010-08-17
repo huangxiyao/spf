@@ -38,32 +38,7 @@
 		<name>Shared Portal Framework: DMITS</name>
 	</organization>
 
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>Internal Releases</name>
-			<url>
-				http://repo1.corp.hp.com/nexus/content/repositories/releases
-			</url>
-		</repository>
 
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>Internal Snapshots</name>
-			<url>
-				http://repo1.corp.hp.com/nexus/content/repositories/snapshots
-			</url>
-		</snapshotRepository>
-
-		<site>
-			<id>cas.sdk</id>
-			<name>CAS SDK</name>
-			<!--
-				<url>scp://samson.atl.hp.com:/var/www/sdk/${project.artifactId}/${project.version}</url>
-			-->
-			<url>file:/opt/sasuapps/casfw/local/var/${project.artifactId}/${project.version}</url>
-		</site>
-	</distributionManagement>
 	<build>
 		<!-- For reuse, these plugins are here in this parent POM
 			for use by the submodules. -->
