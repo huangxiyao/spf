@@ -74,7 +74,7 @@
 				<version>2.7</version>
 				<configuration>
 				<aggregate>true</aggregate>
-				<windowtitle>${name} ${project.version} Developer's Guide</windowtitle>
+				<windowtitle>${project.name} ${project.version} Developer's Guide</windowtitle>
 				</configuration>
 			</plugin>
 		</plugins>
