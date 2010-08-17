@@ -38,7 +38,14 @@
 		<name>Shared Portal Framework: DMITS</name>
 	</organization>
 
-
+	<distributionManagement>
+		<site>
+			<id>site</id>
+			<name>SPF LAF Site</name>
+			<url>${siteUrl}/spf-layout-laf/${project.version}</url>
+		</site>
+	</distributionManagement>
+	
 	<build>
 		<!-- For reuse, these plugins are here in this parent POM
 			for use by the submodules. -->
