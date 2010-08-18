@@ -32,7 +32,9 @@
 	</modules>
 	
 	<properties>
-		<spf.common.version>2.1.2-SNAPSHOT</spf.common.version>
+		<commonVersion>2.1.2-SNAPSHOT</commonVersion>
+		<casServiceVersion>1.0.1-SNAPSHOT</casServiceVersion>
+		<casCoreVersion>1.1.4</casCoreVersion>
 	</properties>
 
 	<distributionManagement>
