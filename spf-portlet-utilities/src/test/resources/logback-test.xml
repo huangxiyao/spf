@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration debug="true">
+
+    <!--
+        Levels (case-insensitive) ALL OFF ERROR (highest value) WARN INFO DEBUG TRACE (lowest value)
+    -->
+
+    <contextName>com.hp.it.cas.email.atm</contextName>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.err</target>
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ALL</level>
+        </filter>
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%date [%thread] [%mdc] %level %logger.%method:%line %message%n</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="unit-test-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${java.io.tmpdir}/logs/unit-test-cas-services-jdbc.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${java.io.tmpdir}/logs/unit-test-cas-services-jdbc.%d{yyyy-MM-dd}.log
+            </FileNamePattern>
+            <MaxHistory>7</MaxHistory> <!-- the number of days worth of history -->
+        </rollingPolicy>
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%date [%thread] [%mdc] %level %logger.%method:%line %message%n</Pattern>
+        </layout>
+    </appender>
+
+    <logger name="com.hp.it.cas.cloud.AgentHttpServerRunner" level="debug" />
+
+    <root level="all">
+        <appender-ref ref="console" />
+        <appender-ref ref="unit-test-log" />
+    </root>
+
+</configuration>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           	http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           	http://www.springframework.org/schema/tx
+			http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="application.properties" />
+   </bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="${jdbcUrl}"/>
+		<property name="username" value="${jdbcUsername}"/>
+		<property name="password" value="${jdbcPassword}"/>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+<!--	<bean id="daoFactory" class="com.hp.it.cas.batch.runtime.dao.LockDAOFactoryImpl">-->
+<!--		<constructor-arg>-->
+<!--			<ref bean="dataSource" />-->
+<!--		</constructor-arg>-->
+<!--	</bean>-->
+
+    <bean id="logAuditDaoFactory" class="com.hp.it.cas.log.audit.dao.LogAuditDAOFactoryImpl">
+        <constructor-arg>
+            <ref bean="dataSource" />
+        </constructor-arg>
+    </bean>
+    
+    <bean id="cursorDAOFactory" class="com.hp.it.cas.cursor.dao.CursorDAOFactory">
+        <constructor-arg>
+            <ref bean="dataSource" />
+        </constructor-arg>
+    </bean>
+    
+    <bean id="configDaoFactory" class="com.hp.it.cas.config.dao.ConfigDAOFactoryImpl">
+        <constructor-arg>
+            <ref bean="dataSource" />
+        </constructor-arg>
+    </bean>
+	
+</beans>
