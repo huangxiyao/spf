@@ -66,15 +66,6 @@
 		<module>package_all</module>
 
 	</modules>
-	<dependencies>
-		<dependency>
-			<groupId>com.hp.frameworks</groupId>
-			<artifactId>hpweb-laf</artifactId>
-			<version>2.1.10-SNAPSHOT</version>
-			<type>car</type>
-			<scope>compile</scope>
-		</dependency>
-	</dependencies>
 	<reporting>
 		<plugins>
 			<plugin>
