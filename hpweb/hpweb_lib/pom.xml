@@ -7,7 +7,7 @@
     	<version>2.1.10-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>hpweb-lib</artifactId>
+	<artifactId>hpweb_lib</artifactId>
 	<packaging>car</packaging>
 	<name>HPWeb Class Library VAP Component</name>
 	
