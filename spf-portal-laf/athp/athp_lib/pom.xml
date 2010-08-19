@@ -7,7 +7,7 @@
     	<version>2.1.10-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>athp-vap</artifactId>
+	<artifactId>athp_lib</artifactId>
 	<packaging>car</packaging>
 	<name>AtHP Class Library VAP Component</name>
 	
