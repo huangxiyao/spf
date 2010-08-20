@@ -2449,12 +2449,14 @@ string embedded inside it like this:</p>
 	objects (ie this is a <code>Collection</code> of <code>Locale</code> -
 	it is not declared in the <code>getWidgetHTML</code> signature as <code>Collection&lt;Locale&gt;</code>
 	for backward-compatibility to Java 1.4). As provided, the collection is
-	unsorted.</p>
+	unsorted. The system obtained this collection for you by calling <a
+		href="#i18n.other.locale.avail"><code>I18nUtility.getAvailableLocales(HttpServletRequest)</code></a>
+	in the usual manner.</p>
 	</li>
 	<li>
-	<p>The <code>Locale</code> is the user's current locale, as
-	determined by the <a href="#i18n.other.locale.resolver">SPF locale
-	resolver</a> as usual.</p>
+	<p>The <code>Locale</code> is the user's current locale, which the
+	system obtained for you by calling <a href="#i18n.other.locale.get"><code>I18nUtility.getLocale(HttpServletRequest)</code></a>
+	in the usual manner.</p>
 	</li>
 	<li>
 	<p>Finally, the 2 boolean switches are advice to you.</p>
@@ -2758,7 +2760,6 @@ SPF portal runtime environment. To use them:</p>
 
 <hr>
 
-LEFT OFF HERE
 <a name="i18n.l10n">
 <h3>2.9. Localizing your resources</h3>
 </a>
@@ -2792,7 +2793,7 @@ HTML files, etc) in whatever way you see fit. The only requirements are:</p>
 </ul>
 
 <a name="i18n.l10n.spf">
-<h4>2.8.1 The SPF localization process</h4>
+<h4>2.9.1 The SPF localization process</h4>
 </a>
 
 <p>The Shared Portal Framework provides tools and support for a
@@ -2852,15 +2853,21 @@ covered in the <b>SPF Localization Guide</b>.</p>
 
 <hr>
 
-<a name="i18n.other">
-<h3>2.9. Other internationalization topics</h3>
+LEFT OFF HERE <a name="i18n.other">
+<h3>2.10. Other internationalization topics</h3>
 </a>
 
 <p>This section covers miscellaneous other topics in the subject
 area of internationalization.</p>
 
+<a name="i18n.other.locale.avail">
+<h4>2.10.1. Getting the available locales</h4>
+</a>
+
+<p></p>
+
 <a name="i18n.other.locale.get">
-<h4>2.9.1. Getting the locale</h4>
+<h4>2.10.2. Getting the current locale</h4>
 </a>
 
 <p>Use the Java portlet standard API for this, {@link
@@ -2922,7 +2929,7 @@ elements in order to have visibility to this locale.</p>
 </blockquote>
 
 <a name="i18n.other.locale.set">
-<h4>2.9.2. Setting the locale</h4>
+<h4>2.10.3. Setting the current locale</h4>
 </a>
 
 <p>Generally there is no need for you to be concerned with setting
@@ -3035,9 +3042,9 @@ pass, your setting will take effect with varying degrees of persistence:</p>
 	</li>
 </ul>
 
-<a name="i18n.other.i18n_portlet_config">
-<h4>2.9.3. Configuring <code>i18n_portlet_config.properties</code>
-(optional)</h4>
+<a name="i18n.other.locale.config">
+<h4>2.10.4. Configuring site default locale and additional locales
+(<code>site_locale_support.properties</code>)</h4>
 </a>
 
 <blockquote>
@@ -3100,45 +3107,8 @@ servlet.fileRelay.included=false
 	</dd>
 </dl>
 
-<a name="i18n.other.init_relay">
-<h4>2.9.4. Configuring <code>init_relay.properties</code>
-(optional)</h4>
-</a>
-
-<blockquote>
-<p><b>Note:</b> You only need to concern yourself with <code>init_relay.properties</code>
-if you have <a href="#i18n.location.external">external supporting
-resources</a> <b>and</b> you are dis-satisfied with the configuration in <code>init_relay_default.properties</code>
-(which is delivered inside the SPF portlet utilities JAR). See the
-discussion in the <a
-	href="com/hp/it/spf/xa/relay/servlet/package-summary.html#init_relay.properties">package
-description</a> for the relay servlet.</p>
-</blockquote>
-
-<p>The properties in <code>init_relay.properties</code> list all of
-the allowed file extensions which the relay servlet will permit to be
-downloaded from anywhere underneath the <i>portlet resource bundle
-folder</i>. They also map to the MIME type which the servlet should specify
-(on the HTTP <code>Content-Type:</code> response header) when
-downloading that particular type of file to the user. The properties use
-the following format:</p>
-
-<blockquote><pre>
-contentType.<i>file-extension</i>=<i>mime-type</i>
-</pre></blockquote>
-
-<p>For example:</p>
-
-<blockquote><pre>
-contentType.mov=video/quicktime # For Apple quicktime format using .mov extension
-</pre></blockquote>
-
-<p>This means that all <code>*.mov</code> files in the portlet
-bundle folder will be permissible for download, and <code>Content-Type:
-video/quicktime</code> will be used in the download.</p>
-
 <a name="i18n.other.common">
-<h4>2.9.5. Using the common <code>I18nUtility</code></h4>
+<h4>2.10.5. Using the common <code>I18nUtility</code></h4>
 </a>
 
 <p>Above we have seen the various internationalization API's and
@@ -3162,6 +3132,12 @@ encompassing:</p>
 	Common Utilities Developer's Guide</a> as well as in the JavaDoc for the
 	{@link com.hp.it.spf.xa.i18n.portlet.I18nUtility} class.</li>
 </ul>
+
+<a name="i18n.other.locale.resolver">
+<h4>2.10.6. A word about the locale resolver</h4>
+</a>
+
+<p></p>
 
 <hr>
 
