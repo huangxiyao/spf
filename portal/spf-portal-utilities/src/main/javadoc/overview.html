@@ -2903,7 +2903,7 @@ following SPF portal <code>I18nUtility</code> methods:</p>
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.portal.I18nUtility#getAvailableLocales(HttpServletRequest)}</dt>
 	<dd>
-	<p>This method returns a {@link java.util.Collection} of {@link
+	<p>Returns a {@link java.util.Collection} of {@link
 	java.util.Locale} objects, one for each of the available locales at the
 	<b>current</b> portal site. You pass your current {@link
 	javax.servlet.http.HttpServletRequest}.</p>
@@ -2911,18 +2911,40 @@ following SPF portal <code>I18nUtility</code> methods:</p>
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.portal.I18nUtility#getAvailableLocales(Site)}</dt>
 	<dd>
-	<p>This method returns a similar <code>Collection</code> of <code>Locale</code>
+	<p>Returns a similar <code>Collection</code> of <code>Locale</code>
 	objects, which are the available locales at the <b>given</b> portal
 	site. You pass the Vignette <code>Site</code> object for the desired
 	site.</p>
 	</dd>
 </dl>
 
-<p>In each method, the returned collection is unsorted. Please see
-the JavaDocs for the methods for more information.</p>
+<p>In each method, the returned collection is unsorted. It contains
+the site default locale and any additional locales aggregated together
+without distinction. If you need to know which is the site default
+locale, you can get just the site default locale using one of the
+following SPF portal <code>I18nUtility</code> methods:</p>
 
-LEFT OFF HERE
-<a name="i18n.other.locale.get">
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getDefaultLocale(HttpServletRequest)}</dt>
+	<dd>
+	<p>Returns the site default {@link java.util.Locale} for the <b>current</b>
+	portal site. You pass your current {@link
+	javax.servlet.http.HttpServletRequest}.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getDefaultLocale(Site)}</dt>
+	<dd>
+	<p>Returns the site default {@link java.util.Locale} for the <b>given</b>
+	portal site. You pass the Vignette <code>Site</code> object for the
+	desired site.</p>
+	</dd>
+</dl>
+</dl>
+
+<p>Please see the JavaDocs for more information about the methods.</p>
+
+LEFT OFF HERE <a name="i18n.other.locale.get">
 <h4>2.10.2. Getting the current locale</h4>
 </a>
 
