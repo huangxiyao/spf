@@ -2342,15 +2342,15 @@ SPF portal runtime environment. To use them:</p>
 	to be the style instance to use for the <code>spf-locale-widget-styletype</code>.</p>
 	</li>
 	<li>
-	<p>For your portal site administrator to have access to the styles
-	(eg to change theme settings in the runtime environment), the SPF
-	Vignette server administrator should share the <code>spf-locale-selector-classic-style</code>
-	and <code>spf-locale-indicator-classic-style</code> to your portal
-	site. In the Vignette server console, go to <b>Components &gt;
-	Styles &gt; Style List</b>, checkmark the 2 styles, and use <b>Share
+	<p>For your portal site administrator to have access to the grid,
+	theme and styles (eg to change theme settings in the runtime
+	environment), the SPF Vignette server administrator should share the <code>spf-locale-indicator-classic-style</code>,
+	<code>spf-locale-selector-classic-style</code>, and the theme and grid
+	to your portal site. In the Vignette server console, go to <b>Components
+	&gt; Styles &gt; Style List</b>, checkmark the 2 styles, and use <b>Share
 	to...</b>. This should already have been done for you when your portal site
 	was first setup. (It should not be necessary to share the style type to
-	your site, just the styles.)</p>
+	your site, just the styles.) Then do similarly for your theme and grid.</p>
 	</li>
 </ul>
 
@@ -2705,14 +2705,60 @@ call directly instead, if desired.</p>
    /&gt;
 </pre></blockquote>
 
-LEFT OFF HERE <a name="i18n.locale.indicator.style">
+<a name="i18n.locale.indicator.style">
 <h4>2.8.3. Using the <code>spf-locale-indicator-classic-style</code></h4>
 </a>
 
-<p></p>
+<p>If you are developing your own Vignette grid, Shared Portal
+Framework provides a style type and style component for the HPWeb
+"classic" locale indicator which you can plug right in. The style type
+is <code>spf-locale-widget-styletype</code>, the <code>Shared
+Portal Framework - Locale Widget Style Type</code>. This style type has 2
+styles provided by SPF:</p>
+
+<ul>
+	<li><code>spf-locale-selector-classic-style</code>, the <code>Shared
+	Portal Framework - Classic Locale Selector Style</code> (described <a
+		href="#i18n.locale.selector.style">above</a>)</li>
+	<li><code>spf-locale-indicator-classic-style</code>, the <code>Shared
+	Portal Framework - Classic Locale Indicator Style</code> (described here)</li>
+</ul>
+
+<p>The <code>spf-locale-indicator-classic-style</code> simply uses
+the JSP tag described <a href="#i18n.locale.indicator.jsp">above</a> to
+emit the name of the current locale (called a <i>locale indicator</i>)
+in the HPWeb "classic" fashion.</p>
+
+<p>The <code>spf-locale-indicator-classic-style</code> and its
+companion style type, <code>spf-locale-widget-styletype</code>, are
+provided in the main SPF components distribution, and included in each
+SPF portal runtime environment. To use them:</p>
+
+<ul>
+	<li>
+	<p>Define your Vignette grid to include a position for the <code>spf-locale-widget-styletype</code>,
+	as usual in Vignette grid programming.</p>
+	</li>
+	<li>
+	<p>Create a Vignette theme for that grid, and set <code>spf-locale-indicator-classic-style</code>
+	to be the style instance to use for the <code>spf-locale-widget-styletype</code>.</p>
+	</li>
+	<li>
+	<p>For your portal site administrator to have access to the grid,
+	theme and styles (eg to change theme settings in the runtime
+	environment), the SPF Vignette server administrator should share the <code>spf-locale-indicator-classic-style</code>,
+	<code>spf-locale-selector-classic-style</code>, and the theme and grid
+	to your portal site. In the Vignette server console, go to <b>Components
+	&gt; Styles &gt; Style List</b>, checkmark the 2 styles, and use <b>Share
+	to...</b>. This should already have been done for you when your portal site
+	was first setup. (It should not be necessary to share the style type to
+	your site, just the styles.) Then do similarly for your theme and grid.</p>
+	</li>
+</ul>
 
 <hr>
 
+LEFT OFF HERE
 <a name="i18n.l10n">
 <h3>2.9. Localizing your resources</h3>
 </a>
