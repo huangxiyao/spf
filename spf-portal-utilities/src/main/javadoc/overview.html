@@ -2853,7 +2853,7 @@ covered in the <b>SPF Localization Guide</b>.</p>
 
 <hr>
 
-LEFT OFF HERE <a name="i18n.other">
+<a name="i18n.other">
 <h3>2.10. Other internationalization topics</h3>
 </a>
 
@@ -2864,8 +2864,64 @@ area of internationalization.</p>
 <h4>2.10.1. Getting the available locales</h4>
 </a>
 
-<p></p>
+<p>In Shared Portal Framework, each portal site can define its own
+list of available locales - ie, the locales acceptable to the portal
+site. For example, this is the collection of locales listed in the <a
+	href="#i18n.locale.selector">locale selector</a> for the portal site.
+These available locales are defined to be the aggregation of the
+following:</p>
 
+<ul>
+	<li>
+	<p>The <i>default locale</i> for the portal site, as <a
+		href="#i18n.other.locale.config">configured</a> in Vignette console.
+	Every site has a default locale, even if it is allowed to itself just
+	default to the SPF Vignette server default locale (which is
+	US-English).</p>
+	</li>
+	<li>
+	<p>Any <i>additional locales</i> supported by the portal site, as <a
+		href="#i18n.other.locale.config">configured</a> in <code>site_locale_support.properties</code>.</p>
+	</li>
+</ul>
+
+<p>Note that each locale is only considered available if it is also
+a registered locale in Vignette server. Both full country-specific
+locales like US-English, and generic language-only locales like English,
+are supported by SPF and thus may be made available for your portal site
+(but note that the current HP.com standard is to utilize full
+country-specific locales only). Read <a href="#i18n.other.locale.config">below</a>
+for more information on configuring the available locales for your
+portal site.</p>
+
+<p>SPF portal components can get the collection of available locales
+at runtime. (Portlets cannot do this. The set of available locales is a
+portal-managed asset, not exposed by SPF to portlets.) Use one of the
+following SPF portal <code>I18nUtility</code> methods:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getAvailableLocales(HttpServletRequest)}</dt>
+	<dd>
+	<p>This method returns a {@link java.util.Collection} of {@link
+	java.util.Locale} objects, one for each of the available locales at the
+	<b>current</b> portal site. You pass your current {@link
+	javax.servlet.http.HttpServletRequest}.</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#getAvailableLocales(Site)}</dt>
+	<dd>
+	<p>This method returns a similar <code>Collection</code> of <code>Locale</code>
+	objects, which are the available locales at the <b>given</b> portal
+	site. You pass the Vignette <code>Site</code> object for the desired
+	site.</p>
+	</dd>
+</dl>
+
+<p>In each method, the returned collection is unsorted. Please see
+the JavaDocs for the methods for more information.</p>
+
+LEFT OFF HERE
 <a name="i18n.other.locale.get">
 <h4>2.10.2. Getting the current locale</h4>
 </a>
