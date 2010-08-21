@@ -3080,68 +3080,82 @@ number of better ways to do it:</p>
 	</li>
 </ul>
 
-LEFT OFF HERE <a name="i18n.other.locale.config">
+<a name="i18n.other.locale.config">
 <h4>2.10.4. Configuring site default locale and additional locales
 (<code>site_locale_support.properties</code>)</h4>
 </a>
 
-<blockquote>
-<p><b>Note:</b> You only need to concern yourself with <code>i18n_portlet_config.properties</code>
-if you have <a href="#i18n.location.external">external supporting
-resources</a> <b>and</b> you are either putting the <i>portlet resource
-bundle folder</i> in a non-default location, <b>or</b> you are deploying the
-<i>file relay servlet</i> in a non-default location.</p>
-</blockquote>
+<p>The <a href="#i18n.other.locale.avail">available locales</a> for
+your portal site are:</p>
 
-<p>The <code>i18n_portlet_config.properties</code> lets you
-configure the location of the portlet resource bundle folder, on the
-portlet server, and the location of the file relay servlet.</p>
+<ul>
+	<li>Your <i>site default locale</i>, configured in Vignette
+	console; plus</li>
+	<li>Any <i>additional locales</i>, defined for your site in <code>site_locale_support.properties</code></li>
+</ul>
 
 <dl>
-	<dt><code>portlet.bundleDirectory</code></dt>
+	<dt>To configure your <b>site default locale</b>:</dt>
 	<dd>
-	<p>This property gives the fully-qualified pathname of the <i>portlet
-	resource bundle folder</i> on the portlet server. For example:</p>
-	<blockquote><pre>
-portlet.bundleDirectory=/var/my_portlet/my_resources
-</pre></blockquote>
-	<p>The default value for this property is {@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#BUNDLE_DIR_DEFAULT} and you
-	do not need to configure this property if you accept the default.</p>
+	<p>In Vignette site console for your site, navigate to <b>Site
+	Settings &gt; Site Basics &gt; Languages</b> and configure the <b>Default
+	Language</b>. The list of Vignette server-registered locales is presented
+	to you, from which to choose your site default. Ignore the other
+	settings on the page, such as <b>Guest Languages</b> - SPF does not use
+	them. Changes to the site default locale take effect immediately within
+	the list of <a href="#i18n.other.locale.avail">available locales</a>.</p>
 	</dd>
-	<dt><code>servlet.fileRelay.url</code></dt>
-	<dt><code>servlet.fileRelay.included</code></dt>
+	<dt>To configure your <b>additional locales</b>:</dt>
 	<dd>
-	<p>These properties give the location of the <i>file relay
-	servlet</i>. The <code>servlet.fileRelay.url</code> property gives the URI,
-	and the <code>servlet.fileRelay.included</code> property indicates if
-	that URI is inside your portlet application (<code>true</code>) or
-	somewhere else (<code>false</code>).</p>
-	<p>For example, if you are deploying the relay servlet inside your
-	portlet application (as is recommended), put your servlet mapping path
-	into the <code>servlet.fileRelay.url</code> property and set the <code>servlet.fileRelay.included</code>
-	property to <code>true</code>, like this (eg where you have used <code>&lt;servlet-mapping&gt;/getFile/*</code>
-	in your deployment descriptor for the servlet):</p>
+	<p>Add the locales to the <code>site_locale_support.properties</code>
+	file. This is a configuration file on each Vignette portal machine,
+	stored in a directory on the portal classpath - typically the <i>global
+	resources</i> directory, <code>/opt/sasuapps/sp/global_resources</code>
+	(though in a sandbox, it may be in a different location). The format of
+	the file is:</p>
 	<blockquote><pre>
-servlet.fileRelay.url=/getFile
-servlet.fileRelay.included=true
-	</pre></blockquote>
-	<p>As another example, if you are deploying the relay servlet in
-	the SPF portal application (but remember it must have access to the
-	portlet bundle folder, so this typically only works with a
-	local-portlet architecture), then likewise put your servlet mapping
-	path here, like this (eg where the SPF portal application is deployed
-	under <code>/portal</code> and the relay servlet is under <code>&lt;servlet-mapping&gt;/relay/*</code>):</p>
+<i>&lt;site-name&gt;</i> = <i>&lt;language-tag&gt;</i>, <i>&lt;language-tag&gt;</i>, ...
+</pre></blockquote>
+	<p>where the <code><i>&lt;site-name&gt;</i></code> is the Vignette
+	"site DNS name" for your portal site (this is the string which appears
+	in your portal site URL, <code>http://.../portal/site/<i>&lt;site-name&gt;</i></code>),
+	and where each <code><i>&lt;language-tag&gt;</i></code> is a locale, in
+	<a href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language
+	tag format (for example, <code>ja</code> for Japanese, <code>es-MX</code>
+	for Mexico Spanish, etc).</p>
+	<p>For example, the following configures Mexico Spanish, Italy
+	Italian, France French and Germany German as additional locales for the
+	<code>example</code> portal site:</p>
 	<blockquote><pre>
-servlet.fileRelay.url=/portal/relay
-servlet.fileRelay.included=false
-	</pre></blockquote>
-	<p>The default value for these properties are {@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_PATH_DEFAULT} and
-	{@link
-	com.hp.it.spf.xa.i18n.portlet.I18nUtility#RELAY_INCLUDED_DEFAULT} and
-	you do not need to configure the properties if you accept their
-	defaults.</p>
+example = es-MX, it-IT, fr-FR, de-DE
+</pre></blockquote>
+	<p>The order in which the locales are listed does not matter. If
+	you want to just make all server-registered locales available in your
+	portal site, you can use the special keyword <code>ALL</code> instead
+	of listing the language tags - like this:</p>
+	<blockquote><pre>
+example = ALL
+</pre></blockquote>
+	<p>Changes to the file, once saved, take effect in the list of <a
+		href="#i18n.other.locale.avail">available locales</a> within 15
+	minutes, or upon a portal server restart (whichever comes first).</p>
+	<p>The locales you configure in <code>site_locale_support.properties</code>
+	are limited to the server-registered locales in Vignette. The
+	server-registered locales are listed in Vignette server console, under
+	<b>Server Settings &gt; Server Defaults &gt; Languages</b>.</p>
+	<blockquote>
+	<p><b>Note:</b> Outside of the sandbox environment, only authorized
+	SPF server administrators have access to the Vignette server console
+	and <code>site_locale_support.properties</code>. You may need to make a
+	request to the SPF support team to setup <code>site_locale_support.properties</code>
+	for you.</p>
+	<p><b>Note:</b> For your information, <code>site_locale_support.properties</code>
+	is an extension to native Vignette capabilities. Out of the box, all
+	Vignette portal sites share the same set of available locales for
+	registered users. Shared Portal Framework added <code>site_locale_support.properties</code>
+	to the system in order to support different locale sets for each portal
+	site.</p>
+	</blockquote>
 	</dd>
 </dl>
 
@@ -3150,8 +3164,8 @@ servlet.fileRelay.included=false
 </a>
 
 <p>Above we have seen the various internationalization API's and
-tags provided by the SPF portlet utilities, primarily in the {@link
-com.hp.it.spf.xa.i18n.portlet.I18nUtility} class. Be aware that class
+tags provided by the SPF portal utilities, including the {@link
+com.hp.it.spf.xa.i18n.portal.I18nUtility} class. Be aware that class
 inherits from the common {@link com.hp.it.spf.xa.i18n.I18nUtility}, part
 of the <a
 	href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html">SPF
@@ -3168,9 +3182,10 @@ encompassing:</p>
 	<li><b>Note:</b> these inherited methods are documented in the <a
 		href="http://samson.atl.hp.com:8080/hudson/job/spf-common-utilities/site/apidocs/overview-summary.html#top">SPF
 	Common Utilities Developer's Guide</a> as well as in the JavaDoc for the
-	{@link com.hp.it.spf.xa.i18n.portlet.I18nUtility} class.</li>
+	{@link com.hp.it.spf.xa.i18n.portal.I18nUtility} class.</li>
 </ul>
 
+LEFT OFF HERE
 <a name="i18n.other.locale.resolver">
 <h4>2.10.6. A word about the locale resolver</h4>
 </a>
