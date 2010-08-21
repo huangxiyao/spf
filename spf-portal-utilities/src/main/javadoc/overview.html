@@ -284,22 +284,24 @@ later.
 			a tag library for a custom rendition</a></li>
 		</ul>
 		</li>
-		<li>3.4. <a href="#help.global.java">Producing links to
+		<li>3.4. <a href="#help.global">Producing global help using
+		the <code>spf-global-help-secondarypagetype</code></a></li>
+		<li>3.5. <a href="#help.global.java">Producing links to
 		global help using Java code </a>
 		<ul>
-			<li>3.4.1. <a href="#help.global.java.classicGlobalHelpProvider">Using
+			<li>3.5.1. <a href="#help.global.java.classicGlobalHelpProvider">Using
 			<code>ClassicGlobalHelpProvider</code></a></li>
-			<li>3.4.2. <a href="#help.global.java.globalHelpProvider">Extending
+			<li>3.5.2. <a href="#help.global.java.globalHelpProvider">Extending
 			<code>GlobalHelpProvider</code> to create a custom rendition</a></li>
 		</ul>
 		</li>
-		<li>3.5. <a href="#help.global.jsp">Producing links to global
+		<li>3.6. <a href="#help.global.jsp">Producing links to global
 		help using JSP tag libraries</a>
 		<ul>
-			<li>3.5.1. <a href="#help.global.jsp.classicGlobalHelp">Using
+			<li>3.6.1. <a href="#help.global.jsp.classicGlobalHelp">Using
 			<code>&lt;spf-help-portal:classicGlobalHelp&gt;</code> for standalone
 			classic global help links</a></li>
-			<li>3.5.2. <a href="#help.global.jsp.classicGlobalHelpParam">Using
+			<li>3.6.2. <a href="#help.global.jsp.classicGlobalHelpParam">Using
 			<code>&lt;spf-i18n-portal:i18nClassicGlobalHelpParam&gt;</code> for
 			injected classic global help links</a></li>
 			<li>3.5.3. <a href="#help.global.jsp.globaHelpProvider">Creating
@@ -828,8 +830,9 @@ key=Have questions?  &lt;global_help&gt;Read help&lt;/global_help&gt; about this
 	automatically inject the global help hyperlink around the content
 	surrounded with <code>&lt;global_help&gt;...&lt;/global_help&gt;</code>
 	("Read help" in this example). This links to your portal site's
-	instance of the <b>SPF global help secondary page type</b>, which your
-	portal site is presumed to provide. More on this below.</p>
+	secondary page instance of the <b>SPF global help secondary page
+	type</b>, which your portal site is presumed to <a href="#help.global">produced</a>
+	as described later in this document.</p>
 	</li>
 </ul>
 
@@ -1030,9 +1033,10 @@ String msg = I18nUtility.getValue("key", null, ctx, null, null, cchps, false, fa
 	global help secondary page, in a child window styled with the window
 	parameters you specify. (You must have provided a secondary page for
 	the SPF-provided <b>global help secondary page type</b> containing your
-	desired content. What is global help, and what does it mean to inject
-	it? See the <a href="#help.kinds.global">introduction to global
-	help</a> later in this document.)</p>
+	desired content, as documented in <a href="#help.global">producing
+	global help</a> later in this document. What is global help, and what does
+	it mean to inject it? See the <a href="#help.kinds.global">introduction
+	to global help</a> later in this document.)</p>
 	<p>For example, say you want "Read help" in the following message
 	to be linked to your site's global help secondary page:</p>
 
@@ -1336,7 +1340,9 @@ key=Your name is {0} and your age is {1}.
 	<dd>
 	<p>This tag is only used inside the tag body of <code>&lt;spf-i18n-portal:i18nValue&gt;</code>.
 	You use it to inject a hyperlink pointing to your portal site's <b>global
-	help secondary page</b>. The hyperlink is injected wherever the special <code>&lt;global_help&gt;...&lt;/global_help&gt;</code>
+	help secondary page</b>, which your site is presumed to <a
+		href="#help.global">produce</a> (as described later in this document).
+	The hyperlink is injected wherever the special <code>&lt;global_help&gt;...&lt;/global_help&gt;</code>
 	markup is found. The global help hyperlink which is injected opens the
 	secondary page in a child popup window, according to the window
 	features you specify.</p>
@@ -3342,14 +3348,13 @@ settings.</p>
 
 <hr>
 
-LEFT OFF HERE
 <a name="help">
 <h2>3. Online Help</h2>
 </a>
 
-<p>The SPF portlet utilities' online help framework is discussed
+<p>The SPF portal utilities' online help framework is discussed
 here. These are the utilities with which you can develop online help for
-your portlet's users.</p>
+the users of your portal site.</p>
 
 <hr>
 
@@ -3372,27 +3377,34 @@ element. Contextual help is meant to be brief and specific about the
 particular screen element from which it is linked.</p>
 
 <p>SPF provides a contextual help framework for helping you develop
-your contextual help. SPF comes with a "classic" rendition of contextual
-help, where the linked screen element opens a DHTML popup window (table)
-which is click-and-dragable by the user. Inside the popup window are a
-brief help title, some brief help content, and an "X" image with which
-to dismiss the window. An optional <code>ALT</code> can be provided for
-the "X" image. For non-scripted browsers, "classic" contextual help
-provides a no-script action on the link, which takes the user to a page
-you provide, or your portlet's <code>help</code> mode by default (if
-your portlet supports that mode).</p>
+your contextual help. This framework is available for both portlets and
+Vignette portal components to use; since this is the developer's guide
+for portal utilities, the focus in this guide will be on contextual help
+in portal components, but for portlet-resident contextual help you can
+refer to the SPF portlet utilities developer guide.</p>
+
+<p>The SPF contextual help framework includes a "classic" HPWeb
+rendition of contextual help, where the linked screen element opens a
+DHTML popup window (table) which is click-and-dragable by the user.
+Inside the popup window are a brief help title, some brief help content,
+and an "X" image with which to dismiss the window. An optional <code>ALT</code>
+can be provided for the "X" image. For non-scripted browsers, "classic"
+contextual help provides a no-script action on the link, which takes the
+user to a page you provide, or to your portal site's <a
+	href="#help.global">global help secondary page</a> by default (in
+portal components; in portlets, it takes the user to portlet help mode
+by default).</p>
 
 <p>For example, the text for "classic" contextual help might look
 like this - notice the word <code>secure</code> is the linked screen
 element in question:</p>
 
-<img
-	src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelpLink.jpg">
+<img src="com/hp/it/spf/xa/i18n/portal/doc-files/contextualHelpLink.jpg">
 
 <p>When the user clicks on the link, the "classic" contextual help
 popup might look like this:</p>
 
-<img src="com/hp/it/spf/xa/i18n/portlet/doc-files/contextualHelp.jpg">
+<img src="com/hp/it/spf/xa/i18n/portal/doc-files/contextualHelp.jpg">
 
 <p>With "classic" contextual help, the SPF-provided API's and JSP
 tags let you define your own link, title, and help content, as well as
@@ -3425,8 +3437,8 @@ part of the sentence needing to be linked.</p>
 
 <p>Injection of contextual help into a message, is mostly discussed
 in the <a href="#i18n">Internationalization</a> section above. See the <a
-	href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getMessage</code></a>
-Java API's and the <a href="#i18n.messages.jsp.spf.message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>
+	href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getValue</code></a>
+Java API's and the <a href="#i18n.messages.jsp.spf.message"><code>&lt;spf-i18n-portal:i18nValue&gt;</code></a>
 JSP tag discussions above.</p>
 
 <p>The remaining documentation for contextual help is covered in
@@ -3450,9 +3462,12 @@ assists you with this by letting you just author your help content as a
 mostly-static HTML file, in which you can put text, image references,
 CSS, JavaScript, and <i>special markup tokens</i> for certain dynamic
 server-side behaviors. You just write this content, and then use one of
-the SPF's <a href="#file">text interpolation</a> utilities to render it
-for the user for <code>help</code> mode. See the <a href="#help.portlet">discussion
-below</a>.</p>
+the SPF's text interpolation utilities to render it for the user for <code>help</code>
+mode.</p>
+
+<p>Since the subject of this guide is portal utilities, portlet help
+will not be discussed further here. Please see the SPF Portlet Utilities
+Developer's Guide instead, for more information.</p>
 
 <a name="help.kinds.global">
 <h4>3.1.3. Portal help (global help)</h4>
@@ -3464,24 +3479,38 @@ rather than a specific in-context screen element, or a specific portlet.</p>
 
 <p>As it is site-wide, this is implemented in SPF at the portal
 level rather than the portlet level. SPF provides a Vignette secondary
-page and secondary page type for global help. The SPF portal owns and
-operates these components, but each portal site can provide its own HTML
-content file for it. As briefly discussed with <a
-	href="#help.kinds.portlet">portlet help</a> above, this file can
-contain whatever text, image references, CSS, JavaScript, and defined
-dynamic behavior (ie special markup tokens) you need. You just write the
-content and import it into the global help secondary page component in
-Vignette. Because this is not a portlet developer's task, it is not
-described further here.</p>
+page type for global help, named <b>Shared Portal Framework - Global
+Help Page</b> (component ID <code>spf-global-help-secondarypagetype</code>).
+To implement global help, you create a secondary page instance dedicated
+to your portal site, which inherits the display action from the page
+type, and in which you provide your own HTML content file. This file can
+contain whatever text, image references, CSS, JavaScript, and certain
+dynamic behavior (ie the <a href="#file.authoer">special markup
+tokens</a> discussed later in this document, under <a href="#file">Text
+Interpolation</a>). The page type display action then renders the content
+from your provided HTML file.</p>
 
-<blockquote>
-<p><b>Note:</b></p>
-As a general principle, portlets are discouraged from linking to global
-help (although it is technically feasible to do so using the SPF common
-utilities' {@link com.hp.it.spf.xa.portalurl.PortalURL} class - how to
-do so is left as an exercise to the reader). Portlets should confine
-themselves to <a href="#help.kinds.contextual">contextual help</a> and <a
-	href="#help.kinds.portlet">portlet help</a> instead.</blockquote>
+<p>Portal components can then create hyperlinks pointing to global
+help. SPF provides support for links that generate HPWeb "classic" popup
+windows for displaying your global help secondary page. This is a
+buttonless unadorned child browser window in which your global help is
+displayed - by default it looks like this, though you can alter the
+window features:</p>
+
+<img src="com/hp/it/spf/xa/help/portal/doc-files/globalHelp.jpg">
+
+<p>What if you are not satisfied with this "classic", popup
+rendering of the global help secondary page? The SPF global help link
+generator framework is extensible; you can implement your own (ie
+custom) kind of global help help link. (This is explained in the section
+about <a href="#help.global.java.globalHelpProvider">extending a <code>GlobalHelpProvider</code></a>.)</p>
+
+<p>Your links pointing to global help can be either "standalone" or
+"injected", as defined previously in the <a
+	href="#help.kinds.contextual">contextual help introduction above</a>.
+As with contextual help, you can create these links using <a
+	href="#help.global.java">Java API's</a> or <a href="#help.global.jsp">JSP
+tags</a>.</p>
 
 <hr>
 
@@ -3489,9 +3518,9 @@ themselves to <a href="#help.kinds.contextual">contextual help</a> and <a
 <h3>3.2. Producing contextual help using Java code</h3>
 </a>
 
-<p>The SPF portlet utilities include a Java class which implements
-the "classic" rendering of contextual help for you, {@link
-com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider}. Or, if you
+<p>The SPF portal utilities include a Java class which implements
+the HPWeb "classic" rendering of contextual help for you, {@link
+com.hp.it.spf.xa.help.portal.ClassicContextualHelpProvider}. Or, if you
 need to create your own rendition of contextual help, you can extend the
 SPF contextual help framework to do so, by extending any class in the
 {@link com.hp.it.spf.xa.help.ContextualHelpProvider} hierarchy.</p>
@@ -3502,16 +3531,18 @@ SPF contextual help framework to do so, by extending any class in the
 
 <blockquote>
 <p><b>Note:</b> There is an SPF-provided JSP tag library for this -
-see the <a href="#help.contextual.jsp.classicContextualHelp"><code>&lt;spf-help-portlet:classicContextualHelp&gt;</code></a>
+see the <a href="#help.contextual.jsp.classicContextualHelp"><code>&lt;spf-help-portal:classicContextualHelp&gt;</code></a>
 description below for standalone help, and the <a
-	href="#help.contextual.jsp.classicContextualHelpParam"><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a>
+	href="#help.contextual.jsp.classicContextualHelpParam"><code>&lt;spf-i18n-portal:i18nClassicContextualHelpParam&gt;</code></a>
 description below for injected help.</p>
 </blockquote>
 
 <p>{@link
-com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} is a Java
-class in the SPF portlet utilities which knows how to render-out the
+com.hp.it.spf.xa.help.portal.ClassicContextualHelpProvider} is a Java
+class in the SPF portal utilities which knows how to render-out the
 "classic" version of contextual help. Usage is as follows:</p>
+
+LEFT OFF HERE
 
 <ol>
 	<li>
@@ -4003,6 +4034,12 @@ your desired functionality. You also need to create your TLD file.</p>
 order to familiarize yourself with their provided and abstract
 functionality, so that you can decide which would be best for you to
 extend.</p>
+
+<hr>
+
+<a name="help.global">
+<h3>3.4. Producing global help using the <code>spf-global-help-secondarypagetype</code></h3>
+</a>
 
 <hr>
 
