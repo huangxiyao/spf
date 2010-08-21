@@ -3185,49 +3185,164 @@ encompassing:</p>
 	{@link com.hp.it.spf.xa.i18n.portal.I18nUtility} class.</li>
 </ul>
 
-LEFT OFF HERE
 <a name="i18n.other.locale.resolver">
 <h4>2.10.6. A word about the locale resolver</h4>
 </a>
 
-<p>In SPF, for simplicity, the user is considered to have one
-preferred locale at any given time. The SPF portal framework has the
-responsibility of resolving that locale from numerous sources:</p>
+<p>In Shared Portal Framework, the <b>locale resolver</b> is an
+SPF-provided module which automatically determines the user's current
+locale on each portal request, taking into account all of the user's
+indicated locale preferences, the <a href="#i18n.other.locale.avail">available
+locales</a> that are <a href="#i18n.other.locale.config">configured</a> for
+your portal site, and any default locales for each available language.
+The locale resolver then sets the locale into Vignette (and any
+portlets) as well as the HP.com locale cookies (when appropriate); so
+when your portal components (or any portlets on the page) <a
+	href="#i18n.other.locale.get">get the current locale</a>, they get the
+locale which the locale resolver determined.</p>
+
+<p>The locale resolver is an SPF-provided module (a servlet filter
+integrated with the Vignette portal application), which needs no
+customization or configuration. It just runs automatically and does its
+job. But since developers may be curious how it works, this section
+gives a brief description of its operation.</p>
 
 <ol>
-	<li>The SPF locale resolver accepts desired locales from the user
-	according to the following inputs (in order):
+	<li>
+	<p>The SPF locale resolver accepts preferred locales from the user
+	according to the following inputs (in order):</p>
 	<ol>
-		<li>The HP.com-standard <code>lang</code> and <code>cc</code>
-		query parameters on the URL.</li>
-		<li>The HP.com-standard <code>lang</code> and <code>cc</code>
-		cookies.</li>
-		<li>The HP Passport core user profile attribute, <code>langCode</code>.
+		<li>
+		<p>The HP.com-standard <code>lang</code> and <code>cc</code> query
+		parameters on the URL.</p>
+		</li>
+		<li>
+		<p>The HP.com-standard <code>lang</code> and <code>cc</code>
+		cookies in the request.</p>
+		</li>
+		<li>
+		<p>The HP Passport core user profile attribute, <code>langCode</code>.
 		(Note that the HP Passport <code>residentCountryCode</code> core
 		profile attribute is not used by HPP itself for locale determination,
-		so is not used by SPF either.)</li>
-		<li>The HTTP-standard <code>Accept-Language:</code> request
-		header.</li>
+		so is not used by SPF either.)</p>
+		</li>
+		<li>
+		<p>The HTTP-standard <code>Accept-Language:</code> request header.</p>
+		</li>
 	</ol>
 	</li>
-	<li>The SPF locale resolver filters the above inputs by the <i>available
-	locales</i> for your portal site. (When you configure your portal site in
-	the SPF portal, you can specify the <i>default locale</i> to use at
-	your site, as well as any <i>additional locales</i> to support at the
-	site.)
-	<ul>
-		<li>The locale from the first input found to match one of the
-		available locale(s) for the portal site, is the one resolved.</li>
-		<li>If none of the inputs provide locale(s) that match the
+	<li>
+	<p>The SPF locale resolver filters the above inputs by the <a
+		href="#i18n.other.locale.avail">available locales</a> you have <a
+		href="#i18n.other.locale.config">configured</a> for your portal site.</p>
+	<ol>
+		<li>
+		<p>The locale from the first input found to match one of the
+		available locale(s) for the portal site, resolves the matched locale.
+		Specifically:</p>
+		<ul>
+			<li>
+			<p>If an input locale exactly matches an available locale, then
+			that available locale is resolved. For example, the <code>ja-JP</code>
+			input locale exactly matches the <code>ja-JP</code> available locale,
+			so <code>ja-JP</code> (Japan Japanese) is resolved.</p>
+			</li>
+			<li>
+			<p>Otherwise if an input locale's language code matches an
+			available language-only locale, then that available locale is
+			resolved. For example, the <code>ja-JP</code> input locale does not
+			exactly match the <code>ja</code> available locale, but the <code>ja-JP</code>
+			language code alone (<code>ja</code>) does, so <code>ja</code>
+			(Japanese) is resolved.</p>
+			</li>
+			<li>
+			<p>Otherwise if an input locale's language code, combined with
+			the HP.com-default country for that language, matches an available
+			locale, than that available locale is resolved. For example, the <code>ja-SG</code>
+			input locale does not exactly match the <code>ja-JP</code> available
+			locale; but the <code>ja-SG</code> language code alone (<code>ja</code>)
+			has an HP.com-default country code (<code>JP</code>), and put
+			together they do match - so <code>ja-JP</code> is resolved.</p>
+			<blockquote>
+			<p><b>Note:</b> The HP.com-default countries for each language
+			are defined as initialization parameters to the locale resolver, by
+			the SPF team. For Japanese the default is Japan; for English it is
+			USA; for German it is Germany; etc. Contact the SPF team for a
+			complete listing, if curious.</p>
+			</blockquote>
+			</li>
+		</ul>
+		<li>
+		<p>If none of the inputs provide locale(s) that match the
 		available ones, then the default locale for the portal site is
-		resolved.</li>
-	</ul>
+		resolved.</p>
+		</li>
+	</ol>
+	</li>
+	<li>
+	<p>Once a locale is resolved, it is set into Vignette so that it
+	becomes the current locale for the request, in all portal components
+	and portlets implicated in handling that request.</p>
+	<p>Furthermore, if the locale was resolved from the URL (<code>lang</code>
+	and <code>cc</code> HP.com-standard query parameters, see above), then
+	the resolved locale is set into the HP.com-standard cookies, <code>lang</code>
+	and <code>cc</code>. The cookies are set at the HP.com level for
+	sharing across all HP.com sites, not just SPF sites, for the rest of
+	the browser session. (This ensures that the URL-indicated locale
+	carries-over into subsequent requests lacking the same locale
+	parameters.)</p>
 	</li>
 </ol>
 
+<p><b><u>An example</u></b></p>
+
+<p>For example, consider the <code>example</code> portal site. The
+site default locale is <code>en-US</code> and we have the following in <code>site_locale_support.properties</code>:</p>
+
+<blockquote><pre>
+example = es-MX, it-IT, fr-FR, de-DE
+</pre></blockquote>
+
+<p>Now consider a user request to the <code>example</code> site,
+with no HP.com-standard <code>lang</code> or <code>cc</code> URL
+parameters or cookies. Nor is the user logged-in. However the user's
+browser language preferences are set, indicating <code>fr-FR</code>
+(France French) as a preferred language (via the <code>Accept-Language</code>
+HTTP request header, per the HTTP standards). Therefore the locale
+resolver determines that <code>fr-FR</code> (since it is one of the
+available locales for the <code>example</code> site) is the proper
+current locale. Had the user not had any browser language preferences
+set, the locale resolver would have settled on <code>en-US</code>, the
+site default locale.</p>
+
+<p>What if the user's browser preference had been <code>fr-CH</code>
+(Swiss French) instead? In that case <code>fr-CH</code> would not be
+resolved as the current locale, since it is not in the available list.
+However the HP.com default for French is <code>fr-FR</code>, which is in
+the list - so the locale resolver still would have settled on <code>fr-FR</code>
+as the current locale.</p>
+
+<p>What happens when the user logs-in? The HP Passport language code
+comes into play, at higher precedence than the browser settings. If the
+user had registered in HPP using Spanish (<code>es</code>), then after
+login the locale resolver would begin to resolve <code>es-MX</code>
+(Mexico Spanish) instead - because while <code>es</code> is not one of
+the available locales, <code>es-MX</code> is the HP.com default for
+Spanish and is among the available locales. So after login, the user
+experience would switch from <code>fr-FR</code> to <code>es-MX</code>.</p>
+
+<p>Note that the HP.com cookies still have not been set, in this
+example. They are typically not set until the user does something to
+consciously choose a locale - for example, use the <a
+	href="#i18n.locale.selector">locale selector</a> widget, or click on a
+hyperlink which has another locale's <code>lang</code> and <code>cc</code>
+query parameters embedded into it. When the cookies are set, or the URL
+query parameters appear, they will override both the HPP and browser
+settings.</p>
 
 <hr>
 
+LEFT OFF HERE
 <a name="help">
 <h2>3. Online Help</h2>
 </a>
