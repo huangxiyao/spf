@@ -101,6 +101,12 @@ Portlet Utilities Developer's Guide</a>.</p>
 	the HTML special characters to be converted into their corresponding
 	character entities, so that they display literally in the browser
 	instead, use the <code>escape="true"</code> attribute on the tag.</p>
+	<blockquote>
+	<p><b>Note:</b> If you inject contextual help into your message
+	using <a href="#classicContextualHelpParam><code>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</code></a>,
+	the HTML-escape policy set by this <code>escape</code> attribute
+	applies to the contextual help content (title and body) as well.</p>
+	</blockquote>
 	</dd>
 </dl>
 
@@ -141,9 +147,9 @@ contain the following SPF tags:</p>
 </pre></blockquote>
 
 <p>You use this tag inside the <a href="#message"><code>&lt;spf-i18n-portlet:message&gt;</code></a>
-tag body, to pass a string parameter into any {@link java.text.MessageFormat}
-placeholders in the message value. For example, if your message is like
-this:</p>
+tag body, to pass a string parameter into any {@link
+java.text.MessageFormat} placeholders in the message value. For example,
+if your message is like this:</p>
 
 <blockquote><pre>
 key=Your name is {0} and your age is {1}.
@@ -170,12 +176,13 @@ contains the user name, and <code>age</code> contains the age):</p>
 	</dd>
 </dl>
 
-<p>A single message may contain multiple {@link java.text.MessageFormat}
-parameter placeholders, labeled <code>{0}</code>, <code>{1}</code>, etc
-as shown in the above example. You just provide one <code>&lt;spf-i18n-portlet:param&gt;</code>
-tag for each one, in order. Any extra tags you provide go unused.
-Conversely, any placeholders in the message, for which you did not
-provide a <code>&lt;spf-i18n-portlet:param&gt;</code>, remain.</p>
+<p>A single message may contain multiple {@link
+java.text.MessageFormat} parameter placeholders, labeled <code>{0}</code>,
+<code>{1}</code>, etc as shown in the above example. You just provide
+one <code>&lt;spf-i18n-portlet:param&gt;</code> tag for each one, in
+order. Any extra tags you provide go unused. Conversely, any
+placeholders in the message, for which you did not provide a <code>&lt;spf-i18n-portlet:param&gt;</code>,
+remain.</p>
 
 <a name="classicContextualHelpParam">
 <h3>&lt;spf-i18n-portlet:classicContextualHelpParam&gt;</h3>
