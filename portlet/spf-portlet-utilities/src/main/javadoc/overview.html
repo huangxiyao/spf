@@ -319,10 +319,11 @@ table.props td {
 			<code>{SITE-URL:<i>spec</i>}</code>)</a></li>
 			<li>4.5.2. <a href="#file.author.token.user">Displaying user
 			information (<code>{NAME}</code>, <code>{EMAIL}</code>, <code>{LANGUAGE-CODE}</code>,
-			<code>{LANGUAGE-CODE:<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>, <code>{COUNTRY-CODE:<i>case</i>}</code>, 
-			<code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>,
-			<code>{HPP-LANGUAGE-CODE}</code>, <code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>,
-			<code>{USER-PROPERTY:<i>key</i>}</code>, <code>{VALUE:<i>property-name</i>}</code>)</a></li>
+			<code>{LANGUAGE-CODE:<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>,
+			<code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG}</code>,
+			<code>{LANGUAGE-TAG:<i>case</i>}</code>, <code>{HPP-LANGUAGE-CODE}</code>,
+			<code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>,
+			<code>{VALUE:<i>property-name</i>}</code>)</a></li>
 			<li>4.5.3. <a href="#file.author.token.auth">Permissioning
 			content for authorized users (<code>{LOGGED-IN}</code>, <code>{LOGGED-OUT}</code>,
 			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>,
@@ -3072,6 +3073,7 @@ the same capabilities for standalone help. The usage is:</p>
 	titleKey="<i>help-title-message-key</i>"
 	content="<i>help-content</i>"
 	contentKey="<i>help-content-message-key</i>"
+	escape="<i>true-or-false</i>"
 	noScriptHref="<i>uri</i>"
 	width="<i>pixels</i>"
 	borderStyle="<i>inline-style</i>'
@@ -3144,6 +3146,10 @@ supporting resource file.</p>
 
 <p>The SPF portlet utilities JAR contains a sample <code>btn_close.gif</code>
 which you can copy. (It is the same one shown in the example above.)</p>
+
+<p>The "X" image can also be assigned some ALT text by placing a
+message in your portlet application's message resources. The message key
+must be named <code>contextualHelp.close.alt</code>.</p>
 </blockquote>
 
 <a name="help.contextual.jsp.classicContextualHelpParam">
@@ -4444,10 +4450,9 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 <a name="file.author.token.user">
 <h4>4.5.2. Displaying user information (<code>{NAME}</code>, <code>{EMAIL}</code>,
 <code>{LANGUAGE-CODE}</code>, <code>{LANGUAGE-CODE<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>,
-<code>{COUNTRY-CODE:<i>case</i>}</code>, 
-<code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>, <code>{HPP-LANGUAGE-CODE}</code>,
-<code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>,
-<code>{VALUE:<i>property-name</i>}</code>)</h4>
+<code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>,
+<code>{HPP-LANGUAGE-CODE}</code>, <code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>,
+<code>{USER-PROPERTY:<i>key</i>}</code>, <code>{VALUE:<i>property-name</i>}</code>)</h4>
 </a>
 
 <p>The following tokens can be used to interpolate information about
