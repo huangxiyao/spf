@@ -4293,10 +4293,9 @@ methods:</p>
 	</dd>
 </dl>
 
-LEFT OFF HERE
-
-<p>For example, consider a <code>text.html</code> file with the
-following content and special markup tokens:</p>
+<p>For example, consider a secondary support file in our portal
+component, here named <code>text.html</code>, with the following content
+and special markup tokens:</p>
 
 <blockquote><pre>
 &lt;h1&gt;This is the base version&lt;/h1&gt;
@@ -4309,10 +4308,10 @@ following content and special markup tokens:</p>
 &lt;/ul&gt;
 </pre></blockquote>
 
-<p>The <code>text_ja_JP.html</code> file is similar, except it has
-been localized into Japanese for Japan (represented here identically,
-except for mention of <code>Japanese</code> inside the &lt;H1&gt; tag,
-for readability):</p>
+<p>Along with <code>text.html</code>, consider a companion secondary
+support file named <code>text_ja_JP.html</code> which is similar, except
+it has been localized into Japanese for Japan (represented here in
+English for readability):</p>
 
 <blockquote><pre>
 &lt;h1&gt;This is the Japanese version&lt;/h1&gt;
@@ -4325,36 +4324,31 @@ for readability):</p>
 &lt;/ul&gt;
 </pre></blockquote>
 
-<p>Also consider that we have put the HP.com homepage URL into a
-token substitutions file named <code>my_tokens.properties</code>, as
-follows:</p>
+<p>Finally, consider that we have put the HP.com homepage URL into
+another secondary support file, here named <code>my_includes.properties</code>,
+as follows:</p>
 
 <blockquote><pre>
-url.hp=http://www.hp.com
+url.hp = http://www.hp.com
 </pre></blockquote>
 
-<p>Finally, consider that we have installed <code>my_tokens.properties</code>
-somewhere accessible to the classloader. And consider that the 2 files
-in the <code>text.html</code> bundle have been installed in the <code>html/</code>
-subfolder of either the portlet bundle folder, or the portlet WAR.</p>
-
-<p>To interpolate this bundle for the current user in his/her
-current locale, using the portlet <code>FileInterpolator</code>, we use
-the following code (where <code>request</code> is our {@link
-javax.portlet.PortletRequest} and <code>response</code> is our {@link
-javax.portlet.PortletResponse}):</p>
+<p>To interpolate this bundle in our portal component Java code, for
+the current user in his/her current locale, using the portal <code>FileInterpolator</code>,
+we use the following code (where <code>context</code> is our Vignette <code>PortalContext</code>
+object):</p>
 
 <blockquote><pre>
-import com.hp.it.spf.xa.interpolate.portlet.FileInterpolator;
+import com.hp.it.spf.xa.interpolate.portal.FileInterpolator;
 ...
-FileInterpolator file = new FileInterpolator(request, response, 
+FileInterpolator file = new FileInterpolator(context, 
     "html/text.html",
     "my_tokens.properties");
 String content = file.interpolate();
 </pre></blockquote>
 
-<p>For a logged-in Japanese user (first name <code>Bob</code>, last
-name <code>Smith</code>), the returned <code>content</code> string is:</p>
+<p>For a logged-in Japanese (Japan) user (first name <code>Bob</code>,
+last name <code>Smith</code>), the returned <code>content</code> string
+is:</p>
 
 <blockquote><pre>
 &lt;h1&gt;This is the Japanese version&lt;/h1&gt;
@@ -4371,7 +4365,7 @@ name <code>Smith</code>), the returned <code>content</code> string is:</p>
 conventional for Japan. See {@link
 com.hp.it.spf.xa.i18n.I18nUtility#getUserDisplayName(String,String,Locale)}.)</p>
 
-<p>For a logged-out German user, the returned <code>content</code>
+<p>For a logged-out German (Germany) user, though, the returned <code>content</code>
 string is:</p>
 
 <blockquote><pre>
@@ -4395,10 +4389,11 @@ below about <a href="#file.author">authoring text</a>.</p>
 <h4>4.2.2. Using <code>TokenParser</code> to interpolate strings</h4>
 </a>
 
-<p>The portlet {@link
-com.hp.it.spf.xa.interpolate.portlet.TokenParser} is the engine at the
-heart of text interpolation in the SPF portlet utilities. All of the
-other classes and JSP tags perform text interpolation via this class.</p>
+<p>The portal {@link
+com.hp.it.spf.xa.interpolate.portal.TokenParser} is the engine at the
+heart of text interpolation in the SPF portal utilities. The
+file-interpolation class and JSP tag perform text interpolation via this
+<code>TokenParser</code> class.</p>
 
 <p>With <code>TokenParser</code> you can perform text interpolation
 against Java strings which you have already populated with content,
@@ -4411,21 +4406,18 @@ methods to perform the desired interpolations.</p>
 
 <dl>
 	<dt>{@link
-	com.hp.it.spf.xa.interpolate.portlet.TokenParser#TokenParser(PortletRequest,PortletResponse)}</dt>
+	com.hp.it.spf.xa.interpolate.portal.TokenParser#TokenParser(PortalContext)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.interpolate.portlet.TokenParser#TokenParser(PortletRequest,PortletResponse,String)}</dt>
+	com.hp.it.spf.xa.interpolate.portal.TokenParser#TokenParser(PortalContext,String)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.interpolate.portlet.TokenParser#TokenParser(PortletRequest,PortletResponse,Locale,String)}</dt>
+	com.hp.it.spf.xa.interpolate.portal.TokenParser#TokenParser(PortalContext,Locale,String)}</dt>
 	<dd>
 	<p>Use one of these constructors to instantiate the class. The
 	arguments are:</p>
 
 	<ul>
 		<li>
-		<p>Your current {@link javax.portlet.PortletRequest} object.</p>
-		</li>
-		<li>
-		<p>Your current {@link javax.portlet.PortletResponse} object.</p>
+		<p>Your current Vignette <code>PortalContext</code> object.</p>
 		</li>
 		<li>
 		<p>The {@link java.util.Locale} you want to use during the string
@@ -4443,12 +4435,17 @@ methods to perform the desired interpolations.</p>
 		with no subfolder, but you can override it with this parameter. If you
 		will not be using the special <code>{INCLUDE:<i>key</i>}</code> or
 		will use the default filename, you can ignore this parameter.</p>
+		<p>If you do use this parameter, you should pass the basename of a
+		secondary support file in the current portal component which contains
+		the substitution key/value pairs. Note this file may be localized; as
+		with the text filename parameter above, the method selects the
+		best-fit localized version of the file for the given locale.</p>
 		</li>
 	</ul>
 	</dd>
 
 	<dt>{@link
-	com.hp.it.spf.xa.interpolate.portlet.TokenParser#parse(String)}</dt>
+	com.hp.it.spf.xa.interpolate.portal.TokenParser#parse(String)}</dt>
 	<dd>
 	<p>You use this method to interpolate any string you provide. The
 	parameters you gave the constructor will be used as the data sources
@@ -4458,7 +4455,7 @@ methods to perform the desired interpolations.</p>
 
 	<p>Besides the <code>TokenParser.parse(String)</code> method, each
 	individual token has its own parser method. For example, {@link
-	com.hp.it.spf.xa.interpolate.portlet.TokenParser#parseEmail(String)} to
+	com.hp.it.spf.xa.interpolate.portal.TokenParser#parseEmail(String)} to
 	just parse the given string for the <code>{EMAIL}</code> token. See the
 	class documentation for a list of all the available methods. Generally
 	you will want to use the full <code>TokenParser.parse(String)</code>
@@ -4485,26 +4482,22 @@ learn the names of the available user properties.)</p>
 
 <p>Also consider that we have put the HP.com homepage URL into a
 token substitutions file named <code>my_tokens.properties</code>, as
-follows:</p>
+follows, and stored that file as a secondary support file in our portal
+component:</p>
 
 <blockquote><pre>
 url.hp=http://www.hp.com
 </pre></blockquote>
 
-<p>Finally, consider that we have installed <code>my_tokens.properties</code>
-somewhere accessible to the classloader.</p>
-
-<p>To interpolate this string for the current user in his/her
-current locale, using the portlet <code>TokenParse</code>, we use the
-following code (where <code>request</code> is our {@link
-javax.portlet.PortletRequest}, <code>response</code> is our {@link
-javax.portlet.PortletResponse}, and <code>raw</code> is the above string
-of text):</p>
+<p>To interpolate this string in our portal component, for the
+current user in his/her current locale, using the portal <code>TokenParser</code>,
+we use the following code (where <code>context</code> is our Vignette <code>PortalContext</code>
+object, and <code>raw</code> is the above string of text):</p>
 
 <blockquote><pre>
-import com.hp.it.spf.xa.interpolate.portlet.TokenParser;
+import com.hp.it.spf.xa.interpolate.portal.TokenParser;
 ...
-TokenParser parser = new TokenParser(request, response, "my_tokens.properties");
+TokenParser parser = new TokenParser(context, "my_tokens.properties");
 String interpolated = parser.parse(raw);
 </pre></blockquote>
 
@@ -4542,7 +4535,7 @@ below about <a href="#file.author">authoring text</a>.</p>
 
 <hr>
 
-<a name="file.display.jsp">
+LEFT OFF HERE <a name="file.display.jsp">
 <h3>4.3. Interpolating text using JSP tag libraries</h3>
 </a>
 
