@@ -4535,47 +4535,47 @@ below about <a href="#file.author">authoring text</a>.</p>
 
 <hr>
 
-LEFT OFF HERE <a name="file.display.jsp">
+<a name="file.display.jsp">
 <h3>4.3. Interpolating text using JSP tag libraries</h3>
 </a>
 
-<p>The SPF portlet utilities include a JSP tag which wraps-around
-the <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>
-for you: <code>&lt;spf-file-portlet:interpolate&gt;</code>.</p>
+<p>The SPF portal utilities include a JSP tag which wraps-around the
+<a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>
+for you: <code>&lt;spf-file-portal:interpolate&gt;</code>. For example,
+this is the JSP tag you typically use in the primary JSP of a global
+help secondary page - see the <a href="#help.global">global help</a>
+discussion earlier in this document.</p>
 
 <a name="file.display.jsp.interpolate">
-<h4>4.3.1. Using <code>&lt;spf-file-portlet:interpolate&gt;</code></h4>
+<h4>4.3.1. Using <code>&lt;spf-file-portal:interpolate&gt;</code></h4>
 </a>
 
-<p>The SPF portlet utilities provide a JSP tag, <code>&lt;spf-file-portlet:interpolate&gt;</code>,
+<p>The SPF portal utilities provide a JSP tag, <code>&lt;spf-file-portal:interpolate&gt;</code>,
 which wraps around <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>
-to offer most of the same capabilities. If you are authoring a portlet
-mode which just needs to display some interpolated text from a file,
-with dynamic behaviors limited to the bounds of the <a
-	href="#file.author">supported token language</a>, then using this tag
-is the the easiest way: you don't even need a controller class, just
-write a JSP which calls this tag, and configure it into Spring.</p>
-
-<p>The tag is thoroughly documented in the <a
-	href="com/hp/it/spf/xa/interpolate/portlet/tag/package-summary.html#interpolate">package
+to offer most of the same capabilities. The tag is thoroughly documented
+in the <a
+	href="com/hp/it/spf/xa/interpolate/portal/tag/package-summary.html#interpolate">package
 description</a>. Briefly:</p>
 
 <dl>
 	<dt>
 	<p><a
-		href="com/hp/it/spf/xa/interpolate/portlet/tag/package-summary.html#interpolate"><code>&lt;spf-file-portlet:interpolate&gt;</code></a></p>
+		href="com/hp/it/spf/xa/interpolate/portal/tag/package-summary.html#interpolate"><code>&lt;spf-file-portal:interpolate&gt;</code></a></p>
 	</dt>
 
 	<dd>
-	<p>This tag takes the base filename (including any subfolder path
-	relative to the portlet resource bundle folder / portlet WAR root), and
-	(optionally) a filename for the <i>token substitutions</i> file. The
-	usage is:</p>
+	<p>This tag takes two base filenames of secondary support files (or
+	bundles of localized secondary support files, where the system will
+	pick the best-fit for the user's current locale). The first filename is
+	required and contains the content to interpolate and render. The second
+	filename is for an optional <i>token substitutions</i> file. The tag
+	reads the content, interpolates it, and expresses it in-place in your
+	JSP. The usage is:</p>
 
 	<blockquote><pre>
-&lt;%@ taglib prefix="spf-file-portlet" uri="/spf-file-portlet.tld" %&gt;
+&lt;%@ taglib prefix="spf-file-portal" uri="/spf-file-portal.tld" %&gt;
 ...
-&lt;spf-file-portlet:interpolate
+&lt;spf-file-portal:interpolate
 	file="<i>base-file</i>"
 	includeFile="<i>token-substitutions-file</i>"
 	/&gt;
@@ -4583,11 +4583,12 @@ description</a>. Briefly:</p>
 
 	<p>The <code>file</code> attribute lets you provide the base
 	filename for the file to interpolate and display (same as the {@link
-	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator} constructors).</p>
+	com.hp.it.spf.xa.interpolate.portal.FileInterpolator} constructors).</p>
 
 	<p>The <code>includeFile</code> attribute lets you provide an
-	override for the default token substitutions file, same as the {@link
-	com.hp.it.spf.xa.interpolate.portlet.FileInterpolator#FileInterpolator(PortletRequest,PortletResponse,String,String)}
+	override for the default token substitutions filename, same as the
+	{@link
+	com.hp.it.spf.xa.interpolate.portal.FileInterpolator#FileInterpolator(PortalContext,String,String)}
 	constructor. This is used for any special <code>{INCLUDE:<i>key</i>}</code>
 	tokens that might be found in the file content. (See the discussion on
 	<a href="#file.author">authoring content</a> below, for a description
@@ -4600,55 +4601,24 @@ description</a>. Briefly:</p>
 	file in JSP, using this tag:</p>
 
 	<blockquote><pre>
-&lt;%@ taglib prefix="spf-file-portlet" uri="/spf-file-portlet.tld" %&gt;
+&lt;%@ taglib prefix="spf-file-portal" uri="/spf-file-portal.tld" %&gt;
 ...
-&lt;spf-file-portlet:interpolate file="/html/text.html" includeFile="my_tokens.properties" /&gt;
+&lt;spf-file-portal:interpolate file="text.html" includeFile="my_tokens.properties" /&gt;
 </pre></blockquote>
 
 	<p>The selection of the proper localized file, and the subsequent
 	interpolation, are performed using the attributes of the current
 	request (its locale, user attributes, etc). See the tag documentation,
 	in the <a
-		href="com/hp/it/spf/xa/interpolate/portlet/tag/package-summary.html#interpolate">package
+		href="com/hp/it/spf/xa/interpolate/portal/tag/package-summary.html#interpolate">package
 	description</a>, for more information.</p>
 	</dd>
 </dl>
 
-<p>For an example of how you would configure your JSP which calls
-this tag, directly into Spring without any controller class or other
-Java code needed, see the the <a href="#help.portlet.jsp.interpolate">discussion
-above</a> about portlet <code>help</code> mode.</p>
-
 <hr>
 
-<a name="file.display.htmlViewer">
-<h3>4.4. Using the <code>htmlviewer</code> portlet to display
-interpolated text from files</h3>
-</a>
-
-<p>The Shared Portal Framework includes a portlet application, <code>htmlviewer</code>,
-which you can use with minimal customization. This portlet basically
-wraps-around the file interpolation framework discussed above, at the
-highest possible level: the portlet application.</p>
-
-<p>If you have a portlet which needs to do nothing more than display
-some basic text, with dynamic behaviors within the capabilities of the <a
-	href="#file.author">text interpolation tokens</a>, then using <code>htmlviewer</code>
-is the easiest way to inmplement. You write no Java code, no JSP, and no
-Spring configuration. You just write the needed text file(s), and use
-the Vignette site console to instantiate the needed portlet instance(s)
-and configure them via the portlet's <code>config</code> mode so that
-they use those file(s).</p>
-
-<p>The <code>htmlviewer</code> portlet is covered in a separate
-document, the <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-html-viewer/site/overview.html">SPF
-HTML Viewer Portlet Administration and Developer's Guide</a> (see).</p>
-
-<hr>
-
-<a name="file.author">
-<h3>4.5. Authoring text using interpolation tokens</h3>
+LEFT OFF HERE <a name="file.author">
+<h3>4.4. Authoring text using interpolation tokens</h3>
 </a>
 
 <p>The text interpolation tokens supported by the SPF portlet
@@ -4677,7 +4647,7 @@ will get interpolated too.
 </blockquote>
 
 <a name="file.author.token.url">
-<h4>4.5.1. Referencing URLs (<code>{CONTENT-URL:<i>path</i>}</code>,
+<h4>4.4.1. Referencing URLs (<code>{CONTENT-URL:<i>path</i>}</code>,
 <code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code>, <code>{REQUEST-URL}</code>,
 <code>{REQUEST-URL:<i>spec</i>}</code>, <code>{SITE-URL}</code>, <code>{SITE-URL:<i>spec</i>}</code>)</h4>
 </a>
@@ -4884,7 +4854,7 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 </dl>
 
 <a name="file.author.token.user">
-<h4>4.5.2. Displaying user information (<code>{NAME}</code>, <code>{EMAIL}</code>,
+<h4>4.4.2. Displaying user information (<code>{NAME}</code>, <code>{EMAIL}</code>,
 <code>{LANGUAGE-CODE}</code>, <code>{LANGUAGE-CODE<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>,
 <code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>,
 <code>{HPP-LANGUAGE-CODE}</code>, <code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>,
@@ -5092,7 +5062,7 @@ The request property value for 'requestKey' is : {VALUE:requestKey}
 </dl>
 
 <a name="file.author.token.auth">
-<h4>4.5.3. Permissioning content for authorized users (<code>{LOGGED-IN}</code>,
+<h4>4.4.3. Permissioning content for authorized users (<code>{LOGGED-IN}</code>,
 <code>{LOGGED-OUT}</code>, <code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>,
 <code>{EXIST:<i>property-name</i>}</code>)</h4>
 </a>
@@ -5257,7 +5227,7 @@ This text is for everybody.&lt;BR&gt;
 </dl>
 
 <a name="file.author.token.consolidate">
-<h4>4.5.4. Consolidating content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
+<h4>4.4.4. Consolidating content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
 <code>{PAGE:<i>friendly-ids</i>}</code>, <code>{NAV-ITEM:<i>items</i>}</code>,
 <code>{SITE:<i>site-names</i>}</code>, <code>{INCLUDE:<i>key</i>}</code>)</h4>
 </a>
@@ -5508,7 +5478,7 @@ This text is for everybody.&lt;BR&gt;
 </dl>
 
 <a name="file.author.token.misc">
-<h4>4.5.5. Miscellaneous (<code>{AFTER:<i>date</i>}</code>, <code>{BEFORE:<i>date</i>}</code>,
+<h4>4.4.5. Miscellaneous (<code>{AFTER:<i>date</i>}</code>, <code>{BEFORE:<i>date</i>}</code>,
 <code>{SITE-NAME}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</h4>
 </a>
 
