@@ -4199,8 +4199,8 @@ below.</p>
 <p>The portal {@link
 com.hp.it.spf.xa.interpolate.portal.FileInterpolator} is a plain Java
 object which implements text interpolation for files. For example, the
-canonical <i>primary JSP</i> for a global help secondary page uses the <code>FileInterpolator</code>
-to read and interpolate the help content resource bundle (see the <a
+global help secondary page uses the <code>FileInterpolator</code> to
+read and interpolate the help content resource bundle (see the <a
 	href="#help.global">global help</a> discussion previously in this
 document). (Note: The <code>FileInterpolator</code> in turn calls the <a
 	href="#file.display.java.tokenParser"><code>TokenParser</code></a>,
@@ -4411,6 +4411,10 @@ methods to perform the desired interpolations.</p>
 	com.hp.it.spf.xa.interpolate.portal.TokenParser#TokenParser(PortalContext,String)}</dt>
 	<dt>{@link
 	com.hp.it.spf.xa.interpolate.portal.TokenParser#TokenParser(PortalContext,Locale,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.interpolate.portal.TokenParser#TokenParser(PortalContext,ResourceBundle)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.interpolate.portal.TokenParser#TokenParser(PortalContext,Locale,ResourceBundle)}</dt>
 	<dd>
 	<p>Use one of these constructors to instantiate the class. The
 	arguments are:</p>
@@ -4426,20 +4430,31 @@ methods to perform the desired interpolations.</p>
 		null) the locale inside the portlet request is assumed.</p>
 		</li>
 		<li>
-		<p>An optional string for a <i>token substitutions</i> property
-		file. As discussed in the section about <a
+		<p>An optional parameter indicating any include properties to
+		apply during parsing. As discussed in the section about <a
 			href="#file.author.token.consolidate">authoring text</a>, one of the
 		special markup tokens (<code>{INCLUDE:<i>key</i>}</code>) substitutes
-		values from this property file. By default, the name of the property
-		file is considered to be <code>default_includes.properties</code>,
-		with no subfolder, but you can override it with this parameter. If you
-		will not be using the special <code>{INCLUDE:<i>key</i>}</code> or
-		will use the default filename, you can ignore this parameter.</p>
-		<p>If you do use this parameter, you should pass the basename of a
-		secondary support file in the current portal component which contains
-		the substitution key/value pairs. Note this file may be localized; as
-		with the text filename parameter above, the method selects the
-		best-fit localized version of the file for the given locale.</p>
+		values from a set of substitution properties. By default, these
+		properties are assumed to be stored in a secondary support file in
+		your component, named <code>default_includes.properties</code>. But
+		you can override that via one of the optional parameters:</p>
+		<ul>
+			<li>
+			<p>A {@link java.lang.String} parameter giving the name of a
+			different property file. You pass the basename of a secondary support
+			file in your component containing the substitution properties. Note
+			this file may be localized; the <code>TokenParser</code> chooses the
+			best-fit localized version of the file for the given locale, using
+			the standard Java search sequence for a <code>ResourceBundle</code>.
+			Your bundle of localized include-files must be tagged by locale and
+			stored as secondary support files in your component, as described <a
+				href="#i18n.location">previously</a>.</p>
+			</li>
+			<li>
+			<p>Or a {@link java.util.ResourceBundle} parameter passing the
+			substitution properties directly.</p>
+			</li>
+		</ul>
 		</li>
 	</ul>
 	</dd>
@@ -4541,10 +4556,7 @@ below about <a href="#file.author">authoring text</a>.</p>
 
 <p>The SPF portal utilities include a JSP tag which wraps-around the
 <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>
-for you: <code>&lt;spf-file-portal:interpolate&gt;</code>. For example,
-this is the JSP tag you typically use in the primary JSP of a global
-help secondary page - see the <a href="#help.global">global help</a>
-discussion earlier in this document.</p>
+for you: <code>&lt;spf-file-portal:interpolate&gt;</code>.</p>
 
 <a name="file.display.jsp.interpolate">
 <h4>4.3.1. Using <code>&lt;spf-file-portal:interpolate&gt;</code></h4>
@@ -4617,16 +4629,16 @@ description</a>. Briefly:</p>
 
 <hr>
 
-LEFT OFF HERE <a name="file.author">
+<a name="file.author">
 <h3>4.4. Authoring text using interpolation tokens</h3>
 </a>
 
-<p>The text interpolation tokens supported by the SPF portlet
+<p>The text interpolation tokens supported by the SPF portal
 utilities are described briefly here. Each token is delimited by braces
 <code>{...}</code> (although you can use angle-brackets instead of
 braces, if you prefer <code>&lt;...&gt;</code>). Detailed information on
 each token is provided in the class documentation for the {@link
-com.hp.it.spf.xa.interpolate.portlet.FileInterpolator}.</p>
+com.hp.it.spf.xa.interpolate.portal.FileInterpolator}.</p>
 
 <blockquote>
 <p><b>Important:</b> File interpolation only supports UTF-8 encoded
@@ -4646,7 +4658,7 @@ any of the tokens, including nested occurrences of the same token; they
 will get interpolated too.
 </blockquote>
 
-<a name="file.author.token.url">
+LEFT OFF HERE <a name="file.author.token.url">
 <h4>4.4.1. Referencing URLs (<code>{CONTENT-URL:<i>path</i>}</code>,
 <code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code>, <code>{REQUEST-URL}</code>,
 <code>{REQUEST-URL:<i>spec</i>}</code>, <code>{SITE-URL}</code>, <code>{SITE-URL:<i>spec</i>}</code>)</h4>
