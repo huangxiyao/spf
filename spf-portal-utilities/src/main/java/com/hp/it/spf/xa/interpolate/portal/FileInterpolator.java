@@ -1,9 +1,8 @@
 /*
- * Project: Shared Portal Framework
- * Copyright (c) 2008 HP. All Rights Reserved.
+ * Project: Shared Portal Framework Copyright (c) 2008 HP. All Rights Reserved.
  * 
- * This portal utility class reads a file of text (eg an HTML file), substituting
- * dynamic values for various tokens, and returning the substituted
+ * This portal utility class reads a file of text (eg an HTML file),
+ * substituting dynamic values for various tokens, and returning the substituted
  * content to the calling class.
  */
 package com.hp.it.spf.xa.interpolate.portal;
@@ -36,15 +35,15 @@ import com.vignette.portal.website.enduser.PortalContext;
  * provide), among all the files for that basename in a bundle of files (each
  * tagged with locale), in the manner of the Java standard for
  * {@link ResourceBundle}. All of the files in the bundle must be loaded as
- * secondary support files against the current portal component. <b>Important:</b>
- * Your files must be UTF-8 encoded.
+ * secondary support files against the current portal component.
+ * <b>Important:</b> Your files must be UTF-8 encoded.
  * </p>
  * <p>
  * This class uses the portal {@link TokenParser} to do most of its work. As of
- * this writing, the following tokens are supported in the input file. <b>Note:</b>
- * Your content may use <code>&lt;</code> and <code>&gt;</code> instead of
- * <code>{</code> and <code>}</code> as the token delimiters, if desired.
- * The token names are case-sensitive.
+ * this writing, the following tokens are supported in the input file.
+ * <b>Note:</b> Your content may use <code>&lt;</code> and <code>&gt;</code>
+ * instead of <code>{</code> and <code>}</code> as the token delimiters, if
+ * desired. The token names are case-sensitive.
  * </p>
  * <blockquote>
  * <p>
@@ -116,20 +115,20 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{CONTENT-URL:<i>pathname</i>}</code></dt>
+ * <dt><a name="content-url"><code>{CONTENT-URL:<i>pathname</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert a URL for an <b>unlocalized</b> secondary support
  * file (such as an administrator-uploaded image) into the interpolated content.
- * For the <code><i>pathname</i></code> in the token, use the filename for
- * the particular secondary support file.
+ * For the <code><i>pathname</i></code> in the token, use the filename for the
+ * particular secondary support file.
  * </p>
  * <p>
- * For example, upload <code>picture.jpg</code> as a secondary support file
- * for a particular component which uses this <code>FileInterpolator</code>.
- * Then put the following markup into an HTML text file to be processed by the
- * <code>FileInterpolator</code>, and upload that text file as another
- * secondary support file:
+ * For example, upload <code>picture.jpg</code> as a secondary support file for
+ * a particular component which uses this <code>FileInterpolator</code>. Then
+ * put the following markup into an HTML text file to be processed by the
+ * <code>FileInterpolator</code>, and upload that text file as another secondary
+ * support file:
  * </p>
  * <p>
  * <code>&lt;IMG SRC="{CONTENT-URL:picture.jpg}"&gt;</code>
@@ -148,21 +147,20 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{COUNTRY-CODE}</code></dt>
- * <dt><code>{COUNTRY-CODE:<i>case</i>}</code></dt>
+ * <dt><a name="country-code"><code>{COUNTRY-CODE}</code></a></dt>
+ * <dt><a name="country-code"><code>{COUNTRY-CODE:<i>case</i>}</code></a></dt>
  * <dd>
  * <p>
- * Use either of these tokens to insert the <a
- * href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
- * 3166-1</a> country code from the current locale. Note that the language code
- * is not a part of this. For example, for a Japanese request,
+ * Use either of these tokens to insert the <a href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm"
+ * >ISO 3166-1</a> country code from the current locale. Note that the language
+ * code is not a part of this. For example, for a Japanese request,
  * <code>{COUNTRY-CODE}</code> is replaced with <code>JP</code>. Note the
  * country code is uppercase by default; you can force use of lowercase with
  * <code>{COUNTRY-CODE:lower}</code>.
  * </p>
  * </dd>
  * 
- * <dt><code>{EMAIL}</code></dt>
+ * <dt><a name="email"><code>{EMAIL}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert the email address of the user into the interpolated
@@ -202,8 +200,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * 
  * <p>
- * If the current request includes <code>key=<i>keyvalue</i></code> as a
- * request or session attribute or parameter, the returned content string is:
+ * If the current request includes <code>key=<i>keyvalue</i></code> as a request
+ * or session attribute or parameter, the returned content string is:
  * </p>
  * 
  * <pre>
@@ -218,20 +216,20 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * <pre>
  *  This content is for everyone.
- *  
+ * 
  * </pre>
  * 
  * </dd>
  * 
- * <dt><code>{GROUP:<i>groups</i>}...{/GROUP}</code></dt>
+ * <dt><a name="group"><code>{GROUP:<i>groups</i>}...{/GROUP}</code></a></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
  * the interpolated content if the user is a member of any one (or more) of the
- * listed <code><i>groups</i></code>. For example, using this token, a
- * single file can contain the proper content for multiple kinds of users,
- * simplifying administration of a portal component which must display different
- * content for different user groups.
+ * listed <code><i>groups</i></code>. For example, using this token, a single
+ * file can contain the proper content for multiple kinds of users, simplifying
+ * administration of a portal component which must display different content for
+ * different user groups.
  * </p>
  * <p>
  * The groups to be checked are provided to the <code>FileInterpolator</code>
@@ -241,11 +239,11 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * In the <code><i>groups</i></code> parameter to the
- * <code>{GROUP:<i>groups</i>}</code> token, you can list just a single
- * group name, or multiple group names (use the <code>|</code> character to
- * delimit them). The content enclosed by the <code>{GROUP:<i>groups</i>}</code>
- * and <code>{/GROUP}</code> tokens is omitted from the returned content
- * unless the groups provided to the constructor match one of those group names.
+ * <code>{GROUP:<i>groups</i>}</code> token, you can list just a single group
+ * name, or multiple group names (use the <code>|</code> character to delimit
+ * them). The content enclosed by the <code>{GROUP:<i>groups</i>}</code> and
+ * <code>{/GROUP}</code> tokens is omitted from the returned content unless the
+ * groups provided to the constructor match one of those group names.
  * </p>
  * <p>
  * The content enclosed by the <code>{GROUP:<i>groups</i>}</code> and
@@ -271,20 +269,21 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * </dd>
  * 
- * <dt><code>{HPP-LANGUAGE-CODE}</code></dt>
- * <dt><code>{HPP-LANGUAGE-CODE:<i>case</i>}</code></dt>
+ * <dt><a name="hpp-language-code"><code>{HPP-LANGUAGE-CODE}</code></a></dt>
+ * <dt><a name="hpp-language-code"><code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>
+ * </a></dt>
  * <dd>
  * <p>
  * Use either of these tokens to insert the HP Passport standard language code
  * for the current locale. Note that HP Passport does not exactly follow the ISO
  * 639-1 convention; that is why you need to use this token instead of
- * <code>{LANGUAGE-CODE}</code> or <code>{LANGUAGE-CODE:<i>case</i>}</code>
- * if you are dealing with HP Passport. Note that the country code is not part
- * of this (HP Passport uses the ISO 3166-1 country code so you can use the
+ * <code>{LANGUAGE-CODE}</code> or <code>{LANGUAGE-CODE:<i>case</i>}</code> if
+ * you are dealing with HP Passport. Note that the country code is not part of
+ * this (HP Passport uses the ISO 3166-1 country code so you can use the
  * <code>{COUNTRY-CODE}</code> token for that). For example, for a Traditional
  * Chinese request, <code>{HPP-LANGUAGE-CODE}</code> is replaced with
- * <code>12</code>. By default, the HPP language code is lowercase; you can
- * use <code>{HPP-LANGUAGE-CODE:upper}</code> to force uppercase.
+ * <code>12</code>. By default, the HPP language code is lowercase; you can use
+ * <code>{HPP-LANGUAGE-CODE:upper}</code> to force uppercase.
  * </p>
  * </dd>
  * 
@@ -297,7 +296,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * that in the <code>FileInterpolator</code> constructor. Whether you use
  * <code>default_includes.properties</code> or your own token-substitution
  * property file, the file should be loaded into a location accessible to the
- * class loader. The property values may include any text content.
+ * class loader, or into your portal component as a secondary support file by
+ * default. The property values may include any text content.
  * </p>
  * <p>
  * For example, assume you have put this key/value pair into your property file:
@@ -324,11 +324,10 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <ul>
  * <li>
  * <p>
- * The property value for this token may contain <b>any</b> of the other
- * special markup tokens supported by <code>FileInterpolator</code>,
- * <b>except</b> another <code>{INCLUDE:<i>key</i>}</code> token. In other
- * words, you can "nest" other tokens inside the propery values expressed by
- * this token.
+ * The property value for this token may contain <b>any</b> of the other special
+ * markup tokens supported by <code>FileInterpolator</code>, <b>except</b>
+ * another <code>{INCLUDE:<i>key</i>}</code> token. In other words, you can
+ * "nest" other tokens inside the propery values expressed by this token.
  * </p>
  * <p>
  * For example, assume we have this in our property file:
@@ -345,8 +344,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <code>&lt;A HREF="http://shopping.hp.com?lang=pt&cc=BR"&gt;Go to HP shopping.&lt;/A&gt;</code>
  * </p>
  * </li>
- * <li> As another example, assume we now have this in our property file:
- * </p>
+ * <li>As another example, assume we now have this in our property file: </p>
  * <p>
  * <code>image.current-promo=december_sale.gif</code>
  * </p>
@@ -360,8 +358,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * Then the interpolated content will display the proper localized version of
- * the <code>december_sale.gif</code> image to the user; like this, for
- * example, for a Japanese (Japan) user:
+ * the <code>december_sale.gif</code> image to the user; like this, for example,
+ * for a Japanese (Japan) user:
  * </p>
  * <p>
  * <code>&lt;IMG SRC="/.../december_sale_ja_JP.gif"&gt;</code>
@@ -372,13 +370,13 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <blockquote>
  * <p>
- * <b>Note:</b> Although you can "nest" <code>{INCLUDE:<i>key</i>}</code>
- * within other token's parameters, you cannot nest other token parameters of
- * any kind inside the <code><i>key</i></code> parameter for
+ * <b>Note:</b> Although you can "nest" <code>{INCLUDE:<i>key</i>}</code> within
+ * other token's parameters, you cannot nest other token parameters of any kind
+ * inside the <code><i>key</i></code> parameter for
  * <code>{INCLUDE:<i>key</i>}</code>. In other words, the
  * <code><i>key</i></code> is always treated as a literal.
  * </p>
- * </blockquote> </li>
+ * </blockquote></li>
  * </ul>
  * <p>
  * A template for the token substitution property file, also named
@@ -387,24 +385,24 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{LANGUAGE-CODE}</code></dt>
- * <dt><code>{LANGUAGE-CODE:<i>case</i>}</code></dt>
+ * <dt><a name="language-code"><code>{LANGUAGE-CODE}</code></a></dt>
+ * <dt><a name="language-code"><code>{LANGUAGE-CODE:<i>case</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use either of these tokens to insert the <a
- * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO 639-1</a>
- * language code from the current locale. Note that the country code is not a
- * part of this. For example, for a Japanese request,
- * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>. By
- * default, the language code is lowercase; to force uppercase, use
+ * href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+ * 639-1</a> language code from the current locale. Note that the country code
+ * is not a part of this. For example, for a Japanese request,
+ * <code>{LANGUAGE-CODE}</code> is replaced with <code>ja</code>. By default,
+ * the language code is lowercase; to force uppercase, use
  * <code>{LANGUAGE-CODE:upper}</code>. <b>Note:</b> If you need the language
  * code for use with HP Passport, be sure to use the
  * <code>{HPP-LANGUAGE-CODE}</code> token instead of this one.
  * </p>
  * </dd>
  * 
- * <dt><code>{LANGUAGE-TAG}</code></dt>
- * <dt><code>{LANGUAGE-TAG:<i>case</i>}</code></dt>
+ * <dt><a name="language-tag"><code>{LANGUAGE-TAG}</code></a></dt>
+ * <dt><a name="language-tag"><code>{LANGUAGE-TAG:<i>case</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use either of these tokens to insert the <a
@@ -412,15 +410,16 @@ import com.vignette.portal.website.enduser.PortalContext;
  * the current locale. Note that the country code is included in the language
  * tag, if it was set in the locale (otherwise the language tag consists of the
  * language code only). For example, for a French (Canada) request,
- * <code>{LANGUAGE-TAG}</code> is replaced with <code>fr-CA</code>. By
- * default, the language tag is mixed-case (uppercase for country code,
- * lowercase for language code). You can force all-uppercase with
+ * <code>{LANGUAGE-TAG}</code> is replaced with <code>fr-CA</code>. By default,
+ * the language tag is mixed-case (uppercase for country code, lowercase for
+ * language code). You can force all-uppercase with
  * <code>{LANGUAGE-TAG:upper}</code> and all-lowercase with
  * <code>{LANGUAGE-TAG:lower}</code>.
  * </p>
  * </dd>
  * 
- * <dt><code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code></dt>
+ * <dt><a name="localized-content-url">
+ * <code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert a URL for a (potentially localized) secondary
@@ -428,19 +427,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * some text) into the interpolated content. Upload the secondary support files
  * (both the base file and the localized versions) into the portal component
  * that uses this <code>FileInterpolator</code>. For the
- * <code><i>pathname</i></code> in the token, use the filename of the base
- * file. The <code>FileInterpolator</code> will replace this token with a URL
- * for the best-fit candidate secondary support file for the current locale.
+ * <code><i>pathname</i></code> in the token, use the filename of the base file.
+ * The <code>FileInterpolator</code> will replace this token with a URL for the
+ * best-fit candidate secondary support file for the current locale.
  * </p>
  * <p>
- * For example, upload <code>picture.jpg</code> as a secondary support file
- * for a particular component which uses this <code>FileInterpolator</code>.
- * Also upload any localized versions of the file (eg
- * <code>picture_fr.jpg</code> for French, <code>picture_fr_CA.jpg</code>
- * for French (Canada), etc), as additional secondary support files for the same
- * component. Then put the following markup into an HTML text file to be
- * processed by the <code>FileInterpolator</code>, and upload that text file
- * as another secondary support file:
+ * For example, upload <code>picture.jpg</code> as a secondary support file for
+ * a particular component which uses this <code>FileInterpolator</code>. Also
+ * upload any localized versions of the file (eg <code>picture_fr.jpg</code> for
+ * French, <code>picture_fr_CA.jpg</code> for French (Canada), etc), as
+ * additional secondary support files for the same component. Then put the
+ * following markup into an HTML text file to be processed by the
+ * <code>FileInterpolator</code>, and upload that text file as another secondary
+ * support file:
  * </p>
  * <p>
  * <code>&lt;IMG SRC="{LOCALIZED-CONTENT-URL:picture.jpg}"&gt;</code>
@@ -456,8 +455,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{LOGGED-IN}...{/LOGGED-IN}</code><br>
- * <code>{LOGGED-OUT}...{/LOGGED-OUT}</code></dt>
+ * <dt><a name="logged-in"><code>{LOGGED-IN}...{/LOGGED-IN}</code></a><br>
+ * <a name="logged-out"><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></a></dt>
  * <dd>
  * <p>
  * Use these tokens around sections of content which should only be included in
@@ -488,7 +487,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{NAME}</code></dt>
+ * <dt><a name="name"><code>{NAME}</code></a></dt>
  * <dd>
  * <p>
  * Use this token to insert the full name of the user into the interpolated
@@ -500,9 +499,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * For example, <code>{NAME}</code> is replaced with
- * <code>Scott Jorgenson</code> for that user by default (ie, for most
- * locales). For certain Asian locales, where it is customary to use the family
- * name first (eg Japan - the list of such locales is configured in
+ * <code>Scott Jorgenson</code> for that user by default (ie, for most locales).
+ * For certain Asian locales, where it is customary to use the family name first
+ * (eg Japan - the list of such locales is configured in
  * <code>i18n_config.properties</code>), it would be replaced with
  * <code>Jorgenson Scott</code> instead.
  * </p>
@@ -526,18 +525,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * In the <code><i>items</i></code> parameter to the
  * <code>{NAV-ITEM:<i>items</i>}</code> token, you can list just a single item,
- * or multiple (use the <code>|</code> character to delimit them). Each item
- * can be a navigation item name or friendly URL (or substring thereof). The
- * content enclosed by the <code>{NAV-ITEM:<i>items</i>}</code> and
- * <code>{/NAV-ITEM}</code> tokens is omitted from the returned content unless the
- * navigation item operative for the request matches one of those values. The
- * match is a case-insensitive substring match.
+ * or multiple (use the <code>|</code> character to delimit them). Each item can
+ * be a navigation item name or friendly URL (or substring thereof). The content
+ * enclosed by the <code>{NAV-ITEM:<i>items</i>}</code> and
+ * <code>{/NAV-ITEM}</code> tokens is omitted from the returned content unless
+ * the navigation item operative for the request matches one of those values.
+ * The match is a case-insensitive substring match.
  * </p>
  * <p>
  * The content enclosed by the <code>{NAV-ITEM:<i>items</i>}</code> and
  * <code>{/NAV-ITEM}</code> tokens can be anything, including any of the special
  * tokens supported by this class (including other
- * <code>{NAV-ITEM:<i>items</i>}...{/NAV-ITEM}</code> tokens - ie you can "nest" them.
+ * <code>{NAV-ITEM:<i>items</i>}...{/NAV-ITEM}</code> tokens - ie you can "nest"
+ * them.
  * </p>
  * <p>
  * For example, the following markup selectively includes or omits the content
@@ -570,8 +570,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * In the <code><i>pages</i></code> parameter to the
  * <code>{PAGE:<i>pages</i>}</code> token, you can list just a single page
- * friendly ID, or multiple (use the <code>|</code> character to delimit
- * them). The content enclosed by the <code>{PAGE:<i>pages</i>}</code> and
+ * friendly ID, or multiple (use the <code>|</code> character to delimit them).
+ * The content enclosed by the <code>{PAGE:<i>pages</i>}</code> and
  * <code>{/PAGE}</code> tokens is omitted from the returned content unless the
  * page friendly ID in the request matches one of those values. The match is a
  * case-insensitive substring match.
@@ -580,8 +580,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * The content enclosed by the <code>{PAGE:<i>pages</i>}</code> and
  * <code>{/PAGE}</code> tokens can be anything, including any of the special
  * tokens supported by this class (including other
- * <code>{PAGE:<i>pages</i>}...{/PAGE}</code> tokens - ie you can "nest"
- * them.
+ * <code>{PAGE:<i>pages</i>}...{/PAGE}</code> tokens - ie you can "nest" them.
  * </p>
  * <p>
  * For example, the following markup selectively includes or omits the content
@@ -617,8 +616,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * <p>
  * For example, <code>{REQUEST-URL}</code> is replaced with
- * <code>http://portal.hp.com/portal/site/itrc/template.PAGE/...</code> when
- * the page is requested from the <code>itrc</code> portal site on the
+ * <code>http://portal.hp.com/portal/site/itrc/template.PAGE/...</code> when the
+ * page is requested from the <code>itrc</code> portal site on the
  * <code>portal.hp.com</code> server using HTTP. If we use
  * <code>{REQUEST-URL:https}</code> instead, then it is replaced with
  * <code>https://portal.hp.com/portal/site/itrc/template.PAGE/...</code> - the
@@ -633,8 +632,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * interpolated content. The site name is taken from the portal context (it is
  * the Vignette "site DNS name" element). For example, <code>{SITE-NAME}</code>
  * is replaced with <code>itrc</code> when the portal component invoking this
- * <code>FileInterpolator</code> is requested from the <code>itrc</code>
- * portal site.
+ * <code>FileInterpolator</code> is requested from the <code>itrc</code> portal
+ * site.
  * </p>
  * </dd>
  * 
@@ -648,21 +647,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * making administration of the sites easier.
  * </p>
  * <p>
- * In the <code><i>names</i></code> parameter to the
- * <code>{SITE:names}</code> token, you can list just a single site name, or
- * multiple (use the <code>|</code> character to delimit them). The content
- * enclosed by the <code>{SITE:<i>names</i>}</code> and <code>{/SITE}</code>
- * tokens is omitted from the returned content unless the site name in the
- * request matches one of those values. The match is case-insensitive. The site
- * name in the request is gotten from the portal context (it is the Vignette
- * "site DNS name").
+ * In the <code><i>names</i></code> parameter to the <code>{SITE:names}</code>
+ * token, you can list just a single site name, or multiple (use the
+ * <code>|</code> character to delimit them). The content enclosed by the
+ * <code>{SITE:<i>names</i>}</code> and <code>{/SITE}</code> tokens is omitted
+ * from the returned content unless the site name in the request matches one of
+ * those values. The match is case-insensitive. The site name in the request is
+ * gotten from the portal context (it is the Vignette "site DNS name").
  * </p>
  * <p>
  * The content enclosed by the <code>{SITE:<i>names</i>}</code> and
  * <code>{/SITE}</code> tokens can be anything, including any of the special
  * tokens supported by this class (including other
- * <code>{SITE:<i>names</i>}...{/SITE}</code> tokens - ie you can "nest"
- * them.
+ * <code>{SITE:<i>names</i>}...{/SITE}</code> tokens - ie you can "nest" them.
  * </p>
  * <p>
  * For example, the following markup selectively includes or omits the content
@@ -684,14 +681,14 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </dd>
  * 
  * <dt><a name="site-url"><code>{SITE-URL}</code></a></dt>
- * <dt><a name="site-url_p"><code>{SITE-URL:<i>spec</i>}</code></a></dt>
+ * <dt><a name="site-url"><code>{SITE-URL:<i>spec</i>}</code></a></dt>
  * <dd>
  * <p>
  * Use these related tokens to insert URL's for pages at the current portal site
- * into the interpolated content. The <code>{SITE-URL}</code> token inserts
- * the current site home page URL; the <code>{SITE-URL:<i>spec</i>}</code>
- * token inserts a URL for a page at the current site, or another site,
- * according to the <code><i>spec</i></code>.
+ * into the interpolated content. The <code>{SITE-URL}</code> token inserts the
+ * current site home page URL; the <code>{SITE-URL:<i>spec</i>}</code> token
+ * inserts a URL for a page at the current site, or another site, according to
+ * the <code><i>spec</i></code>.
  * </p>
  * <p>
  * The portal site URL is taken from a non-standard attribute in the request
@@ -704,15 +701,14 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <code><i>scheme</i>:<i>port</i>;<i>uri</i></code>
  * 
  * <p>
- * The <code><i>scheme</i></code> can be <code>http</code> or
- * <code>https</code>; if it is not specified, then the scheme in the current
- * request is used. The <code><i>port</i></code> can be a port number; if it
- * is not specified, then the one from the current request is used. The
- * <code><i>uri</i></code> is used to give a site-relative URI for
- * identifying the particular page and/or portal site. If the
- * <code><i>uri</i></code> starts with <code>/</code>, it is used as the
- * particular page within the current portal site. If it does not start with
- * <code>/</code> then the first part of the <code><i>uri</i></code> is
+ * The <code><i>scheme</i></code> can be <code>http</code> or <code>https</code>
+ * ; if it is not specified, then the scheme in the current request is used. The
+ * <code><i>port</i></code> can be a port number; if it is not specified, then
+ * the one from the current request is used. The <code><i>uri</i></code> is used
+ * to give a site-relative URI for identifying the particular page and/or portal
+ * site. If the <code><i>uri</i></code> starts with <code>/</code>, it is used
+ * as the particular page within the current portal site. If it does not start
+ * with <code>/</code> then the first part of the <code><i>uri</i></code> is
  * taken to be the new site name, and the remainder is used as the particular
  * page within that site. The URI can include a friendly URI for the page in
  * Vignette, a secondary page template name, or etc - this can even include
@@ -730,19 +726,17 @@ import com.vignette.portal.website.enduser.PortalContext;
  * (the global help secondary page), etc.
  * </p>
  * <p>
- * To repeat the above examples, but switch the site to <code>acme</code>:
- * use <code>{SITE-URL:acme}</code>, <code>{SITE-URL:acme/forums}</code>,
+ * To repeat the above examples, but switch the site to <code>acme</code>: use
+ * <code>{SITE-URL:acme}</code>, <code>{SITE-URL:acme/forums}</code>,
  * <code>{SITE-URL:acme/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc.
  * </p>
  * <p>
  * And to repeat the above examples again, but switch the scheme to HTTPS, here
  * is how we do it for the current portal site: <code>{SITE-URL:https;}</code>,
  * <code>{SITE-URL:https;/forums}</code>,
- * <code>{SITE-URL:https;/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc. And
- * to simultaneously switch to the <code>acme</code> portal site: use
- * <code>{SITE-URL:https;acme}</code>,
- * <code>{SITE-URL:https;acme/forums}</code>,
- * <code>{SITE-URL:https;acme/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc.
+ * <code>{SITE-URL:https;/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc. And to
+ * simultaneously switch to the <code>acme</code> portal site: use
+ * <code>{SITE-URL:https;acme}</code>, <code>{SITE-URL:https;acme/forums}</code>, <code>{SITE-URL:https;acme/template.PUBLIC_SPF_GLOBAL_HELP}</code>, etc.
  * </p>
  * </dd>
  * 
@@ -761,20 +755,20 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <dd>
  * <p>
  * Use this token to insert a given string property of the user into the
- * interpolated content. The <code><i>key</i></code> parameter in the token
- * is the name of the user property, and the user properties themselves are
- * taken from the <i>user profile map</i> created by SPF. For example,
+ * interpolated content. The <code><i>key</i></code> parameter in the token is
+ * the name of the user property, and the user properties themselves are taken
+ * from the <i>user profile map</i> created by SPF. For example,
  * <code>{USER-PROPERTY:PhoneNumber}</code> is replaced with
  * <code>123 456 7890</code> for a user with such a phone number.
  * </p>
  * <p>
  * The property name <code><i>key</i></code>'s are not listed here; you can
  * lookup their values in the {@link com.hp.it.spf.xa.misc.portal.Consts} class.
- * (They are the values of the <code>Consts</code> class attributes whose
- * names begin with <code>KEY_*</code> - for example,
+ * (They are the values of the <code>Consts</code> class attributes whose names
+ * begin with <code>KEY_*</code> - for example,
  * {@link com.hp.it.spf.xa.misc.portal.Consts#KEY_EMAIL}. Note you must use the
- * value - you cannot use the name of one of those <code>KEY_*</code>
- * attributes in your <code><i>key</i></code> for the
+ * value - you cannot use the name of one of those <code>KEY_*</code> attributes
+ * in your <code><i>key</i></code> for the
  * <code>{USER-PROPERTY:<i>key</i>}</code> token.
  * </p>
  * <p>
@@ -787,9 +781,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <dt><a name="value"><code>{VALUE:<i>key</i>}</code></a></dt>
  * <dd>
  * <p>
- * Parses the given string, converting the <code>{VALUE:<i>key</i>}</code>
- * token into the value for that key in the request (attribute or parameter).
- * The <i>key</i> may be any of the following (this is also the order of
+ * Parses the given string, converting the <code>{VALUE:<i>key</i>}</code> token
+ * into the value for that key in the request (attribute or parameter). The
+ * <i>key</i> may be any of the following (this is also the order of
  * precedence):
  * </p>
  * <p>
@@ -840,189 +834,189 @@ import com.vignette.portal.website.enduser.PortalContext;
  *      <code>com.hp.it.spf.xa.interpolate.TokenParser</code>
  */
 public class FileInterpolator extends
-		com.hp.it.spf.xa.interpolate.FileInterpolator {
+	com.hp.it.spf.xa.interpolate.FileInterpolator {
 
-	/**
-	 * Portal context.
-	 */
-	private PortalContext portalContext = null;
+    /**
+     * Portal context.
+     */
+    private PortalContext portalContext = null;
 
-	/**
-	 * Portal log.
-	 */
-	private LogWrapper portalLog = new LogWrapper(FileInterpolator.class);
+    /**
+     * Portal log.
+     */
+    private LogWrapper portalLog = new LogWrapper(FileInterpolator.class);
 
-	/**
-	 * <p>
-	 * Constructs a new <code>FileInterpolator</code> for the given base
-	 * content secondary support filename and portal context.
-	 * </p>
-	 * <p>
-	 * The filename provided should be the base name of the secondary support
-	 * file containing the content to interpolate. The interpolate method will
-	 * open the best-fit localized version of that secondary support file, based
-	 * on the locale in the given request.
-	 * </p>
-	 * <b>Note:</b> A token-substitutions property file (to be used with any
-	 * <code>{INCLUDE:<i>key</i>}</code> tokens in the file content) is not
-	 * passed in this constructor. Therefore any
-	 * <code>{INCLUDE:<i>key</i>}</code> tokens in the file content will be
-	 * resolved against the default token-substitutions property file (<code>default_includes.properties</code>).
-	 * </p>
-	 * 
-	 * @param portalContext
-	 *            The portal context
-	 * @param baseContentFile
-	 *            The base filename of the text secondary support file to
-	 *            interpolate
-	 */
-	public FileInterpolator(PortalContext portalContext, String baseContentFile) {
-		this.portalContext = portalContext;
-		this.baseContentFilePath = baseContentFile;
-		if (portalContext != null) {
-			this.parser = new TokenParser(portalContext);
-		}
+    /**
+     * <p>
+     * Constructs a new <code>FileInterpolator</code> for the given base content
+     * secondary support filename and portal context.
+     * </p>
+     * <p>
+     * The filename provided should be the base name of the secondary support
+     * file containing the content to interpolate. The interpolate method will
+     * open the best-fit localized version of that secondary support file, based
+     * on the locale in the given request.
+     * </p>
+     * <b>Note:</b> A token-substitutions property file (to be used with any
+     * <code>{INCLUDE:<i>key</i>}</code> tokens in the file content) is not
+     * passed in this constructor. Therefore any
+     * <code>{INCLUDE:<i>key</i>}</code> tokens in the file content will be
+     * resolved against the default token-substitutions property file (
+     * <code>default_includes.properties</code>). </p>
+     * 
+     * @param portalContext
+     *            The portal context
+     * @param baseContentFile
+     *            The base filename of the text secondary support file to
+     *            interpolate
+     */
+    public FileInterpolator(PortalContext portalContext, String baseContentFile) {
+	this.portalContext = portalContext;
+	this.baseContentFilePath = baseContentFile;
+	if (portalContext != null) {
+	    this.parser = new TokenParser(portalContext);
 	}
+    }
 
-	/**
-	 * <p>
-	 * Constructs a new <code>FileInterpolator</code> for the given base
-	 * content secondary support filename, portal context, and
-	 * token-substitutions pathname.
-	 * </p>
-	 * <p>
-	 * This constructor works like
-	 * {@link #FileInterpolator(PortalContext, String)} and allows a
-	 * token-substitutions file to be specified as well. The token-substitutions
-	 * pathname provided is to be used with any
-	 * <code>{INCLUDE:<i>key</i>}</code> tokens in the file content; they
-	 * will be resolved against the file whose pathname you provide. The
-	 * pathname should include any necessary path (relative to the class loader)
-	 * followed by the filename (the extension <code>.properties</code> is
-	 * required and assumed). If you know there are no such tokens in the file
-	 * content, you can pass null for this parameter.
-	 * </p>
-	 * 
-	 * @param portalContext
-	 *            The portal context
-	 * @param baseContentFile
-	 *            The base filename of the text secondary support file to
-	 *            interpolate
-	 * @param subsFilePath
-	 *            The filename and path relative to where the class loader
-	 *            searches for the token-substitutions property file (for
-	 *            purposes of any <code>{INCLUDE:<i>key</i>}</code> tokens
-	 *            in the file content)
-	 */
-	public FileInterpolator(PortalContext portalContext,
-			String relativeFilePath, String subsFileBase) {
-		this.portalContext = portalContext;
-		this.baseContentFilePath = relativeFilePath;
-		if (portalContext != null) {
-			this.parser = new TokenParser(portalContext, subsFileBase);
-		}
+    /**
+     * <p>
+     * Constructs a new <code>FileInterpolator</code> for the given base content
+     * secondary support filename, portal context, and token-substitutions
+     * pathname.
+     * </p>
+     * <p>
+     * This constructor works like
+     * {@link #FileInterpolator(PortalContext, String)} and allows a
+     * token-substitutions file to be specified as well. The token-substitutions
+     * pathname provided is to be used with any
+     * <code>{INCLUDE:<i>key</i>}</code> tokens in the file content; they will
+     * be resolved against the file whose pathname you provide. The pathname
+     * should include any necessary path (relative to the class loader) followed
+     * by the filename (the extension <code>.properties</code> is required and
+     * assumed). If you know there are no such tokens in the file content, you
+     * can pass null for this parameter.
+     * </p>
+     * 
+     * @param portalContext
+     *            The portal context
+     * @param baseContentFile
+     *            The base filename of the text secondary support file to
+     *            interpolate
+     * @param subsFilePath
+     *            The filename and path relative to where the class loader
+     *            searches for the token-substitutions property file (for
+     *            purposes of any <code>{INCLUDE:<i>key</i>}</code> tokens in
+     *            the file content)
+     */
+    public FileInterpolator(PortalContext portalContext,
+	    String relativeFilePath, String subsFileBase) {
+	this.portalContext = portalContext;
+	this.baseContentFilePath = relativeFilePath;
+	if (portalContext != null) {
+	    this.parser = new TokenParser(portalContext, subsFileBase);
 	}
+    }
 
-	/**
-	 * <p>
-	 * Constructs a new <code>FileInterpolator</code> for the given base
-	 * content secondary support filename, portal context, locale, and
-	 * token-substitutions pathname.
-	 * </p>
-	 * <p>
-	 * This constructor works like
-	 * {@link #FileInterpolator(PortalContext, String, String)} except that the
-	 * given locale is used instead of the one in the request in the portal
-	 * context. However if the given locale is null, then the one in the request
-	 * will be used.
-	 * </p>
-	 * 
-	 * @param portalContext
-	 *            The portal context
-	 * @param pLocale
-	 *            The locale to use (if null, uses the one in the portal context
-	 *            instead)
-	 * @param baseContentFile
-	 *            The base filename of the text secondary support file to
-	 *            interpolate
-	 * @param subsFilePath
-	 *            The filename and path relative to where the class loader
-	 *            searches for the token-substitutions property file (for
-	 *            purposes of any <code>{INCLUDE:<i>key</i>}</code> tokens
-	 *            in the file content)
-	 */
-	public FileInterpolator(PortalContext portalContext, Locale pLocale,
-			String relativeFilePath, String subsFileBase) {
-		this.portalContext = portalContext;
-		this.baseContentFilePath = relativeFilePath;
-		this.locale = pLocale;
-		if (portalContext != null) {
-			this.parser = new TokenParser(portalContext, pLocale, subsFileBase);
-		}
+    /**
+     * <p>
+     * Constructs a new <code>FileInterpolator</code> for the given base content
+     * secondary support filename, portal context, locale, and
+     * token-substitutions pathname.
+     * </p>
+     * <p>
+     * This constructor works like
+     * {@link #FileInterpolator(PortalContext, String, String)} except that the
+     * given locale is used instead of the one in the request in the portal
+     * context. However if the given locale is null, then the one in the request
+     * will be used.
+     * </p>
+     * 
+     * @param portalContext
+     *            The portal context
+     * @param pLocale
+     *            The locale to use (if null, uses the one in the portal context
+     *            instead)
+     * @param baseContentFile
+     *            The base filename of the text secondary support file to
+     *            interpolate
+     * @param subsFilePath
+     *            The filename and path relative to where the class loader
+     *            searches for the token-substitutions property file (for
+     *            purposes of any <code>{INCLUDE:<i>key</i>}</code> tokens in
+     *            the file content)
+     */
+    public FileInterpolator(PortalContext portalContext, Locale pLocale,
+	    String relativeFilePath, String subsFileBase) {
+	this.portalContext = portalContext;
+	this.baseContentFilePath = relativeFilePath;
+	this.locale = pLocale;
+	if (portalContext != null) {
+	    this.parser = new TokenParser(portalContext, pLocale, subsFileBase);
 	}
+    }
 
-	/**
-	 * <p>
-	 * Gets the best-fit localized version of the secondary support file (using
-	 * {@link #getLocalizedContentFileAsStream()}, reads it into a string, and
-	 * substitutes the tokens found in the string with the proper dynamic values
-	 * (using {@link TokenParser#parse(String)}, returning the interpolated
-	 * content. The filename of the secondary support content file, the locale
-	 * for which to find the best-candidate, and the proper substitution values
-	 * for the tokens are all based on the information you provided when calling
-	 * the constructor. Null is returned if there are problems interpolating (eg
-	 * the file is not found or was empty, or the portal context or content file
-	 * you provided when calling the constructor were null). See class
-	 * documentation for more information about the tokens which are
-	 * substituted.
-	 * </p>
-	 * 
-	 * @return The interpolated file content
-	 * @throws Exception
-	 *             Some exception
-	 */
-	public String interpolate() throws Exception {
+    /**
+     * <p>
+     * Gets the best-fit localized version of the secondary support file (using
+     * {@link #getLocalizedContentFileAsStream()}, reads it into a string, and
+     * substitutes the tokens found in the string with the proper dynamic values
+     * (using {@link TokenParser#parse(String)}, returning the interpolated
+     * content. The filename of the secondary support content file, the locale
+     * for which to find the best-candidate, and the proper substitution values
+     * for the tokens are all based on the information you provided when calling
+     * the constructor. Null is returned if there are problems interpolating (eg
+     * the file is not found or was empty, or the portal context or content file
+     * you provided when calling the constructor were null). See class
+     * documentation for more information about the tokens which are
+     * substituted.
+     * </p>
+     * 
+     * @return The interpolated file content
+     * @throws Exception
+     *             Some exception
+     */
+    public String interpolate() throws Exception {
 
-		if (portalContext == null) {
-			logWarning("Portal context was null.");
-			return null;
-		}
-		return super.interpolate();
+	if (portalContext == null) {
+	    logWarning("Portal context was null.");
+	    return null;
 	}
+	return super.interpolate();
+    }
 
-	/**
-	 * Get an input stream for the best-candidate localized content file
-	 * available among the secondary support files of the current portal
-	 * component, based on the locale and base content filename provided to the
-	 * constructor. If no specific locale was provided to the constructor, then
-	 * the one in the portal context is used. Null is returned if the file is
-	 * not found or the portal context or content file provided to the
-	 * constructor was null. This method uses
-	 * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocalizedFileStream(PortalContext, String, Locale, boolean)}
-	 * (see).
-	 * 
-	 * @return The input stream for the file
-	 */
-	protected InputStream getLocalizedContentFileAsStream() {
-		if (portalContext == null || baseContentFilePath == null) {
-			return null;
-		}
-		Locale loc = locale;
-		if (loc == null) {
-			loc = I18nUtility.getLocale(portalContext.getHttpServletRequest());
-		}
-		return I18nUtility.getLocalizedFileStream(portalContext,
-				baseContentFilePath, loc, true);
+    /**
+     * Get an input stream for the best-candidate localized content file
+     * available among the secondary support files of the current portal
+     * component, based on the locale and base content filename provided to the
+     * constructor. If no specific locale was provided to the constructor, then
+     * the one in the portal context is used. Null is returned if the file is
+     * not found or the portal context or content file provided to the
+     * constructor was null. This method uses
+     * {@link com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocalizedFileStream(PortalContext, String, Locale, boolean)}
+     * (see).
+     * 
+     * @return The input stream for the file
+     */
+    protected InputStream getLocalizedContentFileAsStream() {
+	if (portalContext == null || baseContentFilePath == null) {
+	    return null;
 	}
+	Locale loc = locale;
+	if (loc == null) {
+	    loc = I18nUtility.getLocale(portalContext.getHttpServletRequest());
+	}
+	return I18nUtility.getLocalizedFileStream(portalContext,
+		baseContentFilePath, loc, true);
+    }
 
-	/**
-	 * Log warning.
-	 * 
-	 * @param msg
-	 *            log message
-	 */
-	protected void logWarning(String msg) {
-		portalLog.warning(msg);
-	}
+    /**
+     * Log warning.
+     * 
+     * @param msg
+     *            log message
+     */
+    protected void logWarning(String msg) {
+	portalLog.warning(msg);
+    }
 
 }

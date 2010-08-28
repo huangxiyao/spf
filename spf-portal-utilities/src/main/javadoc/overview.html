@@ -285,7 +285,26 @@ later.
 		</ul>
 		</li>
 		<li>3.4. <a href="#help.global">Producing global help using
-		the <code>spf-global-help-secondarypagetype</code></a></li>
+		the <code>spf-global-help-secondarypagetype</code></a>
+		<ul>
+			<li>3.4.1. <a href="#help.global.car">Structuring your CAR
+			file</a></li>
+			<li>3.4.2. <a href="#help.global.xml">Creating your
+			component descriptor (<code>component.xml</code>)</a></li>
+			<li>3.4.3. <a href="#help.global.content">Creating your
+			global help content (<code>globalHelp.html</code>)</a></li>
+			<li>3.4.4. <a href="#help.global.properties">Creating your
+			global help include properties (<code>globalHelpInclude.properties</code>
+			- optional)</a></li>
+			<li>3.4.5. <a href="#help.global.primary">Creating your
+			primary JSP (<code>globalHelpMain.jsp</code>)</a></li>
+			<li>3.4.6. <a href="#help.global.messages">Creating your
+			page title (<code>WEB-INF/i18n/&lt;your-component-id&gt;.properties</code>)</a></li>
+			<li>3.4.7. <a href="#help.global.deployment">Deploying and
+			configuring your CAR file</a></li>
+		</ul>
+		</li>
+
 		<li>3.5. <a href="#help.global.java">Producing links to
 		global help using Java code </a>
 		<ul>
@@ -4067,6 +4086,305 @@ extend.</p>
 <h3>3.4. Producing global help using the <code>spf-global-help-secondarypagetype</code></h3>
 </a>
 
+<p>Not every portal site needs to have a global help page. But if
+you decide to implement one, the SPF provides a framework to minimize
+the task for you, letting you concentrate just on the content itself.
+This framework is based around the SPF-provided <b>global help
+secondary page type</b>. This section will tell you how to implement global
+help using that secondary page type, and the <a href="#help.global.java">following</a>
+<a href="#help.global.jsp">sections</a> will give you ways to link to
+your global help page.</p>
+
+<p>To build a global help page, you implement a <b>global help
+secondary page</b> instance for the SPF-provided global help secondary page
+type. This secondary page type, named <b>Shared Portal Framework -
+Global Help Page</b> (component ID <code>spf-global-help-secondarypagetype</code>),
+is available in every SPF-provided instance of Vignette portal. To
+construct your global help secondary page, it helps to have some
+experience with Vignette portal component development. The <a
+	href="#overview.other.vignette.devguide">Vignette Portal
+Developer's Guide</a> is a good reference for that, and this section will
+assume you have the basic background.</p>
+
+<a name="help.global.car">
+<h4>3.4.1. Structuring your CAR file</h4>
+</a>
+
+<p>As with all Vignette portal components, your global help
+secondary page must be packaged as a CAR (Vignette component archive)
+file. Your CAR file should have the following layout. See below for an
+explanation of the files.</p>
+<blockquote><pre>
+component.xml                                          # Your Vignette component descriptor.
+globalHelp.html                                        # Base (English) global help content.
+globalHelp_&lt;your-locales&gt;.html                         # Translations.
+...                                                    # ...
+globalHelp_&lt;your-locales&gt;.html                         # Translations.
+globalHelpInclude.properties                           # Your help content's include properties (optional).
+globalHelpMain.jsp                                     # The primary JSP.
+&lt;any-supporting-resources&gt;                             # Any supporting resources (eg images) used
+                                                       # by your help content (optional).
+WEB-INF
+   +--i18n
+      +--&lt;your-component-id&gt;.properties                # Base (English) messages.
+      +--&lt;your-component-id&gt;_&lt;your-locales&gt;.properties # Translations.
+      +--...                                           # ...
+      +--&lt;your-component-id&gt;_&lt;your-locales&gt;.properties # Translations.
+</pre></blockquote>
+
+<a name="help.global.xml">
+<h4>3.4.2. Creating your component descriptor (<code>component.xml</code>)</h4>
+</a>
+<p>The <code>component.xml</code> (Vignette component descriptor)
+for your global help secondary page must follow a stereotypical pattern.
+In particular, you must declare your secondary page component name and
+ID, and instantiate the <code>spf-global-help-secondarypagetype</code>,
+which provides most of the code needed to render your global help. It
+looks like this. This example is taken from the HP Support Center, an
+SPF-based portal site. See after the example for important notes about
+the tag attributes which are hyperlinked below.</p>
+
+<blockquote><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;epideploy:component build-version="Gold"
+	<a href="#help.global.xml.id">component-id="sp4ts-global-help-secondarypage"</a>
+	component-type="Secondary Pages"
+	<a href="#help.global.xml.desc">description="Secondary page for display of global help in HP Support Center."</a>
+	epi-build="251"
+	epi-version="7.2.2"
+	major-version="1"
+	minor-version="0"
+	<a href="#help.global.xml.title">title="HP Support Center - Global Help Page"</a>
+	xmlns:epideploy="http://www.epicentric.com/deployment"&gt;
+	&lt;epideploy:required-component
+		component-id="spf-global-help-secondarypagetype"
+		component-type="Secondary Page Types"
+		major-version="1"
+		minor-version="0" /&gt;
+	&lt;epideploy:detail&gt;
+		&lt;style-info apply-template-header="false"
+			<a href="#help.global.xml.desc">description="Secondary page for display of global help in HP Support Center."</a>
+			<a href="#help.global.xml.friendly">friendly-id="PUBLIC_SP4TS_GLOBAL_HELP"</a>
+			<a href="#help.global.xml.id">id="sp4ts-global-help-secondarypage"</a>
+			is-system="false" 
+			primary-filename="globalHelpMain.jsp"
+			processing-type="ACTION_BASED" 
+			template-default="true"
+			template-uid="spf-global-help-secondarypagetype"
+			<a href="#help.global.xml.title">title="HP Support Center - Global Help Page"</a>
+			visible="true"&gt;
+			&lt;actions&gt;
+				&lt;group-reference group-id="INHERIT_ALL" /&gt;
+			&lt;/actions&gt;
+		&lt;/style-info&gt;
+	&lt;/epideploy:detail&gt;
+&lt;/epideploy:component&gt;
+</pre></blockquote>
+
+<blockquote>
+<dl>
+	<dt><a name="help.global.xml.id"><b>component-id (id)</b></a></dt>
+	<dd>
+	<p>Technically this can be whatever you want. But by convention,
+	please use <code><i>&lt;your-site&gt;</i>-global-help-secondarypage</code>,
+	where <code><i>&lt;your-site&gt;</i></code> is your "site DNS name".</p>
+	</dd>
+	<dt><a name="help.global.xml.title"><b>title</b></a></dt>
+	<dd>
+	<p>Technically this can be whatever you want. But by convention,
+	please use <code><i>&lt;your-site&gt;</i> - Global Help Page</code>,
+	where <code><i>&lt;your-site&gt;</i></code> is your full site name.</p>
+	</dd>
+	<dt><a name="help.global.xml.desc"><b>description</b></a></dt>
+	<dd>
+	<p>Customize this with a short description of the purpose of the
+	page. For example, <code>Secondary page for display of global
+	help in <i>&lt;your-site&gt;</i></code>.</p>
+	</dd>
+	<dt><a name="help.global.xml.friendly"><b>friendly-id</b></a></dt>
+	<dd>
+	<p>Technically this can be whatever you want. But by convention,
+	please use <code>PUBLIC_<i>&lt;your-site&gt;</i>_GLOBAL_HELP</code>,
+	where <code><i>&lt;your-site&gt;</i></code> is your "site DNS name" in
+	uppercase.</p>
+	</dd>
+</dl>
+</blockquote>
+
+<a name="help.global.content">
+<h4>3.4.3. Creating your global help content (<code>globalHelp.html</code>)</h4>
+</a>
+
+<p>Your global help content is placed in an HTML <a
+	href="#i18n.resources.bundles">resource bundle</a> whose base filename
+is <code>globalHelp.html</code>. You can use whatever HTML markup
+(including CSS and JS) you need. Remember, though, that this document
+will be pulled-in by the portal and aggregated with your theme (grid and
+style) - therefore it should not include any document-level markup such
+as the <code>&lt;HTML&gt;</code>, <code>&lt;HEAD&gt;</code>, and <code>&lt;BODY&gt;</code>
+tags.</p>
+
+<p>You can also use the SPF's dynamic token language in your <code>globalHelp.html</code>.
+This lets you interpolate certain dynamic data into the content, such as
+user properties (name, email address, etc); URL's pointing to images,
+CSS files, JS files, etc; and <a href="#help.global.properties">include
+properties</a> from your <code>globalHelpInclude.properties</code> file. You
+can also permission/condition the content so that certain parts are seen
+only by logged-in or logged-out users, or users within certain groups.
+Read more about the <a href="#file.author">token language</a> later in
+this document.</p>
+
+<p>Your global help content can be localized. Each localized file
+should be named and tagged as described earlier in the discussion about
+<a href="#i18n.resources.bundles">resource bundles</a>, and must use
+UTF-8 character encoding. At runtime, the <code>spf-global-help-secondarypagetype</code>
+will select the best-available localized version for the user's locale.
+The user's locale is as determined automatically by the SPF portal's <a
+	href="#i18n.other.locale.resolver">locale resolver</a>, and the search
+sequence for the best-fit <code>globalHelp.html</code> file follows the
+standard Java {@link java.util.ResourceBundle} algorithm.</p>
+
+<p>Your global help HTML may include references (ie URLs) pointing
+to other supporting resource files which you keep in your global help
+CAR (eg images, CSS files, etc). Use the <a
+	href="#file.author.token.url"><code>{CONTENT-URL:<i>filename</i>}</code></a>
+or <a href="#file.author.token.url"><code>{LOCALIZED-CONTENT-URL:<i>filename</i>}</code></a>
+dynamic tokens to generate URLs for them inside your <code>globalHelp.html</code>.
+Be sure to include the <code><i>filename</i></code> files in your CAR as
+well. Note the <code><i>filename</i></code> files may themselves be
+localized - just tag them appropriately as you do with the localized <code>globalHelp.html</code>
+files.</p>
+
+<p>Note: If you wish, your global help can refer to CSS classes
+defined by your theme. That is, any CSS classes pulled-in by the page
+grid and/or styles which you will apply to your global help secondary
+page (see <a href="#help.global.deployment">below</a>), can be assumed
+and used in your content since they will be in-scope when the content is
+aggregated with the theme at runtime.</p>
+
+<p>For example, here is some global help content taken from the HP
+Support Center:</p>
+
+<blockquote><pre>
+&lt;div id="introBlock"&gt;
+&lt;h1 class="headerAlpha"&gt;Welcome to HP Support Center site help&lt;/h1&gt;
+
+&lt;p class="content"&gt;This page provides general information about HP
+Support Center and how to use it. For detailed information about
+specific features such as Forums, Search, etc., use the specific feature
+help links available below.&lt;br&gt;
+&lt;br&gt;
+
+&lt;span class="textLevelC"&gt;Note: For additional features for users
+with support agreements (such as Support Case Manager, Software Update
+Manager, and others), please visit the &lt;a href="{INCLUDE:itrc.url.home}"&gt;IT
+Resource Center website&lt;/a&gt;. These services will be added to HP Support
+Center in a future release.&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+...
+
+{GROUP:LOCAL_PORTAL_LANG_JA|LOCAL_PORTAL_COUNTRY_JP}
+{LOGGED-IN}
+
+...
+
+	&lt;tr&gt;
+		&lt;td valign="top"&gt;1.&lt;/td&gt;
+		&lt;td valign="top"&gt;In the OiSC contract confirmation page, enter
+		your registry key issued by HP Japan and click 'confirm'. If you do
+		not know your registry key, contact &lt;a
+			href="mailto:{INCLUDE:hp.email.registry}"&gt;{INCLUDE:hp.email.registry}&lt;/a&gt;.&lt;/td&gt;
+		&lt;td&gt;&lt;img src="{LOCALIZED-CONTENT-URL:oiscRegPage.jpg}"
+			alt="Oracle internet Support Center"
+			title="Oracle internet Support Center"&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+
+...
+
+{/LOGGED-IN}
+{/GROUP}
+</pre></blockquote>
+
+<p>Notes on this example:</p>
+
+<ul>
+	<li>
+	<p>Since this content will be aggregated with the theme components
+	to assemble the whole page, notice that no document-level tags like <code>&lt;HTML&gt;</code>,
+	<code>&lt;HEAD&gt;</code>, and <code>&lt;BODY&gt;</code> are used.</p>
+	</li>
+
+	<li>
+	<p>HP.com-defined CSS stylesheets are linked-in by the theme
+	components for this portal site by default. Therefore the <code>globalHelp.html</code>
+	content makes use of HP.com-defined CSS classes such as <code>introBlock</code>
+	and <code>headerAlpha</code> without defining them.</p>
+	</li>
+
+	<li>
+	<p>Several include-properties are used, for parts of the document
+	which the author felt were important to keep in a separate properties
+	file. (This way, for example, they could be changed without having to
+	re-localize the <code>globalHelp.html</code> bundle.) For example, the
+	ITRC URL is assumed to be available in an include-property named <code>itrc.url.home</code>,
+	and included here in <code>globalHelp.html</code> at runtime using the
+	<code>{INCLUDE:itrc.url.home}</code> token. The property value is
+	defined in a separate file, <code>globalHelpInclude.properties</code>;
+	see <a href="#help.global.properties">below</a>.</p>
+	</li>
+
+	<li>
+	<p>Notice that a whole block of content is defined exclusively for
+	logged-in Japanese users. First, the <code>{GROUP:LOCAL_PORTAL_LANG_JA|LOCAL_PORTAL_LANG_JP}</code>
+	token is used to permission the enclosed content for users who are in
+	either the SPF-provided Japanese language group (<code>LOCAL_PORTAL_LANG_JA</code>)
+	or the SPF-provided Japan country group (<code>LOCAL_PORTAL_LANG_JP</code>)
+	(or both). Next, the <code>{LOGGED-IN}</code> token is used to
+	permission the enclosed content for authenticated users only. You can
+	read more about permissioning tokens later in this document, in the
+	section about <a href="#file.author.token.auth">permissioning
+	content</a> during text interpolation. (The available groups to permission
+	will vary depending on your portal site, but the standard SPF-provided
+	ones are defined later in this document too, in the section about <a
+		href="#portal.user.groups"><code>Utils.getGroups</code></a>.)</p>
+	</li>
+
+	<li>
+	<p>Finally, notice that an <code>&lt;IMG&gt;</code> tag is
+	declared, pointing to a picture named <code>oiscRegPage.jpg</code>
+	using the <code>{LOCALIZED-CONTENT-URL:oiscRegPage.jpg}</code> token.
+	Thus the JPG file, <code>oiscRegPage.jpg</code> (and specifically the
+	Japanese localized version of it, in this context, since the token is
+	referenced inside a Japan-only section of the help document), must be
+	kept inside the CAR as well.</p>
+	</li>
+</ul>
+
+LEFT OFF HERE
+<a name="help.global.properties">
+<h4>3.4.4. Creating your global help include properties (<code>globalHelpInclude.properties</code>
+- optional)</h4>
+</a>
+
+<p></p>
+
+<a name="help.global.primary">
+<h4>3.4.5. Creating your primary JSP (<code>globalHelpMain.jsp</code>)</h4>
+</a>
+
+<p></p>
+
+<a name="help.global.messages">
+<h4>3.4.6. Creating your page title (<code>WEB-INF/i18n/&lt;your-component-id&gt;.properties</code>)</h4>
+</a>
+
+<p></p>
+
+<a name="help.global.deployment">
+<h4>3.4.7. Deploying and configuring your CAR file</h4>
+</a>
+
 <hr>
 
 <a name="help.global.java">
@@ -4658,7 +4976,7 @@ any of the tokens, including nested occurrences of the same token; they
 will get interpolated too.
 </blockquote>
 
-LEFT OFF HERE <a name="file.author.token.url">
+<a name="file.author.token.url">
 <h4>4.4.1. Referencing URLs (<code>{CONTENT-URL:<i>path</i>}</code>,
 <code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code>, <code>{REQUEST-URL}</code>,
 <code>{REQUEST-URL:<i>spec</i>}</code>, <code>{SITE-URL}</code>, <code>{SITE-URL:<i>spec</i>}</code>)</h4>
@@ -4669,75 +4987,54 @@ text. Please click on the links for more documentation for each token.</p>
 
 <dl>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#content-url"><code>{CONTENT-URL:<i>pathname</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#content-url"><code>{CONTENT-URL:<i>filename</i>}</code></a></dt>
 	<dd>
-	<p>Use this token to insert a URL for an <b>unlocalized</b>
-	supporting resource file into the interpolated content. The file can be
-	an <a href="#i18n.location">external or internal</a> <a
-		href="#i18n.resources.supporting">supporting resource</a>, of any file
-	type (for example, an image). If it is external, you will get a URL for
-	the <i>file relay servlet</i>; if it is internal, you will get a static
-	resource URL for your portlet application. In either case, the URL will
-	be properly portlet-encoded for presentation to the user.</p>
+	<p>Use this token to insert a URL for an <b>unlocalized</b> <a
+		href="#i18n.resources.supporting">supporting resource file</a> into
+	the interpolated content. As a supporting resource file, this file must
+	be stored as a <i>secondary support file</i> in the same portal
+	component as where you are interpolating the <code>{CONTENT-URL:<i>filename</i>}</code>
+	token. The result of using this token is a well-formed Vignette portal
+	URL referencing that secondary support file.</p>
 
-	<p>The <code><i>pathname</i></code> in the token should give the
-	name of the resource file, led by any subfolder(s) relative to the <i>portlet
-	resource bundle folder</i> (for an external resource) or the portlet WAR
-	root (for an internal resource). Here is some example HTML text using
-	this token to help build an HTML &lt;IMG&gt; tag:</p>
+	<p>The <code><i>filename</i></code> in the token should give the
+	name of the secondary support file. Here is some example HTML markup
+	which illustrates using this token to help build an HTML &lt;IMG&gt;
+	tag for an image (<code>picture.jpg</code>) in the same portal
+	component:</p>
 
 	<blockquote><pre>
-&lt;IMG SRC="{CONTENT-URL:/images/picture.jpg}"&gt;
+&lt;IMG SRC="{CONTENT-URL:picture.jpg}"&gt;
 </pre></blockquote>
-
-	<p><b>Note:</b> If you are placing your resource files outside of
-	the WAR, you must have <a href="#i18n.supporting.relay">configured
-	and deployed</a> the relay servlet accordingly. You also must have <a
-		href="#i18n.other.i18n_portlet_config">configured your <code>i18n_portlet_config.properties</code></a>
-	with the locations of the portlet bundle folder and the relay servlet,
-	if you are not using the defaults. See the previous discussion in this
-	document.</p>
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#localized-content-url"><code>{LOCALIZED-CONTENT-URL:<i>pathname</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#localized-content-url"><code>{LOCALIZED-CONTENT-URL:<i>filename</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert a URL for an <b>possibly localized</b>
-	supporting resource file into the interpolated content. The file can be
-	an <a href="#i18n.location">external or internal</a> <a
-		href="#i18n.resources.supporting">supporting resource</a>, of any file
-	type (for example, an image). If it is external, you will get a URL for
-	the <i>file relay servlet</i>; if it is internal, you will get a static
-	resource URL for your portlet application. In either case, the URL will
-	be properly portlet-encoded for presentation to the user.</p>
+	<a href="#i18n.resources.supporting">supporting resource file</a> into
+	the interpolated content. As a supporting resource file, this file
+	(including its localized versions) must be stored as <i>secondary
+	support files</i>, properly tagged by locale, in the same portal component
+	as where you are interpolating the <code>{LOCALIZED-CONTENT-URL:<i>filename</i>}</code>
+	token. The result of using this token is a well-formed Vignette portal
+	URL referencing the best-fit localized version of that file for the
+	user's current locale (as determined by the SPF portal's <a
+		href="#i18n.other.locale.resolver">locale resolver</a>).</p>
 
-	<p>The <code><i>pathname</i></code> in the token should give the
-	base name of the <a href="#i18n.resources.bundles">resource bundle</a>
-	containing the desired file. This name should include any subfolder(s)
-	where the bundle files are located, relative to the <i>portlet
-	resource bundle folder</i> (for an external resource) or the portlet WAR
-	root (for an internal resource). The token will find the best-fit
-	localized file in that bundle for the user's current locale, and
-	include that filename in the expressed URL.</p>
-
-	<p>Here is some example HTML text using this token to help build an
-	HTML &lt;IMG&gt; tag:</p>
+	<p>The <code><i>filename</i></code> in the token should give the
+	base name of the secondary support file bundle. Here is some example
+	HTML markup which illustrates using this token to help build an HTML
+	&lt;IMG&gt; tag:</p>
 
 	<blockquote><pre>
-&lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/picture.jpg}"&gt;
+&lt;IMG SRC="{LOCALIZED-CONTENT-URL:picture.jpg}"&gt;
 </pre></blockquote>
 
-	<p><b>Note:</b> If you are placing your resource files outside of
-	the WAR, you must have <a href="#i18n.supporting.relay">configured
-	and deployed</a> the relay servlet accordingly. You also must have <a
-		href="#i18n.other.i18n_portlet_config">configured your <code>i18n_portlet_config.properties</code></a>
-	with the locations of the portlet bundle folder and the relay servlet,
-	if you are not using the defaults. See the previous discussion in this
-	document.</p>
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#request-url"><code>{REQUEST-URL}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#request-url"><code>{REQUEST-URL}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the current portal request URL into the
 	interpolated content. This is a reconstruction of the URL which, if
@@ -4754,7 +5051,7 @@ text. Please click on the links for more documentation for each token.</p>
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site-url_p"><code>{REQUEST-URL:<i>spec</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#request-url"><code>{REQUEST-URL:<i>spec</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the current portal request URL into the
 	interpolated content. Like the above token, this is a reconstruction of
@@ -4790,7 +5087,7 @@ text. Please click on the links for more documentation for each token.</p>
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site-url"><code>{SITE-URL}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#site-url"><code>{SITE-URL}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the portal home page URL into the
 	interpolated content. (The URL is for the current scheme; if you need
@@ -4804,7 +5101,7 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site-url_p"><code>{SITE-URL:<i>spec</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#site-url"><code>{SITE-URL:<i>spec</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert a URL pointing to any page in the
 	portal site, by the site-relative URI for that page. You can also
@@ -4844,25 +5141,26 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 		</li>
 	</ul>
 
-	<p>Here is some sample HTML text, using this token to help build a
+	p>For example, here is some HTML text using this token to help build a
 	hyperlink pointing to the current site's Forums page (which in this
-	example has a "friendly URI" of <code>/forums</code>):</p>
+	example has a "friendly URI" of <code>/forums</code>):
+</p>
 
-	<blockquote><pre>
+<blockquote><pre>
 Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 </pre></blockquote>
 
-	<p>To repeat the above example, but switch to the <code>itrc</code>
-	site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
+<p>To repeat the above example, but switch to the <code>itrc</code>
+site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
 
-	<p>To repeat both of those examples, and force use of HTTPS in the
-	URL, use {SITE-URL:https;/forums}<code>{SITE-URL:https;itrc/forums}</code>
-	instead.</p>
+<p>To repeat both of those examples, and force use of HTTPS in the
+URL, use {SITE-URL:https;/forums}<code>{SITE-URL:https;itrc/forums}</code>
+instead.</p>
 
-	<p>To force use of HTTPS but otherwise generate just a home page
-	URL for the current portal site (ie like <code>{SITE-URL}</code>
-	without any parameters does), use <code>{SITE-URL:https;}</code>.</p>
-	</dd>
+<p>To force use of HTTPS but otherwise generate just a home page URL
+for the current portal site (ie like <code>{SITE-URL}</code> without any
+parameters does), use <code>{SITE-URL:https;}</code>.</p>
+</dd>
 </dl>
 
 <a name="file.author.token.user">
@@ -4879,9 +5177,9 @@ documentation for each token.</p>
 
 <dl>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#country-code"><code>{COUNTRY-CODE}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#country-code"><code>{COUNTRY-CODE}</code></a></dt>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#country-code"><code>{COUNTRY-CODE:<i>case</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#country-code"><code>{COUNTRY-CODE:<i>case</i>}</code></a></dt>
 	<dd>
 	<p>Use either of these tokens to insert the <a
 		href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm">ISO
@@ -4902,7 +5200,7 @@ documentation for each token.</p>
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#email"><code>{EMAIL}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#email"><code>{EMAIL}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the email address for the user into the
 	interpolated content. The email is taken from the SPF-generated <i>user
@@ -4917,9 +5215,9 @@ The email address we have on record for you is: {EMAIL}
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#hpp-language-code"><code>{HPP-LANGUAGE-CODE}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#hpp-language-code"><code>{HPP-LANGUAGE-CODE}</code></a></dt>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#hpp-language-code"><code>{HPP-LANGUAGE-CODE:<i>case</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#hpp-language-code"><code>{HPP-LANGUAGE-CODE:<i>case</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the HP Passport standard language code
 	for the current user into the interpolated content. Note that HP
@@ -4939,9 +5237,9 @@ The email address we have on record for you is: {EMAIL}
 
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-code"><code>{LANGUAGE-CODE}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#language-code"><code>{LANGUAGE-CODE}</code></a></dt>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-code"><code>{LANGUAGE-CODE:<i>case</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#language-code"><code>{LANGUAGE-CODE:<i>case</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the <a
 		href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
@@ -4964,9 +5262,9 @@ The email address we have on record for you is: {EMAIL}
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-tag"><code>{LANGUAGE-TAG}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#language-tag"><code>{LANGUAGE-TAG}</code></a></dt>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolator/portlet/FileInterpolator.html#language-tag"><code>{LANGUAGE-TAG:<i>case</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#language-tag"><code>{LANGUAGE-TAG:<i>case</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the <a
 		href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag
@@ -4988,7 +5286,7 @@ The email address we have on record for you is: {EMAIL}
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#name"><code>{NAME}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#name"><code>{NAME}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the full name (both given and family
 	names) for the user into the interpolated content. The given and family
@@ -5010,11 +5308,11 @@ Welcome, {NAME}!
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#user-property"><code>{USER-PROPERTY:<i>key</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#user-property"><code>{USER-PROPERTY:<i>key</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert any property in the SPF-generated <i>user
 	profile map</i> for the user into the interpolated content. The <code><i>key</i></code>
-	is the name of the property, as you would pass it to the SPF portlet
+	is the name of the property, as you would pass it to the SPF portal
 	utilities' <a href="#portal.user.props"><code>Utils.getUserProperty</code></a>
 	method (see).</p>
 	<p>These user properties include core user-identity attributes from
@@ -5049,17 +5347,16 @@ The phone number we have on record for you is: {USER-PROPERTY:PhoneNumber}
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#value"><code>{VALUE:<i>property-name</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#value"><code>{VALUE:<i>property-name</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the value of a request or session
 	attribute or parameter named by the <code><i>property-name</i></code>.
-	The following attributes and parameters are checked, in this order:</p>
+	The <code><i>property-name</i></code> is case-insensitive. The
+	following attributes and parameters are checked, in this order:</p>
 
 	<p>request attribute,<br>
 	request parameter,<br>
-	public render parameter,<br>
-	portlet-scoped session attribute,<br>
-	application-scoped session attribute</p>
+	session attribute</p>
 
 	<p>For an example, suppose we intend to display the value from
 	request named <code>requestKey</code>. So we can reference this value
@@ -5075,8 +5372,7 @@ The request property value for 'requestKey' is : {VALUE:requestKey}
 
 <a name="file.author.token.auth">
 <h4>4.4.3. Permissioning content for authorized users (<code>{LOGGED-IN}</code>,
-<code>{LOGGED-OUT}</code>, <code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>,
-<code>{EXIST:<i>property-name</i>}</code>)</h4>
+<code>{LOGGED-OUT}</code>, <code>{GROUP:<i>group-names</i>}</code>, <code>{EXIST:<i>property-name</i>}</code>)</h4>
 </a>
 
 <p>The following tokens may be used to permission content against
@@ -5089,15 +5385,15 @@ documentation for each token.</p>
 <blockquote>
 <p><b>Note:</b> The SPF lets you "nest" container tokens. Nested
 containers form a "logical-AND" between their respective conditions. So,
-for example, <code>{LOGGED-IN}{ROLE:abc}{ROLE:xyz}...{/ROLE}{/ROLE}{/LOGGED-IN}</code>
-means the user must be logged-in <b>and</b> must be in roles <code>abc</code>
+for example, <code>{LOGGED-IN}{GROUP:abc}{GROUP:xyz}...{/GROUP}{/GROUP}{/LOGGED-IN}</code>
+means the user must be logged-in <b>and</b> must be in groups <code>abc</code>
 <b>and</b> <code>xyz</code> in order to see the <code>...</code> wrapped
 content.
 </blockquote>
 
 <dl>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#group"><code>{GROUP:<i>groups</i>}...{/GROUP}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#group"><code>{GROUP:<i>groups</i>}...{/GROUP}</code></a></dt>
 	<dd>
 	<p>Use this container token to permission the content inside the
 	container based on the user's current set of groups. Use the <code><i>groups</i></code>
@@ -5135,14 +5431,16 @@ This text is for everybody.&lt;BR&gt;
 	inside the portal. In SPF, groups themselves are generally mapped from
 	other characteristics, either in the portal itself, or in UGS. Both
 	groups and roles can exist apart from authentication; ie anonymous
-	users can still be in groups/roles. This SPF authorization design is
-	documented elsewhere.</p>
+	users can still be in groups/roles. Only groups are made available for
+	portal components to check on the portal side, but portlets have access
+	both to groups and roles. This SPF authorization design is documented
+	elsewhere.</p>
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#logged-in"><code>{LOGGED-IN}...{/LOGGED-IN}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#logged-in"><code>{LOGGED-IN}...{/LOGGED-IN}</code></a></dt>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#logged-out"><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#logged-out"><code>{LOGGED-OUT}...{/LOGGED-OUT}</code></a></dt>
 	<dd>
 	<p>Use these container tokens to permission the content inside the
 	container based on the user's current authentication status. The <code>{LOGGED-IN}...{/LOGGED-IN}</code>
@@ -5159,63 +5457,7 @@ This text is for everybody.&lt;BR&gt;
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#role"><code>{ROLE:<i>roles</i>}...{/ROLE}</code></a></dt>
-	<dd>
-	<p>Use this container token to permission the content inside the
-	container based on the user's current roles. Use the <code><i>roles</i></code>
-	parameter to list the names of the role(s) for which the wrapped
-	content is permissioned. The user must be a member of at least one of
-	the <code><i>roles</i></code> in order for the wrapped content to be
-	included in the output. Role names are case-insensitive and are
-	delimited with the <code>|</code> character. For example:</p>
-
-	<blockquote><pre>
-This text is for everybody.&lt;BR&gt;
-{ROLE:abc|xyz}This text is only for users in the "abc" or "xyz" roles.{/ROLE}
-	</pre></blockquote>
-
-	<p>The actual role names will vary by application, over time, and
-	according to the mappings which initially derive them in the portal
-	from the groups. They are not documented here.</p>
-
-	<p><b>Background:</b> For basic information about groups and roles,
-	see the discussion for the <code>{GROUP:<i>groups</i>}</code> token
-	above. Remember that even if the portal has mapped groups into roles,
-	your portlet will not see those roles unless you have defined them in
-	your application descriptors, per the JSR specification for <i>programmatic
-	security</i>. At minimum:</p>
-
-	<ol>
-		<li>
-		<p>You need to define your role names in your portlet
-		application's <code>web.xml</code>, like this for the role named <code>abc</code>:</p>
-
-		<blockquote><pre>
-&lt;security-role&gt;
-    &lt;role-name&gt;abc&lt;/role-name&gt;
-&lt;/security-role&gt;
-	</pre></blockquote>
-		</li>
-		<li>
-		<p>And you need to reference those roles from your portlet
-		application's <code>portlet.xml</code>, like this:</p>
-		<blockquote><pre>
-&lt;security-role-ref&gt;
-    &lt;role-name&gt;abc&lt;/role-name&gt;
-&lt;/security-role-ref&gt;
-	</pre></blockquote>
-		</li>
-	</ol>
-
-	<p>(You can additionally define optional <code>&lt;role-link&gt;</code>
-	elements in <code>portlet.xml</code>, to introduce a level of
-	indirection which lets the role names in <code>web.xml</code> and <code>portlet.xml</code>
-	be different. Please see the JSR portlet specification for more
-	information.)</p>
-	</dd>
-
-	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#exist"><code>{EXIST:<i>property-name</i>}...{/EXIST}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#exist"><code>{EXIST:<i>property-name</i>}...{/EXIST}</code></a></dt>
 	<dd>
 	<p>Use this container token to permission the content inside the
 	container based on whether certain attributes or parameters exist in
@@ -5224,14 +5466,12 @@ This text is for everybody.&lt;BR&gt;
 
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{EXIST:requestKey}This text is visible only in-case 'requestKey' is present either as an attribute or parameter.{/EXIST}
+{EXIST:requestKey}This text is visible only when 'requestKey' is present either as an attribute or parameter.{/EXIST}
 	</pre></blockquote>
 
 	<p>The engine looks for the <code><i>property-name</i></code>
-	anywhere in the current request attributes or parameters (including
-	public render parameters, private render parameters, and action
-	parameters), and anywhere in the current session (both portlet-scoped
-	and application-scoped session). If an attribute or parameter named by
+	anywhere in the current request attributes or parameters, and anywhere
+	in the current portal session. If an attribute or parameter named by
 	the <code><i>property-name</i></code> exists in any of those places,
 	the surrounded content is included in the output; otherwise it is
 	omitted from the output.</p>
@@ -5239,37 +5479,39 @@ This text is for everybody.&lt;BR&gt;
 </dl>
 
 <a name="file.author.token.consolidate">
-<h4>4.4.4. Consolidating content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
-<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{NAV-ITEM:<i>items</i>}</code>,
-<code>{SITE:<i>site-names</i>}</code>, <code>{INCLUDE:<i>key</i>}</code>)</h4>
+<h4>4.4.4. Consolidating content for easier administration (<code>{PAGE:<i>friendly-ids</i>}</code>,
+<code>{NAV-ITEM:<i>items</i>}</code>, <code>{SITE:<i>site-names</i>}</code>,
+<code>{INCLUDE:<i>key</i>}</code>)</h4>
 </a>
 
 <p>The following tokens may be used to consolidate content, either
-to reduce the number of files storing content for different portlets or
-portal sites, or to provide referential integrity for content shared
-between multiple files. Please click on the links for more documentation
+to reduce the number of files storing content for different pages,
+navigation items or portal sites, or to provide referential integrity
+for content shared between multiple files (via the use of
+include-properties). Please click on the links for more documentation
 for each token.</p>
 
 <blockquote>
 <p><b>Note:</b> The SPF lets you "nest" container tokens. Nested
 containers form a "logical-AND" between their respective conditions. So,
-for example, <code>{PORTLET:forums}{SITE:itrc}...{/SITE}{/PORTLET}</code>
-means the current request must be for the <code>forums</code> portlet
-instance in the portal site named <code>itrc</code>, in order to get the
-<code>...</code> wrapped content.
+for example, <code>{PAGE:forums}{NAV-ITEM:forums/article/edit}...{/NAV-ITEM}{/PAGE}</code>
+means the current request must be for the <code>forums</code> page and
+the <code>forums/article/edit</code> navigation item, in order to get
+the <code>...</code> wrapped content.
 </blockquote>
 
 <dl>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#token"><code>{INCLUDE:<i>key</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#include"><code>{INCLUDE:<i>key</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to consolidate shared content into a separate
 	properties file, and then include it into the interpolated content.
-	First, you create a token substitutions property file with a simple
-	key-value format:</p>
+	First, you create a <i>token substitutions property file</i> (also
+	called an <i>include property file</i>) with a simple key-value format
+	(ie the standard {@link java.util.Properties} format):</p>
 
 	<blockquote><pre>
-<i>key</i>=<i>value</i>
+<i>key</i> = <i>value</i>
 </pre></blockquote>
 
 	<p>Then you reference the <code><i>key</i></code> in your <code>{INCLUDE:<i>key</i>}</code>
@@ -5294,64 +5536,47 @@ url.hp=http://www.hp.com
 	guide (however it cannot contain other <code>{INCLUDE:<i>key</i>}</code>
 	tokens).</p>
 
-	<p>Your token substitutions property file may be located anywhere
-	accessible to the system classloader. For example, if you are using
-	SASU, you can put it in the "global resources" external folder
-	configured on the JVM classpath. (Of course, you can always put it
-	inside your portlet WAR, in <code>/WEB-INF/classes</code>.)</p>
+	<p>Your token substitutions property file must be a <i>secondary
+	support file</i> in the same portal component as is interpolating the <code>{INCLUDE:<i>key</i>}</code>
+	token. You can have a single version of the file, or multiple localized
+	versions of the file, tagged by locale and stored in your portal
+	component as a bundle of <a href="#i18n.resources.supporting">supporting
+	resource files</a> (see earlier in this document). The SPF will choose the
+	best-fit version for the user's locale in each request.</p>
 
-	<p>Alternatively, the file may be treated as an <a
-		href="#i18n.location">internal or external resource</a> and
-	accordingly stored anywhere inside your portlet WAR or underneath the
-	portlet resource bundle folder.</p>
-
-	<p>The name of the token substitutions property file is assumed by
-	the interpolator to be <code>default_includes.properties</code>, and it
-	is assumed to not be stored in a subfolder, unless otherwise specified.
-	You can specify a different name (and/or any subfolders relative to the
-	location where you put it - see previous paragraphs) in different ways,
-	depending on how you invoke the interpolator:</p>
+	<p>The base filename of the token substitutions property file is
+	assumed by the SPF to be <code>default_includes.properties</code>. You
+	can use a different base filename in different ways, depending on how
+	you invoke the interpolator:</p>
 
 	<ul>
-		<li>If you invoke <a href="#file.display.java.tokenParser"><code>TokenParser</code></a>
-		to interpolate from a string, you pass the token substitutions
-		filename to the constructor.</li>
-		<li>If you invoke <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>
-		to interpolate from a file, you also pass the filename to the
-		constructor.</li>
-		<li>If you use <a
-			href="#file.display.java.fileInterpolatorController"><code>FileInterpolatorController</code></a>,
-		you set the {@link
-		com.hp.it.spf.xa.interpolate.portlet.web.FileInterpolatorController#includeFileName}
-		class attribute.</li>
-		<li>If you use the <a href="#file.display.jsp.interpolate"><code>&lt;spf-file-portlet:interpolate&gt;</code></a>
-		JSP tag, set use the <code>includeFile</code> tag attribute.</li>
-		<li>If you use the <a href="#file.display.htmlViewer"><code>htmlviewer</code></a>
-		portlet, the file is assumed to be named <code>html_viewer_includes.properties</code>
-		by default, but the portal administrator can override that when
-		configuring the portlet instance. (The portlet's <code>config</code>
-		mode lets the administrator enter an alternate token substitutions
-		filename.)</li>
+		<li>
+		<p>If you invoke <a href="#file.display.java.tokenParser"><code>TokenParser</code></a>
+		to interpolate from a string, you can pass the base token
+		substitutions filename to the constructor. (You can even use an
+		alternate constructor that lets you pass some properties you have
+		already loaded, as a {@link java.util.ResourceBundle}, into the <code>TokenParser</code>
+		constructor. See the <code>TokenParser</code> discussion.)</p>
+		</li>
+		<li>
+		<p>If you invoke <a href="#file.display.java.fileInterpolator"><code>FileInterpolator</code></a>
+		to interpolate from a file, you can pass the base include property
+		filename to the constructor.</p>
+		</li>
+		<li>
+		<p>If you use the <a href="#file.display.jsp.interpolate"><code>&lt;spf-file-portal:interpolate&gt;</code></a>
+		JSP tag, use the <code>includeFile</code> tag attribute.</p>
+		</li>
+		<li>
+		<p>If you are inmplementing a <a href="#help.global">global
+		help secondary page</a>, the base filename of your include properties must
+		be <code>globalHelpInclude.properties</code>.</p>
+		</li>
 	</ul>
-
-	<p>A template for the token substitutions file, also named <code>default_includes.properties</code>,
-	is provided. You download it, then modify and rename it as needed, and
-	ship it with your application.</p>
-
-	<p>To get the <code>default_includes.properties</code> template,
-	download the <code>spf-portlet-config.jar</code>. Download the latest
-	version of this JAR (typically a version number is affixed to the JAR
-	filename) and extract the <code>default_includes.properties</code>
-	template file from it.</p>
-
-	<p>You can get the latest <code>spf-portlet-config.jar</code> from
-	the SPF team on their Maven 2 repository, here: <a
-		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
-	(browse for the latest version).</p>
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#nav"><code>{NAV-ITEM:<i>items</i>}...{/NAV-ITEM}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#nav"><code>{NAV-ITEM:<i>items</i>}...{/NAV-ITEM}</code></a></dt>
 	<dd>
 	<p>Use this container token to put content for multiple portal
 	navigation items into the same uninterpolated content string (or file).
@@ -5365,8 +5590,7 @@ url.hp=http://www.hp.com
 	names or friendly URLs. Use the <code>|</code> character to delimit
 	multiple item names or friendly URLs in the <code><i>items</i></code>
 	parameter. (In the SPF portal, the navigation item name and friendly
-	URL are Vignette properties, assigned by the administrator. The SPF
-	transmites this to the portlet where it can be accessed.)</p>
+	URL are Vignette properties, assigned by the administrator.)</p>
 
 	<p>For example:</p>
 	<blockquote><pre>
@@ -5403,7 +5627,7 @@ This text is only for pages accessed with the "manuals", "parts", or "repairs" n
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#page"><code>{PAGE:<i>pages</i>}...{/PAGE}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#page"><code>{PAGE:<i>pages</i>}...{/PAGE}</code></a></dt>
 	<dd>
 	<p>Use this container token to put content for multiple portal
 	pages into the same uninterpolated content string (or file). When it is
@@ -5416,8 +5640,7 @@ This text is only for pages accessed with the "manuals", "parts", or "repairs" n
 	of the listed page ID's. Use the <code>|</code> character to delimit
 	multiple page ID's in the <code><i>pages</i></code> parameter. (In the
 	SPF portal, the page ID is the Vignette <i>friendly ID</i> assigned to
-	the page by the administrator. The SPF transmits this to the portlet
-	where it can be accessed.)</p>
+	the page by the administrator.)</p>
 
 	<p>For example:</p>
 	<blockquote><pre>
@@ -5431,37 +5654,7 @@ This text is for everybody.&lt;BR&gt;
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#portlet"><code>{PORTLET:<i>portlets</i>}...{/PORTLET}</code></a></dt>
-	<dd>
-	<p>Use this container token to put content for multiple instances
-	of one (or more) portlets into the same uninterpolated content string
-	(eg file). When it is interpolated, only the section for the current
-	portlet will be included.</p>
-
-	<p>The <code><i>portlets</i></code> parameter lists the portlet ID
-	<i>substrings</i> for the portlet instances that should get the wrapped
-	content. The portlet ID for the current portlet instance must <i>contain</i>
-	(case-insensitive) at least one of the listed portlet ID's. Use the <code>|</code>
-	character to delimit multiple portlet ID's in the <code><i>portlets</i></code>
-	parameter. (In the SPF portal, the portlet ID is the Vignette <i>friendly
-	ID</i> assigned to the portlet instance when the administrator provisions
-	the portlet on a portal page. The SPF transmits this to the portlet
-	where it can be accessed.)</p>
-
-	<p>For example:</p>
-	<blockquote><pre>
-This text is for everybody.&lt;BR&gt;
-{PORTLET:abc|def}This text is only for the "abc" or "def" portlets.{/PORTLET}
-{PORTLET:xyz}This text is only for the "xyz" portlet.{/PORTLET}
-</pre></blockquote>
-
-	<p>The actual portlet ID's will vary by portal and portlet
-	instance; they are setup by the administrator. They are not listed
-	here.</p>
-	</dd>
-
-	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site"><code>{SITE:<i>sites</i>}...{/SITE}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#site"><code>{SITE:<i>sites</i>}...{/SITE}</code></a></dt>
 	<dd>
 	<p>Use this container token to put content for multiple portal
 	sites into the same uninterpolated content string (eg file). When it is
@@ -5470,18 +5663,18 @@ This text is for everybody.&lt;BR&gt;
 
 	<p>The <code><i>sites</i></code> parameter lists the <i>site
 	name(s)</i> of the portal site(s) which should get the wrapped content. The
-	site name for the current portlet must match (case-insensitive) at
-	least one of the listed site names. Use the <code>|</code> character to
-	delimit multiple site names in the <code><i>sites</i></code> parameter.
-	(In the SPF portal, the site name is the Vignette "site DNS name"
-	assigned to the portal site when it is created by the administrator.
-	The SPF transmits this to the portlet where it can be accessed.)</p>
+	site name for the current portal request must match (case-insensitive)
+	at least one of the listed site names. Use the <code>|</code> character
+	to delimit multiple site names in the <code><i>sites</i></code>
+	parameter. (In the SPF portal, the site name is the Vignette "site DNS
+	name" assigned to the portal site when it is created by the
+	administrator.)</p>
 
 	<p>For example:</p>
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{SITE:abc|def}This text is only for portlets in the the "abc" or "def" portal sites.{/SITE}
-{SITE:xyz}This text is only for portlets in the "xyz" portal site.{/SITE}
+{SITE:abc|def}This text is only for pages in the the "abc" or "def" portal sites.{/SITE}
+{SITE:xyz}This text is only for pages in the "xyz" portal site.{/SITE}
 </pre></blockquote>
 
 	<p>The actual site names will vary by portal site; they are setup
@@ -5499,9 +5692,9 @@ more documentation on each token.</p>
 
 <dl>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#after"><code>{AFTER:<i>date</i>}...{/AFTER}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#after"><code>{AFTER:<i>date</i>}...{/AFTER}</code></a></dt>
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#before"><code>{BEFORE:<i>date</i>}...{/BEFORE}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#before"><code>{BEFORE:<i>date</i>}...{/BEFORE}</code></a></dt>
 	<dd>
 	<p>Use these container tokens to restrict content inside the
 	container based on the current date and time. The <code>{AFTER:<i>date</i>}...{/AFTER}</code>
@@ -5548,7 +5741,7 @@ This text is permanent.&lt;BR&gt;
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#site-name"><code>{SITE-NAME}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#site-name"><code>{SITE-NAME}</code></a></dt>
 	<dd>
 	<p>Use this token to insert the portal site name into the
 	interpolated content. In SPF, the portal site name is the Vignette
@@ -5572,7 +5765,7 @@ This text is permanent.&lt;BR&gt;
 	</dd>
 
 	<dt><a
-		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#url-encode"><code>{URL-ENCODE:<i>string</i>}</code></a></dt>
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#url-encode"><code>{URL-ENCODE:<i>string</i>}</code></a></dt>
 	<dd>
 	<p>Use this token to insert a <code><i>string</i></code>,
 	URL-encoded, into the interpolated content. For example:</p>
@@ -5588,7 +5781,7 @@ This text is permanent.&lt;BR&gt;
 
 <hr>
 
-<a name="portal">
+LEFT OFF HERE <a name="portal">
 <h2>5. Portal Data</h2>
 </a>
 
