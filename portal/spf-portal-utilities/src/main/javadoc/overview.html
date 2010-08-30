@@ -2580,7 +2580,7 @@ available within your portal site. In Vignette console:</p>
 	Appearance &gt; Secondary Pages</b> to do this.</p>
 	</li>
 	<li>
-	<p>Done - no further configuration or customization is needed.
+	<p>Done - no further configuration or customization is needed.</p>
 	</li>
 </ol>
 
@@ -4361,29 +4361,147 @@ Center in a future release.&lt;/span&gt;&lt;/p&gt;
 	</li>
 </ul>
 
-LEFT OFF HERE
 <a name="help.global.properties">
 <h4>3.4.4. Creating your global help include properties (<code>globalHelpInclude.properties</code>
 - optional)</h4>
 </a>
 
-<p></p>
+<p>If your <a href="#help.global.content">global help content</a>
+does not use the <a href="#file.author.token.consolidate"><code>{INCLUDE:<i>key</i>}</code></a>
+token, you do not need a <code>globalHelpInclude.properties</code> file.
+But if you do use that token, put your key-value pairs into <code>globalHelpInclude.properties</code>,
+and put <code>globalHelpInclude.properties</code> into your CAR file as
+shown <a href="#help.global.car">above</a>.</p>
+
+<p>For example, the <code>globalHelpInclude.properties</code> for
+the content example shown above looks like this. (Notice how
+include-property values can reference other dynamic tokens. In this
+example, this has been applied to the task of passing the proper ITRC
+language code for the user's current locale into the ITRC URL. The
+property value has been wrapped for readability in this listing.)</p>
+
+<blockquote><pre>
+#
+# ITRC properties
+#
+itrc.url.home = http://www.itrc.hp.com/service/home/home.do?LANGUAGE_OPTION={INC
+LUDE:itrc.language.{INCLUDE:country.{LANGUAGE-TAG}}}
+itrc.language. = english
+itrc.language.CN = chinese-s
+itrc.language.HK = chinese-t
+itrc.language.TW = chinese-t
+itrc.language.KR = korean
+itrc.language.JP = japanese
+...
+#
+# email properties
+#
+hp.email.registry = sw.mvs@hp.com
+#
+# internal properties
+#
+country.zh-CN = CN
+country.zh-HK = HK
+country.zh-TW = TW
+country.ko-KR = KR
+country.ja-JP = JP
+country.zh = CN
+country.ko = KR
+country.ja = JP
+...
+</pre></blockquote>
+
+<p>If desired, you can localize your <code>globalHelpInclude.properties</code>
+so that include-property values referred-to from your localized global
+help content are themselves localized. Tag your localized files with
+locale and put them into the global help CAR file too.</p>
 
 <a name="help.global.primary">
 <h4>3.4.5. Creating your primary JSP (<code>globalHelpMain.jsp</code>)</h4>
 </a>
 
-<p></p>
+<p>Your global help secondary page's primary JSP can be very simple.
+The secondary page type will interpolate your <a
+	href="#help.global.content">global help content</a> and any <a
+	href="#help.global.properties">include properties</a> for you,
+depositing the resulting interpolated content into the portal request
+object as a single {@link java.lang.String} request attribute. So your
+primary JSP can just get and express that attribute. The name of the
+attribute is contained in the {@link
+com.hp.it.spf.xa.misc.portal.Consts#REQUEST_ATTR_GLOBAL_HELP_DATA} class
+attribute, part of the SPF portal utilities. So a stereotypical primary
+JSP for your global help secondary page could look just like this:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="vgn-portal" uri="vgn-tags" %&gt;
+
+&lt;%@ page import="com.hp.it.spf.xa.misc.portal.Consts" %&gt;
+
+&lt;vgn-portal:defineObjects/&gt;
+
+&lt;%= request.getAttribute(Consts.REQUEST_ATTR_GLOBAL_HELP_DATA) %&gt;
+</pre></blockquote>
 
 <a name="help.global.messages">
 <h4>3.4.6. Creating your page title (<code>WEB-INF/i18n/&lt;your-component-id&gt;.properties</code>)</h4>
 </a>
 
-<p></p>
+<p>If you are using one of the C-frames provided by the SPF team, or
+building on the SPF-provided C-frame components, note that your global
+help secondary page is expected to have a <code>title</code> message in
+its resource bundle, containing the title to use for the page. As usual
+with Vignette component development, the base filename should match your
+component ID - by convention, <code><i>&lt;your-site&gt;</i>-global-help-secondarypage.properties</code>
+- and you can declare a <code>title_comment</code> message for use in
+describing the purpose of the <code>title</code> message in Vignette
+console. For example:</p>
+
+<blockquote><pre>
+title = Site help
+title_comment = Title for the HP Support Center global help page.
+</pre></blockquote>
+
+<p>As usual with message resource bundles, your base file can be
+localized - just tag each localized file with the locale and include in
+your CAR, as shown <a href="#help.global.car">above</a>.</p>
 
 <a name="help.global.deployment">
 <h4>3.4.7. Deploying and configuring your CAR file</h4>
 </a>
+
+<p>Deploy your global help secondary page to Vignette following the
+usual procedure. (You need Vignette server console access to do this -
+so in integration and production environments, contact the SPF support
+team for assistance.)</p>
+
+<p>Then, to activate your global help secondary page in your portal
+site, do the following steps in Vignette console:</p>
+
+<ol>
+	<li>
+	<p>Share your global help secondary page to your portal site. In
+	the Vignette server console, go to <b>Components &gt; Pages &gt;
+	Secondary Page List</b>, checkmark your global help secondary page, and <b>Share
+	to...</b> your portal site. This step requires server console access;
+	contact the SPF support team for assistance if needed. (It should not
+	be necessary to share the SPF global help secondary page type to your
+	site, just your global help secondary page.)</p>
+	</li>
+	<li>
+	<p>Apply your portal site's grid and theme to the SPF global help
+	secondary page type, and configure your global help secondary page to
+	be used for that secondary page type. In the Vignette site console for
+	your site, go to <b>Site Settings &gt; Appearance &gt; Secondary
+	Pages</b> to do this.</p>
+	</li>
+	<li>
+	<p>Done.</p>
+	</li>
+</ol>
+
+<p>Now, when you invoke the template friendly ID for global help at your
+portal site, you should see your global help content (interpolated) render 
+with your grid, theme and title.</p>
 
 <hr>
 
