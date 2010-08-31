@@ -1716,8 +1716,8 @@ exists inside your portal component.</p>
 	bundle, and look for the best-fit localized version of that file for
 	the user's locale inside the current portal component. For example,
 	here is how we check whether any good-candidate localized version of <code>something.xml</code>
-	exists in the portlet WAR (in the <code>xml/</code> subfolder). The <code>PortalContext</code>
-	object here is named <code>ctx</code>:</p>
+	exists in the portal component). The <code>PortalContext</code> object
+	here is named <code>ctx</code>:</p>
 
 	<blockquote><pre>
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
@@ -3742,8 +3742,9 @@ key.help.content=Internet security is important to us...
 </pre></blockquote>
 
 <p>To provide that content as standalone classic contextual help
-around an image (possibly localized) whose base name was <code>question_mark.gif</code>
-(in the <code>images/</code> subfolder), with a gray title bar with
+around an image like this (possibly localized) <img
+	src="com/hp/it/spf/xa/help/portal/doc-files/more_info.gif"> whose
+base name was <code>more_info.gif</code>, with a gray title bar with
 heavy black font, your code might look like this (where <code>ctx</code>
 is your Vignette <code>PortalContext</code> object):</p>
 
@@ -3755,7 +3756,7 @@ String helpTitle = I18nUtility.getValue("key.help.title", ctx);
 // Now get the main content for the contextual help popup.
 String helpContent = I18nUtility.getValue("key.help.content", ctx);
 // Now make the HTML &lt;img&gt; tag for the content of the contextual help hyperlink.
-String imgURL = I18nUtility.getLocalizedFileURL(ctx, "/images/question_mark.gif");
+String imgURL = I18nUtility.getLocalizedFileURL(ctx, "more_info.gif");
 String imgTag = "&lt;IMG SRC='" + imgURL + "'&gt;"; 
 // Now make the classic contextual help object and set its contents.
 ClassicContextualHelpProvider cchp = new ClassicContextualHelpProvider(ctx);
@@ -3770,7 +3771,8 @@ String html = cchp.getHTML(false, false);
 </pre></blockquote>
 
 <p>The resulting contextual help popup (when the user clicks on the
-question-mark image) looks like this:</p>
+<img src="com/hp/it/spf/xa/help/portal/doc-files/more_info.gif">
+image) looks like this:</p>
 
 <img
 	src="com/hp/it/spf/xa/i18n/portal/doc-files/contextualHelpGrayTitle.jpg">
@@ -3800,7 +3802,7 @@ message key.</p>
 <p>See the {@link
 com.hp.it.spf.xa.help.portal.ClassicContextualHelpProvider} class
 documentation, and the <a
-	href="com/hp/it/spf/xa/i18n/portal/package-summary.html">package
+	href="com/hp/it/spf/xa/help/portal/package-summary.html">package
 description</a>, for more information.</p>
 
 <a name="help.contextual.java.contextualHelpProvider">
@@ -4668,16 +4670,135 @@ an HPWeb "classic"-style popup window. Usage is as follows:</p>
 	</li>
 </ol>
 
-LEFT OFF HERE <a name="help.global.java.GlobalHelpProvider">
+<p>An example of injecting a global help popup link into a message
+was shown above, in the description of the <a
+	href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getValue</code></a>
+methods. Standalone global help is very similar. For example, say you
+just want to wrap the word "Help" inside a global help popup hyperlink.
+(You could do this using global help injection, since the linked content
+is a text message. But since it is a whole text message, not just a
+substring, using the standalone approach works too. The following
+example will demonstrate the standalone approach, and you can see the <a
+	href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getValue</code></a>
+for a demonstration of the injected approach.)</p>
+
+<p>First, in your portal component's message properties you would
+have the "Help" message:</p>
+
+<blockquote><pre>
+key=Help
+</pre></blockquote>
+
+<p>Then your Java code for generating the HTML markup string for the
+"Help" global help popup hyperlink using <code>ClassicGlobalHelpProvider</code>
+would look like this (where <code>context</code> is your Vignette <code>PortalContext</code>
+object):</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+...
+// First get the "Help" message, for the link content.
+String helpText = I18nUtility.getValue("key", context);
+// Next get the "Help" message wrapped in a classic global-help popup link.
+ClassicGlobalHelpProvider cghp = new ClassicGlobalHelpProvider(context);
+cghp.setLinkContent(helpText);
+String html = cghp.getHTML(false, false);
+</pre></blockquote>
+
+<p>So then you would express the <code>html</code> string in your
+JSP, to render the "Help" text hyperlinked to your global help secondary
+page inside an HPWeb classic-style global help popup. Since the above
+code didn't call {@link
+com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider#setWindowFeatures(String)}
+to override the default window features, the child window will have the
+default specifications, and look like the example in the section <a
+	href="#help.kinds.global">introducing global help</a>.</p>
+
+<p>The above example causes the generated link to open a
+default-styled popup displaying your global help secondary page at the
+top of the page. Your link content doesn't have to be a message string,
+though; any string of HTML wrappable in an hyperlink will do. For
+example, imagine that instead of the "Help" message, you wanted this
+image <img src="com/hp/it/spf/xa/help/portal/doc-files/warning.gif">
+to open the global-help popup when clicked, and auto-scroll to the
+fragment (anchor) within your global help content named "warnings".
+Assuming the image was packed inside your component as a secondary
+support file named <code>warning.gif</code> (note it can be localized
+too), then your code would look like this:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+...
+// First get the "warning.gif" image, for the link content.
+String imgURL = I18nUtility.getLocalizedFileURL(context, "warning.gif");
+String imgTag = "&lt;IMG SRC='" + imgURL + "'&gt;";
+// Next get the "warning.gif" wrapped in a classic global-help popup link.
+// Do this so the global help auto-scrolls to the "warnings" section.
+ClassicGlobalHelpProvider cghp = new ClassicGlobalHelpProvier(context);
+cghp.setLinkContent(imgTag);
+cghp.setFragment("warnings");
+String html = cghp.getHTML(false, false);
+</pre></blockquote>
+
+<p>See the {@link
+com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider} class
+documentation, and the <a
+	href="com/hp/it/spf/xa/help/portal/package-summary.html">package
+description</a>, for more information.</p>
+
+<a name="help.global.java.GlobalHelpProvider">
 <h4>3.5.2. Extending <code>GlobalHelpProvider</code> to create a
 custom rendition</h4>
 </a>
 
-<p></p>
+<p>If you need to create a custom version of a global help
+hyperlink, you should extend the {@link
+com.hp.it.spf.xa.help.portal.GlobalHelpProvider} abstract base class.
+This class is a foundation for generating global help hyperlinks of
+various kinds; for example, the {@link
+com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider} discussed above
+is based on it.</p>
+
+<p>When you extend <code>GlobalHelpProvider</code>, you inherit the
+method for setting the link content, {@link
+com.hp.it.spf.xa.help.portal.GlobalHelpProvider#setLinkContent(String)}.
+You just need to implement the {@link
+com.hp.it.spf.xa.help.portal.GlobalHelpProvider#getHTML(boolean,boolean)}
+method, to generate and return the link HTML based on the link content
+that was set (available to you in the {@link
+com.hp.it.spf.xa.help.portal.GlobalHelpProvider#linkContent} protected
+string attribute). You also generate any other methods needed for your
+rendition of global help - eg setters for other attributes of the link.</p>
+
+<p>The <code>getHTML</code> <code>boolean</code> parameters tell you
+whether to invoke HTML-escaping and filtering of Vignette-generated <code>&lt;SPAN&gt;</code>
+tags, respectively, on the link content (and any other content included
+in the return from <code>getHTML</code>).</p>
+
+<ul>
+	<li>
+	<p>When the first boolean is true, that tells you that your <code>getHTML</code>
+	method should call something like {@link
+	com.hp.it.spf.xa.misc.portal.Utils#escapeXml(String)} to escape the
+	content.</p>
+	</li>
+	<li>
+	<p>When the second boolean is true, that tells you that your <code>getHTML</code>
+	method should call {@link
+	com.hp.it.spf.xa.i18n.portal.I18nUtility#filterSpan(String)} to
+	filter-out the <code>&lt;SPAN&gt;</code> tags Vignette may have
+	generated.</p>
+	</li>
+</ul>
+
+<p>Please read the <code>GlobalHelpProvider</code> documentation for
+more information.</p>
 
 <hr>
 
-<a name="help.global.jsp">
+LEFT OFF HERE <a name="help.global.jsp">
 <h3>3.6. Producing links to global help using JSP tag libraries</h3>
 </a>
 
@@ -4839,10 +4960,10 @@ methods:</p>
 			href="#file.author.token.consolidate">authoring text</a>, one of the
 		special markup tokens (<code>{INCLUDE:<i>key</i>}</code>) substitutes
 		values from this property file. By default, the name of the property
-		file is considered to be <code>default_includes.properties</code>,
-		with no subfolder, but you can override that with this parameter. If
-		you will not be using the special <code>{INCLUDE:<i>key</i>}</code> or
-		will use the default filename, you can ignore this parameter.</p>
+		file is considered to be <code>default_includes.properties</code>, but
+		you can override that with this parameter. If you will not be using
+		the special <code>{INCLUDE:<i>key</i>}</code> or will use the default
+		filename, you can ignore this parameter.</p>
 		<p>If you do use this parameter, you should pass the basename of a
 		secondary support file in the current portal component which contains
 		the substitution key/value pairs. Note this file may be localized; as
@@ -5413,23 +5534,23 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 	p>For example, here is some HTML text using this token to help build a
 	hyperlink pointing to the current site's Forums page (which in this
 	example has a "friendly URI" of <code>/forums</code>):
-	</p>
+</p>
 
-	<blockquote><pre>
+<blockquote><pre>
 Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 </pre></blockquote>
 
-	<p>To repeat the above example, but switch to the <code>itrc</code>
-	site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
+<p>To repeat the above example, but switch to the <code>itrc</code>
+site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
 
-	<p>To repeat both of those examples, and force use of HTTPS in the
-	URL, use {SITE-URL:https;/forums}<code>{SITE-URL:https;itrc/forums}</code>
-	instead.</p>
+<p>To repeat both of those examples, and force use of HTTPS in the
+URL, use {SITE-URL:https;/forums}<code>{SITE-URL:https;itrc/forums}</code>
+instead.</p>
 
-	<p>To force use of HTTPS but otherwise generate just a home page
-	URL for the current portal site (ie like <code>{SITE-URL}</code>
-	without any parameters does), use <code>{SITE-URL:https;}</code>.</p>
-	</dd>
+<p>To force use of HTTPS but otherwise generate just a home page URL
+for the current portal site (ie like <code>{SITE-URL}</code> without any
+parameters does), use <code>{SITE-URL:https;}</code>.</p>
+</dd>
 </dl>
 
 <a name="file.author.token.user">
