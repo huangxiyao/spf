@@ -952,7 +952,7 @@ String msg = I18nUtility.getValue("key", ctx, args);
 	<img
 		src="com/hp/it/spf/xa/i18n/portal/doc-files/contextualHelpLink.jpg">
 
-	<p>Using the SPF <code>I18nUtility.getMessage</code> API's, you can
+	<p>Using the SPF <code>I18nUtility.getValue</code> API's, you can
 	have the following in your message properties:</p>
 
 	<blockquote><pre>
@@ -3714,8 +3714,8 @@ class in the SPF portal utilities which knows how to render-out the
 		<p>If you are <i>injecting</i> contextual help, just pass your <code>ContextualHelpProvider</code>
 		into the <a href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getValue</code></a>
 		method. See the <a href="#i18n.messages.java.spf.getMessage">discussion
-		above</a> for an example of this. The <code>getMessage</code> method will
-		supply the link content from the message itself.</p>
+		above</a> for an example of this. The <code>I18nUtility.getValue</code>
+		method will supply the link content from the message itself.</p>
 		</li>
 	</ul>
 	</li>
@@ -4499,9 +4499,11 @@ site, do the following steps in Vignette console:</p>
 	</li>
 </ol>
 
-<p>Now, when you invoke the template friendly ID for global help at your
-portal site, you should see your global help content (interpolated) render 
-with your grid, theme and title.</p>
+<p>Now, when you invoke the template friendly URL for global help at
+your portal site, you should see your global help content (interpolated)
+render with your grid, theme and title. (That template friendly URL is <code>template.PUBLIC_SPF_GLOBAL_HELP</code>
+- so entering the URL <code>/portal/site/<i>&lt;your-site&gt;</i>/template.PUBLIC_SPF_GLOBAL_HELP</code>
+will now invoke your global help.)</p>
 
 <hr>
 
@@ -4509,15 +4511,164 @@ with your grid, theme and title.</p>
 <h3>3.5. Producing links to global help using Java code</h3>
 </a>
 
-<p></p>
+<p>Making a link to global help is as simple as making a portal URL
+for your site containing the template friendly URL for global help, <code>template.PUBLIC_SPF_GLOBAL_HELP</code>.
+This friendly URL string is the value of a special class attribute,
+{@link
+com.hp.it.spf.xa.misc.portal.Consts#PAGE_FRIENDLY_URI_GLOBAL_HELP}. So
+it is easy to make a global help hyperlink in Java code in a number of
+ways. For example, using {@link
+com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(HttpServletRequest,String)}
+(where <code>request</code> is your <code>HttpServletRequest</code>):</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portal.Consts;
+import com.hp.it.spf.xa.misc.portal.Utils;
+...
+String url = Utils.getPortalSiteURL(request, "/" + Consts.PAGE_FRIENDLY_URI_GLOBAL_HELP);
+</pre></blockquote>
+
+<p>This returns the fully-qualified, absolute URL for the global
+help secondary page on the current portal site, using the same scheme
+(HTTP or HTTPS), host and port as was used in the request (for example,
+<code>http://my_host.hp.com/portal/site/my_site/template.PUBLIC_SPF_GLOBAL_HELP/</code>).</p>
+
+<p>Beyond just making global help URLs, though, the SPF portal
+utilities include a framework for generating links for HPWeb
+"classic"-style global help popup windows. These are minimalistic child
+windows in which your global help is rendered in the HPWeb "classic"
+style - for example, without buttons or information bars, as illustrated
+in the section <a href="#help.kinds.global">introducing global help</a>.
+The pattern for doing so in SPF is similar to that for <a
+	href="#help.contextual.java">contextual help</a>:</p>
+
+<ul>
+	<li>
+	<p>First, there is a Java class which generates the popup-window
+	link for you, {@link
+	com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider}.</p>
+	</li>
+	<li>
+	<p>Second, if you need to create your own style of global help, you
+	can extend the SPF global help framework to do so, by extending the
+	{@link com.hp.it.spf.xa.help.portal.GlobalHelpProvider} abstract base
+	class.</p>
+	</li>
+</ul>
+
+<p>More on this below.</p>
 
 <a name="help.global.java.classicGlobalHelpProvider">
 <h4>3.5.1. Using <code>ClassicGlobalHelpProvider</code></h4>
 </a>
 
-<p></p>
+<blockquote>
+<p><b>Note:</b> There is an SPF-provided JSP tag library for this -
+see the <a href="#help.global.jsp.classicGlobalHelp"><code>&lt;spf-help-portal:classicGlobalHelp&gt;</code></a>
+description below for standalone help, and the <a
+	href="#help.global.jsp.classicGlobalHelpParam"><code>&lt;spf-i18n-portal:i18nClassicGlobalHelpParam&gt;</code></a>
+description below for injected help.</p>
+</blockquote>
 
-<a name="help.global.java.GlobalHelpProvider">
+<p>{@link com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider} is
+a Java class in the SPF portal utilities which knows how to generate
+hyperlinks pointing your portal site's global help secondary page inside
+an HPWeb "classic"-style popup window. Usage is as follows:</p>
+
+<ol>
+	<li>
+	<p>First, you construct the object using the current Vignette <code>PortalContext</code>
+	object.</p>
+	</li>
+
+	<li>
+	<p>Then, you set the attributes for the global help link. The
+	following setters are available:</p>
+
+	<dl>
+		<dt>{@link
+		com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider#setLinkContent(String)}</dt>
+		<dd>
+		<p>Sets the content of the global-help hyperlink. Pass in whatever
+		HTML (text and markup) you want to have included inside the hyperlink.
+		Use this if you are doing a <i>standalone</i> global help link. If you
+		are <i>injecting</i> the global help link into a message, leave it
+		unset, since the link content will be injected from the message.</p>
+		</dd>
+		<dt>{@link
+		com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider#setWindowFeatures(String)}</dt>
+		<dd>
+		<p>Sets the JavaScript <code>window.open(...)</code> features to
+		impose on the child window. This lets you control the size (height and
+		width) of the window, presence or absence of controls (eg buttons) and
+		bars (eg address bar, status bar), and all other window
+		characteristics and behaviors specifiable in <code>window.open(...)</code>.</p>
+		<p>Pass a string listing the desired window features, in exactly
+		the syntax that <code>window.open(...)</code> uses. Many resources are
+		available on the Internet which document the syntax and semantics of
+		the available features - for example, <a
+			href="https://developer.mozilla.org/en/window.open">https://developer.mozilla.org/en/window.open</a>.
+		By default, if you do not set any window features, the <code>ClassicGlobalHelpProvider</code>
+		will assume the following: <code>height=610,width=410,menubar=no,status=no,toolbar=no,resizable=yes</code>.</p>
+		</dd>
+		<dt>{@link
+		com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider#setFragment(String)}</dt>
+		<dd>
+		<p>By default, the popup window will display your global help
+		secondary page from the top of the page. If you have defined any
+		anchors (ie, document fragment names) inside your global help content,
+		though, you can cause the popup window to autoscroll to that fragment
+		by using this <code>setFragment(String)</code> method. Just pass the
+		anchor (ie fragment) name.</p>
+		</dd>
+	</dl>
+	</li>
+
+	<li>
+	<p>Finally, you are ready to generate the global help hyperlink:</p>
+
+	<ul>
+		<li>
+		<p>If you are doing a <i>standalone</i> global help link, just
+		call the {@link
+		com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider#getHTML(boolean,boolean)}
+		method now. This will return the HTML string containing all the HTML
+		and JavaScript necessary to generate the link for popup global help.</p>
+		<ul>
+			<li>
+			<p>The first boolean switch, if set <code>true</code>, enables
+			HTML-escaping in the link content (ie any HTML meta-characters there
+			like <code>&lt;</code> will be converted to their HTML escape
+			sequences so as to be displayed literally in the browser).</p>
+			</li>
+			<li>
+			<p>The second boolean switch, when set <code>true</code>,
+			suppresses any <code>&lt;SPAN&gt;</code> tags such as Vignette may
+			have injected into your message strings, from the link content.</p>
+			</li>
+		</ul>
+		</li>
+		<li>
+		<p>If you are <i>injecting</i> your global help link into a
+		message, though, just pass your <code>GlobalHelpProvider</code> into
+		the <a href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getValue</code></a>
+		method. See the <a href="#i18n.messages.java.spf.getMessage">discussion
+		above</a> for an example of this. The <code>I18nUtility.getValue</code>
+		method will supply the link content from the message itself.</p>
+		</li>
+	</ul>
+	</li>
+
+	<li>
+	<p>You can reuse the same <code>ClassicGlobalHelpProvider</code>
+	numerous times if you wish. The main JavaScript making the popup window
+	will only be included the first time, unless you call the {@link
+	com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider#resetHTML()}
+	method.</p>
+	</li>
+</ol>
+
+LEFT OFF HERE <a name="help.global.java.GlobalHelpProvider">
 <h4>3.5.2. Extending <code>GlobalHelpProvider</code> to create a
 custom rendition</h4>
 </a>
@@ -5262,23 +5413,23 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 	p>For example, here is some HTML text using this token to help build a
 	hyperlink pointing to the current site's Forums page (which in this
 	example has a "friendly URI" of <code>/forums</code>):
-</p>
+	</p>
 
-<blockquote><pre>
+	<blockquote><pre>
 Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 </pre></blockquote>
 
-<p>To repeat the above example, but switch to the <code>itrc</code>
-site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
+	<p>To repeat the above example, but switch to the <code>itrc</code>
+	site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
 
-<p>To repeat both of those examples, and force use of HTTPS in the
-URL, use {SITE-URL:https;/forums}<code>{SITE-URL:https;itrc/forums}</code>
-instead.</p>
+	<p>To repeat both of those examples, and force use of HTTPS in the
+	URL, use {SITE-URL:https;/forums}<code>{SITE-URL:https;itrc/forums}</code>
+	instead.</p>
 
-<p>To force use of HTTPS but otherwise generate just a home page URL
-for the current portal site (ie like <code>{SITE-URL}</code> without any
-parameters does), use <code>{SITE-URL:https;}</code>.</p>
-</dd>
+	<p>To force use of HTTPS but otherwise generate just a home page
+	URL for the current portal site (ie like <code>{SITE-URL}</code>
+	without any parameters does), use <code>{SITE-URL:https;}</code>.</p>
+	</dd>
 </dl>
 
 <a name="file.author.token.user">
