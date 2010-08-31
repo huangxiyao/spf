@@ -4798,20 +4798,82 @@ more information.</p>
 
 <hr>
 
-LEFT OFF HERE <a name="help.global.jsp">
+<a name="help.global.jsp">
 <h3>3.6. Producing links to global help using JSP tag libraries</h3>
 </a>
 
-<p></p>
+<p>Making a URL pointing to the global help secondary page in your
+JSP is fairly easy. Just use {@link
+com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(HttpServletRequest,String)}
+and {@link
+com.hp.it.spf.xa.misc.portal.Consts#PAGE_FRIENDLY_URI_GLOBAL_HELP}
+inside a Java section (ie inside <code>&lt;% ... %&gt;</code>) - an
+example of that code is covered at the beginning of the section about <a
+	href="#help.global.java">Java APIs for global help links</a>
+(previously in this document).</p>
+
+<blockquote>
+<p><b>Note:</b> Unfortunately there is no JSP tag for this.</p>
+</blockquote>
+
+<p>Beyond just making global help URLs, though, the SPF portal
+utilities include a framework for generating links to HPWeb
+"classic"-style global help popup windows. These are minimalistic child
+windows in which your global help secondary page is rendered in the
+HPWeb "classic" style - for example, without buttons or information
+bars, as illustrated in the section <a href="#help.kinds.global">introducing
+global help</a>. The pattern for this is similar to that for <a
+	href="#help.contextual.jsp">contextual help</a>:</p>
+
+<ul>
+	<li>
+	<p>First, there is a JSP tag which generates the HPWeb "classic"
+	global help popup link around some standalone content: <a
+		href="#help.global.jsp.classicGlobalHelp"><code>&lt;spf-help-portal:classicGlobalHelp&gt;</code></a>.</p>
+	</li>
+	<li>
+	<p>Second, there is another JSP tag which does the same, but
+	injects the link into a message: <a
+		href="#help.global.jsp.classicGlobalHelpParam"><code>&lt;spf-i18n-portal:classicGlobalHelpParam&gt;</code></a>.</p>
+	</li>
+	<li>
+	<p>Finally, if you need to create your own style of global help
+	link, you can <a href="#help.global.jsp.globalHelpProvider">create
+	a custom tag library</a> by extending the SPF framework.</p>
+	</li>
+</ul>
+
+<p>More on each of these below.</p>
 
 <a name="help.global.jsp.classicGlobalHelp">
 <h4>3.6.1. Using <code>&lt;spf-help-portal:classicGlobalHelp&gt;</code>
 for standalone classic global help links</h4>
 </a>
 
-<p></p>
+<p>You use this tag to express a standalone "classic"-style global
+help popup hyperlink. It wraps around the <a
+	href="#help.global.java.classicGlobalHelpProvider"><code>ClassicGlobalHelpProvider</code></a>
+to provide the same capabilities for standalone global help. The usage
+is:</p>
 
-<a name="help.global.jsp.classicGlobalHelpParam">
+<blockquote><pre>
+&lt;%@ taglib prefix=&quot;spf-help-portal&quot; uri=&quot;/spf-help-portal.tld&quot; %&gt;
+...
+&lt;spf-help-portal:classicGlobalHelp
+  anchor=&quot;&lt;link-text&gt;&quot;
+  anchorKey=&quot;&lt;link-message-key&gt;&quot;
+  anchorImg=&quot;&lt;link-image-URL&gt;&quot;
+  anchorImgKey=&quot;&lt;link-image-message-key&gt;&quot;
+  anchorImgAlt=&quot;&lt;link-image-alt-text&gt;&quot;
+  anchorImgAltKey=&quot;&lt;link-image-alt-message-key&gt;&quot;
+  escape=&quot;&lt;true-or-false&gt;&quot;
+  filterSpan=&quot;&lt;true-or-false&gt;&quot;
+  fragment=&quot;&lt;fragment-name&gt;&quot;
+  windowFeatures=&quot;&lt;popup-window-features&gt;&quot;
+/&gt;
+</pre></blockquote>
+
+LEFT OFF HERE <a name="help.global.jsp.classicGlobalHelpParam">
 <h4>3.6.2. Using <code>&lt;spf-i18n-portal:i18nClassicGlobalHelpParam&gt;</code>
 for injected classic global help links</h4>
 </a>
