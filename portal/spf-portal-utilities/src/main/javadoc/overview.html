@@ -3879,8 +3879,71 @@ the same capabilities for standalone help. The usage is:</p>
 	/&gt;
 </pre></blockquote>
 
-<p>Most of the tag attributes are optional. For example, suppose
-your portal component's message resource bundle contains this:</p>
+<p>You must provide one of the first four attributes (<code>anchor</code>,
+<code>anchorKey</code>, <code>anchorImg</code>, <code>anchorImgKey</code>)
+- these provide the link content. You must also provide the <code>title</code>
+(or <code>titleKey</code>) and <code>content</code> (or <code>contentKey</code>)
+- these provide the messages for the contextual-help popup layer itself.
+The other tag attributes are optional.</p>
+
+<ul>
+	<li>
+	<p>With <code>anchor</code> you provide the exact link content - a
+	string of text, HTML, and whatever else.</p>
+	</li>
+	<li>
+	<p>With <code>anchorKey</code> you provide the keyname of a message
+	in your portal component's message resource bundle, and the tag looks
+	up the whole link content from there. As usual with message resource
+	lookup, the best-fit localized version for the user's current locale
+	found in your bundle is used (this proceeds like <a
+		href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getValue</code></a>
+	described earlier in this document).</p>
+	</li>
+	<li>
+	<p>With <code>anchorImg</code> you provide the URL of an image, and
+	the <code>&lt;spf-help-portal:classicGlobalHelp&gt;</code> tag builds
+	an HTML <code>&lt;IMG&gt;</code> tag for that and uses it as the link
+	content.</p>
+	</li>
+	<li>
+	<p>With <code>anchorImgKey</code> you provide the basename of a
+	supporting resource file (ie <i>secondary support file</i>) in your
+	portal component. The <code>&lt;spf-help-portal:classicGlobalHelp&gt;</code>
+	tag looks-up the best-fit localized version of that file for the user's
+	current locale, and makes a URL for it (this proceeds like <a
+		href="#i18n.supporting.java.getLocalizedFileURL"><code>I18nUtility.getLocalizedFileURL</code></a>
+	described earlier in this document) - then builds an HTML <code>&lt;IMG&gt;</code>
+	tag for that and uses it as the link content.</p>
+	<blockquote>
+	<p>With either of the above image-related attributes, you can also
+	specify HTML <code>ALT</code> text for the HTML <code>&lt;IMG&gt;</code>
+	tag using either <code>anchorImgAlt</code> for the exact text, or <code>anchorImgAltKey</code>
+	for the keyname of a message property in your component's resource
+	bundle.</p>
+	</blockquote>
+	</li>
+	<li>
+	<p>With <code>title</code> you provide the exact title text for the
+	contextual help popup layer, including whatever HTML you like.</p>
+	</li>
+	<li>
+	<p>With <code>titleKey</code> you provide the keyname of a message
+	property containing the title text for the contextual help popup. As
+	above, this may be localized.</p>
+	</li>
+	<li>
+	<p>With <code>content</code> you provide the exact body text for
+	the contextual help popup layer, including whatever HTML you like.</p>
+	</li>
+	<li>
+	<p>With <code>contentKey</code> you provide a message keyname
+	instead - as above, this may be localized.</p>
+	</li>
+</ul>
+
+<p>For example, suppose your portal component's message resource
+bundle contains this:</p>
 
 <blockquote><pre>
 key.help.title=Service Portal and your security
@@ -3984,8 +4047,37 @@ markup is found. The format of contextual help which is injected is the
 	/&gt;
 </pre></blockquote>
 
-<p>Most of the tag attributes are optional. For example, if your
-message properties contain this:</p>
+<p>The <code>title</code> (or <code>titleKey</code>) and <code>content</code>
+(or <code>contentKey</code>) are required; the other tag attributes are
+optional.</p>
+
+<ul>
+	<li>
+	<p>With <code>title</code> you provide the exact content for the
+	title bar of the contextual-help popup - a string of text, HTML, and
+	whatever else.</p>
+	</li>
+	<li>
+	<p>With <code>titleKey</code> you provide the keyname of a message
+	in your portal component's message resource bundle, and the tag looks
+	up the contextual-help title from there. As usual with message resource
+	lookup, the best-fit localized version for the user's current locale
+	found in your bundle is used (this proceeds like <a
+		href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getValue</code></a>
+	described earlier in this document).</p>
+	</li>
+	<li>
+	<p>With <code>content</code> you provide the exact body text for
+	the contextual help popup layer, including whatever HTML you like.</p>
+	</li>
+	<li>
+	<p>With <code>contentKey</code> you provide a message keyname for
+	the contextual help popup's main body instead - as above, this may be
+	localized.</p>
+	</li>
+</ul>
+
+<p>For example, if your message properties contain this:</p>
 
 <blockquote><pre>
 key=Your sign-in is &lt;contextual_help&gt;secure&lt;/contextual_help&gt;
@@ -4850,8 +4942,8 @@ global help</a>. The pattern for this is similar to that for <a
 for standalone classic global help links</h4>
 </a>
 
-<p>You use this tag to express a standalone "classic"-style global
-help popup hyperlink. It wraps around the <a
+<p>You use this tag to express a standalone HPWeb "classic"-style
+global help popup hyperlink. It wraps around the <a
 	href="#help.global.java.classicGlobalHelpProvider"><code>ClassicGlobalHelpProvider</code></a>
 to provide the same capabilities for standalone global help. The usage
 is:</p>
@@ -4872,6 +4964,118 @@ is:</p>
   windowFeatures=&quot;&lt;popup-window-features&gt;&quot;
 /&gt;
 </pre></blockquote>
+
+<p>You must provide one of the first four attributes (<code>anchor</code>,
+<code>anchorKey</code>, <code>anchorImg</code>, <code>anchorImgKey</code>)
+- these provide the link content. The other tag attributes are optional.</p>
+
+<ul>
+	<li>
+	<p>With <code>anchor</code> you provide the exact link content - a
+	string of text, HTML, and whatever else.</p>
+	</li>
+	<li>
+	<p>With <code>anchorKey</code> you provide the keyname of a message
+	in your portal component's message resource bundle, and the tag looks
+	up the whole link content from there. As usual with message resource
+	lookup, the best-fit localized version for the user's current locale
+	found in your bundle is used (this proceeds like <a
+		href="#i18n.messages.java.spf.getMessage"><code>I18nUtility.getValue</code></a>
+	described earlier in this document).</p>
+	</li>
+	<li>
+	<p>With <code>anchorImg</code> you provide the URL of an image, and
+	the <code>&lt;spf-help-portal:classicGlobalHelp&gt;</code> tag builds
+	an HTML <code>&lt;IMG&gt;</code> tag for that and uses it as the link
+	content.</p>
+	</li>
+	<li>
+	<p>With <code>anchorImgKey</code> you provide the basename of a
+	supporting resource file (ie <i>secondary support file</i>) in your
+	portal component. The <code>&lt;spf-help-portal:classicGlobalHelp&gt;</code>
+	tag looks-up the best-fit localized version of that file for the user's
+	current locale, and makes a URL for it (this proceeds like <a
+		href="#i18n.supporting.java.getLocalizedFileURL"><code>I18nUtility.getLocalizedFileURL</code></a>
+	described earlier in this document) - then builds an HTML <code>&lt;IMG&gt;</code>
+	tag for that and uses it as the link content.</p>
+	<blockquote>
+	<p>With either of the above image-related attributes, you can also
+	specify HTML <code>ALT</code> text for the HTML <code>&lt;IMG&gt;</code>
+	tag using either <code>anchorImgAlt</code> for the exact text, or <code>anchorImgAltKey</code>
+	for the keyname of a message property in your component's resource
+	bundle.</p>
+	</blockquote>
+	</li>
+</ul>
+
+<p>For example, say you need to link a message ("Help") to the top
+of the global help secondary page (presented in an HPWeb "classic"-style
+popup window with all the default window features). The message would be
+in your component's message resource bundle like this:</p>
+
+<blockquote><pre>
+key=Help
+</pre></blockquote>
+
+<p>Then your JSP would look like this:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-help-portal" uri="/spf-help-portal.tld" %&gt;
+...
+&lt;spf-help-portal:classicGlobalHelp anchorKey="key" /&gt;
+</pre></blockquote>
+
+<p>This would render the word "Help" as a hyperlink like this:</p>
+
+<blockquote><u><font color="blue"> Help </font></u></blockquote>
+
+<p>And when clicked, the link would open a child window pointing to
+the top of your portal site's <a href="#help.global">global help
+secondary page</a>, with the default size and window features for an HPWeb
+"classic"-style popup. (See the illustration in the <a
+	href="#help.kinds.global">introducing global help</a> section.)</p>
+
+<p>As another example, consider anchoring this image <img
+	src="com/hp/it/spf/xa/help/portal/doc-files/warning.gif"> to the
+"warning" section in global help, inside an HPWeb "classic"-style popup
+window. Assume the "warning" section is marked in your <a
+	href="#help.global.content">global help content</a> with an <code>&lt;a
+name="warning"&gt;</code> tag as usual.</p>
+
+<p>To do this, first put the image file into your portal component
+CAR, as a secondary support file. (The image may be localized - just
+following the packaging and locale-tagging guidelines discussed <a
+	href="#i18n.location">earlier</a>. In this example, we will use <code>warning.gif</code>
+as the basename for this image file.) Also put some <code>ALT</code>
+text for the image into your component's message resources, like this:</p>
+
+<blockquote><pre>
+warning.alt=Caution
+</pre></blockquote>
+
+<p>Then your JSP would look like this:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-help-portal" uri="/spf-help-portal.tld" %&gt;
+...
+&lt;spf-help-portal:classicGlobalHelp
+   anchorImgKey="warning.gif"
+   anchorImgAltKey="warning.alt"
+   fragment="warning"
+   /&gt;
+</pre></blockquote>
+
+<p>This example would render the (properly-localized version of the)
+<code>warning.gif</code> image <img
+	src="com/hp/it/spf/xa/help/portal/doc-files/warning.gif"> with <code>ALT</code>
+text saying "Caution" when moused-over. And when clicked, it would open
+the global help popup window and auto-scroll to the <code>warning</code>
+section.</p>
+
+<p>See the <code>&lt;spf-help-portal:classicGlobalHelp&gt;</code>
+tag documentation in the <a
+	href="com/hp/it/spf/xa/help/portal/tag/package-summary.html#classicGlobalHelp">package
+description</a> for more information about this JSP tag.</p>
 
 LEFT OFF HERE <a name="help.global.jsp.classicGlobalHelpParam">
 <h4>3.6.2. Using <code>&lt;spf-i18n-portal:i18nClassicGlobalHelpParam&gt;</code>

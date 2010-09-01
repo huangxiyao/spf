@@ -457,7 +457,7 @@
  * </p>
  * 
  * <hr>
- * <a name="classicGlobalHelpParam">
+ * <a name="classicGlobalHelp">
  * <h3>
  * &lt;spf-help-portal:classicGlobalHelp&gt;</h3> </a>
  * <p>
