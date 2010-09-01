@@ -4172,7 +4172,12 @@ your desired functionality. You also need to create your TLD file.</p>
 <p>Please read the class and method documentation for each class, in
 order to familiarize yourself with their provided and abstract
 functionality, so that you can decide which would be best for you to
-extend.</p>
+extend. You may also want to look at the source for SPF's own classes
+that do this, such as {@link
+com.hp.it.spf.xa.help.portal.tag.ClassicContextualHelpTag} and {@link
+com.hp.it.spf.xa.i18n.portal.tag.ClassicContextualHelpParamTag}, to see
+how it is done. The SPF development team can direct you to the source
+code.</p>
 
 <hr>
 
@@ -5077,18 +5082,105 @@ tag documentation in the <a
 	href="com/hp/it/spf/xa/help/portal/tag/package-summary.html#classicGlobalHelp">package
 description</a> for more information about this JSP tag.</p>
 
-LEFT OFF HERE <a name="help.global.jsp.classicGlobalHelpParam">
+<a name="help.global.jsp.classicGlobalHelpParam">
 <h4>3.6.2. Using <code>&lt;spf-i18n-portal:i18nClassicGlobalHelpParam&gt;</code>
 for injected classic global help links</h4>
 </a>
 
-<p></p>
+<p>This tag is only used inside the tag body of <a
+	href="#i18n.messages.jsp.spf.message"><code>&lt;spf-i18n-portal:i18nValue&gt;</code></a>.
+It wraps-around the <a
+	href="#help.global.java.classicGlobalHelpProvider"><code>ClassicGlobalHelpProvider</code></a>
+to provide the same capabilities for injected help. You use it to inject
+hyperlinks pointing to your <a href="#help.global">global help
+secondary page</a> into the message value, where the special <code>&lt;global_help&gt;...&lt;/global_help&gt;</code>
+markup is found. The hyperlink which is injected points to global help
+using an HPWeb "classic"-style child (popup) window. The usage is:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix=&quot;spf-i18n-portal&quot; uri=&quot;/spf-i18n-portal.tld&quot; %&gt;
+...
+&lt;spf-i18n-portal:classicGlobalHelpParam
+  fragment=&quot;&lt;fragment-name&gt;&quot;
+  windowFeatures=&quot;&lt;popup-window-features&gt;&quot;
+/&gt;
+</pre></blockquote>
+
+<p>The tag attributes are optional and can be used to indicate a
+section (ie named fragment) of the global help content to which the
+popup window should auto-scroll, or provide an overriding set of
+JavaScript <code>window.open(...)</code> features specifying the size
+and attributes of the popup window.</p>
+
+<p>For example, if your portal component's message properties
+contain this:</p>
+
+<blockquote><pre>
+key=Read &lt;global_help&gt;help&lt;/global_help&gt; about using HP Passport.
+</pre></blockquote>
+
+<p>Then in your JSP you could inject a hyperlink to global help into
+that message when rendering it, pointing to the HP Passport section of
+your global help content. (In this example, assuming that the section
+was marked in your <a href="#help.global.content">global help
+content</a> with <code>&lt;a name="hpp_info"&gt;</code>. Assume also that we
+want a 974 x 410 pixel window, with a scrollbar but no other controls.)
+Your JSP would look like this:</p>
+
+<blockquote><pre>
+&lt;%@ taglib prefix="spf-i18n-portal" uri="/spf-i18n-portal.tld" %&gt;
+...
+&lt;spf-i18n-portal:i18nValue key="key"&gt;
+	&lt;spf-i18n-portal:i18nClassicGlobalHelpParam
+	    fragment="hpp_info"
+	    windowFeatures="height=410,width=974,scrollbars=yes,menubar=no,status=no,toolbar=no" /&gt;
+&lt;/spf-i18n-portal:i18nValue&gt;
+</pre></blockquote>
+
+<p>This JSP would generate a message in the user's browser looking
+like this:</p>
+
+<blockquote>Read <u><font color="blue">help</font></u>
+about using HP Passport.</blockquote>
+
+<p>And when the user clicked the "help" link, a popup window would
+reveal the HP Passport section of your global help content, like this:</p>
+
+<img src="com/hp/it/spf/xa/help/portal/doc-files/globalHelp.jpg">
+
+<p>See the <code>&lt;spf-i18n-portal:classicGlobalHelpParam&gt;</code>
+tag documentation in the <a
+	href="com/hp/it/spf/xa/i18n/portal/tag/package-summary.html#classicGlobalHelpParam">package
+description</a> for more information about this JSP tag.</p>
 
 <a name="help.global.jsp.globalHelpProvider">
 <h4>3.6.3. Creating a tag library for a custom rendition</h4>
-</a>
+</a> p>If you need to create a custom version of a global help link, you can
+create a tag class to reference it. First, develop your custom global
+help provider as described above, by <a
+	href="#help.contextual.java.globalHelpProvider">extending <code>GlobalHelpProvider</code></a>.
+</p>
 
-<p></p>
+<p>Then create a tag class to go with it. SPF provides some base tag
+classes you can upon:</p>
+
+<ul>
+	<li>For a tag for standalone global help, extend {@link
+	com.hp.it.spf.xa.help.portal.tag.GlobalHelpBaseTag}.</li>
+	<li>For a tag for injecting global help into a message body,
+	extend {@link com.hp.it.spf.xa.i18n.portal.tag.GlobalHelpParamBaseTag}.</li>
+</ul>
+
+<p>Basically, in each case you need to implement the abstract <code>getGlobalHelpProvider</code>
+method, and potentially override or create any other methods to impose
+your desired functionality. You also need to create your TLD file.</p>
+
+<p>Please read the class and method documentation for each class, in
+order to familiarize yourself with their provided and abstract
+functionality. You may also want to look at the source for SPF's own
+{@link com.hp.it.spf.xa.help.portal.tag.ClassicGlobalHelpTag} and {@link
+com.hp.it.spf.xa.i18n.portal.tag.ClassicGlobalHelpParamTag} to see how
+it is done. The SPF development team can direct you to the source code.</p>
 
 <hr>
 
