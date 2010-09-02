@@ -247,7 +247,7 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	 * path info). For example, in the URL
 	 * <code>http://host.hp.com/portal/site/abc/template.SOMETHING</code>, the
 	 * portal-root-relative path is <code>/site/abc/template.SOMETHING</code>,
-	 * and so the site name is <code>site</code>.
+	 * and so the site name is <code>abc</code>.
 	 * <p>
 	 * <p>
 	 * This method returns null if the site cannot be determined from the given
