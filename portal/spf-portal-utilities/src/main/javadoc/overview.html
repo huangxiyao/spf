@@ -399,12 +399,13 @@ later.
 		request data</a>
 		<ul>
 			<li>5.3.1. <a href="#portal.request.site.current">Accessing
-			the current portal site (<code>Utils.getSiteDNS</code>, <code>Utils.getSiteURL</code>)</a></li>
+			information about the current portal site (<code>Utils.getSiteDNS</code>,
+			<code>Utils.getSiteURL</code>)</a></li>
 			<li>5.3.2. <a href="#portal.request.site.effective">Accessing
-			the effective portal site (<code>Utils.getEffectiveSiteDNS</code>, <code>Utils.getEffectiveSiteURL</code>,
-			<code>Utils.getEffectiveSite</code>)</a></li>
-			<li>5.3.3. <a href="#portal.request.url.current">Accessing
-			the current request (<code>Utils.getRequestURL</code>)</a></li>
+			information about the effective portal site (<code>Utils.getEffectiveSite</code>,
+			<code>Utils.getEffectiveSiteDNS</code>, <code>Utils.getEffectiveSiteURL</code>)</a></li>
+			<li>5.3.3. <a href="#portal.request.url">Accessing the
+			portal request URL (<code>Utils.getRequestURL</code>)</a></li>
 			<li>5.3.4. <a href="#portal.request.fed">Accessing site
 			federation status (<code>Utils.isFederatedSite</code>)</a></li>
 		</ul>
@@ -7203,441 +7204,288 @@ or <code>PortalContext.getPortalRequest().getRequest()</code>.</p>
 </blockquote>
 
 <a name="portal.request.site.current">
-<h4>5.3.1. Accessing the current portal site (<code>Utils.getSiteDNS</code>,
+<h4>5.3.1. Accessing information about the current portal site (<code>Utils.getSiteDNS</code>,
 <code>Utils.getSiteURL</code>)</h4>
 </a>
 
-<p>To get the current site name (ie what Vignette calls the "site
-DNS name") you can always use standard Vignette API's like <code>PortalContext.getCurrentSite().getDNSName()</code>.
-These APIs obtain the site name from the Vignette database. If you want
-to get the site name from the current URL instead (where, by Vignette
-convention, the site name is a contained in the URL path after <code>/portal/site/</code>),
-use {@link
-com.hp.it.spf.xa.misc.portal.Utils#getSiteDNS(HttpServletRequest)}. For
-example (where <code>context</code> is the <code>PortalContext</code>
-object):</p>
+<blockquote>
+<p><b>Note:</b> If you are a developer of the SPF framework, working
+on code that may execute under the core <code>spf</code> portal site,
+please see the next section about <a
+	href="#portal.request.site.effective">getting the effective site</a>
+instead.</p>
+</blockquote>
 
-<blockquote><pre>
+<ul>
+	<li>
+	<p>To get the current Vignette <code>Site</code> object, use
+	standard Vignette API's like <code>PortalContext.getCurrentSite()</code>.</p>
+	</li>
+	<li>
+	<p>To get the current site name (ie what Vignette calls the "site
+	DNS name") you can always use standard Vignette API's like <code>PortalContext.getCurrentSite().getDNSName()</code>.
+	These APIs obtain the site name from the Vignette database. If you want
+	to get the site name from the current URL instead (where, by Vignette
+	convention, the site name is contained in the URL path after <code>/portal/site/</code>),
+	use {@link
+	com.hp.it.spf.xa.misc.portal.Utils#getSiteDNS(HttpServletRequest)}. For
+	example (where <code>context</code> is the <code>PortalContext</code>
+	object):</p>
+
+	<blockquote><pre>
 import com.hp.it.spf.xa.misc.portal.Utils;
 ...
 String siteName = Utils.getSiteDNS(context.getHttpServletRequest());
 </pre></blockquote>
-</p>
+	</p>
+	</li>
+	<li>
+	<p>To get server-relative URI/URL information about the current
+	portal site, you can use standard Vignette API's like <code>PortalContext.getCurrentBasePortalURI()</code>.
+	However, if you need to build a full URL for an arbitrary page in the
+	current portal site (or another portal site under the same Vignette
+	server), including the scheme, host, port and site-relative "friendly
+	URI" for the page, the various <code>Utils.getSiteURL</code> methods
+	will be handy:</p>
 
-<p>Similarly, to get server-relative URI/URL information about the
-current portal site, you can use standard Vignette API's like <code>PortalContext.getCurrentBasePortalURI()</code>.
-However, if you need to build a full URL for an arbitrary page in the
-current portal site (or another portal site under the same Vignette
-server), including the scheme, host, port and site-relative "friendly
-URI" for the page, the various <code>Utils.getSiteURL</code> methods
-will be handy:</p>
+	<blockquote>
+	<p><b>Note:</b> The SPF portal utilities do not provide a way to
+	build a URL which includes portlet information. Use the <code>PortalURL</code>
+	family of classes and interfaces in the <a
+		href="#overview.other.spf.common">SPF common utilities</a> to do that.
+	</p>
+	</blockquote>
 
-<blockquote>
-<p><b>Note:</b> The SPF portal utilities do not provide a way to
-build a URL which includes portlet information. Use the <code>PortalURL</code>
-family of classes and interfaces in the <a
-	href="#overview.other.spf.common">SPF common utilities</a> to do that.
-</p>
-</blockquote>
-
-<dl>
-	<dt>{@link
-	com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest)}</dt>
-	<dd>
-	<p>Pass the current <code>HttpServletRequest</code> to this method,
-	and it will return the full URL for the home page of the current portal
-	site. This includes the same scheme (HTTP or HTTPS), hostname and port
-	used in the current request. For example, when a request to the <code>my_site</code>
-	portal site used HTTP (port 80) at <code>my_server.hp.com</code>, the
-	following code would return <code>http://my_server.hp.com/portal/site/my_site/</code>:</p>
-	<blockquote><pre>
+	<dl>
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest)}</dt>
+		<dd>
+		<p>Pass the current <code>HttpServletRequest</code> to this
+		method, and it will return the full URL for the home page of the
+		current portal site. This includes the same scheme (HTTP or HTTPS),
+		hostname and port used in the current request. For example, when a
+		request to the <code>my_site</code> portal site used HTTP (port 80) at
+		<code>my_server.hp.com</code>, the following code would return <code>http://my_server.hp.com/portal/site/my_site/</code>:</p>
+		<blockquote><pre>
 import com.hp.it.spf.xa.misc.portal.Utils;
 ...
 String siteUrl = Utils.getSiteURL(context.getHttpServletRequest());
 	</pre></blockquote>
-	</dd>
+		</dd>
 
-	<dt>{@link
-	com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest,String)}</dt>
-	<dd>
-	<p>Use this method to get a full URL for an arbitrary page at the
-	current portal site (or another portal site under the same Vignette
-	server). This includes the same scheme (HTTP or HTTPS), hostname and
-	port used in the current request. The string parameter is a
-	site-relative URI (eg navigation item friendly URI) for the desired
-	page. If it starts with <code>/</code> it is assumed to be relative to
-	the current portal site (the same one used in the current request). If
-	not, then the friendly URI is assumed to start with the desired site
-	name.</p>
-	<p>For example, when a request to the <code>my_site</code> portal
-	site used HTTPS (at non-standard port 444) at <code>my_server.hp.com</code>,
-	the following code would return <code>https://my_server.hp.com:444/portal/site/my_site/some/page</code>:</p>
-	<blockquote><pre>
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest,String)}</dt>
+		<dd>
+		<p>Use this method to get a full URL for an arbitrary page at the
+		current portal site (or another portal site under the same Vignette
+		server). This includes the same scheme (HTTP or HTTPS), hostname and
+		port used in the current request. The string parameter is a
+		site-relative URI (eg navigation item friendly URI) for the desired
+		page. If it starts with <code>/</code> it is assumed to be relative to
+		the current portal site (the same one used in the current request). If
+		not, then the friendly URI is assumed to start with the desired site
+		name.</p>
+		<p>For example, when a request to the <code>my_site</code> portal
+		site used HTTPS (at non-standard port 444) at <code>my_server.hp.com</code>,
+		the following code would return <code>https://my_server.hp.com:444/portal/site/my_site/some/page</code>:</p>
+		<blockquote><pre>
 import com.hp.it.spf.xa.misc.portal.Utils;
 ...
 String siteUrl = Utils.getSiteURL(context.getHttpServletRequest(), "/some/page");
 	</pre></blockquote>
-	<p>The following code would return the same URL, but for the <code>other_site</code>
-	portal site instead (<code>https://my_server.hp.com:444/portal/site/other_site/some/page</code>):</p>
-	<blockquote><pre>
+		<p>The following code would return the same URL, but for the <code>other_site</code>
+		portal site instead (<code>https://my_server.hp.com:444/portal/site/other_site/some/page</code>):</p>
+		<blockquote><pre>
 import com.hp.it.spf.xa.misc.portal.Utils;
 ...
 String siteUrl = Utils.getSiteURL(context.getHttpServletRequest(), "other_site/some/page");
 	</pre></blockquote>
-	<p>Note that your URI may include a query string - this would
-	return <code>https://my_server.hp.com:444/portal/site/other_site/some/page?key=value</code>:</p>
-	<blockquote><pre>
+		<p>Note that your URI may include a query string - this would
+		return <code>https://my_server.hp.com:444/portal/site/other_site/some/page?key=value</code>:</p>
+		<blockquote><pre>
 import com.hp.it.spf.xa.misc.portal.Utils;
 ...
 String siteUrl = Utils.getSiteURL(context.getHttpServletRequest(), "other_site/some/page?key=value");
 	</pre></blockquote>
-	</dd>
-	<dt>{@link
-	com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest,Boolean,String,int,String)}</dt>
-	<dd>
-	<p>This is like the previous method, except the additional
-	parameters let you build a URL containing a hostname, scheme and/or
-	port different than what was used in the current request. The {@link
-	java.lang.Boolean} parameter indicates whether to put HTTP or HTTPS
-	into the URL (<code>true</code> means HTTPS; the default is HTTP). The
-	extra string parameter is the hostname to put into the URL (if blank or
-	null, the default is the one used in the current request). And the
-	integer parameter is the port number (if zero or negative, the default
-	is the one used in the current request - in any case, if the port is
-	the standard port for the scheme, it is omitted from the returned URL).</p>
-	<p>For example, the following returns a URL for the current portal
-	site home page, forcing it to use HTTPS even if that is not what was
-	used in the current request:</p>
-	<blockquote><pre>
+		</dd>
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest,Boolean,String,int,String)}</dt>
+		<dd>
+		<p>This is like the previous method, except the additional
+		parameters let you build a URL containing a hostname, scheme and/or
+		port different than what was used in the current request. The {@link
+		java.lang.Boolean} parameter indicates whether to put HTTP or HTTPS
+		into the URL (<code>true</code> means HTTPS; the default is HTTP). The
+		extra string parameter is the hostname to put into the URL (if blank
+		or null, the default is the one used in the current request). And the
+		integer parameter is the port number (if zero or negative, the default
+		is the one used in the current request - in any case, if the port is
+		the standard port for the scheme, it is omitted from the returned
+		URL).</p>
+		<p>For example, the following returns a URL for the current portal
+		site home page, forcing it to use HTTPS even if that is not what was
+		used in the current request:</p>
+		<blockquote><pre>
 import com.hp.it.spf.xa.misc.portal.Utils;
 ...
 String siteUrl = Utils.getSiteURL(context.getHttpServletRequest(), new Boolean(true), 
                                   null, -1, null);
 	</pre></blockquote>
-	<p>As another example, the following returns a URL for <code>/some/page</code>
-	at some <code>other_site</code> portal site on some <code>other_server.hp.com</code>
-	host. The scheme in this example is forced to HTTP (at non-standard
-	port 8080), resulting in a URL like this: <code>http://other_server.hp.com:8080/portal/site/other_site/some/page</code></p>
-	<blockquote><pre>
+		<p>As another example, the following returns a URL for <code>/some/page</code>
+		at some <code>other_site</code> portal site on some <code>other_server.hp.com</code>
+		host. The scheme in this example is forced to HTTP (at non-standard
+		port 8080), resulting in a URL like this: <code>http://other_server.hp.com:8080/portal/site/other_site/some/page</code></p>
+		<blockquote><pre>
 import com.hp.it.spf.xa.misc.portal.Utils;
 ...
 String siteUrl = Utils.getSiteURL(context.getHttpServletRequest(), new Boolean(false),
                                   "other_server.hp.com", 8080, "other_site/some/page");
 	</pre></blockquote>
-	<p>The URL may include a query string, as with the {@link
-	com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest,String)}
-	method (see above).</p>
-	</dd>
-</dl>
+		<p>The URL may include a query string, as with the {@link
+		com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest,String)}
+		method (see above).</p>
+		</dd>
+	</dl>
+	</li>
+</ul>
 
 <p>Please see the method documentation for more information.</p>
 
-LEFT OFF HERE <a name="portal.request.site.effective">
-<h4>5.3.2. Accessing the effective portal site (<code>Utils.getEffectiveSiteDNS</code>,
-<code>Utils.getEffectiveSiteURL</code>, <code>Utils.getEffectiveSite</code>)</h4>
+<a name="portal.request.site.effective">
+<h4>5.3.2. Accessing information about the effective portal site (<code>Utils.getEffectiveSite</code>,
+<code>Utils.getEffectiveSiteDNS</code>, <code>Utils.getEffectiveSiteURL</code>)</h4>
 </a>
 
-<p>In some rare cases, you may have a use case where components in
-one portal site need to process on behalf of another portal site. SPF
-itself faces this situation, for example where the <code>spf</code> site
-(ie the site whose DNS name is <code>spf</code>) handles post-logout
-processing for all sites (since SiteMinder limitations require only a
-single logout URL for the whole Vignette server). In this case, Shared
-Portal Framework utilizes a convention for indicating the site on whose
-behalf the current site is operating, called the <i>effective site</i>.</p>
+<blockquote>
+<p><b>Note:</b> Generally, this section is only of interest to
+developers of the SPF framework, working on code that may execute under
+the core <code>spf</code> portal site.</p>
+</blockquote>
 
-<p>Please see the method documentation for more information.</p>
+<p>Shared Portal Framework includes a portal site, with "DNS name" <code>spf</code>,
+which is responsible for performing a number of core functionalities. If
+you will be developing SPF portal artifacts which may execute within the
+context of the <code>spf</code> portal site, you may sometimes need to
+get the <i>effective site</i> instead of the current site. The effective
+site is the portal site on whose behalf the <code>spf</code> site is
+doing certain processing. The "DNS name" of the effective site is passed
+in a query string on the <code>spf</code> portal site URL; the name of
+the query parameter is given by the {@link
+com.hp.it.spf.xa.misc.portal.Consts#PARAM_EFFECTIVE_SITE} constant (<code>spfSite</code>
+at this time of writing).</p>
 
-<a name="portal.request.url.current">
-<h4>5.3.3. Accessing the current request (<code>Utils.getRequestURL</code>)</h4>
-</a> <a name="portal.request.fed">
-<h4>5.3.4. Accessing site federation status (<code>Utils.isFederatedSite</code>)</h4>
-</a> <a name="portal.request.page">
-<h4>5.3.2. Accessing the portal page ID (<code>Utils.getPortalPageID</code>)</h4>
-</a>
+<p>For example, logout handling: since SiteMinder can register only
+one logout URL for any server, multiple portal sites in the same server
+which need to use the local logout URL must all share the same one. So
+the SPF logout secondary page under the <code>spf</code> portal site is
+registered with SiteMinder as the local logout URL, and other portal
+sites which need to use local logout (instead of linking to logout on
+HPP or @HP, for various reasons) can link to it and identify themselves
+as the "effective" site within the link: eg <code>http://my_server.hp.com/portal/site/spf/template.SPF_LOGOUT/?spfSite=my_site</code></p>
 
-<p>Use {@link
-com.hp.it.spf.xa.misc.portlet.Utils#getPortalPageID(PortletRequest)} to
-get the ID for the current portal page. This method currently returns
-the Vignette "friendly ID" for the page, as configured in Vignette
-console by the portal administrator. For example (where <code>request</code>
-is the <code>PortletRequest</code>):</p>
+<p>Note that by default (eg when no valid effective site is present
+in the URL, or when the current portal site is not <code>spf</code>) the
+effective site is considered to be the current site. The following
+methods revert to the current site in that case.</p>
 
-<blockquote><pre>
-import com.hp.it.spf.xa.misc.portlet.Utils;
+<ul>
+	<li>
+	<p>To get the effective site, use {@link
+	com.hp.it.spf.xa.misc.portal.Utils#getEffectiveSite(HttpServletRequest)}.
+	This returns the Vignette <code>Site</code> object for the effective
+	site (ie the one whose "DNS name" is listed in the <code>spfSite</code>
+	query string on the current <code>spf</code> portal site URL). If the
+	current request has no valid <code>spfSite</code> query string, or is
+	not targeted at the <code>spf</code> portal site, the method returns
+	just the Vignette <code>Site</code> object for the current site.</p>
+	<p>For example (where <code>context</code> is the current Vignette
+	<code>PortalContext</code> object):</p>
+	<blockquote><pre>
+import com.hp.it.spf.xa.misc.portal.Utils;
+import com.epicentric.site.Site;
 ...
-String pageID = Utils.getPortalPageID(request);
-</pre></blockquote>
+Site site = Utils.getEffectiveSite(context.getHttpServletRequest());
+	</pre></blockquote>
+	</li>
+	<li>
+	<p>To get the site name (ie what Vignette calls the "DNS name") for
+	the effective site, you can use {@link
+	com.hp.it.spf.xa.misc.portal.Utils#getEffectiveSiteDNS(HttpServletRequest)}.
+	When the current request has no valid <code>spfSite</code> query
+	string, or is not targeted at the <code>spf</code> portal site, the
+	method just returns the current site name (ie same as {@link
+	com.hp.it.spf.xa.misc.portal.Utils#getSiteDNS(HttpServletRequest)}).
+	For example (where <code>context</code> is the <code>PortalContext</code>
+	object):</p>
 
-<p>Please see the method documentation for more information.</p>
-
-<a name="portal.request.nav">
-<h4>5.3.3. Accessing the portal navigation item (<code>Utils.getPortalNavItemID</code>,
-<code>Utils.getPortalNavItemURL</code>)</h4>
-</a>
-
-<p>There are a couple of methods for accessing information about the
-current operative navigation item (that is, the navigation item
-corresponding to the URL by which the current portal page was
-requested). {@link
-com.hp.it.spf.xa.misc.portlet.Utils#getPortalNavItemID(PortletRequest)}
-returns the navigation item name, as configured in Vignette console by
-the portal administrator. Note that this is not a unique value;
-unfortunately Vignette does not provide a friendly unique ID for
-navigation items. For example (where <code>request</code> is the <code>PortletRequest</code>):</p>
-
-<blockquote><pre>
-import com.hp.it.spf.xa.misc.portlet.Utils;
+	<blockquote><pre>
+import com.hp.it.spf.xa.misc.portal.Utils;
 ...
-String navItemName = Utils.getPortalNavItemID(request);
+String siteName = Utils.getEffectiveSiteDNS(context.getHttpServletRequest());
 </pre></blockquote>
-
-<p>The navigation item friendly URL is accessible via {@link
-com.hp.it.spf.xa.misc.portlet.Utils#getPortalNavItemURL(PortletRequest)}.
-This returns the navigation item friendly URL specified in the current
-portal request. Generally this matches what is configured in Vignette
-console by the portal administrator, but not necessarily due to how
-Vignette treats navigation item friendly URLs. For example, Vignette
-allows the friendly URL used in the request to contain additional path
-beyond what is configured, so this method will return that as well, not
-just what is configured. As another example, Vignette defaults requests
-with blank or unrecognized friendly URLs to the site home page, so this
-method will return the value actually used in the case of a home page
-request, not necessarily what is configured.</p>
-
-<p>For example (where <code>request</code> is the <code>PortletRequest</code>):</p>
-
-<blockquote><pre>
-import com.hp.it.spf.xa.misc.portlet.Utils;
+	</li>
+	<li>
+	<p>To get full URL's for an arbitrary page in the current portal
+	site (or another portal site under the same Vignette server), including
+	the scheme, host, port and site-relative "friendly URI" for the page,
+	use one of the <code>Utils.getEffectiveSiteURL</code> methods.</p>
+	<blockquote>
+	<p><b>Note:</b> The SPF portal utilities do not provide a way to
+	build a URL which includes portlet information. Use the <code>PortalURL</code>
+	family of classes and interfaces in the <a
+		href="#overview.other.spf.common">SPF common utilities</a> to do that.
+	</p>
+	</blockquote>
+	<dl>
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portal.Utils#getEffectiveSiteURL(HttpServletRequest)}</dt>
+		<dd>
+		<p>Pass the current <code>HttpServletRequest</code> to this
+		method, and it will return the full URL for the home page of the
+		effective portal site. This includes the same scheme (HTTP or HTTPS),
+		hostname and port used in the current request. If no valid effective
+		site has been indicated in the <code>spfSite</code> query string, or
+		the current request is not targeted at the <code>spf</code> site, then
+		this method assumes the current site and behaves the same as {@link
+		com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest)}.</p>
+		<p>For example, when a request to the <code>my_site</code> portal
+		site used HTTP (port 80) at <code>my_server.hp.com</code>, the
+		following code would return <code>http://my_server.hp.com/portal/site/my_site/</code>:</p>
+		<blockquote><pre>
+import com.hp.it.spf.xa.misc.portal.Utils;
 ...
-String friendlyURL = Utils.getPortalNavItemURL(request);
-</pre></blockquote>
+String siteUrl = Utils.getSiteURL(context.getHttpServletRequest());
+	</pre></blockquote>
+		</dd>
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portal.Utils#getEffectiveSiteURL(HttpServletRequest,String)}</dt>
+		<dd>
+		<p></p>
+		</dd>
+		<dt>{@link
+		com.hp.it.spf.xa.misc.portal.Utils#getEffectiveSiteURL(HttpServletRequest,Boolean,String,int,String)}</dt>
+		<dd>
+		<p></p>
+		</dd>
+	</dl>
+	</li>
+</ul>
 
-<p>Please see the method documentation for more information.</p>
 
-<a name="portal.request.portlet">
-<h4>5.3.4. Accessing the portlet ID (<code>Utils.getPortalPortletID</code>)</h4>
-</a>
 
-<p>Use {@link
-com.hp.it.spf.xa.misc.portlet.Utils#getPortalPortletID(PortletRequest)}
-to get the ID for your portlet as it is known to your portal site. This
-portlet ID is assigned to the instance of your portlet when it is
-created by the portal administrator. Note that in Vignette, this is the
-"portlet friendly ID". For example (where <code>request</code> is the
-{@link javax.portlet.PortletRequest}):</p>
 
-<blockquote><pre>
-import com.hp.it.spf.xa.misc.portlet.Utils;
-...
-String portletID = Utils.getPortalPortletID(request);
-</pre></blockquote>
-
-<p>Please see the method documentation for more information.</p>
 
 <a name="portal.request.url">
-<h4>5.3.3. Accessing portal URL's (<code>Utils.getPortalRequestURL</code>,
-<code>Utils.getPortalSiteURL</code>)</h4>
+<h4>5.3.3. Accessing the current request URL (<code>Utils.getRequestURL</code>)</h4>
 </a>
 
-<p>Use these methods to get portal URL's for the portal site
-containing your portlet.</p>
+<p></p>
 
-<dl>
-	<dt>{@link
-	com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(PortletRequest)}</dt>
-	<dt>{@link
-	com.hp.it.spf.xa.misc.portlet.Utils#getPortalRequestURL(PortletRequest,Boolean,String,int)}</dt>
-	<dd>
-	<p>These methods return a URL corresponding to the current portal
-	request. By default, the URL contains the same scheme, hostname and
-	port which the browser used, with the path for the current portal page
-	and site. Its query string (if any) contains all of the form parameters
-	for the current page as well (including parameters targeted to your
-	portlet, if any). It does not matter whether the form parameters were
-	submitted via HTTP <code>GET</code> or <code>POST</code> - they are
-	included in the query string of the URL returned by this method.</p>
-	<p>The arguments are:</p>
-	<ul>
-		<li>Your current {@link javax.portlet.PortletRequest}.</li>
-		<li>A {@link java.lang.Boolean} indicating the security scheme
-		that should be set into the returned URL. If true, then the returned
-		URL will be an <code>https</code> URL. If false, then it will be an <code>http</code>
-		URL. By default (eg if you provide null for this argument) the scheme
-		will be the same as used in the current request.</li>
-		<li>A string hostname indicating the hostname that should be set
-		into the returned URL. By default (eg if you provide a null or blank
-		string), the hostname will be the same as used in the current request.</li>
-		<li>An integer port number indicating the port that should be
-		specified in the returned URL. By default (eg if you provide a
-		non-positive number), the port will be the same as used in the current
-		request.</li>
-		<blockquote>
-		<p><b>Note:</b> You can configure a non-standard HTTP or HTTPS
-		port in the <code>portalurl.properties</code> file. If you switch the
-		security scheme using this method, and do not provide a positive port
-		number directly, your non-standard port number from the file will be
-		used in the returned URL string. For information about installing and
-		configuring <code>portalurl.properties</code>, please see the SPF
-		common utilities developer's guide.</p>
-		</blockquote>
-	</ul>
-	<p>For example, this gets the URL for the current request (where <code>request</code>
-	is the {@link javax.portlet.PortletRequest}):</p>
-	<blockquote><pre>
-import com.hp.it.spf.xa.misc.portlet.Utils;
-...
-String url = Utils.getPortalRequestURL(request);
-</pre></blockquote>
-	<p>And this forcibly changes it to use HTTPS:</p>
-	<blockquote><pre>
-import com.hp.it.spf.xa.misc.portlet.Utils;
-...
-String url = Utils.getPortletRequestURL(request, new Boolean(true));
-</pre></blockquote>
-	</dd>
+<a name="portal.request.fed">
+<h4>5.3.4. Accessing site federation status (<code>Utils.isFederatedSite</code>)</h4>
+</a>
 
-	<dt>{@link
-	com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest)}</dt>
-	<dd>
-	<p>This method returns the URL for the current portal site's home
-	page. The URL contains the same scheme, hostname, and port which the
-	browser used for the current portal page. The URL can be used with the
-	<a href="#overview.other.spf.common">SPF common utilities</a> {@link
-	com.hp.it.spf.xa.portalurl.PortalURL} interface when constructing
-	portal URL objects for arbitrary sites, pages and portlets.</p>
-
-	<p>For example, consider that we wish to build a <code>PortalURL</code>
-	for the current portal site's Forums page, where <code>forums</code> is
-	the friendly URI. Here is the code (where <code>request</code> is the
-	{@link javax.portlet.PortletRequest} - and note that {@link
-	com.hp.it.spf.xa.portalurl.PortalURL} and {@link
-	com.hp.it.spf.xa.portalurl.PortalURLFactory} are artifacts inside the <a
-		href="#overview.other.spf.common">SPF common utilities</a>):</p>
-
-	<blockquote><pre>
-import com.hp.it.spf.xa.misc.portlet.Utils;
-import com.hp.it.spf.xa.portalurl.PortalURL;
-import com.hp.it.spf.xa.portalurl.PortalURLFactory;
-...
-String home = Utils.getPortalSiteURL(request);
-PortalURL portalURL = PortalURLFactory.createPageURL(home, "forums");
-...
-// We could then continue with the portalURL, to target a particular portlet
-// on that page, setting its mode, parameters, etc.  Please see the
-// PortalURL documentation.
-...
-String url = portalURL.toString();
-</pre></blockquote>
-
-	<p>We could then continue with the <code>PortalURL</code> to target
-	a particular portlet on that page, setting its mode, parameters, etc.
-	Please see the <code>PortalURL</code> documentation.</p>
-	</dd>
-
-	<dt>{@link
-	com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest,Boolean,String,int,String)}</dt>
-	<dd>
-	<p>This method returns the URL for a page at a portal site. By
-	default, the URL contains the same scheme, hostname, and port which the
-	browser used for the current portal page. Also by default, the URL
-	points to the home page for the current portal site. (Thus the default
-	behavior of this method is the same as the above method.) However you
-	can override the defaults with the arguments. They are:</p>
-
-	<ul>
-		<li>
-		<p>Your current {@link javax.portlet.PortletRequest}.</p>
-		</li>
-		<li>
-		<p>A {@link java.lang.Boolean} indicating the security scheme that
-		should be set into the returned URL. If true, then the returned URL
-		will be an <code>https</code> URL. If false, then it will be an <code>http</code>
-		URL. By default (eg if you provide null for this argument) the scheme
-		will be the same as used in the current request.</p>
-		</li>
-		<li>
-		<p>A string hostname indicating the hostname that should be set
-		into the returned URL. By default (eg if you provide a null or blank
-		string), the hostname will be the same as used in the current request.</p>
-		</li>
-		<li>
-		<p>An integer port number indicating the port that should be
-		specified in the returned URL. By default (eg if you provide a
-		non-positive number), the port will be the same as used in the current
-		request.</p>
-		<blockquote>
-		<p><b>Note:</b> You can configure a non-standard HTTP or HTTPS
-		port in the <code>portalurl.properties</code> file. If you switch the
-		security scheme using this method, and do not provide a positive port
-		number directly, your non-standard port number from the file will be
-		used in the returned URL string. For information about installing and
-		configuring <code>portalurl.properties</code>, please see the SPF
-		common utilities developer's guide.</p>
-		</blockquote>
-		</li>
-		<li>
-		<p>The final string argument is used to provide a <i>site-relative
-		URI</i>, including optionally the portal site name and additional
-		page-specific path (such as a friendly URI, template ID, query string,
-		etc). As follows:</p>
-		<ul>
-			<li>If the URI string starts with <code>/</code> then the
-			returned portal URL will be for the current portal site. The URI
-			string specifies the particular page at that site (plus any
-			additional path and/or query parameters).</li>
-			<li>Otherwise the first part of the URI string is considered to
-			be the site name for the desired portal site. Anything after the
-			first <code>/</code> in the URI string is considered to specify the
-			particular page, as above.</li>
-		</ul>
-		</li>
-	</ul>
-
-	<p>Let's repeat the above example, but this time without using <code>PortalURL</code>.
-	It can all be done through this method instead. Here is the code (the
-	null and -1 parameters cause the hostname, scheme and port to default
-	to their current values):</p>
-
-	<blockquote><pre>
-import com.hp.it.spf.xa.misc.portlet.Utils;
-...
-String url = Utils.getPortalSiteURL(request, null, null, -1, "/forums");
-</pre></blockquote>
-
-	<p>If we wanted to switch to HTTPS on a non-standard port 444, too,
-	we could do it like this (passing null as the final parameter means
-	this will result in a home page URL for our current site):</p>
-
-	<blockquote><pre>
-import com.hp.it.spf.xa.misc.portlet.Utils;
-...
-String url = Utils.getPortalSiteURL(request, new Boolean(true), null, 444, null);
-</pre></blockquote>
-
-	<blockquote>
-	<p><b>Note:</b> If you are trying to build a portal URL that
-	targets a particular portlet on that page, then you must use the
-	approach with <code>PortalURL</code> instead, since only that API
-	contains methods for targeting portlets and setting their modes,
-	parameters, etc. Please see the documentation for {@link
-	com.hp.it.spf.xa.portalurl.PortalURL} and {@link
-	com.hp.it.spf.xa.portalurl.PortalURLFactory} - they are part of the <a
-		href="#overview.other.spf.common">SPF common utilities</a></p>
-	</blockquote>
-	</dd>
-
-	<dt>{@link
-	com.hp.it.spf.xa.misc.portlet.Utils#getPortalSiteURL(PortletRequest,String)}</dt>
-	<dd>
-	<p>This method is like the above method, where the string parameter
-	is the <i>site-relative URI</i>. Using this method, you can get a URL
-	for any portal page, where the URL includes the same hostname, scheme
-	and port as used for the current request.</p>
-	</dd>
-</dl>
-
-<p>Please refer to the method documentation for more information.</p>
+<p></p>
 
 <hr>
 
