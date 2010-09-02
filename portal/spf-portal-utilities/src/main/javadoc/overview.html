@@ -7087,7 +7087,8 @@ appropriate:</p>
 		However the current portal site, and the HPP policies, have not been
 		enabled for user-identity federation with a 3rd-party identity
 		provider. (User identity federation is not typically used with SPF at
-		this time.)</p>
+		this time. You can read a little more about it below, in the section
+		about <a href="#portal.request.fed">site federation status.</a>)</p>
 		</dd>
 
 		<dt><code>{@link
@@ -7100,7 +7101,9 @@ appropriate:</p>
 		through the public (ie HPP) authentication system, which has been
 		setup (along with the portal site) for user-identity federation with a
 		3rd-party identity provider. (User identity federation is not
-		typically used with SPF at this time.)</p>
+		typically used with SPF at this time. You can read a little more about
+		it below, in the section about <a href="#portal.request.fed">site
+		federation status.</a>)</p>
 		</dd>
 	</dl>
 	</dd>
@@ -7300,8 +7303,8 @@ import com.hp.it.spf.xa.misc.portal.Utils;
 ...
 String siteUrl = Utils.getSiteURL(context.getHttpServletRequest(), "other_site/some/page");
 	</pre></blockquote>
-		<p>Note that your URI may include a query string - this would
-		return <code>https://my_server.hp.com:444/portal/site/other_site/some/page?key=value</code>:</p>
+		<p>Note that your given URI may include a query string - this
+		would return <code>https://my_server.hp.com:444/portal/site/other_site/some/page?key=value</code>:</p>
 		<blockquote><pre>
 import com.hp.it.spf.xa.misc.portal.Utils;
 ...
@@ -7341,7 +7344,7 @@ import com.hp.it.spf.xa.misc.portal.Utils;
 String siteUrl = Utils.getSiteURL(context.getHttpServletRequest(), new Boolean(false),
                                   "other_server.hp.com", 8080, "other_site/some/page");
 	</pre></blockquote>
-		<p>The URL may include a query string, as with the {@link
+		<p>The given URI may include a query string, as with the {@link
 		com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest,String)}
 		method (see above).</p>
 		</dd>
@@ -7404,7 +7407,7 @@ methods revert to the current site in that case.</p>
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.epicentric.site.Site;
 ...
-Site site = Utils.getEffectiveSite(context.getHttpServletRequest());
+Site effectiveSite = Utils.getEffectiveSite(context.getHttpServletRequest());
 	</pre></blockquote>
 	</li>
 	<li>
@@ -7421,7 +7424,7 @@ Site site = Utils.getEffectiveSite(context.getHttpServletRequest());
 	<blockquote><pre>
 import com.hp.it.spf.xa.misc.portal.Utils;
 ...
-String siteName = Utils.getEffectiveSiteDNS(context.getHttpServletRequest());
+String effectiveSiteName = Utils.getEffectiveSiteDNS(context.getHttpServletRequest());
 </pre></blockquote>
 	</li>
 	<li>
@@ -7448,48 +7451,248 @@ String siteName = Utils.getEffectiveSiteDNS(context.getHttpServletRequest());
 		the current request is not targeted at the <code>spf</code> site, then
 		this method assumes the current site and behaves the same as {@link
 		com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest)}.</p>
-		<p>For example, when a request to the <code>my_site</code> portal
-		site used HTTP (port 80) at <code>my_server.hp.com</code>, the
-		following code would return <code>http://my_server.hp.com/portal/site/my_site/</code>:</p>
+		<p>For example, when a request to the <code>spf</code> portal site
+		used HTTP (port 80) at <code>my_server.hp.com</code>, and included <code>spfSite=my_site</code>
+		in the query string, the following code would return <code>http://my_server.hp.com/portal/site/my_site/</code>:</p>
 		<blockquote><pre>
 import com.hp.it.spf.xa.misc.portal.Utils;
 ...
-String siteUrl = Utils.getSiteURL(context.getHttpServletRequest());
+String effectiveSiteUrl = Utils.getEffectiveSiteURL(context.getHttpServletRequest());
 	</pre></blockquote>
 		</dd>
 		<dt>{@link
 		com.hp.it.spf.xa.misc.portal.Utils#getEffectiveSiteURL(HttpServletRequest,String)}</dt>
 		<dd>
-		<p></p>
+		<p>Use this method to get a full URL for an arbitrary page at the
+		effective portal site (or another portal site under the same Vignette
+		server). This includes the same scheme (HTTP or HTTPS), hostname and
+		port used in the current request. The string parameter is a
+		site-relative URI (eg navigation item friendly URI) for the desired
+		page. If it starts with <code>/</code> it is assumed to be relative to
+		the effective portal site. If not, then the friendly URI is assumed to
+		start with the desired site name. If no valid effective site has been
+		indicated in the <code>spfSite</code> query string, or the current
+		request is not targeted at the <code>spf</code> site, then this method
+		assumes the current site and behaves the same as {@link
+		com.hp.it.spf.xa.misc.portal.Utils#getSiteURL(HttpServletRequest,String)}.</p>
+		<p>For example, when a request to the <code>spf</code> portal site
+		used HTTPS (at non-standard port 444) at <code>my_server.hp.com</code>,
+		and referred to <code>spfSite=my_site</code> in the query string, the
+		following code would return <code>https://my_server.hp.com:444/portal/site/my_site/some/page</code>:</p>
+		<blockquote><pre>
+import com.hp.it.spf.xa.misc.portal.Utils;
+...
+String effectiveSiteUrl = Utils.getEffectiveSiteURL(context.getHttpServletRequest(),
+                                                    "/some/page");
+	</pre></blockquote>
+		<p>The following code would return the same URL, but for the <code>other_site</code>
+		portal site instead (<code>https://my_server.hp.com:444/portal/site/other_site/some/page</code>):</p>
+		<blockquote><pre>
+import com.hp.it.spf.xa.misc.portal.Utils;
+...
+String effectiveSiteUrl = Utils.getEffectiveSiteURL(context.getHttpServletRequest(),
+                                                    "other_site/some/page");
+	</pre></blockquote>
+		<p>Note that your given URI may include a query string - this
+		would return <code>https://my_server.hp.com:444/portal/site/other_site/some/page?key=value</code>:</p>
+		<blockquote><pre>
+import com.hp.it.spf.xa.misc.portal.Utils;
+...
+String effectiveSiteUrl = Utils.getEffectiveSiteURL(context.getHttpServletRequest(),
+                                                    "other_site/some/page?key=value");
+	</pre></blockquote>
 		</dd>
 		<dt>{@link
 		com.hp.it.spf.xa.misc.portal.Utils#getEffectiveSiteURL(HttpServletRequest,Boolean,String,int,String)}</dt>
 		<dd>
-		<p></p>
+		<p>This is like the previous method, except the additional
+		parameters let you build a URL containing a hostname, scheme and/or
+		port different than what was used in the current request. The {@link
+		java.lang.Boolean} parameter indicates whether to put HTTP or HTTPS
+		into the URL (<code>true</code> means HTTPS; the default is HTTP). The
+		extra string parameter is the hostname to put into the URL (if blank
+		or null, the default is the one used in the current request). And the
+		integer parameter is the port number (if zero or negative, the default
+		is the one used in the current request - in any case, if the port is
+		the standard port for the scheme, it is omitted from the returned
+		URL).</p>
+		<p>For example, the following returns a URL for the effective
+		portal site home page, forcing it to use HTTPS even if that is not
+		what was used in the current request:</p>
+		<blockquote><pre>
+import com.hp.it.spf.xa.misc.portal.Utils;
+...
+String effectiveSiteUrl = Utils.getEffectiveSiteURL(context.getHttpServletRequest(),
+                                                    new Boolean(true), null, -1, null);
+	</pre></blockquote>
+		<p>As another example, the following returns a URL for <code>/some/page</code>
+		at some <code>other_site</code> portal site on some <code>other_server.hp.com</code>
+		host. The scheme in this example is forced to HTTP (at non-standard
+		port 8080), resulting in a URL like this: <code>http://other_server.hp.com:8080/portal/site/other_site/some/page</code></p>
+		<blockquote><pre>
+import com.hp.it.spf.xa.misc.portal.Utils;
+...
+String effectiveSiteUrl = Utils.getEffectiveSiteURL(context.getHttpServletRequest(),
+                                                    new Boolean(false), "other_server.hp.com",
+                                                    8080, "other_site/some/page");
+	</pre></blockquote>
+		<p>The given URI may include a query string, as with the {@link
+		com.hp.it.spf.xa.misc.portal.Utils#getEffectiveSiteURL(HttpServletRequest,String)}
+		method (see above).</p>
 		</dd>
 	</dl>
 	</li>
 </ul>
 
-
-
-
-
 <a name="portal.request.url">
-<h4>5.3.3. Accessing the current request URL (<code>Utils.getRequestURL</code>)</h4>
+<h4>5.3.3. Accessing the portal request URL (<code>Utils.getRequestURL</code>)</h4>
 </a>
 
-<p></p>
+<p>You can reconstruct the original URL for the current request
+using the {@link
+com.hp.it.spf.xa.misc.portal.Utils#getRequestURL(HttpServletRequest)}
+method. Just pass the current <code>HttpServletRequest</code> object:</p>
+
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portal.Utils;
+...
+String requestURL = Utils.getRequestURL(context.getHttpServletRequest());
+</pre></blockquote>
+
+<p>You can also get the original request URL with a modified scheme
+(HTTP or HTTPS), hostname and/or port. Use the {@link
+com.hp.it.spf.xa.misc.portal.Utils#getRequestURL(HttpServletRequest,Boolean,String,int)}
+method. The {@link java.lang.Boolean} parameter indicates whether to put
+HTTP or HTTPS into the URL (<code>true</code> means HTTPS; the default
+is HTTP). The string parameter is the hostname to put into the URL (if
+blank or null, the default is the one used in the current request). And
+the integer parameter is the port number (if zero or negative, the
+default is the one used in the current request - in any case, if the
+port is the standard port for the scheme, it is omitted from the
+returned URL).</p>
+<p>For example, this gets an HTTPS version of the original URL for
+the current request:</p>
+<blockquote><pre>
+import com.hp.it.spf.xa.misc.portal.Utils;
+...
+String requestURL = Utils.getRequestURL(context.getHttpServletRequest(), 
+                                        new Boolean(true), null, -1);
+</pre></blockquote>
+
+<blockquote>
+<p><b>Note:</b> Both of the above methods build a query string
+containing all of the request parameters (properly URL-encoded) that
+were present in the current request. With a GET request, this is
+basically a copy of the original query string (though the parameters may
+be in a different order). With a POST request, this is a query string
+built out of the form parameters that were in the current request body.
+</p>
+</blockquote>
 
 <a name="portal.request.fed">
 <h4>5.3.4. Accessing site federation status (<code>Utils.isFederatedSite</code>)</h4>
 </a>
 
-<p></p>
+<blockquote>
+<p><b>Note:</b> This section is only relevant to portal sites
+dealing in user identity federation. This is uncommon at this time; most
+portal site developers can ignore this section.</p>
+</blockquote>
+
+<p>Shared Portal Framework supports <i>user identity federation</i>
+("federation" for short) with HP Passport. Normally HP Passport is the
+user identity provider - the master repository for the user identity, at
+which the user registers, logs-in, logs-out, etc. With federation,
+though, HPP defers the role of user identity provider to a 3rd party.
+The 3rd-party system provides the master repository for the user
+identity, as well as typical end-user-facing identity services around
+that, like registration, login, and logout. Then through a secure
+industry-standard protocol like SAML (Security Assertion Markup
+Language) HPP synchronizes with the 3rd-party identity provider,
+replicating the user attributes into HPP and automatically booting an
+HPP SiteMinder session off them. The end result is that the user has
+single-signon from their identity provider to HPP, and, consequently,
+single-signon to any HPP-integrated systems like portal sites based on
+Shared Portal Framework.</p>
+
+<p>A full discussion of federation is beyond the scope of this
+document. And federation is not commonly used with SPF at this time.
+However the framework does support it, strictly on a site-by-site basis;
+meaning that in SPF any given portal site can use HPP on a standard,
+non-federated basis (the usual <i>modus operandi</i>); or on a federated
+basis (but not both). If you are writing portal components that need to
+run in both federated and non-federated portal sites, therefore it can
+sometimes be useful (even necessary) to know whether the current portal
+site is federated or not. This is where the <code>Utils.isFederatedSite</code>
+methods are helpful.</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.misc.portal.Utils#isFederatedSite(HttpServletRequest)}</dt>
+	<dd>
+	<p>Pass the current <code>HttpServletRequest</code> object to this
+	method, and it will return <code>true</code> if the current portal site
+	is known by SPF to be a federated site, and <code>false</code>
+	otherwise.</p>
+	<blockquote>
+	<p><b>Note:</b> There is a close relationship between this method
+	and the <b>access type groups</b> discussed earlier, in the section
+	about <a href="#portal.user.groups">user groups</a>. When <code>isFederatedSite(HttpServletRequest)</code>
+	returns true, the user will always be a member of the federation group
+	(named by {@link
+	com.hp.it.spf.xa.misc.portal.Consts#GROUP_AUTH_TYPE_FED}). And when it
+	returns false, the user will always be a member of the standard HPP
+	group or @HP group.</p>
+	</blockquote>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.misc.portal.Utils#isFederatedSite(String)}</dt>
+	<dd>
+	<p>Pass any Vignette "site DNS name" to this method, and it will do
+	likewise.</p>
+	</dd>
+</dl>
+
+<p><b>Note:</b> Ultimately whether a site is actually federated or
+not depends on how it has been integrated with HP Passport. There are
+many steps involved, but almost all of them are on the HPP side, and
+beyond the scope of this document. In the SPF portal (Vignette)
+environment, the only step is to declare the site to be federated in the
+<code>site_federation.properties</code> file. This step informs the SPF
+portal runtime that federation is used with that site. It is this
+declaration which the above predicates simply report; SPF otherwise has
+no direct knowledge of whether the site has been setup for federation in
+HPP.</p>
+
+<p>The <code>site_federation.properties</code> file is a
+configuration file on each Vignette portal machine, stored in a
+directory on the portal classpath - typically the <i>global
+resources</i> directory, <code>/opt/sasuapps/sp/global_resources</code>
+(though in a sandbox, it may be in a different location). The format of
+the file is very simple:</p>
+<blockquote><pre>
+<i>&lt;site-name&gt;</i> = yes
+</pre></blockquote>
+<p>where the <code><i>&lt;site-name&gt;</i></code> is the Vignette
+"site DNS name" for your portal site (this is the string which appears
+in your portal site URL, <code>http://.../portal/site/<i>&lt;site-name&gt;</i></code>).</p>
+<p>For example, the following declares the <code>example</code>
+portal site to be a federated site:</p>
+<blockquote><pre>
+example = yes
+</pre></blockquote>
+<p>Changes to the file, once saved, take effect within 15 minutes,
+or upon a portal server restart (whichever comes first).</p>
+<blockquote>
+<p><b>Note:</b> Outside of the sandbox environment, only authorized
+SPF server administrators have access to <code>site_federation.properties</code>.
+You may need to make a request to the SPF support team to setup <code>site_federation.properties</code>
+for you.</p>
+</blockquote>
 
 <hr>
 
-<a name="error">
+LEFT OFF HERE <a name="error">
 <h2>6. Error Handling</h2>
 </a>
 
