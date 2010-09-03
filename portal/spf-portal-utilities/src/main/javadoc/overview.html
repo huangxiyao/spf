@@ -424,8 +424,8 @@ later.
 		</li>
 		<li>6.2. <a href="#error.auth">Handling authorization errors</a>
 		<ul>
-			<li>6.2.1. <a href="#error.auth.page">The authorization error
-			page (<code>spf-auth-error-secondarypage</code>)</a></li>
+			<li>6.2.1. <a href="#error.auth.page">The authorization
+			error page (<code>spf-auth-error-secondarypage</code>)</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -7728,18 +7728,93 @@ page when needed (<code>ExceptionUtil.redirectSystemErrorPage</code>).</p>
 
 <p>Shared Portal Framework comes with a general-purpose system error
 page, to which you can transfer control whenever an unrecoverable
-internal error is encountered. (The SPF Vignette portal itself will
-vector into this page if it encounters internal system errors.) The page
-is one of the SPF provided portal components: a secondary page named <b>Shared
-Portal Framework - System Error Page</b> (component ID: <code>spf-system-error-secondarypage</code>),
-which is an instance of the Vignette-standard <b>Error Page</b>
-secondary page type.</p>
+internal error is encountered. (The Vignette portal and SPF themselves
+will vector into this page if they encounter internal system errors.)
+The page is one of the SPF provided portal components: a secondary page
+named <b>Shared Portal Framework - System Error Page</b> (component ID:
+<code>spf-system-error-secondarypage</code>), which is an instance of
+the Vignette-standard <b>Error Page</b> secondary page type.</p>
 
-LEFT OFF HERE
+<p>As an instance of <b>Error Page</b>, when you configure your
+portal site (in Vignette Site Console) you can select <b>Shared
+Portal Framework - System Error Page</b> for that secondary page type. Then
+whenever a system error occurs in Vignette Portal, or in the SPF
+extensions to Vignette, or whenever you <a href="#error.system.redirect">redirect
+to the system error page</a> yourself (ie from your portal component), that
+<code>spf-system-error-secondarypage</code> will be the one which
+renders.</p>
+
+<p>The SPF system error secondary page is part of the SPF portal
+components, provided by the SPF team in every SPF environment (including
+sandboxes). To configure Vignette to use the SPF system error secondary
+page:</p>
+
+<ol>
+	<li>
+	<p>The SPF system error secondary page must have been configured as
+	the default secondary page to use for the Vignette-standard system
+	error secondary page type. In the Vignette server console, go to <b>Server
+	Settings &gt; Server Defaults &gt; Site &amp; Appearance &gt; Default
+	Secondary Pages</b>, and for the <b>Error Page</b> secondary page type,
+	choose <b>Shared Portal Framework - System Error Page</b>. (In most
+	cases, this will already have been done for you during SPF server
+	setup.)</p>
+	</li>
+	<li>
+	<p>The SPF system error secondary page must have been shared to
+	your portal site. In the Vignette server console, go to <b>Components
+	&gt; Pages &gt; Secondary Page List</b>, checkmark the <b>Shared Portal
+	Framework - System Error Page</b>, and <b>Share to...</b>. This should
+	already have been done for you when your portal site was first setup.
+	(It should not be necessary to share the secondary page type to your
+	site, just the secondary page.)</p>
+	</li>
+	<li>
+	<p>Finally, in your portal site, you must apply your site's grid
+	and theme to the secondary page, and again make sure that the secondary
+	page is configured to be used for that secondary page type. In the
+	Vignette site console for your site, go to <b>Site Settings &gt;
+	Appearance &gt; Secondary Pages</b> to do this.</p>
+	</li>
+	<li>
+	<p>Done - no further configuration or customization is needed.</p>
+	</li>
+</ol>
+
+<p>The SPF system error secondary page comes with its own default
+error messaging, including localizations for all HP.com standard
+locales. It looks like this, in English.</p>
+
+<blockquote>
+<p><b>Note:</b> This illustration is taken from the HP Support
+Center, an SPF-based portal site, so its header and footer are specific
+to the HPSC. These are marked below in <font color="red">red</font>;
+your header and footer will vary depending on what grid and theme you
+applied (above) to the secondary page. The secondary page content itself
+is marked below as well in <font color="red">red</font>; this is the
+default content, which you can override if desired when <a
+	href="#error.system.redirect">redirecting to the system error page</a>.</p>
+</blockquote>
+
+<img
+	src="com/hp/it/spf/xa/exception/portal/doc-files/spfSystemErrorSecondaryPage.jpg">
+
+<p>The Vignette-standard template friendly ID for a system error
+page, <code>template.ERROR</code>, invokes the SPF system error
+secondary page once it has been configured against your portal site. In
+other words, once configured against your portal site as above, you can
+deliberately invoke the page with the URL <code>http://.../portal/site/<i>&lt;your-site&gt;</i>/template.ERROR</code>.
+(Vignette and the Shared Portal Framework will automatically redirect to
+that URL when encountering system error conditions of their own). For a
+convenient utility method letting you redirect to the system error page,
+and optionally override the default error content of the page, see <a
+	href="#error.system.redirect">below</a>.</p>
 
 <a name="error.system.redirect">
 <h4>6.1.2. Redirecting to the system error page (<code>ExceptionUtil.redirectSystemErrorPage</code>)</h4>
 </a>
+
+LEFT OFF HERE
 
 <p>{@link com.hp.it.spf.xa.exception.portal.ExceptionUtil} is a
 utility class providing commonly-used error-handling routines. At
