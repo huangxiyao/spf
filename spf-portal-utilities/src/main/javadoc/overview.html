@@ -5914,23 +5914,23 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 	p>For example, here is some HTML text using this token to help build a
 	hyperlink pointing to the current site's Forums page (which in this
 	example has a "friendly URI" of <code>/forums</code>):
-</p>
+	</p>
 
-<blockquote><pre>
+	<blockquote><pre>
 Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 </pre></blockquote>
 
-<p>To repeat the above example, but switch to the <code>itrc</code>
-site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
+	<p>To repeat the above example, but switch to the <code>itrc</code>
+	site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
 
-<p>To repeat both of those examples, and force use of HTTPS in the
-URL, use {SITE-URL:https;/forums}<code>{SITE-URL:https;itrc/forums}</code>
-instead.</p>
+	<p>To repeat both of those examples, and force use of HTTPS in the
+	URL, use {SITE-URL:https;/forums}<code>{SITE-URL:https;itrc/forums}</code>
+	instead.</p>
 
-<p>To force use of HTTPS but otherwise generate just a home page URL
-for the current portal site (ie like <code>{SITE-URL}</code> without any
-parameters does), use <code>{SITE-URL:https;}</code>.</p>
-</dd>
+	<p>To force use of HTTPS but otherwise generate just a home page
+	URL for the current portal site (ie like <code>{SITE-URL}</code>
+	without any parameters does), use <code>{SITE-URL:https;}</code>.</p>
+	</dd>
 </dl>
 
 <a name="file.author.token.user">
@@ -7814,21 +7814,110 @@ and optionally override the default error content of the page, see <a
 <h4>6.1.2. Redirecting to the system error page (<code>ExceptionUtil.redirectSystemErrorPage</code>)</h4>
 </a>
 
-LEFT OFF HERE
-
 <p>{@link com.hp.it.spf.xa.exception.portal.ExceptionUtil} is a
-utility class providing commonly-used error-handling routines. At
-present, utility methods for invoking the SPF-provided system error page
-from your portal component (the <code>ExceptionUtil.redirectSystemErrorPage</code>
-methods) are the only such routines offered.</p>
+utility class providing commonly-used error-handling routines. The <code>ExceptionUtil.redirectSystemErrorPage</code>
+methods let you transfer control from an <i>action class</i> in your
+portal component to the SPF system error secondary page discussed <a
+	href="#error.system.page">above</a>.</p>
+
+<blockquote>
+<p><b>Note:</b> The <code>ExceptionUtil.redirectSystemErrorPage</code>
+methods do not themselves actually transfer control to the SPF system
+error secondary page. Rather they make a redirect object (a Vignette <code>PortalURI</code>
+representing an external redirect) and return it to you. It is then up
+to you to act on that. In an action class' main <code>execute</code>
+method, this is done by simply returning the <code>PortalURI</code>.
+(This is the standard way in the Vignette programming model to generate
+a redirect: by creating a <code>PortalURI</code> for the redirect and
+returning it from your action class' <code>execute</code> method. So <code>ExceptionUtil.redirectSystemErrorPage</code>
+will build the <code>PortalURI</code> for you, but then it is up to you
+to return it.)</p>
+</blockquote>
+
+<p>The following methods are available:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portal.ExceptionUtil#redirectSystemErrorPage(PortalContext,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portal.ExceptionUtil#redirectSystemErrorPage(PortalContext,String,String,String)}</dt>
+</dl>
+
+<p>Arguments are:</p>
+
+<ul>
+	<li>
+	<p>The current Vignette <code>PortalContext</code> object.</p>
+	</li>
+
+	<li>
+	<p>Three strings:</p>
+	<ul>
+		<li>
+		<p>An <i>error code</i> - this will be displayed by the SPF system
+		error secondary page in the "(Error: <i>&lt;error-code&gt;</i>)" line.
+		The default is <code>portappl-internal_error</code>. This can be
+		whatever you like, but generally is recommended to be a short unique
+		string.</p>
+		</li>
+		<li>
+		<p>An <i>error message</i> - this will be displayed by the SPF
+		system error secondary page in between the error title and code. You
+		should pass a value that is already localized. The default is (in
+		English): <code>The service or information you requested is not
+		available at this time.&lt;br/&gt;Please try again later.</code></p>
+		</li>
+		<li>
+		<p>An <i>error title</i> - this will be displayed by the SPF
+		system error secondary page above the error message. You should pass a
+		value that is already localized. The default is (in English): <code>Could
+		not open page</code>.</p>
+		</li>
+	</ul>
+	<p>See the illustration of the SPF system error secondary page <a
+		href="#error.system.page">above</a>.</p>
+	</li>
+</ul>
+
+<p>For example, in the <code>execute</code> method of <code>MyAction</code>,
+a concrete subclass of the Vignette <code>BaseAction</code> class:</p>
+
+<blockquote><pre>
+import com.vignette.portal.website.enduser.components.BaseAction;
+import com.vignette.portal.website.enduser.PortalContext;
+import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
+...
+public class MyAction extends BaseAction {
+   ...
+   public PortalURI execute(PortalContext portalContext) {
+      ...
+      try {
+         ...
+      } catch (Exception e) {
+         // unexpected exception occurred - redirect to system error page
+         return ExceptionUtil.redirectSystemErrorPage(portalContext,
+                                                      "myService-43565");
+      }
+      ...
+   }
+   ...
+}
+</pre></blockquote>
 
 <hr>
 
 <a name="error.auth">
-<h3>6.2. Handling authorization errors</code></h3>
+<h3>6.2. Handling authorization errors</code>
+</h3>
 </a>
 
-<p></p>
+<p><i>Authorization errors</i> are unrecoverable error conditions in framework or
+application business logic, which in normal use should never happen, and
+for which the only recourse in the user interface is to display a
+service-unavailable error. Shared Portal Framework provides a secondary
+page for rendering system errors (spf-system-error-secondarypage) and
+also provides a utility for transfering control to that secondary page
+when needed (ExceptionUtil.redirectSystemErrorPage).</p>
 
 <a name="error.auth.page">
 <h4>6.2.1. The authorization error page (<code>spf-auth-error-secondarypage</code>)</h4>
