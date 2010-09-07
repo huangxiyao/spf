@@ -122,13 +122,6 @@ table.props td {
 <h1>Shared Portal Framework - Portal Utilities - Developer's Guide</h1>
 </a>
 
-<h2><font style="background: red; color: white;"><b>Work
-In Progress</b></font></h2>
-
-Everything below HERE is work-in-progress copied from the portlet
-utilities dev guide and undergoing modification. Please check back
-later.
-
 <a name="toc">
 <h2>Table of Contents</h2>
 </a>
@@ -426,6 +419,8 @@ later.
 		<ul>
 			<li>6.2.1. <a href="#error.auth.page">The authorization
 			error page (<code>spf-auth-error-secondarypage</code>)</a></li>
+			<li>6.2.2. <a href="#error.auth.redirect">Redirecting to the
+			authorization error page (<code>ExceptionUtil.redirectAuthErrorPage</code>)</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -7907,23 +7902,203 @@ public class MyAction extends BaseAction {
 <hr>
 
 <a name="error.auth">
-<h3>6.2. Handling authorization errors</code>
-</h3>
+<h3>6.2. Handling authorization errors</code></h3>
 </a>
 
-<p><i>Authorization errors</i> are unrecoverable error conditions in framework or
-application business logic, which in normal use should never happen, and
-for which the only recourse in the user interface is to display a
-service-unavailable error. Shared Portal Framework provides a secondary
-page for rendering system errors (spf-system-error-secondarypage) and
-also provides a utility for transfering control to that secondary page
-when needed (ExceptionUtil.redirectSystemErrorPage).</p>
+<p><i>Authorization errors</i> are situations where the user is not
+permitted to proceed with a requested action, for which the recourse in
+the user interface is to display an access-denied error. Shared Portal
+Framework provides a secondary page for rendering authorization errors (<code>spf-auth-error-secondarypage</code>).
+For example, SiteMinder (both HPP and @HP) can be configured to invoke
+that page a group membership check you have configured on a protected
+page fails. SPF also provides a utility for transfering control
+explicitly to that secondary page when needed (<code>ExceptionUtil.redirectAuthErrorPage</code>).</p>
 
 <a name="error.auth.page">
 <h4>6.2.1. The authorization error page (<code>spf-auth-error-secondarypage</code>)</h4>
 </a>
 
-<p></p>
+<p>Shared Portal Framework comes with a general-purpose
+authorization-error page, to which you can transfer control whenever an
+authorization error is encountered. For example, you can configure
+SiteMinder (HPP and/or @HP) to redirect to this page when a
+group-membership check for access by the user to a particular protected
+resource in your portal site fails.</p>
+
+<p>The authorization error page is part of the SPF provided portal
+components. It comprises a secondary page named <b>Shared Portal
+Framework - Authorization Error Page</b> (component ID: <code>spf-auth-error-secondarypage</code>),
+and a secondary page type named likewise (component ID: <code>spf-auth-error-secondarypagetype</code>)
+of which the secondary page is an instance.</p>
+
+<p>When you configure your portal site (in Vignette Site Console)
+you can select <b>Shared Portal Framework - Authorization Error Page</b>
+for that secondary page type. Then whenever an authorization error
+occurs in SiteMinder (assuming you configured a policy in SiteMinder to
+use this page), or whenever you <a href="#error.auth.redirect">redirect
+to the authorization error page</a> yourself (ie from your portal
+component), that <code>spf-auth-error-secondarypage</code> will be the
+one which renders.</p>
+
+<p>The SPF authorization error page is part of the SPF portal
+components, provided by the SPF team in every SPF environment (including
+sandboxes). To configure Vignette to use the SPF authorization error
+page:</p>
+
+<ol>
+	<li>
+	<p>The SPF authorization error secondary page must have been
+	configured as the default secondary page to use for the SPF
+	authorization error secondary page type. In the Vignette server
+	console, go to <b>Server Settings &gt; Server Defaults &gt; Site
+	&amp; Appearance &gt; Default Secondary Pages</b>, and for the <b>Shared
+	Portal Framework - Authorization Error Page</b> secondary page type, choose
+	<b>Shared Portal Framework - Authorization Error Page</b>. (In most
+	cases, this will already have been done for you during SPF server
+	setup.)</p>
+	</li>
+	<li>
+	<p>The SPF authorization error secondary page must have been shared
+	to your portal site. In the Vignette server console, go to <b>Components
+	&gt; Pages &gt; Secondary Page List</b>, checkmark the <b>Shared Portal
+	Framework - Authorization Error Page</b>, and <b>Share to...</b>. This
+	should already have been done for you when your portal site was first
+	setup. (It should not be necessary to share the secondary page type to
+	your site, just the secondary page.)</p>
+	</li>
+	<li>
+	<p>Finally, in your portal site, you must apply your site's grid
+	and theme to the secondary page, and again make sure that the secondary
+	page is configured to be used for that secondary page type. In the
+	Vignette site console for your site, go to <b>Site Settings &gt;
+	Appearance &gt; Secondary Pages</b> to do this.</p>
+	</li>
+	<li>
+	<p>Done - no further configuration or customization is needed.</p>
+	</li>
+</ol>
+
+<p>The SPF authorization error secondary page comes with its own
+default error messaging, including localizations for all HP.com standard
+locales. It looks like this, in English.</p>
+
+<blockquote>
+<p><b>Note:</b> This illustration is taken from the HP Support
+Center, an SPF-based portal site, so its header and footer are specific
+to the HPSC. These are marked below in <font color="red">red</font>;
+your header and footer will vary depending on what grid and theme you
+applied (above) to the secondary page. The secondary page content itself
+is marked below as well in <font color="red">red</font>; this is the
+default content, which you can override if desired when <a
+	href="#error.auth.redirect">redirecting to the authorization error
+page</a>.</p>
+</blockquote>
+
+<img
+	src="com/hp/it/spf/xa/exception/portal/doc-files/spfAuthErrorSecondaryPage.jpg">
+
+<p>The SPF template friendly ID for an authorization error page, <code>template.PUBLIC_SPF_AUTH_ERROR</code>,
+invokes the SPF authorization error secondary page once it has been
+configured against your portal site. In other words, once configured
+against your portal site as above, you can deliberately invoke the page
+with the URL <code>http://.../portal/site/<i>&lt;your-site&gt;</i>/template.PUBLIC_SPF_AUTH_ERROR</code>
+- for example, by <a href="#error.auth.redirect">redirecting from
+another portal component</a> - or SiteMinder can invoke it, by configuring
+SiteMinder to use that URL when a group-membership check fails.</p>
+
+<a name="error.auth.redirect">
+<h4>6.2.2. Redirecting to the authorization error page (<code>ExceptionUtil.redirectAuthErrorPage</code>)</h4>
+</a>
+
+<p>{@link com.hp.it.spf.xa.exception.portal.ExceptionUtil} is a
+utility class providing commonly-used error-handling routines. The <code>ExceptionUtil.redirectAuthErrorPage</code>
+methods let you transfer control from an <i>action class</i> in your
+portal component to the SPF authorization error secondary page discussed
+<a href="#error.auth.page">above</a>.</p>
+
+<blockquote>
+<p><b>Note:</b> The <code>ExceptionUtil.redirectAuthErrorPage</code>
+methods do not themselves actually transfer control to the SPF system
+error secondary page. Rather they make a redirect object (a Vignette <code>PortalURI</code>
+representing an external redirect) and return it to you. It is then up
+to you to act on that. In an action class' main <code>execute</code>
+method, this is done by simply returning the <code>PortalURI</code>.
+(This is the standard way in the Vignette programming model to generate
+a redirect: by creating a <code>PortalURI</code> for the redirect and
+returning it from your action class' <code>execute</code> method. So <code>ExceptionUtil.redirectAuthErrorPage</code>
+will build the <code>PortalURI</code> for you, but then it is up to you
+to return it.)</p>
+</blockquote>
+
+<p>The following methods are available:</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portal.ExceptionUtil#redirectAuthErrorPage(PortalContext,String)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.exception.portal.ExceptionUtil#redirectAuthErrorPage(PortalContext,String,String,String)}</dt>
+</dl>
+
+<p>Arguments are:</p>
+
+<ul>
+	<li>
+	<p>The current Vignette <code>PortalContext</code> object.</p>
+	</li>
+
+	<li>
+	<p>Three strings:</p>
+	<ul>
+		<li>
+		<p>An <i>error code</i> - this will be displayed by the SPF
+		authorization error secondary page in the "(Error: <i>&lt;error-code&gt;</i>)"
+		line. The default is <code>portappl-authorization_error</code>. This
+		can be whatever you like, but generally is recommended to be a short
+		unique string.</p>
+		</li>
+		<li>
+		<p>An <i>error message</i> - this will be displayed by the SPF
+		authorization error secondary page in between the error title and
+		code. You should pass a value that is already localized. The default
+		is (in English): <code>You do not have proper authorization to
+		access this page.&lt;br/&gt;If you believe you have received this
+		message in error, please contact the support team for this Web site.</code></p>
+		</li>
+		<li>
+		<p>An <i>error title</i> - this will be displayed by the SPF
+		authorization error secondary page above the error message. You should
+		pass a value that is already localized. The default is (in English): <code>Authorization
+		error</code>.</p>
+		</li>
+	</ul>
+	<p>See the illustration of the SPF authorization error secondary
+	page <a href="#error.auth.page">above</a>.</p>
+	</li>
+</ul>
+
+<p>For example, in the <code>execute</code> method of <code>MyAction</code>,
+a concrete subclass of the Vignette <code>BaseAction</code> class:</p>
+
+<blockquote><pre>
+import com.vignette.portal.website.enduser.components.BaseAction;
+import com.vignette.portal.website.enduser.PortalContext;
+import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
+import com.hp.it.spf.xa.misc.portal.Utils;
+...
+public class MyAction extends BaseAction {
+   ...
+   public PortalURI execute(PortalContext portalContext) {
+      ...
+      if (!Utils.isUserInGroup(portalContext, "MY_GROUP") {
+         // user not allowed - redirect to authorization error page
+         return ExceptionUtil.redirectAuthErrorPage(portalContext,
+                                                    "myService-93829");
+      }
+      ...
+   }
+   ...
+}
+</pre></blockquote>
 
 <hr>
 
@@ -7940,7 +8115,7 @@ when needed (ExceptionUtil.redirectSystemErrorPage).</p>
 	</tr>
 	<tr>
 		<td>1.0</td>
-		<td>September 3 2010</td>
+		<td>September 7 2010</td>
 		<td>S. Jorgenson</td>
 		<td>Initial published version.</td>
 	</tr>
