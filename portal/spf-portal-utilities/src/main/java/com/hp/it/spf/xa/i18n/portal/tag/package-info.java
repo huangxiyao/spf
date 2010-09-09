@@ -1093,13 +1093,9 @@
  * Now imagine that we want to generate a locale selector using the above
  * message string (localized for the user's current locale) as the label for the
  * pull-down widget. We also want each locale named in the pull-down list to be
- * rendered in its own native language, but we want them to be sorted in order
- * of the current locale. (In reality, you would probably want the options to be
- * <i>either</i> both localized and sorted in the current locale, <i>or</i> each
- * localized in its own language and then all sorted together cross-locale. So
- * this is not necessarily a realistic example, but helps to demonstrate use of
- * the tag.) The following JSP code in your component JSP would satisfy these
- * requirements:
+ * expressed in its own native language, but we want them to be sorted in order
+ * of the current locale's collating sequence. The following JSP code in your
+ * component JSP would satisfy these requirements:
  * </p>
  * <blockquote>
  * 
@@ -1256,10 +1252,10 @@
  * <dt><code>displayInLocale="<i>language-tag</i>"</code></dt>
  * <dd>
  * <p>
- * By default, each locale in the selector list is expressed in the language of
- * the current locale (as per the HPWeb "classic" standard). However you can
- * specify an alternate language explicitly, by passing its language tag with
- * this attribute. The language tag must be an RFC 3066 format tag - for
+ * By default, each locale name in the selector list is expressed in the
+ * language of the current locale (as per the HPWeb "classic" standard). However
+ * you can specify an alternate language explicitly, by passing its language tag
+ * with this attribute. The language tag must be an RFC 3066 format tag - for
  * example, <code>displayInLocale="en"</code> for English,
  * <code>displayInLocale="en-US"</code> for US English, etc.
  * <code>displayInLocale="various"</code> is a special value requesting that
@@ -1272,9 +1268,10 @@
  * <dt><code>sortInLocale="<i>language-tag</i>"</code></dt>
  * <dd>
  * <p>
- * Locale options in the selector list are sorted by locale name, where the
- * locale name is localized according to this attribute. By default, the current
- * locale is used for sorting (as per the HPWeb "classic" standard). However you
+ * Locale options in the selector list are sorted by display-localized locale
+ * name, where the collating sequence used for the sort is the one for the
+ * locale specified by this attribute. By default, the current locale is used
+ * for the collating sequence (as per the HPWeb "classic" standard). However you
  * can specify an alternate language explicitly, by passing its language tag
  * with this attribute. The language tag must be an RFC 3066 format tag - for
  * example, <code>sortInLocale="en"</code> for English,
@@ -1283,14 +1280,14 @@
  * yields the default behavior. Regardless, the sort order of locales is always
  * ascending.
  * </p>
+ * <blockquote>
  * <p>
- * <font color="red"><b>Coming soon:</b></font>
- * <code>sortInLocale="various"</code> is a special value requesting that each
- * locale be localized into its own native language for purposes of sorting (the
- * resulting sort thus transcends any one locale, and is conducted in the
- * Unicode character collating sequence).
+ * <b>Note:</b> The <code>sortInLocale</code> only controls the <i>collating
+ * sequence</i> used for the sort. The <code>displayInLocale</code> controls
+ * both the localization of the locale names used in the sort, plus the
+ * rendering of the locale names in the options in the list.
  * </p>
- * </dd>
+ * </blockquote></dd>
  * 
  * <dt><code>labelStyle="<i>inline-style</i>"</code><br>
  * <code>labelClass="<i>css-classname</i>"</code></dt>
