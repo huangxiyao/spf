@@ -1951,13 +1951,9 @@ whereas with <code>ClassicLocaleSelectorProvider</code> it is optional.</p>
 
 <p>For example, say you wanted to produce a classic locale selector
 widget including a <code>Language:</code> label, with each locale option
-displayed country first (eg "Australia-English") and localized according
-to its own locale, and sorted according to the current locale. (In
-reality, you would probably want the options to be <i>either</i> both
-localized and sorted in the current locale, <i>or</i> each localized in
-its own language and then all sorted together cross-locale. So this is
-not necessarily a realistic example, but helps to demonstrate use of the
-class.) Here is how you would do it. First, add the label to your
+displayed country first (eg "Australia-English"), localized according to
+its own locale, and sorted in the collating sequence of the current
+locale. Here is how you would do it. First, add the label to your
 message resources using whatever message key name you like. For example
 (in the base message properties):</p>
 
@@ -1979,8 +1975,10 @@ String label = I18nUtility.getValue("localeSelector.label", portalContext);
 ...
 ClassicLocaleSelectorProvider selector = new ClassicLocaleSelectorProvider(portalContext);
 selector.setLabelContent(label);
+// Current locale is default; do not need to make this call, but shown for illustration.
 selector.setSortLocale(currentLocale);
-// Null is default; do not need to make this call, but shown for illustration.
+// Null (meaning each in its own locale) is default; do not need to make this call, but
+// shown for illustration.
 selector.setDisplayLocale(null);
 // Country-first is default; do not need to make this call, but shown for illustration.
 selector.setOrder(ClassicLocaleSelectorProvider.ORDER_COUNTRY_FIRST);
@@ -2129,11 +2127,12 @@ the class JavaDoc for more information.</p>
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.portal.ClassicLocaleSelectorProvider#setDisplayLocale(Locale)}</dt>
 	<dd>
-	<p>Controls the localization of country and language names
-	displayed in the list. By default, each is localized automatically for
-	that locale. Thus by default, each locale in the list displays as
-	localized according to that locale. Pass in a specific locale (eg the
-	current locale, which you can get using {@link
+	<p>Controls the localization of country and language names in the
+	list - both for purposes of sorting the list and displaying the list.
+	By default, each is localized automatically for that locale. Thus by
+	default, each locale in the list sorts and displays as localized
+	according to that locale. Pass in a specific locale (eg the current
+	locale, which you can get using {@link
 	com.hp.it.spf.xa.i18n.portal.I18nUtility#getLocale(HttpServletRequest)}
 	- <a href="#i18n.other.locale.get">see below</a>) to force localization
 	across the list into a single common locale. In any case, the localized
@@ -2144,23 +2143,14 @@ the class JavaDoc for more information.</p>
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.portal.ClassicLocaleSelectorProvider#setSortLocale(Locale)}</dt>
 	<dd>
-	<p>Controls the locale used for the sorting of locale options
-	displayed in the <code>&lt;SELECT&gt;</code> list. In other words, for
-	purposes of sorting only, each locale is internally localized into the
-	given locale (with country-language order as controlled by {@link
-	com.hp.it.spf.xa.i18n.portal.ClassicLocaleSelectorProvider#setOrder(int)},
-	see above) and then sorted using the Unicode collating sequence. As
-	above, the actual localized country and language names used during the
-	sort are those built-into the JRE itself. The locale passed to <code>setSortLocale</code>
-	is used only for sorting purposes; <code>setDisplayLocale</code>
-	controls how the locale options are localized for display (thus it is
-	possible to display in one locale but sort in another, though generally
-	there should be no reason for doing so).</p>
-	<p><font color="red"><b>Coming soon:</b></font> By default, this
-	method will localize each locale option in the list according to its
-	own locale, for sorting purposes. This therefore will be the same
-	default behavior as with <code>setDisplayLocale</code>. As above, the
-	Unicode collating sequence will then be used to sort them.</p>
+	<p>Controls the locale of the collating sequence used when sorting
+	the locale options displayed in the <code>&lt;SELECT&gt;</code> list.
+	In other words, for purposes of sorting only, each locale is internally
+	localized into the locale given <code>setDisplayLocale</code>, then
+	sorted according to the collating sequence passed to <code>setSortLocale</code>.
+	By default, the current locale's collating sequence is assumed. As
+	noted above, the actual localized country and language names used
+	during the sort are those built-into the JRE itself.</p>
 	</dd>
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.portal.ClassicLocaleSelectorProvider#getHTML(boolean)}<br>
@@ -2243,11 +2233,7 @@ description</a> for information on each attribute.</p>
 selector widget including a <code>Language:</code> label, with each
 locale option displayed country first (eg "Australia-English") and
 localized according to its own locale, then sorted according to the
-current locale. (In reality, you would probably want the options to be <i>either</i>
-both lcoalized and sorted in the current locale, or each localized in
-its own language and then all sorted together cross-locale. So this is
-not necessarily a realistic example, but helps to demonstrate the
-capabilities of the tag.) First, add the label to your portal
+current locale's collating sequence. First, add the label to your portal
 component's message resource bundle, using whatever message key name you
 like. For example (in your base message properties):</p>
 
@@ -2269,7 +2255,7 @@ localeSelector.label = Language:
 
 <p>The resulting locale selector would render as follows. Note the
 illustration below is for when the user's current locale is US English;
-the label string, default (ie pre-selected) value, and sort order would
+the label string, default (ie pre-selected) value, and sort order could
 differ in other locales, though each displayed locale name in the select
 list would continue to be rendered in its own language.</p>
 
@@ -2346,8 +2332,8 @@ fashion. This locale selector:</p>
 	<li>includes a properly-localized label: <code>Select:</code></li>
 	<li>renders with the default behavior of the JSP tag in other
 	respects - for example, locales are each displayed in native language,
-	country first, and (<font color="red"><b>coming soon</b></font>) sorted
-	universally in Unicode sequence.</li>
+	country first, and sorted in the collating sequence of the current
+	locale.</li>
 </ul>
 
 <p>If your portal site is <a href="#i18n.other.locale.config">configured</a>
