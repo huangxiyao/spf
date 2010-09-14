@@ -82,6 +82,13 @@
 			<version>${spf.common.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<type>jar</type>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
