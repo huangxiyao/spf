@@ -10,14 +10,14 @@
 
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>common</artifactId>
-	<version>2.1.2</version>
+	<version>2.1.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>SPF common aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/tags/common-2.1.2</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/common-2.1.2</developerConnection>
-		<url>http://code1.corp.hp.com/svn/spf/source/tags/common-2.1.2</url>
+		<connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk/common</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/common</developerConnection>
+		<url>http://code1.corp.hp.com/svn/spf/source/trunk/common</url>
 	</scm>
 
 	<modules>
