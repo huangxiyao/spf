@@ -1,12 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 
 	<groupId>com.hp.it.spf.tools</groupId>
 	<artifactId>spf-pom</artifactId>
 	<name>Shared Portal Framework super POM</name>
-	<version>2.1.5-SNAPSHOT</version>
+	<version>2.1.5</version>
 	<packaging>pom</packaging>
 
 	<description>
@@ -16,10 +15,10 @@
 	</description>
 
 	<scm>
-		<connection>${spf.sourceReadUrl}/trunk/spf-pom</connection>
-		<developerConnection>${spf.sourceWriteUrl}/trunk/spf-pom
+		<connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/tags/spf-pom-2.1.5</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-pom-2.1.5
 		</developerConnection>
-		<url>${spf.sourceViewUrl}/trunk/spf-pom</url>
+		<url>http://code1.corp.hp.com/svn/spf/source/tags/spf-pom-2.1.5</url>
 	</scm>
 
 	<ciManagement>
