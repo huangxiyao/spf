@@ -7,7 +7,9 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import com.sun.portal.portletcontainer.admin.registry.database.dao.EntityManagerFactoryManager;
@@ -42,7 +44,11 @@ public class DatabaseInit {
 	}
 	
 	public static void generateDB() {
-		EntityManager em = EntityManagerFactoryManager.getInstance().getFactory().createEntityManager();
+		EntityManagerFactory emf = EntityManagerFactoryManager.getInstance().getFactory();
+		if( !emf.isOpen() ){
+			emf = Persistence.createEntityManagerFactory("portletregistry_datasource");
+		}
+		EntityManager em = emf.createEntityManager();
 		em.close();
 	}
 	public static void insertDataIntoTables() {
@@ -77,6 +83,11 @@ public class DatabaseInit {
 		ccmap1.put("text/html", "VIEW,EDIT,HELP");		
 		cmap1.put("supportsMap", ccmap1);
 		
+		ccmap1 = new HashMap();
+		ccmap1.put("user", "userInfo");
+		cmap1.put("userInfoMap", ccmap1);
+		
+		
 		PortletApp pa1 = createPortletApp(map1, cmap1);
 		
 		Map<String, String> map2 = new HashMap<String, String>();
@@ -107,6 +118,7 @@ public class DatabaseInit {
 		ccmap2 = new HashMap();
 		ccmap2.put("role2", "EMPLOYEE_ROLE");
 		cmap2.put("roleMap", ccmap2);
+		
 		
 		PortletApp pa2 = createPortletApp(map2, cmap2);
 		
