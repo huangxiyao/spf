@@ -1,9 +1,22 @@
 package com.sun.portal.portletcontainer.admin.registry.database.dao;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
@@ -14,12 +27,15 @@ import com.sun.portal.portletcontainer.admin.registry.PortletRegistryTags;
 import com.sun.portal.portletcontainer.admin.registry.PortletWindowPreference;
 import com.sun.portal.portletcontainer.admin.registry.PortletWindowPreferenceRegistryContextImpl;
 import com.sun.portal.portletcontainer.admin.registry.PortletWindowPreferenceRegistryWriter;
+import com.sun.portal.portletcontainer.admin.registry.PortletWindowRegistryContextImpl;
 import com.sun.portal.portletcontainer.admin.registry.database.PortletWindowPreferenceRegistryContextDBImpl;
+import com.sun.portal.portletcontainer.admin.registry.database.PortletWindowRegistryContextDBImpl;
 import com.sun.portal.portletcontainer.admin.registry.database.entity.PortletUserWindow;
+import com.sun.portal.portletcontainer.admin.registry.database.utils.DatabaseInit;
 import com.sun.portal.portletcontainer.admin.registry.database.utils.PortletRegistryUtils;
 import com.sun.portal.portletcontainer.context.registry.PortletRegistryException;
 
-public class PortletWindowPreferenceRegistryTest extends TestCase {
+public class PortletWindowPreferenceRegistryTest {
     private PortletWindowPreferenceRegistryContextImpl portletWindowPreferenceRegistry = null;
 
     private PortletWindowPreferenceRegistryContextDBImpl portletWindowPreferenceDBRegistry = null;
@@ -31,9 +47,29 @@ public class PortletWindowPreferenceRegistryTest extends TestCase {
     private String userName = "testuser";
 
     private String portletName = "portletdriver.WSRPProducerAdminPortlet";
+	private static PortletWindowRegistryContextImpl portletWindowRegistry = null;
+	private static PortletWindowRegistryContextDBImpl portletWindowDBRegistry = null;
+    
+    @BeforeClass
+    public static void initDB() throws Exception {
+		portletWindowRegistry = new PortletWindowRegistryContextImpl();
+		portletWindowDBRegistry = new PortletWindowRegistryContextDBImpl();
+		DatabaseInit.generateDB();		
+		DatabaseInit.insertDataIntoTables();
+    }
+    
+	@AfterClass
+	public static void dropTables() throws Exception{
+		EntityManagerFactory emf = EntityManagerFactoryManager.getInstance().getFactory(); 
+		EntityManager em = emf.createEntityManager();
+		em.clear();
+		em.close();
+		emf.close();
+	}
+    
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
 
         PortletWindowPreferenceRegistryContextImpl prePortletWindowPreferenceRegistry = new PortletWindowPreferenceRegistryContextImpl();
         PortletWindowPreferenceRegistryContextDBImpl prePortletWindowPreferenceDBRegistry = new PortletWindowPreferenceRegistryContextDBImpl();
@@ -134,15 +170,13 @@ public class PortletWindowPreferenceRegistryTest extends TestCase {
 
         portletWindowPreferenceRegistry = new PortletWindowPreferenceRegistryContextImpl();
         portletWindowPreferenceDBRegistry = new PortletWindowPreferenceRegistryContextDBImpl();
-
-        super.setUp();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
+    @After
+    public void tearDown() throws Exception {
     }
 
+    @Test
     public void testGetPreferencesReadOnly() throws Exception {
         Map value = portletWindowPreferenceRegistry.getPreferencesReadOnly(
                 portletName, defaultUserName);
@@ -151,6 +185,7 @@ public class PortletWindowPreferenceRegistryTest extends TestCase {
         assertEquals(value, dbvalue);
     }
 
+    @Test
     public void testGetPreferences() throws Exception {
         Map value = portletWindowPreferenceRegistry.getPreferences(portletName,
                 userName);
@@ -159,6 +194,7 @@ public class PortletWindowPreferenceRegistryTest extends TestCase {
         assertEquals(value, dbvalue);
     }
 
+    @Test
     public void testSavePreferences() throws Exception {
         // add preferences to specified portlet window and user portlet
         Map prefMap = new HashMap();
@@ -179,6 +215,7 @@ public class PortletWindowPreferenceRegistryTest extends TestCase {
         assertEquals(value, dbvalue);
     }
 
+    @Test
     public void testRemovePreferences() throws Exception {
         // remove
         portletWindowPreferenceRegistry.removePreferences(portletName);
