@@ -15,6 +15,9 @@
 <String value="HELP"/>
 </Collection>
 </Collection>
+<Collection name="userInfoMap">
+<String name="user" value="userInfo"/>
+</Collection>
 </Properties>
 </PortletApp>
 <PortletApp name="WelcomePortlet.WelcomePortlet" portletName="WelcomePortlet.WelcomePortlet">
