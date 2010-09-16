@@ -24,8 +24,13 @@ public class EntityManagerFactoryManager {
 	}
 	
 	public static EntityManagerFactoryManager getInstance() {
-	    if (manager == null || emf == null){
+	    if (manager == null || emf == null || !emf.isOpen() ){
 	    	manager = new EntityManagerFactoryManager();
+			try {
+				emf = Persistence.createEntityManagerFactory("portletregistry_datasource");
+			} catch (Exception ex){			
+				throw new PortletRegistryDBException("Create entity manager factory error!", ex);
+			}
 	    }
 	    return manager;
 	}
