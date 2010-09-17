@@ -47,7 +47,55 @@
 		<vignetteVersion>7.4.2</vignetteVersion>
 		<slf4jVersion>1.5.6</slf4jVersion>
 		<logbackVersion>0.9.15</logbackVersion>
+
+		<cas.sourceReadUrl>scm:svn:http://code1.corp.hp.com/svn/cas/source</cas.sourceReadUrl>
+		<cas.sourceWriteUrl>scm:svn:https://code1.corp.hp.com/svn/cas/source</cas.sourceWriteUrl>
+		<cas.sourceViewUrl>http://code1.corp.hp.com/svn/cas/source</cas.sourceViewUrl>
+		<distributeSnapshotUrl>http://repo1.corp.hp.com/nexus/content/repositories/snapshots</distributeSnapshotUrl>
+		<distributeReleaseUrl>http://repo1.corp.hp.com/nexus/content/repositories/releases</distributeReleaseUrl>
+		<siteUrl>dav:http://repo1.corp.hp.com/site</siteUrl>
+		<continuousIntegrationUrl>http://build1.corp.hp.com/hudson</continuousIntegrationUrl>
+		<sonar.host.url>http://g4t0173g.houston.hp.com/sonar</sonar.host.url>
 	</properties>
+
+	<repositories>
+		<repository>
+			<id>central</id>
+			<name>Public</name>
+			<url>http://repo1.corp.hp.com/nexus/content/groups/public</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>interval:15</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<!--<updatePolicy>interval:1</updatePolicy>-->
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>central</id>
+			<name>Public</name>
+			<url>http://repo1.corp.hp.com/nexus/content/groups/public</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>interval:15</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<distributionManagement>
 
