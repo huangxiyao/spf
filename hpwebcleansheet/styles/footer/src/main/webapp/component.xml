@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component 
+	build-version="Gold" 
+	component-id="HPWebCleansheetFooter" 
+	component-type="Styles" 
+	description="HPWeb Cleansheet layout footer displays the privacy link, terms and condition link, feedback link, site map link, etc." 
+	epi-build="570014" 
+	epi-version="7.4" 
+	major-version="2" 
+	minor-version="0" 
+	title="HPWeb Cleansheet Layout Footer" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	
+		<epideploy:required-component 
+			component-id="template0035" 
+			component-type="Style Types" 
+			major-version="7" 
+			minor-version="4" />
+
+		<epideploy:detail>
+			<style-info 
+				apply-template-header="true" 
+				description="HPWeb Cleansheet layout footer displays the privacy link, terms and condition link, feedback link, site map link, etc." 
+				friendly-id="hpwebcleansheetfooter" 
+				id="HPWebCleansheetFooter" 
+				is-system="false" 
+				primary-filename="hpweb_cleansheet_footer.jsp" 
+				processing-type="JSP_BASED" 
+				template-default="false" 
+				template-uid="template0035" 
+				title="HPWeb Cleansheet Layout Footer" 
+				visible="true" />
+		</epideploy:detail>
+
+</epideploy:component>
