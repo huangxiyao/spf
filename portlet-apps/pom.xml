@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -12,15 +11,15 @@
 
 	<groupId>com.hp.it.spf.portlet</groupId>
 	<artifactId>portlet-apps</artifactId>
-	<version>2.1.2-SNAPSHOT</version>
+	<version>2.1.2</version>
 
 	<packaging>pom</packaging>
 	<name>SPF portlet applications aggregator POM</name>
 
 	<scm>
-		<connection>${spf.sourceReadUrl}/trunk/portlet-apps</connection>
-		<developerConnection>${spf.sourceWriteUrl}/trunk/portlet-apps</developerConnection>
-		<url>${spf.sourceViewUrl}/trunk/portlet-apps</url>
+		<connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/tags/portlet-apps-2.1.2</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/portlet-apps-2.1.2</developerConnection>
+		<url>http://code1.corp.hp.com/svn/spf/source/tags/portlet-apps-2.1.2</url>
 	</scm>
 
 	<distributionManagement>
