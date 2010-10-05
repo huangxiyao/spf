@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<description>WPA Core Tags for HPWeb</description>
+	<tlib-version>1.0</tlib-version>
+	<short-name>hpweb-core-printable</short-name>
+	<uri>http://frameworks.hp.com/wpa/hpweb-core-printable</uri>
+
+	<tag>
+		<name>printableVersionFilter</name>
+		<tag-class>
+			com.hp.frameworks.wpa.hpweb.taglib.PrintableVersionFilterTag
+		</tag-class>
+		<body-content>scriptless</body-content>
+	</tag>
+	
+	<tag-file>
+		<name>logoTitle</name>
+		<path>/META-INF/tags/PrintableLogoTitle.tag</path>
+	</tag-file>
+
+	<tag-file>
+		<name>footer</name>
+		<path>/META-INF/tags/PrintableFooter.tag</path>
+	</tag-file>
+			
+</taglib>

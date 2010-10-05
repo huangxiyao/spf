@@ -1,0 +1,20 @@
+
+Maven2 Package Notes:
+
+o  "mvn package" will build CAR files for each component, and package all
+of them to the master CAR file "package_all/target/HPWebComponents-x.x.x.car" 
+file.
+
+o Because of a WebLogic defect that recompiles .tag files on every page 
+refresh, all hpweb-related .tag and .tld files from hpweb-core.jar and 
+hpweb-vap.jar have been unbundled, and placed under "/WEB-INF/tags/hpweb".
+Also .class files from hpweb-core.jar are unbundled and deployed under 
+"/WEB/classes".
+
+See hpweb_lib pom for more information and what to do when the WL defect 
+is fixed.
+
+o Deploy the hpweb-vap.jar under hpweb_lib to the Frameworks maven2 repository
+manually for each new version.  The hpweb-vap.jar contains java classes needed 
+by developers.   The hpweb_lib  pom doesn't perform this function  because the 
+the artifact is the CAR file.
