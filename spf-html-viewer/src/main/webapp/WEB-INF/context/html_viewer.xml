@@ -11,6 +11,11 @@
 	<bean id="htmlViewerConfigController"
 		class="com.hp.it.spf.htmlviewer.portlet.web.ConfigController">
 		<property name="viewName" value="config" />
+	</bean>
+
+	<bean id="htmlViewerViewController"
+		class="com.hp.it.spf.htmlviewer.portlet.web.ViewController">
+		<property name="viewName" value="view" />
 		<!-- Added for workaround to strange problem in which Vignette 
 		periodically decides to minimize certain portlet instances, therefore
 		(without this setting) causing the portlet instance to render minimally.
@@ -22,11 +27,6 @@
 		this workaround makes the portlet un-minimizable.  
 		CR #222, DSJ 2010/10/4 -->
 		<property name="renderWhenMinimized" value="true"/>
-	</bean>
-
-	<bean id="htmlViewerViewController"
-		class="com.hp.it.spf.htmlviewer.portlet.web.ViewController">
-		<property name="viewName" value="view" />
 	</bean>
 
 	<!-- Portlet mode-to-controller mapping -->
