@@ -69,7 +69,7 @@ pageContext.setAttribute("dnsName", portalContext.getCurrentSite().getDNSName())
 
 pageContext.setAttribute("layoutConfigHeadJspPath",
 		"/" + portalContext.getCurrentStyle().getUrlSafeRelativePath() +
-		"hpweb_layout_config_head.jsp");
+		"hpweb_cleansheet_layout_config_head.jsp");
 
 </jsp:scriptlet>
 
@@ -180,7 +180,7 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 	Template
 -----------------------------------------------------------------------------%>
 
-<html lang="<%= languageTag %>">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="<%= languageTag %>" xml:lang="en-us">
 <head>
 	<vgn-portal:pageContentTitle />
 	
@@ -211,7 +211,7 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 	<c:if test="${fn:length(countryTag) != 0}">
 		<meta name="target_country" content="${countryTag}">
 	</c:if>
-	<meta name="hp_design_version" content="hpweb.1.2j">
+	<meta name="hp_design_version" content="hpweb.1.3">
 	
 <c:forEach var="metaInfo" items="${HPWebModel.metaInfos}" varStatus="status">	
 	<meta name="${metaInfo.key}" content="${metaInfo.value}">
@@ -223,14 +223,37 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
        	</script>
     </c:if>
     
-    <!-- CSS positioning code -->
-	<link rel="stylesheet" type="text/css" href="${styleDir}hpweb_eeeep_ov2.css">
+	<link href="http://www8.hp.com/us/en/images/i/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+	<link href="http://www8.hp.com/us/en/system/styles/header_footer_v2.css" media="screen" rel="stylesheet" type="text/css"/>
 	
-    <script type="text/javascript" language="JavaScript" src="${javascriptDir}hpweb_utilities.js"></script>
+	<!--[if (IE 7)|(IE 8)]>
+         <link href="http://www8.hp.com/us/en/system/styles/header_footer_ie.css" rel="stylesheet" type="text/css" />
+    <![endif]-->
+    <!--[if IE 6]>
+         <link href="http://www8.hp.com/us/en/system/styles/community_widget_ie6.css" media="screen" type="text/css" rel="stylesheet"/>
+         <link href="http://www8.hp.com/us/en/system/styles/header_footer_ie6.css" rel="stylesheet" type="text/css" />
+         <link href="http://www8.hp.com/us/en/system/styles/content_area_ie6_v2.css" media="screen" rel="stylesheet" type="text/css"/>
+         <script src="http://www8.hp.com/us/en/scripts/homepage/png.js" type="text/javascript" charset="utf-8"></script>
+         <script type="text/javascript">
+              DD_belatedPNG.fix('.png');
+         </script>
+         <style type="text/css" media="screen">
+              body {behavior: url("http://www8.hp.com/us/en/scripts/homepage/csshover3.htc"); }
+         </style>
+    <![endif]-->
+	<script src="http://www8.hp.com/us/en/scripts/homepage/mootools_homepage.js" type="text/javascript">//</script>	
+	<script charset="utf-8" type="text/javascript">
+		var templateType='no_toolbar';
+		var wip=true; 
+		var agt=navigator.userAgent.toLowerCase();
+		var is_ie= (agt.indexOf("msie") != -1);
+		var newsroom_rss = 'http://www8.hp.com/us/en/system/include/ie_rss.jsp';
+	    var defaultSegment = 'HHO';
+		var hpAbsDir = '/us/en/';
+	    var rtl=false;
+     </script>
         
-	<!-- CSS Print file -->
-	<link rel="stylesheet" type="text/css" media="print" href="${styleDir}hpweb_print.css">
-	
+
 	<%-- Our static CSS style extensions to the HPWeb standard --%>
 	<link href="<c:out value="${stylePath}" />hpweb_cleansheet_extensions.css" rel="stylesheet" type="text/css">
 	
@@ -255,12 +278,13 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 
 </head>
 
-<body class="pageLayout<c:if test="${widePage}">Wide</c:if>" text="#000000" link="#003366" alink="#003366" vlink="#660066">
+<body>
 		
 	<c:if test="${isRTL}">
 		<div dir="rtl">
 	</c:if>
 
+	<div class="everything">
 	<!--stopindex-->
 
 	<vgn-portal:includeStyle friendlyID="account_controls" args="<%= args %>"/>
@@ -316,9 +340,10 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 
 	<vgn-portal:includeStyle friendlyID="footer" args="<%= args %>" />
 
+	</div>  <!--  end div everything -->
 	<c:if test="${isRTL}">
 		</div>
 	</c:if>
-
+	<script src="http://www8.hp.com/us/en/scripts/homepage/home_init.js" type="text/javascript" xml:space="preserve">//</script>
 	</body>
 </html>

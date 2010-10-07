@@ -14,6 +14,7 @@
 -----------------------------------------------------------------------------%>
 
 <jsp:directive.page import="com.hp.frameworks.wpa.portal.hpweb.Utils" />
+<jsp:directive.page import="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
 
 
 <%----------------------------------------------------------------------------- 
@@ -24,43 +25,51 @@
 <%@ taglib prefix="hpweb" uri="http://frameworks.hp.com/wpa/hpweb-core-enhanced" %>
 
 <%----------------------------------------------------------------------------- 
-	Style Arguments
------------------------------------------------------------------------------%>
-
-<%-- boolean widePage --%>
-<c:set var="widePageArg" value="${widePage}" />
-
-<%----------------------------------------------------------------------------- 
 	Local variables  
 -----------------------------------------------------------------------------%>
 
-<%-- Only support stretch --%>
-<c:set var="stretch" value="true" />
 
+		
 <jsp:scriptlet>
+HPWebModel model = (HPWebModel)request.getAttribute("HPWebModel");
 
-String localeSelectorDef = Utils.getI18nValue(i18nID, "hpweb.localeSelector", 
-			portalContext);
+if (model == null ) {
+	model = new HPWebModel();
+}
+
+model.setTagline("tag line");
+
+model.setUsername("John");
+model.setSignInUrl("http://www.hp.com");
+model.setSignOutUrl("http://www.hp.com");
+model.setRegisterUrl("http://www.hp.com");
+model.setProfileUrl("http://www.hp.com");
+
+request.setAttribute("HPWebModel", model);
 
 </jsp:scriptlet>
 
-<jsp:useBean id="HPWebModel" scope="request" 
-		class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
-		
 <%----------------------------------------------------------------------------- 
 	Template  
 -----------------------------------------------------------------------------%>
 
-<c:if test="${stretch}">
+<hpweb:welcome>
+	<jsp:attribute name="username">John</jsp:attribute>
+	<jsp:attribute name="signInUrl">http://www.hp.com</jsp:attribute>
+	<jsp:attribute name="signOutUrl">http://www.hp.com</jsp:attribute>
+	<jsp:attribute name="registerUrl">http://www.hp.com</jsp:attribute>
+	<jsp:attribute name="profileUrl">http://www.hp.com</jsp:attribute>
+	<jsp:attribute name="myAccountUrl">http://www.hp.com</jsp:attribute>
+</hpweb:welcome>
 
-	<hpweb:welcome>
-		<jsp:attribute name="username">${HPWebModel.username}</jsp:attribute>
-		<jsp:attribute name="signInUrl">${HPWebModel.signInUrl}</jsp:attribute>
-		<jsp:attribute name="signOutUrl">${HPWebModel.signOutUrl}</jsp:attribute>
-		<jsp:attribute name="registerUrl">${HPWebModel.registerUrl}</jsp:attribute>
-		<jsp:attribute name="profileUrl">${HPWebModel.profileUrl}</jsp:attribute>
-		<jsp:attribute name="localeSelector"><c:out value="${HPWebModel.localeSelector}" default="<%= localeSelectorDef %>" escapeXml="false" /></jsp:attribute>
-		<jsp:attribute name="wide">${widePageArg}</jsp:attribute>
-	</hpweb:welcome>
-	
-</c:if>
+<!--
+<hpweb:welcome>
+	<jsp:attribute name="username">${HPWebModel.username}</jsp:attribute>
+	<jsp:attribute name="signInUrl">${HPWebModel.signInUrl}</jsp:attribute>
+	<jsp:attribute name="signOutUrl">${HPWebModel.signOutUrl}</jsp:attribute>
+	<jsp:attribute name="registerUrl">${HPWebModel.registerUrl}</jsp:attribute>
+	<jsp:attribute name="profileUrl">${HPWebModel.profileUrl}</jsp:attribute>
+	<jsp:attribute name="myAccountUrl">${HPWebModel.myAccountUrl}</jsp:attribute>
+</hpweb:welcome>
+-->
+
