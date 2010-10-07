@@ -37,7 +37,7 @@
 
 	   <style>
 		<template-uid>HPLayoutConfigStyleType</template-uid>
-		<style-uid>HPWebLayoutConfig</style-uid>
+		<style-uid>HPWebCleansheetLayoutConfig</style-uid>
 	   </style>
 	   <style>
 		<template-uid>template0051</template-uid>

@@ -5,8 +5,7 @@
 <%@ attribute name="signOutUrl" type="java.lang.String" %>
 <%@ attribute name="profileUrl" type="java.lang.String" %>
 <%@ attribute name="registerUrl" type="java.lang.String" %>
-<%@ attribute name="localeSelector" type="java.lang.String" %>
-<%@ attribute name="wide" type="java.lang.Boolean" %>
+<%@ attribute name="myAccountUrl" type="java.lang.String" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -28,8 +27,7 @@
 <fmt:message var="signOut" key="text.hpweb2003.signout" bundle="${msgResources}" />
 <fmt:message var="register" key="text.hpweb2003.register" bundle="${msgResources}" />
 <fmt:message var="profile" key="text.hpweb2003.profile" bundle="${msgResources}" />
-
-<fmt:message var="countryIndicator" key="text.hpweb2003.countryIndicator" bundle="${msgResources}" />
+<fmt:message var="myAccount" key="text.hpweb.myaccount" bundle="${msgResources}" />
 
 
 <c:if test="${!empty username}">
@@ -70,32 +68,62 @@
 
 <a class="screenReading" tabindex="1" href="#jumptocontent">${jumpcontent}</a>
 
-<div id="headerTopBar">	
-
-	<div id="hppWelcomeL">${welcome}</div>	
-	
-	<c:choose>
-		<c:when test="${!empty localeSelector}">
-			<div id="localeSelectorContainer">${localeSelector}</div>
-		</c:when>
-		<c:otherwise>
-			<div id="ctryInd">${countryIndicator}</div>		
-		</c:otherwise>
-	</c:choose>
-
-	<c:if test="${!wide}">
-		<div id="hppSignIn">
-			<c:if test="${!empty signInUrl}">
-				<c:choose>
-					<c:when test="${!empty username}">
-						&raquo;&nbsp;<a href="${signOutUrl}" class="small">${signOut}</a>&nbsp;<span class="color666666">|</span>&nbsp;&raquo;&nbsp;<a href="${profileUrl}" class="small">${profile}</a>
-					</c:when>
-					<c:otherwise>
-						<img src="${hppServiceImg}" alt="${signInAlt}" style="display:inline;" /><a href="${signInUrl}" class="small udrlinebold">${signIn}</a><c:if test="${!empty registerUrl}">&nbsp;<span class="color666666">|</span>&nbsp;&raquo;&nbsp;<a href="${registerUrl}" class="small">${register}</a></c:if>
-					</c:otherwise>
-				</c:choose>
-			</c:if>
-		</div>
-	</c:if>
-	
+<!-- style top_buyhp is defined in header_footer_v2.css by.hp.com. need to be customized locally  -->
+<div class="top_buyhp" style="text-transform: none; height:18px;">
+	<div class="top_wrapper">
+	    <div class="top_left" style="font-size:11pt;padding-left:15px">${welcome}</div>	
+			
+		<c:if test="${!empty signInUrl}">
+			<c:choose>
+				<c:when test="${empty username}">
+					<c:choose>
+						<c:when test="${!empty myAccountUrl}">
+							<div class="top_right"> »
+								<a class="ribbon_link link_metrics" name="${signIn}" title="${signIn}" 
+									href="${signInUrl}" tabindex="1" style="font-size:10pt;padding-right:32px">${signIn}</a>
+							</div>
+							<div class="top_right"> » 
+								<a class="ribbon_link link_metrics" name="${myAccount}" title="${myAccount}" 
+										href="${myAccountUrl}" tabindex="1" style="font-size:10pt;padding-right:25px">${myAccount}</a>
+							</div>							
+						</c:when>
+						<c:otherwise>
+							<div class="top_right"> »
+								<a class="ribbon_link link_metrics" name="${register}" title="${register}" 
+										href="${registerUrl}" tabindex="1" style="font-size:10pt;padding-right:32px">${register}</a>
+							</div>							
+							<div class="top_right"> »
+								<a class="ribbon_link link_metrics" name="${signIn}" title="${signIn}" 
+									href="${signInUrl}" tabindex="1" style="font-size:10pt;padding-right:25px">${signIn}</a>
+							</div>
+						</c:otherwise>
+					</c:choose>
+				</c:when>
+				<c:otherwise>
+					<c:choose>
+						<c:when test="${!empty myAccountUrl}"> 
+							<div class="top_right"> »
+								<a class="ribbon_link link_metrics" name="${signOut}" title="${signOut}" 
+									href="${signOutUrl}" tabindex="1" style="font-size:10pt;padding-right:32px">${signOut}</a>
+							</div>
+							<div class="top_right"> »
+								<a class="ribbon_link link_metrics" name="${myAccount}" title="${myAccount}" 
+										href="${myAccountUrl}" tabindex="1" style="font-size:10pt;padding-right:25px">${myAccount}</a>
+							</div>							
+						</c:when>
+						<c:otherwise>
+							<div class="top_right"> »
+								<a class="ribbon_link link_metrics" name="${profile}" title="${profile}" 
+										href="${profileUrl}" tabindex="1" style="font-size:10pt;padding-right:32px">${profile}</a>
+							</div>							
+							<div class="top_right"> »
+								<a class="ribbon_link link_metrics" name="${signOut}" title="${signOut}" 
+									href="${signOutUrl}" tabindex="1" style="font-size:10pt;padding-right:25px">${signOut}</a>
+							</div>
+						</c:otherwise>
+					</c:choose>
+				</c:otherwise>
+			</c:choose>
+		</c:if>
+	</div>
 </div>
