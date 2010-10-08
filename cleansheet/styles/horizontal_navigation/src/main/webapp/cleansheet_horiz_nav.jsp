@@ -150,7 +150,7 @@ pageContext.setAttribute("selectedIndex", selectedIndex);
 	Template
 -----------------------------------------------------------------------------%>
 
-<script type="text/javascript" src="${stylePath}hpweb_cleansheet_horiz_nav.js"></script>
+<script type="text/javascript" src="${stylePath}cleansheet_horiz_nav.js"></script>
 
 <c:if test="${! empty menuItemList}" >
 

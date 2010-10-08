@@ -69,7 +69,7 @@ pageContext.setAttribute("dnsName", portalContext.getCurrentSite().getDNSName())
 
 pageContext.setAttribute("layoutConfigHeadJspPath",
 		"/" + portalContext.getCurrentStyle().getUrlSafeRelativePath() +
-		"hpweb_cleansheet_layout_config_head.jsp");
+		"cleansheet_layout_config_head.jsp");
 
 </jsp:scriptlet>
 
@@ -255,13 +255,13 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
         
 
 	<%-- Our static CSS style extensions to the HPWeb standard --%>
-	<link href="<c:out value="${stylePath}" />hpweb_cleansheet_extensions.css" rel="stylesheet" type="text/css">
+	<link href="<c:out value="${stylePath}" />cleansheet_extensions.css" rel="stylesheet" type="text/css">
 	
 	<%-- Our dynamic CSS style extensions to the HPWeb standard --%>
-	<%@ include file="hpweb_cleansheet_extensions_css.jsp" %>
+	<%@ include file="cleansheet_extensions_css.jsp" %>
 	
 	<%-- Our CSS portlet styles --%>
-	<%@ include file="hpweb_cleansheet_portlet_css.jsp" %>
+	<%@ include file="cleansheet_portlet_css.jsp" %>
 	
 	<%-- Include portal's JSP file which contains any js script, css, etc, 
 			for inserting into the head element.  --%>

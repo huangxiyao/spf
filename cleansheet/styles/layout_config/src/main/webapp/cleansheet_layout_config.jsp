@@ -1,5 +1,5 @@
 <%-----------------------------------------------------------------------------
-	hpweb_cleansheet_layout_config.jsp
+	cleansheet_layout_config.jsp
 	
 	This is the primary JSP file for including custom code to configure
 	the HPWeb layout through the use of the HPWebModel request bean

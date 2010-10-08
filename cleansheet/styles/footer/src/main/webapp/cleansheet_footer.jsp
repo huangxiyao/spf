@@ -1,7 +1,7 @@
 <%-----------------------------------------------------------------------------
-	hpweb_cleansheet_footer.jsp
+	cleansheet_footer.jsp
 	
-	STYLE: HPWeb Cleansheet Footer
+	STYLE: Cleansheet Footer
 	STYLE TYPE: Footer
 	USES HEADER FILE: Yes
 
