@@ -1,0 +1,168 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- This pom creates the HPWebComponents.car file which contains all the 
+		HPWeb individual component car files, e.g. header style component.
+	-->
+
+	<parent>
+		<groupId>com.hp.frameworks</groupId>
+		<artifactId>spf-hpweb-laf</artifactId>
+		<version>2.1.10-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>CleansheetComponents</artifactId>
+	<name>Cleansheet VAP All Components</name>
+	<packaging>car</packaging>
+
+	<dependencies>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>HPLayoutConfigStyleType</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>cleansheet-lib</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetAccountControls</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetFooter</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetHeader</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetHorizontalNav</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetLayoutConfig</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetVerticalNav</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetPortletChromeIntroBox</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetPortletChromeLevelA</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetPortletChromeLevelB</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetPortletChromeLevelBBevel</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetPortletChromeLevelC</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetPortletChromeless</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetHorizontalNavGrid</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetSplitNavGrid</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetSystemGrid</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetVerticalNavGrid</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+
+    	<dependency>
+        	<groupId>com.hp.frameworks</groupId>
+        	<artifactId>CleansheetTheme</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+    	</dependency>
+	</dependencies>
+	 
+	<build>
+		<plugins>
+			<plugin>
+    			<groupId>com.hp.it.spf.tools</groupId>
+    			<artifactId>spf-maven-car-plugin</artifactId>
+    			<version>2.1.0</version>
+    			<extensions>true</extensions>
+    			<configuration>
+        			<composite>true</composite>
+    			</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
