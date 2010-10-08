@@ -159,7 +159,7 @@ pageContext.setAttribute("selectedIndex", selectedIndex);
 <cs-ext:tabSet selectedIndex="${selectedIndex}" stretchTabs="false" hairline="false">
 <c:forEach var="tab" items="${menuItemList}">
 	<c:if test="${tab.visible eq true}">
-		<hpweb-ext:tab title="${tab.title}" url="${tab.url}" />
+		<cs-ext:tab title="${tab.title}" url="${tab.url}" />
 	</c:if>
 </c:forEach>
 </cs-ext:tabSet>

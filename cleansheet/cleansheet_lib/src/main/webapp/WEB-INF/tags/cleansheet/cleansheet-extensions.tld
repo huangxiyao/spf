@@ -42,7 +42,7 @@
 	
 	<tag-file>
 		<name>tabSet</name>
-		<path>/WEB-INF/tags/hpweb/TabSetExt.tag</path>
+		<path>/WEB-INF/tags/cleansheet/TabSetExt.tag</path>
 	</tag-file>	
 	
 </taglib>

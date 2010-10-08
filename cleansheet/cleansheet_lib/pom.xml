@@ -25,8 +25,8 @@
 		
 		When the WL defect is fixed, then need to remove the local copy of 
 		the jar, and remove the .tag and .tld files from the
-		src/main/webapp/WEB-INF/tags/hpweb directory.  Also need to 
-		bundle hpweb-extensions.tld and TabSetEnhancedExt.tag into 
+		src/main/webapp/WEB-INF/tags/cleansheet directory.  Also need to 
+		bundle cleansheet-extensions.tld and TabSetEnhancedExt.tag into 
 		hpweb-var.jar.
 -->
 			<scope>provided</scope>

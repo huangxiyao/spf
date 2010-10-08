@@ -12,52 +12,52 @@
 
 	<tag-file>
 		<name>welcome</name>
-		<path>/WEB-INF/tags/hpweb/Welcome.tag</path>
+		<path>/WEB-INF/tags/cleansheet/Welcome.tag</path>
 	</tag-file>	
 	
 	<tag-file>
 		<name>logo</name>
-		<path>/WEB-INF/tags/hpweb/Logo.tag</path>
+		<path>/WEB-INF/tags/cleansheet/Logo.tag</path>
 	</tag-file>	
 
 	<tag-file>
 		<name>topNavSearch</name>
-		<path>/WEB-INF/tags/hpweb/TopNavSearch.tag</path>
+		<path>/WEB-INF/tags/cleansheet/TopNavSearch.tag</path>
 	</tag-file>
 
 	<tag-file>
 		<name>title</name>
-		<path>/WEB-INF/tags/hpweb/Title.tag</path>
+		<path>/WEB-INF/tags/cleansheet/Title.tag</path>
 	</tag-file>
 			
 	<tag-file>
 		<name>topNav</name>
-		<path>/WEB-INF/tags/hpweb/TopNav.tag</path>
+		<path>/WEB-INF/tags/cleansheet/TopNav.tag</path>
 	</tag-file>
 			
 	<tag-file>
 		<name>contactSearch</name>
-		<path>/WEB-INF/tags/hpweb/ContactSearch.tag</path>
+		<path>/WEB-INF/tags/cleansheet/ContactSearch.tag</path>
 	</tag-file>	
 	
 	<tag-file>
 		<name>logoTitle</name>
-		<path>/WEB-INF/tags/hpweb/LogoTitle.tag</path>
+		<path>/WEB-INF/tags/cleansheet/LogoTitle.tag</path>
 	</tag-file>	
 	
 	<tag-file>
 		<name>leftMenu</name>
-		<path>/WEB-INF/tags/hpweb/LeftMenu.tag</path>
+		<path>/WEB-INF/tags/cleansheet/LeftMenu.tag</path>
 	</tag-file>	
 	
 	<tag-file>
 		<name>leftMenuItem</name>
-		<path>/WEB-INF/tags/hpweb/LeftMenuItem.tag</path>
+		<path>/WEB-INF/tags/cleansheet/LeftMenuItem.tag</path>
 	</tag-file>	
 
 	<tag-file>
 		<name>footer</name>
-		<path>/WEB-INF/tags/hpweb/Footer.tag</path>
+		<path>/WEB-INF/tags/cleansheet/Footer.tag</path>
 	</tag-file>	
 			
 </taglib>

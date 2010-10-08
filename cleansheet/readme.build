@@ -6,8 +6,8 @@ of them to the master CAR file "package_all/target/HPWebComponents-x.x.x.car"
 file.
 
 o Because of a WebLogic defect that recompiles .tag files on every page 
-refresh, all hpweb-related .tag and .tld files from hpweb-core.jar and 
-hpweb-vap.jar have been unbundled, and placed under "/WEB-INF/tags/hpweb".
+refresh, all cleansheet-related .tag and .tld files from hpweb-core.jar and 
+hpweb-vap.jar have been unbundled, and placed under "/WEB-INF/tags/cleansheet"
 Also .class files from hpweb-core.jar are unbundled and deployed under 
 "/WEB/classes".
 
