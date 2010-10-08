@@ -1,5 +1,5 @@
 <%-----------------------------------------------------------------------------
-	hpweb_cleansheet_account_controls.jsp
+	cleansheet_account_controls.jsp
 	
 	STYLE: HPWeb Cleansheet Account Controls
 	STYLE TYPE: Account Controls

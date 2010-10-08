@@ -1,5 +1,5 @@
 <%-----------------------------------------------------------------------------
-	hpweb_cleansheet_portlet_css.jsp
+	cleansheet_portlet_css.jsp
 
 	Style sheet containing containing JSR-268 portlet style definitions
 	and that aren't defined by hp.com classes. 
