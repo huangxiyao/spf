@@ -38,7 +38,7 @@
 			boolean isLocaleLeftToRight(javax.servlet.jsp.jstl.fmt.LocalizationContext)
 		</function-signature>
 		<example>
-			${hpweb:isLocaleLTR(locCtxt)}
+			${cleansheet:isLocaleLTR(locCtxt)}
 		</example>
 	</function>
 	
@@ -54,7 +54,7 @@
 			java.lang.String format(java.lang.String, java.lang.String)
 		</function-signature>
 		<example>
-			${hpweb:format(pattern, param)}
+			${cleansheet:format(pattern, param)}
 		</example>
 	</function>	
 </taglib>

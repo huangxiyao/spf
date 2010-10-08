@@ -35,42 +35,42 @@
 
 	<tag-file>
 		<name>contentUnit</name>
-		<path>/WEB-INF/tags/hpwebcleansheet/ContentUnit.tag</path>
+		<path>/WEB-INF/tags/cleansheet/ContentUnit.tag</path>
 	</tag-file>
 	
 	<tag-file>
 		<name>tabSet</name>
-		<path>/WEB-INF/tags/hpwebcleansheet/TabSet.tag</path>
+		<path>/WEB-INF/tags/cleansheet/TabSet.tag</path>
 	</tag-file>	
 		
 	<tag-file>
 		<name>table</name>
-		<path>/WEB-INF/tags/hpwebcleansheet/Table.tag</path>
+		<path>/WEB-INF/tags/cleansheet/Table.tag</path>
 	</tag-file>	
 	
 	<tag-file>
 		<name>tr</name>
-		<path>/WEB-INF/tags/hpwebcleansheet/TableRow.tag</path>
+		<path>/WEB-INF/tags/cleansheet/TableRow.tag</path>
 	</tag-file>	
 	
 	<tag-file>
 		<name>th</name>
-		<path>/WEB-INF/tags/hpwebcleansheet/TableHeaderCell.tag</path>
+		<path>/WEB-INF/tags/cleansheet/TableHeaderCell.tag</path>
 	</tag-file>	
 			
 	<tag-file>
 		<name>leftMenuItem</name>
-		<path>/WEB-INF/tags/hpwebcleansheet/LeftMenuItem.tag</path>
+		<path>/WEB-INF/tags/cleansheet/LeftMenuItem.tag</path>
 	</tag-file>		
 	
 	<tag-file>
 		<name>rightMenu</name>
-		<path>/WEB-INF/tags/hpwebcleansheet/RightMenu.tag</path>
+		<path>/WEB-INF/tags/cleansheet/RightMenu.tag</path>
 	</tag-file>		
 		
 	<tag-file>
 		<name>rightMenuItem</name>
-		<path>/WEB-INF/tags/hpwebcleansheet/RightMenuItem.tag</path>
+		<path>/WEB-INF/tags/cleansheet/RightMenuItem.tag</path>
 	</tag-file>		
 		
 </taglib>
