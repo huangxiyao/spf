@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component 
+	build-version="Gold" 
+	component-id="CleansheetHorizontalNavigation" 
+	component-type="Styles" 
+	description="Cleansheet layout horizontal navigation display consists of primary navigation (tabset), secondary navigation (row of buttons), and flyout menus." 
+	epi-build="570014" 
+	epi-version="7.4" 
+	major-version="2" 
+	minor-version="0" 
+	title="Cleansheet Layout Horizontal Navigation" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	
+		<epideploy:required-component 
+			component-id="template0002" 
+			component-type="Style Types" 
+			major-version="7" 
+			minor-version="4" />
+
+		<epideploy:detail>
+			<style-info 
+				apply-template-header="true" 
+				description="Cleansheet layout horizontal navigation display consists of primary navigation (tabset), secondary navigation (row of buttons), and flyout menus." 
+				friendly-id="cleansheethoriznav" 
+				id="CleansheetHorizontalNavigation" 
+				is-system="false" 
+				primary-filename="cleansheet_horiz_nav.jsp" 
+				processing-type="JSP_BASED" 
+				template-default="false" 
+				template-uid="template0002" 
+				title="Cleansheet Layout Horizontal Navigation" 
+				visible="true" />
+		</epideploy:detail>
+
+</epideploy:component>
