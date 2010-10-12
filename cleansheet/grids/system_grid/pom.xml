@@ -31,7 +31,7 @@
 										flatten="true"&gt;
 									<fileset dir="..">
 										<include name="*.jsp" />
-										<include name="hpweb_extensions.css" />
+										<include name="cleansheet_extensions.css" />
 									</fileset>
 								</copy>
                 			</tasks>
