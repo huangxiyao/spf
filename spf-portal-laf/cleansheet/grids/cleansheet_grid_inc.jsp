@@ -36,7 +36,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="hpwebfn" uri="http://frameworks.hp.com/wpa/cleansheet-fn" %>
+<%@ taglib prefix="csfn" uri="http://frameworks.hp.com/wpa/cleansheet-fn" %>
 
 
 <%----------------------------------------------------------------------------- 
@@ -119,7 +119,7 @@ pageContext.setAttribute("countryTag", countryTag);
 	Local variables
 -----------------------------------------------------------------------------%>
 
-<c:if test="${!hpwebfn:isLocaleLTR(urlResources)}">	
+<c:if test="${!csfn:isLocaleLTR(urlResources)}">	
 	<%--  Variable isRTL is used by horz nav and portlet chrome.  --%>
 	<c:set var="isRTL" value="true" scope="request" />
 </c:if>
@@ -222,7 +222,7 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
        		var theme = '${themeColor}'; 
        	</script>
     </c:if>
-    
+    <link rel="stylesheet" type="text/css" href="${styleDir}hpweb_eeeep_ov2.css">
 	<link href="http://www8.hp.com/us/en/images/i/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
 	<link href="http://www8.hp.com/us/en/system/styles/header_footer_v2.css" media="screen" rel="stylesheet" type="text/css"/>
 	
@@ -242,6 +242,7 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
          </style>
     <![endif]-->
 	<script src="http://www8.hp.com/us/en/scripts/homepage/mootools_homepage.js" type="text/javascript">//</script>	
+	<script type="text/javascript" language="JavaScript" src="${javascriptDir}hpweb_utilities.js"></script>
 	<script charset="utf-8" type="text/javascript">
 		var templateType='no_toolbar';
 		var wip=true; 
