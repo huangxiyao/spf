@@ -255,11 +255,36 @@
 									<li>
 										<a title="Home" class="hnl_l2_p2_toggler green_arrow hand" tabindex="3" >At Home</a>
 										<div class="hnl_l2_p2_link" id="hnl_ath">
-											<ul>
-												<li>
-													<a title="Share print photos online" class="hho link_metrics" href="http://www.snapfish.ie/snapfishie/welcome" name="ie_en_home_hho-at-home_l1_hho_fixed_share---print-photos-online" tabindex="3">Share - print photos online</a>
-												</li>
-											</ul>
+					                      <ul>
+					
+					                        <li>
+					                          <a class="hho link_metrics" href="http://www.hp.com/hho/hp_create" name="us_en_home_hho-at-home_l1_hho_fixed_free-printing-projects" tabindex="3" title="Free printing projects">Free printing projects</a>
+					                        </li>
+					                        <li>
+					                          <a class="hho link_metrics" href="http://www.hp.com/united-states/consumer/everyday-computing/index.html" name="us_en_home_hho-at-home_l2_hho_fixed_pc-ideas,-guides-and-how-tos" tabindex="3" title="PC ideas, guides and how-to's">PC ideas, guides and how-to's</a>
+					                        </li>
+					                        <li>
+					                          <a class="hho link_metrics" href="http://www1.snapfish.com/welcomenpnu" name="us_en_home_hho-at-home_l3_hho_fixed_share-print-photos-online" tabindex="3" title="Share &amp; print photos online">Share &amp; print photos online</a>
+					
+					                        </li>
+					                        <li>
+					                          <a class="hho link_metrics" href="http://h71036.www7.hp.com/hho/cache/252121-0-0-225-121.html" name="us_en_home_hho-at-home_l4_hho_fixed_home-office-printing-tips" tabindex="3" title="Home office printing tips">Home office printing tips</a>
+					                        </li>
+					                        <li>
+					                          <a class="hho link_metrics" href="http://www.hp.com/united-states/consumer/digital_photography/home.html" name="us_en_home_hho-at-home_l5_hho_fixed_photo-printing-tips-ideas" tabindex="3" title="Photo printing tips &amp; ideas">Photo printing tips &amp; ideas</a>
+					                        </li>
+					
+					                        <li>
+					                          <a class="hho link_metrics" href="http://h30187.www3.hp.com/?tab=atHome&amp;mcid=hho" name="us_en_home_hho-at-home_l6_hho_fixed_free-online-classes" tabindex="3" title="Free online classes">Free online classes</a>
+					                        </li>
+					                        <li>
+					                          <a class="hho link_metrics" href="http://www.hp.com/global/us/en/consumer/digital_photography/free/software/printapp_index.html" name="us_en_home_hho-at-home_l7_hho_fixed_free-printing-software" tabindex="3" title="Free printing software">Free printing software</a>
+					                        </li>
+					                        <li>
+					                          <a class="hho link_metrics" href="http://h71036.www7.hp.com/hho/cache/597818-0-0-225-121.html" name="us_en_home_hho-at-home_l8_hho_fixed_exclusive-extras-for-your-pc" tabindex="3" title="Exclusive extras for your PC">Exclusive extras for your PC</a>
+					
+					                        </li>
+					                      </ul>
 										</div>
 									</li>
 									<li>

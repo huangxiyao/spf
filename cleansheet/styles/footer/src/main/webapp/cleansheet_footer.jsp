@@ -76,27 +76,27 @@ String siteMapUrlDef = Utils.getI18nValue(i18nID, "hpweb.siteMapUrl",
 								<!--<a title="About HP" class="hand" id="fnr_l1_p1_trigger" tabindex="190">About HP</a>-->
 								<a title="About HP" class="hand link_metrics" id="fnr_l1_p1_trigger" tabindex="190" name="insert metrics id">About HP</a>
 							</span>
-							<span class="pipe_chr_solid"> </span>
+							<span class="pipe_chr_solid"></span>
 						</li>
 						<li>
 							<span class="no_printable">
 								<!--<a title="Support and Drivers" class="hand link_metrics" tabindex="192">Support &amp; Drivers</a>-->
 								<a title="Support and Drivers" class="hand link_metrics" tabindex="192" name="insert metrics id here">Support &amp; Drivers</a>
 							</span>
-							<span class="pipe_chr_solid"> </span>
+							<span class="pipe_chr_solid"></span>
 						</li>
 						<li>
 							<span class="no_printable">
 								<a title="HP Labs" href="http://www.hpl.hp.com" name="ie_en_home_footer_l2_corp_fixed_hp-labs" tabindex="194" class="link_metrics">HP Labs</a>
 							</span>
-							<span class="pipe_chr_solid"> </span>
+							<span class="pipe_chr_solid"></span>
 						</li>
 						<li>
 							<span class="no_printable">
 								<!--<a title="Resources" class="hand" id="fnr_l1_p3_trigger" tabindex="196">Resources</a>-->
 								<a title="Resources" class="hand link_metrics" name="insert metrics id here" id="fnr_l1_p3_trigger" tabindex="196">Resources</a>
 							</span>
-							<span class="pipe_chr_solid"> </span>
+							<span class="pipe_chr_solid"></span>
 						</li>
 						<li>
 							<span class="no_printable">
@@ -112,19 +112,19 @@ String siteMapUrlDef = Utils.getI18nValue(i18nID, "hpweb.siteMapUrl",
 							<span class="no_printable">
 								<a title="Site Map" href="http://www8.hp.com/ie/en/sitemap.html" name="ie_en_home_footer_l5_corp_fixed_site-map" tabindex="200" class="link_metrics">Site Map</a>
 							</span>
-							<span class="pipe_chr_solid"> </span>
+							<span class="pipe_chr_solid"></span>
 						</li>
 						<li>
 							<span class="no_printable">
 								<a title="HP Mobile" href="http://h41105.www4.hp.com/m/ie/en/index.xsl" name="ie_en_home_footer_l6_corp_fixed_hp-mobile" tabindex="200" class="link_metrics">HP Mobile</a>
 							</span>
-							<span class="pipe_chr_solid"> </span>
+							<span class="pipe_chr_solid"></span>
 						</li>
 						<li>
 							<span class="no_printable">
 								<a title="Contact HP and Customer Service" href="/country/ie/en/cs/contact-hp/contact.html" name="ie_en_home_footer_l7_corp_fixed_all-hp-contacts" tabindex="200" class="link_metrics">Contact HP / Customer Service</a>
 							</span>
-							<span class="pipe_chr_solid"> </span>
+							<span class="pipe_chr_solid"></span>
 						</li>
 						<li>
 							<span class="no_printable">
@@ -139,13 +139,13 @@ String siteMapUrlDef = Utils.getI18nValue(i18nID, "hpweb.siteMapUrl",
 							<span class="no_printable">
 								<a title="Privacy Statement" href="http://www8.hp.com/ie/en/privacy/privacy.html" name="ie_en_home_footer_l1_corp_fixed_privacy-statement" tabindex="200" class="link_metrics">Privacy Statement</a>
 							</span>
-							<span class="pipe_chr_solid"> </span>
+							<span class="pipe_chr_solid"></span>
 						</li>
 						<li>
 							<span class="no_printable">
 								<a title="Terms of use" href="http://www8.hp.com/ie/en/privacy/terms-of-use.html" name="ie_en_home_footer_l3_corp_fixed_term-of-use" tabindex="200" class="link_metrics">Terms of Use</a>
 							</span>
-							<span class="pipe_chr_solid"> </span>
+							<span class="pipe_chr_solid"></span>
 						</li>
 						<li class="copyright">© 2010 Hewlett-Packard Development Company, L.P.</li>
 					</ul>
