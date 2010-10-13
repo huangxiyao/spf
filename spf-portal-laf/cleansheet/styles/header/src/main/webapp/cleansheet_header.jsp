@@ -9,7 +9,7 @@
 	horizontal navigation to display between the upper portion 
 	(hp-wide global buttons) and the lower portion (title and breadcrumbs).
 	
-	'hpweb_header_split' request attribute set here to indicate to the
+	'cleansheet_header_split' request attribute set here to indicate to the
 	grid component and here that the lower portion remains to be displayed.
 	
 -----------------------------------------------------------------------------%>
@@ -50,7 +50,7 @@
 				<div class="left" >
 					<div class="pad">
 						<a title="HP.com home" class="logo png link_metrics" href="http://www.hp.com" name="ie_en_home__header_corp_fixed_homepage" tabindex="1">
-							<span class="hidden">HP.com</span>
+							<span class="hidden">HP.com </span>
 						</a>
 						<ul class="main_nav">
 							<li>
@@ -379,7 +379,7 @@
 								<div class="lefty">
 									<div class="linksWidth">
 										<div class="connectImage">
-											<img alt="Email us" height="12" src="i/email_us.png" width="17"/>
+											<img alt="Email us" height="12" src="http://www8.hp.com/us/en/images/email_us_tcm245-167814.png" width="17"/>
 										</div>
 										<div class="lefty">
 											<a title="Email us" onclick="return false;" href="javascript:void(0);" class="togglerrn hand" tabindex="21">Email us </a>
@@ -408,7 +408,7 @@
 								<div class="lefty">
 									<div class="linksWidth">
 										<div class="connectImage">
-											<img alt="Call us" height="20" src="i/call_us.png" width="15"/>
+											<img alt="Call us" height="20" src="http://www8.hp.com/us/en/images/call_us_tcm245-167809.png" width="15"/>
 										</div>
 										<div class="lefty">
 											<a title="Call us" onclick="return false;" href="javascript:void(0);" class="togglerrn hand" tabindex="21">Call us </a>
@@ -434,7 +434,7 @@
 							<div class="connect_border"> </div>
 							<div>
 								<div class="connectImage">
-									<img alt="HP office locations" height="18" src="i/office_location.png" width="17"/>
+									<img alt="HP office locations" height="18" src="http://www8.hp.com/us/en/images/office_location_tcm245-167819.png" width="17"/>
 								</div>
 								<div class="lefty">
 									<a title="HP office locations" href="http://welcome.hp.com/country/ie/en/contact/office_locs.html" id="hp-office-locations" name="ie_en_home_header_l9_corp_fixed_hp-office-locations" tabindex="21" class="link_metrics">HP office locations</a>
