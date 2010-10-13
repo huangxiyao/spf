@@ -244,6 +244,7 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 	<script src="http://www8.hp.com/us/en/scripts/homepage/mootools_homepage.js" type="text/javascript">//</script>	
 	<script type="text/javascript" language="JavaScript" src="${javascriptDir}hpweb_utilities.js"></script>
 	<script charset="utf-8" type="text/javascript">
+		var searchTxt = '';
 		var templateType='no_toolbar';
 		var wip=true; 
 		var agt=navigator.userAgent.toLowerCase();
@@ -269,13 +270,6 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 
 	<jsp:include page="${layoutConfigHeadJspPath}" />
 
-	<c:if test="${stretch}">
-		<script type="text/javascript">
-			var sval = "${searchLabel}";
-			function clearSearch(el) { if(el.value==sval) el.value=''; }
-			function restoreSearch(el) { if(el.value=='') el.value=sval; }
-		</script>
-	</c:if>    
 
 </head>
 
