@@ -12,7 +12,7 @@
 	xmlns:epideploy="http://www.epicentric.com/deployment">
 	
 		<epideploy:required-component 
-			component-id="HPLayoutConfigStyleType" 
+			component-id="HPLocaleSelectorStyleType" 
 			component-type="Style Types" 
 			major-version="1" 
 			minor-version="0" />
@@ -27,7 +27,7 @@
 				primary-filename="cleansheet_locale_selector.jsp" 
 				processing-type="JSP_BASED" 
 				template-default="false" 
-				template-uid="HPLayoutConfigStyleType" 
+				template-uid="HPLocaleSelectorStyleType" 
 				title="Cleansheet Layout Config" 
 				visible="true" />
 		</epideploy:detail>
