@@ -28,7 +28,7 @@
 				processing-type="JSP_BASED" 
 				template-default="false" 
 				template-uid="HPLocaleSelectorStyleType" 
-				title="Cleansheet Layout Config" 
+				title="Cleansheet Locale Selector" 
 				visible="true" />
 		</epideploy:detail>
 
