@@ -302,36 +302,38 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 		<vgn-portal:includeStyle friendlyID="header" args="<%= args %>"/>
 	</c:if>
 	
-	<div id="enhancedPageBody">
-
+	<div class="body" id="body">
+		<%-- disable vertical nav for now, not sure whether is needed anymore
 		<c:choose>
 			<c:when test="${showVertNav eq 'true'}">
 				<vgn-portal:includeNavigation friendlyID="navigation-vertical" 
 							isSecondary="true" />
 			</c:when>
 			<c:otherwise>
-				<%-- Set the wide page width style value because hp.com assumes
-						that the vertical menu will be present and sets it to a shorter
-						width. --%>
-						
-				<style type="text/css">
-					.pageLayoutWide #enhancedContentArea {
-						width: 974px;
-					}
-				</style>
 			</c:otherwise>
 		</c:choose>
-		
+		--%>
 		<!--startindex-->
 				
-		<div id="enhancedContentArea">		
-			<a name="jumptocontent"><span class="screenReading">${contentStart}</span></a>									
-			<vgn-portal:includePageContent />
+		<div class="holder">  <!--  all these nested divs are required for overlay local selector to work -->
+          <div class="max" id="page">
+            <!-- BEGIN INSERT CONTENT -->
+            <div id="controls">
+              <div class="hidden" id="carousel">	
+				<a name="jumptocontent"><span class="screenReading">${contentStart}</span></a>									
+				<vgn-portal:includePageContent />
+			
+			  </div>
+              
+            </div>
+            <!-- END INSERT CONTENT -->
+          </div>
 		</div>
 				
 		<!--stopindex-->
 		
 	</div>
+	<vgn-portal:includeStyle friendlyID="hp_locale_selector" args="<%= args %>" />
 
 	<vgn-portal:includeStyle friendlyID="footer" args="<%= args %>" />
 
