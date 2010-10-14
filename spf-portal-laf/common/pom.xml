@@ -25,7 +25,6 @@
 	<modules>
 		<!-- Style type components -->
 		<module>style_types/layout_config</module>
-		<module>style_types/locale_selector</module>
 
 	</modules>
 
