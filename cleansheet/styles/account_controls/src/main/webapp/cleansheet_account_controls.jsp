@@ -62,7 +62,7 @@ request.setAttribute("HPWebModel", model);
 	<jsp:attribute name="myAccountUrl">http://www.hp.com</jsp:attribute>
 </cscore:welcome>
 
-<!--
+<%--
 <cscore:welcome>
 	<jsp:attribute name="username">${HPWebModel.username}</jsp:attribute>
 	<jsp:attribute name="signInUrl">${HPWebModel.signInUrl}</jsp:attribute>
@@ -71,5 +71,5 @@ request.setAttribute("HPWebModel", model);
 	<jsp:attribute name="profileUrl">${HPWebModel.profileUrl}</jsp:attribute>
 	<jsp:attribute name="myAccountUrl">${HPWebModel.myAccountUrl}</jsp:attribute>
 </cscore:welcome>
--->
+--%>
 
