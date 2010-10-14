@@ -5,7 +5,7 @@
 	
 	GRID: Cleansheet Grid with no horizontal nor vertical navigation
 
-	For use with the HPWeb theme, this grid displays HPWeb header, footer, 
+	For use with the Cleansheet theme, this grid displays Cleansheet header, footer, 
 	and the page content.
 -----------------------------------------------------------------------------%>
 

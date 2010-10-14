@@ -48,10 +48,7 @@
 		<module>styles/portlet_chrome/level_c_chrome</module>
 		<module>styles/portlet_chrome/chromeless</module>
 
-		<!-- Style type components -->
-		<!--
-		<module>styletypes/locale_controls</module>
-		-->
+		<module>styles/locale_selector</module>
 
 		<!-- Grid components -->
 		<module>grids/horz_nav_grid</module>
