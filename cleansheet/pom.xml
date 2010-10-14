@@ -60,7 +60,7 @@
 		<module>grids/vert_nav_grid</module>
 
 		<!-- Theme components -->
-		<module>themes/hpweb_theme</module>
+		<module>themes/cleansheet_theme</module>
 
 		<!-- 'package_all' master car component need to be last module -->
 		<module>package_all</module>
