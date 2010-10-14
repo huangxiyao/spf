@@ -25,13 +25,6 @@
     	</dependency>
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
-        	<artifactId>HPLocaleSelectorStyleType</artifactId>
-			<version>${project.version}</version>
-			<type>car</type>
-    	</dependency>
-
-    	<dependency>
-        	<groupId>com.hp.frameworks</groupId>
         	<artifactId>cleansheet-lib</artifactId>
 			<version>${project.version}</version>
 			<type>car</type>
@@ -155,13 +148,6 @@
 			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
-    	<dependency>
-        	<groupId>com.hp.frameworks</groupId>
-        	<artifactId>CleansheetLocaleSelector</artifactId>
-			<version>${project.version}</version>
-			<type>car</type>
-    	</dependency>
-
 	</dependencies>
 	 
 	<build>
