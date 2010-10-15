@@ -242,7 +242,6 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
          </style>
     <![endif]-->
 	<script src="http://www8.hp.com/us/en/scripts/homepage/mootools_homepage.js" type="text/javascript">//</script>	
-	<script src="http://www8.hp.com/us/en/scripts/homepage/campaign.js" type="text/javascript" xml:space="preserve">//</script>
 	
 	<script type="text/javascript" language="JavaScript" src="${javascriptDir}hpweb_utilities.js"></script>
 	<script charset="utf-8" type="text/javascript">
@@ -321,13 +320,6 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
           <div class="max" id="page">
             <!-- BEGIN INSERT CONTENT -->
             <div id="controls">
-	            <div id="promo_area">
-	              <div class="group1"> </div>
-	
-	              <div class="group2 hidden"> </div>
-	              <div class="group3 hidden"> </div>
-	            </div>
-            
               <div class="hidden" id="carousel">	
 				<a name="jumptocontent"><span class="screenReading">${contentStart}</span></a>									
 				<vgn-portal:includePageContent />
@@ -349,7 +341,6 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 		</div>
 	</c:if>
 	<script src="http://www8.hp.com/us/en/scripts/homepage/home_init.js" type="text/javascript" xml:space="preserve">//</script>
-	    <script src="http://www8.hp.com/us/en/scripts/homepage/home_flash.js" type="text/javascript" xml:space="preserve">//</script>
 	
 	</body>
 </html>
