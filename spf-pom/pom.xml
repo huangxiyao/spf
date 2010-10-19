@@ -1,838 +1,841 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-
-
-	<groupId>com.hp.it.spf.tools</groupId>
-	<artifactId>spf-pom</artifactId>
-	<name>Shared Portal Framework super POM</name>
-	<version>2.1.6-SNAPSHOT</version>
-	<packaging>pom</packaging>
-
-	<description>
-		This POM encapsulates all the reporting features of the
-		shared
-		portal framework.
-	</description>
-
-	<scm>
-		<connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk/spf-pom</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/spf-pom
-		</developerConnection>
-		<url>http://code1.corp.hp.com/svn/spf/source/trunk/spf-pom</url>
-	</scm>
-
-	<ciManagement>
-		<system>Hudson</system>
-		<url>${continuousIntegrationUrl}</url>
-	</ciManagement>
-
-	<organization>
-		<name>Shared Portal Framework: DMITS</name>
-	</organization>
-
-	<properties>
-		<javaVersion>1.5</javaVersion>
-		<springFrameworkVersion>2.5.6</springFrameworkVersion>
-		<jmockVersion>2.5.1</jmockVersion>
-		<!-- Proposed for next Maven release as project/build/sourceEncoding. In 
-			the meantime, some plugins already recognize this. -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<!-- 2.5 fixes a bug in Maven 2.0.9 where paths containing spaces blow 
-			up -->
-		<!-- NOTE: darin.buck@hp.com: Javadoc plugin version 2.4 seems to be the 
-			only one that doesn't display the "prime the pump" problem out of (2.3, 2.4, 
-			2.5, 2.6, 2.6.1) -->
-		<mavenJavadocPluginVersion>2.4</mavenJavadocPluginVersion>
-		<vignetteVersion>7.4.2</vignetteVersion>
-		<slf4jVersion>1.5.6</slf4jVersion>
-		<logbackVersion>0.9.15</logbackVersion>
-
-		<cas.sourceReadUrl>scm:svn:http://code1.corp.hp.com/svn/cas/source</cas.sourceReadUrl>
-		<cas.sourceWriteUrl>scm:svn:https://code1.corp.hp.com/svn/cas/source</cas.sourceWriteUrl>
-		<cas.sourceViewUrl>http://code1.corp.hp.com/svn/cas/source</cas.sourceViewUrl>
-		<distributeSnapshotUrl>http://repo1.corp.hp.com/nexus/content/repositories/snapshots</distributeSnapshotUrl>
-		<distributeReleaseUrl>http://repo1.corp.hp.com/nexus/content/repositories/releases</distributeReleaseUrl>
-		<siteUrl>dav:http://repo1.corp.hp.com/site</siteUrl>
-		<continuousIntegrationUrl>http://build1.corp.hp.com/hudson</continuousIntegrationUrl>
-		<sonar.host.url>http://g4t0173g.houston.hp.com/sonar</sonar.host.url>
-	</properties>
-
-	<repositories>
-		<repository>
-			<id>central</id>
-			<name>Public</name>
-			<url>http://repo1.corp.hp.com/nexus/content/groups/public</url>
-			<layout>default</layout>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>interval:15</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-				<!--<updatePolicy>interval:1</updatePolicy>-->
-				<updatePolicy>never</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-		</repository>
-	</repositories>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>central</id>
-			<name>Public</name>
-			<url>http://repo1.corp.hp.com/nexus/content/groups/public</url>
-			<layout>default</layout>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>interval:15</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-		</pluginRepository>
-	</pluginRepositories>
-
-	<distributionManagement>
-
-		<snapshotRepository>
-			<id>snapshot</id>
-			<name>Internal Snapshots</name>
-			<url>${distributeSnapshotUrl}</url>
-		</snapshotRepository>
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <groupId>com.hp.it.spf.tools</groupId>
+    <artifactId>spf-pom</artifactId>
+    <name>Shared Portal Framework super POM</name>
+    <version>2.1.6-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <description>
+        This POM encapsulates all the reporting features of the
+        shared
+        portal framework.
+    </description>
+
+    <scm>
+        <connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk/spf-pom</connection>
+        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/spf-pom
+        </developerConnection>
+        <url>http://code1.corp.hp.com/svn/spf/source/trunk/spf-pom</url>
+    </scm>
+
+    <ciManagement>
+        <system>Hudson</system>
+        <url>${continuousIntegrationUrl}</url>
+    </ciManagement>
+
+    <organization>
+        <name>Shared Portal Framework: DMITS</name>
+    </organization>
+
+    <properties>
+        <javaVersion>1.5</javaVersion>
+        <springFrameworkVersion>2.5.6</springFrameworkVersion>
+        <jmockVersion>2.5.1</jmockVersion>
+        <!-- Proposed for next Maven release as project/build/sourceEncoding. In 
+            the meantime, some plugins already recognize this. -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- 2.5 fixes a bug in Maven 2.0.9 where paths containing spaces blow 
+            up -->
+        <!-- NOTE: darin.buck@hp.com: Javadoc plugin version 2.4 seems to be the 
+            only one that doesn't display the "prime the pump" problem out of (2.3, 2.4, 
+            2.5, 2.6, 2.6.1) -->
+        <mavenJavadocPluginVersion>2.4</mavenJavadocPluginVersion>
+        <mavenSourcePluginVersion>2.1.2</mavenSourcePluginVersion>
+        <vignetteVersion>7.4.2</vignetteVersion>
+        <slf4jVersion>1.5.6</slf4jVersion>
+        <logbackVersion>0.9.15</logbackVersion>
+
+        <cas.sourceReadUrl>scm:svn:http://code1.corp.hp.com/svn/cas/source</cas.sourceReadUrl>
+        <cas.sourceWriteUrl>scm:svn:https://code1.corp.hp.com/svn/cas/source</cas.sourceWriteUrl>
+        <cas.sourceViewUrl>http://code1.corp.hp.com/svn/cas/source</cas.sourceViewUrl>
+        <distributeSnapshotUrl>http://repo1.corp.hp.com/nexus/content/repositories/snapshots</distributeSnapshotUrl>
+        <distributeReleaseUrl>http://repo1.corp.hp.com/nexus/content/repositories/releases</distributeReleaseUrl>
+        <siteUrl>dav:http://repo1.corp.hp.com/site</siteUrl>
+        <continuousIntegrationUrl>http://build1.corp.hp.com/hudson</continuousIntegrationUrl>
+        <sonar.host.url>http://g4t0173g.houston.hp.com/sonar</sonar.host.url>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Public</name>
+            <url>http://repo1.corp.hp.com/nexus/content/groups/public</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:15</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <!--<updatePolicy>interval:1</updatePolicy>-->
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Public</name>
+            <url>http://repo1.corp.hp.com/nexus/content/groups/public</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:15</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+
+        <snapshotRepository>
+            <id>snapshot</id>
+            <name>Internal Snapshots</name>
+            <url>${distributeSnapshotUrl}</url>
+        </snapshotRepository>
 
-		<repository>
-			<id>release</id>
-			<name>Internal Releases</name>
-			<url>${distributeReleaseUrl}</url>
-		</repository>
+        <repository>
+            <id>release</id>
+            <name>Internal Releases</name>
+            <url>${distributeReleaseUrl}</url>
+        </repository>
 
-	</distributionManagement>
+    </distributionManagement>
 
-	<dependencyManagement>
-		<dependencies>
+    <dependencyManagement>
+        <dependencies>
 
 
 
 
-			<!-- Testing -->
+            <!-- Testing -->
 
 
 
 
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.4</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jmock</groupId>
-				<artifactId>jmock</artifactId>
-				<version>${jmockVersion}</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.4</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jmock</groupId>
+                <artifactId>jmock</artifactId>
+                <version>${jmockVersion}</version>
+                <scope>test</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>org.jmock</groupId>
-				<artifactId>jmock-junit4</artifactId>
-				<version>${jmockVersion}</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.jmock</groupId>
+                <artifactId>jmock-junit4</artifactId>
+                <version>${jmockVersion}</version>
+                <scope>test</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>org.jmock</groupId>
-				<artifactId>jmock-legacy</artifactId>
-				<version>${jmockVersion}</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.jmock</groupId>
+                <artifactId>jmock-legacy</artifactId>
+                <version>${jmockVersion}</version>
+                <scope>test</scope>
+            </dependency>
 
 
 
 
-			<!-- Spring framework -->
+            <!-- Spring framework -->
 
 
 
 
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring</artifactId>
-				<version>2.5.6</version>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring</artifactId>
+                <version>2.5.6</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${springFrameworkVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${springFrameworkVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-mock</artifactId>
-				<version>2.0.8</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-mock</artifactId>
+                <version>2.0.8</version>
+                <scope>test</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-webmvc-portlet</artifactId>
-				<version>${springFrameworkVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc-portlet</artifactId>
+                <version>${springFrameworkVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-webmvc</artifactId>
-				<version>${springFrameworkVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${springFrameworkVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-web</artifactId>
-				<version>${springFrameworkVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${springFrameworkVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-test</artifactId>
-				<version>${springFrameworkVersion}</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${springFrameworkVersion}</version>
+                <scope>test</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-aop</artifactId>
-				<version>${springFrameworkVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${springFrameworkVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.springmodules</groupId>
-				<artifactId>spring-modules-cache</artifactId>
-				<version>0.9</version>
-			</dependency>
+            <dependency>
+                <groupId>org.springmodules</groupId>
+                <artifactId>spring-modules-cache</artifactId>
+                <version>0.9</version>
+            </dependency>
 
 
 
 
 
-			<!-- Logging -->
+            <!-- Logging -->
 
 
 
 
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>${slf4jVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
 
 
-			<dependency>
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-core</artifactId>
-				<version>${logbackVersion}</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logbackVersion}</version>
+                <scope>test</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-classic</artifactId>
-				<version>${logbackVersion}</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logbackVersion}</version>
+                <scope>test</scope>
+            </dependency>
 
 
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.5.6</version>
-			</dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.5.6</version>
+            </dependency>
 
-			<dependency>
-				<groupId>commons-logging</groupId>
-				<artifactId>commons-logging</artifactId>
-				<version>1.1.1</version>
-			</dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.1</version>
+            </dependency>
 
-			<dependency>
-				<groupId>commons-logging</groupId>
-				<artifactId>commons-logging-api</artifactId>
-				<version>1.1</version>
-			</dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging-api</artifactId>
+                <version>1.1</version>
+            </dependency>
 
-			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>1.2.14</version>
-			</dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.14</version>
+            </dependency>
 
 
 
 
 
-			<!-- Non-CAS HP Dependencies -->
+            <!-- Non-CAS HP Dependencies -->
 
 
 
 
 
-			<dependency>
-				<groupId>com.hp.frameworks</groupId>
-				<artifactId>timber-core</artifactId>
-				<version>2.1.2</version>
-			</dependency>
-			<dependency>
-				<groupId>com.hp.websat</groupId>
-				<artifactId>timber</artifactId>
-				<version>1.2.5</version>
-			</dependency>
+            <dependency>
+                <groupId>com.hp.frameworks</groupId>
+                <artifactId>timber-core</artifactId>
+                <version>2.1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hp.websat</groupId>
+                <artifactId>timber</artifactId>
+                <version>1.2.5</version>
+            </dependency>
 
-			<dependency>
-				<groupId>com.hp.websat</groupId>
-				<artifactId>wpa-framework</artifactId>
-				<version>3.5.0</version>
-			</dependency>
+            <dependency>
+                <groupId>com.hp.websat</groupId>
+                <artifactId>wpa-framework</artifactId>
+                <version>3.5.0</version>
+            </dependency>
 
-			<dependency>
-				<groupId>com.hp.frameworks</groupId>
-				<artifactId>wpa-portlet-core</artifactId>
-				<version>3.0.2</version>
-			</dependency>
+            <dependency>
+                <groupId>com.hp.frameworks</groupId>
+                <artifactId>wpa-portlet-core</artifactId>
+                <version>3.0.2</version>
+            </dependency>
 
 
 
 
-			<!-- Vignette -->
+            <!-- Vignette -->
 
 
 
 
-			<dependency>
-				<groupId>vignette</groupId>
-				<artifactId>vgn-portal-core</artifactId>
-				<version>${vignetteVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>vignette</groupId>
+                <artifactId>vgn-portal-core</artifactId>
+                <version>${vignetteVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>vignette</groupId>
-				<artifactId>vgn-portal-log</artifactId>
-				<version>${vignetteVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>vignette</groupId>
+                <artifactId>vgn-portal-log</artifactId>
+                <version>${vignetteVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>vignette</groupId>
-				<artifactId>vgn-portal-linking</artifactId>
-				<version>${vignetteVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>vignette</groupId>
+                <artifactId>vgn-portal-linking</artifactId>
+                <version>${vignetteVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>vignette</groupId>
-				<artifactId>vgn-wsrp-toolkit</artifactId>
-				<version>${vignetteVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>vignette</groupId>
+                <artifactId>vgn-wsrp-toolkit</artifactId>
+                <version>${vignetteVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>vignette</groupId>
-				<artifactId>vgn-portal-cache</artifactId>
-				<version>${vignetteVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>vignette</groupId>
+                <artifactId>vgn-portal-cache</artifactId>
+                <version>${vignetteVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>vignette</groupId>
-				<artifactId>vgn-jsr-container-taglib</artifactId>
-				<version>${vignetteVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>vignette</groupId>
+                <artifactId>vgn-jsr-container-taglib</artifactId>
+                <version>${vignetteVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>vignette</groupId>
-				<artifactId>vgn-portal-base</artifactId>
-				<version>${vignetteVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>vignette</groupId>
+                <artifactId>vgn-portal-base</artifactId>
+                <version>${vignetteVersion}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>vignette</groupId>
-				<artifactId>webinf-classes</artifactId>
-				<version>${vignetteVersion}</version>
-			</dependency>
+            <dependency>
+                <groupId>vignette</groupId>
+                <artifactId>webinf-classes</artifactId>
+                <version>${vignetteVersion}</version>
+            </dependency>
 
 
 
 
-			<!-- Portal/Portlet -->
+            <!-- Portal/Portlet -->
 
 
-			<dependency>
-				<groupId>org.apache.portals.pluto</groupId>
-				<artifactId>pluto-taglib</artifactId>
-				<version>2.0.0</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.portals.pluto</groupId>
+                <artifactId>pluto-taglib</artifactId>
+                <version>2.0.0</version>
+            </dependency>
 
-			<dependency>
-				<groupId>javax.portlet</groupId>
-				<artifactId>portlet-api</artifactId>
-				<version>2.0</version>
-				<scope>provided</scope>
-			</dependency>
+            <dependency>
+                <groupId>javax.portlet</groupId>
+                <artifactId>portlet-api</artifactId>
+                <version>2.0</version>
+                <scope>provided</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>com.sun.portal.portletcontainer</groupId>
-				<artifactId>container</artifactId>
-				<version>2.1-r830</version>
-			</dependency>
+            <dependency>
+                <groupId>com.sun.portal.portletcontainer</groupId>
+                <artifactId>container</artifactId>
+                <version>2.1-r830</version>
+            </dependency>
 
-			<dependency>
-				<groupId>com.sun.portal.portletcontainer</groupId>
-				<artifactId>portlet-container</artifactId>
-				<version>2.1-r830</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.portal.portletcontainer</groupId>
-				<artifactId>portletadmin</artifactId>
-				<version>2.1-r830</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.portal.portletcontainer</groupId>
-				<artifactId>portletcontainercontext</artifactId>
-				<version>2.1-r830</version>
-			</dependency>
+            <dependency>
+                <groupId>com.sun.portal.portletcontainer</groupId>
+                <artifactId>portlet-container</artifactId>
+                <version>2.1-r830</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.portal.portletcontainer</groupId>
+                <artifactId>portletadmin</artifactId>
+                <version>2.1-r830</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.portal.portletcontainer</groupId>
+                <artifactId>portletcontainercontext</artifactId>
+                <version>2.1-r830</version>
+            </dependency>
 
-			<dependency>
-				<groupId>com.sun.portal.portletcontainer</groupId>
-				<artifactId>pc-database-persistence</artifactId>
-				<version>1.0.1</version>
-			</dependency>
+            <dependency>
+                <groupId>com.sun.portal.portletcontainer</groupId>
+                <artifactId>pc-database-persistence</artifactId>
+                <version>1.0.1</version>
+            </dependency>
 
-			<dependency>
-				<groupId>com.sun.portal.portletcontainer</groupId>
-				<artifactId>portletdriver</artifactId>
-				<version>2.1-r830</version>
-			</dependency>
+            <dependency>
+                <groupId>com.sun.portal.portletcontainer</groupId>
+                <artifactId>portletdriver</artifactId>
+                <version>2.1-r830</version>
+            </dependency>
 
-			<dependency>
-				<groupId>com.sun.portal.wsrp</groupId>
-				<artifactId>wsrp-common</artifactId>
-				<version>2.1-r806</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.portal.wsrp</groupId>
-				<artifactId>wsrp-producer</artifactId>
-				<version>2.1-r806</version>
-			</dependency>
+            <dependency>
+                <groupId>com.sun.portal.wsrp</groupId>
+                <artifactId>wsrp-common</artifactId>
+                <version>2.1-r806</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.portal.wsrp</groupId>
+                <artifactId>wsrp-producer</artifactId>
+                <version>2.1-r806</version>
+            </dependency>
 
 
 
 
-			<!-- Web Services -->
+            <!-- Web Services -->
 
 
 
 
-			<dependency>
-				<groupId>wsdl4j</groupId>
-				<artifactId>wsdl4j</artifactId>
-				<version>1.6.1</version>
-			</dependency>
+            <dependency>
+                <groupId>wsdl4j</groupId>
+                <artifactId>wsdl4j</artifactId>
+                <version>1.6.1</version>
+            </dependency>
 
-			<dependency>
-				<groupId>castor</groupId>
-				<artifactId>castor</artifactId>
-				<version>0.9.9</version>
-			</dependency>
+            <dependency>
+                <groupId>castor</groupId>
+                <artifactId>castor</artifactId>
+                <version>0.9.9</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.axis</groupId>
-				<artifactId>axis-jaxrpc</artifactId>
-				<version>1.4</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.axis</groupId>
+                <artifactId>axis-jaxrpc</artifactId>
+                <version>1.4</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.axis</groupId>
-				<artifactId>axis</artifactId>
-				<version>1.4</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.axis</groupId>
+                <artifactId>axis</artifactId>
+                <version>1.4</version>
+            </dependency>
 
 
-			<dependency>
-				<groupId>org.apache.axis</groupId>
-				<artifactId>axis-saaj</artifactId>
-				<version>1.4</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.axis</groupId>
+                <artifactId>axis-saaj</artifactId>
+                <version>1.4</version>
+            </dependency>
 
-			<dependency>
-				<groupId>javax.xml.soap</groupId>
-				<artifactId>saaj-api</artifactId>
-				<version>1.3</version>
-			</dependency>
+            <dependency>
+                <groupId>javax.xml.soap</groupId>
+                <artifactId>saaj-api</artifactId>
+                <version>1.3</version>
+            </dependency>
 
-			<dependency>
-				<groupId>javax.xml.ws</groupId>
-				<artifactId>jaxws-api</artifactId>
-				<version>2.1</version>
-			</dependency>
+            <dependency>
+                <groupId>javax.xml.ws</groupId>
+                <artifactId>jaxws-api</artifactId>
+                <version>2.1</version>
+            </dependency>
 
-			<dependency>
-				<groupId>com.sun.xml.ws</groupId>
-				<artifactId>jaxws-rt</artifactId>
-				<version>2.1.4</version>
-			</dependency>
+            <dependency>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>jaxws-rt</artifactId>
+                <version>2.1.4</version>
+            </dependency>
 
-			<dependency>
-				<groupId>javax.jws</groupId>
-				<artifactId>jsr181-api</artifactId>
-				<version>1.0-MR1</version>
-			</dependency>
+            <dependency>
+                <groupId>javax.jws</groupId>
+                <artifactId>jsr181-api</artifactId>
+                <version>1.0-MR1</version>
+            </dependency>
 
 
 
 
-			<!-- Persistence -->
+            <!-- Persistence -->
 
 
 
 
-			<dependency>
-				<groupId>javax.persistence</groupId>
-				<artifactId>persistence-api</artifactId>
-				<version>1.0</version>
-			</dependency>
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>persistence-api</artifactId>
+                <version>1.0</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.eclipse.persistence</groupId>
-				<artifactId>eclipselink</artifactId>
-				<version>1.0.2</version>
-			</dependency>
+            <dependency>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>eclipselink</artifactId>
+                <version>1.0.2</version>
+            </dependency>
 
-			<dependency>
-				<groupId>com.oracle</groupId>
-				<artifactId>ojdbc14</artifactId>
-				<version>10.2</version>
-			</dependency>
+            <dependency>
+                <groupId>com.oracle</groupId>
+                <artifactId>ojdbc14</artifactId>
+                <version>10.2</version>
+            </dependency>
 
-			<dependency>
-				<groupId>commons-dbcp</groupId>
-				<artifactId>commons-dbcp</artifactId>
-				<version>1.4</version>
-				<type>jar</type>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>1.4</version>
+                <type>jar</type>
+                <scope>test</scope>
+            </dependency>
 
 
 
 
-			<!-- Apache Commons -->
+            <!-- Apache Commons -->
 
 
 
 
-			<dependency>
-				<groupId>commons-codec</groupId>
-				<artifactId>commons-codec</artifactId>
-				<version>1.3</version>
-			</dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.3</version>
+            </dependency>
 
-			<dependency>
-				<groupId>commons-lang</groupId>
-				<artifactId>commons-lang</artifactId>
-				<version>2.3</version>
-			</dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.3</version>
+            </dependency>
 
-			<dependency>
-				<groupId>commons-fileupload</groupId>
-				<artifactId>commons-fileupload</artifactId>
-				<version>1.2.1</version>
-			</dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.2.1</version>
+            </dependency>
 
-			<dependency>
-				<groupId>commons-io</groupId>
-				<artifactId>commons-io</artifactId>
-				<version>1.4</version>
-			</dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>1.4</version>
+            </dependency>
 
-			<dependency>
-				<groupId>commons-discovery</groupId>
-				<artifactId>commons-discovery</artifactId>
-				<version>0.2</version>
-			</dependency>
+            <dependency>
+                <groupId>commons-discovery</groupId>
+                <artifactId>commons-discovery</artifactId>
+                <version>0.2</version>
+            </dependency>
 
-			<dependency>
-				<groupId>commons-httpclient</groupId>
-				<artifactId>commons-httpclient</artifactId>
-				<version>3.0.1</version>
-			</dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>3.0.1</version>
+            </dependency>
 
 
 
 
-			<!-- XML Processing -->
+            <!-- XML Processing -->
 
 
 
 
-			<dependency>
-				<groupId>org.jdom</groupId>
-				<artifactId>jdom</artifactId>
-				<version>1.1</version>
-			</dependency>
+            <dependency>
+                <groupId>org.jdom</groupId>
+                <artifactId>jdom</artifactId>
+                <version>1.1</version>
+            </dependency>
 
-			<dependency>
-				<groupId>javax.xml.bind</groupId>
-				<artifactId>jaxb-api</artifactId>
-				<version>2.1</version>
-			</dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>2.1</version>
+            </dependency>
 
-			<dependency>
-				<groupId>xerces</groupId>
-				<artifactId>xercesImpl</artifactId>
-				<version>2.8.1</version>
-				<scope>runtime</scope>
-			</dependency>
+            <dependency>
+                <groupId>xerces</groupId>
+                <artifactId>xercesImpl</artifactId>
+                <version>2.8.1</version>
+                <scope>runtime</scope>
+            </dependency>
 
 
 
 
-			<!-- General Web -->
+            <!-- General Web -->
 
 
 
 
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>jstl</artifactId>
-				<version>1.1.2</version>
-			</dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>1.1.2</version>
+            </dependency>
 
-			<dependency>
-				<groupId>taglibs</groupId>
-				<artifactId>standard</artifactId>
-				<version>1.1.2</version>
-			</dependency>
+            <dependency>
+                <groupId>taglibs</groupId>
+                <artifactId>standard</artifactId>
+                <version>1.1.2</version>
+            </dependency>
 
-			<dependency>
-				<groupId>struts</groupId>
-				<artifactId>struts</artifactId>
-				<version>1.2.9</version>
-			</dependency>
+            <dependency>
+                <groupId>struts</groupId>
+                <artifactId>struts</artifactId>
+                <version>1.2.9</version>
+            </dependency>
 
-			<dependency>
-				<groupId>dnsjava</groupId>
-				<artifactId>dnsjava</artifactId>
-				<version>2.0.3</version>
-			</dependency>
+            <dependency>
+                <groupId>dnsjava</groupId>
+                <artifactId>dnsjava</artifactId>
+                <version>2.0.3</version>
+            </dependency>
 
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>servlet-api</artifactId>
-				<version>2.5</version>
-				<scope>provided</scope>
-			</dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.5</version>
+                <scope>provided</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>javax.servlet.jsp</groupId>
-				<artifactId>jsp-api</artifactId>
-				<version>2.1</version>
-				<scope>provided</scope>
-			</dependency>
+            <dependency>
+                <groupId>javax.servlet.jsp</groupId>
+                <artifactId>jsp-api</artifactId>
+                <version>2.1</version>
+                <scope>provided</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>com.bea</groupId>
-				<artifactId>weblogic</artifactId>
-				<version>10.0.1.0</version>
-			</dependency>
+            <dependency>
+                <groupId>com.bea</groupId>
+                <artifactId>weblogic</artifactId>
+                <version>10.0.1.0</version>
+            </dependency>
 
 
 
 
-			<!-- Mail -->
+            <!-- Mail -->
 
 
 
 
-			<dependency>
-				<groupId>sun-javamail</groupId>
-				<artifactId>mail</artifactId>
-				<version>1.4</version>
-			</dependency>
+            <dependency>
+                <groupId>sun-javamail</groupId>
+                <artifactId>mail</artifactId>
+                <version>1.4</version>
+            </dependency>
 
-			<!-- Note the one above... Which one should we keep? -->
-			<dependency>
-				<groupId>javax.mail</groupId>
-				<artifactId>mail</artifactId>
-				<version>1.4</version>
-			</dependency>
+            <!-- Note the one above... Which one should we keep? -->
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>1.4</version>
+            </dependency>
 
 
 
 
-			<!-- Maven -->
+            <!-- Maven -->
 
 
 
 
-			<dependency>
-				<groupId>org.apache.maven</groupId>
-				<artifactId>maven-plugin-api</artifactId>
-				<version>2.0</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1-alpha-2</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-plugin-api</artifactId>
+                <version>2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1-alpha-2</version>
+            </dependency>
 
 
 
 
-			<!-- Other -->
+            <!-- Other -->
 
 
 
 
-			<dependency>
-				<groupId>javax.ccpp</groupId>
-				<artifactId>ccpp</artifactId>
-				<version>1.0</version>
-			</dependency>
+            <dependency>
+                <groupId>javax.ccpp</groupId>
+                <artifactId>ccpp</artifactId>
+                <version>1.0</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.aspectj</groupId>
-				<artifactId>aspectjweaver</artifactId>
-				<version>1.6.0</version>
-			</dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>1.6.0</version>
+            </dependency>
 
-			<dependency>
-				<groupId>net.sf.ehcache</groupId>
-				<artifactId>ehcache</artifactId>
-				<version>1.5.0</version>
-			</dependency>
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache</artifactId>
+                <version>1.5.0</version>
+            </dependency>
 
-			<dependency>
-				<groupId>net.sf.json-lib</groupId>
-				<artifactId>json-lib</artifactId>
-				<version>2.2.2</version>
-				<classifier>jdk15</classifier>
-			</dependency>
+            <dependency>
+                <groupId>net.sf.json-lib</groupId>
+                <artifactId>json-lib</artifactId>
+                <version>2.2.2</version>
+                <classifier>jdk15</classifier>
+            </dependency>
 
 
-		</dependencies>
-	</dependencyManagement>
+        </dependencies>
+    </dependencyManagement>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>com.hp.it.spf.tools</groupId>
-				<artifactId>spf-maven-car-plugin</artifactId>
-				<extensions>true</extensions>
-				<version>2.1.1</version>
-			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.hp.it.spf.tools</groupId>
+                <artifactId>spf-maven-car-plugin</artifactId>
+                <extensions>true</extensions>
+                <version>2.1.1</version>
+            </plugin>
 
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<inherited>true</inherited>
-					<configuration>
-						<source>${javaVersion}</source>
-						<target>${javaVersion}</target>
-					</configuration>
-				</plugin>
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${mavenJavadocPluginVersion}</version>
+                    <inherited>true</inherited>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 
-				<plugin>
-					<artifactId>maven-resources-plugin</artifactId>
-					<inherited>true</inherited>
-					<configuration>
-						<encoding>UTF-8</encoding>
-					</configuration>
-				</plugin>
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${mavenSourcePluginVersion}</version>
+                    <inherited>true</inherited>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 
-				<plugin>
-					<artifactId>maven-antrun-plugin</artifactId>
-					<version>1.2</version>  <!-- 1.2 allows property checks on tasks, e.g. unless='<property>' -->
-				</plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
 
-				<plugin>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>${mavenJavadocPluginVersion}</version>
-					<inherited>true</inherited>
-					<executions>
-						<execution>
-							<id>attach-javadocs</id>
-							<phase>package</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <source>${javaVersion}</source>
+                        <target>${javaVersion}</target>
+                    </configuration>
+                </plugin>
 
-				<plugin>
-					<artifactId>maven-source-plugin</artifactId>
-					<inherited>true</inherited>
-					<executions>
-						<execution>
-							<id>attach-sources</id>
-							<phase>package</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
 
-			</plugins>
-		</pluginManagement>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.2</version>  <!-- 1.2 allows property checks on tasks, e.g. unless='<property>' -->
+                </plugin>
 
-	</build>
+            </plugins>
+        </pluginManagement>
 
-	<reporting>
-		<plugins>
+    </build>
 
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${mavenJavadocPluginVersion}</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<docfilessubdirs>true</docfilessubdirs>
-					<links>
-						<link>http://java.sun.com/j2se/${javaVersion}.0/docs/api/</link>
-						<link>http://static.springframework.org/spring/docs/2.5.x/api/
-						</link>
-					</links>
-				</configuration>
-			</plugin>
+    <reporting>
+        <plugins>
 
-			<!-- Generate Sonar report link in site reports -->
-			<plugin>
-				<groupId>org.codehaus.sonar-plugins</groupId>
-				<artifactId>maven-report</artifactId>
-				<version>0.1</version>
-			</plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${mavenJavadocPluginVersion}</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <docfilessubdirs>true</docfilessubdirs>
+                    <links>
+                        <link>http://java.sun.com/j2se/${javaVersion}.0/docs/api/</link>
+                        <link>http://static.springframework.org/spring/docs/2.5.x/api/
+                        </link>
+                    </links>
+                </configuration>
+            </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-changes-plugin</artifactId>
-				<version>2.3</version>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>changes-report</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
+            <!-- Generate Sonar report link in site reports -->
+            <plugin>
+                <groupId>org.codehaus.sonar-plugins</groupId>
+                <artifactId>maven-report</artifactId>
+                <version>0.1</version>
+            </plugin>
 
-		</plugins>
-	</reporting>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changes-plugin</artifactId>
+                <version>2.3</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>changes-report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+        </plugins>
+    </reporting>
 </project>
