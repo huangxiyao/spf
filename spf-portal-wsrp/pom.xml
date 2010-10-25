@@ -16,7 +16,7 @@
 	</description>
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
-		<artifactId>spf-portal-parent</artifactId>
+		<artifactId>portal</artifactId>
 		<version>2.1.2-SNAPSHOT</version>
 	</parent>
 	<dependencies>
