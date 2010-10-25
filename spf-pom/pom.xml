@@ -794,6 +794,16 @@
                     <version>1.2</version>  <!-- 1.2 allows property checks on tasks, e.g. unless='<property>' -->
                 </plugin>
 
+                <plugin>
+                    <artifactId>tool-starteam-maven-plugin</artifactId>
+                    <groupId>com.hp.it.118361</groupId>
+                    <version>1.1.5-SNAPSHOT</version>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <starteamUrl>stpro1.atlanta.hp.com:7100:/TSGIT_SPF-src/TSGIT_SPF-src/Code</starteamUrl>
+                    </configuration>
+                </plugin>
+
             </plugins>
         </pluginManagement>
 
