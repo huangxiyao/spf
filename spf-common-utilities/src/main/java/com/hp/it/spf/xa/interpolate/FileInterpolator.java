@@ -21,6 +21,10 @@ import java.util.Locale;
  * concrete subclasses for more information. This class uses the base
  * {@link TokenParser} heavily to do its work.
  * </p>
+ * <blockquote>
+ * <p><b>Note:</b> <code>TokenParser</code> is not thread-safe, so neither is
+ * <code>FileInterpolator</code>.
+ * </blockquote>
  * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>

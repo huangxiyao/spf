@@ -1002,12 +1002,12 @@ get the localized values; they are not custom translations.</p>
 <code>I18nUtility.getFullDisplayDate</code>)</h4>
 </a>
 
-<p>Dates are frequently displayed in different, customary formats
-depending on the locale. Localized, formatted date strings in Java come
-in four forms: short, medium, long, and full. Although the JDK provides
-all the API's necessary to let you generate arbitrary-format date
-strings, the SPF common utilities provide the following convenience
-methods for you:</p>
+<p>Dates and times are frequently displayed in different, customary
+formats depending on the locale. Localized, formatted date and time
+strings in Java come in four forms: short, medium, long, and full.
+Although the JDK provides all the API's necessary to let you generate
+arbitrary-format date and time strings, the SPF common utilities provide
+the following convenience methods for you:</p>
 
 <dl>
 	<dt>{@link
@@ -1019,57 +1019,99 @@ methods for you:</p>
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.I18nUtility#getFullDisplayDate(Date,TimeZone,Locale)}</dt>
 	<dd>
-	<p>These methods return the Java-default formatted date strings in
-	each of the four styles: short (corresponding to {@link
+	<p>These methods return the Java-default formatted date and time
+	strings in each of the four styles: short (corresponding to {@link
 	java.text.DateFormat#SHORT}), medium ({@link
 	java.text.DateFormat#MEDIUM}), long ({@link
 	java.text.DateFormat#LONG}), and full ({@link
-	java.text.DateFormat#FULL}). The arguments are simply the {@link
-	java.util.Date} in question, the {@link java.util.TimeZone} for that
-	date, and the {@link java.util.Locale} in which to localize it.</p>
+	java.text.DateFormat#FULL}). The arguments are simply:</p>
 
-	<p>For example (where the <code>date</code> is for February 14,
-	2009, at 10:56:55 PM in the North American Pacific timezone, and <code>tz</code>
-	is that timezone):</p>
+	<ul>
+		<li>the moment of time in question, represented as a {@link
+		java.util.Date} object (no default);</li>
+		<li>the {@link java.util.TimeZone} to use when timezone-adjusting
+		the date and time for that moment (GMT by default, if you pass a null
+		<code>TimeZone</code>);</li>
+		<li>and the {@link java.util.Locale} in which to localize the
+		date and time for that moment (no default)</li>
+	</ul>
+
+	<p>For example (where the <code>moment</code> is for February 14,
+	2009, at 10:56:55 PM in the US Pacific timezone, and <code>tz</code> is
+	that timezone):</p>
+	<p>
 	<dl>
-		<dt><code>I18nUtility.getShortDisplayDate(date, tz,
+		<dt><code>I18nUtility.getShortDisplayDate(moment, tz,
 		Locale.US)</code></dt>
 		<dd>returns <code>2/14/09 10:56 PM</code></dd>
-		<dt><code>I18nUtility.getShortDisplayDate(date, tz,
+		<dt><code>I18nUtility.getShortDisplayDate(moment, tz,
 		Locale.GERMANY)</code></dt>
 		<dd>returns <code>14.02.09 22:56</code></dd>
-		<dt><code>I18nUtility.getMediumDisplayDate(date, tz,
+		<dt><code>I18nUtility.getMediumDisplayDate(moment, tz,
 		Locale.US)</code></dt>
 		<dd>returns <code>Feb 14, 2009 10:56:55 PM</code></dd>
-		<dt><code>I18nUtility.getMediumDisplayDate(date, tz,
+		<dt><code>I18nUtility.getMediumDisplayDate(moment, tz,
 		Locale.GERMANY)</code></dt>
 		<dd>returns <code>14.02.2009 22:56:55</code></dd>
 
-		<dt><code>I18nUtility.getLongDisplayDate(date, tz,
+		<dt><code>I18nUtility.getLongDisplayDate(moment, tz,
 		Locale.US)</code></dt>
 		<dd>returns <code>February 14, 2009 10:56:55 PM PST</code></dd>
-		<dt><code>I18nUtility.getLongDisplayDate(date, tz,
+		<dt><code>I18nUtility.getLongDisplayDate(moment, tz,
 		Locale.GERMANY)</code></dt>
 		<dd>returns <code>14. Februar 2009 22:56:55 PST</code></dd>
-		<dt><code>I18nUtility.getFullDisplayDate(date, tz,
+		<dt><code>I18nUtility.getFullDisplayDate(moment, tz,
 		Locale.US)</code></dt>
 		<dd>returns <code>Saturday, February 14, 2009 10:56:55 PM
 		PST</code></dd>
-		<dt><code>I18nUtility.getFullDisplayDate(date, tz,
+		<dt><code>I18nUtility.getFullDisplayDate(moment, tz,
 		Locale.GERMANY)</code></dt>
 		<dd>returns <code>Samstag, 14. Februar 2009 22.56 Uhr PST</code></dd>
 	</dl>
-	<p>If you need different date string formats, please use the Java
-	API's directly.</p>
+	</p>
+	</dd>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getShortDisplayDate(Date,TimeZone,Locale,boolean)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getMediumDisplayDate(Date,TimeZone,Locale,boolean)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getLongDisplayDate(Date,TimeZone,Locale,boolean)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#getFullDisplayDate(Date,TimeZone,Locale,boolean)}</dt>
+	<dd>
+	<p>These methods are like the above, but through the boolean
+	parameter they give you the option of controlling whether both date and
+	time are returned, or only date (year, month, day). When true, these
+	methods behave the same as the previous ones, returning both date and
+	time. When false, only date is returned.</p>
+	<p>When you ask only for date, note that the <code>TimeZone</code>
+	parameter is still relevant, as are whatever hours, minutes and seconds
+	are recorded in the <code>Date</code> parameter. In other words, you
+	will be returned the date of that moment, timezone-adjusted - the same
+	as if you had asked for time as well, just with the time part missing
+	from the return value.</p>
+	<p>Also, note there is a difference in the consequence of passing a
+	null <code>TimeZone</code>, based on the boolean parameter. If the
+	boolean is true (ie you are asking for both date and time), a null
+	timezone will be disregarded and GMT will be assumed. But if the
+	boolean is false (ie you are asking for date only), no timezone in
+	particular will be assumed. This does not mean timezone will not be
+	taken into account at all, though - in the Java data model, your <code>Date</code>
+	is just a moment in time (like a Unix "epoch"), so it is impossible to
+	provide a date for it without applying <i>some</i> timezone. Java
+	internally assumes the server timezone in such cases, so that is what
+	will happen in this case too, when the boolean is false and the
+	timezone you pass is null.</p>
 	</dd>
 </dl>
 
-<p>Please see the method documentation for more information.</p>
+<p>Please see the method documentation for more information. If you
+need different date string formats, please use the Java API's directly.</p>
 
 <blockquote>
-<p><b>Note:</b> The SPF uses the translations and default
-date-format patterns built-into the JDK to get the localized values;
-they are not custom SPF translations or formats.</p>
+<p><b>Note:</b> The SPF uses the localization patterns built-into
+the JDK to get the localized values; they are not custom SPF
+translations or formats.</p>
 </blockquote>
 
 <a name="i18n.display.other">
@@ -2171,6 +2213,13 @@ reload.checkPeriod = 3600
 		<td>Added <code>propertyresourcebundlemanager.properties</code>
 		and <code>reload.checkPeriod</code> to <code>PropertyResourceBundleManager</code>
 		discussion.</td>
+	</tr>
+	<tr>
+		<td>1.4</td>
+		<td>Dec 9 2010</td>
+		<td>S. Jorgenson</td>
+		<td>Added new <code>get*DisplayDate</code> methods which take
+		boolean parameter.</td>
 	</tr>
 </table>
 <p></p>
