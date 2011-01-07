@@ -470,15 +470,25 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	    int i = 1;
 	    while (atts.hasNext()) {
 		Locale locale = (Locale) atts.next();
+		if (locale == null)
+		    continue;
+		
 		Locale displayInLocale = displayLocale;
-
 		// get display name according to the settings
 		if (displayInLocale == null) {
 		    displayInLocale = locale;
 		}
 		String dispName = I18nUtility.getLocaleDisplayName(locale,
 			displayInLocale, flags);
+		if ((dispName == null) || (dispName.trim().length() == 0))
+		    continue;
+		dispName = dispName.trim();
+		
 		String value = I18nUtility.localeToLanguageTag(locale);
+		if ((value == null) || (value.trim().length() == 0))
+		    continue;
+		value = value.trim();
+		
 		// both the display name and value need to be HTML-escaped
 		// just in case
 		html.append("<option value=\"" + Utils.escapeXml(value) + "\"");

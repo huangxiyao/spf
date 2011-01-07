@@ -57,6 +57,10 @@ import com.vignette.portal.website.enduser.PortalContext;
  * final output. Content surrounded by container tokens can itself contain other
  * tokens, including nested occurrences of container tokens.
  * </p>
+ * <p>
+ * <b>Note:</b> <code>TokenParser</code> is not thread-safe, so neither is
+ * <code>FileInterpolator</code>.
+ * </p>
  * </blockquote>
  * 
  * <dl>
@@ -67,12 +71,18 @@ import com.vignette.portal.website.enduser.PortalContext;
  * Use these tokens around sections of content which should only be included in
  * the interpolated content before or after certain dates. You can nest these
  * tokens for a date range (ie content that should be included only in-between
- * certain dates). The <code><i>date</i></code> must adhere to the
- * {@link java.text.SimpleDateFormat} pattern in
- * {@link com.hp.it.spf.xa.interpolate.TokenParser#DATE_FORMAT}, which at this
- * writing is the following:</p:>
+ * certain dates). The <code><i>date</i></code> must adhere to either of these
+ * {@link java.text.SimpleDateFormat} patterns in
+ * {@link com.hp.it.spf.xa.interpolate.TokenParser}:
+ * </p>
+ * <dl>
+ * <dt>{@link com.hp.it.spf.xa.interpolate.TokenParser#PATTERN_DATETIME}</dt>
+ * <dd>
+ * <p>
+ * At the time of this writing, this pattern is the following:
+ * </p>
  * 
- * <code><i>M</i>/<i>d</i>/<i>yyyy</i> <i>h</i>:<i>mm</i>:<i>ss</i> <i>a</i> <i>z</i></code>
+ * <code><i>M</i>/<i>d</i>/<i>yyyy</i> <i>h</i>:<i>mm</i> <i>a</i> <i>z</i></code>
  * 
  * <ul>
  * <li><code><i>M</i></code> is a one or two-digit month</li>
@@ -80,13 +90,42 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <li><code><i>yyyy</i></code> is a four-digit year</li>
  * <li><code><i>h</i></code> is a one or two-digit hour (12 hour clock)</li>
  * <li><code><i>mm</i></code> is a two-digit minutes</li>
- * <li><code><i>ss</i></code> is a two-digit seconds</li>
  * <li><code><i>a</i></code> is <code>AM</code> or <code>PM</code></li>
  * <li><code><i>z</i></code> is the timezone such as <code>GMT</code> for
  * Greenwich Mean Time, <code>PST</code> for Pacific Standard Time,
  * <code>GMT-05:00</code> for 5 hours behind GMT, etc.</li>
  * </ul>
  * 
+ * <p>
+ * For example: <code>5/20/2010 11:30 PM GMT</code>. Notice the time is
+ * specified down to the minute; seconds cannot be specified and are assumed to
+ * be zero, so the specified minute is "sharp".
+ * </p>
+ * </dd>
+ * <dt>{@link com.hp.it.spf.xa.interpolate.TokenParser#PATTERN_DATE}</dt>
+ * <dd>
+ * <p>
+ * At the time of this writing, this pattern is the same as above, but with the
+ * calendar date only:
+ * </p>
+ * 
+ * <code><i>M</i>/<i>d</i>/<i>yyyy</i></code>
+ * 
+ * <ul>
+ * <li><code><i>M</i></code> is a one or two-digit month</li>
+ * <li><code><i>d</i></code> is a one or two-digit day of month</li>
+ * <li><code><i>yyyy</i></code> is a four-digit year</li>
+ * </ul>
+ * 
+ * <p>
+ * For example: <code>5/20/2010</code>. Note that GMT will be assumed by the
+ * system when you use this pattern for your <code><i>date</i></code>. In other
+ * words, when you use this date-only format, the system compares the current
+ * date in the GMT timezone against the <code><i>date</i></code> you provide in
+ * the token.
+ * </p>
+ * </dd>
+ * </dl>
  * <p>
  * The content enclosed by the tokens can be anything, including any of the
  * other special tokens listed here.
@@ -98,21 +137,88 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * 
  * <pre>
- * This content is for everybody.
- * {AFTER:1/5/2009 8:00:00 AM GMT}
- * This content is only for after 8 AM on January 5 2009 (Greenwich).
+ * This content is for all times.
+ * {AFTER:1/5/2009 8:00 AM GMT}
+ * This content is only for after 8 AM sharp on January 5 2009 (Greenwich).
  * {/AFTER}
- * {BEFORE:6/10/2009 12:00:00 PM CDT}
- * This content is only for until noon on June 10 2009 (US Central Time).
+ * {BEFORE:6/10/2009 12:00 PM CDT}
+ * This content is only for until noon (sharp) on June 10 2009 (US Central Time).
  * {/BEFORE}
- * {AFTER:9/1/2009 12:00:00 AM GMT}
- *   {BEFORE:10/1/2009 12:00:00 AM GMT}
- *   This content is only for September 2009 (Greenwich).
+ * {AFTER:9/1/2009}
+ *   {BEFORE:10/1/2009}
+ *   This content is only for any day in September 2009 (Greenwich)).
  *   {/BEFORE}
  * {/AFTER}
  * </pre>
  * 
  * </p>
+ * </dd>
+ * 
+ * <dt><a name="auth"><code>{AUTH:<i>types</i>}...{/AUTH}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use this token around a section of content which should only be included in
+ * the interpolated content if the user's current SPF authentication type (eg
+ * HPP, AtHP, etc) qualifies against the listed <code><i>types</i></code>. For
+ * example, using this token, a single file can contain the proper content for
+ * multiple SPF authentication types, simplifying administration of a portal
+ * component which must display different content for users of different SPF
+ * authentication systems.
+ * </p>
+ * <p>
+ * In the <code><i>types</i></code> parameter to the
+ * <code>{AUTH:<i>types</i>}</code> token, you can list just a single
+ * authentication type code, or multiple ones (use the <code>|</code> character
+ * to delimit them). Authentication type codes correspond to the supported SPF
+ * authentication systems, which at this time of writing are HPP (both standard
+ * and federated) and AtHP:
+ * </p>
+ * <ul>
+ * <li>For standard HPP, use this authentication type code: <code>HPP</code></li>
+ * <li>For federated HPP, use this authentication type code: <code>FED</code></li>
+ * <li>For the AtHP employee portal, use this code: <code>ATHP</code></li>
+ * </ul>
+ * 
+ * <p>
+ * The content enclosed by the <code>{AUTH:<i>types</i>}</code> and
+ * <code>{/AUTH}</code> tokens is omitted from the returned content unless the
+ * user's current SPF authentication type is one of the types listed in the
+ * token.
+ * </p>
+ * <p>
+ * You may also prefix the <code>!</code> character to any authentication type
+ * code listed with the token, in order to indicate negation. The content
+ * enclosed by the <code>{AUTH}</code> token is then omitted from the returned
+ * content when the user's current SPF authentication type is <b>not</b> the
+ * negated type.
+ * </p>
+ * <p>
+ * The content enclosed by the <code>{AUTH:<i>types</i>}</code> and
+ * <code>{/AUTH}</code> tokens can be anything, including any of the special
+ * tokens listed here (even other <code>{AUTH:<i>types</i>}...{/AUTH}</code>
+ * sections - ie, you can "nest" them).
+ * </p>
+ * <p>
+ * For example, the following markup selectively includes or omits the content
+ * depending on the user's authentication type, as indicated:
+ * </p>
+ * <p>
+ * 
+ * <pre>
+ *  This content is for everyone.
+ *  {AUTH:!ATHP}
+ *  This content is only for non-internal users - eg users of standard or 
+ *  federated HP Passport, as well as other types not yet defined.
+ *    {AUTH:HPP|FED}
+ *    This content is only for members of HP Passport in either standard or
+ *    federated modes.
+ *    {/AUTH}
+ *  {/AUTH}
+ *  {AUTH:ATHP}
+ *  This content is only for internal users.
+ *  {/AUTH}
+ * </pre>
+ * 
  * </dd>
  * 
  * <dt><a name="content-url"><code>{CONTENT-URL:<i>pathname</i>}</code></a></dt>
@@ -153,10 +259,114 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * Use either of these tokens to insert the <a href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm"
  * >ISO 3166-1</a> country code from the current locale. Note that the language
- * code is not a part of this. For example, for a Japanese request,
- * <code>{COUNTRY-CODE}</code> is replaced with <code>JP</code>. Note the
- * country code is uppercase by default; you can force use of lowercase with
+ * code is not a part of this. For example, for a Japan - Japanese request,
+ * <code>{COUNTRY-CODE}</code> is replaced with <code>JP</code>. If there is no
+ * country in the current locale (ie, the current locale is a language-only
+ * locale) then this token is replaced with an empty string. Note the country
+ * code is uppercase by default; you can force use of lowercase with
  * <code>{COUNTRY-CODE:lower}</code>.
+ * </p>
+ * </dd>
+ * 
+ * <dt><a name="country-name"><code>{COUNTRY-NAME}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use this token to insert the localized name of the country in the current
+ * locale. For example, for a Germany - German request,
+ * <code>{COUNTRY-NAME}</code> is replaced with <code>Deutschland</code>. If
+ * there is no country in the current locale (ie, the current locale is a
+ * language-only locale) then this token is replaced with an empty string. The
+ * country name translations returned are the ones built-into the JVM's
+ * <code>Locale.getDisplayCountry()</code> method.
+ * </p>
+ * </dd>
+ * 
+ * <dt><a name="date"><code>{DATE:<i>date</i>}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use this token to insert the given <code><i>date</i></code> as a
+ * well-formatted, localized, timezone-adjusted string according to the user's
+ * locale and timezone. The <code><i>date</i></code> is optional; if provided,
+ * it must adhere to either of the following {@link java.text.SimpleDateFormat}
+ * patterns in {@link com.hp.it.spf.xa.interpolate.TokenParser}:
+ * </p>
+ * <dl>
+ * <dt>{@link com.hp.it.spf.xa.interpolate.TokenParser#PATTERN_DATETIME}</dt>
+ * <dd>
+ * <p>
+ * At the time of this writing, this pattern is the following:
+ * </p>
+ * 
+ * <code><i>M</i>/<i>d</i>/<i>yyyy</i> <i>h</i>:<i>mm</i> <i>a</i> <i>z</i></code>
+ * 
+ * <ul>
+ * <li><code><i>M</i></code> is a one or two-digit month</li>
+ * <li><code><i>d</i></code> is a one or two-digit day of month</li>
+ * <li><code><i>yyyy</i></code> is a four-digit year</li>
+ * <li><code><i>h</i></code> is a one or two-digit hour (12 hour clock)</li>
+ * <li><code><i>mm</i></code> is a two-digit minutes</li>
+ * <li><code><i>a</i></code> is <code>AM</code> or <code>PM</code></li>
+ * <li><code><i>z</i></code> is the timezone such as <code>GMT</code> for
+ * Greenwich Mean Time, <code>PST</code> for Pacific Standard Time,
+ * <code>GMT-05:00</code> for 5 hours behind GMT, etc.</li>
+ * </ul>
+ * 
+ * <p>
+ * For example: <code>{DATE:2/20/2010 11:30 PM GMT}</code>.
+ * </p>
+ * <p>
+ * When you use this pattern, the resulting formatted string is localized for
+ * the current user's locale and comprises both the date and time (adjusted for
+ * the user's timezone). For the above example, for a German-Germany user with
+ * Western Europe timezone, the resulting formatted string would look like this:
+ * <code>21. Februar 2010 00:30 CET</code>.
+ * </p>
+ * </dd>
+ * <dt>{@link com.hp.it.spf.xa.interpolate.TokenParser#PATTERN_DATE}</dt>
+ * <dd>
+ * <p>
+ * At the time of this writing, this pattern is the same as above, but with the
+ * calendar date only:
+ * </p>
+ * 
+ * <code><i>M</i>/<i>d</i>/<i>yyyy</i></code>
+ * 
+ * <ul>
+ * <li><code><i>M</i></code> is a one or two-digit month</li>
+ * <li><code><i>d</i></code> is a one or two-digit day of month</li>
+ * <li><code><i>yyyy</i></code> is a four-digit year</li>
+ * </ul>
+ * 
+ * <p>
+ * For example: <code>{DATE:2/20/2010}</code>.
+ * </p>
+ * <p>
+ * When you use this pattern, the resulting formatted string is localized for
+ * the user's current locale and consists of the date only. The user's timezone
+ * is <b>not</b> taken into account. For the above example, for a
+ * Germany-Germany user, the resulting formatted string would look like this:
+ * <code>20. Februar 2010</code>.
+ * </dd>
+ * </dl>
+ * 
+ * <p>
+ * As mentioned, the <code><i>date</i></code> parameter of the token is
+ * optional. If not provided, then the current date (not time) in the user's
+ * timezone is assumed, and the resulting formatted string is localized for the
+ * user locale. So if <code>{DATE}</code>, with no parameter, were evaluated at
+ * 11:30 PM GMT on February 20, 2010, then the resulting formatted string for a
+ * German-Germany user (in the Western Europe timezone) would be
+ * <code>21. Februar 2010</code>.
+ * </p>
+ * 
+ * <p>
+ * This token is very picky about the format of the <code><i>date</i></code>
+ * parameter - if provided, it must comply with either of the formats listed
+ * above. If it does not, then an empty string will be inserted where the token
+ * is in the resulting content. Also, this token is not flexible about the
+ * format of the resulting string it generates. For example, there is no way to
+ * get it to generate a numeric month instead of a word month, or a two-digit
+ * year instead of a four-digit year.
  * </p>
  * </dd>
  * 
@@ -172,18 +382,30 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><a name="exist"><code>{EXIST:<i>key</i>}...{/EXIST}</code></a></dt>
+ * <dt><a name="exist"><code>{EXIST:<i>keys</i>}...{/EXIST}</code></a></dt>
  * <dd>
  * <p>
- * Parses the string for any <code>{EXIST:<i>key</i>}</code> content; such
- * content is deleted if the <i>key</i> is not present in the request (as an
- * attribute or parameter). Otherwise only the special markup is removed. The
- * <i>key</i> may be any of the following:
+ * Parses the string for any <code>{EXIST:<i>keys</i>}</code> content; such
+ * content is deleted if the current request properties do not qualify
+ * (otherwise only the special markup is removed). The <i>keys</i> may include
+ * one or more property names, delimited by "|". An individual property name in
+ * turn may be prefixed with "!" to indicate negation. The current request is
+ * considered to qualify, if it includes at least one of the named properties in
+ * the <i>keys</i>; or does <b>not</b> include at least one of the listed
+ * <b>negated</b> properties. <code>{EXIST:<i>keys</i>}</code> markup may be
+ * nested.
+ * </p>
+ * 
+ * <p>
+ * For this token's purposes, "request properties" include all of the following:
  * </p>
  * <p>
- * request attribute <br>
- * request parameter <br>
- * session attribute
+ * current portal request attributes <br>
+ * current portal request parameters <br>
+ * current portal session attributes
+ * </p>
+ * <p>
+ * Thus you may use the name of any one of these properties in your <i>keys</i>.
  * </p>
  * <p>
  * For example, consider the following content string:
@@ -192,31 +414,43 @@ import com.vignette.portal.website.enduser.PortalContext;
  * 
  * <pre>
  *  This content is for everyone.
- *  {EXIST:key}
- *    This content is displayed indicating key existence in the request.
+ *  {EXIST:key1|key2|key3}
+ *    This content is displayed only when the request contains key1, key2
+ *    or key3 properties.
+ *    {EXIST:!key1}
+ *      This content is only displayed when the request contains key2 or
+ *      key3 properties.
+ *    {/EXIST}
  *  {/EXIST}
  * </pre>
  * 
  * </p>
  * 
  * <p>
- * If the current request includes <code>key=<i>keyvalue</i></code> as a request
- * or session attribute or parameter, the returned content string is:
+ * If the current portal request includes <code>key2</code> as a request or
+ * session attribute or parameter, the returned content string is:
  * </p>
  * 
  * <pre>
  *  This content is for everyone.
  *  
- *    This content is displayed indicating key existence in the request.
+ *    This content is displayed only when the request contains key1, key2
+ *    or key3 properties.
+ *    
+ *      This content is only displayed when the request contains key2 or
+ *      key3 properties.
  * </pre>
  * 
  * <p>
- * Otherwise, the returned content string is:
+ * But if the current request includes <code>key1</code> instead, the returned
+ * content string is:
  * </p>
  * 
  * <pre>
  *  This content is for everyone.
  * 
+ *    This content is displayed only when the request contains key1, key2
+ *    or key3 properties.
  * </pre>
  * 
  * </dd>
@@ -225,9 +459,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
- * the interpolated content if the user is a member of any one (or more) of the
- * listed <code><i>groups</i></code>. For example, using this token, a single
- * file can contain the proper content for multiple kinds of users, simplifying
+ * the interpolated content if the user's groups qualify against the listed
+ * <code><i>groups</i></code>. For example, using this token, a single file can
+ * contain the proper content for multiple kinds of users, simplifying
  * administration of a portal component which must display different content for
  * different user groups.
  * </p>
@@ -246,6 +480,13 @@ import com.vignette.portal.website.enduser.PortalContext;
  * groups provided to the constructor match one of those group names.
  * </p>
  * <p>
+ * You may also prefix the <code>!</code> character to any group name listed
+ * with the token, in order to indicate negation. The content enclosed by the
+ * <code>{GROUP}</code> token is omitted from the returned content when the
+ * groups provided to the constructor match a negated group name listed in the
+ * token.
+ * </p>
+ * <p>
  * The content enclosed by the <code>{GROUP:<i>groups</i>}</code> and
  * <code>{/GROUP}</code> tokens can be anything, including any of the special
  * tokens listed here (even other <code>{GROUP:<i>groups</i>}...{/GROUP}</code>
@@ -260,10 +501,13 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <pre>
  * This content is for everybody.
  * {GROUP:A}
- * This content is only for members of group A.
- * {GROUP:B|C}
- * This content is only for members of groups A and B, or A and C.
+ *   This content is only for members of group A.
+ *   {GROUP:B|C}
+ *     This content is only for members of groups A and B, or A and C.
+ *   {/GROUP}
  * {/GROUP}
+ * {GROUP:!A}
+ *   This content is for everyone except members of group A.
  * {/GROUP}
  * </pre>
  * 
@@ -401,6 +645,17 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
+ * <dt><a name="language-name"><code>{LANGUAGE-NAME}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use this token to insert the localized name of the language in the current
+ * locale. For example, for a Germany - German request,
+ * <code>{LANGUAGE-NAME}</code> is replaced with <code>Deutsch</code>. The
+ * language name translations returned are the ones built-into the JVM's
+ * <code>Locale.getDisplayLanguage()</code> method.
+ * </p>
+ * </dd>
+ * 
  * <dt><a name="language-tag"><code>{LANGUAGE-TAG}</code></a></dt>
  * <dt><a name="language-tag"><code>{LANGUAGE-TAG:<i>case</i>}</code></a></dt>
  * <dd>
@@ -512,7 +767,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{NAV-ITEM:<i>items</i>}...{/NAV-ITEM}</code></dt>
+ * <dt><a name="nav"><code>{NAV-ITEM:<i>items</i>}...{/NAV-ITEM}</code></a></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -533,6 +788,12 @@ import com.vignette.portal.website.enduser.PortalContext;
  * The match is a case-insensitive substring match.
  * </p>
  * <p>
+ * Additionally, you may prefix a listed value with the <code>!</code> character
+ * to indicate negation. The content enclosed by the <code>{NAV-ITEM}</code>
+ * token is then omitted from the returned content if the navigation item for
+ * the request does match that value.
+ * </p>
+ * <p>
  * The content enclosed by the <code>{NAV-ITEM:<i>items</i>}</code> and
  * <code>{/NAV-ITEM}</code> tokens can be anything, including any of the special
  * tokens supported by this class (including other
@@ -548,17 +809,36 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <pre>
  * This content is for all requests using this file to show.
  * {NAV-ITEM:item_A|item_B}
- * This content is only for requests for navigation items item_A or item_B.
- * {NAV-ITEM:item_B}
- * This content is only for requests for navigation item item_B.
+ *   This content is only for requests for navigation item_A or item_B.
+ *   {NAV-ITEM:item_B}
+ *     This content is only for requests for navigation item_B.
+ *   {/NAV-ITEM}
  * {/NAV-ITEM}
+ * {NAV-ITEM:!item_A}
+ *   {NAV-ITEM:!item_B}
+ *     This content is for all requests except navigation item_A and item_B.
+ *   {/NAV-ITEM}
  * {/NAV-ITEM}
  * </pre>
  * 
  * </p>
- * </dd>
  * 
- * <dt><code>{PAGE:<i>pages</i>}...{/PAGE}</code></dt>
+ * <blockquote>
+ * <p>
+ * <b>Note:</b> Remember that the <code><i>items</i></code> in this token are
+ * compared against navigation item names <b>and</b> friendly URLs, and need
+ * only be substrings (case-insensitive) thereof. Using the <code>!</code>
+ * operator therefore only works with values that are common to both the
+ * navigation item name and friendly URL of the navigation item you want to
+ * exclude. In the above example, for example, if the current navigation item
+ * containes neither <code>item_A</code> nor <code>item_B</code> in the friendly
+ * URL, but does contain those substrings in the name of the navigation item,
+ * the enclosed content will be included in the interpolated string - which
+ * might not be what you expected.
+ * </p>
+ * </blockquote></dd>
+ * 
+ * <dt><a name="page"><code>{PAGE:<i>pages</i>}...{/PAGE}</code></a></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -577,6 +857,12 @@ import com.vignette.portal.website.enduser.PortalContext;
  * case-insensitive substring match.
  * </p>
  * <p>
+ * You may also prefix the <code>!</code> character to any page ID listed with
+ * the token, in order to indicate negation. The content enclosed by the
+ * <code>{PAGE}</code> token is then omitted from the returned content when the
+ * page friendly ID in the request matches the negated value.
+ * </p>
+ * <p>
  * The content enclosed by the <code>{PAGE:<i>pages</i>}</code> and
  * <code>{/PAGE}</code> tokens can be anything, including any of the special
  * tokens supported by this class (including other
@@ -591,10 +877,15 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <pre>
  * This content is for all pages using this file to show.
  * {PAGE:page_A|page_B}
- * This content is only for page_A or page_B to show.
- * {PAGE:page_B}
- * This content is only for page_B to show.
+ *   This content is only for page_A or page_B to show.
+ *   {PAGE:page_B}
+ *     This content is only for page_B to show.
+ *   {/PAGE}
  * {/PAGE}
+ * {PAGE:!page_A}
+ *   {PAGE:!page_B}
+ *     This content is for every page except page_A and page_B.
+ *   {/PAGE}
  * {/PAGE}
  * </pre>
  * 
@@ -625,7 +916,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{SITE-NAME}</code></dt>
+ * <dt><a name="site-name"><code>{SITE-NAME}</code></site-name></dt>
  * <dd>
  * <p>
  * Use this token to insert the site name of the current portal site into the
@@ -637,7 +928,7 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </p>
  * </dd>
  * 
- * <dt><code>{SITE:<i>names</i>}...{/SITE}</code></dt>
+ * <dt><a name="site"><code>{SITE:<i>names</i>}...{/SITE}</code></a></dt>
  * <dd>
  * <p>
  * Use this token around a section of content which should only be included in
@@ -656,6 +947,12 @@ import com.vignette.portal.website.enduser.PortalContext;
  * gotten from the portal context (it is the Vignette "site DNS name").
  * </p>
  * <p>
+ * You may also prefix the <code>!</code> character to any site name listed with
+ * the token, in order to indicate negation. The content enclosed by the
+ * <code>{SITE}</code> token is then omitted from the returned content when the
+ * site name in the request matches the negated value.
+ * </p>
+ * <p>
  * The content enclosed by the <code>{SITE:<i>names</i>}</code> and
  * <code>{/SITE}</code> tokens can be anything, including any of the special
  * tokens supported by this class (including other
@@ -670,10 +967,15 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <pre>
  * This content is for all sites to show.
  * {SITE:site_A|site_B}
- * This content is only to be shown in site_A or site_B.
- * {SITE:site_B}
- * This content is only to be shown in site_B.
+ *   This content is only to be shown in site_A or site_B.
+ *   {SITE:site_B}
+ *   This content is only to be shown in site_B.
+ *   {/SITE}
  * {/SITE}
+ * {SITE:!site_A}
+ *   {SITE:!site_B}
+ *     This content is for every site except site_A and site_B.
+ *   {/SITE}
  * {/SITE}
  * </pre>
  * 

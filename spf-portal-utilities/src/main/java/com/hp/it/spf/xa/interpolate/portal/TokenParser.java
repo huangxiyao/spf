@@ -29,6 +29,10 @@ import com.vignette.portal.website.enduser.PortalContext;
  * further description.
  * </p>
  * 
+ * <blockquote>
+ * <p><b>Note:</b> <code>TokenParser</code> is not thread-safe.
+ * </blockquote>
+ * 
  * @author <link href="jyu@hp.com">Yu Jie</link>
  * @version TBD
  * @see <code>com.hp.it.spf.xa.interpolate.portal.FileInterpolator</code><br>
