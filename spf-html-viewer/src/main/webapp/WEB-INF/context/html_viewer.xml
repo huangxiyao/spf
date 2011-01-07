@@ -31,7 +31,7 @@
 
 	<!-- Portlet mode-to-controller mapping -->
 	<bean id="portletModeHandlerMapping"
-		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		parent="portletModeHandlerMappingTemplate">
 		<property name="order" value="1" />
 		<property name="portletModeMap">
 			<map>

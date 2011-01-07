@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.sso</groupId>
 			<artifactId>spf-portlet-filters</artifactId>
-			<version>${spf.portlet.version}</version>
+            <version>${spf.portlet.version}</version>
 		</dependency>
 
 		<dependency>
@@ -80,13 +80,10 @@
 			<artifactId>spf-common-utilities</artifactId>
 			<version>${spf.common.version}</version>
 		</dependency>
-
+ 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<type>jar</type>
-			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 
