@@ -50,7 +50,7 @@ public class ANONAuthenticatorTest {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         context = MockeryUtils.createMockery();
-        request = MockeryUtils.mockHttpServletRequest(context);
+        request = MockeryUtils.mockHttpServletRequestForANON(context);
         user = MockeryUtils.mockUser(context);
         guestUser = MockeryUtils.mockGuestUser(context);
     }

@@ -29,6 +29,36 @@ public class AuthenticationConsts {
     
     static final String SP_FROM_FEDERATION = "FEDERATION";
     
+    /**
+     * The access type code - this is one of the possible values
+     * from the http request header by {@link #HEADER_ACCESS_TYPE}.
+     */
+    static final String ACCESS_TYPE_INTERNET = "Internet";
+    
+    /**
+     * The access type code - this is one of the possible values
+     * from the http request header by {@link #HEADER_ACCESS_TYPE}.
+     */
+    static final String ACCESS_TYPE_INTRANET = "Intranet";
+    
+    /**
+     * The HPP authentication type code - this is one of the possible values
+     * keyed from the user profile map by {@link #KEY_AUTH_TYPE}.
+     */
+    static final String AUTH_TYPE_HPP = Consts.AUTH_TYPE_HPP;
+
+    /**
+     * The AtHP authentication type code - this is one of the possible values
+     * keyed from the user profile map by {@link #KEY_AUTH_TYPE}.
+     */
+    static final String AUTH_TYPE_ATHP = Consts.AUTH_TYPE_ATHP;
+
+    /**
+     * The federated authentication type code - this is one of the possible
+     * values keyed from the user profile map by {@link #KEY_AUTH_TYPE}.
+     */
+    public static final String AUTH_TYPE_FED = Consts.AUTH_TYPE_FED;
+    
     static final String AUTH_SOURCE_TAGE = "AuthSource";
     
     static final String PHONE_EXT_SPLIT = "ext.";
@@ -136,6 +166,11 @@ public class AuthenticationConsts {
     static final String HEADER_ATHP_FLAG = "SM_AUTHDIRNAME";
     
     /**
+     * The http request header name to judge where the user comes from.
+     */
+    static final String HEADER_ACCESS_TYPE = "AccessType";
+    
+    /**
      * keys for those attributes in userProfile map in http session
      */
     static final String KEY_PROFILE_ID = Consts.KEY_PROFILE_ID;
@@ -176,11 +211,16 @@ public class AuthenticationConsts {
     
     public static final String KEY_CITY = Consts.KEY_CITY;
     
-    public  static final String KEY_ZIP = Consts.KEY_ZIP;
+    public static final String KEY_ZIP = Consts.KEY_ZIP;
     
     public static final String KEY_STATE = Consts.KEY_STATE;
     
-    static final String KEY_USER_GROUPS = Consts.KEY_USER_GROUPS;    
+    public static final String KEY_USER_GROUPS = Consts.KEY_USER_GROUPS;    
+    
+    /**
+     * The key to get the authentication type from user profile map.
+     */
+    public static final String KEY_AUTH_TYPE = Consts.KEY_AUTH_TYPE;
 
     /**
      * SharedPortal session attributes prefix
