@@ -422,8 +422,8 @@ public class ConfigController extends AbstractController {
 
 	    String includesFilename = Utils.slashify(request
 		    .getParameter(Consts.INCLUDES_FILENAME));
-	    if (includesFilename == null)
-		includesFilename = "";
+	    if ((includesFilename == null) || (includesFilename.length() == 0))
+		includesFilename = Consts.DEFAULT_INCLUDES_FILENAME;
 	    response.setRenderParameter(Consts.INCLUDES_FILENAME,
 		    includesFilename);
 

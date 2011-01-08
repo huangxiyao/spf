@@ -475,7 +475,7 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
      * @param request
      *            The portlet request.
      */
-    public static void setupLogData(RenderRequest request, Exception ex) {
+    public static void setupLogData(PortletRequest request, Exception ex) {
 	setupLogData(request);
 	if (request != null) {
 	    Transaction trans = TransactionImpl.getTransaction(request);

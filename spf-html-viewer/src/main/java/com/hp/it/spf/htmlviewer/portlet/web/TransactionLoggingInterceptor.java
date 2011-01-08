@@ -32,4 +32,19 @@ public class TransactionLoggingInterceptor extends
 	Utils.setupLogData(request);
 	return result;
     }
+
+    /**
+     * Delegates to the superclass for standard WPA Timber post-completion
+     * processing, except the exception is suppressed so that duplicate logging
+     * does not take place (the exception either already will have logged itself
+     * by this point in the workflow, or will log itself later downstream in the
+     * workflow).
+     */
+    public void afterCompletion(PortletRequest request,
+	    PortletResponse response, Object handler, Exception ex)
+	    throws Exception {
+	
+	super.afterCompletion(request, response, handler, null);
+    }
+
 }

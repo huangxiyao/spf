@@ -289,8 +289,9 @@ public class ViewData {
     /**
      * Returns the base view filename that was loaded into this
      * <code>ViewData</code> object. This corresponds with the base view
-     * filename preference in the portlet preferences. If there was a fatal
-     * error during load, this value may be unreliable.
+     * filename preference from the portlet preferences or request, whichever
+     * was used. If there was a fatal error during load, this value may be
+     * unreliable.
      * 
      * @return the base view filename (relative to the portlet bundle folder or
      *         portlet application)
@@ -302,8 +303,9 @@ public class ViewData {
     /**
      * Returns the base include filename that was loaded into this
      * <code>ViewData</code> object. This corresponds with the base include
-     * filename preference in the portlet preferences. If there was a fatal
-     * error during load, this value may be unreliable.
+     * filename preference from the portlet preferences or request, whichever
+     * was used. If there was a fatal error during load, this value may be
+     * unreliable.
      * 
      * @return the base include filename (relative to the portlet bundle folder,
      *         portlet application, or classpath)
@@ -454,10 +456,10 @@ public class ViewData {
 	boolean isDefault = false;
 
 	// If includes filename is not defined, revert to the default.
-	if ((includesFilename == null) || (includesFilename.length() == 0)) {
-	    includesFilename = Consts.DEFAULT_INCLUDES_FILENAME;
+	if ((includesFilename == null) || (includesFilename.length() == 0))
+	    this.includesFilename = includesFilename = Consts.DEFAULT_INCLUDES_FILENAME;
+	if (includesFilename.equals(Consts.DEFAULT_INCLUDES_FILENAME)) 
 	    isDefault = true;
-	}
 
 	// Skip load and flag warning if includes filename is improper.
 	if (includesFilename.indexOf("..") != -1) {

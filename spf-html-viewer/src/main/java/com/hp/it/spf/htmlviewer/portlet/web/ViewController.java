@@ -153,6 +153,10 @@ public class ViewController extends AbstractController {
 	    throw new InternalErrorException(request, data.getErrorCode(), data
 		    .getErrorDiagnostic());
 	}
+	if (trans != null) {
+	    trans.addContextInfo("viewFile", data.getViewFilename());
+	    trans.addContextInfo("includesFile", data.getIncludesFilename());
+	}
 
 	// Interpolate the view content.
 	ResourceBundle includesContent = data.getIncludesContent();
