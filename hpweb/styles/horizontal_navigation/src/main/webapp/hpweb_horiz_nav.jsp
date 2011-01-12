@@ -215,10 +215,10 @@ pageContext.setAttribute("selectedIndex", selectedIndex);
 						onmouseout="collapse(this, ${button.highlighted}, '${blackCaretImg}', '${whiteCaretImg}');">
 
 						<c:if test="${button.highlighted eq true}">
-							<a class="menuNormal topMenuItem active" href="${button.url}">${button.title}<img src="${spacerImg}" width="10" height="1" border="0"><img src="${blackCaretImg}" border="0" /></a>
+							<a class="menuNormal topMenuItem active" href="${button.url}">${button.title}<img src="${spacerImg}" width="10" height="1" border="0" alt=""/><img src="${blackCaretImg}" border="0" alt=""/></a>
 						</c:if>
 						<c:if test="${button.highlighted eq false}">
-							<a class="menuNormal topMenuItem" href="${button.url}">${button.title}<img src="${spacerImg}" width="10" height="1" border="0"><img src="${whiteCaretImg}" border="0" /></a>
+							<a class="menuNormal topMenuItem" href="${button.url}">${button.title}<img src="${spacerImg}" width="10" height="1" border="0" alt=""/><img src="${whiteCaretImg}" border="0" alt=""/></a>
 						</c:if>
 				
 						<%-- Render flyout menu --%>
