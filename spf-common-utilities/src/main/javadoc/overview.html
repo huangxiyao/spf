@@ -1143,9 +1143,11 @@ operating on collections of locales.</p>
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, Locale)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, sortLocale)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, Locale, int)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, sortLocale, int)}</dt>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, sortLocale,displayLocale, int)}</dt>
 	<dd>
 	<p>These methods return a {@link java.util.Collection} of {@link
 	java.util.Locale} objects, sorted by their localized display names (see
@@ -1158,7 +1160,7 @@ operating on collections of locales.</p>
 		argument.</p>
 		</li>
 		<li>
-		<p>The locales are sorted by their <i>display names</i>, not by
+		<p>The sortLocale are sorted by their <i>localized display names</i>, not by
 		language code or anything else. By default, the English names for the
 		locales are used, but you can provide an optional <code>Locale</code>
 		object as the second argument. This locale is used to localize the
@@ -1166,7 +1168,7 @@ operating on collections of locales.</p>
 		localized sequence.</p>
 		</li>
 		<li>
-		<p>As noted, the locales are sorted by their display names. By
+		<p>As noted, the locales are sorted by their localized display names. By
 		default, this is an ascending sort, with the language name considered
 		over the country name. However there are 2 optional control flags you
 		can provide to the <code>int</code> argument, to override that:</p>
@@ -1201,6 +1203,11 @@ operating on collections of locales.</p>
 		Locale.JAPANESE, I18nUtility.LOCALE_BY_COUNTRY |
 		I18nUtility.LOCALE_DESCENDING)</code></dt>
 		<dd>returns the locales sorted descending by their Japanese
+		names, with country over language</dd>
+		<dt><code>I18nUtility.sortLocales(locales,
+		Locale.JAPANESE, Locale.JAPANESE, I18nUtility.LOCALE_BY_COUNTRY |
+		I18nUtility.LOCALE_DESCENDING)</code></dt>
+		<dd>returns the locales sorted descending by their Japanese readable sorted
 		names, with country over language</dd>
 	</dl>
 	</dd>
