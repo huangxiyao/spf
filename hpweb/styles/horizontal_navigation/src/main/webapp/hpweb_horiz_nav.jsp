@@ -73,6 +73,25 @@ pageContext.setAttribute("helpTextDef", Utils.getI18nValue(i18nID, "hpweb.helpTe
 pageContext.setAttribute("helpUrlDef",  Utils.getI18nValue(i18nID, "hpweb.helpUrl",
 		portalContext));
 
+// Retrieve the selected menu item
+MenuItemNode selectedNode = MenuItemUtils.getSelectedMenuItemNode(portalContext);
+MenuItemNode selectedLevel2Parent = null;
+// If selected menu item's level is deeper than 3, pick up the level 2 parent node
+if (selectedNode.getLevel() > 2) {
+	List parentNodeList = MenuItemUtils.getParentsForSelectedMenuItem(pageContext);
+	Iterator parentNodes = parentNodeList.iterator();
+	MenuItemNode parentNode;
+	int currentLevel;
+	while (parentNodes.hasNext()) {
+		parentNode = (MenuItemNode) parentNodes.next();
+		currentLevel = parentNode.getLevel();
+		if (currentLevel == 1) {
+			selectedLevel2Parent = parentNode;
+			break;
+		}
+	}
+}
+
 List menuItemList = HPWebModel.getTopMenuItems();
 
 // if the HPWebModel bean has top menu items, use it for hpweb layout
@@ -115,6 +134,11 @@ for (int tabIndex=0; tabIndex<menuItemList.size(); tabIndex++) {
 				selectedIndex = tabIndex;
 				done = true;
 				break;
+			}
+			// 
+			if ( (selectedLevel2Parent != null) && selectedLevel2Parent.getID().equals(button.getId()) ) {
+				//Highlight the level 2 parent of the selected menu item
+				button.setHighlighted(true);
 			}
 			int flyoutItemCount = button.getSubMenuItems().size();
 			if (flyoutItemCount > 0) {
