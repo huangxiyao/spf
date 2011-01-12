@@ -441,13 +441,13 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	html.append("<tr>\n");
 
 	// label column
-	html.append("<td " + labelStyleAttr + "valign=\"middle\">" + label
-		+ "</td>\n");
+        html.append("<td ").append(labelStyleAttr).append("valign=\"middle\">").append(label).append("</td>\n");
 
 	// drop down list column
-	html.append("<td " + labelStyleAttr + ">\n");
-	html.append("<select " + listStyleAttr + "id=\"" + widgetName
-		+ "\" name=\"" + widgetName + "\">\n");
+	// refactor inconsistent use of StringBuffer.append according to SPF_Enhancements_for_DP 3.2_3.3 CR216
+	html.append("<td ").append(labelStyleAttr).append(">\n");
+	html.append("<select ").append(listStyleAttr).append("id=\"").append(widgetName)
+		.append("\" name=\"").append(widgetName).append("\">\n");
 	if (availableLocales != null) {
 
 	    // prepare current settings
@@ -461,8 +461,8 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	    }
 
 	    // sort available locales according to the settings
-	    availableLocales = I18nUtility.sortLocales(availableLocales,
-		    sortInLocale, flags);
+	    availableLocales = I18nUtility.sortLocales(availableLocales, 
+    		sortInLocale, displayLocale, flags);
 
 	    // iterate over the sorted locales and display the select option for
 	    // each one
@@ -491,12 +491,12 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 		
 		// both the display name and value need to be HTML-escaped
 		// just in case
-		html.append("<option value=\"" + Utils.escapeXml(value) + "\"");
+		html.append("<option value=\"").append(Utils.escapeXml(value)).append("\"");
 		// make the current locale selected if it is not empty
 		if ((currentLocale != null) && (locale.equals(currentLocale))) {
 		    html.append(" selected");
 		}
-		html.append(">" + Utils.escapeXml(dispName) + "</option>\n");
+		html.append(">").append(Utils.escapeXml(dispName)).append("</option>\n");
 		i++;
 	    }
 	}
@@ -506,10 +506,8 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	// button column
 	String imgLink = getSubmitImageURL();
 	String imgAlt = getSubmitImageAlt();
-	html.append("<td " + labelStyleAttr + "valign=\"middle\">\n");
-	html.append("<input type=\"image\" name=\"btn_" + widgetName
-		+ "\" src=\"" + imgLink + "\" alt=\"" + imgAlt + "\" title=\""
-		+ imgAlt + "\">\n");
+	html.append("<td ").append(labelStyleAttr).append("valign=\"middle\">\n");
+	html.append("<input type=\"image\" name=\"btn_").append(widgetName).append("\" src=\"").append(imgLink).append("\" alt=\"").append(imgAlt).append("\" title=\"").append(imgAlt).append("\">\n");
 	html.append("</td>\n");
 
 	// end selector table layout
