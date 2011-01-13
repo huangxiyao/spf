@@ -80,6 +80,11 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
     protected static String SUBMIT_BUTTON_IMG_ALT = "localeSelector.submit.alt";
 
     /**
+     * The key for the locale selector alternative text
+     */
+    protected static String LABEL_ALT = "localeSelector.label.alt";
+
+    /**
      * The default style to apply to the label. Currently null.
      */
     protected static String DEFAULT_LABEL_STYLE = null;
@@ -441,7 +446,26 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	html.append("<tr>\n");
 
 	// label column
-        html.append("<td ").append(labelStyleAttr).append("valign=\"middle\">").append(label).append("</td>\n");
+	// add the label tag to follow the accessibility requirements.
+	String labelAlt = getLabelAlt();
+	if ((label != null) && !("".equals(label))) {
+		//If the label is non-blank, 
+		//wrap '<label for="' + widgetName + '">' ... '</label>' 
+		//around it and insert that label into the <td>
+		html.append("<td ").append(labelStyleAttr)
+				.append("valign=\"middle\">").append("<label for=\"")
+				.append(widgetName).append("\">").append(label)
+				.append("</label>").append("</td>\n");
+	} else if ((labelAlt != null) && !("".equals(labelAlt))) {
+		//If the label alt is non-blank, 
+		//wrap '<label class="screenReading" for="' + widgetName + '">' ... '</label>' 
+		//around the alt label string, and insert that into the <td>
+		html.append("<td ").append(labelStyleAttr)
+				.append("valign=\"middle\">")
+				.append("<label class=\"screenReading\" for=\"")
+				.append(widgetName).append("\">").append(labelAlt)
+				.append("</label>").append("</td>\n");
+	}
 
 	// drop down list column
 	// refactor inconsistent use of StringBuffer.append according to SPF_Enhancements_for_DP 3.2_3.3 CR216
@@ -568,6 +592,23 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	if (portalContext != null) {
 	    alt = I18nUtility
 		    .getValue(SUBMIT_BUTTON_IMG_ALT, "", portalContext);
+	}
+	return alt;
+    }
+
+    /**
+     * A method to generate the tooltip string for the classic locale selector's
+     * label. This string is presumed to exist in the message catalog
+     * for the current portal component, under the
+     * <code>localeSelector.submit.alt</code> message key. If the message does
+     * not exist, then an empty string is returned (ie there is no default
+     * message).
+     */
+    protected String getLabelAlt() {
+	String alt = "";
+	if (portalContext != null) {
+	    alt = I18nUtility
+		    .getValue(LABEL_ALT, "", portalContext);
 	}
 	return alt;
     }
