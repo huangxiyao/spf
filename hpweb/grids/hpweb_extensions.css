@@ -108,6 +108,7 @@
 
 .horzNavButton a.topMenuItem.noFlyout:hover {
     background-color: #FFFFFF;
+    position: relative;
     color: #003366;
     text-decoration: underline;
 }
