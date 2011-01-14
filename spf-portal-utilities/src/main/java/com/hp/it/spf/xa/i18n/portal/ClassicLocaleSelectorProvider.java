@@ -465,6 +465,9 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 				.append("<label class=\"screenReading\" for=\"")
 				.append(widgetName).append("\">").append(labelAlt)
 				.append("</label>").append("</td>\n");
+	} else {
+		//Else, just add a blank column
+		html.append("<td ").append(labelStyleAttr).append("valign=\"middle\">").append("</td>\n");
 	}
 
 	// drop down list column
