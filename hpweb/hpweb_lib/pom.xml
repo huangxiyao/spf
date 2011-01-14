@@ -148,88 +148,34 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			
 			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.4.3</version>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.6</version>
 				<executions>
 					<execution>
-						<id>copy-classes</id>
 						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes/com</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.build.directory}/hpweb-core/com</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
+							<target>
+								<copy todir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes/com">
+									<fileset dir="${project.build.directory}/hpweb-core/com" />
+								</copy>
+								<copy todir="${project.build.directory}/${project.build.finalName}/WEB-INF/tags/hpweb">
+									<fileset dir="${project.build.directory}/hpweb-core/META-INF/tags" />
+									<fileset dir="${project.build.directory}/hpweb-core/META-INF" includes="**/*.tld"/>
+								</copy>
+								<replace dir="${project.build.directory}/${project.build.finalName}/WEB-INF/tags/hpweb" 
+									includes="*.tld"  
+									token="/META-INF/tags/"
+									value="/WEB-INF/tags/hpweb/" />
+								<jar destfile="${project.build.directory}/${project.build.finalName}/WEB-INF/lib/hpweb-core-repackaged.jar"
+									basedir="${project.build.directory}/hpweb-core"
+									includes="META-INF/com/**,META-INF/maven/**" />
+							</target>
 						</configuration>
-					</execution>
-					<execution>
-						<id>copy-tags</id>
-						<phase>generate-resources</phase>
 						<goals>
-							<goal>copy-resources</goal>
+							<goal>run</goal>
 						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/tags/hpweb</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.build.directory}/hpweb-core/META-INF/tags</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-tlds</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/tags/hpweb</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.build.directory}/hpweb-core/META-INF</directory>
-									<includes>
-										<include>**/*.tld</include>
-									</includes>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<addMavenDescriptor>false</addMavenDescriptor>
-					</archive>
-				</configuration>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-						<configuration>
-							<classesDirectory>${project.build.directory}/hpweb-core</classesDirectory>
-							<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/lib</outputDirectory>
-							<finalName>hpweb-core-repackaged</finalName>
-							<includes>
-								<include>META-INF/com/**</include>
-								<include>META-INF/maven/**</include>
-							</includes>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
