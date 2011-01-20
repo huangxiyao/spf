@@ -451,11 +451,11 @@ public class I18nUtility {
      * <p>
      * Sort the given collection of locales alphabetically. The sort is in
      * ascending order by language first, country second, and variant third.
-     * They are sorted alphabetically according to the display names for those
-     * elements in the system default locale (ie,
-     * {@link java.util.Locale#getDefault()}). The method returns the collection
-     * in the form of an {@link java.util.ArrayList}. If the collection did not
-     * purely contain locales, it is returned unsorted.
+     * They are sorted by the display names for each element, localized
+     * according to its own locale, and collated for the system default locale
+     * (ie, {@link java.util.Locale#getDefault()}). The method returns the
+     * collection in the form of an {@link java.util.ArrayList}. If the
+     * collection did not purely contain locales, it is returned unsorted.
      * </p>
      * 
      * @param locales
@@ -469,19 +469,19 @@ public class I18nUtility {
     /**
      * <p>
      * Sort the given collection of locales alphabetically according to the
-     * given locale. The sort is in ascending order by language first, country
-     * second, and variant third. They are sorted alphabetically according to
-     * the display names for those elements in the given locale (or the system
-     * default locale, {@link java.util.Locale#getDefault()}, if the given
-     * locale is null). The method returns the collection in the form of an
-     * {@link java.util.ArrayList}. If there is a problem during the sort, the
-     * list is returned unsorted.
+     * given locale. The sort is in ascending order, using the display names for
+     * language first, country second, and variant third, where the display
+     * names are localized and collated for the given locale. If the given
+     * locale is null, the localization and collation of display names is the
+     * same as with {@link #sortLocales(Collection)}). The method returns the
+     * collection in the form of an {@link java.util.ArrayList}. If there is a
+     * problem during the sort, the list is returned unsorted.
      * </p>
      * 
      * @param locales
      *            Collection of locales.
      * @param Locale
-     *            The locale in which to alphabetize the collection.
+     *            The locale in which to localize and collate the collection.
      * @return Sorted locales, in the form of an {@link java.util.ArrayList}.
      */
     public static Collection<Locale> sortLocales(Collection<Locale> locales,
@@ -489,40 +489,14 @@ public class I18nUtility {
 	return sortLocales(locales, inLocale, 0);
     }
 
-	/**
-     * <p>
-     * Sort the given collection of locales alphabetically according to the
-     * given locale. The sort is in ascending order by language first, country
-     * second, and variant third. They are sorted alphabetically according to
-     * the display names for those elements in the given locale (or the system
-     * default locale, {@link java.util.Locale#getDefault()}, if the given
-     * locale is null). The method returns the collection in the form of an
-     * {@link java.util.ArrayList}. If there is a problem during the sort, the
-     * list is returned unsorted.
-     * </p>
-     * 
-     *  @param locales
-     *            Collection of locales.
-     * @param inLocale
-     *            The locale in which to alphabetize the collection.
-     * @param flags
-     *            A bitmask of control flags (see description above).
-     * @return Sorted locales, in the form of an {@link java.util.ArrayList}.
-     */
-    
-    public static Collection<Locale> sortLocales(Collection<Locale> locales,
-    	    Locale inLocale, int flags) {
-    	if (inLocale == null)
-            inLocale = Locale.getDefault();
-        return sortLocales(locales, inLocale, inLocale, 0);
-
-    }
-    
     /**
      * <p>
      * Sort the given collection of locales alphabetically according to the
-     * given locale and flags. The sort takes into account the language,
-     * country, and variant according to the flags (a bitmask):
+     * given locale and flags.
+     * </p>
+     * <p>
+     * The sort takes into account the language, country, and variant for each
+     * locale, according to the flags (a bitmask):
      * </p>
      * <ul>
      * <li>
@@ -540,9 +514,71 @@ public class I18nUtility {
      * </li>
      * </ul>
      * <p>
-     * The sort is performed in the given locale (the system default locale,
-     * {@link java.util.Locale#getDefault()}, is used if the given locale is
-     * null). The method returns the collection in the form of an
+     * The sort is performed using the display names for language, country and
+     * variant (according to the above flags), where the display names are
+     * localized and collated for the given locale. If the given locale is null,
+     * the localization and collation of display names is the same as with
+     * {@link #sortLocales(Collection)}).
+     * </p>
+     * <p>
+     * The method returns the collection in the form of an
+     * {@link java.util.ArrayList}. If there is a problem during the sort, the
+     * list is returned unsorted.
+     * </p>
+     * 
+     * @param locales
+     *            Collection of locales.
+     * @param inLocale
+     *            The locale in which to alphabetize the collection.
+     * @param flags
+     *            A bitmask of control flags (see description above).
+     * @return Sorted locales, in the form of an {@link java.util.ArrayList}.
+     */
+
+    public static Collection<Locale> sortLocales(Collection<Locale> locales,
+	    Locale inLocale, int flags) {
+	if (inLocale == null)
+	    inLocale = Locale.getDefault();
+	return sortLocales(locales, inLocale, inLocale, 0);
+
+    }
+
+    /**
+     * <p>
+     * Sort the given collection of locales alphabetically according to the
+     * given locale and flags.
+     * </p>
+     * <p>
+     * The sort takes into account the language, country, and variant according
+     * to the flags (a bitmask):
+     * </p>
+     * <ul>
+     * <li>
+     * <p>
+     * If the flags include the {@link #LOCALE_BY_COUNTRY} bit, then the sort is
+     * by country first and language second. Otherwise it is by language first
+     * and country second. (In both cases, any variant is third.)
+     * </p>
+     * </li>
+     * <li>
+     * <p>
+     * If the flags include the {@link #LOCALE_DESCENDING} bit, then the sort is
+     * in descending order. Otherwise it is ascending.
+     * </p>
+     * </li>
+     * </ul>
+     * <p>
+     * <p>
+     * The sort is performed using the display names for language, country and
+     * variant (according to the above flags), where the display names are
+     * localized for the given display locale, and collated for the given sort
+     * locale. If the display locale is null, the display names for each locale
+     * are localized per that locale. If the sort locale is null, the collation
+     * sequence used is that of the system default locale (ie,
+     * {@link java.util.Locale#getDefault()}).
+     * </p>
+     * <p>
+     * The method returns the collection in the form of an
      * {@link java.util.ArrayList}. If there was an unexpected problem during
      * the sort, the list is returned unsorted.
      * </p>
@@ -552,14 +588,14 @@ public class I18nUtility {
      * @param sortLocale
      *            The locale in which to alphabetize the collection.
      * @param displayLocale
-     *            The locale in which generate the localized display names in collection. 
+     *            The locale in which generate the localized display names in
+     *            the collection.
      * @param flags
      *            A bitmask of control flags (see description above).
      * @return Sorted locales, in the form of an {@link java.util.ArrayList}.
      */
     public static Collection<Locale> sortLocales(Collection<Locale> locales,
-            Locale sortLocale, Locale displayLocale, int flags) {
-
+	    Locale sortLocale, Locale displayLocale, int flags) {
 
 	/**
 	 * The comparator class for the <code>sortLocales</code> methods.
@@ -567,85 +603,82 @@ public class I18nUtility {
 	 * @author djorgen
 	 */
 	class LocaleComparator implements Comparator<Locale> {
-        int flags = 0;
-        Locale sortInLocale = Locale.getDefault();
-        Locale displayInLocale = null;
+	    int flags = 0;
+	    Locale sortInLocale = Locale.getDefault();
+	    Locale displayInLocale = null;
 
-        public void setFlags (int pFlags) {
-            flags = pFlags;
-        }
+	    public void setFlags(int pFlags) {
+		flags = pFlags;
+	    }
 
-        public void setSortLocale(Locale pSortInLocale) {
-            if (pSortInLocale != null) 
-                sortInLocale = pSortInLocale;
-        }
+	    public void setSortLocale(Locale pSortInLocale) {
+		if (pSortInLocale != null)
+		    sortInLocale = pSortInLocale;
+	    }
 
-        public void setDisplayLocale(Locale pDisplayInLocale) {
-            if (pDisplayInLocale != null) 
-                displayInLocale = pDisplayInLocale;
-        }
+	    public void setDisplayLocale(Locale pDisplayInLocale) {
+		if (pDisplayInLocale != null)
+		    displayInLocale = pDisplayInLocale;
+	    }
 
-
-
-
-        public int compare(Locale loc1, Locale loc2) {
-            String s1 = "";
-            String s2 = "";
-            int outcome = 0;
-            Collator collator = Collator.getInstance(sortInLocale);
-            if (loc1 != null) {
-                Locale inLocale = displayInLocale;
-                if (inLocale == null)
-                    inLocale = loc1;
-                if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
-                    s1 = loc1.getDisplayCountry(inLocale)
-                        + loc1.getDisplayLanguage(inLocale)
-                        + loc1.getDisplayVariant(inLocale);
-                else
-                    s1 = loc1.getDisplayLanguage(inLocale)
-                        + loc1.getDisplayCountry(inLocale)
-                        + loc1.getDisplayVariant(inLocale);
-            }
-            if (loc2 != null) {
-                Locale inLocale = displayInLocale;
-                if (inLocale == null)
-                    inLocale = loc2;
-                if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
-                    s2 = loc2.getDisplayCountry(inLocale)
-                        + loc2.getDisplayLanguage(inLocale)
-                        + loc2.getDisplayVariant(inLocale);
-                else
-                    s2 = loc2.getDisplayLanguage(inLocale)
-                        + loc2.getDisplayCountry(inLocale)
-                        + loc2.getDisplayVariant(inLocale);
-            }
-            if ((flags & LOCALE_DESCENDING) == LOCALE_DESCENDING)
-                outcome = collator.compare(s2, s1);
-            else
-                outcome = collator.compare(s1, s2);
-            return (outcome);
-        }
-    }
+	    public int compare(Locale loc1, Locale loc2) {
+		String s1 = "";
+		String s2 = "";
+		int outcome = 0;
+		Collator collator = Collator.getInstance(sortInLocale);
+		if (loc1 != null) {
+		    Locale inLocale = displayInLocale;
+		    if (inLocale == null)
+			inLocale = loc1;
+		    if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
+			s1 = loc1.getDisplayCountry(inLocale)
+				+ loc1.getDisplayLanguage(inLocale)
+				+ loc1.getDisplayVariant(inLocale);
+		    else
+			s1 = loc1.getDisplayLanguage(inLocale)
+				+ loc1.getDisplayCountry(inLocale)
+				+ loc1.getDisplayVariant(inLocale);
+		}
+		if (loc2 != null) {
+		    Locale inLocale = displayInLocale;
+		    if (inLocale == null)
+			inLocale = loc2;
+		    if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
+			s2 = loc2.getDisplayCountry(inLocale)
+				+ loc2.getDisplayLanguage(inLocale)
+				+ loc2.getDisplayVariant(inLocale);
+		    else
+			s2 = loc2.getDisplayLanguage(inLocale)
+				+ loc2.getDisplayCountry(inLocale)
+				+ loc2.getDisplayVariant(inLocale);
+		}
+		if ((flags & LOCALE_DESCENDING) == LOCALE_DESCENDING)
+		    outcome = collator.compare(s2, s1);
+		else
+		    outcome = collator.compare(s1, s2);
+		return (outcome);
+	    }
+	}
 
 	if (locales == null) {
-        return null;
-    }
+	    return null;
+	}
 
-    // Make the locale comparator.
-    LocaleComparator comp = new LocaleComparator();
-    comp.setFlags(flags);
-    comp.setSortLocale(sortLocale);
-    comp.setDisplayLocale(displayLocale);
+	// Make the locale comparator.
+	LocaleComparator comp = new LocaleComparator();
+	comp.setFlags(flags);
+	comp.setSortLocale(sortLocale);
+	comp.setDisplayLocale(displayLocale);
 
-    // Sort the collection.
-    List<Locale> list = new ArrayList<Locale>();
-    list.addAll(locales);
-    try {
-        Collections.sort(list, comp);
-    } catch (Exception e) {
-        // Ignore exception and return unsorted list.
-    }
-    return list;
+	// Sort the collection.
+	List<Locale> list = new ArrayList<Locale>();
+	list.addAll(locales);
+	try {
+	    Collections.sort(list, comp);
+	} catch (Exception e) {
+	    // Ignore exception and return unsorted list.
+	}
+	return list;
     }
 
     /**
