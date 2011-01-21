@@ -303,8 +303,8 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
     }
 
     /**
-     * Sets up the Timber logs; meant for use at the beginning of a handler(eg,
-     * from the
+     * Sets up the Timber logs for normal processing; meant for use at the
+     * beginning of a handler (eg, from the
      * {@link com.hp.it.spf.xa.htmlviewer.portlet.web.TransactionLoggingInterceptor}
      * ). Setup includes:
      * <ul>
@@ -315,10 +315,40 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
      * <li>initializing the status indicator to OK</li>
      * </ul>
      * 
+     * <p>
+     * Note this method is idempotent: it can be called multiple times on the
+     * same request and will always have the same effect.
+     * </p>
+     * 
+     * 
      * @param request
      *            The portlet request.
      */
     public static void setupLogData(PortletRequest request) {
+	setupLogData(request, StatusIndicator.OK);
+    }
+
+    /**
+     * Sets up the Timber logs for normal processing but with the given status
+     * indicator; meant for use in a handler or resolver when the status has
+     * changed. Setup includes:
+     * <ul>
+     * <li>setting Timber logs' CLIENT_ID column to the SPF diagnostic ID</li>
+     * <li>setting Timber logs' PAGE_ID column to the SPF user ID</li>
+     * <li>setting Timber logs' PORTLET_NAME column to the SPF portlet friendly
+     * ID</li>
+     * <li>initializing the status indicator to OK</li>
+     * </ul>
+     * <p>
+     * Note this method is idempotent: it can be called multiple times with the
+     * same request and status indicator, and will always have the same effect.
+     * </p>
+     * 
+     * @param request
+     *            The portlet request.
+     */
+    public static void setupLogData(PortletRequest request,
+	    StatusIndicator status) {
 	if (request != null) {
 	    Transaction trans = TransactionImpl.getTransaction(request);
 	    if (trans != null) {
@@ -331,7 +361,10 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 		trans.setPageId(userID);
 		trans.setPortletName(portletID);
 		// trans.addContextInfo("portletID", portletID);
-		trans.setStatusIndicator(StatusIndicator.OK);
+		if (status != null)
+		    trans.setStatusIndicator(status);
+		else
+		    trans.setStatusIndicator(StatusIndicator.OK);
 	    }
 	}
     }
@@ -481,6 +514,12 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
      * the Timber error and errortrace logs</li>
      * </ul>
      * 
+     * <blockquote>
+     * <p>
+     * Note this method is <b>not</b> idempotent; each time you call it, it adds
+     * context info (and possibly error/errortrace log data) which accumulates.
+     * </p>
+     * </blockquote>
      * 
      * @param request
      *            The portlet request.
@@ -509,6 +548,8 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 		    trans.addContextInfo(errorCode, errorDiagnostic);
 		    if (ex instanceof SystemException) { // system error
 			Throwable cause = spfEx.getNext();
+			if (cause == null) // log cause or else this
+			    cause = spfEx;
 			trans.addError(cause, errorDiagnostic, errorCode);
 		    }
 		} else { // assume system error
@@ -516,7 +557,9 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 		    String errorDiagnostic = ex.getMessage();
 		    trans.addContextInfo(errorCode, errorDiagnostic);
 		    Throwable cause = ex.getCause();
-		    trans.addError(cause, errorCode, errorDiagnostic);
+		    if (cause == null) // log cause or else this
+			cause = ex;
+		    trans.addError(cause);
 		}
 	    }
 	}

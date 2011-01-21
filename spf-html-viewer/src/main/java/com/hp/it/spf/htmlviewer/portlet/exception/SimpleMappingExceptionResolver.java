@@ -4,6 +4,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.springframework.web.portlet.ModelAndView;
+import com.hp.websat.timber.model.StatusIndicator;
 
 import com.hp.it.spf.xa.exception.portlet.BusinessException;
 
@@ -32,17 +33,26 @@ public class SimpleMappingExceptionResolver
 	    RenderResponse response, Object handler, Exception ex) {
 
 	// First detect and log system errors that haven't already logged
-	// themselves.
+	// themselves. For those that have already logged themselves, make sure
+	// the status indicator is still set (this handles the corner-case of a
+	// system error instantiated in action phase and now being resolved in
+	// render phase - this makes sure the log data is still set, since it
+	// gets reset between phases).
 	if (!(ex instanceof InternalErrorException)
 		&& !(ex instanceof BusinessException)) {
 	    Utils.setupLogData(request, ex);
+	} else if (ex instanceof InternalErrorException) {
+	    Utils.setupLogData(request, StatusIndicator.FATAL);
 	}
 
 	// Next detect and log business errors that haven't already logged
-	// themselves.
+	// themselves. For those that have already logged themselves, make sure
+	// the status indicator is still set.
 	if (!(ex instanceof InputErrorException)
 		&& (ex instanceof BusinessException)) {
 	    Utils.setupLogData(request, ex);
+	} else if (ex instanceof InputErrorException) {
+	    Utils.setupLogData(request, StatusIndicator.ERROR);
 	}
 
 	// Last we call super to resolve the exception (basic Spring
