@@ -42,7 +42,7 @@
 String privacyUrlDef = Utils.getI18nValue(i18nID, "hpweb.privacyUrl",
 			portalContext);
 String dataRightsUrlDef = Utils.getI18nValue(i18nID, "hpweb.dataRightsUrl",
-		portalContext);
+			portalContext);
 String imprintUrlDef = Utils.getI18nValue(i18nID, "hpweb.imprintUrl",
 			portalContext);
 String termsUrlDef = Utils.getI18nValue(i18nID, "hpweb.termsUrl",
