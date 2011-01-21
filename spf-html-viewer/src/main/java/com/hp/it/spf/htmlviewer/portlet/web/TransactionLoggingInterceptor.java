@@ -7,12 +7,22 @@ import com.hp.it.spf.htmlviewer.portlet.util.Utils;
 
 /**
  * Extends the WPA Timber <code>TransactionLoggingInterceptor</code> to collect
- * log data common to all portlet phases and modes. This delegates to
- * {@link Utils#setupLogData(PortletRequest)} to collect the log data and set it
- * into the WPA Timber <code>Transaction</code> object, after invoking the WPA
- * Timber superclass to perform its standard processing. WPA Timber will then
- * output that data into the corresponding fields in the various logs, as
- * configured in the portlet application's logger.xml.
+ * log data common to all portlet phases and modes.
+ * 
+ * This delegates to {@link LogHelper#setupLogData(PortletRequest)} (see) after
+ * invoking the WPAP Timber superclass to perform its usual
+ * <code>preHandle</code> processing. It also disables any exception from being
+ * logged to the Timber error logs by overriding the
+ * <code>afterCompletion</code> method to suppress passing the exception into
+ * the superclass. (We do this because all exceptions considered system errors
+ * will already have been logged to the Timber error logs, either from the
+ * {@link com.hp.it.spf.htmlviewer.portlet.exception.InternalErrorException}
+ * constructor, or from the
+ * {@link com.hp.it.spf.htmlviewer.portlet.exception.SimpleMappingExceptionResolver}
+ * , so any additional logging to the error logs by the superclass would be
+ * redundant. As for other kinds of exception, since they represent non-system
+ * errors, we would not want them logged anyway; the Timber error logs are
+ * reserved for system errors.)
  * 
  * @author djorgen
  */
@@ -43,7 +53,7 @@ public class TransactionLoggingInterceptor extends
     public void afterCompletion(PortletRequest request,
 	    PortletResponse response, Object handler, Exception ex)
 	    throws Exception {
-	
+
 	super.afterCompletion(request, response, handler, null);
     }
 

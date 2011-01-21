@@ -465,12 +465,22 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
     }
 
     /**
+     * <p>
      * Sets up the Timber logs; meant for use at the beginning of exception
-     * resolution. Assumes that the handled exception has already set the Timber
-     * errors and context info accordingly; the exception is only used here to
-     * ensure the status indicator has the proper value: ERROR for business errors
-     * and FATAL for system errors. Otherwise has the same effect as
-     * {@link #setupLogData(PortletRequest)}.
+     * resolution. First delegates to {@link #setupLogData(PortletRequest)} to
+     * initialize the log data. Then:
+     * </p>
+     * <ul>
+     * <li>in the case of an SPF <code>BusinessException</code>, initializes the
+     * Timber status indicator to ERROR and adds the error code and message as
+     * Timber context info</li>
+     * <li>in the case of an SPF <code>SystemException</code> or any other
+     * non-SPF-<code>BusinessException</code>, initializes the Timber status
+     * indicator to FATAL, and adds the error code (or classname) and message as
+     * Timber context info, and adds the exception (including its stacktrace) to
+     * the Timber error and errortrace logs</li>
+     * </ul>
+     * 
      * 
      * @param request
      *            The portlet request.
@@ -480,6 +490,7 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 	if (request != null) {
 	    Transaction trans = TransactionImpl.getTransaction(request);
 	    if (trans != null) {
+		// set status indicator
 		if (ex instanceof SPFException) {
 		    if (ex instanceof SystemException) {
 			trans.setStatusIndicator(StatusIndicator.FATAL);
@@ -488,6 +499,24 @@ public class Utils extends com.hp.it.spf.xa.misc.portlet.Utils {
 		    }
 		} else {
 		    trans.setStatusIndicator(StatusIndicator.FATAL);
+		}
+		// add error context info to business log (in all cases) and
+		// add error data to error logs (in system error case only)
+		if (ex instanceof SPFException) {
+		    SPFException spfEx = (SPFException) ex;
+		    String errorCode = spfEx.getErrorCode();
+		    String errorDiagnostic = spfEx.getErrorMessage();
+		    trans.addContextInfo(errorCode, errorDiagnostic);
+		    if (ex instanceof SystemException) { // system error
+			Throwable cause = spfEx.getNext();
+			trans.addError(cause, errorDiagnostic, errorCode);
+		    }
+		} else { // assume system error
+		    String errorCode = ex.getClass().getName();
+		    String errorDiagnostic = ex.getMessage();
+		    trans.addContextInfo(errorCode, errorDiagnostic);
+		    Throwable cause = ex.getCause();
+		    trans.addError(cause, errorCode, errorDiagnostic);
 		}
 	    }
 	}

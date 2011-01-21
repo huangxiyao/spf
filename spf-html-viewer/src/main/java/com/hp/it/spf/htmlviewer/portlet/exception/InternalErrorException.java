@@ -11,6 +11,7 @@ import javax.portlet.PortletRequest;
 import com.hp.frameworks.wpa.portlet.transaction.Transaction;
 import com.hp.frameworks.wpa.portlet.transaction.TransactionImpl;
 import com.hp.it.spf.htmlviewer.portlet.util.Consts;
+import com.hp.it.spf.htmlviewer.portlet.util.Utils;
 import com.hp.it.spf.xa.exception.portlet.SystemException;
 import com.hp.websat.timber.model.StatusIndicator;
 
@@ -46,12 +47,13 @@ public class InternalErrorException extends SystemException {
      * Timber logging status indicator for a fatal error, and generates log
      * entries for the error condition. Log entries include:
      * <ul>
-     * <li>Error code and diagnostic message are added to the business log.</li>
+     * <li>Error code and diagnostic message are added as context info to the
+     * business log.</li>
      * <li>An error log entry for this <code>InternalErrorException</code>,
      * including the error code, diagnostic, and any other accumulated context
      * info.</li>
      * <li>A stacktrace for this <code>InternalErrorException</code> in the
-     * errortrace log.
+     * errortrace log.</li>
      * </ul>
      * 
      * @param pRequest
@@ -75,11 +77,12 @@ public class InternalErrorException extends SystemException {
      * logging status indicator for a fatal error, and generates log entries for
      * the error condition. Log entries include:
      * <ul>
-     * <li>Root-cause exception name and message are added to the business log.</li>
+     * <li>Root-cause exception name and message are added as context info to
+     * the business log.</li>
      * <li>An error log entry for this <code>InternalErrorException</code>,
      * including the root-cause exception name and message, and any other
      * accumulated context info.</li>
-     * <li>A stacktrace for the root-cause exception in the errortrace log.
+     * <li>A stacktrace for the root-cause exception in the errortrace log.</li>
      * </ul>
      * 
      * @param pRequest
@@ -96,17 +99,7 @@ public class InternalErrorException extends SystemException {
     // //////////////////////////////////////
 
     private void log(PortletRequest pRequest) {
-	Transaction trans = TransactionImpl.getTransaction(pRequest);
-	if (trans != null) {
-	    String errorCode = getErrorCode();
-	    String errorMsg = getErrorMessage();
-	    Throwable errorCause = this;
-	    if (getNext() != null) {
-		errorCause = getNext();
-	    }
-	    trans.addError(errorCause, errorMsg, errorCode);
-	    trans.addContextInfo(errorCode, errorMsg);
-	    trans.setStatusIndicator(StatusIndicator.FATAL);
-	}
+	// Setup log data for this exception
+	Utils.setupLogData(pRequest, this);
     }
 }
