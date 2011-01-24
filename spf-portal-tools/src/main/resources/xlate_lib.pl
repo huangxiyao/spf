@@ -15,6 +15,7 @@
 # 3.0   02/16/09        DSJ updated for Shared Portal Framework
 # 3.1   04/01/09        DSJ updated to duplicate files for Hebrew
 # 3.2   11/20/09        DSJ updated to duplicate files for Hong Kong Chinese
+# 3.3   1/24/11         DSJ updated to normalize pt_br instead of pt_pt
 #
 ################################################################
 package main;
@@ -31,7 +32,9 @@ $image_ext_re = "jpg|gif|tif|png";
 $misc_ext_re = "pdf|doc|mpg|wav|psd|wmv|avi|ppt";
 $media_ext_re = "$image_ext_re|$misc_ext_re";
 $text_ext_re = "$msg_ext_re|$nonmsg_ext_re";
-$nonnormal_tags_re = "es_es|fr_ca|pt_br|zh_tw|zh_hk";
+# For CR #218 - pt_br should be normalized to pt, and pt_pt should be left
+# unnormalized - DSJ 2011/1/24
+$nonnormal_tags_re = "es_es|fr_ca|pt_pt|zh_tw|zh_hk";
 
 $all_files_re = "^.*\.($text_ext_re|$media_ext_re)\$";
 $all_msg_text_files_re = "^.*\.($msg_ext_re)\$";
