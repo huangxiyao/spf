@@ -97,7 +97,7 @@ public class DatabaseCheckTask extends GeneralComponentCheckTask {
          */
         String thisMethod = thisClassname + ".init(): ";
         String thisStep = thisMethod + "begin";
-        LOG.info(thisStep);
+        LOG.debug(thisStep);
         
         /*
          * use the parameter of vignette default database
@@ -109,7 +109,7 @@ public class DatabaseCheckTask extends GeneralComponentCheckTask {
         
         try {
             thisStep = thisMethod + "check driver exists";
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             Class.forName(driver);
             initSuccess = true;
         } catch (Exception e) {
@@ -118,7 +118,7 @@ public class DatabaseCheckTask extends GeneralComponentCheckTask {
                       + ", caught: " + e);
         }
         thisStep = thisMethod + "end";
-        LOG.info(thisStep);
+        LOG.debug(thisStep);
     }
 
     /**
@@ -134,7 +134,7 @@ public class DatabaseCheckTask extends GeneralComponentCheckTask {
          */
         String thisMethod = thisClassname + ".run(): ";
         String thisStep = thisMethod + "begin";
-        LOG.info(thisStep);
+        LOG.debug(thisStep);
         
         Connection con = null;
         Statement stmt = null;
@@ -148,16 +148,16 @@ public class DatabaseCheckTask extends GeneralComponentCheckTask {
             }
             
             thisStep = thisMethod + "get connection";
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             // connect the database
             con = DriverManager.getConnection(url, user, password);
             
             thisStep = thisMethod + "create statement";
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             stmt = con.createStatement();
             
             thisStep = thisMethod + "execute query";
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             // execute the SQL
             stmt.executeQuery(QUERY_STRING);
 
@@ -189,7 +189,7 @@ public class DatabaseCheckTask extends GeneralComponentCheckTask {
         responseTime = System.currentTimeMillis() - beginTime;
         
         thisStep = thisMethod + "end";
-        LOG.info (thisStep);
+        LOG.debug(thisStep);
     }
 
 }

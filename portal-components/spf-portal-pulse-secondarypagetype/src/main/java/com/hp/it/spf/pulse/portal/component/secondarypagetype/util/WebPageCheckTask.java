@@ -93,13 +93,13 @@ public class WebPageCheckTask extends GeneralComponentCheckTask {
          */
         String thisMethod = thisClassname + ".init(): ";
         String thisStep = thisMethod + "begin";
-        LOG.info(thisStep);
+        LOG.debug(thisStep);
         
         String trustStore = (String)params.get("trustStore");
         String trustStorePassword = (String)params.get("trustStorePassword");
 
         thisStep = thisMethod + "set ssl parameters and register protocol";
-        LOG.info(thisStep);
+        LOG.debug(thisStep);
         if (trustStore != null && trustStorePassword != null) { // set ssl
             // parameters
             System.setProperty("javax.net.sll.trustStore", trustStore);
@@ -109,10 +109,10 @@ public class WebPageCheckTask extends GeneralComponentCheckTask {
                     new ExSecureProtocolSocketFactory(), 443);
             Protocol.registerProtocol("https", myhttps);
         } else {
-            LOG.info(thisStep + ": no ssl configuration");
+            LOG.debug(thisStep + ": no ssl configuration");
         }
         thisStep = thisMethod + "end";
-        LOG.info(thisStep);
+        LOG.debug(thisStep);
     }
 
     /**
@@ -129,17 +129,17 @@ public class WebPageCheckTask extends GeneralComponentCheckTask {
          */
         String thisMethod = thisClassname + ".run(): ";
         String thisStep = thisMethod + "begin";
-        LOG.info(thisStep);
+        LOG.debug(thisStep);
         
         String url = (String)params.get("url");
         
         thisStep = thisMethod + "check url parameter";
-        LOG.info(thisStep);
+        LOG.debug(thisStep);
         if (url == null || url.length() < minURLLength) { // check if the url
             // parameter is valid
             status = STATUS_FAIL;
             thisStep = thisMethod + "end";
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             return;
         }
         String pattern = (String)params.get("pattern");
@@ -168,12 +168,12 @@ public class WebPageCheckTask extends GeneralComponentCheckTask {
              * troubleshooting.
              */
             thisStep = thisMethod + "get HttpClient";
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             httpClient = new HttpClient();
             // httpClient.setState(initialState); //removed by Gao, Hua-Kun
             // 2006/11/30
             thisStep = thisMethod + "get PostMethod";
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             postMethod = new PostMethod(url);
             Iterator it = params.entrySet().iterator();
             while (it.hasNext()) { // add parameters to the postMethod object
@@ -192,11 +192,11 @@ public class WebPageCheckTask extends GeneralComponentCheckTask {
             postMethod.getParams().setCookiePolicy(CookiePolicy.NETSCAPE);
 
             thisStep = thisMethod + "execute HttpClient";
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             int statusCode = httpClient.executeMethod(postMethod);
             
             thisStep = thisMethod + "check response";
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             String redirectLocation;
             Header locationHeader = postMethod.getResponseHeader("location");
             String content = "";
@@ -222,13 +222,13 @@ public class WebPageCheckTask extends GeneralComponentCheckTask {
                  * troubleshooting.
                  */
                 thisStep = thisMethod + "redirected: get GetMethod";
-                LOG.info(thisStep);
+                LOG.debug(thisStep);
                 redirectMethod = new GetMethod(redirectLocation);
                 redirectMethod.getParams().setCookiePolicy(
                         CookiePolicy.NETSCAPE);
                 
                 thisStep = thisMethod + "execute HttpClient";
-                LOG.info(thisStep);
+                LOG.debug(thisStep);
                 statusCode = httpClient.executeMethod(redirectMethod);
                 byte[] responseBody = redirectMethod.getResponseBody();
                 content = new String(responseBody);
@@ -289,6 +289,6 @@ public class WebPageCheckTask extends GeneralComponentCheckTask {
         responseTime = System.currentTimeMillis() - beginTime;
         
         thisStep = thisMethod + "end";
-        LOG.info (thisStep);
+        LOG.debug(thisStep);
     }
 }
