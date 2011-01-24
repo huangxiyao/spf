@@ -77,19 +77,19 @@ public class HPPWebServiceCheckTask extends GeneralComponentCheckTask {
          */
         String thisMethod = thisClassname + ".run(): ";
         String thisStep = thisMethod + "begin";
-        LOG.info(thisStep);
+        LOG.debug(thisStep);
         
         int tmpStatus = STATUS_FAIL; // STATUS_FAIL means failing of the HPP ws
         long beginTime = System.currentTimeMillis(); // the current time
         
         try {
             thisStep = thisMethod + "get Web service";
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             // the instance of new webservice
             PassportService ws = new PassportService();
 
             thisStep = thisMethod + "get Web service parameters";
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             // login using admin account
             PassportParametersManager wsManagerInstance = PassportParametersManager
                     .getInstance();
@@ -97,7 +97,7 @@ public class HPPWebServiceCheckTask extends GeneralComponentCheckTask {
             String adminUserPWD = wsManagerInstance.getAdminPassword();
 
             thisStep = thisMethod + "execute Web service test: adminUserName: " + adminUserName;
-            LOG.info(thisStep);
+            LOG.debug(thisStep);
             ws.login(adminUserName, adminUserPWD);
 
             tmpStatus = STATUS_PASS; // STATUS_PASS means failing of the HPP ws
@@ -109,6 +109,6 @@ public class HPPWebServiceCheckTask extends GeneralComponentCheckTask {
         responseTime = System.currentTimeMillis() - beginTime;
         
         thisStep = thisMethod + "end";
-        LOG.info (thisStep);
+        LOG.debug(thisStep);
     }
 }
