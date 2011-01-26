@@ -15,10 +15,9 @@
     </description>
 
     <scm>
-        <connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk/spf-pom</connection>
-        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/spf-pom
-        </developerConnection>
-        <url>http://code1.corp.hp.com/svn/spf/source/trunk/spf-pom</url>
+        <connection>${spf.sourceReadUrl}/trunk/spf-pom</connection>
+        <developerConnection>${spf.sourceWriteUrl}/trunk/spf-pom</developerConnection>
+        <url>${spf.sourceViewUrl}/trunk/spf-pom</url>
     </scm>
 
     <ciManagement>
@@ -49,9 +48,9 @@
         <slf4jVersion>1.5.6</slf4jVersion>
         <logbackVersion>0.9.15</logbackVersion>
 
-        <cas.sourceReadUrl>scm:svn:http://code1.corp.hp.com/svn/cas/source</cas.sourceReadUrl>
-        <cas.sourceWriteUrl>scm:svn:https://code1.corp.hp.com/svn/cas/source</cas.sourceWriteUrl>
-        <cas.sourceViewUrl>http://code1.corp.hp.com/svn/cas/source</cas.sourceViewUrl>
+        <spf.sourceReadUrl>scm:svn:http://code1.corp.hp.com/svn/spf/source</spf.sourceReadUrl>
+        <spf.sourceWriteUrl>scm:svn:https://code1.corp.hp.com/svn/spf/source</spf.sourceWriteUrl>
+        <spf.sourceViewUrl>http://code1.corp.hp.com/svn/spf/source</spf.sourceViewUrl>
         <distributeSnapshotUrl>http://repo1.corp.hp.com/nexus/content/repositories/snapshots</distributeSnapshotUrl>
         <distributeReleaseUrl>http://repo1.corp.hp.com/nexus/content/repositories/releases</distributeReleaseUrl>
         <siteUrl>dav:http://repo1.corp.hp.com/site</siteUrl>
@@ -164,7 +163,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring</artifactId>
-                <version>2.5.6</version>
+                <version>${springFrameworkVersion}</version>
             </dependency>
 
             <dependency>
@@ -175,8 +174,8 @@
 
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-mock</artifactId>
-                <version>2.0.8</version>
+                <artifactId>spring-test</artifactId>
+                <version>${springFrameworkVersion}</version>
                 <scope>test</scope>
             </dependency>
 
@@ -732,41 +731,34 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.hp.it.spf.tools</groupId>
-                <artifactId>spf-maven-car-plugin</artifactId>
-                <extensions>true</extensions>
-                <version>2.1.1</version>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${mavenJavadocPluginVersion}</version>
+                <inherited>true</inherited>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
-                <plugin>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>${mavenJavadocPluginVersion}</version>
-                    <inherited>true</inherited>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>${mavenSourcePluginVersion}</version>
-                    <inherited>true</inherited>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${mavenSourcePluginVersion}</version>
+                <inherited>true</inherited>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
         </plugins>
         <pluginManagement>
