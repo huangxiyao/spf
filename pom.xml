@@ -25,9 +25,9 @@
 	</modules>
 
 	<scm>
-		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-portal-laf-DP3.3</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-portal-laf-DP3.3</developerConnection>
-		<url>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-portal-laf-DP3.3</url>
+		<connection>${spf.sourceReadUrl}/branches/spf-portal-laf-DP3.3</connection>
+		<developerConnection>${spf.sourceWriteUrl}/branches/spf-portal-laf-DP3.3</developerConnection>
+		<url>${spf.sourceViewUrl}/branches/spf-portal-laf-DP3.3</url>
 	</scm>
 	
 	<ciManagement>
