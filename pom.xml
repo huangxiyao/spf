@@ -17,9 +17,9 @@
 	<name>SPF portlet applications aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/branches/portlet-apps-DP3.3</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/portlet-apps-DP3.3</developerConnection>
-		<url>http://code1.corp.hp.com/svn/spf/source/branches/portlet-apps-DP3.3</url>
+		<connection>${spf.sourceReadUrl}/branches/portlet-apps-DP3.3</connection>
+		<developerConnection>${spf.sourceWriteUrl}/branches/portlet-apps-DP3.3</developerConnection>
+		<url>${spf.sourceViewUrl}/branches/portlet-apps-DP3.3</url>
 	</scm>
 
 	<distributionManagement>
