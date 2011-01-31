@@ -56,14 +56,10 @@ public class SimpleMappingExceptionResolver extends
      * {@link ExceptionUtil#getException(javax.portlet.PortletRequest)}, will
      * find it.
      */
-    /**
-     * TODO uncomment this when Spring is upgrade to 3.x
     public ModelAndView resolveException(ResourceRequest request,
 	    ResourceResponse response, Object handler, Exception ex) {
 
 	ExceptionUtil.setException(request, ex);
 	return super.resolveException(request, response, handler, ex);
     }
-     */
-
 }
