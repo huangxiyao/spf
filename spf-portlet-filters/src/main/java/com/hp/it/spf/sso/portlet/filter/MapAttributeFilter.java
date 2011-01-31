@@ -155,7 +155,8 @@ public class MapAttributeFilter
     private void forVAP(PortletRequest request) {
         // retrieve all attribute names start with VIGNETTE_PREFIX
         Enumeration enums = request.getAttributeNames();
-        while (enums.hasMoreElements()) {
+        // Fix NullPointerException vulnerability - DSJ 2011/1/31
+        while ((enums != null) && (enums.hasMoreElements())) {
             String attKey = (String)enums.nextElement();
             if (attKey.startsWith(VIGNETTE_PREFIX)) {
                 String localKey = attKey.replaceFirst(VIGNETTE_PREFIX, "");
@@ -180,7 +181,8 @@ public class MapAttributeFilter
      */
     private void forOpenPortal(PortletRequest request) {
         HttpServletRequest rq = (HttpServletRequest)request.getAttribute("javax.portlet.portletc.httpServletRequest");
-        if (rq.getAttribute(Consts.USER_PROFILE_KEY) instanceof Map) {
+        // Fix NullPointerException vulnerability - DSJ 2011/1/31
+        if ((rq != null) && (rq.getAttribute(Consts.USER_PROFILE_KEY) instanceof Map)) {
             Object obj = rq.getAttribute("com.sun.portal.portletcontainer.portlet_container_request");
             if (obj != null) {
                 try {
