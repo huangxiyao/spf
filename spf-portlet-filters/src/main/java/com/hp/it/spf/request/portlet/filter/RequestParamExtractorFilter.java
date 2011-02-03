@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Set;
 import java.util.HashSet;
+import java.net.URLDecoder;
 
 import com.hp.it.spf.xa.misc.portlet.Utils;
 
@@ -170,6 +171,9 @@ public class RequestParamExtractorFilter
 						int ixOfEqual = keyValPairs.indexOf('=');
 						String key = keyValPairs.substring(0, ixOfEqual);
 						String value = keyValPairs.substring(ixOfEqual + 1);
+						// need to URL-decode the key and value
+						key = URLDecoder.decode(key, "UTF8");
+						value = URLDecoder.decode(value, "UTF8");
 						if (map.containsKey(key)) {
 							String[] valueArray = map.get(key);
 							String[] tempArray = appendValue(valueArray, value);
