@@ -8,6 +8,10 @@
  * <dt><code>{AFTER:<i>date</i>}</code></dt>
  * <dd>Includes the surrounded content after the particular
  * <code><i>date</i></code>.</dd>
+ * <dt><code>{AUTH:<i>types</i>}</code></dt>
+ * <dd>Includes the surrounded content if the user in the current portal request
+ * is using one of the listed authentication <code><i>types</i></code> (eg,
+ * HPP). Otherwise suppresses the surrounded content.</dd>
  * <dt><code>{BEFORE:<i>date</i>}</code></dt>
  * <dd>Includes the surrounded content until the particular
  * <code><i>date</i></code>.</dd>
@@ -20,6 +24,12 @@
  * <dt><code>{COUNTRY-CODE:<i>case</i>}</code></dt>
  * <dd>As above, forced to <code><i>lower</i></code> or
  * <code><i>upper</i></code> case (default is upper).</dd>
+ * <dt><code>{COUNTRY-NAME}</code></dt>
+ * <dd>Replaced with the localized name of the country in the locale for the
+ * current portal request.</dd>
+ * <dt><code>{DATE:<i>date</i>}</code></dt>
+ * <dd>Replaced with a localized, timezone-adjusted, formatted string for the
+ * particular <code><i>date</i></code>.</dd>
  * <dt><code>{EMAIL}</code></dt>
  * <dd>Replaced with the email address for the user in the current portal
  * request.</dd>
@@ -47,6 +57,9 @@
  * <dt><code>{LANGUAGE-CODE:<i>case</i>}</code></dt>
  * <dd>As above, forced to <code><i>lower</i></code> or
  * <code><i>upper</i></code> case (default is lower).</dd>
+ * <dt><code>{LANGUAGE-NAME}</code></dt>
+ * <dd>Replaced with the localized name of the language for the current portal
+ * request.</dd>
  * <dt><code>{LANGUAGE-TAG}</code></dt>
  * <dd>Replaced with the <a href="http://www.faqs.org/rfcs/rfc3066.html">RFC
  * 3066</a> language tag for the current portal request.</dd>

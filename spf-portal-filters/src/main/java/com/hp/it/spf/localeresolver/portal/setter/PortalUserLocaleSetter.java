@@ -15,7 +15,9 @@ import com.epicentric.site.Site;
 import com.hp.it.spf.localeresolver.hpweb.LanguageNegotiator;
 import com.hp.it.spf.localeresolver.portal.getter.IUserMediator;
 import com.hp.it.spf.localeresolver.portal.getter.PortalUserMediator;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.misc.portal.Utils;
+import com.hp.it.spf.xa.misc.portal.Consts;
 
 /**
  * @author <link href="marc.derosa@hp.com"></link>
@@ -51,12 +53,16 @@ public class PortalUserLocaleSetter implements ILocaleSetter {
             return;
         }
         
-        if (userMediator.isGuestUser(user)) {
-            Localizer localizer = I18nUtils.getLocalizer(request.getSession(false), 
-                    request);
-            localizer.setLocale(locale);
-        } else {
-            I18nUtils.setUserLocale(user, locale);
+        if (!I18nUtility.isCachedLocale(request, locale)) {
+	        if (userMediator.isGuestUser(user)) {
+	            Localizer localizer = I18nUtils.getLocalizer(request.getSession(false), 
+	                    request);
+	            localizer.setLocale(locale);
+	        } else {
+	            I18nUtils.setUserLocale(user, locale);
+	        }
+	        //cache the resolved locale into session
+	        I18nUtility.setCachedLocale(request, locale);
         }
         
         String uid = userAndSiteCompositeUid(user, request);
