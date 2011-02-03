@@ -73,6 +73,25 @@ pageContext.setAttribute("helpTextDef", Utils.getI18nValue(i18nID, "hpweb.helpTe
 pageContext.setAttribute("helpUrlDef",  Utils.getI18nValue(i18nID, "hpweb.helpUrl",
 		portalContext));
 
+// Retrieve the selected menu item
+MenuItemNode selectedNode = MenuItemUtils.getSelectedMenuItemNode(portalContext);
+MenuItemNode selectedLevel2Parent = null;
+// If selected menu item's level is deeper than 3, pick up the level 2 parent node
+if (selectedNode.getLevel() > 2) {
+	List parentNodeList = MenuItemUtils.getParentsForSelectedMenuItem(pageContext);
+	Iterator parentNodes = parentNodeList.iterator();
+	MenuItemNode parentNode;
+	int currentLevel;
+	while (parentNodes.hasNext()) {
+		parentNode = (MenuItemNode) parentNodes.next();
+		currentLevel = parentNode.getLevel();
+		if (currentLevel == 1) {
+			selectedLevel2Parent = parentNode;
+			break;
+		}
+	}
+}
+
 List menuItemList = HPWebModel.getTopMenuItems();
 
 // if the HPWebModel bean has top menu items, use it for hpweb layout
@@ -115,6 +134,11 @@ for (int tabIndex=0; tabIndex<menuItemList.size(); tabIndex++) {
 				selectedIndex = tabIndex;
 				done = true;
 				break;
+			}
+			// 
+			if ( (selectedLevel2Parent != null) && selectedLevel2Parent.getID().equals(button.getId()) ) {
+				//Highlight the level 2 parent of the selected menu item
+				button.setHighlighted(true);
 			}
 			int flyoutItemCount = button.getSubMenuItems().size();
 			if (flyoutItemCount > 0) {
@@ -165,12 +189,15 @@ pageContext.setAttribute("selectedIndex", selectedIndex);
 </hpweb-ext:tabSet>
 
 <%-- Render secondary navigation/button bar --%>
-
-<div id="horzNavButtonBar">
+<table id="horzNavButtonBar">
+<tr>
+<td>
+<table>
+<tr>
 <c:forEach var="tab" items="${menuItemList}" varStatus="tabIndex">
 
 	<c:if test="${selectedIndex eq tabIndex.count-1 && tab.visible eq true &&  fn:length(tab.subMenuItems) > 0}" >
-		<c:forEach var="button" items="${tab.subMenuItems}">
+		<c:forEach var="button" items="${tab.subMenuItems}" varStatus="status">
 		
 			<c:if test="${button.visible eq true}">
 		
@@ -186,15 +213,21 @@ pageContext.setAttribute("selectedIndex", selectedIndex);
 	
 				<c:choose>
 				<c:when test="${hasFlyout eq true}" >
-
-					<div class="horzNavButton" onmouseover="expand(this, '${blackCaretImg}');"
+					<c:choose>
+					<c:when test="${button.highlighted eq true}">
+					<td id="menuTD_${status.index}" class="horzNavButton active" onmouseover="expand(this, '${blackCaretImg}');"
 						onmouseout="collapse(this, ${button.highlighted}, '${blackCaretImg}', '${whiteCaretImg}');">
-
+					</c:when>
+					<c:otherwise>
+					<td id="menuTD_${status.index}" class="horzNavButton" onmouseover="expand(this, '${blackCaretImg}');"
+						onmouseout="collapse(this, ${button.highlighted}, '${blackCaretImg}', '${whiteCaretImg}');">
+					</c:otherwise>
+					</c:choose>	
 						<c:if test="${button.highlighted eq true}">
-							<a class="menuNormal topMenuItem active" href="${button.url}">${button.title}<img src="${spacerImg}" width="10" height="1" border="0"><img src="${blackCaretImg}" border="0" /></a>
+							<a class="menuNormal topMenuItem active" href="${button.url}">${button.title}</a>
 						</c:if>
 						<c:if test="${button.highlighted eq false}">
-							<a class="menuNormal topMenuItem" href="${button.url}">${button.title}<img src="${spacerImg}" width="10" height="1" border="0"><img src="${whiteCaretImg}" border="0" /></a>
+							<a class="menuNormal topMenuItem" href="${button.url}">${button.title}</a>
 						</c:if>
 				
 						<%-- Render flyout menu --%>
@@ -207,13 +240,21 @@ pageContext.setAttribute("selectedIndex", selectedIndex);
 							
 							</c:forEach>
 						</div>
-					</div>
+					</td>
+					<c:if test="${button.highlighted eq true}">
+						<td id="imgTD_${status.index}" class="horzNavButton rightBorder active"><img id="img_${status.index}" class="menuImg" src="${blackCaretImg}" border="0" alt=""/></td>
+					</c:if>
+					<c:if test="${button.highlighted eq false}">
+						<td id="imgTD_${status.index}" class="horzNavButton rightBorder"><img id="img_${status.index}" class="menuImg" src="${whiteCaretImg}" border="0" alt=""/></td>
+					</c:if>
 				</c:when>
 				<c:otherwise>
-					<div class="horzNavButton">
+					<td class="horzNavButton rightBorder">
 						<%-- Render a link that has no flyout menu --%>
-						<a class="topMenuItem noFlyout <c:if test="${button.highlighted eq true}">active</c:if>" href="${button.url}">${button.title}</a>
-					</div>
+						<a class="topMenuItem noFlyout <c:if test="${button.highlighted eq true}">active</c:if>" href="${button.url}" onmouseover="mouseOver(this);" onmouseout="mouseOut(this, ${button.highlighted});">
+						${button.title}
+						</a>
+					</td>
 				</c:otherwise>
 				</c:choose>
 			
@@ -222,25 +263,26 @@ pageContext.setAttribute("selectedIndex", selectedIndex);
 	</c:if>
 
 </c:forEach>
-
+</tr>
+</table>
+</td>
 	<%-- Render Help button if it is specified  --%>
 	
 	<c:if test="${(!empty HPWebModel.helpUrl || !empty helpUrlDef) && (! empty HPWebModel.helpText || !empty helpTextDef)}">
-		<div id="horzNavHelpButton">
+		<td id="horzNavHelpButton">
 			<a class="topMenuItem" href="<c:out value="${HPWebModel.helpUrl}" default="${helpUrlDef}" escapeXml="false" />"><c:out value="${HPWebModel.helpText}" default="${helpTextDef}" /></a>
-		</div>
+		</td>
 	</c:if>
 
 	<%-- This div is needed for FF to render the background color between 
 			the Help button and the previous button in the button bar.  
-	--%>
-	<div id="horzNavButtonBarBackground">
+	
+	<td id="horzNavButtonBarBackground">
 		&nbsp;
-	</div>
-
-</div>
+	</td>--%>
+</tr>
+</table>
 
 <div style="clear:both;"/>
 
 </c:if>
-

@@ -62,7 +62,7 @@
 <c:otherwise>
 
 <style text="text/css">
-.horzNavButton {border-right: 1px solid #FFFFFF; }
+.rightBorder {border-right: 1px solid #FFFFFF; }
 </style>
 
 </c:otherwise>
