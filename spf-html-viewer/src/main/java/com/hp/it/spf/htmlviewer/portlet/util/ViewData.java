@@ -1,7 +1,6 @@
 /*
- * Project: Shared Portal Framework
- * Copyright (c) 2009 HP. All Rights Reserved.
- **/
+ * Project: Shared Portal Framework Copyright (c) 2009 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.htmlviewer.portlet.util;
 
 import java.io.IOException;
@@ -46,9 +45,9 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  * the load was successful.
  * </p>
  * <p>
- * Thus <code>ViewData</code> acts as a wrapper around the portlet
- * preferences. All access to portlet preferences in the HTML viewer portlet
- * occurs through this wrapper.
+ * Thus <code>ViewData</code> acts as a wrapper around the portlet preferences.
+ * All access to portlet preferences in the HTML viewer portlet occurs through
+ * this wrapper.
  * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
@@ -56,466 +55,492 @@ import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
  */
 public class ViewData {
 
-	// cached preference data
-	private String viewFilename = null;
-	private String includesFilename = null;
-	private boolean launchButtonless = Boolean
-			.parseBoolean(Consts.DEFAULT_LAUNCH_BUTTONLESS);
-	private int checkSeconds = Integer.parseInt(Consts.DEFAULT_CHECK_SECONDS);
+    // cached preference data
+    private String viewFilename = null;
+    private String includesFilename = null;
+    private boolean launchButtonless = Boolean
+	    .parseBoolean(Consts.DEFAULT_LAUNCH_BUTTONLESS);
+    private int checkSeconds = Integer.parseInt(Consts.DEFAULT_CHECK_SECONDS);
 
-	// cached content
-	private String viewContent = null;
-	private ResourceBundle includesContent = null;
+    // cached content
+    private String viewContent = null;
+    private ResourceBundle includesContent = null;
 
-	// cache metadata
-	private Locale locale = null;
-	private long createMillis = System.currentTimeMillis();
-	private boolean fatal = false;
-	private LinkedHashMap<String, String> errors = new LinkedHashMap<String, String>();
+    // cache metadata
+    private Locale locale = null;
+    private long createMillis = System.currentTimeMillis();
+    private boolean fatal = false;
+    private String errorCode = null;
+    private String errorDiagnostic = null;
 
-	/**
-	 * <p>
-	 * Initialize the <code>ViewData</code> object from the portlet
-	 * preferences for the given request. First the portlet preferences are
-	 * fetched and stored inside the <code>ViewData</code> object. Then the
-	 * base view filename and includes filename preferences are used to obtain
-	 * the view file and includes file content, respectively. The proper
-	 * localized version of the content is obtained for the locale in the given
-	 * request. The view file is loaded from the portlet bundle directory or the
-	 * portlet application. The includes file is loaded from the portlet bundle
-	 * directory or portlet application, or the classpath. The content is <b>not</b>
-	 * interpolated, so that it can be re-used with many different users and
-	 * requests.
-	 * </p>
-	 * <p>
-	 * Use the instance methods to find out whether the creation of the object
-	 * succeeded or whether there was a fatal (or non-fatal) error.
-	 * </p>
-	 * 
-	 * @param request
-	 *            the user request
-	 */
-	public ViewData(PortletRequest request) {
+    /**
+     * <p>
+     * Initialize the <code>ViewData</code> object from the portlet preferences
+     * and parameters for the given request. First the request parameters and
+     * portlet preferences are fetched and stored inside the
+     * <code>ViewData</code> object. Then the base view filename and includes
+     * filename (taken from the request parameters when they exist, and
+     * otherwise taken from portlet preferences) are used to obtain the view
+     * file and includes file content, respectively. The proper localized
+     * version of the content is obtained for the locale in the given request.
+     * The view file is loaded from the portlet bundle directory or the portlet
+     * application. The includes file is loaded from the portlet bundle
+     * directory or portlet application, or the classpath. The content is
+     * <b>not</b> interpolated, so that it can be re-used with many different
+     * users and requests.
+     * </p>
+     * <p>
+     * Use the instance methods to find out whether the creation of the object
+     * succeeded or whether there was a fatal (or non-fatal) error.
+     * </p>
+     * 
+     * @param request
+     *            the user request
+     */
+    public ViewData(PortletRequest request) {
 
-		// Requires a non-null portlet request to load the preferences.
-		if (request != null) {
-			this.locale = request.getLocale();
-			try {
-				PortletPreferences pp = request.getPreferences();
-				// When getting strings, apply defaults later
-				this.viewFilename = Utils.slashify(pp.getValue(
-						Consts.VIEW_FILENAME, ""));
-				this.includesFilename = Utils.slashify(pp.getValue(
-						Consts.INCLUDES_FILENAME, ""));
-				// When getting other attributes, apply defaults now
-				this.launchButtonless = Boolean.valueOf(pp.getValue(
-						Consts.LAUNCH_BUTTONLESS,
-						Consts.DEFAULT_LAUNCH_BUTTONLESS));
-				try {
-					this.checkSeconds = Integer
-							.parseInt(pp.getValue(Consts.CHECK_SECONDS,
-									Consts.DEFAULT_CHECK_SECONDS));
-				} catch (NumberFormatException e) {
-					// Don't flag an error since there is a reasonable default.
-					this.checkSeconds = Integer
-							.parseInt(Consts.DEFAULT_CHECK_SECONDS);
-				}
-			} catch (Exception e) {
-				setFatal(Consts.ERROR_CODE_INTERNAL,
-						"Unable to read portlet preferences; reason: " + e);
-			} finally {
-				// Now load the content corresponding to the preferences.
-				loadViewContent(request);
-				loadIncludesContent(request);
-			}
+	// Requires a non-null portlet request to load the preferences.
+	if (request != null) {
+	    this.locale = request.getLocale();
+	    try {
+		PortletPreferences pp = request.getPreferences();
+		// Get filenames from request or otherwise from preferences
+		this.viewFilename = Utils.getRequestedViewFilename(request);
+		if (this.viewFilename == null) {
+		    this.viewFilename = pp.getValue(Consts.VIEW_FILENAME, "");
 		}
-	}
-
-	/**
-	 * <p>
-	 * Initialize the <code>ViewData</code> object from the given parameters,
-	 * storing them to portlet preferences as a side-effect. First the
-	 * parameters are stored inside the <code>ViewData</code> object. Then
-	 * they are persisted into the portlet preferences database. Finally they
-	 * are used to obtain the view file and includes file content. The proper
-	 * localized version of the content is obtained for the locale in the given
-	 * request. The view file is loaded from the portlet bundle directory or the
-	 * portlet application. The includes file is loaded from the portlet bundle
-	 * directory or portlet application, or the classpath. The content is <b>not</b>
-	 * interpolated, so that it can be re-used with many different users and
-	 * requests.
-	 * </p>
-	 * <p>
-	 * Use the instance methods to find out whether the creation of the object
-	 * (and save to the database) succeeded or whether there was a fatal (or
-	 * non-fatal) error.
-	 * </p>
-	 * 
-	 * @param request
-	 *            the user request
-	 * @param viewFilename
-	 *            the base view filename (relative to the portlet bundle
-	 *            directory or portlet application)
-	 * @param includesFilename
-	 *            the base includes filename (relative to the portlet bundle
-	 *            directory, portlet application, or classpath)
-	 * @param launchButtonless
-	 *            the launch-buttonless preference
-	 * @param checkSeconds
-	 *            the check-seconds preference
-	 */
-	public ViewData(PortletRequest request, String viewFilename,
-			String includesFilename, boolean launchButtonless, int checkSeconds) {
-
-		this.viewFilename = Utils.slashify(viewFilename);
-		this.includesFilename = Utils.slashify(includesFilename);
-		this.launchButtonless = launchButtonless;
-		this.checkSeconds = checkSeconds;
-
-		// Requires a non-null portlet request to set the preferences.
-		if (request != null) {
-			this.locale = request.getLocale();
-			try {
-				PortletPreferences pp = request.getPreferences();
-				pp.setValue(Consts.VIEW_FILENAME, this.viewFilename);
-				pp.setValue(Consts.INCLUDES_FILENAME, this.includesFilename);
-				pp.setValue(Consts.LAUNCH_BUTTONLESS, Boolean
-						.toString(this.launchButtonless));
-				pp.setValue(Consts.CHECK_SECONDS, Integer
-						.toString(this.checkSeconds));
-				pp.store();
-			} catch (Exception e) {
-				setFatal(Consts.ERROR_CODE_INTERNAL,
-						"Unable to save portlet preferences; reason: " + e);
-			} finally {
-				// Lastly load the content corresponding to the preferences.
-				loadViewContent(request);
-				loadIncludesContent(request);
-			}
+		this.viewFilename = Utils.slashify(this.viewFilename);
+		this.includesFilename = Utils
+			.getRequestedIncludesFilename(request);
+		if (this.includesFilename == null) {
+		    this.includesFilename = pp.getValue(
+			    Consts.INCLUDES_FILENAME, "");
 		}
-	}
-
-	/**
-	 * <p>
-	 * Returns true if this <code>ViewData</code> object has expired per the
-	 * check-seconds portlet preference at the time it was created, and false
-	 * otherwise. Thus if the check-seconds was negative, this will always
-	 * return false, and if the check-seconds was zero, it will always return
-	 * true.
-	 * </p>
-	 * <p>
-	 * <b>Note:</b> Whether the load of this <code>ViewData</code> succeeded
-	 * or not has no bearing on whether it is expired or not. In other words,
-	 * this method can return true even if {@link #ok()} is false.
-	 * </p>
-	 * 
-	 * @return true if expired, false if not yet expired
-	 */
-	public boolean expired() {
-
-		// If OK to cache forever, always return true.
-		if (checkSeconds < 0) {
-			return false;
-		}
-
-		// Otherwise compare current time with the last-check time + the number
-		// of seconds to cache.
-		long nowMillis = System.currentTimeMillis();
-		long expiresMillis = createMillis + (checkSeconds * 1000);
-		return nowMillis >= expiresMillis;
-	}
-
-	/**
-	 * Returns true if this <code>ViewData</code> object was created (loaded)
-	 * without any fatal or non-fatal errors. If false is returned, that means
-	 * there were fatal or non-fatal errors. In that case, you can use the
-	 * {@link #getErrors()} method to get the set of errors, and the
-	 * {@link #fatal()} method to check whether any were fatal.
-	 * 
-	 * @return true if there was no error during load, false otherwise
-	 */
-	public boolean ok() {
-		return this.errors.isEmpty() && !this.fatal;
-	}
-
-	/**
-	 * Returns true if a fatal error was encountered when this
-	 * <code>ViewData</code> object was created (loaded). You can use the
-	 * {@link #getErrors()} method to get the full set of errors (some of which
-	 * may have been fatal and some of which may have been non-fatal).
-	 * 
-	 * @return true if there was a fatal error during load, false otherwise
-	 */
-	public boolean fatal() {
-		return !this.errors.isEmpty() && this.fatal;
-	}
-
-	/**
-	 * Returns the set of errors encountered when this <code>ViewData</code>
-	 * object was created (loaded). The keys in the map are the error codes;
-	 * each one points to an internal diagnostic message containing further
-	 * information. Generally the diagnostic messages are not end-user-friendly
-	 * and are not localized; they should be used for logging/reporting purposes
-	 * only. If there were no errors, the returned map is empty.
-	 * 
-	 * @return the map of errors (empty if none)
-	 */
-	public LinkedHashMap<String,String> getErrors() {
-		return this.errors;
-	}
-
-	/**
-	 * Returns the base view filename that was loaded into this
-	 * <code>ViewData</code> object. This corresponds with the base view
-	 * filename preference in the portlet preferences. If there was a fatal
-	 * error during load, this value may be unreliable.
-	 * 
-	 * @return the base view filename (relative to the portlet bundle folder or
-	 *         portlet application)
-	 */
-	public String getViewFilename() {
-		return this.viewFilename;
-	}
-
-	/**
-	 * Returns the base include filename that was loaded into this
-	 * <code>ViewData</code> object. This corresponds with the base include
-	 * filename preference in the portlet preferences. If there was a fatal
-	 * error during load, this value may be unreliable.
-	 * 
-	 * @return the base include filename (relative to the portlet bundle folder,
-	 *         portlet application, or classpath)
-	 */
-	public String getIncludesFilename() {
-		return this.includesFilename;
-	}
-
-	/**
-	 * Returns the launch-buttonless value that was loaded into this
-	 * <code>ViewData</code> object. This corresponds with the
-	 * launch-buttonless preference in the portlet preferences. If there was a
-	 * fatal error during load, this value may be unreliable.
-	 * 
-	 * @return the launch-buttonless value
-	 */
-	public boolean getLaunchButtonless() {
-		return this.launchButtonless;
-	}
-
-	/**
-	 * Returns the check-seconds value that was loaded into this
-	 * <code>ViewData</code> object. This is the number of seconds for which
-	 * this <code>ViewData</code> object is considered valid from its
-	 * creation/load. This corresponds with the check-seconds preference in the
-	 * portlet preferences. If there was a fatal error during load, this value
-	 * may be unreliable.
-	 * 
-	 * @return the check-seconds value
-	 */
-	public int getCheckSeconds() {
-		return this.checkSeconds;
-	}
-
-	/**
-	 * Returns the locale that was loaded into this <code>ViewData</code>
-	 * object. This is the locale of the portlet request used to create the
-	 * <code>ViewData</code>. It is the locale for which the best-candidate
-	 * view content and includes content stored in this <code>ViewData</code>
-	 * were determined.
-	 * 
-	 * @return the locale for this <code>ViewData</code>
-	 */
-	public Locale getLocale() {
-		return this.locale;
-	}
-
-	/**
-	 * Returns the <b>uninterpolated</b> view file content that was loaded into
-	 * this <code>ViewData</code> object. This is the best-fit localized
-	 * content for the base view filename in the portlet preferences given the
-	 * locale. It is uninterpolated so that it can be reused by many different
-	 * users and requests. If there was an error during load, this content may
-	 * be unreliable.
-	 * 
-	 * @return the localized, uninterpolated view file content
-	 */
-	public String getViewContent() {
-		return this.viewContent;
-	}
-
-	/**
-	 * Returns the <b>uninterpolated</b> includes file content that was loaded
-	 * into this <code>ViewData</code> object. This is the best-fit localized
-	 * content for the base includes filename in the portlet preferences given
-	 * the locale. It is uninterpolated so that it can be reused by many
-	 * different users and requests. If there was an error during load, this
-	 * content may be unreliable.
-	 * 
-	 * @return the localized, uninterpolated includes file content
-	 */
-	public ResourceBundle getIncludesContent() {
-		return this.includesContent;
-	}
-
-	// ////////////////////////////////
-
-	/**
-	 * Load the view content. First get the input stream for the best-candidate
-	 * version of the file given the user's current locale and the current base
-	 * view filename. Then read that stream, until end of file, into the view
-	 * content. If not found or not openable/readable, the view content is left
-	 * null.
-	 */
-	private void loadViewContent(PortletRequest request) {
-
-		String viewFilename = this.viewFilename;
-
-		// Skip load and flag warning if view filename is improper.
-		if ((viewFilename == null) || (viewFilename.length() == 0)) {
-			setError(Consts.ERROR_CODE_VIEW_FILENAME_NULL);
-			return;
-		}
-		if (viewFilename.indexOf("..") != -1) {
-			setError(Consts.ERROR_CODE_VIEW_FILENAME_PATH, viewFilename);
-			return;
-		}
-
-		// Get input stream for the view filename. Skip load and flag warning if
-		// file not found.
-		InputStream viewStream = I18nUtility.getLocalizedFileStream(request,
-				viewFilename, this.locale, true);
-		if (viewStream == null) {
-			viewFilename = Utils.slashify(Consts.VIEW_FILE_DEFAULT_FOLDER
-					+ this.viewFilename);
-			viewStream = I18nUtility.getLocalizedFileStream(request,
-					viewFilename, this.locale, true);
-			if (viewStream == null) {
-				setError(Consts.ERROR_CODE_VIEW_FILE_NULL, this.viewFilename);
-				return;
-			}
-		}
-
-		// Read input stream into view content buffer. Skip load and flag
-		// warning if read problem.
-		StringBuffer sb = new StringBuffer();
+		this.includesFilename = Utils.slashify(this.includesFilename);
+		// When getting other attributes, apply defaults now
+		this.launchButtonless = Boolean.valueOf(pp.getValue(
+			Consts.LAUNCH_BUTTONLESS,
+			Consts.DEFAULT_LAUNCH_BUTTONLESS));
 		try {
-			InputStreamReader is = new InputStreamReader(viewStream, "utf-8");
-			char[] ch = new char[4096];
-			int len = 0;
-			while ((len = is.read(ch)) != -1) {
-				sb.append(ch, 0, len);
-			}
-			is.close();
-		} catch (IOException e) {
-			setError(Consts.ERROR_CODE_INTERNAL, "Unable to read view file: "
-					+ viewFilename + "; reason: " + e);
-			return;
+		    this.checkSeconds = Integer
+			    .parseInt(pp.getValue(Consts.CHECK_SECONDS,
+				    Consts.DEFAULT_CHECK_SECONDS));
+		} catch (NumberFormatException e) {
+		    // Don't flag an error since there is a reasonable default.
+		    this.checkSeconds = Integer
+			    .parseInt(Consts.DEFAULT_CHECK_SECONDS);
 		}
+	    } catch (Exception e) {
+		setFatal(Consts.ERROR_CODE_INTERNAL,
+			"Unable to read portlet preferences; reason: " + e);
+	    } finally {
+		// Now load the content corresponding to the preferences.
+		loadViewContent(request);
+		loadIncludesContent(request);
+	    }
+	}
+    }
 
-		// Finally store the buffer.
-		this.viewContent = sb.toString();
+    /**
+     * <p>
+     * Initialize the <code>ViewData</code> object from the given parameters,
+     * storing them to portlet preferences as a side-effect. First the
+     * parameters are stored inside the <code>ViewData</code> object. Then they
+     * are persisted into the portlet preferences database. Finally they are
+     * used to obtain the view file and includes file content. The proper
+     * localized version of the content is obtained for the locale in the given
+     * request. The view file is loaded from the portlet bundle directory or the
+     * portlet application. The includes file is loaded from the portlet bundle
+     * directory or portlet application, or the classpath. The content is
+     * <b>not</b> interpolated, so that it can be re-used with many different
+     * users and requests.
+     * </p>
+     * <p>
+     * Use the instance methods to find out whether the creation of the object
+     * (and save to the database) succeeded or whether there was a fatal (or
+     * non-fatal) error.
+     * </p>
+     * 
+     * @param request
+     *            the user request
+     * @param viewFilename
+     *            the base view filename (relative to the portlet bundle
+     *            directory or portlet application)
+     * @param includesFilename
+     *            the base includes filename (relative to the portlet bundle
+     *            directory, portlet application, or classpath)
+     * @param launchButtonless
+     *            the launch-buttonless preference
+     * @param checkSeconds
+     *            the check-seconds preference
+     */
+    public ViewData(PortletRequest request, String viewFilename,
+	    String includesFilename, boolean launchButtonless, int checkSeconds) {
+
+	this.viewFilename = Utils.slashify(viewFilename);
+	this.includesFilename = Utils.slashify(includesFilename);
+	this.launchButtonless = launchButtonless;
+	this.checkSeconds = checkSeconds;
+
+	// Requires a non-null portlet request to set the preferences.
+	if (request != null) {
+	    this.locale = request.getLocale();
+	    try {
+		PortletPreferences pp = request.getPreferences();
+		pp.setValue(Consts.VIEW_FILENAME, this.viewFilename);
+		pp.setValue(Consts.INCLUDES_FILENAME, this.includesFilename);
+		pp.setValue(Consts.LAUNCH_BUTTONLESS, Boolean
+			.toString(this.launchButtonless));
+		pp.setValue(Consts.CHECK_SECONDS, Integer
+			.toString(this.checkSeconds));
+		pp.store();
+	    } catch (Exception e) {
+		setFatal(Consts.ERROR_CODE_INTERNAL,
+			"Unable to save portlet preferences; reason: " + e);
+	    } finally {
+		// Lastly load the content corresponding to the preferences.
+		loadViewContent(request);
+		loadIncludesContent(request);
+	    }
+	}
+    }
+
+    /**
+     * <p>
+     * Returns true if this <code>ViewData</code> object has expired per the
+     * check-seconds portlet preference at the time it was created, and false
+     * otherwise. Thus if the check-seconds was negative, this will always
+     * return false, and if the check-seconds was zero, it will always return
+     * true.
+     * </p>
+     * <p>
+     * <b>Note:</b> Whether the load of this <code>ViewData</code> succeeded or
+     * not has no bearing on whether it is expired or not. In other words, this
+     * method can return true even if {@link #ok()} is false.
+     * </p>
+     * 
+     * @return true if expired, false if not yet expired
+     */
+    public boolean expired() {
+
+	// If OK to cache forever, always return true.
+	if (checkSeconds < 0) {
+	    return false;
+	}
+
+	// Otherwise compare current time with the last-check time + the number
+	// of seconds to cache.
+	long nowMillis = System.currentTimeMillis();
+	long expiresMillis = createMillis + (checkSeconds * 1000);
+	return nowMillis >= expiresMillis;
+    }
+
+    /**
+     * Returns the error code of the fatal (or non-fatal) error encountered when
+     * instantiating this <code>ViewData</code>, or null if there was no error.
+     * To check whether the error was fatal, use the {@link #fatal()} method.
+     * 
+     * @return the error code, or null if none
+     */
+    public String getErrorCode() {
+	return this.errorCode;
+    }
+
+    /**
+     * Returns any diagnostic message for the fatal (or non-fatal) error
+     * encountered when instantiating this <code>ViewData</code>. Returns null
+     * if there was no error, or if no diagnostic message was set for the error.
+     * To check whether there was an error, use {@link #ok()} or
+     * {@link #getErrorCode()}, and to check whether the error (if there was
+     * one) was fatal, use {@link #fatal()}.
+     * 
+     * @return the error diagnostic message, or null if none
+     */
+    public String getErrorDiagnostic() {
+	return this.errorDiagnostic;
+    }
+
+    /**
+     * Returns true if this <code>ViewData</code> object was created (loaded)
+     * without any fatal or non-fatal error. If false is returned, that means
+     * there was a fatal or non-fatal error. In that case, you can use the
+     * {@link #getErrorCode()} and {@link #getErrorDiagnostic()} methods to get
+     * information about the error, and the {@link #fatal()} method to check
+     * whether it was fatal.
+     * 
+     * @return true if there was no error during load, false otherwise
+     */
+    public boolean ok() {
+	return (this.errorCode == null) && !this.fatal;
+    }
+
+    /**
+     * Returns true if a fatal error was encountered when this
+     * <code>ViewData</code> object was created (loaded). You can use the
+     * {@link #getErrorCode()} and {@link #getErrorDiagnostic()} methods to get
+     * information about the error.
+     * 
+     * @return true if there was a fatal error during load, false otherwise
+     */
+    public boolean fatal() {
+	return (this.errorCode != null) && this.fatal;
+    }
+
+    /**
+     * Returns the base view filename that was loaded into this
+     * <code>ViewData</code> object. This corresponds with the base view
+     * filename preference from the portlet preferences or request, whichever
+     * was used. If there was a fatal error during load, this value may be
+     * unreliable.
+     * 
+     * @return the base view filename (relative to the portlet bundle folder or
+     *         portlet application)
+     */
+    public String getViewFilename() {
+	return this.viewFilename;
+    }
+
+    /**
+     * Returns the base include filename that was loaded into this
+     * <code>ViewData</code> object. This corresponds with the base include
+     * filename preference from the portlet preferences or request, whichever
+     * was used. If there was a fatal error during load, this value may be
+     * unreliable.
+     * 
+     * @return the base include filename (relative to the portlet bundle folder,
+     *         portlet application, or classpath)
+     */
+    public String getIncludesFilename() {
+	return this.includesFilename;
+    }
+
+    /**
+     * Returns the launch-buttonless value that was loaded into this
+     * <code>ViewData</code> object. This corresponds with the launch-buttonless
+     * preference in the portlet preferences. If there was a fatal error during
+     * load, this value may be unreliable.
+     * 
+     * @return the launch-buttonless value
+     */
+    public boolean getLaunchButtonless() {
+	return this.launchButtonless;
+    }
+
+    /**
+     * Returns the check-seconds value that was loaded into this
+     * <code>ViewData</code> object. This is the number of seconds for which
+     * this <code>ViewData</code> object is considered valid from its
+     * creation/load. This corresponds with the check-seconds preference in the
+     * portlet preferences. If there was a fatal error during load, this value
+     * may be unreliable.
+     * 
+     * @return the check-seconds value
+     */
+    public int getCheckSeconds() {
+	return this.checkSeconds;
+    }
+
+    /**
+     * Returns the locale that was loaded into this <code>ViewData</code>
+     * object. This is the locale of the portlet request used to create the
+     * <code>ViewData</code>. It is the locale for which the best-candidate view
+     * content and includes content stored in this <code>ViewData</code> were
+     * determined.
+     * 
+     * @return the locale for this <code>ViewData</code>
+     */
+    public Locale getLocale() {
+	return this.locale;
+    }
+
+    /**
+     * Returns the <b>uninterpolated</b> view file content that was loaded into
+     * this <code>ViewData</code> object. This is the best-fit localized content
+     * for the base view filename in the portlet preferences given the locale.
+     * It is uninterpolated so that it can be reused by many different users and
+     * requests. If there was an error during load, this content may be
+     * unreliable.
+     * 
+     * @return the localized, uninterpolated view file content
+     */
+    public String getViewContent() {
+	return this.viewContent;
+    }
+
+    /**
+     * Returns the <b>uninterpolated</b> includes file content that was loaded
+     * into this <code>ViewData</code> object. This is the best-fit localized
+     * content for the base includes filename in the portlet preferences given
+     * the locale. It is uninterpolated so that it can be reused by many
+     * different users and requests. If there was an error during load, this
+     * content may be unreliable.
+     * 
+     * @return the localized, uninterpolated includes file content
+     */
+    public ResourceBundle getIncludesContent() {
+	return this.includesContent;
+    }
+
+    // ////////////////////////////////
+
+    /**
+     * Load the view content. First get the input stream for the best-candidate
+     * version of the file given the user's current locale and the current base
+     * view filename. Then read that stream, until end of file, into the view
+     * content. If not found or not openable/readable, the view content is left
+     * null.
+     */
+    private void loadViewContent(PortletRequest request) {
+
+	String viewFilename = this.viewFilename;
+
+	// Skip load and flag warning if view filename is improper.
+	if ((viewFilename == null) || (viewFilename.length() == 0)) {
+	    setError(Consts.ERROR_CODE_VIEW_FILENAME_NULL);
+	    return;
+	}
+	if (viewFilename.indexOf("..") != -1) {
+	    setError(Consts.ERROR_CODE_VIEW_FILENAME_PATH, viewFilename);
+	    return;
+	}
+
+	// Get input stream for the view filename. Skip load and flag warning if
+	// file not found.
+	InputStream viewStream = I18nUtility.getLocalizedFileStream(request,
+		viewFilename, this.locale, true);
+	if (viewStream == null) {
+	    viewFilename = Utils.slashify(Consts.VIEW_FILE_DEFAULT_FOLDER
+		    + this.viewFilename);
+	    viewStream = I18nUtility.getLocalizedFileStream(request,
+		    viewFilename, this.locale, true);
+	    if (viewStream == null) {
+		setError(Consts.ERROR_CODE_VIEW_FILE_NULL, this.viewFilename);
 		return;
+	    }
 	}
 
-	/**
-	 * Load the includes content. First get the input stream for the
-	 * best-candidate version of the file given the user's current locale and
-	 * the current base includes filename. Then read that stream, until end of
-	 * file, into a resource bundle. If not found or not openable/readable, try
-	 * to load from the classpath using the PropertyResourceBundleManager. If
-	 * still not found or not openable/readable, the includes content is left
-	 * null.
-	 */
-	private void loadIncludesContent(PortletRequest request) {
+	// Read input stream into view content buffer. Skip load and flag
+	// warning if read problem.
+	StringBuffer sb = new StringBuffer();
+	try {
+	    InputStreamReader is = new InputStreamReader(viewStream, "utf-8");
+	    char[] ch = new char[4096];
+	    int len = 0;
+	    while ((len = is.read(ch)) != -1) {
+		sb.append(ch, 0, len);
+	    }
+	    is.close();
+	} catch (IOException e) {
+	    setError(Consts.ERROR_CODE_INTERNAL, "Unable to read view file: "
+		    + viewFilename + "; reason: " + e);
+	    return;
+	}
 
-		String includesFilename = this.includesFilename;
-		boolean isDefault = false;
+	// Finally store the buffer.
+	this.viewContent = sb.toString();
+	return;
+    }
 
-		// If includes filename is not defined, revert to the default.
-		if ((includesFilename == null) || (includesFilename.length() == 0)) {
-			includesFilename = Consts.DEFAULT_INCLUDES_FILENAME;
-			isDefault = true;
-		}
+    /**
+     * Load the includes content. First get the input stream for the
+     * best-candidate version of the file given the user's current locale and
+     * the current base includes filename. Then read that stream, until end of
+     * file, into a resource bundle. If not found or not openable/readable, try
+     * to load from the classpath using the PropertyResourceBundleManager. If
+     * still not found or not openable/readable, the includes content is left
+     * null.
+     */
+    private void loadIncludesContent(PortletRequest request) {
 
-		// Skip load and flag warning if includes filename is improper.
-		if (includesFilename.indexOf("..") != -1) {
-			setError(Consts.ERROR_CODE_INCLUDES_FILENAME_PATH, includesFilename);
-			return;
-		}
+	String includesFilename = this.includesFilename;
+	boolean isDefault = false;
 
-		// Get input stream for the includes filename. If this succeeds, try
-		// making a resource bundle from it. If that succeeds, return (no
-		// warning if empty), but if it fails, flag a warning and return.
-		InputStream includesStream = I18nUtility.getLocalizedFileStream(
-				request, includesFilename, this.locale, true);
-		if (includesStream != null) {
-			try {
-				this.includesContent = new PropertyResourceBundle(
-						includesStream);
-				return;
-			} catch (Exception e) {
-				setError(Consts.ERROR_CODE_INTERNAL,
-						"Unable to read includes file: " + includesFilename
-								+ "; reason: " + e);
-				return;
-			}
-		}
+	// If includes filename is not defined, revert to the default.
+	if ((includesFilename == null) || (includesFilename.length() == 0))
+	    this.includesFilename = includesFilename = Consts.DEFAULT_INCLUDES_FILENAME;
+	if (includesFilename.equals(Consts.DEFAULT_INCLUDES_FILENAME)) 
+	    isDefault = true;
 
-		// If the file was not found and loaded from the localized file stream,
-		// try getting and loading it from the classpath (using
-		// PropertyResourceBundleManager). If this also fails, log a warning
-		// unless it was for the default includes file (which is OK if it does
-		// not exist).
-		this.includesContent = PropertyResourceBundleManager
-				.getBundle(includesFilename);
-		if ((this.includesContent == null) && !isDefault) {
-			setError(Consts.ERROR_CODE_INCLUDES_FILE_NULL, includesFilename);
-		}
+	// Skip load and flag warning if includes filename is improper.
+	if (includesFilename.indexOf("..") != -1) {
+	    setError(Consts.ERROR_CODE_INCLUDES_FILENAME_PATH, includesFilename);
+	    return;
+	}
+
+	// Get input stream for the includes filename. If this succeeds, try
+	// making a resource bundle from it. If that succeeds, return (no
+	// warning if empty), but if it fails, flag a warning and return.
+	InputStream includesStream = I18nUtility.getLocalizedFileStream(
+		request, includesFilename, this.locale, true);
+	if (includesStream != null) {
+	    try {
+		this.includesContent = new PropertyResourceBundle(
+			includesStream);
 		return;
+	    } catch (Exception e) {
+		setError(Consts.ERROR_CODE_INTERNAL,
+			"Unable to read includes file: " + includesFilename
+				+ "; reason: " + e);
+		return;
+	    }
 	}
 
-	/**
-	 * Flag a non-fatal error and store the given diagnostics.
-	 * 
-	 * @param warnCode
-	 *            the diagnostic error code
-	 */
-	private void setError(String errorCode) {
-		setError(errorCode, null);
+	// If the file was not found and loaded from the localized file stream,
+	// try getting and loading it from the classpath (using
+	// PropertyResourceBundleManager). If this also fails, log a warning
+	// unless it was for the default includes file (which is OK if it does
+	// not exist).
+	this.includesContent = PropertyResourceBundleManager
+		.getBundle(includesFilename);
+	if ((this.includesContent == null) && !isDefault) {
+	    setError(Consts.ERROR_CODE_INCLUDES_FILE_NULL, includesFilename);
 	}
+	return;
+    }
 
-	/**
-	 * Flag a non-fatal error and store the given diagnostics.
-	 * 
-	 * @param errorCode
-	 *            the diagnostic error code
-	 * @param errorParam
-	 *            a diagnostic error parameter
-	 */
-	private void setError(String errorCode, String errorParam) {
-		this.errors.put(errorCode, Utils.getDiagnostic(errorCode, errorParam));
-	}
+    /**
+     * Flag a non-fatal error and store the given diagnostics.
+     * 
+     * @param warnCode
+     *            the diagnostic error code
+     */
+    private void setError(String errorCode) {
+	setError(errorCode, null);
+    }
 
-	/**
-	 * Flag a fatal error and store the given diagnostics.
-	 * 
-	 * @param errorCode
-	 *            the diagnostic error code
-	 */
-	private void setFatal(String errorCode) {
-		setFatal(errorCode, null);
-	}
+    /**
+     * Flag a non-fatal error and store the given diagnostics.
+     * 
+     * @param errorCode
+     *            the diagnostic error code
+     * @param errorParam
+     *            a diagnostic error parameter
+     */
+    private void setError(String errorCode, String errorParam) {
+	this.errorCode = errorCode;
+	this.errorDiagnostic = Utils.getDiagnostic(errorCode, errorParam);
+    }
 
-	/**
-	 * Flag a fatal error and store the given diagnostics.
-	 * 
-	 * @param errorCode
-	 *            the diagnostic error code
-	 * @param errorParam
-	 *            a diagnostic error parameter
-	 */
-	private void setFatal(String errorCode, String errorParam) {
-		setError(errorCode, errorParam);
-		this.fatal = true;
-	}
+    /**
+     * Flag a fatal error and store the given diagnostics.
+     * 
+     * @param errorCode
+     *            the diagnostic error code
+     */
+    private void setFatal(String errorCode) {
+	setFatal(errorCode, null);
+    }
+
+    /**
+     * Flag a fatal error and store the given diagnostics.
+     * 
+     * @param errorCode
+     *            the diagnostic error code
+     * @param errorParam
+     *            a diagnostic error parameter
+     */
+    private void setFatal(String errorCode, String errorParam) {
+	setError(errorCode, errorParam);
+	this.fatal = true;
+    }
 }

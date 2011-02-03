@@ -17,9 +17,9 @@
 	<name>SPF portlet applications aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk/portlet-apps</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/portlet-apps</developerConnection>
-		<url>http://code1.corp.hp.com/svn/spf/source/trunk/portlet-apps</url>
+		<connection>${spf.sourceReadUrl}/trunk/portlet-apps</connection>
+		<developerConnection>${spf.sourceWriteUrl}/trunk/portlet-apps</developerConnection>
+		<url>${spf.sourceViewUrl}/trunk/portlet-apps</url>
 	</scm>
 
 	<distributionManagement>
@@ -31,8 +31,11 @@
 	</distributionManagement>
 
 	<properties>
-		<spf.common.version>2.1.1</spf.common.version>
-		<spf.portlet.version>2.1.1</spf.portlet.version>
+		<spf.common.version>2.1.3-SNAPSHOT</spf.common.version>
+		<spf.portlet.version>2.1.3-SNAPSHOT</spf.portlet.version>
+		<!-- Temporarily pinning the Spring dependency to 3.0.x until the portal artifacts and
+		Vignette will be able to use it too -->
+		<springFrameworkVersion>3.0.5.RELEASE</springFrameworkVersion>
 	</properties>
 
 	<modules>

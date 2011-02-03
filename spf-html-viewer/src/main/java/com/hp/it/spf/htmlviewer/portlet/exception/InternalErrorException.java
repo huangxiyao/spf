@@ -1,7 +1,6 @@
 /*
- * Project: Shared Portal Framework
- * Copyright (c) 2008 HP. All Rights Reserved.
- **/
+ * Project: Shared Portal Framework Copyright (c) 2008 HP. All Rights Reserved.
+ */
 package com.hp.it.spf.htmlviewer.portlet.exception;
 
 import java.util.LinkedHashMap;
@@ -12,21 +11,22 @@ import javax.portlet.PortletRequest;
 import com.hp.frameworks.wpa.portlet.transaction.Transaction;
 import com.hp.frameworks.wpa.portlet.transaction.TransactionImpl;
 import com.hp.it.spf.htmlviewer.portlet.util.Consts;
+import com.hp.it.spf.htmlviewer.portlet.util.Utils;
 import com.hp.it.spf.xa.exception.portlet.SystemException;
 import com.hp.websat.timber.model.StatusIndicator;
 
 /**
  * <p>
- * A system exception used by the <code>html-viewer</code> portlet code
- * whenever a system error has occurred. For example, when no view filename is
- * configured by the time that the
+ * A system exception used by the <code>html-viewer</code> portlet code whenever
+ * a system error has occurred. For example, when no view filename is configured
+ * by the time that the
  * {@link com.hp.it.spf.htmlviewer.portlet.web.ViewController} executes.
  * </p>
  * <p>
- * The error diagnostics representing the system error(s) are set into this
- * exception by the constructor. The constructor also sets the WPAP Timber
- * logging status to indicate a fatal error was encountered. A WPAP Timber log
- * entry is generated for each error in the diagnostics. logging.
+ * The error diagnostics or exception representing the system error are set into
+ * this exception by the constructor. The constructor also sets the WPAP Timber
+ * logging status to indicate a fatal error was encountered, and records the
+ * error into the proper WPAP Timber logs (business, error, and errortrace).
  * </p>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
@@ -36,48 +36,70 @@ import com.hp.websat.timber.model.StatusIndicator;
  */
 public class InternalErrorException extends SystemException {
 
-	/**
-	 * serialVersionUID long
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * serialVersionUID long
+     */
+    private static final long serialVersionUID = 1L;
 
-	private LinkedHashMap<String, String> errors = null;
+    /**
+     * Constructs the <code>InternalErrorException</code> given an error code
+     * and diagnostic message describing the error condition. Also sets the WPAP
+     * Timber logging status indicator for a fatal error, and generates log
+     * entries for the error condition. Log entries include:
+     * <ul>
+     * <li>Error code and diagnostic message are added as context info to the
+     * business log.</li>
+     * <li>An error log entry for this <code>InternalErrorException</code>,
+     * including the error code, diagnostic, and any other accumulated context
+     * info.</li>
+     * <li>A stacktrace for this <code>InternalErrorException</code> in the
+     * errortrace log.</li>
+     * </ul>
+     * 
+     * @param pRequest
+     *            The portlet request.
+     * @param pErrorCode
+     *            The error code (a short unique keyname representing the
+     *            error).
+     * @param pErrorMsg
+     *            The error message (a longer diagnostic message describing the
+     *            error in more detail).
+     */
+    public InternalErrorException(PortletRequest pRequest, String pErrorCode,
+	    String pErrorMsg) {
+	super(pErrorCode, pErrorMsg);
+	log(pRequest);
+    }
 
-	/**
-	 * Constructs the <code>InternalErrorException</code> given a map of error
-	 * codes and diagnostic messages - one for each error condition. Also sets
-	 * the WPAP Timber logging status indicator for a fatal error, and generates
-	 * error log entries for each error condition in the diagnostics.
-	 * 
-	 * @param pRequest -
-	 *            The portlet request
-	 * @param pErrors -
-	 *            A map of error codes to (optional) diagnostic messages.
-	 */
-	public InternalErrorException(PortletRequest pRequest,
-			LinkedHashMap<String, String> pErrors) {
-		super(Consts.ERROR_CODE_INTERNAL);
-		this.errors = pErrors;
-		Transaction trans = TransactionImpl.getTransaction(pRequest);
-		if (trans != null) {
-			if (pErrors != null) {
-				Iterator i = pErrors.keySet().iterator();
-				String errorCode, errorDiagnostic;
-				while (i.hasNext()) {
-					errorCode = (String) i.next();
-					errorDiagnostic = pErrors.get(errorCode);
-					if (errorDiagnostic != null) { 
-						trans.addError(this, errorDiagnostic, errorCode);
-						trans.addContextInfo(errorCode, errorDiagnostic);
-					} else {
-						trans.addError(this, null, errorCode);
-						trans.addContextInfo(errorCode, null);
-					}
-				}
-			} else {
-				trans.addError(this);
-			}
-			trans.setStatusIndicator(StatusIndicator.FATAL);
-		}
-	}
+    /**
+     * Constructs the <code>InternalErrorException</code> given a root-cause
+     * exception (or similar <code>Throwable</code>). Also sets the WPAP Timber
+     * logging status indicator for a fatal error, and generates log entries for
+     * the error condition. Log entries include:
+     * <ul>
+     * <li>Root-cause exception name and message are added as context info to
+     * the business log.</li>
+     * <li>An error log entry for this <code>InternalErrorException</code>,
+     * including the root-cause exception name and message, and any other
+     * accumulated context info.</li>
+     * <li>A stacktrace for the root-cause exception in the errortrace log.</li>
+     * </ul>
+     * 
+     * @param pRequest
+     *            The portlet request.
+     * @param pEx
+     *            The root-cause exception.
+     */
+    public InternalErrorException(PortletRequest pRequest, Throwable pEx) {
+	super(Consts.ERROR_CODE_INTERNAL, pEx,
+		"An unexpected exception occurred: " + pEx.getClass().getName());
+	log(pRequest);
+    }
+
+    // //////////////////////////////////////
+
+    private void log(PortletRequest pRequest) {
+	// Setup log data for this exception
+	Utils.setupLogData(pRequest, this);
+    }
 }
