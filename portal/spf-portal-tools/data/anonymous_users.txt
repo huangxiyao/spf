@@ -35,6 +35,7 @@ fr	FR	Europe/Paris	French - France
 fr	CH	Europe/Zurich	French - Switzerland
 fr	CA	America/Montreal	French - Canada
 fr	BE	Europe/Brussels	French - Belgium
+fr	LU	Europe/Luxembourg	French - Luxembourg
 ru		Europe/Moscow	Russian (generic)
 ru	RU	Europe/Moscow	Russian - Russia
 ru	UA	Europe/Kiev	Russian - Ukraine
@@ -100,7 +101,7 @@ ro	RO	Europe/Bucharest	Romanian - Romania
 sr		Europe/Belgrade	Serbian (generic)
 sr	RS	Europe/Belgrade	Serbian - Serbia
 sr	ME	Europe/Belgrade	Serbian - Montenegro
-th		Asia/Bangkok	Thai (generic) 	
+th		Asia/Bangkok	Thai (generic)
 th	TH	Asia/Bangkok	Thai - Thailand
 vi		Asia/Saigon	Vietnamese (generic)
 vi	VN	Asia/Saigon	Vietnamese - Vietnam
