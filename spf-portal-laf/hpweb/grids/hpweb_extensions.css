@@ -45,23 +45,42 @@
 	margin-bottom: 5px;
     padding: 0;
 	width:750px;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#horzNavButtonBar table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#horzNavButtonBar td {
+	padding: 0;
+	vertical-align: top;
 }
 
 .horzNavButton {
-	float:left;
+	color:#FFFFFF;
 	font-color: #FFFFFF;
 	font-size:12px;
-	min-width:90px;
-	padding: 0;
-	text-align:center;
+	text-align:left;
 	text-decoration: none;
+}
+
+#horzNavButtonBar .active {
+	background-color: #FFFFFF;
+}
+
+#horzNavButtonBar .menuImg {
+	padding-top: 6px;
+	padding-right:10px;
 }
 
 #horzNavHelpButton{
 	float: right;
 	font-color: #FFFFFF;
 	font-size:12px;
-	min-width:90px;
+	width:120px; min-width:120px; _width:120px;
 	padding-right: 10px;
 	text-align:right;
 	text-decoration: none;
@@ -101,7 +120,6 @@
 /* secondary nav button that has no flyout menu */
 
 .horzNavButton a.topMenuItem.noFlyout.active {		
-    background-color: #FFFFFF;
     color: #003366;
     text-decoration: underline;
 }

@@ -41,6 +41,8 @@
 
 String privacyUrlDef = Utils.getI18nValue(i18nID, "hpweb.privacyUrl",
 			portalContext);
+String dataRightsUrlDef = Utils.getI18nValue(i18nID, "hpweb.dataRightsUrl",
+			portalContext);
 String imprintUrlDef = Utils.getI18nValue(i18nID, "hpweb.imprintUrl",
 			portalContext);
 String termsUrlDef = Utils.getI18nValue(i18nID, "hpweb.termsUrl",
@@ -67,7 +69,8 @@ String siteMapUrlDef = Utils.getI18nValue(i18nID, "hpweb.siteMapUrl",
 -----------------------------------------------------------------------------%>
 
 <hpweb:footer>
-	<jsp:attribute name="privacyUrl"><c:out value="${HPWebModel.privacyUrl}" default="<%= privacyUrlDef %>" escapeXml="false" /></jsp:attribute> 
+	<jsp:attribute name="privacyUrl"><c:out value="${HPWebModel.privacyUrl}" default="<%= privacyUrlDef %>" escapeXml="false" /></jsp:attribute>
+	<jsp:attribute name="dataRightsUrl"><c:out value="${HPWebModel.dataRightsUrl}" default="<%= dataRightsUrlDef %>" escapeXml="false" /></jsp:attribute>
 	<jsp:attribute name="imprintUrl"><c:out value="${HPWebModel.imprintUrl}" default="<%= imprintUrlDef %>" escapeXml="false" /></jsp:attribute>
 	<jsp:attribute name="termsUrl"><c:out value="${HPWebModel.termsUrl}" default="<%= termsUrlDef %>" escapeXml="false" /></jsp:attribute>		
 	<jsp:attribute name="saleTermsUrl"><c:out value="${HPWebModel.saleTermsUrl}" default="<%= saleTermsUrlDef %>" escapeXml="false" /></jsp:attribute>
