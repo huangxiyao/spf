@@ -157,7 +157,7 @@ public class ConfigControllerTest extends TestCase {
 				actionResponse);
 		assertEquals("html/test_url_1.html", pp.getValue(Consts.VIEW_FILENAME,
 				""));
-		assertEquals("", pp.getValue(Consts.INCLUDES_FILENAME, ""));
+		assertEquals(Consts.DEFAULT_INCLUDES_FILENAME, pp.getValue(Consts.INCLUDES_FILENAME, ""));
 		assertEquals("true", pp.getValue(Consts.LAUNCH_BUTTONLESS, ""));
 		assertEquals("30", pp.getValue(Consts.CHECK_SECONDS, ""));
 		assertEquals(Consts.INFO_CODE_PREFS_SAVED + ':'

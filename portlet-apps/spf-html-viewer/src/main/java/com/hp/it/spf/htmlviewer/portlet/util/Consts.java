@@ -16,11 +16,11 @@ import java.util.HashMap;
  */
 public class Consts extends com.hp.it.spf.xa.misc.portlet.Consts {
 
-	/** View filename portlet preference, request parameter, and model attribute. */
+	/** View filename portlet preference, render parameter, and model attribute. */
 	public static final String VIEW_FILENAME = "viewFilename";
 
 	/**
-	 * Token substitutions filename portlet preference, request parameter, and
+	 * Token substitutions filename portlet preference, render parameter, and
 	 * model attribute.
 	 */
 	public static final String INCLUDES_FILENAME = "includesFilename";

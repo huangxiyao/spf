@@ -16,8 +16,12 @@
 	</bean>
 
 	<!-- Exception handling -->
+	<!--
+		Now use our custom exception resolver to ensure logging of all
+		non-business errors. DSJ 2010/12/8
+	-->
 	<bean id="defaultExceptionHandlerTemplate"
-		class="com.hp.it.spf.xa.exception.portlet.handler.SimpleMappingExceptionResolver"
+		class="com.hp.it.spf.htmlviewer.portlet.exception.SimpleMappingExceptionResolver"
 		abstract="true">
 		<property name="defaultErrorView" value="defaultError" />
 	</bean>
@@ -30,7 +34,18 @@
 
 	<!-- WPAP logging interceptor -->
 	<bean id="transactionLoggingInterceptor"
-		class="com.hp.frameworks.wpa.portlet.handler.TransactionLoggingInterceptor" />
+		class="com.hp.it.spf.htmlviewer.portlet.web.TransactionLoggingInterceptor" />
+	<bean id="portletModeHandlerMappingTemplate"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping"
+		abstract="true">
+		<property name="interceptors">
+			<list>
+				<ref bean="transactionLoggingInterceptor" />
+			</list>
+		</property>
+	</bean>
+
+<!-- 
 	<bean id="annotationHandlerMapping"
 		class="org.springframework.web.portlet.mvc.annotation.DefaultAnnotationHandlerMapping">
 		<property name="interceptors">
@@ -39,4 +54,5 @@
 			</list>
 		</property>
 	</bean>
+-->
 </beans>

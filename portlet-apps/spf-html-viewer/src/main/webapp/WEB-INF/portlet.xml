@@ -67,6 +67,8 @@
 		<filter-class>com.hp.frameworks.wpa.portlet.transaction.TransactionLoggingFilter</filter-class>
 		<lifecycle>ACTION_PHASE</lifecycle>
 		<lifecycle>RENDER_PHASE</lifecycle>
+		<lifecycle>RESOURCE_PHASE</lifecycle>
+		<lifecycle>EVENT_PHASE</lifecycle>
 	</filter>
 	
 	<!-- SPF attribute map filter -->
