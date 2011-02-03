@@ -80,6 +80,11 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
     protected static String SUBMIT_BUTTON_IMG_ALT = "localeSelector.submit.alt";
 
     /**
+     * The key for the locale selector alternative text
+     */
+    protected static String LABEL_ALT = "localeSelector.label.alt";
+
+    /**
      * The default style to apply to the label. Currently null.
      */
     protected static String DEFAULT_LABEL_STYLE = null;
@@ -441,13 +446,35 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	html.append("<tr>\n");
 
 	// label column
-	html.append("<td " + labelStyleAttr + "valign=\"middle\">" + label
-		+ "</td>\n");
+	// add the label tag to follow the accessibility requirements.
+	String labelAlt = getLabelAlt();
+	if ((label != null) && !("".equals(label))) {
+		//If the label is non-blank, 
+		//wrap '<label for="' + widgetName + '">' ... '</label>' 
+		//around it and insert that label into the <td>
+		html.append("<td ").append(labelStyleAttr)
+				.append("valign=\"middle\">").append("<label for=\"")
+				.append(widgetName).append("\">").append(label)
+				.append("</label>").append("</td>\n");
+	} else if ((labelAlt != null) && !("".equals(labelAlt))) {
+		//If the label alt is non-blank, 
+		//wrap '<label class="screenReading" for="' + widgetName + '">' ... '</label>' 
+		//around the alt label string, and insert that into the <td>
+		html.append("<td ").append(labelStyleAttr)
+				.append("valign=\"middle\">")
+				.append("<label class=\"screenReading\" for=\"")
+				.append(widgetName).append("\">").append(labelAlt)
+				.append("</label>").append("</td>\n");
+	} else {
+		//Else, just add a blank column
+		html.append("<td ").append(labelStyleAttr).append("valign=\"middle\">").append("</td>\n");
+	}
 
 	// drop down list column
-	html.append("<td " + labelStyleAttr + ">\n");
-	html.append("<select " + listStyleAttr + "id=\"" + widgetName
-		+ "\" name=\"" + widgetName + "\">\n");
+	// refactor inconsistent use of StringBuffer.append according to SPF_Enhancements_for_DP 3.2_3.3 CR216
+	html.append("<td ").append(labelStyleAttr).append(">\n");
+	html.append("<select ").append(listStyleAttr).append("id=\"").append(widgetName)
+		.append("\" name=\"").append(widgetName).append("\">\n");
 	if (availableLocales != null) {
 
 	    // prepare current settings
@@ -461,8 +488,8 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	    }
 
 	    // sort available locales according to the settings
-	    availableLocales = I18nUtility.sortLocales(availableLocales,
-		    sortInLocale, flags);
+	    availableLocales = I18nUtility.sortLocales(availableLocales, 
+    		sortInLocale, displayLocale, flags);
 
 	    // iterate over the sorted locales and display the select option for
 	    // each one
@@ -470,23 +497,33 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	    int i = 1;
 	    while (atts.hasNext()) {
 		Locale locale = (Locale) atts.next();
+		if (locale == null)
+		    continue;
+		
 		Locale displayInLocale = displayLocale;
-
 		// get display name according to the settings
 		if (displayInLocale == null) {
 		    displayInLocale = locale;
 		}
 		String dispName = I18nUtility.getLocaleDisplayName(locale,
 			displayInLocale, flags);
+		if ((dispName == null) || (dispName.trim().length() == 0))
+		    continue;
+		dispName = dispName.trim();
+		
 		String value = I18nUtility.localeToLanguageTag(locale);
+		if ((value == null) || (value.trim().length() == 0))
+		    continue;
+		value = value.trim();
+		
 		// both the display name and value need to be HTML-escaped
 		// just in case
-		html.append("<option value=\"" + Utils.escapeXml(value) + "\"");
+		html.append("<option value=\"").append(Utils.escapeXml(value)).append("\"");
 		// make the current locale selected if it is not empty
 		if ((currentLocale != null) && (locale.equals(currentLocale))) {
 		    html.append(" selected");
 		}
-		html.append(">" + Utils.escapeXml(dispName) + "</option>\n");
+		html.append(">").append(Utils.escapeXml(dispName)).append("</option>\n");
 		i++;
 	    }
 	}
@@ -496,10 +533,8 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	// button column
 	String imgLink = getSubmitImageURL();
 	String imgAlt = getSubmitImageAlt();
-	html.append("<td " + labelStyleAttr + "valign=\"middle\">\n");
-	html.append("<input type=\"image\" name=\"btn_" + widgetName
-		+ "\" src=\"" + imgLink + "\" alt=\"" + imgAlt + "\" title=\""
-		+ imgAlt + "\">\n");
+	html.append("<td ").append(labelStyleAttr).append("valign=\"middle\">\n");
+	html.append("<input type=\"image\" name=\"btn_").append(widgetName).append("\" src=\"").append(imgLink).append("\" alt=\"").append(imgAlt).append("\" title=\"").append(imgAlt).append("\">\n");
 	html.append("</td>\n");
 
 	// end selector table layout
@@ -560,6 +595,23 @@ public class ClassicLocaleSelectorProvider extends LocaleSelectorProvider {
 	if (portalContext != null) {
 	    alt = I18nUtility
 		    .getValue(SUBMIT_BUTTON_IMG_ALT, "", portalContext);
+	}
+	return alt;
+    }
+
+    /**
+     * A method to generate the tooltip string for the classic locale selector's
+     * label. This string is presumed to exist in the message catalog
+     * for the current portal component, under the
+     * <code>localeSelector.submit.alt</code> message key. If the message does
+     * not exist, then an empty string is returned (ie there is no default
+     * message).
+     */
+    protected String getLabelAlt() {
+	String alt = "";
+	if (portalContext != null) {
+	    alt = I18nUtility
+		    .getValue(LABEL_ALT, "", portalContext);
 	}
 	return alt;
     }

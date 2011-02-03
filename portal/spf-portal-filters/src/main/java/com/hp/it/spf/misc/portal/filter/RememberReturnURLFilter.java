@@ -130,8 +130,8 @@ public class RememberReturnURLFilter implements Filter {
 
 				HttpServletResponse res = (HttpServletResponse) response;
 
-				// Create a new cookie “HP_SPF_SITE” with value as “Last
-				// Visited Site DNS Name”.
+				// Create a new cookie "HP_SPF_SITE" with value as "Last
+				// Visited Site DNS Name".
 				// Set the cookie domain, path and age. Age of the cookie is
 				// 2 years.
 

@@ -484,9 +484,15 @@ public class AuthenticatorHelper {
      * @return true for this user from AtHP siteminder, otherwise false
      */
     public static boolean isFromAtHP(HttpServletRequest request) {
+        /*
         String authSource = request
                 .getHeader(AuthenticationConsts.AUTH_SOURCE_TAGE);
-        return AuthenticationConsts.SP_FROM_ATHP.equals(authSource);
+        return AuthenticationConsts.SP_FROM_ATHP.equals(authSource);*/
+        
+        //If the http request header AccessType="Internet", 
+        //the user is from atHP webagent.
+        String accessType = request.getHeader(AuthenticationConsts.HEADER_ACCESS_TYPE);
+        return AuthenticationConsts.ACCESS_TYPE_INTRANET.equals(accessType);
     }
 
     /**
@@ -509,9 +515,15 @@ public class AuthenticatorHelper {
      * @return true for this user from from general HPP, otherwise false
      */
     public static boolean isFromHPPGeneral(HttpServletRequest request) {
+        /*
         String authSource = request
                 .getHeader(AuthenticationConsts.AUTH_SOURCE_TAGE);
-        return AuthenticationConsts.SP_FROM_HPP.equals(authSource);
+        return AuthenticationConsts.SP_FROM_HPP.equals(authSource);*/
+        
+        //If the http request header AccessType="Internet", 
+        //the user is from HPP webagent.
+        String accessType = request.getHeader(AuthenticationConsts.HEADER_ACCESS_TYPE);
+        return AuthenticationConsts.ACCESS_TYPE_INTERNET.equals(accessType);
     }
 
     /**

@@ -253,7 +253,7 @@ public class AuthenticatorHelperTest {
         assertFalse(reslut);
         
         reslut = AuthenticatorHelper.isFromHPP(anonRequest);
-        assertFalse(reslut);        
+        assertTrue(reslut);        
     }
 
     /**

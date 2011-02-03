@@ -99,15 +99,19 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			return false;
 		}
 		try {
-			HttpSession session = pReq.getSession();
-			User currentUser = SessionUtils.getCurrentUser(session);
-			if (currentUser.isGuestUser()) {
-				Localizer localizerForGuest = (Localizer) I18nUtils
-						.getLocalizer(session, pReq);
-				localizerForGuest.setLocale(pLocale);
-			} else {
-				I18nUtils.setUserLocale(currentUser, pLocale);
-			}
+			if (!isCachedLocale(pReq, pLocale)) {
+				HttpSession session = pReq.getSession();
+				User currentUser = SessionUtils.getCurrentUser(session);
+				if (currentUser.isGuestUser()) {
+					Localizer localizerForGuest = (Localizer) I18nUtils
+							.getLocalizer(session, pReq);
+					localizerForGuest.setLocale(pLocale);
+				} else {
+					I18nUtils.setUserLocale(currentUser, pLocale);
+				}
+				//cache the resolved locale into session
+				setCachedLocale(pReq, pLocale);
+			}	
 		} catch (Exception ex) {
 			return false;
 		}
@@ -127,23 +131,27 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return The locale of the request, or else the site default locale.
 	 */
 	public static Locale getLocale(HttpServletRequest pReq) {
-		Locale rLocale = null;
-		try {
-			if (pReq != null) {
-				HttpSession session = pReq.getSession();
-				User currentUser = SessionUtils.getCurrentUser(session);
-				if (currentUser.isGuestUser()) {
-					Localizer localizerForGuest = (Localizer) I18nUtils
-							.getLocalizer(session, pReq);
-					rLocale = localizerForGuest.getLocale();
-				} else {
-					rLocale = I18nUtils.getUserLocale(currentUser);
+		Locale rLocale = getCachedLocale(pReq);
+        if (rLocale == null) {
+			try {
+				if (pReq != null) {
+					HttpSession session = pReq.getSession();
+					User currentUser = SessionUtils.getCurrentUser(session);
+					if (currentUser.isGuestUser()) {
+						Localizer localizerForGuest = (Localizer) I18nUtils
+								.getLocalizer(session, pReq);
+						rLocale = localizerForGuest.getLocale();
+					} else {
+						rLocale = I18nUtils.getUserLocale(currentUser);
+					}
 				}
+			} catch (Exception ex) {
 			}
-		} catch (Exception ex) {
-		}
-		if (null == rLocale) {
-			rLocale = getDefaultLocale(pReq);
+			if (null == rLocale) {
+				rLocale = getDefaultLocale(pReq);
+			}
+			//cache the resolved locale into session
+			setCachedLocale(pReq, rLocale);
 		}
 		return rLocale;
 	}
@@ -1879,5 +1887,58 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			thisStyleObject = pContext.getCurrentSecondaryPage();
 		}
 		return thisStyleObject;
+	}
+	
+	/**
+     * Detemines if the user locale is cached in the http session.
+     * 
+     * @param pReq
+	 *            The portal request.
+	 * @param pLocale
+	 *            A locale.
+     * @return true if the locale is cached.
+     */
+	public static boolean isCachedLocale(HttpServletRequest pReq, Locale pLocale) {
+		Locale cachedLocale = getCachedLocale(pReq);
+		if (cachedLocale == null) {
+			return (pLocale == null);
+		} else {
+			return (cachedLocale.equals(pLocale));
+		}
+	}
+	
+	/**
+     * Returns the user locale cached in http session.
+     * 
+     * @param pReq
+	 *            The portal request.
+     * @return the cached locale, or null if it's not found in session.
+     */
+	public static Locale getCachedLocale(HttpServletRequest pReq) {
+		if (pReq != null) {
+			HttpSession session = pReq.getSession();
+			if (session != null) {
+				return (Locale) session
+						.getAttribute(Consts.SESSION_ATTR_CACHED_LOCALE);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Set the given locale into http session for cache purpose.
+	 * 
+	 * @param pReq
+	 *            The portal request.
+	 * @param pLocale
+	 *            A locale.
+	 */
+	public static void setCachedLocale(HttpServletRequest pReq, Locale pLocale) {
+		if (pReq != null) {
+			HttpSession session = pReq.getSession();
+			if (session != null) {
+				session.setAttribute(Consts.SESSION_ATTR_CACHED_LOCALE, pLocale);
+			}
+		}
 	}
 }

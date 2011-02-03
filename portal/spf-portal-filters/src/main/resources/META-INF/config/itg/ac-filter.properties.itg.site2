@@ -55,7 +55,7 @@ athpCanonical.otherSiteHostnames=spp-itg-site1-athp.austin.hp.com
 #   bother to specify this and the other cookie properties if your system needs 
 #   such a cookie.
 #
-#REPLACE.siteCookieName=REPLACE-IF-WANTED-ELSE-DELETE-LINE
+*.siteCookieName=HP_SPF_HOST
 #
 # [id.]siteCookieValue
 #   The value to use when setting a session cookie which records which
@@ -73,7 +73,7 @@ athpCanonical.otherSiteHostnames=spp-itg-site1-athp.austin.hp.com
 #   a cookie is set). Thus this is ignored if the site cookie name is not also
 #   defined (see above).
 #
-#REPLACE.siteCookieDomain=REPLACE-IF-WANTED-ELSE-DELETE-LINE
+*.siteCookieDomain=.hp.com
 #
 # [id.]siteCookiePath
 #   The path to use when setting a session cookie which records which

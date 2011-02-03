@@ -177,4 +177,8 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	public static final String SESSION_ATTR_RETURN_URL = STICKY_SESSION_ATTR_PREFIX
 			+ "RETURN_URL";
 
+    /**
+     * The name of the session attribute storing the resolved user locale. 
+     */
+    public static final String SESSION_ATTR_CACHED_LOCALE = UNSTICKY_SESSION_ATTR_PREFIX + "CACHED_LOCALE";
 }
