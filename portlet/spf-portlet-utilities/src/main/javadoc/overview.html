@@ -319,21 +319,22 @@ table.props td {
 			<code>{SITE-URL:<i>spec</i>}</code>)</a></li>
 			<li>4.5.2. <a href="#file.author.token.user">Displaying user
 			information (<code>{NAME}</code>, <code>{EMAIL}</code>, <code>{LANGUAGE-CODE}</code>,
-			<code>{LANGUAGE-CODE:<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>,
-			<code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG}</code>,
-			<code>{LANGUAGE-TAG:<i>case</i>}</code>, <code>{HPP-LANGUAGE-CODE}</code>,
-			<code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>,
-			<code>{VALUE:<i>property-name</i>}</code>)</a></li>
+			<code>{LANGUAGE-CODE:<i>case</i>}</code>, <code>{LANGUAGE-NAME}</code>,
+			<code>{COUNTRY-CODE}</code>, <code>{COUNTRY-CODE:<i>case</i>}</code>,
+			<code>{COUNTRY-NAME}</code>, <code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>,
+			<code>{HPP-LANGUAGE-CODE}</code>, <code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>,
+			<code>{USER-PROPERTY:<i>key</i>}</code>, <code>{VALUE:<i>property-name</i>}</code>)</a></li>
 			<li>4.5.3. <a href="#file.author.token.auth">Permissioning
 			content for authorized users (<code>{LOGGED-IN}</code>, <code>{LOGGED-OUT}</code>,
 			<code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>,
-			<code>{EXIST:<i>property-name</i>}</code>)</a></li>
+			<code>{AUTH:<i>types</i>}</code>, <code>{EXIST:<i>property-name</i>}</code>)</a></li>
 			<li>4.5.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>{PORTLET:<i>friendly-ids</i>}</code>,
 			<code>{PAGE:<i>friendly-ids</i>}</code>, <code>{NAV-ITEM:<i>items</i>}</code>,
 			<code>{SITE:<i>site-names</i></code>}, <code>{INCLUDE:<i>key</i>}</code>)</a></li>
 			<li>4.5.5. <a href="#file.author.token.misc">Miscellaneous (<code>{AFTER:<i>date</i>}</code>,
-			<code>{BEFORE:<i>date</i>}</code>, <code>{SITE-NAME}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</a></li>
+			<code>{BEFORE:<i>date</i>}</code>, <code>{DATE:<i>date</i>}</code>, <code>{SITE-NAME}</code>,
+			<code>{URL-ENCODE:<i>string</i>}</code>)</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -4449,10 +4450,11 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 
 <a name="file.author.token.user">
 <h4>4.5.2. Displaying user information (<code>{NAME}</code>, <code>{EMAIL}</code>,
-<code>{LANGUAGE-CODE}</code>, <code>{LANGUAGE-CODE<i>case</i>}</code>, <code>{COUNTRY-CODE}</code>,
-<code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>,
-<code>{HPP-LANGUAGE-CODE}</code>, <code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>,
-<code>{USER-PROPERTY:<i>key</i>}</code>, <code>{VALUE:<i>property-name</i>}</code>)</h4>
+<code>{LANGUAGE-CODE}</code>, <code>{LANGUAGE-CODE<i>case</i>}</code>, <code>{LANGUAGE-NAME}</code>,
+<code>{COUNTRY-CODE}</code>, <code>{COUNTRY-CODE:<i>case</i>}</code>, <code>{COUNTRY-NAME}</code>,
+<code>{LANGUAGE-TAG}</code>, <code>{LANGUAGE-TAG:<i>case</i>}</code>, <code>{HPP-LANGUAGE-CODE}</code>,
+<code>{HPP-LANGUAGE-CODE:<i>case</i>}</code>, <code>{USER-PROPERTY:<i>key</i>}</code>,
+<code>{VALUE:<i>property-name</i>}</code>)</h4>
 </a>
 
 <p>The following tokens can be used to interpolate information about
@@ -4481,6 +4483,19 @@ documentation for each token.</p>
 	<blockquote><pre>
 &lt;A HREF="http://other.hp.com/path?lang={LANGUAGE-CODE}&cc={COUNTRY-CODE}"&gt;...&lt;/A&gt;
 </pre></blockquote>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#country-name"><code>{COUNTRY-NAME}</code></a></dt>
+	<dd>
+	<p>Use this token to insert into the interpolated content the
+	localized country name from the locale used in the current portlet
+	request. For example, <code>{COUNTRY-NAME}</code> is replaced with <code>Deutschland</code>
+	for a Germany - German user. If the user's locale is not a
+	country-specific locale (eg is simply French instead of France -
+	French, for example), then blank will be substituted. Note that the
+	country name translations used by this token are the ones built-into
+	the JVM and returned by <code>Locale.getDisplayCountry()</code>.</p>
 	</dd>
 
 	<dt><a
@@ -4543,6 +4558,16 @@ The email address we have on record for you is: {EMAIL}
 	<p><b>Note:</b> HP Passport does not fully conform to the ISO 639-1
 	standard. To work with HP Passport in all languages, use the <code>{HPP-LANGUAGE-CODE}</code>
 	token instead.</p>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#language-name"><code>{LANGUAGE-NAME}</code></a></dt>
+	<dd>
+	<p>Use this token to insert into the interpolated content the
+	localized language name from the locale used in the current portal
+	request. For example, <code>{LANGUAGE-NAME}</code> is replaced with <code>Deutsch</code>
+	for a Germany - German user. Note that the language name translations
+	used by this token are the ones built-into the JVM and returned by <code>Locale.getDisplayLanguage()</code>.</p>
 	</dd>
 
 	<dt><a
@@ -4657,8 +4682,8 @@ The request property value for 'requestKey' is : {VALUE:requestKey}
 
 <a name="file.author.token.auth">
 <h4>4.5.3. Permissioning content for authorized users (<code>{LOGGED-IN}</code>,
-<code>{LOGGED-OUT}</code>, <code>{ROLE:<i>role-names</i>}</code>, <code>{GROUP:<i>group-names</i>}</code>,
-<code>{EXIST:<i>property-name</i>}</code>)</h4>
+<code>{LOGGED-OUT}</code>, <code>{ROLE:<i>role-names</i>}</code>, <code>{AUTH:<i>types</i>}</code>
+<code>{GROUP:<i>group-names</i>}</code>, <code>{EXIST:<i>property-name</i>}</code>)</h4>
 </a>
 
 <p>The following tokens may be used to permission content against
@@ -4679,19 +4704,88 @@ content.
 
 <dl>
 	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#auth"><code>{AUTH:<i>types</i>}...{/AUTH}</code></a></dt>
+	<dd>
+	<p>Use this container token to permission the content inside the
+	container based on the SPF-provided authentication system currently in
+	use by the user. SPF provides the following kinds of authentication:</p>
+
+	<ul>
+		<li>Standard HP Passport (authentication type: <code>HPP</code>)</li>
+		<li>Federated HP Passport (authentication type: <code>FED</code>)
+		- not commonly used</li>
+		<li>&#64;HP employee portal via HP Intranet (authentication type:
+		<code>ATHP</code>)</li>
+	</ul>
+
+	<p>Use the <code><i>types</i></code> parameter to list the code(s)
+	for the authentication type(s) against which to permission the wrapped
+	content (the authentication type codes are listed above, and are
+	case-insensitive). Use the <code>|</code> character to delimit multiple
+	ones. The user must be accessing via one of the <code><i>types</i></code>
+	you list, in order for the wrapped content to be included in the
+	output.</p>
+
+	<p>You may also prefix the <code>!</code> character to any
+	authentication type code listed in the <code><i>types</i></code>, in
+	order to indicate negation. The content enclosed by the <code>{AUTH}</code>
+	token is then included in the output only if the user is <b>not</b>
+	using that authentication system.</p>
+
+	<p>For example:</p>
+
+	<blockquote><pre>
+This content is for everyone.
+{AUTH:!ATHP}
+  This content is only for non-internal users - eg users of standard or 
+  federated HP Passport, as well as other types not yet defined.
+  {AUTH:HPP|FED}
+    This content is only for members of HP Passport in either standard or
+    federated modes.
+  {/AUTH}
+{/AUTH}
+{AUTH:ATHP}
+  This content is only for internal users.
+{/AUTH}
+	</pre></blockquote>
+
+	<p>Note that this works for both anonymous and authenticated users.
+	In other words, even before logging-in, users are always accessing your
+	portlet via one SPF authentication system or another, and which one is
+	known to SPF. Thus this token works in both authenticated and anonymous
+	cases.</p>
+	</dd>
+
+	<dt><a
 		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#group"><code>{GROUP:<i>groups</i>}...{/GROUP}</code></a></dt>
 	<dd>
 	<p>Use this container token to permission the content inside the
 	container based on the user's current set of groups. Use the <code><i>groups</i></code>
-	parameter to list the names of the group(s) for which the wrapped
-	content is permissioned. The user must be a member of at least one of
-	the <code><i>groups</i></code> in order for the wrapped content to be
-	included in the output. Group names are case-insensitive and are
-	delimited with the <code>|</code> character. For example:</p>
+	parameter to list the names of the group(s) against which to permission
+	the wrapped content (use the <code>|</code> character to delimit the
+	group names). The user must be a member of at least one of the <code><i>groups</i></code>
+	in order for the wrapped content to be included in the output. Group
+	names are case-insensitive and are delimited with the <code>|</code>
+	character.</p>
+
+	<p>You may also prefix the <code>!</code> character to any group
+	name listed in the <code><i>groups</i></code>, in order to indicate
+	negation. The content enclosed by the <code>{GROUP}</code> token is
+	then included in the output only if the user is <b>not</b> a member of
+	that group.</p>
+
+	<p>For example:</p>
 
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{GROUP:abc|xyz}This text is only for members of the "abc" or "xyz" groups.{/GROUP}
+{GROUP:abc|xyz}
+  This text is only for members of the "abc" or "xyz" groups.
+{/GROUP}
+{GROUP:!abc}
+  {GROUP:!xyz}
+    This text is for everyone except members of the "abc" and "xyz" groups.
+  {/GROUP}
+{/GROUP}
 	</pre></blockquote>
 
 	<p>The actual group names will vary by application, over time, and
@@ -4745,15 +4839,29 @@ This text is for everybody.&lt;BR&gt;
 	<dd>
 	<p>Use this container token to permission the content inside the
 	container based on the user's current roles. Use the <code><i>roles</i></code>
-	parameter to list the names of the role(s) for which the wrapped
-	content is permissioned. The user must be a member of at least one of
-	the <code><i>roles</i></code> in order for the wrapped content to be
-	included in the output. Role names are case-insensitive and are
-	delimited with the <code>|</code> character. For example:</p>
+	parameter to list the names of the role(s) against which to permission
+	the wrapped content. The user must be a member of at least one of the <code><i>roles</i></code>
+	in order for the wrapped content to be included in the output. Role
+	names are case-insensitive and are delimited with the <code>|</code>
+	character.</p>
+
+	<p>You may also prefix the <code>!</code> character to any role
+	name listed in the <code><i>roles</i></code>, in order to indicate
+	negation. The content enclosed by the <code>{ROLE}</code> token is then
+	included in the output only if the user is <b>not</b> in that role.</p>
+
+	<p>For example:</p>
 
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{ROLE:abc|xyz}This text is only for users in the "abc" or "xyz" roles.{/ROLE}
+{ROLE:abc|xyz}
+  This text is only for members of the "abc" or "xyz" roles.
+{/ROLE}
+{ROLE:!abc}
+  {ROLE:!xyz}
+    This text is for everyone except members of the "abc" and "xyz" roles.
+  {/ROLE}
+{/ROLE}
 	</pre></blockquote>
 
 	<p>The actual role names will vary by application, over time, and
@@ -4801,12 +4909,35 @@ This text is for everybody.&lt;BR&gt;
 	<dd>
 	<p>Use this container token to permission the content inside the
 	container based on whether certain attributes or parameters exist in
-	the user's current request or session. The <code><i>property-name</i></code>
-	is case-insensitive. For example:</p>
+	the user's current request or session. The <code><i>property-names</i></code>
+	is case-insensitive.</p>
+
+	<p>Your <code><i>property-names</i></code> may include one or more
+	property names, delimited with the <code>|</code> character. The engine
+	looks for each <code><i>property-name</i></code> anywhere in the
+	current request attributes or parameters, and anywhere in the current
+	portlet session. If an attribute or parameter named by the <code><i>property-name</i></code>
+	exists in any of those places, the surrounded content is included in
+	the output; otherwise it is omitted from the output.</p>
+
+	<p>In addition, you may prefix any property name you list in your <code><i>property-names</i></code>
+	with the <code>!</code> character to indicate negation. The surrounded
+	content is then included in the output when the request does <b>not</b>
+	contain any request attribute, parameter, or session attribute of that
+	name.</p>
+
+	<p>For example:</p>
 
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{EXIST:requestKey}This text is visible only in-case 'requestKey' is present either as an attribute or parameter.{/EXIST}
+{EXIST:key1|key2|key3}
+  This text is visible only when an attribute or parameter exists named
+  'key1', 'key2', or 'key3'.
+  {EXIST:!key3}
+    This text is visible only when an attribute or parameter exists named
+    'key1' or 'key2'.
+  {/EXIST}
+{/EXIST}
 	</pre></blockquote>
 
 	<p>The engine looks for the <code><i>property-name</i></code>
@@ -4814,9 +4945,12 @@ This text is for everybody.&lt;BR&gt;
 	public render parameters, private render parameters, and action
 	parameters), and anywhere in the current session (both portlet-scoped
 	and application-scoped session). If an attribute or parameter named by
-	the <code><i>property-name</i></code> exists in any of those places,
-	the surrounded content is included in the output; otherwise it is
-	omitted from the output.</p>
+	one of the <code><i>property-names</i></code> exists in any of those
+	places, the surrounded content is included in the output. Conversely,
+	if any one of the <b>negated</b> <code><i>property-names</i></code>
+	fails to exist in any of those places, the surrounded content will also
+	be included. Otherwise the surrounded content will be dropped from the
+	output.</p>
 	</dd>
 </dl>
 
@@ -4937,8 +5071,8 @@ url.hp=http://www.hp.com
 	<dd>
 	<p>Use this container token to put content for multiple portal
 	navigation items into the same uninterpolated content string (or file).
-	When it is interpolated, only the section for the current navigation
-	item will be included.</p>
+	When it is interpolated, only the sections for which the current
+	navigation item qualifies will be included.</p>
 
 	<p>The <code><i>items</i></code> parameter lists the <i>substrings</i>
 	of desired navigation item names and/or friendly URLs. The navigation
@@ -4948,14 +5082,29 @@ url.hp=http://www.hp.com
 	multiple item names or friendly URLs in the <code><i>items</i></code>
 	parameter. (In the SPF portal, the navigation item name and friendly
 	URL are Vignette properties, assigned by the administrator. The SPF
-	transmites this to the portlet where it can be accessed.)</p>
+	transmits this to the portlet where it can be accessed.)</p>
+
+	<p>You may also use the <code>!</code> character as a negation
+	operator. Any item listed in your <code><i>items</i></code> and
+	prefixed with <code>!</code> indicates the wrapped content is to be
+	displayed only when the current navigation item is <b>not</b> the one
+	named. (Remember that this is compared against both the current
+	navigation item name and its friendly URL; to fully negate the match,
+	neither of those must match.)</p>
 
 	<p>For example:</p>
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
 {NAV-ITEM:manuals|parts|repairs}
-This text is only for pages accessed with the "manuals", "parts", or "repairs" navigation items.
-{NAV-ITEM:manuals}Additional text only for pages accessed with the "manuals" navigation item.{/NAV-ITEM}
+  This text is only for portlets accessed with the "manuals", "parts", or 
+  "repairs" navigation items.
+  {NAV-ITEM:manuals}
+    Additional text only for portlets accessed with the "manuals" navigation item.
+  {/NAV-ITEM}
+  {NAV-ITEM:!manuals}
+    Additional text only for portlets accessed with the "parts" or "repairs"
+    navigation items.
+  {/NAV-ITEM}
 {/NAV-ITEM}
 </pre></blockquote>
 
@@ -4989,8 +5138,8 @@ This text is only for pages accessed with the "manuals", "parts", or "repairs" n
 	<dd>
 	<p>Use this container token to put content for multiple portal
 	pages into the same uninterpolated content string (or file). When it is
-	interpolated, only the section for the current portal page will be
-	included.</p>
+	interpolated, only the sections for which the current portal page
+	qualifies will be included.</p>
 
 	<p>The <code><i>pages</i></code> parameter lists the page ID <i>substrings</i>
 	for the pages that should use the wrapped content. The page ID for the
@@ -5001,11 +5150,20 @@ This text is only for pages accessed with the "manuals", "parts", or "repairs" n
 	the page by the administrator. The SPF transmits this to the portlet
 	where it can be accessed.)</p>
 
+	<p>You may also use the <code>!</code> character as a negation
+	operator. Any ID listed in your <code><i>pages</i></code> and prefixed
+	with <code>!</code> indicates the wrapped content is to be displayed
+	only when the current page ID is <b>not</b> the one named.</p>
+
 	<p>For example:</p>
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{PAGE:abc|def}This text is only for the "abc" or "def" pages.{/PAGE}
-{PAGE:xyz}This text is only for the "xyz" page.{/PAGE}
+{PAGE:abc|def}
+  This text is only for portlets on the "abc" or "def" pages.
+{/PAGE}
+{PAGE:!xyz}
+  This text is for portlets on every page except the "xyz" page.
+{/PAGE}
 </pre></blockquote>
 
 	<p>The actual page ID's will vary; they are setup by the
@@ -5017,8 +5175,8 @@ This text is for everybody.&lt;BR&gt;
 	<dd>
 	<p>Use this container token to put content for multiple instances
 	of one (or more) portlets into the same uninterpolated content string
-	(eg file). When it is interpolated, only the section for the current
-	portlet will be included.</p>
+	(eg file). When it is interpolated, only the sections for which the
+	current portlet qualifies will be included.</p>
 
 	<p>The <code><i>portlets</i></code> parameter lists the portlet ID
 	<i>substrings</i> for the portlet instances that should get the wrapped
@@ -5030,11 +5188,20 @@ This text is for everybody.&lt;BR&gt;
 	the portlet on a portal page. The SPF transmits this to the portlet
 	where it can be accessed.)</p>
 
+	<p>You may also use the <code>!</code> character as a negation
+	operator. Any ID listed in your <code><i>portlets</i></code> and
+	prefixed with <code>!</code> indicates the wrapped content is to be
+	displayed only when the current portlet ID is <b>not</b> the one named.</p>
+
 	<p>For example:</p>
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{PORTLET:abc|def}This text is only for the "abc" or "def" portlets.{/PORTLET}
-{PORTLET:xyz}This text is only for the "xyz" portlet.{/PORTLET}
+{PORTLET:abc|def}
+  This text is only for the "abc" or "def" portlets.
+{/PORTLET}
+{PORTLET:!xyz}
+  This text is for any portlet except the "xyz" portlet.
+{/PORTLET}
 </pre></blockquote>
 
 	<p>The actual portlet ID's will vary by portal and portlet
@@ -5047,8 +5214,8 @@ This text is for everybody.&lt;BR&gt;
 	<dd>
 	<p>Use this container token to put content for multiple portal
 	sites into the same uninterpolated content string (eg file). When it is
-	interpolated, only the section for the current portal site will be
-	included.</p>
+	interpolated, only the section for which the current portal site
+	qualifies will be included.</p>
 
 	<p>The <code><i>sites</i></code> parameter lists the <i>site
 	name(s)</i> of the portal site(s) which should get the wrapped content. The
@@ -5059,11 +5226,20 @@ This text is for everybody.&lt;BR&gt;
 	assigned to the portal site when it is created by the administrator.
 	The SPF transmits this to the portlet where it can be accessed.)</p>
 
+	<p>You may also use the <code>!</code> character as a negation
+	operator. Any name listed in your <code><i>sites</i></code> and
+	prefixed with <code>!</code> indicates the wrapped content is to be
+	displayed only when the current site name is <b>not</b> that one.</p>
+
 	<p>For example:</p>
 	<blockquote><pre>
 This text is for everybody.&lt;BR&gt;
-{SITE:abc|def}This text is only for portlets in the the "abc" or "def" portal sites.{/SITE}
-{SITE:xyz}This text is only for portlets in the "xyz" portal site.{/SITE}
+{SITE:abc|def}
+  This text is only for portlets in the the "abc" or "def" portal sites.
+{/SITE}
+{SITE:!xyz}
+  This text is for portlets in every site except the "xyz" portal site.
+{/SITE}
 </pre></blockquote>
 
 	<p>The actual site names will vary by portal site; they are setup
@@ -5073,7 +5249,7 @@ This text is for everybody.&lt;BR&gt;
 
 <a name="file.author.token.misc">
 <h4>4.5.5. Miscellaneous (<code>{AFTER:<i>date</i>}</code>, <code>{BEFORE:<i>date</i>}</code>,
-<code>{SITE-NAME}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</h4>
+<code>{DATE:<i>date</i>}</code>, <code>{SITE-NAME}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</h4>
 </a>
 
 <p>These are miscellaneous tokens. Please click on the links for
@@ -5088,25 +5264,29 @@ more documentation on each token.</p>
 	<p>Use these container tokens to restrict content inside the
 	container based on the current date and time. The <code>{AFTER:<i>date</i>}...{/AFTER}</code>
 	token will cause the wrapped content to be <b>included</b> in the
-	interpolated content beginning on the particular <code><i>date</i></code>.
+	interpolated content beginning right after the particular <code><i>date</i></code>.
 	The <code>{BEFORE:<i>date</i>}...{/BEFORE}</code> token is the
 	opposite: the content will be included only until the particular <code><i>date</i></code>.
 	You can nest these tokens to mark content with a beginning and end
 	date.</p>
-	<p>The format of the <code><i>date</i></code> parameter is as
-	follows:</p>
+	<p>The format of the <code><i>date</i></code> parameter may include
+	date only, or both date and time:</p>
 
-	<p><code><i>M</i>/<i>d</i>/<i>yyyy</i> <i>h</i>:<i>mm</i>:<i>ss</i>
-	<i>a</i> <i>z</i></code></p>
+	<p><code><i>M</i>/<i>d</i>/<i>yyyy</i> <i>h</i>:<i>mm</i> <i>a</i>
+	<i>z</i></code></p>
 
 	<ul>
 		<li><code><i>M</i></code> is a one or two-digit month</li>
 		<li><code><i>d</i></code> is a one or two-digit day of month</li>
 		<li><code><i>yyyy</i></code> is a four-digit year</li>
+	</ul>
+
+	<p>The rest of the format is optional:</p>
+
+	<ul>
 		<li><code><i>h</i></code> is a one or two-digit hour (12 hour
 		clock)</li>
 		<li><code><i>mm</i></code> is a two-digit minutes</li>
-		<li><code><i>ss</i></code> is a two-digit seconds</li>
 		<li><code><i>a</i></code> is <code>AM</code> or <code>PM</code></li>
 		<li><code><i>z</i></code> is the timezone such as <code>GMT</code>
 		for Greenwich Mean Time, <code>PST</code> for Pacific Standard Time, <code>GMT-05:00</code>
@@ -5117,16 +5297,103 @@ more documentation on each token.</p>
 	recognize your <code><i>date</i></code>, they will err on the side of
 	displaying the wrapped content.</p>
 
+	<p>If you specify only a date, then midnight GMT is assumed. Thus
+	the comparison will be between the current clocktime and midnight on
+	that date in GMT. If you specify both date and time, note that time
+	fields below minute are assumed to be zero. Thus the comparison will be
+	between the current clocktime and that minute, "sharp".</p>
+
 	<p>For example:</p>
 
 	<blockquote><pre>
 This text is permanent.&lt;BR&gt;
-{AFTER:2/1/2009 12:00:00 AM GMT}
-  {BEFORE:3/1/2009 12:00:00 AM GMT}
-  This text is only for the month of February 2009 (as measured by Greenwich Mean Time).
+{BEFORE:2/20/2009 12:30 PM GMT}
+This text is only displayed until 12:30 PM sharp (Greenwhich Mean Time) on February 20, 2009.
+{/BEFORE}
+{AFTER:2/1/2009}
+  {BEFORE:3/1/2009}
+  This text is only displayed during the month of February 2009 (as measured by Greenwich Mean Time).
   {/BEFORE}
 {/AFTER}
 </pre></blockquote>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portlet/FileInterpolator.html#date"><code>{DATE:<i>date</i>}</code></a></dt>
+	<dd>
+	<p>Use this token to insert the given <code><i>date</i></code> as a
+	well-formatted string, localized according to the user locale. The
+	string may contain the date only, or time as well. When time is taken
+	into account, it is adjusted for the user timezone. If you do not
+	specify a <code><i>date</i></code>, the current date is assumed.</p>
+
+	<p>The format of the <code><i>date</i></code> parameter may include
+	date only, or both date and time:</p>
+
+	<p><code><i>M</i>/<i>d</i>/<i>yyyy</i> <i>h</i>:<i>mm</i> <i>a</i>
+	<i>z</i></code></p>
+
+	<ul>
+		<li><code><i>M</i></code> is a one or two-digit month</li>
+		<li><code><i>d</i></code> is a one or two-digit day of month</li>
+		<li><code><i>yyyy</i></code> is a four-digit year</li>
+	</ul>
+
+	<p>The rest of the format is optional and used to specify a time of
+	day:</p>
+
+	<ul>
+		<li><code><i>h</i></code> is a one or two-digit hour (12 hour
+		clock)</li>
+		<li><code><i>mm</i></code> is a two-digit minutes</li>
+		<li><code><i>a</i></code> is <code>AM</code> or <code>PM</code></li>
+		<li><code><i>z</i></code> is the timezone such as <code>GMT</code>
+		for Greenwich Mean Time, <code>PST</code> for Pacific Standard Time, <code>GMT-05:00</code>
+		for 5 hours behind GMT, etc.</li>
+	</ul>
+
+	<p>If you specify just a date, then just the date will be inserted
+	(localized for the user locale). If you specify both date and time,
+	then both date and time will be inserted (localized for the user locale
+	and adjusted for the user timezone). If you do not specify any <code><i>date</i></code>
+	parameter, then the current date (not including time) in the user's
+	timezone will be inserted, localized for the user locale.</p>
+
+	<p>The tokens are very picky about the format of the <code><i>date</i></code>
+	you specify. If the tokens do not recognize your <code><i>date</i></code>,
+	they will insert an empty string instead.</p>
+
+	<p>For example:</p>
+
+	<ul>
+		<li>
+		<p>For a user with locale of US-English and US (East Coast)
+		timezone, <code>{DATE:2/20/2009 11:30 PM GMT}</code> is replaced with
+		<code>February 20, 2009 6:30 PM EST</code>. The same token instance,
+		for a German-Germany user with Western Europe timezone, is replaced
+		with <code>21. Februar 2009 00:30 CET</code>.</p>
+		</li>
+		<li>
+		<p>For the same users, <code>{DATE:2/20/2009}</code> is simply
+		rendered as <code>February 20, 2009</code> and <code>20.
+		Februar 2009</code>, respectively. Note that the user timezone and
+		time-of-day is ignored in this case, so the displayed date will always
+		be the same one you specify.</p>
+		</li>
+		<li>
+		<p>For the same users, <code>{DATE}</code> will render the current
+		localized date in their timezones at the time of execution. So if the
+		token is executed at 11:30 PM GMT on February 20, 2009, then it will
+		render as <code>February 20, 2009</code> for the US-English (East
+		Coast timezone) user, and <code>21. Februar 2009</code> for the
+		German-Germany (Western Europe timezone) user (since at 11:30 PM GMT
+		it is already the next day on the Western European continent).</p>
+		</li>
+	</ul>
+
+	<p><b>Note:</b> This token's output format is rigid. Varying the
+	output format - eg, using numeric month instead of word month, or
+	2-digit instead of 4-digit year - is not supported.</p>
 	</dd>
 
 	<dt><a
@@ -5717,36 +5984,34 @@ elsewhere.</p>
 
 <p>The actual groups will vary by application and over time. The SPF
 core framework defines the following groups, but applications will add
-to them. All SPF users (whether authenticated or anonymous) are
-automatically assigned by the SPF into the following groups as
-appropriate:</p>
+to them.</p>
 
 <dl>
 	<dt>
-	<p><b><u>Access Type Groups:</u></b></p>
+	<p><b><u>Authentication Type Groups:</u></b></p>
 	</dt>
 	<dd>
+	<p><b>Note:</b> Only authenticated users are members of these
+	groups. Anonymous users will not be members of these groups until they
+	login.</p>
 	<dl>
 		<dt><code>{@link
 		com.hp.it.spf.xa.misc.portlet.Consts#GROUP_AUTH_TYPE_ATHP}</code></dt>
 		<dd>
 		<p>Indicates the user is a member of the &#64;HP employee portal,
-		not HP Passport. Whether the user is currently logged-into his/her HP
-		Enterprise Directory account is irrelevant; this group indicates the
-		user is accessing via the HP Intranet and the &#64;HP authentication
-		system.</p>
+		not HP Passport. This group indicates the user is accessing via the HP
+		Intranet and the &#64;HP authentication system.</p>
 		</dd>
 
 		<dt><code>{@link
 		com.hp.it.spf.xa.misc.portlet.Consts#GROUP_AUTH_TYPE_HPP}</code></dt>
 		<dd>
 		<p>Indicates the user is a member of <i>standard</i> (not
-		federated) HP Passport. Whether the user is currently logged-into
-		his/her HPP user account is irrelevant; this group indicates the user
-		is accessing through the public (ie HPP) authentication system.
-		However the current portal site, and the HPP policies, have not been
-		enabled for user-identity federation with a 3rd-party identity
-		provider. (User identity federation is not typically used with SPF at
+		federated) HP Passport. This group indicates the user is accessing
+		through the public (ie HPP) authentication system, but the current
+		portal site, and the HPP policies, have not been enabled for
+		user-identity federation with a 3rd-party identity provider. (User
+		identity federation is not used with most SPF-based portal sites at
 		this time.)</p>
 		</dd>
 
@@ -5755,12 +6020,11 @@ appropriate:</p>
 		<dd>
 		<p><i>This group is uncommon in most SPF portal applications.</i>
 		It indicates the user is a member of <i>federated</i> (not standard)
-		HP Passport. Whether the user is currently logged-into his/her HPP
-		user account is irrelevant; this group indicates the user is accessing
-		through the public (ie HPP) authentication system, which has been
-		setup (along with the portal site) for user-identity federation with a
-		3rd-party identity provider. (User identity federation is not
-		typically used with SPF at this time.)</p>
+		HP Passport. This group indicates the user is accessing through the
+		public (ie HPP) authentication system, which has been setup (along
+		with the portal site) for user-identity federation with a 3rd-party
+		identity provider. (User identity federation is not used with most
+		SPF-based portal sites at this time.)</p>
 		</dd>
 	</dl>
 	</dd>
@@ -5797,6 +6061,9 @@ appropriate:</p>
 	<p><b><u>Locale Groups:</u></b></p>
 	</dt>
 	<dd>
+	<p><b>Note:</b> All SPF users (whether authenticated or anonymous)
+	are automatically assigned by the SPF into their appropriate locale
+	groups.</p>
 	<dl>
 		<dt><code>{@link
 		com.hp.it.spf.xa.misc.portlet.Consts#GROUP_LOCALE_COUNTRY_PREFIX} + "<i>&lt;country-code&gt;</i>"</code></dt>
@@ -7149,6 +7416,16 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		<td>Added documentation for <code>{NAV-ITEM}</code> token and
 		also for <code>Utils.getPortalPageID</code>, <code>Utils.getPortalNavItemID</code>,
 		and <code>Utils.getPortalNavItemURL</code> methods.</td>
+	</tr>
+	<tr>
+		<td>2.4</td>
+		<td>December 3 2010</td>
+		<td>S. Jorgenson</td>
+		<td>Added <code>{DATE}</code>, <<code>{AUTH}</code>, <code>{LANGUAGE-NAME}</code>,
+		<code>{COUNTRY-NAME}</code> tokens. Added <code>!</code> operator to
+		applicable container tokens like <code>{GROUP}</code>. Corrected
+		documentation about authentication type groups, to note they are only
+		available to authenticated users.</td>
 	</tr>
 
 </table>

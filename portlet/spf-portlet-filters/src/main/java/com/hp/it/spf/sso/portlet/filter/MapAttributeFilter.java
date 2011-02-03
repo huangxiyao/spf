@@ -180,6 +180,9 @@ public class MapAttributeFilter
      */
     private void forOpenPortal(PortletRequest request) {
         HttpServletRequest rq = (HttpServletRequest)request.getAttribute("javax.portlet.portletc.httpServletRequest");
+        // Fix NullPointerException vulnerability - DSJ 2011/1/31
+        if (rq == null)
+            return;
         if (rq.getAttribute(Consts.USER_PROFILE_KEY) instanceof Map) {
             Object obj = rq.getAttribute("com.sun.portal.portletcontainer.portlet_container_request");
             if (obj != null) {
