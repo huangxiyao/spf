@@ -712,6 +712,10 @@ public abstract class ClassicContextualHelpProvider extends
 		// Make the close button image URL and alt message.
 		String closeButtonUrl = getCloseImageURL();
 		String closeButtonAlt = normalize(getCloseImageAlt());
+		if (escape) {
+		    closeButtonAlt = Utils.escapeXml(closeButtonAlt);
+		}
+		closeButtonAlt = I18nUtility.filterNoLocalizationTokens(closeButtonAlt);
 
 		// Make the width.
 		String widthAttr = "";

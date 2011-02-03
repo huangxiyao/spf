@@ -167,21 +167,76 @@ public class I18nUtilityTest extends TestCase {
         assertEquals("yingzhi wu", userDisName);
     }
 
-    public void testGetDisplayDate() {
+    public void testGetShortDisplayDate() {
     	SimpleDateFormat formatter = new SimpleDateFormat("M/dd/yyyy hh:mm:ss a z");
     	try {
     		TimeZone tz = TimeZone.getTimeZone("GMT");
     		Calendar cal = Calendar.getInstance(tz);
-    		cal.set(2009, 0, 12, 12, 34, 56);
+    		cal.set(2010, 0, 12, 23, 34, 56);
+    		cal.setTimeZone(tz);
     		Date date = cal.getTime();
     		Locale locale = Locale.GERMANY;
+    		tz = TimeZone.getTimeZone("Europe/Berlin");
     		String s = I18nUtility.getShortDisplayDate(date, tz, locale);
-    		assertEquals("12.01.09 12:34", s);
-    		s = I18nUtility.getMediumDisplayDate(date, tz, locale);
-    		assertEquals("12.01.2009 12:34:56", s);
-    		s = I18nUtility.getLongDisplayDate(date, tz, locale);
-    		assertEquals("12. Januar 2009 12:34:56 GMT", s);
+    		assertEquals("13.01.10 00:34", s);
+    		s = I18nUtility.getShortDisplayDate(date, tz, locale, false);
+    		assertEquals("13.01.10", s);
     	} catch (Exception e) {
     	}
     }
+    
+    public void testGetMediumDisplayDate() {
+    	SimpleDateFormat formatter = new SimpleDateFormat("M/dd/yyyy hh:mm:ss a z");
+    	try {
+    		TimeZone tz = TimeZone.getTimeZone("GMT");
+    		Calendar cal = Calendar.getInstance(tz);
+    		cal.set(2010, 0, 12, 23, 34, 56);
+    		cal.setTimeZone(tz);
+    		Date date = cal.getTime();
+    		Locale locale = Locale.GERMANY;
+    		tz = TimeZone.getTimeZone("Europe/Berlin");
+    		String s = I18nUtility.getMediumDisplayDate(date, tz, locale);
+    		assertEquals("13.01.2010 00:34:56", s);
+    		s = I18nUtility.getMediumDisplayDate(date, tz, locale, false);
+    		assertEquals("13.01.2010", s);
+    	} catch (Exception e) {
+    	}
+    }
+
+    public void testGetLongDisplayDate() {
+    	SimpleDateFormat formatter = new SimpleDateFormat("M/dd/yyyy hh:mm:ss a z");
+    	try {
+    		TimeZone tz = TimeZone.getTimeZone("GMT");
+    		Calendar cal = Calendar.getInstance(tz);
+    		cal.set(2010, 0, 12, 23, 34, 56);
+    		cal.setTimeZone(tz);
+    		Date date = cal.getTime();
+    		Locale locale = Locale.GERMANY;
+    		tz = TimeZone.getTimeZone("Europe/Berlin");
+    		String s = I18nUtility.getLongDisplayDate(date, tz, locale);
+    		assertEquals("13. Januar 2010 00:34:56 CET", s);
+    		s = I18nUtility.getLongDisplayDate(date, tz, locale, false);
+    		assertEquals("13. Januar 2010", s);
+    	} catch (Exception e) {
+    	}
+    }
+
+    public void testGetFullDisplayDate() {
+    	SimpleDateFormat formatter = new SimpleDateFormat("M/dd/yyyy hh:mm:ss a z");
+    	try {
+    		TimeZone tz = TimeZone.getTimeZone("GMT");
+    		Calendar cal = Calendar.getInstance(tz);
+    		cal.set(2010, 0, 12, 23, 34, 56);
+    		cal.setTimeZone(tz);
+    		Date date = cal.getTime();
+    		Locale locale = Locale.GERMANY;
+    		tz = TimeZone.getTimeZone("Europe/Berlin");
+    		String s = I18nUtility.getFullDisplayDate(date, tz, locale);
+    		assertEquals("Mittwoch, 13. Januar 2010 0.34 Uhr CET", s);
+    		s = I18nUtility.getFullDisplayDate(date, tz, locale, false);
+    		assertEquals("Mittwoch, 13. Januar 2010", s);
+    	} catch (Exception e) {
+    	}
+    }
+
 }
