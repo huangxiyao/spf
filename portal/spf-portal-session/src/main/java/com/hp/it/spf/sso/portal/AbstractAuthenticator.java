@@ -438,29 +438,36 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                                 lastLoginDate);
             }
 
-            if (AuthenticationUtility.isFromAtHP(request)) {
-            	// If the user is from atHP webagent, add a property SPFAuthType="ATHP"
-            	// into the user profile map.
-            	userProfile.put(AuthenticationConsts.KEY_AUTH_TYPE,
-            			AuthenticationConsts.AUTH_TYPE_ATHP);
-            } else if (AuthenticationUtility.isFromFed(request)) {
-            	// If the user is from HPP webagent and it's a federated site,
-            	// add a property SPFAuthType="FED" into the user profile map.
-            	userProfile.put(AuthenticationConsts.KEY_AUTH_TYPE,
-            			AuthenticationConsts.AUTH_TYPE_FED);
-            } else {
-            	// By default, add a property SPFAuthType="HPP" into the user profile map
-            	// because we think for most cases, the application is for HPP users.
-            	userProfile.put(AuthenticationConsts.KEY_AUTH_TYPE,
-            			AuthenticationConsts.AUTH_TYPE_HPP);
-            }
-            
             // set user groups
             userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
                             Collections.list(Collections.enumeration(AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser)))));
         }
         request.getSession()
                .setAttribute(AuthenticationConsts.USER_PROFILE_KEY, userProfile);
+    }
+
+    /**
+     * Sets the authentication type attribute {@link AuthenticationConsts#KEY_AUTH_TYPE} value
+     * in the user profile map.
+     */
+    private void setAuthType()
+    {
+        if (AuthenticationUtility.isFromAtHP(request)) {
+            // If the user is from atHP webagent, add a property SPFAuthType="ATHP"
+            // into the user profile map.
+            userProfile.put(AuthenticationConsts.KEY_AUTH_TYPE,
+                    AuthenticationConsts.AUTH_TYPE_ATHP);
+        } else if (AuthenticationUtility.isFromFed(request)) {
+            // If the user is from HPP webagent and it's a federated site,
+            // add a property SPFAuthType="FED" into the user profile map.
+            userProfile.put(AuthenticationConsts.KEY_AUTH_TYPE,
+                    AuthenticationConsts.AUTH_TYPE_FED);
+        } else {
+            // By default, add a property SPFAuthType="HPP" into the user profile map
+            // because we think for most cases, the application is for HPP users.
+            userProfile.put(AuthenticationConsts.KEY_AUTH_TYPE,
+                    AuthenticationConsts.AUTH_TYPE_HPP);
+        }
     }
 
     /**
@@ -662,6 +669,10 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                                 EntityPersistenceException {
         // append all external user profile retrieved from UPS/Persona
         userProfile.putAll(getUserProfile());
+
+        // Set the SPFAuthType attribute before calling group service so the group definitions can
+        // use its value.
+        setAuthType();
 
         mapUserProfile2SSOUser();
         Set groups = getUserGroups();
