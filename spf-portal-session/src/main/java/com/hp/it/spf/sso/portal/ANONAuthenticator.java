@@ -84,6 +84,11 @@ public class ANONAuthenticator extends AbstractAuthenticator {
             }
         }
 
+        // If we got here this means the user profile in the session is stale.
+
+        // Let's start with setting its SPFAuthType value.
+        setAuthTypeProfileAttribute();
+
         String language = reqLocale.getLanguage();
         String country = reqLocale.getCountry();
         language = (language != null) ? language.trim().toLowerCase() : "";
