@@ -84,7 +84,15 @@ public class SelectLocaleProcessAction extends BaseAction {
 			LOG.info("SelectLocaleProcessAction: invoked to set new locale: "
 					+ plocale);
 			if (isAvailableLocale(request, plocale)) {
-				// set locale into the request
+			    	// CR #224 - do not set locale into Vignette because this could set it for
+			    	// an SSO guest user - thus the current SSO guest user for locale A would 
+			    	// get set with locale B, which would be a Bad Thing.  Anyway setting the
+			    	// locale into Vignette at all here is unnecessary; the new locale does not
+			    	// need to take effect in this request, but only in the next request after
+			    	// the redirect process-action runs.  And setting the cookies (below) will
+			    	// ensure that the new locale does take effect in that next request.
+			    	// DSJ 2011/2/7
+			    	/*
 				LOG
 						.info("SelectLocaleProcessAction: updating user's locale into request for Vignette.");
 				boolean setLocaleFlag = I18nUtility.setLocale(request, plocale);
@@ -93,6 +101,7 @@ public class SelectLocaleProcessAction extends BaseAction {
 							.error("SelectLocaleProcessAction: update user's locale into request for Vignette failed.");
 					sFlag = false;
 				}
+				*/
 
 				// set locale into the HP.com cookies
 				LOG
