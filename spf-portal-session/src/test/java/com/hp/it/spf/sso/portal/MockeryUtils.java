@@ -335,6 +335,7 @@ public class MockeryUtils {
                 allowing(request).getParameter("guestMode");
                 allowing(request).getParameter("username");
                 allowing(request).getHeader("Host");will(returnValue("bollo22.serviceportal.hp.com"));
+                allowing(request).getHeader("AccessType");will(returnValue(null));
                 will(returnValue("false"));
             }
         });
