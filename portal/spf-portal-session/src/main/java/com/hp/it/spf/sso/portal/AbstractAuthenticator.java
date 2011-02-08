@@ -196,6 +196,11 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                             new Date());
         }
 
+
+        // Set the SPFAuthType attribute before calling group service so the group definitions can
+        // use its value.
+        setAuthTypeProfileAttribute();
+
         try {
             // Retrieve user group from UGS to SSOUser
             // and synchronous to VAP user, and return the
@@ -450,7 +455,8 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
      * Sets the authentication type attribute {@link AuthenticationConsts#KEY_AUTH_TYPE} value
      * in the user profile map.
      */
-    private void setAuthType()
+    @SuppressWarnings("unchecked")
+    protected void setAuthTypeProfileAttribute()
     {
         if (AuthenticationUtility.isFromAtHP(request)) {
             // If the user is from atHP webagent, add a property SPFAuthType="ATHP"
@@ -669,10 +675,6 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
                                 EntityPersistenceException {
         // append all external user profile retrieved from UPS/Persona
         userProfile.putAll(getUserProfile());
-
-        // Set the SPFAuthType attribute before calling group service so the group definitions can
-        // use its value.
-        setAuthType();
 
         mapUserProfile2SSOUser();
         Set groups = getUserGroups();
