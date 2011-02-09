@@ -15,7 +15,8 @@
 # 3.0   02/16/09        DSJ updated for Shared Portal Framework
 # 3.1   04/01/09        DSJ updated to duplicate files for Hebrew
 # 3.2   11/20/09        DSJ updated to duplicate files for Hong Kong Chinese
-# 3.3   1/24/11         DSJ updated to normalize pt_br instead of pt_pt
+# 3.3   2/8/11          DSJ updated to normalize pt_br instead of pt_pt, and 
+#                           add eps to misc extensions list
 #
 ################################################################
 package main;
@@ -29,7 +30,7 @@ use integer;
 $msg_ext_re = "properties";
 $nonmsg_ext_re = "html|htm|xml|txt|css|js|rtf";
 $image_ext_re = "jpg|gif|tif|png";
-$misc_ext_re = "pdf|doc|mpg|wav|psd|wmv|avi|ppt";
+$misc_ext_re = "pdf|doc|mpg|wav|psd|eps|wmv|avi|ppt";
 $media_ext_re = "$image_ext_re|$misc_ext_re";
 $text_ext_re = "$msg_ext_re|$nonmsg_ext_re";
 # For CR #218 - pt_br should be normalized to pt, and pt_pt should be left
