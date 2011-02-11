@@ -71,7 +71,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.4</version>
+                <version>${mavenJavadocPluginVersion}</version>
 				<configuration>
 				<aggregate>true</aggregate>
 				<windowtitle>${project.name} ${project.version} Developer's Guide</windowtitle>
