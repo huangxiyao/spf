@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>2.1.6-SNAPSHOT</version>
+		<version>2.2.0</version>
 	</parent>
 
 
@@ -31,7 +31,7 @@
 	</modules>
 	
 	<properties>
-		<spf.common.version>2.1.3-SNAPSHOT</spf.common.version>
+		<spf.common.version>2.2.0</spf.common.version>
 		<!-- Temporarily pinning the Spring dependency to 3.0.x until the portal artifacts and
 		Vignette will be able to use it too -->
 		<springFrameworkVersion>3.0.5.RELEASE</springFrameworkVersion>
