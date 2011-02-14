@@ -12,7 +12,7 @@
 	<packaging>pom</packaging>
 
 	<!-- This version number doesn't need to change. -->
-	<version>2.2.0-SNAPSHOT</version>
+	<version>2.2.0</version>
 
 	<name>HP Layout VAP Components</name>
 	<url>http://frameworks.hp.com</url>
@@ -25,9 +25,9 @@
 	</modules>
 
 	<scm>
-		<connection>${spf.sourceReadUrl}/trunk/spf-portal-laf</connection>
-		<developerConnection>${spf.sourceWriteUrl}/trunk/spf-portal-laf</developerConnection>
-		<url>${spf.sourceViewUrl}/trunk/spf-portal-laf</url>
+		<connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/tags/spf-layout-laf-2.2.0</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-layout-laf-2.2.0</developerConnection>
+		<url>http://code1.corp.hp.com/svn/spf/source/tags/spf-layout-laf-2.2.0</url>
 	</scm>
 	
 	<ciManagement>
