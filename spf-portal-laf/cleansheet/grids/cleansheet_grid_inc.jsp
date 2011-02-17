@@ -2,7 +2,7 @@
 <%-----------------------------------------------------------------------------
 	cleansheet_grid_inc.jsp
 	
-	This jsp contains all the common code for each of the HPWeb grids and is 
+	This jsp contains all the common code for each of the cleansheet grids and is 
 	included by each of the grid component jsp file, 
 	e.g. cleansheet_vert_nav_grid.jsp.
 	
@@ -320,7 +320,7 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
           <div class="max" id="page">
             <!-- BEGIN INSERT CONTENT -->
             <div id="controls">
-              <div class="hidden" id="carousel">	
+              <div id="carousel">	
 				<a name="jumptocontent"><span class="screenReading">${contentStart}</span></a>									
 				<vgn-portal:includePageContent />
 			
@@ -340,7 +340,6 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 	<c:if test="${isRTL}">
 		</div>
 	</c:if>
-	<script src="http://www8.hp.com/us/en/scripts/homepage/home_init.js" type="text/javascript" xml:space="preserve">//</script>
 	
 	</body>
 </html>
