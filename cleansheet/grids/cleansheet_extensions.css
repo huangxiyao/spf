@@ -1,6 +1,35 @@
 
 /* HP.com style attributes that are overriden */
 
+a:hover {
+	color:#61c702;
+	text-decoration:none
+}	
+
+a:visited {
+	color:#ADADAD;
+	text-decoration:none
+}	
+
+span.spfcs_chr_solid {
+	font:8px Arial;
+	color:#fff;
+	text-decoration:none;
+	border-right:1px solid #ccc;
+	margin-left:7px;
+	margin-right:6px
+}
+
+span.spfcs_pipe_chr  {
+	font:8px Arial;
+	color:#fff;
+	text-decoration:none;
+	border-right:1px dotted #eee;
+	height:8px;
+	margin:12px 11px 0 9px;
+	padding:3px 0 0
+}
+
 .pageLayoutWide #tabbedNavEnhanced {
 	width:974px;
 }

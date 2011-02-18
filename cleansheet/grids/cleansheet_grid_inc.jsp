@@ -124,55 +124,12 @@ pageContext.setAttribute("countryTag", countryTag);
 	<c:set var="isRTL" value="true" scope="request" />
 </c:if>
 
-<%-- 
-	Grab layout settings from HPWebModel bean, and if a setting value is not 
-	found there, then look in the grid message catalog. 	
---%>
-	
-<jsp:scriptlet>
-
-String themeDef = Utils.getI18nValue(i18nID, "hpweb.theme", "#003366", 
-			portalContext);
-String headerStyleDef = Utils.getI18nValue(i18nID, "hpweb.headerStyle", "stretch",
-			portalContext);
-String pageWidthDef = Utils.getI18nValue(i18nID, "hpweb.pageWidth", "wide", 
-			portalContext);
-
-</jsp:scriptlet>
-		
-<c:set var="themeColor" value="${HPWebModel.themeColor}" />
-<c:if test="${empty themeColor}">
-	<c:set var="themeColor" value="<%= themeDef %>" />
-</c:if>
-
-<c:set var="headerStyle" value="${HPWebModel.headerStyle}" />
-<c:if test="${empty headerStyle}">
-	<c:set var="headerStyle" value="<%= headerStyleDef %>" />
-</c:if>
-
-<c:set var="pageWidth" value="${HPWebModel.pageWidth}" />
-<c:if test="${empty pageWidth}">
-	<c:set var="pageWidth" value="<%= pageWidthDef %>" />
-</c:if>
-
-<c:if test="${headerStyle eq 'stretch'}">
-	<c:set var="stretch" value="true" />
-</c:if>
-
-<c:set var="widePage" value="true" />
-
-<c:if test="${pageWidth eq 'narrow'}">
-	<c:set var="widePage" value="false" />
-</c:if>
-
 <jsp:scriptlet>
 
 // Create HashMap to pass arguments to styles that need values sourced from
 // grid components.
 
 HashMap args = new HashMap();
-args.put("widePage", pageContext.getAttribute("widePage"));
-args.put("themeColor", pageContext.getAttribute("themeColor"));
 
 </jsp:scriptlet>
 
@@ -217,14 +174,10 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 	<meta name="${metaInfo.key}" content="${metaInfo.value}">
 </c:forEach>
 
-	<c:if test="${!empty themeColor}">
-       	<script type="text/javascript"> 
-       		var theme = '${themeColor}'; 
-       	</script>
-    </c:if>
-    <link rel="stylesheet" type="text/css" href="${styleDir}hpweb_eeeep_ov2.css">
+    <!--  link rel="stylesheet" type="text/css" href="${styleDir}hpweb_eeeep_ov2.css"-->
 	<link href="http://www8.hp.com/us/en/images/i/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
 	<link href="http://www8.hp.com/us/en/system/styles/header_footer_v2.css" media="screen" rel="stylesheet" type="text/css"/>
+	<link href="http://www8.hp.com/us/en/system/styles/community_widget.css" media="screen" rel="stylesheet" type="text/css" />
 	
 	<!--[if (IE 7)|(IE 8)]>
          <link href="http://www8.hp.com/us/en/system/styles/header_footer_ie.css" rel="stylesheet" type="text/css" />

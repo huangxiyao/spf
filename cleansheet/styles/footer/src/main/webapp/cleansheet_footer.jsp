@@ -68,7 +68,7 @@ String siteMapUrlDef = Utils.getI18nValue(i18nID, "hpweb.siteMapUrl",
 	Template
 -----------------------------------------------------------------------------%>
  <!-- BEGIN FOOTER AREA -->
-      <div class="footer" id="footer">
+      <div class="footer" >
  <!-- BEGIN FOOTER RIGHT NAV TOP ROW -->
         <div class="right top">
           <ul>
