@@ -38,9 +38,7 @@
 
 		<!-- Grid components -->
 		<module>grids/horz_nav_grid</module>
-		<module>grids/split_nav_grid</module>
 		<module>grids/system_grid</module>
-		<module>grids/vert_nav_grid</module>
 
 		<!-- Theme components -->
 		<module>themes/cleansheet_theme</module>
