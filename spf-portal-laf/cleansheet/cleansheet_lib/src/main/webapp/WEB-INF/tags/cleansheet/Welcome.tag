@@ -5,7 +5,6 @@
 <%@ attribute name="signOutUrl" type="java.lang.String" %>
 <%@ attribute name="profileUrl" type="java.lang.String" %>
 <%@ attribute name="registerUrl" type="java.lang.String" %>
-<%@ attribute name="myAccountUrl" type="java.lang.String" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -27,8 +26,6 @@
 <fmt:message var="signOut" key="text.hpweb2003.signout" bundle="${msgResources}" />
 <fmt:message var="register" key="text.hpweb2003.register" bundle="${msgResources}" />
 <fmt:message var="profile" key="text.hpweb2003.profile" bundle="${msgResources}" />
-<fmt:message var="myAccount" key="text.hpweb.myaccount" bundle="${msgResources}" />
-
 
 <c:if test="${!empty username}">
 	<fmt:message var="welcome" key="text.hpweb2003.welcome" bundle="${msgResources}">
@@ -70,60 +67,33 @@
 
 <!-- style top_buyhp is defined in header_footer_v2.css by.hp.com. need to be customized locally  -->
 <div class="top_buyhp" style="text-transform: none; height:18px;">
-	<div class="top_wrapper">
-	    <div class="top_left" style="font-size:11pt;padding-left:15px">${welcome}</div>	
+    <div style="float:left;font-size:10pt;">${welcome}</div>	
 			
-		<c:if test="${!empty signInUrl}">
-			<c:choose>
-				<c:when test="${empty username}">
-					<c:choose>
-						<c:when test="${!empty myAccountUrl}">
-							<div class="top_right"> »
-								<a class="ribbon_link link_metrics" name="${signIn}" title="${signIn}" 
-									href="${signInUrl}" tabindex="1" style="font-size:10pt;padding-right:32px">${signIn}</a>
-							</div>
-							<div class="top_right"> » 
-								<a class="ribbon_link link_metrics" name="${myAccount}" title="${myAccount}" 
-										href="${myAccountUrl}" tabindex="1" style="font-size:10pt;padding-right:25px">${myAccount}</a>
-							</div>							
-						</c:when>
-						<c:otherwise>
-							<div class="top_right"> »
-								<a class="ribbon_link link_metrics" name="${register}" title="${register}" 
-										href="${registerUrl}" tabindex="1" style="font-size:10pt;padding-right:32px">${register}</a>
-							</div>							
-							<div class="top_right"> »
-								<a class="ribbon_link link_metrics" name="${signIn}" title="${signIn}" 
-									href="${signInUrl}" tabindex="1" style="font-size:10pt;padding-right:25px">${signIn}</a>
-							</div>
-						</c:otherwise>
-					</c:choose>
-				</c:when>
-				<c:otherwise>
-					<c:choose>
-						<c:when test="${!empty myAccountUrl}"> 
-							<div class="top_right"> »
-								<a class="ribbon_link link_metrics" name="${signOut}" title="${signOut}" 
-									href="${signOutUrl}" tabindex="1" style="font-size:10pt;padding-right:32px">${signOut}</a>
-							</div>
-							<div class="top_right"> »
-								<a class="ribbon_link link_metrics" name="${myAccount}" title="${myAccount}" 
-										href="${myAccountUrl}" tabindex="1" style="font-size:10pt;padding-right:25px">${myAccount}</a>
-							</div>							
-						</c:when>
-						<c:otherwise>
-							<div class="top_right"> »
-								<a class="ribbon_link link_metrics" name="${profile}" title="${profile}" 
-										href="${profileUrl}" tabindex="1" style="font-size:10pt;padding-right:32px">${profile}</a>
-							</div>							
-							<div class="top_right"> »
-								<a class="ribbon_link link_metrics" name="${signOut}" title="${signOut}" 
-									href="${signOutUrl}" tabindex="1" style="font-size:10pt;padding-right:25px">${signOut}</a>
-							</div>
-						</c:otherwise>
-					</c:choose>
-				</c:otherwise>
-			</c:choose>
-		</c:if>
-	</div>
+	<c:if test="${!empty signInUrl}">
+		<c:choose>
+			<c:when test="${empty username}">
+				<div style="float:right;font-size:11pt">
+					<a class="link_metrics" name="${signIn}" title="${signIn}" 
+						href="${signInUrl}" tabindex="1">${signIn}</a>
+					
+					<span class="spfcs_pipe_chr"> </span>
+					
+					<a class="link_metrics" name="${register}" title="${register}" 
+					href="${registerUrl}" tabindex="1">${register}</a>
+				</div>
+			</c:when>
+			<c:otherwise>
+				<div style="float:right;font-size:11pt">
+					<a class="link_metrics" name="${signOut}" title="${signOut}" 
+						href="${signOutUrl}" tabindex="1">${signOut}</a>
+						
+					<span class="spfcs_pipe_chr"> </span>
+					
+					<a class="link_metrics" name="${profile}" title="${profile}" 
+							href="${profileUrl}" tabindex="1">${profile}</a>
+				</div>							
+			</c:otherwise>
+		</c:choose>
+	</c:if>
+
 </div>

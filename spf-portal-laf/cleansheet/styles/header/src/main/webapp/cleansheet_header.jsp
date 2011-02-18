@@ -365,7 +365,7 @@
 								</a>
 							</li>
 							<li>
-								<a class="community"  id="community_trigger" onclick="return false;" tabindex="22" title="Online Communities">
+								<a class="community png" href="javascript:void(0);" id="community_trigger" onclick="return false;" tabindex="22" title="Online Communities">
 									<span class="hidden">Online Communities</span>
 									<span class="hidden">Opens simulated dialog</span>
 								</a>

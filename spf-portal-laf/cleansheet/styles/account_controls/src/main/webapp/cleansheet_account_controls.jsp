@@ -37,7 +37,7 @@ if (model == null ) {
 	model = new HPWebModel();
 }
 
-model.setTagline("tag line");
+model.setTagline("dummy tag line");
 
 model.setUsername("John");
 model.setSignInUrl("http://www.hp.com");
@@ -54,22 +54,20 @@ request.setAttribute("HPWebModel", model);
 -----------------------------------------------------------------------------%>
 
 <cscore:welcome>
-	<jsp:attribute name="username">John</jsp:attribute>
+	<jsp:attribute name="username">John Doe</jsp:attribute>
 	<jsp:attribute name="signInUrl">http://www.hp.com</jsp:attribute>
 	<jsp:attribute name="signOutUrl">http://www.hp.com</jsp:attribute>
 	<jsp:attribute name="registerUrl">http://www.hp.com</jsp:attribute>
 	<jsp:attribute name="profileUrl">http://www.hp.com</jsp:attribute>
-	<jsp:attribute name="myAccountUrl">http://www.hp.com</jsp:attribute>
 </cscore:welcome>
 
 <%--
 <cscore:welcome>
-	<jsp:attribute name="username">${HPWebModel.username}</jsp:attribute>
-	<jsp:attribute name="signInUrl">${HPWebModel.signInUrl}</jsp:attribute>
-	<jsp:attribute name="signOutUrl">${HPWebModel.signOutUrl}</jsp:attribute>
-	<jsp:attribute name="registerUrl">${HPWebModel.registerUrl}</jsp:attribute>
-	<jsp:attribute name="profileUrl">${HPWebModel.profileUrl}</jsp:attribute>
-	<jsp:attribute name="myAccountUrl">${HPWebModel.myAccountUrl}</jsp:attribute>
+	<jsp:attribute name="username">${HPCSModel.username}</jsp:attribute>
+	<jsp:attribute name="signInUrl">${HPCSModel.signInUrl}</jsp:attribute>
+	<jsp:attribute name="signOutUrl">${HPCSModel.signOutUrl}</jsp:attribute>
+	<jsp:attribute name="registerUrl">${HPCSModel.registerUrl}</jsp:attribute>
+	<jsp:attribute name="profileUrl">${HPCSModel.profileUrl}</jsp:attribute>
 </cscore:welcome>
 --%>
 
