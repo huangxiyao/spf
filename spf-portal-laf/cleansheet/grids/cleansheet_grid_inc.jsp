@@ -233,66 +233,27 @@ HashMap args = new HashMap();
 		<div dir="rtl">
 	</c:if>
 
-	<div class="everything">
-	<!--stopindex-->
-
 	<vgn-portal:includeStyle friendlyID="account_controls" args="<%= args %>"/>
-	
-	<vgn-portal:includeStyle friendlyID="header" args="<%= args %>"/>
-	
-	<c:if test="${showHorzNav eq 'true'}">
-		<vgn-portal:includeNavigation friendlyID="navigation-horizontal" />
-	</c:if>
-	
-	<%-- Invoke header style again if this is a hpweb header which displays
-			itself in two parts.   This is done to allow the horizontal navigation
-			to display between the upper portion (hp-wide global buttons)
-			and the lower portion (title and breadcrumbs).
-			'hpweb_header_split' is a request attribute set by the hpweb header
-			component.
-	 --%>
-	
-	<c:if test="${hpweb_header_split eq 'true'}">
+	<div class="everything">
 		<vgn-portal:includeStyle friendlyID="header" args="<%= args %>"/>
-	</c:if>
 	
-	<div class="body" id="body">
-		<%-- disable vertical nav for now, not sure whether is needed anymore
-		<c:choose>
-			<c:when test="${showVertNav eq 'true'}">
-				<vgn-portal:includeNavigation friendlyID="navigation-vertical" 
-							isSecondary="true" />
-			</c:when>
-			<c:otherwise>
-			</c:otherwise>
-		</c:choose>
-		--%>
-		<!--startindex-->
+		<c:if test="${showHorzNav eq 'true'}">
+		<vgn-portal:includeNavigation friendlyID="navigation-horizontal" />
+		</c:if>
+	
+		<div class="body" id="body" style="background-color:#FFF">
 				
-		<div class="holder">  <!--  all these nested divs are required for overlay local selector to work -->
-          <div class="max" id="page">
-            <!-- BEGIN INSERT CONTENT -->
-            <div id="controls">
-              <div id="carousel">	
-				<a name="jumptocontent"><span class="screenReading">${contentStart}</span></a>									
-				<vgn-portal:includePageContent />
-			
-			  </div>
-              
-            </div>
-            <!-- END INSERT CONTENT -->
-          </div>
+			<a name="jumptocontent"><span class="screenReading">${contentStart}</span></a>									
+			<vgn-portal:includePageContent />
 		</div>
-				
-		<!--stopindex-->
 		
-	</div>
-	<vgn-portal:includeStyle friendlyID="footer" args="<%= args %>" />
+		<vgn-portal:includeStyle friendlyID="footer" args="<%= args %>" />
 
-	</div>  <!--  end div everything -->
+	</div>
+	
 	<c:if test="${isRTL}">
 		</div>
 	</c:if>
 	
-	</body>
+</body>
 </html>

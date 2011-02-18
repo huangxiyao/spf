@@ -66,13 +66,14 @@
 <a class="screenReading" tabindex="1" href="#jumptocontent">${jumpcontent}</a>
 
 <!-- style top_buyhp is defined in header_footer_v2.css by.hp.com. need to be customized locally  -->
-<div class="top_buyhp" style="text-transform: none; height:18px;">
-    <div style="float:left;font-size:10pt;">${welcome}</div>	
+<div class="top_buyhp" style="text-transform: none;">
+    <div class="top_wrapper">
+    	<div class="top_left">${welcome}</div>
+		<div class="top_right">
 			
-	<c:if test="${!empty signInUrl}">
-		<c:choose>
-			<c:when test="${empty username}">
-				<div style="float:right;font-size:11pt">
+		<c:if test="${!empty signInUrl}">
+			<c:choose>
+				<c:when test="${empty username}">
 					<a class="link_metrics" name="${signIn}" title="${signIn}" 
 						href="${signInUrl}" tabindex="1">${signIn}</a>
 					
@@ -80,10 +81,8 @@
 					
 					<a class="link_metrics" name="${register}" title="${register}" 
 					href="${registerUrl}" tabindex="1">${register}</a>
-				</div>
-			</c:when>
-			<c:otherwise>
-				<div style="float:right;font-size:11pt">
+				</c:when>
+				<c:otherwise>
 					<a class="link_metrics" name="${signOut}" title="${signOut}" 
 						href="${signOutUrl}" tabindex="1">${signOut}</a>
 						
@@ -91,9 +90,9 @@
 					
 					<a class="link_metrics" name="${profile}" title="${profile}" 
 							href="${profileUrl}" tabindex="1">${profile}</a>
-				</div>							
-			</c:otherwise>
-		</c:choose>
-	</c:if>
-
+				</c:otherwise>
+			</c:choose>
+		</c:if>
+		</div>
+	</div>
 </div>
