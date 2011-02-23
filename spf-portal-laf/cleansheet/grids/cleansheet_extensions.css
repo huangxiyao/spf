@@ -1,12 +1,13 @@
 
 /* HP.com style attributes that are overriden */
 
-a:hover {
+div.top_buyhp div.top_wrapper div.top_right a:hover 
+{
 	color:#61c702;
 	text-decoration:none
 }	
 
-a:visited {
+div.top_buyhp div.top_wrapper div.top_right a:visited {
 	color:#ADADAD;
 	text-decoration:none
 }	
