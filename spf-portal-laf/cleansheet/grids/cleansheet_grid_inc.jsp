@@ -235,8 +235,14 @@ HashMap args = new HashMap();
 
 	<vgn-portal:includeStyle friendlyID="account_controls" args="<%= args %>"/>
 	<div class="everything">
+		 
 		<vgn-portal:includeStyle friendlyID="header" args="<%= args %>"/>
-	
+		
+		 
+		<div style="height:50px; background-color:#2A2A2A" >
+			<span style="position:relative;top:8px;left:30px; font-size:20pt; color:#C1C1C1">HP Support Center</span>
+		</div>
+		 
 		<c:if test="${showHorzNav eq 'true'}">
 		<vgn-portal:includeNavigation friendlyID="navigation-horizontal" />
 		</c:if>
