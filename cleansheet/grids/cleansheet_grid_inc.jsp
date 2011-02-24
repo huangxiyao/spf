@@ -197,18 +197,6 @@ HashMap args = new HashMap();
 	<script src="http://www8.hp.com/us/en/scripts/homepage/mootools_homepage.js" type="text/javascript">//</script>	
 	
 	<script type="text/javascript" language="JavaScript" src="${javascriptDir}hpweb_utilities.js"></script>
-	<script charset="utf-8" type="text/javascript">
-		var searchTxt = '';
-		var templateType='no_toolbar';
-		var wip=true; 
-		var agt=navigator.userAgent.toLowerCase();
-		var is_ie= (agt.indexOf("msie") != -1);
-		var newsroom_rss = 'http://www8.hp.com/us/en/system/include/ie_rss.jsp';
-	    var defaultSegment = 'HHO';
-		var hpAbsDir = '/us/en/';
-	    var rtl=false;
-     </script>
-        
 
 	<%-- Our static CSS style extensions to the HPWeb standard --%>
 	<link href="<c:out value="${stylePath}" />cleansheet_extensions.css" rel="stylesheet" type="text/css">
