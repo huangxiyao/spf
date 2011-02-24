@@ -27,8 +27,6 @@
 		<!--
 		<module>styles/locale_indicator</module>
 		-->
-		<module>styles/vertical_navigation</module>
-		
 		<module>styles/portlet_chrome/intro_box_chrome</module>
 		<module>styles/portlet_chrome/level_a_chrome</module>
 		<module>styles/portlet_chrome/level_b_chrome</module>
