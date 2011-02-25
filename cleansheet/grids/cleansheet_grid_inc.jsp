@@ -234,13 +234,13 @@ HashMap args = new HashMap();
 		<c:if test="${showHorzNav eq 'true'}">
 		<vgn-portal:includeNavigation friendlyID="navigation-horizontal" />
 		</c:if>
-	
-		<div class="body" id="body" style="background-color:#FFF">
-				
-			<a name="jumptocontent"><span class="screenReading">${contentStart}</span></a>									
-			<vgn-portal:includePageContent />
-		</div>
-		
+		<div style="padding: 0 12px 0 12px;background-color: #222;">
+			<div class="body" id="body" style="background-color:#FFF">
+					
+				<a name="jumptocontent"><span class="screenReading">${contentStart}</span></a>									
+				<vgn-portal:includePageContent />
+			</div>
+		</div>		
 		<vgn-portal:includeStyle friendlyID="footer" args="<%= args %>" />
 
 	</div>
