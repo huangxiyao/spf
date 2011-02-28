@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+//import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 
-import com.vignette.portal.website.enduser.PortalContext;
+//import com.vignette.portal.website.enduser.PortalContext;
 
 
 /**
