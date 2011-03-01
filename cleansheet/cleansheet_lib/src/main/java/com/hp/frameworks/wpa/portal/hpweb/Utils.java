@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.PageContext;
 
 import com.epicentric.common.website.I18nUtils;
 import com.epicentric.common.website.Localizer;
@@ -17,6 +18,7 @@ import com.epicentric.common.website.SessionUtils;
 import com.epicentric.settings.Settings;
 import com.epicentric.site.Site;
 import com.epicentric.site.SiteSettings;
+import com.epicentric.template.Style;
 import com.epicentric.user.User;
 import com.hp.frameworks.wpa.hpweb.MenuItem;
 import com.vignette.portal.util.StringUtils;
@@ -394,4 +396,41 @@ public class Utils {
        return WebUtils.xmlEntitiesToChars(value);          
      }
 
+     public static HPWebModel initialize(PortalContext portalContext, PageContext pageContext) {
+    	 Style currentStyle = portalContext.getCurrentStyle();
+    	 String i18nID = currentStyle.getUID();
+    	 	
+    	 pageContext.setAttribute("stylePath", portalContext.getPortalHttpRoot() + 
+    	 		currentStyle.getUrlSafeRelativePath());
+    	 	
+    	 pageContext.setAttribute("dnsName", portalContext.getCurrentSite().getDNSName());
+    	 
+    	 pageContext.setAttribute("layoutConfigHeadJspPath",
+    				"/" + portalContext.getCurrentStyle().getUrlSafeRelativePath() +
+    				"cleansheet_layout_config_head.jsp");
+
+    	 HttpServletRequest request = portalContext.getHttpServletRequest();
+
+    	 Locale locale = Utils.getLocale(request);
+    	 String languageTag = Utils.localeToLanguageTag(locale);
+    	 String countryTag = locale.getCountry();
+    	 if (languageTag == null) {
+    	     languageTag = "en-US";
+    	     countryTag = "US";
+    	 }
+    	 pageContext.setAttribute("countryTag", countryTag);    	 
+
+    	 HPWebModel hpwebModel = (HPWebModel) request.getAttribute("HPWebModel");
+    	 if (hpwebModel == null) {
+    		 hpwebModel = new HPWebModel(); 
+    		 request.setAttribute("HPWebModel", hpwebModel);
+    	 }
+    	 
+    	 hpwebModel.setLanguageTag(languageTag);
+    	 hpwebModel.setCountryTag(countryTag);
+    	 hpwebModel.setLocale(locale);
+    	 
+    	 
+    	 return hpwebModel;
+     }
 }

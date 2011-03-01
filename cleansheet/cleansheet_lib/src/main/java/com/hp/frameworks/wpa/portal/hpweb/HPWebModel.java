@@ -31,6 +31,54 @@ public class HPWebModel extends com.hp.frameworks.wpa.hpweb.HPWebModel {
 	private String helpUrl;
 	private String helpText;
 	private List topMenuItems = new ArrayList();
+	
+	private String countryTag;
+	private String languageTag;
+	private Locale locale;
+	
+
+	
+	/**
+	 * @return the languageTag
+	 */
+	public String getLanguageTag() {
+		return languageTag;
+	}
+
+	/**
+	 * @param languageTag the languageTag to set
+	 */
+	public void setLanguageTag(String languageTag) {
+		this.languageTag = languageTag;
+	}
+
+	/**
+	 * @return the countryTag
+	 */
+	public String getCountryTag() {
+		return countryTag;
+	}
+
+	/**
+	 * @param countryTag the countryTag to set
+	 */
+	public void setCountryTag(String countryTag) {
+		this.countryTag = countryTag;
+	}
+
+	/**
+	 * @return the locale
+	 */
+	public Locale getLocale() {
+		return locale;
+	}
+
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
 
 	public HPWebModel() {
 		super();
