@@ -20,7 +20,7 @@
 		<epideploy:detail>
 			<style-info 
 				apply-template-header="false" 
-				description="Style to hold custom code for hpweb layout configuration." 
+				description="Style to hold custom code for cleansheet layout configuration." 
 				friendly-id="cleansheetlayoutconfig" 
 				id="CleansheetLayoutConfig" 
 				is-system="false" 
