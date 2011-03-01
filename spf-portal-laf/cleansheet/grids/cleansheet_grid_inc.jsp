@@ -25,6 +25,7 @@
 
 <jsp:directive.page import="java.util.HashMap" />
 <jsp:directive.page import="com.epicentric.template.Style" />
+<jsp:directive.page import="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
 <jsp:directive.page import="com.hp.frameworks.wpa.portal.hpweb.Utils" />
 <jsp:directive.page import="java.util.Locale" />
 
@@ -48,55 +49,20 @@
 <jsp:scriptlet>
 
 // Get current style, which is the grid, for use in generating the path.
-
-Style currentStyle = portalContext.getCurrentStyle();
-String i18nID = currentStyle.getUID();
-	
-pageContext.setAttribute("stylePath", portalContext.getPortalHttpRoot() + 
-		currentStyle.getUrlSafeRelativePath());
-	
-pageContext.setAttribute("dnsName", portalContext.getCurrentSite().getDNSName());
+	HPWebModel hpwebModel = Utils.initialize(portalContext, pageContext);
 	
 </jsp:scriptlet>
+
+<c:set var="countryTag" value="${hpwebModel.countryTag}"/>
 
 <%-- Include the Layout Config style --%>
-
 <vgn-portal:includeStyle friendlyID="hp_layout_config" />
-
-<jsp:scriptlet>
-
-// Get path to hp_layout_config head JSP file to include later in head.
-
-pageContext.setAttribute("layoutConfigHeadJspPath",
-		"/" + portalContext.getCurrentStyle().getUrlSafeRelativePath() +
-		"cleansheet_layout_config_head.jsp");
-
-</jsp:scriptlet>
-
-<jsp:useBean id="HPWebModel" scope="request" 
-		class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
-
-<jsp:scriptlet>
-
-// Get locale from logic to get it from what is set in Vignette.
-// Use locale and ISO language tag for fmt tags, and <html lang=""> element.
-
-Locale locale = Utils.getLocale(request);
-String languageTag = Utils.localeToLanguageTag(locale);
-String countryTag = locale.getCountry();
-if (languageTag == null) {
-    languageTag = "en-US";
-    countryTag = "US";
-}
-pageContext.setAttribute("countryTag", countryTag);
-
-</jsp:scriptlet>
 
 <%----------------------------------------------------------------------------- 
 	Messages  
 -----------------------------------------------------------------------------%>
 
-<fmt:setLocale value="<%= locale %>" scope="request" />
+<fmt:setLocale value="${hpwebModel.locale}" scope="request" />
 
 <fmt:setBundle var="urlResources" basename="com.hp.frameworks.wpa.hpweb.Urls" />
 <fmt:setBundle var="msgResources" basename="com.hp.frameworks.wpa.hpweb.Messages"  />
@@ -137,7 +103,7 @@ HashMap args = new HashMap();
 	Template
 -----------------------------------------------------------------------------%>
 
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="<%= languageTag %>" xml:lang="en-us">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="${hpwebModel.languageTag}" xml:lang="en-us">
 <head>
 	<vgn-portal:pageContentTitle />
 	
@@ -196,8 +162,6 @@ HashMap args = new HashMap();
     <![endif]-->
 	<script src="http://www8.hp.com/us/en/scripts/homepage/mootools_homepage.js" type="text/javascript">//</script>	
 	
-	<script type="text/javascript" language="JavaScript" src="${javascriptDir}hpweb_utilities.js"></script>
-
 	<%-- Our static CSS style extensions to the HPWeb standard --%>
 	<link href="<c:out value="${stylePath}" />cleansheet_extensions.css" rel="stylesheet" type="text/css">
 	
@@ -234,7 +198,7 @@ HashMap args = new HashMap();
 		<c:if test="${showHorzNav eq 'true'}">
 		<vgn-portal:includeNavigation friendlyID="navigation-horizontal" />
 		</c:if>
-		<div style="padding: 0 12px 0 12px;background-color: #222;">
+		<div style="padding: 0 12px 0 12px;background-color: #35383C;">
 			<div class="body" id="body" style="background-color:#FFF">
 					
 				<a name="jumptocontent"><span class="screenReading">${contentStart}</span></a>									
