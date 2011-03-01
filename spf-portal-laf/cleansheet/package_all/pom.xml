@@ -67,13 +67,6 @@
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
-        	<artifactId>CleansheetVerticalNav</artifactId>
-			<version>${project.version}</version>
-			<type>car</type>
-    	</dependency>
-
-    	<dependency>
-        	<groupId>com.hp.frameworks</groupId>
         	<artifactId>CleansheetPortletChromeIntroBox</artifactId>
 			<version>${project.version}</version>
 			<type>car</type>
@@ -123,21 +116,7 @@
 
     	<dependency>
         	<groupId>com.hp.frameworks</groupId>
-        	<artifactId>CleansheetSplitNavGrid</artifactId>
-			<version>${project.version}</version>
-			<type>car</type>
-    	</dependency>
-
-    	<dependency>
-        	<groupId>com.hp.frameworks</groupId>
         	<artifactId>CleansheetSystemGrid</artifactId>
-			<version>${project.version}</version>
-			<type>car</type>
-    	</dependency>
-
-    	<dependency>
-        	<groupId>com.hp.frameworks</groupId>
-        	<artifactId>CleansheetVerticalNavGrid</artifactId>
 			<version>${project.version}</version>
 			<type>car</type>
     	</dependency>
