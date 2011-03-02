@@ -27,47 +27,19 @@
 <%----------------------------------------------------------------------------- 
 	Local variables  
 -----------------------------------------------------------------------------%>
-
-
-		
-<jsp:scriptlet>
-HPWebModel model = (HPWebModel)request.getAttribute("HPWebModel");
-
-if (model == null ) {
-	model = new HPWebModel();
-}
-
-model.setTagline("dummy tag line");
-
-model.setUsername("John");
-model.setSignInUrl("http://www.hp.com");
-model.setSignOutUrl("http://www.hp.com");
-model.setRegisterUrl("http://www.hp.com");
-model.setProfileUrl("http://www.hp.com");
-
-request.setAttribute("HPWebModel", model);
-
-</jsp:scriptlet>
+<jsp:useBean id="HPWebModel" scope="request" 
+		class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
 
 <%----------------------------------------------------------------------------- 
 	Template  
 -----------------------------------------------------------------------------%>
 
 <cscore:welcome>
-	<jsp:attribute name="username">John Doe</jsp:attribute>
-	<jsp:attribute name="signInUrl">http://www.hp.com</jsp:attribute>
-	<jsp:attribute name="signOutUrl">http://www.hp.com</jsp:attribute>
-	<jsp:attribute name="registerUrl">http://www.hp.com</jsp:attribute>
-	<jsp:attribute name="profileUrl">http://www.hp.com</jsp:attribute>
+	<jsp:attribute name="username">${HPWebModel.username}</jsp:attribute>
+	<jsp:attribute name="signInUrl">${HPWebModel.signInUrl}</jsp:attribute>
+	<jsp:attribute name="signOutUrl">${HPWebModel.signOutUrl}</jsp:attribute>
+	<jsp:attribute name="registerUrl">${HPWebModel.registerUrl}</jsp:attribute>
+	<jsp:attribute name="profileUrl">${HPWebModel.profileUrl}</jsp:attribute>
 </cscore:welcome>
 
-<%--
-<cscore:welcome>
-	<jsp:attribute name="username">${HPCSModel.username}</jsp:attribute>
-	<jsp:attribute name="signInUrl">${HPCSModel.signInUrl}</jsp:attribute>
-	<jsp:attribute name="signOutUrl">${HPCSModel.signOutUrl}</jsp:attribute>
-	<jsp:attribute name="registerUrl">${HPCSModel.registerUrl}</jsp:attribute>
-	<jsp:attribute name="profileUrl">${HPCSModel.profileUrl}</jsp:attribute>
-</cscore:welcome>
---%>
 

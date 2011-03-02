@@ -48,8 +48,7 @@
 
 <jsp:scriptlet>
 
-// Get current style, which is the grid, for use in generating the path.
-	HPWebModel hpwebModel = Utils.initialize(portalContext, pageContext);
+	Utils.initialize(portalContext, pageContext);
 	
 </jsp:scriptlet>
 
@@ -58,26 +57,35 @@
 <%-- Include the Layout Config style --%>
 <vgn-portal:includeStyle friendlyID="hp_layout_config" />
 
+<jsp:scriptlet>
+	// this line has to be after hp_layout_config style type declaration	 	
+    pageContext.setAttribute("layoutConfigHeadJspPath",
+    				"/" + portalContext.getCurrentStyle().getUrlSafeRelativePath() +
+    				"cleansheet_layout_config_head.jsp");
+</jsp:scriptlet>
+
+<jsp:useBean id="HPWebModel" scope="request" class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
+		
 <%----------------------------------------------------------------------------- 
 	Messages  
 -----------------------------------------------------------------------------%>
 
-<fmt:setLocale value="${hpwebModel.locale}" scope="request" />
+<fmt:setLocale value="${locale}" scope="request" />
 
-<fmt:setBundle var="urlResources" basename="com.hp.frameworks.wpa.hpweb.Urls" />
-<fmt:setBundle var="msgResources" basename="com.hp.frameworks.wpa.hpweb.Messages"  />
+<fmt:setBundle var="urlResources" basename="com.hp.it.spf.portal.cleansheet.Urls" />
+<fmt:setBundle var="msgResources" basename="com.hp.it.spf.portal.cleansheet.Messages"  />
 
-<fmt:message var="contentStart" key="text.hpweb2003.content" bundle="${msgResources}" />
-<fmt:message var="htmlLang" key="text.hpweb2003.htmlLang" bundle="${msgResources}" />
+<fmt:message var="contentStart" key="text.cleansheet.content" bundle="${msgResources}" />
+<fmt:message var="htmlLang" key="text.cleansheet.htmlLang" bundle="${msgResources}" />
 
 <c:choose>
 	<c:when test="${pageContext.request.scheme eq 'https'}">
-		<fmt:message var="javascriptDir" key="link.hpweb2003.secure_javascript_dir" bundle="${urlResources}" />
-		<fmt:message var="styleDir" key="link.hpweb2003.secure_style_dir" bundle="${urlResources}" />	
+		<fmt:message var="javascriptDir" key="link.cleansheet.secure_javascript_dir" bundle="${urlResources}" />
+		<fmt:message var="styleDir" key="link.cleansheet.secure_style_dir" bundle="${urlResources}" />	
 	</c:when>
 	<c:otherwise>
-		<fmt:message var="javascriptDir" key="link.hpweb2003.javascript_dir" bundle="${urlResources}" />
-		<fmt:message var="styleDir" key="link.hpweb2003.style_dir" bundle="${urlResources}" />
+		<fmt:message var="javascriptDir" key="link.cleansheet.javascript_dir" bundle="${urlResources}" />
+		<fmt:message var="styleDir" key="link.cleansheet.style_dir" bundle="${urlResources}" />
 	</c:otherwise>
 </c:choose>
 
@@ -103,7 +111,7 @@ HashMap args = new HashMap();
 	Template
 -----------------------------------------------------------------------------%>
 
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="${hpwebModel.languageTag}" xml:lang="en-us">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="${languageTag}" xml:lang="en-us">
 <head>
 	<vgn-portal:pageContentTitle />
 	

@@ -2,15 +2,9 @@
 <style text="text/css">
 .calloutEnhancedExt {font-color: ${themeColor}; }
 
-#horzNavButtonBar {background: ${themeColor}; }
+.theme {background: ${themeColor}; }
 
-#horzNavHelpButton{background: ${themeColor}; }
-
-.horzNavButton a.topMenuItem.menuNormal {background-color: ${themeColor}; }
 <%-- the following style has to go after the above style, and not before it. --%>
-.horzNavButton a.topMenuItem.active {background-color: #FFFFFF; }
-
-#horzNavButtonBarBackground {background: ${themeColor}; }
 </style>
 
 <%--  Add extra right margin property for IE6 to fix missing right bounding box
