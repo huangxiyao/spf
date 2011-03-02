@@ -12,14 +12,14 @@
 <%----------------------------------------------------------------------------- 
 	Messages  
 -----------------------------------------------------------------------------%>
-<fmt:setBundle var="urlResources" basename="com.hp.frameworks.wpa.hpweb.Urls" />
+<fmt:setBundle var="urlResources" basename="com.hp.it.spf.portal.cleansheet.Urls" />
 
 <c:choose>
 	<c:when test="${pageContext.request.scheme eq 'https'}">
-		<fmt:message var="spacerUrl" key="link.hpweb2003.secure_spacer" bundle="${urlResources}" />		
+		<fmt:message var="spacerUrl" key="link.cleansheet.secure_spacer" bundle="${urlResources}" />		
 	</c:when>
 	<c:otherwise>
-		<fmt:message var="spacerUrl" key="link.hpweb2003.spacer" bundle="${urlResources}" />
+		<fmt:message var="spacerUrl" key="link.cleansheet.spacer" bundle="${urlResources}" />
 	</c:otherwise>
 </c:choose>
 

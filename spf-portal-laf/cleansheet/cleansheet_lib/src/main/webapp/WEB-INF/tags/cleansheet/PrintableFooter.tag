@@ -16,15 +16,15 @@
 <%----------------------------------------------------------------------------- 
 	Messages  
 -----------------------------------------------------------------------------%>
-<fmt:setBundle var="msgResources" basename="com.hp.frameworks.wpa.hpweb.Messages" />
-<fmt:setBundle var="urlResources" basename="com.hp.frameworks.wpa.hpweb.Urls" />
+<fmt:setBundle var="msgResources" basename="com.hp.it.spf.portal.cleansheet.Messages" />
+<fmt:setBundle var="urlResources" basename="com.hp.it.spf.portal.cleansheet.Urls" />
 
-<fmt:message var="return" key="text.hpweb2003.return" bundle="${msgResources}" />
-<fmt:message var="privacy" key="text.hpweb2003.privacy" bundle="${msgResources}" />
-<fmt:message var="imprint" key="text.hpweb2003.imprint" bundle="${msgResources}" />
-<fmt:message var="terms" key="text.hpweb2003.terms" bundle="${msgResources}" />
-<fmt:message var="saleTerms" key="text.hpweb2003.saleTerms" bundle="${msgResources}" />
-<fmt:message var="copyright" key="text.hpweb2003.copyright" bundle="${msgResources}">
+<fmt:message var="return" key="text.cleansheet.return" bundle="${msgResources}" />
+<fmt:message var="privacy" key="text.cleansheet.privacy" bundle="${msgResources}" />
+<fmt:message var="imprint" key="text.cleansheet.imprint" bundle="${msgResources}" />
+<fmt:message var="terms" key="text.cleansheet.terms" bundle="${msgResources}" />
+<fmt:message var="saleTerms" key="text.cleansheet.saleTerms" bundle="${msgResources}" />
+<fmt:message var="copyright" key="text.cleansheet.copyright" bundle="${msgResources}">
 	<fmt:param>	
 		<jsp:useBean id="now" class="java.util.Date" />
 		<fmt:formatDate value="${now}"  pattern="yyyy"/>	
@@ -33,25 +33,25 @@
 
 <c:choose>
 	<c:when test="${pageContext.request.scheme eq 'https'}">
-		<fmt:message var="spacerUrl" key="link.hpweb2003.secure_spacer" bundle="${urlResources}" />	
-		<fmt:message var="javascriptDir" key="link.hpweb2003.secure_javascript_dir" bundle="${urlResources}" />	
+		<fmt:message var="spacerUrl" key="link.cleansheet.secure_spacer" bundle="${urlResources}" />	
+		<fmt:message var="javascriptDir" key="link.cleansheet.secure_javascript_dir" bundle="${urlResources}" />	
 	</c:when>
 	<c:otherwise>
-		<fmt:message var="spacerUrl" key="link.hpweb2003.spacer" bundle="${urlResources}" />
-		<fmt:message var="javascriptDir" key="link.hpweb2003.javascript_dir" bundle="${urlResources}" />
+		<fmt:message var="spacerUrl" key="link.cleansheet.spacer" bundle="${urlResources}" />
+		<fmt:message var="javascriptDir" key="link.cleansheet.javascript_dir" bundle="${urlResources}" />
 	</c:otherwise>
 </c:choose>
 
 <c:if test="${empty privacyUrl}">
-	<fmt:message var="privacyUrl" key="link.hpweb2003.privacy" bundle="${urlResources}" />
+	<fmt:message var="privacyUrl" key="link.cleansheet.privacy" bundle="${urlResources}" />
 </c:if>
 
 <c:if test="${empty imprintUrl}">
-	<fmt:message var="imprintUrl" key="link.hpweb2003.imprint" bundle="${urlResources}" />
+	<fmt:message var="imprintUrl" key="link.cleansheet.imprint" bundle="${urlResources}" />
 </c:if>
 
 <c:if test="${empty termsUrl}">
-	<fmt:message var="termsUrl" key="link.hpweb2003.terms" bundle="${urlResources}" />
+	<fmt:message var="termsUrl" key="link.cleansheet.terms" bundle="${urlResources}" />
 </c:if>
 
 <c:if test="${empty metricsUrl}">

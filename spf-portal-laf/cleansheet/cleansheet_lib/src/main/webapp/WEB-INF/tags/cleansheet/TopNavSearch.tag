@@ -19,27 +19,27 @@
 <%----------------------------------------------------------------------------- 
 	Messages  
 -----------------------------------------------------------------------------%>
-<fmt:setBundle var="msgResources" basename="com.hp.frameworks.wpa.hpweb.Messages" />
-<fmt:setBundle var="urlResources" basename="com.hp.frameworks.wpa.hpweb.Urls" />
+<fmt:setBundle var="msgResources" basename="com.hp.it.spf.portal.cleansheet.Messages" />
+<fmt:setBundle var="urlResources" basename="com.hp.it.spf.portal.cleansheet.Urls" />
 
-<fmt:message var="prodServ" key="text.hpweb2003.prodserv" bundle="${msgResources}" />
-<fmt:message var="support" key="text.hpweb2003.support" bundle="${msgResources}" />
-<fmt:message var="solutions" key="text.hpweb2003.solutions" bundle="${msgResources}" />
-<fmt:message var="explore" key="text.hpweb.explore" bundle="${msgResources}" />
-<fmt:message var="communities" key="text.hpweb.communities" bundle="${msgResources}" />
+<fmt:message var="prodServ" key="text.cleansheet.prodserv" bundle="${msgResources}" />
+<fmt:message var="support" key="text.cleansheet.support" bundle="${msgResources}" />
+<fmt:message var="solutions" key="text.cleansheet.solutions" bundle="${msgResources}" />
+<fmt:message var="explore" key="text.cleansheet.explore" bundle="${msgResources}" />
+<fmt:message var="communities" key="text.cleansheet.communities" bundle="${msgResources}" />
 
-<fmt:message var="prodServUrl" key="link.hpweb2003.prodserv" bundle="${urlResources}" />
-<fmt:message var="supportUrl" key="link.hpweb2003.support" bundle="${urlResources}" />
-<fmt:message var="solutionsUrl" key="link.hpweb2003.solutions" bundle="${urlResources}" />
+<fmt:message var="prodServUrl" key="link.cleansheet.prodserv" bundle="${urlResources}" />
+<fmt:message var="supportUrl" key="link.cleansheet.support" bundle="${urlResources}" />
+<fmt:message var="solutionsUrl" key="link.cleansheet.solutions" bundle="${urlResources}" />
 
-<fmt:message var="searchCountryCode" key="text.hpweb2003.searchCountryCode" bundle="${msgResources}" />
-<fmt:message var="searchLanguageCode" key="text.hpweb2003.searchLanguageCode" bundle="${msgResources}" />
-<fmt:message var="searchCriteria" key="text.hpweb2003.searchCriteria" bundle="${msgResources}" />
-<fmt:message var="searchLabel" key="text.hpweb2003.searchLabel" bundle="${msgResources}" />
-<fmt:message var="searchBegin" key="text.hpweb2003.beginSearch" bundle="${msgResources}" />
+<fmt:message var="searchCountryCode" key="text.cleansheet.searchCountryCode" bundle="${msgResources}" />
+<fmt:message var="searchLanguageCode" key="text.cleansheet.searchLanguageCode" bundle="${msgResources}" />
+<fmt:message var="searchCriteria" key="text.cleansheet.searchCriteria" bundle="${msgResources}" />
+<fmt:message var="searchLabel" key="text.cleansheet.searchLabel" bundle="${msgResources}" />
+<fmt:message var="searchBegin" key="text.cleansheet.beginSearch" bundle="${msgResources}" />
 
 <c:if test="${empty searchUrl}">
-	<fmt:message var="searchUrl" key="link.hpweb2003.search" bundle="${urlResources}" />
+	<fmt:message var="searchUrl" key="link.cleansheet.search" bundle="${urlResources}" />
 </c:if>
 
 

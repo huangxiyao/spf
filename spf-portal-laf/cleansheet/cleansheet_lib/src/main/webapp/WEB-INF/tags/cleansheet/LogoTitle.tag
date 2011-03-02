@@ -13,18 +13,18 @@
 <%----------------------------------------------------------------------------- 
 	Messages  
 -----------------------------------------------------------------------------%>
-<fmt:setBundle var="msgResources" basename="com.hp.frameworks.wpa.hpweb.Messages" />
-<fmt:setBundle var="urlResources" basename="com.hp.frameworks.wpa.hpweb.Urls" />
+<fmt:setBundle var="msgResources" basename="com.hp.it.spf.portal.cleansheet.Messages" />
+<fmt:setBundle var="urlResources" basename="com.hp.it.spf.portal.cleansheet.Urls" />
 
-<fmt:message var="home" key="text.hpweb2003.home" bundle="${msgResources}" />
-<fmt:message var="homeUrl" key="link.hpweb2003.home" bundle="${urlResources}" />
+<fmt:message var="home" key="text.cleansheet.home" bundle="${msgResources}" />
+<fmt:message var="homeUrl" key="link.cleansheet.home" bundle="${urlResources}" />
 
 <c:choose>
 	<c:when test="${pageContext.request.scheme eq 'https'}">	
-		<fmt:message var="globalImgDir" key="link.hpweb2003.secure_global_img_dir" bundle="${urlResources}" />	
+		<fmt:message var="globalImgDir" key="link.cleansheet.secure_global_img_dir" bundle="${urlResources}" />	
 	</c:when>
 	<c:otherwise>
-		<fmt:message var="globalImgDir" key="link.hpweb2003.global_img_dir" bundle="${urlResources}" />
+		<fmt:message var="globalImgDir" key="link.cleansheet.global_img_dir" bundle="${urlResources}" />
 	</c:otherwise>
 </c:choose>
 

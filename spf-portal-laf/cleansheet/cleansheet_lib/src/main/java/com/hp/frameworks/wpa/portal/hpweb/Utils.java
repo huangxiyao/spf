@@ -396,7 +396,7 @@ public class Utils {
        return WebUtils.xmlEntitiesToChars(value);          
      }
 
-     public static HPWebModel initialize(PortalContext portalContext, PageContext pageContext) {
+     public static void initialize(PortalContext portalContext, PageContext pageContext) {
     	 Style currentStyle = portalContext.getCurrentStyle();
     	 String i18nID = currentStyle.getUID();
     	 	
@@ -405,10 +405,6 @@ public class Utils {
     	 	
     	 pageContext.setAttribute("dnsName", portalContext.getCurrentSite().getDNSName());
     	 
-    	 pageContext.setAttribute("layoutConfigHeadJspPath",
-    				"/" + portalContext.getCurrentStyle().getUrlSafeRelativePath() +
-    				"cleansheet_layout_config_head.jsp");
-
     	 HttpServletRequest request = portalContext.getHttpServletRequest();
 
     	 Locale locale = Utils.getLocale(request);
@@ -418,19 +414,21 @@ public class Utils {
     	     languageTag = "en-US";
     	     countryTag = "US";
     	 }
-    	 pageContext.setAttribute("countryTag", countryTag);    	 
+    	 pageContext.setAttribute("countryTag", countryTag);
+    	 pageContext.setAttribute("languageTag", languageTag);  
+    	 pageContext.setAttribute("locale", locale);  
 
     	 HPWebModel hpwebModel = (HPWebModel) request.getAttribute("HPWebModel");
     	 if (hpwebModel == null) {
     		 hpwebModel = new HPWebModel(); 
-    		 request.setAttribute("HPWebModel", hpwebModel);
+    		 System.out.println("grid: created new HPWebModel()");
+    	 }
+    	 else {
+    		 System.out.println("grid; used existing HPWebModel()");
     	 }
     	 
-    	 hpwebModel.setLanguageTag(languageTag);
-    	 hpwebModel.setCountryTag(countryTag);
-    	 hpwebModel.setLocale(locale);
-    	 
-    	 return hpwebModel;
+    	 hpwebModel.setUsername("John"); // test code, will be removed
+		 request.setAttribute("HPWebModel", hpwebModel);
      }
      
      public static void initHorzNav(PortalContext portalContext, PageContext pageContext) throws Exception {
@@ -470,6 +468,10 @@ public class Utils {
     	 if (hpwebModel == null) {
     		 hpwebModel = new HPWebModel(); 
     		 request.setAttribute("HPWebModel", hpwebModel);
+    		 System.out.println("hnav: created new HPWebModel()");
+    	 }
+    	 else {
+    		 System.out.println("hnav; used existing HPWebModel()");
     	 }
 
     	 List menuItemList = hpwebModel.getTopMenuItems();
