@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="V1hexuhgkx7bzsplny3f3">
+		<property name="$defaultDiagram" value="true"/>
+		<property name="$metaclass" value="ClassDiagram20"/>
+		<reference referencedUin="design:node:::-tdsqjugkx7d370li3hhx">
+			<property name="bounds" value="435,95,80,80"/>
+			<property name="location_set_by_user" value="true"/>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjugkx7df8s8b9xk2">
+			<property name="bounds" value="656,124,80,80"/>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjugkx7dmpgtobd7c">
+			<property name="bounds" value="475,335,87,80"/>
+			<property name="location_set_by_user" value="true"/>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjugkx7dzfh-nm7pr3">
+			<property name="bounds" value="735,315,93,80"/>
+			<property name="location_set_by_user" value="true"/>
+		</reference>
+	</view>
+</nodeSet>
