@@ -5,6 +5,42 @@
 	<node uin="-tdsqjugkx7d370li3hhx">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="Link"/>
+		<node uin="hnimszgkx8973j-etzvuq">
+			<property name="$metaclass" value="Property20"/>
+			<property name="mod_Visibility" value="$packageLocal"/>
+			<property name="$name" value="text"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.String"/>
+			<property name="mod__type" value="String"/>
+			<link uin="ieje0rgkx89k7vy0e9gq">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::hnimszgkx8973j-etzvuq:-tdsqjugkx7d370li3hhx" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.String" role="Supplier"></participant>
+			</link>
+		</node>
+		<node uin="hnimszgkx89s3p34a727">
+			<property name="$metaclass" value="Property20"/>
+			<property name="mod_Visibility" value="$packageLocal"/>
+			<property name="$name" value="alternate"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.String"/>
+			<property name="mod__type" value="String"/>
+			<link uin="ieje0rgkx8agdb-ffqwgc">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::hnimszgkx89s3p34a727:-tdsqjugkx7d370li3hhx" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.String" role="Supplier"></participant>
+			</link>
+		</node>
+		<node uin="hnimszgkx8amznc3e7be">
+			<property name="$metaclass" value="Property20"/>
+			<property name="mod_Visibility" value="$packageLocal"/>
+			<property name="$name" value="url"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.String"/>
+			<property name="mod__type" value="String"/>
+			<link uin="ieje0rgkx8aupe-ph1vh3">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::hnimszgkx8amznc3e7be:-tdsqjugkx7d370li3hhx" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.String" role="Supplier"></participant>
+			</link>
+		</node>
 	</node>
 	<node uin="-tdsqjugkx7df8s8b9xk2">
 		<property name="$metaclass" value="Class20"/>
