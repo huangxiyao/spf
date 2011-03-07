@@ -28,6 +28,7 @@
 		<module>spf-portlet-utilities</module>
 		<module>spf-portlet-wsrp</module>
 		<module>spf-portletdriver</module>
+		<module>spf-openportalclasspath</module>
 	</modules>
 	
 	<properties>
