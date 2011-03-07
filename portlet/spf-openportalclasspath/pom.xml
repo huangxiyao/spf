@@ -9,15 +9,27 @@
         <version>2.2.0</version>
     </parent>
 
-    <groupId>com.hp.it.spf</groupId>
+    <groupId>com.hp.it.spf.openportal</groupId>
     <artifactId>spf-openportalclasspath</artifactId>
     <version>2.2.0-SNAPSHOT</version>
+    <!--
+    The packaging of this module is "pom" as it produces a ".zip" file and maven does not support that natively.
+    -->
+    <packaging>pom</packaging>
+
     <name>OpenPortal servlet container classpath</name>
     <description>
-        The classpath JAR for OpenPortal.
-        This module is used only to provide classpath which needs to be setup as part of WebLogic
-        Server configuration. This jar, through its MANIFEST.MF's Class-Path entry references
-        any other JAR files which need to be part of the classpath.
+        The classpath JAR for OpenPortal along with its dependencies.
+        This module produces a zip file containing openportalclasspath.jar and all other
+        JAR files which are required by OpenPortal portlet container to be set in servlet
+        container classpath.
+        openportalclasspath.jar MANIFEST.MF file contains the Class-Path entry referencing
+        the dependencies. This approach allows to specify only openportalclasspath.jar
+        in servlet container configuration, and all other dependencies will be included
+        automatically as per declaration in MANIFEST.MF file.
+        Note that even though this module produces openportalclasspath.jar, this file is
+        not published to the Maven repository as it is not useful on its own. The only
+        published artifact is ${project.artifactId}-${project.version}-bin.zip.
     </description>
 
     <!--
@@ -70,6 +82,7 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <!-- This JAR file comes from Metro 1.1 and has to be manually uploaded into Maven repo. -->
             <groupId>javax.xml</groupId>
             <artifactId>webservices-api</artifactId>
             <version>1.1</version>
@@ -88,19 +101,27 @@
     </dependencies>
 
     <build>
-        <finalName>openportalclasspath</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
                 <configuration>
+                    <finalName>openportalclasspath</finalName>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>create-openportalclasspath-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -122,14 +143,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <!--
-                    Since final name is redefined above to be backward compatible and also
-                    to strip off any version number, we still want the overall package to have
-                    the version number so we re-define the finalName below. This way
-                    the JAR file will be named openportalclasspath.jar but the bundle containing
-                    it along with its dependencies will be called spf-openportalclasspath-x.x.x-bin.zip
-                    -->
-                    <finalName>${project.artifactId}-${project.version}</finalName>
                     <descriptors>
                         <descriptor>src/main/assembly/bin.xml</descriptor>
                     </descriptors>
