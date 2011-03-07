@@ -32,6 +32,15 @@
         published artifact is ${project.artifactId}-${project.version}-bin.zip.
     </description>
 
+    <properties>
+        <!-- Pinning eclipselink and portlet-container version to match what's deployed -->
+        <eclipselink.version>1.0.1</eclipselink.version>
+        <portletcontainer.version>2.1</portletcontainer.version>
+
+        <!-- This JAR file comes from Metro 1.1 and has to be manually uploaded into Maven repo. -->
+        <webservicesapi.version>1.1</webservicesapi.version>
+    </properties>
+
     <!--
     Dependencies scope is set explicitly to "compile" to ensure all of them are included
     in the JAR classpath regardless of the scope defined in the parent pom.
@@ -79,13 +88,13 @@
         <dependency>
             <groupId>com.sun.portal.portletcontainer</groupId>
             <artifactId>portlet-container</artifactId>
+            <version>${portletcontainer.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <!-- This JAR file comes from Metro 1.1 and has to be manually uploaded into Maven repo. -->
             <groupId>javax.xml</groupId>
             <artifactId>webservices-api</artifactId>
-            <version>1.1</version>
+            <version>${webservicesapi.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -96,6 +105,7 @@
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
+            <version>${eclipselink.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
