@@ -141,9 +141,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <appendAssemblyId>false</appendAssemblyId>
                     <descriptors>
-                        <descriptor>src/main/assembly/lib.xml</descriptor>
+                        <descriptor>src/main/assembly/jars.xml</descriptor>
                     </descriptors>
                 </configuration>
                 <executions>
