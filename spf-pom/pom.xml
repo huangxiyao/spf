@@ -394,7 +394,12 @@
             <dependency>
                 <groupId>com.sun.portal.portletcontainer</groupId>
                 <artifactId>portlet-container</artifactId>
-                <version>2.1-r830</version>
+                <!--<version>2.1-r830</version>-->
+                <!-- 
+                This 2.1 version was hand-crafted to fix some bug and uploaded manually to our Maven repo. 
+                It is not an official OpenPortal 2.1 version.
+                -->
+                <version>2.1</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.portal.portletcontainer</groupId>
@@ -493,6 +498,13 @@
                 <version>1.0-MR1</version>
             </dependency>
 
+            <!-- This JAR file comes from Metro 1.1 and has to be manually uploaded into our Maven repo. -->
+            <dependency>
+                <groupId>javax.xml</groupId>
+                <artifactId>webservices-api</artifactId>
+                <version>1.1</version>
+                <scope>compile</scope>
+            </dependency>
 
 
 
@@ -510,7 +522,7 @@
             <dependency>
                 <groupId>org.eclipse.persistence</groupId>
                 <artifactId>eclipselink</artifactId>
-                <version>1.0.2</version>
+                <version>1.0.1</version>
             </dependency>
 
             <dependency>
