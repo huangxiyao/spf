@@ -6,7 +6,7 @@
 <%@ attribute name="menuItems" type="java.util.List" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="cscore" uri="http://frameworks.hp.com/wpa/cleansheet-core" %>
+<%@ taglib prefix="cscore" uri="http://frameworks.hp.com/spf/cleansheet-core" %>
 
 
 <%----------------------------------------------------------------------------- 
