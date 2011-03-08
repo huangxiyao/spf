@@ -5,10 +5,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
 	version="2.0">
 
-	<description>WPA Core Tags for Cleansheet</description>
+	<description>SPF Core Tags for Cleansheet</description>
 	<tlib-version>1.0</tlib-version>
 	<short-name>cleansheet-core</short-name>
-	<uri>http://frameworks.hp.com/wpa/cleansheet-core</uri>
+	<uri>http://frameworks.hp.com/spf/cleansheet-core</uri>
 
 	<tag-file>
 		<name>welcome</name>
