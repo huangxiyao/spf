@@ -29,8 +29,16 @@
 	Style Arguments
 -----------------------------------------------------------------------------%>
 
-<%-- boolean widePage --%>
-<c:set var="widePageArg" value="${widePage}" />
+<jsp:scriptlet>
+
+	Utils.initLocaleSelector(portalContext, pageContext);
+
+</jsp:scriptlet>
+
+<%-----------------------------------------------------------------------------
+	Template
+-----------------------------------------------------------------------------%>
+
 
 
 <%-----------------------------------------------------------------------------
@@ -68,7 +76,7 @@ String siteMapUrlDef = Utils.getI18nValue(i18nID, "hpweb.siteMapUrl",
 	Template
 -----------------------------------------------------------------------------%>
  <!-- BEGIN FOOTER AREA -->
-      <div class="footer" >
+      <div id="footer" class="footer" >
  <!-- BEGIN FOOTER RIGHT NAV TOP ROW -->
         <div class="right top">
           <ul>
@@ -176,5 +184,18 @@ String siteMapUrlDef = Utils.getI18nValue(i18nID, "hpweb.siteMapUrl",
         </div>
         <!-- END FOOTER LEFT NAV -->
       </div>
+<!-- BEGIN COUNTRY SELECTOR -->
+      <div class="hidden" id="americas" title="Americas">
+        <div class="continentheader">Americas</div>
+      </div>
+      <div class="hidden" id="asia" title="Asia and Oceania">
+        <div class="continentheader">Asia and Oceania</div>
+      </div>
+      <div class="hidden" id="europe" title="Europe, Middle East and Africa">
+        <div class="continentheader">Europe, Middle East and Africa</div>
+      </div>
+      <!-- END  COUNTRY SELECTOR -->      
       <!-- END FOOTER AREA -->
-	
+
+<script type="text/javascript" src="${stylePath}cleansheet_locale_selector.js" xml:space="preserve">//</script>
+
