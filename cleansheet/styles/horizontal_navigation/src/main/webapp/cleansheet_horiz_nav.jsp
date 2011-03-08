@@ -31,8 +31,8 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="csc" uri="http://frameworks.hp.com/wpa/cleansheet-content" %>
-<%@ taglib prefix="cs-ext" uri="http://frameworks.hp.com/wpa/cleansheet-extensions" %>
+<%@ taglib prefix="csc" uri="http://frameworks.hp.com/spf/cleansheet-content" %>
+<%@ taglib prefix="cs-ext" uri="http://frameworks.hp.com/spf/cleansheet-extensions" %>
 
 <%-----------------------------------------------------------------------------
 	Variables

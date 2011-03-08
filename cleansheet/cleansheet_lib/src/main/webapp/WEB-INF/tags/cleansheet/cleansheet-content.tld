@@ -8,7 +8,7 @@
 	<description>WPA Content Tags for Cleansheet</description>
 	<tlib-version>1.0</tlib-version>
 	<short-name>cleansheet-content</short-name>
-	<uri>http://frameworks.hp.com/wpa/cleansheet-content</uri>
+	<uri>http://frameworks.hp.com/spf/cleansheet-content</uri>
 
 	<tag>
 		<name>tab</name>
