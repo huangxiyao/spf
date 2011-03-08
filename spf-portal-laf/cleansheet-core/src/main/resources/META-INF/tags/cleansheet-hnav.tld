@@ -8,7 +8,7 @@
 	<description>H-Nav Tags for Cleansheet</description>
 	<tlib-version>1.0</tlib-version>
 	<short-name>cleansheet-hnav</short-name>
-	<uri>http://spf.it.hp.com/portal/cleansheet-extensions</uri>
+	<uri>http://frameworks.hp.com/spf/cleansheet-hnav</uri>
 
 	<!-- This tag is added to enable rtexprvalue in attribute values -->
 	

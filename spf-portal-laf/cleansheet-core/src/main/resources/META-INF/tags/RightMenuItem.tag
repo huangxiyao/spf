@@ -6,7 +6,7 @@
 <%@ attribute name="subMenuItems" type="java.util.List" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="cs" uri="http://frameworks.hp.com/wpa/cleansheet-content" %>
+<%@ taglib prefix="cs" uri="http://frameworks.hp.com/spf/cleansheet-content" %>
 
 
 <%----------------------------------------------------------------------------- 
