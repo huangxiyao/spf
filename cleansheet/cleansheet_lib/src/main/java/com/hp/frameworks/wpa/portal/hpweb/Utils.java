@@ -1,6 +1,8 @@
 package com.hp.frameworks.wpa.portal.hpweb;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -21,6 +23,7 @@ import com.epicentric.site.SiteSettings;
 import com.epicentric.template.Style;
 import com.epicentric.user.User;
 import com.hp.frameworks.wpa.hpweb.MenuItem;
+//import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.vignette.portal.util.StringUtils;
 import com.vignette.portal.util.WebUtils;
 import com.vignette.portal.website.enduser.PortalContext;
@@ -34,7 +37,32 @@ public class Utils {
 	
 	private static String OPEN_SPAN_REGEX = "(?i:<SPAN.*?>)";
 	private static String CLOSE_SPAN_REGEX = "(?i:</SPAN>)";
+	
+	private static List<List<String>> supportedLocaleCodes = null;
+	private static List<List<String>> partitionedLocaleCodes = null;
+	
+	private static String [] zone1LocaleCodes = {
+		"es-ar", "es-bo", "pt-pr", "en-ca", "fr-ca", "es-cl", "es-co", 
+		"es-ec", "es-mx", "es-py", "es-pe", "es-pr", "en-us", "es-uy", "es-ve"	};
 
+	private static String [] zone2LocaleCodes = {
+		"ru-by", "nl-be"
+	};
+	
+	private static String [] zone3LocaleCodes = {
+		"en-au", "en-bd", "zh-cn"
+	};
+	
+	
+	static {
+		if (supportedLocaleCodes == null) {
+			supportedLocaleCodes = new ArrayList< List<String>>();
+			supportedLocaleCodes.add((List<String>)Arrays.asList(zone1LocaleCodes));
+			supportedLocaleCodes.add((List<String>)Arrays.asList(zone2LocaleCodes));
+			supportedLocaleCodes.add((List<String>)Arrays.asList(zone3LocaleCodes));
+		}
+	}
+	
 	/**
      * Get {@link java.util.Locale} for current user, whether 
      * she is a anonymous and authenticated user.
@@ -545,5 +573,54 @@ public class Utils {
     	 pageContext.setAttribute("menuItemList", menuItemList);
     	 pageContext.setAttribute("selectedIndex", selectedIndex); 
     	 
+     }
+     
+     public static void initLocaleSelector(PortalContext portalContext, PageContext pageContext) {
+    	 Style currentStyle = portalContext.getCurrentStyle();
+    	 
+    	 pageContext.setAttribute("stylePath", portalContext.getPortalHttpRoot() + 
+     	 		currentStyle.getUrlSafeRelativePath());
+     }
+     
+     public static void main(String [] args) {
+    	 for (List<String> list: supportedLocaleCodes) {
+    		 System.out.println("----------");
+    		 for (String str: list) {
+    			 System.out.println(str);
+    		 }
+    	 }
+    	 
+     }
+     
+     public static String generateLocaleSelectorHtml(PortalContext portalContext) {
+    	 if (portalContext == null) return null;
+    	 
+    	 String html;
+    	 HttpServletRequest request = portalContext.getHttpServletRequest();
+    	 
+    	 // locales supported by a site
+    	 //Collection availableLocales = I18nUtility.getAvailableLocales(request);
+    	 
+    	 
+    	 
+ 		 
+    	 return "";
+     }
+     
+     public static String getCountryForSelectedLocale(PortalContext portalContext) {
+    	 if (portalContext == null) return null;
+
+    	 HttpServletRequest request = portalContext.getHttpServletRequest();
+    	 
+    	 // locales supported by a site
+    	// Collection availableLocales = I18nUtility.getAvailableLocales(request);
+    	 
+    	 // currently selected locale
+ 		 Locale currentLocale = null; //I18nUtility.getLocale(request);
+ 		 
+ 		 if (currentLocale == null) currentLocale = Locale.US;
+ 		 return currentLocale.getDisplayCountry(currentLocale);
+ 		 
+
      }
 }
