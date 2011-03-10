@@ -1,7 +1,6 @@
 package com.hp.frameworks.wpa.portal.hpweb;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +22,7 @@ import com.epicentric.site.SiteSettings;
 import com.epicentric.template.Style;
 import com.epicentric.user.User;
 import com.hp.frameworks.wpa.hpweb.MenuItem;
-//import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.vignette.portal.util.StringUtils;
 import com.vignette.portal.util.WebUtils;
 import com.vignette.portal.website.enduser.PortalContext;
@@ -38,28 +37,34 @@ public class Utils {
 	private static String OPEN_SPAN_REGEX = "(?i:<SPAN.*?>)";
 	private static String CLOSE_SPAN_REGEX = "(?i:</SPAN>)";
 	
-	private static List<List<String>> supportedLocaleCodes = null;
-	private static List<List<String>> partitionedLocaleCodes = null;
+	private static List<List<Locale>> supportedLocales = null;
+	//private static List<List<String>> partitionedLocaleCodes = null;
 	
-	private static String [] zone1LocaleCodes = {
-		"es-ar", "es-bo", "pt-pr", "en-ca", "fr-ca", "es-cl", "es-co", 
-		"es-ec", "es-mx", "es-py", "es-pe", "es-pr", "en-us", "es-uy", "es-ve"	};
+	private static String [] americasLocaleCodes = {
+		"en-CA", "fr-CA", "es-AR", "es-BO", "es-CL", "es-CO", "es-CR", "es-DO", "es-EC", "es-GT", "es-HN", 
+		"es-MX", "es-NI", "es-PA", "es-PE", "es-PR", "es-PY", "es-SV", "es-UY", "es-VE", "pt-BR", "en-US"
+		};
 
-	private static String [] zone2LocaleCodes = {
-		"ru-by", "nl-be"
+	private static String [] europeLocaleCodes = {
+		"be-BY", "bg-BG", "ca-ES", "cs-CZ", "da-DK", "de-AT", "de-CH", "de-DE", "de-LU", "el-GR", "en-GB", "en-IE", "es-ES", 
+		"et-EE", "fi-FI", "fr-BE", "fr-CH", "fr-FR", "fr-LU", "hr-HR", "hu-HU", "is-IS", "it-CH", "it-IT", "lt-LT", "lv-LV", 
+		"mk-MK", "nl-BE", "nl-NL", "no-NO", "pl-PL", "pt-PT", "ro-RO", "ru-RU", "sk-SK", "sl-SI", "sq-AL", "sr-BA", "sr-CS", 
+		"sv-SE", "tr-TR", "uk-UA", "ar-AE", "ar-BH", "ar-IQ", "ar-JO", "ar-KW", "ar-LB", "ar-OM", "ar-QA", "ar-SA", "ar-YE", 
+		"ar-SY", "iw-IL", "ar-DZ", "ar-EG", "ar-LY", "ar-MA", "ar-SD", "ar-TN", "en-ZA"
+		 
 	};
 	
-	private static String [] zone3LocaleCodes = {
-		"en-au", "en-bd", "zh-cn"
+	private static String [] asiaLocaleCodes = {
+		"en-AU", "hi-IN", "ja-JP", "ko-KR", "th-TH", "vi-VN", "zh-CN", "zh-HK", "zh-TW", "en-IN", "en-NZ",
+		"en-HK", "en-in", "en-id", "en-my", "en-ph", "en-sg", "en-lk", "en-th", "en-vn"
 	};
-	
 	
 	static {
-		if (supportedLocaleCodes == null) {
-			supportedLocaleCodes = new ArrayList< List<String>>();
-			supportedLocaleCodes.add((List<String>)Arrays.asList(zone1LocaleCodes));
-			supportedLocaleCodes.add((List<String>)Arrays.asList(zone2LocaleCodes));
-			supportedLocaleCodes.add((List<String>)Arrays.asList(zone3LocaleCodes));
+		if (supportedLocales == null) {
+			supportedLocales = new ArrayList< List<Locale>>();
+			supportedLocales.add(getLocalesForAZone(americasLocaleCodes));
+			supportedLocales.add(getLocalesForAZone(europeLocaleCodes));
+			supportedLocales.add(getLocalesForAZone(asiaLocaleCodes));
 		}
 	}
 	
@@ -407,24 +412,24 @@ public class Utils {
      * message can be obtained
      * @return String localized message
      */
-     public static String getI18nValue(String i18nID, String pKey, 
+    public static String getI18nValue(String i18nID, String pKey, 
     		 String pDefaultValue, PortalContext pContext) {
-       if (pKey == null || pContext == null) {
-           return null;
-       }
+    	if (pKey == null || pContext == null) {
+    		return null;
+    	}
        
-       HttpServletRequest request = pContext.getPortalRequest().getRequest();      
-       String value = filterSpan(I18nUtils.getValue(i18nID, pKey, pDefaultValue, request));
+    	HttpServletRequest request = pContext.getPortalRequest().getRequest();      
+    	String value = filterSpan(I18nUtils.getValue(i18nID, pKey, pDefaultValue, request));
        
-       // I18nUtils.getValue() converts special HTML/XML characters to 
-       // encoded characters, e.g. "&raquo;" to "&amp;raquo;", which is not 
-       // what we found, so use WebUtils.xmlEntitiesToChars to convert 
-       // encoded characters back to special HTML/XML characters.
+    	// I18nUtils.getValue() converts special HTML/XML characters to 
+    	// encoded characters, e.g. "&raquo;" to "&amp;raquo;", which is not 
+    	// what we found, so use WebUtils.xmlEntitiesToChars to convert 
+    	// encoded characters back to special HTML/XML characters.
        
-       return WebUtils.xmlEntitiesToChars(value);          
-     }
+    	return WebUtils.xmlEntitiesToChars(value);          
+    }
 
-     public static void initialize(PortalContext portalContext, PageContext pageContext) {
+    public static void initialize(PortalContext portalContext, PageContext pageContext) {
     	 Style currentStyle = portalContext.getCurrentStyle();
     	 String i18nID = currentStyle.getUID();
     	 	
@@ -457,7 +462,7 @@ public class Utils {
     	 
     	 hpwebModel.setUsername("John"); // test code, will be removed
 		 request.setAttribute("HPWebModel", hpwebModel);
-     }
+    }
      
      public static void initHorzNav(PortalContext portalContext, PageContext pageContext) throws Exception {
     	 Style currentStyle = portalContext.getCurrentStyle();
@@ -575,52 +580,124 @@ public class Utils {
     	 
      }
      
-     public static void initLocaleSelector(PortalContext portalContext, PageContext pageContext) {
-    	 Style currentStyle = portalContext.getCurrentStyle();
+     /**
+      * lazy initialization of locale selector
+      * @param portalContext PortalContext
+      * @return
+      */               
+    public static void initializeLocaleSelector(PortalContext portalContext, PageContext pageContext) {
     	 
-    	 pageContext.setAttribute("stylePath", portalContext.getPortalHttpRoot() + 
-     	 		currentStyle.getUrlSafeRelativePath());
-     }
-     
-     public static void main(String [] args) {
-    	 for (List<String> list: supportedLocaleCodes) {
-    		 System.out.println("----------");
-    		 for (String str: list) {
-    			 System.out.println(str);
-    		 }
-    	 }
-    	 
-     }
-     
-     public static String generateLocaleSelectorHtml(PortalContext portalContext) {
-    	 if (portalContext == null) return null;
-    	 
-    	 String html;
-    	 HttpServletRequest request = portalContext.getHttpServletRequest();
-    	 
-    	 // locales supported by a site
-    	 //Collection availableLocales = I18nUtility.getAvailableLocales(request);
-    	 
-    	 
-    	 
- 		 
-    	 return "";
-     }
-     
-     public static String getCountryForSelectedLocale(PortalContext portalContext) {
-    	 if (portalContext == null) return null;
+    	if (portalContext == null || pageContext == null ) return;
+    	
+    	Style currentStyle = portalContext.getCurrentStyle();
+	 
+    	pageContext.setAttribute("stylePath", portalContext.getPortalHttpRoot() + currentStyle.getUrlSafeRelativePath());
+    	
+    	HttpServletRequest request = portalContext.getHttpServletRequest();
 
-    	 HttpServletRequest request = portalContext.getHttpServletRequest();
-    	 
-    	 // locales supported by a site
-    	// Collection availableLocales = I18nUtility.getAvailableLocales(request);
-    	 
-    	 // currently selected locale
- 		 Locale currentLocale = null; //I18nUtility.getLocale(request);
- 		 
- 		 if (currentLocale == null) currentLocale = Locale.US;
- 		 return currentLocale.getDisplayCountry(currentLocale);
- 		 
+    	Locale currentLocale = I18nUtility.getLocale(request);
+    	if (currentLocale == null) currentLocale = Locale.US;
+    	pageContext.setAttribute("selectedCountry", currentLocale.getDisplayCountry(currentLocale));
 
+    	HttpSession session = request.getSession();
+    	if (session.getAttribute("americas") == null) {
+    	
+    		final String urlFormat = "/portal/site/hpsc/template.PUBLIC_SPF_SELECT_LOCALE/action.process/?spfSelectedLocale=%s-%s";
+	    	List<HyperLink> countryHyperlinks = null;
+	    	List<Locale> localesInZone = null;
+	    	 
+	    	// locales supported by a site
+	    	Collection availableLocales = I18nUtility.getAvailableLocales(request);
+	    	
+	    	// debugging
+	    	Iterator it = availableLocales.iterator();
+	    	
+	    	while (it.hasNext()) {
+	    		System.out.println("Available Locale: " + ((Locale)it.next()).toString());
+	    	}
+	    		
+	    	// need to refactor
+	    	if (availableLocales.size() > 1) {
+	    		countryHyperlinks =  new ArrayList<HyperLink>();
+	    		localesInZone = getLocalesForZone(0, availableLocales);
+	    		for (Locale locale: localesInZone) {
+	    			countryHyperlinks.add(
+	    				new HyperLink(locale.getDisplayCountry(locale), 
+	    					locale.getDisplayCountry(), 
+	    					(String.format(urlFormat, locale.getLanguage(), locale.getCountry()))
+	    			));
+	    		}
+	    		session.setAttribute("americas", countryHyperlinks);
+	    		System.out.println("set in session for americas: " + countryHyperlinks.size()); 
+
+	    		localesInZone = getLocalesForZone(1, availableLocales);
+	    		countryHyperlinks =  new ArrayList<HyperLink>();
+	    		for (Locale locale: localesInZone) {
+	    			countryHyperlinks.add(
+	    				new HyperLink(locale.getDisplayCountry(locale), 
+	    					locale.getDisplayCountry(), 
+	    					(String.format(urlFormat, locale.getLanguage(), locale.getCountry()))
+	    			));
+	    		}
+	    		session.setAttribute("europe", countryHyperlinks);
+	    		System.out.println("set in session for europe: " + countryHyperlinks.size()); 
+
+	    		localesInZone = getLocalesForZone(2, availableLocales);
+	    		countryHyperlinks =  new ArrayList<HyperLink>();
+	    		for (Locale locale: localesInZone) {
+	    			countryHyperlinks.add(
+	    				new HyperLink(locale.getDisplayCountry(locale), 
+	    					locale.getDisplayCountry(), 
+	    					(String.format(urlFormat, locale.getLanguage(), locale.getCountry()))
+	    			));
+	    		}
+	    		session.setAttribute("asia", countryHyperlinks);
+	    		System.out.println("set in session for asia: " + countryHyperlinks.size()); 
+	    	}
+    	}
+    }
+     
+    /**
+     * filter out locales/countries in a zone 
+     * @param zone
+     * @param availableLocales
+     * @return
+     */
+    private static List<Locale> getLocalesForZone(int zone, Collection availableLocales) {
+    	List<Locale> list = new ArrayList<Locale>();
+    	 
+    	List<Locale> supportedLocalesInZone = supportedLocales.get(zone);
+    	Iterator it = availableLocales.iterator();
+    	Locale availLocale;
+    	while (it.hasNext()) {
+    		availLocale = (Locale)it.next();
+    		for (Locale supportedLocale: supportedLocalesInZone) {
+    			if (availLocale.getCountry().equalsIgnoreCase(supportedLocale.getCountry()) &&
+    					availLocale.getLanguage().equalsIgnoreCase(supportedLocale.getLanguage())) {
+    				list.add(availLocale);
+    				break;
+    			}
+    		}
+    	}
+    	System.out.println(String.format("available locales in zone %d: %d", zone+1, list.size()));
+    	return list;
+    }
+     
+    private static List<Locale> getLocalesForAZone(String [] localeCodes) {
+    	List<Locale> locales = new ArrayList<Locale>();
+    	 
+    	String [] langCnty;
+		for (String code : localeCodes) {
+			langCnty = code.split("-"); 
+			if (langCnty.length == 1) {
+				locales.add(new Locale(langCnty[0]));;
+			}
+			else if(langCnty.length == 2) {
+				locales.add(new Locale(langCnty[0], langCnty[1]));;
+			}
+		}
+		System.out.println("supported locales in a zone " + locales.size());
+		return locales;
+		
      }
 }
