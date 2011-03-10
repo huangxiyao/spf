@@ -31,7 +31,8 @@
 
 <jsp:scriptlet>
 
-	Utils.initLocaleSelector(portalContext, pageContext);
+	Utils.initializeLocaleSelector(portalContext, pageContext);
+	
 
 </jsp:scriptlet>
 
@@ -179,22 +180,15 @@ String siteMapUrlDef = Utils.getI18nValue(i18nID, "hpweb.siteMapUrl",
           </div>
           <div class="footerlefttext">
 
-            <a class="country" tabindex="180" title="United States">United States</a>
+            <a class="country" tabindex="180" title="United States">${selectedCountry}</a>
           </div>
         </div>
         <!-- END FOOTER LEFT NAV -->
       </div>
-<!-- BEGIN COUNTRY SELECTOR -->
-      <div class="hidden" id="americas" title="Americas">
-        <div class="continentheader">Americas</div>
-      </div>
-      <div class="hidden" id="asia" title="Asia and Oceania">
-        <div class="continentheader">Asia and Oceania</div>
-      </div>
-      <div class="hidden" id="europe" title="Europe, Middle East and Africa">
-        <div class="continentheader">Europe, Middle East and Africa</div>
-      </div>
-      <!-- END  COUNTRY SELECTOR -->      
+
+	<cscore:localeSelectorZone zoneId="americas" zoneTitle="Americas" countryLinks="${americas}" />
+	<cscore:localeSelectorZone zoneId="europe" zoneTitle="Europe, Middle East and Africa" countryLinks="${europe}" />
+	<cscore:localeSelectorZone zoneId="asia" zoneTitle="Asia and Oceania" countryLinks="${asia}" />
       <!-- END FOOTER AREA -->
 
 <script type="text/javascript" src="${stylePath}cleansheet_locale_selector.js" xml:space="preserve">//</script>
