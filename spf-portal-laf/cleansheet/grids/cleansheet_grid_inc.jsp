@@ -25,8 +25,8 @@
 
 <jsp:directive.page import="java.util.HashMap" />
 <jsp:directive.page import="com.epicentric.template.Style" />
-<jsp:directive.page import="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
-<jsp:directive.page import="com.hp.frameworks.wpa.portal.hpweb.Utils" />
+<jsp:directive.page import="com.hp.it.spf.portal.cleansheet.HPCSModel" />
+<jsp:directive.page import="com.hp.it.spf.portal.cleansheet.Utils" />
 <jsp:directive.page import="java.util.Locale" />
 
 <%-----------------------------------------------------------------------------
@@ -52,8 +52,6 @@
 	
 </jsp:scriptlet>
 
-<c:set var="countryTag" value="${hpwebModel.countryTag}"/>
-
 <%-- Include the Layout Config style --%>
 <vgn-portal:includeStyle friendlyID="hp_layout_config" />
 
@@ -64,7 +62,7 @@
     				"cleansheet_layout_config_head.jsp");
 </jsp:scriptlet>
 
-<jsp:useBean id="HPWebModel" scope="request" class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
+<jsp:useBean id="HPCSModel" scope="request" class="com.hp.it.spf.portal.cleansheet.HPCSModel" />
 		
 <%----------------------------------------------------------------------------- 
 	Messages  
@@ -121,9 +119,9 @@ HashMap args = new HashMap();
 	--%>
 
 	<c:choose>
-	<c:when test="${! empty HPWebModel.windowTitle}">
+	<c:when test="${! empty HPCSModel.windowTitle}">
     	<script type="text/javascript">
-        	document.title="${HPWebModel.windowTitle}";
+        	document.title="${HPCSModel.windowTitle}";
     	</script>
 	</c:when>
 	<c:otherwise>
@@ -144,7 +142,7 @@ HashMap args = new HashMap();
 	</c:if>
 	<meta name="hp_design_version" content="hpweb.1.3">
 	
-<c:forEach var="metaInfo" items="${HPWebModel.metaInfos}" varStatus="status">	
+<c:forEach var="metaInfo" items="${HPCSModel.metaInfos}" varStatus="status">	
 	<meta name="${metaInfo.key}" content="${metaInfo.value}">
 </c:forEach>
 
