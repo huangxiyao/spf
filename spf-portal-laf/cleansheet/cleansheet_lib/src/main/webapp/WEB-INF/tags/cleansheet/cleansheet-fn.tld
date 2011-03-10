@@ -16,13 +16,13 @@
 		</description>
 		<name>round</name>
 		<function-class>
-			com.hp.frameworks.wpa.hpweb.taglib.functions.Functions
+			com.hp.it.spf.portal.cleansheet.taglib.functions.Functions
 		</function-class>
 		<function-signature>
 			long round(double)
 		</function-signature>
 		<example>
-			${hpweb:round(someValue / 3)}
+			${cleansheet:round(someValue / 3)}
 		</example>
 	</function>
 	
@@ -32,13 +32,13 @@
 		</description>
 		<name>isLocaleLTR</name>
 		<function-class>
-			com.hp.frameworks.wpa.hpweb.taglib.functions.Functions
+			com.hp.it.spf.portal.cleansheet.taglib.functions.Functions
 		</function-class>
 		<function-signature>
 			boolean isLocaleLeftToRight(javax.servlet.jsp.jstl.fmt.LocalizationContext)
 		</function-signature>
 		<example>
-			${cleansheet:isLocaleLTR(locCtxt)}
+			${cleansheet-fn:isLocaleLTR(locCtxt)}
 		</example>
 	</function>
 	
@@ -48,13 +48,13 @@
 		</description>
 		<name>format</name>
 		<function-class>
-			com.hp.frameworks.wpa.hpweb.taglib.functions.Functions
+			com.hp.it.spf.portal.cleansheet.taglib.functions.Functions
 		</function-class>
 		<function-signature>
 			java.lang.String format(java.lang.String, java.lang.String)
 		</function-signature>
 		<example>
-			${cleansheet:format(pattern, param)}
+			${cleansheet-fn:format(pattern, param)}
 		</example>
 	</function>	
 </taglib>

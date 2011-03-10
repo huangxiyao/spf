@@ -13,7 +13,7 @@
 	<tag>
 		<name>tab</name>
 		<tag-class>
-			com.hp.frameworks.wpa.hpweb.taglib.TabTag
+			com.hp.it.spf.portal.cleansheet.taglib.TabTag
 		</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
@@ -56,21 +56,5 @@
 	<tag-file>
 		<name>th</name>
 		<path>/WEB-INF/tags/cleansheet/TableHeaderCell.tag</path>
-	</tag-file>	
-			
-	<tag-file>
-		<name>leftMenuItem</name>
-		<path>/WEB-INF/tags/cleansheet/LeftMenuItem.tag</path>
-	</tag-file>		
-	
-	<tag-file>
-		<name>rightMenu</name>
-		<path>/WEB-INF/tags/cleansheet/RightMenu.tag</path>
-	</tag-file>		
-		
-	<tag-file>
-		<name>rightMenuItem</name>
-		<path>/WEB-INF/tags/cleansheet/RightMenuItem.tag</path>
-	</tag-file>		
-		
+	</tag-file>			
 </taglib>

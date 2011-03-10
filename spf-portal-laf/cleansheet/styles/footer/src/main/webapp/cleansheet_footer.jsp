@@ -16,7 +16,7 @@
 	Imports
 -----------------------------------------------------------------------------%>
 
-<%@ page import="com.hp.frameworks.wpa.portal.hpweb.Utils" %>
+<%@ page import="com.hp.it.spf.portal.cleansheet.Utils" %>
 
 <%-----------------------------------------------------------------------------
 	Tag libraries
@@ -69,8 +69,8 @@ String siteMapUrlDef = Utils.getI18nValue(i18nID, "hpweb.siteMapUrl",
 
 %>
 
-<jsp:useBean id="HPWebModel" scope="request" 
-		class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
+<jsp:useBean id="HPCSModel" scope="request" 
+		class="com.hp.it.spf.portal.cleansheet.HPCSModel" />
 		
 
 <%-----------------------------------------------------------------------------

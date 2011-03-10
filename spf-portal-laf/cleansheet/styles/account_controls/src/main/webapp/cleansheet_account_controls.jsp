@@ -1,7 +1,7 @@
 <%-----------------------------------------------------------------------------
 	cleansheet_account_controls.jsp
 	
-	STYLE: HPWeb Cleansheet Account Controls
+	STYLE: HP Cleansheet Account Controls
 	STYLE TYPE: Account Controls
 	USES HEADER FILE: Yes
 
@@ -13,8 +13,8 @@
 	Imports
 -----------------------------------------------------------------------------%>
 
-<jsp:directive.page import="com.hp.frameworks.wpa.portal.hpweb.Utils" />
-<jsp:directive.page import="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
+<jsp:directive.page import="com.hp.it.spf.portal.cleansheet.Utils" />
+<jsp:directive.page import="com.hp.it.spf.portal.cleansheet.HPCSModel" />
 
 
 <%----------------------------------------------------------------------------- 
@@ -27,19 +27,19 @@
 <%----------------------------------------------------------------------------- 
 	Local variables  
 -----------------------------------------------------------------------------%>
-<jsp:useBean id="HPWebModel" scope="request" 
-		class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
+<jsp:useBean id="HPCSModel" scope="request" 
+		class="com.hp.it.spf.portal.cleansheet.HPCSModel" />
 
 <%----------------------------------------------------------------------------- 
 	Template  
 -----------------------------------------------------------------------------%>
 
 <cscore:welcome>
-	<jsp:attribute name="username">${HPWebModel.username}</jsp:attribute>
-	<jsp:attribute name="signInUrl">${HPWebModel.signInUrl}</jsp:attribute>
-	<jsp:attribute name="signOutUrl">${HPWebModel.signOutUrl}</jsp:attribute>
-	<jsp:attribute name="registerUrl">${HPWebModel.registerUrl}</jsp:attribute>
-	<jsp:attribute name="profileUrl">${HPWebModel.profileUrl}</jsp:attribute>
+	<jsp:attribute name="username">${HPCSModel.username}</jsp:attribute>
+	<jsp:attribute name="signInUrl">${HPCSModel.signInUrl}</jsp:attribute>
+	<jsp:attribute name="signOutUrl">${HPCSModel.signOutUrl}</jsp:attribute>
+	<jsp:attribute name="registerUrl">${HPCSModel.registerUrl}</jsp:attribute>
+	<jsp:attribute name="profileUrl">${HPCSModel.profileUrl}</jsp:attribute>
 </cscore:welcome>
 
 

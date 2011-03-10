@@ -22,8 +22,8 @@
 <jsp:directive.page import="com.epicentric.settings.Settings" />
 <jsp:directive.page import="com.epicentric.site.SiteSettings" />
 <jsp:directive.page import="com.vignette.portal.util.StringUtils" />
-<jsp:directive.page import="com.hp.frameworks.wpa.hpweb.MenuItem" />
-<jsp:directive.page import="com.hp.frameworks.wpa.portal.hpweb.Utils" />
+<jsp:directive.page import="com.hp.it.spf.portal.cleansheet.MenuItem" />
+<jsp:directive.page import="com.hp.it.spf.portal.cleansheet.Utils" />
 
 <%-----------------------------------------------------------------------------
 	Tag libraries
@@ -38,8 +38,8 @@
 	Variables
 -----------------------------------------------------------------------------%>
 
-<jsp:useBean id="HPWebModel" scope="request" 
-		class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
+<jsp:useBean id="HPCSModel" scope="request" 
+		class="com.hp.it.spf.portal.cleansheet.HPCSModel" />
 		
 <jsp:scriptlet>
 
@@ -126,9 +126,9 @@
 
 	<%-- Render Help button if it is specified  --%>
 	
-	<c:if test="${(!empty HPWebModel.helpUrl || !empty helpUrlDef) && (! empty HPWebModel.helpText || !empty helpTextDef)}">
+	<c:if test="${(!empty HPCSModel.helpUrl || !empty helpUrlDef) && (! empty HPCSModel.helpText || !empty helpTextDef)}">
 		<div id="horzNavHelpButton">
-			<a class="topMenuItem" href="<c:out value="${HPWebModel.helpUrl}" default="${helpUrlDef}" escapeXml="false" />"><c:out value="${HPWebModel.helpText}" default="${helpTextDef}" /></a>
+			<a class="topMenuItem" href="<c:out value="${HPCSModel.helpUrl}" default="${helpUrlDef}" escapeXml="false" />"><c:out value="${HPCSModel.helpText}" default="${helpTextDef}" /></a>
 		</div>
 	</c:if>
 

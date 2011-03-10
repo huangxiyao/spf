@@ -14,7 +14,7 @@
 -----------------------------------------------------------------------------%>
 
 <jsp:useBean id="tabList" class="java.util.ArrayList" />
-<c:set var="com.hp.frameworks.wpa.hpweb.TABS" value="${tabList}" scope="request" />
+<c:set var="com.hp.it.spf.portal.cleansheet.TABS" value="${tabList}" scope="request" />
 <jsp:doBody />
 
 <c:if test="${empty selectedIndex}">

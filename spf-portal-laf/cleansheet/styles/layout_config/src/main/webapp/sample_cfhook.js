@@ -1,18 +1,18 @@
 
 // This is a sample Central Form integration JS file from the HPP team, and
-// serves as demo purpose with the HPWeb VAP layout. 
+// serves as demo purpose with the HP Cleansheet VAP layout. 
 
 // This script is a modified version of the cfhook.js file that the HPP team 
 // provides, and only contains js functions for loading to the New User
 // page, Login page, etc.   It doesn't render any HTML such as for the
-// Sign-in link, etc, because it is expected that the HPWeb VAP layout
+// Sign-in link, etc, because it is expected that the HP Cleansheet VAP layout
 // will handle the rendering of the links to these pages.
 
 // Portal teams should get the latest cfhook.js file from them, and configure
 // the variables to the portals accordingly.
 
-// See the 'sample_hpweb_layout_config.jsp' file on how this file is included
-// and how these js functions are configured into the HPWebModel object.
+// See the 'sample_cleansheet_layout_config.jsp' file on how this file is included
+// and how these js functions are configured into the HPCSModel object.
 
 var cfserver = "http://hpp.foo.com";
 

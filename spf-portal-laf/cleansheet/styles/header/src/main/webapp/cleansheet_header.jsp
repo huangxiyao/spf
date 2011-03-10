@@ -28,8 +28,8 @@
 <jsp:directive.page import="java.util.Iterator" />
 <jsp:directive.page import="com.epicentric.common.website.MenuItemUtils" />
 <jsp:directive.page import="com.epicentric.common.website.MenuItemNode" />
-<jsp:directive.page import="com.hp.frameworks.wpa.hpweb.MenuItem" />
-<jsp:directive.page import="com.hp.frameworks.wpa.portal.hpweb.Utils" />
+<jsp:directive.page import="com.hp.it.spf.portal.cleansheet.MenuItem" />
+<jsp:directive.page import="com.hp.it.spf.portal.cleansheet.Utils" />
 
 
 <%----------------------------------------------------------------------------- 
@@ -43,8 +43,8 @@
 	Local variables  
 -----------------------------------------------------------------------------%>
 
-<jsp:useBean id="HPWebModel" scope="request" 
-		class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
+<jsp:useBean id="HPCSModel" scope="request" 
+		class="com.hp.it.spf.portal.cleansheet.HPCSModel" />
 		
 <div class="header" id="header">
 				<div class="left" >

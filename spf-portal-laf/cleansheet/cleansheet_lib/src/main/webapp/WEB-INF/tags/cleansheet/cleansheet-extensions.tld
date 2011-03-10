@@ -15,7 +15,7 @@
 	<tag>
     	<name>tab</name>
     	<tag-class>
-        	com.hp.frameworks.wpa.hpweb.taglib.TabTag
+        	com.hp.it.spf.portal.cleansheet.taglib.TabTag
     	</tag-class>
     	<body-content>scriptless</body-content>
     	<attribute>

@@ -11,7 +11,7 @@
 	Imports
 -----------------------------------------------------------------------------%>
 
-<%@ page import="com.hp.frameworks.wpa.portal.hpweb.Utils" %>
+<%@ page import="com.hp.it.spf.portal.cleansheet.Utils" %>
 
 <%----------------------------------------------------------------------------
 	Tag libraries

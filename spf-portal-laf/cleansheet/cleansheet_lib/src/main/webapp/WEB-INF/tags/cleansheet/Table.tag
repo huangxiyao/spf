@@ -56,4 +56,4 @@
 	Clean-up  
 -----------------------------------------------------------------------------%>
 
-<c:set var="com.hp.frameworks.wpa.hpweb.ALT_ROW" value="false" scope="request" />
+<c:set var="com.hp.it.spf.portal.cleansheet.ALT_ROW" value="false" scope="request" />
