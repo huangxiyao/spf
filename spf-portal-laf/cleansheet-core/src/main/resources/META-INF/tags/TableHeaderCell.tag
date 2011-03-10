@@ -25,7 +25,7 @@
 -----------------------------------------------------------------------------%>
 
 <c:choose>
-	<c:when test="${requestScope['com.hp.frameworks.wpa.hpweb.HEADER_ROW']}">
+	<c:when test="${requestScope['com.hp.it.spf.portal.cleansheet.HEADER_ROW']}">
 		<c:set var="cssClass" value="small themebody ${cssClass}" />
 	</c:when>
 	<c:otherwise>

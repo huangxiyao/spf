@@ -46,18 +46,13 @@
 	</tag-file>	
 	
 	<tag-file>
-		<name>leftMenu</name>
-		<path>/WEB-INF/tags/cleansheet/LeftMenu.tag</path>
-	</tag-file>	
-	
-	<tag-file>
-		<name>leftMenuItem</name>
-		<path>/WEB-INF/tags/cleansheet/LeftMenuItem.tag</path>
-	</tag-file>	
-
-	<tag-file>
 		<name>footer</name>
 		<path>/WEB-INF/tags/cleansheet/Footer.tag</path>
 	</tag-file>	
+
+	<tag-file>
+		<name>localeSelectorZone</name>
+		<path>/WEB-INF/tags/cleansheet/LocaleSelectorZone.tag</path>
+	</tag-file>
 			
 </taglib>

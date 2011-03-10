@@ -5,10 +5,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
 	version="2.0">
 
-	<description>H-Nav Tags for Cleansheet</description>
+	<description>SPF Extension Tags for Cleansheet</description>
 	<tlib-version>1.0</tlib-version>
-	<short-name>cleansheet-hnav</short-name>
-	<uri>http://frameworks.hp.com/spf/cleansheet-hnav</uri>
+	<short-name>cleansheet-extensions</short-name>
+	<uri>http://frameworks.hp.com/spf/cleansheet-extensions</uri>
 
 	<!-- This tag is added to enable rtexprvalue in attribute values -->
 	

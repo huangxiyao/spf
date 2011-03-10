@@ -13,8 +13,8 @@
 <%----------------------------------------------------------------------------- 
 	Messages  
 -----------------------------------------------------------------------------%>
-<fmt:setBundle var="msgResources" basename="com.hp.frameworks.wpa.hpweb.Messages" />
-<fmt:setBundle var="urlResources" basename="com.hp.frameworks.wpa.hpweb.Urls" />
+<fmt:setBundle var="msgResources" basename="com.hp.it.spf.portal.cleansheet.Messages" />
+<fmt:setBundle var="urlResources" basename="com.hp.it.spf.portal.cleansheet.Urls" />
 
 
 <%----------------------------------------------------------------------------- 

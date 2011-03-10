@@ -15,47 +15,47 @@
 <%----------------------------------------------------------------------------- 
 	Messages  
 -----------------------------------------------------------------------------%>
-<fmt:setBundle var="msgResources" basename="com.hp.frameworks.wpa.hpweb.Messages" />
-<fmt:setBundle var="urlResources" basename="com.hp.frameworks.wpa.hpweb.Urls" />
+<fmt:setBundle var="msgResources" basename="com.hp.it.spf.portal.cleansheet.Messages" />
+<fmt:setBundle var="urlResources" basename="com.hp.it.spf.portal.cleansheet.Urls" />
 
-<fmt:message var="jumpcontent" key="text.hpweb2003.jumpcontent" bundle="${msgResources}" />
-<fmt:message var="javascript" key="text.hpweb2003.javascript" bundle="${msgResources}" />
-<fmt:message var="javascriptUrl" key="link.hpweb2003.javascript" bundle="${urlResources}" />
+<fmt:message var="jumpcontent" key="text.cleansheet.jumpcontent" bundle="${msgResources}" />
+<fmt:message var="javascript" key="text.cleansheet.javascript" bundle="${msgResources}" />
+<fmt:message var="javascriptUrl" key="link.cleansheet.javascript" bundle="${urlResources}" />
 
-<fmt:message var="signInAlt" key="text.hpweb2003.signinAlt" bundle="${msgResources}" />
-<fmt:message var="signIn" key="text.hpweb2003.signin" bundle="${msgResources}" />
-<fmt:message var="signOut" key="text.hpweb2003.signout" bundle="${msgResources}" />
-<fmt:message var="register" key="text.hpweb2003.register" bundle="${msgResources}" />
-<fmt:message var="profile" key="text.hpweb2003.profile" bundle="${msgResources}" />
+<fmt:message var="signInAlt" key="text.cleansheet.signinAlt" bundle="${msgResources}" />
+<fmt:message var="signIn" key="text.cleansheet.signin" bundle="${msgResources}" />
+<fmt:message var="signOut" key="text.cleansheet.signout" bundle="${msgResources}" />
+<fmt:message var="register" key="text.cleansheet.register" bundle="${msgResources}" />
+<fmt:message var="profile" key="text.cleansheet.profile" bundle="${msgResources}" />
 
-<fmt:message var="countryIndicator" key="text.hpweb2003.countryIndicator" bundle="${msgResources}" />
+<fmt:message var="countryIndicator" key="text.cleansheet.countryIndicator" bundle="${msgResources}" />
 
-<fmt:message var="home" key="text.hpweb2003.home" bundle="${msgResources}" />
-<fmt:message var="prodServ" key="text.hpweb2003.prodserv" bundle="${msgResources}" />
-<fmt:message var="support" key="text.hpweb2003.support" bundle="${msgResources}" />
-<fmt:message var="solutions" key="text.hpweb2003.solutions" bundle="${msgResources}" />
-<fmt:message var="buy" key="text.hpweb2003.buy" bundle="${msgResources}" />
+<fmt:message var="home" key="text.cleansheet.home" bundle="${msgResources}" />
+<fmt:message var="prodServ" key="text.cleansheet.prodserv" bundle="${msgResources}" />
+<fmt:message var="support" key="text.cleansheet.support" bundle="${msgResources}" />
+<fmt:message var="solutions" key="text.cleansheet.solutions" bundle="${msgResources}" />
+<fmt:message var="buy" key="text.cleansheet.buy" bundle="${msgResources}" />
 
-<fmt:message var="homeUrl" key="link.hpweb2003.home" bundle="${urlResources}" />
-<fmt:message var="prodServUrl" key="link.hpweb2003.prodserv" bundle="${urlResources}" />
-<fmt:message var="supportUrl" key="link.hpweb2003.support" bundle="${urlResources}" />
-<fmt:message var="solutionsUrl" key="link.hpweb2003.solutions" bundle="${urlResources}" />
-<fmt:message var="buyUrl" key="link.hpweb2003.buy" bundle="${urlResources}" />
+<fmt:message var="homeUrl" key="link.cleansheet.home" bundle="${urlResources}" />
+<fmt:message var="prodServUrl" key="link.cleansheet.prodserv" bundle="${urlResources}" />
+<fmt:message var="supportUrl" key="link.cleansheet.support" bundle="${urlResources}" />
+<fmt:message var="solutionsUrl" key="link.cleansheet.solutions" bundle="${urlResources}" />
+<fmt:message var="buyUrl" key="link.cleansheet.buy" bundle="${urlResources}" />
 
 <c:if test="${!empty username}">
-	<fmt:message var="welcome" key="text.hpweb2003.welcome" bundle="${msgResources}">
+	<fmt:message var="welcome" key="text.cleansheet.welcome" bundle="${msgResources}">
 		<fmt:param value="${username}" />
 	</fmt:message>
 </c:if>
 
 <c:choose>
 	<c:when test="${pageContext.request.scheme eq 'https'}">	
-		<fmt:message var="imgDir" key="link.hpweb2003.secure_img_dir" bundle="${urlResources}" />	
-		<fmt:message var="globalImgDir" key="link.hpweb2003.secure_global_img_dir" bundle="${urlResources}" />
+		<fmt:message var="imgDir" key="link.cleansheet.secure_img_dir" bundle="${urlResources}" />	
+		<fmt:message var="globalImgDir" key="link.cleansheet.secure_global_img_dir" bundle="${urlResources}" />
 	</c:when>
 	<c:otherwise>
-		<fmt:message var="imgDir" key="link.hpweb2003.img_dir" bundle="${urlResources}" />
-		<fmt:message var="globalImgDir" key="link.hpweb2003.global_img_dir" bundle="${urlResources}" />
+		<fmt:message var="imgDir" key="link.cleansheet.img_dir" bundle="${urlResources}" />
+		<fmt:message var="globalImgDir" key="link.cleansheet.global_img_dir" bundle="${urlResources}" />
 	</c:otherwise>
 </c:choose>
 

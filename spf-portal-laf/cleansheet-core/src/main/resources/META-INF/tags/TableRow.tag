@@ -18,11 +18,11 @@
 <c:choose>
 	<c:when test="${headerStyle}">
 		<c:set var="cssClass" value='theme ${cssClass}' />
-		<c:set var="com.hp.frameworks.wpa.hpweb.HEADER_ROW" value="true" scope="request" />
+		<c:set var="com.hp.it.spf.portal.cleansheet.HEADER_ROW" value="true" scope="request" />
 	</c:when>
 	<c:otherwise>
-		<c:set var="altRow" value="${requestScope['com.hp.frameworks.wpa.hpweb.ALT_ROW']}" />
-		<c:set var="com.hp.frameworks.wpa.hpweb.ALT_ROW" value="${!altRow}" scope="request" />
+		<c:set var="altRow" value="${requestScope['com.hp.it.spf.portal.cleansheet.ALT_ROW']}" />
+		<c:set var="com.hp.it.spf.portal.cleansheet.ALT_ROW" value="${!altRow}" scope="request" />
 		
 		<c:choose>
 			<c:when test="${!altRow}">
@@ -77,4 +77,4 @@
 	Clean-up  
 -----------------------------------------------------------------------------%>
 
-<c:set var="com.hp.frameworks.wpa.hpweb.HEADER_ROW" value="false" scope="request" />
+<c:set var="com.hp.it.spf.portal.cleansheet.HEADER_ROW" value="false" scope="request" />

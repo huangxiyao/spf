@@ -22,31 +22,31 @@
 <%----------------------------------------------------------------------------- 
 	Messages  
 -----------------------------------------------------------------------------%>
-<fmt:setBundle var="msgResources" basename="com.hp.frameworks.wpa.hpweb.Messages" />
-<fmt:setBundle var="urlResources" basename="com.hp.frameworks.wpa.hpweb.Urls" />
+<fmt:setBundle var="msgResources" basename="com.hp.it.spf.portal.cleansheet.Messages" />
+<fmt:setBundle var="urlResources" basename="com.hp.it.spf.portal.cleansheet.Urls" />
 
-<fmt:message var="contact" key="text.hpweb2003.contact" bundle="${msgResources}" />
-<fmt:message var="searchCountryCode" key="text.hpweb2003.searchCountryCode" bundle="${msgResources}" />
-<fmt:message var="searchLanguageCode" key="text.hpweb2003.searchLanguageCode" bundle="${msgResources}" />
-<fmt:message var="searchLabel" key="text.hpweb2003.searchLabel" bundle="${msgResources}" />
-<fmt:message var="searchCriteria" key="text.hpweb2003.searchCriteria" bundle="${msgResources}" />
-<fmt:message var="searchStatus" key="text.hpweb2003.searchStatus" bundle="${msgResources}" />
-<fmt:message var="searchAllOf" key="text.hpweb2003.searchAllOf" bundle="${msgResources}" />
+<fmt:message var="contact" key="text.cleansheet.contact" bundle="${msgResources}" />
+<fmt:message var="searchCountryCode" key="text.cleansheet.searchCountryCode" bundle="${msgResources}" />
+<fmt:message var="searchLanguageCode" key="text.cleansheet.searchLanguageCode" bundle="${msgResources}" />
+<fmt:message var="searchLabel" key="text.cleansheet.searchLabel" bundle="${msgResources}" />
+<fmt:message var="searchCriteria" key="text.cleansheet.searchCriteria" bundle="${msgResources}" />
+<fmt:message var="searchStatus" key="text.cleansheet.searchStatus" bundle="${msgResources}" />
+<fmt:message var="searchAllOf" key="text.cleansheet.searchAllOf" bundle="${msgResources}" />
 
 <c:if test="${empty contactUrl}">
-	<fmt:message var="contactUrl" key="link.hpweb2003.contact" bundle="${urlResources}" />
+	<fmt:message var="contactUrl" key="link.cleansheet.contact" bundle="${urlResources}" />
 </c:if>
 
 <c:if test="${empty searchUrl}">
-	<fmt:message var="searchUrl" key="link.hpweb2003.search" bundle="${urlResources}" />
+	<fmt:message var="searchUrl" key="link.cleansheet.search" bundle="${urlResources}" />
 </c:if>
 
 <c:choose>
 	<c:when test="${pageContext.request.scheme eq 'https'}">	
-		<fmt:message var="globalImgDir" key="link.hpweb2003.secure_global_img_dir" bundle="${urlResources}" />	
+		<fmt:message var="globalImgDir" key="link.cleansheet.secure_global_img_dir" bundle="${urlResources}" />	
 	</c:when>
 	<c:otherwise>
-		<fmt:message var="globalImgDir" key="link.hpweb2003.global_img_dir" bundle="${urlResources}" />
+		<fmt:message var="globalImgDir" key="link.cleansheet.global_img_dir" bundle="${urlResources}" />
 	</c:otherwise>
 </c:choose>
 

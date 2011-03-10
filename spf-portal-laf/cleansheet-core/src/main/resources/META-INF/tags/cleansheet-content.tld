@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
 	version="2.0">
 
-	<description>SPF Content Tags for Cleansheet</description>
+	<description>WPA Content Tags for Cleansheet</description>
 	<tlib-version>1.0</tlib-version>
 	<short-name>cleansheet-content</short-name>
 	<uri>http://frameworks.hp.com/spf/cleansheet-content</uri>
@@ -13,7 +13,7 @@
 	<tag>
 		<name>tab</name>
 		<tag-class>
-			com.hp.frameworks.wpa.hpweb.taglib.TabTag
+			com.hp.it.spf.portal.cleansheet.taglib.TabTag
 		</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
@@ -56,21 +56,5 @@
 	<tag-file>
 		<name>th</name>
 		<path>/WEB-INF/tags/cleansheet/TableHeaderCell.tag</path>
-	</tag-file>	
-			
-	<tag-file>
-		<name>leftMenuItem</name>
-		<path>/WEB-INF/tags/cleansheet/LeftMenuItem.tag</path>
-	</tag-file>		
-	
-	<tag-file>
-		<name>rightMenu</name>
-		<path>/WEB-INF/tags/cleansheet/RightMenu.tag</path>
-	</tag-file>		
-		
-	<tag-file>
-		<name>rightMenuItem</name>
-		<path>/WEB-INF/tags/cleansheet/RightMenuItem.tag</path>
-	</tag-file>		
-		
+	</tag-file>			
 </taglib>

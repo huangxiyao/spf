@@ -14,7 +14,7 @@
 -----------------------------------------------------------------------------%>
 
 <jsp:useBean id="tabList" class="java.util.ArrayList" />
-<c:set var="com.hp.frameworks.wpa.hpweb.TABS" value="${tabList}" scope="request" />
+<c:set var="com.hp.it.spf.portal.cleansheet.TABS" value="${tabList}" scope="request" />
 <jsp:doBody />
 
 <c:if test="${empty selectedIndex}">
@@ -47,23 +47,14 @@
 						 isn't specified. --%>
 
 					<%-- TSG wants selected tab to also display &raquo character, exception to hp.com standards for tabs.  --%>
-					<div class="tab tabSelected" title="${item.alt}">&raquo;<a href="${item.url}">${item.title}<span class="screenReading"> - Tab - Selected</span></a></div>
+					<div class="tabSelected" title="${item.alt}"><span class="tabText">${item.title}</span><span class="screenReading"> - Tab - Selected</span></div>
 				</c:when>
 				<c:otherwise>
-					<div class="tab" title="${item.alt}">&raquo;<a href="${item.url}" >${item.title}<span class="screenReading"> - Tab </span></a></div>		
+					<div class="tab" title="${item.alt}"><span class="tabText"><a href="${item.url}" >${item.title}<span class="screenReading"> - Tab </span></a></span></div>		
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>
 	</div>
-<%-- Do not need to display content
-	<div<c:if test="${hairline}"> class="paddedBlock themeRightBorder"</c:if>>
-		<c:forEach var="item" items="${tabList}" varStatus="loopStatus">
-			<c:if test="${loopStatus.index == selectedIndex}">
-				${item.body}
-			</c:if>
-		</c:forEach>	
-	</div>		
---%>
 </div>
 
 
