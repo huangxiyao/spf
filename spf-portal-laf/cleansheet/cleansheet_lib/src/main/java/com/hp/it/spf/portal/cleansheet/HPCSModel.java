@@ -2,7 +2,6 @@ package com.hp.it.spf.portal.cleansheet;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -30,7 +29,7 @@ public class HPCSModel {
    	private boolean printableDisabled;
    	private String tagline;
    	private String title;
-   	private List breadcrumbItems;
+   	private List<String> breadcrumbItems;
    	private String searchAudience;
    	private String searchOmnitureTag;
    	private String searchReturnUrl;
@@ -61,10 +60,6 @@ public class HPCSModel {
    	private String custSvcText;
    	private String custSvcUrl;
    	private String myAccountUrl;
-   	private String cartText;
-   	private String cartUrl;
-   	private String cartItemText;
-   	private String cartItemCount;
    	private String exploreUrl;
    	private String communitiesUrl;
    	private String siteMapUrl;
@@ -78,16 +73,36 @@ public class HPCSModel {
 	private Properties metaInfos;
 	private String helpUrl;
 	private String helpText;
-	private List topMenuItems = new ArrayList();
+	private List<MenuItem> topMenuItems = new ArrayList<MenuItem>();
 	
+	private boolean gutterEnabled = false;
+	
+
+	/**
+	 * Constructor
+	 */
 	public HPCSModel() {
 		super();
 		metaInfos = new Properties();
 	}
 
-	
+	/**
+	 * @return the gutterEnabled
+	 */
+	public boolean isGutterEnabled() {
+		return gutterEnabled;
+	}
+
+	/**
+	 * @param gutterEnabled the gutterEnabled to set
+	 */
+	public void setGutterEnabled(boolean gutterEnabled) {
+		this.gutterEnabled = gutterEnabled;
+	}
 	 
-	 
+	/**
+	 * @return
+	 */
 	public String getThemeColor()
 	{
 	  return theme;
@@ -320,36 +335,6 @@ public class HPCSModel {
 		 this.custSvcUrl = custSvcUrl;
 	}
  
-	public String getCartText()
-	{
-	  return cartText;
-	}
- 
-	public void setCartText(String cartText)
-	{
-		 this.cartText = cartText;
-	}
- 
-	public String getCartUrl()
-	{
-	  return cartUrl;
-	}
- 
-	public void setCartUrl(String cartUrl)
-	{
-		 this.cartUrl = cartUrl;
-	}
- 
-	public String getCartItemText()
-	{
-	  return cartItemText;
-	}
- 
-	public void setCartItemText(String cartItemText)
-	{
-		 this.cartItemText = cartItemText;
-	}
- 
 	public String getExploreUrl()
 	{
 	  return exploreUrl;
@@ -450,13 +435,13 @@ public class HPCSModel {
 		 this.searchAudience = searchAudience;
 	}
  
-	public List getBreadcrumbItems()
+	public List<String> getBreadcrumbItems()
 	{
  
 	  return breadcrumbItems;
 	}
  
-	public void setBreadcrumbItems(List breadcrumbs)
+	public void setBreadcrumbItems(List<String> breadcrumbs)
 	{
 		 this.breadcrumbItems = breadcrumbs;
 	}
@@ -712,14 +697,14 @@ public class HPCSModel {
 	/**
 	 * Set the top menu item list.
 	 */
-	public void setTopMenuItems(List topMenuItems) {
+	public void setTopMenuItems(List<MenuItem> topMenuItems) {
 		this.topMenuItems = topMenuItems;
 	}
 
 	/**
 	 * Get the top menu item list.
 	 */
-	public List getTopMenuItems() {
+	public List<MenuItem> getTopMenuItems() {
 		return topMenuItems;
 	}
 }
