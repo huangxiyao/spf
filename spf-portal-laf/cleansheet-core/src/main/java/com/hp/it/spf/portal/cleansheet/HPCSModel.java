@@ -1,669 +1,710 @@
 package com.hp.it.spf.portal.cleansheet;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-//import com.hp.it.spf.xa.i18n.portal.I18nUtility;
-
-//import com.vignette.portal.website.enduser.PortalContext;
-
 
 /**
  * This model object represents all of the configurable properties of a standard
- * HP Cleansheet c-frame. Each property exposed by this model maps to an element of the
- * HP Cleansheet header, navigation menu or footer that can be customized by the
- * application developer. This object is not initialized with any default
- * values, it is used solely as a strongly-typed interface to a property map
- * that is used to communicate app-specific customizations to whichever service
- * that will ultimately render the layout. It is the responsibility of the
+ * HP Clean sheet c-frame for use with the HP Clean sheet VAP Components. Each property exposed 
+ * by this model maps to an element of the HP Clean sheet header, 
+ * navigation menu or footer that can be customized by the application developer. 
+ * This object is not initialized with any default
+ * values, it is used to communicate app-specific customizations to whichever 
+ * service that will ultimately render the layout. It is the responsibility of the
  * rendering service to, where appropriate, provide sensible defaults for values
  * that are not explicitly set through this model.
+ * <br><br>
  */
-public class HPCSModel
-{
+public class HPCSModel {
 
-    // ------------------------------------------------------ Private fields
+   	private String metricsUrl;
+   	private String feedbackText;
+   	private String feedbackUrl;
+   	private String saleTermsUrl;
+   	private String termsUrl;
+   	private String imprintUrl;
+   	private String privacyUrl;
+   	private String printableUrl;
+   	private boolean printableDisabled;
+   	private String tagline;
+   	private String title;
+   	private List<String> breadcrumbItems;
+   	private String searchAudience;
+   	private String searchOmnitureTag;
+   	private String searchReturnUrl;
+   	private String searchContactUrl;
+   	private String searchReturnText;
+   	private String searchQueryPrefix;
+   	private String searchSectionName;
+   	private String searchUrl;
+   	private String phoneNumber;
+   	private String phoneLabel;
+   	private String contactUrl;
+   	private String registerUrl;
+   	private String profileUrl;
+   	private String signOutUrl;
+   	private String signInUrl;
+   	private String username;
+   	private String headerStyle;
+   	private String theme;
+   	private String pageWidth;
+   	private String sectionTitle;
+   	private String contactText;
+   	private String liveChatText;
+   	private String liveChatUrl;
+   	private String buyingOptText;
+   	private String buyingOptUrl;
+   	private String orderStatusText;
+   	private String orderStatusUrl;
+   	private String custSvcText;
+   	private String custSvcUrl;
+   	private String myAccountUrl;
+   	private String exploreUrl;
+   	private String communitiesUrl;
+   	private String siteMapUrl;
 
-    private String contactUrl;
-    private String contactText;
-    private String communitiesUrl;
-    private String dataRightsUrl;
-    private String feedbackText;
-    private String feedbackUrl;
-	private String globalHeader;
-	private String globalFooter;
-    private String imprintUrl;
-    private String headerStyle;
+	private String windowTitle;
+	private String leftPromotion;
+	private String topPromotion;
+	private String searchWidget;
+	private String localeSelector;
+	private boolean generateBreadcrumbs = false;
+	private Properties metaInfos;
 	private String helpUrl;
 	private String helpText;
-    private String metricUrl;
-	private String pageTitle;
-    private String phoneNumber;
-    private String phoneLabel;
-    private String privacyUrl;
-    private String printableUrl;
-    private String printableDisabled;
-    private String profileUrl;
-    private String registerUrl;
-    private String searchAudience;
-    private String searchOmnitureTag;
-    private String searchReturnUrl;
-    private String searchContactUrl;
-    private String searchReturnText;
-    private String searchQueryPrefix;
-    private String searchSectionName;
-	private String searchWidget;
-    private String searchUrl;
-    private String sectionTitle;
-    private String signOutUrl;
-    private String signInUrl;
-    private String siteMapUrl;
-    private String tagline;
-    private String termsUrl;
-    private String themeColor;
-    private String username;
-	private String windowTitle;
-    
 	private List<MenuItem> topMenuItems = new ArrayList<MenuItem>();
-	private Properties metaInfos = new Properties();  
-	private Map<String, String> supportedLocales = new HashMap<String, String>();
-
-	// ------------------------------------------------------ Constructor and public methods
 	
+	private boolean gutterEnabled = false;
+	
+
 	/**
-	 * Constructor to instantiate the object
+	 * Constructor
 	 */
 	public HPCSModel() {
+		super();
+		metaInfos = new Properties();
 	}
 
 	/**
-	 * @return the contactUrl
+	 * @return the gutterEnabled
 	 */
-	public String getContactUrl() {
-		return contactUrl;
+	public boolean isGutterEnabled() {
+		return gutterEnabled;
 	}
 
 	/**
-	 * @param contactUrl the contactUrl to set
+	 * @param gutterEnabled the gutterEnabled to set
 	 */
-	public void setContactUrl(String contactUrl) {
-		this.contactUrl = contactUrl;
+	public void setGutterEnabled(boolean gutterEnabled) {
+		this.gutterEnabled = gutterEnabled;
 	}
-
+	 
 	/**
-	 * @return the contactText
+	 * @return
 	 */
-	public String getContactText() {
-		return contactText;
+	public String getThemeColor()
+	{
+	  return theme;
 	}
-
+ 
+	public void setThemeColor(String themeColor)
+	{
+		 this.theme = themeColor;
+	}
+ 
+	public String getHeaderStyle()
+	{
+	  return headerStyle;
+	}
+ 
+	public void setHeaderStyle(String headerStyle)
+	{
+		 this.headerStyle = headerStyle;
+	}
+ 
+	public String getPageWidth()
+	{
+	  return pageWidth;
+	}
+ 
+	public void setPageWidth(String pageWidth)
+	{
+		 this.pageWidth = pageWidth;
+	}
+ 
+	public String getUsername()
+	{
+	  return username;
+	}
+ 
+	public void setUsername(String username)
+	{
+		 this.username = username;
+	}
+ 
+	public String getSignInUrl()
+	{
+	  return signInUrl;
+	}
+ 
+	public void setSignInUrl(String signInUrl)
+	{
+		 this.signInUrl = signInUrl;
+	}
+ 
+	public String getSignOutUrl()
+	{
+	  return signOutUrl;
+	}
+ 
+	public void setSignOutUrl(String signOutUrl)
+	{
+		 this.signOutUrl = signOutUrl;
+	}
+ 
+	public String getProfileUrl()
+	{
+	  return profileUrl;
+	}
+ 
+	public void setProfileUrl(String profileUrl)
+	{
+		 this.profileUrl = profileUrl;
+	}
+ 
+	public String getRegisterUrl()
+	{
+	  return registerUrl;
+	}
+ 
+	public void setRegisterUrl(String registerUrl)
+	{
+		 this.registerUrl = registerUrl;
+	}
+ 
+	/** @deprecated */
+	public String getReigsterUrl()
+	{
+	  return registerUrl;
+	}
+ 
+	/** @deprecated */
+	public void setReigsterUrl(String registerUrl)
+	{
+		 this.registerUrl = registerUrl;
+	}
+ 
+	public String getMyAccountUrl()
+	{
+	  return myAccountUrl;
+	}
+ 
+	public void setMyAccountUrl(String myAccountUrl)
+	{
+		 this.myAccountUrl = myAccountUrl;
+	}
+ 
+	public String getSectionTitle()
+	{
+	  return sectionTitle;
+	}
+ 
+	public void setSectionTitle(String sectionTitle)
+	{
+		 this.sectionTitle = sectionTitle;
+	}
+ 
+	public String getContactText()
+	{
+	  return contactText;
+	}
+ 
+	public void setContactText(String contactText)
+	{
+		 this.contactText = contactText;
+	}
+ 
+	public String getContactUrl()
+	{
+	  return contactUrl;
+	}
+ 
+	public void setContactUrl(String contactUrl)
+	{
+		 this.contactUrl = contactUrl;
+	}
+ 
+	public String getPhoneLabel()
+	{
+	  return phoneLabel;
+	}
+ 
+	public void setPhoneLabel(String phoneLabel)
+	{
+		 this.phoneLabel = phoneLabel;
+	}
+ 
+	public String getPhoneNumber()
+	{
+	  return phoneNumber;
+	}
+ 
+	public void setPhoneNumber(String phoneNumber)
+	{
+		 this.phoneNumber = phoneNumber;
+	}
+ 
+	public String getLiveChatText()
+	{
+	  return liveChatText;
+	}
+ 
+	public void setLiveChatText(String liveChatText)
+	{
+		 this.liveChatText = liveChatText;
+	}
+ 
+	public String getLiveChatUrl()
+	{
+	  return liveChatUrl;
+	}
+ 
+	public void setLiveChatUrl(String liveChatUrl)
+	{
+		 this.liveChatUrl = liveChatUrl;
+	}
+ 
+	public String getBuyingOptText()
+	{
+	  return buyingOptText;
+	}
+ 
+	public void setBuyingOptText(String buyingOptText)
+	{
+		 this.buyingOptText = buyingOptText;
+	}
+ 
+	public String getBuyingOptUrl()
+	{
+	  return buyingOptUrl;
+	}
+ 
+	public void setBuyingOptUrl(String buyingOptUrl)
+	{
+		 this.buyingOptUrl = buyingOptUrl;
+	}
+ 
+	public String getOrderStatusText()
+	{
+	  return orderStatusText;
+	}
+ 
+	public void setOrderStatusText(String orderStatusText)
+	{
+		 this.orderStatusText = orderStatusText;
+	}
+ 
+	public String getOrderStatusUrl()
+	{
+	  return orderStatusUrl;
+	}
+ 
+	public void setOrderStatusUrl(String orderStatusUrl)
+	{
+		 this.orderStatusUrl = orderStatusUrl;
+	}
+ 
+	public String getCustSvcText()
+	{
+	  return custSvcText;
+	}
+ 
+	public void setCustSvcText(String custSvcText)
+	{
+		 this.custSvcText = custSvcText;
+	}
+ 
+	public String getCustSvcUrl()
+	{
+	  return custSvcUrl;
+	}
+ 
+	public void setCustSvcUrl(String custSvcUrl)
+	{
+		 this.custSvcUrl = custSvcUrl;
+	}
+ 
+	public String getExploreUrl()
+	{
+	  return exploreUrl;
+	}
+ 
+	public void setExploreUrl(String exploreUrl)
+	{
+		 this.exploreUrl = exploreUrl;
+	}
+ 
+	public String getCommunitiesUrl()
+	{
+	  return communitiesUrl;
+	}
+ 
+	public void setCommunitiesUrl(String communitiesUrl)
+	{
+		 this.communitiesUrl = communitiesUrl;
+	}
+ 
+	public String getSearchUrl()
+	{
+	  return searchUrl;
+	}
+ 
+	public void setSearchUrl(String searchUrl)
+	{
+		 this.searchUrl = searchUrl;
+	}
+ 
+	public String getSearchSectionName()
+	{
+	  return searchSectionName;
+	}
+ 
+	public void setSearchSectionName(String searchSectionName)
+	{
+		 this.searchSectionName = searchSectionName;
+	}
+ 
+	public String getSearchQueryPrefix()
+	{
+	  return searchQueryPrefix;
+	}
+ 
+	public void setSearchQueryPrefix(String searchQueryPrefix)
+	{
+		 this.searchQueryPrefix = searchQueryPrefix;
+	}
+ 
+	public String getSearchReturnText()
+	{
+	  return searchReturnText;
+	}
+ 
+	public void setSearchReturnText(String searchReturnText)
+	{
+		 this.searchReturnText = searchReturnText;
+	}
+ 
+	public String getSearchContactUrl()
+	{
+	  return searchContactUrl;
+	}
+ 
+	public void setSearchContactUrl(String searchContactUrl)
+	{
+		 this.searchContactUrl = searchContactUrl;
+	}
+ 
+	public String getSearchReturnUrl()
+	{
+	  return searchReturnUrl;
+	}
+ 
+	public void setSearchReturnUrl(String searchReturnUrl)
+	{
+		 this.searchReturnUrl = searchReturnUrl;
+	}
+ 
+	public String getSearchOmnitureTag()
+	{
+	  return searchOmnitureTag;
+	}
+ 
+	public void setSearchOmnitureTag(String searchOmnitureTag)
+	{
+		 this.searchOmnitureTag = searchOmnitureTag;
+	}
+ 
+	public String getSearchAudience()
+	{
+	  return searchAudience;
+	}
+ 
+	public void setSearchAudience(String searchAudience)
+	{
+		 this.searchAudience = searchAudience;
+	}
+ 
+	public List<String> getBreadcrumbItems()
+	{
+ 
+	  return breadcrumbItems;
+	}
+ 
+	public void setBreadcrumbItems(List<String> breadcrumbs)
+	{
+		 this.breadcrumbItems = breadcrumbs;
+	}
+ 
+	public String getTitle()
+	{
+	  return title;
+	}
+ 
+	public void setTitle(String title)
+	{
+		 this.title = title;
+	}
+ 
+	public String getTagline()
+	{
+	  return tagline;
+	}
+ 
+	public void setTagline(String tagline)
+	{
+		 this.tagline = tagline;
+	}
+ 
+	public Boolean isPrintableDisabled()
+	{
+	  return printableDisabled;
+	}
+ 
+	public void setPrintableDisabled(Boolean printableDisabled)
+	{
+		 this.printableDisabled = printableDisabled;
+	}
+ 
+	public String getPrintableUrl()
+	{
+	  return printableUrl;
+	}
+ 
+	public void setPrintableUrl(String printableUrl)
+	{
+		 this.printableUrl = printableUrl;
+	}
+ 
+	public String getPrivacyUrl()
+	{
+	  return privacyUrl;
+	}
+ 
+	public void setPrivacyUrl(String privacyUrl)
+	{
+		 this.privacyUrl = privacyUrl;
+	}
+ 
+	public String getImprintUrl()
+	{
+	  return imprintUrl;
+	}
+ 
+	public void setImprintUrl(String imprintUrl)
+	{
+		 this.imprintUrl = imprintUrl;
+	}
+ 
+	public String getTermsUrl()
+	{
+	  return termsUrl;
+	}
+ 
+	public void setTermsUrl(String termsUrl)
+	{
+		 this.termsUrl = termsUrl;
+	}
+ 
+	public String getSaleTermsUrl()
+	{
+	  return saleTermsUrl;
+	}
+ 
+	public void setSaleTermsUrl(String saleTermsUrl)
+	{
+		 this.saleTermsUrl = saleTermsUrl;
+	}
+ 
+	public String getFeedbackUrl()
+	{
+	  return feedbackUrl;
+	}
+ 
+	public void setFeedbackUrl(String feedbackUrl)
+	{
+		 this.feedbackUrl = feedbackUrl;
+	}
+ 
+	public String getFeedbackText()
+	{
+	  return feedbackText;
+	}
+ 
+	public void setFeedbackText(String feedbackText)
+	{
+		 this.feedbackText = feedbackText;
+	}
+ 
+	public String getSiteMapUrl()
+	{
+	  return siteMapUrl;
+	}
+ 
+	public void setSiteMapUrl(String siteMapUrl)
+	{
+		 this.siteMapUrl = siteMapUrl;
+	}
+ 
+	public String getMetricsUrl()
+	{
+	  return metricsUrl;
+	}
+ 
+	public void setMetricsUrl(String metricsUrl)
+	{
+		 this.metricsUrl = metricsUrl;
+	}
+  	
 	/**
-	 * @param contactText the contactText to set
+	 * Get the top promotion area html string.
 	 */
-	public void setContactText(String contactText) {
-		this.contactText = contactText;
+	public String getTopPromotion() {
+		return topPromotion;
 	}
 
 	/**
-	 * @return the communitiesUrl
+	 * Set the html for the top promotion area.
 	 */
-	public String getCommunitiesUrl() {
-		return communitiesUrl;
+	public void setTopPromotion(String topPromotion) {
+		this.topPromotion = topPromotion;
 	}
 
 	/**
-	 * @param communitiesUrl the communitiesUrl to set
+	 * Get the left promotion area html string.
 	 */
-	public void setCommunitiesUrl(String communitiesUrl) {
-		this.communitiesUrl = communitiesUrl;
+	public String getLeftPromotion() {
+		return leftPromotion;
 	}
 
 	/**
-	 * @return the dataRightsUrl
+	 * Set the html for the left promotion area.
 	 */
-	public String getDataRightsUrl() {
-		return dataRightsUrl;
+	public void setLeftPromotion(String leftPromotion) {
+		this.leftPromotion = leftPromotion;
 	}
 
 	/**
-	 * @param dataRightsUrl the dataRightsUrl to set
-	 */
-	public void setDataRightsUrl(String dataRightsUrl) {
-		this.dataRightsUrl = dataRightsUrl;
-	}
-
-	/**
-	 * @return the feedbackText
-	 */
-	public String getFeedbackText() {
-		return feedbackText;
-	}
-
-	/**
-	 * @param feedbackText the feedbackText to set
-	 */
-	public void setFeedbackText(String feedbackText) {
-		this.feedbackText = feedbackText;
-	}
-
-	/**
-	 * @return the feedbackUrl
-	 */
-	public String getFeedbackUrl() {
-		return feedbackUrl;
-	}
-
-	/**
-	 * @param feedbackUrl the feedbackUrl to set
-	 */
-	public void setFeedbackUrl(String feedbackUrl) {
-		this.feedbackUrl = feedbackUrl;
-	}
-
-	/**
-	 * @return the globalHeader
-	 */
-	public String getGlobalHeader() {
-		return globalHeader;
-	}
-
-	/**
-	 * @param globalHeader the globalHeader to set
-	 */
-	public void setGlobalHeader(String globalHeader) {
-		this.globalHeader = globalHeader;
-	}
-
-	/**
-	 * @return the globalFooter
-	 */
-	public String getGlobalFooter() {
-		return globalFooter;
-	}
-
-	/**
-	 * @param globalFooter the globalFooter to set
-	 */
-	public void setGlobalFooter(String globalFooter) {
-		this.globalFooter = globalFooter;
-	}
-
-	/**
-	 * @return the imprintUrl
-	 */
-	public String getImprintUrl() {
-		return imprintUrl;
-	}
-
-	/**
-	 * @param imprintUrl the imprintUrl to set
-	 */
-	public void setImprintUrl(String imprintUrl) {
-		this.imprintUrl = imprintUrl;
-	}
-
-	/**
-	 * @return the headerStyle
-	 */
-	public String getHeaderStyle() {
-		return headerStyle;
-	}
-
-	/**
-	 * @param headerStyle the headerStyle to set
-	 */
-	public void setHeaderStyle(String headerStyle) {
-		this.headerStyle = headerStyle;
-	}
-
-	/**
-	 * @return the helpUrl
-	 */
-	public String getHelpUrl() {
-		return helpUrl;
-	}
-
-	/**
-	 * @param helpUrl the helpUrl to set
-	 */
-	public void setHelpUrl(String helpUrl) {
-		this.helpUrl = helpUrl;
-	}
-
-	/**
-	 * @return the helpText
-	 */
-	public String getHelpText() {
-		return helpText;
-	}
-
-	/**
-	 * @param helpText the helpText to set
-	 */
-	public void setHelpText(String helpText) {
-		this.helpText = helpText;
-	}
-
-	/**
-	 * @return the metricUrl
-	 */
-	public String getMetricUrl() {
-		return metricUrl;
-	}
-
-	/**
-	 * @param metricUrl the metricUrl to set
-	 */
-	public void setMetricUrl(String metricUrl) {
-		this.metricUrl = metricUrl;
-	}
-
-	/**
-	 * @return the pageTitle
-	 */
-	public String getPageTitle() {
-		return pageTitle;
-	}
-
-	/**
-	 * @param pageTitle the pageTitle to set
-	 */
-	public void setPageTitle(String pageTitle) {
-		this.pageTitle = pageTitle;
-	}
-
-	/**
-	 * @return the phoneNumber
-	 */
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	/**
-	 * @param phoneNumber the phoneNumber to set
-	 */
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	/**
-	 * @return the phoneLabel
-	 */
-	public String getPhoneLabel() {
-		return phoneLabel;
-	}
-
-	/**
-	 * @param phoneLabel the phoneLabel to set
-	 */
-	public void setPhoneLabel(String phoneLabel) {
-		this.phoneLabel = phoneLabel;
-	}
-
-	/**
-	 * @return the privacyUrl
-	 */
-	public String getPrivacyUrl() {
-		return privacyUrl;
-	}
-
-	/**
-	 * @param privacyUrl the privacyUrl to set
-	 */
-	public void setPrivacyUrl(String privacyUrl) {
-		this.privacyUrl = privacyUrl;
-	}
-
-	/**
-	 * @return the printableUrl
-	 */
-	public String getPrintableUrl() {
-		return printableUrl;
-	}
-
-	/**
-	 * @param printableUrl the printableUrl to set
-	 */
-	public void setPrintableUrl(String printableUrl) {
-		this.printableUrl = printableUrl;
-	}
-
-	/**
-	 * @return the printableDisabled
-	 */
-	public String getPrintableDisabled() {
-		return printableDisabled;
-	}
-
-	/**
-	 * @param printableDisabled the printableDisabled to set
-	 */
-	public void setPrintableDisabled(String printableDisabled) {
-		this.printableDisabled = printableDisabled;
-	}
-
-	/**
-	 * @return the profileUrl
-	 */
-	public String getProfileUrl() {
-		return profileUrl;
-	}
-
-	/**
-	 * @param profileUrl the profileUrl to set
-	 */
-	public void setProfileUrl(String profileUrl) {
-		this.profileUrl = profileUrl;
-	}
-
-	/**
-	 * @return the registerUrl
-	 */
-	public String getRegisterUrl() {
-		return registerUrl;
-	}
-
-	/**
-	 * @param registerUrl the registerUrl to set
-	 */
-	public void setRegisterUrl(String registerUrl) {
-		this.registerUrl = registerUrl;
-	}
-
-	/**
-	 * @return the searchAudience
-	 */
-	public String getSearchAudience() {
-		return searchAudience;
-	}
-
-	/**
-	 * @param searchAudience the searchAudience to set
-	 */
-	public void setSearchAudience(String searchAudience) {
-		this.searchAudience = searchAudience;
-	}
-
-	/**
-	 * @return the searchOmnitureTag
-	 */
-	public String getSearchOmnitureTag() {
-		return searchOmnitureTag;
-	}
-
-	/**
-	 * @param searchOmnitureTag the searchOmnitureTag to set
-	 */
-	public void setSearchOmnitureTag(String searchOmnitureTag) {
-		this.searchOmnitureTag = searchOmnitureTag;
-	}
-
-	/**
-	 * @return the searchReturnUrl
-	 */
-	public String getSearchReturnUrl() {
-		return searchReturnUrl;
-	}
-
-	/**
-	 * @param searchReturnUrl the searchReturnUrl to set
-	 */
-	public void setSearchReturnUrl(String searchReturnUrl) {
-		this.searchReturnUrl = searchReturnUrl;
-	}
-
-	/**
-	 * @return the searchContactUrl
-	 */
-	public String getSearchContactUrl() {
-		return searchContactUrl;
-	}
-
-	/**
-	 * @param searchContactUrl the searchContactUrl to set
-	 */
-	public void setSearchContactUrl(String searchContactUrl) {
-		this.searchContactUrl = searchContactUrl;
-	}
-
-	/**
-	 * @return the searchReturnText
-	 */
-	public String getSearchReturnText() {
-		return searchReturnText;
-	}
-
-	/**
-	 * @param searchReturnText the searchReturnText to set
-	 */
-	public void setSearchReturnText(String searchReturnText) {
-		this.searchReturnText = searchReturnText;
-	}
-
-	/**
-	 * @return the searchQueryPrefix
-	 */
-	public String getSearchQueryPrefix() {
-		return searchQueryPrefix;
-	}
-
-	/**
-	 * @param searchQueryPrefix the searchQueryPrefix to set
-	 */
-	public void setSearchQueryPrefix(String searchQueryPrefix) {
-		this.searchQueryPrefix = searchQueryPrefix;
-	}
-
-	/**
-	 * @return the searchSectionName
-	 */
-	public String getSearchSectionName() {
-		return searchSectionName;
-	}
-
-	/**
-	 * @param searchSectionName the searchSectionName to set
-	 */
-	public void setSearchSectionName(String searchSectionName) {
-		this.searchSectionName = searchSectionName;
-	}
-
-	/**
-	 * @return the searchWidget
+	 * Get the search widget html string.
 	 */
 	public String getSearchWidget() {
 		return searchWidget;
 	}
 
 	/**
-	 * @param searchWidget the searchWidget to set
+	 * Set the html for the search widget.
 	 */
 	public void setSearchWidget(String searchWidget) {
 		this.searchWidget = searchWidget;
 	}
 
 	/**
-	 * @return the searchUrl
+	 * Get the locale selector html string.
 	 */
-	public String getSearchUrl() {
-		return searchUrl;
+	public String getLocaleSelector() {
+		return localeSelector;
 	}
 
 	/**
-	 * @param searchUrl the searchUrl to set
+	 * Set the html for the locale selector.
 	 */
-	public void setSearchUrl(String searchUrl) {
-		this.searchUrl = searchUrl;
+	public void setLocaleSelector(String localeSelector) {
+		this.localeSelector = localeSelector;
 	}
 
 	/**
-	 * @return the sectionTitle
+	 * Get the boolean indicator for generating the breadcrumbs.
 	 */
-	public String getSectionTitle() {
-		return sectionTitle;
+	public boolean isGenerateBreadcrumbs() {
+		return generateBreadcrumbs;
 	}
 
 	/**
-	 * @param sectionTitle the sectionTitle to set
+	 * Set the boolean indicator for generating the breadcrumbs.
 	 */
-	public void setSectionTitle(String sectionTitle) {
-		this.sectionTitle = sectionTitle;
+	public void setGenerateBreadcrumbs(boolean generateBreadcrumbs) {
+		this.generateBreadcrumbs = generateBreadcrumbs;
 	}
 
 	/**
-	 * @return the signOutUrl
-	 */
-	public String getSignOutUrl() {
-		return signOutUrl;
-	}
-
-	/**
-	 * @param signOutUrl the signOutUrl to set
-	 */
-	public void setSignOutUrl(String signOutUrl) {
-		this.signOutUrl = signOutUrl;
-	}
-
-	/**
-	 * @return the signInUrl
-	 */
-	public String getSignInUrl() {
-		return signInUrl;
-	}
-
-	/**
-	 * @param signInUrl the signInUrl to set
-	 */
-	public void setSignInUrl(String signInUrl) {
-		this.signInUrl = signInUrl;
-	}
-
-	/**
-	 * @return the siteMapUrl
-	 */
-	public String getSiteMapUrl() {
-		return siteMapUrl;
-	}
-
-	/**
-	 * @param siteMapUrl the siteMapUrl to set
-	 */
-	public void setSiteMapUrl(String siteMapUrl) {
-		this.siteMapUrl = siteMapUrl;
-	}
-
-	/**
-	 * @return the tagline
-	 */
-	public String getTagline() {
-		return tagline;
-	}
-
-	/**
-	 * @param tagline the tagline to set
-	 */
-	public void setTagline(String tagline) {
-		this.tagline = tagline;
-	}
-
-	/**
-	 * @return the termsUrl
-	 */
-	public String getTermsUrl() {
-		return termsUrl;
-	}
-
-	/**
-	 * @param termsUrl the termsUrl to set
-	 */
-	public void setTermsUrl(String termsUrl) {
-		this.termsUrl = termsUrl;
-	}
-
-	/**
-	 * @return the themeColor
-	 */
-	public String getThemeColor() {
-		return themeColor;
-	}
-
-	/**
-	 * @param themeColor the themeColor to set
-	 */
-	public void setThemeColor(String themeColor) {
-		this.themeColor = themeColor;
-	}
-
-	/**
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
-	}
-
-	/**
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	/**
-	 * @return the windowTitle
+	 * Get the browser window title.
 	 */
 	public String getWindowTitle() {
 		return windowTitle;
 	}
 
 	/**
-	 * @param windowTitle the windowTitle to set
+	 * Set the browser window title.
 	 */
 	public void setWindowTitle(String windowTitle) {
 		this.windowTitle = windowTitle;
 	}
 
 	/**
-	 * @return the topMenuItems
-	 */
-	public List<MenuItem> getTopMenuItems() {
-		return topMenuItems;
-	}
-
-	/**
-	 * @param topMenuItems the topMenuItems to set
-	 */
-	public void setTopMenuItems(List<MenuItem> topMenuItems) {
-		this.topMenuItems = topMenuItems;
-	}
-
-	/**
-	 * @return the metaInfos
+	 * Get the <code>&lt;meta name="name" contents="value"&gt;</code>
+	 * elements to the <code>&lt;head&gt;</code> element.
 	 */
 	public Properties getMetaInfos() {
 		return metaInfos;
 	}
 
 	/**
-	 * @param metaInfos the metaInfos to set
+	 * Set additional <code>&lt;meta name="name" contents="value"&gt;</code>
+	 * elements to the <code>&lt;head&gt;</code> element.
 	 */
 	public void setMetaInfos(Properties metaInfos) {
 		this.metaInfos = metaInfos;
 	}
 
 	/**
-	 * @return the supportedLocales
+	 * Get the Help link url.
 	 */
-	public Map<String, String> getSupportedLocales() {
-		return supportedLocales;
+	public String getHelpUrl() {
+		return helpUrl;
 	}
 
 	/**
-	 * @param supportedLocales the supportedLocales to set
+	 * Set the Help link url.
 	 */
-	public void setSupportedLocales(Map<String, String> supportedLocales) {
-		this.supportedLocales = supportedLocales;
+	public void setHelpUrl(String helpUrl) {
+		this.helpUrl = helpUrl;
 	}
-	
+
+	/**
+	 * Get the Help link text.
+	 */
+	public String getHelpText() {
+		return helpText;
+	}
+
+	/**
+	 * Set the Help link text.
+	 */
+	public void setHelpText(String helpText) {
+		this.helpText = helpText;
+	}
+
+	/**
+	 * Set the top menu item list.
+	 */
+	public void setTopMenuItems(List<MenuItem> topMenuItems) {
+		this.topMenuItems = topMenuItems;
+	}
+
+	/**
+	 * Get the top menu item list.
+	 */
+	public List<MenuItem> getTopMenuItems() {
+		return topMenuItems;
+	}
 }

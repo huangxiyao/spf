@@ -1,6 +1,7 @@
 package com.hp.it.spf.portal.cleansheet;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -20,12 +21,14 @@ import com.epicentric.site.Site;
 import com.epicentric.site.SiteSettings;
 import com.epicentric.template.Style;
 import com.epicentric.user.User;
+import com.hp.it.spf.portal.cleansheet.MenuItem;
+import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.vignette.portal.util.StringUtils;
 import com.vignette.portal.util.WebUtils;
 import com.vignette.portal.website.enduser.PortalContext;
 
 /**
- * This Cleansheet utility class contains methods used by the HP Cleansheet layout.
+ * This HP Clean sheet utility class contains methods used by the HP Clean sheet layout.
  *
  */
 
@@ -33,7 +36,38 @@ public class Utils {
 	
 	private static String OPEN_SPAN_REGEX = "(?i:<SPAN.*?>)";
 	private static String CLOSE_SPAN_REGEX = "(?i:</SPAN>)";
+	
+	private static List<List<Locale>> supportedLocales = null;
+	//private static List<List<String>> partitionedLocaleCodes = null;
+	
+	private static String [] americasLocaleCodes = {
+		"en-CA", "fr-CA", "es-AR", "es-BO", "es-CL", "es-CO", "es-CR", "es-DO", "es-EC", "es-GT", "es-HN", 
+		"es-MX", "es-NI", "es-PA", "es-PE", "es-PR", "es-PY", "es-SV", "es-UY", "es-VE", "pt-BR", "en-US"
+		};
 
+	private static String [] europeLocaleCodes = {
+		"be-BY", "bg-BG", "ca-ES", "cs-CZ", "da-DK", "de-AT", "de-CH", "de-DE", "de-LU", "el-GR", "en-GB", "en-IE", "es-ES", 
+		"et-EE", "fi-FI", "fr-BE", "fr-CH", "fr-FR", "fr-LU", "hr-HR", "hu-HU", "is-IS", "it-CH", "it-IT", "lt-LT", "lv-LV", 
+		"mk-MK", "nl-BE", "nl-NL", "no-NO", "pl-PL", "pt-PT", "ro-RO", "ru-RU", "sk-SK", "sl-SI", "sq-AL", "sr-BA", "sr-CS", 
+		"sv-SE", "tr-TR", "uk-UA", "ar-AE", "ar-BH", "ar-IQ", "ar-JO", "ar-KW", "ar-LB", "ar-OM", "ar-QA", "ar-SA", "ar-YE", 
+		"ar-SY", "iw-IL", "ar-DZ", "ar-EG", "ar-LY", "ar-MA", "ar-SD", "ar-TN", "en-ZA"
+		 
+	};
+	
+	private static String [] asiaLocaleCodes = {
+		"en-AU", "hi-IN", "ja-JP", "ko-KR", "th-TH", "vi-VN", "zh-CN", "zh-HK", "zh-TW", "en-IN", "en-NZ",
+		"en-HK", "en-in", "en-id", "en-my", "en-ph", "en-sg", "en-lk", "en-th", "en-vn"
+	};
+	
+	static {
+		if (supportedLocales == null) {
+			supportedLocales = new ArrayList< List<Locale>>();
+			supportedLocales.add(getLocalesForAZone(americasLocaleCodes));
+			supportedLocales.add(getLocalesForAZone(europeLocaleCodes));
+			supportedLocales.add(getLocalesForAZone(asiaLocaleCodes));
+		}
+	}
+	
 	/**
      * Get {@link java.util.Locale} for current user, whether 
      * she is a anonymous and authenticated user.
@@ -217,7 +251,7 @@ public class Utils {
      * @param navSplit Valid values are 0 to 3, and a value of -1 to use the 
      * configured navigation level in Vignette.  The default value is 0.
      * @param maxLevel Valid values are 2 or 3.  The default value is 3.
-     * @return Returns a list of {@link com.hp.frameworks.wpa.hpweb.MenuItem}
+     * @return Returns a list of {@link com.hp.it.spf.portal.cleansheet.MenuItem}
      * objects.
      * @throws Exception
      */
@@ -378,40 +412,60 @@ public class Utils {
      * message can be obtained
      * @return String localized message
      */
-     public static String getI18nValue(String i18nID, String pKey, 
+    public static String getI18nValue(String i18nID, String pKey, 
     		 String pDefaultValue, PortalContext pContext) {
-       if (pKey == null || pContext == null) {
-           return null;
-       }
+    	if (pKey == null || pContext == null) {
+    		return null;
+    	}
        
-       HttpServletRequest request = pContext.getPortalRequest().getRequest();      
-       String value = filterSpan(I18nUtils.getValue(i18nID, pKey, pDefaultValue, request));
+    	HttpServletRequest request = pContext.getPortalRequest().getRequest();      
+    	String value = filterSpan(I18nUtils.getValue(i18nID, pKey, pDefaultValue, request));
        
+    	// I18nUtils.getValue() converts special HTML/XML characters to 
+    	// encoded characters, e.g. "&raquo;" to "&amp;raquo;", which is not 
+    	// what we found, so use WebUtils.xmlEntitiesToChars to convert 
+    	// encoded characters back to special HTML/XML characters.
        
-       // I18nUtils.getValue() converts special HTML/XML characters to 
-       // encoded characters, e.g. "&raquo;" to "&amp;raquo;", which is not 
-       // what we found, so use WebUtils.xmlEntitiesToChars to convert 
-       // encoded characters back to special HTML/XML characters.
-       
-       return WebUtils.xmlEntitiesToChars(value);          
-     }
-     
-     /**
-      * converts a locale selector html from hp.com to a site specific locale selector
-      * @param hpLocaleSelctor
-      * @param portalContext
-      * @return
-      */
-     public static String getSiteLocaleSelector(final String hpLocaleSelctor, 
-    		 									final PortalContext portalContext) {
-    	 String siteLocaleSelector = null;
-    	 
-    	 return siteLocaleSelector;
-     }
+    	return WebUtils.xmlEntitiesToChars(value);          
+    }
 
-     public static void loadHorizontalNav(PortalContext portalContext, PageContext pageContext) throws Exception {
+    public static void initialize(PortalContext portalContext, PageContext pageContext) {
     	 Style currentStyle = portalContext.getCurrentStyle();
-    	
+    	 String i18nID = currentStyle.getUID();
+    	 	
+    	 pageContext.setAttribute("stylePath", portalContext.getPortalHttpRoot() + 
+    	 		currentStyle.getUrlSafeRelativePath());
+    	 	
+    	 pageContext.setAttribute("dnsName", portalContext.getCurrentSite().getDNSName());
+    	 
+    	 HttpServletRequest request = portalContext.getHttpServletRequest();
+
+    	 Locale locale = Utils.getLocale(request);
+    	 String languageTag = Utils.localeToLanguageTag(locale);
+    	 String countryTag = locale.getCountry();
+    	 if (languageTag == null) {
+    	     languageTag = "en-US";
+    	     countryTag = "US";
+    	 }
+    	 pageContext.setAttribute("countryTag", countryTag);
+    	 pageContext.setAttribute("languageTag", languageTag);  
+    	 pageContext.setAttribute("locale", locale);  
+
+    	 HPCSModel hpcsModel = (HPCSModel) request.getAttribute("HPCSModel");
+    	 if (hpcsModel == null) {
+    		 hpcsModel = new HPCSModel(); 
+    		 System.out.println("grid: created new HPCSModel()");
+    	 }
+    	 else {
+    		 System.out.println("grid; used existing HPCSModel()");
+    	 }
+    	 
+    	 hpcsModel.setUsername("John"); // test code, will be removed
+		 request.setAttribute("HPCSModel", hpcsModel);
+    }
+     
+     public static void initHorzNav(PortalContext portalContext, PageContext pageContext) throws Exception {
+    	 Style currentStyle = portalContext.getCurrentStyle();
     	 String i18nID = currentStyle.getUID();
     	 
     	 pageContext.setAttribute("stylePath", portalContext.getPortalHttpRoot() + 
@@ -437,32 +491,25 @@ public class Utils {
     	 pageContext.setAttribute("blackCaretImg", blackCaretImg);
     	 pageContext.setAttribute("spacerImg", spacerImg);
 
-    	 pageContext.setAttribute("helpTextDef", Utils.getI18nValue(i18nID, "hpweb.helpText", portalContext));
-    	 pageContext.setAttribute("helpUrlDef",  Utils.getI18nValue(i18nID, "hpweb.helpUrl", portalContext));
+    	 pageContext.setAttribute("helpTextDef", Utils.getI18nValue(i18nID, "hpweb.helpText",
+    	 		portalContext));
+    	 pageContext.setAttribute("helpUrlDef",  Utils.getI18nValue(i18nID, "hpweb.helpUrl",
+    	 		portalContext));
 
-    	 // Retrieve the selected menu item
-    	 MenuItemNode selectedNode = MenuItemUtils.getSelectedMenuItemNode(portalContext);
-    	 MenuItemNode selectedLevel2Parent = null;
-    	 // If selected menu item's level is deeper than 3, pick up the level 2 parent node
-    	 if (selectedNode.getLevel() > 2) {
-    	 	List parentNodeList = MenuItemUtils.getParentsForSelectedMenuItem(pageContext);
-    	 	Iterator parentNodes = parentNodeList.iterator();
-    	 	MenuItemNode parentNode;
-    	 	int currentLevel;
-    	 	while (parentNodes.hasNext()) {
-    	 		parentNode = (MenuItemNode) parentNodes.next();
-    	 		currentLevel = parentNode.getLevel();
-    	 		if (currentLevel == 1) {
-    	 			selectedLevel2Parent = parentNode;
-    	 			break;
-    	 		}
-    	 	}
+    	 HttpServletRequest request = portalContext.getHttpServletRequest();
+    	 HPCSModel hpcsModel = (HPCSModel) request.getAttribute("HPCSModel");
+    	 if (hpcsModel == null) {
+    		 hpcsModel = new HPCSModel(); 
+    		 request.setAttribute("HPCSModel", hpcsModel);
+    		 System.out.println("hnav: created new HPCSModel()");
+    	 }
+    	 else {
+    		 System.out.println("hnav; used existing HPCSModel()");
     	 }
 
-    	 HPCSModel model = (HPCSModel)pageContext.getRequest().getAttribute("HPCSModel");
-    	 List menuItemList = model.getTopMenuItems();
+    	 List menuItemList = hpcsModel.getTopMenuItems();
 
-    	 // if the HPWebModel bean has top menu items, use it for hpweb layout
+    	 // if the HPCSModel bean has top menu items, use it for hpweb layout
     	 // top nav, i.e. don't need to generate it from vap configured nav menu.
 
     	 if (menuItemList == null || menuItemList.size() == 0) {
@@ -503,11 +550,6 @@ public class Utils {
     	 				done = true;
     	 				break;
     	 			}
-    	 			// 
-    	 			if ( (selectedLevel2Parent != null) && selectedLevel2Parent.getID().equals(button.getId()) ) {
-    	 				//Highlight the level 2 parent of the selected menu item
-    	 				button.setHighlighted(true);
-    	 			}
     	 			int flyoutItemCount = button.getSubMenuItems().size();
     	 			if (flyoutItemCount > 0) {
     	 				for (int flyoutIndex=0; flyoutIndex<flyoutItemCount; flyoutIndex++) {
@@ -534,6 +576,128 @@ public class Utils {
     	 }
 
     	 pageContext.setAttribute("menuItemList", menuItemList);
-    	 pageContext.setAttribute("selectedIndex", selectedIndex);
+    	 pageContext.setAttribute("selectedIndex", selectedIndex); 
+    	 
+     }
+     
+     /**
+      * lazy initialization of locale selector
+      * @param portalContext PortalContext
+      * @return
+      */               
+    public static void initializeLocaleSelector(PortalContext portalContext, PageContext pageContext) {
+    	 
+    	if (portalContext == null || pageContext == null ) return;
+    	
+    	Style currentStyle = portalContext.getCurrentStyle();
+	 
+    	pageContext.setAttribute("stylePath", portalContext.getPortalHttpRoot() + currentStyle.getUrlSafeRelativePath());
+    	
+    	HttpServletRequest request = portalContext.getHttpServletRequest();
+
+    	Locale currentLocale = I18nUtility.getLocale(request);
+    	if (currentLocale == null) currentLocale = Locale.US;
+    	pageContext.setAttribute("selectedCountry", currentLocale.getDisplayCountry(currentLocale));
+
+    	HttpSession session = request.getSession();
+    	if (session.getAttribute("americas") == null) {
+    	
+    		final String urlFormat = "/portal/site/hpsc/template.PUBLIC_SPF_SELECT_LOCALE/action.process/?spfSelectedLocale=%s-%s";
+	    	List<HyperLink> countryHyperlinks = null;
+	    	List<Locale> localesInZone = null;
+	    	 
+	    	// locales supported by a site
+	    	Collection availableLocales = I18nUtility.getAvailableLocales(request);
+	    	
+	    	// debugging
+	    	Iterator it = availableLocales.iterator();
+	    	
+	    	while (it.hasNext()) {
+	    		System.out.println("Available Locale: " + ((Locale)it.next()).toString());
+	    	}
+	    		
+	    	// need to refactor
+	    	if (availableLocales.size() > 1) {
+	    		countryHyperlinks =  new ArrayList<HyperLink>();
+	    		localesInZone = getLocalesForZone(0, availableLocales);
+	    		for (Locale locale: localesInZone) {
+	    			countryHyperlinks.add(
+	    				new HyperLink(locale.getDisplayCountry(locale), 
+	    					locale.getDisplayCountry(), 
+	    					(String.format(urlFormat, locale.getLanguage(), locale.getCountry()))
+	    			));
+	    		}
+	    		session.setAttribute("americas", countryHyperlinks);
+	    		System.out.println("set in session for americas: " + countryHyperlinks.size()); 
+
+	    		localesInZone = getLocalesForZone(1, availableLocales);
+	    		countryHyperlinks =  new ArrayList<HyperLink>();
+	    		for (Locale locale: localesInZone) {
+	    			countryHyperlinks.add(
+	    				new HyperLink(locale.getDisplayCountry(locale), 
+	    					locale.getDisplayCountry(), 
+	    					(String.format(urlFormat, locale.getLanguage(), locale.getCountry()))
+	    			));
+	    		}
+	    		session.setAttribute("europe", countryHyperlinks);
+	    		System.out.println("set in session for europe and: " + countryHyperlinks.size()); 
+
+	    		localesInZone = getLocalesForZone(2, availableLocales);
+	    		countryHyperlinks =  new ArrayList<HyperLink>();
+	    		for (Locale locale: localesInZone) {
+	    			countryHyperlinks.add(
+	    				new HyperLink(locale.getDisplayCountry(locale), 
+	    					locale.getDisplayCountry(), 
+	    					(String.format(urlFormat, locale.getLanguage(), locale.getCountry()))
+	    			));
+	    		}
+	    		session.setAttribute("asia", countryHyperlinks);
+	    		System.out.println("set in session for asia AND: " + countryHyperlinks.size()); 
+	    	}
+    	}
+    }
+     
+    /**
+     * filter out locales/countries in a zone 
+     * @param zone
+     * @param availableLocales
+     * @return
+     */
+    private static List<Locale> getLocalesForZone(int zone, Collection availableLocales) {
+    	List<Locale> list = new ArrayList<Locale>();
+    	 
+    	List<Locale> supportedLocalesInZone = supportedLocales.get(zone);
+    	Iterator it = availableLocales.iterator();
+    	Locale availLocale;
+    	while (it.hasNext()) {
+    		availLocale = (Locale)it.next();
+    		for (Locale supportedLocale: supportedLocalesInZone) {
+    			if (availLocale.getCountry().equalsIgnoreCase(supportedLocale.getCountry()) &&
+    					availLocale.getLanguage().equalsIgnoreCase(supportedLocale.getLanguage())) {
+    				list.add(availLocale);
+    				break;
+    			}
+    		}
+    	}
+    	System.out.println(String.format("available locales in zone %d: %d", zone+1, list.size()));
+    	return list;
+    }
+     
+    private static List<Locale> getLocalesForAZone(String [] localeCodes) {
+    	List<Locale> locales = new ArrayList<Locale>();
+    	 
+    	String [] langCnty;
+		for (String code : localeCodes) {
+			langCnty = code.split("-"); 
+			if (langCnty.length == 1) {
+				locales.add(new Locale(langCnty[0]));;
+			}
+			else if(langCnty.length == 2) {
+				locales.add(new Locale(langCnty[0], langCnty[1]));;
+			}
+		}
+		System.out.println("supported locales in a zone " + locales.size());
+		return locales;
+		
      }
 }
