@@ -243,7 +243,8 @@ span.spfcs_pipe_chr  {
 }
 
 #horzNavButtonBarBackground {
-	padding: 6px 0;
+	padding: 14px 0;
+	background-color:#35383C;
 }
 
 /* Portlet chrome style properties */
