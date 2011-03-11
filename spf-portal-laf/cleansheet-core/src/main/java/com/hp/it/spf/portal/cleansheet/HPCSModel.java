@@ -75,8 +75,8 @@ public class HPCSModel {
 	private String helpText;
 	private List<MenuItem> topMenuItems = new ArrayList<MenuItem>();
 	
-	private boolean gutterEnabled = false;
-	
+	private boolean portletGutterEnabled = false;
+	private String portletGutterStyle;
 
 	/**
 	 * Constructor
@@ -87,19 +87,33 @@ public class HPCSModel {
 	}
 
 	/**
-	 * @return the gutterEnabled
+	 * @return the portletGutterEnabled
 	 */
-	public boolean isGutterEnabled() {
-		return gutterEnabled;
+	public boolean isPortletGutterEnabled() {
+		return portletGutterEnabled;
 	}
 
 	/**
-	 * @param gutterEnabled the gutterEnabled to set
+	 * @param portletGutterEnabled the portletGutterEnabled to set
 	 */
-	public void setGutterEnabled(boolean gutterEnabled) {
-		this.gutterEnabled = gutterEnabled;
+	public void setPortletGutterEnabled(boolean portletGutterEnabled) {
+		this.portletGutterEnabled = portletGutterEnabled;
 	}
 	 
+	/**
+	 * @return the portletGutterStyle
+	 */
+	public String getPortletGutterStyle() {
+		return portletGutterStyle;
+	}
+
+	/**
+	 * @param portletGutterStyle the portletGutterStyle to set
+	 */
+	public void setPortletGutterStyle(String portletGutterStyle) {
+		this.portletGutterStyle = portletGutterStyle;
+	}
+
 	/**
 	 * @return
 	 */
