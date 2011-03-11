@@ -36,17 +36,11 @@
 			
 <!-- 
 		For WL recompile defect workaround, don't package up the real 
-		hpweb-core.jar, but package with a local copy of hpweb-core.jar 
-		that is unbundled of .tag and .tld files.   This local copy is checkin 
-		under the src/main/webapp/WEB-INF/lib directory.   
+		cleansheet-core.jar. Instead the content of cleansheet-core.jar is 
+		re-bundled into the car file itself using the plugins in the build section.
 		
-		When the WL defect is fixed, then need to remove the local copy of 
-		the jar, and remove the .tag and .tld files from the
-		src/main/webapp/WEB-INF/tags/cleansheet directory.  Also need to 
-		bundle cleansheet-extensions.tld and TabSetEnhancedExt.tag into 
-		hpweb-var.jar.
 -->
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -121,10 +115,65 @@
 	</properties>
 	
 	<build>
-	  <!--  Document the jar versions in the manifest file since the
-			jars filenames don't include the version numbers.  -->
       
     <plugins>
+		<!-- The following two plugins repackage cleansheet-core.jar in order to work around the WebLogic
+		bug related to *.tag files embedded in a *.jar file which get recompiled on every request.
+		The JAR file is exploded into WEB-INF directory -->
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-dependency-plugin</artifactId>
+			<executions>
+				<execution>
+					<id>unpack-dependecines-tags</id>
+					<phase>generate-resources</phase>
+					<goals>
+						<goal>unpack-dependencies</goal>
+					</goals>
+					<configuration>
+						<includeArtifactIds>cleansheet-core</includeArtifactIds>
+						<excludeTransitive>true</excludeTransitive>
+						<includes>
+							**/*.*
+						</includes>
+						<outputDirectory>
+							${project.build.directory}/cleansheet-core/
+             				</outputDirectory>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+		
+		<plugin>
+			<artifactId>maven-antrun-plugin</artifactId>
+			<version>1.6</version>
+			<executions>
+				<execution>
+					<phase>generate-resources</phase>
+					<configuration>
+						<target>
+							<copy todir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes/com">
+								<fileset dir="${project.build.directory}/cleansheet-core/com" />
+							</copy>
+							<copy todir="${project.build.directory}/${project.build.finalName}/WEB-INF/tags/cleansheet">
+								<fileset dir="${project.build.directory}/cleansheet-core/META-INF/tags" />
+								<fileset dir="${project.build.directory}/cleansheet-core/META-INF" includes="**/*.tld" />
+							</copy>
+							<replace dir="${project.build.directory}/${project.build.finalName}/WEB-INF/tags/cleansheet" 
+									includes="*.tld" token="/META-INF/tags/" value="/WEB-INF/tags/cleansheet/" />
+							<jar destfile="${project.build.directory}/${project.build.finalName}/WEB-INF/lib/cleansheet-core-repackaged.jar" 
+									basedir="${project.build.directory}/cleansheet-core" includes="META-INF/com/**,META-INF/maven/**" />
+						</target>
+					</configuration>
+					<goals>
+						<goal>run</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+
+	  <!--  Document the jar versions in the manifest file since the
+			jars filenames don't include the version numbers.  -->
 
 		<plugin>
     		<groupId>com.hp.it.spf.tools</groupId>
