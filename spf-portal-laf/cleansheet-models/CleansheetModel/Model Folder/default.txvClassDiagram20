@@ -6,7 +6,7 @@
 		<property name="$defaultDiagram" value="true"/>
 		<property name="$metaclass" value="ClassDiagram20"/>
 		<reference referencedUin="design:node:::-tdsqjugkx7dmpgtobd7c">
-			<property name="bounds" value="95,55,201,221"/>
+			<property name="bounds" value="515,95,180,200"/>
 			<property name="location_set_by_user" value="true"/>
 			<property name="bounds_setted_by_user" value="true"/>
 			<reference referencedUin="design:node:::hnimszgkx8smcq-pc03jd:-tdsqjugkx7dmpgtobd7c">
@@ -14,9 +14,43 @@
 			</reference>
 			<reference referencedUin="design:node:::uwq1gkx8u2ov-sqwonf:-tdsqjugkx7dmpgtobd7c">
 			</reference>
-			<reference referencedUin="design:node:::hnimszgkx8taklk7652s:-tdsqjugkx7dmpgtobd7c">
-				<property name="bounds" value="43,131,0,0"/>
+			<reference referencedUin="design:node:::hnimszgl5r09gs-7hmmxn:-tdsqjugkx7dmpgtobd7c">
+				<property name="bounds" value="20,153,0,0"/>
 			</reference>
+			<reference referencedUin="design:node:::hnimszgl5qzy7cttwohp:-tdsqjugkx7dmpgtobd7c">
+				<property name="bounds" value="37,148,0,0"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjugl5mwmbr-ha41tu">
+			<property name="bounds" value="821,55,133,106"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="collapsedCompartments" value=""/>
+			<reference referencedUin="design:node:::hnimszgl5mx4du-k13ppw:-tdsqjugl5mwmbr-ha41tu">
+				<property name="bounds" value="27,30,0,0"/>
+			</reference>
+			<reference referencedUin="design:node:::hnimszgl5n0qq176rdz0:-tdsqjugl5mwmbr-ha41tu">
+				<property name="bounds" value="124,13,0,0"/>
+			</reference>
+			<reference referencedUin="design:node:::hnimszgl5n0d0yxvjnbv:-tdsqjugl5mwmbr-ha41tu">
+				<property name="bounds" value="31,37,0,0"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-i8kpg9gl5my6vf-jflrub">
+			<property name="bounds" value="835,215,105,97"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:node:::hpmgzsgl5mymlt3hz2yc:-i8kpg9gl5my6vf-jflrub">
+				<property name="bounds" value="80,5,0,0"/>
+			</reference>
+			<reference referencedUin="design:node:::hpmgzsgl5myh3r-if4vrq:-i8kpg9gl5my6vf-jflrub">
+				<property name="bounds" value="39,6,0,0"/>
+			</reference>
+			<reference referencedUin="design:node:::hpmgzsgl5myrvh-owxo8:-i8kpg9gl5my6vf-jflrub">
+				<property name="bounds" value="84,7,0,0"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjugl5vmwazbzrgt3">
+			<property name="bounds" value="95,35,93,80"/>
+			<property name="location_set_by_user" value="true"/>
 		</reference>
 	</view>
 </nodeSet>
