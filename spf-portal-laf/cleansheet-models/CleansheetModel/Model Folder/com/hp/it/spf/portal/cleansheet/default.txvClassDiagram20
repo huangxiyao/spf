@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="V1hexuhgl5y29wr-2epl4r">
+		<property name="$defaultDiagram" value="true"/>
+		<property name="$metaclass" value="ClassDiagram20"/>
+		<property name="__options" value="option.nlayout.recursive=true"/>
+		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.MenuItem">
+			<property name="bounds" value="435,5,167,181"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.MenuItem:subMenu">
+				<property name="sourceAnchor" value="607,187"/>
+				<property name="targetAnchor" value="603,191"/>
+				<property name="bendpoints" value="636,187,636,220,603,220"/>
+				<property name="smooth_bendpoints" value="636,187,636,220,603,220"/>
+				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.MenuItem:subMenu">
+					<property name="bounds" value="606,192,21,19"/>
+				</reference>
+				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.MenuItem:subMenu">
+					<property name="bounds" value="617,165,10,19"/>
+				</reference>
+			</reference>
+		</reference>
+		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.HPSCModel">
+			<property name="bounds" value="5,162,200,271"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:localSelector">
+				<property name="sourceAnchor" value="210,302"/>
+				<property name="targetAnchor" value="301,302"/>
+				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:localSelector">
+					<property name="bounds" value="270,280,21,19"/>
+				</reference>
+				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:localSelector">
+					<property name="bounds" value="220,280,10,19"/>
+				</reference>
+			</reference>
+		</reference>
+		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.LocaleRegion">
+			<property name="bounds" value="310,5,105,97"/>
+			<property name="location_set_by_user" value="true"/>
+		</reference>
+		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.LocaleLink">
+			<property name="bounds" value="296,244,133,106"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.LocaleLink:region">
+				<property name="sourceAnchor" value="367,249"/>
+				<property name="targetAnchor" value="367,107"/>
+			</reference>
+		</reference>
+	</view>
+</nodeSet>

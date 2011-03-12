@@ -1,3 +1,6 @@
+package com.hp.it.spf.portal.cleansheet;
+
+import java.util.List;
 
 public class MenuItem {
 

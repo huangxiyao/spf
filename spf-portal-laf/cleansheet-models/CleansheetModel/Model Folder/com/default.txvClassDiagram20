@@ -2,11 +2,11 @@
 
 
 <nodeSet  version="1.1">
-	<view uin="V1hexuhgkx7bzsplny3f3">
+	<view uin="V1hexuhgl5y0t6xolsoap">
 		<property name="$defaultDiagram" value="true"/>
 		<property name="$metaclass" value="ClassDiagram20"/>
-		<reference referencedUin="design:view:::V1hexuhgl5y0t6xolsoap">
-			<property name="bounds" value="238,3,86,75"/>
+		<reference referencedUin="design:view:::exsxjgl5y1m8v-mp6ben">
+			<property name="bounds" value="0,0,86,75"/>
 			<property name="location_set_by_user" value="true"/>
 		</reference>
 	</view>
