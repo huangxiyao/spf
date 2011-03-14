@@ -101,37 +101,63 @@ public class HPSCModel {
 
 	boolean displayLocaleSelector;
 
-	
 	/**
 	 * This is the name of the portal site listed in the Page Header just below the HP logo.
 	 */
-	
+
 	String siteTitle;
 
-	
 	/**
 	 * This will be the localized page title for the specific page the user is currently visiting.  It is displayed just below the horizontal menu.
 	 */
-	
+
 	String pageTitle;
 
-	
 	/**
 	 * <p>The value of this property will be rendered as the tagline text immediately beneath the page title. This is an optional page element. If no value is specified, no tagline will be rendered.</p> <p></p>
 	 */
-	
+
 	String tagline;
-	
+
 	/**
 	 * <p>The value of this property will be rendered as the browser window title which is displayed in the title bar of the user's browser. If no value is specified for this property the Vignette JSP custom tag <code>&lt;vgn-portal:pageContentTitle /&gt;</code> will be used to render the window title.</p>
 	 */
-	
+
 	String windowTitle;
-	
+
 	/**
 	 * <p>????? - Need more definition on how these will work.</p> <p>Breadcrumbs are used to represent the current page's location in the site hierarchy and are displayed immediately above the page header. Breadcrumbs are optional page element.</p>
 	 */
 	
 	List<MenuItem> breadcrumbs;
+
+	
+	/**
+	 * This property determines whether there will be a 10px gutter space between portlets on the page.  If the value is set to true there will be a 10 pixel space between portlets.  If this value is set to false, then adjacent portlets line up with no separation between them.  Note: this applies to the space between portlets only, the outer edge spacing will be controlled by portletMarginEnabled. <p>default: true</p>
+	 */
+	
+	boolean portletGutterEnabled;
+
+	
+	/**
+	 * ???? - What do we allow to be chosen? <ul> <li>on some pages the gutterspace is off entirely</li> <li>on other pages it is white</li> <li>on some pages it is black</li> <li>on some pages it is dark gray (same color as horizontal nav)</li> <li>finally on other pages it is light gray</li> <li>default to pink ;) that way it will get updated quickly when wrong.</li> </ul>
+	 */
+	
+	String portletGutterStyle;
+
+	
+	/**
+	 * This property determines whether there will be a margin on the <span style='font-size:11.0pt;font-family:"Calibri","sans-serif"; mso-ascii-theme-font:minor-latin;mso-fareast-font-family:SimSun;mso-fareast-theme-font: minor-fareast;mso-hansi-theme-font:minor-latin;mso-bidi-font-family:"Times New Roman"; mso-bidi-theme-font:minor-bidi;mso-ansi-language:EN-US;mso-fareast-language: ZH-CN;mso-bidi-language:AR-SA'>OUTSIDE EDGE of the portlet page-display area: not just left/right edges, but top/bottom as well.<span style="mso-spacerun:yes">  </span></span>If this value is set to false, then there will be no margin on the outside edge of the portlets.. <p>default: true</p>
+	 */
+	
+	boolean portletMarginEnabled;
+
+	
+	/**
+	 * <p>???? - What do we allow to be chosen?</p> <ul> <li>sometimes the L/R margins are different color than the gutterspace,</li> <li> sometimes they are the same color as the gutterspace,</li> <li>sometimes they exist when otherwise there is NO gutterspace</li> <li>sometimes gutterspace may exist with NO margins (in principle at least; not shown in UI mockups but I think you should design for this case)</li> </ul>
+	 */
+	
+	String portletMarginStyle;
+
 
 }
