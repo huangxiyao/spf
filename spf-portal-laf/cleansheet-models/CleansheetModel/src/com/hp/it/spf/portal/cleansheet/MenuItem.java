@@ -9,7 +9,7 @@ public class MenuItem {
 	 */
 	final String id = null;
 
-	String title;
+	String linkText;
 
 	String url;
 
@@ -17,7 +17,7 @@ public class MenuItem {
 
 	String description;
 
-	String imageReference;
+	String imageURL;
 
 	boolean highlighted;
 
