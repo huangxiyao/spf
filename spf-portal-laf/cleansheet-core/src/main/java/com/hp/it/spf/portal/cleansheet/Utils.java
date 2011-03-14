@@ -602,7 +602,9 @@ public class Utils {
     	HttpSession session = request.getSession();
     	if (session.getAttribute("americas") == null) {
     	
-    		final String urlFormat = "/portal/site/hpsc/template.PUBLIC_SPF_SELECT_LOCALE/action.process/?spfSelectedLocale=%s-%s";
+        	String siteName = portalContext.getCurrentSite().getDNSName();
+        	System.out.println("dns name "+ siteName);
+    		final String urlFormat = "/portal/site/" + siteName + "/template.PUBLIC_SPF_SELECT_LOCALE/action.process/?spfSelectedLocale=%s-%s";
 	    	List<HyperLink> countryHyperlinks = null;
 	    	List<Locale> localesInZone = null;
 	    	 
