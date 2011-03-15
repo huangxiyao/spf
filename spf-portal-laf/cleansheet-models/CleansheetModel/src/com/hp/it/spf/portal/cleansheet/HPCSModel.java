@@ -1,13 +1,16 @@
 package com.hp.it.spf.portal.cleansheet;
 
 import java.util.List;
-import java.util.SortedSet;
 
 /**
  * Site Help is a link that appears on the right portion of the menu bar.  If this value is populated it will appear on the menu bar, if the URL or linkText is null it will not appear.  The link should take the user to a page that offers help related to the current site.
  */
 
-public class HPSCModel {
+public class HPCSModel {
+
+	private CountryLanguageLink selectedLocale;
+
+	AuthSource authSource;
 
 	/**
 	 * The fully-qualified URL to the User's profile page.  This URL will be used in conjunction with the &quot;Edit your profile&quot; hyperlink rendered at the top of the page.  The &quot;Edit your profile&quot; hyperlink is only rendered when the &quot;signInUrl&quot; and &quot;username&quot; properties both contain non-null values. <p>Note: For HPP users this will link to the HPP edit profile page, for Enterprise Directory users this should link to DirectoryWorks.</p>
@@ -45,16 +48,6 @@ public class HPSCModel {
 	private List<MenuItem> contactHP;
 
 	/**
-	 * ?????????? - how does this get populated?  I.e. how is it aware of the &quot;Latest...&quot; <p>This is an ordered list of menu items used to populate the &quot;Online Communities&quot; drop down icon in the upper right of the UI.  The list will be pre-populated with global hp.com values.  Application teams may choose to add a site specific MenuItem to the list or to replace the entire list with site specific values.  Note that images appear in the menu dropdown and therefore must be small, it is recommended to keep these images at 85x85 pixels.</p>
-	 */
-	private List<MenuItem> communities;
-
-	/**
-	 * This is an optional image of a [ + ] and [ - ] floating in the bottom right of screen.  When the user clicks on this link they will be taken to the feedback url given by this String.
-	 */
-	private String feedback;
-
-	/**
 	 * List of services where page can be shared.  This is an ordered list of MenuItem's.  The relevant values are id, linkText, url, alt, and imageURL.  Other attributes of MenuItem will be ignored. Note that images appear in the menu dropdown and therefore must be small, it is recommended to keep these images at 20x20 pixels or smaller. <p>Clicking the Share button will expand a menu of sharing options. The exact list of options is determined by the BU and should be optimized locally by featuring only the most popular sharing options per country. The list is ordered by popularity, in descending order (for instance, in the U.S. the first share icon would be Facebook). Clicking any of these links will close the Share menu and open a new browser tab/window with the corresponding sharing page for that particular service. Users are sharing the current page, so the page URL is forwarded to the sharing page of the service. The “Email” option opens a pop-up window.</p> <p>The recommendation is to have 2 - 6 sharing tools. However, the Share menu can accommodate up to 20 sharing tools, divided into 2 columns of 10. For instance, if there are 8 options, they will all display in a single column; if there are 12 options, the first column will include 10 and the second column will include the remaining 2.</p>
 	 */
 	private List<MenuItem> share;
@@ -74,17 +67,11 @@ public class HPSCModel {
 	 */
 	private List<MenuItem> footerLinks;
 
-	
 	/**
 	 * This is a like to the Global Help page for the current site.  The link will be placed on the right side of the horizontal navigation bar.
 	 */
-	
-	private MenuItem siteHelp;
 
-	/**
-	 * WORK IN PROGRESS <p>This is a Set of LocaleLinks that will be used to create the Locale Selector on the site.  The Locales will be sorted automatically based on the Region and localized Locale name.</p>
-	 */
-	private SortedSet<CountryLanguageLink> localSelector;
+	private MenuItem siteHelp;
 
 	/**
 	 * Determines whether to display the Locale selector.  If the value is true, the Locale selector will be available and the user will be able to change Locales using the Locale selector.  If the value is false the the current Locale will be indicated, but the user will not have the ability to change Locales. <p>default value: true</p>
@@ -150,7 +137,7 @@ public class HPSCModel {
 	 * <p>When the default search form is used, the value of this property will be passed to the HP.com search engine as the Omniture account identifier for the current site.  This is an optional value.  If supplied, this value is set as a hidden form field named &quot;hpo&quot; within the search form.</p> <p></p>
 	 */
 	private String searchOmnitureTag;
-	
+
 	/**
 	 * <p>The value of this property is passed to the HP.com search engine and is rendered on the search results as the text of the hyperlink that will return the user to the page where they initiated the search.  An example value might be something like &quot;Return to the HP Shopping site&quot;.  This value <b>must</b> be supplied whenever the default search form is used. This value is set as a hidden form field named &quot;hpn&quot; within the search form.</p> <p></p>
 	 */
@@ -165,17 +152,17 @@ public class HPSCModel {
 	 * <p>???? Is this needed?</p> <p>When the default search form is used, the value of this property is passed to the HP.com search engine and is used as the URL for the &quot;Contact HP&quot; hyperlink rendered on the search results page.  If no value is provided, the search results page will render a &quot;Contact HP&quot; hyperlink to points to the country gateway contact page. If supplied, this value is set as a hidden form field named &quot;hpa&quot; within the search form.</p> <p></p>
 	 */
 	private String searchContactUrl;
-	
+
 	/**
 	 * <p>This property is used to instruct the HP.com search engine to filter the search results so that only pages from a particular site are returned.  This value <b>must</b> be supplied whenever the search section name property is used.  See the <a href="http://www.hp.com/searchtools/contextual_builder.html">Contextual Search Builder</a> for instructions on creating a valid query prefix string. If supplied, this value is set as a hidden form field named &quot;qp&quot; within the search form.</p> <p></p>
 	 */
 	private String searchQueryPrefix;
-	
+
 	/**
 	 * <p>The default search form can be customized to return search results that are specific to a particular web site (or section).  This property is used to set the name of the local web site.  This value will be rendered next to a radio button that the user can select to indicate that they'd like their query to be constrained to the local site.  If no value is specified for this property then no radio buttons will be rendered as part of the search form.  Note that this property should always be used in conjunction with a valid value for the query prefix property (see below).  If supplied, this value is also set as a hidden form field named &quot;hps&quot; within the search form.</p> <p></p>
 	 */
 	private String searchSectionName;
-	
+
 	/**
 	 * <p>When the default search form is rendered, this property can be used to override the action URL to which the form will be posted.  If no value is supplied the default value of &quot;http://www.hp.com/search&quot; will be used.</p>
 	 */

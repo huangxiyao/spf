@@ -14,140 +14,16 @@
 				<property name="targetAnchor" value="668,301"/>
 				<property name="bendpoints" value="701,297,701,330,668,330"/>
 				<property name="smooth_bendpoints" value="701,297,701,330,668,330"/>
-				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.MenuItem:subMenu">
-					<property name="bounds" value="682,275,10,19"/>
-				</reference>
 				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.MenuItem:subMenu">
 					<property name="bounds" value="671,302,21,19"/>
 				</reference>
-			</reference>
-		</reference>
-		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.HPSCModel">
-			<property name="bounds" value="55,55,200,556"/>
-			<property name="location_set_by_user" value="true"/>
-			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPSCModel.contactHP">
-				<property name="bounds" value="0,106,0,0"/>
-				<property name="location_set_by_user" value="true"/>
-			</reference>
-			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPSCModel.username">
-				<property name="bounds" value="-1,90,0,0"/>
-				<property name="location_set_by_user" value="true"/>
-			</reference>
-			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPSCModel.signInURL">
-				<property name="bounds" value="0,47,0,0"/>
-				<property name="location_set_by_user" value="true"/>
-			</reference>
-			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPSCModel.tagline">
-			</reference>
-			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:siteHelp">
-				<property name="sourceAnchor" value="260,156"/>
-				<property name="targetAnchor" value="500,156"/>
-			</reference>
-			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPSCModel.metricURL">
-			</reference>
-			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:share">
-				<property name="sourceAnchor" value="260,140"/>
-				<property name="targetAnchor" value="500,140"/>
-				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:share">
-					<property name="bounds" value="270,118,10,19"/>
-				</reference>
-				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:share">
-					<property name="bounds" value="469,118,21,19"/>
-				</reference>
-			</reference>
-			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPSCModel.searchReturnText">
-				<property name="bounds" value="-1,431,0,0"/>
-				<property name="location_set_by_user" value="true"/>
-			</reference>
-			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:breadcrumbs">
-				<property name="sourceAnchor" value="260,196"/>
-				<property name="targetAnchor" value="500,196"/>
-				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:breadcrumbs">
-					<property name="bounds" value="270,174,10,19"/>
-				</reference>
-				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:breadcrumbs">
-					<property name="bounds" value="469,174,21,19"/>
-				</reference>
-			</reference>
-			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPSCModel.signOutURL">
-				<property name="bounds" value="0,47,0,0"/>
-				<property name="location_set_by_user" value="true"/>
-			</reference>
-			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:feedback">
-				<property name="sourceAnchor" value="260,172"/>
-				<property name="targetAnchor" value="500,172"/>
-			</reference>
-			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:subscribe">
-				<property name="sourceAnchor" value="260,132"/>
-				<property name="targetAnchor" value="500,132"/>
-				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:subscribe">
-					<property name="bounds" value="290,110,10,19"/>
-				</reference>
-				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:subscribe">
-					<property name="bounds" value="439,110,21,19"/>
-				</reference>
-			</reference>
-			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPSCModel.portletMarginStyle">
-				<property name="bounds" value="0,371,0,0"/>
-				<property name="location_set_by_user" value="true"/>
-			</reference>
-			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPSCModel.portletGutterStyle">
-			</reference>
-			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:footerLinks">
-				<property name="sourceAnchor" value="260,164"/>
-				<property name="targetAnchor" value="500,164"/>
-				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:footerLinks">
-					<property name="bounds" value="469,142,21,19"/>
-				</reference>
-				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:footerLinks">
-					<property name="bounds" value="270,142,10,19"/>
-				</reference>
-			</reference>
-			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:printableURL">
-				<property name="sourceAnchor" value="260,148"/>
-				<property name="targetAnchor" value="500,148"/>
-			</reference>
-			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:contactHP">
-				<property name="sourceAnchor" value="260,180"/>
-				<property name="targetAnchor" value="500,180"/>
-				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:contactHP">
-					<property name="bounds" value="310,158,10,19"/>
-				</reference>
-				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:contactHP">
-					<property name="bounds" value="409,158,21,19"/>
-				</reference>
-			</reference>
-			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:communities">
-				<property name="sourceAnchor" value="260,188"/>
-				<property name="targetAnchor" value="500,188"/>
-				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:communities">
-					<property name="bounds" value="439,166,21,19"/>
-				</reference>
-				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:communities">
-					<property name="bounds" value="290,166,10,19"/>
-				</reference>
-			</reference>
-			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPSCModel.displayLocaleSelector">
-				<property name="bounds" value="0,242,0,0"/>
-				<property name="location_set_by_user" value="true"/>
-			</reference>
-			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPSCModel.breadcrumbs">
-				<property name="bounds" value="0,301,0,0"/>
-				<property name="location_set_by_user" value="true"/>
-			</reference>
-			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:localSelector">
-				<property name="sourceAnchor" value="260,413"/>
-				<property name="targetAnchor" value="380,413"/>
-				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:localSelector">
-					<property name="bounds" value="349,391,21,19"/>
-				</reference>
-				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPSCModel:localSelector">
-					<property name="bounds" value="270,391,10,19"/>
+				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.MenuItem:subMenu">
+					<property name="bounds" value="682,275,10,19"/>
 				</reference>
 			</reference>
 		</reference>
 		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.Region">
-			<property name="bounds" value="435,515,82,97"/>
+			<property name="bounds" value="395,515,82,97"/>
 			<property name="location_set_by_user" value="true"/>
 		</reference>
 		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.CountryLanguageLink">
@@ -161,6 +37,141 @@
 				<property name="sourceAnchor" value="481,466"/>
 				<property name="targetAnchor" value="481,520"/>
 			</reference>
+		</reference>
+		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.HPCSModel">
+			<property name="bounds" value="55,55,200,541"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:authSource">
+				<property name="sourceAnchor" value="260,295"/>
+				<property name="targetAnchor" value="320,295"/>
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.searchReturnText">
+				<property name="bounds" value="-1,431,0,0"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.metricURL">
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.displayLocaleSelector">
+				<property name="bounds" value="0,242,0,0"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:footerLinks">
+				<property name="sourceAnchor" value="260,164"/>
+				<property name="targetAnchor" value="500,164"/>
+				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:footerLinks">
+					<property name="bounds" value="270,142,10,19"/>
+				</reference>
+				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:footerLinks">
+					<property name="bounds" value="469,142,21,19"/>
+				</reference>
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.signOutURL">
+				<property name="bounds" value="0,47,0,0"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.breadcrumbs">
+				<property name="bounds" value="0,301,0,0"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:share">
+				<property name="sourceAnchor" value="260,140"/>
+				<property name="targetAnchor" value="500,140"/>
+				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:share">
+					<property name="bounds" value="469,118,21,19"/>
+				</reference>
+				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:share">
+					<property name="bounds" value="270,118,10,19"/>
+				</reference>
+			</reference>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:contactHP">
+				<property name="sourceAnchor" value="260,180"/>
+				<property name="targetAnchor" value="500,180"/>
+				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:contactHP">
+					<property name="bounds" value="290,158,10,19"/>
+				</reference>
+				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:contactHP">
+					<property name="bounds" value="439,158,21,19"/>
+				</reference>
+			</reference>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:siteHelp">
+				<property name="sourceAnchor" value="260,156"/>
+				<property name="targetAnchor" value="500,156"/>
+			</reference>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:subscribe">
+				<property name="sourceAnchor" value="260,132"/>
+				<property name="targetAnchor" value="500,132"/>
+				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:subscribe">
+					<property name="bounds" value="439,110,21,19"/>
+				</reference>
+				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:subscribe">
+					<property name="bounds" value="290,110,10,19"/>
+				</reference>
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.contactHP">
+				<property name="bounds" value="0,106,0,0"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:breadcrumbs">
+				<property name="sourceAnchor" value="260,196"/>
+				<property name="targetAnchor" value="500,196"/>
+				<reference referencedUin="label:supplierCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:breadcrumbs">
+					<property name="bounds" value="469,174,21,19"/>
+				</reference>
+				<reference referencedUin="label:clientCardinality:jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:breadcrumbs">
+					<property name="bounds" value="270,174,10,19"/>
+				</reference>
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.username">
+				<property name="bounds" value="-1,90,0,0"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:selectedLocale">
+				<property name="sourceAnchor" value="260,413"/>
+				<property name="targetAnchor" value="380,413"/>
+			</reference>
+			<reference referencedUin="jdt:l_ast:src:com.hp.it.spf.portal.cleansheet.HPCSModel:printableURL">
+				<property name="sourceAnchor" value="260,148"/>
+				<property name="targetAnchor" value="500,148"/>
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.tagline">
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.signInURL">
+				<property name="bounds" value="0,47,0,0"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.authSource">
+				<property name="bounds" value="0,45,0,0"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.portletMarginStyle">
+				<property name="bounds" value="0,371,0,0"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.HPCSModel.portletGutterStyle">
+			</reference>
+		</reference>
+		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.LocalSelector">
+			<property name="bounds" value="535,515,200,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.LocalSelector.localSelector">
+				<property name="bounds" value="6,-4,0,0"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.holdme">
+			<property name="bounds" value="515,675,80,80"/>
+			<property name="location_set_by_user" value="true"/>
+		</reference>
+		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.Research">
+			<property name="bounds" value="157,669,112,80"/>
+			<reference referencedUin="jdt:e_field:src:com.hp.it.spf.portal.cleansheet.Research.feedback">
+				<property name="bounds" value="17,17,0,0"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="jdt:e_class:src:com.hp.it.spf.portal.cleansheet.AuthSource">
+			<property name="bounds" value="315,215,97,94"/>
+			<property name="location_set_by_user" value="true"/>
 		</reference>
 	</view>
 </nodeSet>
