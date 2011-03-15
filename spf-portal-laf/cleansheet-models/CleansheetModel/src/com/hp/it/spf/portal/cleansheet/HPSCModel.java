@@ -128,36 +128,86 @@ public class HPSCModel {
 	/**
 	 * <p>????? - Need more definition on how these will work.</p> <p>Breadcrumbs are used to represent the current page's location in the site hierarchy and are displayed immediately above the page header. Breadcrumbs are optional page element.</p>
 	 */
-	
+
 	private List<MenuItem> breadcrumbs;
 
-	
 	/**
 	 * This property determines whether there will be a 10px gutter space between portlets on the page.  If the value is set to true there will be a 10 pixel space between portlets.  If this value is set to false, then adjacent portlets line up with no separation between them.  Note: this applies to the space between portlets only, the outer edge spacing will be controlled by portletMarginEnabled. <p>default: true</p>
 	 */
-	
+
 	private boolean portletGutterEnabled;
 
-	
 	/**
 	 * ???? - What do we allow to be chosen? <ul> <li>on some pages the gutterspace is off entirely</li> <li>on other pages it is white</li> <li>on some pages it is black</li> <li>on some pages it is dark gray (same color as horizontal nav)</li> <li>finally on other pages it is light gray</li> <li>default to pink ;) that way it will get updated quickly when wrong.</li> </ul>
 	 */
-	
+
 	private String portletGutterStyle;
 
-	
 	/**
 	 * This property determines whether there will be a margin on the <span style='font-size:11.0pt;font-family:"Calibri","sans-serif"; mso-ascii-theme-font:minor-latin;mso-fareast-font-family:SimSun;mso-fareast-theme-font: minor-fareast;mso-hansi-theme-font:minor-latin;mso-bidi-font-family:"Times New Roman"; mso-bidi-theme-font:minor-bidi;mso-ansi-language:EN-US;mso-fareast-language: ZH-CN;mso-bidi-language:AR-SA'>OUTSIDE EDGE of the portlet page-display area: not just left/right edges, but top/bottom as well.<span style="mso-spacerun:yes">  </span></span>If this value is set to false, then there will be no margin on the outside edge of the portlets.. <p>default: true</p>
 	 */
-	
+
 	private boolean portletMarginEnabled;
 
-	
 	/**
 	 * <p>???? - What do we allow to be chosen?</p> <ul> <li>sometimes the L/R margins are different color than the gutterspace,</li> <li> sometimes they are the same color as the gutterspace,</li> <li>sometimes they exist when otherwise there is NO gutterspace</li> <li>sometimes gutterspace may exist with NO margins (in principle at least; not shown in UI mockups but I think you should design for this case)</li> </ul>
 	 */
-	
+
 	private String portletMarginStyle;
 
+	/**
+	 * Determines whether the search box exists in the header ready for text or if only the Search icon is displayed.
+	 */
+	private boolean searchBoxDisplayed;
+
+	/**
+	 * <p>When the default search form is used, the value of this property will be passed to HP.com search engine as the audience tag.  This is an optional value.  If supplied, this value is set as a hidden form field named &quot;h_audience&quot; within the search form.  For more information on the audience tag, see the <a href="http://www.hp.com/searchtools/contextual_builder.html">Contextual Site Builder</a> page.</p> <p></p>
+	 */
+
+	private String searchAudience;
+
+	/**
+	 * <p>When the default search form is used, the value of this property will be passed to the HP.com search engine as the Omniture account identifier for the current site.  This is an optional value.  If supplied, this value is set as a hidden form field named &quot;hpo&quot; within the search form.</p> <p></p>
+	 */
+
+	private String searchOmnitureTag;
+
+	
+	/**
+	 * <p>The value of this property is passed to the HP.com search engine and is rendered on the search results as the text of the hyperlink that will return the user to the page where they initiated the search.  An example value might be something like &quot;Return to the HP Shopping site&quot;.  This value <b>must</b> be supplied whenever the default search form is used. This value is set as a hidden form field named &quot;hpn&quot; within the search form.</p> <p></p>
+	 */
+	
+	private String searchReturnText;
+
+	/**
+	 * <p>When the default search form is used, the value of this property is passed to the HP.com search engine and is used as the URL for the hyperlink on the search results page that will return the user to the site where the search originated.  If no value is provided, the search engine will default to using the URL from which search query was posted.  If supplied, this value is set as a hidden form field named &quot;hpr&quot; within the search form.</p> <p></p>
+	 */
+
+	private final String searchReturnUrl;
+
+	/**
+	 * <p>???? Is this needed?</p> <p>When the default search form is used, the value of this property is passed to the HP.com search engine and is used as the URL for the &quot;Contact HP&quot; hyperlink rendered on the search results page.  If no value is provided, the search results page will render a &quot;Contact HP&quot; hyperlink to points to the country gateway contact page. If supplied, this value is set as a hidden form field named &quot;hpa&quot; within the search form.</p> <p></p>
+	 */
+
+	private String searchContactUrl;
+
+	
+	/**
+	 * <p>This property is used to instruct the HP.com search engine to filter the search results so that only pages from a particular site are returned.  This value <b>must</b> be supplied whenever the search section name property is used.  See the <a href="http://www.hp.com/searchtools/contextual_builder.html">Contextual Search Builder</a> for instructions on creating a valid query prefix string. If supplied, this value is set as a hidden form field named &quot;qp&quot; within the search form.</p> <p></p>
+	 */
+	
+	private String searchQueryPrefix;
+	
+	/**
+	 * <p>The default search form can be customized to return search results that are specific to a particular web site (or section).  This property is used to set the name of the local web site.  This value will be rendered next to a radio button that the user can select to indicate that they'd like their query to be constrained to the local site.  If no value is specified for this property then no radio buttons will be rendered as part of the search form.  Note that this property should always be used in conjunction with a valid value for the query prefix property (see below).  If supplied, this value is also set as a hidden form field named &quot;hps&quot; within the search form.</p> <p></p>
+	 */
+	
+	private String searchSectionName;
+	
+	/**
+	 * <p>When the default search form is rendered, this property can be used to override the action URL to which the form will be posted.  If no value is supplied the default value of &quot;http://www.hp.com/search&quot; will be used.</p>
+	 */
+	
+	private String searchUrl;
 
 }
