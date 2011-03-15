@@ -1,6 +1,6 @@
 package com.hp.it.spf.portal.cleansheet;
 
-public enum LocaleRegion {
+public enum Region {
 	Americas,
 
 	EMEA,

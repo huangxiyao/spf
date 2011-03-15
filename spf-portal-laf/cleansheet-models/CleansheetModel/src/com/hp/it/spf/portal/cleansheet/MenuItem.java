@@ -7,21 +7,21 @@ public class MenuItem {
 	/**
 	 * bollo comment <p></p> 
 	 */
-	final String id = null;
+	private final String id = null;
 
-	String linkText;
+	private String linkText;
 
-	String url;
+	private String url;
 
-	String alt;
+	private String alt;
 
-	String description;
+	private String description;
 
-	String imageURL;
+	private String imageURL;
 
-	boolean highlighted;
+	private boolean highlighted;
 
-	boolean visible;
+	private boolean visible;
 
-	List<MenuItem> subMenu;
+	private List<MenuItem> subMenu;
 }

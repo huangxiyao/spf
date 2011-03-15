@@ -2,18 +2,17 @@ package com.hp.it.spf.portal.cleansheet;
 
 import java.util.Locale;
 
-public class LocaleLink {
+public class CountryLanguageLink {
 
-	
+	private Locale locale;
+
 	/**
 	 * A Locale must exist in one of three Regions, this must be &quot;Americas,&quot; &quot;EMEA,&quot; or &quot;AsiaPac.&quot;
 	 */
 	
-	LocaleRegion region;
+	private Region region;
 
-	Locale locale;
+	private String countryLanguageName;
 
-	String localeName;
-
-	String localURL;
+	private String countryLanguageURL;
 }
