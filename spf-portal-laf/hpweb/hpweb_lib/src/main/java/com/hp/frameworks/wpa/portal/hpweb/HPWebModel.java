@@ -1,8 +1,11 @@
 package com.hp.frameworks.wpa.portal.hpweb;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -20,164 +23,186 @@ import java.util.Properties;
  * class for its configurable properties.
  */
 public class HPWebModel extends com.hp.frameworks.wpa.hpweb.HPWebModel {
-	
-	private String windowTitle;
-	private String leftPromotion;
-	private String topPromotion;
-	private String searchWidget;
-	private String localeSelector;
-	private boolean generateBreadcrumbs = false;
-	private Properties metaInfos;
-	private String helpUrl;
-	private String helpText;
-	private List topMenuItems = new ArrayList();
 
-	public HPWebModel() {
-		super();
-		metaInfos = new Properties();
-		// Set default
-		setCartItemCount(0);
-	}
+    private String windowTitle;
+    private String leftPromotion;
+    private String topPromotion;
+    private String searchWidget;
+    private String localeSelector;
+    private boolean generateBreadcrumbs = false;
+    private Properties metaInfos = new Properties();
+    private List<MetaTag> metaTags = new ArrayList<MetaTag>();
+    private String helpUrl;
+    private String helpText;
+    private List topMenuItems = new ArrayList();
 
-	/**
-	 * Get the top promotion area html string.
-	 */
-	public String getTopPromotion() {
-		return topPromotion;
-	}
+    public HPWebModel() {
+        super();
+        // Set default
+        setCartItemCount(0);
+    }
 
-	/**
-	 * Set the html for the top promotion area.
-	 */
-	public void setTopPromotion(String topPromotion) {
-		this.topPromotion = topPromotion;
-	}
+    /**
+     * Get the top promotion area html string.
+     */
+    public String getTopPromotion() {
+        return topPromotion;
+    }
 
-	/**
-	 * Get the left promotion area html string.
-	 */
-	public String getLeftPromotion() {
-		return leftPromotion;
-	}
+    /**
+     * Set the html for the top promotion area.
+     */
+    public void setTopPromotion(String topPromotion) {
+        this.topPromotion = topPromotion;
+    }
 
-	/**
-	 * Set the html for the left promotion area.
-	 */
-	public void setLeftPromotion(String leftPromotion) {
-		this.leftPromotion = leftPromotion;
-	}
+    /**
+     * Get the left promotion area html string.
+     */
+    public String getLeftPromotion() {
+        return leftPromotion;
+    }
 
-	/**
-	 * Get the search widget html string.
-	 */
-	public String getSearchWidget() {
-		return searchWidget;
-	}
+    /**
+     * Set the html for the left promotion area.
+     */
+    public void setLeftPromotion(String leftPromotion) {
+        this.leftPromotion = leftPromotion;
+    }
 
-	/**
-	 * Set the html for the search widget.
-	 */
-	public void setSearchWidget(String searchWidget) {
-		this.searchWidget = searchWidget;
-	}
+    /**
+     * Get the search widget html string.
+     */
+    public String getSearchWidget() {
+        return searchWidget;
+    }
 
-	/**
-	 * Get the locale selector html string.
-	 */
-	public String getLocaleSelector() {
-		return localeSelector;
-	}
+    /**
+     * Set the html for the search widget.
+     */
+    public void setSearchWidget(String searchWidget) {
+        this.searchWidget = searchWidget;
+    }
 
-	/**
-	 * Set the html for the locale selector.
-	 */
-	public void setLocaleSelector(String localeSelector) {
-		this.localeSelector = localeSelector;
-	}
+    /**
+     * Get the locale selector html string.
+     */
+    public String getLocaleSelector() {
+        return localeSelector;
+    }
 
-	/**
-	 * Get the boolean indicator for generating the breadcrumbs.
-	 */
-	public boolean isGenerateBreadcrumbs() {
-		return generateBreadcrumbs;
-	}
+    /**
+     * Set the html for the locale selector.
+     */
+    public void setLocaleSelector(String localeSelector) {
+        this.localeSelector = localeSelector;
+    }
 
-	/**
-	 * Set the boolean indicator for generating the breadcrumbs.
-	 */
-	public void setGenerateBreadcrumbs(boolean generateBreadcrumbs) {
-		this.generateBreadcrumbs = generateBreadcrumbs;
-	}
+    /**
+     * Get the boolean indicator for generating the breadcrumbs.
+     */
+    public boolean isGenerateBreadcrumbs() {
+        return generateBreadcrumbs;
+    }
 
-	/**
-	 * Get the browser window title.
-	 */
-	public String getWindowTitle() {
-		return windowTitle;
-	}
+    /**
+     * Set the boolean indicator for generating the breadcrumbs.
+     */
+    public void setGenerateBreadcrumbs(boolean generateBreadcrumbs) {
+        this.generateBreadcrumbs = generateBreadcrumbs;
+    }
 
-	/**
-	 * Set the browser window title.
-	 */
-	public void setWindowTitle(String windowTitle) {
-		this.windowTitle = windowTitle;
-	}
+    /**
+     * Get the browser window title.
+     */
+    public String getWindowTitle() {
+        return windowTitle;
+    }
 
-	/**
-	 * Get the <code>&lt;meta name="name" contents="value"&gt;</code>
-	 * elements to the <code>&lt;head&gt;</code> element.
-	 */
-	public Properties getMetaInfos() {
-		return metaInfos;
-	}
+    /**
+     * Set the browser window title.
+     */
+    public void setWindowTitle(String windowTitle) {
+        this.windowTitle = windowTitle;
+    }
 
-	/**
-	 * Set additional <code>&lt;meta name="name" contents="value"&gt;</code>
-	 * elements to the <code>&lt;head&gt;</code> element.
-	 */
-	public void setMetaInfos(Properties metaInfos) {
-		this.metaInfos = metaInfos;
-	}
+    /**
+     * Get the <code>&lt;meta {type}="{typeValue}" content="{content}"&gt;</code>
+     * elements to the <code>&lt;head&gt;</code> element.
+     */
+    public List<MetaTag> getMetaTags() {
+        return metaTags;
+    }
 
-	/**
-	 * Get the Help link url.
-	 */
-	public String getHelpUrl() {
-		return helpUrl;
-	}
+    /**
+     * Set additional <code>&lt;meta {type}}="{typeValue}" content="{content}}"&gt;</code>
+     * elements to the <code>&lt;head&gt;</code> element.
+     */
+    public void setMetaTags(List<MetaTag> metaTags) {
+        this.metaTags = metaTags;
+    }
 
-	/**
-	 * Set the Help link url.
-	 */
-	public void setHelpUrl(String helpUrl) {
-		this.helpUrl = helpUrl;
-	}
+    /**
+     * Get the <code>&lt;meta name="name" contents="value"&gt;</code>
+     * elements to the <code>&lt;head&gt;</code> element.
+     *
+     * @deprecated This method has been deprecated as it does not allow to specify meta tags
+     * which use "http-equiv". Use {@link #getMetaTags()} instead.
+     */
+    public Properties getMetaInfos() {
+        return metaInfos;
+    }
 
-	/**
-	 * Get the Help link text.
-	 */
-	public String getHelpText() {
-		return helpText;
-	}
+    /**
+     * Set additional <code>&lt;meta name="name" contents="value"&gt;</code>
+     * elements to the <code>&lt;head&gt;</code> element.
+     *
+     * @deprecated This method has been deprecated as it does not allow to specify meta tags
+     * which use "http-equiv". Use {@link #setMetaTags(java.util.List)} instead.
+     */
+    public void setMetaInfos(Properties metaInfos) {
+        this.metaInfos = metaInfos;
+    }
 
-	/**
-	 * Set the Help link text.
-	 */
-	public void setHelpText(String helpText) {
-		this.helpText = helpText;
-	}
+    /**
+     * Get the Help link url.
+     */
+    public String getHelpUrl() {
+        return helpUrl;
+    }
 
-	/**
-	 * Set the top menu item list.
-	 */
-	public void setTopMenuItems(List topMenuItems) {
-		this.topMenuItems = topMenuItems;
-	}
+    /**
+     * Set the Help link url.
+     */
+    public void setHelpUrl(String helpUrl) {
+        this.helpUrl = helpUrl;
+    }
 
-	/**
-	 * Get the top menu item list.
-	 */
-	public List getTopMenuItems() {
-		return topMenuItems;
-	}
+    /**
+     * Get the Help link text.
+     */
+    public String getHelpText() {
+        return helpText;
+    }
+
+    /**
+     * Set the Help link text.
+     */
+    public void setHelpText(String helpText) {
+        this.helpText = helpText;
+    }
+
+    /**
+     * Set the top menu item list.
+     */
+    public void setTopMenuItems(List topMenuItems) {
+        this.topMenuItems = topMenuItems;
+    }
+
+    /**
+     * Get the top menu item list.
+     */
+    public List getTopMenuItems() {
+        return topMenuItems;
+    }
 }

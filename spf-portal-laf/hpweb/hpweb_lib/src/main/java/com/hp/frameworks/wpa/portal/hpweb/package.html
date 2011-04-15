@@ -1931,11 +1931,14 @@ collection script for the current locale will be used.</p>
 </table>
 
 <h3 id="metaElements">7.53 Meta Elements</h3>
-<p>This property will add additional <code>&lt;meta name=&quot;&lt;name&gt;&quot; 
-contents=&quot;&lt;value&gt;&quot;&gt;</code> elements to the <code>&lt;head&gt;</code> 
-element.&nbsp; Retrieve the <code>java.util.Properties</code> object and use the
-<code>setProperty(name, value)</code> method to include additional <code>&lt;meta&gt;</code> 
-elements.</p>
+<p>This property will add additional <code>&lt;meta {type}=&quot;{typeValue}&quot;
+content=&quot;{content}&quot;&gt;</code> elements to the <code>&lt;head&gt;</code>
+element. {type} should be one of: name, http-equiv, scheme. {typeValue} should be appropriate
+for the given {type}, e.g. &quot;keywords&quot; can be used for type &quot;name&quot;,
+&quot;content-type&quot; can be used for type &quot;http-equiv&quot;, etc...&nbsp;
+Retrieve the <code>java.util.List&lt;MetaTag&gt;</code> object and use the
+<code>add(new {@link com.hp.frameworks.wpa.portal.hpweb.MetaTag}(type, typeValue, content))</code>
+method to include additional <code>&lt;meta&gt;</code> elements.</p>
 
 <table class="props">
 <tr>
@@ -1949,7 +1952,7 @@ elements.</p>
 	</tr>
 	<tr>
 		<th>HPWebModel Property:</th>		
-		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#getMetaInfos()}</td>
+		<td>{@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#getMetaTags()}</td>
 	</tr>
 </table>
 
@@ -1966,6 +1969,13 @@ The following meta elements are included on each page:
 	</ul>
 <li>&lt;meta name="hp_design_version" content="hpweb.1.2j"&gt;
 </ul>
+</p>
+
+<p>
+Note that {@link com.hp.frameworks.wpa.portal.hpweb.HPWebModel#getMetaInfos()}
+has been deprecated. All the properties added to it continue to be rendered as
+<code>&lt;meta name=&quot;{propertyName}&quot; content=&quot;{propertyValue}&quot;&gt;</code>
+elements.
 </p>
 
 <h3 id="helpText">7.54 Help Link Text</h3>

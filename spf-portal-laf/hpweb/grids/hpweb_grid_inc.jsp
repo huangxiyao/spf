@@ -183,7 +183,10 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 <html lang="<%= languageTag %>">
 <head>
 	<vgn-portal:pageContentTitle />
-	
+<c:forEach var="metaTag" items="${HPWebModel.metaTags}" varStatus="status">
+	<meta ${metaTag.type}="${metaTag.typeValue}" content="${metaTag.content}">
+</c:forEach>
+
 	<%-- Override default window title with one from hpweb model, if it exists.
 		 Also, Vignette may surround <span> element around the title if
 		 it is retrieved from properties, so need to remove them. 
@@ -212,8 +215,14 @@ args.put("themeColor", pageContext.getAttribute("themeColor"));
 		<meta name="target_country" content="${countryTag}">
 	</c:if>
 	<meta name="hp_design_version" content="hpweb.1.2j">
-	
-<c:forEach var="metaInfo" items="${HPWebModel.metaInfos}" varStatus="status">	
+
+<%--
+    The metaInfos approach below is deprecated as it does not allow to use
+    http-equiv meta tags. It is kept only for backward compatibility with
+    existing config layout code. Above, just below the title is the new way
+    the meta tags are rendered.
+--%>
+<c:forEach var="metaInfo" items="${HPWebModel.metaInfos}" varStatus="status">
 	<meta name="${metaInfo.key}" content="${metaInfo.value}">
 </c:forEach>
 
