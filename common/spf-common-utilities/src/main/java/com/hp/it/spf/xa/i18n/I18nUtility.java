@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -606,14 +608,18 @@ public class I18nUtility {
 	    int flags = 0;
 	    Locale sortInLocale = Locale.getDefault();
 	    Locale displayInLocale = null;
+	    Collator collator = Collator.getInstance(sortInLocale);
+	    Map<Locale, String> localeStringMap = new HashMap<Locale, String>();
 
 	    public void setFlags(int pFlags) {
 		flags = pFlags;
 	    }
 
 	    public void setSortLocale(Locale pSortInLocale) {
-		if (pSortInLocale != null)
+		if (pSortInLocale != null) {
 		    sortInLocale = pSortInLocale;
+		    collator = Collator.getInstance(sortInLocale);
+		}
 	    }
 
 	    public void setDisplayLocale(Locale pDisplayInLocale) {
@@ -622,35 +628,42 @@ public class I18nUtility {
 	    }
 
 	    public int compare(Locale loc1, Locale loc2) {
-		String s1 = "";
-		String s2 = "";
-		int outcome = 0;
-		Collator collator = Collator.getInstance(sortInLocale);
-		if (loc1 != null) {
-		    Locale inLocale = displayInLocale;
-		    if (inLocale == null)
-			inLocale = loc1;
-		    if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
-			s1 = loc1.getDisplayCountry(inLocale)
-				+ loc1.getDisplayLanguage(inLocale)
-				+ loc1.getDisplayVariant(inLocale);
-		    else
-			s1 = loc1.getDisplayLanguage(inLocale)
-				+ loc1.getDisplayCountry(inLocale)
-				+ loc1.getDisplayVariant(inLocale);
+		String s1 = localeStringMap.get(loc1);
+		String s2 = localeStringMap.get(loc2);
+		int outcome;
+		if (s1 == null) {
+			s1 = "";
+			if (loc1 != null) {
+			    Locale inLocale = displayInLocale;
+			    if (inLocale == null)
+				inLocale = loc1;
+			    if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
+				s1 = loc1.getDisplayCountry(inLocale)
+					+ loc1.getDisplayLanguage(inLocale)
+					+ loc1.getDisplayVariant(inLocale);
+			    else
+				s1 = loc1.getDisplayLanguage(inLocale)
+					+ loc1.getDisplayCountry(inLocale)
+					+ loc1.getDisplayVariant(inLocale);
+			}
+			localeStringMap.put(loc1, s1);//Cache the fixed string for each locale in the map.
 		}
-		if (loc2 != null) {
-		    Locale inLocale = displayInLocale;
-		    if (inLocale == null)
-			inLocale = loc2;
-		    if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
-			s2 = loc2.getDisplayCountry(inLocale)
-				+ loc2.getDisplayLanguage(inLocale)
-				+ loc2.getDisplayVariant(inLocale);
-		    else
-			s2 = loc2.getDisplayLanguage(inLocale)
-				+ loc2.getDisplayCountry(inLocale)
-				+ loc2.getDisplayVariant(inLocale);
+		if (s2 == null) {
+			s2 = "";
+			if (loc2 != null) {
+			    Locale inLocale = displayInLocale;
+			    if (inLocale == null)
+				inLocale = loc2;
+			    if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
+				s2 = loc2.getDisplayCountry(inLocale)
+					+ loc2.getDisplayLanguage(inLocale)
+					+ loc2.getDisplayVariant(inLocale);
+			    else
+				s2 = loc2.getDisplayLanguage(inLocale)
+					+ loc2.getDisplayCountry(inLocale)
+					+ loc2.getDisplayVariant(inLocale);
+			}
+			localeStringMap.put(loc2, s2);
 		}
 		if ((flags & LOCALE_DESCENDING) == LOCALE_DESCENDING)
 		    outcome = collator.compare(s2, s1);
