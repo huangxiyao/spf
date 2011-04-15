@@ -108,10 +108,8 @@
 	</dependencies>
 
 	<properties>
-		<!-- local copy of hpweb-core.jar is packaged in car, and not the same 
-			version as defined version. -->
-		<hpweb-core-version>4.5.0</hpweb-core-version>
-		<hpweb-resources-version>4.5.0</hpweb-resources-version>
+		<hpweb-core-version>4.5.1-SNAPSHOT</hpweb-core-version>
+		<hpweb-resources-version>4.5.1-SNAPSHOT</hpweb-resources-version>
 		<wpa-layout-manager-version>4.2.0</wpa-layout-manager-version>
 	</properties>
 
