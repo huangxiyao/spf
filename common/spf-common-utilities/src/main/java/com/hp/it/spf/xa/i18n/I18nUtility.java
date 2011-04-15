@@ -38,7 +38,7 @@ import java.text.Collator;
  * Portal and portlet code should not import or try to instantiate this class,
  * but use the portal or portlet <code>I18nUtility</code> class instead, as
  * appropriate.
- * 
+ *
  * @author <link href="liping.yan@hp.com">Liping Yan</link>
  * @author <link href="ying-zhi.wu@hp.com">Oliver</link>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
@@ -134,16 +134,16 @@ public class I18nUtility {
      * built into the JVM for the {@link java.util.TimeZone} class. Returns null
      * when given null parameters.
      * </p>
-     * 
+     *
      * @param timezone
      *            A time zone.
      * @param inLocale
      *            A locale.
      * @return The current localized timezone display name.
      */
-    public static String getLongTimezoneDisplayName(TimeZone timezone,
-	    Locale inLocale) {
-	return getLongTimezoneDisplayName(null, timezone, inLocale);
+    public static String getLongTimezoneDisplayName(TimeZone timezone, Locale inLocale)
+    {
+        return getLongTimezoneDisplayName(null, timezone, inLocale);
     }
 
     /**
@@ -156,7 +156,7 @@ public class I18nUtility {
      * the daylight calculation). This uses the translations built into the JVM
      * for the {@link java.util.TimeZone} class.
      * </p>
-     * 
+     *
      * @param datetime
      *            Time to use for deciding whether it is daylight time.
      * @param timezone
@@ -166,17 +166,19 @@ public class I18nUtility {
      * @return The localized timezone display name at that date and time.
      */
     public static String getLongTimezoneDisplayName(Date datetime,
-	    TimeZone timezone, Locale inLocale) {
-	if (timezone == null || inLocale == null) {
-	    return null;
-	}
-	if (datetime == null) {
-	    return timezone.getDisplayName(timezone.inDaylightTime(new Date()),
-		    TimeZone.LONG, inLocale);
-	} else {
-	    return timezone.getDisplayName(timezone.inDaylightTime(datetime),
-		    TimeZone.LONG, inLocale);
-	}
+                                                    TimeZone timezone, Locale inLocale)
+    {
+        if (timezone == null || inLocale == null) {
+            return null;
+        }
+        if (datetime == null) {
+            return timezone.getDisplayName(timezone.inDaylightTime(new Date()),
+                    TimeZone.LONG, inLocale);
+        }
+        else {
+            return timezone.getDisplayName(timezone.inDaylightTime(datetime),
+                    TimeZone.LONG, inLocale);
+        }
     }
 
     /**
@@ -188,16 +190,16 @@ public class I18nUtility {
      * built into the JVM for the {@link java.util.TimeZone} class. Returns null
      * when given null parameters.
      * </p>
-     * 
+     *
      * @param timezone
      *            A time zone.
      * @param inLocale
      *            A locale.
      * @return The current localized timezone display name.
      */
-    public static String getShortTimezoneDisplayName(TimeZone timezone,
-	    Locale inLocale) {
-	return getShortTimezoneDisplayName(null, timezone, inLocale);
+    public static String getShortTimezoneDisplayName(TimeZone timezone, Locale inLocale)
+    {
+        return getShortTimezoneDisplayName(null, timezone, inLocale);
     }
 
     /**
@@ -210,7 +212,7 @@ public class I18nUtility {
      * the daylight calculation). This uses the translations built into the JVM
      * for the {@link java.util.TimeZone} class.
      * </p>
-     * 
+     *
      * @param datetime
      *            Time to use for deciding whether it is daylight time.
      * @param timezone
@@ -219,18 +221,19 @@ public class I18nUtility {
      *            A locale.
      * @return The localized timezone display name at that date and time.
      */
-    public static String getShortTimezoneDisplayName(Date datetime,
-	    TimeZone timezone, Locale inLocale) {
-	if (timezone == null || inLocale == null) {
-	    return null;
-	}
-	if (datetime == null) {
-	    return timezone.getDisplayName(timezone.inDaylightTime(new Date()),
-		    TimeZone.SHORT, inLocale);
-	} else {
-	    return timezone.getDisplayName(timezone.inDaylightTime(datetime),
-		    TimeZone.SHORT, inLocale);
-	}
+    public static String getShortTimezoneDisplayName(Date datetime, TimeZone timezone, Locale inLocale)
+    {
+        if (timezone == null || inLocale == null) {
+            return null;
+        }
+        if (datetime == null) {
+            return timezone.getDisplayName(timezone.inDaylightTime(new Date()),
+                    TimeZone.SHORT, inLocale);
+        }
+        else {
+            return timezone.getDisplayName(timezone.inDaylightTime(datetime),
+                    TimeZone.SHORT, inLocale);
+        }
     }
 
     /**
@@ -257,45 +260,49 @@ public class I18nUtility {
      * and country elements only.)
      * </p>
      * </blockquote>
-     * 
+     *
      * @param pHppLangCode
      *            An HPP language code.
      * @param pHppCountryCode
      *            An HPP country code.
      * @return The equivalent locale.
      */
-    public static Locale hppLanguageToLocale(String pHppLangCode,
-	    String pHppCountryCode) {
-	if (pHppLangCode == null) {
-	    return null;
-	}
-	pHppLangCode = pHppLangCode.trim().toLowerCase();
-	Locale locale = null;
-	if (HPP_TRAD_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
-	    locale = Locale.TAIWAN; // Assume Taiwan, and override if special
-	    // conditions occur
-	    if (pHppCountryCode != null) {
-		if (pHppCountryCode
-			.equalsIgnoreCase(ISO_COUNTRY_CODE_HONG_KONG)) {
-		    locale = new Locale(ISO_LANG_CODE_CHINESE,
-			    ISO_COUNTRY_CODE_HONG_KONG);
-		} else if (pHppCountryCode
-			.equalsIgnoreCase(ISO_COUNTRY_CODE_MACAU)) {
-		    locale = new Locale(ISO_LANG_CODE_CHINESE,
-			    ISO_COUNTRY_CODE_MACAU);
-		}
-	    }
-	} else if (HPP_SIMP_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
-	    locale = Locale.CHINA;
-	} else {
-	    if (pHppCountryCode != null) {
-		pHppCountryCode = pHppCountryCode.trim().toUpperCase();
-		locale = new Locale(pHppLangCode, pHppCountryCode);
-	    } else {
-		locale = new Locale(pHppLangCode);
-	    }
-	}
-	return locale;
+    public static Locale hppLanguageToLocale(String pHppLangCode, String pHppCountryCode)
+    {
+        if (pHppLangCode == null) {
+            return null;
+        }
+        pHppLangCode = pHppLangCode.trim().toLowerCase();
+        Locale locale = null;
+        if (HPP_TRAD_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
+            locale = Locale.TAIWAN; // Assume Taiwan, and override if special
+            // conditions occur
+            if (pHppCountryCode != null) {
+                if (pHppCountryCode
+                        .equalsIgnoreCase(ISO_COUNTRY_CODE_HONG_KONG)) {
+                    locale = new Locale(ISO_LANG_CODE_CHINESE,
+                            ISO_COUNTRY_CODE_HONG_KONG);
+                }
+                else if (pHppCountryCode
+                        .equalsIgnoreCase(ISO_COUNTRY_CODE_MACAU)) {
+                    locale = new Locale(ISO_LANG_CODE_CHINESE,
+                            ISO_COUNTRY_CODE_MACAU);
+                }
+            }
+        }
+        else if (HPP_SIMP_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
+            locale = Locale.CHINA;
+        }
+        else {
+            if (pHppCountryCode != null) {
+                pHppCountryCode = pHppCountryCode.trim().toUpperCase();
+                locale = new Locale(pHppLangCode, pHppCountryCode);
+            }
+            else {
+                locale = new Locale(pHppLangCode);
+            }
+        }
+        return locale;
     }
 
     /**
@@ -309,13 +316,14 @@ public class I18nUtility {
      * assume Taiwan Chinese ({@link java.util.Locale#TAIWAN}) or China Chinese
      * ({@link java.util.Locale#CHINA}) respectively.
      * </p>
-     * 
+     *
      * @param pHppLangCode
      *            An HPP language code.
      * @return The equivalent locale.
      */
-    public static Locale hppLanguageToLocale(String pHppLangCode) {
-	return hppLanguageToLocale(pHppLangCode, null);
+    public static Locale hppLanguageToLocale(String pHppLangCode)
+    {
+        return hppLanguageToLocale(pHppLangCode, null);
     }
 
     /**
@@ -330,29 +338,30 @@ public class I18nUtility {
      * returned HPP language code will be the HPP proprietary value for
      * Simplified Chinese {@link #HPP_SIMP_CHINESE_LANG}).
      * </p>
-     * 
+     *
      * @param pLocale
      *            A locale.
      * @return The equivalent HPP language code.
      */
-    public static String localeToHPPLanguage(Locale pLocale) {
-	if (pLocale == null) {
-	    return null;
-	}
-	String language = pLocale.getLanguage().trim().toLowerCase();
-	String country = pLocale.getCountry().trim().toUpperCase();
-	if ((Locale.TAIWAN.getLanguage().equalsIgnoreCase(language))
-		&& (Locale.TAIWAN.getCountry().equalsIgnoreCase(country)))
-	    return HPP_TRAD_CHINESE_LANG;
-	if ((ISO_LANG_CODE_CHINESE.equalsIgnoreCase(language))
-		&& (ISO_COUNTRY_CODE_HONG_KONG.equalsIgnoreCase(country)))
-	    return HPP_TRAD_CHINESE_LANG;
-	if ((ISO_LANG_CODE_CHINESE.equalsIgnoreCase(language))
-		&& (ISO_COUNTRY_CODE_MACAU.equalsIgnoreCase(country)))
-	    return HPP_TRAD_CHINESE_LANG;
-	if (Locale.CHINA.getLanguage().equalsIgnoreCase(language))
-	    return HPP_SIMP_CHINESE_LANG;
-	return language;
+    public static String localeToHPPLanguage(Locale pLocale)
+    {
+        if (pLocale == null) {
+            return null;
+        }
+        String language = pLocale.getLanguage().trim().toLowerCase();
+        String country = pLocale.getCountry().trim().toUpperCase();
+        if ((Locale.TAIWAN.getLanguage().equalsIgnoreCase(language))
+                && (Locale.TAIWAN.getCountry().equalsIgnoreCase(country)))
+            return HPP_TRAD_CHINESE_LANG;
+        if ((ISO_LANG_CODE_CHINESE.equalsIgnoreCase(language))
+                && (ISO_COUNTRY_CODE_HONG_KONG.equalsIgnoreCase(country)))
+            return HPP_TRAD_CHINESE_LANG;
+        if ((ISO_LANG_CODE_CHINESE.equalsIgnoreCase(language))
+                && (ISO_COUNTRY_CODE_MACAU.equalsIgnoreCase(country)))
+            return HPP_TRAD_CHINESE_LANG;
+        if (Locale.CHINA.getLanguage().equalsIgnoreCase(language))
+            return HPP_SIMP_CHINESE_LANG;
+        return language;
     }
 
     /**
@@ -366,21 +375,22 @@ public class I18nUtility {
      * {@link #HPP_SIMP_CHINESE_LANG}), then the ISO language code for Chinese (
      * {@link java.util.Locale#CHINESE}) must be returned without distinction.
      * </p>
-     * 
+     *
      * @param pHppLangCode
      *            An HPP language code.
      * @return The equivalent ISO 639-1 language code.
      */
-    public static String hppLanguageToISOLanguage(String pHppLangCode) {
-	if (pHppLangCode == null) {
-	    return null;
-	}
-	pHppLangCode = pHppLangCode.trim().toLowerCase();
-	if (HPP_TRAD_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)
-		|| HPP_SIMP_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
-	    return Locale.CHINESE.getLanguage();
-	}
-	return pHppLangCode;
+    public static String hppLanguageToISOLanguage(String pHppLangCode)
+    {
+        if (pHppLangCode == null) {
+            return null;
+        }
+        pHppLangCode = pHppLangCode.trim().toLowerCase();
+        if (HPP_TRAD_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)
+                || HPP_SIMP_CHINESE_LANG.equalsIgnoreCase(pHppLangCode)) {
+            return Locale.CHINESE.getLanguage();
+        }
+        return pHppLangCode;
     }
 
     /**
@@ -389,30 +399,31 @@ public class I18nUtility {
      * href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a> language tag.
      * Returns null if the given parameter is null.
      * </p>
-     * 
+     *
      * @param pLocale
      *            A locale.
      * @return The equivalent RFC 3066 language tag, such as <code>fr-CA</code>
      *         for Canada French, or <code>fr</code> for generic French.
      */
-    public static String localeToLanguageTag(Locale pLocale) {
-	if (pLocale == null) {
-	    return null;
-	}
-	String language = pLocale.getLanguage().trim().toLowerCase();
-	String country = pLocale.getCountry().trim().toUpperCase();
-	String variant = pLocale.getVariant().trim();
-	StringBuffer result = new StringBuffer();
-	if (language.length() > 0) {
-	    result.append(language);
-	    if (country.length() > 0) {
-		result.append('-').append(country);
-		if (variant.length() > 0) {
-		    result.append('-').append(variant);
-		}
-	    }
-	}
-	return result.toString();
+    public static String localeToLanguageTag(Locale pLocale)
+    {
+        if (pLocale == null) {
+            return null;
+        }
+        String language = pLocale.getLanguage().trim().toLowerCase();
+        String country = pLocale.getCountry().trim().toUpperCase();
+        String variant = pLocale.getVariant().trim();
+        StringBuffer result = new StringBuffer();
+        if (language.length() > 0) {
+            result.append(language);
+            if (country.length() > 0) {
+                result.append('-').append(country);
+                if (variant.length() > 0) {
+                    result.append('-').append(variant);
+                }
+            }
+        }
+        return result.toString();
     }
 
     /**
@@ -421,32 +432,35 @@ public class I18nUtility {
      * language tag into the equivalent locale. Returns null if the given
      * parameter is null.
      * </p>
-     * 
+     *
      * @param pLangTag
      *            The RFC 3066 language tag, such as <code>fr-CA</code> for
      *            Canada French or <code>fr</code> for generic French.
      * @return The equivalent locale.
      */
-    public static Locale languageTagToLocale(String pLangTag) {
-	if (pLangTag == null) {
-	    return null;
-	}
-	pLangTag = pLangTag.trim().toLowerCase();
-	Locale locale = null;
-	// RFC 3066 specifies "-" as delimiter but we will accept "_" as
-	// well
-	String[] effLocale = pLangTag.split("[_-]");
-	int length = effLocale.length;
-	if (length <= 1) {
-	    locale = new Locale(effLocale[0].trim());
-	} else if (length > 1 && length <= 2) {
-	    locale = new Locale(effLocale[0].trim(), effLocale[1].trim()
-		    .toUpperCase());
-	} else if (length > 2) {
-	    locale = new Locale(effLocale[0].trim(), effLocale[1].trim()
-		    .toUpperCase(), effLocale[2].trim());
-	}
-	return locale;
+    public static Locale languageTagToLocale(String pLangTag)
+    {
+        if (pLangTag == null) {
+            return null;
+        }
+        pLangTag = pLangTag.trim().toLowerCase();
+        Locale locale = null;
+        // RFC 3066 specifies "-" as delimiter but we will accept "_" as
+        // well
+        String[] effLocale = pLangTag.split("[_-]");
+        int length = effLocale.length;
+        if (length <= 1) {
+            locale = new Locale(effLocale[0].trim());
+        }
+        else if (length > 1 && length <= 2) {
+            locale = new Locale(effLocale[0].trim(), effLocale[1].trim()
+                    .toUpperCase());
+        }
+        else if (length > 2) {
+            locale = new Locale(effLocale[0].trim(), effLocale[1].trim()
+                    .toUpperCase(), effLocale[2].trim());
+        }
+        return locale;
     }
 
     /**
@@ -459,13 +473,14 @@ public class I18nUtility {
      * collection in the form of an {@link java.util.ArrayList}. If the
      * collection did not purely contain locales, it is returned unsorted.
      * </p>
-     * 
+     *
      * @param locales
      *            Collection of locales.
      * @return Sorted locales, in the form of an {@link java.util.ArrayList}.
      */
-    public static Collection<Locale> sortLocales(Collection<Locale> locales) {
-	return sortLocales(locales, null, 0);
+    public static Collection<Locale> sortLocales(Collection<Locale> locales)
+    {
+        return sortLocales(locales, null, 0);
     }
 
     /**
@@ -479,16 +494,16 @@ public class I18nUtility {
      * collection in the form of an {@link java.util.ArrayList}. If there is a
      * problem during the sort, the list is returned unsorted.
      * </p>
-     * 
+     *
      * @param locales
      *            Collection of locales.
      * @param Locale
      *            The locale in which to localize and collate the collection.
      * @return Sorted locales, in the form of an {@link java.util.ArrayList}.
      */
-    public static Collection<Locale> sortLocales(Collection<Locale> locales,
-	    Locale inLocale) {
-	return sortLocales(locales, inLocale, 0);
+    public static Collection<Locale> sortLocales(Collection<Locale> locales, Locale inLocale)
+    {
+        return sortLocales(locales, inLocale, 0);
     }
 
     /**
@@ -527,7 +542,7 @@ public class I18nUtility {
      * {@link java.util.ArrayList}. If there is a problem during the sort, the
      * list is returned unsorted.
      * </p>
-     * 
+     *
      * @param locales
      *            Collection of locales.
      * @param inLocale
@@ -538,10 +553,11 @@ public class I18nUtility {
      */
 
     public static Collection<Locale> sortLocales(Collection<Locale> locales,
-	    Locale inLocale, int flags) {
-	if (inLocale == null)
-	    inLocale = Locale.getDefault();
-	return sortLocales(locales, inLocale, inLocale, 0);
+                                                 Locale inLocale, int flags)
+    {
+        if (inLocale == null)
+            inLocale = Locale.getDefault();
+        return sortLocales(locales, inLocale, inLocale, 0);
 
     }
 
@@ -584,7 +600,7 @@ public class I18nUtility {
      * {@link java.util.ArrayList}. If there was an unexpected problem during
      * the sort, the list is returned unsorted.
      * </p>
-     * 
+     *
      * @param locales
      *            Collection of locales.
      * @param sortLocale
@@ -597,101 +613,108 @@ public class I18nUtility {
      * @return Sorted locales, in the form of an {@link java.util.ArrayList}.
      */
     public static Collection<Locale> sortLocales(Collection<Locale> locales,
-	    Locale sortLocale, Locale displayLocale, int flags) {
+                                                 Locale sortLocale, Locale displayLocale, int flags)
+    {
 
-	/**
-	 * The comparator class for the <code>sortLocales</code> methods.
-	 * 
-	 * @author djorgen
-	 */
-	class LocaleComparator implements Comparator<Locale> {
-	    int flags = 0;
-	    Locale sortInLocale = Locale.getDefault();
-	    Locale displayInLocale = null;
-	    Collator collator = Collator.getInstance(sortInLocale);
-	    Map<Locale, String> localeStringMap = new HashMap<Locale, String>();
+        /**
+         * The comparator class for the <code>sortLocales</code> methods.
+         *
+         * @author djorgen
+         */
+        class LocaleComparator implements Comparator<Locale>
+        {
+            int flags = 0;
+            Locale sortInLocale = Locale.getDefault();
+            Locale displayInLocale = null;
+            Collator collator = Collator.getInstance(sortInLocale);
+            Map<Locale, String> localeStringMap = new HashMap<Locale, String>();
 
-	    public void setFlags(int pFlags) {
-		flags = pFlags;
-	    }
+            public void setFlags(int pFlags)
+            {
+                flags = pFlags;
+            }
 
-	    public void setSortLocale(Locale pSortInLocale) {
-		if (pSortInLocale != null) {
-		    sortInLocale = pSortInLocale;
-		    collator = Collator.getInstance(sortInLocale);
-		}
-	    }
+            public void setSortLocale(Locale pSortInLocale)
+            {
+                if (pSortInLocale != null) {
+                    sortInLocale = pSortInLocale;
+                    collator = Collator.getInstance(sortInLocale);
+                }
+            }
 
-	    public void setDisplayLocale(Locale pDisplayInLocale) {
-		if (pDisplayInLocale != null)
-		    displayInLocale = pDisplayInLocale;
-	    }
+            public void setDisplayLocale(Locale pDisplayInLocale)
+            {
+                if (pDisplayInLocale != null)
+                    displayInLocale = pDisplayInLocale;
+            }
 
-	    public int compare(Locale loc1, Locale loc2) {
-		String s1 = localeStringMap.get(loc1);
-		String s2 = localeStringMap.get(loc2);
-		int outcome;
-		if (s1 == null) {
-			s1 = "";
-			if (loc1 != null) {
-			    Locale inLocale = displayInLocale;
-			    if (inLocale == null)
-				inLocale = loc1;
-			    if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
-				s1 = loc1.getDisplayCountry(inLocale)
-					+ loc1.getDisplayLanguage(inLocale)
-					+ loc1.getDisplayVariant(inLocale);
-			    else
-				s1 = loc1.getDisplayLanguage(inLocale)
-					+ loc1.getDisplayCountry(inLocale)
-					+ loc1.getDisplayVariant(inLocale);
-			}
-			localeStringMap.put(loc1, s1);//Cache the fixed string for each locale in the map.
-		}
-		if (s2 == null) {
-			s2 = "";
-			if (loc2 != null) {
-			    Locale inLocale = displayInLocale;
-			    if (inLocale == null)
-				inLocale = loc2;
-			    if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
-				s2 = loc2.getDisplayCountry(inLocale)
-					+ loc2.getDisplayLanguage(inLocale)
-					+ loc2.getDisplayVariant(inLocale);
-			    else
-				s2 = loc2.getDisplayLanguage(inLocale)
-					+ loc2.getDisplayCountry(inLocale)
-					+ loc2.getDisplayVariant(inLocale);
-			}
-			localeStringMap.put(loc2, s2);
-		}
-		if ((flags & LOCALE_DESCENDING) == LOCALE_DESCENDING)
-		    outcome = collator.compare(s2, s1);
-		else
-		    outcome = collator.compare(s1, s2);
-		return (outcome);
-	    }
-	}
+            public int compare(Locale loc1, Locale loc2)
+            {
+                String s1 = localeStringMap.get(loc1);
+                String s2 = localeStringMap.get(loc2);
+                int outcome;
+                if (s1 == null) {
+                    s1 = "";
+                    if (loc1 != null) {
+                        Locale inLocale = displayInLocale;
+                        if (inLocale == null)
+                            inLocale = loc1;
+                        if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
+                            s1 = loc1.getDisplayCountry(inLocale)
+                                    + loc1.getDisplayLanguage(inLocale)
+                                    + loc1.getDisplayVariant(inLocale);
+                        else
+                            s1 = loc1.getDisplayLanguage(inLocale)
+                                    + loc1.getDisplayCountry(inLocale)
+                                    + loc1.getDisplayVariant(inLocale);
+                    }
+                    localeStringMap.put(loc1, s1);//Cache the fixed string for each locale in the map.
+                }
+                if (s2 == null) {
+                    s2 = "";
+                    if (loc2 != null) {
+                        Locale inLocale = displayInLocale;
+                        if (inLocale == null)
+                            inLocale = loc2;
+                        if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY)
+                            s2 = loc2.getDisplayCountry(inLocale)
+                                    + loc2.getDisplayLanguage(inLocale)
+                                    + loc2.getDisplayVariant(inLocale);
+                        else
+                            s2 = loc2.getDisplayLanguage(inLocale)
+                                    + loc2.getDisplayCountry(inLocale)
+                                    + loc2.getDisplayVariant(inLocale);
+                    }
+                    localeStringMap.put(loc2, s2);
+                }
+                if ((flags & LOCALE_DESCENDING) == LOCALE_DESCENDING)
+                    outcome = collator.compare(s2, s1);
+                else
+                    outcome = collator.compare(s1, s2);
+                return (outcome);
+            }
+        }
 
-	if (locales == null) {
-	    return null;
-	}
+        if (locales == null) {
+            return null;
+        }
 
-	// Make the locale comparator.
-	LocaleComparator comp = new LocaleComparator();
-	comp.setFlags(flags);
-	comp.setSortLocale(sortLocale);
-	comp.setDisplayLocale(displayLocale);
+        // Make the locale comparator.
+        LocaleComparator comp = new LocaleComparator();
+        comp.setFlags(flags);
+        comp.setSortLocale(sortLocale);
+        comp.setDisplayLocale(displayLocale);
 
-	// Sort the collection.
-	List<Locale> list = new ArrayList<Locale>();
-	list.addAll(locales);
-	try {
-	    Collections.sort(list, comp);
-	} catch (Exception e) {
-	    // Ignore exception and return unsorted list.
-	}
-	return list;
+        // Sort the collection.
+        List<Locale> list = new ArrayList<Locale>();
+        list.addAll(locales);
+        try {
+            Collections.sort(list, comp);
+        }
+        catch (Exception e) {
+            // Ignore exception and return unsorted list.
+        }
+        return list;
     }
 
     /**
@@ -702,7 +725,7 @@ public class I18nUtility {
      * the {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility}
      * <code>getLocalizedFile*</code> methods.
      * </p>
-     * 
+     *
      * <p>
      * Looks up the given base filename in the given path, and returns the
      * filename as per the boolean switch: either the best-fit localized
@@ -716,7 +739,7 @@ public class I18nUtility {
      * directory). Note that on a case-sensitive filesystem, this is a
      * case-sensitive lookup.
      * </p>
-     * 
+     *
      * <p>
      * If you set the boolean parameter to false, this method will just verify
      * that the given base filename exists at the given path (returning the
@@ -724,7 +747,7 @@ public class I18nUtility {
      * specify the locale parameter in this case; you can set that to null. The
      * base filename parameter is required.
      * </p>
-     * 
+     *
      * <p>
      * If you set the boolean parameter to true, both the base filename and
      * locale parameters are required. This method will treat the given file and
@@ -735,13 +758,13 @@ public class I18nUtility {
      * best fit. Whatever the best-fit file, its filename is returned (including
      * any path which was in the given filename). Otherwise null is returned.
      * </p>
-     * 
+     *
      * <p>
      * For example: in <code>/files/html</code> consider that we have the files
      * <code>foo.htm</code>, <code>foo_fr_CA.htm</code>, and
      * <code>foo_fr.htm</code>. Then:
      * </p>
-     * 
+     *
      * <dl>
      * <dt>
      * <code>getLocalizedFileName("/files", "html/foo.htm", Locale.FRENCH, true)</code>
@@ -769,7 +792,7 @@ public class I18nUtility {
      * <dt><code>getLocalizedFileName("/files", "foo.htm", null, false)</code></dt>
      * <dd>returns <code>null</code></dd>
      * </dl>
-     * 
+     *
      * <p>
      * On case-sensitive filesystems, lowercase is assumed for the langage and
      * variant codes, and uppercase is assumed for the country code. Thus in the
@@ -777,7 +800,7 @@ public class I18nUtility {
      * and/or <code>foo_fr_CA.htm</code> were tagged with uppercase language or
      * lowercase country. Be sure your resource bundles follow the convention.
      * </p>
-     * 
+     *
      * @param pPath
      *            The directory in which to search (recommended to use an
      *            absolute path; otherwise is relative to current working
@@ -792,88 +815,90 @@ public class I18nUtility {
      *            (false) or the best-fitting localized file (true).
      * @return The proper filename as per the parameters, or null if no
      *         qualifying file was found.
-     * 
+     *
      */
     protected static String getLocalizedFileName(String pPath,
-	    String pBaseFileName, Locale pLocale, boolean pLocalized) {
-	if (pBaseFileName == null || (pLocalized == true && pLocale == null)) {
-	    return null;
-	}
-	pBaseFileName = pBaseFileName.trim();
-	pBaseFileName = Utils.slashify(pBaseFileName);
-	if (pPath == null) {
-	    pPath = "";
-	}
-	pPath = pPath.trim();
-	pPath = Utils.slashify(pPath);
-	if (pBaseFileName.length() == 0) {
-	    return null;
-	}
-	// Resolve localized file
-	if (pLocalized) {
-	    String localizedFileName = null;
-	    String fileName = null;
-	    String extension = null;
-	    try {
-		fileName = pBaseFileName.substring(0,
-			pBaseFileName.lastIndexOf(".")).trim();
-		extension = pBaseFileName.substring(
-			pBaseFileName.lastIndexOf(".")).trim();
-	    } catch (Exception ex) {
-		fileName = pBaseFileName;
-		extension = "";
-	    }
+                                                 String pBaseFileName, Locale pLocale, boolean pLocalized)
+    {
+        if (pBaseFileName == null || (pLocalized == true && pLocale == null)) {
+            return null;
+        }
+        pBaseFileName = pBaseFileName.trim();
+        pBaseFileName = Utils.slashify(pBaseFileName);
+        if (pPath == null) {
+            pPath = "";
+        }
+        pPath = pPath.trim();
+        pPath = Utils.slashify(pPath);
+        if (pBaseFileName.length() == 0) {
+            return null;
+        }
+        // Resolve localized file
+        if (pLocalized) {
+            String localizedFileName = null;
+            String fileName = null;
+            String extension = null;
+            try {
+                fileName = pBaseFileName.substring(0,
+                        pBaseFileName.lastIndexOf(".")).trim();
+                extension = pBaseFileName.substring(
+                        pBaseFileName.lastIndexOf(".")).trim();
+            }
+            catch (Exception ex) {
+                fileName = pBaseFileName;
+                extension = "";
+            }
 
-	    StringBuffer localizedFile = new StringBuffer(pBaseFileName
-		    .length() + 10);
-	    localizedFile.append(fileName);
+            StringBuffer localizedFile = new StringBuffer(pBaseFileName
+                    .length() + 10);
+            localizedFile.append(fileName);
 
-	    String language = pLocale.getLanguage().trim().toLowerCase();
-	    String country = pLocale.getCountry().trim().toUpperCase();
-	    String variant = pLocale.getVariant().trim().toLowerCase();
+            String language = pLocale.getLanguage().trim().toLowerCase();
+            String country = pLocale.getCountry().trim().toUpperCase();
+            String variant = pLocale.getVariant().trim().toLowerCase();
 
-	    if (language.length() > 1) {
-		localizedFile.append("_").append(language);
-		if (country.length() > 1) {
-		    localizedFile.append("_").append(country);
-		    if (variant.length() > 1) {
-			localizedFile.append("_").append(variant);
+            if (language.length() > 1) {
+                localizedFile.append("_").append(language);
+                if (country.length() > 1) {
+                    localizedFile.append("_").append(country);
+                    if (variant.length() > 1) {
+                        localizedFile.append("_").append(variant);
 
-			// filename_lang_cc_varint.extension
-			localizedFile.append(extension);
-			localizedFileName = localizedFile.toString();
-			if (fileExists(pPath, localizedFileName)) {
-			    return localizedFileName;
-			}
-			localizedFile.delete(localizedFile.lastIndexOf("_"),
-				localizedFile.length());
-		    }
+                        // filename_lang_cc_varint.extension
+                        localizedFile.append(extension);
+                        localizedFileName = localizedFile.toString();
+                        if (fileExists(pPath, localizedFileName)) {
+                            return localizedFileName;
+                        }
+                        localizedFile.delete(localizedFile.lastIndexOf("_"),
+                                localizedFile.length());
+                    }
 
-		    // filename_lang_cc.extension
-		    localizedFile.append(extension);
-		    localizedFileName = localizedFile.toString();
-		    if (fileExists(pPath, localizedFileName)) {
-			return localizedFileName;
-		    }
-		    localizedFile.delete(localizedFile.lastIndexOf("_"),
-			    localizedFile.length());
-		}
+                    // filename_lang_cc.extension
+                    localizedFile.append(extension);
+                    localizedFileName = localizedFile.toString();
+                    if (fileExists(pPath, localizedFileName)) {
+                        return localizedFileName;
+                    }
+                    localizedFile.delete(localizedFile.lastIndexOf("_"),
+                            localizedFile.length());
+                }
 
-		// filename_lang.extension
-		localizedFile.append(extension);
-		localizedFileName = localizedFile.toString();
-		if (fileExists(pPath, localizedFileName)) {
-		    return localizedFileName;
-		}
-	    }
-	}
+                // filename_lang.extension
+                localizedFile.append(extension);
+                localizedFileName = localizedFile.toString();
+                if (fileExists(pPath, localizedFileName)) {
+                    return localizedFileName;
+                }
+            }
+        }
 
-	// filename.extension
-	if (fileExists(pPath, pBaseFileName)) {
-	    return pBaseFileName;
-	}
-	// all the files do not exist
-	return null;
+        // filename.extension
+        if (fileExists(pPath, pBaseFileName)) {
+            return pBaseFileName;
+        }
+        // all the files do not exist
+        return null;
     }
 
     /**
@@ -884,7 +909,7 @@ public class I18nUtility {
      * the {@link com.hp.it.spf.xa.i18n.portlet.I18nUtility}
      * <code>getLocalizedFile*</code> methods.
      * </p>
-     * 
+     *
      * <p>
      * Returns true if the given file exists at the given location, otherwise
      * false. Returns null if given a null filename. The given path should be an
@@ -893,32 +918,34 @@ public class I18nUtility {
      * parameter blank or null). On case-sensitive filesystems, this is a
      * case-sensitive lookup.
      * </p>
-     * 
+     *
      * @param pPath
      *            the file path
      * @param pFileName
      *            the name of the file
      * @return true or false
      */
-    protected static boolean fileExists(String pPath, String pFileName) {
-	boolean result = false;
-	if (pFileName == null) {
-	    return result;
-	}
-	if (pPath == null) {
-	    pPath = "";
-	}
-	pPath = pPath.trim();
-	pFileName = pFileName.trim();
-	try {
-	    File file = new File(Utils.slashify(pPath + "/" + pFileName));
-	    if (file.exists()) {
-		result = true;
-	    }
-	} catch (Exception e) {
-	    // Exception (eg file not found) - ignore and return false.
-	}
-	return result;
+    protected static boolean fileExists(String pPath, String pFileName)
+    {
+        boolean result = false;
+        if (pFileName == null) {
+            return result;
+        }
+        if (pPath == null) {
+            pPath = "";
+        }
+        pPath = pPath.trim();
+        pFileName = pFileName.trim();
+        try {
+            File file = new File(Utils.slashify(pPath + "/" + pFileName));
+            if (file.exists()) {
+                result = true;
+            }
+        }
+        catch (Exception e) {
+            // Exception (eg file not found) - ignore and return false.
+        }
+        return result;
     }
 
     /**
@@ -934,13 +961,14 @@ public class I18nUtility {
      * parameter is null. This uses the translations built into the JVM for the
      * {@link java.util.Locale} class.
      * </p>
-     * 
+     *
      * @param locale
      *            A locale.
      * @return The localized display name for the locale.
      */
-    public static String getLocaleDisplayName(Locale locale) {
-	return getLocaleDisplayName(locale, locale, 0);
+    public static String getLocaleDisplayName(Locale locale)
+    {
+        return getLocaleDisplayName(locale, locale, 0);
     }
 
     /**
@@ -957,7 +985,7 @@ public class I18nUtility {
      * parameter is null. This uses the translations built into the JVM for the
      * {@link java.util.Locale} class.
      * </p>
-     * 
+     *
      * @param locale
      *            A locale.
      * @param inLocale
@@ -965,8 +993,9 @@ public class I18nUtility {
      * @return The display name for the first locale, localized by the second
      *         locale.
      */
-    public static String getLocaleDisplayName(Locale locale, Locale inLocale) {
-	return getLocaleDisplayName(locale, inLocale, 0);
+    public static String getLocaleDisplayName(Locale locale, Locale inLocale)
+    {
+        return getLocaleDisplayName(locale, inLocale, 0);
     }
 
     /**
@@ -1005,7 +1034,7 @@ public class I18nUtility {
      * null if the parameter is null. This uses the translations built into the
      * JVM for the {@link java.util.Locale} class.
      * </p>
-     * 
+     *
      * @param locale
      *            A locale.
      * @param inLocale
@@ -1016,38 +1045,40 @@ public class I18nUtility {
      *         locale.
      */
     public static String getLocaleDisplayName(Locale locale, Locale inLocale,
-	    int flags) {
-	if (locale == null) {
-	    return null;
-	}
-	if (inLocale == null) {
-	    inLocale = Locale.getDefault();
-	}
-	String displayLanguage = locale.getDisplayLanguage(inLocale);
-	String displayCountry = locale.getDisplayCountry(inLocale);
-	String displayVariant = locale.getDisplayVariant(inLocale);
-	if (displayLanguage != null)
-	    displayLanguage = displayLanguage.trim();
-	if (displayCountry != null)
-	    displayCountry = displayCountry.trim();
-	if (displayVariant != null)
-	    displayVariant = displayVariant.trim();
-	String displayName = "";
-	if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY) {
-	    if (displayCountry.equals("") || displayLanguage.equals(""))
-		displayName = displayCountry + displayLanguage;
-	    else
-		displayName = displayCountry + "-" + displayLanguage;
-	} else {
-	    if (displayCountry.equals("") || displayLanguage.equals(""))
-		displayName = displayLanguage + displayCountry;
-	    else
-		displayName = displayLanguage + "-" + displayCountry;
-	}
-	if (!displayVariant.equals("")) {
-	    displayName += " (" + displayVariant + ")";
-	}
-	return displayName;
+                                              int flags)
+    {
+        if (locale == null) {
+            return null;
+        }
+        if (inLocale == null) {
+            inLocale = Locale.getDefault();
+        }
+        String displayLanguage = locale.getDisplayLanguage(inLocale);
+        String displayCountry = locale.getDisplayCountry(inLocale);
+        String displayVariant = locale.getDisplayVariant(inLocale);
+        if (displayLanguage != null)
+            displayLanguage = displayLanguage.trim();
+        if (displayCountry != null)
+            displayCountry = displayCountry.trim();
+        if (displayVariant != null)
+            displayVariant = displayVariant.trim();
+        String displayName = "";
+        if ((flags & LOCALE_BY_COUNTRY) == LOCALE_BY_COUNTRY) {
+            if (displayCountry.equals("") || displayLanguage.equals(""))
+                displayName = displayCountry + displayLanguage;
+            else
+                displayName = displayCountry + "-" + displayLanguage;
+        }
+        else {
+            if (displayCountry.equals("") || displayLanguage.equals(""))
+                displayName = displayLanguage + displayCountry;
+            else
+                displayName = displayLanguage + "-" + displayCountry;
+        }
+        if (!displayVariant.equals("")) {
+            displayName += " (" + displayVariant + ")";
+        }
+        return displayName;
     }
 
     /**
@@ -1067,7 +1098,7 @@ public class I18nUtility {
      * contained inside the SPF common utilities JAR, and generally should never
      * need to be customized by application developers or administrators.
      * </p>
-     * 
+     *
      * @param givenName
      *            Given name.
      * @param familyName
@@ -1077,69 +1108,72 @@ public class I18nUtility {
      * @return The whole user name in correct order.
      */
     public static String getUserDisplayName(String givenName,
-	    String familyName, Locale inLocale) {
-	if (givenName == null && familyName == null) {
-	    return null;
-	}
-	if (givenName == null) {
-	    givenName = "";
-	}
-	if (familyName == null) {
-	    familyName = "";
-	}
-	givenName = givenName.trim();
-	familyName = familyName.trim();
+                                            String familyName, Locale inLocale)
+    {
+        if (givenName == null && familyName == null) {
+            return null;
+        }
+        if (givenName == null) {
+            givenName = "";
+        }
+        if (familyName == null) {
+            familyName = "";
+        }
+        givenName = givenName.trim();
+        familyName = familyName.trim();
 
-	// In some locales, only one name may be used.
-	if (givenName.length() == 0) {
-	    return familyName;
-	}
-	if (familyName.length() == 0) {
-	    return givenName;
-	}
-	// Use Western order by default.
-	if (inLocale == null) {
-	    return givenName + " " + familyName;
-	}
+        // In some locales, only one name may be used.
+        if (givenName.length() == 0) {
+            return familyName;
+        }
+        if (familyName.length() == 0) {
+            return givenName;
+        }
+        // Use Western order by default.
+        if (inLocale == null) {
+            return givenName + " " + familyName;
+        }
 
-	// Display name according to language, not country.
-	String lang = inLocale.getLanguage().trim().toLowerCase();
-	if (lang.length() == 0) {
-	    return givenName + " " + familyName;
-	}
+        // Display name according to language, not country.
+        String lang = inLocale.getLanguage().trim().toLowerCase();
+        if (lang.length() == 0) {
+            return givenName + " " + familyName;
+        }
 
-	// the flag whether the order of the name need to be reversed
-	boolean reverseFlag = false;
+        // the flag whether the order of the name need to be reversed
+        boolean reverseFlag = false;
 
-	// get langs from properties files
-	String reverseList = null;
-	ResourceBundle rb = PropertyResourceBundleManager
-		.getBundle(I18N_CONFIG_FILE);
-	if (rb == null) {
-	    LOG.error("I18nUtility: getUserDisplayName failed to open "
-		    + I18N_CONFIG_FILE + " properties file");
-	} else {
-	    try {
-		reverseList = rb
-			.getString(I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS);
-	    } catch (Exception ex) {
-		LOG.warn("I18nUtility: getUserDisplayName failed to find "
-			+ I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS
-			+ " property in " + I18N_CONFIG_FILE
-			+ " properties file");
-		LOG.warn("I18nUtility: " + ex.getMessage());
-	    }
-	}
+        // get langs from properties files
+        String reverseList = null;
+        ResourceBundle rb = PropertyResourceBundleManager
+                .getBundle(I18N_CONFIG_FILE);
+        if (rb == null) {
+            LOG.error("I18nUtility: getUserDisplayName failed to open "
+                    + I18N_CONFIG_FILE + " properties file");
+        }
+        else {
+            try {
+                reverseList = rb
+                        .getString(I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS);
+            }
+            catch (Exception ex) {
+                LOG.warn("I18nUtility: getUserDisplayName failed to find "
+                        + I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS
+                        + " property in " + I18N_CONFIG_FILE
+                        + " properties file");
+                LOG.warn("I18nUtility: " + ex.getMessage());
+            }
+        }
 
-	// the given locale's language is in the reverse list
-	if (reverseList != null && !reverseList.trim().equals("")) {
-	    reverseFlag = Arrays.asList(
-		    reverseList.toLowerCase().split("[\\s,]*[,][\\s,]*"))
-		    .contains(lang);
-	}
+        // the given locale's language is in the reverse list
+        if (reverseList != null && !reverseList.trim().equals("")) {
+            reverseFlag = Arrays.asList(
+                    reverseList.toLowerCase().split("[\\s,]*[,][\\s,]*"))
+                    .contains(lang);
+        }
 
-	return reverseFlag ? (familyName + " " + givenName)
-		: (givenName + " " + familyName);
+        return reverseFlag ? (familyName + " " + givenName)
+                : (givenName + " " + familyName);
     }
 
     /**
@@ -1151,16 +1185,17 @@ public class I18nUtility {
      * leave that markup in there, this method will be used to remove it. Note:
      * the content surrounded by the tokens is retained; only the tokens
      * themselves are removed.
-     * 
+     *
      * @param msg
      *            A message string.
      * @return The message string with no-localization tokens removed.
      */
-    public static String filterNoLocalizationTokens(String msg) {
-	if (msg == null) {
-	    return null;
-	}
-	return msg.replaceAll(NO_LOCALIZATION_REGEX, "");
+    public static String filterNoLocalizationTokens(String msg)
+    {
+        if (msg == null) {
+            return null;
+        }
+        return msg.replaceAll(NO_LOCALIZATION_REGEX, "");
     }
 
     /**
@@ -1170,7 +1205,7 @@ public class I18nUtility {
      * using {@link #getShortDisplayDate(Date, TimeZone, Locale, boolean)} where
      * the boolean flag is true.
      * </p>
-     * 
+     *
      * @param moment
      *            A moment in time.
      * @param tz
@@ -1181,9 +1216,9 @@ public class I18nUtility {
      * @return The localized string for that date and time, in
      *         {@link java.util.DateFormat#SHORT} style.
      */
-    public static String getShortDisplayDate(Date moment, TimeZone tz,
-	    Locale inLocale) {
-	return getShortDisplayDate(moment, tz, inLocale, true);
+    public static String getShortDisplayDate(Date moment, TimeZone tz, Locale inLocale)
+    {
+        return getShortDisplayDate(moment, tz, inLocale, true);
     }
 
     /**
@@ -1219,7 +1254,7 @@ public class I18nUtility {
      * internally will revert to server timezone.) If you pass null to any other
      * parameter, then null will be returned.
      * </p>
-     * 
+     *
      * @param moment
      *            A moment in time.
      * @param tz
@@ -1234,9 +1269,10 @@ public class I18nUtility {
      *         {@link java.util.DateFormat#SHORT} style.
      */
     public static String getShortDisplayDate(Date moment, TimeZone tz,
-	    Locale inLocale, boolean includeTime) {
-	return getDisplayDate(moment, tz, inLocale, DateFormat.SHORT,
-		includeTime);
+                                             Locale inLocale, boolean includeTime)
+    {
+        return getDisplayDate(moment, tz, inLocale, DateFormat.SHORT,
+                includeTime);
     }
 
     /**
@@ -1246,7 +1282,7 @@ public class I18nUtility {
      * using {@link #getMediumDisplayDate(Date, TimeZone, Locale, boolean)}
      * where the boolean flag is true.
      * </p>
-     * 
+     *
      * @param moment
      *            A moment in time.
      * @param tz
@@ -1257,9 +1293,9 @@ public class I18nUtility {
      * @return The localized string for that date and time, in
      *         {@link java.util.DateFormat#MEDIUM} style.
      */
-    public static String getMediumDisplayDate(Date moment, TimeZone tz,
-	    Locale inLocale) {
-	return getMediumDisplayDate(moment, tz, inLocale, true);
+    public static String getMediumDisplayDate(Date moment, TimeZone tz, Locale inLocale)
+    {
+        return getMediumDisplayDate(moment, tz, inLocale, true);
     }
 
     /**
@@ -1295,7 +1331,7 @@ public class I18nUtility {
      * internally will revert to server timezone.) If you pass null to any other
      * parameter, then null will be returned.
      * </p>
-     * 
+     *
      * @param moment
      *            A moment in time.
      * @param tz
@@ -1310,9 +1346,10 @@ public class I18nUtility {
      *         {@link java.util.DateFormat#MEDIUM} style.
      */
     public static String getMediumDisplayDate(Date moment, TimeZone tz,
-	    Locale inLocale, boolean includeTime) {
-	return getDisplayDate(moment, tz, inLocale, DateFormat.MEDIUM,
-		includeTime);
+                                              Locale inLocale, boolean includeTime)
+    {
+        return getDisplayDate(moment, tz, inLocale, DateFormat.MEDIUM,
+                includeTime);
     }
 
     /**
@@ -1322,7 +1359,7 @@ public class I18nUtility {
      * using {@link #getLongDisplayDate(Date, TimeZone, Locale, boolean)} where
      * the boolean flag is true.
      * </p>
-     * 
+     *
      * @param moment
      *            A moment in time.
      * @param tz
@@ -1334,8 +1371,9 @@ public class I18nUtility {
      *         {@link java.util.DateFormat#LONG} style.
      */
     public static String getLongDisplayDate(Date moment, TimeZone tz,
-	    Locale inLocale) {
-	return getLongDisplayDate(moment, tz, inLocale, true);
+                                            Locale inLocale)
+    {
+        return getLongDisplayDate(moment, tz, inLocale, true);
     }
 
     /**
@@ -1371,7 +1409,7 @@ public class I18nUtility {
      * internally will revert to server timezone.) If you pass null to any other
      * parameter, then null will be returned.
      * </p>
-     * 
+     *
      * @param moment
      *            A moment in time.
      * @param tz
@@ -1386,9 +1424,10 @@ public class I18nUtility {
      *         {@link java.util.DateFormat#LONG} style.
      */
     public static String getLongDisplayDate(Date moment, TimeZone tz,
-	    Locale inLocale, boolean includeTime) {
-	return getDisplayDate(moment, tz, inLocale, DateFormat.LONG,
-		includeTime);
+                                            Locale inLocale, boolean includeTime)
+    {
+        return getDisplayDate(moment, tz, inLocale, DateFormat.LONG,
+                includeTime);
     }
 
     /**
@@ -1398,7 +1437,7 @@ public class I18nUtility {
      * using {@link #getFullDisplayDate(Date, TimeZone, Locale, boolean)} where
      * the boolean flag is true.
      * </p>
-     * 
+     *
      * @param moment
      *            A moment in time.
      * @param tz
@@ -1409,9 +1448,9 @@ public class I18nUtility {
      * @return The localized string for that date and time, in
      *         {@link java.util.DateFormat#FULL} style.
      */
-    public static String getFullDisplayDate(Date moment, TimeZone tz,
-	    Locale inLocale) {
-	return getFullDisplayDate(moment, tz, inLocale, true);
+    public static String getFullDisplayDate(Date moment, TimeZone tz, Locale inLocale)
+    {
+        return getFullDisplayDate(moment, tz, inLocale, true);
     }
 
     /**
@@ -1447,7 +1486,7 @@ public class I18nUtility {
      * internally will revert to server timezone.) If you pass null to any other
      * parameter, then null will be returned.
      * </p>
-     * 
+     *
      * @param moment
      *            A moment in time.
      * @param tz
@@ -1462,9 +1501,10 @@ public class I18nUtility {
      *         {@link java.util.DateFormat#FULL} style.
      */
     public static String getFullDisplayDate(Date moment, TimeZone tz,
-	    Locale inLocale, boolean includeTime) {
-	return getDisplayDate(moment, tz, inLocale, DateFormat.FULL,
-		includeTime);
+                                            Locale inLocale, boolean includeTime)
+    {
+        return getDisplayDate(moment, tz, inLocale, DateFormat.FULL,
+                includeTime);
     }
 
     /**
@@ -1472,44 +1512,49 @@ public class I18nUtility {
      * medium, long or full.
      */
     private static String getDisplayDate(Date date, TimeZone tz,
-	    Locale inLocale, int style, boolean includeTime) {
-	if (date == null || inLocale == null) {
-	    return null;
-	}
-	// if not given a timezone but time is desired, default to GMT;
-	// otherwise no default (SimpleDateFormat will revert to server timezone
-	// in that case)
-	if (includeTime && (tz == null)) {
-	    tz = TimeZone.getTimeZone("GMT");
-	}
-	try {
-	    SimpleDateFormat formatter;
-	    if (includeTime) {
-		formatter = (SimpleDateFormat) DateFormat.getDateTimeInstance(
-			style, style, inLocale);
-	    } else {
-		formatter = (SimpleDateFormat) DateFormat.getDateInstance(
-			style, inLocale);
-	    }
-	    if (tz != null) {
-		formatter.setTimeZone(tz);
-	    }
-	    return formatter.format(date);
-	} catch (Exception e1) { // should never happen
-	    try {
-		SimpleDateFormat formatter;
-		if (includeTime) {
-		    formatter = (SimpleDateFormat) DateFormat
-			    .getDateTimeInstance(style, style, Locale
-				    .getDefault());
-		} else {
-		    formatter = (SimpleDateFormat) DateFormat.getDateInstance(
-			    style, Locale.getDefault());
-		}
-		return formatter.format(date);
-	    } catch (Exception e2) { // should really never happen
-		return date.toString();
-	    }
-	}
+                                         Locale inLocale, int style, boolean includeTime)
+    {
+        if (date == null || inLocale == null) {
+            return null;
+        }
+        // if not given a timezone but time is desired, default to GMT;
+        // otherwise no default (SimpleDateFormat will revert to server timezone
+        // in that case)
+        if (includeTime && (tz == null)) {
+            tz = TimeZone.getTimeZone("GMT");
+        }
+        try {
+            SimpleDateFormat formatter;
+            if (includeTime) {
+                formatter = (SimpleDateFormat) DateFormat.getDateTimeInstance(
+                        style, style, inLocale);
+            }
+            else {
+                formatter = (SimpleDateFormat) DateFormat.getDateInstance(
+                        style, inLocale);
+            }
+            if (tz != null) {
+                formatter.setTimeZone(tz);
+            }
+            return formatter.format(date);
+        }
+        catch (Exception e1) { // should never happen
+            try {
+                SimpleDateFormat formatter;
+                if (includeTime) {
+                    formatter = (SimpleDateFormat) DateFormat
+                            .getDateTimeInstance(style, style, Locale
+                                    .getDefault());
+                }
+                else {
+                    formatter = (SimpleDateFormat) DateFormat.getDateInstance(
+                            style, Locale.getDefault());
+                }
+                return formatter.format(date);
+            }
+            catch (Exception e2) { // should really never happen
+                return date.toString();
+            }
+        }
     }
 }
