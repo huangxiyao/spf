@@ -42,7 +42,7 @@
         <dependency>
             <groupId>com.sun.portal.portletcontainer</groupId>
             <artifactId>spf-pc-database-persistence</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
