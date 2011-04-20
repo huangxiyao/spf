@@ -108,8 +108,8 @@
 	</dependencies>
 
 	<properties>
-		<hpweb-core-version>4.5.1-SNAPSHOT</hpweb-core-version>
-		<hpweb-resources-version>4.5.1-SNAPSHOT</hpweb-resources-version>
+		<hpweb-core-version>4.5.1</hpweb-core-version>
+		<hpweb-resources-version>4.5.1</hpweb-resources-version>
 		<wpa-layout-manager-version>4.2.0</wpa-layout-manager-version>
 	</properties>
 
