@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.hp.it.spf.tools</groupId>
+    <version>2.2.1-SNAPSHOT</version>
+    <artifactId>spf-all</artifactId>
+    <packaging>pom</packaging>
+    <name>SPF Aggregator POM</name>
+    
+    <modules>
+        <module>spf-pom</module>
+        <module>common</module>
+        <module>portal</module>
+        <module>portal-components</module>
+        <module>portal-helper-apps</module>
+        <module>portlet</module>
+        <module>portlet-apps</module>
+        <module>spf-portal-laf</module>
+    </modules>
+    
+    <scm>
+        <connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk</connection>
+        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk</developerConnection>
+        <url>http://code1.corp.hp.com/svn/spf/source/trunk</url>
+    </scm>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Public</name>
+            <url>http://repo1.corp.hp.com/nexus/content/groups/public</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:15</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <!--<updatePolicy>interval:1</updatePolicy>-->
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Public</name>
+            <url>http://repo1.corp.hp.com/nexus/content/groups/public</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:15</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+
+        <snapshotRepository>
+            <id>snapshot</id>
+            <name>Internal Snapshots</name>
+            <url>${distributeSnapshotUrl}</url>
+        </snapshotRepository>
+
+        <repository>
+            <id>release</id>
+            <name>Internal Releases</name>
+            <url>${distributeReleaseUrl}</url>
+        </repository>
+
+    </distributionManagement>
+
+</project>
