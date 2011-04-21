@@ -10,9 +10,7 @@
 	<!-- Spring application context location -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			/WEB-INF/context/applicationContext.xml
-		</param-value>
+		<param-value>/WEB-INF/context/applicationContext.xml</param-value>
 	</context-param>
 	
 	<!-- WPAP log root -->
@@ -23,33 +21,25 @@
 
 	<!-- Spring application context loader -->
 	<listener>
-		<listener-class>
-			org.springframework.web.context.ContextLoaderListener
-		</listener-class>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	
 	<!-- WPAP log configuration listener -->
 	<listener>
-		<listener-class>
-			com.hp.frameworks.wpa.portlet.logging.LoggingConfigListener
-		</listener-class>
+		<listener-class>com.hp.frameworks.wpa.portlet.logging.LoggingConfigListener</listener-class>
 	</listener>
 	
 	<!-- Spring view renderer servlet, for helping Spring portlet render views (eg JSP) -->
 	<servlet>
 		<servlet-name>ViewRendererServlet</servlet-name>
-		<servlet-class>
-			org.springframework.web.servlet.ViewRendererServlet
-		</servlet-class>
+		<servlet-class>org.springframework.web.servlet.ViewRendererServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 	<!-- SPF file-relay servlet, for hosting file-download from the portlet bundle directory -->
 	<servlet>
 		<servlet-name>FileRelayServlet</servlet-name>
-		<servlet-class>
-			com.hp.it.spf.xa.relay.servlet.RelayServlet
-		</servlet-class>
+		<servlet-class>com.hp.it.spf.xa.relay.servlet.RelayServlet</servlet-class>
 	</servlet>
 	
 	<!-- Spring view renderer servlet mapping -->
