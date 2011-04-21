@@ -28,8 +28,8 @@
 	</distributionManagement>
 
 	<properties>
-		<spf.common.version>2.2.0</spf.common.version>
-		<spf.portal.version>2.2.0</spf.portal.version>
+		<spf.common.version>${project.version}</spf.common.version>
+		<spf.portal.version>${project.version}</spf.portal.version>
 	</properties>
 
 	<modules>

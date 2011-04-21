@@ -32,7 +32,7 @@
     </modules>
     
     <properties>
-        <spf.common.version>2.2.0</spf.common.version>
+        <spf.common.version>${project.version}</spf.common.version>
         <!-- Temporarily pinning the Spring dependency to 3.0.x until the portal artifacts and
         Vignette will be able to use it too -->
         <springFrameworkVersion>3.0.5.RELEASE</springFrameworkVersion>
