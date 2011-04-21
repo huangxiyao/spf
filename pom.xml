@@ -29,9 +29,9 @@
 	</distributionManagement>
 	
 	<properties>
-		<spf.common.version>2.2.0</spf.common.version>
+		<spf.common.version>${project.version}</spf.common.version>
 		<cas.security.version>2.1.1</cas.security.version>
-		<spf.portal-helper-apps.version>2.2.0</spf.portal-helper-apps.version>
+		<spf.portal-helper-apps.version>${project.version}</spf.portal-helper-apps.version>
 	</properties>
 
 
