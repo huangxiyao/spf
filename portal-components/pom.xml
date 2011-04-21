@@ -27,11 +27,6 @@
 		</site>
 	</distributionManagement>
 
-	<properties>
-		<spf.common.version>${project.version}</spf.common.version>
-		<spf.portal.version>${project.version}</spf.portal.version>
-	</properties>
-
 	<modules>
 		<module>spf-auth-error-secondarypage</module>
 		<module>spf-auth-error-secondarypagetype</module>

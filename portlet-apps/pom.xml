@@ -31,8 +31,6 @@
 	</distributionManagement>
 
 	<properties>
-		<spf.common.version>${project.version}</spf.common.version>
-		<spf.portlet.version>${project.version}</spf.portlet.version>
 		<!-- Temporarily pinning the Spring dependency to 3.0.x until the portal artifacts and
 		Vignette will be able to use it too -->
 		<springFrameworkVersion>3.0.5.RELEASE</springFrameworkVersion>
