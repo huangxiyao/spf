@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>${spf.common.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.sso</groupId>
 			<artifactId>spf-portlet-filters</artifactId>
-            <version>${spf.portlet.version}</version>
+            <version>${project.version}</version>
 		</dependency>
 
 		<dependency>
@@ -67,13 +67,13 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-portlet-utilities</artifactId>
-			<version>${spf.portlet.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>${spf.common.version}</version>
+			<version>${project.version}</version>
 		</dependency>
  
 		<dependency>

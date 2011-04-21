@@ -68,7 +68,7 @@
 			<dependency>
 				<groupId>com.hp.it.spf.xa</groupId>
 				<artifactId>spf-common-hpp</artifactId> 				
-				<version>${spf.common.version}</version>
+				<version>${project.version}</version>
 				<exclusions>
 					<exclusion>
 						<groupId>xerces</groupId>

@@ -48,7 +48,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.sso</groupId>
 			<artifactId>spf-portlet-filters</artifactId>
-			<version>${spf.portlet.version}</version>
+			<version>${project.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 

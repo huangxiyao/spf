@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-utilities</artifactId>
-			<version>${spf.common.version}</version>
+			<version>${project.version}</version>
 			<!-- This is part of OpenPortal lib directory therefore the scope for this is provided -->
 		</dependency>
 		<dependency>
