@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>com.hp.it.spf.sso</groupId>
 			<artifactId>spf-portal-session</artifactId>
-			<version>${version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		
