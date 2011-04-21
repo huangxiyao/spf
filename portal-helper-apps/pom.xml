@@ -29,10 +29,6 @@
 		</site>
 	</distributionManagement>
 	
-	<properties>
-		<spfCommonUtilitiesVersion>2.2.0</spfCommonUtilitiesVersion>
-	</properties>
-
 	<modules>
 		<module>spf-healthcheck</module>
 		<module>spf-open-sign</module>
