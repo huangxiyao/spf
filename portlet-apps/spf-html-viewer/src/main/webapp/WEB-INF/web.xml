@@ -51,6 +51,6 @@
 	<!-- SPF file-relay servlet mapping -->
 	<servlet-mapping>
 		<servlet-name>FileRelayServlet</servlet-name>
-		<url-pattern>/relay/*</url-pattern>
+		<url-pattern>/relay.resource/*</url-pattern>
 	</servlet-mapping>
 </web-app>
