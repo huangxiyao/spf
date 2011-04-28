@@ -77,6 +77,11 @@
             <url>${distributeReleaseUrl}</url>
         </repository>
 
+        <site>
+            <id>site</id>
+            <url>${siteUrl}/${project.artifactId}/${project.version}</url>
+        </site>
+
     </distributionManagement>
 
 </project>
