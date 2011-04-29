@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	To support validation of your configuration file and for
+	admin plug-in compatibility, include the
+	following DOCTYPE element at the beginning of your file
+	(after the "xml" declaration):
+	
+	<!DOCTYPE markmenus PUBLIC "WPA_MARKMENU_DTD" 
+		"http://websat.cup.hp.com/dtds/wpa-markmenu.dtd">
+
+-->
+
+<!ELEMENT markmenus (menu)+>
+
+<!ATTLIST markmenus	messages 	CDATA 	#IMPLIED>
+
+
+<!ELEMENT menu (menuitem|spacer|separator|placemenuitem)*>
+
+<!ATTLIST menu 		id 			ID 		#REQUIRED>
+<!ATTLIST menu 		title 		CDATA 	#IMPLIED>
+<!ATTLIST menu 		titleKey 	CDATA 	#IMPLIED>
+<!ATTLIST menu 		color 		CDATA 	#IMPLIED>
+<!ATTLIST menu 		colorName 	CDATA 	#IMPLIED>
+<!ATTLIST menu 		screens 	CDATA 	#REQUIRED>
+
+
+<!ELEMENT menuitem (menuitem*)>
+
+<!ATTLIST menuitem 	id 			ID 		#REQUIRED>
+<!ATTLIST menuitem	title 		CDATA 	#IMPLIED>
+<!ATTLIST menuitem	titleKey 	CDATA 	#IMPLIED>
+<!ATTLIST menuitem	href 		CDATA 	#IMPLIED>
+<!ATTLIST menuitem	page 		CDATA 	#IMPLIED>
+<!ATTLIST menuitem	target 		CDATA 	#IMPLIED> 
+<!ATTLIST menuitem	style 		CDATA 	#IMPLIED>
+
+
+<!ELEMENT placemenuitem EMPTY>
+
+<!ATTLIST placemenuitem	id	CDATA 	#REQUIRED>	
+
+
+<!ELEMENT separator EMPTY>
+
+
+<!ELEMENT spacer EMPTY>

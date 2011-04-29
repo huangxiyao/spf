@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold" component-id="spf-mypages-page-display-secondarypage"
+                     component-type="Secondary Pages"
+                     description="Shared Portal Framework static main view of My Pages where users see portlets grouped on a page."
+                     epi-build="582900" epi-version="7.4" major-version="1" minor-version="0"
+                     title="Shared Portal Framework - My Pages - Page Display"
+                     xmlns:epideploy="http://www.epicentric.com/deployment">
+    <epideploy:required-component component-id="template0045" component-type="Secondary Page Types"
+                                  major-version="7" minor-version="4"/>
+    <epideploy:detail>
+        <style-info apply-template-header="false"
+                    description="Shared Portal Framework static main view of My Pages where users see portlets grouped on a page."
+                    friendly-id="SPF_MY_PAGES_PAGE" id="spf-mypages-page-display-secondarypage"
+                    is-system="false" primary-filename="my_pages_display.jsp"
+                    processing-type="ACTION_BASED" secure="false" template-default="false"
+                    template-uid="template0045" title="Shared Portal Framework - My Pages - Page Display"
+                    visible="true">
+            <actions>
+                <action id="spf_pda" type="PRE_DISPLAY">
+                    <!-- This class is defined in spf-portal-utilities modules -->
+                    <class>com.hp.it.spf.xa.portletdata.portal.PortletDataPreDisplayAction</class>
+                </action>
+                <group-reference group-id="INHERIT_ALL"/>
+            </actions>
+        </style-info>
+    </epideploy:detail>
+</epideploy:component>

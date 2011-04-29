@@ -1,0 +1,163 @@
+# healthcheck.properties - healthcheck application properties
+#
+# This file contains application properties for the healthcheck service.
+# Customize this file for each managed server, by replacing the 
+# "REPLACE-HERE..." tokens below.
+#   - Typically you should set the "enabled" property to "yes".
+#   - For the other properties, you will need to know the managed server
+#     listen IP address and port.
+# Therefore you will have one customized version of this file for
+# each managed server.  Name each customized file "healthcheck.properties" 
+# and place it in a configuration directory which you have added to the
+# CLASSPATH for the managed server.
+##############################################################################
+#
+# Whether or not healthchecks are scheduled for execution.  Values are yes/no.
+# The default is that they are not enabled.
+#
+enabled=yes
+#
+# The IP address or hostname of the server for the portal pulse page
+# healthcheck.  May be an SLB VIP for the portal cluster, or a physical IP for
+# a portal managed server, or a DNS name thereof.  (Typically in a production
+# clustered environment, you would use the VIP or a DNS name thereof.)  May
+# even be a proxy server hostname or IP address, if you want the portal pulse
+# page healthcheck to be proxied.  The default is localhost.  
+#
+portal-pulse.request.host=g2u0170.austin.hp.com
+#
+# The port number of the server for the portal pulse page healthcheck.
+# May be an SLB virtual port for the portal cluster, or a physical port for a
+# portal managed server.  (Typically in a production clustered environment, you
+# would use the port associated with the VIP - see portal host property above.)
+# May even be a proxy server port, if you want the portal pulse page
+# healthcheck to be proxied.  The default is 7001. 
+#
+portal-pulse.request.port=30027
+#
+# The IP address or hostname of the server for the open sign healthcheck.
+# May be an SLB VIP for a cluster, or a physical IP for a managed server,
+# or a DNS name thereof.  (Typically in a production clustered environment,
+# you would use the VIP or a DNS name thereof, ie the same value used for
+# portal host property above.)  May even be a proxy server hostname or IP
+# address, if you want the open sign healthcheck to be proxied.  The default
+# is localhost.  
+#
+open-sign.request.host=g2u0170.austin.hp.com
+#
+# The port number of the server for the open sign healthcheck.  May be an
+# SLB virtual port for a cluster, or a physical port for a managed server.
+# (Typically in a production clustered environment, you would use the port
+# associated with the VIP - see open sign host property above - ie you would
+# use the same value used for the portal port property above.)  May even be
+# a proxy server port, if you want the portal pulse page healthcheck to be
+# proxied.  The default is 7001. 
+#
+open-sign.request.port=30027
+#
+#######################################################################
+# Property values below here should not need to be modified.
+#######################################################################
+#
+# The number of seconds between startup and the first healthcheck.  Use
+# 0 for no delay.  The default is 0 (no delay).
+#
+delay.initial=10
+#
+# The number of seconds between repeating healthchecks.  The minimum is 5
+# seconds - a shorter delay cannot be configured, to prevent thrashing.
+# The default is 60 seconds.
+#
+delay.repeat=30
+#
+# The number of successive overall healthchecks resulting in an "open and
+# working" status, before considering the site open and working.  This
+# property can be adjusted to prevent "flapping" if sporadic problems are
+# occuring.  (But typically it is just the down threshold you would adjust,
+# leaving this one at 1.)  The default is 1 (ie "open and working" status
+# is effective upon detection).
+#
+threshold.open=1
+#
+# The number of successive overall healthchecks resulting in an "closing/
+# closed but working" status, before considering the site closed.  This
+# property can be adjusted to prevent "flapping" if sporadic problems are
+# occuring.  (But typically it is just the down threshold you would adjust,
+# leaving this one at 1.)  The default is 1 (ie "closed" status takes
+# effect upon detection).
+#
+threshold.closed=1
+#
+# The number of successive overall healthchecks resulting in an "non-
+# working" status, before considering the site down.  This property can be
+# adjusted to prevent "flapping" if sporadic problems are occuring.
+# The default is 1 (ie "down" status takes effect upon detection).
+#
+threshold.down=2
+#
+# How many characters to include (maximum) in the "message" portion of a 
+# healthcheck log record.  Use -1 for unlimited.  The default is -1 
+# (unlimited).
+#
+log.bytes=256
+#
+# How long to wait before timing-out a portal pulse page healthcheck, in
+# seconds.  The default is 10 seconds.  Use -1 to disable timeout.
+#
+portal-pulse.timeout=30
+#
+# Whether to catch any cookies that might be sent in responses from the portal
+# pulse page, and resend them on subsequent requests.  Values are yes/no.  The
+# default is yes.
+#
+portal-pulse.cookies=yes
+#
+# The URL for the portal pulse page healthcheck, to request from the portal
+# pulse page server (see portal host and port properties above).  Typically
+# this is just the path and query string (if any), since the portal host and
+# port are configured in properties above.  But if you want the portal pulse
+# page healthcheck to be proxied, use an absolute URL instead (and configure 
+# the proxy server host and port above).  The default is /.
+#
+portal-pulse.request.url=/portal/site/spf/template.PUBLIC_SPF_PORTAL_PULSE
+#
+# The Java regular expression string which, if found to match any part 
+# of a line in the portal pulse page healthcheck response (up to the byte 
+# limit, see below property), means the portal is working.  If the portal 
+# pulse page healthcheck cannot find a successful match on this pattern, 
+# that will be understood to mean the portal is not working.  All the usual
+# syntax for Java regular expression strings is supported.  The default is
+#    ^HTTP/1\.. 200 .*$
+# which matches any HTTP status 200 response.
+#
+portal-pulse.response.pattern=^(?i:X-Site-Available: yes)$
+#
+# The fully-qualified Java classname of an optional, alternative class which
+# evaluates portal pulse page healthcheck responses (up to the byte limit,
+# see below property).  See healthcheck service design documentation.
+# Normally this is not used.  There is no default.
+#
+portal-pulse.response.class=
+#
+# How many bytes to read and evaluate from the portal pulse page healthcheck
+# response.  Use this property if your portal pulse page success pattern
+# (see property above) occurs near the beginning of a long HTTP response.
+# Use -1 to read and evaluate the whole response (the default).
+#
+portal-pulse.response.bytes=-1
+#
+# The URL for the open sign healthcheck, to request from the open sign 
+# server (see open sign host and port properties above).  Typically this is
+# just the path and query string (if any), since the open sign host and port
+# are configured in properties above.  But if you want the open sign
+# healthcheck to be proxied, use an absolute URL instead (and configure the
+# proxy server host and port above).  /open-sign/isOpen is the default.
+#
+open-sign.request.url=/open-sign
+#
+# How long to wait before timing-out an open-sign healthcheck, in seconds.
+# The default is 10 seconds.  Use -1 to disable timeout.
+#
+open-sign.timeout=15
+#
+

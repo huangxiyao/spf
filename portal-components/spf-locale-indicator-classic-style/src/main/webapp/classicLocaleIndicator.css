@@ -1,0 +1,11 @@
+/* This file contains the default CSS styles for the SPF "classic"
+locale indicator Vignette style component.  Use this file as a template
+to define your own CSS for this component.  Name your new file 
+"<site>ClassicLocaleIndicator.css" (where <site> is your site DNS name
+in Vignette) and upload it as a new secondary support file into the SPF
+"classic" locale indicator Vignette style component, using the Vignette
+console. */
+
+.spf-localeindicator-classic {
+	/* reserved for you to customize */
+}

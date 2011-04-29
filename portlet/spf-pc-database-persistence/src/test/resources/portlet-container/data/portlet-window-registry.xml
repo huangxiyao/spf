@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PortletWindowRegistry version="1.0">
+<PortletWindow lang="JAVA" name="portletdriver.WSRPProducerAdminPortlet" portletName="portletdriver.WSRPProducerAdminPortlet" remote="false">
+<Properties>
+<String name="width" value="thick"/>
+<String name="row" value="1"/>
+<String name="title" value="WSRP Producer Admin Portlet"/>
+<String name="visible" value="true"/>
+<String name="entityIDPrefix" value="portletdriver|WSRPProducerAdminPortlet"/>
+</Properties>
+</PortletWindow>
+<PortletWindow lang="JAVA" name="WelcomePortlet.WelcomePortlet" portletName="WelcomePortlet.WelcomePortlet" remote="false">
+<Properties>
+<String name="row" value="2"/>
+<String name="width" value="thick"/>
+<String name="title" value="Hello Portlet World"/>
+<String name="visible" value="true"/>
+<String name="entityIDPrefix" value="WelcomePortlet|WelcomePortlet"/>
+</Properties>
+</PortletWindow>
+</PortletWindowRegistry>

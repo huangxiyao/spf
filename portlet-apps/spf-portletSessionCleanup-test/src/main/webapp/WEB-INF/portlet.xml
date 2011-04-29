@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app
+	xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+	version="2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd
+	                    http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+		
+	<portlet>
+        <portlet-name>NoSessionCleanup</portlet-name>
+		<portlet-class>
+			com.hp.frameworks.wpa.portlet.WPADispatcherPortlet
+		</portlet-class>
+
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/session-portlet.xml</value>
+		</init-param>
+
+		<expiration-cache>-1</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>VIEW</portlet-mode>
+		</supports>
+
+		<supported-locale>en</supported-locale>
+
+		<resource-bundle>NoFilterAppliedPortletMessages</resource-bundle>
+	</portlet>
+
+	<portlet>
+        <portlet-name>KeepStickyOnly</portlet-name>
+		<portlet-class>
+			com.hp.frameworks.wpa.portlet.WPADispatcherPortlet
+		</portlet-class>
+
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/session-portlet.xml</value>
+		</init-param>
+
+		<expiration-cache>-1</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>VIEW</portlet-mode>
+		</supports>
+
+		<supported-locale>en</supported-locale>
+		<resource-bundle>FilterAppliedMode1PortletMessages</resource-bundle>
+	</portlet>
+
+	<portlet>
+        <portlet-name>RemoveUnstickyOnly</portlet-name>
+		<portlet-class>
+			com.hp.frameworks.wpa.portlet.WPADispatcherPortlet
+		</portlet-class>
+
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/session-portlet.xml</value>
+		</init-param>
+
+		<expiration-cache>-1</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>VIEW</portlet-mode>
+		</supports>
+
+		<supported-locale>en</supported-locale>
+
+		<resource-bundle>FilterAppliedMode2PortletMessages</resource-bundle>
+		
+	</portlet>
+
+	<!-- SPF attribute map filter -->
+	<filter>
+	    <display-name>SPF Map Attribute Filter</display-name> 
+	    <filter-name>MapAttributeFilter</filter-name> 
+	    <filter-class>com.hp.it.spf.sso.portlet.filter.MapAttributeFilter</filter-class> 
+	    <lifecycle>ACTION_PHASE</lifecycle>      
+	    <lifecycle>RENDER_PHASE</lifecycle>      
+	</filter> 
+	<filter>
+	    <display-name>Session Cleanup Filter Mode1</display-name> 
+	    <filter-name>SessionCleanupFilterMode1</filter-name> 
+	    <filter-class>com.hp.it.spf.session.portlet.filter.SessionCleanupFilter</filter-class> 
+	    <lifecycle>ACTION_PHASE</lifecycle>      
+	    <lifecycle>RENDER_PHASE</lifecycle>      
+		<init-param>
+			<name>portletSessionCleanupMode</name>
+			<value>spf.keepStickySessionAttributesOnly</value>
+		</init-param>
+	</filter> 
+
+	<filter>
+	    <display-name>Session Cleanup Filter Mode2</display-name> 
+	    <filter-name>SessionCleanupFilterMode2</filter-name> 
+	    <filter-class>com.hp.it.spf.session.portlet.filter.SessionCleanupFilter</filter-class> 
+	    <lifecycle>ACTION_PHASE</lifecycle>      
+	    <lifecycle>RENDER_PHASE</lifecycle>      
+		<init-param>
+			<name>portletSessionCleanupMode</name>
+			<value>spf.removeNonStickySessionAttributesOnly</value>
+		</init-param>
+	</filter> 
+	
+
+	<!-- SPF attribute map filter mapping -->
+	<filter-mapping>
+    	<filter-name>MapAttributeFilter</filter-name> 
+    	<portlet-name>*</portlet-name> 
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>SessionCleanupFilterMode1</filter-name>
+		<portlet-name>KeepStickyOnly</portlet-name>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>SessionCleanupFilterMode2</filter-name>
+		<portlet-name>RemoveUnstickyOnly</portlet-name>
+	</filter-mapping>
+		
+</portlet-app>

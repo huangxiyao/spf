@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component 
+	build-version="Gold" 
+	component-id="HPWebHorizontalNavGrid" 
+	component-type="Grids" 
+	description="HPWeb layout grid displays header, horizontal navigation, and footer elements for a HPWeb page layout." 
+	epi-build="570014" 
+	epi-version="7.4" 
+	major-version="1" 
+	minor-version="0" 
+	title="HPWeb Layout Horizontal Navigation Grid" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+
+		<epideploy:required-component 
+			component-id="template0005" 
+			component-type="Style Types" 
+			major-version="7" 
+			minor-version="4"/>
+
+		<epideploy:detail>
+			<style-info 
+				apply-template-header="false" 
+				description="HPWeb layout grid displays header, horizontal navigation, and footer elements for a HPWeb page layout." 
+				friendly-id="hpwebhorznavgrid" 
+				id="HPWebHorizontalNavGrid" 
+				is-system="false" 
+				primary-filename="hpweb_horz_nav_grid.jsp" 
+				processing-type="JSP_BASED" 
+				template-default="false" 
+				template-uid="template0005" 
+				title="HPWeb Layout Horizontal Navigation Grid" 
+				visible="true"/>
+		</epideploy:detail>
+</epideploy:component>

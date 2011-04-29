@@ -1,0 +1,54 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+
+<!--
+	DTD for the Navigation Manager Configuration File, Version 1.0
+
+	To support validation of your configuration file, include the
+	following DOCTYPE element at the beginning of your file
+	(after the "xml" declaration):
+
+	<!DOCTYPE nav-manager-rules PUBLIC "WPA_NAVIGATION_DTD"
+		"http://websat.cup.hp.com/dtds/wpa-navigation.dtd">
+
+	$Revision: 1.2 $, $Date: 2006/11/16 00:48:53 $	
+-->
+
+<!--
+	The "nav-manager-rules" element is the root of the 
+	configuration file hierarchy and allows for any number
+	of nested "rule" elements.
+-->
+<!ELEMENT nav-manager-rules (rule*)>
+
+
+<!--
+	The "rule" element defines either a push or pop rule that
+	should be applied to a particular portal/path combination.
+	The following attributes are defined:
+
+	action		Type of rule, should be either "push" or "pop".
+
+	portal		The name of the portal context that this rule
+				applies to.	
+	
+	path		The action forward path that this rule applies
+				to.  When the Navigation Manager is invoked, it
+				will look at the path attribute of the current
+				ActionForward object and try to match it against
+				this attribute.
+
+	target		New path that the user should be directed to
+				after this rule is executed.  Only applies to
+				"push" rules.  Optional.
+
+	redirect	Boolean indicating whether the Navigation Manager
+				should use an HTTP redirect when interrupting
+				the navigation flow.  Optional, defaults to false.
+-->
+<!ELEMENT rule EMPTY>
+<!ATTLIST rule	action 		(push|pop) 		#REQUIRED>
+<!ATTLIST rule	portal 		CDATA 			#REQUIRED>
+<!ATTLIST rule	path 		CDATA 			#REQUIRED>
+<!ATTLIST rule	target 		CDATA 			#IMPLIED>
+<!ATTLIST rule	redirect	(true|false)	#IMPLIED>
+

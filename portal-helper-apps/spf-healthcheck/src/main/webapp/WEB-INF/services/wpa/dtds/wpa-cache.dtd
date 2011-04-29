@@ -1,0 +1,22 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<!--
+	To support validation of your configuration file and for
+	admin plug-in compatibility, include the
+	following DOCTYPE element at the beginning of your file
+	(after the "xml" declaration):
+	
+	<!DOCTYPE cache-list PUBLIC "WPA_CACHE_DTD" 
+		"http://websat.cup.hp.com/dtds/wpa-cache.dtd">
+
+-->
+
+<!ELEMENT cache-list (cache+)>
+<!ELEMENT cache EMPTY>
+<!ATTLIST cache
+	name CDATA #REQUIRED
+	className CDATA "com.hp.bco.pl.wpa.cache.WPACacheFIFO"
+	scope (session|application) "session"
+	capacity CDATA #REQUIRED
+	expireSecs CDATA "3600"
+        checkIntervalSecs CDATA "300">
+

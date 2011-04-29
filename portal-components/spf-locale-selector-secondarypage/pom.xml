@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.hp.it.spf.portal</groupId>
+		<artifactId>portal-components</artifactId>
+		<version>2.2.4-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.hp.it.spf.comps</groupId>
+	<artifactId>spf-locale-selector-secondarypage</artifactId>
+
+	<packaging>car</packaging>
+	<name>SPF locale selector secondary page</name>
+	<description>Artifacts for the Shared Portal Framework locale selector secondary page. This Vignette component triggers the process action chain in the secondary page type to persist the user's locale selection into the standard location (request, HP.com cookies, and HPP).</description>
+
+	<inceptionYear>January 2009</inceptionYear>
+
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.hp.it.spf.comps</groupId>
+			<artifactId>spf-locale-selector-secondarypagetype</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-portal-utilities</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+</project>

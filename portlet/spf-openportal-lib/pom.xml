@@ -1,0 +1,160 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hp.it.spf.portlet</groupId>
+        <artifactId>portlet</artifactId>
+        <version>2.2.4-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.hp.it.spf.openportal</groupId>
+    <artifactId>spf-openportal-lib</artifactId>
+    
+    <!--
+    The packaging of this module is "pom" as it produces a ".zip" file and maven does not support that natively.
+    -->
+    <packaging>pom</packaging>
+
+    <name>OpenPortal shared libraries</name>
+    <description>
+        The classpath JAR for OpenPortal along with its dependencies.
+        This module produces a zip file containing openportalclasspath.jar and all other
+        JAR files which are required by OpenPortal portlet container to be set in servlet
+        container classpath.
+        openportalclasspath.jar MANIFEST.MF file contains the Class-Path entry referencing
+        the dependencies. This approach allows to specify only openportalclasspath.jar
+        in servlet container configuration, and all other dependencies will be included
+        automatically as per declaration in MANIFEST.MF file.
+        Note that even though this module produces openportalclasspath.jar, this file is
+        not published to the Maven repository as it is not useful on its own. The only
+        published artifact is ${project.artifactId}-${project.version}-bin.zip.
+    </description>
+
+    <!--
+    Dependencies scope is set explicitly to "compile" to ensure all of them are included
+    in the JAR classpath regardless of the scope defined in the parent pom.
+    In addition. the maven-dependency-plugin is also configured to copy dependencies
+    with "compile" scope - see below.
+    -->
+    <dependencies>
+        <dependency>
+            <groupId>com.sun.portal.portletcontainer</groupId>
+            <artifactId>spf-pc-database-persistence</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.hp.it.spf.openportal</groupId>
+            <artifactId>spf-portlet-container</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.ccpp</groupId>
+            <artifactId>ccpp</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.portal.portletcontainer</groupId>
+            <artifactId>container</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.portal.portletcontainer</groupId>
+            <artifactId>portletcontainercontext</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.portal.portletcontainer</groupId>
+            <artifactId>portletadmin</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.portal.portletcontainer</groupId>
+            <artifactId>portlet-container</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml</groupId>
+            <artifactId>webservices-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.portlet</groupId>
+            <artifactId>portlet-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <finalName>openportalclasspath</finalName>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>create-openportalclasspath-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <includeScope>compile</includeScope>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/jars.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>package-archive-with-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

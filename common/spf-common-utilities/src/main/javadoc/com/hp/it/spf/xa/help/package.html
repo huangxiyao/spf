@@ -1,0 +1,80 @@
+<html>
+<body>
+<p>This package contains <b>abstract base classes</b> for plain Java
+objects related to online help in both the portal and portlet frameworks
+of the Shared Portal Framework.</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portal and portlet developers should never need
+to use the Java classes in this package directly. Generally they should
+import the classes provided for them in the portal and portlet
+frameworks:</p>
+
+<ul>
+	<li>Portal developers should see the documentation in {@link
+	com.hp.it.spf.xa.help.portal}</li>
+	<li>Portlet developers should see the documentation in {@link
+	com.hp.it.spf.xa.help.portlet}</li>
+</ul>
+
+<p>However, developers who want to extend these base classes to
+produce new, concrete kinds of online help, may do so.</p>
+</blockquote>
+
+<hr>
+
+<a name="HelpProvider">
+<h3>HelpProvider</h3>
+<p>The {@link com.hp.it.spf.xa.help.HelpProvider} class is the
+abstract base class for <b>all</b> kinds of online-help provider, like
+{@link com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} for
+portlets, and {@link
+com.hp.it.spf.xa.help.portal.ClassicContextualHelpProvider} and {@link
+com.hp.it.spf.xa.help.portal.ClassicGlobalHelpProvider} for portal
+components. (Help providers are plain Java objects which know how to
+generate the HTML markup for particular kinds of online help. They are
+used by online-help JSP tags, and also by the internationalization code
+for injecting online-help markup into messages.)</p>
+
+<a name="ContextualHelpProvider">
+<h3>ContextualHelpProvider</h3>
+<p>The {@link com.hp.it.spf.xa.help.ContextualHelpProvider} class is
+the abstract base class for <b>all</b> contextual help providers, like
+{@link com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} for
+portlets, and {@link
+com.hp.it.spf.xa.help.portal.ClassicContextualHelpProvider} for portal
+components. (What is a help provider? See <a href="#HelpProvider"><code>HelpProvider</code></a>
+discussion above.)</p>
+
+<a name="ClassicContextualHelpProvider">
+<h3>ClassicContextualHelpProvider</h3>
+</a>
+<p>The {@link
+com.hp.it.spf.xa.help.ClassicContextualHelpProvider} class is the
+abstract base class for <b>classic</b> contextual help providers, like
+{@link com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} for
+portlets, and {@link
+com.hp.it.spf.xa.help.portal.ClassicContextualHelpProvider} for portal
+components. (What is a help provider? See <a href="#HelpProvider"><code>HelpProvider</code></a>
+discussion above.)</p>
+
+<hr>
+
+<a name="HelpUtility">
+<h3>HelpUtility</h3>
+<p>The {@link com.hp.it.spf.xa.help.HelpUtility} class is the
+abstract base class for <b>all</b> kinds of online-help utilities, like
+{@link com.hp.it.spf.xa.help.ContextualHelpUtility} for contextual help,
+and {@link com.hp.it.spf.xa.help.portal.GlobalHelpUtility} for global
+help (only available to portal components). This class provides common
+utility methods for parsing messages (for help injection), for example.</p>
+
+<a name="ContextualHelpUtility">
+<h3>ContextualHelpUtility</h3>
+<p>The {@link com.hp.it.spf.xa.help.ContextualHelpUtility} class
+provides utility methods for all kinds of contextual help. This class
+provides a utility method for parsing messages (for contextual-help
+injection), for example.</p>
+
+</body>
+</html>

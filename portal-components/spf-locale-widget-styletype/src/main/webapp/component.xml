@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold"
+	component-id="spf-locale-widget-styletype" component-type="Style Types"
+	description="Shared Portal Framework style type for all kinds of locale widgets, including the locale selector and locale indicator."
+	epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0"
+	title="Shared Portal Framework - Locale Widget Style Type"
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:detail>
+		<template-info allow-guest-access="false"
+			description="Shared Portal Framework style type for all kinds of locale widgets, including the locale selector and locale indicator."
+			friendly-id="spfLocaleWidget" header-filename=""
+			id="spf-locale-widget-styletype" is-system="false"
+			system-secondary-page-type="false" title="Shared Portal Framework - Locale Widget Style Type"
+			type="templatetype_ui_element" visible="true" />
+	</epideploy:detail>
+</epideploy:component>

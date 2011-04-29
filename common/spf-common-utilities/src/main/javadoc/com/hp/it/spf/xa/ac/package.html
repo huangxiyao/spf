@@ -1,0 +1,44 @@
+<html>
+<body>
+<p>This package contains the common data model for all admission
+control functions, including the <code>healthcheck</code> Web
+application, and the <code>AdmissionControlFilter</code> servlet filter.
+These are portal components which regulate entry into the system based
+on various criteria (such as system availability), working with the
+load-balancers (ie in the infrastructure) to provide load-redirection
+and failover capability beyond what the load-balancers themselves can
+natively provide.</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portal and portlet developers should never need
+to use this package.</p>
+</blockquote>
+
+<a name="HealthcheckStatus">
+<h3>HealthcheckStatus</h3>
+</a>
+<p>{@link com.hp.it.spf.xa.ac.HealthcheckStatus} is an abstract base
+class for all kinds of healthcheck status outcome.</p>
+
+<a name="OpenStatus">
+<h3>OpenStatus</h3>
+</a>
+<p>{@link com.hp.it.spf.xa.ac.OpenStatus} is a concrete <code>HealthcheckStatus</code>
+meaning that the site is fully operational (ie is both working and open
+to end-users).</p>
+
+<a name="ClosedStatus">
+<h3>ClosedStatus</h3>
+</a>
+<p>{@link com.hp.it.spf.xa.ac.ClosedStatus} is a concrete <code>HealthcheckStatus</code>
+meaning that the site is internally operational (ie is working) but has
+been administratively closed to end-users.</p>
+
+<a name="DownStatus">
+<h3>DownStatus</h3>
+</a>
+<p>{@link com.hp.it.spf.xa.ac.DownStatus} is a concrete <code>HealthcheckStatus</code>
+meaning that the site is non-operational (ie is not working).</p>
+
+</body>
+</html>

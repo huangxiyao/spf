@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.hp.it.spf.apps</groupId>
+		<artifactId>portal-helper-apps</artifactId>
+		<version>2.2.4-SNAPSHOT</version>
+	</parent>
+	
+	<groupId>com.hp.it.spf.apps</groupId>
+	<artifactId>spf-healthcheck</artifactId>
+	<packaging>war</packaging>
+	
+	<name>SPF healthcheck application</name>
+	<description>Shared Portal Framework Web application which performs automated healthchecks against
+		the SPF portal and the SPF open-sign, and relays the status to the
+		load-balancers (or any other interested clients).</description>
+		
+	<inceptionYear>January 2009</inceptionYear>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.hp.websat</groupId>
+			<artifactId>timber</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.websat</groupId>
+			<artifactId>wpa-framework</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>struts</groupId>
+			<artifactId>struts</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

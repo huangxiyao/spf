@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<portal-pulse>
+	<!-- To enable HPP Web Service check-task (no params are needed here) 
+	uncomment the next line -->
+	<!--
+	<monitoring-check-task name="HPP_WEB_SERVICE_CHECK"/>
+	-->
+	
+	<!-- To enable Vignette database check-task (no params are needed here) 
+	keep it uncomment, to disable Vignette database check-task, just comment 
+	it -->
+	<monitoring-check-task name="VIGNETTE_DATABASE_CHECK"/>
+	
+	<!-- To enable Web page check-task for arbitrary Web page (params required)
+	uncomment the next lines-->
+	<!--
+	<monitoring-check-task name="WEB_PAGE_CHECK"> -->
+			<!-- Same params as supported for <webpage-check-task> pre-R3.1.1 -->
+			<!--<init-param>
+				<param-name>url</param-name>
+				<param-value>some value</param-value>
+			</init-param>
+			<init-param>
+				<param-name>pattern</param-name>
+				<param-value>some value</param-value>
+			</init-param>
+	</monitoring-check-task>
+	-->
+</portal-pulse>

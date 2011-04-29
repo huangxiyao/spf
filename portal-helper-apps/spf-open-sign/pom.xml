@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.hp.it.spf.apps</groupId>
+		<artifactId>portal-helper-apps</artifactId>
+		<version>2.2.4-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.hp.it.spf.apps</groupId>
+	<artifactId>spf-open-sign</artifactId>
+
+	<packaging>war</packaging>
+	<name>SPF open-sign</name>
+
+	<description>Web application for the Shared Portal Framework open-sign. When this application is
+		running, it means the SPF site (cluster) is open. When this application is not
+		running, it means the SPF site (cluster) is closed.</description>
+
+	<inceptionYear>January 2009</inceptionYear>
+
+</project>

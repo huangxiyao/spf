@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>com.hp.it.spf.portal</groupId>
+		<artifactId>portal-components</artifactId>
+		<version>2.2.4-SNAPSHOT</version>
+	</parent>
+	
+	<groupId>com.hp.it.spf.comps</groupId>
+	<artifactId>spf-locale-indicator-classic-style</artifactId>
+	
+	<packaging>car</packaging>
+	<name>SPF classic locale indicator style</name>
+	<description>
+		JSPs and other artifacts for the Shared Portal Framework classic
+		locale indicator style. This Vignette component displays the
+		classic look-and-feel locale indicator widget.
+	</description>
+	
+	<inceptionYear>January 2009</inceptionYear>
+	
+	<dependencies>
+	
+		<dependency>
+			<groupId>com.hp.it.spf.comps</groupId>
+			<artifactId>spf-locale-widget-styletype</artifactId>
+			<version>${project.version}</version>
+			<type>car</type>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-portal-utilities</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+	</dependencies>
+</project>

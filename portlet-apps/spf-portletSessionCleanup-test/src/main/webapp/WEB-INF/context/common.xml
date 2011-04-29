@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	
+
+	<!-- ========================================================= UI Layer -->
+	
+	<bean id="parameterMappingInterceptor"
+		class="org.springframework.web.portlet.handler.ParameterMappingInterceptor" />
+		
+	<!-- Default View Resolver -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="cache" value="false" />
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- ==================================================== Exception Handling -->
+		
+	<bean id="defaultExceptionHandlerTemplate"
+		class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver" 
+		abstract="true">
+		<property name="defaultErrorView" value="genericError" />
+		<property name="exceptionMappings">
+			<props>
+				<prop key="com.hp.it.ossiris.web.ui.MessageKeyException">
+					messageKeyError
+				</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="defaultExceptionHandler" parent="defaultExceptionHandlerTemplate" />
+		
+</beans>

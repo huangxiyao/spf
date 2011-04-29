@@ -1,0 +1,144 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.hp.it.spf.portlet</groupId>
+		<artifactId>portlet-apps</artifactId>
+		<version>2.2.4-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.hp.it.spf.apps</groupId>
+	<artifactId>spf-html-viewer</artifactId>
+	<packaging>war</packaging>
+
+	<name>SPF HTML viewer portlet</name>
+	<description>
+		Shared Portal Framework portlet application implementing the
+		HTMLViewer portlet: a JSR-168 portlet which interpolates and
+		displays an administrated HTML file (including defined tokens
+		for certain dynamic substitutions).
+	</description>
+	<inceptionYear>December 2008</inceptionYear>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.hp.frameworks</groupId>
+			<artifactId>timber-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hp.frameworks</groupId>
+			<artifactId>wpa-portlet-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.portlet</groupId>
+			<artifactId>portlet-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hp.it.spf.sso</groupId>
+			<artifactId>spf-portlet-filters</artifactId>
+            <version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc-portlet</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-portlet-utilities</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-common-utilities</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+ 
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+		</dependency>
+		
+		<!-- Needed for local portlet deployment - will be excluded in the remote version of the WAR file -->
+		<dependency>
+			<groupId>vignette</groupId>
+			<artifactId>vgn-jsr-container-taglib</artifactId>
+			<version>7.4.2</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+	</dependencies>
+
+	<build>
+		<finalName>htmlviewer</finalName>
+		<plugins>
+			
+			<plugin>
+				<groupId>com.hp.frameworks</groupId>
+				<artifactId>maven-vignette-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>local-war</id>
+						<configuration>
+							<securityFilterEnabled>true</securityFilterEnabled>
+						</configuration>
+						<goals>
+							<goal>assemble</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-war</id>
+						<!-- Exclude VAP lib from the remote version of the WAR file -->
+						<configuration>
+							<packagingExcludes>**/vgn-jsr-container-taglib*.jar</packagingExcludes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>local-war</id>
+						<!-- Include VAP lib in the local version of the WAR file -->
+						<!-- Include also web.xml VAP-instrumented by maven-vignette-plugin above -->
+						<configuration>
+							<classifier>vgn</classifier>
+							<packagingIncludes>**/vgn-jsr-container-taglib*.jar</packagingIncludes>
+							<webXml>target/vignette-resources/web.xml</webXml>
+						</configuration>
+						<goals>
+							<goal>war</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+	</build>
+</project>

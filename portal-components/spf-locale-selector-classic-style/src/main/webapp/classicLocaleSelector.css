@@ -1,0 +1,25 @@
+/* This file contains the default CSS styles for the SPF "classic"
+locale selector Vignette style component.  Use this file as a template
+to define your own CSS for this component.  Name your new file 
+"<site>ClassicLocaleSelector.css" (where <site> is your site DNS name
+in Vignette) and upload it as a new secondary support file into the SPF
+"classic" locale selector Vignette style component, using the Vignette
+console. */
+
+/* When multiple locales are available for the site, this component
+renders a select list with a text label.  These CSS styles apply to 
+those renderings. */
+.spf-localeselector-classic-label {
+	/* reserved for you to customize */
+}
+.spf-localeselector-classic-list {
+	/* reserved for you to customize */
+}
+
+/* When only a single locale is available for the site, this component
+renders the locale indicator just like the SPF "classic" locale 
+indicator (Vignette style component) does.  This CSS style applies to
+that. */
+.spf-localeindicator-classic {
+	/* reserved for you to customize */
+}

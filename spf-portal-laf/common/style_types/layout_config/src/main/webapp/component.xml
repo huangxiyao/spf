@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component 
+	build-version="Gold" 
+	component-id="HPLayoutConfigStyleType" 
+	component-type="Style Types" 
+	description="Style type to hold custom code for layout configuration." 
+	epi-build="570014" 
+	epi-version="7.4" 
+	major-version="1" 
+	minor-version="0" 
+	title="HP Layout Config Style Type" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+
+	<epideploy:detail>
+		<template-info 
+			id="HPLayoutConfigStyleType" 
+			friendly-id="hp_layout_config" 
+			title="HP Layout Config Style Type" 
+			description="Style type to hold custom code for layout configuration." 
+			type="templatetype_ui_element" 
+			is-system="false" 
+			allow-guest-access="true" 
+			system-secondary-page-type="false" 
+			visible="true"/>
+	</epideploy:detail>
+</epideploy:component>

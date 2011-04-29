@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<bean id="htmlViewerConfigController"
+		class="com.hp.it.spf.htmlviewer.portlet.web.ConfigController">
+		<property name="viewName" value="config" />
+	</bean>
+
+	<bean id="htmlViewerViewController"
+		class="com.hp.it.spf.htmlviewer.portlet.web.ViewController">
+		<property name="viewName" value="view" />
+		<!-- Added for workaround to strange problem in which Vignette 
+		periodically decides to minimize certain portlet instances, therefore
+		(without this setting) causing the portlet instance to render minimally.
+		This workaround will cause it to render fully when in minimized state,
+		as when in "normal" state.  Note: This should only be considered a
+		temporary workaround, suitable only for instances of the portlet which
+		are never meant to be minimized.  Using this with a portlet instance
+		which really is intended to be minimized will be inappropriate, since
+		this workaround makes the portlet un-minimizable.  
+		CR #222, DSJ 2010/10/4 -->
+		<property name="renderWhenMinimized" value="true"/>
+	</bean>
+
+	<!-- Portlet mode-to-controller mapping -->
+	<bean id="portletModeHandlerMapping"
+		parent="portletModeHandlerMappingTemplate">
+		<property name="order" value="1" />
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="htmlViewerViewController" />
+				</entry>
+				<entry key="vignette:config">
+					<ref bean="htmlViewerConfigController" />
+				</entry>
+				<entry key="config">
+					<ref bean="htmlViewerConfigController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- Exception handling -->
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="com.hp.it.spf.htmlviewer.portlet.exception.InternalErrorException">
+					systemError
+				</prop>
+			</props>
+		</property>
+	</bean>
+</beans>

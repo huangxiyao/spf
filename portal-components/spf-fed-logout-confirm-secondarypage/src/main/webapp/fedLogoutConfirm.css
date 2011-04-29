@@ -1,0 +1,38 @@
+/* This file contains the default CSS styles for the SPF federated
+logout confirmation secondary page.  Use this file as a template to
+define your own style for this page.  Name your new file
+"<site>FedLogoutConfirm.css" (where <site> is your site DNS name in
+Vignette) and upload it as a new secondary support file into the SPF
+federated logout confirmation secondary page component, using the
+Vignette console. */
+
+.spf-fedlogoutconfirm-section-header {
+	font-size: large;
+	font-weight: bold;
+	text-align: left;
+	vertical-align: bottom;
+	padding-top: 5px;
+	padding-bottom: 0px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	border-bottom-color: black;
+	border-bottom-style: solid;
+	border-bottom-height: 5px;
+}
+
+.spf-fedlogoutconfirm-section-text {
+	padding-left: 10px;
+}
+
+.spf-fedlogoutconfirm-section-text-note {
+	font-weight: bold;
+}
+
+.spf-fedlogoutconfirm-section-text-note-details {
+	font-style: italic;
+}
+
+.spf-fedlogoutconfirm-section-text-link {
+	font-weight: bold;
+	padding-left: 10px;
+}

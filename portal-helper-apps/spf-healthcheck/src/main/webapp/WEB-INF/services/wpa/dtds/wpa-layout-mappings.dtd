@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	To support validation of your configuration file and for
+	admin plug-in compatibility, include the
+	following DOCTYPE element at the beginning of your file
+	(after the "xml" declaration):
+	
+	<!DOCTYPE layout-mappings PUBLIC "WPA_LAYOUT_MAPPINGS_DTD" 
+		"http://websat.cup.hp.com/dtds/wpa-layout-mappings.dtd">
+
+-->
+
+<!ELEMENT layout-mappings (layout-mapping*)>
+
+<!-- The "layout-mapping" element establishes a mapping between a path/portal
+     combination and the named layout that should be applied.
+
+     path            The context-relative path to the page that is being decorated
+                     by the layout.
+
+     portal          The portal name that was associated with the action mapping
+                     in the struts-config.xml file.
+
+     layout          The name of the layout (as specified in the layout.xml file)
+                     that should be applied to this path/portal combination.
+
+     layoutAction    The fully-qualified Java class name of the LayoutAction that
+                     should be executed before control is forwarded to that page
+		     identified by the "path" attribute. [OPTIONAL]
+
+     roles           The comma-delimited list of user roles that need to be matched
+                     in order for this layout to be applied.  This is treated as an
+		     OR list, so only one of the listed roles need match. [OPTIONAL]
+-->
+<!ELEMENT layout-mapping (layout-action|set-property*)>
+<!ATTLIST layout-mapping path		CDATA #REQUIRED>
+<!ATTLIST layout-mapping portal		CDATA #REQUIRED>
+<!ATTLIST layout-mapping layout		CDATA #REQUIRED>
+<!ATTLIST layout-mapping layoutAction	CDATA #IMPLIED>
+<!ATTLIST layout-mapping roles		CDATA #IMPLIED>
+
+
+<!-- The "layout-action" element describes a LayoutAction that is associated with a
+     particular set of user roles.  For a given request, if the user belongs to one
+     of the roles listed in the "roles" attribute, the LayoutAction indicated by
+     the "class" attribute will be executed.  The ordering of the "layout-action"
+     elements is important - only the first one that matches a given user will
+     be executed.
+
+     roles           The list of user roles (comma delimited) that must be matched in 
+                     order to execute the LayoutAction specified by the "type" 
+		     attribute.  This is treated as an OR list, so only one 
+		     of the listed roles need match.
+
+     class           The fully-qualified Java class name of the LayoutAction to
+                     execute if the current user matches one of the roles listed in
+		     the "roles" attribute.
+-->
+<!ELEMENT layout-action EMPTY>
+<!ATTLIST layout-action roles	CDATA #REQUIRED>
+<!ATTLIST layout-action class	CDATA #REQUIRED>
+
+
+<!ELEMENT set-property EMPTY>
+<!ATTLIST set-property property		CDATA #REQUIRED>
+<!ATTLIST set-property value		CDATA #REQUIRED>
+

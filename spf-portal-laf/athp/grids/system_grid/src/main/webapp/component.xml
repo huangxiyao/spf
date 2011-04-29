@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component 
+	build-version="Gold" 
+	component-id="AtHPSystemGrid" 
+	component-type="Grids" 
+	description="@hp layout grid displays header and footer elements for a @hp page layout." 
+	epi-build="570014" 
+	epi-version="7.4" 
+	major-version="1" 
+	minor-version="0" 
+	title="@hp Layout System Grid" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+
+		<epideploy:required-component 
+			component-id="template0005" 
+			component-type="Style Types" 
+			major-version="7" 
+			minor-version="4"/>
+
+		<epideploy:detail>
+			<style-info 
+				apply-template-header="false" 
+				description="@hp layout grid displays header and footer elements for a @hp page layout." 
+				friendly-id="athpsystemgrid" 
+				id="AtHPSystemGrid" 
+				is-system="false" 
+				primary-filename="athp_system_grid.jsp" 
+				processing-type="JSP_BASED" 
+				template-default="false" 
+				template-uid="template0005" 
+				title="@hp Layout System Grid" 
+				visible="true"/>
+		</epideploy:detail>
+</epideploy:component>

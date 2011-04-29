@@ -1,0 +1,35 @@
+<html>
+<body>
+<p>This package contains plain Java classes for internationalizing
+both portlet applications and portal components in the Shared Portal
+Framework.</p>
+
+<blockquote>
+<p><b>Note:</b> SPF portal and portlet developers should never need
+to use the Java classes in this package directly. Import the portal or
+portlet subclasses instead - eg, {@link
+com.hp.it.spf.xa.i18n.portlet.I18nUtility} for portlets, and {@link
+com.hp.it.spf.xa.i18n.portal.I18nUtility} for portal components.</p>
+</blockquote>
+
+<a name="I18nUtility">
+<h3>I18nUtility</h3>
+</a>
+<p>The {@link com.hp.it.spf.xa.i18n.I18nUtility} class provides
+methods for:
+<ul>
+	<li>getting localized displayable values for various objects
+	(timezones, user names, etc)</li>
+	<li>converting between different representations of locale ({@link
+	java.util.Locale}, <a
+		href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO
+	639-1</a>, <a href="http://www.faqs.org/rfcs/rfc3066.html">RFC 3066</a>,
+	etc)</li>
+	<li>sorting locales</li>
+	<li>and more.</li>
+</ul>
+Please see the class documentation for more information.
+</p>
+
+</body>
+</html>

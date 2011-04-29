@@ -1,0 +1,6 @@
+This file contains the SVN revision numbers for OpenPortal projects as present in their repository.
+The HP-modified files present in this folder were created for these versions.
+
+
+portlet-container (https://portlet-container.dev.java.net/svn/portlet-container/trunk): 830
+wsrp (https://wsrp.dev.java.net/svn/wsrp/trunk): 805

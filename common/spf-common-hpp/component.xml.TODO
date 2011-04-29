@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component
+	build-version="gold"
+	component-id="SPF-common-ws-hpp"
+	component-type="Generic Component"
+	description="Shared Portal Framework common HPP Web Services client API"
+	epi-build="105"
+	epi-version="7.2.1"
+	major-version="1"
+	minor-version="0"
+	title="SPF common HPP Web Services" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+</epideploy:component>

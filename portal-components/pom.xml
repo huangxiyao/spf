@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.hp.it.spf.tools</groupId>
+		<artifactId>spf-pom</artifactId>
+		<version>2.2.4-SNAPSHOT</version>
+	</parent>
+
+	<version>2.2.4-SNAPSHOT</version>
+	<groupId>com.hp.it.spf.portal</groupId>
+	<artifactId>portal-components</artifactId>
+	<packaging>pom</packaging>
+	<name>SPF portal components aggregator POM</name>
+
+	<scm>
+		<connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk/portal-components</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/portal-components</developerConnection>
+		<url>http://code1.corp.hp.com/svn/spf/source/trunk/portal-components</url>
+	</scm>
+
+	<distributionManagement>
+		<site>
+			<id>site</id>
+			<name>SPF Common Site</name>
+			<url>${siteUrl}/portal-components/${project.version}</url>
+		</site>
+	</distributionManagement>
+
+	<modules>
+		<module>spf-auth-error-secondarypage</module>
+		<module>spf-auth-error-secondarypagetype</module>
+		<module>spf-fed-launch-error-secondarypage</module>
+		<module>spf-fed-launch-error-secondarypagetype</module>
+		<module>spf-fed-logout-confirm-secondarypage</module>
+		<module>spf-fed-logout-confirm-secondarypagetype</module>
+		<module>spf-global-help-secondarypage</module>
+		<module>spf-global-help-secondarypagetype</module>
+		<module>spf-hpweb-layout-config-style</module>
+		<module>spf-locale-indicator-classic-style</module>
+		<module>spf-locale-selector-classic-style</module>
+		<module>spf-locale-selector-secondarypage</module>
+		<module>spf-locale-selector-secondarypagetype</module>
+		<module>spf-locale-widget-styletype</module>
+		<module>spf-logout-secondarypage</module>
+		<module>spf-logout-secondarypagetype</module>
+		<module>spf-maximize-secondarypage</module>
+		<module>spf-mypages-maximize-secondarypage</module>
+		<module>spf-mypages-page-display-secondarypage</module>
+		<module>spf-navportlet-portalbean</module>
+		<module>spf-page-display-secondarypage</module>
+		<module>spf-portal-components</module>
+		<module>spf-portal-pulse-secondarypage</module>
+		<module>spf-portal-pulse-secondarypagetype</module>
+		<module>spf-return-secondarypage</module>
+		<module>spf-return-secondarypagetype</module>
+		<module>spf-site-picker-secondarypage</module>
+		<module>spf-system-error-secondarypage</module>
+	</modules>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.hp.it.spf.xa</groupId>
+				<artifactId>spf-common-hpp</artifactId> 				
+				<version>${project.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>xerces</groupId>
+						<artifactId>xercesImpl</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.hp.it.spf.tools</groupId>
+				<artifactId>spf-maven-car-plugin</artifactId>
+				<extensions>true</extensions>
+				<version>2.1.1</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<preparationGoals>clean install</preparationGoals>
+					<arguments>-Dmaven.test.skip=true</arguments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

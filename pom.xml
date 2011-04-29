@@ -1,60 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.hp.it.spf.tools</groupId>
+    <version>2.2.4-SNAPSHOT</version>
+    <artifactId>spf-all</artifactId>
+    <packaging>pom</packaging>
+    <name>SPF Aggregator POM</name>
+    
+    <modules>
+        <module>spf-pom</module>
+        <module>common</module>
+        <module>portal</module>
+        <module>portal-components</module>
+        <module>portal-helper-apps</module>
+        <module>portlet</module>
+        <module>portlet-apps</module>
+        <module>spf-portal-laf</module>
+    </modules>
+    
+    <scm>
+        <connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk</connection>
+        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk</developerConnection>
+        <url>http://code1.corp.hp.com/svn/spf/source/trunk</url>
+    </scm>
 
-	<parent>
-		<groupId>com.hp.it.spf.tools</groupId>
-		<artifactId>spf-pom</artifactId>
-		<version>2.2.4-SNAPSHOT</version>
-	</parent>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Public</name>
+            <url>http://repo1.corp.hp.com/nexus/content/groups/public</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:15</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <!--<updatePolicy>interval:1</updatePolicy>-->
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </repository>
+    </repositories>
 
-	<groupId>com.hp.it.spf.portal</groupId>
-	<artifactId>portal</artifactId>
-	<version>2.2.4-SNAPSHOT</version>
-	
-	<packaging>pom</packaging>
-	<name>SPF portal aggregator POM</name>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Public</name>
+            <url>http://repo1.corp.hp.com/nexus/content/groups/public</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:15</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 
-	<scm>
-		<connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk/portal</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/portal</developerConnection>
-		<url>http://code1.corp.hp.com/svn/spf/source/trunk/portal</url>
-	</scm>
+    <distributionManagement>
 
-	<distributionManagement>
-		<site>
-			<id>site</id>
-			<name>SPF Common Site</name>
-			<url>${siteUrl}/portal/${project.version}</url>
-		</site>
-	</distributionManagement>
-	
-	<properties>
-		<cas.security.version>2.1.1</cas.security.version>
-	</properties>
+        <snapshotRepository>
+            <id>snapshot</id>
+            <name>Internal Snapshots</name>
+            <url>${distributeSnapshotUrl}</url>
+        </snapshotRepository>
 
+        <repository>
+            <id>release</id>
+            <name>Internal Releases</name>
+            <url>${distributeReleaseUrl}</url>
+        </repository>
 
-	<modules>
-		<module>spf-maven-car-plugin</module>
-		<module>spf-portal</module>
-		<module>spf-portal-config</module>
-		<module>spf-portal-filters</module>
-		<module>spf-portal-session</module>
-		<module>spf-portal-tools</module>
-		<module>spf-portal-utilities</module>
-		<module>spf-portal-wsrp</module>
-	</modules>
+        <site>
+            <id>site</id>
+            <url>${siteUrl}/${project.artifactId}/${project.version}</url>
+        </site>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.0-beta-9</version>
-				<configuration>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<preparationGoals>clean install</preparationGoals>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    </distributionManagement>
+
 </project>

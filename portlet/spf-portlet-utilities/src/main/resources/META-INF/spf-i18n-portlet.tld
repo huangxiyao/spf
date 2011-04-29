@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+<taglib>
+	<tlibversion>1.0</tlibversion>
+	<jspversion>1.2</jspversion>
+	<shortname>spf-i18n-portlet</shortname>
+	<uri>/spf-i18n-portlet.tld</uri>
+	<info>
+		Tag library for Shared Portal Framework portlet
+		internationalization tags.
+	</info>
+	<!-- Tag: <spf-i18n-portlet:localizedFileURL> -->
+	<tag>
+		<name>localizedFileURL</name>
+		<tagclass>
+			com.hp.it.spf.xa.i18n.portlet.tag.LocalizedFileURLTag
+		</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Expresses a URL for a proper best-fit localized version of
+			the given file, which may be found in the portlet resource
+			bundle folder or inside the portlet application WAR. This
+			tag is for SPF portlets.
+		</info>
+		<attribute>
+			<name>file</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>fileKey</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- Tag: <spf-i18n-portlet:message> -->
+	<tag>
+		<name>message</name>
+		<tagclass>
+			com.hp.it.spf.xa.i18n.portlet.tag.MessageTag
+		</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>
+			Expresses a message string for the given message key in the
+			portlet resource bundles. If the message string is not
+			found, the given default is expressed instead. In any case,
+			the expressed message may optionally be HTML-escaped. To
+			insert general string parameters into the message, put
+			&lt;spf-i18n-portlet:param&gt; tags inside the tag body. To
+			insert contextual-help parameters into the message, put
+			&lt;spf-i18n-portlet:contextualHelpParam&gt; tags inside the
+			tag body. This tag is for SPF portlets.
+		</info>
+		<attribute>
+			<name>key</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>defaultValue</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>escape</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- Tag: <spf-i18n-portlet:param> -->
+	<tag>
+		<name>param</name>
+		<tagclass>com.hp.it.spf.xa.i18n.portlet.tag.ParamTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			A general string parameter for a surrounding
+			&lt;spf-i18n-portlet:message&gt; tag. The given value will
+			be treated as a general string parameter to substitute into
+			the message string where it is formatted as per the
+			Java-standard MessageFormat specification. This tag is for
+			SPF portlets.
+		</info>
+		<attribute>
+			<name>value</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- Tag: <spf-i18n-portlet:classicContextualHelpParam> -->
+	<tag>
+		<name>classicContextualHelpParam</name>
+		<tagclass>
+			com.hp.it.spf.xa.i18n.portlet.tag.ClassicContextualHelpParamTag
+		</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			A set of contextual-help parameters for a surrounding
+			&lt;spf-i18n-portlet:message&gt; tag. These parameters are
+			used to populate a "classic"-style contextual-help hyperlink
+			corresponding to any special &lt;Contextual_Help&gt; token
+			found inside the message string. This tag is for SPF
+			portlets.
+		</info>
+		<attribute>
+			<name>title</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>titleKey</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>content</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>contentKey</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>noScriptHref</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>borderStyle</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>borderClass</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>titleStyle</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>titleClass</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>contentStyle</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>contentClass</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>

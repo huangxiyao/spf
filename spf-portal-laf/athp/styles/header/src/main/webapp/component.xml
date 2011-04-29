@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component 
+	build-version="Gold" 
+	component-id="AtHPHeader" 
+	component-type="Styles" 
+	description="@hp layout header displays the HP logo, banner text, search form, and peoplefinder form." 
+	epi-build="570014" 
+	epi-version="7.4" 
+	major-version="1" 
+	minor-version="0" 
+	title="@hp Layout Header" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	
+		<epideploy:required-component 
+			component-id="template0008" 
+			component-type="Style Types" 
+			major-version="7" 
+			minor-version="4" />
+
+		<epideploy:detail>
+			<style-info 
+				apply-template-header="true" 
+				description="@hp layout header displays the HP logo, banner text, search form, and peoplefinder form." 
+				friendly-id="athpheader" 
+				id="AtHPHeader" 
+				is-system="false" 
+				primary-filename="athp_header.jsp" 
+				processing-type="JSP_BASED" 
+				template-default="false" 
+				template-uid="template0008" 
+				title="@hp Layout Header" 
+				visible="true" />
+		</epideploy:detail>
+
+</epideploy:component>

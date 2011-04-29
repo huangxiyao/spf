@@ -1,0 +1,204 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.hp.frameworks</groupId>
+		<artifactId>spf-hpweb-laf</artifactId>
+		<version>2.2.4-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>hpweb_lib</artifactId>
+	<packaging>car</packaging>
+	<name>HPWeb Class Library VAP Component</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.hp.frameworks</groupId>
+			<artifactId>hpweb-core</artifactId>
+			<version>${hpweb-core-version}</version>
+			<scope>provided</scope>
+
+			<!-- For WL recompile defect workaround, don't package up the real hpweb-core.jar, 
+				but package with a local copy of hpweb-core.jar that is unbundled of .tag 
+				and .tld files. This local copy is checkin under the src/main/webapp/WEB-INF/lib 
+				directory. When the WL defect is fixed, then need to remove the local copy 
+				of the jar, and remove the .tag and .tld files from the src/main/webapp/WEB-INF/tags/hpweb 
+				directory. Also need to bundle hpweb-extensions.tld and TabSetEnhancedExt.tag 
+				into hpweb-var.jar. <scope>provided</scope> -->
+		</dependency>
+
+		<dependency>
+			<groupId>com.hp.frameworks</groupId>
+			<artifactId>hpweb-resources</artifactId>
+			<version>${hpweb-resources-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hp.frameworks</groupId>
+			<artifactId>wpa-layout-manager</artifactId>
+			<version>${wpa-layout-manager-version}</version>
+		</dependency>
+
+		<!-- The following jars are not included in CAR file because VAP webapp 
+			have them already. -->
+
+		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>sitemesh</artifactId>
+			<version>2.3</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>oro</groupId>
+			<artifactId>oro</artifactId>
+			<version>2.0.8</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.1.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.4</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>vignette</groupId>
+			<artifactId>vgn-portal-core</artifactId>
+			<version>7.4.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>vignette</groupId>
+			<artifactId>vgn-portal-linking</artifactId>
+			<version>7.4.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>vignette</groupId>
+			<artifactId>vgn-portal-base</artifactId>
+			<version>7.4.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+
+	<properties>
+		<hpweb-core-version>4.5.1</hpweb-core-version>
+		<hpweb-resources-version>4.5.1</hpweb-resources-version>
+		<wpa-layout-manager-version>4.2.0</wpa-layout-manager-version>
+	</properties>
+
+	<build>
+		<!-- Document the jar versions in the manifest file since the jars filenames 
+			don't include the version numbers. -->
+
+		<!-- The following plugins repackage hpweb-core.jar in order to work around the WebLogic
+		bug related to *.tag files embedded in a *.jar file which get recompiled on every request.
+		The JAR file is explosed into WEB-INF directory and the only remaining component in it
+		is LayoutManager.properties. -->
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-dependecines-tags</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeArtifactIds>hpweb-core</includeArtifactIds>
+							<excludeTransitive>true</excludeTransitive>
+							<includes>
+								**/*.*
+							</includes>
+							<outputDirectory>
+								${project.build.directory}/hpweb-core/
+              				</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<configuration>
+							<target>
+								<copy todir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes/com">
+									<fileset dir="${project.build.directory}/hpweb-core/com" />
+								</copy>
+								<copy todir="${project.build.directory}/${project.build.finalName}/WEB-INF/tags/hpweb">
+									<fileset dir="${project.build.directory}/hpweb-core/META-INF/tags" />
+									<fileset dir="${project.build.directory}/hpweb-core/META-INF" includes="**/*.tld" />
+								</copy>
+								<replace dir="${project.build.directory}/${project.build.finalName}/WEB-INF/tags/hpweb" includes="*.tld" token="/META-INF/tags/" value="/WEB-INF/tags/hpweb/" />
+								<jar destfile="${project.build.directory}/${project.build.finalName}/WEB-INF/lib/hpweb-core-repackaged.jar" basedir="${project.build.directory}/hpweb-core" includes="META-INF/com/**,META-INF/maven/**" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.hp.it.spf.tools</groupId>
+				<artifactId>spf-maven-car-plugin</artifactId>
+				<version>2.1.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<outputFileNameMapping>@{artifactId}@.@{extension}@</outputFileNameMapping>
+					<archive>
+						<manifestEntries>
+							<hpweb-laf>${project.version}</hpweb-laf>
+							<hpweb-core>${hpweb-core-version}</hpweb-core>
+							<hpweb-resources>${hpweb-resources-version}</hpweb-resources>
+							<wpa-layout-manager>${wpa-layout-manager-version}</wpa-layout-manager>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<archiveClasses>true</archiveClasses>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

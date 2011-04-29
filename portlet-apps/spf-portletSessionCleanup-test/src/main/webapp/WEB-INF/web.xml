@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	version="2.4">
+
+	<display-name>Session Cleanup Demo Application</display-name>
+
+	<description>
+		This is a Portlet Web Application which contains the 
+		Session Cleanup demostration Portlets
+	</description>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/context/common.xml
+		</param-value>
+	</context-param>
+	
+	<!-- WPAP log root -->
+	<context-param>
+		<param-name>timberLogRoot</param-name>
+		<param-value>/opt/sasuapps/sp/logs</param-value>
+	</context-param>
+	
+	<!--
+		Prevent the Spring Log4jListener from exposing the web app root 
+		directory as a system property so that we can deploy the application
+		as an un-exploded WAR if we want. 
+	 -->
+	<context-param>
+		<param-name>log4jExposeWebAppRoot</param-name>
+		<param-value>false</param-value>
+	</context-param>	
+
+	<!-- 
+		Ensure that the WPA LoggingConfigListener appears before the Spring
+		provided Log4jConfigListener so that the LOG_ROOT system property is
+		property initialized 
+	 -->
+	<listener>
+		<listener-class>
+			com.hp.frameworks.wpa.portlet.logging.LoggingConfigListener
+		</listener-class>
+	</listener>
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+
+		
+	<servlet>
+		<servlet-name>ViewRendererServlet</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.ViewRendererServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>ViewRendererServlet</servlet-name>
+		<url-pattern>/WEB-INF/servlet/view</url-pattern>
+	</servlet-mapping>
+
+</web-app>

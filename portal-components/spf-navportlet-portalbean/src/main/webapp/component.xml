@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="1" component-id="spf-navportlet-portalbean" component-type="ModuleTypes"
+					 description="Navigator portlet renders portal navigation tree's node and its children."
+					 epi-build="251" epi-version="7.2.2" major-version="2" minor-version="0"
+					 title="Shared Portal Framework - Navigator Portlet"
+					 xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:detail>
+		<module-config auto-deploy="true">
+			<descriptor-id>spf-navportlet-portalbean</descriptor-id>
+			<web-deployment-path>/beans/spf-navportlet</web-deployment-path>
+			<locale-key>c56d32feb0fce0e2743292844c6f0101</locale-key>
+		</module-config>
+	</epideploy:detail>
+</epideploy:component>

@@ -1,0 +1,1235 @@
+<html>
+<head>
+<title>Shared Portal Framework - HTML Viewer Portlet -
+Administration and Developer's Guide</title>
+</head>
+<body>
+<style type="text/css">
+body {
+	padding: 0;
+	font-family: Verdana, Sans-serif;
+	font-size: small;
+}
+
+h1 {
+	font-family: Georgia, Serif;
+	font-size: 200%;
+	color: #404040;
+	margin-top: 5px;
+}
+
+h2 {
+	font-family: Georgia, Serif;
+	font-size: 175%;
+	color: #404040;
+	page-break-before: always;
+}
+
+h3 {
+	font-family: Verdana, Sans-serif;
+	font-size: 150%;
+	font-weight: bold;
+	color: #404040;
+	margin-top: 20px;
+}
+
+h4 {
+	font-family: Verdana, Sans-serif;
+	font-size: 125%;
+	font-weight: bold;
+	color: #404040;
+	margin-top: 20px;
+}
+
+li {
+	margin-left: -10px;
+}
+
+ol li {
+	margin-bottom: 20px;
+}
+
+code {
+	color: #990000;
+	font-size: 110%
+}
+
+pre {
+	color: #990000;
+	font-size: 110%;
+}
+
+.byline {
+	font-style: italic;
+	font-size: 90%;
+	color: gray;
+	margin-top: -10px;
+	border-bottom: solid black 1px;
+}
+
+.codeSample {
+	color: #990000;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: small;
+	border: solid #990000 1px;
+	padding: 5px;
+}
+
+.leftFloatingImage {
+	float: left;
+	margin: 0 10px 10px 0;
+}
+
+.rightFloatingImage {
+	float: right;
+	margin: 0 0 10px 10px;
+}
+
+.toc {
+	list-style-type: none;
+}
+
+ul.toc ul {
+	list-style-type: none;
+}
+
+table.props td,table.props th {
+	padding: 5px;
+	background-color: #F0F0F0
+}
+
+table.props th {
+	font-size: 11px;
+	font-weight: bold;
+	text-align: right;
+}
+
+table.props td {
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.style1 {
+	border-style: solid;
+	border-width: 1px;
+}
+</style>
+
+<a name="top">
+<h1>Shared Portal Framework - HTML Viewer Portlet - Administration
+and Developer's Guide</h1>
+</a>
+
+<a name="toc">
+<h2>Table of Contents</h2>
+</a>
+
+<ul class="toc">
+	<li>1. <a href="#overview">Overview</a>
+	<ul>
+		<li>1.1. <a href="#overview.installation">Installation</a>
+		<ul>
+			<li>1.1.1. <a href="#overview.installation.war">Installation
+			of the <code>htmlviewer</code> WAR</a></li>
+			<li>1.1.2. <a href="#overview.installation.i18n_portlet_config">Installation
+			of <code>i18n_portlet_config.properties</code> (optional)</a></li>
+			<li>1.1.3. <a href="#overview.installation.init_relay">Installation
+			of <code>init_relay.properties</code> (optional)</a></li>
+			<li>1.1.4. <a href="#overview.installation.html_viewer_includes">Installation
+			of <code>html_viewer_includes.properties</code> (optional)</a></li>
+		</ul>
+		</li>
+		<li>1.2. <a href="#overview.dependencies">Dependencies</a></li>
+	</ul>
+	</li>
+	<li>2. <a href="#using">Using the <code>htmlviewer</code>
+	portlet</a>
+	<ul>
+		<li>2.1. <a href="#using.authoring">Authoring the view
+		content</a>
+		<ul>
+			<li>2.1.1. <a href="#using.authoring.file">Authoring the
+			view file</a></li>
+			<li>2.1.2. <a href="#using.authoring.other">Other resources
+			referenced from the view file</a></li>
+		</ul>
+		</li>
+		<li>2.2. <a href="#using.localizing">Localizing the view
+		content</a></li>
+		<li>2.3. <a href="#using.storing">Installing the view content</a>
+		<ul>
+			<li>2.3.1. <a href="#using.storing.internal">Packaging it
+			inside the <code>htmlviewer</code> WAR</a></li>
+			<li>2.3.2. <a href="#using.storing.external">Installing it
+			ouside of the <code>htmlviewer</code> WAR</a></li>
+		</ul>
+		</li>
+		<li>2.4. <a href="#using.creating">Creating and configuring
+		the portlet instance</a>
+		<ul>
+			<li>2.4.1. <a href="#using.creating.create">Creating the
+			portlet instance</a></li>
+			<li>2.4.2. <a href="#using.creating.configure">Configuring
+			the portlet instance</a></li>
+		</ul>
+		</li>
+		<li>2.5. <a href="#using.logs">Reading the logs</a></li>
+	</ul>
+	</li>
+	<li>3. <a href="#history">Document History</a></li>
+</ul>
+
+<hr>
+
+<a name="overview">
+<h2>1. Overview</h2>
+</a>
+
+<p>This is the administration guide and developer's guide for the <b>Shared
+Portal Framework (SPF) HTML viewer portlet</b>. The HTML viewer portlet is a
+JSR-286 portlet for displaying an arbitrary content file you provide
+(called a <i>view file</i>).</p>
+
+<ul>
+	<li>
+	<p>The view file may contain any HTML, CSS, or JavaScript so long
+	as it is portal-consumable (eg can be aggregated with other content
+	from the portal and possible other portlet(s) to constitute the overall
+	page).</p>
+	</li>
+	<li>
+	<p>The view file may also contain any of the <a
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#file.author">special
+	markup tokens</a> for server-side text interpolation, as supported by the
+	SPF portlet utilities' <a
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#file">text
+	interpolation</a> engine. Using these special markup tokens, your view file
+	can:</p>
+	<p>
+	<ul>
+		<li>permission content based on user authentication or
+		authorization;</li>
+		<li>display user profile attributes (name, email, etc);</li>
+		<li>present URLs for other static resources (images, etc) or
+		portal pages (but not target portlets on those pages with parameters,
+		modes, etc);</li>
+		<li>consolidate content that otherwise would have to be
+		maintained in multiple view files</li>
+	</ul>
+	</p>
+	<li>
+	<p>The view file and its static resources (images, etc), if any,
+	may be localized (for example, using the SPF standard localization
+	business process); the portlet will render the versions which best-fit
+	the user's locale.</p>
+	</li>
+	<li>
+	<p>The portal administrator, when creating an instance of the
+	portlet, configures the name of the view file to render. (The view file
+	itself, and its other static resources if any, are created and edited
+	separately, not online.)</p>
+	</li>
+	<li>
+	<p>The view file, its static resources, and their localized
+	versions may be stored <i>internal</i> to the portlet application or <i>external</i>,
+	on the filesystem of the portlet server, in the <i>portlet resource
+	bundle folder</i>.</p>
+	<p>
+	<ul>
+		<li>It is recommended to store them externally, if you anticipate
+		the administrator will need to change those files.</li>
+		<li>Changes to external files take effect without restarts.</li>
+	</ul>
+	</p>
+	</li>
+	<li>
+	<p>The portlet is contained in the <code>htmlviewer.war</code>
+	portlet application and may be deployed as a local portlet with the
+	portal, or as a remote portlet accessed by the portal over WSRP. (In
+	Shared Portal Framework, in practice, the portlet will be deployed
+	remotely in the OpenPortal container, and consumed by Vignette Portal.)</p>
+	</li>
+</ul>
+
+<hr>
+
+<a name="overview.installation">
+<h3>1.1. Installation</h3>
+</a>
+<a name="overview.installation.war">
+<h4>1.1.1 Installation of the <code>htmlviewer</code> WAR</h4>
+</a>
+<p>The HTML viewer portlet is distributed as a complete portlet
+application, in J2EE WAR format. The WAR filename is <code>htmlviewer.war</code>.
+The <code>htmlviewer</code> WAR is distributed through Maven 2:</p>
+
+<ul>
+	<li>The current Maven 2 repository is <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/apps/spf-html-viewer/"><code>http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-html-viewer/</code></a></li>
+	<li>The Maven group ID is <code>com.hp.it.spf.apps</code>
+	<li>The Maven artifact ID is <code>spf-html-viewer</code>
+</ul>
+
+<p>To get the HTML viewer portlet, download the latest released
+version of <code>htmlviewer.war</code> from the repository.</p>
+
+<p>The HTML viewer is a JSR-286 portlet application, so it needs a
+JSR-286-compliant portlet container. It can be local to the portal
+application, or remoted with the support of a WSRP portlet container. <b>Note:</b>
+For the Shared Portal Framework platform, we will generally use the
+remoted approach, employing the SPF-integrated OpenPortal portlet
+container (installation of this container and the application server in
+which it runs is not covered here). The remainder of these instructions
+will assume use of the SPF-integrated OpenPortal container.</p>
+
+<p>The deployment procedures for the HTML viewer WAR are generally
+the same as for any other JSR-286 portlet application. For the
+SPF-integrated OpenPortal container, general detailed deployment
+instructions are documented elsewhere in the SPF administration
+documentation. For your convenience, here are the steps in summary:</p>
+
+<ol>
+	<li>
+	<p>Login to the OpenPortal portlet driver console.</p>
+	</li>
+
+	<li>
+	<p>On the "Portlets" tab of the console, create your producer or
+	find an existing producer to use.</p>
+	<blockquote>
+	<p><b>Important:</b> make sure the producer is <b>enabled</b> and
+	has <b>registration required</b>. The latter prepares the system to
+	manage portlet preferences for each instance - a prerequisite for the
+	HTML viewer portlet. If using an existing producer where registration
+	was not required, you can change it - however you will have to delete
+	and re-create any remote portlet server (RPS) and associated portlet
+	instances in Vignette.</p>
+	</blockquote>
+	</li>
+
+	<li>
+	<p>On the "Admin" tab of the console, deploy the HTML viewer WAR.</p>
+	<blockquote>
+	<p><b>Important:</b> make sure the WAR filename is <code>htmlviewer.war</code>
+	first, if it is not already so. (This is because at least some versions
+	of OpenPortal require the filename to match the context root declared
+	in the deployment descriptor, which is <code>htmlviewer</code>.) After
+	downloading it above, it may be a different name, so rename it to <code>htmlviewer.war</code>
+	accordingly before deploying it. Also note that if you are updating an
+	existing deployment, you should <b>not</b> undeploy the existing
+	portlet from OpenPortal first.</p>
+	</blockquote>
+	</li>
+
+	<li>
+	<p>Login to the application server (WebLogic) console.</p>
+	</li>
+
+	<li>
+	<p>Deploy the <code>htmlviewer.war</code> to the desired targets as
+	usual for a Web application. You will find the <code>htmlviewer.war</code>
+	already staged for deployment by OpenPortal.</p>
+	<blockquote>
+	<p><b>Important:</b> you must deploy to WebLogic the version of the
+	WAR which OpenPortal staged, since OpenPortal rewrites some of the
+	deployment descriptor during the OpenPortal deployment step (above).</p>
+	</blockquote>
+	</li>
+
+	<li>
+	<p>Done. You can now create and configure one or more instances of
+	the HTML viewer portlet in Vignette console using the typical
+	procedures for doing so.</p>
+	<blockquote>
+	<p><b>Note:</b> on the <b>Details</b> tab for the portlet in
+	Vignette console, you will be prompted for a view filename (and
+	optional includes filename). See <a href="#using">Using the <code>htmlviewer</code>
+	portlet</a> below for detailed instructions. Be aware that, unless you have
+	<a href="#overview.installation.i18n_portlet_config">installed and
+	configured <code>i18n_portlet_config.properties</code></a> (below) to point
+	to a different location, the portlet will assume the view and include
+	files are under <code>/opt/sasuapps/sp/global_resources/portlet/i18n/</code>.
+	Also note that, until you configure a view file, the portlet's view
+	mode will display a generic internal error message (with error code <code>error.internal</code>).
+	</p>
+	</li>
+</ol>
+
+<a name="overview.installation.i18n_portlet_config">
+<h4>1.1.2 Installation of <code>i18n_portlet_config.properties</code>
+(optional)</h4>
+</a>
+
+<p>The HTML viewer portlet uses the SPF portlet utilities to find
+your view file and other resources referenced from the view file.
+Therefore you may need to configure the SPF portlet utilities' <code>i18n_portlet_config.properties</code>
+to configure the <code>htmlviewer</code> WAR.</p>
+
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>i18n_portlet_config.properties</code>
+if you use <a href="#using.storing.external">external view files</a> <b>and</b>
+you are putting the <i>portlet resource bundle folder</i> in a
+non-default location. (That is the external folder on the portlet
+server's filesystem, where you plan to put your externalized view
+content - see the discussion about <a href="#using.storing.external">external
+view files</a> below.) <i>Otherwise you can skip this.</i></p>
+</blockquote>
+
+<p>To install this file:</p>
+
+<ul>
+	<li>
+	<p>Download the template for <code>i18n_portlet_config.properties</code>.
+	It is packaged with the rest of the SPF portlet configuration file
+	templates, in the <code>spf-portlet-config.jar</code>. Download the
+	latest version of this JAR (typically a version number is affixed to
+	the JAR filename) and extract the <code>i18n_portlet_config.properties</code>
+	template file from it.</p>
+
+	<p>You can get the latest <code>spf-portlet-config.jar</code> from
+	the SPF team on their Maven 2 repository, here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+	(browse for the latest version).</p>
+	</li>
+
+	<li>
+	<p>Customize the <code>portlet.bundleDirectory</code> property in
+	the file, so that it has your non-default path for the <i>portlet
+	resource bundle folder</i>. For example, if you plan to keep your external
+	view files somewhere under <code>/var/htmlviewer/content</code>, then
+	you would configure:</p>
+
+	<blockquote><pre>
+portlet.bundleDirectory=/var/htmlviewer/content
+	</pre></blockquote>
+
+	<p>For more information about configuring this property, see the
+	instructions both in the template file, and in the SPF portlet
+	utilities guide (in the section about <a
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.other.i18n_portlet_config">configuring
+	the <code>i18n_portlet_config.properties</code></a>).</p>
+
+	<blockquote>
+	<p><b>Note:</b> <code>portlet.bundleDirectory</code> is the only
+	property in the file you will need to configure; ignore the rest.</p>
+	</blockquote>
+	</li>
+
+	<li>
+	<p>Include the customized file, named <code>i18n_portlet_config.properties</code>,
+	with the <code>htmlviewer</code> portlet application. You can put the
+	file anywhere that the system classloader searches: you can add it into
+	the <code>htmlviewer.war</code> (eg in <code>/WEB-INF/classes</code>)
+	or you can put it in any folder outside of the WAR which is named in
+	the classpath for your JVM. We recommend the latter; it makes
+	administrative changes to the file easier, and also means that when a
+	new <code>htmlviewer.war</code> is released, you can upgrade without
+	re-inserting your file into it.</p>
+
+	<p>If you are interested in externalizing the <code>i18n_portlet_config.properties</code>
+	from the portlet WAR, check how your application server is configured.
+	If you are using an application server hosting environment, like DASH
+	or SASU, they probably will have provided you a "global resources"
+	folder on the server filesystem and in the JVM classpath. You would put
+	the <code>i18n_portlet_config.properties</code> file there.</p>
+	</li>
+</ul>
+
+
+<a name="overview.installation.init_relay">
+<h4>1.1.3 Installation of <code>init_relay.properties</code>
+(optional)</h4>
+</a>
+
+<p>The HTML viewer portlet uses the SPF portlet utilities' <i>file
+relay servlet</i> to host downloads of external static resource files
+referenced from your view file. If your view file references other
+resource files (eg images, CSS, etc) and they are outside of the <code>htmlviewer</code>
+WAR, you <i>may</i> want to configure the SPF portlet utilities' <code>init_relay.properties</code>
+to configure the servlet to your satisfaction.</p>
+
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with <code>init_relay.properties</code>
+if you reference <a href="#using.storing.external">external resource
+files</a> from your view file, <b>and</b> you are dis-satisfied with the
+configuration in <code>init_relay_default.properties</code> (which is
+delivered inside the SPF portlet utilities JAR). See the discussion in
+the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/com/hp/it/spf/xa/relay/servlet/package-summary.html#init_relay.properties">package
+description</a> for the relay servlet. <i>For all of the most common
+static resources, the default configuration is fine and you should be
+able to skip this.</i></p>
+</blockquote>
+
+<p>To install this file:</p>
+
+<ul>
+	<li>
+	<p>Download the template for <code>init_relay.properties</code>. It
+	is packaged with the rest of the SPF portlet configuration file
+	templates, in the <code>spf-portlet-config.jar</code>. Download the
+	latest version of this JAR (typically a version number is affixed to
+	the JAR filename) and extract the <code>init_relay.properties</code>
+	template file from it.</p>
+
+	<p>You can get the latest <code>spf-portlet-config.jar</code> from
+	the SPF team on their Maven 2 repository, here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+	(browse for the latest version).</p>
+	</li>
+
+	<li>
+	<p>Customize the properties in the file as needed - see the
+	instructions both in the template file, and in the SPF portlet
+	utilities guide (in the section about <a
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.other.init_relay">configuring
+	the <code>init_relay.properties</code></a>).</p>
+	</li>
+
+	<li>
+	<p>Include the customized file, named <code>init_relay.properties</code>,
+	with your <code>htmlviewer</code> application. You can put the file
+	anywhere that the system classloader searches. See the discussion on
+	this point above, in regard to <a
+		href="#overview.installation.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
+	- the same comments apply to <code>init_relay.properties</code>.</p>
+	</li>
+</ul>
+
+<a name="overview.installation.html_viewer_includes">
+<h4>1.1.4 Installation of <code>html_viewer_includes.properties</code>
+(optional)</h4>
+</a>
+
+<p>The HTML viewer portlet uses the SPF file utilities' <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#file">text
+interpolation</a> engine to parse your view files and perform dynamic
+substitutions for certain special markup tokens you can use when <a
+	href="#using.authoring.file">authoring the view file</a>. If you use
+the <code>{INCLUDE:<i>key</i>}</code> token, then you will need to
+configure an <i>includes</i> (aka <i>token substitutions</i>) property
+file to define your key-value pair(s). By default, this property file is
+named <code>html_viewer_includes.properties</code>.</p>
+
+<blockquote>
+<p><b>Note:</b> You only need to concern yourself with the includes
+property file if you use the special <code>{INCLUDE:<i>key</i>}</code>
+markup token in your view file. <i>Otherwise you can skip this.</i></p>
+</blockquote>
+
+<p>To install this file:</p>
+
+<ul>
+	<li>
+	<p>Download the template for the includes file from SPF team Maven
+	2 repository. The template file is named <code>default_includes.properties</code>
+	but you will rename it. It is delivered inside the <code>spf-portlet-config.jar</code>
+	file (often a version number is affixed to the end of the JAR file
+	name). You can download that JAR file from the SPF Maven repository
+	here: <a
+		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+	(browse for the latest version).</p>
+	</li>
+
+	<li>
+	<p>Add your key-value pairs to the file - see the instructions both
+	in the template file, and in the SPF portlet utilities guide (in the
+	section which discusses the <a
+		href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#file.author.token.consolidate"><code>{INCLUDE:<i>key</i>}</code>
+	token</a>).</p>
+	</li>
+
+	<li>
+	<p>Include the customized file with your <code>htmlviewer</code>
+	application. By default, you can name it <code>html_viewer_includes.properties</code>,
+	but you can give it a custom name. (If you will have multiple portlet
+	instances and you want them to use different property files, this is
+	the way.) You have several choices where you can put this file:</p>
+	<ul>
+		<li>
+		<p>You can put the file anywhere that the system classloader
+		searches. See the discussion on this point above, in regard to <a
+			href="#overview.installation.i18n_portlet_config"><code>i18n_portlet_config.properties</code></a>
+		- the same comments apply to your token substitutions property file.</p>
+		</li>
+		<li>
+		<p>Alternatively, you can put the file anywhere in your portlet
+		WAR or in the <i>portlet resource bundle folder</i>, managing it as an
+		<i>internal</i> or <i>external</i> resource file like the view file
+		itself - see <a href="#using.storing">installing the view content</a>.</p>
+		</li>
+	</ul>
+	<p>When you <a href="#using.creating.configure">configure the
+	portlet instance</a>, you will tell it the filename and location relative
+	to where you put it. The portlet will then search in the above
+	locations for it.</p>
+	</li>
+</ul>
+
+<hr>
+
+<a name="overview.dependencies">
+<h3>1.2. Dependencies</h3>
+</a>
+
+<p>All of the runtime dependencies for the HTML viewer portlet are
+contained inside the <code>htmlviewer.war</code>. Your application
+server should be using Java 1.5 minimum and your portlet container needs
+to support JSR-286.</p>
+
+<hr>
+
+<a name="using">
+<h2>2. Using the <code>htmlviewer</code> portlet</h2>
+</a>
+
+<p>This chapter tells you how to use the HTML viewer portlet to
+render your content.</p>
+
+<hr>
+
+<a name="using.authoring">
+<h3>2.1. Authoring the view content</h3>
+</a>
+<a name="using.authoring.file">
+<h4>2.1.1. Authoring the view file</h4>
+</a>
+
+<p>Your view file must be an HTML file with UTF-8 character
+encoding. In your HTML file you can use whatever text, HTML markup, CSS
+and JavaScript is desired. However, remember that the content of your
+file will be aggregated by the portal with portal content and possibly
+other portlet content to form the overall Web page. Therefore for best
+results, your view file should <b>not</b> include any of the following:</p>
+
+<p>
+<ul>
+	<li>The HTML <code>&lt;html&gt;</code> and <code>&lt;/html&gt;</code>
+	tags.</li>
+	<li>The HTML <code>&lt;head&gt;</code> and <code>&lt;/head&gt;</code>
+	tags, including any markup valid only inside those tags (such as <code>&lt;meta&gt;</code>
+	and <code>&lt;title&gt;</code>).</li>
+	<li>The HTML <code>&lt;body&gt;</code> and <code>&lt;/body&gt;</code>
+	tags.</li>
+	<li>File editors on the Microsoft platform often insert a "byte
+	order mark" (BOM) in the first 2 bytes of a file, when the file is
+	saved. To avoid any possible rendering problems, remove the byte order
+	mark if it is present.</li>
+</ul>
+</p>
+
+<p>Your view file can contain any of the <i>special markup
+tokens</i> supported by the SPF portlet utilities' <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#file">text
+interpolation</a> engine. With these tokens, you can perform certain
+server-side substitutions such as:</p>
+
+<p>
+<ul>
+	<li>Inserting user data like name, email, and locale;</li>
+	<li>Inserting URLs pointing to other portal pages at your portal
+	site (though not targeting portlets with parameters, modes, window
+	states, etc);</li>
+	<li>Inserting URLs pointing to other static resource files (CSS
+	files, JavaScript files, images, video, audio, PDF, etc) contained
+	outside of your view file - either inside the <code>htmlviewer</code>
+	WAR itself, or outside it in the <i>portlet resource bundle folder</i>
+	(see the discussion below);</li>
+	<li>Conditionally including content based on user authentication
+	status or group- or role-based authorization; portlet ID or site; and
+	date and time;</li>
+	<li>Including content kept as key-value pairs in a separate <i>token
+	substitutions</i> property file;</li>
+	<li>And other behaviors.</li>
+</ul>
+</p>
+
+<p>Please see the discussion of <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#file.author">special
+markup tokens</a> in the SPF portlet utilities guide for a full description
+of all of the dynamic server-side behaviors you can put into your HTML
+view file.</p>
+
+<blockquote>
+<p><b>Note:</b> Be advised that if you use the <code>{INCLUDE:<i>key</i>}</code>
+token, you will want to create an <i>includes file</i> (aka token
+substitutions file) to go with it. This is a simple property file where
+you will define the key-value pairs you reference from your view file.
+See the discussion about <a
+	href="#overview.installation.html_viewer_includes">installing <code>html_viewer_includes.properties</code></a>
+above.</p>
+</blockquote>
+
+<blockquote>
+<p><b>Note:</b> Also be advised that the <i>file relay servlet</i>
+is already deployed inside the <code>htmlviewer</code> portlet
+application. You can use any of the tokens which build URLs to external
+static resources (images, etc) without having to worry about installing
+that servlet somewhere. (If you want to override that servlet's default
+configuration - usually this is not required - see the discussion above
+about <a href="#overview.installation.init_relay">installing <code>init_relay.properties</code></a>.)
+</p>
+</blockquote>
+
+<p>When your view file is finished, give it any desired filename
+with either a <code>.html</code> or <code>.htm</code> file extension. If
+you used English for your text, then name your file <i>without</i> any
+locale tag - because the HTML viewer portlet assumes English is your
+base locale. If you used a non-English language, then name your file <i>with</i>
+a locale tag as per the Java standard. Translations of the same view
+file must have the same <i>base file name</i> - ie disregarding the
+locale tag, their filenames must be the same. Like this:</p>
+
+<blockquote><pre>
+my_view_file.html          # English base view file
+my_view_file_fr.html       # Generic French view file
+my_view_file_fr_CA.html    # French (Canada) view file
+</pre></blockquote>
+
+<blockquote>
+<p><b>Note:</b> If you will be using the SPF localization business
+process, then typically you write just write a base English view file,
+and the localized versions will be created for you by the translators
+via that process. If you author your own localized versions, be sure to
+use the proper locale tag in your filename.</p>
+</blockquote>
+
+<a name="using.authoring.other">
+<h4>2.1.2. Other resources referenced from the view file</h4>
+</a>
+
+<p>Your view file can include URLs pointing to other static
+resources: images, video, audio, PDF, CSS files, JavaScript files, etc.
+Author these files as you normally would for each of their respective
+formats. (For text files like CSS and JavaScript, you must use UTF-8
+character encoding.) The special markup tokens <i>cannot</i> be used in
+these resources; they can only be used in the main HTML file (ie the
+view file) itself.</p>
+
+<p>Name your resource file whatever you prefer, giving it a file
+extension appropriate for its format (eg <code>.css</code> for CSS, <code>.js</code>
+for JavaScript, <code>.gif</code> for GIF images, etc). To reference
+these resources from your view file, use the appropriate special markup
+token in your view file to make a URL pointing to the resource: either <code>{CONTENT-URL:<i>path</i>}</code>
+or <code>{LOCALIZED-CONTENT-URL:<i>path</i>}</code>. The <code><i>path</i></code>
+includes the filename as well as any subfolder where you plan to keep
+the resource file (see <a href="#using.storing">installing the view
+content</a> below).</p>
+
+<p>For example, if you have a <code>picture.jpg</code> image which
+you plan to put into the <code>images/</code> subfolder, you could
+reference it from your view file like this:</p>
+
+<blockquote><pre>
+&lt;IMG SRC="{LOCALIZED-CONTENT-URL:/images/picture.jpg}" ALT="Some picture"&gt;
+</pre></blockquote>
+
+<p>As with view files, your other resource files should be tagged
+with the locale they correspond to (unless they are English or
+unlocalized). For example, we would use <code>picture.jpg</code> if the
+image is English or unlocalized; <code>picture_fr.jpg</code> if it was
+generic French; <code>picture_fr_CA.jpg</code> if it was French for
+Canada; etc. (As with view files, though, if you will be using the SPF
+localization business process for your resource files, normally you will
+just create the base English versions, and the translators will create
+the localized version.)</p>
+
+<hr>
+
+<a name="using.localizing">
+<h3>2.2. Localizing the view content</h3>
+</a>
+
+<p>Your view content - both your view file and any other resources
+like images which you reference from your view file - can be localized.
+You can create the localized versions yourself if desired - just follow
+the procedures for proper character encoding and naming of the localized
+files as discussed in the previous section. Or, you can use the
+SPF-standard localization business process, in which you just create the
+English base file(s), and then send them off to be translated by the HP
+Translation and Localization (T&L) team. For more information about how
+this works, see the section about the <a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.l10n.spf">SPF
+localization process</a> in the SPF portlet utilities guide.</p>
+
+<hr>
+
+<a name="using.storing">
+<h3>2.3. Installing the view content</h3>
+</a>
+
+<p>Once your view content files are created - the main HTML view
+file(s) themselves, plus any static resource file(s), as well as their
+localized versions - you have a choice as to where you put them. You can
+either add them to the <code>htmlviewer.war</code> itself, or you can
+put them outside, underneath a folder on the portlet server filesystem
+called the <i>portlet resource bundle folder</i>.</p>
+
+<blockquote>
+<p><b>Note:</b> This is the same principle as used in the SPF
+portlet utilities for custom portlet applications' message properties
+and other resource files: that is, <i>internal</i> versus <i>external</i>
+resources. The same ideas apply; you may want to read the discussion on
+<a
+	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n.location">where
+to put your resources</a> in the SPF portlet utilities developer's guide. We
+recommend you put your content files outside of the <code>htmlviewer.war</code>;
+that way, when the SPF team provides an updated version of the WAR, you
+can upgrade to it without first adding your custom file.</p>
+</blockquote>
+
+<blockquote>
+<p><b>Note:</b> If you have an <i>includes file</i>, you can install
+it as an internal or external resource file, too. See the discussion
+about <a href="#overview.installation.html_viewer_includes">installing
+<code>html_viewer_includes.properties</code></a> above, and <a
+	href="#using.creating.configure">configuring the portlet instance</a>
+below. As above, we recommend your put your includes file outside of the
+WAR.</p>
+</blockquote>
+
+<blockquote>
+<p><b>Note:</b> Unfortunately at this time the HTML viewer portlet
+does not support loading the view content or token substitution
+properties to a database; only to the portlet WAR or the filesystem.
+Similarly, at this time it does not provide a UI wizard or config mode
+for installing that content; you have to do it without the support of
+such a portlet-provided tool.</p>
+</blockquote>
+
+<a name="using.storing.internal">
+<h4>2.3.1. Packaging view content inside the <code>htmlviewer</code>
+WAR</h4>
+</a>
+
+<p>You can choose to add your view content to the <code>htmlviewer.war</code>.
+The advantage of this is that now wherever the <code>htmlviewer.war</code>
+gets copied to, the content will go along with it. The disadvantage is
+that putting the content inside the WAR makes it more difficult for an
+administrator to change at runtime. Note also that if you put it inside
+the WAR, you will have to repeat that whenever you upgrade to a new
+version of <code>htmlviewer.war</code> from the SPF development team.</p>
+
+<p>If you choose to package your view content inside the <code>htmlviewer</code>
+WAR, here is how:</p>
+
+<ol>
+	<li>Explode the <code>htmlviewer.war</code> file as you normally
+	would any WAR, EAR, JAR or ZIP file. Eg on Unix you can use <code>jar
+	xvf htmlviewer.war</code> for this.</li>
+	<li>For organizational purposes, create a desirable folder at the
+	root of the exploded WAR, to store your view file(s). For example,
+	create an <code>html/</code> folder at the root of the exploded WAR.</li>
+	<li>Copy your view file(s) - both the base file(s) and the
+	localized version(s) if any - into the folder you just created (eg, the
+	<code>html/</code> folder). You can put your file(s) into that folder
+	directly, or you can organize them into subfolders of that one.
+	However, be sure to keep each localized bundle - ie each base file and
+	its localized variants - in the same folder.</li>
+	<li>For each type of other static resource which you have, create
+	an appropriate folder at the root of the exploded WAR, and likewise
+	copy those resource files into it (again, both the base and localized
+	versions if any). As with the view files, you can use further levels of
+	subfolder to organize the static resources, so long as you keep all the
+	files of each localized bundle together. <b>Important:</b> Make sure
+	the relative path and file name (ie base name, in the case of a
+	localized bundle of resource files) match what you used in your URL's
+	in your view file(s).</li>
+	<li>Make sure all the folder and file permissions are set to allow
+	read by the application server at runtime.</li>
+	<li>Re-build the <code>htmlviewer.war</code> file as you normally
+	would a WAR file. Eg on Unix you can use <code>jar cvf
+	htmlviewer.war *</code> for this.</li>
+</ol>
+
+<p>For example, imagine that we plan to have 2 HTML viewer portlet
+instances, each displaying different, localized views (including some
+shared images). One of the views using a <i>token substitutions file</i>
+for the <code>{INCLUDE:<i>key</i>}</code> token. The layout could look
+like this:</p>
+
+<blockquote><pre>
+<code><i>&lt;web-app-root&gt;</i></code>/
+     html/
+          my_portlet_instance_1/
+               my_view_file_1.html
+               my_view_file_1_de.html
+               my_view_file_1_fr.html
+               my_view_file_1_pt_BR.html
+               ...
+          my_portlet_instance_2/
+               my_view_file_2.html
+               my_view_file_2_de.html
+               ...
+     images/
+          shared/
+               an_image.gif
+               an_image_de.gif
+               an_image_fr.gif
+               an_image_pt_BR.gif
+               ...
+     properties/
+          my_portlet_instance_1/
+               my_includes.properties
+          ...
+</pre></blockquote>
+
+<blockquote>
+<p><b>Note:</b> The <code>htmlviewer</code> portlet WAR already
+contains many files. Be sure not to lose or corrupt any of them when
+inserting your content into the WAR or rebuilding the WAR.</p>
+</blockquote>
+
+<a name="using.storing.external">
+<h4>2.3.2. Installing view content outside of the <code>htmlviewer</code>
+WAR</h4>
+</a>
+
+<p>Alternatively, you can put your resource files outside of the <code>htmlviewer.war</code>,
+in the <i>portlet resource bundle folder</i>. This is a folder on the
+portlet server's filesystem which is devoted to storing external
+resource files for SPF-based portlet applications. By default, the HTML
+viewer portlet assumes the folder is <code>/opt/sasuapps/sp/global_resources/portlet/i18n/</code>
+but you can override that in <code>i18n_portlet_config.properties</code>
+(see the discussion above about <a
+	href="#overview.installation.i18n_portlet_config">installing <code>i18n_portlet_config.properties</code></a>).</p>
+
+<p>The advantage to externalizing your view content is that
+administrative changes are made easier than they would be if the content
+was packaged inside the WAR. Also, you can upgrade to a new version of
+the WAR without first re-packing your content inside it. However, you
+must also become concerned with distributing your view content and
+installing it into the right place in production, in addition to the WAR
+itself.</p>
+
+<p>If you choose to use external view content, here is how:</p>
+
+<ol>
+	<li>If you are using a non-default location for the portlet bundle
+	folder, configure the location in <code>i18n_portlet_config.properties</code>
+	and install that file as mentioned above.</li>
+	<li>On each portlet server in your cluster:
+	<ol>
+		<li>Create the portlet resource bundle folder if it does not
+		already exist.</li>
+		<li>Create a desirable folder underneath it for storing your view
+		file(s), such as an <code>html/</code> subfolder.</li>
+		<li>Copy your view file(s) - both the base file(s) and the
+		localized version(s) if any - into the folder you created (eg, the <code>html/</code>
+		folder). You can put your file(s) into that folder directly, or you
+		can organize them into further subfolders. However, be sure to keep
+		each localized bundle - ie each base file and its localized variants -
+		in the same folder.</li>
+		<li>For each type of other static resource which you have, create
+		an appropriate subfolder within the portlet bundle folder, and
+		likewise copy those resource files into it (again, both the base and
+		localized versions if any). As with the view files, you can use
+		further levels of subfolder to organize the static resources, so long
+		as you keep all the files of each localized bundle together. <b>Important:</b>
+		Make sure the relative path and file name (ie base name, in the case
+		of a localized bundle of resource files) match what you used in your
+		URL's in your view file(s).</li>
+		<li>Make sure all the folder and file permissions are set to
+		allow read by the application server at runtime.</li>
+	</ol>
+</ol>
+
+<p>Let's repeat the previous example, this time externalizing the
+content. The layout looks the same, except that it is relative to the
+portlet bundle directory (eg, <code>/opt/sasuapps/sp/global_resources/portlet/i18n/</code>
+by default) instead of the WAR root:</p>
+
+<blockquote><pre>
+/opt/sasuapps/sp/global_resources/portlet/i18n/
+     html/
+          my_portlet_instance_1/
+               my_view_file_1.html
+               my_view_file_1_de.html
+               my_view_file_1_fr.html
+               my_view_file_1_pt_BR.html
+               ...
+          my_portlet_instance_2/
+               my_view_file_2.html
+               my_view_file_2_de.html
+               ...
+     images/
+          shared/
+               an_image.gif
+               an_image_de.gif
+               an_image_fr.gif
+               an_image_pt_BR.gif
+               ...
+     properties/
+          my_portlet_instance_1/
+               my_includes.properties
+          ...
+</pre></blockquote>
+
+<hr>
+
+<a name="using.creating">
+<h3>2.4. Creating and configuring the portlet instance</h3>
+</a>
+
+<p>Once the <code>htmlviewer</code> application has been installed
+in your portlet application server, and your view content is prepared
+and installed, you are ready to instantiate and configure an instance of
+the portlet to display the content.</p>
+
+<a name="using.creating.create">
+<h4>2.4.1. Creating the portlet instance</h4>
+</a>
+
+<p>If your portlet deployment succeeded, and your portal is in
+communication with your portlet container, then in the administrative
+console for your portal site, you will see the HTML viewer portlet
+listed as an available portlet type for instantiation. Just follow the
+standard procedures for creating an instance of a portlet type. You may
+name the portlet whatever you like, permission however you require,
+dress it in whatever portlet chrome of your choice as needed (or go
+chromeless), and position the portlet wherever needed on whatever page.</p>
+
+<blockquote>
+<p><b>Note:</b> If your view content uses the special <code>{PORTLET:<i>id</i>}...{/PORTLET}</code>
+markup token, then when you create the portlet instance for that
+content, be sure to enter a <i>portlet friendly ID</i> which matches
+that token. In Vignette console, the portlet friendly ID is entered on
+the <b>Basics</b> tab of the portlet instance.</p>
+<p>As of version 1.0.15 of the HTML viewer portlet application, the
+portlet friendly ID is also used in the logs, to differentiate between
+log entries for different portlet instances (see <a href="#using.logs">reading
+the logs</a> below). So it is a good idea to specify a good friendly ID even
+if your view content does not use that token.</p>
+</blockquote>
+
+<a name="using.creating.configure">
+<h4>2.4.2. Configuring the portlet instance</h4>
+</a>
+
+<p>After creating the portlet instance, go to its configuration view
+(ie run the portlet's <code>config</code> mode). This is where you tell
+the portlet instance what view file to render. In Vignette console, the
+configuration view is found in the <b>Details</b> tab of the portlet
+instance.</p>
+
+<blockquote>
+<p><b>Note:</b> Until you configure the portlet instance, its <code>view</code>
+mode will not know what view file to render, and will display an error
+if invoked. The <code>config</code> mode view will remind you to specify
+at least a view file when you first enter the mode.</p>
+</blockquote>
+
+<p>In the configuration view, there are 4 input elements (as of this
+writing - until the 1.0.15 version of the HTML viewer application, there
+were only the first 3):</p>
+
+<dl>
+	<dt><b>View file:</b></dt>
+	<dd>
+	<p>In this text box, enter the name of the view file containing the
+	content this portlet instance should render. In the case of a localized
+	bundle of view files, enter the base name. Include the file extension,
+	and any subfolders relative to the portlet bundle folder or portlet WAR
+	root. Consider the example layout in the previous section:</p>
+
+	<p>
+	<ul>
+		<li>When configuring the first portlet instance, you would enter
+		just <code>/html/my_view_file_1.html</code>.</li>
+		<li>When configuring the second portlet instance, you would enter
+		just <code>/html/my_view_file_2.html</code>.</li>
+	</ul>
+	</p>
+	</dd>
+
+	<dt><b>Includes file</b> (ie token substitutions file):</dt>
+	<dd>
+	<p><b>Optional.</b> You only care about this input element if your
+	view file content uses the special <code>{INCLUDE:<i>key</i>}</code>
+	token to dynamically insert key-value pairs from the <i>includes
+	file</i>; <b>and</b> that property file is named something other than the
+	default (<code>html_viewer_includes.properties</code>) or exists in a
+	subfolder. If so, then enter the filename here. Include the file
+	extension, and any subfolder relative to the classloader folder, <code>htmlviewer.war</code>
+	root, or <i>portlet resource bundle folder</i> where the file is
+	located. (The file may be located in any folder searched by the system
+	classloader, such as your "global resources" folder configured on the
+	JVM classpath; or it may be anywhere inside the WAR or underneath the
+	portlet resource bundle folder. See the discussion about <a
+		href="#overview.installation.html_viewer_includes">installing <code>html_viewer_includes.properties</code></a>
+	earlier in this guide.)</p>
+
+	<p>Consider the example layout in the previous section - for that
+	example, you would enter <code>/properties/my_portlet_instance_1/my_includes.properties</code>.</p>
+	</dd>
+
+	<dt><b>Open links in new buttonless window?</b></dt>
+	<dd>
+	<p><b>Optional.</b> The HTML viewer portlet has a secondary feature
+	whereby it can rewrite hyperlinks in your view content so that, when
+	clicked, the link is opened in a new, buttonless, child window. Only
+	hyperlinks coded in your view file using the <code>&lt;A
+	HREF="..."&gt;</code> tag are rewritten. JavaScript must be enabled in the
+	browser for the rewrite to have any effect (if JavaScript is disabled,
+	the link still functions but does not launch a new buttonless window).</p>
+	<p>To enable this optional feature, click the checkmark in the
+	configuration view. This feature is off by default.</p>
+	</dd>
+
+	<dt><b>Cache duration</b> (new to version 1.0.15):</dt>
+	<dd>
+	<p><b>Optional.</b> As of version 1.0.15 of the portlet
+	application, the HTML viewer portlet caches all of the resources it
+	uses to render the view content - the view file, includes file, and the
+	values of the these configuration input elements. This may improve the
+	HTML viewer portlet's performance under heavy loads.</p>
+	<p>The cache duration input element lets you specify the number of
+	seconds until the cache will be refreshed. By default, the cache
+	duration is 900 seconds (15 minutes) but if you want to enter an
+	alternative value, you can enter any positive number of seconds here.
+	Enter a negative number (eg <code>-1</code>) to cache forever, and
+	enter zero (<code>0</code>) to disable the cache (which is the
+	pre-1.0.15 behavior).</p>
+	</dd>
+</dl>
+
+<p>Be sure to click the <code>Save</code> button to save your
+changes.</p>
+
+<p>You are now done configuring the portlet, and you can go view or
+preview the portlet to see and test your rendered content.</p>
+
+<ul>
+	<li>Come back to the configuration view at any time to make
+	changes (eg point the portlet instance at a different view file).</li>
+	<li>You can also make changes to the view content at any time.
+	Changes you make to external view content take effect immediately,
+	without any restart or reconfiguration of the portlet required.</li>
+</ul>
+
+<hr>
+
+<a name="using.logs">
+<h3>2.5. Reading the logs</h3>
+</a>
+
+<p>The HTML viewer portlet uses WPAP (Timber) application logging.
+Configuration for these logs is in <code>logger.xml</code>, inside the <code>htmlviewer</code>
+portlet WAR file. The out-of-the-box configuration generates <b>business
+activity</b>, <b>performance</b>, <b>error</b> and <b>error trace</b> logs
+from which you can see how the portlet has been behaving. All HTML
+viewer portlet instances in the consuming portal write to these same
+logs.</p>
+<p>As of version 1.0.15 of the HTML viewer portlet application, the
+logging has been enhanced to include more data. Context information has
+been added to all the log records, including the portlet friendly ID
+(allowing you to distinguish between portlet instances in the log files)
+and whether the data rendered came from the cache or the source. For
+example, here is a business log record as of version 1.0.15 (the record
+has been wrapped here for readability):</p>
+
+<blockquote><pre>
+09/17/2009, 19:13:04 | 12532147846432971 | 12532147846432971 | 
+epi:user.standard;654e687954b2df310152dd6cb053ce01 | 
+257dc89c9d78647ad00bb72db053ce01-56a6ec2482b21250e00bb72db053ce01-2636b6e39487235532e82a10b053ce01 | 
+RENDER_PHASE | view | normal |  | en_US | {portletID:hmLogin},{contentFrom:cache} |  | OK | 0.008
+</pre></blockquote>
+
+<p>This log record was for the <code>hmLogin</code> portlet instance
+(friendly ID) and indicates the content (US English) was served
+succesfully (OK) from cache in 8 milliseconds.</p>
+<p>Application errors like missing or unreadable view files are now
+logged, as well. For example, when a portlet instance is configured to
+point to a non-existent view file, it has no content it can display.
+When a user views the portlet anyway, it will render a
+service-unavailable error message, and the business log entry will look
+like this (as of version 1.0.15):</p>
+
+<blockquote><pre>
+09/17/2009, 19:19:21 | 12532151611575614 | 12532151611575614 | 
+epi:user.standard;654e687954b2df310152dd6cb053ce01 | 
+257dc89c9d78647ad00bb72db053ce01-671d9ad3f4880aa391c6b510b053ce01-eae66195bd3b616d45c1fbecb053ce01 | 
+RENDER_PHASE | view | normal |  | en_US | {portletID:fmHelp},{contentFrom:source},
+{error.nullFile:viewFilename not found or readable: forums/html/forumsHelp1.html} |  | FATAL | 0.061
+</pre></blockquote>
+
+<p>This log record was for the <code>fmHelp</code> portlet instance
+(friendly ID) and indicates there was a FATAL error due to the view file
+(<code>forums/html/forumsHelp1.html</code>) not being found. The error
+and error trace logs will contain further information.</p>
+
+<p>The out-of-the-box HTML viewer configuration puts these log files
+into <code>/opt/sasuapps/sp/logs/htmlviewer/main</code> (where <code>htmlviewer</code>
+is the context root for the application, and <code>/opt/sasuapps/sp/logs/</code>
+is the WPAP Timber log root defined in the HTML viewer application's <code>web.xml</code>).</p>
+<hr>
+
+<a name="history">
+<h2>3. Document History</h2>
+</a>
+
+<table border="1">
+	<tr>
+		<th>Version</th>
+		<th>Date</th>
+		<th>Editor</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>1.0</td>
+		<td>Feb 27 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Initial published version.</td>
+	</tr>
+	<tr>
+		<td>1.1</td>
+		<td>Feb 28 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Added support for using a token substitutions property file
+		named something other than the default <code>html_viewer_includes.properties</code>,
+		and configured in the portlet's <code>config</code> mode. The file may
+		exist in a classloader folder or an internal or external resource
+		file.</td>
+	</tr>
+	<tr>
+		<td>1.2</td>
+		<td>Mar 30 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Documented that <code>html/</code> is no longer a required
+		subfolder for view files; any desirable subfolder can be used instead.</td>
+	</tr>
+	<tr>
+		<td>1.3</td>
+		<td>Apr 7 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Updated TBD URL's for property file templates, with pointers
+		to SPF portlet config JAR.</td>
+	</tr>
+	<tr>
+		<td>1.4</td>
+		<td>Jul 6 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Added note about renaming WAR file for OpenPortal.</td>
+	</tr>
+	<tr>
+		<td>1.5</td>
+		<td>Sep 17 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Documented new configuration option for the cache retention
+		period. Documented new logging section. Corrected the documentation to
+		say that HTML viewer is a JSR-286 portlet, not JSR-168, and requires a
+		JSR-286-compatible container.</td>
+	</tr>
+	<tr>
+		<td>1.6</td>
+		<td>Oct 14 2009</td>
+		<td>S. Jorgenson</td>
+		<td>Improved installation instructions.</td>
+	</tr>
+</table>
+<p></p>
+
+<hr>
+
+<h2>- End -</h2>
+</body>
+</html>

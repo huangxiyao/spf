@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app
+        xmlns="http://www.bea.com/ns/weblogic/90"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.bea.com/ns/weblogic/90 http://www.bea.com/ns/weblogic/90/weblogic-web-app.xsd">
+
+    <jsp-descriptor>
+        <keepgenerated>true</keepgenerated>
+        <page-check-seconds>-1</page-check-seconds>
+        <debug>false</debug>
+    </jsp-descriptor>
+
+    <container-descriptor>
+        <servlet-reload-check-secs>-1</servlet-reload-check-secs>
+        <resource-reload-check-secs>-1</resource-reload-check-secs>
+        <!-- Below setting is for WebLogic Server 10.3.x which comes with up-to-date
+        (comparing to WLS 10.0.x) JAX-WS and dependent classes. WebLogic should use its own classes,
+        otherwise ClassCastException is thrown. -->
+        <prefer-web-inf-classes>false</prefer-web-inf-classes>
+    </container-descriptor>
+
+    <security-role-assignment>
+        <role-name>admin</role-name>
+        <principal-name>Administrators</principal-name>
+    </security-role-assignment>
+
+    <context-root>portletdriver</context-root>
+</weblogic-web-app>

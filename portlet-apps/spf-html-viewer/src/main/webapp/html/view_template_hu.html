@@ -1,0 +1,37 @@
+<!--                  -->
+<!-- Sample HTML file --> <!--                  -->
+
+<!-- This is a template for an HTML Viewer portlet view file.  You will find it inside the portlet WAR, in the html/ subfolder.  Copy the file and modify it to create your own view file content.  First delete  these comments, then modify the rest of this file as needed for your portlet.  You can use any HTML, CSS, and JavaScript you like (but don't use the html, head, title, body, or any other page-wide tags).  You can    also use any special markup tokens supported by the HTML Viewer portlet in the Shared Portal Framework - see the usage documentation.  When you  are finished, name the file whatever you want and put it either:  - Inside the HTML Viewer portlet WAR, in the html/ subfolder (not recommended because then you would have to rebuild the WAR); or  - In your external portlet bundle folder, in the html/ subfolder.  (If your portlet bundle folder is not the default location:   /opt/sasuapps/sp/global_resources/portlet/i18n/ then also configure the actual location in i18n_portlet_config.properties in the portlet.bundleDirectory property, and put that file anywhere in your classpath. The other properties in the file can remain at their default settings.)  - If your global help is for a particular portal site, name the file <site-name>GlobalHelp.html where <site-name> is the site name for the site in Vignette.  Finally, go into the portal console and run the administrator panel (config mode) for the HTML Viewer portlet (after you have deployed the portlet application and instantiated the portlet, of course).  Enter  your filename into that panel and save.  Now the default (view) mode of the HTML Viewer portlet will display your interpolated file! -->
+
+<!--                              -->
+
+<!-- You can refer to external CSS in this file.  Create your styles in a CSS file.  Then place the file either inside the HTML Viewer  portlet WAR (not recommended) or in the external portlet bundle folder, as described above.  Put it in an appropriate subfolder, like css/, and then reference it from this file using a token like this (be sure to set the filename in the token to match the name you chose):   (Note: you may want to inherit your styles from the portal instead of defining your own. This is just for demonstration purposes.) -->
+
+<link href="{CONTENT-URL:/css/view_template.css}" rel="stylesheet" type="text/css"/>
+
+<!--                              -->
+
+<!-- Here is some sample content referring to styles in the CSS. -->
+
+<h1>Ide &iacute;rja a c&iacute;met.</h1>
+
+<p>Ide &iacute;rja a tartalmat. Bemutat&oacute;:</p>
+
+<!-- Here is an example of using some of the special markup tokens supported by the HTML Viewer portlet.  Please see the HTML Viewer portlet's administration guide for more information on the supported tokens: -->
+
+{LOGGED-IN}
+<p>&Ouml;n jelenleg az al&aacute;bbi adatokkal van <b>bejelentkezve</b>:</p>
+
+<p>Felhaszn&aacute;l&oacute;n&eacute;v: <code>{NAME}</code></p>
+<p>E-mail c&iacute;m: <code>{EMAIL}</code></p>
+
+<p>E n&eacute;zet v&aacute;laszművelet&eacute;nek megtekint&eacute;s&eacute;hez jelentkezzen ki.</p>
+{/LOGGED-IN}
+
+{LOGGED-OUT}
+<p>&Ouml;n <b>kijelentkezett</b>. E n&eacute;zet v&aacute;laszművelet&eacute;nek megtekint&eacute;s&eacute;hez jelentkezzen be.</p>
+{/LOGGED-OUT}
+
+<!-- Finally, you can also refer to external JavaScript in this file.  Put your JavaScript in a JS file.  Then place the file either inside the  HTML Viewer portlet WAR (not recommended) or in the external portlet bundle folder, as described above.  Put it in an appropriate subfolder, like js/, and then reference it from this file using a token like this (be sure to set the filename in the token to match the name you chose): -->
+
+<script src="{CONTENT-URL:/js/view_template.js}" type="text/javascript" language="javascript" charset="utf-8"></script>
