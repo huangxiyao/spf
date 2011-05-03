@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%-------------------------------------
 File: isWorkingAndOpen.jsp
 View file for case where site is both working and open.
