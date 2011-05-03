@@ -44,6 +44,6 @@ Healthcheck</a></b> for more current status regarding this site.</p>
 <font size="-1"><i>Based on open-sign at: <%=openSignSource%></i></font>
 <br>
 <font size="-1"><i><%=References.HTTP_X_SITE_AVAILABLE_HEADER%>:
-<%=References.HTTP_X_SITE_AVAILABLE%>
+<%=References.HTTP_X_SITE_AVAILABLE%></i></font>
 </body>
 </html>
