@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/portal" docBase="@@casfw_home@@/software/vignette-portal-@@portal_version@@/portal" reloadable="true" crossContext="true">
+    <Manager className="org.apache.catalina.session.StandardManager" pathname=""/>
+</Context>
