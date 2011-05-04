@@ -1,0 +1,478 @@
+<?xml version="1.0"?>
+
+<!--
+*
+* Copyright 1999-2007 Vignette Corporation.
+* All rights reserved.
+*
+* THIS PROGRAM IS CONFIDENTIAL AND AN UNPUBLISHED WORK AND TRADE
+* SECRET OF THE COPYRIGHT HOLDER, AND DISTRIBUTED ONLY UNDER RESTRICTION.
+*
+* EXCEPT AS EXPLICITLY STATED IN A WRITTEN AGREEMENT BETWEEN THE PARTIES,
+* THE SOFTWARE IS PROVIDED AS-IS, WITHOUT WARRANTIES OF ANY KIND, EXPRESS
+* OR IMPLIED, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT,
+* PERFORMANCE, AND QUALITY.
+*
+-->
+
+<!--
+* This is the configuration file for the Portal Data Sources subsystem,
+* which supports management and persistence of Entities (Users and Groups) in Portal.
+* It declares all entity types-each representing a particular user or
+* user group category-available in Portal.
+*
+* Only certain portions of this file, as explicitly noted, should be
+* modified. Any other modifications made to this file can cause
+* unpredictable results and is not supported.
+*
+* SQL configuration:
+* User Datasource: SQL
+* Group Datasource: SQL
+* User <-> Group Relationships: SQL
+* Group <-> Group Relationships: SQL
+*
+* Changes to this file take effect on restart of Portal.
+-->
+
+<data-sources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schema/entity_datasource.xsd">
+
+	<!-- Default mapping for all entity types defined in entity_management.xml -->
+	<entity-type-mappings>
+		<entity-type-mapping entity-type-id="epi:user.guest" data-source-id="vgn:datasource.cache" />
+		<entity-type-mapping entity-type-id="epi:user.standard" data-source-id="vgn:datasource.cache" />
+		<entity-type-mapping entity-type-id="epi:usergroup.standard" data-source-id="vgn:datasource.cache" />
+		<entity-type-mapping entity-type-id="epi:usergroup.system.standard" data-source-id="vgn:datasource.cache" />
+		<entity-type-mapping entity-type-id="epi:usergroup.system.admin" data-source-id="vgn:datasource.cache" />
+
+		<entity-type-mapping entity-type-id="epi:usergroup.system.registered" data-source-id="vgn:datasource.memory" />
+		<entity-type-mapping entity-type-id="epi:usergroup.system.everyone" data-source-id="vgn:datasource.memory" />
+	</entity-type-mappings>
+
+	<entity-type-relationship-mappings>
+		<entity-type-relationship-mapping
+			parent-entity-type-id="epi:usergroup.standard" child-entity-type-id="epi:user.standard"
+			data-source-id="vgn:datasource.cache" />
+		<entity-type-relationship-mapping
+			parent-entity-type-id="epi:usergroup.standard" child-entity-type-id="epi:usergroup.standard"
+			data-source-id="vgn:datasource.cache" />
+		<entity-type-relationship-mapping
+			parent-entity-type-id="epi:usergroup.system.standard" child-entity-type-id="epi:user.standard"
+			data-source-id="vgn:datasource.cache" />
+		<entity-type-relationship-mapping
+			parent-entity-type-id="epi:usergroup.system.standard" child-entity-type-id="epi:usergroup.system.standard"
+			data-source-id="vgn:datasource.cache" />
+		<entity-type-relationship-mapping
+			parent-entity-type-id="epi:usergroup.system.admin" child-entity-type-id="epi:user.standard"
+			data-source-id="vgn:datasource.cache" />
+		<entity-type-relationship-mapping
+			parent-entity-type-id="epi:usergroup.system.registered" child-entity-type-id="epi:user.standard"
+			data-source-id="vgn:datasource.memory" />
+		<entity-type-relationship-mapping
+			parent-entity-type-id="epi:usergroup.system.everyone" child-entity-type-id="epi:user.guest"
+			data-source-id="vgn:datasource.memory" />
+		<entity-type-relationship-mapping
+			parent-entity-type-id="epi:usergroup.system.everyone" child-entity-type-id="epi:usergroup.system.registered"
+			data-source-id="vgn:datasource.memory" />
+	</entity-type-relationship-mappings>
+
+	<data-source id="vgn:datasource.cache"
+				 type="com.epicentric.entity.datasource.internal.cache.CachingDataSource">
+
+		<entity-type-schemas>
+			<entity-type-schema entity-type-id="epi:user.guest" xsi:type="composite-entity-type-schema" >
+				<primary-schema-mapping data-source-id="vgn:datasource.sql">
+				</primary-schema-mapping>
+			</entity-type-schema>
+
+			<entity-type-schema entity-type-id="epi:user.standard" xsi:type="composite-entity-type-schema" >
+				<primary-schema-mapping data-source-id="vgn:datasource.aggregate">
+				</primary-schema-mapping>
+			</entity-type-schema>
+
+			<entity-type-schema entity-type-id="epi:usergroup.standard" xsi:type="composite-entity-type-schema" >
+				<primary-schema-mapping data-source-id="vgn:datasource.sql">
+				</primary-schema-mapping>
+			</entity-type-schema>
+
+			<entity-type-schema entity-type-id="epi:usergroup.system.standard" xsi:type="composite-entity-type-schema" >
+				<primary-schema-mapping data-source-id="vgn:datasource.sql">
+				</primary-schema-mapping>
+			</entity-type-schema>
+
+			<entity-type-schema entity-type-id="epi:usergroup.system.admin" xsi:type="composite-entity-type-schema" >
+				<primary-schema-mapping data-source-id="vgn:datasource.sql">
+				</primary-schema-mapping>
+			</entity-type-schema>
+		</entity-type-schemas>
+
+		<entity-type-relationship-schemas>
+			<entity-type-relationship-schema xsi:type="composite-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.standard" child-entity-type-id="epi:user.standard"
+				data-source-id="vgn:datasource.aggregate">
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="composite-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.standard" child-entity-type-id="epi:usergroup.standard"
+				data-source-id="vgn:datasource.sql">
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="composite-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.system.standard" child-entity-type-id="epi:user.standard"
+				data-source-id="vgn:datasource.aggregate">
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="composite-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.system.standard" child-entity-type-id="epi:usergroup.system.standard"
+				data-source-id="vgn:datasource.sql">
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="composite-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.system.admin" child-entity-type-id="epi:user.standard"
+				data-source-id="vgn:datasource.aggregate">
+			</entity-type-relationship-schema>
+		</entity-type-relationship-schemas>
+	</data-source>
+
+	<data-source id="vgn:datasource.aggregate"
+				 type="com.epicentric.entity.datasource.internal.aggregate.AggregateDataSource">
+		<entity-type-schemas>
+			<entity-type-schema entity-type-id="epi:user.standard" xsi:type="composite-entity-type-schema" >
+				<primary-schema-mapping data-source-id="vgn:datasource.sql" search-order="1" >
+				</primary-schema-mapping>
+
+				<secondary-schema-mappings>
+					<secondary-schema-mapping data-source-id="vgn:datasource.metastore" search-order="2" >
+						<foreign-keys>
+							<foreign-key property-id="id" />
+						</foreign-keys>
+					</secondary-schema-mapping>
+				</secondary-schema-mappings>
+			</entity-type-schema>
+		</entity-type-schemas>
+
+		<entity-type-relationship-schemas>
+			<entity-type-relationship-schema xsi:type="composite-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.standard" child-entity-type-id="epi:user.standard"
+				data-source-id="vgn:datasource.sql">
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="composite-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.system.standard" child-entity-type-id="epi:user.standard"
+				data-source-id="vgn:datasource.sql">
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="composite-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.system.admin" child-entity-type-id="epi:user.standard"
+				data-source-id="vgn:datasource.sql">
+			</entity-type-relationship-schema>
+		</entity-type-relationship-schemas>
+	</data-source>
+
+	<data-source id="vgn:datasource.sql"
+				 type="com.epicentric.entity.datasource.internal.sql.SQLDataSource">
+
+		<config-properties>
+			<config-property>
+				<key>connectionpool</key>
+				<value>default</value>
+			</config-property>
+		</config-properties>
+
+		<entity-type-schemas>
+			<entity-type-schema entity-type-id="epi:user.standard" xsi:type="primitive-entity-type-schema" >
+				<primitive-schema-mapping>
+					<config-properties>
+						<config-property>
+							<key>table_name</key>
+							<value>Users</value>
+						</config-property>
+					</config-properties>
+
+					<property-mappings>
+						<property-mapping property-id="address1" data-field-name="address1" />
+						<property-mapping property-id="address2" data-field-name="address2" />
+						<property-mapping property-id="city" data-field-name="city" />
+						<property-mapping property-id="country" data-field-name="country" />
+						<property-mapping property-id="created_date" data-field-name="created_date" />
+						<property-mapping property-id="day_phone" data-field-name="day_phone" />
+						<property-mapping property-id="dob" data-field-name="dob" />
+						<property-mapping property-id="domain" data-field-name="domain" />
+						<property-mapping property-id="email" data-field-name="email_address" />
+						<property-mapping property-id="employer" data-field-name="employer" />
+						<property-mapping property-id="id" data-field-name="user_id" />
+						<property-mapping property-id="fax" data-field-name="fax" />
+						<property-mapping property-id="firstname" data-field-name="first_name" />
+						<property-mapping property-id="gender" data-field-name="gender" />
+						<property-mapping property-id="language" data-field-name="language" />
+						<property-mapping property-id="lastname" data-field-name="last_name" />
+						<property-mapping property-id="middlename" data-field-name="middle_name" />
+						<property-mapping property-id="mobile_phone" data-field-name="mobile_phone" />
+						<property-mapping property-id="night_phone" data-field-name="night_phone" />
+						<property-mapping property-id="state" data-field-name="state" />
+						<property-mapping property-id="timezone" data-field-name="timezone" />
+						<property-mapping property-id="username" data-field-name="user_name" />
+						<property-mapping property-id="uid" data-field-name="unique_id" />
+						<property-mapping property-id="zip" data-field-name="zip" />
+						<property-mapping property-id="vgn.entity_type" data-field-name="entity_type" />
+
+						<!-- CUSTOM PROPERTIES
+						<property-mapping property-id="custom1" data-field-name="custom" />
+						-->
+						<property-mapping property-id="profileid" data-field-name="PROFILE_ID" />
+						<property-mapping property-id="lastchangedate" data-field-name="LAST_CHANGE_DATE" />
+						<property-mapping property-id="lastlogindate" data-field-name="LAST_LOGIN_DATE" />
+						<property-mapping property-id="spf_timezone" data-field-name="SPF_TIMEZONE" />
+					</property-mappings>
+				</primitive-schema-mapping>
+			</entity-type-schema>
+
+			<entity-type-schema entity-type-id="epi:user.guest" xsi:type="primitive-entity-type-schema" >
+				<primitive-schema-mapping>
+					<config-properties>
+						<config-property>
+							<key>table_name</key>
+							<value>Users</value>
+						</config-property>
+					</config-properties>
+
+					<property-mappings>
+						<property-mapping property-id="id" data-field-name="user_id" />
+						<property-mapping property-id="firstname" data-field-name="first_name" />
+						<property-mapping property-id="lastname" data-field-name="last_name" />
+						<property-mapping property-id="username" data-field-name="user_name" />
+						<property-mapping property-id="uid" data-field-name="unique_id" />
+						<property-mapping property-id="vgn.entity_type" data-field-name="entity_type" />
+					</property-mappings>
+				</primitive-schema-mapping>
+			</entity-type-schema>
+
+			<entity-type-schema entity-type-id="epi:usergroup.standard" xsi:type="primitive-entity-type-schema" >
+				<primitive-schema-mapping>
+					<config-properties>
+						<config-property>
+							<key>table_name</key>
+							<value>UserGroups</value>
+						</config-property>
+					</config-properties>
+
+					<property-mappings>
+						<property-mapping property-id="created_date" data-field-name="created_date" />
+						<property-mapping property-id="description" data-field-name="description" />
+						<property-mapping property-id="id" data-field-name="id" />
+						<property-mapping property-id="title" data-field-name="name" />
+						<property-mapping property-id="uid" data-field-name="unique_id" />
+					</property-mappings>
+				</primitive-schema-mapping>
+			</entity-type-schema>
+
+			<entity-type-schema entity-type-id="epi:usergroup.system.standard" xsi:type="primitive-entity-type-schema" >
+				<primitive-schema-mapping>
+					<config-properties>
+						<config-property>
+							<key>table_name</key>
+							<value>SystemUserGroups</value>
+						</config-property>
+					</config-properties>
+
+					<property-mappings>
+						<property-mapping property-id="created_date" data-field-name="created_date" />
+						<property-mapping property-id="description" data-field-name="description" />
+						<property-mapping property-id="id" data-field-name="id" />
+						<property-mapping property-id="title" data-field-name="name" />
+						<property-mapping property-id="uid" data-field-name="unique_id" />
+						<property-mapping property-id="vgn.entity_type" data-field-name="entity_type" />
+					</property-mappings>
+				</primitive-schema-mapping>
+			</entity-type-schema>
+
+			<entity-type-schema entity-type-id="epi:usergroup.system.admin" xsi:type="primitive-entity-type-schema" >
+				<primitive-schema-mapping>
+					<config-properties>
+						<config-property>
+							<key>table_name</key>
+							<value>SystemUserGroups</value>
+						</config-property>
+					</config-properties>
+
+					<property-mappings>
+						<property-mapping property-id="created_date" data-field-name="created_date" />
+						<property-mapping property-id="description" data-field-name="description" />
+						<property-mapping property-id="id" data-field-name="id" />
+						<property-mapping property-id="title" data-field-name="name" />
+						<property-mapping property-id="uid" data-field-name="unique_id" />
+						<property-mapping property-id="vgn.entity_type" data-field-name="entity_type" />
+					</property-mappings>
+				</primitive-schema-mapping>
+			</entity-type-schema>
+		</entity-type-schemas>
+
+		<entity-type-relationship-schemas>
+			<entity-type-relationship-schema xsi:type="primitive-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.standard" child-entity-type-id="epi:user.standard">
+				<primitive-relationship-schema-mapping>
+					<config-properties>
+						<config-property>
+							<key>table_name</key>
+							<value>UserGroupMembership</value>
+						</config-property>
+						<config-property>
+							<key>child_column</key>
+							<value>user_uid</value>
+						</config-property>
+						<config-property>
+							<key>parent_column</key>
+							<value>group_uid</value>
+						</config-property>
+					</config-properties>
+				</primitive-relationship-schema-mapping>
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="primitive-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.standard" child-entity-type-id="epi:usergroup.standard" >
+				<primitive-relationship-schema-mapping>
+					<config-properties>
+						<config-property>
+							<key>table_name</key>
+							<value>GroupRelationship</value>
+						</config-property>
+						<config-property>
+							<key>child_column</key>
+							<value>child_uid</value>
+						</config-property>
+						<config-property>
+							<key>parent_column</key>
+							<value>parent_uid</value>
+						</config-property>
+					</config-properties>
+				</primitive-relationship-schema-mapping>
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="primitive-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.system.standard" child-entity-type-id="epi:user.standard" >
+				<primitive-relationship-schema-mapping>
+					<config-properties>
+						<config-property>
+							<key>table_name</key>
+							<value>SystemUserGroupMembership</value>
+						</config-property>
+						<config-property>
+							<key>child_column</key>
+							<value>user_uid</value>
+						</config-property>
+						<config-property>
+							<key>parent_column</key>
+							<value>group_uid</value>
+						</config-property>
+					</config-properties>
+				</primitive-relationship-schema-mapping>
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="primitive-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.system.admin" child-entity-type-id="epi:user.standard" >
+				<primitive-relationship-schema-mapping>
+					<config-properties>
+						<config-property>
+							<key>table_name</key>
+							<value>SystemUserGroupMembership</value>
+						</config-property>
+						<config-property>
+							<key>child_column</key>
+							<value>user_uid</value>
+						</config-property>
+						<config-property>
+							<key>parent_column</key>
+							<value>group_uid</value>
+						</config-property>
+					</config-properties>
+				</primitive-relationship-schema-mapping>
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="primitive-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.system.standard" child-entity-type-id="epi:usergroup.system.standard" >
+				<primitive-relationship-schema-mapping>
+					<config-properties>
+						<config-property>
+							<key>table_name</key>
+							<value>SystemUserGroupRelationship</value>
+						</config-property>
+						<config-property>
+							<key>child_column</key>
+							<value>child_uid</value>
+						</config-property>
+						<config-property>
+							<key>parent_column</key>
+							<value>parent_uid</value>
+						</config-property>
+					</config-properties>
+				</primitive-relationship-schema-mapping>
+			</entity-type-relationship-schema>
+		</entity-type-relationship-schemas>
+	</data-source>
+
+	<data-source id="vgn:datasource.metastore"
+				 type="com.epicentric.entity.datasource.internal.metastore.MetaStoreDataSource">
+
+		<entity-type-schemas>
+			<entity-type-schema entity-type-id="epi:user.standard" xsi:type="primitive-entity-type-schema" >
+				<primitive-schema-mapping>
+					<property-mappings>
+						<property-mapping property-id="primary_site_id" data-field-name="primary_site_id" />
+						<property-mapping property-id="id" data-field-name="id" />
+
+						<!-- CUSTOM PROPERTIES
+						<property-mapping property-id="custom1" data-field-name="custom" />
+						-->
+					</property-mappings>
+				</primitive-schema-mapping>
+			</entity-type-schema>
+		</entity-type-schemas>
+	</data-source>
+
+	<data-source id="vgn:datasource.memory"
+				 type="com.epicentric.entity.datasource.internal.memory.MemoryDataSource">
+
+		<entity-type-schemas>
+			<entity-type-schema entity-type-id="epi:usergroup.system.registered" xsi:type="primitive-entity-type-schema" >
+				<primitive-schema-mapping>
+					<property-mappings>
+						<property-mapping property-id="title" />
+						<property-mapping property-id="description" />
+						<property-mapping property-id="uid" />
+					</property-mappings>
+				</primitive-schema-mapping>
+			</entity-type-schema>
+
+			<entity-type-schema entity-type-id="epi:usergroup.system.everyone" xsi:type="primitive-entity-type-schema" >
+				<primitive-schema-mapping>
+					<property-mappings>
+						<property-mapping property-id="title" />
+						<property-mapping property-id="description" />
+						<property-mapping property-id="uid" />
+					</property-mappings>
+				</primitive-schema-mapping>
+			</entity-type-schema>
+		</entity-type-schemas>
+
+		<entity-type-relationship-schemas>
+			<entity-type-relationship-schema xsi:type="primitive-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.system.registered" child-entity-type-id="epi:user.standard">
+				<primitive-relationship-schema-mapping>
+				</primitive-relationship-schema-mapping>
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="primitive-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.system.everyone" child-entity-type-id="epi:user.guest" >
+				<primitive-relationship-schema-mapping>
+				</primitive-relationship-schema-mapping>
+			</entity-type-relationship-schema>
+
+			<entity-type-relationship-schema xsi:type="primitive-entity-type-relationship-schema"
+				parent-entity-type-id="epi:usergroup.system.everyone" child-entity-type-id="epi:usergroup.system.registered" >
+				<primitive-relationship-schema-mapping>
+				</primitive-relationship-schema-mapping>
+			</entity-type-relationship-schema>
+		</entity-type-relationship-schemas>
+	</data-source>
+
+</data-sources>

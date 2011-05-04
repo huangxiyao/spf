@@ -4,7 +4,7 @@ CASFW_HOME="$(cd "$(dirname "$0")/.." && pwd -P)"
 
 source ${CASFW_HOME}/bin/.casfwrc
 
-echo "Installing Vignette Portal"
+echo "Setting up Vignette Portal"
 
 VIGNETTE_HOME="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
 
@@ -16,7 +16,7 @@ vignette_db_password="$(get_property_value "${VIGNETTE_HOME}/config/properties.t
 vignette_admin_username="$(get_property_value "${CASFW_HOME}/etc/casfw.properties" "portal_admin_username")"
 vignette_admin_password="$(get_property_value "${CASFW_HOME}/etc/casfw.properties" "portal_admin_password")"
 
-echo "Installing Vignette Portal database ${vignette_db_url}"
+echo "Setting up Vignette Portal database ${vignette_db_url}"
 # Will use Vignette-provided tools to do that
 pushd ${VIGNETTE_HOME}/bin
 
@@ -67,3 +67,6 @@ if [ ${last_exit_code} -ne 0 ]; then
 fi
 
 popd
+
+echo "#### TODO: add anonymous users import #####"
+

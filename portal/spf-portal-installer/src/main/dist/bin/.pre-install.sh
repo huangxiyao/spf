@@ -34,6 +34,30 @@ fi
 VIGNETTE_HOME="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
 ln -sf ${VIGNETTE_HOME}/config ${CASFW_HOME}/etc/vignette-portal
 
+# Overlay spf-portal onto Vignette/portal
+echo "Preparing SPF artifacts"
+
+# first spf-portal-*.war - let's copy it over Vignette portal directory so Vignette bootstrap picks SPF classes too
+spf_war="$(ls ${CASFW_HOME}/software/spf-portal-*.war | tail -n1)"
+pushd ${VIGNETTE_HOME}/portal
+# Let's make sure we can execute "jar" as the permissions are only fixed later
+chmod u+x ${JAVA_HOME}/bin/jar
+if ${using_cygwin}; then
+    ${JAVA_HOME}/bin/jar xf "$(cygpath -aw "${spf_war}")"
+else
+    ${JAVA_HOME}/bin/jar xf "${spf_war}"
+fi
+popd
+
+# Since spf-portal.war is not useful and we have its files already in Vignette let's remove it and 
+# create a symbolic link to the target directory in Vignette
+spf_war_basename="$(basename ${spf_war} .war)"
+rm "${spf_war}"
+ln -sf ${VIGNETTE_HOME}/portal ${CASFW_HOME}/software/${spf_war_basename}
+
+# And now the CAR files so they get bootstrapped too
+mv ${CASFW_HOME}/software/*.car ${VIGNETTE_HOME}/system/bootstrap
+
 # Setup other /var directories 
 mkdir -p ${CASFW_HOME}/var/log/vignette-portal
 mkdir -p ${CASFW_HOME}/var/data
@@ -45,16 +69,23 @@ echo "Setting permissions"
 # - user to read+write+browse (i.e. execute for directories, and if execute for files was already there we are fine), 
 # - group to read+browse, 
 # - others to do nothing
+# - all to read+browse log files
 chmod -R u+rwX,g=rX,o= ${CASFW_HOME}
+chmod -R a+rX ${CASFW_HOME}/var/log
 
 # And now we explicitely set 'execute' permissions for files we know we need
 chmod ug+x ${CASFW_HOME}/bin/*.sh
+for app_dir in $(ls -d ${CASFW_HOME}/software/oracle-java-* 2>/dev/null); do
+    chmod u+x ${app_dir}/bin/*
+    chmod u+x ${app_dir}/jre/bin/*
+done 
 for app_dir in $(ls -d ${CASFW_HOME}/software/apache-tomcat-*); do
-    chmod ug+x ${app_dir}/bin/*.sh
+    chmod u+x ${app_dir}/bin/*.sh
 done 
 for app_dir in $(ls -d ${CASFW_HOME}/software/vignette-portal-*); do
-    chmod ug+x ${app_dir}/bin/*.sh
+    chmod u+x ${app_dir}/bin/*.sh
 done 
+
 
 # Update Java "cacerts" file with the one that we ship and which contains HP Certificate Authority
 echo "Installing HP Certificate Authority"
