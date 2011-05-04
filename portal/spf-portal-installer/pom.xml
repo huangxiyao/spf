@@ -25,7 +25,7 @@
             <plugin>
                 <groupId>com.hp.it.118361</groupId>
                 <artifactId>install-assembler-maven-plugin</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>2.0.0-pi-SNAPSHOT</version>
                 <extensions>true</extensions>
                 <configuration>
                     <installDirectoryName>portal-${project.version}</installDirectoryName>
