@@ -4,8 +4,33 @@ CASFW_HOME="$(cd "$(dirname "$0")/.." && pwd -P)"
 
 source ${CASFW_HOME}/bin/.casfwrc
 
-echo "### TODO: uncomment setupPrimaryPortalNode.sh in .post-install.sh"
-#${CASFW_HOME}/bin/setupPrimaryPortalNode.sh
+${CASFW_HOME}/bin/setupPrimaryPortalNode.sh
+
+echo "Importing remaining component archives"
+VIGNETTE_HOME="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
+echo "Y" > ${CASFW_HOME}/var/accept_site_import.txt
+pushd ${VIGNETTE_HOME}/bin
+for carFile in $(ls ${CASFW_HOME}/software/*.car); do
+    if ${using_cygwin}; then
+        carFile="$(cygpath -am ${carFile})"
+    fi
+    echo "Importing ${carFile}"
+    ./ImportExportTool.sh -import ${carFile} < ${CASFW_HOME}/var/accept_site_import.txt \
+    1>${CASFW_HOME}/var/log/vignette-portal/ImportExportTool.out \
+    2>${CASFW_HOME}/var/log/vignette-portal/ImportExportTool.err
+
+    last_exit_code=$?
+    if [ ${last_exit_code} -ne 0 ]; then
+        echo "Importing file ${carFile} failed with code ${last_exit_code}."
+        echo "Aborting."
+        popd
+        rm ${CASFW_HOME}/var/accept_site_import.txt
+        exit ${last_exit_code}
+    fi
+done
+popd
+rm ${CASFW_HOME}/var/accept_site_import.txt
+
 
 # Print message about URL at which Portal runs
 tomcat_portal_http_port="$(get_property_value "${CASFW_HOME}/etc/casfw.properties" "tomcat_portal_connector_http_port")"

@@ -38,6 +38,32 @@ if [ ${last_exit_code} -ne 0 ]; then
     exit ${last_exit_code}
 fi
 
+echo "Creating custom SPF columns"
+alter_sql_path="${VIGNETTE_HOME}/config/spf_vap_alter_users.sql"
+if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
+    alter_sql_path=${alter_sql_path}.derby
+fi
+if ${using_cygwin}; then
+    alter_sql_path="$(cygpath -am ${alter_sql_path})"
+fi
+
+sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.SqlScriptRunner \
+ "--driver=${vignette_db_driver_class}" \
+ "--jdbcUrl=${vignette_db_url}" \
+ "--username=${vignette_db_username}" \
+ "--password=${vignette_db_password}" \
+ "--scriptPath=${alter_sql_path}" \
+ 1>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
+ 2>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+
+last_exit_code=$?
+if [ ${last_exit_code} -ne 0 ]; then
+    echo "Creating custom SPF columns failed with code ${last_exit_code}."
+    echo "Aborting."
+    popd
+    exit ${last_exit_code}
+fi
+
 
 echo "Creating administrator account ${vignette_admin_username}"
 sh ./create_first_admin_account.sh ${vignette_admin_username} ${vignette_admin_password} \
