@@ -4,6 +4,7 @@ CASFW_HOME="$(cd "$(dirname "$0")/.." && pwd -P)"
 
 source ${CASFW_HOME}/bin/.casfwrc
 
+# Setup DB for portal
 ${CASFW_HOME}/bin/setupPrimaryPortalNode.sh
 
 echo "Importing remaining component archives"
@@ -30,6 +31,9 @@ for carFile in $(ls ${CASFW_HOME}/software/*.car); do
 done
 popd
 rm ${CASFW_HOME}/var/accept_site_import.txt
+
+# Setup DB for persona
+${CASFW_HOME}/bin/setupPersonaDatabase.sh
 
 
 # Print message about URL at which Portal runs

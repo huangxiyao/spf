@@ -4,8 +4,6 @@ CASFW_HOME="$(cd "$(dirname "$0")/.." && pwd -P)"
 
 source ${CASFW_HOME}/bin/.casfwrc
 
-echo "Setting up Vignette Portal"
-
 VIGNETTE_HOME="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
 
 vignette_db_driver_class="$(get_property_value "${VIGNETTE_HOME}/config/properties.txt" "default.db.driver")"
