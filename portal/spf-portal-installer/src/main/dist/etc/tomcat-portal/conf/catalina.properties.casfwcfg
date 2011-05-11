@@ -71,7 +71,7 @@ server.loader=
 #     "foo/bar.jar": Add bar.jar as a class repository 
 # Please note that for single jars, e.g. bar.jar, you need the URL form
 # starting with file:.
-shared.loader=@@vignette_home@@/lib/shared/*.jar,@@vignette_home@@/portal/WEB-INF/lib/derby.jar,@@vignette_home@@/portal/WEB-INF/lib/ojdbc14.jar
+shared.loader=@@vignette_home@@/lib/shared/*.jar,@@vignette_home@@/portal/WEB-INF/lib/derby.jar,@@vignette_home@@/portal/WEB-INF/lib/ojdbc14.jar,@@casfw_home@@/etc/resources_tomcat-portal,@@casfw_home@@/etc/resources_global
 
 #
 # String cache configuration.
