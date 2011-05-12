@@ -8,7 +8,7 @@
     </parent>
 
     <groupId>com.hp.it.spf.apps</groupId>
-    <artifactId>spf-portal</artifactId>
+    <artifactId>spf-portal-installer</artifactId>
     <name>SPF Portal Installer</name>
     <packaging>cdi</packaging>
 
