@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/batch-console-web" docBase="@@casfw_home@@/software/spf-html-viewer-@@htmlviewer_version@@" />

@@ -55,6 +55,10 @@ if [ -z "${portal_version}" ]; then
     portal_home="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
     portal_version="$(basename ${portal_home} | sed 's/vignette-portal-//')"
 fi
+if [ -z "${htmlviewer_version}" ]; then
+    htmlviewer_home="$(cd $(ls -d ${CASFW_HOME}/software/spf-html-viewer-* | tail -n1) && pwd -P)"
+    htmlviewer_version="$(basename ${htmlviewer_home} | sed 's/spf-html-viewer-//')"
+fi
 
 
-CASFW_DYNAMIC_CONFIG_TOKENS="-Dportal_version=${portal_version} -Dvignette_home=${VIGNETTE_HOME}"
+CASFW_DYNAMIC_CONFIG_TOKENS="-Dportal_version=${portal_version} -Dvignette_home=${VIGNETTE_HOME} -Dhtmlviewer_version=${htmlviewer_version}"

@@ -55,30 +55,41 @@
                         <artifact>
                             <groupId>com.hp.it.spf.apps</groupId>
                             <artifactId>spf-portal</artifactId>
-                            <version>2.2.4-pi-SNAPSHOT</version>
+                            <version>${project.version}</version>
                             <type>war</type>
                             <prepareMethod>DOWNLOAD</prepareMethod>
                         </artifact>
                         <artifact>
                             <groupId>com.hp.it.spf.comps</groupId>
                             <artifactId>spf-portal-components</artifactId>
-                            <version>2.2.3</version>
+                            <!--<version>${project.version}</version>-->
+                            <version>2.2.4</version>
                             <type>car</type>
                             <prepareMethod>DOWNLOAD</prepareMethod>
                         </artifact>
                         <artifact>
                             <groupId>com.hp.frameworks</groupId>
                             <artifactId>HPWebComponents</artifactId>
-                            <version>2.2.3</version>
+                            <!--<version>${project.version}</version>-->
+                            <version>2.2.4</version>
                             <type>car</type>
                             <prepareMethod>DOWNLOAD</prepareMethod>
                         </artifact>
                         <artifact>
                             <groupId>com.hp.it.spf.sites</groupId>
                             <artifactId>spf-site</artifactId>
+                            <!--<version>${project.version}</version>-->
                             <version>2.2.0</version>
                             <type>car</type>
                             <prepareMethod>DOWNLOAD</prepareMethod>
+                        </artifact>
+                        <artifact>
+                            <groupId>com.hp.it.spf.apps</groupId>
+                            <artifactId>spf-html-viewer</artifactId>
+                            <!--<version>${project.version}</version>-->
+                            <version>2.2.4</version>
+                            <type>war</type>
+                            <classifier>vgn</classifier>
                         </artifact>
                         <!--
                         <artifact>
@@ -92,13 +103,6 @@
                             <artifactId>spf-healthcheck</artifactId>
                             <version>2.2.3</version>
                             <type>war</type>
-                        </artifact>
-                        <artifact>
-                            <groupId>com.hp.it.spf.apps</groupId>
-                            <artifactId>spf-html-viewer</artifactId>
-                            <version>2.2.3</version>
-                            <type>war</type>
-                            <classifier>vgn</classifier>
                         </artifact>
                     -->
                     </software>
