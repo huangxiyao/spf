@@ -4,13 +4,13 @@
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
 		<artifactId>spf-pom</artifactId>
-		<version>2.2.4-SNAPSHOT</version>
+		<version>2.2.4-pi-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.hp.it.spf.portal</groupId>
 	<artifactId>portal</artifactId>
-	<version>2.2.4-SNAPSHOT</version>
-	
+	<version>2.2.4-pi-SNAPSHOT</version>
+
 	<packaging>pom</packaging>
 	<name>SPF portal aggregator POM</name>
 
@@ -27,7 +27,7 @@
 			<url>${siteUrl}/portal/${project.version}</url>
 		</site>
 	</distributionManagement>
-	
+
 	<properties>
 		<cas.security.version>2.1.1</cas.security.version>
 	</properties>
@@ -42,6 +42,7 @@
 		<module>spf-portal-tools</module>
 		<module>spf-portal-utilities</module>
 		<module>spf-portal-wsrp</module>
+		<module>spf-portal-installer</module>
 	</modules>
 
 	<build>

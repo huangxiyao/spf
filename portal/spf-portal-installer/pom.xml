@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.hp.it.spf.portal</groupId>
         <artifactId>portal</artifactId>
-        <version>2.2.4-SNAPSHOT</version>
+        <version>2.2.4-pi-SNAPSHOT</version>
     </parent>
 
     <groupId>com.hp.it.spf.apps</groupId>
@@ -55,7 +55,7 @@
                         <artifact>
                             <groupId>com.hp.it.spf.apps</groupId>
                             <artifactId>spf-portal</artifactId>
-                            <version>2.2.4-SNAPSHOT</version>
+                            <version>2.2.4-pi-SNAPSHOT</version>
                             <type>war</type>
                             <prepareMethod>DOWNLOAD</prepareMethod>
                         </artifact>

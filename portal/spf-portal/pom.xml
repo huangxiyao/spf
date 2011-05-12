@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>portal</artifactId>
-		<version>2.2.4-SNAPSHOT</version>
+		<version>2.2.4-pi-SNAPSHOT</version>
 	</parent>
 
 
@@ -16,13 +16,15 @@
 	<name>SPF portal application</name>
 	<description>Modified Vignette Portal Application for the Shared Portal Framework.</description>
 
-	<dependencies>
+    <dependencies>
+        <!--
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal</artifactId>
 			<version>7.4.2.615224</version>
 			<type>war</type>
-		</dependency>
+        </dependency>
+        -->
 		<dependency>
 			<groupId>com.hp.it.spf.xa</groupId>
 			<artifactId>spf-common-hpp</artifactId>
