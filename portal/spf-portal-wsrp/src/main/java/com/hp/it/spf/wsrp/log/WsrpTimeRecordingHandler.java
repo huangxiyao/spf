@@ -113,7 +113,7 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 		if (MDC.get(Consts.DIAGNOSTIC_ID) == null) {
 			// Set a flag so we only clear the MDC value if it was set in the WSRP handler.
 			// Normally for portlet render requests WSRP handler will set this flag. However for
-			// WSRP action requests which are performed by WebLogic request thread, this will already
+			// WSRP action requests which are performed by server request thread, this will already
 			// be set by RequestLogFilter so we don't want to overwrite it.
 			MDC.put(SPF_DC_ID_SET_IN_HANDER_FLAG, Boolean.TRUE);
 			MDC.put(Consts.DIAGNOSTIC_ID, portletDiagnosticId);

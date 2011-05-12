@@ -52,10 +52,10 @@ public class RequestLogFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
 	{
 		boolean isTopLevelRequest = (request.getAttribute(FILTER_APPLIED_KEY) == null);
-		
+
 		if (isTopLevelRequest) {
 			request.setAttribute(FILTER_APPLIED_KEY, Boolean.TRUE);
-			
+
 			initMDC((HttpServletRequest) request);
 			RequestContext requestContext = initRequestContext(request);
 			TimeRecorder timeRecorder = requestContext.getTimeRecorder();
@@ -199,11 +199,14 @@ public class RequestLogFilter implements Filter {
 		}
 
 	}
-	
+
 	/**
-	 * Returns hash value of weblogic JSESSIONID.
-	 * Weblogic appends server informations in JSESSIONID, so here we are taking hash value till "!".
-	 * Hence in case of switch from primary server to secondary server, this value will be same for that session.
+	 * Returns hash value of HTTP session ID.
+	 * For WebLogic the session ID value contains the "!" which separates the actual session ID
+	 * from the ID of the primary and secondary servers on which the session is hosted.
+	 * The actual session ID does not change if the session fails over to another server.
+	 * Therefore, if the HTTP session ID contains "!", the hash is calculated based on the substring
+	 * up to "!".
 	 * @param request portal request
 	 * @return sessionId hash value.
 	 */	
@@ -214,7 +217,14 @@ public class RequestLogFilter implements Filter {
 			return null;
 		}
 		else {
-			return Integer.toHexString(Math.abs(sessionId.substring(0, sessionId.indexOf("!")).hashCode()));
+			int pos = sessionId.indexOf('!');
+
+			// the session ID has '!' - it is WebLogic session ID.
+			// let's just take its value up to '!'
+			if (pos != -1) {
+				sessionId = sessionId.substring(0, pos);
+			}
+			return Integer.toHexString(Math.abs(sessionId.hashCode()));
 		}
 	}
 
@@ -223,7 +233,7 @@ public class RequestLogFilter implements Filter {
 	 * @param request portal request
 	 * @return request id set by the web server, if not null, else system current time in milliseconds.	 
 	 */
-	
+
 	private String getRequestId(HttpServletRequest request) {
 		// The web server should have send us the HTTP header SPF_DC_ID
 		String reqId = request.getHeader(Consts.DIAGNOSTIC_ID);
@@ -237,7 +247,7 @@ public class RequestLogFilter implements Filter {
 			return reqId;
 		}
 	}
-	
+
 	private String getSessionId(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		if (session == null) {
@@ -267,7 +277,7 @@ public class RequestLogFilter implements Filter {
 		}
 		return siteName;
 	}
-	
+
 	/**
 	 * Gets all the cookies from the request. 
 	 * If the cookie is not set, add the session cookie in the response.
