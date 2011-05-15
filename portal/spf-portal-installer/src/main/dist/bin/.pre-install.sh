@@ -61,6 +61,7 @@ mv $(ls ${CASFW_HOME}/software/*.car | grep -v "\-site-") ${VIGNETTE_HOME}/syste
 
 # Setup other /var directories 
 mkdir -p ${CASFW_HOME}/var/log/vignette-portal
+mkdir -p ${CASFW_HOME}/var/log/spf-html-viewer
 mkdir -p ${CASFW_HOME}/var/data
 
 # Fix permissions
