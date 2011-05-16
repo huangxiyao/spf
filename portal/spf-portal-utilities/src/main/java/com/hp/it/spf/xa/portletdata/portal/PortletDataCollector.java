@@ -38,9 +38,9 @@ public class PortletDataCollector
 	 */
 	public Map<String, String> retrieveUserContextKeys(HttpServletRequest request) {
 		Map<String, String> userContext = new HashMap<String, String>();
-		
-		userContext.put(Consts.KEY_PORTAL_SITE_URL, com.hp.it.spf.xa.misc.portal.Utils.getPortalSiteURL(request));
-		userContext.put(Consts.KEY_PORTAL_REQUEST_URL, com.hp.it.spf.xa.misc.portal.Utils.getRequestURL(request));
+
+		userContext.put(Consts.KEY_PORTAL_SITE_URL, getPortalSiteURL(request));
+		userContext.put(Consts.KEY_PORTAL_REQUEST_URL, getRequestURL(request));
 		userContext.put(Consts.KEY_PORTAL_SITE_NAME, getPortalSiteName(request));
 		userContext.put(Consts.KEY_PORTAL_SESSION_ID, getPortalSessionId(request));
 		userContext.put(Consts.KEY_SESSION_TOKEN, getHppSessionToken(request));
@@ -50,7 +50,6 @@ public class PortletDataCollector
 		userContext.put(Consts.KEY_LAST_PORTAL_SESSION_CLEANUP_DATE, getLastSessionCleanupDate(request));
 		return userContext;
 	}
-
 
 	/**
 	 * Retrieves user profile map from portal session.
@@ -72,6 +71,33 @@ public class PortletDataCollector
 		}
 	}
 
+	/**
+	 * Retrieves request URL.
+	 * @param request incoming user request
+	 * @return request URL as calculated by {@link com.hp.it.spf.xa.misc.portal.Utils#getRequestURL(javax.servlet.http.HttpServletRequest)}
+	 */
+	private String getRequestURL(HttpServletRequest request)
+	{
+		// synchronize this as multiple WSRP threads will access the request in
+		// parallel and we don't know the underlying request implementation
+		synchronized (request) {
+			return com.hp.it.spf.xa.misc.portal.Utils.getRequestURL(request);
+		}
+	}
+
+	/**
+	 * Retrieves requested portal site URL.
+	 * @param request incoming user request
+	 * @return site URL as calculaged by {@link com.hp.it.spf.xa.misc.portal.Utils#getPortalSiteURL(javax.servlet.http.HttpServletRequest)}
+	 */
+	private String getPortalSiteURL(HttpServletRequest request)
+	{
+		// synchronize this as multiple WSRP threads will access the request in
+		// parallel and we don't know the underlying request implementation
+		synchronized (request) {
+			return com.hp.it.spf.xa.misc.portal.Utils.getPortalSiteURL(request);
+		}
+	}
 
 	/**
 	 * Retrieves portal site DNS name.
@@ -198,7 +224,7 @@ public class PortletDataCollector
 			return page.getFriendlyID(portalContext);
 		}
 	}
-	
+
 	/**
 	 * Retrieves the last session clean up date stored in the http session.
 	 * @param request
