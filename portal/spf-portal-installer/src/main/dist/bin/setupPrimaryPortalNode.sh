@@ -90,7 +90,22 @@ if [ ${last_exit_code} -ne 0 ]; then
     exit ${last_exit_code}
 fi
 
-popd
+echo "Adding anonymous users"
+user_data_path="${VIGNETTE_HOME}/config/spf_anonymous_users.txt"
+if ${using_cygwin}; then
+    user_data_path="$(cygpath -am ${user_data_path})"
+fi
+sh ./runs_with_classpath.sh com.hp.it.spf.sso.portal.AnonUsersImport  "hpp_realm1" "${user_data_path}" \
+ 1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
+ 2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
 
-echo "#### TODO: add anonymous users import #####"
+last_exit_code=$?
+if [ ${last_exit_code} -ne 0 ]; then
+    echo "Adding anonymous users failed with code ${last_exit_code}."
+    echo "Aborting."
+    popd
+    exit ${last_exit_code}
+fi
+
+popd
 

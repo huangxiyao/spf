@@ -59,6 +59,13 @@ if [ -z "${htmlviewer_version}" ]; then
     htmlviewer_home="$(cd $(ls -d ${CASFW_HOME}/software/spf-html-viewer-* | tail -n1) && pwd -P)"
     htmlviewer_version="$(basename ${htmlviewer_home} | sed 's/spf-html-viewer-//')"
 fi
+if [ -z "${opensign_version}" ]; then
+    opensign_home="$(cd $(ls -d ${CASFW_HOME}/software/spf-open-sign-* | tail -n1) && pwd -P)"
+    opensign_version="$(basename ${opensign_home} | sed 's/spf-open-sign-//')"
+fi
+if [ -z "${healthcheck_version}" ]; then
+    healthcheck_home="$(cd $(ls -d ${CASFW_HOME}/software/spf-healthcheck-* | tail -n1) && pwd -P)"
+    healthcheck_version="$(basename ${healthcheck_home} | sed 's/spf-healthcheck-//')"
+fi
 
-
-CASFW_DYNAMIC_CONFIG_TOKENS="-Dportal_version=${portal_version} -Dvignette_home=${VIGNETTE_HOME} -Dhtmlviewer_version=${htmlviewer_version}"
+CASFW_DYNAMIC_CONFIG_TOKENS="-Dportal_version=${portal_version} -Dvignette_home=${VIGNETTE_HOME} -Dhtmlviewer_version=${htmlviewer_version} -Dopensign_version=${opensign_version} -Dhealthcheck_version=${healthcheck_version}"
