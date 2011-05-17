@@ -595,9 +595,9 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 			return null;
 		}
 		String url = "";
-		Enumeration params;
-		String[] values;
-		String scheme, hostAndPort, host, context, path, info, query, name, value;
+//		Enumeration params;
+//		String[] values;
+		String scheme, hostAndPort, host, context, path, info, query/*, name, value*/;
 		int p, i;
 
 		// We could probably use request.getRequestURL for most of the below,
@@ -666,14 +666,35 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 		// that the returned URL stands a better chance of accurately reflecting
 		// the whole original request.
 		query = "";
-		params = request.getParameterNames();
-		if (params != null) {
-			while (params.hasMoreElements()) {
-				name = (String) params.nextElement();
-				values = request.getParameterValues(name);
+//		params = request.getParameterNames();
+//		if (params != null) {
+//			while (params.hasMoreElements()) {
+//				name = (String) params.nextElement();
+//				values = request.getParameterValues(name);
+//				if (values != null) {
+//					for (i = 0; i < values.length; i++) {
+//						value = values[i];
+//						if (!"".equals(query))
+//							query += "&";
+//						try {
+//							query += URLEncoder.encode(name, "UTF-8");
+//							query += "=";
+//							query += URLEncoder.encode(value, "UTF-8");
+//						} catch (UnsupportedEncodingException e) {
+//							should never happen
+//						}
+//					}
+//				}
+//			}
+//		}
+		Map<String, String[]> params = request.getParameterMap();
+		if (params != null && !params.isEmpty()) {
+			for (Map.Entry<String, String[]> param : params.entrySet()) {
+				String name = param.getKey();
+				String[] values = param.getValue();
 				if (values != null) {
 					for (i = 0; i < values.length; i++) {
-						value = values[i];
+						String value = values[i];
 						if (!"".equals(query))
 							query += "&";
 						try {
@@ -681,10 +702,11 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 							query += "=";
 							query += URLEncoder.encode(value, "UTF-8");
 						} catch (UnsupportedEncodingException e) {
-							// should never happen
+//							should never happen
 						}
 					}
 				}
+
 			}
 		}
 		if (!"".equals(query))
