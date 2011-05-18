@@ -16,6 +16,10 @@
         <module>portlet</module>
         <module>portlet-apps</module>
         <module>spf-portal-laf</module>
+        <!-- spf-portal-installer cannot be a submodule of portal as it depends on
+        portal-components which are built only after the portal. To solve this dependency
+        issue portal/spf-portal-installer is included in this main SPF aggregator POM. -->
+        <module>portal/spf-portal-installer</module>
     </modules>
     
     <scm>

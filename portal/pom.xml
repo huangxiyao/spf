@@ -42,7 +42,9 @@
 		<module>spf-portal-tools</module>
 		<module>spf-portal-utilities</module>
 		<module>spf-portal-wsrp</module>
-		<module>spf-portal-installer</module>
+        <!-- spf-portal-installer cannot be a submodule of this artifact as it depends on
+        portal-components which are built only after the portal. To solve this dependency
+        issue portal/spf-portal-installer is included in the main SPF aggregator POM. -->
 	</modules>
 
 	<build>
