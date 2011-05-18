@@ -65,16 +65,8 @@ mkdir -p ${CASFW_HOME}/var/log/spf-html-viewer
 mkdir -p ${CASFW_HOME}/var/log/spf-healthcheck
 mkdir -p ${CASFW_HOME}/var/data
 
-# Fix permissions
-echo "Setting permissions"
-
-# In general we want:
-# - user to read+write+browse (i.e. execute for directories, and if execute for files was already there we are fine), 
-# - group to read+browse, 
-# - others to do nothing
-# - all to read+browse log files
-chmod -R u+rwX,g=rX,o= ${CASFW_HOME}
-chmod -R a+rX ${CASFW_HOME}/var/log
+#Fix permissions for the executables we know about
+echo "Setting 'execute' permissions"
 
 # And now we explicitely set 'execute' permissions for files we know we need
 chmod ug+x ${CASFW_HOME}/bin/*.sh

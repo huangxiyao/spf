@@ -35,6 +35,18 @@ rm ${CASFW_HOME}/var/accept_site_import.txt
 # Setup DB for persona
 ${CASFW_HOME}/bin/setupPersonaDatabase.sh
 
+#Fix permissions for all other files
+echo "Setting other permissions"
+
+# In general we want:
+# - user to read+write+browse (i.e. execute for directories, and if execute for files was already there we are fine),
+# - group to read+browse,
+# - others to do nothing
+# - everybody to have read+browse access to log directory
+chmod -R u+rwX,g=rX,o= ${CASFW_HOME}
+chmod a+rX ${CASFW_HOME}
+chmod -R a+rX ${CASFW_HOME}/var
+chmod -R a+rX ${CASFW_HOME}/var/log
 
 # Print message about URL at which Portal runs
 tomcat_portal_http_port="$(get_property_value "${CASFW_HOME}/etc/casfw.properties" "tomcat_portal_connector_http_port")"
@@ -43,7 +55,6 @@ echo "Starting Tomcat with Vignette Portal at http://$(hostname):${tomcat_portal
 ${CASFW_HOME}/bin/tomcat-portal.sh start
 
 
-
-echo
-echo "Please check ${CASFW_HOME}/README.txt for details of the components included"
-echo "in this installation."
+#echo
+#echo "Please check ${CASFW_HOME}/README.txt for details of the components included"
+#echo "in this installation."
