@@ -1,6 +1,9 @@
 #!/bin/sh
 CASFW_HOME="$(cd "$(dirname "$0")/.." && pwd -P)" 
 
+#Let's make sure that all our files are writable by us
+chmod -R u+rwX ${CASFW_HOME}
+
 source ${CASFW_HOME}/bin/.casfwrc
 
 # Create Tomcat instance
