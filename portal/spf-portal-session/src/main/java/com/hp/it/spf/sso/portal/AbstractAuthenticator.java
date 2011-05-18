@@ -447,6 +447,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             userProfile.put(AuthenticationConsts.KEY_USER_GROUPS,
                             Collections.list(Collections.enumeration(AuthenticatorHelper.getUserGroupTitleSet(AuthenticatorHelper.getUserGroupSet(vapUser)))));
         }
+        if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+            LOG.debug("Saving user profile map in session: %s" + userProfile);
+        }
         request.getSession()
                .setAttribute(AuthenticationConsts.USER_PROFILE_KEY, userProfile);
     }

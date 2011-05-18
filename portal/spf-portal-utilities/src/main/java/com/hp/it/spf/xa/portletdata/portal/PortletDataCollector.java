@@ -30,29 +30,56 @@ import com.vignette.portal.website.enduser.PortalContext;
 public class PortletDataCollector
 {
 	private static final LogWrapper LOG = new LogWrapper(PortletDataCollector.class);
+	static final String REQUEST_USER_CONTEXT_KEYS_KEY = PortletDataCollector.class.getName() + ".UserContextKeys";
+	static final String REQUEST_USER_PROFILE_KEY = PortletDataCollector.class.getName() + ".UserProfile";
 
 	/**
 	 * Collects the data from the request which will be sent to portlets in user context map.
+	 * This method will save its result as the request attribute and will attempt to use that
+	 * attribute value if it is already present. Invoking it from the main request thread
+	 * prior to calling remote portlets should help preventing mutli-threaded access issues.
 	 * @param request portal request
 	 * @return user context keys map
 	 */
 	public Map<String, String> retrieveUserContextKeys(HttpServletRequest request) {
-		Map<String, String> userContext = new HashMap<String, String>();
+		// synchronize this as multiple WSRP threads will access the request in
+		// parallel and we don't know the underlying request implementation
+		synchronized (request) {
+			Map<String, String> userContext = (Map<String, String>) request.getAttribute(REQUEST_USER_CONTEXT_KEYS_KEY);
+			if (userContext != null) {
+				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+					LOG.debug("User context keys already present in request: " + userContext);
+				}
+				return userContext;
+			}
 
-		userContext.put(Consts.KEY_PORTAL_SITE_URL, getPortalSiteURL(request));
-		userContext.put(Consts.KEY_PORTAL_REQUEST_URL, getRequestURL(request));
-		userContext.put(Consts.KEY_PORTAL_SITE_NAME, getPortalSiteName(request));
-		userContext.put(Consts.KEY_PORTAL_SESSION_ID, getPortalSessionId(request));
-		userContext.put(Consts.KEY_SESSION_TOKEN, getHppSessionToken(request));
-		userContext.put(Consts.KEY_NAVIGATION_ITEM_NAME, getNavigationItemName(request));
-		userContext.put(Consts.KEY_PORTAL_PAGE_ID, getPageFriendlyId(request));
-		// add last session cleanup date in usercontext to be passed to portlets per CR 86
-		userContext.put(Consts.KEY_LAST_PORTAL_SESSION_CLEANUP_DATE, getLastSessionCleanupDate(request));
-		return userContext;
+			userContext = new HashMap<String, String>();
+
+			userContext.put(Consts.KEY_PORTAL_SITE_URL, getPortalSiteURL(request));
+			userContext.put(Consts.KEY_PORTAL_REQUEST_URL, getRequestURL(request));
+			userContext.put(Consts.KEY_PORTAL_SITE_NAME, getPortalSiteName(request));
+			userContext.put(Consts.KEY_PORTAL_SESSION_ID, getPortalSessionId(request));
+			userContext.put(Consts.KEY_SESSION_TOKEN, getHppSessionToken(request));
+			userContext.put(Consts.KEY_NAVIGATION_ITEM_NAME, getNavigationItemName(request));
+			userContext.put(Consts.KEY_PORTAL_PAGE_ID, getPageFriendlyId(request));
+			// add last session cleanup date in usercontext to be passed to portlets per CR 86
+			userContext.put(Consts.KEY_LAST_PORTAL_SESSION_CLEANUP_DATE, getLastSessionCleanupDate(request));
+
+			request.setAttribute(REQUEST_USER_CONTEXT_KEYS_KEY, userContext);
+
+			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+				LOG.debug("User context keys saved in request: " + userContext);
+			}
+
+			return userContext;
+		}
 	}
 
 	/**
 	 * Retrieves user profile map from portal session.
+     * This method will save its result as the request attribute and will attempt to use that
+     * attribute value if it is already present. Invoking it from the main request thread
+     * prior to calling remote portlets should help preventing mutli-threaded access issues.
 	 *
 	 * @param request incoming user request
 	 * @return map containing user profile.
@@ -61,12 +88,29 @@ public class PortletDataCollector
 		// synchronize this as multiple WSRP threads will access the request in
 		// parallel and we don't know the underlying request implementation
 		synchronized (request) {
+			Map userProfile = (Map) request.getAttribute(REQUEST_USER_PROFILE_KEY);
+			if (userProfile != null) {
+				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+					LOG.debug("User profile map already present in request: " + userProfile);
+				}
+				return userProfile;
+			}
+
 			HttpSession session = request.getSession(true);
-			Map userProfile = (Map) session.getAttribute(Consts.USER_PROFILE_KEY);
+			userProfile = (Map) session.getAttribute(Consts.USER_PROFILE_KEY);
 			// profile not found in the standard attribute; try legacy name
 			if (userProfile == null) {
 				userProfile = (Map) session.getAttribute("StandardParameters");
 			}
+
+			if (userProfile != null) {
+				request.setAttribute(REQUEST_USER_PROFILE_KEY, userProfile);
+
+				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+					LOG.debug("User profile map saved in request: " + userProfile);
+				}
+			}
+
 			return userProfile;
 		}
 	}
@@ -78,11 +122,7 @@ public class PortletDataCollector
 	 */
 	private String getRequestURL(HttpServletRequest request)
 	{
-		// synchronize this as multiple WSRP threads will access the request in
-		// parallel and we don't know the underlying request implementation
-		synchronized (request) {
-			return com.hp.it.spf.xa.misc.portal.Utils.getRequestURL(request);
-		}
+		return com.hp.it.spf.xa.misc.portal.Utils.getRequestURL(request);
 	}
 
 	/**
@@ -92,11 +132,7 @@ public class PortletDataCollector
 	 */
 	private String getPortalSiteURL(HttpServletRequest request)
 	{
-		// synchronize this as multiple WSRP threads will access the request in
-		// parallel and we don't know the underlying request implementation
-		synchronized (request) {
-			return com.hp.it.spf.xa.misc.portal.Utils.getPortalSiteURL(request);
-		}
+		return com.hp.it.spf.xa.misc.portal.Utils.getPortalSiteURL(request);
 	}
 
 	/**
@@ -105,23 +141,19 @@ public class PortletDataCollector
 	 * @return portal site DNS name retrieved from Vignette <tt>PortalContext</tt> object
 	 */
 	/*private*/ String getPortalSiteName(HttpServletRequest request) {
-		// synchronize this as multiple WSRP threads will access the request in
-		// parallel and we don't know the underlying request implementation
-		synchronized (request) {
-			PortalContext portalContext = (PortalContext) request.getAttribute("portalContext");
-			if (portalContext == null) {
-				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-					LOG.debug("Unable to find PortalContext object - this happens when called from Vignette Console");
-				}
-				return "";
+		PortalContext portalContext = (PortalContext) request.getAttribute("portalContext");
+		if (portalContext == null) {
+			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+				LOG.debug("Unable to find PortalContext object - this happens when called from Vignette Console");
 			}
-			Site currentSite = portalContext.getCurrentSite();
-			if (currentSite == null) {
-				LOG.warning("No site for current request");
-				return "";
-			}
-			return currentSite.getDNSName();
+			return "";
 		}
+		Site currentSite = portalContext.getCurrentSite();
+		if (currentSite == null) {
+			LOG.warning("No site for current request");
+			return "";
+		}
+		return currentSite.getDNSName();
 	}
 
 	/**
@@ -130,11 +162,7 @@ public class PortletDataCollector
 	 * @return {@link javax.servlet.http.HttpSession} ID of the request
 	 */
 	/*private*/ String getPortalSessionId(HttpServletRequest request) {
-		// synchronize this as multiple WSRP threads will access the request in
-		// parallel and we don't know the underlying request implementation
-		synchronized (request) {
-			return request.getSession(true).getId();
-		}
+		return request.getSession(true).getId();
 	}
 
 	/**
@@ -144,12 +172,7 @@ public class PortletDataCollector
 	 *         if non could be found
 	 */
 	/*private*/ String getHppSessionToken(HttpServletRequest request) {
-		Cookie[] cookies = null;
-		// synchronize this as multiple WSRP threads will access the request in
-		// parallel and we don't know the underlying request implementation
-		synchronized (request) {
-			cookies = request.getCookies();
-		}
+		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (int i = 0, len = cookies.length; i < len; i++) {
 				Cookie cookie = cookies[i];
@@ -167,24 +190,20 @@ public class PortletDataCollector
 	 * @return navigation item name or empty string if none could be found
 	 */
 	/*private*/ String getNavigationItemName(HttpServletRequest request) {
-		// synchronize this as multiple WSRP threads will access the request in
-		// parallel and we don't know the underlying request implementation
-		synchronized (request) {
-			PortalContext portalContext = (PortalContext) request.getAttribute("portalContext");
-			if (portalContext == null) {
-				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-					LOG.debug("Unable to find PortalContext object - this happens when called from Vignette Console");
-				}
-				return "";
+		PortalContext portalContext = (PortalContext) request.getAttribute("portalContext");
+		if (portalContext == null) {
+			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+				LOG.debug("Unable to find PortalContext object - this happens when called from Vignette Console");
 			}
-			MenuItemNode node = getSelectedMenuItemNode(portalContext);
-			if (node == null) {
-				LOG.warning("Unable to find current menu item");
-				return "";
-			}
-			if (node.getMenuItem() != null) {
-				return node.getMenuItem().getTitle();
-			}
+			return "";
+		}
+		MenuItemNode node = getSelectedMenuItemNode(portalContext);
+		if (node == null) {
+			LOG.warning("Unable to find current menu item");
+			return "";
+		}
+		if (node.getMenuItem() != null) {
+			return node.getMenuItem().getTitle();
 		}
 		return "";
 	}
@@ -206,23 +225,19 @@ public class PortletDataCollector
 	 * if none could be found
 	 */
 	/*private*/ String getPageFriendlyId(HttpServletRequest request) {
-		// synchronize this as multiple WSRP threads will access the request in
-		// parallel and we don't know the underlying request implementation
-		synchronized (request) {
-			PortalContext portalContext = (PortalContext) request.getAttribute("portalContext");
-			if (portalContext == null) {
-				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-					LOG.debug("Unable to find PortalContext object - this happens when called from Vignette Console");
-				}
-				return "";
+		PortalContext portalContext = (PortalContext) request.getAttribute("portalContext");
+		if (portalContext == null) {
+			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+				LOG.debug("Unable to find PortalContext object - this happens when called from Vignette Console");
 			}
-			Page page = portalContext.getResolvedPortletPage();
-			if (page == null) {
-				LOG.warning("Unable to get page object for current request");
-				return "";
-			}
-			return page.getFriendlyID(portalContext);
+			return "";
 		}
+		Page page = portalContext.getResolvedPortletPage();
+		if (page == null) {
+			LOG.warning("Unable to get page object for current request");
+			return "";
+		}
+		return page.getFriendlyID(portalContext);
 	}
 
 	/**
@@ -233,13 +248,11 @@ public class PortletDataCollector
 	 * if none could be found
 	 */
 	String getLastSessionCleanupDate(HttpServletRequest request) {
-		// synchronize this as multiple WSRP threads will access the request in
-		// parallel and we don't know the underlying request implementation
-		synchronized (request) {
-			HttpSession session = request.getSession();
-			String epoch = (String)session.getAttribute(Consts.KEY_LAST_PORTAL_SESSION_CLEANUP_DATE);
-			if (epoch == null) epoch = "";
-			return epoch;
+		HttpSession session = request.getSession();
+		String epoch = (String)session.getAttribute(Consts.KEY_LAST_PORTAL_SESSION_CLEANUP_DATE);
+		if (epoch == null) {
+			epoch = "";
 		}
+		return epoch;
 	}
 }
