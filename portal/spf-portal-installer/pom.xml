@@ -19,8 +19,6 @@
     </properties>
 
     <build>
-        <!-- temporarily -->
-        <finalName>tmp-portal-installer-nojvm</finalName>
         <plugins>
             <plugin>
                 <groupId>com.hp.it.118361</groupId>
@@ -31,7 +29,6 @@
                     <installDirectoryName>portal-${project.version}</installDirectoryName>
                     <scmRevision>${scmRevision}</scmRevision>
                     <software>
-                        <!--
                         <artifact>
                             <groupId>com.oracle.java</groupId>
                             <artifactId>oracle-java</artifactId>
@@ -39,7 +36,6 @@
                             <classifier>linux-x64</classifier>
                             <type>tar.gz</type>
                         </artifact>
-                    -->
                         <artifact>
                             <groupId>org.apache.tomcat</groupId>
                             <artifactId>apache-tomcat</artifactId>
@@ -102,7 +98,6 @@
                         </artifact>
                     </software>
                 </configuration>
-<!--                
                 <executions>
                     <execution>
                         <goals>
@@ -117,7 +112,6 @@
                         </configuration>
                     </execution>
                 </executions> 
--->                
             </plugin>
         </plugins>
     </build>
