@@ -40,8 +40,7 @@ ${CASFW_HOME}/bin/setupPersonaDatabase.sh
 tomcat_portal_http_port="$(get_property_value "${CASFW_HOME}/etc/casfw.properties" "tomcat_portal_connector_http_port")"
 echo
 echo "Starting Tomcat with Vignette Portal at http://$(hostname):${tomcat_portal_http_port}/portal/"
-echo "### TODO: uncomment 'tomcat-portal.sh start' in .post-install.sh"
-#${CASFW_HOME}/bin/tomcat-portal.sh start
+${CASFW_HOME}/bin/tomcat-portal.sh start
 
 
 
