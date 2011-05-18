@@ -41,7 +41,7 @@
 <jsp:useBean id="HPWebModel" scope="request" 
 		class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
 		
-<jsp:scriptlet>
+<%
 
 Style currentStyle = portalContext.getCurrentStyle();
 	
@@ -168,7 +168,7 @@ for (int tabIndex=0; tabIndex<menuItemList.size(); tabIndex++) {
 pageContext.setAttribute("menuItemList", menuItemList);
 pageContext.setAttribute("selectedIndex", selectedIndex);
 
-</jsp:scriptlet>
+%>
 
 <%-----------------------------------------------------------------------------
 	Template

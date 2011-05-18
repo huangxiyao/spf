@@ -8,7 +8,7 @@
 
 <vgn-portal:defineObjects/>
 
-<jsp:scriptlet>
+<%
 
 // Create directory string to current style directory to access the
 // sample_cfhook.js file (see below).
@@ -16,7 +16,7 @@
 String stylePath = portalContext.getPortalHttpRoot() + 
 	portalContext.getCurrentStyle().getUrlSafeRelativePath();
 
-</jsp:scriptlet>
+%>
 
 <%-- Include sample HPP cfhook JS file to use JS functions for signin, signout,
 	 edit profile, register urls. --%>

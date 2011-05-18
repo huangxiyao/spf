@@ -25,7 +25,7 @@
 	Local variables  
 -----------------------------------------------------------------------------%>
 
-<jsp:scriptlet>
+<%
 
 String headerLevel = Utils.getI18nValue( i18nID, "hpweb.headerLevel", "2",
                         portalContext);
@@ -47,7 +47,7 @@ pageContext.setAttribute("headerLevel", headerLevel);
 pageContext.setAttribute("boundingBox", boundingBox);
 pageContext.setAttribute("portletTitle", portletTitle);
 
-</jsp:scriptlet>
+%>
 
 <c:choose>
 	<c:when test="${empty style}">

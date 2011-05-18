@@ -45,7 +45,7 @@
 
 <vgn-portal:defineObjects/>
 
-<jsp:scriptlet>
+<%
 
 // Get current style, which is the grid, for use in generating the path.
 
@@ -57,13 +57,13 @@ pageContext.setAttribute("stylePath", portalContext.getPortalHttpRoot() +
 	
 pageContext.setAttribute("dnsName", portalContext.getCurrentSite().getDNSName());
 	
-</jsp:scriptlet>
+%>
 
 <%-- Include the Layout Config style --%>
 
 <vgn-portal:includeStyle friendlyID="hp_layout_config" />
 
-<jsp:scriptlet>
+<%
 
 // Get path to hp_layout_config head JSP file to include later in head.
 
@@ -71,12 +71,12 @@ pageContext.setAttribute("layoutConfigHeadJspPath",
 		"/" + portalContext.getCurrentStyle().getUrlSafeRelativePath() +
 		"hpweb_layout_config_head.jsp");
 
-</jsp:scriptlet>
+%>
 
 <jsp:useBean id="HPWebModel" scope="request" 
 		class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
 
-<jsp:scriptlet>
+<%
 
 // Get locale from logic to get it from what is set in Vignette.
 // Use locale and ISO language tag for fmt tags, and <html lang=""> element.
@@ -90,7 +90,7 @@ if (languageTag == null) {
 }
 pageContext.setAttribute("countryTag", countryTag);
 
-</jsp:scriptlet>
+%>
 
 <%----------------------------------------------------------------------------- 
 	Messages  
@@ -129,7 +129,7 @@ pageContext.setAttribute("countryTag", countryTag);
 	found there, then look in the grid message catalog. 	
 --%>
 	
-<jsp:scriptlet>
+<%
 
 String themeDef = Utils.getI18nValue(i18nID, "hpweb.theme", "#003366", 
 			portalContext);
@@ -138,7 +138,7 @@ String headerStyleDef = Utils.getI18nValue(i18nID, "hpweb.headerStyle", "stretch
 String pageWidthDef = Utils.getI18nValue(i18nID, "hpweb.pageWidth", "wide", 
 			portalContext);
 
-</jsp:scriptlet>
+%>
 		
 <c:set var="themeColor" value="${HPWebModel.themeColor}" />
 <c:if test="${empty themeColor}">
@@ -165,7 +165,7 @@ String pageWidthDef = Utils.getI18nValue(i18nID, "hpweb.pageWidth", "wide",
 	<c:set var="widePage" value="false" />
 </c:if>
 
-<jsp:scriptlet>
+<%
 
 // Create HashMap to pass arguments to styles that need values sourced from
 // grid components.
@@ -174,7 +174,7 @@ HashMap args = new HashMap();
 args.put("widePage", pageContext.getAttribute("widePage"));
 args.put("themeColor", pageContext.getAttribute("themeColor"));
 
-</jsp:scriptlet>
+%>
 
 <%-----------------------------------------------------------------------------
 	Template

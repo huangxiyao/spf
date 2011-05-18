@@ -37,12 +37,12 @@
 <%-- Only support stretch --%>
 <c:set var="stretch" value="true" />
 
-<jsp:scriptlet>
+<%
 
 String localeSelectorDef = Utils.getI18nValue(i18nID, "hpweb.localeSelector", 
 			portalContext);
 
-</jsp:scriptlet>
+%>
 
 <jsp:useBean id="HPWebModel" scope="request" 
 		class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
