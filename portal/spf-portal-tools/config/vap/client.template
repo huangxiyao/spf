@@ -5,7 +5,7 @@
 
 	<globalConfiguration></globalConfiguration>
 
-	<transport name="http" pivot="java:org.apache.axis.transport.http.CommonsHTTPSender">
+	<transport name="http" pivot="java:com.hp.it.spf.wsrp.axis.transport.http.HTTPSender">
 		<requestFlow>
 			<handler type="java:com.vignette.portal.webservices.internal.axis.handlers.CookieHeaderAccessHandler"/>
 			<handler type="java:com.vignette.webservices.toolkit.security.SecurityHandler"/>
