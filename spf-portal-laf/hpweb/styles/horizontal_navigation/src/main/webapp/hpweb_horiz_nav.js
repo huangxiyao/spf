@@ -57,7 +57,7 @@ function collapse(div, active, blackCaretImg, whiteCaretImg)
 		}
 	}else{
 		img.src = whiteCaretImg;
-		imgTD.className = imgTD.className.replace(/active/, '');
+		imgTD.className = imgTD.className.replace(/\sactive/, '');
 	}
 		
 	/** Change style class back to menuNormal **/
@@ -96,6 +96,6 @@ function mouseOut(el, active){
 			parentNode.className = parentNode.className.contact(' active');
 		}
 	}else{
-		parentNode.className = parentNode.className.replace(/active/, '');
+		parentNode.className = parentNode.className.replace(/\sactive/, '');
 	}
 }
