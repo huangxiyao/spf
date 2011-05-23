@@ -37,11 +37,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springmodules</groupId>
-			<artifactId>spring-modules-cache</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>com.hp.frameworks</groupId>
 			<artifactId>timber-core</artifactId>
 		</dependency>

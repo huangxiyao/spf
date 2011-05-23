@@ -221,13 +221,6 @@
                 <version>${springFrameworkVersion}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.springmodules</groupId>
-                <artifactId>spring-modules-cache</artifactId>
-                <version>0.9</version>
-            </dependency>
-
-
 
 
 
