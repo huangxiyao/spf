@@ -93,3 +93,7 @@ for java_dir in $(ls -d ${CASFW_HOME}/software/oracle-java-1.5.* 2>/dev/null); d
 done 
 
 
+# allow other installers using this one as base to provide their additional steps
+if [ -r ${CASFW_HOME}/bin/.pre-install_custom.sh ]; then
+    source ${CASFW_HOME}/bin/.pre-install_custom.sh
+fi

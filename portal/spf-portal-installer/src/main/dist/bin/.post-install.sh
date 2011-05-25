@@ -48,6 +48,11 @@ chmod a+rX ${CASFW_HOME}
 chmod -R a+rX ${CASFW_HOME}/var
 chmod -R a+rX ${CASFW_HOME}/var/log
 
+# allow other installers using this one as base to provide their additional steps
+if [ -r ${CASFW_HOME}/bin/.post-install_custom.sh ]; then
+    source ${CASFW_HOME}/bin/.post-install_custom.sh
+fi
+
 # Print message about URL at which Portal runs
 tomcat_portal_http_port="$(get_property_value "${CASFW_HOME}/etc/casfw.properties" "tomcat_portal_connector_http_port")"
 echo

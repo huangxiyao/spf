@@ -69,3 +69,9 @@ if [ -z "${healthcheck_version}" ]; then
 fi
 
 CASFW_DYNAMIC_CONFIG_TOKENS="-Dportal_version=${portal_version} -Dvignette_home=${VIGNETTE_HOME} -Dhtmlviewer_version=${htmlviewer_version} -Dopensign_version=${opensign_version} -Dhealthcheck_version=${healthcheck_version}"
+
+
+# allow other installers using this one as base to provide their additional settings
+if [ -r ${CASFW_HOME}/.casfwrc_custom ]; then
+    source ${CASFW_HOME}/.casfwrc_custom
+fi
