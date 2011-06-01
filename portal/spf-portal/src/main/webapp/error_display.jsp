@@ -34,6 +34,10 @@ maintenance for this software.
 	response.setHeader("Cache-Control","no-cache");
 	String homeURL = PortalServicesComponent._getPortalHttpRoot();
 	String controllerURL = request.getParameter(ParameterConstants.CONTROLLER_URL);
+	String cdn = "http://welcome.hp-ww.com";
+	if( request.isSecure()){
+		cdn = "https://secure.hp-ww.com";
+	}
 
 	if (controllerURL != null) {
 		// url encode whatever value we get for controllerURL so that malicious
@@ -124,7 +128,7 @@ maintenance for this software.
                                 padding-bottom: 0pt;
                                 padding-left: 26px;
                                 background-color: transparent;
-                                background-image: url("/img/slp_logo_black_000000.gif");
+                                background-image: url("<%=cdn %>/img/slp_logo_black_000000.gif");
                                 background-repeat: no-repeat;
                                 background-attachment: scroll;
                                 background-position: 26px 0pt;
@@ -160,8 +164,6 @@ maintenance for this software.
                 </style>
 
 <style>
-	#stretchLogoWithPageTitle {color:#FFFFFF; background-color: #003366;}
-	#stretchLogoWithPageTitle #logo {background-image: url(http://welcome.hp-ww.com/country/img/slp_logo_003366.gif);}
 	
 </style>
 </head>
@@ -181,8 +183,8 @@ maintenance for this software.
 	<link href="/portal/templates/template0053/spf-system-error-secondarypage/systemError.css" rel="stylesheet" type="text/css">
 	        <div id="stretchLogoWithPageTitleBlack">
 	                <div id="logo">
-	                        <a href="http://welcome.hp.com/country/us/en/welcome.html" title="HP.com Home">
-	                        <img src="http://welcome.hp-ww.com//img/slp_logo_black_000000.gif" alt="" border="0">
+	                        <a href="<%=cdn %>/country/us/en/welcome.html" title="HP.com Home">
+	                        <img src="<%=cdn %>/img/slp_logo_black_000000.gif" alt="" border="0">
 	                                <span class="screenReading">HP.com Home</span>
 	                        </a>
 	                </div>
@@ -195,12 +197,12 @@ maintenance for this software.
 	        <p>If the issue persists, please try the following:</p>
 	        <ul>
 	                <li>Clear your browser's cache and try again.</li>
-	                <li><a href="http://welcome.hp.com/country/us/en/wwcontact_us.html">Contacth HP Customer Service</a></li>
+	                <li><a href="<%=cdn %>/country/us/en/wwcontact_us.html">Contact HP Customer Service</a></li>
 	        </ul>
 	</div>
 	<div id="footer">
-	        <a href="http://welcome.hp.com/country/us/en/privacy.html" class="udrlinesmall">Privacy statement</a>
-	                                &nbsp;|&nbsp;<a href="http://welcome.hp.com/country/us/en/termsofuse.html" class="udrlinesmall">Using this site means you accept its terms</a>
+	        <a href="<%=cdn %>/country/us/en/privacy.html" class="udrlinesmall">Privacy statement</a>
+	                                &nbsp;|&nbsp;<a href="<%=cdn %>/country/us/en/termsofuse.html" class="udrlinesmall">Using this site means you accept its terms</a>
 	</div>
 	
 	<div id="copyright" class="small">&#169; 2011 Hewlett-Packard Development Company, L.P.</div>
