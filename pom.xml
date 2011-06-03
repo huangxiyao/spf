@@ -26,6 +26,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.sun.portal.portletcontainer</groupId>
+			<artifactId>portlet-container</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.portal.portletcontainer</groupId>
 			<artifactId>portletadmin</artifactId>
 			<scope>provided</scope>
 		</dependency>
@@ -42,6 +47,16 @@
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>eclipselink</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.portlet</groupId>
+			<artifactId>portlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
