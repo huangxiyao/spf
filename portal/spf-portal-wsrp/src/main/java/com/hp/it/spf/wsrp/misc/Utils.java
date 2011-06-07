@@ -1,5 +1,6 @@
 package com.hp.it.spf.wsrp.misc;
 
+import com.hp.it.spf.xa.wsrp.portal.RequestWrapper;
 import org.apache.axis.MessageContext;
 import org.apache.axis.AxisFault;
 import org.apache.axis.message.RPCElement;
@@ -7,6 +8,7 @@ import org.apache.axis.message.RPCParam;
 import org.xml.sax.SAXException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
@@ -25,6 +27,8 @@ import java.util.Vector;
  */
 public class Utils {
 	private static final LogWrapper LOG = new LogWrapper(Utils.class);
+	private static final String REQUEST_MC_KEY = Utils.class.getName() + ".Request";
+	private static final String SESSION_MC_KEY = Utils.class.getName() + ".Session";
 
 	private Utils() {}
 
@@ -44,11 +48,11 @@ public class Utils {
 		// handling time but not at response handling time. We know this method will be called 
 		// during a request so let's store the request object in message context and have it
 		// ready to use when this method is called at response time
-		HttpServletRequest request = (HttpServletRequest) messageContext.getProperty(Utils.class.getName() + ".Request");
+		HttpServletRequest request = (HttpServletRequest) messageContext.getProperty(REQUEST_MC_KEY);
 		if (request != null) {
 			return request;
 		}
-		
+
 		String userAgentValue = findUserAgentValue(messageContext.getRequestMessage());
 		if (userAgentValue != null) {
 			int pos = userAgentValue.lastIndexOf(RequestBindingFilter.KEY_PREFIX);
@@ -59,7 +63,7 @@ public class Utils {
 						+ RequestBindingFilter.KEY_PREFIX.length());
 				request = RequestMap.getInstance().get(requestKey);
 				// store the request in message context so we can reuse it at response time
-				messageContext.setProperty(Utils.class.getName() + ".Request", request);
+				messageContext.setProperty(REQUEST_MC_KEY, request);
 				return request;
 			} else {
 				LOG.error("SPF request key not found!");
@@ -72,12 +76,38 @@ public class Utils {
 		return null;
 	}
 
+	/**
+	 * Retrieves the portal session associated with this web service call.
+	 * This method relies on {@link #retrieveRequest(org.apache.axis.MessageContext)} and therefore
+	 * similar constraints apply for its use.
+	 *
+	 * @param messageContext web service message context.
+	 * @return corresponding portal session  or <tt>null</tt> if the portal request to which
+	 * this session is associated could not be found.
+	 * @throws Exception If an unexpected error occurs while processing the message context data
+	 */
+	public static HttpSession retrieveSession(MessageContext messageContext) throws Exception
+	{
+		HttpSession session = (HttpSession) messageContext.getProperty(SESSION_MC_KEY);
+		if (session != null) {
+			return session;
+		}
+
+		HttpServletRequest request = retrieveRequest(messageContext);
+		if (request != null) {
+			session = (HttpSession) request.getAttribute(RequestWrapper.ORIGINAL_SESSION);
+			messageContext.setProperty(SESSION_MC_KEY, session);
+		}
+
+		return session;
+	}
+
 
 	/**
 	 * Extracts from the SOAP message WSRP request or response object. 
- 	 * When this method is called in a handler called within the request flow, the method returns
- 	 * the request object. If this method is called in a handler within the response  flow, 
- 	 * this method returns response object.
+	 * When this method is called in a handler called within the request flow, the method returns
+	 * the request object. If this method is called in a handler within the response  flow,
+	 * this method returns response object.
 	 *
 	 * @param messageContext this web service call message context
 	 * @return RPCParam containing the object (request parameter or result)
@@ -90,8 +120,8 @@ public class Utils {
 	{
 		return getWsrpCallRPCParam(messageContext.getMessage());
 	}
-	
-	
+
+
 	/**
 	 * Extracts from the SOAP message WSRP object.
 	 * If the object passed to the method is a request message, it will return the request 
@@ -132,10 +162,10 @@ public class Utils {
 		}
 
 		return (RPCParam) params.get(0);
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Checks whether the SOAP message contains a SOAP fault.
 	 * 
