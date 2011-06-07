@@ -52,10 +52,10 @@ public class RequestLogFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
 	{
 		boolean isTopLevelRequest = (request.getAttribute(FILTER_APPLIED_KEY) == null);
-		
+
 		if (isTopLevelRequest) {
 			request.setAttribute(FILTER_APPLIED_KEY, Boolean.TRUE);
-			
+
 			initMDC((HttpServletRequest) request);
 			RequestContext requestContext = initRequestContext(request);
 			TimeRecorder timeRecorder = requestContext.getTimeRecorder();
@@ -199,7 +199,7 @@ public class RequestLogFilter implements Filter {
 		}
 
 	}
-	
+
 	/**
 	 * Returns hash value of weblogic JSESSIONID.
 	 * Weblogic appends server informations in JSESSIONID, so here we are taking hash value till "!".
@@ -223,7 +223,7 @@ public class RequestLogFilter implements Filter {
 	 * @param request portal request
 	 * @return request id set by the web server, if not null, else system current time in milliseconds.	 
 	 */
-	
+
 	private String getRequestId(HttpServletRequest request) {
 		// The web server should have send us the HTTP header SPF_DC_ID
 		String reqId = request.getHeader(Consts.DIAGNOSTIC_ID);
@@ -237,7 +237,7 @@ public class RequestLogFilter implements Filter {
 			return reqId;
 		}
 	}
-	
+
 	private String getSessionId(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		if (session == null) {
@@ -267,7 +267,7 @@ public class RequestLogFilter implements Filter {
 		}
 		return siteName;
 	}
-	
+
 	/**
 	 * Gets all the cookies from the request. 
 	 * If the cookie is not set, add the session cookie in the response.
@@ -286,7 +286,9 @@ public class RequestLogFilter implements Filter {
 			}
 		}
 		if (!cookieAlreadySet) {
-			response.addCookie(new Cookie(SPF_DC_SID_COOKIE_NAME, getSessionIdHashValue(request)));
+			Cookie cookie = new Cookie(SPF_DC_SID_COOKIE_NAME, getSessionIdHashValue(request));
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 	}
 
