@@ -1,0 +1,82 @@
+####### REWRITE RULES for SP4TS ########
+<IfModule mod_rewrite.c>
+
+  RewriteEngine on
+
+# Redirect China ITRC Lite Forums pages to SP4TS Forums Home Page
+
+  RewriteCond %{HTTP_HOST} ^h50069.www5.hp.com$ [NC]
+#  RewriteRule ^/e-delivery3/forum/webui(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/fm/home/?lang=zh&cc=CN [NC,R=301,L]
+  RewriteRule ^/e-delivery3/forum/webui(.*) http://h30499.www3.hp.com/hpeb/?category.id=simplified_chinese_community [NC,R=301,L]
+
+# Redirect other China ITRC Lite pages to SP4TS Home Page
+
+  RewriteCond %{HTTP_HOST} ^e-support.hp.com.cn$ [NC]
+  RewriteRule ^/Support(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/?lang=zh&cc=CN [NC,R=301,L]
+  RewriteCond %{HTTP_HOST} ^e-support.hp.com.cn$ [NC]
+  RewriteRule ^/enterprise(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/?lang=zh&cc=CN [NC,R=301,L]
+  RewriteCond %{HTTP_HOST} ^e-support.hp.com.cn$ [NC]
+  RewriteRule ^/e-delivery(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/?lang=zh&cc=CN [NC,R=301,L]
+
+# Redirect Taiwan ITRC Lite Forums pages to SP4TS Forums Home Page
+
+  RewriteCond %{HTTP_HOST} ^h50163.www5.hp.com$ [NC]
+#  RewriteRule ^/tcforum(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/fm/home/?lang=zh&cc=TW [NC,R=301,L]
+  RewriteRule ^/tcforum(.*) http://h30499.www3.hp.com/hpeb/?category.id=traditional_chinese_community [NC,R=301,L]
+
+# Redirect other Taiwan ITRC Lite pages to SP4TS Home Page
+
+  RewriteCond %{HTTP_HOST} ^h50178.www5.hp.com$ [NC]
+  RewriteRule ^/itrc(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/?lang=zh&cc=TW [NC,R=301,L]
+
+# Redirect Japan ITRC Lite Forums pages to SP4TS Forums Home Page
+
+  RewriteCond %{HTTP_HOST} ^h50221.www5.hp.com$ [NC]
+#  RewriteRule ^/cgi/service/itrcforum(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/fm/home/?lang=ja&cc=JP [NC,R=301,L]
+  RewriteRule ^/cgi/service/itrcforum(.*) http://h30499.www3.hp.com/hpeb/?category.id=japanese_community [NC,R=301,L]
+
+# Redirect other Japan ITRC Lite pages to SP4TS Home Page
+
+  RewriteCond %{HTTP_HOST} ^h50221.www5.hp.com$ [NC]
+  RewriteRule ^/upassist(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/?lang=ja&cc=JP [NC,R=301,L]
+
+# Redirect Korea ITRC Lite Forums pages to SP4TS Forums Page
+
+  RewriteCond %{HTTP_HOST} ^h20498.www2.hp.com$ [NC]
+#  RewriteRule ^/forum(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/fm/home/?lang=ko&cc=KR [NC,R=301,L]
+  RewriteRule ^/forum(.*) http://h30499.www3.hp.com/hpeb/?category.id=korean_community [NC,R=301,L]
+
+# Redirect other Korea ITRC Lite pages to SP4TS Home Page
+
+  RewriteCond %{HTTP_HOST} ^h20498.www2.hp.com$ [NC]
+  RewriteRule ^(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/?lang=ko&cc=KR [NC,R=301,L]
+
+### New to DP3.2 ###
+
+  RewriteRule ^/portal/site/hpsc/(.*)/fm(.*) http://h30499.www3.hp.com/ [NC,R=301,L]
+  RewriteRule ^/portal/site/hpsc/fm(.*) http://h30499.www3.hp.com/ [NC,R=301,L]
+  
+### New to DP4 ###
+
+# Redirect China UST pages to SP4TS Home Page
+
+  RewriteCond %{HTTP_HOST} ^h50176.www5.hp.com$ [NC]
+  RewriteRule ^/support(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/?lang=zh&cc=CN [NC,R=301,L]
+
+# Redirect Korea UST pages to SP4TS Home Page
+
+  RewriteCond %{HTTP_HOST} ^h50177.www5.hp.com$ [NC]
+  RewriteRule ^/support(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/?lang=ko&cc=KR [NC,R=301,L]
+
+# Redirect Taiwan UST pages to SP4TS Home Page
+
+  RewriteCond %{HTTP_HOST} ^h50178.www5.hp.com$ [NC]
+  RewriteRule ^/support(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/?lang=zh&cc=TW [NC,R=301,L]
+
+# Redirect Japan UST pages to SP4TS Home Page
+
+  RewriteCond %{HTTP_HOST} ^h50222.www5.hp.com$ [NC]
+  RewriteRule ^/support(.*) http://h20564.www2.hp.com/portal/site/hpsc/public/?lang=ja&cc=JP [NC,R=301,L]
+
+</IfModule>
+####### END REWRITE RULES HTTP ########

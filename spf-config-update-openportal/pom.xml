@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hp.it.spf.config</groupId>
+        <artifactId>spf-config-update</artifactId>
+        <version>2.2-DP3.3</version>
+    </parent> 
+
+    <groupId>com.hp.it.spf.config</groupId>
+    <artifactId>spf-config-update-openportal</artifactId>
+    <packaging>jar</packaging>
+    
+    <description>
+        This artifact contains a subset of OpenPortal production configuration files that will be updated 
+        as part of DP3.3 release.
+    </description>
+</project>

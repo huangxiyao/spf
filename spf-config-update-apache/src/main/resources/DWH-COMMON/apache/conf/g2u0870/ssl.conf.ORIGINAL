@@ -1,0 +1,31 @@
+# Enable SSLv3 and TLSv1, but no SSLv2
+# This will ensure we have an SSL session ID
+SSLProtocol all -SSLv2
+
+#######  LOAD ADDITIONAL PLUGIN ########
+#Will be loaded in DWH master file
+#LoadModule rewrite_module modules/mod_rewrite.so
+#######  END LOAD ADDITIONAL PLUGIN ########
+####### REWRITE RULES SSL ########
+# TODO: confirm rewrite rules
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+
+  # jsessionid in URL is not supported by SPF -- remove it if any is found
+  RewriteRule ^(.*);jsessionid=[^\/\?]*(.*)$ $1$2 [L,R]
+
+  RewriteRule ^/portal/site/([^\/]*)([\/]?\??)$ /portal/site/$1/public$2 [R,L]
+  RewriteRule ^/portal/site/([^\/]*)/template\.(PAGE|MAXIMIZE)(/action\.process)?([\/]?\??)$ /portal/site/$1/template.$2$3/public$4 [R,L]
+
+  #Prevent users from accessing these URLs through Apache
+  RewriteRule ^/portal/services/(.*) /portal/site/spf/template.PUBLIC_SPF_AUTH_ERROR [R,L]
+  RewriteRule ^/portal/webservices/(.*) /portal/site/spf/template.PUBLIC_SPF_AUTH_ERROR [R,L]
+  RewriteRule ^/portal/beans/(.*) /portal/site/spf/template.PUBLIC_SPF_AUTH_ERROR [R,L]
+  RewriteRule ^/portal/beanutils/(.*) /portal/site/spf/template.PUBLIC_SPF_AUTH_ERROR [R,L] 
+</IfModule> 
+####### END REWRITE RULES SSL ########
+#
+####### URL REDIRECT SETTINGS ########
+# Include redirect.conf
+include /opt/webhost/sp/redirect/redirect.conf
+####### END URL REDIRECT SETTINGS ########

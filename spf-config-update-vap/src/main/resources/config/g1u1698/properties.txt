@@ -1,0 +1,1136 @@
+##########################################################################
+# Copyright 1999-2007 Vignette Corporation.
+# All rights reserved.
+#
+# THIS PROGRAM IS CONFIDENTIAL AND AN UNPUBLISHED WORK AND TRADE
+# SECRET OF THE COPYRIGHT HOLDER, AND DISTRIBUTED ONLY UNDER RESTRICTION.
+#
+# EXCEPT AS EXPLICITLY STATED IN A WRITTEN AGREEMENT BETWEEN THE PARTIES,
+# THE SOFTWARE IS PROVIDED AS-IS, WITHOUT WARRANTIES OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT,
+# PERFORMANCE, AND QUALITY.
+##########################################################################
+
+##########################################################################
+# Vignette Portal Configuration File
+#
+# properties.txt contains properties commonly changed when configuring
+# Vignette Portal. After the installer runs, you can modify your
+# Vignette Portal configuration by editing properties.txt. Examples of modifications
+# you might want to make are configuring Vignette Portal to run behind a proxy server,
+# changing the database properties, or using a user management scheme
+# other than the default.
+#
+##########################################################################
+
+##########JDBC DATABASE###################################################
+#
+# Controls the JDBC driver and database login.
+#
+# This section contains four properties for defining the database
+# driver, URL, user name, and password that Vignette Portal uses to
+# connect to your database.
+#
+# The default values are a simple JDBC configuration that allows Vignette Portal
+# subsystems to share JDBC settings. In the default Vignette Portal configuration,
+# database settings of all Vignette Portal subsystems point to "default.db", so they
+# use the properties listed below.
+
+# default.db.user and default.db.password are database-independent
+# and must be configured regardless of which database you are using.
+# In addition to these properties, you must uncomment the appropriate
+# JDBC driver and URL properties for your specific database.
+#
+# Note that for all databases, except DB2, you should use the
+# JDBC driver that Vignette provides. These drivers are located
+# in VignetteApplicationServer/lib.
+#
+# DB2 drivers are not shipped with Vignette Portal. Use the driver that comes
+# with the database and make these available to the CLASSPATH of
+# the Vignette Portal Web application.
+
+# A userid/username allowing login to the database.
+# The Vignette Portal installer fills in the value for this property based on
+# user input during the installation process. If you chose to configure
+# your database manually, you must provide a value for this property.
+default.db.user=VIGNETTE02
+
+# The password for the above userid.
+# The Vignette Portal installer fills in the value for this property based on
+# user input during the installation process. If you chose to configure
+# your database manually, you must provide a value for this property.
+default.db.password=TBD
+
+
+# The Java class name of the JDBC driver.
+# The Vignette Portal installer fills in the value for this property based on
+# the database chosen during the installation process. If you chose to
+# configure your database manually, you must provide a value for
+# this property.
+# Sample JDBC Drivers:
+#    Oracle: oracle.jdbc.driver.OracleDriver
+#    SQL Server(DataDirect): com.vignette.jdbc.sqlserver.SQLServerDriver
+#    Sybase: com.sybase.jdbc3.jdbc.SybDriver
+#    DB2(DataDirect): com.vignette.jdbc.db2.DB2Driver
+default.db.driver=oracle.jdbc.driver.OracleDriver
+
+# The URL to the database. The syntax depends on the JDBC driver.
+# The Vignette Portal installer fills in the value for this property based on
+# the database chosen during the installation process. If you chose to
+# configure your database manually, you must provide a value for
+# this property.
+# Sample JDBC URLs:
+#    Oracle: jdbc:oracle:thin:@<host>:1521:<SID>
+#    SQL Server(DataDirect): jdbc:vignette:sqlserver://<host>:1433;databasename=<database>;DescribeParameters=describeIfString
+#    Sybase: jdbc:sybase:Tds:<host>:5001/<database>
+#    DB2(DataDirect): jdbc:vignette:db2://<host>:50000;databasename=<database>
+default.db.url=jdbc:oracle:thin:@(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = gvu3737.austin.hp.com)(PORT = 1525))(ADDRESS = (PROTOCOL = TCP)(HOST = gvu3738.austin.hp.com)(PORT = 1525)) (ADDRESS = (PROTOCOL = TCP)(HOST = gvu1391.austin.hp.com)(PORT = 1525))(ADDRESS = (PROTOCOL = TCP)(HOST = gvu1392.austin.hp.com)(PORT = 1525))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = SRVPTLP)(FAILOVER_MODE =(BACKUP = SRVPTLP_PRECONNECT)(TYPE = SELECT) (METHOD = PRECONNECT)(RETRIES = 180)(DELAY = 5))))
+
+# The parameters of the JDBC driver (optional). Name=Value format is used to specify
+# the driver parameters, with multiple name-value pairs separated by the semicolon
+# character. For example:
+#    default.db.parameters=param1=value1;param2=value2
+# The Oracle driver needs a property (oracle.jdbc.J2EE13Compliant=true) to be fully 
+# compliant with JDBC, especially with regard to conversion of Oracle timestamp and 
+# date types to their JDBC equivalents. This property is ignored by non-Oracle databases. 
+default.db.parameters=oracle.jdbc.J2EE13Compliant=true;oracle.net.CONNECT_TIMEOUT=1000
+##########END JDBC DATABASE###############################################
+
+##########CACHING#########################################################
+
+# Cache Engine Support
+# Vignette Portal provides cluster-safe caching, which is configurable through the
+# properties contained in this section.
+#
+# The ID of the connection pool to use for the cache service.
+# If empty, omitted, or "default," the default connection pool
+# is used. (See the Connection Pool section.)
+cache_service.default.connectionpool=default
+
+# The class to use for the default cache service.
+cache_service.default.code=com.epicentric.cache.defaultcache.DefaultCache
+
+# The Cache API supports file-based caching. This property defines
+# the root directory for file-based passivation. In most cases, this
+# property should not be modified.
+cache_service.default.file_root_path=${com.vignette.portal.installdir.path}/cache
+
+# This property defines the in-memory cache size. When this size limit is exceeded the
+# elements in the in-memory cache will be removed and stored into the disk.
+cache_service.resource_cache.default.cache_size=10
+
+##########END CACHING#####################################################
+
+##########METRICS#########################################################
+
+# The metrics system enables you to collect and record data about Vignette Portal,
+# such as module page hits, unique user sessions, and other usage patterns
+# per page, module, module view, and user.
+
+# The properties in this section allow you to configure the Portal metrics
+# system.
+
+# Customers have full control over whether to gather metrics information or
+# not. Portal ships with metrics gathering enabled by default, but customers can turn
+# off metrics gathering by setting metrics.enabled property to "false".
+# Setting metrics gathering to "false" stops Portal from gathering all
+# metrics data from the server, whether they are Vignette-defined metrics
+# or custom metrics.
+metrics.enabled=false
+
+# The ID of the database connection pool to use for the MetricsDBManager
+# which maintains Metrics log Data persistence.
+# If this property is empty, omitted or "default," the default connection
+# pool is used. (See the Connection Pool section.)
+metrics.log.connectionpool=default
+
+# Number of hits that triggers the Metrics system to persist metrics data
+# into the MetricsLog table; used in conjunction with metrics.log.timeinterval
+metrics.log.threshold=100
+
+# Time interval at which the Metrics system will persist metrics data into
+# the MetricsLog table (in minutes); used in conjunction with
+# metrics.log.threshold.
+#
+# For example, if metrics.log.threshold=200 and metrics.log.timeinterval=10,
+# then every 10 minutes the Metrics system will check for the number of
+# hits since the last database update.  If the hits exceed 200, then the
+# database update occurs.
+metrics.log.timeinterval=5
+
+# The ID of the database connection pool to use for the MetricsDBManager
+# which maintains Metrics Archive Data persistence.
+# If this property is empty, omitted or "default," the default
+# connection pool is used. (See the Connection Pool section.)
+metrics.archive.connectionpool=default
+
+# On startup, portal counts the users and groups, for Metrics.
+# To disable the count of users and groups on portal startup, set the property to true.
+# If this property is absent, it defaults to false.
+metrics.disable.usercount=false
+
+##########END METRICS#####################################################
+
+##########BROADCASTER#####################################################
+
+# BROADCASTER SERVICE
+#
+# The Broadcaster is a distributed event system used to keep
+# other Vignette Portal instances in a cluster up to date.  The default
+# implementation uses the SQL database.  For more about database
+# properties, see the JDBC Database section of this file.
+
+# The connection pool to use for the service.
+broadcaster.default.connectionpool=default
+
+# The class of the service.
+broadcaster.default.code=com.epicentric.broadcaster.sql.SQLBroadcaster
+
+# The broadcaster is responsible for keeping different instances.
+# of EFS in a cluster updated. When an event is sent by the broadcaster
+# it will be polled by the other instances.
+
+# Specifies the broadcaster to use. By default,
+# Vignette Portal uses the SQL broadcaster.Valid values are:
+# default, jms, disabled.
+#broadcaster.default=jms
+#broadcaster.default=disabled
+broadcaster.default=default
+
+# This property represents the frequency of polls made by the Vignette Portal nodes.
+# 50milliseconds is the minimum value. Default is 2 seconds.
+broadcaster.default.poll_interval_millis=2000
+
+
+# JMS BROADCASTER
+#
+# The following properties must be configured for
+# JMS-based broadcasting. These properties are server-independent
+# and must be configured regardless of which JMS server you are using.
+# In addition to these properties, you must uncomment the properties
+# for your specific JMS server (following sections).
+broadcaster.jms.code=com.epicentric.broadcaster.jms.JMSBroadcaster
+broadcaster.jms.factory=TopicConnectionFactory
+broadcaster.jms.topic=EpicentricBroadcasterTopic
+broadcaster.jms.persisted=false
+broadcaster.jms.host=localhost
+
+# OPEN JMS BROADCASTER
+# Uncomment these properties if you are using the Open JMS broadcaster.
+#broadcaster.jms.initialcontextfactory=com.sun.jndi.rmi.registry.RegistryContextFactory
+#broadcaster.jms.providerurl=rmi://${broadcaster.jms.host}:1099
+
+# JRUN JMS BROADCASTER
+# Uncomment these properties if you are using the JRUN JMS broadcaster.
+#broadcaster.jms.initialcontextfactory=allaire.ejipt.ContextFactory
+#broadcaster.jms.providerurl=ejipt://${broadcaster.jms.host}:2323
+#broadcaster.jms.createtopic=true
+
+# WEBLOGIC JMS BROADCASTER
+# Uncomment these properties if you are using the Weblogic JMS broadcaster.
+#broadcaster.jms.initialcontextfactory=weblogic.jndi.WLInitialContextFactory
+#broadcaster.jms.providerurl=t3://${broadcaster.jms.host}:80
+
+# WEBSPHERE JMS BROADCASTER
+# Uncomment these properties if you are using the WebSphere JMS broadcaster.
+#broadcaster.jms.initialcontextfactory=com.ibm.websphere.naming.WsnInitialContextFactory
+#broadcaster.jms.providerurl=iiop://${broadcaster.jms.host}
+
+# J2EE JMS BROADCASTER
+
+# NULL BROADCASTER
+# The null broadcaster will never send any messages.
+# Uncomment these properties to use the null broadcaster.
+#broadcaster.disabled.code=com.epicentric.broadcaster.sql.NullSQLBroadcaster
+
+##########END BROADCASTER#################################################
+
+
+##########CONNECTION POOL#################################################
+
+# Vignette Portal uses a central database connection pool to manage the use
+# of database connections.  Each process needing a database connection
+# requests it from the pool; the pool ensures that each process has its
+# own connection.
+
+# Optionally, you can set up separate connection pools for the following
+# Vignette Portal subsystems:  Audit, Broadcaster, Cache, MetaStore, Metrics,
+# and Users.
+# You can also define separate database settings for these subsystems.
+# If you define separate database settings for a subsystem, you must
+# also define a connection pool for that subsystem.
+
+# EXAMPLE 1 - DEFAULT DATABASE SETTINGS, SEPARATE CONNECTION POOL
+# Suppose that you want the MetaStore to use the default database
+# settings but its own connection pool.  The default database settings
+# are defined in the JDBC Database section of this file.  To configure
+# the MetaStore's connection pool, you would go to the MetaStore section
+# of this file and set the metastore.default.connectionpool property to
+# point to a unique connection pool--for example:
+# metastore.default.connectionpool=metastore
+# Then, in this Connection Pool Support section you would add four
+# new properties with the same connection pool name ("metastore"), as follows:
+# connectionpool.metastore.code=com.epicentric.jdbc.ConnectionPoolService
+# connectionpool.metastore.db=default.db
+# connectionpool.metastore.name=DefaultMetaStoreConnectionPool
+# connectionpool.metastore.description=Default MetaStore Connection Pool Service
+
+# EXAMPLE 2 - SEPARATE DATABASE SETTINGS AND CONNECTION POOL
+# If you wanted the MetaStore to have its own database settings as well as
+# its own connection pool, you would have the same four properties from
+# EXAMPLE 1 except that the database property would point to the MetaStore
+# database instead of to the default database (for example,
+# connectionpool.metastore.db=metastore.db).  You would also add the JDBC
+# properties for the metastore--for example:
+# metastore.db.driver=com.ms.jdbc.odbc.JdbcOdbcDriver
+# metastore.db.url=jdbc:odbc:Metastore
+# metastore.db.user=sysadmin
+# metastore.db.password=admin
+
+# The default connection pool id.
+connectionpool.default=portalserver
+
+# The class for the connection pool service.
+connectionpool.portalserver.code=com.epicentric.jdbc.ConnectionPoolService
+
+# A filter used to get a predefined set of properties. As shipped,
+# the default connection pool uses the default database settings
+# defined in the JDBC Database section of this file.
+connectionpool.portalserver.db=default.db
+# Use these properties if connectionpool.portalserver.db is not supplied.
+# connectionpool.portalserver.driver=com.ms.jdbc.odbc.JdbcOdbcDriver
+# connectionpool.portalserver.url=jdbc:odbc:PortalServer
+# connectionpool.portalserver.user=
+# connectionpool.portalserver.password=
+
+# Extra descriptors for the connection pool (used to distinguish among services
+# if you set up multiple connection pool services).
+connectionpool.portalserver.name=PortalServerConnectionPool
+connectionpool.portalserver.description=Main PortalServer Connection Pool Service
+
+# OPTIONAL CONNECTION POOL PROPERTIES
+# The following properties have reasonable defaults for many configurations.
+# However, you can set your own values for any of these properties.  If you have
+# configured multiple connection pools, you can add these properties for each
+# pool (for example, connectionpool.metastore.poolsize etc. for the MetaStore's
+# connection pool).
+#
+# The comments below provide guidelines for three types of configurations:
+#
+# Large Pool:  A busy system on a machine where connections and memory are
+# not an issue.  The large pool configuration will produce a fast but
+# resource-intensive portal.  The size of the pool and the lower threshold
+# keep a large number of connections available.  The lease time causes
+# connections to start cycling the moment that operations are taking too
+# long.  The long sleep time reduces the likelihood that the pool will
+# shrink too early.
+#
+# Small Pool:  A mid-range system that has memory or connection restrictions
+# but where performance is not critical.  The size of the pool is reasonable
+# for a production system, with a small lower threshold to keep things
+# ticking but not humming.  The timeout and lease time are both inflated
+# to allow for more sluggish system performance.  The sleep time is small
+# (using the default setting) to allow the pool to cool down when the portal
+# goes quiet.
+#
+# Delicate Pool:  A system that is sensitive to latent connections, such as
+# databases that are configured to disconnect latent connections or database
+# drivers that work through firewalls.  The suggested pool size is a little
+# larger than necessary, but with a low threshold and sleep time to keep the
+# tick-over rate as low as possible.
+
+# Maximum number of connections available in the pool
+# Value can be any number from 1 through 2056.
+# Large Pool:  100 suggested
+# Small Pool:  20 suggested
+# Delicate Pool:  50 suggested
+connectionpool.portalserver.poolsize=100
+
+# Minimum number of connections in the pool
+# Large Pool:  50 suggested
+# Small Pool:  3 suggested
+# Delicate Pool:  5 suggested
+connectionpool.portalserver.lowerthreshold=50
+
+# Default connection timeout (in seconds). A process that is waiting for a
+# connection will not receive a timeout exception until this amount of time
+# has expired.
+# Large Pool:  60 suggested
+# Small Pool:  360 suggested
+# Delicate Pool:  60 suggested
+connectionpool.portalserver.timeout=60
+
+# If enabled the monitor will query the DB every minute to make sure
+# it's up an running. It will also test all connections when a bad one
+# is returned.
+# Suggested = true
+connectionpool.portalserver.monitor=true
+
+# Default connection lease time (in seconds).  If a process does not give
+# back a connection during this amount of time, the connection is discarded
+# and a new one is created.  This property reduces the performance impact
+# caused by processes that take connections and never give them back.  If
+# a process gives back a connection after its lease time has expired, the
+# connection pool simply kills it.
+# Large Pool:  5 suggested
+# Small Pool:  60 suggested
+# Delicate Pool:  45 suggested
+connectionpool.portalserver.lease=5
+
+# Connection sleep time (in minutes).  The connection pool breaks a
+# connection if it is not used for this amount of time.
+# Large Pool:  30 suggested
+# Small Pool:  10 suggested
+# Delicate Pool:  2 suggested
+connectionpool.portalserver.sleep=30
+
+# Enable/disable connection testing on return. This property determines
+# whether connections should be "verified" when they are returned to the
+# pool to ensure that they are still alive and functional. Settings this
+# property to true provides some additional robustness to the connection
+# pool at the expense of performance. Defaults to false.
+connectionpool.portalserver.verifyReturns=false
+
+# Enable/disable pooling. When this property is set to true,
+# the connection pool will create a new connection every time one is
+# requested. This can be helpful when trying to measure the benefit
+# that a connection pool is giving to the system. This property
+# should never be set to true in a production environment.
+# Defaults to false.
+connectionpool.portalserver.disabled=false
+
+##########END CONNECTION POOL#############################################
+
+########## URL REDIRECTION ###############################################
+
+# By default, relative URLs are rewritten as absolute URLs based upon CGI
+# environment variables generally set up by the webserver. You can
+# override this default by configuring the
+# ${com.vignette.portal.installdir.path}/config/redirect_map.xml file. See
+# comments in that file for additional information about URL redirection
+# in Vignette Portal.
+#
+# This property specifies the location of the redirect_map.xml file.
+#portal.http.redirectmap=${com.vignette.portal.installdir.path}/config/redirect_map.xml
+
+########## END URL REDIRECTION ###########################################
+
+##########AUTHENTICATION##################################################
+#
+# Users are authenticated against a specified realm (NT Domain,
+# SQL, LDAP, or Single Sign On (SSO)). Vignette provides an
+# authenticator implementation for each of the above realms,
+# except for SSO, which does not require one.
+#
+# The default realm configuration (SQL realm) is contained in the
+# authentication.xml file (in the config directory).
+# Sample configurations for other realms can be found in the
+# authentication.sample file (in config/examples) and in
+# the JNDI sample files (in config/examples/jndi).
+#
+# The following properties describe the Authentication Manager being
+# used by Vignette Portal and identify the location of the authentication.xml file
+# used to configure the authentication system.
+
+# The class name to be used as the default AuthenticationManager.
+authentication.default.type=com.epicentric.authentication.AuthenticationManager
+
+# The display name of the default AuthenticationManager.
+authentication.default.name=Portal Authentication Manager
+
+# The description for the default AuthenticationManager.
+authentication.default.description=Portal Authentication Manager
+
+# The file where realm configurations are specified.
+authentication.default.configfile=${com.vignette.portal.installdir.path}/config/authentication.xml
+
+##########END AUTHENTICATION##############################################
+
+##########ENCRYPTION######################################################
+#
+# These settings can be modified to use different default encryption
+# algorithms as long as a security provider supporting the algorithms
+# has been installed.  Except where noted,these settings should not be
+# changed for typical installations.
+
+# The following specified algorithms must be supported by an installed
+# security provider.  Refer to the Javasoft JCE documentation for details.
+# The default security provider on most JVMs is SHA1PRNG.  For IBM-derived
+# JVMs, the default security provider is IBMSecureRandom.  Use
+# vignette.crypto.algorithm.SecureRandom to override if necessary.
+# Default for most JVMs:
+#    vignette.crypto.algorithm.SecureRandom=SHA1PRNG
+# Default for IBM-derived JVMs:
+#    vignette.crypto.algorithm.SecureRandom=IBMSecureRandom
+vignette.crypto.algorithm.KeyGenerator=Blowfish
+vignette.crypto.algorithm.Cipher=Blowfish/ECB/PKCS5Padding
+
+# The following keysize properties specifies the size of key (in bits)
+# to generate by default.  The default keysize is 128 bits.
+vignette.crypto.keysize=128
+
+# The MetaStore document name to use for the system key.
+# If no system key is found at this location, a new one will be
+# generated upon startup.
+vignette.crypto.systemkey.docname=system_key
+
+# The default passphrase to use for the generation of
+# the master key.  The property should be modified during
+# installation.  Every instance of Vignette Portal using the same database
+# must use the same passphrase.
+vignette.crypto.masterkey.passphrase=Vignette, Inc.
+
+##########END ENCRYPTION##################################################
+
+##########HTTP AGENT######################################################
+#
+# These settings are used when Vignette Portal makes outgoing connections.
+#
+# GENERAL SETTINGS
+# HTTP agent that Vignette Portal uses when making HTTP connections.
+http.agent=Mozilla/4.0 (compatible; MSIE 4.01; Windows 95)
+
+# PROXY SETTINGS
+# Proxy server, if your organization uses one
+#
+# These are standard Java VM settings that effect any
+# network connection made through the standard Java networking
+# classes.  All code that uses standard Java networking classes
+# will automatically use these proxy settings.
+
+# Specify the proxyHost with either the proxy's IP address
+# or its domain name.
+#http.proxyHost=120.120.120.120
+#http.proxyHost=proxy.company.com
+#https.proxyHost=proxy.company.com
+
+# The proxy's port, for example, proxy.company.com:8080.
+#http.proxyPort=8080
+#https.proxyPort=8080
+
+# You may specify hosts to which connections are not sent
+# through the proxy.  These can be domain names or IP addresses.
+# The wildcard character (*) can be used to specify unproxied
+# subnets or subdomains.  Specify multiple hosts by using '|'
+# between each host.  For example,
+#http.nonProxyHosts=20.20.20.*|*.company.com|*.eng.company2.com
+
+# PROXY AUTHORIZATION
+# Some proxies are configured to request a user name and password
+# before allowing requests outside the firewall. If your proxy
+# server requires a user name and password, provide them here.
+#
+# The encryptedProxyPassword is encoded using Base64 encoding.
+# encryptedProxyPassword overrides proxyPassword if they are both
+# set.
+#http.proxyUsername=MyUsername
+#http.proxyPassword=MyPassword
+#http.encryptedProxyPassword=MyBase64EncodedPassword
+#https.proxyUsername=MyUsername
+#https.proxyPassword=MyPassword
+#https.encryptedProxyPassword=MyBase64EncodedPassword
+
+
+# CERTIFICATION AUTHORITIES
+
+# The default directory for the CA certificates.  The CA certs
+# are used by any Vignette Portal module which connects to an external host via https.
+https.cacert.directory=${com.vignette.portal.installdir.path}/config/certs
+
+# If true, load certs from the certs directory. Default is true
+https.cacert.loadcerts=true
+
+# If true, use a non-default hostnameverifier, default is false
+https.security.usehostnameverifier=false
+
+# The HostnameVerifier class you want to use.
+# Only works when "https.security.usehostnameverifier" is true.
+# Default is "com.epicentric.common.HostnameVerifierImp"
+https.security.hostnameverifier=com.epicentric.crypto.HttpsHostnameVerifier
+
+# Comma-separated list of accessible names. You can give an access
+# right to these sites even such a case that cert names don't match.
+# Only works when "https.security.usehostnameverifier=true"
+# and "https.security.hostnameverifier=com.epicentric.common.HostnameVerifierImp".
+# Example: https.security.allowed_servers_list=login.mp3.com,login.abc.com
+https.security.allowed_servers_list=login.mp3.com
+
+# JSSE
+
+# The following property is used to override which class JSSE should use when
+# you instantiate a new URL with the "https://" protocol.
+# When using a Sun JVM, by default the framework uses "com.sun.net.ssl.internal.www.protocol".
+# When using an IBM JVM, by default the framework uses "com.ibm.net.ssl.internal.www.protocol".
+java.protocol.handler.pkgs=
+
+# Special property to increase to 75000 if you are running on
+# WebSphere or if you receive a SeedGenerator from the HTTPS
+# initialization
+https.init.timeout=75000
+
+##########END HTTP AGENT##################################################
+
+##########ERROR AND DEBUG LOGGING#########################################
+#
+# When Vignette Portal starts, it opens a new log file. The following properties
+# allow you to enable and configure the logging system.
+
+# If true, log to file.  Otherwise only log to System.out.
+# Defaults to true.
+log_to_file=true
+
+# Log file directory.  Note that this directory must exist,
+# or logging will not happen.
+log_dir=${com.vignette.portal.installdir.path}/logs
+
+# Vignette Portal supports the following log levels:
+#  * fatal - Indicates that there is a problem with Vignette Portal that requires
+#		immediate attention. During normal operation, Vignette Portal should
+#		not log any critical messages. In deployed servers, these
+#		messages are typically sent to the system administrator's
+#		pager.
+#  * error - Indicates that there is a problem with Vignette Portal, which affects the
+#            functionality of the server or its components.
+#  * warning - Indicates that there is a potential problem with Vignette Portal, which
+#	       does not affect the functionality of the server or its
+#	       components.
+#  * info - Provides information about the state of Vignette Portal. For instance,
+#             "Initializing Entity Management Subsystem."
+#  * debug - Use only as an aid for debuggin a problem with Vignette Portal
+#	     during the development cycle.
+# Defaults to "info".
+log_level=info
+
+# The log level can be dynamically changed through server console (Tools -> Logs). By default, the new log level applies to packages 
+# com.epicentric and com.vignette only. The dynamic_log_package_names setting allows you to specify one or more package 
+# names that will participate in the dynamic logging. To specify multiple package names, use comma as the separator between package names.
+# dynamic_log_package_names=com.company.app1,com.company.app2,com.company1.app3
+dynamic_log_package_names=
+
+# Echo logging to System.out (as well as the log file).
+# If this property is absent, it defaults to true.
+log_echo=false
+
+# If true and the log file is open, messages to System.out
+# are redirected to the log file.
+# Defaults to false.
+# Note that if this property is true, log_echo has no effect. 
+# Note: This property is deprecated and will be removed in future releases.
+log_redirect_stdout=false
+
+# If true and the log file is open, messages to System.err
+# are redirected to the log file.
+# Defaults to false. 
+# Note: This property is deprecated and will be removed in future releases.
+log_redirect_stderr=false
+
+# Whether or not to precede all logged messages
+# with a date/time stamp.  If this property is absent,
+# it defaults to false.
+# Note: This property is deprecated and will be removed in future releases.
+log_datetime_stamped=true
+
+# Whether or not to precede all logged messages
+# with the thread name.
+# Note: This property is deprecated and will be removed in future releases.
+log_thread_name=false
+
+# The level of log messages that get mailed to the
+# administrator email address.
+# Can be either none or critical.
+# Defaults to none.
+log_admin_level=none
+
+# The email address that is sent all log_admin_level log messages.
+log_admin_address=override_me@override_me.com
+
+# Maximum number of bytes the log file can grow to, after which
+# a new log file is started.  If this property is absent or set to
+# -1, the log never rolls to a new file.
+log_max_bytes=10000000
+
+# Maximum number of days the log file can be used, after which a
+# new log file is started.  If this property is absent or set to
+# -1, the log never rolls to a new file.
+# Note: This property is deprecated and will be removed in future releases. The Portal Logger does not implement this property.
+log_max_days=2
+
+# Maximum number of log files allowed in the log directory.
+# This value applies to a given virtual machine (VM) instance.
+# (Each time you restart your application server, a new VM instance
+# is generated.) Vignette Portal checks this property each time a new log file is
+# started and deletes the oldest logs to bring the number within the
+# maximum for the current VM instance.
+#
+# For example, if the property is set to 12, Vignette Portal maintains 12 log files
+# in the log directory until you restart your application server. On
+# restart, Vignette Portal begins to create new log files, up to a maximum of 12,
+# without deleting the 12 files from the previous VM instance, bringing
+# the total number of files in the directory to 24. On the next restart,
+# the number increases to 36, and so forth.
+#
+# If this property is absent or set to -1, the number of files in the
+# directory is infinite.
+# Note: This property is deprecated and will be removed in future releases. 
+log_max_files=20
+
+# If true enables asynchronous logging for the Portal logging system.
+# All appenders attached to the root logger will be attached to the VGNASYNC
+# appender and removed from the root logger.
+# Defaults to false.
+log_async=false
+
+##########END LOGGING#####################################################
+
+##########EMAIL###########################################################
+#
+# Email properties are used to set up Vignette Portal so that it can send email. If you
+# wish to allow emailing of user passwords, or emailing of the Vignette Portal logs
+# you must provide values for the properties in this section.
+
+# Name of the SMTP server that Vignette Portal will use to send email.
+smtp.server.hostname=localhost
+
+# Vignette Portal's email address.  When Vignette Portal sends email, this address appears
+# in the From field of the message.
+portal.admin.email=admin@localhost
+
+##########END EMAIL#######################################################
+
+##########PORTALBEANS#####################################################
+#
+# PortalBeans are modules of content that can appear on a portal site,
+# such as Stocks, Weather, Horoscopes, or News. The following properties
+# allow you to configure certain aspects of the PortalBean system.
+
+# Directory to find the Portal Bean Definition (PBD) files.
+# Each PortalBean type is defined by a .pbd file.
+# This directory is automatically synchronized with
+# portalbean.definition.host, when host is available.
+portalbean.definition.server.dir=${com.vignette.portal.installdir.path}/config/beans/defs/
+
+# Determines whether the set of PortalBean classes available are loaded
+# every time the administrator goes to the Add Module page, or only on
+# web server startup.
+# If this property is absent, it defaults to false.
+portalbean.descriptor.forceload=true
+
+##########END PORTALBEANS#################################################
+
+#################PORTLET WEBSITE SYSTEM##################
+
+# Set to true if JSR 168 portlets should never be displayed within a chrome when in MAXIMIZED window state. 
+# If set to false, the portlet can still be made chromeless in ALL window states through a configuration
+# screen in the admin console 
+# Portalbean portlets will always be chromeless in MAXIMIZED window state, regardless of this property
+portlet.website.maximized.chromeless=false
+
+############################################################
+
+################PORTLET - WSRP PORTLET CONTAINER############
+
+# Timeout in seconds for Consumer/Producer communication.  Note that this value does not
+# apply to rendering remote portlets (getMarkup() invocation).  This can be configured
+# on an individual portlet basis within the Vignette Portal admin console
+# A value of 0 represents an infinite timeout
+portlet.wsrpportletcontainer.requesttimeout=120
+
+# The Default value for WSRP Resource URL Time Out is 10 seconds.
+# If longer time out value is needed you may want to uncomment the
+# this property and set the desired time out.
+
+portlet.management.wsrp.resource_url_timeout_millis = 45000
+portlet.wsrpportletcontainer.allowedResourceURLPrefixes=http://16.238.80.87|http://16.236.56.54|http://16.236.88.150|http://16.238.80.73|http://16.238.8.100|http://16.236.56.25|http://16.238.8.49|http://16.236.88.164|http://16.236.88.81|http://16.238.8.173|http://16.236.16.52|http://16.238.8.183|http://16.238.9.79|http://16.236.88.54
+portlet.management.wsrp.servicedescription.refresh.interval=60
+
+############################################################
+
+##########PORTAL WEB SERVER###############################################
+#
+# This section ensures that portal URL paths are configured correctly
+# for your app/web-server environment.
+#
+# Root of portal's HTTP or HTTPS directory relative to the Web server root.
+# The portal's Web site files physically reside at this relative location.
+#
+# To run at http://foo.com/portal/, use "portal.http.root=/portal".
+# To run at the webserver root (http://foo.com/), use "portal.http.root="
+#
+portal.http.root=/portal
+
+# Root of portal's HTTP or HTTPS directory relative to the servletcontext
+# root. Use this property if your application server differentiates
+# between the Web server's root and the servlet context root in which
+# Vignette Portal executes; should not be modified in most situations.
+#
+# * To run at http://foo.com/portal/ with no application server,
+#   comment this property out.
+#
+# * To run at http://foo.com/portal/ with an application server,
+#   where Vignette Portal is a Web application with a root path of
+#   /portal, use "portal.servletcontext.root=".
+#
+# * To run at http://foo.com/portal/ with an application server,
+#   where Vignette Portal is a Web application with a root path matching the
+#   Web server's root ("/"), use "portal.servletcontext.root=/portal".
+#
+portal.servletcontext.root=
+
+# Set this property to override the standard Portal Web app location under the server.
+# The value of this property should reflect the absolute path of Portal Web app with respect to the App Server. 
+# This property has to be set with CAUTION as it overrides standard behavior of determining the Portal Web app 
+# location inside the App Server. 
+# Currently this is added for Sun 8.1
+# Eg: override.portal.webapp.root.path=C:/Sun/ApplicationServer/domains/vap-domain/applications/j2ee-modules/Vignette_Portal
+override.portal.webapp.root.path=
+
+##########END PORTAL WEB SERVER###########################################
+
+###################Properties for Configuring SSL for Secondary Pages######
+#The proxyName and proxyPort attributes of HTTP/1.1 connector can be used when Tomcat
+#is running behind a proxy server. These attributes modify the values returned to web
+#applications that call the request.getServerName () and request.getServerPort () methods,
+# which are often used to construct absolute URLs for redirects.If the proxyName and proxyPort are used
+#then provide the information below
+#portal.frontdoor.host=<machine name on which portal is configured>
+#portal.http.port=<non secure port number>
+#portal.https.port=<secure port number>
+
+#In case of tomcat Session cookies over HTTPS connection no longer work on HTTP
+#if session cookies have to be made transparent to the connection HTTPS/HTTP uncomment
+#the property below
+#portal.secure.cookie=true
+
+################### End Properties for Configuring SSL for Secondary Pages####
+
+##########WSC WEATHER SERVICE#############################################
+#
+# The weather service provides access to Vignette's weather servlet.
+# The following properties are used to configure the Weather service.
+
+# The default service (same as the WSC Weather Service).
+weather_service.default=wsc
+
+# The Java classname of the Service implementation (do not change).
+weather_service.wsc.code=com.epicentric.portalbeans.beans.weatherbean.communication.WeatherService
+
+# The name of the service.
+weather_service.wsc.name=WSC Weather
+
+# A friendly description of the service.
+weather_service.wsc.description=Weather Module implemented using weather information from WSC
+
+# The base url used to locate the Weather Servlet.
+weather_service.wsc.url=http://servlet.epicentric.com/servlet/weather
+
+# The interval (in minutes) for the weather module to poll the Weather Servlet.
+weather_service.wsc.refreshInterval=60
+
+##########END WSC WEATHER SERVICE#########################################
+
+##########CONTENT TYPES###################################################
+#
+# Vignette Portal supports several MIME or content types. This section identifies the
+# location of the content-types.properties file, which maps file
+# extensions to content types.
+
+# Path relative to the Vignette Portal root to Content Types file
+# Uncomment this property to override the default location of this file.
+#content.types.user.table=${com.vignette.portal.installdir.path}/system/content-types.properties
+
+##########END CONTENT TYPES###############################################
+
+##########ICON LIBRARY####################################################
+#
+# The icon library is a mime-to-icon mapping system, based on
+# a properties file found at the location specified below.  The
+# Icon Manager admin tool uses these properties.
+
+# Name of the properties file for the icon library (located in the
+# lib directory of your Vignette Portal installation)
+portal.icon.library=icon_library.properties
+
+# Location of the icons used by the icon library, relative to the
+# portal directory under your web server root
+portal.icon.root=/images/icons
+
+##########END ICON LIBRARY################################################
+
+##########IMAGE REPOSITORY PATHS##########################################
+#
+# These properties specify the top-level paths to the major
+# image repositories used by the website. There are two
+# repositories; one for the end-user site (portal.image.enduser.root)
+# and one for the admin site (portal.image.admin.root).
+#
+# The directory paths are relative to the web application root
+# directory. For example, if your admin
+# image repository is located at <webroot>/portal/admin/images
+# and your end-user image repository is located at
+# <webroot>/portal/images, you would set the following
+# property values:
+#
+#    portal.admin.image.path=/admin/images
+#    portal.enduser.image.path=/images
+#
+portal.admin.image.path=/admin/images
+portal.enduser.image.path=/images
+
+##########END IMAGE REPOSITORY PATHS######################################
+
+##########CASCADING STYLE SHEET (CSS) REPOSITORY PATHS####################
+#
+# These properties specify the top-level paths to the major
+# style sheet repositories used by the website. There are two
+# repositories; one for the end-user site (portal.css.enduser.root)
+# and one for the admin site (portal.css.admin.root).
+#
+# The directory paths are relative to the web application root
+# directory. For example, if your admin
+# style sheet repository is located at <webroot>/portal/admin/css
+# and your end-user style sheet repository is located at
+# <webroot>/portal/css, you would set the following
+# property values:
+#
+#    portal.admin.css.path=/admin/css
+#    portal.enduser.css.path=/css
+#
+portal.admin.css.path=/admin/css
+portal.enduser.css.path=/css
+
+##########END CASCADING STYLE SHEET (CSS) REPOSITORY PATHS################
+
+##########JAVASCRIPT LIBRARIES############################################
+#
+# This is the path to Vignette Portal's main JavaScript Libraries repository.
+# The directory paths are relative to the web application root
+# directory.
+portal.jslib.path=/jslib
+portal.admin.jslib.path=/admin/js
+
+##########END JAVASCRIPT LIBRARIES########################################
+
+##########TEMPLATES#######################################################
+#
+# The properties in this section provide a dynamic system of creating and
+# modifying templates and styles that can then be associated
+# with user groups and pages.
+
+# Path where templates should be stored, relative to portal root.
+# Note: This directory will be created, if it does not exists.
+# This path will be used to deploy the new templates. Change the
+# directory, restart Portal and deploy new templates. The templates
+# which are shipped with Portal are deployed in /templates directory
+# and will be unaffected by the change of this property. Also, the
+# format should be the same as the "relativePath" argument in the
+# constructor com.epicentric.template.Template.createStyle(...)
+template.default.relative.dir=/templates
+
+# Whether the system is configured to allow delegated administration
+# modules to upload JSP files.  If true, the Template Manager module
+# will allow authorized delegated administrators to create new styles,
+# as well as update the primary style files of existing Styles. Secondary
+# style files consisting of JSP (files that end in .jsp) can be
+# uploaded, as well. Since these style files consist of arbitrary JSP,
+# the security ramifications should be considered before setting
+# this value to true.
+template.allowDelegatedJSPUpload=true
+
+# Whether the system is configured to place template header files on
+# the file system.  If true, the template header files will be placed
+# in the same directory as the template. Template header files can always
+# be downloaded by server administrators using the administration consoles.
+template.deployTemplateHeaderFiles=false
+
+##########END TEMPLATES###################################################
+
+##########SUPPORT OF 4.X URLS AND SECONDARY PAGES#########################
+#
+# Support of 4.x URLs and secondary pages.
+# If this support is needed value should be 4.x. If not needed
+# the value should be 7.x.
+portal.controller.version_support=7.x
+
+##########END SUPPORT OF 4.X URLS AND SECONDARY PAGES#####################
+
+#################### URL REWRITING ####################
+#
+# Set to false on Websphere if using multi-threaded modules or portlets, ignore otherwise.
+# Note that setting it to "false" actually turns off URL rewriting, which means that the portal 
+# would then not support cookie-less clients.
+#
+portal.url_rewriting.enabled=true
+
+#################### END URL REWRITING ####################
+
+##########MWS SERVICE SUPPORT#############################################
+#
+# Vignette Portal ships with Modular Web Services (MWS) capability. Modular Web
+# Services are Web applications built using Vignette's MWS protocol that
+# are hosted remotely on machines that do not necessarily run Vignette Portal.
+# Although MWS modules appear like regular modules on a site, they
+# are not part of the Vignette Portal installation. For more information about
+# Modular Web Services, see the Vignette Portal
+# Administrator's Guide.
+
+# The class name used for the MWS communications service.  Do not change.
+mws_comms_service.default.code=com.epicentric.mws.service.version1_0.soap.SOAPMWSCommunicationService
+
+# A user-friendly name for the MWS communications service.
+mws_comms_service.default.name=SOAP Comms Service
+
+# A user-friendly description  for the MWS communications service.
+mws_comms_service.default.description=SOAP Comms Service
+
+# Property defining the default locale to use when requesting a service
+# Due to user settings, this is always used
+mws_comms_service.default.default_locale=en_US
+
+##########END MWS SERVICE SUPPORT########################################
+
+##########TEXT RESOURCE SETTINGS#########################################
+#
+# These properties are used to refer to the system and/or users
+# throughout the end-user and admin UI. Changing these settings
+# allows you to change the  product branding without having to modify
+# HTML or JSP files.Note that default values are hard-coded into the system
+# in the event that any of these properties does not contain a value.
+
+ui.text.resource.enduser.pagetitle=Main View
+ui.text.resource.admin.pagetitle=Vignette Portal Administrator
+ui.text.resource.admin.title=server administrator
+ui.text.resource.enduser.home.view=Main View
+ui.text.resource.enduser.generic.view=site
+ui.text.resource.system.title=Vignette Portal
+ui.text.resource.system.efb.title=Vignette Foundation Builder
+ui.text.resource.enduser.home.view.possessive=My Main View
+
+##########END TEXT RESOURCE SETTINGS#######################################
+
+##########USER INTERFACE PERFORMANCE SETTINGS##############################
+#
+# These properties determine at what point the administration consoles'
+# default behavior changes for performance reasons.
+#
+# The values used for these properties are highly dependent
+# on the servers that Vignette Portal is running on. Faster machines
+# can handle larger values.
+
+# The display mode cutoffs helps prevent cases where visiting a
+# user/group management screen kicks-off a long search in the process
+# of rendering the page.
+
+# Maximum number of items (any type) that can appear in a dropdown
+# selector before that selector is replaced by a popup selection window.
+ui.dropdown.display.cutoff=25
+
+##########END USER INTERFACE PERFORMANCE SETTINGS#########################
+
+##########PAGE SETTINGS###################################################
+# Page Caching
+#
+# Time, in seconds, to keep pages in cache
+pages.caching.page.ttl=600
+#
+# Time, in seconds, to keep user module sets in cache
+pages.caching.usermoduleset.ttl=300
+
+##########END PAGE SETTINGS###############################################
+
+###########INTERNATIONALIZATION (I18N)####################################
+#
+# The following properties make it possible to create multi-language
+# sites that handle per-request localization.
+#
+# Absolute path to the I18N Descriptor directory
+i18n.definition.server.path=${com.vignette.portal.installdir.path}/system/i18n/defaults
+
+# Character Encoding of this site.  This value must match with the charSet
+# attributes in ALL of the JSP pages in the system otherwise data will be
+# damaged.  Note that if this is undefined or not supported by the portal's
+# JVM, then it will default back to UTF-8.
+portal.character.encoding.default=UTF-8
+
+###########END INTERNATIONALIZATION (I18N)################################
+
+##########SITE DISPATCHER###################################################
+#
+# A pre-defined String format in URL has to be specified here for dispatching
+# sites.  This has to match what's in <url-pattern> of <servlet-mapping> of
+# PortalServer/portal/WEB-INF/web.xml.  By default, Vignette Portal is set to use /site,
+# and web.xml is set to have url-pattern of /site/* in its <servlet-mapping>.
+# If you change the string format, you have to change them in both places.
+# The wrong settings for these properties will generate wrong links to all
+# Vignette Portal sites.
+servlets.dispatcher.site=/site/
+servlets.dispatcher.console=/console/
+
+##########END SITE DISPATCHER#############################################
+
+
+##########MOBILE CONFIGURATION############################################
+#
+# This property is used by Vignette Portal's error-handling mechanism.
+# The Vignette Portal installer sets the value of this property to false by default.
+# The wireless installer resets the value to true to inform Vignette Portal that
+# wireless capability has been enabled for the system.
+
+mobile.enabled=false
+
+##########END MOBILE CONFIGURATION########################################
+
+
+#################REMOTE SESSION MANAGEMENT API CONFIGURATION FILE#################
+com.vignette.portal.rsm.configfile=${com.vignette.portal.installdir.path}/config/rsm.config.properties
+##################################################################################
+
+#################SEGTRANS API CONFIGURATION FILE#################
+com.vignette.portal.segtrans.configfile=${com.vignette.portal.installdir.path}/config/segtrans.config.properties
+#################################################################
+
+##########ADMIN CONSOLE CONFIGURATION#######################################
+#
+# Time, in seconds, to keep DisplayState beans in cache
+com.vignette.portal.website.admin.internal.display.DisplayStateManager.caching.ttl=1800
+#
+# Time, in seconds, to keep Components in cache
+com.vignette.portal.website.admin.internal.component.ComponentRegistry.caching.ttl=1800
+#
+# Time, in seconds, to keep ComponentPermissionGroups in cache
+com.vignette.portal.website.admin.internal.component.InternalComponentPermissionGroupManager.caching.ttl=3600
+#
+# Time, in seconds, to keep ConsoleMenu structures in cache
+com.vignette.portal.website.admin.internal.console.ConsoleMenuManager.caching.ttl=3600
+##########END ADMIN CONSOLE CONFIGURATION###################################
+
+##########HIGH PERFORMANCE DELIVERY CONFIGURATION###########################
+#
+# Time, in seconds, for the User Class cookie to live in a user browser
+com.vignette.portal.hpd.userclass.ttl=3600
+# Mode for user class feature of Portal/HPD.  Default mode is "basic" but a
+# value of "strict" can be used for better security but will cause more
+# page invalidations when group membership changes are made.
+com.vignette.portal.hpd.userclass.mode=basic
+
+#Set this flag to "true" to enable HPD. Any other value will disable HPD.
+#com.vignette.portal.hpd.enabled=true
+
+# TTL (time to live) for resources in seconds
+#com.vignette.portal.hpd.resourceTTL=86400
+
+##########END HIGH PERFORMANCE DELIVERY CONFIGURATION#######################
+
+##########AUDITING CONFIGURATION############################################
+#
+# Set this flag to "true" to enable auditing. Any other value will disable
+# auditing.
+com.vignette.portal.audit.enabled=false
+
+# Implementation class of the auditor to be used.
+com.vignette.portal.audit.impl=com.vignette.portal.audit.internal.AuditInDB
+
+# Connection pool to be used for the AuditInDB implementation
+audit.db.connectionpool=default
+
+##########END AUDITING CONFIGURATION########################################
