@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 CASFW_HOME="$(cd "$(dirname "$0")/.." && pwd -P)" 
 
