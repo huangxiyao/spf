@@ -296,7 +296,9 @@ public class RequestLogFilter implements Filter {
 			}
 		}
 		if (!cookieAlreadySet) {
-			response.addCookie(new Cookie(SPF_DC_SID_COOKIE_NAME, getSessionIdHashValue(request)));
+			Cookie cookie = new Cookie(SPF_DC_SID_COOKIE_NAME, getSessionIdHashValue(request));
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 	}
 

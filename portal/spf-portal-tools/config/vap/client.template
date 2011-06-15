@@ -5,7 +5,7 @@
 
 	<globalConfiguration></globalConfiguration>
 
-	<transport name="http" pivot="java:org.apache.axis.transport.http.CommonsHTTPSender">
+	<transport name="http" pivot="java:com.hp.it.spf.wsrp.axis.transport.http.HTTPSender">
 		<requestFlow>
 			<handler type="java:com.vignette.portal.webservices.internal.axis.handlers.CookieHeaderAccessHandler"/>
 			<handler type="java:com.vignette.webservices.toolkit.security.SecurityHandler"/>
@@ -17,9 +17,9 @@
 		<responseFlow>
 			<handler type="java:com.vignette.portal.webservices.internal.axis.handlers.CookieHeaderAccessHandler"/>
 			<handler type="java:com.vignette.portal.portlet.wsrpconsumer.internal.cookie.SessionCookieSnoopingHandler"/>
-			<handler type="java:com.hp.it.spf.wsrp.log.WsrpTimeRecordingHandler" />
 			<handler type="java:com.hp.it.spf.wsrp.rewriter.WsrpRewriterHandler"/>
 			<handler type="java:com.hp.it.spf.wsrp.sticky.StickyHandler"/>
+			<handler type="java:com.hp.it.spf.wsrp.log.WsrpTimeRecordingHandler" />
 		</responseFlow>
 	</transport>
 	<%MAPPINGS_PLACEHOLDER%>

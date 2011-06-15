@@ -89,7 +89,6 @@ public class StickyHandler extends BasicHandler {
 	 * the appropriate cleanup as defined in onFault method. 
 	 */
 	public void invoke(MessageContext messageContext) throws AxisFault {
-
 		if (!Predicates.isWsrp(messageContext)) {
 			return;
 		}

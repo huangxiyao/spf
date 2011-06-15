@@ -242,10 +242,16 @@ pageContext.setAttribute("selectedIndex", selectedIndex);
 						</div>
 					</td>
 					<c:if test="${button.highlighted eq true}">
-						<td id="imgTD_${status.index}" class="horzNavButton rightBorder active"><img id="img_${status.index}" class="menuImg" src="${blackCaretImg}" border="0" alt=""/></td>
+						<td id="imgTD_${status.index}" class="horzNavButton rightBorder active"
+						onmouseover="expand(document.getElementById('menuTD_${status.index}'), '${blackCaretImg}');"
+						onmouseout="collapse(document.getElementById('menuTD_${status.index}'), false, '${blackCaretImg}', '${whiteCaretImg}');">
+						<img id="img_${status.index}" class="menuImg" src="${blackCaretImg}" border="0" alt=""/></td>
 					</c:if>
 					<c:if test="${button.highlighted eq false}">
-						<td id="imgTD_${status.index}" class="horzNavButton rightBorder"><img id="img_${status.index}" class="menuImg" src="${whiteCaretImg}" border="0" alt=""/></td>
+						<td id="imgTD_${status.index}" class="horzNavButton rightBorder"
+						onmouseover="expand(document.getElementById('menuTD_${status.index}'), '${blackCaretImg}');"
+						onmouseout="collapse(document.getElementById('menuTD_${status.index}'), false, '${blackCaretImg}', '${whiteCaretImg}');">
+						<img id="img_${status.index}" class="menuImg" src="${whiteCaretImg}" border="0" alt=""/></td>
 					</c:if>
 				</c:when>
 				<c:otherwise>

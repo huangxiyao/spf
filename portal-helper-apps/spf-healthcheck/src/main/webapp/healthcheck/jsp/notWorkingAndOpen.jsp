@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%-------------------------------------
 File: notWorkingAndOpen.jsp
 View file for case where site is not working or is closed.
@@ -42,6 +43,6 @@ Healthcheck</a></b> for more current status regarding this site.</p>
 <font size="-1"><i>Based on open-sign at: <%=openSignSource%></i></font>
 <br>
 <font size="-1"><i><%=References.HTTP_X_SITE_AVAILABLE_HEADER%>:
-<%=References.HTTP_X_SITE_UNAVAILABLE%>
+<%=References.HTTP_X_SITE_UNAVAILABLE%></i></font>
 </body>
 </html>

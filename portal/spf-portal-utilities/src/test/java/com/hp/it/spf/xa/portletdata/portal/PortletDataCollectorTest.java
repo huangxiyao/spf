@@ -47,6 +47,7 @@ public class PortletDataCollectorTest
 			allowing(session).getAttribute(Consts.USER_PROFILE_KEY); will(returnValue(null));
 			allowing(session).getAttribute("StandardParameters"); will(returnValue(null));
 			allowing(request).getSession(with(true)); will(returnValue(session));
+			allowing(request).getAttribute(PortletDataCollector.REQUEST_USER_PROFILE_KEY); will(returnValue(null));
 		}});
 
 		assertThat("User Profile map returned is null if none exists in session",
@@ -63,6 +64,8 @@ public class PortletDataCollectorTest
 		mContext.checking(new Expectations() {{
 			allowing(session).getAttribute(Consts.USER_PROFILE_KEY); will(returnValue(profile));
 			allowing(request).getSession(with(true)); will(returnValue(session));
+			allowing(request).getAttribute(PortletDataCollector.REQUEST_USER_PROFILE_KEY); will(returnValue(null));
+			allowing(request).setAttribute(PortletDataCollector.REQUEST_USER_PROFILE_KEY, profile);
 		}});
 
 		@SuppressWarnings("unchecked") HashMap<String, String> retrievedProfile =
@@ -71,7 +74,25 @@ public class PortletDataCollectorTest
 		assertThat("FirstName still present", retrievedProfile.get("FirstName"), is("John"));
 		assertThat("LastName still present", retrievedProfile.get("LastName"), is("Doe"));
 	}
-	
+
+	@Test
+	public void testRetrieveUserProfileFromRequestIfAlreadyThere() {
+		final Map<String, String> profile = new HashMap<String, String>();
+		profile.put("FirstName", "John");
+		profile.put("LastName", "Doe");
+		final HttpSession session = mContext.mock(HttpSession.class);
+		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
+		mContext.checking(new Expectations() {{
+			allowing(request).getAttribute(PortletDataCollector.REQUEST_USER_PROFILE_KEY); will(returnValue(profile));
+		}});
+
+		@SuppressWarnings("unchecked") HashMap<String, String> retrievedProfile =
+				(HashMap<String, String>) mCollector.retrieveUserProfile(request);
+		assertThat("User profile", retrievedProfile, sameInstance(profile));
+		assertThat("FirstName still present", retrievedProfile.get("FirstName"), is("John"));
+		assertThat("LastName still present", retrievedProfile.get("LastName"), is("Doe"));
+	}
+
 	@Test
 	public void testGetPortalSiteNameEmptyWithoutPortalContext() {
 		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
@@ -132,7 +153,7 @@ public class PortletDataCollectorTest
 			allowing(request).getCookies(); will(
 					returnValue(new Cookie[] {
 							new Cookie("cookie1", "value1"),
-			                new Cookie("SMSESSION", "xyz"),
+							new Cookie("SMSESSION", "xyz"),
 							new Cookie("cookie2", "value2")
 					}));
 		}});
@@ -232,13 +253,13 @@ public class PortletDataCollectorTest
 		assertThat("Returns page friendly ID",
 				mCollector.getPageFriendlyId(request), is("MY_SUPER_PAGE"));
 	}
-	
+
 	@Test
 	public void testLastSessionCleanupDate() {
 		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
 		final HttpSession session = mContext.mock(HttpSession.class);
 		final String lastSessionCleanupDate = String.valueOf(System.currentTimeMillis());
-		
+
 		mContext.checking(new Expectations() {{
 			allowing(request).getSession(); will(returnValue(session));
 			allowing(session).getAttribute(Consts.KEY_LAST_PORTAL_SESSION_CLEANUP_DATE);
@@ -248,7 +269,7 @@ public class PortletDataCollectorTest
 		assertThat("Returns last session cleanup date",
 				mCollector.getLastSessionCleanupDate(request), is(lastSessionCleanupDate));
 	}
-	
+
 	private class PortletDataCollectorMock extends PortletDataCollector {
 		private MenuItemNode mNode;
 

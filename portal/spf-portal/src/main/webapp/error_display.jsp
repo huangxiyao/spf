@@ -34,6 +34,10 @@ maintenance for this software.
 	response.setHeader("Cache-Control","no-cache");
 	String homeURL = PortalServicesComponent._getPortalHttpRoot();
 	String controllerURL = request.getParameter(ParameterConstants.CONTROLLER_URL);
+	String cdn = "http://welcome.hp-ww.com";
+	if( request.isSecure()){
+		cdn = "https://secure.hp-ww.com";
+	}
 
 	if (controllerURL != null) {
 		// url encode whatever value we get for controllerURL so that malicious
@@ -89,6 +93,79 @@ maintenance for this software.
 <html>
 <head>
 <title>Could Not Open Page</title>
+               <style>
+                        h1 {
+                                font-size: 25px;
+                                font-weight: normal;
+                                margin-bottom: 2px;
+                                margin-top: 2px;
+                        }
+
+                                #stretchLogoWithPageTitleBlack  {
+                                        width: 100%;
+                                        overflow: hidden;
+                                        margin: 0 0 5px 0;
+                                        color: #FFF;
+                                        background-color: #000;
+                                        position:relative;
+                                }
+                        #logo {
+                                float: left;
+                                margin-top: 0pt;
+                                margin-right: 0pt;
+                                margin-bottom: 0pt;
+                                margin-left: 0pt;
+                                padding-top: 1.5em;
+                                padding-right: 53px;
+                                padding-bottom: 19px;
+                                padding-left: 53px;
+                        }
+
+                        #stretchLogoWithPageTitleBlack #logo
+                        {
+                                padding-top: 0pt;
+                                padding-right: 26px;
+                                padding-bottom: 0pt;
+                                padding-left: 26px;
+                                background-color: transparent;
+                                background-image: url("<%=cdn %>/img/slp_logo_black_000000.gif");
+                                background-repeat: no-repeat;
+                                background-attachment: scroll;
+                                background-position: 26px 0pt;
+                                height: 50px;
+                        }
+                        #maincontent {
+                                padding-left:  20px;
+                                paddign-right:  20px;
+                        }
+                        #footer {
+                                position: relative;
+                                text-align:  center;
+                                width: 100%;
+                                min-width: 740px;
+                                margin-top: 60px;
+                                padding-top: 0pt;
+                                padding-right: 0pt;
+                                padding-bottom: 0pt;
+                                padding-left: 0pt;
+                                border-top-width: 4px;
+                                border-top-style: solid;
+                                border-top-color: #666666;
+                                clear: both;
+                        }
+
+                        #copyright {
+                                position: relative;
+                                text-align: center;
+                                font-size: 11px;
+                        }
+                        
+                        .screenReading  { position: absolute; width: 0; height: 0; font-size: 0; overflow: hidden; }
+                </style>
+
+<style>
+	
+</style>
 </head>
 
 <% if (msg != null) {
@@ -102,10 +179,32 @@ maintenance for this software.
 %>
 
 <body>
-<h1>Could not open page</h1>
-The service or information you requested is not available at this time. <br/>
-Please try again later. <br/>
-<br/>
-<span style="font-size:smaller;">(Error: portappl-internal_error)</span>
+	<!--                                  BANNER                  -->
+	<link href="/portal/templates/template0053/spf-system-error-secondarypage/systemError.css" rel="stylesheet" type="text/css">
+	        <div id="stretchLogoWithPageTitleBlack">
+	                <div id="logo">
+	                        <a href="<%=cdn %>/country/us/en/welcome.html" title="HP.com Home">
+	                        <img src="<%=cdn %>/img/slp_logo_black_000000.gif" alt="" border="0">
+	                                <span class="screenReading">HP.com Home</span>
+	                        </a>
+	                </div>
+	        </div>
+	<!--                    END OF BANNER                        -->
+	<div id="maincontent">
+	        <h1>Unable to process request at this time</h1>
+	        <p>Unfortunately, we are unable to process your request at this time.  We apologize for the inconvenience.  Please try again later.</p>
+	        <p style="{display:  none;}">(Error: portappl-internal_error)</p>
+	        <p>If the issue persists, please try the following:</p>
+	        <ul>
+	                <li>Clear your browser's cache and try again.</li>
+	                <li><a href="<%=cdn %>/country/us/en/wwcontact_us.html">Contact HP Customer Service</a></li>
+	        </ul>
+	</div>
+	<div id="footer">
+	        <a href="<%=cdn %>/country/us/en/privacy.html" class="udrlinesmall">Privacy statement</a>
+	                                &nbsp;|&nbsp;<a href="<%=cdn %>/country/us/en/termsofuse.html" class="udrlinesmall">Using this site means you accept its terms</a>
+	</div>
+	
+	<div id="copyright" class="small">&#169; 2011 Hewlett-Packard Development Company, L.P.</div>
 </body>
 </html>

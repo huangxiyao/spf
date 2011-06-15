@@ -38,11 +38,17 @@
     -->
     <dependencies>
         <dependency>
-            <groupId>com.sun.portal.portletcontainer</groupId>
-            <artifactId>spf-pc-database-persistence</artifactId>
-            <version>${project.version}</version>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
             <scope>compile</scope>
         </dependency>
+        <!--
+            The goal of spf-pc-database-persistence is to privide generic DB persistence layer for 
+            OpenPortal. SPF requires some further customizations and those are captured in spf-portlet-container
+            module. 
+            Therefore it is IMPORTANT that spf-portlet-container be listed, in the CLASSPATH, before 
+            spf-pc-database-persistence to ensure that SPF customizations are taken into account.
+        -->
         <dependency>
             <groupId>com.hp.it.spf.openportal</groupId>
             <artifactId>spf-portlet-container</artifactId>
@@ -50,8 +56,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
+            <groupId>com.sun.portal.portletcontainer</groupId>
+            <artifactId>spf-pc-database-persistence</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -70,6 +77,11 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>javax.portlet</groupId>
+            <artifactId>portlet-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.sun.portal.portletcontainer</groupId>
             <artifactId>portletadmin</artifactId>
             <scope>compile</scope>
@@ -82,11 +94,6 @@
         <dependency>
             <groupId>javax.xml</groupId>
             <artifactId>webservices-api</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.portlet</groupId>
-            <artifactId>portlet-api</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>

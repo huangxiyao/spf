@@ -42,13 +42,13 @@ import org.apache.log4j.MDC;
 @SuppressWarnings("serial")
 public class WsrpTimeRecordingHandler extends BasicHandler {
 	private static final LogWrapper LOG = new LogWrapper(WsrpTimeRecordingHandler.class);
-	
+
 	/**
 	 * Name of HttpServletRequest attribute holding the number of WSRP requests performed for
 	 * this portal request.
 	 */
 	private static final String SPF_DC_PORTLET_REQ_COUNT = "SPF_DC_PORTLET_REQ_COUNT";
-	private static final String SPF_DC_ID_SET_IN_HANDER_FLAG = "SPF_DC_ID_SET_IN_HANDER";
+	private static final String SPF_DC_SAVED = "SPF_DC_ID_SAVED";
 
 	public void invoke(MessageContext messageContext) throws AxisFault {
 		if (!Predicates.isWsrpBaseCall(messageContext)) {
@@ -102,7 +102,7 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 			if (portletRequestCount != null) {
 				portletRequestCount = Integer.valueOf((portletRequestCount.intValue() + 1) % 100);
 			}else {
-			    	portletRequestCount = Integer.valueOf(1);
+				portletRequestCount = Integer.valueOf(1);
 			}
 			request.setAttribute(SPF_DC_PORTLET_REQ_COUNT, portletRequestCount);
 		}
@@ -110,17 +110,14 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 		String diagnosticId = com.hp.it.spf.xa.misc.Utils.getDiagnosticId(request);		
 		String portletDiagnosticId = String.format("%s+%02d", diagnosticId, portletRequestCount);
 
-		if (MDC.get(Consts.DIAGNOSTIC_ID) == null) {
-			// Set a flag so we only clear the MDC value if it was set in the WSRP handler.
-			// Normally for portlet render requests WSRP handler will set this flag. However for
-			// WSRP action requests which are performed by server request thread, this will already
-			// be set by RequestLogFilter so we don't want to overwrite it.
-			MDC.put(SPF_DC_ID_SET_IN_HANDER_FLAG, Boolean.TRUE);
-			MDC.put(Consts.DIAGNOSTIC_ID, portletDiagnosticId);
+		String currentDiagnosticId = (String) MDC.get(Consts.DIAGNOSTIC_ID);
+		if (currentDiagnosticId != null) {
+			MDC.put(SPF_DC_SAVED, currentDiagnosticId);
 		}
+		MDC.put(Consts.DIAGNOSTIC_ID, portletDiagnosticId);
 		setHttpRequestHeader(messageContext, Consts.DIAGNOSTIC_ID, portletDiagnosticId);
 	}
-	
+
 	/**
 	 * This method sets the diagnostic Id in the request header.
 	 * We are getting the REQUEST HEADERS from messageContext property, which returns hashtable of headers.
@@ -143,13 +140,16 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 	}
 
 	private void clearDiagnosticId() {
-		// Remove the SPF_DC_ID from MDC only if it was set by this handler.
-		if (MDC.get(SPF_DC_ID_SET_IN_HANDER_FLAG) != null) {
+		String previousDiagnosticId = (String) MDC.get(SPF_DC_SAVED);
+		if (previousDiagnosticId != null) {
+			MDC.remove(SPF_DC_SAVED);
+			MDC.put(Consts.DIAGNOSTIC_ID, previousDiagnosticId);
+		}
+		else {
 			MDC.remove(Consts.DIAGNOSTIC_ID);
-			MDC.remove(SPF_DC_ID_SET_IN_HANDER_FLAG);
 		}
 	}
-	
+
 	private String getPortletFriendlyId(MessageContext messageContext) throws AxisFault, SAXException, SOAPException
 	{
 		// Portlet friendly Id is stored in ClientAttributes structure which is only present in
@@ -216,7 +216,10 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 		}
 		catch (Exception e) {
 			// Don't rethrow this exception as we are already in an error handler. Just log it.
-			LOG.error("Error occured while logging WSRP error", e);
+			LOG.error("Error occurred while logging WSRP error", e);
+		}
+		finally {
+			clearDiagnosticId();
 		}
 	}
 
