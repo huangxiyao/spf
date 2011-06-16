@@ -31,7 +31,7 @@
 <jsp:useBean id="AtHPModel" scope="request" 
         class="com.hp.frameworks.wpa.portal.athp.AtHPModel" />
 
-<jsp:scriptlet>
+<%
 
 // Use layout properties from AtHPModel bean, with defaults from message properties.
 
@@ -109,7 +109,7 @@ if (breadcrumbItems.size() == 0 &&
 }
 pageContext.setAttribute("breadcrumbItems", breadcrumbItems);
 
-</jsp:scriptlet>
+%>
 
 <%----------------------------------------------------------------- MARKUP --%>
 

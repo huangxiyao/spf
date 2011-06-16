@@ -27,7 +27,7 @@
 <jsp:useBean id="AtHPModel" scope="request" 
         class="com.hp.frameworks.wpa.portal.athp.AtHPModel" />
 
-<jsp:scriptlet>
+<%
 
 // Use layout properties from AtHPModel bean, with defaults from message properties.
 
@@ -46,7 +46,7 @@ pageContext.setAttribute("revisionDateDisplayedDef", I18nUtils.getValue(i18nID, 
 pageContext.setAttribute("versionNumberDef", I18nUtils.getValue(i18nID, "athp.versionNumber", "",
 			false, request));
 
-</jsp:scriptlet>
+%>
 
 <%----------------------------------------------------------------- MARKUP --%>
 

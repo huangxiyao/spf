@@ -24,7 +24,7 @@ If only one locale is available, displays the "classic" locale indicator.
 
 <%----------------------------------------------------------------- SCRIPT --%>
 
-<jsp:scriptlet>
+<%
 	// Record page attribute for whether multiple locales exist.
 	boolean enableSelector = I18nUtility.multipleLocalesEnabled(request);
 	pageContext.setAttribute("enableSelector", Boolean.valueOf(enableSelector));
@@ -35,7 +35,7 @@ If only one locale is available, displays the "classic" locale indicator.
 		cssFile = "classicLocaleSelector.css";
 	String cssURL = I18nUtility.getLocalizedFileURL(portalContext, cssFile, false);
 	pageContext.setAttribute("cssURL", cssURL);
-</jsp:scriptlet>
+%>
 
 <%----------------------------------------------------------------- MARKUP --%>
 

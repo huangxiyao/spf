@@ -113,7 +113,7 @@ void addLeftMenuItem(List leftMenuItems, MenuItem menuItem,
         class="com.hp.frameworks.wpa.portal.athp.AtHPModel" />
 
 
-<jsp:scriptlet>
+<%
 
 // navSplit is either 1 or 2 (default).  if the selected node's level is 0,
 // then it will be changed to 1 (later).
@@ -234,7 +234,7 @@ if (leftMenuItems.size() == 0) {
 
 pageContext.setAttribute("leftMenuItems", leftMenuItems);
 
-</jsp:scriptlet>
+%>
 
 <%---------------------------------------------------------------- MARKUP --%>
 

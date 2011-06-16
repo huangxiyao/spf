@@ -39,7 +39,7 @@
 
 <vgn-portal:includeStyle friendlyID="hp_layout_config"/>
 
-<jsp:scriptlet>
+<%
 
 // Get path to hp_layout_config head JSP file to include later in head.
 
@@ -47,12 +47,12 @@ pageContext.setAttribute("layoutConfigHeadJspPath",
 		"/" + portalContext.getCurrentStyle().getUrlSafeRelativePath() +
 		"athp_layout_config_head.jsp");
 
-</jsp:scriptlet>
+%>
 
 <jsp:useBean id="AtHPModel" scope="request" 
         class="com.hp.frameworks.wpa.portal.athp.AtHPModel" />
         
-<jsp:scriptlet>
+<%
 
 	String headerJS;
 	String homePageCSS;
@@ -67,7 +67,7 @@ pageContext.setAttribute("layoutConfigHeadJspPath",
 			"http://portal.hp.com/lib/navigation/css/homepages-v5.css";		
 	}
 
-</jsp:scriptlet>
+%>
 
 <%----------------------------------------------------------------- MARKUP --%>
 
