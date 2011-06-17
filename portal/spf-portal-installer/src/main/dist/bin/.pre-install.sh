@@ -60,7 +60,9 @@ ln -sf ${VIGNETTE_HOME}/portal ${CASFW_HOME}/software/${spf_war_basename}
 
 # And now the CAR files so they get bootstrapped too
 # Leave site cars in place because they depend on Vignette classes which are being imported
-mv $(ls ${CASFW_HOME}/software/*.car | grep -v "\-site-") ${VIGNETTE_HOME}/system/bootstrap
+# Leave also other cars in place because we will re-import them ton ensure that site cars do not overwrite
+#  the components with older versions
+cp $(ls ${CASFW_HOME}/software/*.car | grep -v "\-site-") ${VIGNETTE_HOME}/system/bootstrap
 
 # Setup other /var directories 
 mkdir -p ${CASFW_HOME}/var/log/vignette-portal

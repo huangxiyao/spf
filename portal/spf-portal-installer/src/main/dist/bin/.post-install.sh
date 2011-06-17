@@ -7,28 +7,47 @@ source ${CASFW_HOME}/bin/.casfwrc
 # Setup DB for portal
 ${CASFW_HOME}/bin/setupPrimaryPortalNode.sh
 
-echo "Importing remaining component archives"
 VIGNETTE_HOME="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
 echo "Y" > ${CASFW_HOME}/var/accept_site_import.txt
 pushd ${VIGNETTE_HOME}/bin
-for carFile in $(ls ${CASFW_HOME}/software/*.car); do
-    if ${using_cygwin}; then
-        carFile="$(cygpath -am ${carFile})"
-    fi
-    echo "Importing ${carFile}"
-    ./ImportExportTool.sh -import ${carFile} < ${CASFW_HOME}/var/accept_site_import.txt \
-    1>${CASFW_HOME}/var/log/vignette-portal/ImportExportTool.out \
-    2>${CASFW_HOME}/var/log/vignette-portal/ImportExportTool.err
 
-    last_exit_code=$?
-    if [ ${last_exit_code} -ne 0 ]; then
-        echo "Importing file ${carFile} failed with code ${last_exit_code}."
-        echo "Aborting."
-        popd
-        rm ${CASFW_HOME}/var/accept_site_import.txt
-        exit ${last_exit_code}
-    fi
-done
+function import_car_files {
+    local current_time=
+
+    for car_file in "$@"; do
+        if ${using_cygwin}; then
+            car_file="$(cygpath -am ${car_file})"
+        fi
+        echo "Importing ${car_file}"
+
+        current_time="$(date '+%Y-%m-%d %H:%M:%S')"
+
+        echo "==== ${current_time} - Importing ${car_file} ====" >> ${CASFW_HOME}/var/log/vignette-portal/ImportExportTool.out
+        echo "==== ${current_time} - Importing ${car_file} ====" >> ${CASFW_HOME}/var/log/vignette-portal/ImportExportTool.err
+
+        ./ImportExportTool.sh -import ${car_file} < ${CASFW_HOME}/var/accept_site_import.txt \
+        1>>${CASFW_HOME}/var/log/vignette-portal/ImportExportTool.out \
+        2>>${CASFW_HOME}/var/log/vignette-portal/ImportExportTool.err
+
+        last_exit_code=$?
+        if [ ${last_exit_code} -ne 0 ]; then
+            echo "Importing file ${car_file} failed with code ${last_exit_code}."
+            echo "Aborting."
+            popd
+            rm ${CASFW_HOME}/var/accept_site_import.txt
+            exit ${last_exit_code}
+        fi
+    done
+}
+
+echo "Importing portal sites"
+import_car_files $(ls ${CASFW_HOME}/software/*.car | grep "\-site-")
+
+# We imported those already during bootstrap, but let's reimport them to ensure that if the site CARs
+#  came with older components the newer ones packaged in these CARs will be used.
+echo "Importing remaining component archives"
+import_car_files $(ls ${CASFW_HOME}/software/*.car | grep -v "\-site-")
+
 popd
 rm ${CASFW_HOME}/var/accept_site_import.txt
 
