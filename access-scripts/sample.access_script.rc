@@ -1,0 +1,32 @@
+
+# Rename this file to .acccess_script.rc and either keep it in this directory or copy it to a location
+# present in your $PATH
+
+function run_cmd_in_term_with_bg_if_needed {
+
+    # Are we logging in to the server and staying there or just running a command?
+    # If running command only - no need to change the background.
+    if [ -n "${RUN_COMMAND_ONLY}" ]; then
+        "$@"
+        exit $?
+    fi
+
+    # Customize the terminal appearance based on script_name.
+    # In general the terminal command should allow to specify background (and other UI customizations if 
+    # desired) and execute a set of commands, as in the example below.
+    script_name="$0"
+    if [[ "${script_name}" =~ "-pro-" ]]; then
+        my_favorite_terminal -background_arg background_color -execute "echo \"${VITALS_MESSAGE}\" && $*" &    
+#    elif
+#        ...
+    else
+        echo "${VITALS_MESSAGE}"
+        "$@"
+    fi
+}
+
+# 'run_access_script' is a shell variable that should contain the name of the command/function
+# to be used to run the actual command.
+# Here we use the name of the function defined above.
+run_access_script=run_cmd_in_term_with_bg_if_needed
+
