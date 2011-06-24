@@ -31,7 +31,7 @@ read -r -d '' VITALS_MESSAGE <<end-of-message
 ''
 end-of-message
 
-if [[ -z "${run_access_script}" && -z "${RUN_COMMAND_ONLY}" ]]; then
+if [[ -z "${run_access_script}" && $# -eq 0 ]]; then
     echo "${VITALS_MESSAGE}"
 fi
 eval "${run_access_script}" ssh -t g2u0872.austin.hp.com "$@"

@@ -13,8 +13,6 @@ done
 
 command_to_execute="$1"
 
-export RUN_COMMAND_ONLY="yes"
-
 # "${access_scripts[@]}" syntax allows to handle properly script paths with spaces
 for access_script in "${access_scripts[@]}"; do
     echo >&2

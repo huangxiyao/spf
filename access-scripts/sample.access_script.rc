@@ -4,13 +4,16 @@
 
 function run_cmd_in_term_with_bg_if_needed {
 
-    # Are we logging in to the server and staying there or just running a command?
-    # If running command only - no need to change the background.
-    if [ -n "${RUN_COMMAND_ONLY}" ]; then
+    # If we run a command there is no need to open customized terminal. 
+    # We run a command if this function is invoked with more than 3 parameters, i.e. ssh -t host COMMAND
+    # (3 => ssh -t host)
+    if [ $# -gt 3 ]; then
         "$@"
         exit $?
     fi
 
+    # If we get here it means we are not running a command but may want to open customized
+    # terminal.
     # Customize the terminal appearance based on script_name.
     # In general the terminal command should allow to specify background (and other UI customizations if 
     # desired) and execute a set of commands, as in the example below.
