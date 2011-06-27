@@ -332,7 +332,10 @@ public abstract class PortletRequestImpl implements PortletRequest, PartitionObj
                     logger.log(Level.INFO, "PSPL_PAECSPPI0039", 
                             new String[] { session.getId(), sessionId, String.valueOf(sessionInvalid) } );
                 }
-                session.invalidate();
+                // SPF - added to work around producer session expired/server restart issue
+                if (getHttpServletRequest().isRequestedSessionIdValid()) {
+                    session.invalidate();
+                }
                 session = createSession(getHttpServletRequest(), create);
             }
             
