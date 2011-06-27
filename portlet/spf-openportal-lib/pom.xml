@@ -9,7 +9,7 @@
 
     <groupId>com.hp.it.spf.openportal</groupId>
     <artifactId>spf-openportal-lib</artifactId>
-    <version>2.2.7.1</version>
+    <version>2.2.8-SNAPSHOT</version>
     
     <!--
     The packaging of this module is "pom" as it produces a ".zip" file and maven does not support that natively.
@@ -163,12 +163,4 @@
             </plugin>
         </plugins>
     </build>
-
-
-
-  <scm>
-    <connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/tags/spf-openportal-lib-2.2.7.1</connection>
-    <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-openportal-lib-2.2.7.1</developerConnection>
-    <url>http://code1.corp.hp.com/svn/spf/source/tags/spf-openportal-lib-2.2.7.1</url>
-  </scm>
 </project>
