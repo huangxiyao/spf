@@ -1,5 +1,5 @@
-LoginId=vignette
-ProfileId=
+LoginId=@@portal_admin_username@@
+ProfileId=@@portal_admin_profile_id@@
 FirstName=admin
 LastName=localhost
 Email=admin@localhost

@@ -76,7 +76,6 @@ if [ ${last_exit_code} -ne 0 ]; then
     exit ${last_exit_code}
 fi
 
- 
 echo "Bootstraping portal application"
 sh ./war_tool.sh portal.war \
  1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
@@ -102,6 +101,32 @@ sh ./runs_with_classpath.sh com.hp.it.spf.sso.portal.AnonUsersImport  "hpp_realm
 last_exit_code=$?
 if [ ${last_exit_code} -ne 0 ]; then
     echo "Adding anonymous users failed with code ${last_exit_code}."
+    echo "Aborting."
+    popd
+    exit ${last_exit_code}
+fi
+
+echo "Updating administrator account ${vignette_admin_username} profile id"
+update_sql_path="${VIGNETTE_HOME}/config/spf_vap_update_admin.sql"
+if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
+    update_sql_path=${update_sql_path}.derby
+fi
+if ${using_cygwin}; then
+    update_sql_path="$(cygpath -am ${update_sql_path})"
+fi
+
+sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.SqlScriptRunner \
+ "--driver=${vignette_db_driver_class}" \
+ "--jdbcUrl=${vignette_db_url}" \
+ "--username=${vignette_db_username}" \
+ "--password=${vignette_db_password}" \
+ "--scriptPath=${update_sql_path}" \
+ 1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
+ 2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+
+last_exit_code=$?
+if [ ${last_exit_code} -ne 0 ]; then
+    echo "Updating administrator account profile id failed with code ${last_exit_code}."
     echo "Aborting."
     popd
     exit ${last_exit_code}

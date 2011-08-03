@@ -40,6 +40,43 @@ function import_car_files {
     done
 }
 
+remote_portlet_servers="${VIGNETTE_HOME}/config/spf_remote_portlet_servers.xml"
+if ${using_cygwin}; then
+    remote_portlet_servers="$(cygpath -am ${remote_portlet_servers})"
+fi
+
+echo "Registering remote portlet servers defined in ${remote_portlet_servers}"
+sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.RegisterRemotePortletServers \
+ ${remote_portlet_servers} \
+1>>${CASFW_HOME}/var/log/vignette-portal/registerRemotePortletServers.out \
+2>>${CASFW_HOME}/var/log/vignette-portal/registerRemotePortletServers.err
+
+last_exit_code=$?
+if [ ${last_exit_code} -ne 0 ]; then
+    echo "Registering remote portlet servers failed with code ${last_exit_code}."
+    echo "Aborting."
+    popd
+    exit ${last_exit_code}
+fi
+
+portlet_applications="${VIGNETTE_HOME}/config/spf_local_portlet_applications.xml"
+if ${using_cygwin}; then
+    portlet_applications="$(cygpath -am ${portlet_applications})"
+fi
+echo "Registering portlet applications defined in ${portlet_applications}"
+sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.RegisterPortletApplications \
+ ${portlet_applications} \
+1>>${CASFW_HOME}/var/log/vignette-portal/registerPortletApplications.out \
+2>>${CASFW_HOME}/var/log/vignette-portal/registerPortletApplications.err
+
+last_exit_code=$?
+if [ ${last_exit_code} -ne 0 ]; then
+    echo "Registering portlet applications failed with code ${last_exit_code}."
+    echo "Aborting."
+    popd
+    exit ${last_exit_code}
+fi
+
 echo "Importing portal sites"
 import_car_files $(ls ${CASFW_HOME}/software/*.car | grep "\-site-")
 

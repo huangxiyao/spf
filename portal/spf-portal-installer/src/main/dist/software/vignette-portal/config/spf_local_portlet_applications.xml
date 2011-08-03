@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-applications>
+    <portlet-application>
+        <name>HTMLViewer</name>
+        <contextRoot>htmlviewer</contextRoot>
+        <description>This is a WPAP/Spring portlet application which contains the Shared Portal Framework HTMLViewer portlet.</description>
+        <portlets>
+            <portlet-name>HTMLViewerPortlet</portlet-name>
+        </portlets>
+    </portlet-application>
+</portlet-applications>
