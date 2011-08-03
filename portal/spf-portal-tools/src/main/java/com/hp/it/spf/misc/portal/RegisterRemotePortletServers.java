@@ -1,13 +1,10 @@
 package com.hp.it.spf.misc.portal;
 
 import java.io.File;
-import java.rmi.server.ServerRef;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -15,17 +12,10 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import com.vignette.portal.portlet.management.external.PortletException;
-import com.vignette.portal.portlet.management.external.PortletPersistenceException;
-import com.vignette.portal.portlet.management.external.extension.wsrp.ProducerNotReachableException;
-import com.vignette.portal.portlet.management.external.extension.wsrp.ProducerOperationFailedException;
-import com.vignette.portal.portlet.management.internal.implementation.provider.wsrp.MissingRegistrationParametersException;
 import com.vignette.portal.portlet.management.internal.implementation.provider.wsrp.WsrpPortletApplicationSpiImpl;
 
 /**
