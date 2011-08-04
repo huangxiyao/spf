@@ -3,12 +3,15 @@ package com.hp.it.spf.misc.portal;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeSet;
 
 import com.epicentric.i18n.locale.LocaleManager;
 import com.hp.it.spf.xa.i18n.I18nUtility;
@@ -67,7 +70,19 @@ public class RegisterSupportedLanguages
                 public void registerSupportedLanguages(Set<Locale> languages)
                 {
                     super.registerSupportedLanguages(languages);
-                    System.out.println("Registered supported languages: " + languages);
+
+                    // the "languages" set is not sorted so let's print it out sorted
+                    // for easier troubleshooting if needed.
+                    List<Locale> sortedLanguages = new ArrayList<Locale>(languages);
+                    Comparator<Locale> localeComparator = new Comparator<Locale>()
+                    {
+                        public int compare(Locale o1, Locale o2)
+                        {
+                            return o1.toString().compareTo(o2.toString());
+                        }
+                    };
+                    Collections.sort(sortedLanguages, localeComparator);
+                    System.out.println("Registered supported languages: " + sortedLanguages);
                 }
 
             };
@@ -101,7 +116,7 @@ public class RegisterSupportedLanguages
 
     private Set<Locale> extractCombinedSetOfLanguagesForAllSites(Properties supportedLanguageDefinitionsData)
     {
-        Set<Locale> allLanguages = new TreeSet<Locale>();
+        Set<Locale> allLanguages = new HashSet<Locale>();
 
         Enumeration siteNames = supportedLanguageDefinitionsData.propertyNames();
         while (siteNames.hasMoreElements()) {
@@ -122,7 +137,7 @@ public class RegisterSupportedLanguages
             return Collections.emptySet();
         }
 
-        Set<Locale> result = new TreeSet<Locale>();
+        Set<Locale> result = new HashSet<Locale>();
 
         // ',' as support languages delimiter
         String[] languages = commaSeparatedLanguages.split(",");
