@@ -77,6 +77,25 @@ if [ ${last_exit_code} -ne 0 ]; then
     exit ${last_exit_code}
 fi
 
+supported_languages="${CASFW_HOME}/etc/resources_global/site_locale_support.properties"
+if ${using_cygwin}; then
+    supported_languages="$(cygpath -am ${supported_languages})"
+fi
+
+echo "Adding supported languages defined in ${supported_languages}"
+sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.RegisterSupportedLanguages \
+ ${supported_languages} \
+1>>${CASFW_HOME}/var/log/vignette-portal/RegisterSupportLanguages.out \
+2>>${CASFW_HOME}/var/log/vignette-portal/RegisterSupportLanguages.err
+
+last_exit_code=$?
+if [ ${last_exit_code} -ne 0 ]; then
+    echo "Registering support languages failed with code ${last_exit_code}."
+    echo "Aborting."
+    popd
+    exit ${last_exit_code}
+fi
+
 echo "Importing portal sites"
 import_car_files $(ls ${CASFW_HOME}/software/*.car | grep "\-site-")
 
