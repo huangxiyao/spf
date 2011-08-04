@@ -21,7 +21,7 @@ pushd ${VIGNETTE_HOME}/bin
 
 ##### Setup portal database #####
 
-echo "Creating portal tables"
+echo "Creating portal database objects"
 sh ./runs_with_classpath.sh com.vignette.tableinstaller.tools.TableInstaller \
  "--driver=${vignette_db_driver_class}" \
  "--jdbc-url=${vignette_db_url}" \
@@ -40,10 +40,10 @@ if [ ${last_exit_code} -ne 0 ]; then
 fi
 
 
-echo "Creating custom SPF columns"
+echo "Applying SPF database extensions"
 alter_sql_path="${VIGNETTE_HOME}/config/spf_vap_alter_users.sql"
 if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
-    alter_sql_path=${alter_sql_path}.derby
+    alter_sql_path="${alter_sql_path}.derby"
 fi
 if ${using_cygwin}; then
     alter_sql_path="$(cygpath -am ${alter_sql_path})"
@@ -55,8 +55,8 @@ sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.SqlScriptRunner \
  "--username=${vignette_db_username}" \
  "--password=${vignette_db_password}" \
  "--scriptPath=${alter_sql_path}" \
- 1>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
- 2>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+ 1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
+ 2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
 
 last_exit_code=$?
 if [ ${last_exit_code} -ne 0 ]; then
@@ -69,7 +69,7 @@ fi
 
 ##### Setup admin account #####
 
-echo "Creating administrator account ${vignette_admin_username}"
+echo "Creating administrator account '${vignette_admin_username}'"
 sh ./create_first_admin_account.sh ${vignette_admin_username} ${vignette_admin_password} \
  1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
  2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
@@ -83,10 +83,30 @@ if [ ${last_exit_code} -ne 0 ]; then
 fi
 
 
-echo "Updating administrator account ${vignette_admin_username} profile id"
+##### Bootstrap portal #####
+
+echo "Bootstraping portal application"
+sh ./war_tool.sh portal.war \
+ 1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
+ 2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+
+last_exit_code=$?
+if [ ${last_exit_code} -ne 0 ]; then
+    echo "Bootstraping portal application failed with code ${last_exit_code}."
+    echo "Aborting."
+    popd
+    exit ${last_exit_code}
+fi
+
+
+##### Set admin account's profile ID #####
+# This needs to be done only after bootstrap has run as create_first_admin_account does not update DB
+# but only create VAP/config/elxo.dat file.
+
+echo "Setting administrator account's profile ID"
 update_sql_path="${VIGNETTE_HOME}/config/spf_vap_update_admin.sql"
 if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
-    update_sql_path=${update_sql_path}.derby
+    update_sql_path="${update_sql_path}.derby"
 fi
 if ${using_cygwin}; then
     update_sql_path="$(cygpath -am ${update_sql_path})"
@@ -104,22 +124,6 @@ sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.SqlScriptRunner \
 last_exit_code=$?
 if [ ${last_exit_code} -ne 0 ]; then
     echo "Updating administrator account profile id failed with code ${last_exit_code}."
-    echo "Aborting."
-    popd
-    exit ${last_exit_code}
-fi
-
-
-##### Bootstrap portal #####
-
-echo "Bootstraping portal application"
-sh ./war_tool.sh portal.war \
- 1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
- 2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
-
-last_exit_code=$?
-if [ ${last_exit_code} -ne 0 ]; then
-    echo "Bootstraping portal application failed with code ${last_exit_code}."
     echo "Aborting."
     popd
     exit ${last_exit_code}
@@ -155,9 +159,9 @@ fi
 
 echo "Registering remote portlet servers defined in ${remote_portlet_servers_path}"
 sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.RegisterRemotePortletServers \
- ${remote_portlet_servers_path} \
-1>>${CASFW_HOME}/var/log/vignette-portal/registerRemotePortletServers.out \
-2>>${CASFW_HOME}/var/log/vignette-portal/registerRemotePortletServers.err
+ "${remote_portlet_servers_path}" \
+ 1>>${CASFW_HOME}/var/log/vignette-portal/RegisterRemotePortletServers.out \
+ 2>>${CASFW_HOME}/var/log/vignette-portal/RegisterRemotePortletServers.err
 
 last_exit_code=$?
 if [ ${last_exit_code} -ne 0 ]; then
@@ -177,9 +181,9 @@ fi
 
 echo "Registering portlet applications defined in ${portlet_applications_path}"
 sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.RegisterPortletApplications \
- ${portlet_applications_path} \
-1>>${CASFW_HOME}/var/log/vignette-portal/registerPortletApplications.out \
-2>>${CASFW_HOME}/var/log/vignette-portal/registerPortletApplications.err
+ "${portlet_applications_path}" \
+ 1>>${CASFW_HOME}/var/log/vignette-portal/RegisterPortletApplications.out \
+ 2>>${CASFW_HOME}/var/log/vignette-portal/RegisterPortletApplications.err
 
 last_exit_code=$?
 if [ ${last_exit_code} -ne 0 ]; then
@@ -199,9 +203,9 @@ fi
 
 echo "Adding supported languages defined in ${supported_languages_path}"
 sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.RegisterSupportedLanguages \
- ${supported_languages_path} \
-1>>${CASFW_HOME}/var/log/vignette-portal/RegisterSupportLanguages.out \
-2>>${CASFW_HOME}/var/log/vignette-portal/RegisterSupportLanguages.err
+ "${supported_languages_path}" \
+ 1>>${CASFW_HOME}/var/log/vignette-portal/RegisterSupportLanguages.out \
+ 2>>${CASFW_HOME}/var/log/vignette-portal/RegisterSupportLanguages.err
 
 last_exit_code=$?
 if [ ${last_exit_code} -ne 0 ]; then
