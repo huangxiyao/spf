@@ -120,6 +120,12 @@ public abstract class ClassicContextualHelpProvider extends
 	 * The JavaScript string for the classic contextual help popup open, close,
 	 * and drag-and-drop behavior. The popup itself is not defined in this
 	 * JavaScript.
+	 * 
+	 * Fix for CR# 308: now all global variable and function names in this
+	 * JavaScript are namespaced with "cch" if they were not adequately
+	 * namespaced previously.  This is to avoid conflicts with other DHTML
+	 * code that may be on the same page, such as MooTools (used by Cleansheet)
+	 * - DSJ 2011/7/28
 	 */
 	protected static String CLASSIC_CONTEXTUAL_HELP_JS = "<script type=\"text/javascript\" language=\"JavaScript\">\n"
 			+ "if (typeof(loadedClassicContextualHelpJS) == 'undefined') \n"
@@ -145,56 +151,56 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "            }\n"
 			+ "        } \n"
 			+ "    } \n"
-			+ "    function isMSIE() {\n"
+			+ "    function cchIsMSIE() {\n"
 			+ "        if (navigator.appName == 'Microsoft Internet Explorer') \n"
 			+ "            return true; \n"
 			+ "        else \n"
 			+ "            return false; \n"
 			+ "    } \n"
 			// Used to block cascading events
-			+ "    function falsefunc() { return false; } \n"
+			+ "    function cchFalse() { return false; } \n"
 
-			// Used to call getMouseXY();
-			+ "    function update(e) { getMouseXY(e); } \n"
+			// Used to call cchGetMouseXY();
+			+ "    function cchUpdate(e) { cchGetMouseXY(e); } \n"
 
 			// Used to get position of mouse, and work on IE6,FireFox.
-			+ "    function getMouseXY(e) \n"
+			+ "    function cchGetMouseXY(e) \n"
 			+ "    { \n"
 			+ "        if (!e) e = window.event; \n"
 			+ "        if (e) \n"
 			+ "        { //Work on FF \n"
 			+ "            if (e.pageX || e.pageY) \n"
 			+ "            { \n"
-			+ "                mousex = e.pageX + window.pageXOffset; \n"
-			+ "                mousey = e.pageY + window.pageYOffset; \n"
+			+ "                cchMouseX = e.pageX + window.pageXOffset; \n"
+			+ "                cchMouseY = e.pageY + window.pageYOffset; \n"
 			+ "            } \n"
 			+ "            else if (e.clientX || e.clientY) \n"
 			+ "            { \n"
-			+ "                mousex = e.clientX + document.body.scrollLeft; \n"
-			+ "                mousey = e.clientY + document.body.scrollTop; \n"
+			+ "                cchMouseX = e.clientX + document.body.scrollLeft; \n"
+			+ "                cchMouseY = e.clientY + document.body.scrollTop; \n"
 			+ "            } \n"
 			+ "        } \n"
 			+ "    } \n"
 
 			// Set this method to mousedown event of div
-			+ "    function grab(context) \n"
+			+ "    function cchGrab(context) \n"
 			+ "    { \n"
-			+ "        document.onmousedown = falsefunc; \n"
-			+ "        dragobj = context;  \n"
-			+ "        //dragobj.style.zIndex = 10; \n"
+			+ "        document.onmousedown = cchFalse; \n"
+			+ "        cchDragObj = context;  \n"
+			+ "        //cchDragObj.style.zIndex = 10; \n"
 			// move it to the top
-			+ "        document.onmousemove = drag; \n"
-			+ "        document.onmouseup = drop; \n"
-			+ "        grabx = mousex; \n"
-			+ "        graby = mousey; \n"
-			+ "        elex = orix = dragobj.offsetLeft; \n"
-			+ "        eley = oriy = dragobj.offsetTop; \n"
-			+ "        update(); \n"
+			+ "        document.onmousemove = cchDrag; \n"
+			+ "        document.onmouseup = cchDrop; \n"
+			+ "        cchGrabX = cchMouseX; \n"
+			+ "        cchGrabY = cchMouseY; \n"
+			+ "        cchElemX = cchOrigX = cchDragObj.offsetLeft; \n"
+			+ "        cchElemY = cchOrigY = cchDragObj.offsetTop; \n"
+			+ "        cchUpdate(); \n"
 			+ "    } \n"
 
-			+ "    function moveFrame(o) \n"
+			+ "    function cchMoveFrame(o) \n"
 			+ "    { \n"
-			+ "        if (isMSIE() == true && o != null) { \n"
+			+ "        if (cchIsMSIE() == true && o != null) { \n"
 			+ "            var wframe = document.getElementById(o.id+'HelpFrame'); \n"
 			+ "            if (wframe != null) { \n"
 			+ "                wframe.style.top = o.offsetTop; \n"
@@ -205,35 +211,35 @@ public abstract class ClassicContextualHelpProvider extends
 
 			// When mouse drags the div, this method is called to update the div
 			// position
-			+ "    function drag(e) \n"
+			+ "    function cchDrag(e) \n"
 			+ "    { \n"
-			+ "        if (dragobj) \n"
+			+ "        if (cchDragObj) \n"
 			+ "        { \n"
-			+ "            elex = orix + (mousex-grabx); \n"
-			+ "            eley = oriy + (mousey-graby); \n"
-			+ "            dragobj.style.position = 'absolute'; \n"
-			+ "            dragobj.style.left = (elex).toString(10) + 'px'; \n"
-			+ "            dragobj.style.top  = (eley).toString(10) + 'px'; \n"
-			+ "            moveFrame(dragobj); \n"
+			+ "            cchElemX = cchOrigX + (cchMouseX-cchGrabX); \n"
+			+ "            cchElemY = cchOrigY + (cchMouseY-cchGrabY); \n"
+			+ "            cchDragObj.style.position = 'absolute'; \n"
+			+ "            cchDragObj.style.left = (cchElemX).toString(10) + 'px'; \n"
+			+ "            cchDragObj.style.top  = (cchElemY).toString(10) + 'px'; \n"
+			+ "            cchMoveFrame(cchDragObj); \n"
 			+ "        } \n"
-			+ "        update(e); \n"
+			+ "        cchUpdate(e); \n"
 			+ "        return false; \n"
 			+ "    } \n"
 
-			// When mouse drop the div, this method is called to clear dragobj
+			// When mouse drop the div, this method is called to clear cchDragObj
 			// and some event handler
-			+ "    function drop() \n"
+			+ "    function cchDrop() \n"
 			+ "    { \n"
-			+ "        if (dragobj) \n "
-			+ "            dragobj = null; \n"
-			+ "        update(); \n"
-			+ "        document.onmousemove = update; \n"
+			+ "        if (cchDragObj) \n "
+			+ "            cchDragObj = null; \n"
+			+ "        cchUpdate(); \n"
+			+ "        document.onmousemove = cchUpdate; \n"
 			+ "        document.onmouseup = null; \n"
 			+ "        document.onmousedown = null; \n"
 			+ "    } \n"
 
-			+ "    function hideFrame(o) {\n"
-			+ "        if (isMSIE() == true && o != null) {\n"
+			+ "    function cchHideFrame(o) {\n"
+			+ "        if (cchIsMSIE() == true && o != null) {\n"
 			+ "            var wframe = document.getElementById(o.id+'HelpFrame'); \n"
 			+ "            if (wframe != null) {\n"
 			+ "                wframe.style.display = \"none\"; \n"
@@ -241,7 +247,7 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "            } \n"
 			+ "        } \n"
 			+ "    } \n"
-			+ "    function hideObject(ev) {\n"
+			+ "    function cchHideFrame(ev) {\n"
 			+ "        var e = window.event ? window.event : ev; \n"
 			+ "        var t = e.target ? e.target : e.srcElement; \n"
 
@@ -251,11 +257,11 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "        if (w != null) { \n "
 			+ "            w.style.display = \"none\"; \n"
 			+ "            w.style.zIndex=0; \n"
-			+ "            hideFrame(w); \n"
+			+ "            cchHideFrame(w); \n"
 			+ "        } \n"
 			+ "    } \n"
-			+ "    function showFrame(o) { \n"
-			+ "        if (isMSIE() == true && o != null) { \n"
+			+ "    function cchShowFrame(o) { \n"
+			+ "        if (cchIsMSIE() == true && o != null) { \n"
 			+ "            var wframe = document.getElementById(o.id+'HelpFrame'); \n"
 			+ "            if (wframe != null) { \n"
 			+ "                wframe.style.top = o.offsetTop; \n"
@@ -267,7 +273,7 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "            } \n"
 			+ "        } \n"
 			+ "    } \n"
-			+ "    function showObject(ev) { \n"
+			+ "    function cchShowObject(ev) { \n"
 			+ "        var e = window.event ? window.event : ev; \n"
 			+ "        var t = e.target ? e.target : e.srcElement; \n"
 			+ "        var w = document.getElementById(t.id + 'Help'); \n"
@@ -280,18 +286,18 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "        var mouseX = e.clientX; \n"
 			+ "        var mouseY = e.clientY; \n"
 
-			// use the lastShow variable to close the last popup window, if any,
+			// use the cchLastShow variable to close the last popup window, if any,
 			// before opening the new popup window.
-			+ "        if (lastShow != null) { \n"
-			+ "            lastShow.style.display = \"none\"; \n"
-			+ "            lastShow.style.zIndex = 0; \n"
-			+ "            hideFrame(lastShow); \n"
+			+ "        if (cchLastShow != null) { \n"
+			+ "            cchLastShow.style.display = \"none\"; \n"
+			+ "            cchLastShow.style.zIndex = 0; \n"
+			+ "            cchHideFrame(cchLastShow); \n"
 			+ "        } \n"
 
 			// set help div element to block display, get div element
 			// name by concatenating 'Close' string to anchor id.
 			+ "        if (w != null) { \n"
-			+ "            lastShow = w; \n"
+			+ "            cchLastShow = w; \n"
 			+ "            w.style.display = \"block\"; \n"
 			+ "            w.style.left = mouseX + \"px\"; \n"
 			+ "            w.style.zIndex = 4999; \n"
@@ -363,7 +369,7 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "                    } \n"
 			+ "                } \n"
 			+ "            } \n"
-			+ "            showFrame(w); \n"
+			+ "            cchShowFrame(w); \n"
 			+ "        } \n"
 			+ "        if (window.event) { \n"
 			+ "            window.event.cancelBubble = true; \n"
@@ -378,11 +384,11 @@ public abstract class ClassicContextualHelpProvider extends
 			// Append the JavaScript code for div moving
 			// These variables are used to get mouse position, calculate and
 			// change div position.
-			+ "    var mousex = 0,mousey = 0,grabx = 0,graby = 0,orix = 0,oriy = 0,elex = 0,eley = 0; \n"
-			+ "    var dragobj = null; \n" + "    var lastShow = null;\n"
+			+ "    var cchMouseX = 0, cchMouseY = 0, cchGrabX = 0, cchGrabY = 0, cchOrigX = 0, cchOrigY = 0, cchElemX = 0, cchElemY = 0; \n"
+			+ "    var cchDragObj = null; \n" + "    var cchLastShow = null;\n"
 
-			// Update the mousex,mousey when mouse is moving
-			+ "    document.onmousemove = update; \n" + "    update(); \n\n"
+			// Update the cchMouseX,cchMouseY when mouse is moving
+			+ "    document.onmousemove = cchUpdate; \n" + "    cchUpdate(); \n\n"
 
 			+ "} \n" + "</script>";
 
@@ -780,9 +786,9 @@ public abstract class ClassicContextualHelpProvider extends
 		// Write html to call javascript popup function
 		html
 				.append("classicContextualHelpUtil.addEvent(document.getElementById('"
-						+ id + "'), 'click', showObject);\n");
+						+ id + "'), 'click', cchShowObject);\n");
 		// Add iframe to avoid IE select bug
-		// html.append("if (isMSIE() == true) \n");
+		// html.append("if (cchIsMSIE() == true) \n");
 		// html.append(" document.write('<iframe id=\"" + id + "HelpFrame\"
 		// src=\"javascript:false;\"
 		// style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
@@ -803,7 +809,7 @@ public abstract class ClassicContextualHelpProvider extends
 
 		html.append("<div ");
 		html.append("id=\"" + id + "Help\" ");
-		html.append("onmousedown=\"grab(this)\" ");
+		html.append("onmousedown=\"cchGrab(this)\" ");
 		html
 				.append("style=\"cursor:pointer;position:absolute;background-color:white;display:none;top:200px;left:200px\">\n");
 		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
@@ -857,7 +863,7 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("<script>\n");
 		html
 				.append("classicContextualHelpUtil.addEvent(document.getElementById('"
-						+ id + "HelpClose'), 'click', hideObject);\n");
+						+ id + "HelpClose'), 'click', cchHideFrame);\n");
 		html.append("</script>");
 
 		// Bump counter and return.
