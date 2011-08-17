@@ -1,0 +1,294 @@
+<project name="build-spp" default="all" basedir=".">
+ 	
+	<!--=======================================================================
+		Set the base build,source and backup directories
+	=======================================================================-->	
+
+ 	
+	<property name="dir.build" value=".\build"/>
+	<property name="dir.login.src" value="C:\To-Build\spp-portal-login-portlet\target\"/>
+	<property name="dir.portal.web.src" value="C:\To-Build\spp-portal-web\target\"/>
+	<property name="dest.login.dir" value="C:\test\spp-portal-login-portlet"/>
+	<property name="dest.portal.web.dir" value="C:\test"/>
+	<property name="backup.login.portlet" value="C:\test\"/>
+	<property name="backup.portlet.war" value="c:\test\opt\spp\bea\weblogic81\common\nodemanager\VignetteServer1\stage\Vignette_Portal"/>
+	<property name="backup.dir" value="C:\backup\"/>
+	<property name="instance.name" value="VignetteServer1"/>
+
+	<!--=======================================================================
+		Backup the Existing Application
+	=======================================================================-->	
+
+	
+	<target name="backup-existing" description="Creates a backup tar of the existing application">
+		<echo message="Creating backup of existing application" />
+		<tstamp>
+			<format property="startDateTime" pattern="MMddyyyyhhmm"/>
+		</tstamp>
+		<echo message="Directory being used:${dest.login.dir}\spp_portal_login_portlet " />
+		<tar tarfile="${backup.dir}\spp_portal_login_portlet_${startDateTime}.tar" basedir="${backup.login.portlet}\spp-portal-login-portlet"/>
+		
+		<echo message="Existing portal.war is being backed up" />
+		<tar tarfile="${backup.dir}\portlet_war_${startDateTime}.tar" basedir="${backup.portlet.war}\portal.war"/>
+		
+
+	</target>
+
+
+	<!--=======================================================================
+		Delete the Existing Application
+	=======================================================================-->	
+
+
+	<target name="delete-existing-application" description="Delete Existing Application">
+		<echo message="Delete Existing Application: ${dest.login.dir}"/>
+		<delete dir="\${dest.login.dir}\spp-portal-login-portlet"/>
+		
+		<echo message="Deleting web.xml"/>
+		<delete	file="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/WEB-INF/web.xml" />		
+
+		<echo message="Delete Existing spp related classes in portal.war"/>
+		<delete dir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/WEB-INF/classes/com/hp/spp"/>
+
+
+		<echo message="Delete SPP related JSP's "/>
+		<delete dir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/jsp/SPP"/>
+
+ 		<delete>
+			<fileset dir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/" 
+					 includes="*.jsp"/>
+		</delete>
+		
+ 		<delete>
+			<fileset dir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/beans/bookmark/jsp/" 
+					 includes="*.jsp"/>
+		</delete>
+
+		<echo message="Delete SPP related Html files "/>
+		<delete> 				
+			<fileset dir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/" 
+				 includes="*.html"/>
+		</delete>
+
+		
+		<echo message="Delete Existing spp related jar files"/>
+		<delete>
+				<fileset dir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/WEB-INF/lib"  
+					includes="spp*.jar"/>
+		</delete>
+
+	</target>
+
+	
+ 	<!--=======================================================================
+			Create the Required Directories
+	=======================================================================-->	
+ 	
+ 	
+	<target name="make-dir" description="Creates all required new directories"> 		
+ 		<echo message="Creating Build directory"/>
+		<mkdir dir="${dir.build}"/>
+		<echo message="Creating spp-portal-login-portlet directory"/>
+		<mkdir dir="${dir.build}/spp-portal-login-portlet/spp-portal-login-portlet"/>
+		<echo message="Creating spp-portal-web directory"/>
+		<mkdir dir="${dir.build}/spp-portal-web/spp-portal-web"/>
+	</target>
+
+ 	
+	<!--=======================================================================
+					Copy spp-portal-login-portlet
+	=======================================================================-->	
+ 	
+ 	
+	<target name="copy-spp-portal-login-portlet" description="Copy spp-portal-login-portlet.war">
+ 		<echo message="Copying spp-portal-login-portlet"/>
+		<copy todir="${dir.build}/spp-portal-login-portlet/spp-portal-login-portlet">
+			<fileset dir="${dir.login.src}">
+				    <include name="spp-portal-login-portlet.war"/>
+			</fileset>
+		</copy>
+ 	</target> 
+	
+
+	<!--=======================================================================
+					Copy spp-portal-web
+	=======================================================================-->	
+ 	
+ 	
+	<target name="copy-spp-portal-web" description="Copy spp-portal-web.war">
+ 		<echo message="Copying spp-portal-web"/>
+		<copy todir="${dir.build}/spp-portal-web/spp-portal-web">
+			<fileset dir="${dir.portal.web.src}">
+				    <include name="spp-portal-web.war"/>
+			</fileset>
+		</copy>
+ 	</target> 	
+
+ 	
+	<!--=======================================================================
+			Explode the spp-portal-login-portlet
+	=======================================================================-->	
+	
+ 	
+	<target name="explode-spp-portal-login-portlet" description="Explode spp-portal-login-portlet.war">
+		<echo message="Exploding spp-portal-login-portlet.war"/>
+		<unwar 	src="${dir.build}/spp-portal-login-portlet/spp-portal-login-portlet/spp-portal-login-portlet.war"
+			dest="${dir.build}/spp-portal-login-portlet/spp-portal-login-portlet" />		
+ 	</target> 
+
+	
+	<!--=======================================================================
+			Explode the spp-portal-web
+	=======================================================================-->	
+	
+ 	
+	<target name="explode-spp-portal-web" description="Explode spp-portal-web.war">
+		<echo message="Exploding spp-portal-web.war"/>
+		<unwar 	src="${dir.build}/spp-portal-web/spp-portal-web/spp-portal-web.war"
+			dest="${dir.build}/spp-portal-web/spp-portal-web" />		
+ 	</target> 	
+
+ 		
+	<!--=======================================================================
+			Delete the spp-portal-login-portlet.war in the Build Directory
+	=======================================================================-->	
+	
+	
+	<target name="delete-spp-portal-login-portlet" description="Delete spp-portal-login-portlet.war">
+		<echo message="Deleting spp-portal-login-portlet"/>
+		<delete	file="${dir.build}/spp-portal-login-portlet/spp-portal-login-portlet/spp-portal-login-portlet.war" />				
+ 	</target>
+
+
+	<!--=======================================================================
+			Delete the spp-portal-web.war in the Build Directory
+	=======================================================================-->	
+	
+	
+	<target name="delete-spp-portal-portal-web" description="Delete spp-portal-web.war">
+		<echo message="Deleting spp-portal-web.war"/>
+		<delete	file="${dir.build}/spp-portal-web/spp-portal-web/spp-portal-web.war" />				
+ 	</target>
+	
+
+	<!--=======================================================================
+			Copy the spp-portal-login-portlet to the Server
+	=======================================================================-->	
+		
+	
+	<target name="copy-to-server-spp-portal-login-portlet" description="Copy spp-portal-login-portlet">
+		<echo message="Copying spp-portal-login-portlet to the Server"/>
+		<copy todir="${dest.login.dir}">
+			 <fileset dir="${dir.build}/spp-portal-login-portlet"/>
+		</copy>
+ 	</target> 	
+
+
+	<!--=======================================================================
+			Copy web.xml to the Vignette Server
+	=======================================================================-->	
+
+	
+	<target name="copy-spp-portal-web-web.xml" description="Copy spp-portal-web web.xml">
+ 		<echo message="Copy web.xml to the server"/>
+		<copy file="${dir.build}/spp-portal-web/spp-portal-web/WEB-INF/web.xml" todir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/WEB-INF/"/>
+ 	</target>
+
+	<!--=======================================================================
+			Copy classes to Vignette Server
+	=======================================================================-->	
+	
+	<target name="copy-spp-portal-web-classes" description="Copy classes to the server">
+ 		<echo message="Copy classes to the server"/>
+ 		<copy todir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/WEB-INF/classes/com/hp">	
+ 			<fileset dir="${dir.build}/spp-portal-web/spp-portal-web/WEB-INF/classes/com/hp"/>
+	 	</copy>
+ 	</target>
+
+ 	
+	<!--=======================================================================
+			Copy JSP files to Vignette Server
+	=======================================================================-->	
+
+
+	<target name="copy-spp-portal-web-jsps" description="Copy JSP's to the server">
+		<echo message="Copy JSP's to the server"/>
+ 		<copy todir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/jsp/SPP">	
+ 			<fileset dir="${dir.build}/spp-portal-web/spp-portal-web/jsp/SPP"/>
+	 	</copy>
+
+		<echo message="Copy each of the JSP's portal.war location" />
+ 		<copy todir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/">	
+			<fileset dir="${dir.build}/spp-portal-web/spp-portal-web/" 
+					 includes="*.jsp"/>
+		</copy>
+
+		<echo message="Copy each of the JSP's to the Bookmark Location" />
+ 		<copy 				todir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/beans/bookmark/jsp/">	
+			<fileset dir="${dir.build}/spp-portal-web/spp-portal-web/beans/bookmark/jsp/" 
+					 includes="*.jsp"/>
+		</copy>
+
+ 	</target>
+
+		
+	<!--=======================================================================
+			Copy the Html files
+	=======================================================================-->
+	<target name="copy-spp-portal-web-html" description="Copy JSP's to the server">
+		<echo message="Copy Html Files" />
+			<copy 				todir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/">	
+			<fileset dir="${dir.build}/spp-portal-web/spp-portal-web/" 
+				 includes="*.html"/>
+			</copy>
+	</target>
+		
+
+	<!--=======================================================================
+			Copy the Jar Files
+	=======================================================================-->
+	
+
+	<target name="copy-spp-portal-web-jars" description="Copy the Jar Files to the server">
+		<echo message="Copy spp related Jar's to the server"/>
+ 		<copy todir="${dest.portal.web.dir}/opt/spp/bea/weblogic81/common/nodemanager/${instance.name}/stage/Vignette_Portal/portal.war/WEB-INF/lib">	
+			<fileset dir="${dir.build}/spp-portal-web/spp-portal-web/WEB-INF/lib/" 
+					 includes="spp*.jar"/>
+
+		</copy>
+
+	</target>
+
+
+	<!--=======================================================================
+			Delete the Directories created by the script				
+	=======================================================================-->	
+	
+	
+	<target name="delete-build-directory" description="Delete created Delete Directory">
+		<echo message="Delete the Build directory created by the script"/>
+		<delete dir="${dir.build}\spp-portal-login-portlet"/>
+	</target>
+ 	
+	
+	<target name="all" description="Executing all the steps One by One"
+		depends="
+				backup-existing,
+				delete-existing-application,
+				make-dir,
+				copy-spp-portal-login-portlet,
+				copy-spp-portal-web,
+				explode-spp-portal-login-portlet,
+				explode-spp-portal-web,
+				delete-spp-portal-login-portlet,
+				delete-spp-portal-portal-web,
+				copy-to-server-spp-portal-login-portlet,
+				copy-spp-portal-web-web.xml,
+				copy-spp-portal-web-classes,
+				copy-spp-portal-web-jsps,
+				copy-spp-portal-web-html,
+				copy-spp-portal-web-jars,
+				delete-build-directory
+			"
+		/>
+</project>

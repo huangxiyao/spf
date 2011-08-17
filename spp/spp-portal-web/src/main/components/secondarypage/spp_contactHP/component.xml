@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<epideploy:component 
+	component-id="sppContactHPInstance" 
+	component-type="Secondary Pages" 
+	description="SPP Contact HP Page Instance" 
+	epi-version="7.2.1" 
+	epi-build="223" 
+	major-version="1" 
+	minor-version="0" 
+	build-version="0" 
+	title="SPP Contact HP Page" 
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+ <epideploy:required-component 
+ 	component-id="sppContactHP" 
+ 	component-type="Secondary Page Types" 
+ 	major-version="1" 
+ 	minor-version="0"
+ />
+ <epideploy:detail>
+  <style-info 
+	apply-template-header="false" 
+	description="SPP Contact HP Page Instance" 
+	friendly-id="sppContactHPInstance" 
+	id="sppContactHPInstance" 
+	is-system="false" 
+	primary-filename="contactHP.jsp" 
+	processing-type="ACTION_BASED" 
+	template-default="true" 
+	template-uid="sppContactHP" 
+	title="SPP Contact HP Page" 
+	visible="true">
+   <actions>
+    <group-reference group-id="INHERIT_ALL"/>
+   </actions>
+  </style-info>
+ </epideploy:detail>
+</epideploy:component>
+

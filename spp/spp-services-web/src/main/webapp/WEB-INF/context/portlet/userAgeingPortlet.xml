@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- Services -->
+	
+	<!-- Validators -->
+	<bean id="ageingValidator" class="com.hp.spp.portlets.reports.userageing.validator.AgeingReportValidator"/>
+
+	
+	<!-- Bean mappings -->
+	<bean id="ageingController" class="com.hp.spp.portlets.reports.userageing.contoller.AgeingReportController" >		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="lastLoginCommand"/>
+		<property name="commandClass" value="com.hp.spp.portlets.reports.userageing.commands.LastLoginCommand"/>
+		<property name="formView" value="report"/>
+		<property name="successView" value="XLSReport"/>
+		<property name="validator"><ref bean="ageingValidator"/></property> 
+	</bean>
+
+	<!-- Handler Mapping, to map action request to controller, key values are to 
+	be sent in the view's action param -->
+	
+	<bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
+
+	<bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+        	<property name="order" value="10"/>
+		<property name="interceptors">
+			<list>
+				<ref bean="portletNameInterceptor"/>
+				<ref bean="parameterMappingInterceptor"/>
+			</list>
+		</property>
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view">
+					<map>	
+						<entry key="ageingReport"><ref bean="ageingController"/></entry>
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>	
+	
+	
+	
+	<bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="order" value="20"/>
+		<property name="interceptors">
+			<list>
+				<ref bean="portletNameInterceptor"/>
+			</list>
+		</property>
+		<property name="portletModeMap">
+			<map>
+				<entry key="view"><ref bean="ageingController"/></entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="defaultExceptionHandler" parent="defaultUserAgeReportExceptionHandlerTemplate"/>
+
+</beans>

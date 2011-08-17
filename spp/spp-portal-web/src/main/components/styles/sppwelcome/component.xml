@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold"
+	component-id="VebaZRQRacWTbQVWURaaSdRQYVdaaYfQ" component-type="Styles"
+	description="" epi-build="251" epi-version="7.2.2" major-version="1"
+	minor-version="0" title="SPP Welcome Message"
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:required-component component-id="ZacSYWSSUTSYRQVWURaaSdRQYVdaaYfQ"
+		component-type="Style Types" major-version="1" minor-version="0"/>
+	<epideploy:detail>
+		<style-info apply-template-header="false" description=""
+			friendly-id="sppwelcomemessage"
+			id="VebaZRQRacWTbQVWURaaSdRQYVdaaYfQ" is-system="false"
+			primary-filename="SPPWelcome.jsp" processing-type="JSP_BASED"
+			template-default="false"
+			template-uid="ZacSYWSSUTSYRQVWURaaSdRQYVdaaYfQ"
+			title="SPP Welcome Message" visible="true"/>
+	</epideploy:detail>
+</epideploy:component>

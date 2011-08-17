@@ -1,0 +1,80 @@
+<!DOCTYPE databases PUBLIC 
+  "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+  "http://castor.exolab.org/mapping.dtd">
+
+<mapping>
+	
+	<class name="com.hp.spp.search.audience.service.AudiencingServiceRequest">
+		<map-to xml="AudiencingServiceRequest"/>
+		<field name="User"  type="com.hp.spp.search.common.User">
+			<bind-xml name="user" node="element"/>
+		</field>
+		<field name="Site"  type="com.hp.spp.search.common.Site">
+			<bind-xml name="site" node="element"/>
+		</field>
+		<field name="ItemList"  type="com.hp.spp.search.common.ItemList">
+			<bind-xml name="itemList" node="element"/>
+		</field>
+		
+	</class>
+	
+	<class name="com.hp.spp.search.common.User">
+		<map-to xml="User"/>
+		<field name="HppId" type="java.lang.String">
+			<bind-xml name="hppId" node="element"/>
+		</field>
+	</class>
+
+	<class name="com.hp.spp.search.common.Site">
+		<map-to xml="Site"/>
+		<field name="Name" type="java.lang.String">
+			<bind-xml name="Name" node="element"/>
+		</field>
+	</class>
+
+	<class name="com.hp.spp.search.common.NavigationItem">
+		<map-to xml="NavigationItem"/>
+		<field name="Id">
+			<bind-xml name="Id" node="element"/>
+		</field>
+	</class>
+
+	<class name="com.hp.spp.search.common.ItemList">
+		<map-to xml="ItemList"/>
+		<field name="navigationItemList" type="com.hp.spp.search.common.NavigationItem" collection="collection">
+			<bind-xml name="NavigationItem"/> 
+		</field>
+	</class>
+	
+	<class name="com.hp.spp.search.audience.service.AudiencingServiceResponse">
+		<map-to xml="AudiencingServiceResponse"/>
+		<field name="ErrorResponse"  type="com.hp.spp.search.audience.service.ErrorResponse">
+			<bind-xml name="ErrorResponse" node="element"/>
+		</field>
+		<field name="SuccessResponse"  type="com.hp.spp.search.audience.service.SuccessResponse">
+			<bind-xml name="SuccessResponse" node="element"/>
+		</field>
+			
+	</class>
+	
+	<class name="com.hp.spp.search.audience.service.SuccessResponse">
+		<map-to xml="SuccessResponse"/>
+		<field name="ItemList"  type="com.hp.spp.search.common.ItemList">
+			<bind-xml name="ItemList" node="element"/>
+		</field>
+				
+	</class>
+	
+	<class name="com.hp.spp.search.audience.service.ErrorResponse">
+		<map-to xml="ErrorResponse"/>
+		<field name="Code"  type="java.lang.String">
+			<bind-xml name="Code" node="element"/>
+		</field>
+		
+		<field name="Description"  type="java.lang.String">
+			<bind-xml name="Description" node="element"/>
+		</field>
+					
+	</class>
+	
+</mapping>

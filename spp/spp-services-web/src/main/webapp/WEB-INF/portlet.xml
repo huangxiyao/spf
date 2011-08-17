@@ -1,0 +1,251 @@
+<portlet-app
+		xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
+		version="1.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
+                        http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
+
+
+		<!-- SPP Test Portlet -->
+		<portlet>
+			<description>SPP Test content portlet</description>
+			<portlet-name>SPPTestContentPortlet</portlet-name>
+			<display-name>SPP Test Content Portlet</display-name>
+
+			<portlet-class>com.hp.spp.portlets.test.SPPTestContentPortlet</portlet-class>
+
+			<expiration-cache>0</expiration-cache>
+
+			<supports>
+				<mime-type>text/html</mime-type>
+				<portlet-mode>VIEW</portlet-mode>
+				<portlet-mode>CONFIG</portlet-mode>
+			</supports>
+
+			<supported-locale>en</supported-locale>
+
+			<portlet-info>
+				<title>SPP Test Content Portlet</title>
+				<short-title>SPP Test Content Portlet</short-title>
+				<keywords>SPPTestContentPortlet</keywords>
+			</portlet-info>
+		</portlet>
+		<!-- End SPP Test Portlet -->
+
+	
+		<!-- User Ageing report -->
+		<portlet>
+		<description>User Ageing report</description>
+        <portlet-name>AgeingReport</portlet-name>
+		<portlet-class>org.apache.portals.bridges.portletfilter.FilterPortlet</portlet-class>
+		<init-param>
+			<name>portlet-class</name>
+			<value>org.springframework.web.portlet.DispatcherPortlet</value>
+		</init-param>
+		<init-param>
+			<name>portlet-filters</name>
+			<value>com.hp.spp.portlets.filter.context.UserContextFilter</value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:UserContextUrl</name>
+			<value>http://localhost:27101/portal/getUserProfile.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:ProxyHost</name>
+			<value></value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:ProxyPort</name>
+			<value></value>
+		</init-param>		
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/portlet/userAgeingPortlet.xml</value>
+		</init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+   
+        <portlet-info>
+            <title>User Ageing report</title>
+        </portlet-info>      
+    </portlet>
+
+
+
+	<!-- SPP UGS Portlet  -->
+	<portlet>
+		<description>Group Management Portlet</description>
+        <portlet-name>Groups</portlet-name>
+		<portlet-class>org.apache.portals.bridges.portletfilter.FilterPortlet</portlet-class>
+		<init-param>
+			<name>portlet-class</name>
+			<value>org.springframework.web.portlet.DispatcherPortlet</value>
+		</init-param>
+		<init-param>
+			<name>portlet-filters</name>
+			<value>com.hp.spp.portlets.filter.context.UserContextFilter</value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:UserContextUrl</name>
+			<value>http://localhost:27101/portal/getUserProfile.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:ProxyHost</name>
+			<value></value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:ProxyPort</name>
+			<value></value>
+		</init-param>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/portlet/groupsPortlet.xml</value>
+		</init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        
+        <supported-locale>en</supported-locale>
+        <supported-locale>ix</supported-locale>
+        <supported-locale>fr</supported-locale>
+        <supported-locale>de</supported-locale>
+        <supported-locale>it</supported-locale>
+        <supported-locale>pt</supported-locale>
+        <supported-locale>nl</supported-locale>
+        <supported-locale>cs</supported-locale>
+        <supported-locale>da</supported-locale>
+        <supported-locale>bg</supported-locale>
+        <supported-locale>el</supported-locale>
+        <supported-locale>es</supported-locale>
+        <supported-locale>fi</supported-locale>
+        <supported-locale>hr</supported-locale>
+        <supported-locale>hu</supported-locale>
+        <supported-locale>no</supported-locale>
+        <supported-locale>pl</supported-locale>
+        <supported-locale>ro</supported-locale>
+        <supported-locale>ru</supported-locale>
+        <supported-locale>sk</supported-locale>
+        <supported-locale>sv</supported-locale>
+        <supported-locale>tr</supported-locale>
+        <supported-locale>sl</supported-locale>
+
+		<resource-bundle>GroupsPortlet</resource-bundle>
+        
+        <portlet-info>
+            <title>User Group Management</title>
+        </portlet-info>      
+    </portlet>
+    
+	<!-- SPP EServices Management Portlet  -->
+	<portlet>
+		<description>EServices Management Portlet</description>
+        <portlet-name>EServicesMgt</portlet-name>
+		<portlet-class>org.apache.portals.bridges.portletfilter.FilterPortlet</portlet-class>
+		<init-param>
+			<name>portlet-class</name>
+			<value>org.springframework.web.portlet.DispatcherPortlet</value>
+		</init-param>
+		<init-param>
+			<name>portlet-filters</name>
+			<value>com.hp.spp.portlets.filter.context.UserContextFilter</value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:UserContextUrl</name>
+			<value>http://localhost:27101/portal/getUserProfile.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:ProxyHost</name>
+			<value></value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:ProxyPort</name>
+			<value></value>
+		</init-param>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/portlet/eServicesMgtPortlet.xml</value>
+		</init-param>
+	
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+	
+        <supported-locale>en</supported-locale>
+        <supported-locale>ix</supported-locale>
+        <supported-locale>fr</supported-locale>
+        <supported-locale>de</supported-locale>
+        <supported-locale>it</supported-locale>
+        <supported-locale>pt</supported-locale>
+        <supported-locale>nl</supported-locale>
+        <supported-locale>cs</supported-locale>
+        <supported-locale>da</supported-locale>
+        <supported-locale>bg</supported-locale>
+        <supported-locale>el</supported-locale>
+        <supported-locale>es</supported-locale>
+        <supported-locale>fi</supported-locale>
+        <supported-locale>hr</supported-locale>
+        <supported-locale>hu</supported-locale>
+        <supported-locale>no</supported-locale>
+        <supported-locale>pl</supported-locale>
+        <supported-locale>ro</supported-locale>
+        <supported-locale>ru</supported-locale>
+        <supported-locale>sk</supported-locale>
+        <supported-locale>sv</supported-locale>
+        <supported-locale>tr</supported-locale>
+        <supported-locale>sl</supported-locale>
+
+		<resource-bundle>EServicesPortlet</resource-bundle>
+        
+        <portlet-info>
+            <title>EServices Management Portlet</title>
+        </portlet-info>      
+    </portlet> 
+    
+    	<!-- HPP Report portlet -->
+	<portlet>
+		<description>HPP Support Portlet</description>
+		<portlet-name>HppReport</portlet-name>
+		<portlet-class>org.apache.portals.bridges.portletfilter.FilterPortlet</portlet-class>
+		<init-param>
+			<name>portlet-class</name>
+			<value>org.springframework.web.portlet.DispatcherPortlet</value>
+		</init-param>
+		<init-param>
+			<name>portlet-filters</name>
+			<value>com.hp.spp.portlets.filter.context.UserContextFilter</value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:UserContextUrl</name>
+			<value>http://localhost:27101/portal/getUserProfile.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:ProxyHost</name>
+			<value></value>
+		</init-param>
+		<init-param>
+			<name>com.hp.spp.portlets.filter.context.UserContextFilter:ProxyPort</name>
+			<value></value>
+		</init-param>
+		<init-param>
+			<name>contextConfigLocation</name>
+			<value>/WEB-INF/context/portlet/hppReportPortlet.xml</value>
+		</init-param>
+		<supports>
+		    <mime-type>text/html</mime-type>
+		    <portlet-mode>view</portlet-mode>
+		</supports>
+
+		<portlet-info>
+		    <title>HPP Support report</title>
+		</portlet-info>      
+	</portlet>
+
+	<custom-portlet-mode>
+		<portlet-mode>vignette:config</portlet-mode>
+	</custom-portlet-mode>
+	
+</portlet-app>

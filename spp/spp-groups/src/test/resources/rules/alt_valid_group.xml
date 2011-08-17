@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Group name='ALT_GENERIC_GROUP'>
+	<And>
+		<Equals attribute="userStatus">Active</Equals>
+		<Not>
+			<Equals attribute="userRole">Partner Portal User</Equals>
+		</Not>
+	</And>
+</Group>
+	

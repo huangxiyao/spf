@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold" component-id="SRUcdecWfeabedaeWSWeceRQYVdaaYfQ" component-type="JSP Includes" description="Gpp Search Dummy Page" epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0" title="Gpp Search Dummy Page" xmlns:epideploy="http://www.epicentric.com/deployment">
+ <epideploy:required-component component-id="template0007" component-type="Style Types" major-version="7" minor-version="2"/>
+ <epideploy:detail>
+  <style-info apply-template-header="true" description="Gpp Search Dummy Page" friendly-id="Gpp-Search-Dummy-Page" id="SRUcdecWfeabedaeWSWeceRQYVdaaYfQ" is-system="false" primary-filename="GPP-Search.jsp" processing-type="JSP_BASED" template-default="false" template-uid="template0007" title="Gpp Search Dummy Page" visible="true"/>
+ </epideploy:detail>
+</epideploy:component>

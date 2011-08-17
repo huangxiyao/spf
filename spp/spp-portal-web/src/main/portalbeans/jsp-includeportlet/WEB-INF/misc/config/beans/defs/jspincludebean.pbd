@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<PORTALBEAN
+	ID="jspincludebean"
+	CLASS="com.epicentric.portalbeans.beans.jspincludebean.JSPIncludeBean"
+	VERSION="5"
+	EDITABLE="FALSE"
+	REQUIRES_DETAIL="TRUE"
+	CATEGORY="BUILDINGBLOCK"
+	DISPLAYCATEGORY="building_blocks"
+	TYPE_UID="560c851827484a5d946029217128efa0"
+>
+	<TITLE>JSP Include</TITLE>
+	<NAME>jspinclude</NAME>
+	<ABSTRACT>Include a JSP file into the portal</ABSTRACT>
+	<VIEW
+		ID="MY_PORTAL_VIEW"
+	>
+	</VIEW>
+	<VIEW
+		ID="USER_BEAN_EDIT_VIEW"
+	>
+	</VIEW>
+	<VIEW
+		ID="ADMIN_BEAN_EDIT_VIEW"
+	>
+	</VIEW>
+	<VIEW
+		ID="ADMIN_BEAN_EDIT_PROCESS_VIEW"
+	>
+	</VIEW>
+</PORTALBEAN>

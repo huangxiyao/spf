@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>spp</artifactId>
+		<groupId>com.hp.spp</groupId>
+		<version>4.9.4-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.spp</groupId>
+	<artifactId>spp-ldap-login</artifactId>
+	<packaging>war</packaging>
+	<version>${spp.version}</version>
+	<dependencies>
+		<dependency>
+			<groupId>com.hp.spp</groupId>
+			<artifactId>spp-cache</artifactId>
+			<version>${spp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.spp</groupId>
+			<artifactId>spp-config</artifactId>
+			<version>${spp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.spp</groupId>
+			<artifactId>spp-db</artifactId>
+			<version>${spp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.spp</groupId>
+			<artifactId>spp-profile</artifactId>
+			<version>${spp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.spp</groupId>
+			<artifactId>spp-hpputils</artifactId>
+			<version>${spp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.3</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- This is not a standalone WAR - it's included as dependency in other jars.
+		Setting this dependency to "provided" allows spp-portal-web to not include this jar
+		and rely on Vignette-provided log4j.jar -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.13</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- This is not a standalone WAR - it's included as dependency in other jars.
+		Setting this dependency to "provided" allows spp-portal-web to not include this jar
+		and rely on Vignette-provided commons-logging.jar --> 
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.0.4</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>spp-ldap-login</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<archiveClasses>true</archiveClasses>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

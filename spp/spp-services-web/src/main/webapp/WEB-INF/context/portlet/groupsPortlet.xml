@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<!-- Property Configurer  -->
+	<!--
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>WEB-INF/books.properties</value>
+			</list>
+		</property>
+	</bean>
+	-->
+
+	<!-- Services -->
+
+	<bean id="groupService" class="com.hp.spp.portlets.groups.GroupService">
+		<!-- <property name="initBooks" value="${books.initBooks}"/> -->
+	</bean>
+	
+	<!-- Validators -->
+
+	<!-- 
+	<bean id="bookValidator" class="org.springframework.web.portlet.sample.BookValidator"/>
+	-->
+	<bean id="xmlUploadValidator" class="com.hp.spp.portlets.groups.XMLUploadValidator"/>
+	
+	
+	<bean id="portletMultipartResolver" class="org.springframework.web.portlet.multipart.CommonsPortletMultipartResolver">
+		<property name="maxUploadSize">
+			<value>2048</value>
+		</property>
+	</bean>
+	<!-- Controllers -->
+
+	<bean id="groupControllerTemplate" abstract="true">
+		<!-- <property name="groupService"><ref bean="groupService"/></property> -->
+	</bean>
+
+	<bean id="groupController" class="com.hp.spp.portlets.groups.GroupController" parent="groupControllerTemplate"/>
+	
+	<bean id="groupHistoryController" class="com.hp.spp.portlets.groups.GroupHistoryController" parent="groupControllerTemplate"/>
+	
+	<bean id="groupExportHistoryFormController" class="com.hp.spp.portlets.groups.GroupExportHistoryFormController" parent="groupControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlContent"/>
+		<property name="commandClass" value="com.hp.spp.common.util.xml.XMLContent"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="exportXML"/>
+	</bean>
+	
+	<bean id="groupImportFormController" class="com.hp.spp.portlets.groups.GroupImportFormController" parent="groupControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlUpload"/>
+		<property name="commandClass" value="com.hp.spp.portlets.groups.XMLUpload"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="groupUpdate"/>
+		<property name="validator"><ref bean="xmlUploadValidator"/></property>
+	</bean>
+	
+	<bean id="groupSaveImportFormController" class="com.hp.spp.portlets.groups.GroupSaveImportFormController" parent="groupControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlUpload"/>
+		<property name="commandClass" value="com.hp.spp.portlets.groups.XMLUpload"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="groupsView"/>
+		<property name="validator"><ref bean="xmlUploadValidator"/></property>
+	</bean>
+	
+	<bean id="groupDeleteFormController" class="com.hp.spp.portlets.groups.GroupDeleteFormController" parent="groupControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="groupList"/>
+		<property name="commandClass" value="com.hp.spp.portlets.groups.GroupList"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="groupDelete"/>
+	</bean>
+	
+	<bean id="groupSaveDeleteFormController" class="com.hp.spp.portlets.groups.GroupSaveDeleteFormController" parent="groupControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="groupList"/>
+		<property name="commandClass" value="com.hp.spp.portlets.groups.GroupList"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="groupsView"/>
+	</bean>
+
+	<bean id="groupExportFormController" class="com.hp.spp.portlets.groups.GroupExportFormController" parent="groupControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlContent"/>
+		<property name="commandClass" value="com.hp.spp.common.util.xml.XMLContent"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="exportXML"/>
+	</bean>
+	<!--  
+	<bean id="groupImportFileController" class="com.hp.spp.portlets.groups.GroupImportFileController" parent="groupControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlUpload"/>
+		<property name="commandClass" value="com.hp.spp.portlets.groups.Upload"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="groupUpdate"/>
+	</bean>
+	-->
+	<bean id="groupResetCacheController" class="com.hp.spp.portlets.groups.GroupResetCacheController" parent="groupControllerTemplate"/>
+	
+	<!-- Handler Mapping -->
+	
+	<bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
+
+	<bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+        <property name="order" value="10"/>
+		<property name="interceptors">
+			<list>
+				<ref bean="portletNameInterceptor"/>
+				<ref bean="parameterMappingInterceptor"/>
+			</list>
+		</property>
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view">
+					<map>
+						<entry key="groups"><ref bean="groupController"/></entry>
+						<entry key="importGroup"><ref bean="groupImportFormController"/></entry>
+						<!--
+						<entry key="importGroup"><ref bean="groupImportFileController"/></entry>
+						-->
+						<entry key="saveImportGroup"><ref bean="groupSaveImportFormController"/></entry>
+						<entry key="deleteGroup"><ref bean="groupDeleteFormController"/></entry>
+						<entry key="saveDeleteGroup"><ref bean="groupSaveDeleteFormController"/></entry>
+						<entry key="history"><ref bean="groupHistoryController"/></entry>
+						<entry key="exportHistory"><ref bean="groupExportHistoryFormController"/></entry>
+						<entry key="exportGroup"><ref bean="groupExportFormController"/></entry>
+						<entry key="resetCache"><ref bean="groupResetCacheController"/></entry>
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+        <property name="order" value="20"/>
+		<property name="interceptors">
+			<list>
+				<ref bean="portletNameInterceptor"/>
+			</list>
+		</property>
+		<property name="portletModeMap">
+			<map>
+				<entry key="view"><ref bean="groupController"/></entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- Exceptions Handler -->
+
+	<bean id="defaultExceptionHandler" parent="defaultExceptionHandlerTemplate"/>
+
+</beans>

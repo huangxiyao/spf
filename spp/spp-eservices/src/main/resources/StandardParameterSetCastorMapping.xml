@@ -1,0 +1,36 @@
+<!DOCTYPE databases PUBLIC 
+  "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+  "http://castor.exolab.org/mapping.dtd">
+
+<mapping>
+	<class name="com.hp.spp.eservice.Site">
+		<map-to xml="Site"/>
+		<field name="Name">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+		<field name="StandardParameterSet" type="com.hp.spp.eservice.StandardParameterSet" collection="set">
+			<bind-xml name="StdParameterSet"/>
+		</field>
+	</class>
+	
+	<class name="com.hp.spp.eservice.StandardParameterSet">
+		<map-to xml="StdParameterSet"/>
+		<field name="Name">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+		<field name="ParameterList" type="com.hp.spp.eservice.Parameter" collection="set">
+			<bind-xml name="parameter"/>
+		</field>
+	</class>
+
+	<class name="com.hp.spp.eservice.Parameter">
+		<map-to xml="Parameter"/>
+		<field name="Name">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+		<field name="expression">
+			<bind-xml name="expression" node="element"/>
+		</field>
+	</class>
+
+</mapping>

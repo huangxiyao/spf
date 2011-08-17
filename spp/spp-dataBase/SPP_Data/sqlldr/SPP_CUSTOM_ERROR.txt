@@ -1,0 +1,110 @@
+smartportal|en|0|You are not authorized to login to HP Smart Portal. Either your user ID or password is incorrect, or your account is inactive.
+smartportal|bg|0|Нямате права да влизате в портала НР Smart. Или вашето потребителско ID, или паролата ви са грешни, или акаунтът ви не е активен.
+smartportal|hr|0|Nemate dopusten pristup logiranju na HP Smart Portal. Ili su Vam korisnicko ime i zaporka neispravni ili Vam racun nije aktiviran.
+smartportal|cs|0|Nejste oprávněni přihlásit se do HP Smart Portálu. Buď je Vaše uživatelské ID nebo heslo nesprávné nebo je Váš účet neaktivní.
+smartportal|da|0|Du kan ikke  logge på HPs Smartportal. Dit User ID eller password er ikke korrekt eller også er din konto deaktiveret.
+smartportal|nl|0|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Ofwel uw inlognaam/wachtwoord is incorrect of uw account is inactief.
+smartportal|fi|0|Käyttäjätunnustasi ei ole valtuutettu sisäänkirjautumaan HP kumppaniportaaliin. Joko käyttäjätunnuksesi tai salasanasi on väärä tai tunnuksen tila ei ole aktiivinen.
+smartportal|fr|0|Vous n'êtes pas autorisé à vous connecter à HP Smart Portal. Soit votre login ou mot de passe est incorrect, soit votre compte est inactif.
+smartportal|de|0|Der Benutzername und/oder das Passwort sind/ist falsch, oder Ihr Konto ist inaktiv.
+smartportal|el|0|Δεν είστε εξουσιοδοτημένος για σύνδεση στο HP Smart Portal. Είτε έχετε λάθος αναγνωριστικό χρήστη ή κωδικό είτε ο λογαριασμός σας είναι ανενεργός.
+smartportal|hu|0|Ön nem jogosult a HP Smart Portalra való bejelentkezésre. Lehet hibás az azonosító, a jelszó vagy a státusza inaktív.
+smartportal|it|0|Non sei autorizzato alla login in HP Smart Portal. O la User ID o la Password non è corretta, o il Contatto non è attivo.
+smartportal|no|0|Du mangler tilgang til HP Smart Portal. Dette skyldes enten feil i oppgitt brukernavn/passord, eller at brukeren er slettet.
+smartportal|pl|0|Nie masz upoważnienia aby zalogować się do portalu - HP Smart Portal. Zostało podane niewłaściwe ID użytkownika lub hasło albo Twoje konto jest nieaktywne.
+smartportal|pt|0|Você não está autorizado a fazer a entrar no HP Smart Portal. Talvez o seu ID de utilizador ou palavra chave estejam incorrectos ou a sua conta esteja inactiva.
+smartportal|ro|0|Nu sunteti autorizat sa va logati la Portalul pentru Parteneri HP. Fie parola sau user ID-ul sunt incorecte, fie contul dv nu este activ.
+smartportal|ru|0|В доступе на портал отказано. Либо ваш логин или пароль введены неверно, либо ваш акаунт не активен.
+smartportal|sk|0|Nie ste oprávnený vstúpiť do HP Smart Portálu. Vaše užívateľské ID alebo heslo je nesprávne, prípadne Váš účet je neaktívny.
+smartportal|sl|0|Nimate pooblastila za prijavo na HP Smart Portal. Vnesli ste napačen uporabniški ID ali geslo, ali pa je vaš račun neaktiven.
+smartportal|es|0|Error de login. Tu identificador o contraseña son erroneos, o tu cuenta no está activada.
+smartportal|sv|0|Du har ej rättighet att logga in på HP Smart Portal. Antingen har du inkorrekt användar-ID eller så är ditt konto inaktivt.
+smartportal|tr|0|HP İş Ortakları Portalında oturum açmanıza izin verilmiyor. Kullanıcı kimliğiniz ya da şifreniz yanlış veya hesabınız inaktif.
+smartportal|en|50009|You are not authorized to login to HP Smart Portal. Either your user ID or password is incorrect, or your account is inactive.
+smartportal|bg|50009|Нямате права да влизате в портала НР Smart. Или вашето потребителско ID, или паролата ви са грешни, или акаунтът ви не е активен.
+smartportal|hr|50009|Nemate dopusten pristup logiranju na HP Smart Portal. Ili su Vam korisnicko ime i zaporka neispravni ili Vam racun nije aktiviran.
+smartportal|cs|50009|Nejste oprávněni přihlásit se do HP Smart Portálu. Buď je Vaše uživatelské ID nebo heslo nesprávné nebo je Váš účet neaktivní.
+smartportal|da|50009|Du kan ikke  logge på HPs Smartportal. Dit User ID eller password er ikke korrekt eller også er din konto deaktiveret.
+smartportal|nl|50009|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Ofwel uw inlognaam/wachtwoord is incorrect of uw account is inactief.
+smartportal|fi|50009|Käyttäjätunnustasi ei ole valtuutettu sisäänkirjautumaan HP kumppaniportaaliin. Joko käyttäjätunnuksesi tai salasanasi on väärä tai tunnuksen tila ei ole aktiivinen.
+smartportal|fr|50009|Vous n'êtes pas autorisé à vous connecter à HP Smart Portal. Soit votre login ou mot de passe est incorrect, soit votre compte est inactif.
+smartportal|de|50009|Der Benutzername und/oder das Passwort sind/ist falsch, oder Ihr Konto ist inaktiv.
+smartportal|el|50009|Δεν είστε εξουσιοδοτημένος για σύνδεση στο HP Smart Portal. Είτε έχετε λάθος αναγνωριστικό χρήστη ή κωδικό είτε ο λογαριασμός σας είναι ανενεργός.
+smartportal|hu|50009|Ön nem jogosult a HP Smart Portalra való bejelentkezésre. Lehet hibás az azonosító, a jelszó vagy a státusza inaktív.
+smartportal|it|50009|Non sei autorizzato alla login in HP Smart Portal. O la User ID o la Password non è corretta, o il Contatto non è attivo.
+smartportal|no|50009|Du mangler tilgang til HP Smart Portal. Dette skyldes enten feil i oppgitt brukernavn/passord, eller at brukeren er slettet.
+smartportal|pl|50009|Nie masz upoważnienia aby zalogować się do portalu - HP Smart Portal. Zostało podane niewłaściwe ID użytkownika lub hasło albo Twoje konto jest nieaktywne.
+smartportal|pt|50009|Você não está autorizado a fazer a entrar no HP Smart Portal. Talvez o seu ID de utilizador ou palavra chave estejam incorrectos ou a sua conta esteja inactiva.
+smartportal|ro|50009|Nu sunteti autorizat sa va logati la Portalul pentru Parteneri HP. Fie parola sau user ID-ul sunt incorecte, fie contul dv nu este activ.
+smartportal|ru|50009|В доступе на портал отказано. Либо ваш логин или пароль введены неверно, либо ваш акаунт не активен.
+smartportal|sk|50009|Nie ste oprávnený vstúpiť do HP Smart Portálu. Vaše užívateľské ID alebo heslo je nesprávne, prípadne Váš účet je neaktívny.
+smartportal|sl|50009|Nimate pooblastila za prijavo na HP Smart Portal. Vnesli ste napačen uporabniški ID ali geslo, ali pa je vaš račun neaktiven.
+smartportal|es|50009|Error de login. Tu identificador o contraseña son erroneos, o tu cuenta no está activada.
+smartportal|sv|50009|Du har ej rättighet att logga in på HP Smart Portal. Antingen har du inkorrekt användar-ID eller så är ditt konto inaktivt.
+smartportal|tr|50009|HP İş Ortakları Portalında oturum açmanıza izin verilmiyor. Kullanıcı kimliğiniz ya da şifreniz yanlış veya hesabınız inaktif.
+smartportal|en|50010|You are not authorized to login to HP Smart Portal. Either your user ID or password is incorrect, or your account is inactive.
+smartportal|bg|50010|Нямате права да влизате в портала НР Smart. Или вашето потребителско ID, или паролата ви са грешни, или акаунтът ви не е активен.
+smartportal|hr|50010|Nemate dopusten pristup logiranju na HP Smart Portal. Ili su Vam korisnicko ime i zaporka neispravni ili Vam racun nije aktiviran.
+smartportal|cs|50010|Nejste oprávněni přihlásit se do HP Smart Portálu. Buď je Vaše uživatelské ID nebo heslo nesprávné nebo je Váš účet neaktivní.
+smartportal|da|50010|Du kan ikke  logge på HPs Smartportal. Dit User ID eller password er ikke korrekt eller også er din konto deaktiveret.
+smartportal|nl|50010|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Ofwel uw inlognaam/wachtwoord is incorrect of uw account is inactief.
+smartportal|fi|50010|Käyttäjätunnustasi ei ole valtuutettu sisäänkirjautumaan HP kumppaniportaaliin. Joko käyttäjätunnuksesi tai salasanasi on väärä tai tunnuksen tila ei ole aktiivinen.
+smartportal|fr|50010|Vous n'êtes pas autorisé à vous connecter à HP Smart Portal. Soit votre login ou mot de passe est incorrect, soit votre compte est inactif.
+smartportal|de|50010|Der Benutzername und/oder das Passwort sind/ist falsch, oder Ihr Konto ist inaktiv.
+smartportal|el|50010|Δεν είστε εξουσιοδοτημένος για σύνδεση στο HP Smart Portal. Είτε έχετε λάθος αναγνωριστικό χρήστη ή κωδικό είτε ο λογαριασμός σας είναι ανενεργός.
+smartportal|hu|50010|Ön nem jogosult a HP Smart Portalra való bejelentkezésre. Lehet hibás az azonosító, a jelszó vagy a státusza inaktív.
+smartportal|it|50010|Non sei autorizzato alla login in HP Smart Portal. O la User ID o la Password non è corretta, o il Contatto non è attivo.
+smartportal|no|50010|Du mangler tilgang til HP Smart Portal. Dette skyldes enten feil i oppgitt brukernavn/passord, eller at brukeren er slettet.
+smartportal|pl|50010|Nie masz upoważnienia aby zalogować się do portalu - HP Smart Portal. Zostało podane niewłaściwe ID użytkownika lub hasło albo Twoje konto jest nieaktywne.
+smartportal|pt|50010|Você não está autorizado a fazer a entrar no HP Smart Portal. Talvez o seu ID de utilizador ou palavra chave estejam incorrectos ou a sua conta esteja inactiva.
+smartportal|ro|50010|Nu sunteti autorizat sa va logati la Portalul pentru Parteneri HP. Fie parola sau user ID-ul sunt incorecte, fie contul dv nu este activ.
+smartportal|ru|50010|В доступе на портал отказано. Либо ваш логин или пароль введены неверно, либо ваш акаунт не активен.
+smartportal|sk|50010|Nie ste oprávnený vstúpiť do HP Smart Portálu. Vaše užívateľské ID alebo heslo je nesprávne, prípadne Váš účet je neaktívny.
+smartportal|sl|50010|Nimate pooblastila za prijavo na HP Smart Portal. Vnesli ste napačen uporabniški ID ali geslo, ali pa je vaš račun neaktiven.
+smartportal|es|50010|Error de login. Tu identificador o contraseña son erroneos, o tu cuenta no está activada.
+smartportal|sv|50010|Du har ej rättighet att logga in på HP Smart Portal. Antingen har du inkorrekt användar-ID eller så är ditt konto inaktivt.
+smartportal|tr|50010|HP İş Ortakları Portalında oturum açmanıza izin verilmiyor. Kullanıcı kimliğiniz ya da şifreniz yanlış veya hesabınız inaktif.
+smartportal|en|50011|You are not authorized to login to HP Smart Portal. Either your user ID or password is incorrect, or your account is inactive.
+smartportal|bg|50011|Нямате права да влизате в портала НР Smart. Или вашето потребителско ID, или паролата ви са грешни, или акаунтът ви не е активен.
+smartportal|hr|50011|Nemate dopusten pristup logiranju na HP Smart Portal. Ili su Vam korisnicko ime i zaporka neispravni ili Vam racun nije aktiviran.
+smartportal|cs|50011|Nejste oprávněni přihlásit se do HP Smart Portálu. Buď je Vaše uživatelské ID nebo heslo nesprávné nebo je Váš účet neaktivní.
+smartportal|da|50011|Du kan ikke  logge på HPs Smartportal. Dit User ID eller password er ikke korrekt eller også er din konto deaktiveret.
+smartportal|nl|50011|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Ofwel uw inlognaam/wachtwoord is incorrect of uw account is inactief.
+smartportal|fi|50011|Käyttäjätunnustasi ei ole valtuutettu sisäänkirjautumaan HP kumppaniportaaliin. Joko käyttäjätunnuksesi tai salasanasi on väärä tai tunnuksen tila ei ole aktiivinen.
+smartportal|fr|50011|Vous n'êtes pas autorisé à vous connecter à HP Smart Portal. Soit votre login ou mot de passe est incorrect, soit votre compte est inactif.
+smartportal|de|50011|Der Benutzername und/oder das Passwort sind/ist falsch, oder Ihr Konto ist inaktiv.
+smartportal|el|50011|Δεν είστε εξουσιοδοτημένος για σύνδεση στο HP Smart Portal. Είτε έχετε λάθος αναγνωριστικό χρήστη ή κωδικό είτε ο λογαριασμός σας είναι ανενεργός.
+smartportal|hu|50011|Ön nem jogosult a HP Smart Portalra való bejelentkezésre. Lehet hibás az azonosító, a jelszó vagy a státusza inaktív.
+smartportal|it|50011|Non sei autorizzato alla login in HP Smart Portal. O la User ID o la Password non è corretta, o il Contatto non è attivo.
+smartportal|no|50011|Du mangler tilgang til HP Smart Portal. Dette skyldes enten feil i oppgitt brukernavn/passord, eller at brukeren er slettet.
+smartportal|pl|50011|Nie masz upoważnienia aby zalogować się do portalu - HP Smart Portal. Zostało podane niewłaściwe ID użytkownika lub hasło albo Twoje konto jest nieaktywne.
+smartportal|pt|50011|Você não está autorizado a fazer a entrar no HP Smart Portal. Talvez o seu ID de utilizador ou palavra chave estejam incorrectos ou a sua conta esteja inactiva.
+smartportal|ro|50011|Nu sunteti autorizat sa va logati la Portalul pentru Parteneri HP. Fie parola sau user ID-ul sunt incorecte, fie contul dv nu este activ.
+smartportal|ru|50011|В доступе на портал отказано. Либо ваш логин или пароль введены неверно, либо ваш акаунт не активен.
+smartportal|sk|50011|Nie ste oprávnený vstúpiť do HP Smart Portálu. Vaše užívateľské ID alebo heslo je nesprávne, prípadne Váš účet je neaktívny.
+smartportal|sl|50011|Nimate pooblastila za prijavo na HP Smart Portal. Vnesli ste napačen uporabniški ID ali geslo, ali pa je vaš račun neaktiven.
+smartportal|es|50011|Error de login. Tu identificador o contraseña son erroneos, o tu cuenta no está activada.
+smartportal|sv|50011|Du har ej rättighet att logga in på HP Smart Portal. Antingen har du inkorrekt användar-ID eller så är ditt konto inaktivt.
+smartportal|tr|50011|HP İş Ortakları Portalında oturum açmanıza izin verilmiyor. Kullanıcı kimliğiniz ya da şifreniz yanlış veya hesabınız inaktif.
+smartportal|en|50013|You are not authorized to login to HP Smart Portal. Either your user ID or password is incorrect, or your account is inactive.
+smartportal|bg|50013|Нямате права да влизате в портала НР Smart. Или вашето потребителско ID, или паролата ви са грешни, или акаунтът ви не е активен.
+smartportal|hr|50013|Nemate dopusten pristup logiranju na HP Smart Portal. Ili su Vam korisnicko ime i zaporka neispravni ili Vam racun nije aktiviran.
+smartportal|cs|50013|Nejste oprávněni přihlásit se do HP Smart Portálu. Buď je Vaše uživatelské ID nebo heslo nesprávné nebo je Váš účet neaktivní.
+smartportal|da|50013|Du kan ikke  logge på HPs Smartportal. Dit User ID eller password er ikke korrekt eller også er din konto deaktiveret.
+smartportal|nl|50013|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Ofwel uw inlognaam/wachtwoord is incorrect of uw account is inactief.
+smartportal|fi|50013|Käyttäjätunnustasi ei ole valtuutettu sisäänkirjautumaan HP kumppaniportaaliin. Joko käyttäjätunnuksesi tai salasanasi on väärä tai tunnuksen tila ei ole aktiivinen.
+smartportal|fr|50013|Vous n'êtes pas autorisé à vous connecter à HP Smart Portal. Soit votre login ou mot de passe est incorrect, soit votre compte est inactif.
+smartportal|de|50013|Der Benutzername und/oder das Passwort sind/ist falsch, oder Ihr Konto ist inaktiv.
+smartportal|el|50013|Δεν είστε εξουσιοδοτημένος για σύνδεση στο HP Smart Portal. Είτε έχετε λάθος αναγνωριστικό χρήστη ή κωδικό είτε ο λογαριασμός σας είναι ανενεργός.
+smartportal|hu|50013|Ön nem jogosult a HP Smart Portalra való bejelentkezésre. Lehet hibás az azonosító, a jelszó vagy a státusza inaktív.
+smartportal|it|50013|Non sei autorizzato alla login in HP Smart Portal. O la User ID o la Password non è corretta, o il Contatto non è attivo.
+smartportal|no|50013|Du mangler tilgang til HP Smart Portal. Dette skyldes enten feil i oppgitt brukernavn/passord, eller at brukeren er slettet.
+smartportal|pl|50013|Nie masz upoważnienia aby zalogować się do portalu - HP Smart Portal. Zostało podane niewłaściwe ID użytkownika lub hasło albo Twoje konto jest nieaktywne.
+smartportal|pt|50013|Você não está autorizado a fazer a entrar no HP Smart Portal. Talvez o seu ID de utilizador ou palavra chave estejam incorrectos ou a sua conta esteja inactiva.
+smartportal|ro|50013|Nu sunteti autorizat sa va logati la Portalul pentru Parteneri HP. Fie parola sau user ID-ul sunt incorecte, fie contul dv nu este activ.
+smartportal|ru|50013|В доступе на портал отказано. Либо ваш логин или пароль введены неверно, либо ваш акаунт не активен.
+smartportal|sk|50013|Nie ste oprávnený vstúpiť do HP Smart Portálu. Vaše užívateľské ID alebo heslo je nesprávne, prípadne Váš účet je neaktívny.
+smartportal|sl|50013|Nimate pooblastila za prijavo na HP Smart Portal. Vnesli ste napačen uporabniški ID ali geslo, ali pa je vaš račun neaktiven.
+smartportal|es|50013|Error de login. Tu identificador o contraseña son erroneos, o tu cuenta no está activada.
+smartportal|sv|50013|Du har ej rättighet att logga in på HP Smart Portal. Antingen har du inkorrekt användar-ID eller så är ditt konto inaktivt.
+smartportal|tr|50013|HP İş Ortakları Portalında oturum açmanıza izin verilmiyor. Kullanıcı kimliğiniz ya da şifreniz yanlış veya hesabınız inaktif.

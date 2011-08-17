@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>com.hp.spp</groupId>
+		<version>4.9.4-SNAPSHOT</version>
+		<artifactId>spp</artifactId>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hp.spp</groupId>
+	<artifactId>sites</artifactId>
+	<version>${spp.version}</version>
+	<dependencies>
+		<dependency>
+			<groupId>net.sf</groupId>
+			<artifactId>ant-contrib</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>sites</finalName>
+		<filters>
+			<filter>../filters/${env}.properties</filter>
+		</filters>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<tasks>
+								<taskdef
+										resource="net/sf/antcontrib/antcontrib.properties"
+										classpathref="maven.compile.classpath"/>
+								<ant inheritRefs="true">
+									<property name="target.dir"
+											  value="${project.build.directory}"/>
+								</ant>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

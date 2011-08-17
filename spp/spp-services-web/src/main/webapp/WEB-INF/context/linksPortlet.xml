@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="portletModeMap">
+			<map>
+				<entry key="view"><ref bean="linksController" /></entry>
+				<entry key="help"><ref bean="linksHelpController" /></entry>
+				<entry key="config"><ref bean="linksConfigController" /></entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="linksController" class="com.hp.portlets.wsrptests.springportlet.LinksController" />
+	<bean id="linksHelpController" class="com.hp.portlets.wsrptests.springportlet.LinksHelpController" />
+
+	<bean id="linkBeanValidator" class="com.hp.portlets.wsrptests.springportlet.LinkBeanValidator" />
+
+	<bean id="linksConfigController" class="com.hp.portlets.wsrptests.springportlet.LinksConfigController">
+		<property name="commandClass" value="com.hp.portlets.wsrptests.springportlet.LinkBean" />
+		<property name="commandName" value="linksConfig" />
+		<property name="formView" value="linksConfigForm" />
+		<property name="successView" value="linksConfigForm" />
+		<property name="validator" ref="linkBeanValidator" />
+	</bean>
+</beans>

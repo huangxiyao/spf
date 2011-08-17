@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold" component-id="ZTYSZSScabTTVUaeRYcTWZRQYVdaaYfQ" component-type="Styles" description="" epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0" title="SPP Localization" xmlns:epideploy="http://www.epicentric.com/deployment">
+ <epideploy:required-component component-id="TbUaWSUdaTcWTUaeRYcTWZRQYVdaaYfQ" component-type="Style Types" major-version="1" minor-version="0"/>
+ <epideploy:detail>
+  <style-info apply-template-header="false" description="" friendly-id="sppqalocalization" id="ZTYSZSScabTTVUaeRYcTWZRQYVdaaYfQ" is-system="false" primary-filename="" processing-type="JSP_BASED" template-default="false" template-uid="TbUaWSUdaTcWTUaeRYcTWZRQYVdaaYfQ" title="SPP Localization" visible="true"/>
+ </epideploy:detail>
+</epideploy:component>

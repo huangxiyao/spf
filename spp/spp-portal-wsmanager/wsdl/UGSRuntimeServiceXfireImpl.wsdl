@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://service.asl.ugs.runtime.hp.com" xmlns:tns="http://service.asl.ugs.runtime.hp.com" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:ns1="http://util.ssa.frameworks.hp.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns3="http://exceptions.shared.ugs.hp.com" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:ns2="http://shared.ugs.hp.com" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://service.asl.ugs.runtime.hp.com">
+<xsd:element name="instanceHealthCheck">
+<xsd:complexType/>
+</xsd:element>
+<xsd:complexType name="anyType2anyTypeMap">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="entry">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="0" name="key" type="xsd:anyType"/>
+<xsd:element maxOccurs="1" minOccurs="0" name="value" type="xsd:anyType"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="instanceHealthCheckResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns1:SSAHealth"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getUsersForGroup">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="groupRequest" nillable="true" type="ns2:GroupRequest"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:complexType name="ArrayOfString">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="getUsersForGroupResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:GroupResponse"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="SiteDoesNotExistException" type="ns3:SiteDoesNotExistException"/>
+<xsd:element name="NoRulesOrGroupsForSiteException" type="ns3:NoRulesOrGroupsForSiteException"/>
+<xsd:element name="UGSSystemException" type="ns3:UGSSystemException"/>
+<xsd:element name="InvalidGroupRequestException" type="ns3:InvalidGroupRequestException"/>
+<xsd:element name="getGroups">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="groupRequest" nillable="true" type="ns2:GroupRequest"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="getGroupsResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="ns2:GroupResponse"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="helloUGSRuntime">
+<xsd:complexType/>
+</xsd:element>
+<xsd:element name="helloUGSRuntimeResponse">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="out" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://util.ssa.frameworks.hp.com">
+<xsd:complexType name="SSAHealth">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="allStatus" nillable="true" type="tns:anyType2anyTypeMap"/>
+<xsd:element minOccurs="0" name="health" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="instance" nillable="true" type="ns1:Instance"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="Instance">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="host" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="port" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="protocol" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="url" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="DiagnosticContext">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="contextON" type="xsd:boolean"/>
+<xsd:element minOccurs="0" name="location" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="messageToLog" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://shared.ugs.hp.com">
+<xsd:complexType name="GroupRequest">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="siteName" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="userContext" nillable="true" type="ns2:ArrayOfUserContext"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="ArrayOfUserContext">
+<xsd:sequence>
+<xsd:element maxOccurs="unbounded" minOccurs="0" name="UserContext" nillable="true" type="ns2:UserContext"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="UserContext">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="key" nillable="true" type="xsd:string"/>
+<xsd:element minOccurs="0" name="value" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="GroupResponse">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="groupList" nillable="true" type="tns:ArrayOfString"/>
+<xsd:element minOccurs="0" name="transactionTime" type="xsd:long"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://exceptions.shared.ugs.hp.com">
+<xsd:complexType name="SiteDoesNotExistException">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="diagnosticContext" nillable="true" type="ns1:DiagnosticContext"/>
+<xsd:element minOccurs="0" name="txID" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="NoRulesOrGroupsForSiteException">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="diagnosticContext" nillable="true" type="ns1:DiagnosticContext"/>
+<xsd:element minOccurs="0" name="txID" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="UGSSystemException">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="diagnosticContext" nillable="true" type="ns1:DiagnosticContext"/>
+<xsd:element minOccurs="0" name="txID" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:complexType name="InvalidGroupRequestException">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="diagnosticContext" nillable="true" type="ns1:DiagnosticContext"/>
+<xsd:element minOccurs="0" name="txID" nillable="true" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="NoRulesOrGroupsForSiteException">
+    <wsdl:part name="NoRulesOrGroupsForSiteException" element="tns:NoRulesOrGroupsForSiteException"/>
+  </wsdl:message>
+  <wsdl:message name="getUsersForGroupRequest">
+    <wsdl:part name="parameters" element="tns:getUsersForGroup"/>
+  </wsdl:message>
+  <wsdl:message name="getGroupsRequest">
+    <wsdl:part name="parameters" element="tns:getGroups"/>
+  </wsdl:message>
+  <wsdl:message name="SiteDoesNotExistException">
+    <wsdl:part name="SiteDoesNotExistException" element="tns:SiteDoesNotExistException"/>
+  </wsdl:message>
+  <wsdl:message name="getUsersForGroupResponse">
+    <wsdl:part name="parameters" element="tns:getUsersForGroupResponse"/>
+  </wsdl:message>
+  <wsdl:message name="helloUGSRuntimeRequest">
+    <wsdl:part name="parameters" element="tns:helloUGSRuntime"/>
+  </wsdl:message>
+  <wsdl:message name="helloUGSRuntimeResponse">
+    <wsdl:part name="parameters" element="tns:helloUGSRuntimeResponse"/>
+  </wsdl:message>
+  <wsdl:message name="InvalidGroupRequestException">
+    <wsdl:part name="InvalidGroupRequestException" element="tns:InvalidGroupRequestException"/>
+  </wsdl:message>
+  <wsdl:message name="instanceHealthCheckResponse">
+    <wsdl:part name="parameters" element="tns:instanceHealthCheckResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getGroupsResponse">
+    <wsdl:part name="parameters" element="tns:getGroupsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="UGSSystemException">
+    <wsdl:part name="UGSSystemException" element="tns:UGSSystemException"/>
+  </wsdl:message>
+  <wsdl:message name="instanceHealthCheckRequest">
+    <wsdl:part name="parameters" element="tns:instanceHealthCheck"/>
+  </wsdl:message>
+  <wsdl:portType name="UGSRuntimeServiceXfireImplPortType">
+    <wsdl:operation name="instanceHealthCheck">
+      <wsdl:input name="instanceHealthCheckRequest" message="tns:instanceHealthCheckRequest"/>
+      <wsdl:output name="instanceHealthCheckResponse" message="tns:instanceHealthCheckResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="getUsersForGroup">
+      <wsdl:input name="getUsersForGroupRequest" message="tns:getUsersForGroupRequest"/>
+      <wsdl:output name="getUsersForGroupResponse" message="tns:getUsersForGroupResponse"/>
+      <wsdl:fault name="SiteDoesNotExistException" message="tns:SiteDoesNotExistException"/>
+      <wsdl:fault name="NoRulesOrGroupsForSiteException" message="tns:NoRulesOrGroupsForSiteException"/>
+      <wsdl:fault name="InvalidGroupRequestException" message="tns:InvalidGroupRequestException"/>
+      <wsdl:fault name="UGSSystemException" message="tns:UGSSystemException"/>
+    </wsdl:operation>
+    <wsdl:operation name="getGroups">
+      <wsdl:input name="getGroupsRequest" message="tns:getGroupsRequest"/>
+      <wsdl:output name="getGroupsResponse" message="tns:getGroupsResponse"/>
+      <wsdl:fault name="SiteDoesNotExistException" message="tns:SiteDoesNotExistException"/>
+      <wsdl:fault name="NoRulesOrGroupsForSiteException" message="tns:NoRulesOrGroupsForSiteException"/>
+      <wsdl:fault name="InvalidGroupRequestException" message="tns:InvalidGroupRequestException"/>
+      <wsdl:fault name="UGSSystemException" message="tns:UGSSystemException"/>
+    </wsdl:operation>
+    <wsdl:operation name="helloUGSRuntime">
+      <wsdl:input name="helloUGSRuntimeRequest" message="tns:helloUGSRuntimeRequest"/>
+      <wsdl:output name="helloUGSRuntimeResponse" message="tns:helloUGSRuntimeResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UGSRuntimeServiceXfireImplHttpBinding" type="tns:UGSRuntimeServiceXfireImplPortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="instanceHealthCheck">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="instanceHealthCheckRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="instanceHealthCheckResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUsersForGroup">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getUsersForGroupRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getUsersForGroupResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SiteDoesNotExistException">
+        <wsdlsoap:fault name="SiteDoesNotExistException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="NoRulesOrGroupsForSiteException">
+        <wsdlsoap:fault name="NoRulesOrGroupsForSiteException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UGSSystemException">
+        <wsdlsoap:fault name="UGSSystemException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidGroupRequestException">
+        <wsdlsoap:fault name="InvalidGroupRequestException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getGroups">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getGroupsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getGroupsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SiteDoesNotExistException">
+        <wsdlsoap:fault name="SiteDoesNotExistException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="NoRulesOrGroupsForSiteException">
+        <wsdlsoap:fault name="NoRulesOrGroupsForSiteException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UGSSystemException">
+        <wsdlsoap:fault name="UGSSystemException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidGroupRequestException">
+        <wsdlsoap:fault name="InvalidGroupRequestException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="helloUGSRuntime">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="helloUGSRuntimeRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="helloUGSRuntimeResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UGSRuntimeServiceXfireImpl">
+    <wsdl:port name="UGSRuntimeServiceXfireImplHttpPort" binding="tns:UGSRuntimeServiceXfireImplHttpBinding">
+      <wsdlsoap:address location="http://htx658a.cce.hp.com:6793/xfire-webservice-webapp/services/UGSRuntimeServiceXfireImpl"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

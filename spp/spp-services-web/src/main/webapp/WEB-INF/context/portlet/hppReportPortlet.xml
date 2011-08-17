@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- Services -->
+	<bean id="hppReportService" class="com.hp.spp.portlets.reports.hppreport.service.HPPReportService" />	
+	
+	<!-- Validators -->
+	
+	<bean id="hppReportValidator" class="com.hp.spp.portlets.reports.hppreport.command.HPPReportValidator"/>
+	
+	<!-- Super Class declaration -->
+
+	<bean id="hppReportControllerTemplate" abstract="true">			
+	</bean>
+	
+	
+	<!-- Bean mappings -->
+	<bean id="hppReportController" class="com.hp.spp.portlets.reports.hppreport.controller.HPPReportController" parent="hppReportControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="hppReport"/>
+		<property name="commandClass" value="com.hp.spp.portlets.reports.hppreport.command.HPPReport"/>		
+		<property name="validator"><ref bean="hppReportValidator"/></property>
+		<property name="formView" value="HppSupportReport"/>
+		<property name="successView" value="HppSupportReport"/>
+		
+	</bean>
+
+	<!-- Bean mappings -->
+	<bean id="addHPPGroupController" class="com.hp.spp.portlets.reports.hppreport.controller.AddHPPGroupController" parent="hppReportControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="hppReport"/>
+		<property name="commandClass" value="com.hp.spp.portlets.reports.hppreport.command.HPPReport"/>
+		<property name="formView" value="HppSupportReport"/>
+		<property name="successView" value="HppSupportReport"/>
+		
+	</bean>
+
+	<!-- Bean mappings -->
+	<bean id="removeHPPGroupController" class="com.hp.spp.portlets.reports.hppreport.controller.RemoveHPPGroupController" parent="hppReportControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="hppReport"/>
+		<property name="commandClass" value="com.hp.spp.portlets.reports.hppreport.command.HPPReport"/>		
+		<property name="formView" value="HppSupportReport"/>
+		<property name="successView" value="HppSupportReport"/>
+		
+	</bean>
+
+
+	
+	<!-- Handler Mapping, to map action request to controller, key values are to 
+	be sent in the view's action param -->
+	
+	<bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
+
+	<bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+        	<property name="order" value="10"/>
+		<property name="interceptors">
+			<list>
+				<ref bean="portletNameInterceptor"/>
+				<ref bean="parameterMappingInterceptor"/>
+			</list>
+		</property>
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view">
+					<map>	
+						<entry key="hppReport"><ref bean="hppReportController"/></entry>
+						<entry key="addGroup"><ref bean="addHPPGroupController"/></entry>
+						<entry key="removeGroup"><ref bean="removeHPPGroupController"/></entry>
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>	
+	
+	
+	
+	<bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="order" value="20"/>
+		<property name="interceptors">
+			<list>
+				<ref bean="portletNameInterceptor"/>
+			</list>
+		</property>
+		<property name="portletModeMap">
+			<map>
+				<entry key="view"><ref bean="hppReportController"/></entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="defaultExceptionHandler" parent="defaultReportExceptionHandlerTemplate"/>
+
+</beans>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site name="Smart Portal">
+	<Group name='CIRC_GROUP_1'>
+		<And>
+			<Equals attribute="userStatus">Active</Equals>
+			<Equals attribute="userProgramName">EU-Competitor Supplies</Equals>
+			<Or>
+				<Equals attribute="userCountryCode">Switzerland</Equals>
+				<Equals attribute="userCountryCode">Lichtenstein</Equals>
+			</Or>
+			<And>
+				<InGroup value="CIRC_GROUP_2"/>
+				<Equals attribute="userRole">Partner Portal Administrator</Equals>
+				<Not>
+					<Or>
+						<Equals attribute="userCountryCode">UK</Equals>
+						<Equals attribute="userCountryCode">IRELAND</Equals>
+					</Or>
+				</Not>
+			</And>
+		</And>
+	</Group>
+	<Group name='CIRC_GROUP_2'>
+		<And>
+			<Equals attribute="userStatus">Active</Equals>
+			<Equals attribute="userProgramName">EU-Competitor Supplies</Equals>
+			<Or>
+				<Equals attribute="userCountryCode">Switzerland</Equals>
+				<Equals attribute="userCountryCode">Lichtenstein</Equals>
+			</Or>
+			<And>
+				<Equals attribute="userRole">Partner Portal Administrator</Equals>
+				<Not>
+					<Or>
+						<Equals attribute="userCountryCode">UK</Equals>
+						<Equals attribute="userCountryCode">IRELAND</Equals>
+						<InGroup value="CIRC_GROUP_3"/>
+					</Or>
+				</Not>
+			</And>
+		</And>
+	</Group>
+	<Group name='CIRC_GROUP_3'>
+		<And>
+			<Equals attribute="userStatus">Active</Equals>
+			<Equals attribute="userProgramName">EU-Competitor Supplies</Equals>
+			<Or>
+				<Equals attribute="userCountryCode">Switzerland</Equals>
+				<Equals attribute="userCountryCode">Lichtenstein</Equals>
+			</Or>
+			<And>
+				<InGroup value="CIRC_GROUP_1"/>
+				<Equals attribute="userRole">Partner Portal Administrator</Equals>
+				<Not>
+					<Or>
+						<Equals attribute="userCountryCode">UK</Equals>
+						<Equals attribute="userCountryCode">IRELAND</Equals>
+					</Or>
+				</Not>
+			</And>
+		</And>
+	</Group>
+	<Group name='CIRC_GROUP_4'>
+		<And>
+			<Equals attribute="userStatus">Active</Equals>
+			<Equals attribute="userProgramName">EU-Competitor Supplies</Equals>
+			<Or>
+				<Equals attribute="userCountryCode">Switzerland</Equals>
+				<Equals attribute="userCountryCode">Lichtenstein</Equals>
+			</Or>
+			<And>
+				<Equals attribute="userRole">Partner Portal Administrator</Equals>
+				<Not>
+					<Or>
+						<Equals attribute="userCountryCode">UK</Equals>
+						<Equals attribute="userCountryCode">IRELAND</Equals>
+						<InGroup value="CIRC_GROUP_4"/>
+					</Or>
+				</Not>
+			</And>
+		</And>
+	</Group>
+</Site>

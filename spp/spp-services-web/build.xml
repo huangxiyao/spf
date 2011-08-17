@@ -1,0 +1,32 @@
+<project name="spp-services-web" default="copyJSP" basedir=".">
+	
+	<description>copy src/main/webapp into target</description>
+	
+	
+	<target name="clean">
+		<delete dir="target/spp-services-web/WEB-INF/jsp"/>
+		<delete dir="target/spp-services-web/jsp"/>
+	</target>
+	<target name="copyJSP" depends="clean">
+		<mkdir dir="target/spp-services-web/WEB-INF/jsp" />
+		<copy todir="target/spp-services-web/WEB-INF/jsp">
+			<fileset dir="src/main/webapp/WEB-INF/jsp">
+				<include name="*.*"/>
+			</fileset>
+		</copy>
+		<mkdir dir="target/spp-services-web/jsp" />
+				<copy todir="target/spp-services-web/jsp">
+					<fileset dir="src/main/webapp/jsp">
+						<include name="*.*"/>
+					</fileset>
+				</copy>
+	</target>
+	<target name="deploy" depends="clean">
+		<delete dir="\\prmnt20.bbn.hp.com\D$\bea\user_projects\domains\prmnt20Domain\applications\spp-services-web">
+		</delete>
+		<mkdir dir="\\prmnt20.bbn.hp.com\D$\bea\user_projects\domains\prmnt20Domain\applications\spp-services-web" />
+		<copy todir="\\prmnt20.bbn.hp.com\D$\bea\user_projects\domains\prmnt20Domain\applications\spp-services-web">
+			<fileset dir="target/spp-services-web" />
+		</copy>
+	</target>
+</project>

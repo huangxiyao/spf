@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Group name='GENERIC_GROUP_TEST'>
+	<And>
+		<Unknown attribute="userStatus">Active</Unknown>
+		<Equals attribute="userProgramName">EU-Competitor Supplies</Equals>
+		<Or>
+			<Equals	attribute="userCountryCode">Switzerland</Equals>
+			<Equals attribute="userCountryCode">Lichtenstein</Equals>
+		</Or>
+		<And>
+			<Equals attribute="userRole">Partner Portal Administrator</Equals>
+			<Not>
+				<Or>
+					<Equals attribute="userCountryCode">UK</Equals>
+					<Equals attribute="userCountryCode">IRELAND</Equals>
+				</Or>
+			</Not>
+		</And>
+	</And>
+</Group>
+	

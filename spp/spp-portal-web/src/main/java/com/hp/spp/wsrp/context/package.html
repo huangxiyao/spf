@@ -1,0 +1,75 @@
+<html>
+<head>
+<title></title>	
+</head>
+<body>
+Provides classes allowing to send additional information between WSRP consumer (portal) and WSRP producer.
+<h2>Overview</h2>
+<p>
+	The additional information is injected into SOAP WSRP requests using <code>UserContextKeysInjector</code>.
+	This class implements Axis handler and therefore can participate in Axis request processing.
+	Unfortunately this class does not have direct access to the information it needs to inject.
+</p>
+<p>
+	This information is provided through <code>RequestBindingFilter</code> and <code>RequestMap</code>.
+	The filter binds the current HTTP request into the request map. The request map generates a String
+	key that will be then used by the UserContextKeysInjector to rerieve the request from the request
+	map.
+</p>
+<p>
+	The request key is passed between the filter and the Axis handler through <code>user-agent</code>
+	value. In the HTTP context it's the header that carries over the information about the browser,
+	its version, operating system, etc... It is the only value that is passed to WSRP context. Therefore
+	we "hack" this value buy appending the key of the request. Because injector has access to SOAP
+	envelope that contains <code>user-agent</code> value, it can extract the request key from it and
+	then retrieve the request from the map.
+</p>
+<p>
+	It's a <b>very ugly</b> solution. Unfortunately I haven't found anything better. I assume that
+	<code>user-agent</code> value is never compared exactly but rather substrings are searched in it.
+	Therefore appending some value to this header should not have any side effects.
+</p>
+<p>
+	The additional data is injected into SOAP header. It can be then extracted by
+	<code>UserContextKeysExtractor</code> class which is defined in the producer module. It's then
+	made available as a map to the remote portlets as a portlet request attribute bound to
+	<code>com.hp.spp.UserContextKeys</code> name.
+</p>
+<h2>Setup</h2>
+<h3>Filter</h3>
+<p>
+	Vignette web.xml file must be updated to include the filter and filter-mapping declaration as follows: <br/>
+
+	&lt;!-- SPP FILTER DEFINITIONS - BEGIN --&gt;
+	&lt;filter&gt;
+	   &lt;filter-name&gt;SPPFilter&lt;/filter-name&gt;
+	   &lt;filter-class&gt;com.hp.spp.wsrp.context.RequestBindingFilter&lt;/filter-class&gt;
+	&lt;/filter&gt;
+	&lt;!-- SPP FILTER DEFINITIONS - END --&gt;
+
+	&lt;!-- SPP FILTER MAPPING - BEGIN --&gt;
+	&lt;filter-mapping&gt;
+	   &lt;filter-name&gt;SPPFilter&lt;/filter-name&gt;
+	   &lt;url-pattern&gt;/site/*&lt;/url-pattern&gt;
+	&lt;/filter-mapping&gt;
+	&lt;!-- SPP FILTER MAPPING - END --&gt;
+</p>
+
+<h3>Injector</h3>
+<p>
+	The following must be added as <code>requestFlow</code> child element in Vignette <code>client.template</code>:<br />
+
+	&lt;handler type="java:com.hp.spp.wsrp.context.UserContextKeysInjector" /&gt;
+</p>
+
+<h3>Extractor</h3>
+<p>
+	The following must be added in <code>server-config.wsdd</code> file in WSRP producer as child
+	element of <code>WSRPBaseService</code> service element:<br />
+
+	&lt;requestFlow&gt;
+	   &lt;handler type="java:com.hp.spp.wsrp.context.UserContextKeysExtractor" /&gt;
+	&lt;/requestFlow&gt;
+</p>
+</body>
+</html>

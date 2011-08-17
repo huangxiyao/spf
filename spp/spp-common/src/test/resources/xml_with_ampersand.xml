@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site name="Smart Portal">
+	<EService name="&quot;service1&quot; & others &apos;&lt;&gt;&apos;" method="GET">
+		<ProductionUrl>http://productionurl.com/page?id=0&status=3</ProductionUrl>
+		<TestUrl>http://testurl.com/page?id=0&status=3</TestUrl>
+		<SecurityMode>0</SecurityMode>
+		<NavigationMode>0</NavigationMode>
+		<StdParameterSetName>EMEA_Parameters</StdParameterSetName>
+		<parameter name="phoneNumber">
+			<expression>${phoneNumber}</expression>
+		</parameter>
+		<parameter name="LocalAdmin">
+			<expression>${spp:Ingroup(LOCAL_ADMIN)}</expression>
+		</parameter>
+	</EService>
+</Site>

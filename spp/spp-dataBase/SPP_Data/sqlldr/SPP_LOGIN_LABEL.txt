@@ -1,0 +1,566 @@
+pt|50007|A aplicação que está a usar está agora integrada com a HP Passport, um único serviço para iniciar a sessão da HP.com. O  ID do usuário e a palavra chave que usa neste site pode ser usado em outros HP Passports permitidos dentro do HP.com. Obrigado por dispensar o seu tempo para actualizar o seu perfil.
+pt|50008|A fim de manter a sua informação segura, necessita alterar a sua pergunta e resposta de segurança. Termine por favor o formulário de baixo para continuar.
+pt|50014|A fim de manter a sua informação segura, necessita alterar a sua palavra chave e a sua pergunta e resposta de segurança. Termine por favor o formulário de baixo da sua pergunta e resposta de segurança para continuar.
+pt|login_password|Palavra chave
+pt|login_submitLabel|Log in
+pt|login_subtitle|Iniciar a sessão
+pt|login_user_id|ID do utilizador
+ro|50001|Pentru a spori securitatea informatiilor trimise de dumneavoastra, este nevoie sa va schimbati parola. Pentru a continua, va rugam sa completati formularul de mai jos. 
+ro|50003|Contul dumneavoastra este blocat pentru aproximativ o ora, din cauza mai multor incercari nereusite de inregistrare. Va rugam sa asteptati aproxmativ o ora pentru deblocarea contului, inainte sa incercati sa va inregistrati.  Cind contul dumneavoastra va fi deblocat, puteti sa faceti “Click” pe \u201dAm uitat user ID” sau \u201dAm uitat parola” daca nu va amintiti informatiile de inregistrare.
+ro|50006|Parola dumneavoastra a expirat. Pentru a continua, va rugam sa completati formularul de mai jos pentru schimbarea parolei. .
+ro|50007|Aplicatia pe care o folositi este acum integrata cu HP Passport, un serviciu unic de inregistrare de la HP.com. User ID-ul si parola pe care le folositi pe acest site pot fi folosite acum si la alte situri in HP.com integrate cu HP Passport. Va multumim ca v-ati dedicat un moment pentru a actualiza profilul dumneavoastra.
+ro|50008|Pentru a spori securitatea informatiilor dumneavoastra, este nevoie sa schimbati intrebarea si raspunsul de siguranta. Pentru a continua, va rugam sa completati formularul de mai jos.
+ro|50014|Pentru a spori securitatea informatiilor dumneavoastra, este necesar sa va schimbati parola, intrebarea si raspunsul de siguranta. Va rugam sa completati formularul pentru “Intrebarea si raspunsul de siguranta” de mai jos.
+ro|login_password|Parola
+ro|login_submitLabel|Log in
+ro|login_subtitle|Sign-in
+ro|login_user_id|User ID
+nl|50001|Om de beveiliging van uw informatie te verhogen dient u uw wachtwoord te veranderen. Gelieve het onderstaand formulier in te vullen alvorens door te gaan.
+nl|50003|Uw inlognaam werd voor circa 1 uur geblokkeerd als gevolg van teveel falende inlogpogingen. Gelieve ongeveer 1 uur te wachten alvorens opnieuw te proberen. Wanneer uw inlognaam gedeblokkeerd is kan u klikken op "Inlognaam vergeten" of "Wachtwoord vergeten" in geval u zich uw inloggegevens niet meer herinnert.
+nl|50004|Het inloggen was niet succesvol. Klik "Inlognaam vergeten" of "Wachtwoord vergeten" in geval u zich uw inloggegevens niet meer herinnert.
+nl|50006|Uw wachtwoord is vervallen en u dient een nieuw aan te maken. Gelieve het onderstaand formulier in te vullen alvorens door te gaan.
+nl|50007|De applicatie die u gebruikt is nu geïntegreerd met HP Passport, een eenmalig inlog-procedure van HP.com. De inlognaam en het wachtwoord die u gebruikt op deze site kan nu gebruikt worden op andere HP.COM sites waar HP Passport van toepassing is. Dank u om even de tijd te nemen om uw profiel te herzien.
+nl|50008|Om de beveiliging van uw informatie te verhogen, dient u uw beveiligingsvraag en antwoord te wijzigen. Gelieve het onderstaand formulier in te vullen alvorens door te gaan.
+nl|50014|Om de beveiliging van uw informatie te verhogen, dient u uw wachtwoord en uw beveiligingsvraag en antwoord te wijzigen. Gelieve het onderstaand formulier in te vullen alvorens door te gaan.
+nl|login_password|Wachtwoord
+nl|login_submitLabel|Inloggen
+nl|login_subtitle|Login
+nl|login_user_id|Inlognaam
+no|50001|Av sikkerhetsmessige årsaker må passordet ditt endres. Vennligst fyll ut skjemaet nedenfor for å fortsette.
+no|50003|Din brukerkonto er midlertidig sperret, pga. for mange mislykkede innloggingsforsøk. Vennligst vent en times tid før du forsøker å logge inn på nytt. Du kan eventuelt benytte funksjonene "Glemt brukernavn" eller "Glemt passord" etter at brukerkontoen er åpnet igjen.
+no|50004|Mislykket innlogging. Velg funksjonene "Glemt brukernavn" eller "Glemt passord" dersom du ikke husker din påloggingsinformasjon.
+no|50006|Passordet ditt er utgått. Vennligst fyll ut skjemaet nedenfor for å fortsette.
+no|50007|Dette nettstedet er nå integrert med HP Passport, en enhetlig og sikker påloggingstjeneste fra HP. Samme brukernavn og passord kan nå benyttes ved andre HP-nettsteder som benytter HP Passport. Vennligst oppdater din brukerprofil.
+no|50008|For å bedre sikkerheten, må ditt hemmelige sikkerhetsspørsmål/svar endres. Vennligst fyll ut skjemaet nedenfor for å fortsette.
+no|50014|For å bedre sikkerheten, må ditt passord og hemmelige sikkerhetsspørsmål/svar endres. Vennligst fyll ut skjemaet nedenfor for å fortsette.
+no|login_password|Passord
+no|login_submitLabel|Logg inn
+no|login_subtitle|Pålogging
+no|login_user_id|Brukernavn
+pl|50001|Dla Twojego bezpieczeństwa prosimy o zmianę hasła. W tym celu prosimy o wypełnienie poniższego formularza.
+pl|50003|Twoje konto zostało zablokowane na około 1 godzinę z powodu nieudanych logowań. Prosimy o ponowne zalogowanie za około 1 godzinę. Po odblokowaniu konta możesz klinkąć na "Zapomnniałem ID użytkownika" lub "Zapomniałem hasło" jeżeli nie pamiętasz danych użytkownika.
+pl|50004|Podany login lub hasło nieprawidłowe. Kliknij "Zapomnniałem ID użytkownika" lub "Zapomniałem hasło" jeżeli nie pamiętasz swoich danych użytkownika.
+pl|50006|Twoje hasło wygasło. Prosimy o wypełnienie poniższego formularza w celu otrzymania nowego hasła.
+pl|50007|Aplikacja, której używasz jest zintegrowana z HP Passport,jednorazową rejestracją w serwisie HP.com. ID użytkownika i hasło, z którego korzystasz na tej stronie może być również użyte na innych stronach HP.com. zintegrowanych z HP Passport. Dziękujemy za aktualizację twojego profilu.
+pl|50008|Dla Twojego bezpieczeństwa prosimy o zmianę twojego zabezpieczenia w postaci Pytania i Odpowiedzi. Prosimy o wypełnienie poniższego formularza.
+pl|50014|Dla Twojego bezpieczeństwa prosimy o zmianę twojego hasła oraz zabezpieczenia w postaci Pytania i Odpowiedzi. Prosimy o wypełnienie poniższego formularza Pytanie i Odpowiedź zabezpieczającego dostęp do systemu.
+pl|login_password|Hasło
+pl|login_submitLabel|loguj
+pl|login_subtitle|Rejestracja
+pl|login_user_id|ID użytkownika
+pt|50001|A fim de manter a sua informação segura, necessita alterar a sua palavra chave. Por favor para continuar termine o formulário de baixo.
+pt|50003|A sua conta será fechada por aproximadamente uma hora, isto porque ocorreram muitas tentativas falhadas para iniciar a sessão. Por favor aguarde aproximadamente uma hora para a sua conta ser desbloqueada antes de tentar iniciar a sessão novamente. Quando a sua conta estiver desbloqueada, deverá clicar em "Esqueceu-se do ID do usuário" ou "esqueceu-se da palavra chave" se não se lembrar dos dados de entrada.
+pt|50004|Não é permitido iniciar a sessão. Clicar em "Esqueceu-se do ID do usuário" ou "esqueceu-se da palavra chave" se não se lembrar dos dados de entrada.
+pt|50006|A sua palavra chave expirou. Por favor preencha o formulário de alteração da palavra chave para continuar.
+el|50001|Προκειμένου να ενισχυθεί η ασφάλεια πληροφοριών σας, πρέπει να αλλάξετε τον κωδικό πρόσβασής σας. Παρακαλώ συμπληρώστε την παρακάτω φόρμα για να συνεχίσετε
+el|50003|Ο λογαριασμός σας είναι κλειδωμένος για περίπου μια ώρα λόγω πολλών ανεπιτυχών προσπαθειών πρόσβασης. Παρακαλώ περιμένετε περίπου μια ώρα για να ξεκλειδώσει ο λογαριασμός. Όταν ο λογαριασμός σας ξεκλειδώσει, μπορείτε να πάτε στα παρακάτω "Ξέχασα το όνομα χρήστη" ή "Ξέχασα τον κωδικό πρόσβασης".
+el|50004|Η πρόσβαση στην πλατφόρμα δεν ήταν επιτυχής. Πατήστε  " Ξέχασα το όνομα χρήστη "ή "Ξέχασα τον κωδικό πρόσβασης "εάν δεν μπορείτε να θυμηθείτε το όνομα χρήστη η τον κωδικό πρόσβασης
+el|50006|Ο κωδικός πρόσβασής σας έχει λήξει. Παρακαλώ συμπληρώστε την παρακάτω φόρμα αλλαγής κωδικού πρόσβασης για να συνεχίσετε
+el|50007|Στην εφαρμογή που χρησιμοποιείτε είναι τώρα ενσωματωμένο το HP Passport, μια υπηρεσία από το HP.com. Το όνομα χρήστη και ο κωδικός πρόσβασης που χρησιμοποιείτε σε αυτό τον ιστοχώρο και σε άλλους ιστοχώρους του HP.com οπoυ έχει ενσωματωθεί το HP Passport. Σας ευχαριστούμε για ενημέρωση του προφίλ σάς.
+el|50008|Προκειμένου να ενισχυθεί η ασφάλεια πληροφοριών σας, πρέπει να αλλάξετε τις ερωτήσεις και απαντήσεις. Παρακαλώ συμπληρώστε την παρακάτω φόρμα για να συνεχίσετε
+el|50014|Προκειμένου να ενισχυθεί η ασφάλεια πληροφοριών σας, πρέπει να αλλάξετε τον κωδικό πρόσβασής σας και τις ερωτήσεις και απαντήσεις ασφάλειάς σας. Παρακαλώ συμπληρώστε την παρακάτω φόρμα ερωτήσεων και απαντήσεων ασφάλειας για να συνεχίσετε
+el|login_password|Κωδικός πρόσβασης
+el|login_submitLabel|Είσοδος
+el|login_subtitle|Είσοδος
+el|login_user_id|Όνομα χρήστη
+en|50001|In order to enhance your information security, you need to change your password. Please complete the form below to continue.
+en|50003|Your user account is locked for approximately one hour because of too many unsuccessful sign-in attempts. Please wait approximately on hour for your account to unlock before attempting to sign-in again. When your account is unlocked, you may click "Forgot user ID" or "Forgot password" if you cannot remember your sign-in information.
+en|50004|Sign-in was not successful. Click "Forgot password" if you cannot remember your sign-in information.
+en|50006|Your password has expired. Please complete the change password form below to continue.
+en|50007|The application you are using is now integrated with HP Passport, a single sign-in service from HP.com. The user ID and password you use at this site can now be used at other HP Passport enabled sites in HP.com. Thank you for taking a moment to update your profile.
+en|50008|In order to enhance your information security, you need to change your security question and answer. Please complete the form below to continue.
+en|50014|In order to enhance your information security, you need to change your password and your security question and answer. Please complete the Security Question and Answer form below to continue.
+en|DISPATCH|You are not authorized to access HP Smart Portal. Your status is "to dispatch". Contact HP for more information.
+en|NOT_REGISTER|You are not registered on HP Smart Portal.
+en|login_password|Password
+en|login_submitLabel|Sign-in
+en|login_subtitle|Sign-in
+en|login_user_id|User ID
+bg|50001|С цел повишаване сигурността на вашата информация, трябва да смените своята парола. Моля попълнете формата по-долу, за да продължите.
+bg|50003|Вашият акаунт е заключен за около един час, поради твърде много неуспешни опита за вход. Моля изчакайте приблизително един час докато вашия акаунт бъде отключен, преди отново да опитате. Когато вашия акаунт бъде отключен, може да натиснете "Забравено потребителско име" или "Забравена парола" ако не сте сигурни, че си ги спомняте правилно.
+bg|50004|Неуспешен опит за вход. Натиснете "Забравено потребителско име" или "Забравена парола ако не сте сигурни, че си ги спомняте правилно.
+bg|50006|Паролата ви е изтекла. Моля попълнете формата за смяна на парола, за да продължите.
+bg|50007|В приложението, което ползвате в момента се прилага HP Passport, регистрационна услуга от HP.com. Потребителското име и паролата, които имате за този сайт, могат да се ползват и в други позволяващи употребата на HP Passport страници, в рамките на HP.com. Благодарим ви за отделеното време за актуализиране на профила ви.
+bg|50008|С цел повишаване сигурността на вашата информация, трябва да смените своите контролен въпрос и отговор. Моля попълнете формата по-долу, за да продължите.
+bg|50014|С цел повишаване сигурността на вашата информация, трябва да смените своята парола, контролен въпрос и отговор. Моля попълнете формата за контролен въпрос и отговор по-долу, за да продължите.
+bg|login_password|Парола
+bg|login_submitLabel|Вход
+bg|login_subtitle|Вход 
+bg|login_user_id|Потребителско име
+es|50001|Para garantizar la seguridad de su información usted necesita cambiar su contraseña. Por favor complete el siguiente formulario para continuar.
+es|50003|Su cuenta de usuario estará bloqueada una hora aproximadamente porque ha introducido varias firmas incorrectas. Por favor, espere una hora aproximadamente para desbloquear su cuenta. Cuando su cuenta esté desbloqueada, usted debe hacer click en "Olvidé mi user ID" o "Olvidé mi contraseña" si no recuerda sus datos.
+es|50004|El inicio de la sesión ha sido erróneo. Haga click "Olvidé mi user ID" o "Olvidé mi contraseña" si usted no recuerda sus datos.
+es|50006|Su contraseña ha expirado. Por favor cambie su contraseña para continuar.
+es|50007|La aplicación que está utilizando está integrada en HP Passport, un servicio único desde HP.com. El user ID y la contraseña que está utilizando puede ser utilizado para otros sitios web permitidos en HP.com. Gracias por actualizar su perfil.
+es|50008|Para garantizar la seguridad de su información usted necesita cambiar su pregunta y respuesta de seguridad. Por favor, complete el siguiente formulario para continuar.
+es|50014|Para garantizar la seguridad de su información usted necesita cambiar su contraseña y su pregunta y respuesta de seguridad. Por favor complete el siguiente formulario para continuar.
+es|login_password|Contraseña
+es|login_submitLabel|Conectar
+es|login_subtitle|Acceder
+es|login_user_id|User ID
+fi|50001|Turvallisen informaationkulun takaamiseksi, teidän tulisi vaihtaa salasana. Olkaa ystävällinen ja täyttäkää alla oleva lomake.
+fi|50003|Käyttäjätunnuksesi on lukittu noin tunnin ajaksi liian monen kirjautumisyrityksen johdosta. Yritä tunnin kuluttua uudelleen. Jos olet unohtanut tunnuksesi tai salasanan voit tiedustella niitä "Käyttäjätunnus unohtunut" tai "Salasana unohtunut" linkeistä.
+fi|50004|Kirjautuminen epäonnistui. Jos olet unohtanut tunnuksesi tai salasanan voit tiedustella niitä "Käyttäjätunnus unohtunut" tai "Salasana unohtunut" linkeistä.
+fi|50006|Salasanasi on vanhentunut. Täytä alla oleva salasananvaihtolomake saadaksesi toimivan salasanan.
+fi|50007|Käyttämääsi sovellukseen on integroitu HP Passport, joka on HP.com:in yhdenkirjautumisen palvelu. Tällä sivustolla käyttämäsi tunnus ja salasana käy nyt myös muilla HP Passportin hyväksyvillä HP.com:in sivuilla. Kiitoksia tietojen päivittämiseen käyttämästäsi ajasta.
+fi|50008|Turvallisen informaationkulun takaamiseksi, teidän tulisi vaihtaa salasana. Olkaa ystävällinen ja täyttäkää alla oleva lomake.
+fi|50014|Turvallisen informaationkulun takaamiseksi, teidän tulisi vaihtaa salasana, sekä teidän varmennuskysymys ja -vastaus. Olkaa ystävällinen ja täyttäkää alla oleva varmennuskysymys ja -vastaus.
+fi|login_password|Salasana
+fi|login_submitLabel|Kirjaudu
+fi|login_subtitle|Kirjautuminen
+fi|login_user_id|Käyttäjätunnus
+ru|50001|Для обеспечения должного уровня безопаности Вам необходимо сменить пароль. Пожалуйста, заполните нижеследующую форму.
+ru|50003|Ввиду слишком большого количества неудачных попыток входа, ваш акаунт заблокирован приблизительно на один час. Пожалуйста воздержитесь от повторных попыток входа в течение часа, и ваш акаунт будет разблокирован. Если вы не можете вспомнить ваши логин или пароль, после разблокирования акаунта воспользуйтесь ссылками "Утерян логин" или "Забыт пароль".
+ru|50004|Ошибка при входе в систему. Если вы не можете вспомнить ваши логин или пароль, кликните соответственно на "Утерян логин" или "Забыт пароль".
+ru|50006|Срок действия вашего пароля истек. Для продолжения необходимо заполнить нижеследующую форму.
+ru|50007|Данное приложение использует для аутентикации механизм HP Passport - единый сервис регистрации на всем пространстве hp.com. Логин и пароль, которые Вы используете для доступа к данному сайту, может быть вами использован и для других сайтов, поддерживающих HP Passport. Благодарим вас за обновление вашего профайла.
+ru|50008|С целью обеспечения необходимого уровня защиты информации, Вам необходимо изменить ваши секретные вопрос и ответ. Пожалуйста заполните нижеследующую форму.
+ru|50014|Для обеспечения должного уровня защиты, Вам необходимо сменить пароль, а также секретный вопрос и ответ. Для продолжения, пожалуйста, заполните нижеследующую форму.
+ru|login_password|Пароль
+ru|login_submitLabel|Ввод
+ru|login_subtitle|Регистрация
+ru|login_user_id|Логин
+sk|50001|V prípade, že chcete zvýšit zabezpečenie informácií, môžete zmeniť heslo a nastaviť kontrolnú otázku a odpoveď na kontrolnú otázku cez odkaz nižšie.
+sk|50003|Použili ste viackrát nesprávne logovacie údaje. Váš účet bol z bezpečnostných dôvodov zablokovaný na približne jednu hodinu. Prosím, vyčkajte asi hodinu, než bude Váš účet opäť odblokovaný alebo použite odkaz "Zabudli ste heslo?".
+sk|50004|Prihlásenie nebolo úspešné. Kliknite na "Zabudli ste heslo?", pokiaľ si nepamätáte logovacie údaje.
+sk|50006|Vaše heslo vypršalo. Prosím vyplňte formulár "Zmeniť heslo" nižšie.
+sk|50007|Aplikácia, ktorú používate, nie je integrovaná. Login a heslo, ktoré používate na týchto stránkach, môže byť teraz použité aj na iných stránkach HP. Prosím, upravte informácie vo Vašom profile.
+sk|50008|V prípade, že chcete zvýšit zabezpečenie informácií, môžete zmeniť heslo a nastaviť kontrolnú otázku a odpoveď na kontrolnú otázku cez odkaz nižšie. 
+sk|50014|In order to enhance your information security, you need to change your password and your security question and answer. Please complete the Security Question and Answer form below to continue.
+sk|login_password|Heslo
+sk|login_submitLabel|Prihlásiť
+sk|login_subtitle|Prihlásenie
+sk|login_user_id|User ID
+sl|50001|V primeru, da želite povečati varnost vaših podatkov morate spremeniti vaše geslo. Prosimo vas, da za nadaljevanje izpolnite spodnji obrazec. SM_50001_comment=Error 50001 generate by GET parameter
+sl|50003|Zaradi prevelikega števila neuspešnih poskusov vpisa v vaš uporabniški račun je le ta zaklenjen za približno eno uro. Prosimo poizkusite kasneje. Ko bo vaš uporabniški račun odklenjen lahko kliknete na \u201dPozabil uporabniško ime\u201d ali \u201dPozabil geslo\u201d.
+sl|50004|Vpis ni bil uspešen. Prosimo kliknite \u201dPozabil uporabniško ime\u201d ali \u201dPozabil geslo\u201d. na \u201dPozabil uporabniški ID\u201d ali \u201dPozabil geslo\u201d, če se ne morete spomnit vpisnih informacij.
+sl|50006|Vaše geslo ni več veljavno. Prosimo izpolnite spodnji obrazec za spremembo gesla. 
+sl|50007|Aplikacija, ki jo uporabljate ima sedaj vgrajeno “HP geslo”, univerzalno geslo za uporabo storitev na HP.COM. Uporabniško ime in geslo, ki ga uporabljate na teh straneh lahko sedaj uporabite na ostalih straneh, ki podpirajo uporabo HP gesla. Hvala ker ste posodobili vaše informacije.
+sl|50008|V primeru, da želite povečati varnost vaših podatkov morate spremeniti vaše geslo. Prosimo vas, da za nadaljevanje izpolnite spodnji obrazec. SM_50008_comment=Error 50008 generate by GET parameter
+sl|50014|V primeru, da želite povečati varnost vaših podatkov morate spremeniti vaše geslo. Prosimo vas, da za nadaljevanje odogovorite na spodaj navedena vprašanja. SM_50014_comment=Error 50014 generate by GET parameter
+sl|login_password|Geslo
+sl|login_submitLabel|Prijava
+sl|login_subtitle|Prijava
+sl|login_user_id|Uporabniško ime 
+sv|50001|För upprätthålla säkerheten för din information behöver du ändra ditt lösenord. Fyll i formuläret här nedan.
+sv|50003|Ditt användarkonto är låst i ungefär en timme p g a för många felaktiga påloggningsförsök. Vänta i ungefär en timme för att ditt konto ska låsas upp innan du försöker logga på igen. När ditt konto är upplåst så kan du klicka på "Forgot user ID" eller "Forgot password" om du inte kommer ihåg din påloggning.
+sv|50004|Inloggningen misslyckades. Klicka på "Glömt användar-ID" eller "Glömt lösenord" om du inte kommer ihåg din påloggning.
+sv|50006|Ditt lösenord är för gammlt. Fyll i formuläret här nedan för att ändra ditt lösenord.
+sv|50007|Applikationen du använder är nu integrerad med HP Passport, en "single sign-in-tjänst" från HP.com. Användar-ID och lösenord som du använder på denna webbplats kan nu användas på andra webbplatser som använder HP Passport på HP.com. Tack för att du tar dig tid för att uppdatera din profil.
+sv|50008|För upprätthålla säkerheten för din information behöver du ändra din säkerhetsfråga och svar lösenord. Fyll i formuläret här nedan.In order to enhance your information security, you need to change your security question and answer. Please complete the form below to continue.
+sv|50014|In order to enhance your information security, you need to change your password and your security question and answer. Please complete the Security Question and Answer form below to continue.
+sv|DISPATCH|Du har inte behörighet för att logga in på HP Smart Portal. Din status är "under utskick". Kontakta HP för mer information.
+sv|login_password|Lösenord
+sv|login_submitLabel|Logga in
+sv|login_subtitle|Logga in
+sv|login_user_id|Användar-ID
+tr|50001|Bilgi guvenliginizi artirmak icin, sifrenizi degistirmeniz gerekmektedir. Devam etmek icin lutfen asagidaki formu doldurunuz.
+tr|50003|Birden fazla basarisiz giris tesebbusunuz oldugundan, kullanici hesabiniz yaklasik bir saattir kilitlenmis durumdadir. Tekrar giris yapmadan once, lutfen hesabinizin yeniden aktif olabilmesi icin bir saat kadar bekleyin. Hesabiniz aktif hale gelince, giris bilgilerinizi unuttuysaniz \u201dKullanici kimligini unuttum\u201d veya \u201dSifremi unuttum\u201da tiklayabilirsiniz. 
+tr|50004|Giris basarisizdi. Giris bilgilerinizi unuttuysaniz \u201dKullanici kimligini unuttum\u201d veya \u201dSifremi unuttum\u201da tiklayabilirsiniz.
+tr|50006|Sifrenizin gecerlilik suresi dolmustur. Devam edebilmek icin lutfen asagidaki sifre degisikligi formunu doldurun. 
+tr|50007|Su anda kullandiginiz uygulama, HP.com tarafindan sunulan tek girislik hizmet olan HP Passport ile entegredir. Bu sitede kullandiginiz kullanici adi ve sifre, HP.com bunyesindeki diger HP Passport’a uyumlu sitelerde de kullanilabilir. Profilinizi guncellediginiz icin tesekkur ederiz.  
+tr|50008|Bilgi guvenliginizi artirmak icin, guvenlik sorunuzu ve cevabinizi degistirmeniz gerekmektedir. Devam etmek icin lutfen asagidaki formu doldurunuz.   
+tr|50014|Bilgi guvenliginizi artirmak icin, sifrenizi, guvenlik sorunuzu ve cevabinizi degistirmeniz gerekmektedir. Devam etmek icin lutfen asagidaki Guvenlik Soru ve Cevap formu doldurunuz.   
+tr|login_password|Şifre
+tr|login_submitLabel|Giriş
+tr|login_subtitle|Giriş
+tr|login_user_id|Kullanıcı adı
+fr|50003|Votre compte utilisation est vérrouillé pendant environ une heure suite à un trop grand nombre de tentatives erronnées de connexions. Veuillez réessayer dans à peu près une heure. Lorsque votre compte sera dévérouillé, cliquez sur "User ID oublié" ou "Mot de passe oublié" si vous ne vous souvenez plus de vos informations de connexions.
+fr|50004|La connexion a échoué. Cliquez sur "Login oublié" ou "Mot de passe oublié" si vous ne vous souvenez plus de vos informations de connexions.
+fr|50006|Votre mot de passe a expiré. Veuillez le changer en complétant le formulaire suivant.
+fr|login_password|Mot de passe
+fr|login_submitLabel|Connexion
+fr|login_subtitle|Identifiez-vous
+fr|login_user_id|Login
+hr|50001|Trebate promjeniti vasu zaporku. Molimo vas da ispunite formu za nastavak.
+hr|50003|Vas korisnicki racun je blokiran na sat vremena zbog previse neuspjelih pokusaja logiranja. Molimo pricekajte sat vremena prije ponovnog logiranja. Kada vam je racun otkljucan, kliknite na "Zaboravio sam korisnicko ime" ili "Zaboravio sam zaporku" ukoliko se nemozete prisjetiti vasih pristupnih detalja.
+hr|50004|Logiranje nije bilo uspjesno. Kliknite na "Zaboravio sam korisnicko ime" ili "Zaboravio sam zaporku" ukoliko se nemozete prisjetiti vasih pristupnih detalja.
+hr|50006|Vasa zaporka je istekla. Molimo ispunite ispunite forumu za promjenu zaporke za nastavak.
+hr|50007|Aplikacija koju koristite je integrirana sa HP Passport - single sign in uslugom od hp.com Korisnicko ime i zaporku koju trenutno koristite mozete koristi na svim ostalim web stranicama gdje je omogucena HP Passport usluga. Zahvaljujemo sto se upotpunili vas profil.
+hr|50008|Trebate promjeniti vas sigurnosni upit i odgovor. Molimo vas da ispunite forumu za nastavak.
+hr|50014|Trebate promjeniti vas sigurnosno pitanje i odgovor. Molimo vas da ispunite forumu za nastavak.
+hr|DISPATCH|Niste autorizirani za pristup na HP Smart Portal. Status vaseg pristupa trenutno "nije dovrsen". Kontaktirajte HP za vise informacija.
+hr|NOT_REGISTER|Niste registirani na HP Smart Portal
+hr|login_password|Zaporka
+hr|login_submitLabel|Prijavi se
+hr|login_subtitle|Prijavljivanje
+hr|login_user_id|Korisnicko ime
+hu|50001|Az informatikai biztonság fenntartása érdekében le kell cserélnie jelszavát. Kérjük töltse ki az alábbi formot a folytatáshoz!
+hu|50003|Az Ön hozzáférését körülbelül egy órára lezártuk túl sok sikertelen bejelentkezési kísérlet miatt. Kérjük várjon körülbelül egy órát, majd kísérelje meg újra a bejelentkezést. Ha a hozzáférése továbbra is le van zárva, kattintson az "Elfelejtett azonosító" vagy az "Elfelejtett jelszó" opcióra ha nem emlékszik a belépési információkra.
+hu|50004|A bejelentkezés sikertelen volt. Kattintson az "Elfelejtett azonosító" vagy az "Elfelejtett jelszó" opcióra ha nem emlékszik a belépési információkra.
+hu|50006|A jelszava lejárt. A folytatáshoz kérjük töltse ki a jelszóváltoztatásra vonatkozó formot!
+hu|50007|Az Ön által használt alkalmazás a HP Passport-tal van összekapcsolva amely a HP.com egyszerű bejelenkezési szolgáltatása. Az azonosító és jelszó amelyet jelenleg használ, a HP.com más - a HP Passport szolgáltatását alkalmazó - oldalain is használható. Köszönjük, hogy áldoz néhány percet adatai frissítésére.
+hu|50008|Az informatikai biztonság fenntartása érdekében le kell cserélnie a jelszó-emlékeztető kérdést és a választ. Kérjük töltse ki az alábbi formot a folytatáshoz!
+hu|50014|Az informatikai biztonság fenntartása érdekében le kell cserélnie jelszavát, a jelszó-emlékeztető kérdést és a választ. Kérjük töltse ki az alábbi "jelszó-emlékeztető kérdés és válasz" formot!
+hu|login_password|Jelszó
+hu|login_submitLabel|Belépés
+hu|login_subtitle|Bejelentkezés
+hu|login_user_id|Azonosító
+it|50004|Tentativo di accesso non riuscito. Se non sei in grado di ricordare i tuoi codici di accesso, clicca su "User ID dimenticato" o "Password dimenticata".
+it|DISPATCH|Non è possibile accedere a HP Smart Portal. Lo stato dell’utente è “In elaborazione”. Contattare HP per maggiori informazioni.
+it|login_password|Password
+it|login_submitLabel|Invio
+it|login_subtitle|Accesso
+it|login_user_id|User ID
+cs|50001|V případě, že chcete zvýšit zabezpečení informací, můžete změnit heslo a nastavit kontrolní otázku a odpověď na kontrolní otázku přes odkaz níže.
+cs|50003|Použili jste vícekrát nesprávné logovací údaje. Váš účet byl z bezpečnostních opatření zablokován na přibližně jednu hodinu. Prosím, vyčkejte asi hodinu, než bude váš účet opět zprovozněn nebo využijte odkaz "Zapomněli jste heslo?".
+cs|50004|Přihlášení nebylo úspěšné. Klikněte na "Zapomněli jste heslo?", pokud si nepamatuje logovací údaje.
+cs|50006|Vaše heslo vypršelo. Prosím vyplňte formulář "Změnit heslo" níže.
+cs|50007|Aplikace, kterou používáte, není integrovaná. Login a heslo, které používáte na těchto stránkách, může být nyní použito i na jiných stránkách HP. Prosím, upravte informace ve vašem profilu.
+cs|50008|V případě, že chcete zvýšit zabezpečení informací, můžete změnit heslo a nastavit kontrolní otázku a odpověď na kontrolní otázku přes odkaz níže. 
+cs|50014|V případě, že chcete zvýšit zabezpečení informací, můžete změnit heslo a nastavit kontrolní otázku a odpověď na kontrolní otázku přes odkaz níže. 
+cs|login_password|Heslo
+cs|login_submitLabel|Přihlásit
+cs|login_subtitle|Přihlásit
+cs|login_user_id|Login
+da|50001|For at sikre at dine personlige oplysninger, bedes du ændre dit password. Udfyld venligst nedestående formular for at fortsætte.
+da|50003|Din brugerkonto er lukket i ca. 1 time. Dette skyldes for mange forkerte login forsøg. Vent venligst 1 time med at logge ind igen, da din bruger der vil være brugbar igen. Når din brugerkonto er åben, kan du klikke "Glemt bruger ID" eller "Glemt password" hvis du ikke kan huske din login information.
+da|50004|Fejl i login. Klik "Glemt bruger ID" eller "Glemt password" hvis du ikke kan huske din login information.
+da|50006|Dit password er udløbet. Udfyld venligst nedestående formular, for at ændre dit password. Derefter kan du fortsætte.
+da|50007|Applikationen som du benytter, er nu integreret med HP Passport, en enkelt login service fra HP.com. Det bruger ID og password som du benytter på denne side, kan nu også benyttes på andre HP Passport sider på HP.com. Tak for at du gav dig tid til at opdatere din profil. Tak fordi du tog tid til at opdatere din profil.
+da|50008|For at sikre dine personlige oplysninger, bedes du ændre dit sikkerhedsspørgsmål og -svar. Udfyld venligst nedestående formular for at fortsætte.
+da|50014|For at sikre at dine personlige oplysninger, bedes du ændre dit password, samt sikkerhedsspørgsmål og -svar. Udfyld venligst nedestående formular for at fortsætte.
+da|login_password|Password
+da|login_submitLabel|Login
+da|login_subtitle|Login
+da|login_user_id|Bruger ID
+de|50001|Um die Sicherheit Ihrer Informationen zu erhöhen, müssen Sie Ihr Passwort ändern. Bitte füllen Sie das nachstehende Formular aus. um fortzufahren.
+de|50003|Ihr User-Account wird aufgrund zu vieler gescheiteter Anmeldeversuche für eine voraussichtliche Dauer von einer Stunde gesperrt. Bitte warten Sie die Zeit ab, bis Ihr Account freigegeben wird, bevor Sie sich erneut anmelden. Nachdem Ihr Account freigegeben ist, haben Sie die Möglichkeit "User ID vergessen" oder "Passwort vergessen" anzuklicken, sofern Sie sich nicht an Ihre Zugangsdaten erinnern. 
+de|50004|Die Anmeldung war nicht erfolgreich. Klicken Sie auf "User ID vergessen" oder "Passwort vergessen" sofern Sie sich nicht an Ihre Zugangsdaten erinnern.
+de|50006|Ihr Passwort ist abgelaufen. Bitte füllen Sie das nachstehende Formular aus, um Ihr Passwort zu ändern.
+de|50007|Die von Ihnen verwendete Anwendung wurde in HP Passport integriert, ein Single Sign-In Service von HP.com. Die User ID und das Passwort, die Sie für diese Seite benutzen, können nun auch für weitere von HP Passport unterstützte Seiten auf HP.com genutzt werden. Bitte nehmen Sie sich einen Moment Zeit, um Ihr Profil zu aktualisieren. Vielen Dank.
+de|50008|Um die Sicherheit Ihrer Informationen zu erhöhen, müssen Sie Ihre Sicherheitsfrage und -antwort ändern. Bitte füllen Sie nachstehendes Formular aus, um fortzufahren.
+de|50014|Um die Sicherheit Ihrer Informationen zu erhöhen, müssen Sie Ihr Passwort, Ihre Sicherheitsfrage und -antwort ändern. Bitte füllen Sie das nachstehende Formular aus um fortzufahren.
+de|login_password|Passwort
+de|login_submitLabel|Log-in
+de|login_subtitle|Sign-in
+de|login_user_id|User ID
+en|2|You are not authorized to access the Portal. Your status is "pending". Contact HP for more information.
+bg|2|Нямате права за достъп до Портала. Вашият статус е "чакащ". Свържете се с НР за повече информация.
+hr|2|Nemate dopusten pristup Portalu. Status Vam je "na cekanju". Kontaktirajte HP za vise informacija.
+cs|2|Nejste oprávněni vstoupit do HP Smart Portálu. Váš status je "Nevyřešený". Kontaktujte HP pro více informací.
+da|2|Du har ikke rettigheder til at se portalen. Din status er "afventende". Kontakt HP for mere information.
+nl|2|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Uw status is "te behandelen". Neem voor meer informatie contact op met HP.
+fi|2|Käyttäjätunnustasi ei ole valtuutettu sisäänkirjautumaan Portaliin. Käyttäjätunnuksen tila on "odottaa pääkäyttäjän hyväksyntää". 
+fr|2|Vous n'êtes pas autorisé à accéder à ce site. Votre statut est "en attente". Contactez HP pour plus d'information.
+de|2|Sie sind noch nicht berechtigt auf das HP Smart Portal zuzugreifen. Ihr Status ist "Schwebend". Sie werden demnächst freigeschaltet.
+el|2|Δεν είστε εξουσιοδοτημένος για πρόσβαση στην πύλη. Η κατάστασή σας είναι "σε εκκρεμότητα”. Επικοινωνήστε με την ΗΡ για περισσότερες πληροφορίες.
+hu|2|Ön nem jogosult a portálra való bejelentkezésre. Státusza "függőben". Vegye fel a kapcsolatot cége partnerportál-adminisztrátorával vagy a HP-val!
+it|2|Non sei autorizzato ad accedere al Portale. Lo stato è "in sospeso". Contatta HP per avere maggiori informazioni.
+no|2|Du mangler tilgang til HP Smart Portal - din brukerstatus er 'Under avklaring'. Kontakt din lokale portaladministrator eller HP for ytterligere informasjon.
+pl|2|Nie masz dostępu do Portalu. Status Twojej rejestracji - "oczekujący". W celu uzyskania dodatkowych informacji prosimy o kontakt z HP.
+pt|2|Você não está autorizado para aceder ao portal. O seu estado está "pendente". Contacte a HP para mais informações
+ro|2|Nu sunteti autorizat sa accesati Portalul. Statusul dv este "in asteptare". Contactati HP pentru mai multe informatii
+ru|2|Ваш акаунт еще не активирован локальным администратором. Статус акаунта - "в ожидании".
+sk|2|Nie ste oprávnený vstúpiť do HP  Partnerského portálu. Váš status je "nevyriešený". Pre viac informácíi kontaktujte prosím HP
+sl|2|Nimate pooblastila za dostop do portala. Vaše stanje je: »v čakanju«. Za dodatne informacije se obrnite na HP.
+es|2|No tienes autorización de acceso al portal. Tu estado es "pendiente". Para más información contacta con HP. 
+sv|2|Du har ej rättighet att ha access till portalen. Din status är 'pending'. Kontakta HP för mer information.
+tr|2|Portala erişmenize izin verilmiyor. "Beklemede" konumundasınız. Daha fazla bilgi için HP ile irtibat kurun.
+en|3|You are not authorized to access the portal. Your status is "inactive". Contact HP for more information.
+bg|3|Нямате права за достъп до Портала. Вашият статус е "неактивен". Свържете се с НР за повече информация.
+hr|3|Nemate dopusten pristup portalu. Status Vam je "neaktivan". Kontaktirajte HP za vise informacija. 
+cs|3|Nejste oprávněni vstoupit do HP Smart Portálu. Váš status je "Neaktivní". Kontaktujte HP pro více informací.
+da|3|Du har ikke rettigheder til at se portalen. Din status er "inaktiv".
+nl|3|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Uw status is "inactief". Neem voor meer informatie contact op met HP.
+fi|3|Käyttäjätunnuksesi ei ole valtuutettu kirjautumaan Portaliin. Käyttäjätunnuksen tila ei ole aktiivinen. Ota yhteyttä HP:seen.
+fr|3|Vous n'êtes pas autorisé à accéder au site. Votre statut est "inactif". Contactez HP pour plus d'information.
+de|3|Sie sind nicht berechtigt auf das HP Smart Portal zuzugreifen. Ihr Status ist "Inaktiv". Kontaktieren Sie die Smart Portal Hotline.
+el|3|Δεν είστε εξουσιοδοτημένος για πρόσβαση στην πύλη. Η κατάστασή σας είναι "ανενεργή”. Επικοινωνήστε με την ΗΡ για περισσότερες πληροφορίες.
+hu|3|Ön nem jogosult a portálra való bejelentkezésre. Státusza "inaktív". Vegye fel a kapcsolatot cége partnerportál-adminisztrátorával vagy a HP-val!
+it|3|Non sei autorizzato ad accedere al portale. Lo stato è "non attivo". Contatta HP per avere maggiori informazioni.
+no|3|Du mangler tilgang til HP Smart Portal - din bruker er slettet. Kontakt din lokale portaladministrator eller HP for ytterligere informasjon.
+pl|3|Nie jesteś upoważniony do dostępu do Portalu. Status Towjego konta - "nieaktywny". W celu uzyskania bliższych informacji prosimy o kontakt z HP.
+pt|3|Você não está autorizado a aceder ao Portal. O seu estado está "inactivo". Contacte a HP para mais informações.
+ro|3|Nu sunteti autorizat sa accesati acest portal. Statusul dv este "inactiv". Contactati HP pentru mai multe informatii.
+ru|3|Вы не авторизованы для доступа на портал. Статус вашего акаунта "неактивен".
+sk|3|Nie ste oprávnený vstúpiť do HP Partnerského portálu. Váš status je "neaktívny". Pre viac informácií, kontaktujte prosím HP
+sl|3|Nimate pooblastila za dostop do portala. Vaše stanje je: »neaktiven«. Za dodatne informacije se obrnite na HP.
+es|3|No tienes autorización de acceso al portal. Tu estado es "inactivo". Para más información contacta con HP. 
+sv|3|Du har ej rättighet att ha tillgång till portalen. Din status är 'inaktiv'. Kontakta HP för mer information.
+tr|3|Portala erişmenize izin verilmiyor. Durumunuz "inaktif". Daha fazla bilgi için HP ile irtibat kurun.
+en|0|You are not authorized to login to HP Partner Portal. Either your user ID or password is incorrect, or your account is inactive.
+bg|0|Нямате права да влизате в НР Партньорския портал. Или вашето потребителско ID, или паролата ви са грешни, или акаунтът ви не е активен.
+hr|0|Nemate dopusten pristup logiranju na HP Partner Portal. Ili su Vam korisnicko ime i zaporka neispravni, ili Vam racun nije aktiviran.
+cs|0|Nejste oprávněni přihlásit se do HP Smart Portálu. Buď je Vaše uživatelské ID nebo heslo nesprávné nebo je Váš účet neaktivní.
+da|0|Du kan ikke  logge på HPs Partnerportal. Dit User ID eller password er ikke korrekt eller også er din konto deaktiveret.
+nl|0|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Ofwel uw gebruikersnaam/wachtwoord is incorrect of uw account is inactief.
+fi|0|Käyttäjätunnustasi ei ole valtuutettu sisäänkirjautumaan HP kumppaniportaaliin. Joko käyttäjätunnuksesi tai salasanasi on väärä tai tunnuksen tila ei ole aktiivinen.
+fr|0|Vous n'êtes pas autorisé à vous connecter à HP Smart Portal. Soit votre login ou mot de passe est incorrect, soit votre compte est inactif.
+de|0|Ihr Benutzername/Passwort ist falsch oder Ihr Konto ist inaktiv.
+el|0|Δεν είστε εξουσιοδοτημένος για σύνδεση στο HP Partner Portal. Είτε έχετε λάθος αναγνωριστικό χρήστη ή κωδικό είτε ο λογαριασμός σας είναι ανενεργός.
+hu|0|Ön nem jogosult a portálra való bejelentkezésre. Lehet hibás az azonosító, a jelszó vagy a státusza "inaktív".
+it|0|Non sei autorizzato alla login in HP Partner Portal. O la User ID o la Password non è corretta, o il Contatto non è attivo.
+no|0|Du mangler tilgang til HP Smart Portal. Dette skyldes enten feil i oppgitt brukernavn/passord, eller at brukeren er slettet.
+pl|0|Nie masz upoważnienia aby zalogować się do portalu - HP Partner Portal. Zostało podane niewłaściwe ID użytkownika lub hasło albo Twoje konto jest nieaktywne.
+pt|0|Você não está autorizado a fazer a entrar no HP Smart Portal. Talvez o seu ID de utilizador ou palavra chave estejam incorrectos ou a sua conta esteja inactiva.
+ro|0|Nu sunteti autorizat sa va logati la Portalul pentru Parteneri HP. Fie parola sau user ID-ul sunt incorecte, fie contul dv nu este activ.
+ru|0|В доступе на портал отказано. Либо ваш логин или пароль введены неверно, либо ваш акаунт не активен.
+sk|0|Nie ste oprávnený vstúpiť do HP Partnerského portálu. Vaše uživateľské ID alebo heslo je nesprávne, prípadne je Váš účet inaktívny.
+sl|0|Nimate pooblastila za prijavo v partnerski portal HP. Vnesli ste napačen uporabniški ID ali geslo, ali pa je vaš račun neaktiven.
+es|0|Error de login. Tu identificador o contraseña son erroneos, o tu cuenta no está activada.
+sv|0|Du har ej rättighet att logga in på HP Partner Portal. Antingen har du inkorrekt användar-ID eller så är ditt konto inaktivt.
+tr|0|HP İş Ortakları Portalında oturum açmanıza izin verilmiyor. Kullanıcı kimliğiniz ya da şifreniz yanlış veya hesabınız inaktif.
+en|50009|You are not authorized to login to HP Partner Portal. Either your user ID or password is incorrect, or your account is inactive.
+bg|50009|Нямате права да влизате в НР Партньорския портал. Или вашето потребителско ID, или паролата ви са грешни, или акаунтът ви не е активен.
+hr|50009|Nemate dopusten pristup logiranju na HP Partner Portal. Ili su Vam korisnicko ime i zaporka neispravni, ili Vam racun nije aktiviran.
+cs|50009|Nejste oprávněni přihlásit se do HP Smart Portálu. Buď je Vaše uživatelské ID nebo heslo nesprávné nebo je Váš účet neaktivní.
+da|50009|Du kan ikke  logge på HPs Partnerportal. Dit User ID eller password er ikke korrekt eller også er din konto deaktiveret.
+nl|50009|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Ofwel uw gebruikersnaam/wachtwoord is incorrect of uw account is inactief.
+fi|50009|Käyttäjätunnustasi ei ole valtuutettu sisäänkirjautumaan HP kumppaniportaaliin. Joko käyttäjätunnuksesi tai salasanasi on väärä tai tunnuksen tila ei ole aktiivinen.
+fr|50009|Vous n'êtes pas autorisé à vous connecter à HP Smart Portal. Soit votre login ou mot de passe est incorrect, soit votre compte est inactif.
+de|50009|Ihr Benutzername/Passwort ist falsch oder Ihr Konto ist inaktiv.
+el|50009|Δεν είστε εξουσιοδοτημένος για σύνδεση στο HP Partner Portal. Είτε έχετε λάθος αναγνωριστικό χρήστη ή κωδικό είτε ο λογαριασμός σας είναι ανενεργός.
+hu|50009|Ön nem jogosult a portálra való bejelentkezésre. Lehet hibás az azonosító, a jelszó vagy a státusza "inaktív".
+it|50009|Non sei autorizzato alla login in HP Partner Portal. O la User ID o la Password non è corretta, o il Contatto non è attivo.
+no|50009|Du mangler tilgang til HP Smart Portal. Dette skyldes enten feil i oppgitt brukernavn/passord, eller at brukeren er slettet.
+pl|50009|Nie masz upoważnienia aby zalogować się do portalu - HP Partner Portal. Zostało podane niewłaściwe ID użytkownika lub hasło albo Twoje konto jest nieaktywne.
+pt|50009|Você não está autorizado a fazer a entrar no HP Smart Portal. Talvez o seu ID de utilizador ou palavra chave estejam incorrectos ou a sua conta esteja inactiva.
+ro|50009|Nu sunteti autorizat sa va logati la Portalul pentru Parteneri HP. Fie parola sau user ID-ul sunt incorecte, fie contul dv nu este activ.
+ru|50009|В доступе на портал отказано. Либо ваш логин или пароль введены неверно, либо ваш акаунт не активен.
+sk|50009|Nie ste oprávnený vstúpiť do HP Partnerského portálu. Vaše uživateľské ID alebo heslo je nesprávne, prípadne je Váš účet inaktívny.
+sl|50009|Nimate pooblastila za prijavo v partnerski portal HP. Vnesli ste napačen uporabniški ID ali geslo, ali pa je vaš račun neaktiven.
+es|50009|Error de login. Tu identificador o contraseña son erroneos, o tu cuenta no está activada.
+sv|50009|Du har ej rättighet att logga in på HP Partner Portal. Antingen har du inkorrekt användar-ID eller så är ditt konto inaktivt.
+tr|50009|HP İş Ortakları Portalında oturum açmanıza izin verilmiyor. Kullanıcı kimliğiniz ya da şifreniz yanlış veya hesabınız inaktif.
+en|50010|You are not authorized to login to HP Partner Portal. Either your user ID or password is incorrect, or your account is inactive.
+bg|50010|Нямате права да влизате в НР Партньорския портал. Или вашето потребителско ID, или паролата ви са грешни, или акаунтът ви не е активен.
+hr|50010|Nemate dopusten pristup logiranju na HP Partner Portal. Ili su Vam korisnicko ime i zaporka neispravni, ili Vam racun nije aktiviran.
+cs|50010|Nejste oprávněni přihlásit se do HP Smart Portálu. Buď je Vaše uživatelské ID nebo heslo nesprávné nebo je Váš účet neaktivní.
+da|50010|Du kan ikke  logge på HPs Partnerportal. Dit User ID eller password er ikke korrekt eller også er din konto deaktiveret.
+nl|50010|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Ofwel uw gebruikersnaam/wachtwoord is incorrect of uw account is inactief.
+fi|50010|Käyttäjätunnustasi ei ole valtuutettu sisäänkirjautumaan HP kumppaniportaaliin. Joko käyttäjätunnuksesi tai salasanasi on väärä tai tunnuksen tila ei ole aktiivinen.
+fr|50010|Vous n'êtes pas autorisé à vous connecter à HP Smart Portal. Soit votre login ou mot de passe est incorrect, soit votre compte est inactif.
+de|50010|Ihr Benutzername/Passwort ist falsch oder Ihr Konto ist inaktiv.
+el|50010|Δεν είστε εξουσιοδοτημένος για σύνδεση στο HP Partner Portal. Είτε έχετε λάθος αναγνωριστικό χρήστη ή κωδικό είτε ο λογαριασμός σας είναι ανενεργός.
+hu|50010|Ön nem jogosult a portálra való bejelentkezésre. Lehet hibás az azonosító, a jelszó vagy a státusza "inaktív".
+it|50010|Non sei autorizzato alla login in HP Partner Portal. O la User ID o la Password non è corretta, o il Contatto non è attivo.
+no|50010|Du mangler tilgang til HP Smart Portal. Dette skyldes enten feil i oppgitt brukernavn/passord, eller at brukeren er slettet.
+pl|50010|Nie masz upoważnienia aby zalogować się do portalu - HP Partner Portal. Zostało podane niewłaściwe ID użytkownika lub hasło albo Twoje konto jest nieaktywne.
+pt|50010|Você não está autorizado a fazer a entrar no HP Smart Portal. Talvez o seu ID de utilizador ou palavra chave estejam incorrectos ou a sua conta esteja inactiva.
+ro|50010|Nu sunteti autorizat sa va logati la Portalul pentru Parteneri HP. Fie parola sau user ID-ul sunt incorecte, fie contul dv nu este activ.
+ru|50010|В доступе на портал отказано. Либо ваш логин или пароль введены неверно, либо ваш акаунт не активен.
+sk|50010|Nie ste oprávnený vstúpiť do HP Partnerského portálu. Vaše uživateľské ID alebo heslo je nesprávne, prípadne je Váš účet inaktívny.
+sl|50010|Nimate pooblastila za prijavo v partnerski portal HP. Vnesli ste napačen uporabniški ID ali geslo, ali pa je vaš račun neaktiven.
+es|50010|Error de login. Tu identificador o contraseña son erroneos, o tu cuenta no está activada.
+sv|50010|Du har ej rättighet att logga in på HP Partner Portal. Antingen har du inkorrekt användar-ID eller så är ditt konto inaktivt.
+tr|50010|HP İş Ortakları Portalında oturum açmanıza izin verilmiyor. Kullanıcı kimliğiniz ya da şifreniz yanlış veya hesabınız inaktif.
+en|50011|You are not authorized to login to HP Partner Portal. Either your user ID or password is incorrect, or your account is inactive.
+bg|50011|Нямате права да влизате в НР Партньорския портал. Или вашето потребителско ID, или паролата ви са грешни, или акаунтът ви не е активен.
+hr|50011|Nemate dopusten pristup logiranju na HP Partner Portal. Ili su Vam korisnicko ime i zaporka neispravni, ili Vam racun nije aktiviran.
+cs|50011|Nejste oprávněni přihlásit se do HP Smart Portálu. Buď je Vaše uživatelské ID nebo heslo nesprávné nebo je Váš účet neaktivní.
+da|50011|Du kan ikke  logge på HPs Partnerportal. Dit User ID eller password er ikke korrekt eller også er din konto deaktiveret.
+nl|50011|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Ofwel uw gebruikersnaam/wachtwoord is incorrect of uw account is inactief.
+fi|50011|Käyttäjätunnustasi ei ole valtuutettu sisäänkirjautumaan HP kumppaniportaaliin. Joko käyttäjätunnuksesi tai salasanasi on väärä tai tunnuksen tila ei ole aktiivinen.
+fr|50011|Vous n'êtes pas autorisé à vous connecter à HP Smart Portal. Soit votre login ou mot de passe est incorrect, soit votre compte est inactif.
+de|50011|Ihr Benutzername/Passwort ist falsch oder Ihr Konto ist inaktiv.
+el|50011|Δεν είστε εξουσιοδοτημένος για σύνδεση στο HP Partner Portal. Είτε έχετε λάθος αναγνωριστικό χρήστη ή κωδικό είτε ο λογαριασμός σας είναι ανενεργός.
+hu|50011|Ön nem jogosult a portálra való bejelentkezésre. Lehet hibás az azonosító, a jelszó vagy a státusza "inaktív".
+it|50011|Non sei autorizzato alla login in HP Partner Portal. O la User ID o la Password non è corretta, o il Contatto non è attivo.
+no|50011|Du mangler tilgang til HP Smart Portal. Dette skyldes enten feil i oppgitt brukernavn/passord, eller at brukeren er slettet.
+pl|50011|Nie masz upoważnienia aby zalogować się do portalu - HP Partner Portal. Zostało podane niewłaściwe ID użytkownika lub hasło albo Twoje konto jest nieaktywne.
+pt|50011|Você não está autorizado a fazer a entrar no HP Smart Portal. Talvez o seu ID de utilizador ou palavra chave estejam incorrectos ou a sua conta esteja inactiva.
+ro|50011|Nu sunteti autorizat sa va logati la Portalul pentru Parteneri HP. Fie parola sau user ID-ul sunt incorecte, fie contul dv nu este activ.
+ru|50011|В доступе на портал отказано. Либо ваш логин или пароль введены неверно, либо ваш акаунт не активен.
+sk|50011|Nie ste oprávnený vstúpiť do HP Partnerského portálu. Vaše uživateľské ID alebo heslo je nesprávne, prípadne je Váš účet inaktívny.
+sl|50011|Nimate pooblastila za prijavo v partnerski portal HP. Vnesli ste napačen uporabniški ID ali geslo, ali pa je vaš račun neaktiven.
+es|50011|Error de login. Tu identificador o contraseña son erroneos, o tu cuenta no está activada.
+sv|50011|Du har ej rättighet att logga in på HP Partner Portal. Antingen har du inkorrekt användar-ID eller så är ditt konto inaktivt.
+tr|50011|HP İş Ortakları Portalında oturum açmanıza izin verilmiyor. Kullanıcı kimliğiniz ya da şifreniz yanlış veya hesabınız inaktif.
+en|50013|You are not authorized to login to HP Partner Portal. Either your user ID or password is incorrect, or your account is inactive.
+bg|50013|Нямате права да влизате в НР Партньорския портал. Или вашето потребителско ID, или паролата ви са грешни, или акаунтът ви не е активен.
+hr|50013|Nemate dopusten pristup logiranju na HP Partner Portal. Ili su Vam korisnicko ime i zaporka neispravni, ili Vam racun nije aktiviran.
+cs|50013|Nejste oprávněni přihlásit se do HP Smart Portálu. Buď je Vaše uživatelské ID nebo heslo nesprávné nebo je Váš účet neaktivní.
+da|50013|Du kan ikke  logge på HPs Partnerportal. Dit User ID eller password er ikke korrekt eller også er din konto deaktiveret.
+nl|50013|U bent niet geautoriseerd om in te loggen op HP Smart Portal. Ofwel uw gebruikersnaam/wachtwoord is incorrect of uw account is inactief.
+fi|50013|Käyttäjätunnustasi ei ole valtuutettu sisäänkirjautumaan HP kumppaniportaaliin. Joko käyttäjätunnuksesi tai salasanasi on väärä tai tunnuksen tila ei ole aktiivinen.
+fr|50013|Vous n'êtes pas autorisé à vous connecter à HP Smart Portal. Soit votre login ou mot de passe est incorrect, soit votre compte est inactif.
+de|50013|Ihr Benutzername/Passwort ist falsch oder Ihr Konto ist inaktiv.
+el|50013|Δεν είστε εξουσιοδοτημένος για σύνδεση στο HP Partner Portal. Είτε έχετε λάθος αναγνωριστικό χρήστη ή κωδικό είτε ο λογαριασμός σας είναι ανενεργός.
+hu|50013|Ön nem jogosult a portálra való bejelentkezésre. Lehet hibás az azonosító, a jelszó vagy a státusza "inaktív".
+it|50013|Non sei autorizzato alla login in HP Partner Portal. O la User ID o la Password non è corretta, o il Contatto non è attivo.
+no|50013|Du mangler tilgang til HP Smart Portal. Dette skyldes enten feil i oppgitt brukernavn/passord, eller at brukeren er slettet.
+pl|50013|Nie masz upoważnienia aby zalogować się do portalu - HP Partner Portal. Zostało podane niewłaściwe ID użytkownika lub hasło albo Twoje konto jest nieaktywne.
+pt|50013|Você não está autorizado a fazer a entrar no HP Smart Portal. Talvez o seu ID de utilizador ou palavra chave estejam incorrectos ou a sua conta esteja inactiva.
+ro|50013|Nu sunteti autorizat sa va logati la Portalul pentru Parteneri HP. Fie parola sau user ID-ul sunt incorecte, fie contul dv nu este activ.
+ru|50013|В доступе на портал отказано. Либо ваш логин или пароль введены неверно, либо ваш акаунт не активен.
+sk|50013|Nie ste oprávnený vstúpiť do HP Partnerského portálu. Vaše uživateľské ID alebo heslo je nesprávne, prípadne je Váš účet inaktívny.
+sl|50013|Nimate pooblastila za prijavo v partnerski portal HP. Vnesli ste napačen uporabniški ID ali geslo, ali pa je vaš račun neaktiven.
+es|50013|Error de login. Tu identificador o contraseña son erroneos, o tu cuenta no está activada.
+sv|50013|Du har ej rättighet att logga in på HP Partner Portal. Antingen har du inkorrekt användar-ID eller så är ditt konto inaktivt.
+tr|50013|HP İş Ortakları Portalında oturum açmanıza izin verilmiyor. Kullanıcı kimliğiniz ya da şifreniz yanlış veya hesabınız inaktif.
+en|login_waitMessage|Login in progress
+bg|login_waitMessage|Логването е в ход
+hr|login_waitMessage|Upis u tijeku
+cs|login_waitMessage|Probíhá přihlašování
+da|login_waitMessage|Login proces
+nl|login_waitMessage|Login in uitvoering
+fi|login_waitMessage|Kirjautuminen käynnissä
+fr|login_waitMessage|Connexion en cours
+de|login_waitMessage|Login in Bearbeitung
+el|login_waitMessage|Διαδικασία σύνδεσης
+hu|login_waitMessage|Belépés folyamatban
+it|login_waitMessage|Login in atto
+no|login_waitMessage|Pålogging pågår
+pl|login_waitMessage|Trwa logowanie
+pt|login_waitMessage|Login em progresso
+ro|login_waitMessage|Login in desfasurare
+ru|login_waitMessage|Производится вход в систему
+sk|login_waitMessage|Prihlásenie do postupu
+sl|login_waitMessage|Vpis v postopku
+es|login_waitMessage|Login en proceso
+sv|login_waitMessage|Login-process igång
+tr|login_waitMessage|Oturum açma işlemi devam ediyor
+zh_cn|0|您无权访问惠普合作伙伴门户。您的用户名或密码输入有误，或您的帐户无效。
+zh_cn|2|您无权访问该门户。您处于“待定”状态。请与惠普联系，了解详情。
+zh_cn|3|您无权访问该门户。您处于“非活跃”状态。请与惠普联系，了解详情。
+zh_cn|50001|为了加强您的信息安全，您需要修改您的密码，请在完成以下表格后再继续登陆。
+zh_cn|50003|由于您多次登陆失败，您的用户帐户将被封锁大约1小时。请等待大约1小时，直到您的帐户解锁后再进行登陆。当您的帐户解锁后，如果您忘记了您的登陆信息，您可以点击“忘记用户名名”或“忘记密码”。
+zh_cn|50004|登陆失败。如果您忘记了您的登陆信息，请点击“忘记密码”。
+zh_cn|50006|您的密码已过期。请在下方表格中输入新密码后再继续登陆。
+zh_cn|50007|您正在使用的应用集成了惠普密码（一个由惠普提供的简单登陆服务）。今后您在该网站上使用的用户名和密码，也可以用于登陆其它支持惠普密码的惠普网站。请您花几分钟的时间来更新您的资料，谢谢！
+zh_cn|50008|为了您增强您的信息安全，您需要更改您的安全问题和答案。请在完成以下表格后再继续登陆。
+zh_cn|50009|您无权登陆惠普合作伙伴门户。您的用户名或密码输入有误，或您的帐户无效。
+zh_cn|50010|您无权登陆惠普合作伙伴门户。您的用户名或密码输入有误，或您的帐户无效。
+zh_cn|50011|您无权登陆惠普合作伙伴门户。您的用户名或密码输入有误，或您的帐户无效。
+zh_cn|50013|您无权登陆惠普合作伙伴门户。您的用户名或密码输入有误，或您的帐户无效。
+zh_cn|50014|为了您增强您的信息安全，您需要更改您的密码以及安全问题和答案。请在完成以下安全问题与答案表格后再继续登陆。
+zh_cn|DISPATCH|您无权登陆HP Smart Portal。您处于“等待派遣”状态。请联系惠普，了解详情。
+zh_cn|NOT_REGISTER|您还没有在HP Smart Portal上注册。
+zh_cn|login_password|密码
+zh_cn|login_submitLabel|登陆
+zh_cn|login_subtitle|登陆
+zh_cn|login_user_id|用户名
+zh_cn|login_waitMessage|正在登陆
+ja|0|有効でないユーザーIDかパスワードが入力されました。ユーザーIDとパスワードを再度入力してください。入力の際は大文字、小文字が正しく入力されているかご注意ください。（パスワードは大文字、小文字の違いを認識します。）もしくはアカウントが有効になっていない可能性があります。
+ja|2|このユーザーIDは現在「保留中」のため、アクセスをすることができません。詳しくはHPにお問合せください。
+ja|3|このユーザーIDは現在「有効」ではないため、アクセスをすることができません。詳しくはHPにお問合せください。
+ja|50001|セキュリティー確保のため、パスワードを定期的に変更する必要があります。以下のフォームにご入力ください。
+ja|50003|入力違いが5回続いたため、このユーザーアカウントは約1時間ロックされます。ロックが解除になるのをお待ちいただき、再びサインイン操作を行ってください。サインイン情報をお忘れの場合には、「ユーザーIDをお忘れですか？」または「パスワードをお忘れですか？」をクリックしてご確認ください。
+ja|50004|ログインすることができませんでした。パスワードをお忘れの場合には「パスワードをお忘れですか？」をクリックしてご確認ください。
+ja|50006|パスワードの有効期限が過ぎています。以下のフォームよりパスワードの変更を行ってください。
+ja|50007|プロファイルを更新いただき、ありがとうございます。このアプリケーションはHPパスポートで管理されています。HPパスポートにIDが登録されると、HPパスポートで管理されているサイトにも同じIDでサインインすることができます。
+ja|50008|セキュリティー確保のため、セキュリティーの質問と答えを定期的に変更する必要があります。以下のフォームにご入力ください。
+ja|50009|有効でないユーザーIDかパスワードが入力されました。ユーザーIDとパスワードを再度入力してください。入力の際は大文字、小文字が正しく入力されているかご注意ください。（パスワードは大文字、小文字の違いを認識します。）もしくはアカウントが有効になっていない可能性があります。
+ja|50010|有効でないユーザーIDかパスワードが入力されました。ユーザーIDとパスワードを再度入力してください。入力の際は大文字、小文字が正しく入力されているかご注意ください。（パスワードは大文字、小文字の違いを認識します。）もしくはアカウントが有効になっていない可能性があります。
+ja|50011|有効でないユーザーIDかパスワードが入力されました。ユーザーIDとパスワードを再度入力してください。入力の際は大文字、小文字が正しく入力されているかご注意ください。（パスワードは大文字、小文字の違いを認識します。）もしくはアカウントが有効になっていない可能性があります。
+ja|50013|有効でないユーザーIDかパスワードが入力されました。ユーザーIDとパスワードを再度入力してください。入力の際は大文字、小文字が正しく入力されているかご注意ください。（パスワードは大文字、小文字の違いを認識します。）もしくはアカウントが有効になっていない可能性があります。
+ja|50014|セキュリティー確保のため、パスワードおよびセキュリティーの質問と答えを定期的に変更する必要があります。以下のフォームにご入力ください。
+ja|DISPATCH|このユーザーIDは現在「処理中」のため、アクセスをすることができません。詳しくはHPにお問合せください。
+ja|NOT_REGISTER|HP PartnerPortalに登録がありません。
+ja|login_password|パスワード
+ja|login_submitLabel|ログイン
+ja|login_subtitle|ログイン
+ja|login_user_id|ユーザー ID
+ja|login_waitMessage|ログイン中
+ko|0|HP 파트너 포털에 로그인할 수 없습니다. 사용자 ID 또는 비밀번호가 잘못되었거나 계정이 비활성 상태입니다.
+ko|2|포털에 액세스할 수 없습니다. 귀하의 상태는 "보류 중"입니다. 자세한 내용은 HP에 문의하십시오.
+ko|3|포털에 액세스할 수 없습니다. 귀하의 상태는 "비활성"입니다. 자세한 내용은 HP에 문의하십시오.
+ko|50001|정보 보안을 향상시키려면 비밀번호를 변경해야 합니다. 계속하려면 아래 양식을 완료하십시오.
+ko|50003|여러 번의 로그인 실패로 인해 귀하의 사용자 계정이 약 한 시간 동안 잠깁니다. 약 한 시간 뒤 계정 잠김이 해제되면 다시 로그인을 시도하십시오. 계정 잠김이 해제되었을 때 로그인 정보가 기억나지 않으면 "ID 찾기" 또는 "비밀번호 찾기"를 클릭할 수 있습니다.
+ko|50004|로그인에 실패했습니다. 로그인 정보가 기억나지 않으면 "비밀번호 찾기"를 클릭하십시오.
+ko|50006|비밀번호가 만료되었습니다. 계속하려면 아래의 비밀번호 변경 양식을 완료하십시오.
+ko|50007|현재 사용 중인 응용 프로그램은 HP.com에서 제공하는 단일 로그인 서비스인 HP Passport와 통합되어 있습니다. 이 사이트에서 사용하는 사용자 ID 및 비밀번호는 HP.com의 다른 HP Passport 활성 사이트에서 사용할 수 있습니다. 프로필을 업데이트해 주시기 바랍니다.
+ko|50008|정보 보안을 향상시키려면 보안 질문/답변을 변경해야 합니다. 계속하려면 아래 양식을 완료하십시오.
+ko|50009|HP 파트너 포털에 로그인할 수 없습니다. 사용자 ID 또는 비밀번호가 잘못되었거나 계정이 비활성 상태입니다.
+ko|50010|HP 파트너 포털에 로그인할 수 없습니다. 사용자 ID 또는 비밀번호가 잘못되었거나 계정이 비활성 상태입니다.
+ko|50011|HP 파트너 포털에 로그인할 수 없습니다. 사용자 ID 또는 비밀번호가 잘못되었거나 계정이 비활성 상태입니다.
+ko|50013|HP 파트너 포털에 로그인할 수 없습니다. 사용자 ID 또는 비밀번호가 잘못되었거나 계정이 비활성 상태입니다.
+ko|50014|정보 보안을 향상시키려면 비밀번호 및 보안 질문/답변을 변경해야 합니다. 계속하려면 아래의 보안 질문/답변 양식을 작성하십시오.
+ko|DISPATCH|HP Smart Portal에 액세스할 수 없습니다. 귀하의 상태는 "발송"입니다. 자세한 내용은 HP에 문의하십시오.
+ko|NOT_REGISTER|귀하는 HP Smart Portal에 등록되지 않았습니다.
+ko|login_password|비밀번호
+ko|login_submitLabel|로그인
+ko|login_subtitle|로그인
+ko|login_user_id|사용자 ID
+ko|login_waitMessage|로그인 진행 중
+zh_tw|0|您可能輸入了無效的使用者帳號或密碼。 請重新輸入您的使用者帳號與密碼，然後重試一次。請確定您輸入的密碼大小寫正確（密碼是有大小寫區別的）。請註意，為了安全目的，當您嘗試登入失敗超過5次，您的帳號就會被鎖住。
+zh_tw|2|您未被授權存取此入口網站。您的狀態是「擱置中」。請與 HP 聯絡以取得更多資訊。
+zh_tw|3|您未被授權存取此入口網站。您的狀態是「尚未啟用」。請與 HP 聯絡以取得更多資訊。
+zh_tw|50001|為了加強資訊的安全，請變更您的密碼。若要繼續，請完成下表。
+zh_tw|50003|因為登入失敗次數過多，使用者帳號會被鎖住約一個小時。請於一個小時後，待帳號解鎖時再行登入。帳號解鎖時，如果不記得登入資訊，可按一下「忘記使用者 ID」或「忘記密碼」。
+zh_tw|50004|登入失敗。如果不記得登入資訊，請按一下「忘記密碼」。
+zh_tw|50006|密碼到期。若要繼續，請完成下面的變更密碼表。
+zh_tw|50007|您正在使用的應用程式已和 HP Passport 整合，HP Passport 是 HP.com 提供的一種單一登入服務。這個網站所用的使用者 ID 和密碼，也可以在 HP.com 中的其他 HP Passport 啟用網站上使用。請花數分鐘時間更新您的設定檔，謝謝！
+zh_tw|50008|為了加強資訊的安全，請變更您的安全問題和答案。若要繼續，請完成下表。
+zh_tw|50009|您未被授權登入 HP 合作夥伴入口網站。使用者 ID 或密碼可能不正確，或者帳號尚末啟用。
+zh_tw|50010|您未被授權登入 HP 合作夥伴入口網站。使用者 ID 或密碼可能不正確，或者帳號尚末啟用。
+zh_tw|50011|您未被授權登入 HP 合作夥伴入口網站。使用者 ID 或密碼可能不正確，或者帳號尚末啟用。
+zh_tw|50013|您未被授權登入 HP 合作夥伴入口網站。使用者 ID 或密碼可能不正確，或者帳號尚末啟用。
+zh_tw|50014|為了加強資訊的安全，請變更您的密碼，以及安全問題和答案。若要繼續，請完成下面的安全問題和答案表。
+zh_tw|DISPATCH|您未被授權存取 HP Smart Portal。您的狀態是「待分派」。請與 HP 聯絡以取得更多資訊。
+zh_tw|NOT_REGISTER|您尚未在 HP Smart Portal 註冊。
+zh_tw|login_password|密碼
+zh_tw|login_submitLabel|登入
+zh_tw|login_subtitle|登入
+zh_tw|login_user_id|使用者 ID
+zh_tw|login_waitMessage|登入進行中
+bg|4|Влизането в портала е временно недостъпно. Свържете се HP за допълнителна информация.
+cz|4|Přihlášení se k portálu je dočasně nedostupné. Pro více informací kontaktujte HP.
+da|4|Portal-login er midlertidigt ikke tilgængelig. Kontakt HP angående flere oplysninger.
+de|4|Anmeldung bei Portal ist derzeit nicht möglich. Um weitere Informationen zu erhalten, wenden Sie sich an HP.
+el|4|Η είσοδος στην πύλη δεν είναι διαθέσιμη προσωρινά. Επικοινωνήστε με την HP για περισσότερες πληροφορίες.
+es|4|El inicio de sesión en el portal no está disponible temporalmente. Póngase en contacto con HP para obtener más información.
+fi|4|Portaaliin ei väliaikaisesti voi kirjautua. Lisätietoja saat HP:ltä.
+fr|4|Le portail est temporairement inaccessible. Pour plus d'informations, veuillez contacter HP.
+hr|4|Prijava na portal privremeno nije dostupna. Kontaktirajte HP za više informacija.
+hu|4|A portálbejelentkezés átmenetileg nem érhető el. További információkért forduljon a HP ügyfélszolgálatához.
+it|4|L'accesso al portale non è momentaneamente disponibile. Contattare HP per maggiori informazioni.
+nl|4|Aanmelden bij Portal is tijdelijk niet beschikbaar. Neem contact op met HP voor meer informatie.
+no|4|Portalpålogging er midlertidig utilgjengelig. Kontakt HP for å få mer informasjon.
+pl|4|Logowanie w portalu jest tymczasowo niedostępne. Więcej informacji można uzyskać, kontaktując się z HP.
+pt|4|O início de sessão no portal está temporariamente indisponível. Para obter mais informações, contacte a HP.
+ru|4|Доступ к порталу временно недоступен. Для получения дополнительной информации обратитесь в компанию HP.
+sk|4|Prihlásenie na portál nie je dočasne k dispozícii. Pre viac informácií kontaktujte spoločnosť HP.
+sl|4|Prijava v portal trenutno ni na voljo. Za dodatne informacije se obrnite na HP.
+sv|4|Det går för närvarande inte att logga in på portalen. Kontakta HP för mer information.
+tr|4|Portal'da geçici olarak oturum açılamıyor. Daha fazla bilgi için HP'ye başvurun.
+zh_tw|4|暫時無法登入入口網站，請聯絡 HP 以取得更多資訊。
+zh_cn|4|门户暂时无法访问。请联系惠普，了解详情。
+ja|4|現在ポータルをご利用いただくことができません（UPSエラー）。詳しくはHPにお問合せください。
+ko|4|일시적으로 포털에 로그인할 수 없습니다. 자세한 내용은 HP에 문의하십시오.
+en|4|Portal login is temporarily not available.Contact HP for more information.
+es|0|No está autorizado para conectarse a  HP Partner Portal. Es posible que su  ID de usuario o contraseña sean incorrectos o su cuenta  está inactiva.|partnerportal-lar
+es|2|No está autorizado para acceder al Portal. Su  estado es "pending". Contacte HP para obtener más información.|partnerportal-lar
+es|3|No está autorizado para acceder al Portal. Su  estado es "inactive". Contacte HP para obtener más información.|partnerportal-lar
+es|50001|Para mejorar su información de seguridad, debe cambiar su contraseña. Complete el formulario  siguiente para continuar.|partnerportal-lar
+es|50003|Su cuenta de usuario está bloqueada durante aproximadamente una hora debido a varios intentos de inicio de sesión fallidos. Espere una hora para desbloquear su cuenta antes de intentar un nuevo inicio de sesión. Una vez desbloqueada su cuenta, haga clic en "¿Olvidó su ID de usuario?" u "¿Olvidó su contraseña?" si no recuerda la información para inciar la sesión.|partnerportal-lar
+es|50004|Error de inicio de sesión. Haga clic en "¿Olvidó su contraseña?" si no recuerda la información para inciar la sesión.|partnerportal-lar
+es|50006|Su contraseña ha caducado. Complete el formulario de cambio de contraseña siguiente para continuar.|partnerportal-lar
+es|50007|La aplicación que está utilizando está integrada ahora al HP Passport, un servicio de acceso único de HP.com. El ID de usuario y contraseña que está utilizando en este sitio pueden ser utilizados en otros sitios HP Passport de HP.com. Gracias por tomarse la molestia de actualizar su perfil.|partnerportal-lar
+es|50008|Para mejorar su información de seguridad, debe cambiar su pregunta y respuesta de seguridad. Complete el formulario siguiente para continuar.|partnerportal-lar
+es|50009|No está autorizado para conectarse a  HP Partner Portal. Es posible que su  ID de usuario o contraseña sean incorrectos o su cuenta  está inactiva.|partnerportal-lar
+es|50010|No está autorizado para conectarse a  HP Partner Portal. Es posible que su  ID de usuario o contraseña sean incorrectos o su cuenta  está inactiva.|partnerportal-lar
+es|50011|No está autorizado para conectarse a  HP Partner Portal. Es posible que su  ID de usuario o contraseña sean incorrectos o su cuenta  está inactiva.|partnerportal-lar
+es|50013|No está autorizado para conectarse a  HP Partner Portal. Es posible que su  ID de usuario o contraseña sean incorrectos o su cuenta  está inactiva.|partnerportal-lar
+es|50014|Para mejorar su información de seguridad, debe cambiar su contraseña y su pregunta y respuesta de seguridad. Complete el formulario siguiente para continuar.|partnerportal-lar
+es|DISPATCH|No está autorizado para acceder a HP Smart Portal. Su  estado es "to dispatch". Contacte HP para obtener más información.|partnerportal-lar
+es|NOT_REGISTER|No está registrado en HP Smart Portal.|partnerportal-lar
+es|login_password|Contraseña|partnerportal-lar
+es|login_submitLabel|Iniciar sesión|partnerportal-lar
+es|login_subtitle|Iniciar sesión|partnerportal-lar
+es|login_user_id|ID de usuario|partnerportal-lar
+es|login_waitMessage|Inicio de sesión en curso|partnerportal-lar
+es|4|El inicio de sesión en el portal está temporalmente fuera de servicio. Conacte HP para obtener más información.|partnerportal-lar
+pt|4|O acesso ao portal se encontra temporariamente indisponível. Contate a HP para mais informações.|partnerportal-lar
+pt|0|Não está autorizado a acessar o HP Partner Portal. A sua identificação de usuário ou senha estão incorretas ou a sua conta  se encontra inativa.|partnerportal-lar
+pt|2|Não está autorizado a acessar o Portal. O seu estado é "pending". Contate a HP para mais informações.|partnerportal-lar
+pt|3|Não está autorizado a acessar o Portal. O seu estado é "inactive". Contate a HP para mais informações.|partnerportal-lar
+pt|50001|Para reforçar a segurança da sua informação, deve alterar a sua senha. Por favor, complete o formulário abaixo para continuar.|partnerportal-lar
+pt|50003|A sua conta de usuário será bloqueada durante cerca de uma hora devido a ter efetuado demasiadas tentativas para acessar. Por favor, espere cerca de uma hora para que a sua conta desbloqueie antes de voltar a tentar acessar novamente. Quando sua conta estiver desbloqueada, poderá clicar em "Esqueceu sua ID do usuário?" ou "Esqueceu sua senha?" se não lembrar sua informação para acessar.|partnerportal-lar
+pt|50004|Acesso sem êxito. Clique em "Esqueceu sua senha?" se não lembrar sua informação para acessar.|partnerportal-lar
+pt|50006|Sua senha expirou. Por favor, complete o formulário de alteração de senha que se encontra abaixo para continuar.|partnerportal-lar
+pt|50007|A aplicação que está usando está agora integrada com o Passaporte HP, um único serviço de acesso da HP.com. A identificação de usuário e senha que você usa neste sítio podem ser usados em outros sítios com Passaporte HP em HP.com. Agradecemos o tempo disponibilizado para atualizar seu perfil.|partnerportal-lar
+pt|50008|Para reforçar a segurança da sua informação, deve alterar a sua senha. Por favor, complete o formulário abaixo para continuar.|partnerportal-lar
+pt|50009|Não está autorizado a acessar o HP Partner Portal. A sua identificação de usuário ou senha estão incorretas ou a sua conta  se encontra inativa.|partnerportal-lar
+pt|50010|Não está autorizado a acessar o HP Partner Portal. A sua identificação de usuário ou senha estão incorretas ou a sua conta  se encontra inativa.|partnerportal-lar
+pt|50011|Não está autorizado a acessar o HP Partner Portal. A sua identificação de usuário ou senha estão incorretas ou a sua conta  se encontra inativa.|partnerportal-lar
+pt|50013|Não está autorizado a acessar o HP Partner Portal. A sua identificação de usuário ou senha estão incorretas ou a sua conta  se encontra inativa.|partnerportal-lar
+pt|50014|Para reforçar a segurança da sua informação, deve alterar a sua senha. Por favor, complete o formulário abaixo para continuar.|partnerportal-lar
+pt|DISPATCH|Não está autorizado a acessar o HP Smart Portal. O seu estado é "to dispatch". Contate a HP para mais informações.|partnerportal-lar
+pt|NOT_REGISTER|Não está cadastrado no HP Smart Portal.|partnerportal-lar
+pt|login_password|Senha|partnerportal-lar
+pt|login_submitLabel|Faça login|partnerportal-lar
+pt|login_subtitle|Faça login|partnerportal-lar
+pt|login_user_id|ID do usuário|partnerportal-lar
+pt|login_waitMessage|Acessando|partnerportal-lar

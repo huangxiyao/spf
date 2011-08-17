@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold" component-id="YVbedcUYUfbQfdbeWSWeceRQYVdaaYfQ" component-type="JSP Includes" description="" epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0" title="InternalRedirectProxy" xmlns:epideploy="http://www.epicentric.com/deployment">
+ <epideploy:required-component component-id="template0007" component-type="Style Types" major-version="7" minor-version="2"/>
+ <epideploy:detail>
+  <style-info apply-template-header="true" description="" friendly-id="internalredirectproxy1" id="YVbedcUYUfbQfdbeWSWeceRQYVdaaYfQ" is-system="false" primary-filename="InternalRedirectProxy.jsp" processing-type="JSP_BASED" template-default="false" template-uid="template0007" title="InternalRedirectProxy" visible="true"/>
+ </epideploy:detail>
+</epideploy:component>

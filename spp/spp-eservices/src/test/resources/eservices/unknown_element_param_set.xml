@@ -1,0 +1,16 @@
+<Site name="EMEA PRM">
+<StdParameterSet name="EMEA_Parameters">
+	<Unknown>toto</Unknown>
+	<parameter name="userName">
+		<expression>${username}</expression>
+	</parameter>
+	<parameter name="lastName">
+			<expression>${lastname}</expression>
+	</parameter>
+</StdParameterSet>
+<StdParameterSet name="EMEA_Parameters_two">
+	<parameter name="userName">
+		<expression>${username}</expression>
+	</parameter>
+</StdParameterSet>
+</Site>

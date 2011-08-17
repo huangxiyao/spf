@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Group name='INVALID_GENERIC_GROUP'>
+	<And>
+		<Equals attribute="userStatus">Active</Equals>
+		<Equals attribute="userProgramName">EU-Competitor Supplies</Equals>
+		<Or>
+			<Equals	attribute="userCountryCode">Switzerland</Equals>
+			<Equals attribute="userCountryCode">Lichtenstein</Equals>
+		</Or>
+		<And>
+			<Equals attribute="userRole">Partner Portal User</Equals>
+			<Not>
+				<Or>
+					<Equals attribute="userCountryCode">UK</Equals>
+					<Equals attribute="userCountryCode">IRELAND</Equals>
+				</Or>
+			</Not>
+		</And>
+	</And>
+</Group>
+	

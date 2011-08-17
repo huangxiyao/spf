@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-lazy="false">
+	<class name="com.hp.spp.common.ResourceHistory" table="SPP_RESOURCE_HISTORY">
+		<id name="id" column="ID" type="long">
+			<generator class="sequence">
+				<param name="sequence">SPP_RESOURCE_HISTORY_ID_SEQ</param>
+			</generator>
+		</id>
+		<property name="owner"   column="OWNER" type="string" length="100"/>
+		<property name="comment" column="MODIFICATION_COMMENT" type="string" length="500"/>
+		<property name="modificationType" column="MODIFICATION_TYPE" type="integer" />
+		<property name="creationDate" column="CREATION_DATE" type="timestamp" />
+		<property name="siteId" column="SITE_ID" type="long"/>
+		<property name="backupFileInternal" column="BACKUP_FILE" type="blob"/>
+		<property name="dataChangeInternal" column="DATA_CHANGE" type="blob"/>
+	</class>
+</hibernate-mapping>
+	

@@ -1,0 +1,849 @@
+LANGUAGECODE|RULENUMBER|CODE|FIELDNAME|DESCRIPTION
+EN|970|field.empty|department|Department not selected.
+IT|972|field.notauthorized|contactID|Il Contact ID inserito è già stato assegnato ad un altro utente.
+IT|971|field.empty|seniority|Ruolo aziendale non selezionato.
+IT|970|field.empty|department|Dipartimento non selezionato.
+NO|973|field.notfound|contactID|Den oppgitte kontaktperson-IDen er ugyldig - enten finnes den ikke, eller den tilhører en slettet bruker.
+NO|972|field.notauthorized|contactID|Den oppgitte kontaktperson-IDen er allerede i bruk.
+NO|971|field.empty|seniority|Funksjon/stilling er ikke oppgitt.
+NO|970|field.empty|department|Avdeling er ikke oppgitt.
+PL|973|field.notfound|contactID|Kontakt ID, który podałeś jest nieprawidłowy. Podany kontakt id nie istnieje lub jest przypisany do nieaktywnego kontaktu.
+PL|972|field.notauthorized|contactID|Kontakt ID, który podałeś jest już przypisany do innego użytkownika portalu
+PL|971|field.empty|seniority|Stanowisko nie zostało wybrane
+PL|970|field.empty|department|Dział nie został wybrany
+PT|973|field.notfound|contactID|O Id do contacto que introduziu está inválido, contudo este Id não existe ou é de um contacto inactivo.
+PT|972|field.notauthorized|contactID|O Id do contacto que introduziu já está a ser utilizado por outro utilizador.
+PT|971|field.empty|seniority|Função não seleccionada.
+PT|970|field.empty|department|Departamento não seleccionado.
+RO|973|field.notfound|contactID|ID-ul persoanei de contact pe care l-ai introdus este invalid, fie acest ID nu exista, fie este pentru un contact care nu este activ.
+RO|972|field.notauthorized|contactID|ID-ul persoanei de contact pe care l-ai introdus este deja acordat altui utilizator al portalului.
+RO|971|field.empty|seniority|Vechimea nu a fost selectata
+RO|970|field.empty|department|Departamentul nu a fost selectat
+RU|973|field.notfound|contactID|Введенный вами Contact ID неверен. Этот ID либо не существует, либо пренадлежит не активному контакту.
+RU|972|field.notauthorized|contactID|Указанный вами Contact ID уже связан с другим пользователем портала.
+RU|971|field.empty|seniority|Должностная функция не указана
+RU|970|field.empty|department|Отдел не указан
+SK|973|field.notfound|contactID|Kontaktné ID, ktoré ste zadali je nesprávne, alebo toto ID neexistuje, alebo kontakt nie je aktívny.
+SK|972|field.notauthorized|contactID|Kontaktné ID, ktoré ste zadali je už zadané pre iného užívateľa Smart Portálu.
+SK|971|field.empty|seniority|Seniorita nebola vybraná
+SK|970|field.empty|department|Oddelenie nebolo vybrané
+SL|973|field.notfound|contactID|Id stika, ki ste ga vnesli, je napačen. Ali ta Id ne obstaja ali pa je namenjen neaktivnemu stiku.
+SL|972|field.notauthorized|contactID|Id stika, ki ste ga vnesli, je že dodeljen drugemu uporabniku portala.
+SL|971|field.empty|seniority|Staž ni izbran.
+SL|970|field.empty|department|Oddelek ni izbran.
+ES|973|field.notfound|contactID|Este Contact ID no es válido, o no existe o el contacto está inactivo
+ES|972|field.notauthorized|contactID|Este Contact ID ya está asignado a otro usuario del portal
+ES|971|field.empty|seniority|Seleccionar el nivel del puesto
+ES|970|field.empty|department|Seleccionar el departamento
+SV|973|field.notfound|contactID|The Contact Id that you have entered is invalid, either this Id does not exist or it is for an inactive contact.
+SV|972|field.notauthorized|contactID|The Contact Id that you have entered is already assigned to another portal user.
+SV|971|field.empty|seniority|Chefsnivå ej vald
+SV|970|field.empty|department|Avdelning inte vald.
+TR|973|field.notfound|contactID|Girmiş olduğunuz kontak kimliği geçersiz. Bu kimlik ya yanlış, ya da aktif durumda değil.
+TR|972|field.notauthorized|contactID|Girmiş olduğunuz kontak kimliği başka bir kullanıcıya verilmiş bulunuyor.
+TR|971|field.empty|seniority|Kıdem seçilmedi.
+TR|970|field.empty|department|Bölüm seçilmedi.
+EN|973|field.notfound|contactID|The Contact Id that you have entered is invalid, either this Id does not exist or it is for an inactive contact.
+EN|972|field.notauthorized|contactID|The Contact Id that you have entered is already assigned to another portal user.
+EN|971|field.empty|seniority|Seniority not selected.
+IX|968|field.empty|alert|Alert not selected.
+FR|972|field.notauthorized|contactID|Le Contact ID que vous avez saisi est déjà assigné à un autre utilisateur du site.
+FR|971|field.empty|seniority|Aucun rôle n'est sélectionné.
+FR|970|field.empty|department|Aucun département n'est sélectionné.
+DE|973|field.notfound|contactID|Die von Ihnen eingegeben Contact-ID ist ungültig. Diese Id existiert nicht oder gehört zu einem inaktiven Kontakt.
+DE|972|field.notauthorized|contactID|Die  von Ihnen eingegebene Contact-ID ist bereits an einen anderen Benutzer des Portals vergeben
+DE|971|field.empty|seniority|Hierachie
+DE|970|field.empty|department|Abteilung nicht ausgewählt
+EL|973|field.notfound|contactID|Το Contact ID δεν είναι έγκυρο, ή δεν υπάρχει ή είναι ανενεργό.
+EN|969|field.empty|newsletter|Newsletter not selected.
+EN|968|field.empty|alert|Alert not selected.
+EL|972|field.notauthorized|contactID|Το Contact ID που επιλέξατε χρησιμοποείται ήδη από κάποιο, άλλο χρήστη.
+EL|971|field.empty|seniority|Δεν επιλέξατε "Θέση στην εταιρεία"
+EL|970|field.empty|department|Δεν επιλέξατε "Τμήμα".
+HU|973|field.notfound|contactID|A megadott Contact ID nem érvényes: nem létezik, vagy inaktív felhasználóhoz tartozik.
+IX|969|field.empty|newsletter|Newsletter not selected.
+IX|968|field.empty|alert|Alert not selected.
+IX|979|field.notfound|partnerProId|Partner ID not found.
+IX|978|field.toomany|partnerProId|Too many Partner ID was returned.
+IX|977|field.notactive|partnerProId|Partner is not active.
+IX|976|field.notauthorized|partnerProId|Partner is not authorized.
+IX|421|field.empty|currentPassword|Current password not entered.
+IX|975|field.empty|role|Role not selected
+IX|974|field.empty|status|Status not selected
+IX|967|field.format|dob|Date format is invalid.
+IX|998|field.empty|workPhone|Work phone not entered
+IX|997|field.empty|mobilePhone|Mobile phone not entered
+IX|999|field.empty|jobFunction|Job function not selected
+IX|996|field.empty|faxNumber|Fax not entered
+IX|995|field.empty|contactPrefEmail|E-Mail privacy not selected
+IX|994|field.empty|contactPrefTelephone|Phone privacy not selected
+IX|993|field.empty|contactPrefPost|Postal mail privacy not selected
+IX|992|field.empty|fax|Fax privacy not selected
+IX|984|field.empty|title|Title not Selected
+IX|263|field.empty|firstName|First Name not entered
+IX|258|field.empty|lastName|Last Name not entered
+IX|467|field.empty|securityAnswer|Challenge answer not entered
+IX|476|field.empty|securityQuestion|Challenge question not selected
+IX|266|field.empty|email|E-Mail not entered
+IX|252|field.empty|password|Password not entered.
+IX|231|field.empty|userId|User ID not entered.
+IX|982|field.empty|emailMessage|Email message is empty
+IX|983|field.empty|topic|Topic not Selected
+IX|985|field.empty|posteCode|Post code not entered
+IX|980|field.format|email|E-mail address format is invalid
+IX|981|field.empty|email|E-mail type not set
+IX|284|field.empty|contactPrefEmail|E-Mail privacy not selected
+IX|279|field.empty|residentCountryCode|Country of Business not selected
+IX|277|field.empty|langCode|Preferred Language not entered
+IX|991|field.empty|sms|SMS privacy not selected
+IX|990|field.empty|company|Partner name not entered
+IX|989|field.empty|companyNumber|Company number not entered
+IX|988|field.empty|workAddress|Work address not entered
+IX|987|field.empty|city|City not entered
+HU|972|field.notauthorized|contactID|A megadott Contact ID-t a rendszer már egy másik felhasználóhoz rendelte.
+HU|971|field.empty|seniority|Pozíció nincs kiválasztva
+HU|970|field.empty|department|Terület nincs kiválasztva
+IT|973|field.notfound|contactID|Il Contact ID inserito non è valido, non esiste o è inattivo.
+EN|969|field.empty|newsletter|Newsletter not selected.
+EN|968|field.empty|alert|Alert not selected.
+IX|973|field.notfound|contactID|The Contact Id that you have entered is invalid, either this Id does not exist or it is for an inactive contact.
+IX|972|field.notauthorized|contactID|The Contact Id that you have entered is already assigned to another portal user.
+IX|971|field.empty|seniority|Seniority not selected.
+IX|970|field.empty|department|Department not selected.
+BG|973|field.notfound|contactID|Контактното ID, което въвеждате е невалидно: или не съществува или принадлежи на неактивен контакт.
+BG|972|field.notauthorized|contactID|Контактното ID, което въвеждате, вече се изпозва от друг потребител на портала.
+BG|971|field.empty|seniority|Не е избрано старшинство
+BG|970|field.empty|department|Не е избран отдел
+HR|973|field.notfound|contactID|Kontakt ID koji ste unjeli je pogresan, nevazeci ili je neaktivan.
+HR|972|field.notauthorized|contactID|Kontakt ID koji ste unjeli je vec upotrebljen.
+HR|971|field.empty|seniority|Funkcija nije odabrana
+HR|970|field.empty|department|Odjel nije odabran
+CS|973|field.notfound|contactID|Kontakt ID, které jste vložili, je neplatné, neexistuje nebo patří neaktivnímu uživateli. 
+CS|972|field.notauthorized|contactID|Kontakt ID, které jste vložili, je již přiřazeno jinému uživateli.
+CS|971|field.empty|seniority|Zvolte hodnostní zařazení
+CS|970|field.empty|department|Zvolte oddělení
+DA|973|field.notfound|contactID|Det kontakt ID du har søgt på er enten ugyldigt, eksisterer ikke eller det er kan være for en inaktiv kontakt.
+DA|972|field.notauthorized|contactID|Det kontakt ID du har søgt på er allerede tildelt en anden bruger på portalen.
+DA|971|field.empty|seniority|Anciennitet ikke valgt.
+DA|970|field.empty|department|Afdeling ikke valgt.
+NL|973|field.notfound|contactID|Het contact ID dat u heeft ingevoerd is ongeldig. Deze ID bestaat niet of is van een inactief contactpersoon.
+NL|972|field.notauthorized|contactID|Het contact ID dat u heeft ingevoerd is al toegekend aan een andere gebruiker.
+NL|971|field.empty|seniority|Senioriteit is niet geselecteerd.
+NL|970|field.empty|department|Afdeling is niet geselecteerd.
+FI|973|field.notfound|contactID|Syöttämäsi Contact Id on virheellinen. Id ei ole käytössä tai se on passiivisella käyttäjällä.
+FI|972|field.notauthorized|contactID|Syöttämäsi Contact Id on jo käytössä.
+IX|986|field.empty|country|Country not selected
+IX|969|field.empty|newsletter|Newsletter not selected.
+FI|971|field.empty|seniority|Virkaa ei ole valittu.
+FI|970|field.empty|department|Osastoa ei ole valittu.
+FR|973|field.notfound|contactID|Le Contact ID que vous avez saisi est incorrect, soit il n'existe pas soit le contact est inactif.
+NO|980|field.format|email|Epost-formatet er ugyldig
+NO|981|field.empty|email|Epost-type mangler
+NO|284|field.empty|contactPrefEmail|Epost-preferanse er ikke oppgitt
+NO|279|field.empty|residentCountryCode|Land/bostedsområde er ikke oppgitt
+NO|277|field.empty|langCode|Foretrukket språk er ikke oppgitt
+NO|991|field.empty|sms|SMS-preferanse er ikke oppgitt
+NO|990|field.empty|company|Firma er ikke oppgitt
+NO|989|field.empty|companyNumber|Firma-identifikasjon er ikke oppgitt
+NO|988|field.empty|workAddress|Kontoradresse er ikke oppgitt
+NO|987|field.empty|city|Poststed er ikke oppgitt
+NO|986|field.empty|country|Land er ikke oppgitt
+PL|998|field.empty|workPhone|Brak telefony służbowego
+PL|997|field.empty|mobilePhone|Brak telefonu komórkowego
+PL|999|field.empty|jobFunction|Stanowisko nie zostało wybrane
+PL|996|field.empty|faxNumber|Brak faxu
+PL|995|field.empty|contactPrefEmail|E-Mail privacy not selected
+PL|994|field.empty|contactPrefTelephone|Phone privacy not selected
+PL|993|field.empty|contactPrefPost|Postal mail privacy not selected
+PL|992|field.empty|fax|Fax privacy not selected
+PL|984|field.empty|title|Brak tytułu
+PL|263|field.empty|firstName|Brak imienia
+PL|258|field.empty|lastName|Brak nazwiska
+PL|467|field.empty|securityAnswer|Brak odpowiedzi sprawdzającej
+PL|476|field.empty|securityQuestion|Brak pytania sprawdzającego
+PL|266|field.empty|email|brak adresu E-Mail
+PL|252|field.empty|password|Brak hasła.
+PL|231|field.empty|userId|Brak id użytkownika.
+PL|982|field.empty|emailMessage|Email Pusta wiadomość
+PL|983|field.empty|topic|Temat nie został wybrany
+PL|985|field.empty|posteCode|Brak kodu pocztowego
+PL|980|field.format|email|format adresu E-mail nieprawidłowy
+PL|981|field.empty|email|Nie wybrano rodzaju E-mail
+PL|284|field.empty|contactPrefEmail|E-Mail privacy not selected
+PL|279|field.empty|residentCountryCode|Kraj/Region nie został wybrany
+PL|277|field.empty|langCode|Brak preferowanego języka
+PL|991|field.empty|sms|SMS privacy not selected
+PL|990|field.empty|company|Brak firmy
+PL|989|field.empty|companyNumber|Brak numery firmy
+PL|988|field.empty|workAddress|Brak adresu służbowego
+PL|987|field.empty|city|Brak miasta
+PL|986|field.empty|country|Brak kraju
+PT|998|field.empty|workPhone|Número de telefone do trabalho não foi colocado
+PT|997|field.empty|mobilePhone|Número do telemóvel não foi colocado
+PT|999|field.empty|jobFunction|Função no trabalho não foi seleccionada
+PT|996|field.empty|faxNumber|Fax não foi colocado
+PT|995|field.empty|contactPrefEmail|E-Mail privado não foi seleccionada
+PT|994|field.empty|contactPrefTelephone|Telefone privado não foi seleccionada
+PT|993|field.empty|contactPrefPost|Mail postal privado não foi seleccionada
+PT|992|field.empty|fax|Fax privado não foi seleccionada
+PT|984|field.empty|title|Titulo não foi seleccionada
+PT|263|field.empty|firstName|Primeiro Nome não foi colocado
+PT|258|field.empty|lastName|Último Nome não foi colocado
+PT|467|field.empty|securityAnswer|Resposta de segurança não foi colocada
+PT|476|field.empty|securityQuestion|Pergunta de segurança não foi seleccionada
+PT|266|field.empty|email|E-Mail não foi colocado
+PT|252|field.empty|password|Password não foi colocada.
+PT|231|field.empty|userId|User ID não foi colocado.
+PT|982|field.empty|emailMessage|A caixa de mensagens do email está vazia
+PT|983|field.empty|topic|Tópico não seleccionado
+PT|985|field.empty|posteCode|Código postal não foi colocado
+PT|980|field.format|email|O formato de endereço do E-mail é inválido
+EN|979|field.notfound|partnerProId|Partner ID not found.
+EN|978|field.toomany|partnerProId|Too many Partner ID was returned.
+EN|977|field.notactive|partnerProId|Partner is not active.
+EN|976|field.notauthorized|partnerProId|Partner is not authorized.
+EN|421|field.empty|currentPassword|Current password not entered.
+EN|975|field.empty|role|Role not selected
+EN|974|field.empty|status|Status not selected
+PT|974|field.empty|status|Status não foi seleccionado
+PT|975|field.empty|role|A função não foi seleccionado
+SV|974|field.empty|status|Status ej vald
+SV|975|field.empty|role|Roll ej vald
+PL|974|field.empty|status|Status nie został wybrany
+PL|975|field.empty|role|Rola nie została wybrana
+IT|974|field.empty|status|Stato non selezionato
+IT|975|field.empty|role|Ruolo non selezionato
+NO|974|field.empty|status|Status er ikke valgt
+NO|975|field.empty|role|Brukerrolle er ikke valgt
+DE|974|field.empty|status|Status wurde nicht ausgewählt
+DE|975|field.empty|role|Rolle wurde nicht ausgewählt
+HR|974|field.empty|status|Status nije odabran
+HR|975|field.empty|role|Funkcija nije odabrana
+BG|974|field.empty|status|Състоянието не е избрано
+BG|975|field.empty|role|Функцията не е избрана
+SL|974|field.empty|status|Manjka status
+SL|975|field.empty|role|Manjka vloga
+FR|974|field.empty|status|Statut non sélectionné
+FR|975|field.empty|role|Rôle non sélectionné
+NL|974|field.empty|status|Status niet geselecteerd
+NL|975|field.empty|role|Rol niet geselecteerd
+SK|974|field.empty|status|Stav nevybratý
+SK|975|field.empty|role|Pozícia nevybratá
+DA|974|field.empty|status|Status ikke valgt
+DA|975|field.empty|role|Rolle ikke valgt
+CS|974|field.empty|status|Stav nebyl vybrán
+CS|975|field.empty|role|Role nebyla vybrána
+RU|974|field.empty|status|Статус не указан
+RU|975|field.empty|role|Роль не указана
+EL|974|field.empty|status|Δεν έχετε επιλέξει κατάσταση
+EL|975|field.empty|role|Δεν έχετε επιλέξει ρόλο
+FI|974|field.empty|status|Tilaa ei ole valittu
+NO|982|field.empty|emailMessage|Epost-melding mangler innhold
+NO|983|field.empty|topic|Emne er ikke oppgitt
+NO|985|field.empty|posteCode|Postnummer er ikke oppgitt
+FI|975|field.empty|role|Roolia ei ole valittu
+ES|974|field.empty|status|Estado no seleccionado
+ES|975|field.empty|role|Perfil no seleccionado
+TR|974|field.empty|status|Statu secilmedi
+TR|975|field.empty|role|Rol secilmedi
+HU|974|field.empty|status|Státusz nincs kiválasztva
+HU|975|field.empty|role|Szerep nincs kiválasztva
+RO|974|field.empty|status|Nu a fost selectat statutul.
+RO|975|field.empty|role|Nu a fost selectat rolul.
+EN|967|field.format|dob|Date format is invalid.
+EL|995|field.empty|contactPrefEmail|Δεν έχετε επιλέξει εάν επιθυμείτε να λαμβάνετε ηλεκτρονικά γράμματα
+EL|467|field.empty|securityAnswer|Η απάντηση στην ερώτηση επιβεβαίωσης δεν έχει συμπληρωθεί
+EL|284|field.empty|contactPrefEmail|Δεν έχετε επιλέξει εάν επιθυμείτε να δέχεστε ηλεκτρονικά γράμματα
+TR|252|field.empty|password|Sifre yazilmadi.
+SV|263|field.empty|firstName|Förnamn ej angivet
+SV|258|field.empty|lastName|Efternamn ej angivet
+SV|467|field.empty|securityAnswer|Säkerhetssvar ej valt
+SV|476|field.empty|securityQuestion|Säkerhetsfråga ej vald
+SV|266|field.empty|email|E-postadress aj angivet
+SV|252|field.empty|password|Lösenord ej angivet.
+SV|231|field.empty|userId|Användar-ID ej agivet.
+SV|982|field.empty|emailMessage|E-postmeddelandet är tomt
+SV|983|field.empty|topic|Ämne ej angivet
+SV|985|field.empty|posteCode|Postnumemr ej angivet
+SV|980|field.format|email|e-postadressformat ogiltigt
+SV|981|field.empty|email|E-posttyp ej angivet
+SV|284|field.empty|contactPrefEmail|E-postsekretess ej angivet
+SV|279|field.empty|residentCountryCode|Land ej valt
+SV|277|field.empty|langCode|Önskat språk ej angivet
+SV|991|field.empty|sms|SMS-sekretess ej angivet
+SV|990|field.empty|company|Företag ej angivet
+SV|989|field.empty|companyNumber|Företagsnummer ej angivet
+SV|988|field.empty|workAddress|Företagsadress ej angivet
+SV|987|field.empty|city|Stad ej angivet
+SV|986|field.empty|country|Land ej angivet
+TR|998|field.empty|workPhone|Is telefonu yazilmadi
+TR|997|field.empty|mobilePhone|Cep telefonu yazilmadi
+TR|999|field.empty|jobFunction|Gorev secilmedi
+IT|284|field.empty|contactPrefEmail|Consenso alla ricezione di E-Mail non selezionato
+IT|279|field.empty|residentCountryCode|Nazione di residenza non selezionata
+IT|277|field.empty|langCode|Lingua principale non inserita
+IT|991|field.empty|sms|Consenso alla ricezione di SMS non selezionato
+IT|990|field.empty|company|Azienda non inserita
+IT|989|field.empty|companyNumber|Numero dell'azienda non inserito
+IT|988|field.empty|workAddress|Indirizzo aziendale non inserito
+IT|987|field.empty|city|Citta' non inserita
+IT|986|field.empty|country|Nazione non selezionata
+NL|998|field.empty|workPhone|Telefoonnummer niet ingegeven
+NL|997|field.empty|mobilePhone|GSM-nummer niet ingegeven
+NL|999|field.empty|jobFunction|Job functie niet geselecteerd
+NL|996|field.empty|faxNumber|Faxnummer niet ingegeven
+NL|995|field.empty|contactPrefEmail|E-mail privacy niet geselecteerd
+NL|994|field.empty|contactPrefTelephone|Telefoon privacy niet geselecteerd
+NL|993|field.empty|contactPrefPost|Adres privacy niet geselecteerd
+NL|992|field.empty|fax|Fax privacy niet geselecteerd
+NL|984|field.empty|title|Titel niet geselecteerd
+NL|263|field.empty|firstName|Voornaam niet ingegeven
+NL|258|field.empty|lastName|Naam niet ingegeven
+NL|467|field.empty|securityAnswer|Antwoord op beveiligingsvraag niet ingegeven
+NL|476|field.empty|securityQuestion|Beveiligingsvraag niet geselecteerd
+NL|266|field.empty|email|E-mail niet ingegeven
+NL|252|field.empty|password|Wachtwoord niet ingegeven
+NL|231|field.empty|userId|Inlognaam niet ingegeven
+NL|982|field.empty|emailMessage|E-mail bericht is leeg
+NL|983|field.empty|topic|Onderwerp niet geselecteerd
+NL|985|field.empty|posteCode|Postcode niet ingegeven
+NL|980|field.format|email|Formaat van e-mail adres is niet geldig
+NL|981|field.empty|email|E-mail type niet ingesteld
+NL|284|field.empty|contactPrefEmail|E-mail privacy niet geselecteerd
+NL|279|field.empty|residentCountryCode|Land/Regio van verblijf niet geselecteerd
+NL|277|field.empty|langCode|Voorkeurtaal niet ingegeven
+NL|991|field.empty|sms|SMS privacy niet geselecteerd
+NL|990|field.empty|company|Bedrijf niet ingegeven
+NL|989|field.empty|companyNumber|Bedrijfnummer niet ingegeven
+NL|988|field.empty|workAddress|Bedrijfsadres niet ingegeven
+NL|987|field.empty|city|Stad niet ingegeven
+NL|986|field.empty|country|Land niet geselecteerd
+NO|998|field.empty|workPhone|Kontortelefon er ikke oppgitt
+NO|997|field.empty|mobilePhone|Mobiltelefon er ikke oppgitt
+NO|999|field.empty|jobFunction|Stilling/funksjon er ikke oppgitt
+NO|996|field.empty|faxNumber|Faks er ikke oppgitt
+NO|995|field.empty|contactPrefEmail|Epost-preferanse er ikke oppgitt
+NO|994|field.empty|contactPrefTelephone|Telefon-preferanse er ikke oppgitt
+NO|993|field.empty|contactPrefPost|Brev-preferanse er ikke oppgitt
+NO|992|field.empty|fax|Faks-preferanse er ikke oppgitt
+NO|984|field.empty|title|Tittel er ikke oppgitt
+NO|263|field.empty|firstName|Fornavn er ikke oppgitt
+NO|258|field.empty|lastName|Etternavn er ikke oppgitt
+NO|467|field.empty|securityAnswer|Hemmelig sikkerhetsspørsmål er ikke besvart
+NO|476|field.empty|securityQuestion|Hemmelig sikkerhetsspørsmål er ikke oppgitt
+NO|266|field.empty|email|Epost-adresse er ikke oppgitt
+NO|252|field.empty|password|Passord er ikke oppgitt
+NO|231|field.empty|userId|Brukernavn er ikke oppgitt
+HR|983|field.empty|topic|Tema nije navedena.
+HR|985|field.empty|posteCode|Postanski broj nije unesen.
+HR|980|field.format|email|Forma e-mail adrese nije ispravan
+HR|981|field.empty|email|Vrsta E-maila nije odabrana
+HR|284|field.empty|contactPrefEmail|E-Mail privatnost nije odabrana
+HR|279|field.empty|residentCountryCode|Zemlja/Regija stanovanja nije odabrana
+HR|277|field.empty|langCode|Preferiran jezink nije odabran
+HR|991|field.empty|sms|SMS privatnost nije naznacena
+HR|990|field.empty|company|Tvrtna nije unesena
+HR|989|field.empty|companyNumber|Broj tvrtke nije unesen
+HR|988|field.empty|workAddress|Adresa na poslu nije unesena
+HR|987|field.empty|city|Grad nije unesen
+HR|986|field.empty|country|Drzava nije odabrana
+HU|998|field.empty|workPhone|Munkahelyi telefonszám hiányzik
+HU|997|field.empty|mobilePhone|Mobilszám hiányzik
+HU|999|field.empty|jobFunction|Betöltött funkció nincs kiválasztva
+HU|996|field.empty|faxNumber|Faxszám hiányzik
+HU|995|field.empty|contactPrefEmail|Privát e-mail cím nincs kiválasztva
+HU|994|field.empty|contactPrefTelephone|Privát telefonszám nincs kiválasztva
+HU|993|field.empty|contactPrefPost|Privát postacím nincs kiválasztva
+HU|992|field.empty|fax|Privát faxszám nincs kiválasztva
+HU|984|field.empty|title|Megszólítás nincs kiválasztva
+HU|263|field.empty|firstName|Keresztnév hiányzik
+HU|258|field.empty|lastName|Vezetéknév hiányzik
+HU|467|field.empty|securityAnswer|Jelszó-emlékeztető hiányzik
+HU|476|field.empty|securityQuestion|Jelszó-emlékeztető nincs kiválasztva
+HU|266|field.empty|email|E-mail hiányzik
+HU|252|field.empty|password|Jelszó hiányzik
+HU|231|field.empty|userId|Felhasználói azonosító hiányzik
+HU|982|field.empty|emailMessage|E-mail üzenet üres
+HU|983|field.empty|topic|Téma nincs kiválasztva
+HU|985|field.empty|posteCode|Irányítószám hiányzik
+HU|980|field.format|email|E-mail cím formátum nem megfelelő
+HU|981|field.empty|email|E-mail típus nincs beállítva
+HU|284|field.empty|contactPrefEmail|Privát e-mail cím nincs kiválasztva
+HU|279|field.empty|residentCountryCode|Ország/régió nincs kiválasztva
+HU|277|field.empty|langCode|Preferált nyelv hiányzik
+HU|991|field.empty|sms|Privát SMS hiányzik
+HU|990|field.empty|company|Vállalat hiányzik
+HU|989|field.empty|companyNumber|Vállalat száma hiányzik
+HU|988|field.empty|workAddress|Munkahelyi cím hiányzik
+HU|987|field.empty|city|Település hiányzik
+HU|986|field.empty|country|Ország nincs kiválasztva
+IT|998|field.empty|workPhone|Numero di telefono non inserito
+IT|997|field.empty|mobilePhone|Numero di cellulare non inserito
+IT|999|field.empty|jobFunction|Ruovo aziendale non inserito
+IT|996|field.empty|faxNumber|Fax non inserito
+IT|995|field.empty|contactPrefEmail|Consenso alla ricezione di E-Mail non selezionato
+IT|994|field.empty|contactPrefTelephone|Consenso alla ricezione di telefonate non selezionato
+IT|993|field.empty|contactPrefPost|Consenso alla ricezione di informazioni via posta non selezionato
+IT|992|field.empty|fax|Consenso alla ricezione di fax non selezionato
+IT|984|field.empty|title|Titolo non selezionato
+IT|263|field.empty|firstName|Nome non inserito
+IT|258|field.empty|lastName|Cognome non inserito
+IT|467|field.empty|securityAnswer|Risposta di sicurezza non inserita
+IT|476|field.empty|securityQuestion|Domanda di sicurezza non selezionata
+IT|266|field.empty|email|E-Mail non inserita
+IT|252|field.empty|password|Password non inserita
+IT|231|field.empty|userId|User ID non inserito
+IT|982|field.empty|emailMessage|Il messaggio Email e' vuoto
+IT|983|field.empty|topic|Argomento non selezionato
+IT|985|field.empty|posteCode|CAP non inserito
+IT|980|field.format|email|Il formato dell'indirizzo E-mail non e' valido
+IT|981|field.empty|email|Tipo di E-mail non impostato
+EL|981|field.empty|email|Ο τύπος της ηλεκτρονικής διεύθυνσης δεν έχει ορισθεί
+EL|279|field.empty|residentCountryCode|Η χώρα/ περιοχή κατοικίας δεν έχει επιλεγεί
+EL|277|field.empty|langCode|Η προτιμώμενη γλώσσα δεν έχει συμπληρωθεί
+EL|991|field.empty|sms|Δεν έχετε επιλέξει εάν επιθυμείτε να δέχεστε SMS
+EL|990|field.empty|company|Η εταιρία δεν έχει συμπληρωθεί
+EL|989|field.empty|companyNumber|Το τηλέφωνο της εταιρίας δεν έχει συμπληρωθεί
+FR|258|field.empty|lastName|Votre nom n'est pas saisi.
+FR|467|field.empty|securityAnswer|Votre question secrète n'est pas saisie.
+FR|476|field.empty|securityQuestion|Votre question secrète n'est pas sélectionnée.
+FR|266|field.empty|email|Votre adresse Email n'est pas saisie.
+FR|252|field.empty|password|Votre mot de passe n'est pas saisi.
+FR|231|field.empty|userId|Votre login n'est pas saisi.
+FR|982|field.empty|emailMessage|Votre message d'Email est vide.
+FR|983|field.empty|topic|Le sujet n'est pas sélectionné.
+FR|985|field.empty|posteCode|Votre code postal n'est pas saisi.
+FR|980|field.format|email|Le format de votre adresse Email est invalide
+FR|981|field.empty|email|E-mail type not set
+FR|284|field.empty|contactPrefEmail|E-Mail privacy not selected
+FR|279|field.empty|residentCountryCode|Votre pays de résidence n'est pas sélectionné.
+FR|277|field.empty|langCode|Votre langage préféré n'est pas saisi.
+FR|991|field.empty|sms|SMS privacy not selected
+FR|990|field.empty|company|Le nom de votre société n'est pas saisi.
+FR|989|field.empty|companyNumber|Votre numéro de société n'est pas saisi.
+FR|988|field.empty|workAddress|Votre adresse de bureau n'est pas saisie.
+FR|987|field.empty|city|Votre ville n'est pas saisie.
+FR|986|field.empty|country|Votre pays n'est pas sélectionné.
+HR|998|field.empty|workPhone|Telefon na poslu nije unesen
+HR|997|field.empty|mobilePhone|Mobilni telefon nije unesen
+HR|999|field.empty|jobFunction|Radna pozicije nije unesena
+HR|996|field.empty|faxNumber|Broj fax-a nije unesen
+HR|995|field.empty|contactPrefEmail|E-Mail nije odabrana
+HR|994|field.empty|contactPrefTelephone|Telefonska privatnost nije odabrana
+HR|993|field.empty|contactPrefPost|Privanost zaprimanja poste nije odabrana
+HR|992|field.empty|fax|Privatnos fax-a nije odabrana
+HR|984|field.empty|title|Naslov nije odabran
+HR|263|field.empty|firstName|Ime nije uneseno
+HR|258|field.empty|lastName|Prezime nije uneseno
+HR|467|field.empty|securityAnswer|Tajni odgovor nije unesen
+HR|476|field.empty|securityQuestion|Tajno pitanje nije uneseno
+HR|266|field.empty|email|E-Mail nije unesen
+HR|252|field.empty|password|Zaporka nije unesena.
+HR|231|field.empty|userId|Korisnicko ime nije unseno.
+HR|982|field.empty|emailMessage|Email poruka je prazna.
+EL|988|field.empty|workAddress|Η διεύθυνση εργασίας δεν έχει συμπληρωθεί
+EL|987|field.empty|city|Η πόλη δεν έχει συμπληρωθεί
+EL|986|field.empty|country|Η χώρα δεν έχει επιλεγεί
+ES|998|field.empty|workPhone|No se ha introducido el teléfono del trabajo
+ES|997|field.empty|mobilePhone|No se ha introducido el teléfono móvil
+ES|999|field.empty|jobFunction|No se ha introducido el cargo
+ES|996|field.empty|faxNumber|No se ha introducido el fax
+ES|995|field.empty|contactPrefEmail|No se ha seleccionado la privacidad del Email
+ES|994|field.empty|contactPrefTelephone|No se ha seleccionado la privacidad del teléfono
+ES|993|field.empty|contactPrefPost|No se ha seleccionado la privacidad del correo
+ES|992|field.empty|fax|No se ha seleccionado la privacidad del fax
+ES|984|field.empty|title|No se ha seleccionado el tatamiento
+ES|263|field.empty|firstName|No se ha introducido el nombre de pila
+ES|258|field.empty|lastName|No se ha introducido el apellido
+ES|467|field.empty|securityAnswer|No se ha introducido la pregunta de control
+ES|476|field.empty|securityQuestion|No se ha seleccionado la pregunta de control
+ES|266|field.empty|email|No se ha introducido el Email
+ES|252|field.empty|password|No se ha introducido la contraseña
+ES|231|field.empty|userId|No se ha introducido el User ID
+ES|982|field.empty|emailMessage|El mensaje de correo electrónico está vacío
+ES|983|field.empty|topic|No se ha elegido un tema
+ES|985|field.empty|posteCode|No se ha introducido el código postal
+ES|980|field.format|email|El formato de Email no es válido
+ES|981|field.empty|email|No se ha seleccionado el tipo de E-mail
+ES|284|field.empty|contactPrefEmail|No se ha seleccionado la privacidad del Email
+ES|279|field.empty|residentCountryCode|No se ha seleccionado el país o región de residencia
+ES|277|field.empty|langCode|No se ha elegido el idioma preferido
+ES|991|field.empty|sms|No se ha seleccionado la privacidad del SMS
+ES|990|field.empty|company|No se ha introducido el nombre de la empresa
+ES|989|field.empty|companyNumber|No se ha introducido el número de la empresa
+ES|988|field.empty|workAddress|No se ha introducido la dirección del trabajo
+ES|987|field.empty|city|No se ha introducido la ciudad
+ES|986|field.empty|country|No se ha seleccionado el país
+FI|998|field.empty|workPhone|Työnumeroa ei ole syötetty
+FI|997|field.empty|mobilePhone|Matkapuhelinnumeroa ei ole syötetty
+FI|999|field.empty|jobFunction|Toimenkuvaa ei ole valittu
+FI|996|field.empty|faxNumber|Faksinumeroa ei ole syötetty
+FI|995|field.empty|contactPrefEmail|Sähköpostin suojausta ei ole valittu
+FI|994|field.empty|contactPrefTelephone|Puhelimen suojausta ei ole valittu
+FI|993|field.empty|contactPrefPost|Postin suojausta ei ole valittu
+FI|992|field.empty|fax|Faksin suojausta ei ole valittu
+FI|984|field.empty|title|Titteliä ei ole valittu
+FI|263|field.empty|firstName|Etunimeä ei ole syötetty
+FI|258|field.empty|lastName|Sukunimeä ei ole syötetty
+FI|467|field.empty|securityAnswer|Salasanan muistikysymyksen vastausta ei ole syötetty
+FI|476|field.empty|securityQuestion|Muistikysymystä ei ole valittu
+FI|266|field.empty|email|Sähköpostiosoitetta ei ole syötetty
+FI|252|field.empty|password|Salasanaa ei ole syötetty
+FI|231|field.empty|userId|Käyttäjätunnusta ei ole syötetty
+FI|982|field.empty|emailMessage|Sähköpostiviesti on tyhjä
+FI|983|field.empty|topic|Otsikkoa ei ole valittu
+FI|985|field.empty|posteCode|Postinumeroa ei ole syötetty
+FI|980|field.format|email|Sähköpostiosoite on virheellinen
+FI|981|field.empty|email|Sähköpostin tyyppiä ei ole valittu
+FI|284|field.empty|contactPrefEmail|Sähköpostin suojausta ei ole valittu
+FI|279|field.empty|residentCountryCode|Maata ei ole valittu
+FI|277|field.empty|langCode|Toivottua kieltä ei ole syötetty
+FI|991|field.empty|sms|SMS suojausta ei ole valittu
+FI|990|field.empty|company|Yritystä ei ole syötetty
+FI|989|field.empty|companyNumber|Yrityksen kumppani ID:tä ei ole syötetty
+FI|988|field.empty|workAddress|Työosoitetta ei ole syötetty
+FI|987|field.empty|city|Kaupunkia ei ole syötetty
+FI|986|field.empty|country|Maata ei ole valittu
+FR|998|field.empty|workPhone|Votre numéro de téléphone de bureau n'est pas saisi.
+FR|997|field.empty|mobilePhone|Votre numéro de téléphone mobile n'est pas saisi.
+FR|999|field.empty|jobFunction|Votre fonction n'est pas sélectionnée.
+FR|996|field.empty|faxNumber|Votre numéro de fax n'est pas saisi.
+FR|995|field.empty|contactPrefEmail|E-Mail privacy not selected.
+FR|994|field.empty|contactPrefTelephone|Phone privacy not selected
+FR|993|field.empty|contactPrefPost|Postal mail privacy not selected.
+FR|992|field.empty|fax|Fax privacy not selected.
+FR|984|field.empty|title|Titre non sélectionné.
+FR|263|field.empty|firstName|Votre prénom n'est pas saisi.
+DA|476|field.empty|securityQuestion|Huske spørgsmål ikke indtastet
+DA|266|field.empty|email|E-Mail ikke indtastet
+DA|252|field.empty|password|Password ikke indtastet.
+DA|231|field.empty|userId|Bruger ID ikke indtastet.
+DA|982|field.empty|emailMessage|Email meddelse er tom
+DA|983|field.empty|topic|Titel ikke valgt
+DA|985|field.empty|posteCode|Postnummer ikke indtastet
+DA|980|field.format|email|E-mail adresse format er ugyldig
+DA|981|field.empty|email|E-mail type ikke sat
+DA|284|field.empty|contactPrefEmail|E-Mail fortrolighed ikke valgt
+DA|279|field.empty|residentCountryCode|Land/Region ikke valgt
+DA|277|field.empty|langCode|Foretrukne sprog ikke valgt
+DA|991|field.empty|sms|SMS fortrolighed ikke valgt
+DA|990|field.empty|company|Firma ikke valgt
+DA|989|field.empty|companyNumber|Firma nummer ikke indtastet
+DA|988|field.empty|workAddress|Firma adresse ikke indtastet
+DA|987|field.empty|city|By ikke indtastet
+DA|986|field.empty|country|Land ikke valgt
+DE|998|field.empty|workPhone|Telefon (geschäftlich) nicht eingegeben
+DE|997|field.empty|mobilePhone|Telefon (mobil) nicht eingegeben
+DE|999|field.empty|jobFunction|Job FunKtion nicht ausgewählt
+DE|996|field.empty|faxNumber|Fax nicht eingegeben
+DE|995|field.empty|contactPrefEmail|E-Mail Datenschutz nicht ausgewählt
+DE|994|field.empty|contactPrefTelephone|Telefon Datenschutz nicht ausgewählt
+DE|993|field.empty|contactPrefPost|Briefpost Datenschutz nicht ausgewählt
+DE|992|field.empty|fax|Fax Datenschutz nicht ausgewählt
+DE|984|field.empty|title|Titel nicht ausgewählt
+DE|263|field.empty|firstName|Vorname nicht eingegeben
+DE|258|field.empty|lastName|Nachname nicht eingegeben
+DE|467|field.empty|securityAnswer|Antwort auf Sicherheitsfrage nicht eingegeben
+DE|476|field.empty|securityQuestion|Sicherheitsfrage nicht ausgewählt
+DE|266|field.empty|email|E-Mail nicht eingegeben
+DE|252|field.empty|password|Passwort nicht eingegeben
+DE|231|field.empty|userId|User ID nicht eingegeben
+DE|982|field.empty|emailMessage|Email Nachricht ist leer
+DE|983|field.empty|topic|Keine Thema ausgewählt
+DE|985|field.empty|posteCode|Postleitzahl kann nicht eingegeben werden
+DE|980|field.format|email|E-mail Adress Format ist ungültig
+DE|981|field.empty|email|E-mail Typ nicht eingegeben
+DE|284|field.empty|contactPrefEmail|E-Mail Datenschutz nicht ausgewählt
+DE|279|field.empty|residentCountryCode|Land nicht ausgewählt
+DE|277|field.empty|langCode|bevorzugte Sprache nicht eingegeben
+DE|991|field.empty|sms|SMS Datenschutz nicht ausgewählt
+DE|990|field.empty|company|Unternehmen nicht eingegeben
+DE|989|field.empty|companyNumber|Unternehmen Nummer nicht eingegeben
+DE|988|field.empty|workAddress|Adresse (geschäftlich) nicht eingegeben
+DE|987|field.empty|city|Stadt nicht eingegeben
+DE|986|field.empty|country|kein Land ausgewählt
+EL|998|field.empty|workPhone|Το τηλέφωνο της εργασίας δεν έχει συμπληρωθεί
+EL|997|field.empty|mobilePhone|Το κινητό τηλέφωνο δεν έχει συμπληρωθεί
+EL|999|field.empty|jobFunction|Η θέση δεν έχει επιλεγεί
+EL|996|field.empty|faxNumber|Ο αριθμός φαξ δεν έχει συμπληρωθεί
+EL|994|field.empty|contactPrefTelephone|Δεν έχετε επιλέξει εάν επιθυμείτε να δέχεστε τηλέφωνα
+EL|993|field.empty|contactPrefPost|Δεν έχετε επιλέξει εάν επιθυμείτε να λαμβάνετε γράμματα
+EL|992|field.empty|fax|Δεν έχετε επιλέξει εάν επιθυμείτε να λαμβάνετε φαξ
+EL|984|field.empty|title|Ο τίτλος δεν έχει επιλεγεί
+EL|263|field.empty|firstName|Το μικρό όνομα δεν έχει συμπληρωθεί
+EL|258|field.empty|lastName|Το επώνυμο δεν έχει συμπληρωθεί
+EL|476|field.empty|securityQuestion|Η ερώτηση επιβεβαίωσης δεν έχει επιλεγεί
+EL|266|field.empty|email|Η ηλεκτρονική διεύθυνση δεν έχει συμπληρωθεί
+EL|252|field.empty|password|Ο κωδικός πρόσβασης δεν έχει συμπληρωθεί
+EL|231|field.empty|userId|Το όνομα χρήστη δεν έχει συμπληρωθεί
+EL|982|field.empty|emailMessage|Το περιεχόμενο του ηλεκτρονικού γράμματος είναι κενό
+EL|983|field.empty|topic|Το θέμα δεν έχει επιλεγεί
+EL|985|field.empty|posteCode|Ο ταχυδρομικός κωδικός δεν έχει συμπληρωθεί
+EL|980|field.format|email|Η σύνταξη της ηλεκτρονικής διεύθυνσης δεν είναι σωστή
+BG|981|field.empty|email|Типът на имейл адреса не е определен
+BG|284|field.empty|contactPrefEmail|Имейл конфиденциалността не е избрана
+BG|279|field.empty|residentCountryCode|Държава/Регион не са избрани
+BG|277|field.empty|langCode|Предпочитаният език не е въведен
+BG|991|field.empty|sms|SMS конфиденциалността не е избрана
+BG|990|field.empty|company|Държавата не е избрана
+BG|989|field.empty|companyNumber|Служебният номер не е въведен
+BG|988|field.empty|workAddress|Служебният адрес не е въведен
+BG|987|field.empty|city|Градът не е въведен
+BG|986|field.empty|country|Държавата не е въведена
+CS|998|field.empty|workPhone|telefonní číslo nebylo vyplněno
+CS|997|field.empty|mobilePhone|číslo mobilu nebylo vyplněno
+CS|999|field.empty|jobFunction|funkce nebyla vybrána
+CS|996|field.empty|faxNumber|číslo faxu nebylo vyplněno
+CS|995|field.empty|contactPrefEmail|typ komunikace přes email nevybrána
+CS|994|field.empty|contactPrefTelephone|typ komunikace přes telefon nevybrána
+CS|993|field.empty|contactPrefPost|typ komunikace přes poštu nevybrána
+CS|992|field.empty|fax|typ komunikace přes fax nevybrána
+CS|984|field.empty|title|titul nebyl vybrán
+CS|263|field.empty|firstName|jméno nebylo vyplněno
+CS|258|field.empty|lastName|příjmení nebylo vyplněno
+CS|467|field.empty|securityAnswer|odpověď na kontrolní otázku nebyla vyplněna
+CS|476|field.empty|securityQuestion|kontrolní otázka nebyla vyplněna
+CS|266|field.empty|email|emailová adresa nebyla vyplněna
+CS|252|field.empty|password|heslo nebylo vyplněno
+CS|231|field.empty|userId|login nebyl vyplněn
+CS|982|field.empty|emailMessage|zpráva je prázdná
+CS|983|field.empty|topic|téma nebylo vybráno
+CS|985|field.empty|posteCode|PSČ nebylo vyplněno
+CS|980|field.format|email|emailová adresa není v patřičném formátu
+CS|981|field.empty|email|emailová adresa nevyplněna
+CS|284|field.empty|contactPrefEmail|typ komunikace přes email nevybrána
+CS|279|field.empty|residentCountryCode|země nebyla vybrána
+CS|277|field.empty|langCode|preferovaný jazyk nebyl vybrán
+CS|991|field.empty|sms|typ komunikace přes sms nevybrána
+CS|990|field.empty|company|společnost nebyla vyplněna
+CS|989|field.empty|companyNumber|Partner ID nebylo vyplněno
+CS|988|field.empty|workAddress|adresa nebyla vyplněna
+CS|987|field.empty|city|město nebylo vyplněno
+CS|986|field.empty|country|země nebyla vyplněna
+DA|998|field.empty|workPhone|Firma telefon ikke indtastet
+BG|998|field.empty|workPhone|Служебният телефон не е въведен
+BG|997|field.empty|mobilePhone|Мобилният телефон не е въведен
+BG|999|field.empty|jobFunction|Длъжността не е въведена
+BG|996|field.empty|faxNumber|Факсът не е въведен
+BG|995|field.empty|contactPrefEmail|Имейл конфиденциалността не е избрана
+BG|994|field.empty|contactPrefTelephone|Конфиденциалността на телефона не е избрана
+BG|993|field.empty|contactPrefPost|Пощенската конфиденциалност не е избрана
+BG|992|field.empty|fax|Факс конфиденциалността не е избрана
+BG|984|field.empty|title|Обращението не е избрано
+BG|263|field.empty|firstName|Името не е въведено
+BG|258|field.empty|lastName|Фамилията не е въведена
+BG|467|field.empty|securityAnswer|Отговорът на контролен въпрос не е въведен
+BG|476|field.empty|securityQuestion|Контролният въпрос не е избран
+BG|266|field.empty|email|Имейлът не е въведен
+DA|997|field.empty|mobilePhone|Mobil telefon ikke indtastet
+DA|999|field.empty|jobFunction|Job funktion ikke valgt
+DA|996|field.empty|faxNumber|Fax ikke indtastet
+DA|995|field.empty|contactPrefEmail|E-Mail fortrolighed ikke valgt
+DA|994|field.empty|contactPrefTelephone|Phone fortrolighed ikke valgt
+DA|993|field.empty|contactPrefPost|Post fortrolighed ikke valgt
+DA|992|field.empty|fax|Fax fortrolighed ikke valgt
+DA|984|field.empty|title|Titel ikke valgt
+DA|263|field.empty|firstName|Fornavn ikke indtastet
+DA|258|field.empty|lastName|Efternavn ikke indtastet
+DA|467|field.empty|securityAnswer|Huske svar ikke indtastet
+RO|263|field.empty|firstName|Nu a fost introdus prenumele
+RO|258|field.empty|lastName|Nu a fost introdus numele de familie
+RO|467|field.empty|securityAnswer|Nu a fost selectat raspunsul secret
+RO|476|field.empty|securityQuestion|Nu a fost selectata intrebarea secreta
+RO|266|field.empty|email|Adresa de e-mail nu a fost introdusa
+RO|252|field.empty|password|Nu a fost introdusa parola
+RO|231|field.empty|userId|Nu a fost introdus User ID-ul
+RO|982|field.empty|emailMessage|Mesajul de e-mail nu contine nimic
+RO|983|field.empty|topic|Nu a fost selectata o topica
+RO|985|field.empty|posteCode|Nu a fost introdus codul postal
+RO|980|field.format|email|Formatul adresei de e-mail nu este valid
+RO|981|field.empty|email|Nu a fost setat tipul de e-mail
+RO|284|field.empty|contactPrefEmail|Nu a fost selectata confidentialitatea adresei de e-mail
+RO|279|field.empty|residentCountryCode|Tara/Regiunea de rezidenta nu a fost introdusa
+RO|277|field.empty|langCode|Nu a fost introdusa limba preferata
+RO|991|field.empty|sms|Nu a fost selectata confidentialitatea SMS-ului
+RO|990|field.empty|company|Nu a fost introdusa compania
+RO|989|field.empty|companyNumber|Nu a fost introdus numarul companiei
+RO|988|field.empty|workAddress|Nu a fost introdusa adresa de la birou
+RO|987|field.empty|city|Nu a fost introdus orasul
+RO|986|field.empty|country|Nu a fost selectata tara
+RU|998|field.empty|workPhone|Телефон не указан
+RU|997|field.empty|mobilePhone|Мобильный телефон не указан
+RU|999|field.empty|jobFunction|Должность не указана
+RU|996|field.empty|faxNumber|Номер факса не указан
+RU|995|field.empty|contactPrefEmail|Разрешение коммуникации по e-mail не указано
+RU|994|field.empty|contactPrefTelephone|Разрешение коммуникации по телефону не указано
+RU|993|field.empty|contactPrefPost|Разрешение коммуникации по почте не указано
+RU|992|field.empty|fax|Разрешение коммуникации по факсу не указано
+RU|984|field.empty|title|Обращение не указано
+RU|263|field.empty|firstName|Имя не указано
+RU|258|field.empty|lastName|Фамилия не указана
+RU|467|field.empty|securityAnswer|Секретный ответ не указан
+RU|476|field.empty|securityQuestion|Секретный вопрос не указан
+RU|266|field.empty|email|Адрес электронной почты не указан
+RU|252|field.empty|password|Пароль не введен.
+RU|231|field.empty|userId|Идентификатор пользователя не введен.
+RU|982|field.empty|emailMessage|Электронное письмо пусто
+RU|983|field.empty|topic|Тема не выбрана
+RU|985|field.empty|posteCode|Почтовый индекс не указан
+RU|980|field.format|email|Формат e-mail не верен
+RU|981|field.empty|email|Тип E-mail не установлен
+RU|284|field.empty|contactPrefEmail|Разрешение коммуникации по e-mail не указано
+RU|279|field.empty|residentCountryCode|Страна/Регион не указаны
+RU|277|field.empty|langCode|Предпочитаемый язык не указан
+RU|991|field.empty|sms|Разрешение коммуникации по СМС не указано
+RU|990|field.empty|company|Компания не указана
+RU|989|field.empty|companyNumber|Номер компании не введен
+PT|981|field.empty|email|Tipo do E-mail não ajustado
+PT|284|field.empty|contactPrefEmail|E-Mail privado não foi seleccionado
+PT|279|field.empty|residentCountryCode|País/Região de residência não selecionado
+PT|277|field.empty|langCode|Língua preferida não foi colocada
+PT|991|field.empty|sms|SMS privado não foi seleccionado
+BG|252|field.empty|password|Паролата не е въведена.
+BG|231|field.empty|userId|Потребителското име не е въведено.
+BG|982|field.empty|emailMessage|Имейл съобщението е празно
+BG|983|field.empty|topic|Темата не е избрана
+BG|985|field.empty|posteCode|Пощенският код не е въведен
+BG|980|field.format|email|Форматът на имейл адреса е невалиден
+TR|996|field.empty|faxNumber|Faks numarasi yazilmadi
+TR|995|field.empty|contactPrefEmail|E-posta gizliligi secilmedi
+TR|994|field.empty|contactPrefTelephone|Telefon gizliligi secilmedi
+TR|993|field.empty|contactPrefPost|Posta gizliligi secilmedi
+TR|992|field.empty|fax|Faks gizliligi secilmedi
+TR|984|field.empty|title|Cinsiyet secilmedi
+TR|263|field.empty|firstName|Isim yazilmadi
+TR|258|field.empty|lastName|Soyadi yazilmadi
+TR|467|field.empty|securityAnswer|Gizlilik sorusunun cevabi yazilmadi
+TR|476|field.empty|securityQuestion|Gizlilik sorusu yazilmadi
+TR|266|field.empty|email|E-posta yazilmadi
+RU|988|field.empty|workAddress|Адрес не указан
+RU|987|field.empty|city|Город не указан
+RU|986|field.empty|country|Страна не выбрана
+SL|998|field.empty|workPhone|Službeni telefon ni vnešen
+SL|997|field.empty|mobilePhone|Mobilni telefon ni vnešen
+SL|999|field.empty|jobFunction|Poklic ni izbran
+SL|996|field.empty|faxNumber|Faks ni vnešen
+SL|995|field.empty|contactPrefEmail|Izjava o zasebnosti o uporabi vašega e-naslova ni potrjena
+SL|994|field.empty|contactPrefTelephone|Izjava o zasebnosti vaše telefonske številke ni potrjena
+SL|993|field.empty|contactPrefPost|Izjava o zasebnosti vašega naslova ni potrjena
+SL|992|field.empty|fax|Izjava o zasebnosti vaše kaks številke ni potrjena
+SL|984|field.empty|title|Naslov ni izbran
+SL|263|field.empty|firstName|Ime ni vnešeno
+SL|258|field.empty|lastName|Priimek ni vnešen
+SL|467|field.empty|securityAnswer|Vaša vprašanja za potrditev gesla niso vnešena
+SL|476|field.empty|securityQuestion|Vprašanje za obnovitev gesla ni izbrano
+SL|266|field.empty|email|E-naslov ni vnešen
+SL|252|field.empty|password|Geslo ni vnešeno
+SL|231|field.empty|userId|Uporabnički račun ni vnešen.
+SL|982|field.empty|emailMessage|E-sporočilo je prazno
+SL|983|field.empty|topic|Tema ni izbrana
+SL|985|field.empty|posteCode|Postna številka ni vnešena
+SL|980|field.format|email|Oblika vašega e-naslova je napačna
+SL|981|field.empty|email|Tip e-naslova ni nastavljen
+SL|284|field.empty|contactPrefEmail|Izjava o zasebnosti o uporabi vašega e-naslova ni izbrana.
+SL|279|field.empty|residentCountryCode|Država porekla ni izbrana
+SL|277|field.empty|langCode|Jezik ni vnešen
+SL|991|field.empty|sms|Izjava o zasebnosti o uporabi SMS sporočila ni izbrana
+SL|990|field.empty|company|Podjetje ni vnešeno
+SL|989|field.empty|companyNumber|Službeni telefon ni vnešen
+SL|988|field.empty|workAddress|Službeni naslov ni vnešen
+SL|987|field.empty|city|Mesto ni vnešeno
+SL|986|field.empty|country|Država ni izbrana
+SK|998|field.empty|workPhone|Nezadali ste číslo pracovného telefónu
+SK|997|field.empty|mobilePhone|Nezadali ste číslo mobilného telefónu
+SK|999|field.empty|jobFunction|Nevybrali ste si pracovnú funkciu
+SK|996|field.empty|faxNumber|Nezadali ste číslo faxu
+SK|995|field.empty|contactPrefEmail|Nepotvrdili ste súhlas so spracovaním vašej Emailovej adresy
+SK|994|field.empty|contactPrefTelephone|Nepotvrdili ste súhlas so spracovaním vášho telefónneho čísla
+SK|993|field.empty|contactPrefPost|Nepotvrdili ste súhlas so spracovaním vašej poštovej adresy
+SK|992|field.empty|fax|Nepotvrdili ste súhlas so spracovaním vášho faxového čísla
+SK|984|field.empty|title|Nevybrali ste si titul
+SK|263|field.empty|firstName|Nezadali ste krstné meno
+SK|258|field.empty|lastName|Nezadali ste priezvisko
+SK|467|field.empty|securityAnswer|Nezadali ste kontrolnú odpoveď
+SK|476|field.empty|securityQuestion|Nezadali ste kontrolnú otázku
+SK|266|field.empty|email|Nezadali ste email
+SK|252|field.empty|password|Nezadali ste heslo
+SK|231|field.empty|userId|Nezadali ste používateľské ID
+SK|982|field.empty|emailMessage|Emailová správa je prázdna
+SK|983|field.empty|topic|Nezadali ste predmet
+SK|985|field.empty|posteCode|Nezadali ste PČS
+SK|980|field.format|email|Formát E-mailovej adresy je neplatný
+SK|981|field.empty|email|Nezadali ste typ E-mailu
+SK|284|field.empty|contactPrefEmail|Nepotvrdili ste súhlas so spracovaním vašej Emailovej adresy
+SK|279|field.empty|residentCountryCode|Country
+SK|277|field.empty|langCode|Nezadali ste preferovaný jazyk
+SK|991|field.empty|sms|Nepotvrdili ste súhlas so spracovaním vášho sms kontaktu
+SK|990|field.empty|company|Nezadali ste spoločnosť
+SK|989|field.empty|companyNumber|Nezadali ste ičo
+SK|988|field.empty|workAddress|nezadali ste adresu spoločnosti
+SK|987|field.empty|city|Nezadali ste mesto
+SK|986|field.empty|country|Nevybrali ste krajinu
+SV|998|field.empty|workPhone|Jobbtelefon ej angivet
+SV|997|field.empty|mobilePhone|Mobiltelefon ej angivet
+SV|999|field.empty|jobFunction|Arbetsbeskrivning ej angivet
+SV|996|field.empty|faxNumber|Fax ej angivet
+SV|995|field.empty|contactPrefEmail|E-post sekretess ej angivet
+SV|994|field.empty|contactPrefTelephone|Telefonsekretss ej angivet
+SV|993|field.empty|contactPrefPost|Postsekretess ej angivet
+SV|992|field.empty|fax|Faxsekretess ej angivet
+SV|984|field.empty|title|Title ej angivet
+PT|990|field.empty|company|Empresa não foi colocada
+PT|989|field.empty|companyNumber|Número da Empresa não foi colocado
+PT|988|field.empty|workAddress|Endereço do trabalho não foi colocado
+PT|987|field.empty|city|Cidade não foi colocada
+PT|986|field.empty|country|País não foi seleccionado
+RO|998|field.empty|workPhone|Numarul de telefon de la birou nu a fost introdus
+RO|997|field.empty|mobilePhone|Numarul de telefon mobil nu a fost introdus
+RO|999|field.empty|jobFunction|Functia nu a fost selectata
+RO|996|field.empty|faxNumber|Numarul de fax nu a fost introdus
+RO|995|field.empty|contactPrefEmail|Nu a fost selectata confidentialitatea adresei de e-mail
+RO|994|field.empty|contactPrefTelephone|Nu a fost selectata confidentialitatea numarului de telefon
+RO|993|field.empty|contactPrefPost|Nu a fot selectata confidentialitatea adresei postale
+RO|992|field.empty|fax|Nu a fost selectata confidentialitatea numarului de fax
+RO|984|field.empty|title|Nu a fost selectat titlul
+TR|231|field.empty|userId|Kullanici adi yazilmadi.
+TR|982|field.empty|emailMessage|E-posta mesaji bos
+TR|983|field.empty|topic|Konu secilmedi
+TR|985|field.empty|posteCode|Posta kodu yazilmadi
+TR|980|field.format|email|E-posta adres formati dogru degil
+TR|981|field.empty|email|E-posta turu secilmedi
+TR|284|field.empty|contactPrefEmail|E-posta gizliliği secilmedi
+TR|279|field.empty|residentCountryCode|Yasanan Ulke/Bolge secilmedi
+TR|277|field.empty|langCode|Tercih edilen dil yazilmadi
+TR|991|field.empty|sms|SMS gizliligi secilmedi
+TR|990|field.empty|company|Sirket bilgisi yazilmadi
+TR|989|field.empty|companyNumber|Sirket numarasi yazilmadi
+TR|988|field.empty|workAddress|Is adresi yazilmadi
+TR|987|field.empty|city|Sehir yazilmadi
+TR|986|field.empty|country|Ulke secilmedi
+EN|998|field.empty|workPhone|Work phone not entered
+EN|997|field.empty|mobilePhone|Mobile phone not entered
+EN|999|field.empty|jobFunction|Job function not selected
+EN|996|field.empty|faxNumber|Fax not entered
+EN|995|field.empty|contactPrefEmail|E-Mail privacy not selected
+EN|994|field.empty|contactPrefTelephone|Phone privacy not selected
+EN|993|field.empty|contactPrefPost|Postal mail privacy not selected
+EN|992|field.empty|fax|Fax privacy not selected
+EN|984|field.empty|title|Title not Selected
+EN|263|field.empty|firstName|First Name not entered
+EN|258|field.empty|lastName|Last Name not entered
+EN|467|field.empty|securityAnswer|Challenge answer not entered
+EN|476|field.empty|securityQuestion|Challenge question not selected
+EN|266|field.empty|email|E-Mail not entered
+EN|252|field.empty|password|Password not entered.
+EN|231|field.empty|userId|User ID not entered.
+EN|982|field.empty|emailMessage|Email message is empty
+EN|983|field.empty|topic|Topic not Selected
+EN|985|field.empty|posteCode|Post code not entered
+EN|980|field.format|email|E-mail address format is invalid
+EN|981|field.empty|email|E-mail type not set
+EN|284|field.empty|contactPrefEmail|E-Mail privacy not selected
+EN|279|field.empty|residentCountryCode|Country of Business not selected
+EN|277|field.empty|langCode|Preferred Language not entered
+EN|991|field.empty|sms|SMS privacy not selected
+EN|990|field.empty|company|Partner name not entered
+EN|989|field.empty|companyNumber|Company number not entered
+EN|988|field.empty|workAddress|Work address not entered
+EN|987|field.empty|city|City not entered
+EN|986|field.empty|country|Country not selected

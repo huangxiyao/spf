@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<PORTALBEAN
+	ID="navigator_portlet"
+	CLASS="com.hp.sesame.navportlet.NavPortletBean"
+	TYPE_UID="e52f774b23843eeee13c7ef0b528efa0"
+	VERSION="2"
+	CATEGORY="ENDUSER"
+	DISPLAYCATEGORY="applications"
+>
+
+<TITLE>Navigator Portlet</TITLE>
+
+<NAME>navigationportlet</NAME>
+
+<ABSTRACT>A navigation portlet that calculates and displays a list of sub-MenuItems.</ABSTRACT>
+
+<DATA>
+	<FIELD NAME="JSPDirName" VALUE="sesamenavigation"></FIELD>
+</DATA>
+
+<VIEW ID="MY_PORTAL_VIEW"></VIEW>
+
+<VIEW ID="ADMIN_BEAN_EDIT_VIEW"></VIEW>
+
+<VIEW ID="ADMIN_BEAN_EDIT_PROCESS_VIEW"></VIEW>
+
+</PORTALBEAN>

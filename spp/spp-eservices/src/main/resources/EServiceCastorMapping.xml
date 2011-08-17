@@ -1,0 +1,63 @@
+<!DOCTYPE mapping PUBLIC 
+  "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+  "http://castor.exolab.org/mapping.dtd">
+
+<mapping>
+	<class name="com.hp.spp.eservice.Site">
+		<map-to xml="Site"/>
+		<field name="Name">
+			<bind-xml node="attribute"/>
+		</field>
+		<field name="EServiceList" type="com.hp.spp.eservice.EService" collection="set">
+			<bind-xml name="EService"/>
+		</field>
+	</class>
+	
+	<class name="com.hp.spp.eservice.EService">
+		<map-to xml="EService"/>
+		<field name="Name">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+		<field name="Method">
+			<bind-xml name="method" node="attribute"/>
+		</field>
+		<field name="ProductionUrl">
+			<bind-xml name="ProductionUrl" node="element"/>
+		</field>
+		<field name="TestUrl">
+			<bind-xml name="TestUrl" node="element"/>
+		</field>
+		<field name="SecurityMode">
+			<bind-xml name="SecurityMode" node="element"/>
+		</field>
+		<field name="NavigationMode">
+			<bind-xml name="NavigationMode" node="element"/>
+		</field>
+		<field name="WindowParameters">
+			<bind-xml name="WindowParameters" node="element"/>
+		</field>
+		<field name="CharacterEncoding">
+			<bind-xml name="CharacterEncoding" node="element"/>
+		</field>
+		<field name="SimulationMode">
+			<bind-xml name="SimulationMode" node="element"/>
+		</field>
+		<field name="StandardParameterSetName">
+			<bind-xml name="StdParameterSetName" node="element"/>
+		</field>
+		<field name="ParameterList" type="com.hp.spp.eservice.Parameter" collection="set">
+			<bind-xml name="parameter"/>
+		</field>
+	</class>
+
+	<class name="com.hp.spp.eservice.Parameter">
+		<map-to xml="Parameter"/>
+		<field name="Name">
+			<bind-xml name="name" node="attribute"/>
+		</field>
+		<field name="expression">
+			<bind-xml name="expression" node="element"/>
+		</field>
+	</class>
+
+</mapping>

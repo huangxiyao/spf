@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<!-- EServices Controllers -->
+
+	<bean id="eServiceControllerTemplate" abstract="true">
+		<property name="EServiceManager"><ref bean="eServiceManager"/></property>
+	</bean>
+
+	<bean id="eServiceMgtController" class="com.hp.spp.portlets.eservices.EServiceMgtController" parent="eServiceControllerTemplate">
+	</bean>
+		
+	<bean id="eServiceHistoryController" class="com.hp.spp.portlets.eservices.EServiceHistoryController" parent="eServiceControllerTemplate"/>
+	
+	<bean id="eServiceExportHistoryFormController" class="com.hp.spp.portlets.eservices.EServiceExportHistoryFormController" parent="eServiceControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlContent"/>
+		<property name="commandClass" value="com.hp.spp.common.util.xml.XMLContent"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="exportXML"/>
+	</bean>
+	
+	<bean id="eServiceDeleteFormController" class="com.hp.spp.portlets.eservices.EServiceDeleteFormController" parent="eServiceControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="eServicesList"/>
+		<property name="commandClass" value="com.hp.spp.portlets.eservices.EServiceList"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="eServiceDelete"/>
+	</bean>
+	
+	<bean id="eServiceSaveDeleteFormController" class="com.hp.spp.portlets.eservices.EServiceSaveDeleteFormController" parent="eServiceControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="eServicesList"/>
+		<property name="commandClass" value="com.hp.spp.portlets.eservices.EServiceList"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="eServicesMgtView"/>
+	</bean>
+
+	<bean id="eServiceImportFormController" class="com.hp.spp.portlets.eservices.EServiceImportFormController" parent="eServiceControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlUpload"/>
+		<property name="commandClass" value="com.hp.spp.portlets.eservices.EServiceXMLUpload"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="eServiceUpdate"/>
+	</bean>
+	
+	<bean id="eServiceSaveImportFormController" class="com.hp.spp.portlets.eservices.EServiceSaveImportFormController" parent="eServiceControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlUpload"/>
+		<property name="commandClass" value="com.hp.spp.portlets.eservices.EServiceXMLUpload"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="eServicesMgtView"/>
+	</bean>
+	
+	<bean id="eServiceExportFormController" class="com.hp.spp.portlets.eservices.EServiceExportFormController" parent="eServiceControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlContent"/>
+		<property name="commandClass" value="com.hp.spp.common.util.xml.XMLContent"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="exportXML"/>
+	</bean>
+	
+	<!-- Parameter Set Controllers -->
+
+	<bean id="standardParameterSetControllerTemplate" abstract="true">
+		<property name="standardParameterSetManager"><ref bean="standardParameterSetManager"/></property>
+	</bean>
+
+	<bean id="standardParameterSetController" class="com.hp.spp.portlets.paramsets.StandardParameterSetController" parent="standardParameterSetControllerTemplate">
+	</bean>
+		
+	<bean id="standardParameterSetHistoryController" class="com.hp.spp.portlets.paramsets.StandardParameterSetHistoryController" parent="standardParameterSetControllerTemplate"/>
+	
+	<bean id="standardParameterSetExportHistoryFormController" class="com.hp.spp.portlets.paramsets.StandardParameterSetExportHistoryFormController" parent="standardParameterSetControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlContent"/>
+		<property name="commandClass" value="com.hp.spp.common.util.xml.XMLContent"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="exportXML"/>
+	</bean>
+	
+	<bean id="standardParameterSetDeleteFormController" class="com.hp.spp.portlets.paramsets.StandardParameterSetDeleteFormController" parent="standardParameterSetControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="standardParameterSetsList"/>
+		<property name="commandClass" value="com.hp.spp.portlets.paramsets.StandardParameterSetList"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="standardParameterSetDelete"/>
+	</bean>
+	
+	<bean id="standardParameterSetSaveDeleteFormController" class="com.hp.spp.portlets.paramsets.StandardParameterSetSaveDeleteFormController" parent="standardParameterSetControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="standardParameterSetsList"/>
+		<property name="commandClass" value="com.hp.spp.portlets.paramsets.StandardParameterSetList"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="standardParameterSetsView"/>
+	</bean>
+
+	<bean id="standardParameterSetImportFormController" class="com.hp.spp.portlets.paramsets.StandardParameterSetImportFormController" parent="standardParameterSetControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlUpload"/>
+		<property name="commandClass" value="com.hp.spp.portlets.paramsets.StandardParameterSetXMLUpload"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="standardParameterSetUpdate"/>
+	</bean>
+	
+	<bean id="standardParameterSetSaveImportFormController" class="com.hp.spp.portlets.paramsets.StandardParameterSetSaveImportFormController" parent="standardParameterSetControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlUpload"/>
+		<property name="commandClass" value="com.hp.spp.portlets.paramsets.StandardParameterSetXMLUpload"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="standardParameterSetsView"/>
+	</bean>
+	
+	<bean id="standardParameterSetExportFormController" class="com.hp.spp.portlets.paramsets.StandardParameterSetExportFormController" parent="standardParameterSetControllerTemplate">
+		<property name="sessionForm" value="true"/>
+		<property name="commandName" value="xmlContent"/>
+		<property name="commandClass" value="com.hp.spp.common.util.xml.XMLContent"/>
+		<property name="formView" value="defError"/>
+		<property name="successView" value="exportXML"/>
+	</bean>
+	
+	<!-- Service beans -->
+	
+	<bean id="eServiceManager" class="com.hp.spp.portlets.eservices.EServiceManager">
+		<property name="marshalService"><ref bean="marshalService"/></property>
+		<property name="unmarshalService"><ref bean="unmarshalService"/></property>
+		<property name="importValidationService"><ref bean="importValidationService"/></property>
+		<property name="resourceHistoryManager"><ref bean="resourceHistoryManager"/></property>
+	</bean>
+	
+	<bean id="standardParameterSetManager" class="com.hp.spp.portlets.paramsets.StandardParameterSetManager">
+		<property name="marshalService"><ref bean="marshalService"/></property>
+		<property name="unmarshalService"><ref bean="unmarshalService"/></property>
+		<property name="importValidationService"><ref bean="importValidationService"/></property>
+		<property name="resourceHistoryManager"><ref bean="resourceHistoryManager"/></property>
+	</bean>
+	
+	<bean id="marshalService" class="com.hp.spp.eservice.services.impl.CastorMarshalServiceImpl">
+	</bean>
+	
+	<bean id="unmarshalService" class="com.hp.spp.eservice.services.impl.CastorUnmarshalServiceImpl">
+	</bean>
+	
+	<bean id="importValidationService" class="com.hp.spp.eservice.services.impl.EServiceImportValidationServiceImpl">
+	</bean>
+	
+	<bean id="resourceHistoryManager" class="com.hp.spp.common.ResourceHistoryManager">
+	</bean>
+	
+	
+	<!-- Handler Mapping -->
+	
+	<bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
+
+	<bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+        <property name="order" value="10"/>
+		<property name="interceptors">
+			<list>
+				<ref bean="portletNameInterceptor"/>
+				<ref bean="parameterMappingInterceptor"/>
+			</list>
+		</property>
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view">
+					<map>
+						<entry key="eservices"><ref bean="eServiceMgtController"/></entry>
+						<entry key="importEService"><ref bean="eServiceImportFormController"/></entry>
+						<entry key="saveImportEService"><ref bean="eServiceSaveImportFormController"/></entry>
+						<entry key="deleteEService"><ref bean="eServiceDeleteFormController"/></entry>
+						<entry key="saveDeleteEService"><ref bean="eServiceSaveDeleteFormController"/></entry>
+						<entry key="eServiceHistory"><ref bean="eServiceHistoryController"/></entry>
+						<entry key="exportHistory"><ref bean="eServiceExportHistoryFormController"/></entry>
+						<entry key="exportEService"><ref bean="eServiceExportFormController"/></entry>
+						<entry key="standardParameterSets"><ref bean="standardParameterSetController"/></entry>
+						<entry key="importStandardParameterSet"><ref bean="standardParameterSetImportFormController"/></entry>
+						<entry key="saveImportStandardParameterSet"><ref bean="standardParameterSetSaveImportFormController"/></entry>
+						<entry key="deleteStandardParameterSet"><ref bean="standardParameterSetDeleteFormController"/></entry>
+						<entry key="saveDeleteStandardParameterSet"><ref bean="standardParameterSetSaveDeleteFormController"/></entry>
+						<entry key="standardParameterSetHistory"><ref bean="standardParameterSetHistoryController"/></entry>
+						<entry key="standardParameterSetExportHistory"><ref bean="standardParameterSetExportHistoryFormController"/></entry>
+						<entry key="exportStandardParameterSet"><ref bean="standardParameterSetExportFormController"/></entry>
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+        <property name="order" value="20"/>
+		<property name="interceptors">
+			<list>
+				<ref bean="portletNameInterceptor"/>
+			</list>
+		</property>
+		<property name="portletModeMap">
+			<map>
+				<entry key="view"><ref bean="eServiceMgtController"/></entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- Exceptions Handler -->
+
+	<bean id="defaultExceptionHandler" parent="defaultExceptionHandlerTemplate"/>
+
+</beans>

@@ -1,0 +1,209 @@
+LANGUAGECODE|TOPICCODE|TOPICLABEL|USERID
+RU|0|Логин, Навигация и профиль|IC.UserManagement@hp.com
+RU|1|Подключение к сайту|IC.UserManagement@hp.com
+RU|2|Ценовая информация|IC.ToolsSupport@hp.com
+RU|7|Пред-продажная тех. поддержка (ПК, серверы, устройства хранения данных)|infocenter@hp.com
+RU|3|Статус заказов|IC.ToolsSupport@hp.com
+RU|4|Литература|IC.UserManagement@hp.com
+RU|5|Содержимое брошюр и других документов|IC.ToolsSupport@hp.com
+RU|6|Статус контрактов|IC.UserManagement@hp.com
+SL|0|Prijava, Pot in profiliranje|IC.UserManagement@hp.com
+SL|1|Povezava na stran|IC.UserManagement@hp.com
+SL|2|Cene in opisi izdelkov|IC.ToolsSupport@hp.com
+SL|3|Status naročil|IC.ToolsSupport@hp.com
+SL|4|Prodajna literatura|IC.UserManagement@hp.com
+SL|5|Vsebina brošur in ostalih dokumentov|IC.ToolsSupport@hp.com
+SL|6|Kontakti|IC.UserManagement@hp.com
+SL|7|Predprodajna in tehnična pomoč(strežniki, shranjevalne enote, PC-ji)|infocenter@hp.com
+SK|0|Login, navigácia a zmena profilu|IC.UserManagement@hp.com
+SK|1|Prístup na portál|IC.UserManagement@hp.com
+SK|2|Produkty a ceny|IC.ToolsSupport@hp.com
+SK|3|Stav objednávok|IC.ToolsSupport@hp.com
+SK|4|Obchodná literatúra|IC.UserManagement@hp.com
+SK|5|Obsah brožúr a iných dokumentov|IC.ToolsSupport@hp.com
+SK|6|Stav kontraktu|IC.UserManagement@hp.com
+SK|7|Technický support (servery, storage, PC)|infocenter@hp.com
+SV|0|Påloggning, navigering och profilering|IC.UserManagement@hp.com
+SV|1|Uppkoppling till webbplatsen|IC.UserManagement@hp.com
+SV|2|Produktpriser|IC.ToolsSupport@hp.com
+SV|3|Orderstatus|IC.ToolsSupport@hp.com
+SV|4|Datablad|IC.UserManagement@hp.com
+SV|5|Innehåll i datablad och andra dokument|IC.ToolsSupport@hp.com
+SV|6|Avtalsstatus|IC.UserManagement@hp.com
+SV|7|Teknisk presalesupport (servrar, storage, PC)|infocenter@hp.com
+TR|0|Oturumu ac, Navigasyon ve profil olusturma|IC.UserManagement@hp.com
+TR|1|Web sitesine baglaniyor|IC.UserManagement@hp.com
+TR|2|Urun fiyatlari ve profil olusturma|IC.ToolsSupport@hp.com
+TR|3|Siparis durumu|IC.ToolsSupport@hp.com
+TR|4|Satis kurallari|IC.UserManagement@hp.com
+TR|5|Brosur ve diger belgelerin icerigi|IC.ToolsSupport@hp.com
+TR|6|Baglanti durumu|IC.UserManagement@hp.com
+TR|7|Satis oncesi teknik destek (sunucular, depolama urunleri, bilgisayarlar)|infocenter@hp.com
+EN|8|Presales tech support(OpenView)|ovconsult@hp.com
+SK|8|Obchodná technická podpora predaja ( OpenView)|ovconsult@hp.com
+HU|8|Pre-sales technikai támogatás (OpenView)|ovconsult@hp.com
+BG|8|Пред-продажбена техническа поддръжка (OpenView)|ovconsult@hp.com
+HR|8|Pred prodajna tehnicka podrska (OpenView)|ovconsult@hp.com
+SL|8|Tehnična podpora pred prodajo (OpenView)|ovconsult@hp.com
+FR|8|Avant-ventes support technique (OpenView)|ovconsult@hp.com
+EL|8| Τεχνική υποστήριξη Presales (OpenView)|ovconsult@hp.com
+DA|8|Presales tech support(OpenView)|ovconsult@hp.com
+PT|8|Suporte Técnico de Pré-Venda (OpenView)|ovconsult@hp.com
+CS|8|Presales support (OpenView)|ovconsult@hp.com
+SV|8|Teknisk presalesupport (OpenView)|ovconsult@hp.com
+RU|8|Предпродажная поддержка (OpenView)|ovconsult@hp.com
+NO|8|Teknisk salgsstøtte (HP OpenView)|ovconsult@hp.com
+RO|8|Suport tehnic de prevanzari(OpenView)|ovconsult@hp.com
+PL|8|Przedsprzedażne wsparcie techniczne(OpenView)|ovconsult@hp.com
+IT|8|Supporto tecnico prevendita (OpenView)|ovconsult@hp.com
+FI|8|Presales tekninen tuki (OpenView)|ovconsult@hp.com
+TR|8|Satis oncesi teknik destek (OpenView)|ovconsult@hp.com
+DE|8|Pre-Sales Tech Support (OpenView)|ovconsult@hp.com
+ES|8|Soporte técnico preventa (OpenView)|ovconsult@hp.com
+NL|8|Pre-sales tech support (OpenView)|ovconsult@hp.com
+IX|8|Presales tech support(OpenView)|ovconsult@hp.com
+IX|0|Login, Navigation and profiling|IC.UserManagement@hp.com
+IX|1|Connecting to the website|IC.UserManagement@hp.com
+IX|2|Product prices and profiling|IC.ToolsSupport@hp.com
+IX|3|Order status|IC.ToolsSupport@hp.com
+IX|7|Presales tech support (servers, storage, PCs)|infocenter@hp.com
+IX|6|Contact status|IC.UserManagement@hp.com
+IX|5|Content of brochures and other documents|IC.ToolsSupport@hp.com
+IX|4|Sales literature|IC.UserManagement@hp.com
+PL|2|Produkty, ceny oraz profilowanie|IC.ToolsSupport@hp.com
+PL|3|Status zamówień|IC.ToolsSupport@hp.com
+PL|5|Broszury oraz inne dokumenty|IC.ToolsSupport@hp.com
+PL|4|Literatura|IC.UserManagement@hp.com
+PL|1|Dostep do strony|IC.UserManagement@hp.com
+PT|0|Iniciar sessão, Navegar e perfilar|IC.UserManagement@hp.com
+PT|7|Técnico de suporte pré-vendas (servidores, armazenamento, PCs)|infocenter@hp.com
+PT|6|Estado dos contactos|IC.UserManagement@hp.com
+PT|2|Preços de produtos e perfilar|IC.ToolsSupport@hp.com
+PT|3|Estado da encomenda|IC.ToolsSupport@hp.com
+PT|5|Índice dos folhetos e outros documentos|IC.ToolsSupport@hp.com
+PT|4|Leitura das vendas|IC.UserManagement@hp.com
+PT|1|Conectar ao web site|IC.UserManagement@hp.com
+RO|3|Situatia comenzilor|IC.ToolsSupport@hp.com
+RO|2|Preturile produselor si crearea profilului|IC.ToolsSupport@hp.com
+RO|1|Conectarea la website|IC.UserManagement@hp.com
+RO|0|Login, Navigare si crearea profilului|IC.UserManagement@hp.com
+RO|4|Literatura pentru vanzari|IC.UserManagement@hp.com
+RO|5|Continutul brosurilor si al altor documente|IC.ToolsSupport@hp.com
+RO|6|Situatia contactelor|IC.UserManagement@hp.com
+RO|7|Suport tehnic pentru pre-vanzari (servere, stocare, PC-uri)|infocenter@hp.com
+RO|7|Suport tehnic pentru pre-vanzari (servere, stocare, PC-uri)|infocenter@hp.com
+DE|2|Produktpreise und Profiling|IC.ToolsSupport@hp.com
+DE|4|Verakufsliteratur|IC.UserManagement@hp.com
+DE|7|Vorverkauf (Presales) technischer Support (Server, Storage, PCs)|infocenter@hp.com
+DE|0|Login, Navigation and Selbstdarstellung (Profiling)|IC.UserManagement@hp.com
+DE|6|Kontaktstatus|IC.UserManagement@hp.com
+DE|5|Inhalt von Broschüren und anderen Dokumenten|IC.ToolsSupport@hp.com
+DE|3|Bestellstatus|IC.ToolsSupport@hp.com
+EL|0|Σύνδεση, πλοήγηση και προφίλ|IC.UserManagement@hp.com
+EL|7|Presales τεχνική υποστήριξη (servers, storage, PCs)|infocenter@hp.com
+EL|6|Κατάσταση συμβολαίων|IC.UserManagement@hp.com
+EL|5|Περιεχόμενο φυλλάδιων και άλλων εγγράφων|IC.ToolsSupport@hp.com
+EL|4|Υλικό πωλήσεων|IC.UserManagement@hp.com
+EL|3|Κατάσταση παραγγελίας|IC.ToolsSupport@hp.com
+EL|2|Τιμές προϊόντων και προφίλ|IC.ToolsSupport@hp.com
+EL|1|Σύνδεση με τον ιστοχώρο|IC.UserManagement@hp.com
+EN|0|Login, Navigation and profiling|IC.UserManagement@hp.com
+EN|1|Connecting to the website|IC.UserManagement@hp.com
+EN|2|Product prices and profiling|IC.ToolsSupport@hp.com
+EN|3|Order status|IC.ToolsSupport@hp.com
+EN|7|Presales tech support (servers, storage, PCs)|infocenter@hp.com
+EN|6|Contact status|IC.UserManagement@hp.com
+EN|5|Content of brochures and other documents|IC.ToolsSupport@hp.com
+EN|4|Sales literature|IC.UserManagement@hp.com
+ES|0|Conexión, Navegación y perfiles|IC.UserManagement@hp.com
+ES|1|Conectando al sitio web|IC.UserManagement@hp.com
+ES|3|Estado del pedido|IC.ToolsSupport@hp.com
+ES|6|Estado del contrato|IC.UserManagement@hp.com
+ES|5|Contenido de folletos y otros documentos|IC.ToolsSupport@hp.com
+ES|4|Documentación comercial|IC.UserManagement@hp.com
+ES|2|Producto precios y perfiles|IC.ToolsSupport@hp.com
+ES|7|Soporte técnico de preventa (servidores, almacenamiento, PCs)|infocenter@hp.com
+FI|0|Kirjautuminen, navigointi ja profilointi|IC.UserManagement@hp.com
+FI|1|Sivustolle pääsy|IC.UserManagement@hp.com
+FI|3|Tilauksen tila|IC.ToolsSupport@hp.com
+FI|6|Sopimuksen tila|IC.UserManagement@hp.com
+FI|5|Esitteiden ja dokumenttien sisältö|IC.ToolsSupport@hp.com
+FI|4|Myyntikirjallisuus|IC.UserManagement@hp.com
+FI|2|Tuotteiden hinnat ja tiedot|IC.ToolsSupport@hp.com
+FI|7|Presales tekninen tuki|infocenter@hp.com
+FR|0|Login, Navigation et profiling|IC.UserManagement@hp.com
+FR|1|Connexion au site web|IC.UserManagement@hp.com
+FR|3|Suivi des commandes|IC.ToolsSupport@hp.com
+FR|6|Suivi des contacts|IC.UserManagement@hp.com
+FR|5|Contenu des brochures et autres documents|IC.ToolsSupport@hp.com
+FR|4|Ventes litteraires|IC.UserManagement@hp.com
+FR|2|Prix produits et profiling|IC.ToolsSupport@hp.com
+FR|7|Avant-ventes support technique (serveur, stockage, PCs)|infocenter@hp.com
+HR|0|Login, Navigacija i profiliranje|IC.UserManagement@hp.com
+HR|1|Spajanje na web stranicu|IC.UserManagement@hp.com
+HR|3|Status narudjbe|IC.ToolsSupport@hp.com
+HR|6|Kontakt|IC.UserManagement@hp.com
+HR|5|Sadrzaj brosura i ostale literature|IC.ToolsSupport@hp.com
+HR|4|Prodajna literatura|IC.UserManagement@hp.com
+HR|2|Cjenik proizvoda i profiliranje|IC.ToolsSupport@hp.com
+HR|7|Tehnicka podrska prije kupnje (serveri, storage, PCs)|infocenter@hp.com
+HU|0|Belépés, navigálás és profil beállítás|IC.UserManagement@hp.com
+HU|1|Csatlakozás a weboldalhoz|IC.UserManagement@hp.com
+HU|3|Rendelési státusz|IC.ToolsSupport@hp.com
+HU|6|Szerződés státusz|IC.UserManagement@hp.com
+HU|5|Brossúrák tartalma és más dokumentumok|IC.ToolsSupport@hp.com
+HU|4|Sales irodalom|IC.UserManagement@hp.com
+HU|2|Termék árak|IC.ToolsSupport@hp.com
+HU|7|Pre-sales támogatás (szerverek, adattárolók, PC-k)|infocenter@hp.com
+IT|0|Accesso, Navigazione e profilazione|IC.UserManagement@hp.com
+IT|1|Connessione al sito|IC.UserManagement@hp.com
+IT|3|Stato degli ordini|IC.ToolsSupport@hp.com
+IT|6|Stato del contratto|IC.UserManagement@hp.com
+IT|5|Brochure e altra documentazione|IC.ToolsSupport@hp.com
+IT|4|Documentazione di vendita|IC.UserManagement@hp.com
+IT|2|Prezzi di prodotto e profilazione|IC.ToolsSupport@hp.com
+IT|7|Supporto tecnico prevendita (server, storage, PC)|infocenter@hp.com
+NL|0|Login, Navigatie en profilering|IC.UserManagement@hp.com
+NL|3|Order status|IC.ToolsSupport@hp.com
+NL|4|Sales literatuur|IC.UserManagement@hp.com
+NL|5|Inhoud van brochures en andere documenten|IC.ToolsSupport@hp.com
+NL|7|Tech. ondersteuning van pre-sales (servers, opslag, PCs)|infocenter@hp.com
+NL|6|Contract status|IC.UserManagement@hp.com
+NL|2|Productprijzen en profilering|IC.ToolsSupport@hp.com
+NL|1|Verbinding met de website|IC.UserManagement@hp.com
+NO|2|Produktpriser og profilering|IC.ToolsSupport@hp.com
+NO|1|Oppkobling til nettstedet|IC.UserManagement@hp.com
+NO|0|Pålogging, navigasjon og brukerprofil|IC.UserManagement@hp.com
+NO|5|Innhold i brosjyrer og andre dokumenter|IC.ToolsSupport@hp.com
+NO|6|Kontraktstatus|IC.UserManagement@hp.com
+BG|7|Пред-продажбена техническа поддръжка(сървъри, съхранение на данни, компютри)|infocenter@hp.com
+BG|0|Вход, Навигация и профилиране|IC.UserManagement@hp.com
+BG|1|Свързване с уебстраницата|IC.UserManagement@hp.com
+BG|3|Статус на поръчка|IC.ToolsSupport@hp.com
+BG|6|Статус на договора|IC.UserManagement@hp.com
+BG|5|Съдържание на брошури и други документи|IC.ToolsSupport@hp.com
+BG|4|Материали в помощ на продажбите|IC.UserManagement@hp.com
+BG|2|Продуктови цени и профилиране|IC.ToolsSupport@hp.com
+CS|0|Login navigace a změna profilu|IC.UserManagement@hp.com
+CS|7|Technický support (servery, storage, PC)|infocenter@hp.com
+CS|6|Stav kontraktu|IC.UserManagement@hp.com
+CS|5|Obsah brožur a jiných dokumentů|IC.ToolsSupport@hp.com
+CS|4|Obchodní literatura|IC.UserManagement@hp.com
+CS|3|Stav objednávek|IC.ToolsSupport@hp.com
+CS|2|Produkty a ceny|IC.ToolsSupport@hp.com
+CS|1|Přístup na portál|IC.UserManagement@hp.com
+DA|0|Login, Navigation og profil|IC.UserManagement@hp.com
+DA|7|Presales teknik support (servers, storage, PCs)|infocenter@hp.com
+DA|6|Kontakt status|IC.UserManagement@hp.com
+DA|5|Indhold af brochurer og andre dokumenter|IC.ToolsSupport@hp.com
+DA|4|Salgs litteratur|IC.UserManagement@hp.com
+DA|3|Ordre status|IC.ToolsSupport@hp.com
+DA|2|Produkt priser og profil|IC.ToolsSupport@hp.com
+DA|1|Forbinde til websitet|IC.UserManagement@hp.com
+DE|1|Verbinden auf die Website|IC.UserManagement@hp.com
+NO|7|Teknisk salgsstøtte (server, lagring, PC, etc)|infocenter@hp.com
+NO|4|Salgsmateriell|IC.UserManagement@hp.com
+NO|3|Ordrestatus|IC.ToolsSupport@hp.com
+PL|0|Login, Nawigacja oraz profilowanie|IC.UserManagement@hp.com
+PL|7|Przedsprzedażne wsparcie techniczne (serwery, storage, PCs)|infocenter@hp.com
+PL|6|Status kontraktu|IC.UserManagement@hp.com

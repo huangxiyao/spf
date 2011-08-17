@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<weblogic-jms xmlns="http://www.bea.com/ns/weblogic/90" xmlns:sec="http://www.bea.com/ns/weblogic/90/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wls="http://www.bea.com/ns/weblogic/90/security/wls" xsi:schemaLocation="http://www.bea.com/ns/weblogic/920 http://www.bea.com/ns/weblogic/920.xsd">
+  <connection-factory name="jms/SPPTopicConnectionFactory">
+    <default-targeting-enabled>true</default-targeting-enabled>
+    <jndi-name>jms/SPPTopicConnectionFactory</jndi-name>
+    <security-params>
+      <attach-jmsx-user-id>false</attach-jmsx-user-id>
+    </security-params>
+  </connection-factory>
+  <uniform-distributed-topic name="jms/OSCacheTopic">
+    <default-targeting-enabled>true</default-targeting-enabled>
+    <message-logging-params>
+      <message-logging-enabled>true</message-logging-enabled>
+      <message-logging-format>JMSDestination,JMSType,JMSTimestamp</message-logging-format>
+    </message-logging-params>
+    <jndi-name>jms/OSCacheTopic</jndi-name>
+    <load-balancing-policy>Round-Robin</load-balancing-policy>
+    <multicast>
+      <multicast-address>239.192.1.67</multicast-address>
+      <multicast-port>30018</multicast-port>
+    </multicast>
+  </uniform-distributed-topic>
+</weblogic-jms>

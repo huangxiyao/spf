@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="1" component-id="navigator_portlet" component-type="ModuleTypes" description="A navigation portlet that calculates and displays a list of sub-MenuItems." epi-build="251" epi-version="7.2.2" major-version="2" minor-version="0" title="Navigator Portlet" xmlns:epideploy="http://www.epicentric.com/deployment">
+ <epideploy:detail>
+  <module-config auto-deploy="true">
+   <descriptor-id>navigator_portlet</descriptor-id>
+   <locale-key>e52f774b23843eeee13c7ef0b528efa0</locale-key>
+   <web-deployment-path>/beans/sesamenavigation</web-deployment-path>
+  </module-config>
+ </epideploy:detail>
+</epideploy:component>

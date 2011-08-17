@@ -1,0 +1,18 @@
+<html>
+	<body>
+<p>
+	This package contains an implementation of configuration API. This API is used to retrieve config
+	entries whose storage is determined by the {@link ConfigEntryDAO} implementations. The default
+	implementations read and store information in the database ({@link JDBCConfigEntryDAO}) and cache
+	the entries in the memory ({@link CachingConfigEntryDAO}).
+</p>
+<p>
+	The clients of this API should mainly use the helper <tt>getValueXXX</tt> methods defined in
+	{@link Config} class. This class gives also access to the singleton {@link ConfigImpl} object
+	that contains other operations allowing to list, load, save and delete config entries.
+</p>
+<p> Note that the <tt>getValueXXX</tt> methods without default value argument throw
+	exception if the entry cannot be found. If you don't want to deal with exception use the form
+	of this methods that has also defaultValue parameter. </p>
+	</body>
+</html>

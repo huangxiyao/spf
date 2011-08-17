@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component
+	component-id="STARTSIMULATION"
+	component-type="Secondary Page Types"
+	title="STARTSIMULATION"
+	major-version="1"
+	minor-version="0"
+	build-version="0"
+	epi-version="7.2.2"
+	epi-build="251"
+	description="Classes used to start simulation."
+	xmlns:epideploy="http://www.epicentric.com/deployment"
+>
+
+<epideploy:detail>
+<template-info
+	id="STARTSIMULATION"
+	friendly-id="STARTSIMULATION"
+	title="STARTSIMULATION"
+	description="Classes used to start simulation."
+	type="templatetype_page_content_include"
+	is-system="false"
+	visible="true"
+	allow-guest-access="true"
+	header-filename="">
+	<actions>
+		<action	id="1" type="PRE_DISPLAY">
+			<class>com.hp.spp.portal.secondarypagetype.startsimulation.StartSimulationAction</class>
+		</action>
+	</actions>
+</template-info>
+
+</epideploy:detail>
+</epideploy:component>

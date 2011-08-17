@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold"
+	component-id="SXSfXbSQTXRXafUWURaaSdRQYVdaaYfQ" component-type="Style Types"
+	description="" epi-build="251" epi-version="7.2.2" major-version="1"
+	minor-version="0" title="SPP Omniture Header"
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:detail>
+		<template-info allow-guest-access="false" description=""
+			friendly-id="SPP_OmnitureHeader_Type" header-filename=""
+			id="SXSfXbSQTXRXafUWURaaSdRQYVdaaYfQ" is-system="false"
+			system-secondary-page-type="false" title="SPP Omniture Header"
+			type="templatetype_ui_element" visible="true"/>
+	</epideploy:detail>
+</epideploy:component>

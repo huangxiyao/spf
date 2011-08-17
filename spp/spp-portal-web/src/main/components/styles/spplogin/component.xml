@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold"
+	component-id="SZbZQTYWaSbXaWdUSYfYeZWYYVdaaYfQ" component-type="Styles"
+	description="" epi-build="251" epi-version="7.2.2" major-version="1"
+	minor-version="0" title="SPP Login"
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:required-component component-id="UcZcYZbVQbYZeWcUSYfYeZWYYVdaaYfQ"
+		component-type="Style Types" major-version="1" minor-version="0"/>
+	<epideploy:detail>
+		<style-info apply-template-header="true" description=""
+			friendly-id="spplogin" id="SZbZQTYWaSbXaWdUSYfYeZWYYVdaaYfQ"
+			is-system="false" primary-filename="SPPLogin.jsp"
+			processing-type="JSP_BASED" template-default="false"
+			template-uid="UcZcYZbVQbYZeWcUSYfYeZWYYVdaaYfQ" title="SPP Login"
+			visible="true"/>
+	</epideploy:detail>
+</epideploy:component>

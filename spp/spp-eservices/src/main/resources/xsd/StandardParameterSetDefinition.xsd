@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	
+	<xsd:element name="Site" type="SiteType"/>
+	
+	<xsd:complexType name="SiteType">
+		<xsd:sequence>
+			<xsd:element name="StdParameterSet" type="StdParameterSetType" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="StdParameterSetType">
+		<xsd:sequence>
+			<xsd:element name="parameter" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="expression" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+					</xsd:sequence>
+					<xsd:attribute name="name" type="xsd:string" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+	</xsd:complexType>
+
+</xsd:schema>

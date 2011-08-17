@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold" component-id="RWZSYXcTTUbVSaaedZdacZRQYVdaaYfQ" component-type="JSP Includes" description="" epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0" title="SPP EserviceInformation" xmlns:epideploy="http://www.epicentric.com/deployment">
+ <epideploy:required-component component-id="template0007" component-type="Style Types" major-version="7" minor-version="2"/>
+ <epideploy:detail>
+  <style-info apply-template-header="true" description="" friendly-id="sppeserviceinformation1" id="RWZSYXcTTUbVSaaedZdacZRQYVdaaYfQ" is-system="false" primary-filename="EServiceInformation.jsp" processing-type="JSP_BASED" template-default="false" template-uid="template0007" title="SPP EserviceInformation" visible="true"/>
+ </epideploy:detail>
+</epideploy:component>

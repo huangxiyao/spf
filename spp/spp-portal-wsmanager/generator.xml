@@ -1,0 +1,77 @@
+<project name="utility-package" default="dist" basedir=".">
+
+	<description>Clean and Distribute</description>
+
+	<target name="init" description="Initialize environment">
+		<property name="backup" value="backup"/>
+
+		<property name="path" value="EServiceManager"/>
+		<property name="wsdl" value="${path}.wsdl"/>
+		<property name="package" value="com.hp.spp.webservice.eservice.client"/>
+		<property name="namespace" value="http://bbnapppro02.bbn.hp.com:27005/spp-services-web/services/EServiceManager"/>
+
+		<property name="src" value="src/main/java"/>
+		
+		<path id="axis.classpath">
+			<fileset dir="C:/Documents and Settings/cmicoud.BIOS/.m2/repository">
+				<include name="vignette/axis/7.2.2/axis-7.2.2.jar" />
+				<include name="vignette/jakarta-discovery/7.2.2/jakarta-discovery-7.2.2.jar" />
+				<include name="vignette/jakarta-logging/7.2.2/jakarta-logging-7.2.2.jar" />
+				<include name="vignette/jax-qname/7.2.2/jax-qname-7.2.2.jar" />
+				<include name="vignette/log4j/7.2.2/log4j-7.2.2.jar" />
+				<include name="vignette/saaj/7.2.2/saaj-7.2.2.jar" />
+				<include name="vignette/vgn-jaxrpc/7.2.2/vgn-jaxrpc-7.2.2.jar" />
+				<include name="vignette/wsdl4j/7.2.2/wsdl4j-7.2.2.jar" />
+			</fileset>
+		</path>
+		
+		<taskdef resource="axis-tasks.properties" classpathref="axis.classpath" />
+	</target>
+
+	<target name="backup" depends="init" description="Back up">
+		<!--<delete dir="${backup}"/>
+		<mkdir dir="${backup}"/>
+		<copy todir="${backup}">
+			<fileset dir="${src.com.hp.spp.ugs.service}"/>
+		</copy>-->
+	</target>
+	
+	<target name="clean" depends="backup" description="Clean up">
+		<!--<delete dir="${src.com.hp.spp.ugs.service}"/>
+		<mkdir dir="${src.com.hp.spp.ugs.service}"/>-->
+	</target>
+	
+	<target name="axis-task" depends="backup">
+		<axis-wsdl2java
+		  output="${src}"
+		  testcase="true"
+		  verbose="true"
+		  url="http://15.138.173.88:27001/upsweb/services/UPSWebServices?wsdl" >
+		    <mapping
+		      namespace="http://UPSWeb.hp.com/Services"
+		      package="${package}" />
+		  </axis-wsdl2java>		
+	</target>
+	
+	<target name="axis" depends="clean" description="Modify generated files">
+		<java classname="org.apache.axis.wsdl.WSDL2Java">
+			<classpath>
+				<fileset dir="C:/Documents and Settings/cmicoud.BIOS/.m2/repository">
+					<include name="vignette/axis/7.2.2/axis-7.2.2.jar" />
+					<include name="vignette/jakarta-discovery/7.2.2/jakarta-discovery-7.2.2.jar" />
+					<include name="vignette/jakarta-logging/7.2.2/jakarta-logging-7.2.2.jar" />
+					<include name="vignette/jax-qname/7.2.2/jax-qname-7.2.2.jar" />
+					<include name="vignette/log4j/7.2.2/log4j-7.2.2.jar" />
+					<include name="vignette/saaj/7.2.2/saaj-7.2.2.jar" />
+					<include name="vignette/vgn-jaxrpc/7.2.2/vgn-jaxrpc-7.2.2.jar" />
+					<include name="vignette/wsdl4j/7.2.2/wsdl4j-7.2.2.jar" />
+				</fileset>
+			</classpath>
+			<arg line=' -s "wsdl/${wsdl}" --NStoPkg ${namespace}=${package} -o "${src}"'/>
+		</java>
+	</target>
+
+	<target name="dist" depends="axis" description="Generate the component">
+	</target>
+	
+</project>

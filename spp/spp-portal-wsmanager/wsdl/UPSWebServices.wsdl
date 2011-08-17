@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://UPSWeb.hp.com/Services" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://UPSWeb.hp.com/Services" xmlns:intf="http://UPSWeb.hp.com/Services" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	 <wsdl:types>
+		  <schema elementFormDefault="qualified" targetNamespace="http://UPSWeb.hp.com/Services" xmlns="http://www.w3.org/2001/XMLSchema">
+			   <element name="attributeXMLPath" type="xsd:string"/>
+			   <element name="clientInfoXMLPath" type="xsd:string"/>
+			   <element name="adapterSettingsPath" type="xsd:string"/>
+			   <complexType name="LOV">
+				    <sequence>
+					     <element name="LOVId" nillable="true" type="xsd:string"/>
+					     <element name="value" nillable="true" type="xsd:string"/>
+				    </sequence>
+			   </complexType>
+			   <complexType abstract="true" name="AbstractAttribute">
+				    <sequence>
+					     <element name="attributeId" nillable="true" type="xsd:string"/>
+					     <element name="fieldType" nillable="true" type="xsd:string"/>
+				    </sequence>
+			   </complexType>
+			   <complexType name="AttributesRow">
+				    <complexContent>
+					     <extension base="impl:AbstractAttribute">
+						      <sequence>
+							       <element maxOccurs="unbounded" name="attributes" nillable="true" type="impl:AbstractAttribute"/>
+						      </sequence>
+					     </extension>
+				    </complexContent>
+			   </complexType>
+			   <complexType name="AttributesRowList">
+				    <complexContent>
+					     <extension base="impl:AbstractAttribute">
+						      <sequence>
+							       <element maxOccurs="unbounded" name="rows" nillable="true" type="impl:AttributesRow"/>
+						      </sequence>
+					     </extension>
+				    </complexContent>
+			   </complexType>
+			   <complexType name="Attribute">
+				    <complexContent>
+					     <extension base="impl:AbstractAttribute">
+						      <sequence>
+							       <element maxOccurs="unbounded" name="attributeValues" nillable="true" type="xsd:string"/>
+							       <element name="fieldDataType" nillable="true" type="xsd:string"/>
+							       <element name="fieldSize" type="xsd:int"/>
+							       <element maxOccurs="unbounded" name="fullLOVList" nillable="true" type="impl:LOV"/>
+							       <element name="localizedPrompt" nillable="true" type="xsd:string"/>
+							       <element name="mandatoryFlag" type="xsd:boolean"/>
+							       <element name="multiselectFlag" type="xsd:boolean"/>
+							       <element name="operator" nillable="true" type="xsd:string"/>
+						      </sequence>
+					     </extension>
+				    </complexContent>
+			   </complexType>
+			   <complexType name="AttributeGroup">
+				    <sequence>
+					     <element name="attributeGroupName" nillable="true" type="xsd:string"/>
+					     <element maxOccurs="unbounded" name="attributes" nillable="true" type="impl:Attribute"/>
+					     <element maxOccurs="unbounded" name="attributesList" nillable="true" type="impl:AttributesRowList"/>
+				    </sequence>
+			   </complexType>
+			   <complexType name="RequestHeader">
+				    <sequence>
+					     <element name="clientId" nillable="true" type="xsd:string"/>
+					     <element name="requestDate" nillable="true" type="xsd:string"/>
+					     <element name="requestId" nillable="true" type="xsd:string"/>
+				    </sequence>
+			   </complexType>
+			   <complexType abstract="true" name="IServiceType">
+				    <sequence>
+					     <element name="configuredQueryId" nillable="true" type="xsd:string"/>
+					     <element name="operation" nillable="true" type="xsd:string"/>
+					     <element name="revisionVersion" nillable="true" type="xsd:string"/>
+					     <element name="transactionId" nillable="true" type="xsd:string"/>
+				    </sequence>
+			   </complexType>
+			   <complexType name="ServiceIdentifier">
+				    <sequence>
+					     <element name="locale" nillable="true" type="xsd:string"/>
+					     <element name="serviceType" nillable="true" type="impl:IServiceType"/>
+				    </sequence>
+			   </complexType>
+			   <complexType name="UPSServiceRequest">
+				    <sequence>
+					     <element maxOccurs="unbounded" name="attributeGroups" nillable="true" type="impl:AttributeGroup"/>
+					     <element name="requestHeader" nillable="true" type="impl:RequestHeader"/>
+					     <element name="serviceIdentifier" nillable="true" type="impl:ServiceIdentifier"/>
+				    </sequence>
+			   </complexType>
+			   <element name="serviceRequest" type="impl:UPSServiceRequest"/>
+			   <complexType name="ResponseHeader">
+				    <sequence>
+					     <element name="requestDate" nillable="true" type="xsd:string"/>
+					     <element name="requestId" nillable="true" type="xsd:string"/>
+				    </sequence>
+			   </complexType>
+			   <complexType name="ServiceStatus">
+				    <sequence>
+					     <element name="requestStatus" nillable="true" type="xsd:string"/>
+					     <element name="revisionVersion" nillable="true" type="xsd:string"/>
+				    </sequence>
+			   </complexType>
+			   <complexType name="UPSServiceResponse">
+				    <sequence>
+					     <element maxOccurs="unbounded" name="attributeGroups" nillable="true" type="impl:AttributeGroup"/>
+					     <element name="responseHeader" nillable="true" type="impl:ResponseHeader"/>
+					     <element name="serviceStatus" nillable="true" type="impl:ServiceStatus"/>
+				    </sequence>
+			   </complexType>
+			   <element name="invokeServiceReturn" type="impl:UPSServiceResponse"/>
+			   <complexType name="GenericUPSFault">
+				    <sequence>
+					     <element name="errorCode" nillable="true" type="xsd:string"/>
+					     <element name="errorMessage" nillable="true" type="xsd:string"/>
+					     <element name="errorType" nillable="true" type="xsd:string"/>
+				    </sequence>
+			   </complexType>
+			   <complexType name="ConfiguredQueryServiceType">
+				    <complexContent>
+					     <extension base="impl:IServiceType">
+						      <sequence/>
+					     </extension>
+				    </complexContent>
+			   </complexType>
+			   <complexType name="TransactionServiceType">
+				    <complexContent>
+					     <extension base="impl:IServiceType">
+						      <sequence/>
+					     </extension>
+				    </complexContent>
+			   </complexType>
+			   <complexType name="AttributeQuery">
+				    <complexContent>
+					     <extension base="impl:IServiceType">
+						      <sequence/>
+					     </extension>
+				    </complexContent>
+			   </complexType>
+			   <element name="fault" type="impl:GenericUPSFault"/>
+		  </schema>
+	 </wsdl:types>
+	 <wsdl:message name="initCacheManagerResponse">
+    </wsdl:message>
+	 <wsdl:message name="initCacheManagerRequest">
+		  <wsdl:part element="impl:attributeXMLPath" name="attributeXMLPath"/>
+		  <wsdl:part element="impl:clientInfoXMLPath" name="clientInfoXMLPath"/>
+		  <wsdl:part element="impl:adapterSettingsPath" name="adapterSettingsPath"/>
+	 </wsdl:message>
+	 <wsdl:message name="GenericUPSFault">
+		  <wsdl:part element="impl:fault" name="fault"/>
+	 </wsdl:message>
+	 <wsdl:message name="invokeServiceResponse">
+		  <wsdl:part element="impl:invokeServiceReturn" name="invokeServiceReturn"/>
+	 </wsdl:message>
+	 <wsdl:message name="invokeServiceRequest">
+		  <wsdl:part element="impl:serviceRequest" name="serviceRequest"/>
+	 </wsdl:message>
+	 <wsdl:portType name="UPSWebServices">
+		  <wsdl:operation name="initCacheManager" parameterOrder="attributeXMLPath clientInfoXMLPath adapterSettingsPath">
+			   <wsdl:input message="impl:initCacheManagerRequest" name="initCacheManagerRequest"/>
+			   <wsdl:output message="impl:initCacheManagerResponse" name="initCacheManagerResponse"/>
+		  </wsdl:operation>
+		  <wsdl:operation name="invokeService" parameterOrder="serviceRequest">
+			   <wsdl:input message="impl:invokeServiceRequest" name="invokeServiceRequest"/>
+			   <wsdl:output message="impl:invokeServiceResponse" name="invokeServiceResponse"/>
+			   <wsdl:fault message="impl:GenericUPSFault" name="GenericUPSFault"/>
+		  </wsdl:operation>
+	 </wsdl:portType>
+	 <wsdl:binding name="UPSWebServicesSoapBinding" type="impl:UPSWebServices">
+		  <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		  <wsdl:operation name="initCacheManager">
+			   <wsdlsoap:operation/>
+			   <wsdl:input>
+				    <wsdlsoap:body use="literal"/>
+			   </wsdl:input>
+			   <wsdl:output>
+				    <wsdlsoap:body use="literal"/>
+			   </wsdl:output>
+		  </wsdl:operation>
+		  <wsdl:operation name="invokeService">
+			   <wsdlsoap:operation/>
+			   <wsdl:input>
+				    <wsdlsoap:body use="literal"/>
+			   </wsdl:input>
+			   <wsdl:output>
+				    <wsdlsoap:body use="literal"/>
+			   </wsdl:output>
+			   <wsdl:fault name="GenericUPSFault">
+				    <wsdlsoap:fault name="GenericUPSFault" use="literal"/>
+			   </wsdl:fault>
+		  </wsdl:operation>
+	 </wsdl:binding>
+	 <wsdl:service name="UPSWebServicesService">
+		  <wsdl:port binding="impl:UPSWebServicesSoapBinding" name="UPSWebServices">
+			   <wsdlsoap:address location="http://15.138.173.88:8001/upsweb/services/UPSWebServices"/>
+		  </wsdl:port>
+	 </wsdl:service>
+</wsdl:definitions>

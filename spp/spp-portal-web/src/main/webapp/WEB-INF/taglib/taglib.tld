@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+
+<taglib>
+	<tlibversion>1.0</tlibversion>
+	<jspversion>1.1</jspversion>
+	<shortname>html</shortname>
+	<info>HTML Tag Library</info>
+
+	<tag>
+		<name>importCss</name>
+		<tagclass>com.epicentric.taglib.html.ImportCssTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Sniff browser and output appropriate CSS import tags, or none
+			if detected browser is not known to support CSS
+		</info>
+		<attribute>
+			<name>cssPath</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>navCss</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>ieCss</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+
+		<name>renderView</name>
+		<tagclass>com.epicentric.taglib.RenderViewTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			To be used for all calls to wrap a module view's serviceHTML method.
+			This tag has been deprecated in 7.0.  Use the renderPortlet tag instead
+		</info>
+		<attribute>
+			<name>view</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>context</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>i18nValue</name>
+		<tagclass>com.epicentric.taglib.html.LocalizedValueTag</tagclass>
+		<teiclass>com.epicentric.taglib.html.LocalizedValueTag$ExtraInfo</teiclass>
+		<bodycontent>JSP</bodycontent>
+		<info>
+			Returns a localized value for the given UniquelyIdentifiable (ui),
+			uid (stringID) or Location (location), and uses the defaultValue
+			if no localized value is found
+		</info>
+		<attribute>
+			<name>id</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>stringID</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>ui</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>key</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>defaultValue</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>beginString</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>endString</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>ignoreAncestors</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>isHtml</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>primary</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>i18nFormattableValue</name>
+		<tagclass>com.epicentric.taglib.html.LocalizedFormattableValueTag</tagclass>
+		<teiclass>com.epicentric.taglib.html.LocalizedFormattableValueTag$ExtraInfo</teiclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Returns a formatted value for the given Formattable.
+		</info>
+		<attribute>
+			<name>id</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>formattable</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>beginString</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>endString</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>ignoreAncestors</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>primary</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>i18nFormat</name>
+		<tagclass>com.epicentric.taglib.html.LocalizedFormatTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Returns a localized format for numbers or dates.  If surrounded
+			in a i18nValue tag, it will act as a string source equivalent
+			to the i18nParam tag.
+			Patterns supported...
+			date/time . short/medium/long/full/default
+			number . currency/percent/integer/decimal
+			e.g. date.default, time.full, number.integer, number.decimal
+		</info>
+		<attribute>
+			<name>value</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>pattern</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>i18nElement</name>
+		<tagclass>com.epicentric.taglib.html.LocalizedElementTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>
+			Allows the application of begin string and end string to I18N
+			call, transforming the i18nValue contained within into an attribute tag
+		</info>
+	</tag>
+
+	<tag>
+		<name>i18nParam</name>
+		<tagclass>com.epicentric.taglib.html.LocalizedParamTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Allows the insertion of a value into a pattern from a i18nValue tag and
+			as such bust be surrounded by one.  Note that string values are encoded
+			by the tag unless the endcode field is set to false.
+		</info>
+		<attribute>
+			<name>value</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>encode</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>i18nParams</name>
+		<tagclass>com.epicentric.taglib.html.LocalizedParamsTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Allows the insertion of multiple values from an Object[] into a pattern
+			from an i18nValue tag and as such must be surrounded by one.  Note that
+			string values from the array are encoded by the tag unless the endcode
+			field is set to false.
+		</info>
+		<attribute>
+			<name>value</name> <!-- An Object[] containing the parameters to the Localized Value Tag -->
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>encode</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+
+		<name>includeGrid</name>
+		<tagclass>com.epicentric.taglib.html.IncludeGridTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Output the current grid style
+			This tag has been deprecated in 7.0.
+		</info>
+		<attribute>
+			<name>args</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>includeStyle</name>
+		<tagclass>com.epicentric.taglib.html.IncludeStyleTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Output the current style
+		</info>
+		<attribute>
+			<name>friendlyID</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>args</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>cellID</name> <!-- Deprecated.  Replaced with panelUID -->
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>panelUID</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>includeNavigation</name>
+		<tagclass>com.epicentric.taglib.html.IncludeNavigationTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Output the current navigation
+		</info>
+		<attribute>
+			<name>friendlyID</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>args</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>isSecondary</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>includePageContent</name>
+		<tagclass>com.epicentric.taglib.html.IncludePageContentTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Output the current page content style
+		</info>
+		<attribute>
+			<name>args</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>checkTicket</name>
+		<tagclass>com.epicentric.taglib.CheckTicketTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Ensure that this JSP was called via Style.execute
+			This tag has been deprecated in 7.0.
+		</info>
+	</tag>
+
+	<tag>
+		<name>contentType</name>
+		<tagclass>com.epicentric.taglib.ContentTypeTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Set the page content type
+			This tag has been deprecated in 7.0.
+		</info>
+	</tag>
+
+	<tag>
+		<name>initFramework</name>
+		<tagclass>com.epicentric.taglib.InitFrameworkTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Initialize the Framework
+			This tag has been deprecated in 7.0.
+		</info>
+	</tag>
+
+	<tag>
+		<name>initSession</name>
+		<tagclass>com.epicentric.taglib.InitSessionTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Initialize various session variables
+			This tag has been deprecated in 7.0.
+		</info>
+	</tag>
+
+	<tag>
+		<name>realmSelector</name>
+		<tagclass>com.epicentric.taglib.html.RealmSelectorTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Display a selector for different realms
+		</info>
+		<attribute>
+			<name>realms</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>lastSelectedRealm</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>controllerURL</name>
+		<tagclass>com.epicentric.taglib.ControllerURLTag</tagclass>
+		<teiclass>com.epicentric.taglib.extrainfohelpers.ControllerURLTEI</teiclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Generates the URL to the top-level,
+			controller page using com.epicentric.components.PortalServicesComponent._getPortalHttpRoot
+			This tag has been deprecated in 7.0.
+		</info>
+	</tag>
+
+	<tag>
+		<name>portalHttpRoot</name>
+		<tagclass>com.epicentric.taglib.PortalHttpRootTag</tagclass>
+		<teiclass>com.epicentric.taglib.extrainfohelpers.PortalHttpRootTEI</teiclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Generates portal http root directory,
+			using com.epicentric.components.PortalServicesComponent._getPortalHttpRoot
+			This tag has been deprecated in 7.0.
+		</info>
+	</tag>
+
+	<tag>
+		<name>guestAccessControl</name>
+		<tagclass>com.epicentric.taglib.GuestAccessControlTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Redirect the user away from the current page, if the current user is
+			a guest.  Default destination is the site login page; can be overridden
+			to redirect to another page content page (though obviously you wouldn't
+			want to redirect to a page content page that doesn't allow guests).
+
+			One possible destination for redirecting is GuestAccessControlTag.DESTINATION_FRONTDOOR,
+			(has to be specified this way because the front door doesn't have a page
+			content).
+		</info>
+		<attribute>
+			<name>redirectDestination</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>isPrintRedirectType</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>styleBlock</name>
+		<tagclass>com.epicentric.taglib.html.StyleBlockTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			include themes fonts and colors aware CSS style block
+		</info>
+		<attribute>
+			<name>templateCSSFile</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>override</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>pageContentTitle</name>
+		<tagclass>com.epicentric.taglib.html.PageContentTitleTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Output the title of the page's page content style
+		</info>
+		<attribute>
+			<name>delimiterSymbol</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+
+		<name>segmentNewCondition</name>
+		<tagclass>com.epicentric.taglib.html.segment.SegmentNewConditionTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+				Renders Segment criteria's new condition for a selected property
+		</info>
+		<attribute>
+			<name>expression</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>propertyDefinition</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>segment</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>segmentEditCondition</name>
+		<tagclass>com.epicentric.taglib.html.segment.SegmentEditConditionTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+				Renders Segment criteria's exiting condition for a selected property
+		</info>
+		<attribute>
+			<name>condition</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>propertyDefinition</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>segment</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>selectedIndex</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>propertySchema</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>modulePreview</name>
+		<tagclass>com.epicentric.taglib.ModulePreviewTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>
+			Renders a preview the given view of a module wrapped in a fake chrome
+			This tag has been deprecated in 7.0.  Use the renderPortlet tag instead
+		</info>
+		<attribute>
+			<name>view</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>portalPageContext</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>inSegment</name>
+		<tagclass>com.epicentric.taglib.html.segment.InSegmentTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>
+			Checks whether the current user is a member of the segment.  If the user is a member, it displays bodycontent.
+		</info>
+		<attribute>
+			<name>friendlyID</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>defineObjects</name>
+		<tagclass>com.epicentric.taglib.DefineObjectsTag</tagclass>
+		<teiclass>com.epicentric.taglib.extrainfohelpers.DefineObjectsTEI</teiclass>
+		<bodycontent>empty</bodycontent>
+		<info>	This tag defines the portalContext (this is an request-based instance of
+			the com.vignette.portal.website.enduser.PortalContext class) and LOG (this is
+			an instance of the com.vignette.portal.log.LogWrapper class) implicit JSP variables.
+		</info>
+	</tag>
+
+	<tag>
+		<name>renderPortlet</name>
+		<tagclass>com.vignette.portal.portlet.website.internal.RenderPortletTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>Displays the content rendered by a portlet in a portlet window.</info>
+		<attribute>
+			<name>portletWindow</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>portletFriendlyID</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>onRenderSuccess</name>
+		<tagclass>com.vignette.portal.portlet.website.internal.OnRenderSuccessTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>When a portlet render succeeds, the body of this tag is executed.  This tag must be nested within a renderPortlet tag.</info>
+	</tag>
+
+	<tag>
+		<name>onRenderFailure</name>
+		<tagclass>com.hp.spp.portal.portlet.website.internal.OnRenderFailureSPPTag</tagclass>
+		<teiclass>com.vignette.portal.portlet.website.internal.OnRenderFailureTag$TEI</teiclass>
+		<bodycontent>JSP</bodycontent>
+		<info>When a portlet render fails, the body of this tag is executed.  This tag must be nested within a renderPortlet tag.</info>
+	</tag>
+
+	<tag>
+		<name>insertPortletContent</name>
+		<tagclass>com.vignette.portal.portlet.website.internal.InsertPortletContentTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>This tag inserts content rendered by a portlet into the page.  This tag must be nested within an OnRenderSuccess tag.</info>
+	</tag>
+
+	<tag>
+		<name>nonce</name>
+		<tagclass>com.epicentric.taglib.NonceTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>Generates a NONCE string which can be used in an INPUT tag or as part of a URL</info>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>nonceInputTag</name>
+		<tagclass>com.epicentric.taglib.NonceInputTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>Generates a NONCE and puts it in the session as well as generates an INPUT tag in the caller JSP</info>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<class name="com.hp.spp.reports.hppreport.User" table="USERS">
+		<id name="id" column="USER_ID" type="big_decimal"></id>		
+		<property name="userName" column="USER_NAME" type="string" length="64"/>		
+		<property name="firstName" column="FIRST_NAME" type="string" length="32"/>
+		<property name="lastName" column="LAST_NAME" type="string" length="32"/>
+		<property name="lastLoginDate" column="LAST_LOGIN_DATE" type="date" />				
+		<property name="hppId" column="HPP_ID" type="string" length="60"/>
+		<property name="emailId" column="EMAIL_ADDRESS" type="string" length="250"/>		
+	</class>
+</hibernate-mapping>

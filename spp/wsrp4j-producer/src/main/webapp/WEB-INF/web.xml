@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+                         "http://java.sun.com/dtd/web-app_2_3.dtd">
+<!--
+Copyright 2003-2005 The Apache Software Foundation.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<web-app>
+
+	<display-name>wsrp4j producer</display-name>
+
+    <!-- Pluto Portal servlet used for testing -->
+    <servlet>
+        <servlet-name>pluto</servlet-name>
+        <display-name>Pluto Driver</display-name>
+        <servlet-class>com.hp.frameworks.wpa.pluto.portalImpl.Servlet</servlet-class>
+        <!-- Uncomment the following to allow for non latin-1 character sets in output. -->
+        <init-param>
+            <param-name>charset</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </servlet>
+
+
+    <servlet>
+        <servlet-name>WSRP4JProducer</servlet-name>
+        <servlet-class>
+			org.apache.axis.transport.http.AxisServlet
+		</servlet-class>
+    </servlet>
+
+	<!-- BEGIN TEST PORTLET -->
+	<servlet>
+		<servlet-name>WSRP4JTestPortlet</servlet-name>
+		<display-name>WSRP4JTestPortletWrapper</display-name>
+		<servlet-class>org.apache.pluto.core.PortletServlet</servlet-class>
+		<init-param>
+			<param-name>portlet-class</param-name>
+			<param-value>org.apache.wsrp4j.testportlet.TestPortlet</param-value>
+		</init-param>
+		<init-param>
+			<param-name>portlet-guid</param-name>
+			<param-value>wsrp4j-producer.WSRP4JTestPortlet</param-value>
+		</init-param>
+	</servlet>
+	<!-- END TEST PORTLET -->
+
+    <!-- Pluto Portal servlet used for testing -->
+    <servlet-mapping>
+        <servlet-name>pluto</servlet-name>
+        <url-pattern>/pluto/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>WSRP4JProducer</servlet-name>
+        <url-pattern>/WSRP4JProducer/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>WSRP4JProducer</servlet-name>
+        <url-pattern>/services/*</url-pattern>
+    </servlet-mapping>  
+
+	<!-- BEGIN TEST PORTLET MAPPING -->
+	<servlet-mapping>
+		<servlet-name>WSRP4JTestPortlet</servlet-name>
+		<url-pattern>/WSRP4JTestPortlet/*</url-pattern>
+	</servlet-mapping>
+	<!-- END TEST PORTLET MAPPING -->
+
+
+	<mime-mapping>
+		<extension>wsdl</extension>
+		<mime-type>text/xml</mime-type>
+	</mime-mapping>
+
+	<mime-mapping>
+		<extension>xsd</extension>
+		<mime-type>text/xml</mime-type>
+	</mime-mapping>
+
+
+	<resource-ref>
+		<description>DB Connection</description>
+		<res-ref-name>jdbc/wsrp4j</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+
+</web-app>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component
+	component-id="PRELOGIN"
+	component-type="Secondary Page Types"
+	title="PRELOGIN"
+	major-version="1"
+	minor-version="0"
+	build-version="0"
+	epi-version="7.2.2"
+	epi-build="251"
+	description="Contains classes used during login process."
+	xmlns:epideploy="http://www.epicentric.com/deployment"
+>
+
+<epideploy:detail>
+<template-info
+	id="PRELOGIN"
+	friendly-id="PRELOGIN"
+	title="PRELOGIN"
+	description="Contains utility classes used during login process."
+	type="templatetype_page_content_include"
+	is-system="false"
+	visible="true"
+	allow-guest-access="true"
+	header-filename="">
+	<actions>
+		<action	id="1" type="PRE_DISPLAY">
+			<class>com.hp.spp.portal.secondarypagetype.loginpreprocess.LoginPreprocessAction</class>
+		</action>
+	</actions>
+</template-info>
+
+</epideploy:detail>
+</epideploy:component>

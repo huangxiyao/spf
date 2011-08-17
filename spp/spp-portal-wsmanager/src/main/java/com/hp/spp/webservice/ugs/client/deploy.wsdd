@@ -1,0 +1,60 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from UserGroupManagerService WSDL service -->
+
+  <service name="UserGroupManager" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="http://vdccintitg.houston.hp.com/spp-services-web/services/UserGroupManager"/>
+      <parameter name="wsdlServiceElement" value="UserGroupManagerService"/>
+      <parameter name="schemaUnqualified" value="http://vdccintitg.houston.hp.com/spp-services-web/services/UserGroupManager,urn:UserGroupManager,http://xml.apache.org/xml-soap"/>
+      <parameter name="wsdlServicePort" value="UserGroupManager"/>
+      <parameter name="className" value="com.hp.spp.webservice.ugs.client.UserGroupManagerSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="UserGroupManager"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="getGroups" qname="operNS:getGroups" xmlns:operNS="http://groups.webservice.spp.hp.com" returnQName="getGroupsReturn" returnType="rtns:UserGroupResponse" xmlns:rtns="urn:UserGroupManager" soapAction="" >
+        <parameter qname="gRequest" type="tns:UserGroupRequest" xmlns:tns="urn:UserGroupManager"/>
+      </operation>
+      <parameter name="allowedMethods" value="getGroups"/>
+
+      <typeMapping
+        xmlns:ns="http://xml.apache.org/xml-soap"
+        qname="ns:mapItem"
+        type="java:com.hp.spp.webservice.ugs.client.MapItem"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="http://vdccintitg.houston.hp.com/spp-services-web/services/UserGroupManager"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:UserGroupManager"
+        qname="ns:UserGroupRequest"
+        type="java:com.hp.spp.webservice.ugs.client.UserGroupRequest"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:UserGroupManager"
+        qname="ns:UserGroupResponse"
+        type="java:com.hp.spp.webservice.ugs.client.UserGroupResponse"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

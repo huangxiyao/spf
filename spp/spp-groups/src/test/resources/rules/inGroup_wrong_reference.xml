@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site name="Smart Portal">
+	<Group name='GENERIC_GROUP_1'>
+		<And>
+			<Equals attribute="userStatus">Active</Equals>
+			<Equals attribute="userProgramName">EU-Competitor Supplies</Equals>
+			<Or>
+				<Equals attribute="userCountryCode">Switzerland</Equals>
+				<Equals attribute="userCountryCode">Lichtenstein</Equals>
+			</Or>
+			<And>
+				<InGroup value="GENERIC_GROUP_2"/>
+				<Equals attribute="userRole">Partner Portal Administrator</Equals>
+				<Not>
+					<Or>
+						<Equals attribute="userCountryCode">UK</Equals>
+						<Equals attribute="userCountryCode">IRELAND</Equals>
+					</Or>
+				</Not>
+			</And>
+		</And>
+	</Group>
+	<Group name='GENERIC_GROUP_2'>
+		<And>
+			<Equals attribute="userStatus">Active</Equals>
+			<Equals attribute="userProgramName">EU-Competitor Supplies</Equals>
+			<Or>
+				<Equals attribute="userCountryCode">Switzerland</Equals>
+				<Equals attribute="userCountryCode">Lichtenstein</Equals>
+			</Or>
+			<And>
+				<Equals attribute="userRole">Partner Portal Administrator</Equals>
+				<Not>
+					<Or>
+						<Equals attribute="userCountryCode">UK</Equals>
+						<Equals attribute="userCountryCode">IRELAND</Equals>
+						<InGroup value="PARTNER_GROUP_TEST_1"/>
+					</Or>
+				</Not>
+			</And>
+		</And>
+	</Group>
+	<Group name='PARTNER_GROUP_TEST_1'>
+		<And>
+			<Equals attribute="userStatus">Active</Equals>
+			<Equals attribute="userProgramName">EU-Competitor Supplies</Equals>
+			<Or>
+				<Equals attribute="userCountryCode">Switzerland</Equals>
+				<Equals attribute="userCountryCode">Lichtenstein</Equals>
+			</Or>
+			<And>
+				<InGroup value="GENERIC_GROUP_NOT_EXISTS"/>
+				<Equals attribute="userRole">Partner Portal Administrator</Equals>
+				<Not>
+					<Or>
+						<Equals attribute="userCountryCode">UK</Equals>
+						<Equals attribute="userCountryCode">IRELAND</Equals>
+					</Or>
+				</Not>
+			</And>
+		</And>
+	</Group>
+	<Group name='PARTNER_GROUP_TEST_2'>
+			<And>
+				<Equals attribute="userStatus">Active</Equals>
+				<InGroup value="ALT_GENERIC_GROUP_NOT_EXISTS_2"/>
+				<Equals attribute="userProgramName">EU-Competitor Supplies</Equals>
+				<Or>
+					<Equals attribute="userCountryCode">Switzerland</Equals>
+					<Equals attribute="userCountryCode">Lichtenstein</Equals>
+				</Or>
+				<And>
+					
+					<Equals attribute="userRole">Partner Portal Administrator</Equals>
+					<Not>
+						<Or>
+							<Equals attribute="userCountryCode">UK</Equals>
+							<Equals attribute="userCountryCode">IRELAND</Equals>
+						</Or>
+					</Not>
+				</And>
+			</And>
+	</Group>
+</Site>

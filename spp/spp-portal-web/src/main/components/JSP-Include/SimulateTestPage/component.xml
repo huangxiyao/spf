@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold" component-id="SYScbXefdTZWQRVUQYbUfUedYVdaaYfQ" component-type="JSP Includes" description="This page is only to test the simulation. This page must not put in Prod!" epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0" title="SPP Simulate Test page" xmlns:epideploy="http://www.epicentric.com/deployment">
+ <epideploy:required-component component-id="template0007" component-type="Style Types" major-version="7" minor-version="2"/>
+ <epideploy:detail>
+  <style-info apply-template-header="true" description="This page is only to test the simulation. This page must not put in Prod!" friendly-id="sppSimulateTestPage" id="SYScbXefdTZWQRVUQYbUfUedYVdaaYfQ" is-system="false" primary-filename="simulate.jsp" processing-type="JSP_BASED" template-default="false" template-uid="template0007" title="SPP Simulate Test page" visible="true"/>
+ </epideploy:detail>
+</epideploy:component>

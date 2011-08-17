@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epideploy:component build-version="Gold"
+	component-id="XWUZSUcdSWTRVfUWURaaSdRQYVdaaYfQ" component-type="Grids"
+	description="SPP grid with a satisfaction survey call" epi-build="251"
+	epi-version="7.2.2" major-version="1" minor-version="0" title="SPP Grid Survey"
+	xmlns:epideploy="http://www.epicentric.com/deployment">
+	<epideploy:required-component component-id="template0005"
+		component-type="Style Types" major-version="7" minor-version="2"/>
+	<epideploy:detail>
+		<style-info apply-template-header="true"
+			description="SPP grid with a satisfaction survey call"
+			friendly-id="sppgridsurvey" id="XWUZSUcdSWTRVfUWURaaSdRQYVdaaYfQ"
+			is-system="false" primary-filename="SPPGridSurvey.jsp"
+			processing-type="JSP_BASED" template-default="false"
+			template-uid="template0005" title="SPP Grid Survey" visible="true"/>
+	</epideploy:detail>
+</epideploy:component>
