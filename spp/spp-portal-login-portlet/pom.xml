@@ -2,14 +2,12 @@
 <project>
 	<parent>
 		<artifactId>spp</artifactId>
-		<groupId>com.hp.spp</groupId>
-		<version>4.9.4-SNAPSHOT</version>
+		<groupId>com.hp.it.spp</groupId>	<version>4.9.4-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.hp.spp</groupId>
+	<groupId>com.hp.it.spp</groupId>
 	<artifactId>spp-portal-login-portlet</artifactId>
 	<packaging>war</packaging>
-	<version>${spp.version}</version>
 	<build>
 		<finalName>spp-portal-login-portlet</finalName>
 		<filters>
@@ -41,7 +39,7 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-wsrp-common</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
@@ -50,12 +48,12 @@
 			<artifactId>vgn-jsr-container-taglib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-portal-login</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-config</artifactId>
 			<version>${spp.version}</version>
 		</dependency>

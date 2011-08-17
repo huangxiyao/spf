@@ -2,12 +2,12 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>com.hp.spp</groupId>
+		<groupId>com.hp.it.spp</groupId>	
 		<version>4.9.4-SNAPSHOT</version>
 		<artifactId>spp</artifactId>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.hp.spp</groupId>
+	<groupId>com.hp.it.spp</groupId>
 	<artifactId>spp-portal-web</artifactId>
 	<packaging>war</packaging>
 	<dependencies>
@@ -97,7 +97,7 @@
 		<!-- This module does not depend directly on spp-common. It is included explicitly here
 		to exclude HIBERNATE dependency -->
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-common</artifactId>
 			<version>${spp.version}</version>
 			<exclusions>
@@ -129,7 +129,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-portal-common</artifactId>
 			<version>${spp.version}</version>
 			<exclusions>
@@ -141,7 +141,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-portal-wsmanager</artifactId>
 			<version>${spp.version}</version>
 			<exclusions>
@@ -153,7 +153,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-profile</artifactId>
 			<version>${spp.version}</version>
 			<exclusions>
@@ -165,7 +165,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-portal-login</artifactId>
 			<version>${spp.version}</version>
 			<exclusions>
@@ -177,7 +177,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-portal-search</artifactId>
 			<version>${spp.version}</version>
 			<exclusions>
@@ -199,7 +199,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-wsrp-common</artifactId>
 			<version>${spp.version}</version>
 			<exclusions>
@@ -226,7 +226,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-ldap-login</artifactId>
 			<version>${spp.version}</version>
 			<type>war</type>

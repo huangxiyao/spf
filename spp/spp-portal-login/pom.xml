@@ -1,14 +1,13 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>com.hp.spp</groupId>
+		<groupId>com.hp.it.spp</groupId>
 		<version>4.9.4-SNAPSHOT</version>
 		<artifactId>spp</artifactId>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.hp.spp</groupId>
+	<groupId>com.hp.it.spp</groupId>
 	<artifactId>spp-portal-login</artifactId>
 	<packaging>jar</packaging>
 	<dependencies>
@@ -25,47 +24,47 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-common</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-db</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-cache</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-portal-common</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-wsrp-common</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-portal-wsmanager</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-profile</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-portal-simulate</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-portal-crypto</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
@@ -85,29 +84,29 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-  <build>
-    		<finalName>spp-portal-login</finalName>
-     		<filters>
-    			<filter>../filters/${env}.properties</filter>
-    		</filters>
-    		<resources>
-    			<resource>
-    				<directory>src/main/resources</directory>
-    				<filtering>true</filtering>
-    			</resource>
-    		</resources>
-  </build>
-  
-  <reporting>
-    <plugins>
-        <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <configuration>
-          <configLocation>${basedir}/../CheckstyleHPSPP.xml</configLocation>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
+	<build>
+		<finalName>spp-portal-login</finalName>
+		<filters>
+			<filter>../filters/${env}.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<configLocation>${basedir}/../CheckstyleHPSPP.xml</configLocation>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>

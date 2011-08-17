@@ -3,13 +3,12 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>spp</artifactId>
-		<groupId>com.hp.spp</groupId>
+		<groupId>com.hp.it.spp</groupId>
 		<version>4.9.4-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.hp.spp</groupId>
+	<groupId>com.hp.it.spp</groupId>
 	<artifactId>spp-profile</artifactId>
-	<version>${spp.version}</version>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>

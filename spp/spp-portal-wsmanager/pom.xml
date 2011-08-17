@@ -1,16 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>com.hp.spp</groupId>
+		<groupId>com.hp.it.spp</groupId>
 		<version>4.9.4-SNAPSHOT</version>
 		<artifactId>spp</artifactId>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.hp.spp</groupId>
+	<groupId>com.hp.it.spp</groupId>
 	<artifactId>spp-portal-wsmanager</artifactId>
 	<packaging>jar</packaging>
-	<version>${spp.version}</version>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -54,32 +52,32 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-common</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-config</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-profile</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-portal-common</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-hpputils</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hp.spp</groupId>
+			<groupId>com.hp.it.spp</groupId>
 			<artifactId>spp-portal-simulate</artifactId>
 			<version>${spp.version}</version>
 		</dependency>
@@ -97,4 +95,4 @@
 		</resources>
 
 	</build>
- </project>
+</project>
