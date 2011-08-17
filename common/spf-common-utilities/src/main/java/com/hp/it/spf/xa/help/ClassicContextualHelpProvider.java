@@ -247,7 +247,7 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "            } \n"
 			+ "        } \n"
 			+ "    } \n"
-			+ "    function cchHideFrame(ev) {\n"
+			+ "    function cchHideObject(ev) {\n"
 			+ "        var e = window.event ? window.event : ev; \n"
 			+ "        var t = e.target ? e.target : e.srcElement; \n"
 
@@ -863,7 +863,7 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("<script>\n");
 		html
 				.append("classicContextualHelpUtil.addEvent(document.getElementById('"
-						+ id + "HelpClose'), 'click', cchHideFrame);\n");
+						+ id + "HelpClose'), 'click', cchHideObject);\n");
 		html.append("</script>");
 
 		// Bump counter and return.
