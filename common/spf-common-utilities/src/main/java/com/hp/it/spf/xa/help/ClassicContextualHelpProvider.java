@@ -298,18 +298,24 @@ public abstract class ClassicContextualHelpProvider extends
 			// name by concatenating 'Close' string to anchor id.
 			+ "        if (w != null) { \n"
 			+ "            cchLastShow = w; \n"
-			+ "            w.style.display = \"block\"; \n"
 			+ "            w.style.left = mouseX + \"px\"; \n"
 			+ "            w.style.zIndex = 4999; \n"
 			+ "            var spaceNeeded; \n"
 			+ "            var spaceAvail; \n"
 			+ "            if (document.documentElement && document.documentElement.clientWidth) { \n"
 
-			// IE6 and Firefox
+			// Non-IE5
 			+ "                frameWidth = document.documentElement.clientWidth; \n"
 			+ "                frameHeight = document.documentElement.clientHeight; \n"
-			+ "                scrollTop = document.documentElement.scrollTop; \n"
-			+ "                scrollLeft = document.documentElement.scrollLeft; \n"
+			+ "                if (document.documentElement.scrollTop) { \n"
+			// IE and FF
+			+ "                    scrollTop = document.documentElement.scrollTop; \n"
+			+ "                    scrollLeft = document.documentElement.scrollLeft; \n"
+			+ "                } else { \n"
+			// Chrome and Safari
+			+ "                    scrollTop = document.body.scrollTop; \n"
+			+ "                    scrollLeft = document.body.scrollLeft; \n"
+			+ "                } \n;"
 			+ "            } \n"
 			+ "            else if (document.body) { \n"
 
@@ -369,6 +375,7 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "                    } \n"
 			+ "                } \n"
 			+ "            } \n"
+            + "            w.style.display = \"block\"; \n"
 			+ "            cchShowFrame(w); \n"
 			+ "        } \n"
 			+ "        if (window.event) { \n"
