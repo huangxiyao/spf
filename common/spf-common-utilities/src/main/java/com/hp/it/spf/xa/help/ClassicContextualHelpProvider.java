@@ -743,16 +743,24 @@ public abstract class ClassicContextualHelpProvider extends
 		}
 
 		// Make the border style.
-		String borderStyleAttr = "";
-		if (this.borderStyle != null)
-			borderStyleAttr += "style=\"" + Utils.escapeXml(this.borderStyle)
-					+ "\" ";
-		if (this.borderClass != null)
-			borderStyleAttr += "class=\"" + Utils.escapeXml(this.borderClass)
-					+ "\" ";
-		if ("".equals(borderStyleAttr) && (DEFAULT_BORDER_STYLE != null))
-			borderStyleAttr += "style=\""
-					+ Utils.escapeXml(DEFAULT_BORDER_STYLE) + "\" ";
+        // Add width to the style to workaround Cleansheet-provoked issue.
+        // DSJ 2011/8/24
+        String borderStyleAttr = "";
+        if (this.borderStyle != null)
+            borderStyleAttr += "style=\""
+                    + Utils.escapeXml(addWidth(this.borderStyle)) + "\" ";
+        if (this.borderClass != null)
+            borderStyleAttr += "class=\"" + Utils.escapeXml(this.borderClass)
+                    + "\" ";
+        if ("".equals(borderStyleAttr)) {
+            if (DEFAULT_BORDER_STYLE != null) {
+                borderStyleAttr += "style=\""
+                        + Utils.escapeXml(addWidth(DEFAULT_BORDER_STYLE))
+                        + "\" ";
+            } else {
+                borderStyleAttr += widthStyleAttr;
+            }
+        }
 
 		// Make the title style.
 		String titleStyleAttr = "";
@@ -853,7 +861,10 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("<tr valign=top height=\"100%\">\n");
 		html.append("<td " + helpStyleAttr + "colspan=4>\n");
 		// Write popup content
-		html.append("<table cellpadding=10 cellspacing=10>\n");
+		// Add width to inner table to workaround Cleansheet-provoked issue -
+		// DSJ 2011/8/24
+        html.append("<table " + widthStyleAttr + widthAttr
+                + "cellpadding=10 cellspacing=10>\n");
 		html.append("<tr><td align=left><p>");
 		html.append(help);
 		html.append("</p></td></tr>\n");
@@ -964,4 +975,36 @@ public abstract class ClassicContextualHelpProvider extends
 		}
 		return value;
 	}
+	
+	/**
+	 * Add a CSS width property for the current contextual-help width, if 
+	 * defined, to any string of CSS properties passed.
+	 * 
+	 * @param style
+	 * @return
+	 */
+	private String addWidth(String style) {
+	    String widthProp = "width:";
+	    if (this.width > 0) {
+	        widthProp += this.width;
+	    } else if (DEFAULT_WIDTH > 0) {
+	        widthProp += DEFAULT_WIDTH;
+	    } else {
+	        return style;
+	    }
+	    widthProp += "px;";
+	    if (style == null) {
+	        return widthProp;
+	    }
+	    style = style.trim();
+	    if ("".equals(style)) {
+	        return widthProp;
+	    }
+	    if (style.endsWith(";")) {
+	        style += widthProp;
+	    } else {
+	        style += ";" + widthProp;
+	    }
+	    return style;
+    }
 }
