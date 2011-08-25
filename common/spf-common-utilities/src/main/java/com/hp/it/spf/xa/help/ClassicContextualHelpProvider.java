@@ -746,20 +746,23 @@ public abstract class ClassicContextualHelpProvider extends
         // Add width to the style to workaround Cleansheet-provoked issue.
         // DSJ 2011/8/24
         String borderStyleAttr = "";
-        if (this.borderStyle != null)
-            borderStyleAttr += "style=\""
-                    + Utils.escapeXml(addWidth(this.borderStyle)) + "\" ";
-        if (this.borderClass != null)
+        if (this.borderStyle != null && this.borderClass != null) {
             borderStyleAttr += "class=\"" + Utils.escapeXml(this.borderClass)
                     + "\" ";
-        if ("".equals(borderStyleAttr)) {
-            if (DEFAULT_BORDER_STYLE != null) {
-                borderStyleAttr += "style=\""
-                        + Utils.escapeXml(addWidth(DEFAULT_BORDER_STYLE))
-                        + "\" ";
-            } else {
-                borderStyleAttr += widthStyleAttr;
-            }
+            borderStyleAttr += "style=\""
+                    + Utils.escapeXml(addWidth(this.borderStyle)) + "\" ";
+        } else if (this.borderStyle != null) {
+            borderStyleAttr += "style=\""
+                    + Utils.escapeXml(addWidth(this.borderStyle)) + "\" ";
+        } else if (this.borderClass != null) {
+            borderStyleAttr += "class=\"" + Utils.escapeXml(this.borderClass)
+                    + "\" ";
+            borderStyleAttr += widthStyleAttr;
+        } else if (DEFAULT_BORDER_STYLE != null) {
+            borderStyleAttr += "style=\""
+                    + Utils.escapeXml(addWidth(DEFAULT_BORDER_STYLE)) + "\" ";
+        } else {
+            borderStyleAttr += widthStyleAttr;
         }
 
 		// Make the title style.
