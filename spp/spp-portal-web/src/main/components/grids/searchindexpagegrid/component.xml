@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<epideploy:component build-version="Gold" component-id="YXYVebWRfVSYRcVdSXZacTRQYVdaaYfQ" component-type="Grids" description="This is a grid to be used for the Search index page. This grid is really lightweight in the sense that it does not have any left bar or top bar. It just displays the contents of the page and a footer." epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0" title="SearchIndexPageGrid" xmlns:epideploy="http://www.epicentric.com/deployment">
- <epideploy:required-component component-id="template0005" component-type="Style Types" major-version="7" minor-version="2"/>
- <epideploy:detail>
-  <style-info apply-template-header="true" description="This is a grid to be used for the Search index page. This grid is really lightweight in the sense that it does not have any left bar or top bar. It just displays the contents of the page and a footer." friendly-id="SearchIndexPageGrid" id="YXYVebWRfVSYRcVdSXZacTRQYVdaaYfQ" is-system="false" primary-filename="blue_frontpage_horizontal_only_lite.jsp" processing-type="JSP_BASED" template-default="false" template-uid="template0005" title="SearchIndexPageGrid" visible="true"/>
- </epideploy:detail>
-</epideploy:component>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<epideploy:component build-version="Gold" component-id="XWXUaYbTVWZbYaXbYeebXYQcYVdaaYfQ" component-type="JSP Includes" description="Search Index Page" epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0" title="Search Index Page" xmlns:epideploy="http://www.epicentric.com/deployment">
- <epideploy:required-component component-id="template0007" component-type="Style Types" major-version="7" minor-version="2"/>
- <epideploy:detail>
-  <style-info apply-template-header="true" description="Search Index Page" friendly-id="SearchIndexPage" id="XWXUaYbTVWZbYaXbYeebXYQcYVdaaYfQ" is-system="false" primary-filename="SearchIndexPage.jsp" processing-type="JSP_BASED" template-default="false" template-uid="template0007" title="Search Index Page" visible="true"/>
- </epideploy:detail>
-</epideploy:component>

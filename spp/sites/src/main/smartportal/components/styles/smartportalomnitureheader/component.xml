@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<epideploy:component build-version="Gold" component-id="RdUWaZZeTbZdTVTVTcZUeeVTYVdaaYfQ" component-type="Styles" description="" epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0" title="Smart Portal Omniture Header" xmlns:epideploy="http://www.epicentric.com/deployment">
- <epideploy:required-component component-id="SXSfXbSQTXRXafUWURaaSdRQYVdaaYfQ" component-type="Style Types" major-version="1" minor-version="0"/>
- <epideploy:detail>
-  <style-info apply-template-header="true" description="" friendly-id="smartportalomnitureheader" id="RdUWaZZeTbZdTVTVTcZUeeVTYVdaaYfQ" is-system="false" primary-filename="SmartPortalOmnitureHeader.jsp" processing-type="JSP_BASED" template-default="false" template-uid="SXSfXbSQTXRXafUWURaaSdRQYVdaaYfQ" title="Smart Portal Omniture Header" visible="true"/>
- </epideploy:detail>
-</epideploy:component>

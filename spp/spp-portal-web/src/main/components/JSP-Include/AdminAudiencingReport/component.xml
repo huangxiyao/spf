@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<epideploy:component build-version="Gold" component-id="ZbcafcZUQWfWfURTWZSdaURQYVdaaYfQ" component-type="JSP Includes" description="Admin Report" epi-build="251" epi-version="7.2.2" major-version="1" minor-version="0" title="AdminReport" xmlns:epideploy="http://www.epicentric.com/deployment">
- <epideploy:detail>
-  <style-info apply-template-header="true" description="Admin Report" friendly-id="AdminReport" id="ZbcafcZUQWfWfURTWZSdaURQYVdaaYfQ" is-system="false" primary-filename="AdminAudiencingReport.jsp" processing-type="JSP_BASED" template-default="false" template-uid="template0007" title="AdminReport" visible="true"/>
- </epideploy:detail>
-</epideploy:component>
