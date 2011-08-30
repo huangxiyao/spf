@@ -5,7 +5,7 @@
     <groupId>com.hp.it.spf.tools</groupId>
     <artifactId>spf-pom</artifactId>
     <name>Shared Portal Framework super POM</name>
-    <version>2.2.4-pi-SNAPSHOT</version>
+    <version>2.2.10-pi-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <description>

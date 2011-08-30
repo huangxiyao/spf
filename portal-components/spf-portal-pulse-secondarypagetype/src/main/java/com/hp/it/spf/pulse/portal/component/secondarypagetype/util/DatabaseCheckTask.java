@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.vignette.portal.log.LogWrapper;
 import com.vignette.portal.config.PortalConfigUtils;
@@ -51,6 +54,8 @@ public class DatabaseCheckTask extends GeneralComponentCheckTask {
     private String url = null;
     private String user = null;
     private String password = null;
+    private Properties connectionProperties = new Properties();
+
     /**
      * params read from the config file of healthcheck.xml
      * added by ck for CR: 1000813522 
@@ -106,7 +111,18 @@ public class DatabaseCheckTask extends GeneralComponentCheckTask {
         this.url = PortalConfigUtils.getProperty("default.db.url");
         this.user = PortalConfigUtils.getProperty("default.db.user");
         this.password = PortalConfigUtils.getProperty("default.db.password");
-        
+
+        /*
+         * Driver parameters are used to provide driver-specific configuration such as for
+         * Oracle connection timeout or J2EE compliance flag.
+         * Along with user and password they form connection properties which are passed
+         * to the driver manager when retrieving connection: DriverManager.getConnection(url, connectionProperties).
+         */
+        this.connectionProperties.putAll(
+                parseDriverParameters(PortalConfigUtils.getProperty("default.db.parameters")));
+        this.connectionProperties.setProperty("user", user);
+        this.connectionProperties.setProperty("password", password);
+
         try {
             thisStep = thisMethod + "check driver exists";
             LOG.debug(thisStep);
@@ -119,6 +135,27 @@ public class DatabaseCheckTask extends GeneralComponentCheckTask {
         }
         thisStep = thisMethod + "end";
         LOG.debug(thisStep);
+    }
+
+    private Properties parseDriverParameters(String driverParameters)
+    {
+        Properties result = new Properties();
+
+        if (driverParameters == null || driverParameters.trim().equals("")) {
+            return result;
+        }
+
+        Pattern pattern = Pattern.compile("(.+?)=(.+?)(;|$)");
+        Matcher matcher = pattern.matcher(driverParameters.trim());
+        while (matcher.find()) {
+            String driverParamName = matcher.group(1).trim();
+            String driverParamValue = matcher.group(2).trim();
+            result.setProperty(driverParamName, driverParamValue);
+        }
+
+        LOG.info("JDBC driver parameters: " + result);
+
+        return result;
     }
 
     /**
@@ -150,7 +187,7 @@ public class DatabaseCheckTask extends GeneralComponentCheckTask {
             thisStep = thisMethod + "get connection";
             LOG.debug(thisStep);
             // connect the database
-            con = DriverManager.getConnection(url, user, password);
+            con = DriverManager.getConnection(url, connectionProperties);
             
             thisStep = thisMethod + "create statement";
             LOG.debug(thisStep);
