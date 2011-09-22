@@ -1,0 +1,77 @@
+# CASFW_HOME is expected to be set before including this file
+
+if [ -r ${HOME}/.casfwrc ]; then
+    source ${HOME}/.casfwrc
+fi
+
+
+function get_property_value() {
+    local file_path="$1"
+    local prop_name="$2"
+    local prop_value="$(grep "^${prop_name}=" "${file_path}" | tail -n1 | awk '{print substr($0, index($0, "=")+1)}')"
+    if [ -z "${prop_value}" ]; then
+        echo "Property \"${prop_name}\" not found in file \"${file_path}\"."
+        echo "Aborting."
+        exit 1
+    fi
+    echo ${prop_value}
+}
+
+
+casfw_java_home="$(ls -d ${CASFW_HOME}/software/oracle-java-1.5.* 2>/dev/null | tail -n1)"
+
+if [ -z "${casfw_java_home}" ]; then
+    if [ -z "${JAVA_HOME}" ]; then
+        echo "JAVA_HOME variable not set."
+        echo "Update your environment with JAVA_HOME pointing to JDK 1.5 and restart."
+        exit 1
+    fi
+
+    jvm_version=$(${JAVA_HOME}/bin/java -version 2>&1 | head -n1)
+    if [[ ! "${jvm_version}" =~ "1.5." ]]; then
+        echo "Required Java version is 1.5 but JAVA_HOME JVM using ${jvm_version}."
+        echo "Update your environment with JAVA_HOME pointing to JDK 1.5."
+        exit 2
+    fi
+else
+    export JAVA_HOME="$(cd ${casfw_java_home} && pwd -P)"
+fi
+
+using_cygwin=false
+if [[ "$(uname)" =~ "CYGWIN" ]]; then
+    using_cygwin=true
+fi 
+
+if [ -z "${VIGNETTE_HOME}" ]; then
+    VIGNETTE_HOME="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
+fi
+
+if ${using_cygwin}; then
+    VIGNETTE_HOME="$(cygpath -m ${VIGNETTE_HOME})"
+fi
+
+
+if [ -z "${portal_version}" ]; then
+    portal_home="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
+    portal_version="$(basename ${portal_home} | sed 's/vignette-portal-//')"
+fi
+if [ -z "${htmlviewer_version}" ]; then
+    htmlviewer_home="$(cd $(ls -d ${CASFW_HOME}/software/spf-html-viewer-* | tail -n1) && pwd -P)"
+    htmlviewer_version="$(basename ${htmlviewer_home} | sed 's/spf-html-viewer-//')"
+fi
+if [ -z "${opensign_version}" ]; then
+    opensign_home="$(cd $(ls -d ${CASFW_HOME}/software/spf-open-sign-* | tail -n1) && pwd -P)"
+    opensign_version="$(basename ${opensign_home} | sed 's/spf-open-sign-//')"
+fi
+if [ -z "${healthcheck_version}" ]; then
+    healthcheck_home="$(cd $(ls -d ${CASFW_HOME}/software/spf-healthcheck-* | tail -n1) && pwd -P)"
+    healthcheck_version="$(basename ${healthcheck_home} | sed 's/spf-healthcheck-//')"
+fi
+
+CASFW_DYNAMIC_CONFIG_TOKENS="-Dportal_version=${portal_version} -Dvignette_home=${VIGNETTE_HOME} -Dhtmlviewer_version=${htmlviewer_version} -Dopensign_version=${opensign_version} -Dhealthcheck_version=${healthcheck_version}"
+
+
+# allow other installers using this one as base to provide their additional settings
+if [ -r ${CASFW_HOME}/bin/.casfwrc_custom ]; then
+    source ${CASFW_HOME}/bin/.casfwrc_custom
+fi

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/portal" docBase="@@casfw_home@@/software/vignette-portal-@@portal_version@@/portal" reloadable="true" crossContext="true">
+    <Manager className="org.apache.catalina.session.StandardManager" pathname=""/>
+    <Resource name="jdbc/cas-persona" auth="Container" type="javax.sql.DataSource"
+              maxActive="20" maxIdle="10" maxWait="-1"
+              connectionProperties="oracle.jdbc.timezoneAsRegion=false"
+              driverClassName="@@persona_db_driver_class@@"
+              username="@@persona_db_username@@"
+              password="@@persona_db_password@@"
+              url="@@persona_db_url@@" />
+</Context>

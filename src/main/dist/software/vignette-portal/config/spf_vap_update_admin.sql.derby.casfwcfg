@@ -1,0 +1,12 @@
+----------------------------------------------------------------
+-- This SQL script will update administrator USERS profile id
+--
+-- Date Crated: July/10/2011
+-- Date Last Modified: July/10/2011
+-- Created by : Liu, Ye
+----------------------------------------------------------------
+
+UPDATE USERS SET PROFILE_ID='@@portal_admin_profile_id@@' WHERE USER_NAME='@@portal_admin_username@@';
+--commit;
+
+--quit;

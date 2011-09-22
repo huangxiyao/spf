@@ -1,0 +1,9 @@
+LoginId=@@portal_admin_username@@
+ProfileId=@@portal_admin_profile_id@@
+FirstName=admin
+LastName=localhost
+Email=admin@localhost
+Language=en
+Country=us
+Timezone=America/Los_Angeles
+GROUPS=LOCAL_PORTAL_AUTH_HPP
