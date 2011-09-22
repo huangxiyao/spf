@@ -215,16 +215,48 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<configuration>
-					<dependentWarExcludes>
-						WEB-INF/web.xml,
-						WEB-INF/weblogic.xml,
-						WEB-INF/lib/spring.jar,
-						WEB-INF/lib/commons-lang.jar,
-						WEB-INF/lib/commons-logging.jar,
-						WEB-INF/lib/log4j.jar
-	       			 </dependentWarExcludes>
-				</configuration>
+				<executions>
+					<execution>
+						<id>default-war</id>
+						<configuration>
+							<overlays>
+								<overlay>
+									<groupId>vignette</groupId>
+									<artifactId>vgn-portal</artifactId>
+									<excludes>
+										<exclude>WEB-INF/web.xml</exclude>
+										<exclude>WEB-INF/weblogic.xml</exclude>
+										<exclude>WEB-INF/lib/spring.jar</exclude>
+										<exclude>WEB-INF/lib/commons-lang.jar</exclude>
+										<exclude>WEB-INF/lib/commons-logging.jar</exclude>
+										<exclude>WEB-INF/lib/log4j.jar</exclude>
+									</excludes>
+								</overlay>
+							</overlays>
+						</configuration>
+					</execution>
+					<execution>
+						<!--
+							The produced below spf-portal-NNN-novgn WAR does not contain vgn-portal
+							files. This WAR file is used with spf-portal-installer.
+						-->
+						<id>novgn-war</id>
+						<configuration>
+							<classifier>novgn</classifier>
+							<webappDirectory>${project.build.directory}/${project.build.finalName}-novgn</webappDirectory>
+							<overlays>
+								<overlay>
+									<groupId>vignette</groupId>
+									<artifactId>vgn-portal</artifactId>
+									<skip>true</skip>
+								</overlay>
+							</overlays>
+						</configuration>
+						<goals>
+							<goal>war</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
