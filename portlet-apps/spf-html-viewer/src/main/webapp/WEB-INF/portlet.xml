@@ -3,8 +3,7 @@
 <portlet-app
 	xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd
-	                    http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
 	version="2.0">
 
 	<portlet>
@@ -20,6 +19,14 @@
 		<init-param>
 			<name>contextConfigLocation</name>
 			<value>/WEB-INF/context/html_viewer.xml</value>
+		</init-param>
+
+		<!-- Overwrite the default mapping which does not work on Tomcat
+		See http://forum.springsource.org/showthread.php?86333-Spring-Portlet-MVC-3.0-Release-File-not-found-WEB-INF-servlet-view
+		-->
+		<init-param>
+			<name>viewRendererUrl</name>
+			<value>/viewRenderer</value>
 		</init-param>
 
 		<supports>
@@ -55,7 +62,7 @@
 			</preference>
 		</portlet-preferences>
 	</portlet>
-	
+
 	<custom-portlet-mode>
 		<portlet-mode>vignette:config</portlet-mode>
 	</custom-portlet-mode>
@@ -70,7 +77,7 @@
 		<lifecycle>RESOURCE_PHASE</lifecycle>
 		<lifecycle>EVENT_PHASE</lifecycle>
 	</filter>
-	
+
 	<!-- SPF attribute map filter -->
 	<filter>
 		<display-name>SPF Map Attribute Filter</display-name>
@@ -81,7 +88,7 @@
 		<lifecycle>RESOURCE_PHASE</lifecycle>
 		<lifecycle>EVENT_PHASE</lifecycle>
 	</filter>
-	
+
 	<filter>
 		<display-name>SPF Requestparam Extractor Filter</display-name>
 		<filter-name>RequestParamExtractorFilter</filter-name>
@@ -95,13 +102,13 @@
 			<value>true</value>
 		</init-param> 
 	</filter>
-	
+
 	<!-- WPAP logging filter mapping -->
 	<filter-mapping>
 		<filter-name>TransactionLoggingFilter</filter-name>
 		<portlet-name>*</portlet-name>
 	</filter-mapping>
-	
+
 	<!-- SPF attribute map filter mapping -->
 	<filter-mapping>
 		<filter-name>MapAttributeFilter</filter-name>

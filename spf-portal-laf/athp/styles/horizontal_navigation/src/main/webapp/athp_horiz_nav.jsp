@@ -34,7 +34,7 @@
 <jsp:useBean id="AtHPModel" scope="request" 
         class="com.hp.frameworks.wpa.portal.athp.AtHPModel" />
 
-<jsp:scriptlet>
+<%
 
 	// For horizontal menu rendering:
 	
@@ -174,7 +174,7 @@
 pageContext.setAttribute("horizontalMenuStyleDef", I18nUtils.getValue(i18nID, "athp.horizontalMenuStyle", "",
 			false, request));
 			
-</jsp:scriptlet>
+%>
 
 
 <%---------------------------------------------------------------- MARKUP --%>

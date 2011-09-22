@@ -1,0 +1,3 @@
+portlet.bundleDirectory=@@casfw_home@@/etc/resources_global/portlet/i18n
+servlet.fileRelay.url=/relay.resource
+servlet.fileRelay.included=true

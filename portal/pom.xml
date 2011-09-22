@@ -10,7 +10,7 @@
 	<groupId>com.hp.it.spf.portal</groupId>
 	<artifactId>portal</artifactId>
 	<version>2.2.10-SNAPSHOT</version>
-	
+
 	<packaging>pom</packaging>
 	<name>SPF portal aggregator POM</name>
 
@@ -27,7 +27,7 @@
 			<url>${siteUrl}/portal/${project.version}</url>
 		</site>
 	</distributionManagement>
-	
+
 	<properties>
 		<cas.security.version>2.1.1</cas.security.version>
 	</properties>
@@ -42,6 +42,9 @@
 		<module>spf-portal-tools</module>
 		<module>spf-portal-utilities</module>
 		<module>spf-portal-wsrp</module>
+        	<!-- spf-portal-installer cannot be a submodule of this artifact as it depends on
+        	portal-components which are built only after the portal. To solve this dependency
+	        issue portal/spf-portal-installer is included in the main SPF aggregator POM. -->
 	</modules>
 
 	<build>

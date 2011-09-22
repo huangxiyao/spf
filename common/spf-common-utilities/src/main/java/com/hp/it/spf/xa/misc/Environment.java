@@ -6,10 +6,8 @@ package com.hp.it.spf.xa.misc;
 
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
@@ -35,7 +33,7 @@ public enum Environment {
 	 * The signleton instance of this class
 	 */
 	singletonInstance;
-	
+
 //	private final Logger mLog = Logger.getLogger(Environment.class);
 
 	private final String PROP_FILE_NAME = "spf_environment.properties";
@@ -50,7 +48,18 @@ public enum Environment {
 
 	private Environment() {
 		determineEnvironmentType();
-		gatherDataFromMBeans();
+		if (isWebLogic()) {
+			gatherDataFromWebLogicMBeans();
+		}
+		else {
+			//FIXME (slawek) - How to get this data for Tomcat from its MBeans ?
+			gatherDataFromSystemProperties();
+		}
+	}
+
+	private boolean isWebLogic()
+	{
+		return System.getProperty("weblogic.Name") != null;
 	}
 
 	private void determineEnvironmentType() {
@@ -83,17 +92,17 @@ public enum Environment {
 		}
 	}
 
-	private void gatherDataFromMBeans() {
+	private void gatherDataFromWebLogicMBeans() {
 		try {
 			 ObjectName runtimeService = new ObjectName("com.bea:Name=RuntimeService,Type=weblogic.management.mbeanservers.runtime.RuntimeServiceMBean");
 			 InitialContext ctx;
 			 ctx = new InitialContext();
 			 MBeanServer mbeanServer = (MBeanServer) ctx.lookup("java:comp/env/jmx/runtime");
-	 		 ObjectName mServerRuntime = (ObjectName)mbeanServer.getAttribute(runtimeService,"ServerRuntime");
-	 		 mManagedServerName = (String)mbeanServer.getAttribute(mServerRuntime,"Name");
-	 		 mManagedServerPort = ((Integer) mbeanServer.getAttribute(mServerRuntime,"ListenPort")).intValue();
+			 ObjectName mServerRuntime = (ObjectName)mbeanServer.getAttribute(runtimeService,"ServerRuntime");
+			 mManagedServerName = (String)mbeanServer.getAttribute(mServerRuntime,"Name");
+			 mManagedServerPort = ((Integer) mbeanServer.getAttribute(mServerRuntime,"ListenPort")).intValue();
 
-	 		 mServerId = mManagedServerName;
+			 mServerId = mManagedServerName;
 
 //	 		 if(mLog.isDebugEnabled()){
 //	 			 mLog.debug("Managed Server Name : "+ mManagedServerName);
@@ -101,13 +110,13 @@ public enum Environment {
 //
 //	 		 }
 
-	 		ObjectName mDomainConfig = (ObjectName)mbeanServer.getAttribute(runtimeService,"DomainConfiguration");
-	    	ObjectName[] mServers = (ObjectName[]) mbeanServer.getAttribute(mDomainConfig, "Servers");
+			ObjectName mDomainConfig = (ObjectName)mbeanServer.getAttribute(runtimeService,"DomainConfiguration");
+			ObjectName[] mServers = (ObjectName[]) mbeanServer.getAttribute(mDomainConfig, "Servers");
 
-	    	 List<String> serverList = new ArrayList<String>();
+			 List<String> serverList = new ArrayList<String>();
 
-	    	 for (int i = 0;i < mServers.length;i++) {
-	        	 String managedServerName = (String) mbeanServer.getAttribute(mServers[i],"Name");
+			 for (int i = 0;i < mServers.length;i++) {
+				 String managedServerName = (String) mbeanServer.getAttribute(mServers[i],"Name");
 
 //	        	 if (mLog.isDebugEnabled()) {
 //	        		 mLog.debug("Managed Server Name : "+managedServerName);
@@ -120,9 +129,9 @@ public enum Environment {
 				 if (!"AdminServer".equalsIgnoreCase(managedServerName)) {
 					 serverList.add((String) mbeanServer.getAttribute(mServers[i],"ListenAddress")+":"+ mbeanServer.getAttribute(mServers[i],"ListenPort"));
 				 }
-	    	 }
+			 }
 
-	    	 mManagedServerList = Collections.unmodifiableList(serverList);
+			 mManagedServerList = Collections.unmodifiableList(serverList);
 
 		} catch (MalformedObjectNameException e) {
 			throw new IllegalStateException("Error while creating the RuntimeService Object", e);
@@ -133,12 +142,21 @@ public enum Environment {
 		}
 	}
 
+	private void gatherDataFromSystemProperties()
+	{
+		mServerId = System.getProperty("spf.ServerId");
+		mManagedServerName = mServerId;
+		mManagedServerPort = (System.getProperty("spf.ServerPort") != null
+				? Integer.parseInt(System.getProperty("spf.ServerPort")) : -1);
+		mManagedServerList = Collections.emptyList();
+	}
+
 	/**
-	    * This method will return current Environment Type
-	    * @return Current Environment Type
-	    *		  DEV
-	    *		 		
-	    */
+	 * This method will return current Environment Type
+	 * @return Current Environment Type
+	 *		  DEV
+	 *
+	 */
 	public String getType() {
 		return mType;
 	}
@@ -146,42 +164,42 @@ public enum Environment {
 	/**
 	 * 
 	 * @ FixMe -Need to remove this method and it's related entries from the code as part of refractoring
-	*/
+	 */
 	public String getServerId() {
 		return mServerId;
 	}
-	
+
 	/**
-	    * This method will return current managed server name
-	    * This information is retrieved from the ServerRuntime
-	    * @return Current Managed Server Name
-	    *		  sppvgna1
-	    *		 		
-	    */
+	 * This method will return current managed server name
+	 * This information is retrieved from the ServerRuntime
+	 * @return Current Managed Server Name
+	 *		  sppvgna1
+	 *
+	 */
 	public String getManagedServerName(){
 		return mManagedServerName;
 	}
-	
+
 	/**
-	    * This method will return current managed server port
-	    * This information is retrieved from the ServerRuntime
-	    * @return Current Managed Server Port
-	    *		  30002 
-	    * 		
-	    */
+	 * This method will return current managed server port
+	 * This information is retrieved from the ServerRuntime
+	 * @return Current Managed Server Port
+	 *		  30002
+	 *
+	 */
 	public int getManagedServerPort(){
 		return mManagedServerPort;
 	}
-	
+
 	/**
-	    * This method will return a List of managed server connection String in a cluster
-	    * This information is retrieved from the DomainConfiguration MBean
-	    * @return A List of managed server connection string
-	    *		  g2u0154.austin.hp.com:30002
-	    *		  g2u0154.austin.hp.com:30004
-	    *		  g1u1569.austin.hp.com:30002 
-	    * 		  g1u1569.austin.hp.com:30004
-	    */
+	 * This method will return a List of managed server connection String in a cluster
+	 * This information is retrieved from the DomainConfiguration MBean
+	 * @return A List of managed server connection string
+	 *		  g2u0154.austin.hp.com:30002
+	 *		  g2u0154.austin.hp.com:30004
+	 *		  g1u1569.austin.hp.com:30002
+	 * 		  g1u1569.austin.hp.com:30004
+	 */
 	public List<String> getManagedServersList(){
 		return mManagedServerList;
 	}

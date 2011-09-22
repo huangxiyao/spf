@@ -63,7 +63,7 @@
 
 	<c:set var="hpweb_header_split" value="true" scope="request" />
 
-<jsp:scriptlet>
+<%
 
 // Set variables from HPWebModel bean, with defaults from message catalog.
 
@@ -121,7 +121,7 @@ String searchOmnitureTagDef = Utils.getI18nValue(i18nID, "hpweb.searchOmnitureTa
 String searchAudienceDef = Utils.getI18nValue(i18nID, "hpweb.searchAudience",
 			portalContext);
 
-</jsp:scriptlet>
+%>
 
 <%----------------------------------------------------------------------------- 
 	Template (for upper header portion) 
@@ -173,7 +173,7 @@ String searchAudienceDef = Utils.getI18nValue(i18nID, "hpweb.searchAudience",
 	Lower header portion, title and breadcrumbs
 -----------------------------------------------------------------------------%>
 
-<jsp:scriptlet>
+<%
 
 // hpweb:title tag attributes
 
@@ -263,7 +263,7 @@ if (HPWebModel.getBreadcrumbItems().size() == 0 &&
 	pageContext.setAttribute("breadcrumbItems", breadcrumbItems);
 }
 
-</jsp:scriptlet>
+%>
 
 <%----------------------------------------------------------------------------- 
 	Template  (for lower header portion)

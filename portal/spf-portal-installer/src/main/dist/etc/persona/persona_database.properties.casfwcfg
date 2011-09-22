@@ -1,0 +1,4 @@
+persona_db_driver_class=@@persona_db_driver_class@@
+persona_db_url=@@persona_db_url@@
+persona_db_username=@@persona_db_username@@
+persona_db_password=@@persona_db_password@@

@@ -84,9 +84,7 @@ public class RequestBindingFilter implements Filter {
             String requestKey = RequestMap.getInstance().add(request);
 
             // put in the request the name of the thread so we can associate
-            // the
-            // WebLogic request
-            // thread with the thread running WSRP call
+            // the request thread with the thread running WSRP call
             request.setAttribute(THREAD_NAME_REQUEST_KEY, Thread
                     .currentThread().getName());
 

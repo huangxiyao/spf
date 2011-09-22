@@ -146,12 +146,14 @@ public class SPFRollingFileAppender extends org.apache.log4j.RollingFileAppender
 		// server name
 		// The snippet used to determine the server id is a duplication of code from Environment
 		// class. It's here to avoid a circular dependency - as Environment also performs some logging
-		// during its class initilization, the logger must be initialized before this occurs.
-		String serverId = System.getProperty("spp.ServerId");
+		// during its class initialization, the logger must be initialized before this occurs.
+		String serverId = System.getProperty("spf.ServerId");
 		if (serverId == null) {
 			serverId = System.getProperty("weblogic.Name");
 		}
-		actualFileName.append(serverId).append(File.separatorChar);
+		if (serverId != null) {
+			actualFileName.append(serverId).append(File.separatorChar);
+		}
 
 		// log domain
 		if (mLogDomain != null) {

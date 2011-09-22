@@ -26,7 +26,7 @@
 	Sample HPP Central Forms integration
 -----------------------------------------------------------------------------%>
 
-<jsp:scriptlet>
+<%
 
 //Build username string from Vignette user object for 'welcome string'.
 
@@ -40,7 +40,7 @@ else if (firstName != null)
 else if (lastName == null)
 	displayName = lastName;
 
-</jsp:scriptlet>
+%>
 
 <jsp:setProperty name="HPWebModel" property="username" 
 		value="<%= displayName %>" />
@@ -62,12 +62,12 @@ else if (lastName == null)
 	Sample code to add <meta> element
 -----------------------------------------------------------------------------%>
 
-<jsp:scriptlet>
+<%
 
 	Properties metaInfos = HPWebModel.getMetaInfos();
 	metaInfos.setProperty("robots", "noindex,nofollow");
 	
-</jsp:scriptlet>
+%>
 
 <%-----------------------------------------------------------------------------
 	Sample Grid properties
@@ -110,7 +110,7 @@ else if (lastName == null)
 <jsp:setProperty name="HPWebModel" property="feedbackText" 
 		value="Feedback to webmaster" />
 
-<jsp:scriptlet>
+<%
 
 <%-----------------------------------------------------------------------------
 	The following sample code shows how to create a sample left menu 
@@ -173,7 +173,7 @@ item2.getSubMenuItems().add(item2_3);
 
 }
 
-</jsp:scriptlet>
+%>
 
 <%-----------------------------------------------------------------------------
 	Sample Vertical Navigation properties
@@ -204,7 +204,7 @@ based on the currently selected page.
 HPWebModel property. 
 --%>
 
-<jsp:scriptlet>
+<%
 
 List breadcrumbs = null;
 boolean createBreadcrumbs = false;
@@ -226,4 +226,4 @@ if (createBreadcrumbs) {
 	breadcrumbs.add(item);
 }
 
-</jsp:scriptlet>
+%>

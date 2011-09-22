@@ -32,7 +32,7 @@
 	Variables
 -----------------------------------------------------------------------------%>
 
-<jsp:scriptlet>
+<%
 
 String leftMenuTitleDef = Utils.getI18nValue(i18nID, "hpweb.leftMenuTitle",
 			portalContext);
@@ -41,7 +41,7 @@ String leftMenuTitleUrlDef = Utils.getI18nValue(i18nID, "hpweb.leftMenuTitleUrl"
 String leftPromotionDef = Utils.getI18nValue(i18nID, "hpweb.leftPromotion",
 			portalContext);
 
-</jsp:scriptlet>
+%>
 
 <%-----------------------------------------------------------------------------
 	Template
@@ -50,7 +50,7 @@ String leftPromotionDef = Utils.getI18nValue(i18nID, "hpweb.leftPromotion",
 <jsp:useBean id="HPWebModel" scope="request" 
 		class="com.hp.frameworks.wpa.portal.hpweb.HPWebModel" />
 
-<jsp:scriptlet>
+<%
 
 	List leftMenuItems = null;
 
@@ -65,7 +65,7 @@ String leftPromotionDef = Utils.getI18nValue(i18nID, "hpweb.leftPromotion",
 
 	}
 
-</jsp:scriptlet>
+%>
 
 <c:choose>
 <c:when test="${! empty HPWebModel.leftMenuItems}" >

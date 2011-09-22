@@ -14,7 +14,7 @@
 
 	<name>SPF portal tools</name>
 	<description>Tools for administrating SPF portal and/or portlet resources. Includes the localization helper scripts for SPF, and more.</description>
-	
+
 	<inceptionYear>March 2009</inceptionYear>
 
 	<dependencies>
@@ -23,19 +23,25 @@
 			<artifactId>vgn-portal-core</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-log</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>vignette</groupId>
+			<artifactId>vgn-portal-cache</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>com.hp.it.spf.sso</groupId>
 			<artifactId>spf-portal-session</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 	</dependencies>
 </project>

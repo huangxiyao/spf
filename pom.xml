@@ -16,6 +16,17 @@
         <module>portlet</module>
         <module>portlet-apps</module>
         <module>spf-portal-laf</module>
+        <!-- 
+            spf-portal-installer cannot be a submodule of portal as it depends on
+            portal-components which are built only after the portal. To solve this dependency
+            issue portal/spf-portal-installer is included in this main SPF aggregator POM.
+        -->
+        <!-- 2011/09/22:
+            Temporarily commenting out spf-portal-installer in this pom as it depends on SNAPSHOT version
+            of CAS install-assembler-maven-plugin and as such couldn't be Maven-released along with other
+            SPF artifacts. Once CAS plugin is in released version this will be uncommented.
+        -->
+        <!--<module>portal/spf-portal-installer</module>-->
     </modules>
     
     <scm>

@@ -14,14 +14,14 @@
 <jsp:useBean id="AtHPModel" scope="request" 
 		class="com.hp.frameworks.wpa.portal.athp.AtHPModel" />
 
-<jsp:scriptlet>
+<%
 
 	// Sample additional MetaInfos customization
 	
 	Properties metaInfos = AtHPModel.getMetaInfos();
 	metaInfos.setProperty("robots", "noindex,nofollow");
 	
-</jsp:scriptlet>
+%>
 
 <jsp:setProperty name="AtHPModel" property="greetingMessage"
 		value="Welcome, User" />
@@ -32,7 +32,7 @@
 <jsp:setProperty name="AtHPModel" property="generateBreadcrumbs"
 		value="true" />
 
-<jsp:scriptlet>
+<%
 
 	// Sample left menu creation and customization
 	
@@ -84,7 +84,7 @@
 
 	}
 
-</jsp:scriptlet>
+%>
 
 <jsp:setProperty name="AtHPModel" property="feedbackUrl"
 		value="http://feedback.foo.com" />

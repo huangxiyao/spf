@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<remote-portlet-servers>
+    <!--
+	<remote-portlet-server>
+		<name>AAE_FUT_WSRP</name>
+		<import-id>AAE_WSRP</import-id>
+		<description></description>
+		<producer-url>http://g2u0460c.austin.hp.com:25577/portletdriver/wsrp/wsdl/AAEFUTA</producer-url>
+	</remote-portlet-server>
+	-->
+</remote-portlet-servers>

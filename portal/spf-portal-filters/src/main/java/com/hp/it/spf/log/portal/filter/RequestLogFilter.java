@@ -201,9 +201,12 @@ public class RequestLogFilter implements Filter {
 	}
 
 	/**
-	 * Returns hash value of weblogic JSESSIONID.
-	 * Weblogic appends server informations in JSESSIONID, so here we are taking hash value till "!".
-	 * Hence in case of switch from primary server to secondary server, this value will be same for that session.
+	 * Returns hash value of HTTP session ID.
+	 * For WebLogic the session ID value contains the "!" which separates the actual session ID
+	 * from the ID of the primary and secondary servers on which the session is hosted.
+	 * The actual session ID does not change if the session fails over to another server.
+	 * Therefore, if the HTTP session ID contains "!", the hash is calculated based on the substring
+	 * up to "!".
 	 * @param request portal request
 	 * @return sessionId hash value.
 	 */	
@@ -214,7 +217,14 @@ public class RequestLogFilter implements Filter {
 			return null;
 		}
 		else {
-			return Integer.toHexString(Math.abs(sessionId.substring(0, sessionId.indexOf("!")).hashCode()));
+			int pos = sessionId.indexOf('!');
+
+			// the session ID has '!' - it is WebLogic session ID.
+			// let's just take its value up to '!'
+			if (pos != -1) {
+				sessionId = sessionId.substring(0, pos);
+			}
+			return Integer.toHexString(Math.abs(sessionId.hashCode()));
 		}
 	}
 
