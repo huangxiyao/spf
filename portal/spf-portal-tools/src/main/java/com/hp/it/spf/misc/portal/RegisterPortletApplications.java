@@ -1,9 +1,9 @@
 package com.hp.it.spf.misc.portal;
 
 import com.vignette.portal.portlet.management.external.PortletPersistenceException;
+import com.vignette.portal.portlet.management.external.PortletResourceNotFoundException;
 import com.vignette.portal.portlet.management.internal.implementation.provider.jsr.JsrPortletApplicationManagerSpiImpl;
-import com.vignette.portal.portlet.management.internal.implementation.provider.jsr.JsrPortletTypeManagerSpiImpl;
-import com.vignette.portal.portlet.management.internal.implementation.provider.jsr.JsrPortletTypeSpiImpl;
+import com.vignette.portal.portlet.management.internal.implementation.provider.jsr.JsrPortletApplicationSpiImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -15,7 +15,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,9 +40,11 @@ import java.util.Set;
  * </pre>
  *
  * @author Liu, Ye (HPIT-GADSC) (ye.liu@hp.com)
+ * @author Xu, Ke-Jun (Daniel,HPIT-GADSC) (ke-jun.xu@hp.com)
  */
 public class RegisterPortletApplications
 {
+    private PortletTypeHelper portletTypeHelper = new PortletTypeHelper();
 
     public static void main(String[] args)
     {
@@ -77,11 +78,15 @@ public class RegisterPortletApplications
                 // for command line usage as here.
 
                 @Override
-                void createPortletApplication(LocalPortletApplicationBean application) throws PortletPersistenceException
+                boolean createOrUpdatePortletApplication(LocalPortletApplicationBean application) throws PortletPersistenceException
                 {
-                    super.createPortletApplication(application);
-                    System.out.printf("Successfully registered portlet application: name=%s, context root=%s, portlets=%s%n",
-                            application.getName(), application.getContextRoot(), application.getTypeList());
+                    boolean portletApplicationCreated = super.createOrUpdatePortletApplication(application);
+                    System.out.printf("Successfully %s portlet application: name=%s, context root=%s, portlets=%s%n",
+                            (portletApplicationCreated ? "registered" : "updated"),
+                            application.getName(),
+                            application.getContextRoot(),
+                            application.getTypeList());
+                    return portletApplicationCreated;
                 }
             };
             tool.registerPortletApplications(portletAppData);
@@ -98,7 +103,7 @@ public class RegisterPortletApplications
     {
         List<LocalPortletApplicationBean> portletApplications = getLocalPortletApplicationDefs(portletAppData);
         for (LocalPortletApplicationBean application : portletApplications) {
-            createPortletApplication(application);
+            createOrUpdatePortletApplication(application);
         }
     }
 
@@ -142,88 +147,40 @@ public class RegisterPortletApplications
         return list;
     }
 
-    void createPortletApplication(LocalPortletApplicationBean application) throws PortletPersistenceException
+    boolean createOrUpdatePortletApplication(LocalPortletApplicationBean application) throws PortletPersistenceException
     {
-        Set<String> portletTypeIDs = createApplicationPortletTypes(application);
+        try {
+            updatePortletApplication(application);
+            return false;
+        }
+        catch (PortletResourceNotFoundException e) {
+            createPortletApplication(application);
+            return true;
+        }
+    }
+
+    private void updatePortletApplication(LocalPortletApplicationBean application) throws PortletResourceNotFoundException, PortletPersistenceException
+    {
+        final int ID_TYPE_CONTEXT_ROOT = 1;
+
+        JsrPortletApplicationSpiImpl existingPortletApp =
+                JsrPortletApplicationSpiImpl.getJsrPortletApplicationByID(
+                        application.getContextRoot(), ID_TYPE_CONTEXT_ROOT);
+
+        portletTypeHelper.createMissingPortletTypes(existingPortletApp, application);
+        portletTypeHelper.deleteObsoletePortletTypes(existingPortletApp, application);
+
+        if (! application.getDescription().equals(existingPortletApp.getDescription())) {
+            existingPortletApp.setDescription(application.getDescription());
+        }
+
+        existingPortletApp.save();
+    }
+
+    private void createPortletApplication(LocalPortletApplicationBean application) throws PortletPersistenceException
+    {
+        Set<String> portletTypeIDs = portletTypeHelper.createApplicationPortletTypes(application.getName(), application.getTypeList());
         JsrPortletApplicationManagerSpiImpl actionManager = JsrPortletApplicationManagerSpiImpl.getInstance();
         actionManager.createPortletApplication(application.getContextRoot(), application.getName(), application.getDescription(), portletTypeIDs, null);
-    }
-
-    private Set<String> createApplicationPortletTypes(LocalPortletApplicationBean application) throws PortletPersistenceException
-    {
-        List<String> typeNames = application.getTypeList();
-
-        Set<String> locales = new HashSet<String>();
-        locales.add("English");
-
-        JsrPortletTypeManagerSpiImpl typeManager = JsrPortletTypeManagerSpiImpl.getInstance();
-
-        Set<String> portletTypeIDs = new HashSet<String>();
-        for (String typeName : typeNames) {
-            JsrPortletTypeSpiImpl type = typeManager.createJsrPortletType(application.getName(), typeName, typeName, "", null, false, null, locales);
-            portletTypeIDs.add(type.getID());
-        }
-
-        return portletTypeIDs;
-    }
-
-
-    static class LocalPortletApplicationBean
-    {
-        private String name;
-        private String description;
-        private String contextRoot;
-        private List<String> typeList;
-
-        public LocalPortletApplicationBean(String name, String description, String contextRoot,
-                                           List<String> typeList)
-        {
-            if (name == null || name.trim().equals("")) {
-                throw new IllegalArgumentException("Portlet application name cannot be null or empty");
-            }
-            if (contextRoot == null || contextRoot.trim().equals("")) {
-                throw new IllegalArgumentException("Portlet application contextRoot cannot be null or empty");
-            }
-            if (typeList == null || typeList.isEmpty()) {
-                throw new IllegalArgumentException("Portlet application's portlet list cannot be empty");
-            }
-            for (String type : typeList) {
-                if (type == null || type.trim().equals("")) {
-                    throw new IllegalArgumentException("Portlet name cannot be null or empty");
-                }
-            }
-
-            this.name = name;
-            this.description = description;
-            this.contextRoot = contextRoot;
-            this.typeList = typeList;
-        }
-
-        public String getName()
-        {
-            return name;
-        }
-
-        public String getDescription()
-        {
-            return description;
-        }
-
-        public String getContextRoot()
-        {
-            return contextRoot;
-        }
-
-        public List<String> getTypeList()
-        {
-            return typeList;
-        }
-
-        @Override
-        public String toString()
-        {
-            return (" name = [" + name + "] ; contextRoot = [" + contextRoot + "] ; description =[" + description
-                    + "] ; typeList = [" + typeList + "]");
-        }
     }
 }

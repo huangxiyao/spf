@@ -37,13 +37,13 @@ public class RegisterPortletApplicationsTest
 
         Document portletAppsDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(src);
         RegisterPortletApplications rpa = new RegisterPortletApplications();
-        List<RegisterPortletApplications.LocalPortletApplicationBean> portletApplications =
+        List<LocalPortletApplicationBean> portletApplications =
                 rpa.getLocalPortletApplicationDefs(portletAppsDoc);
 
         assertThat(portletApplications, is(notNullValue()));
         assertThat(portletApplications.size(), is(1));
 
-        RegisterPortletApplications.LocalPortletApplicationBean portletApplication = portletApplications.get(0);
+        LocalPortletApplicationBean portletApplication = portletApplications.get(0);
 
         assertThat(portletApplication.getName(), is("HTMLViewer"));
         assertThat(portletApplication.getContextRoot(), is("htmlviewer"));

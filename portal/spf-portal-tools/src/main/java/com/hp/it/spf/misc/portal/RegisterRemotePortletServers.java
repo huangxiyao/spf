@@ -11,6 +11,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import com.vignette.portal.portlet.management.external.PortletPersistenceException;
+import com.vignette.portal.portlet.management.internal.implementation.provider.wsrp.WsrpPortletApplicationManagerSpiImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -71,11 +73,15 @@ public class RegisterRemotePortletServers
                 // for command line usage as here.
 
                 @Override
-                void registerRemoteServer(RemotePortletServerBean remoteServer) throws PortletException
+                boolean registerOrUpdateRemoteServer(RemotePortletServerBean remoteServer) throws PortletException
                 {
-                    super.registerRemoteServer(remoteServer);
-                    System.out.printf("Successfully registered remote server: name=%s, import ID=%s, producer URL=%s%n",
-                            remoteServer.getTitle(), remoteServer.getFriendlyID(), remoteServer.getServiceDescriptionEndpoint());
+                    boolean newServerCreated = super.registerOrUpdateRemoteServer(remoteServer);
+                    System.out.printf("Successfully %s remote server: name=%s, import ID=%s, producer URL=%s%n",
+                            (newServerCreated ? "registered" : "updated"),
+                            remoteServer.getTitle(),
+                            remoteServer.getFriendlyID(),
+                            remoteServer.getServiceDescriptionEndpoint());
+                    return newServerCreated;
                 }
             };
             registerTool.registerRemoteServers(remoteServersData);
@@ -90,7 +96,7 @@ public class RegisterRemotePortletServers
     public void registerRemoteServers(Document remoteServersData) throws Exception {
         List<RemotePortletServerBean> list = getRemotePortletServerDefs(remoteServersData);
         for (RemotePortletServerBean remoteServer : list) {
-            registerRemoteServer(remoteServer);
+            registerOrUpdateRemoteServer(remoteServer);
         }
     }
 
@@ -125,86 +131,42 @@ public class RegisterRemotePortletServers
         return list;
     }
 
-    void registerRemoteServer(RemotePortletServerBean remoteServer) throws PortletException
+    boolean registerOrUpdateRemoteServer(RemotePortletServerBean remoteServer) throws PortletException
     {
-        WsrpPortletApplicationSpiImpl wpas = new WsrpPortletApplicationSpiImpl(
+        try {
+            updateRemoteServer(remoteServer);
+            return false;
+        }
+        //FIXME (slawek) - shouldn't this exception be rather PortletResourceNotFoundException ???
+        catch (PortletPersistenceException e) {
+            registerRemoteServer(remoteServer);
+            return true;
+        }
+    }
+
+    private void updateRemoteServer(RemotePortletServerBean remoteServer) throws PortletException
+    {
+        WsrpPortletApplicationManagerSpiImpl wsrpPortletApplicationManager =
+                WsrpPortletApplicationManagerSpiImpl.getInstance();
+
+        WsrpPortletApplicationSpiImpl existingRemoteServer =
+                    wsrpPortletApplicationManager.getWsrpPortletApplicationByFriendlyID(remoteServer.getFriendlyID());
+
+        existingRemoteServer.setAppCreationUrl(remoteServer.getServiceDescriptionEndpoint());
+        existingRemoteServer.setTitle(remoteServer.getTitle());
+        existingRemoteServer.setDescription(remoteServer.getDescription());
+        existingRemoteServer.saveImpl();
+    }
+
+    private void registerRemoteServer(RemotePortletServerBean remoteServer) throws PortletException
+    {
+        WsrpPortletApplicationSpiImpl newRemoteServer = new WsrpPortletApplicationSpiImpl(
                 remoteServer.getTitle(),
                 remoteServer.getDescription(),
                 remoteServer.getServiceDescriptionEndpoint(),
                 Collections.emptyList());
-        wpas.setFriendlyID(remoteServer.getFriendlyID());
-        wpas.saveImpl();
-    }
-
-    static class RemotePortletServerBean {
-
-        private String title;
-        private String description;
-        private String friendlyID;
-        private String serviceDescriptionEndpoint;
-
-        /**
-         * @param title
-         *            the title of remote portlet server
-         * @param description
-         *            the description of remote portlet server
-         * @param friendlyID
-         *            the friendlyID of remote portlet server
-         * @param serviceDescriptionEndpoint
-         *            the url of remote portlet server
-         */
-        public RemotePortletServerBean(String title, String description, String friendlyID,
-                String serviceDescriptionEndpoint)
-        {
-            if (title == null || title.trim().equals("")) {
-                throw new IllegalArgumentException("Remote server title (name) cannot be null or empty");
-            }
-            if (friendlyID == null || friendlyID.trim().equals("")) {
-                throw new IllegalArgumentException("Remote server friendlyID (import ID) cannot be null or empty");
-            }
-            if (serviceDescriptionEndpoint == null || serviceDescriptionEndpoint.trim().equals("")) {
-                throw new IllegalArgumentException("Remote server service description endpoint (producer URL) cannot be null or empty");
-            }
-
-            this.title = title;
-            this.description = description;
-            this.friendlyID = friendlyID;
-            this.serviceDescriptionEndpoint = serviceDescriptionEndpoint;
-        }
-
-        /**
-         * @return title
-         */
-        public String getTitle() {
-            return title;
-        }
-
-        /**
-         * @return the description of remote portlet server
-         */
-        public String getDescription() {
-            return description;
-        }
-
-        /**
-         * @return the friendlyID of remote portlet server
-         */
-        public String getFriendlyID() {
-            return friendlyID;
-        }
-
-        /**
-         * @return serviceDescriptionEndpoint the serviceDescriptionEndpoint of remote portlet server
-         */
-        public String getServiceDescriptionEndpoint() {
-            return serviceDescriptionEndpoint;
-        }
-
-        @Override
-        public String toString() {
-            return (" title = [" + title + "] ; friendlyID = [" + friendlyID + "] ; description =[" + description
-                    + "] ; serviceDescriptionEndpoint = [" + serviceDescriptionEndpoint + "]");
-        }
+        newRemoteServer.setFriendlyID(remoteServer.getFriendlyID());
+        newRemoteServer.saveImpl();
     }
 
 }
