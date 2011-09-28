@@ -183,19 +183,20 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "    } \n"
 
 			// Set this method to mousedown event of div
-			+ "    function cchGrab(context) \n"
+			+ "    function cchGrab(e, context) \n"
 			+ "    { \n"
-			+ "        document.onmousedown = cchFalse; \n"
 			+ "        cchDragObj = context;  \n"
-			+ "        //cchDragObj.style.zIndex = 10; \n"
-			// move it to the top
-			+ "        document.onmousemove = cchDrag; \n"
-			+ "        document.onmouseup = cchDrop; \n"
+            + "        cchUpdate(e); \n"
 			+ "        cchGrabX = cchMouseX; \n"
 			+ "        cchGrabY = cchMouseY; \n"
 			+ "        cchElemX = cchOrigX = cchDragObj.offsetLeft; \n"
 			+ "        cchElemY = cchOrigY = cchDragObj.offsetTop; \n"
-			+ "        cchUpdate(); \n"
+            + "        cchMouseDownWas = document.onmousedown; \n"
+            + "        cchMouseMoveWas = document.onmousemove; \n"
+            + "        cchMouseUpWas = document.onmouseup; \n"
+            + "        document.onmousedown = cchFalse; \n"
+            + "        document.onmousemove = cchDrag; \n"
+            + "        document.onmouseup = cchDrop; \n"
 			+ "    } \n"
 
 			+ "    function cchMoveFrame(o) \n"
@@ -213,6 +214,7 @@ public abstract class ClassicContextualHelpProvider extends
 			// position
 			+ "    function cchDrag(e) \n"
 			+ "    { \n"
+            + "        cchUpdate(e); \n"
 			+ "        if (cchDragObj) \n"
 			+ "        { \n"
 			+ "            cchElemX = cchOrigX + (cchMouseX-cchGrabX); \n"
@@ -222,20 +224,19 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "            cchDragObj.style.top  = (cchElemY).toString(10) + 'px'; \n"
 			+ "            cchMoveFrame(cchDragObj); \n"
 			+ "        } \n"
-			+ "        cchUpdate(e); \n"
 			+ "        return false; \n"
 			+ "    } \n"
 
 			// When mouse drop the div, this method is called to clear cchDragObj
 			// and some event handler
-			+ "    function cchDrop() \n"
+			+ "    function cchDrop(e) \n"
 			+ "    { \n"
 			+ "        if (cchDragObj) \n "
 			+ "            cchDragObj = null; \n"
-			+ "        cchUpdate(); \n"
-			+ "        document.onmousemove = cchUpdate; \n"
-			+ "        document.onmouseup = null; \n"
-			+ "        document.onmousedown = null; \n"
+			+ "        cchUpdate(e); \n"
+			+ "        document.onmousemove = cchMouseMoveWas; \n"
+			+ "        document.onmouseup = cchMouseUpWas; \n"
+			+ "        document.onmousedown = cchMouseDownWas; \n"
 			+ "    } \n"
 
 			+ "    function cchHideFrame(o) {\n"
@@ -394,8 +395,8 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "    var cchMouseX = 0, cchMouseY = 0, cchGrabX = 0, cchGrabY = 0, cchOrigX = 0, cchOrigY = 0, cchElemX = 0, cchElemY = 0; \n"
 			+ "    var cchDragObj = null; \n" + "    var cchLastShow = null;\n"
 
-			// Update the cchMouseX,cchMouseY when mouse is moving
-			+ "    document.onmousemove = cchUpdate; \n" + "    cchUpdate(); \n\n"
+			// These variables are used to remember document event handlers.
+			+ "    var cchMouseMoveWas = null, cchMouseUpWas = null, cchMouseDownWas = null; \n"
 
 			+ "} \n" + "</script>";
 
@@ -827,7 +828,7 @@ public abstract class ClassicContextualHelpProvider extends
 
 		html.append("<div ");
 		html.append("id=\"" + id + "Help\" ");
-		html.append("onmousedown=\"cchGrab(this)\" ");
+		html.append("onmousedown=\"cchGrab(event,this)\" ");
 		html
 				.append("style=\"cursor:pointer;position:absolute;background-color:white;display:none;top:200px;left:200px\">\n");
 		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
@@ -835,18 +836,13 @@ public abstract class ClassicContextualHelpProvider extends
 		// 2009/6/3
 		html.append("<div class=\"select-ie6\">\n");
 		html.append("<table " + borderStyleAttr + widthAttr
-				+ "cellpadding=2 cellspacing=0>\n");
-		// Write title bar with title string and close button, with surrounding
-		// top and bottom cells for padding.
-		html.append("<tr height=2><td " + titleStyleAttr
-				+ "colspan=4 /></tr>\n");
-		html.append("<tr valign=middle height=20>\n");
-		html.append("<td " + titleStyleAttr + ">&nbsp;</td>\n");
-		html.append("<td align=left " + titleStyleAttr + "height=20>");
+				+ "cellpadding=10 cellspacing=0>\n");
+		// Write title bar with title string and close button
+		html.append("<tr>\n");
+		html.append("<td align=left " + titleStyleAttr + "valign=middle>");
 		html.append(title);
 		html.append("</td>\n");
-		html.append("<td " + titleStyleAttr + ">&nbsp;</td>\n");
-		html.append("<td " + titleStyleAttr + ">");
+		html.append("<td align=right " + titleStyleAttr + "valign=middle>");
 		html.append("<img id=\"" + id + "HelpClose\" ");
 		html.append("src=\"" + closeButtonUrl + "\" style=\"cursor:pointer\" ");
 		if (closeButtonAlt != null) {
@@ -859,18 +855,16 @@ public abstract class ClassicContextualHelpProvider extends
 		// html.append("width=\"15\" height=\"15\" ");
 		html.append("align=right border=\"0\"/ ></td>\n");
 		html.append("</tr>\n");
-		html.append("<tr height=2><td " + titleStyleAttr
-				+ "colspan=4 /></tr>\n");
 		html.append("<tr valign=top height=\"100%\">\n");
-		html.append("<td " + helpStyleAttr + "colspan=4>\n");
+		html.append("<td " + helpStyleAttr + "colspan=2>\n");
 		// Write popup content
 		// Add width to inner table to workaround Cleansheet-provoked issue -
 		// DSJ 2011/8/24
         html.append("<table " + widthStyleAttr + widthAttr
-                + "cellpadding=10 cellspacing=10>\n");
-		html.append("<tr><td align=left><p>");
+                + "cellpadding=10 cellspacing=0>\n");
+		html.append("<tr><td align=left>");
 		html.append(help);
-		html.append("</p></td></tr>\n");
+		html.append("</td></tr>\n");
 		html.append("</table></td>\n");
 		html.append("</tr></table>\n");
 		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
