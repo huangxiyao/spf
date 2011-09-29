@@ -14,39 +14,17 @@ vignette_db_password="$(get_property_value "${VIGNETTE_HOME}/config/properties.t
 vignette_admin_username="$(get_property_value "${CASFW_HOME}/etc/casfw.properties" "portal_admin_username")"
 vignette_admin_password="$(get_property_value "${CASFW_HOME}/etc/casfw.properties" "portal_admin_password")"
 
-echo "Setting up Vignette Portal database ${vignette_db_url}"
+# First check if portal database already exists and then create it only if not
+vignette_database_setup_required=true
+
+echo "Checking Vignette Portal database"
 # Will use Vignette-provided tools to do that
 pushd ${VIGNETTE_HOME}/bin
 
-
-##### Setup portal database #####
-
-echo "Creating portal database objects"
-sh ./runs_with_classpath.sh com.vignette.tableinstaller.tools.TableInstaller \
- "--driver=${vignette_db_driver_class}" \
- "--jdbc-url=${vignette_db_url}" \
- "--user=${vignette_db_username}" \
- "--password=${vignette_db_password}" \
- create ../system/dbSetup/tables.xml \
- 1>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
- 2>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
-
-last_exit_code=$?
-if [ ${last_exit_code} -ne 0 ]; then
-    echo "Table creation failed with code ${last_exit_code}."
-    echo "Aborting."
-    popd
-    exit ${last_exit_code}
-fi
-
-
-echo "Applying SPF database extensions"
-alter_sql_path="${VIGNETTE_HOME}/config/spf_vap_alter_users.sql"
-if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
-    alter_sql_path="${alter_sql_path}.derby"
-fi
+db_check_sql_path="${CASFW_HOME}/var/vap_db_check.sql"
+echo "select count(*) from users;" > "${db_check_sql_path}"
 if ${using_cygwin}; then
-    alter_sql_path="$(cygpath -am ${alter_sql_path})"
+    db_check_sql_path="$(cygpath -am ${db_check_sql_path})"
 fi
 
 sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.SqlScriptRunner \
@@ -54,81 +32,133 @@ sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.SqlScriptRunner \
  "--jdbcUrl=${vignette_db_url}" \
  "--username=${vignette_db_username}" \
  "--password=${vignette_db_password}" \
- "--scriptPath=${alter_sql_path}" \
- 1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
- 2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+ "--scriptPath=${db_check_sql_path}" \
+ 2>&1 | grep -q -i "exception"
 
-last_exit_code=$?
-if [ ${last_exit_code} -ne 0 ]; then
-    echo "Creating custom SPF columns failed with code ${last_exit_code}."
-    echo "Aborting."
-    popd
-    exit ${last_exit_code}
+# If the database is not set up the previous command will find an "exception" message and return 0.
+# Therefore if we get non-0 there was no exception so the database already exists
+if [ $? -ne 0 ]; then
+    vignette_database_setup_required=false
 fi
+rm "${db_check_sql_path}"
 
 
-##### Setup admin account #####
+if ${vignette_database_setup_required}; then
 
-echo "Creating administrator account '${vignette_admin_username}'"
-sh ./create_first_admin_account.sh ${vignette_admin_username} ${vignette_admin_password} \
- 1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
- 2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+    ##### Setup portal database #####
 
-last_exit_code=$?
-if [ ${last_exit_code} -ne 0 ]; then
-    echo "Administration account creation failed with code ${last_exit_code}."
-    echo "Aborting."
-    popd
-    exit ${last_exit_code}
+    echo "Setting up Vignette Portal database ${vignette_db_url}"
+
+    echo "Creating portal database objects"
+    sh ./runs_with_classpath.sh com.vignette.tableinstaller.tools.TableInstaller \
+     "--driver=${vignette_db_driver_class}" \
+     "--jdbc-url=${vignette_db_url}" \
+     "--user=${vignette_db_username}" \
+     "--password=${vignette_db_password}" \
+     create ../system/dbSetup/tables.xml \
+     1>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
+     2>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+
+    last_exit_code=$?
+    if [ ${last_exit_code} -ne 0 ]; then
+        echo "Table creation failed with code ${last_exit_code}."
+        echo "Aborting."
+        popd
+        exit ${last_exit_code}
+    fi
+
+
+    echo "Applying SPF database extensions"
+    alter_sql_path="${VIGNETTE_HOME}/config/spf_vap_alter_users.sql"
+    if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
+        alter_sql_path="${alter_sql_path}.derby"
+    fi
+    if ${using_cygwin}; then
+        alter_sql_path="$(cygpath -am ${alter_sql_path})"
+    fi
+
+    sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.SqlScriptRunner \
+     "--driver=${vignette_db_driver_class}" \
+     "--jdbcUrl=${vignette_db_url}" \
+     "--username=${vignette_db_username}" \
+     "--password=${vignette_db_password}" \
+     "--scriptPath=${alter_sql_path}" \
+     1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
+     2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+
+    last_exit_code=$?
+    if [ ${last_exit_code} -ne 0 ]; then
+        echo "Creating custom SPF columns failed with code ${last_exit_code}."
+        echo "Aborting."
+        popd
+        exit ${last_exit_code}
+    fi
+
+
+    ##### Setup admin account #####
+
+    echo "Creating administrator account '${vignette_admin_username}'"
+    sh ./create_first_admin_account.sh ${vignette_admin_username} ${vignette_admin_password} \
+     1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
+     2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+
+    last_exit_code=$?
+    if [ ${last_exit_code} -ne 0 ]; then
+        echo "Administration account creation failed with code ${last_exit_code}."
+        echo "Aborting."
+        popd
+        exit ${last_exit_code}
+    fi
+
+
+    ##### Bootstrap portal #####
+
+    echo "Bootstraping portal application"
+    sh ./war_tool.sh portal.war \
+     1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
+     2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+
+    last_exit_code=$?
+    if [ ${last_exit_code} -ne 0 ]; then
+        echo "Bootstraping portal application failed with code ${last_exit_code}."
+        echo "Aborting."
+        popd
+        exit ${last_exit_code}
+    fi
+
+
+    ##### Set admin account's profile ID #####
+    # This needs to be done only after bootstrap has run as create_first_admin_account does not update DB
+    # but only create VAP/config/elxo.dat file.
+
+    echo "Setting administrator account's profile ID"
+    update_sql_path="${VIGNETTE_HOME}/config/spf_vap_update_admin.sql"
+    if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
+        update_sql_path="${update_sql_path}.derby"
+    fi
+    if ${using_cygwin}; then
+        update_sql_path="$(cygpath -am ${update_sql_path})"
+    fi
+
+    sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.SqlScriptRunner \
+     "--driver=${vignette_db_driver_class}" \
+     "--jdbcUrl=${vignette_db_url}" \
+     "--username=${vignette_db_username}" \
+     "--password=${vignette_db_password}" \
+     "--scriptPath=${update_sql_path}" \
+     1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
+     2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+
+    last_exit_code=$?
+    if [ ${last_exit_code} -ne 0 ]; then
+        echo "Updating administrator account profile id failed with code ${last_exit_code}."
+        echo "Aborting."
+        popd
+        exit ${last_exit_code}
+    fi
+else
+    echo "Vignette Portal database ${vignette_db_url} already exists - skipping its setup"
 fi
-
-
-##### Bootstrap portal #####
-
-echo "Bootstraping portal application"
-sh ./war_tool.sh portal.war \
- 1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
- 2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
-
-last_exit_code=$?
-if [ ${last_exit_code} -ne 0 ]; then
-    echo "Bootstraping portal application failed with code ${last_exit_code}."
-    echo "Aborting."
-    popd
-    exit ${last_exit_code}
-fi
-
-
-##### Set admin account's profile ID #####
-# This needs to be done only after bootstrap has run as create_first_admin_account does not update DB
-# but only create VAP/config/elxo.dat file.
-
-echo "Setting administrator account's profile ID"
-update_sql_path="${VIGNETTE_HOME}/config/spf_vap_update_admin.sql"
-if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
-    update_sql_path="${update_sql_path}.derby"
-fi
-if ${using_cygwin}; then
-    update_sql_path="$(cygpath -am ${update_sql_path})"
-fi
-
-sh ./runs_with_classpath.sh com.hp.it.spf.misc.portal.SqlScriptRunner \
- "--driver=${vignette_db_driver_class}" \
- "--jdbcUrl=${vignette_db_url}" \
- "--username=${vignette_db_username}" \
- "--password=${vignette_db_password}" \
- "--scriptPath=${update_sql_path}" \
- 1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
- 2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
-
-last_exit_code=$?
-if [ ${last_exit_code} -ne 0 ]; then
-    echo "Updating administrator account profile id failed with code ${last_exit_code}."
-    echo "Aborting."
-    popd
-    exit ${last_exit_code}
-fi
-
 
 ##### Add anonymous users #####
 
