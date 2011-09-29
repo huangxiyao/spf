@@ -12,6 +12,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import com.vignette.portal.portlet.management.external.PortletPersistenceException;
+import com.vignette.portal.portlet.management.external.PortletResourceNotFoundException;
+import com.vignette.portal.portlet.management.external.extension.wsrp.ProducerNotReachableException;
 import com.vignette.portal.portlet.management.internal.implementation.provider.wsrp.WsrpPortletApplicationManagerSpiImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -137,8 +139,9 @@ public class RegisterRemotePortletServers
             updateRemoteServer(remoteServer);
             return false;
         }
-        //FIXME (slawek) - shouldn't this exception be rather PortletResourceNotFoundException ???
         catch (PortletPersistenceException e) {
+            //Strangely enough PortletPersistenceException is thrown when the remote portlet server
+            //cannot be found in the database.
             registerRemoteServer(remoteServer);
             return true;
         }
