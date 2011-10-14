@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/security	http://www.springframework.org/schema/security/spring-security-2.0.xsd
+		"
+	>
+
+	<security:global-method-security secured-annotations="enabled"/>
+	
+	<bean id="applicationAuthenticationProvider" class="com.hp.it.cas.persona.security.ApplicationAuthenticationProvider">
+		<security:custom-authentication-provider/>
+	</bean>
+
+	<security:http auto-config="false" realm="Persona Web Service">
+		<security:intercept-url pattern="/**/*.wsdl" filters="none" method="GET"/>
+		<security:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY"/>
+		<security:http-basic/>
+	</security:http>
+	
+<!--	
+	<bean id="securityInterceptor" class="org.springframework.ws.soap.security.xwss.XwsSecurityInterceptor">
+        <description>
+            This interceptor validates incoming messages according to the policy defined in 'securityPolicy.xml'.
+            The policy defines that all incoming requests must have a UsernameToken with a password digest in it.
+            The actual authentication is performed by the Spring Security callback handler.
+        </description>
+        
+        <property name="secureRequest"			value="false"/>
+        <property name="secureResponse"			value="false"/>
+        <property name="validateRequest"		value="true"/>
+        <property name="validateResponse"		value="true"/>
+		<property name="policyConfiguration"	value="/WEB-INF/securityPolicy.xml"/>
+		<property name="callbackHandler">
+			<bean class="org.springframework.ws.soap.security.xwss.callback.SpringPlainTextPasswordValidationCallbackHandler">
+				<property name="authenticationManager" ref="authenticationManager"/>
+			</bean>
+		</property>
+	</bean>
+-->
+
+</beans>

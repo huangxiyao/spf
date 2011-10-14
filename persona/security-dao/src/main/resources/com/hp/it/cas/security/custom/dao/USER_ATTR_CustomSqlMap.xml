@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="USER_ATTR" >
+
+  <!-- These selects do not need a different result map than that defined in the user_attr
+       table, and so can inherit that map -->
+         
+  <select id="findCompoundAttributesForSimpleAttribute" resultMap="UserAttrResult" parameterClass="java.lang.String" >
+    select user_attr.*
+    from cmpnd_attr_smpl_attr
+      left join user_attr on cmpnd_user_attr_id = user_attr_id
+    where smpl_user_attr_id = #value#
+  </select>
+  
+  <select id="findSimpleAttributesForCompoundAttribute" resultMap="UserAttrResult" parameterClass="java.lang.String" >
+	select user_attr.*
+    from cmpnd_attr_smpl_attr
+      left join user_attr on smpl_user_attr_id = user_attr_id
+    where cmpnd_user_attr_id = #value#
+  </select>
+    
+  <select id="selectAllSimpleAttributes" resultMap="UserAttrResult" >
+	select  user_attr.*
+    from USER_ATTR
+    where USER_ATTR_TYPE_CD = 'SMPL'
+  </select>
+    
+  <select id="selectAllCompoundAttributes" resultMap="UserAttrResult" >
+    select user_attr.*
+    from USER_ATTR
+    where USER_ATTR_TYPE_CD = 'CMPND'
+  </select>
+  
+</sqlMap>

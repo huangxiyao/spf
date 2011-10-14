@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>118361-parent</artifactId>
+		<groupId>com.hp.it.118361</groupId>
+		<version>1.1.5-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.hp.it.118361</groupId>
+	<artifactId>security</artifactId>
+	<version>2.1.2-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>CAS Security</name>
+	<description>CAS Security framework</description>
+
+	<!--
+	<scm>
+		<connection>${cas.sourceReadUrl}/trunk/security</connection>
+		<developerConnection>${cas.sourceWriteUrl}/trunk/security</developerConnection>
+		<url>${cas.sourceViewUrl}/trunk/security</url>
+	</scm>
+	-->
+
+	<distributionManagement>
+		<site>
+			<id>site</id>
+			<name>CAS Security Site</name>
+			<url>${siteUrl}/security/${project.version}</url>
+		</site>
+	</distributionManagement>
+
+	<properties>
+		<core.version>1.1.4</core.version>
+	</properties>
+
+	<modules>
+		<module>security-dao</module>
+		<module>security-service</module>
+		<module>security-user-loader</module>
+		<module>security-web</module>
+		<module>security-webservice</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<preparationGoals>clean install</preparationGoals>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

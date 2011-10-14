@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context-2.5.xsd
+		"
+	>
+
+	<context:property-placeholder location="/WEB-INF/application.properties"/>
+	
+<!-- Endpoints -->
+
+	<bean id="baseUserAttributeValueSoapEndpoint" abstract="true">
+		<constructor-arg value="${userAttributeValueSoapNamespaceUri}"/>
+		<constructor-arg ref="webService"/>
+	</bean>
+	
+	<bean id="findUserAttributeValuesEndpoint"
+			parent="baseUserAttributeValueSoapEndpoint"
+			class="com.hp.it.cas.persona.uav.webservice.soap.FindUserAttributeValuesEndpoint"/>
+
+	<bean id="putUserAttributeValuesEndpoint"
+			parent="baseUserAttributeValueSoapEndpoint"
+	 		class="com.hp.it.cas.persona.uav.webservice.soap.PutUserAttributeValuesEndpoint"/>
+
+	<bean id="removeUserAttributeValuesEndpoint"
+			parent="baseUserAttributeValueSoapEndpoint"
+	 		class="com.hp.it.cas.persona.uav.webservice.soap.RemoveUserAttributeValuesEndpoint"/>
+
+<!-- Endpoint mapping -->
+
+	<bean class="org.springframework.ws.server.endpoint.mapping.PayloadRootQNameEndpointMapping">
+		<property name="mappings">
+			<props>
+				<prop key="{${userAttributeValueSoapNamespaceUri}}FindUserAttributeValuesRequest">findUserAttributeValuesEndpoint</prop>
+				<prop key="{${userAttributeValueSoapNamespaceUri}}PutUserAttributeValuesRequest">putUserAttributeValuesEndpoint</prop>
+				<prop key="{${userAttributeValueSoapNamespaceUri}}RemoveUserAttributeValuesRequest">removeUserAttributeValuesEndpoint</prop>
+			</props>
+		</property>
+
+		<property name="interceptors"> 
+			<list>
+				<bean class="org.springframework.ws.server.endpoint.interceptor.PayloadLoggingInterceptor"/>
+			</list>
+		</property>
+	</bean>
+
+<!-- WSDL -->
+	
+	<bean id="schema" class="org.springframework.xml.xsd.SimpleXsdSchema">
+		<property name="xsd" value="/user-attribute-value.xsd"/>
+	</bean>
+
+	<bean id="PersonaUserAttributeValue" class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition">
+		<property name="schema" ref="schema"/>
+		<property name="portTypeName" value="PersonaUserAttributeValue"/>
+
+		<!-- setting in web.xml will cause this to be expanded to the full location -->
+		<!-- must match the servlet mapping URL -->
+		<property name="locationUri" value="/soap"/>
+	</bean>
+
+<!--	
+	<bean id="securityInterceptor" class="org.springframework.ws.soap.security.xwss.XwsSecurityInterceptor">
+        <description>
+            This interceptor validates incoming messages according to the policy defined in 'securityPolicy.xml'.
+            The policy defines that all incoming requests must have a UsernameToken with a password digest in it.
+            The actual authentication is performed by the Spring Security callback handler.
+        </description>
+        
+        <property name="secureRequest"			value="false"/>
+        <property name="secureResponse"			value="false"/>
+        <property name="validateRequest"		value="true"/>
+        <property name="validateResponse"		value="true"/>
+		<property name="policyConfiguration"	value="/WEB-INF/securityPolicy.xml"/>
+		<property name="callbackHandler">
+			<bean class="org.springframework.ws.soap.security.xwss.callback.SpringPlainTextPasswordValidationCallbackHandler">
+				<property name="authenticationManager" ref="authenticationManager"/>
+			</bean>
+		</property>
+	</bean>
+-->
+</beans>

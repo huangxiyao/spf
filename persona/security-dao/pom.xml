@@ -1,0 +1,141 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hp.it.118361</groupId>
+        <artifactId>security</artifactId>
+        <version>2.1.2-SNAPSHOT</version>
+    </parent>
+    
+	<groupId>com.hp.it.118361</groupId>
+	<artifactId>security-dao</artifactId>
+    <packaging>jar</packaging>
+
+	<name>CAS Security DAO</name>
+    <description>Security Data Access Objects</description>
+    
+	<dependencies>
+	
+		<dependency>
+			<groupId>com.hp.it.118361</groupId>
+			<artifactId>core-common</artifactId>
+			<version>${core.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.hp.it.118361</groupId>
+			<artifactId>core-dao</artifactId>
+			<version>${core.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.hp.it.118361</groupId>
+			<artifactId>core-dao</artifactId>
+			<version>${core.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc5</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache</groupId>
+			<artifactId>ibatis</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+		</dependency>
+
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit4</artifactId>
+        </dependency>
+	</dependencies>
+
+	<build>
+		<plugins><plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sql-maven-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>com.oracle</groupId>
+						<artifactId>ojdbc14</artifactId>
+						<version>10.2</version>
+					</dependency>
+				</dependencies>
+
+				<!-- common configuration shared by all executions -->
+				<configuration>
+					<driver>oracle.jdbc.driver.OracleDriver</driver>
+					<url>jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=gvu1663.austin.hp.com)(PORT=1525))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=CASFWD)))</url>
+					<username>CAS02</username>
+					<password>Compaq#12345</password>
+				</configuration>
+
+				<executions>
+					<execution>
+						<phase>generate-test-resources</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<autocommit>false</autocommit>
+							<delimiter>/</delimiter>
+							<delimitertype>row</delimitertype>
+							<srcFiles> 
+								<srcFile>src/test/resources/Security DDL 07-20-09b Full Build Fully Qualified.ddl</srcFile>
+								<srcFile>src/test/resources/finished.ddl</srcFile>
+							</srcFiles>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>

@@ -1,0 +1,13 @@
+<document>
+  <properties>
+    <title>Changes Report</title>
+    <author email="paul.truax@hp.com">Paul Truax</author>
+  </properties>
+  <body>
+    <release version="2.0.2" date="Sept 02, 2009" description="Release">
+      <action dev="paul.truax@hp.com" type="add">
+	Integrated the changes plugin
+      </action>
+    </release>
+  </body>
+</document>

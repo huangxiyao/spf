@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/jee 
+	http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/security	
+	http://www.springframework.org/schema/security/spring-security-2.0.xsd">
+
+	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/cas-persona"/>
+	
+	<bean id="securityDaoFactory" class="com.hp.it.cas.security.dao.SecurityDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+	
+	<bean id="securityCustomDaoFactory" class="com.hp.it.cas.security.custom.dao.SecurityCustomDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+	
+	<bean id="personaDaoFactory" class="com.hp.it.cas.persona.dao.PersonaDaoFactory">
+		<constructor-arg ref="securityDaoFactory"/>
+		<constructor-arg ref="securityCustomDaoFactory"/>
+	</bean>
+	
+	<bean id="configDaoFactory" class="com.hp.it.cas.config.dao.ConfigDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+
+	<bean id="personaAdminService"
+		class="com.hp.it.cas.persona.service.impl.PersonaAdminServiceImpl">
+		<property name="metaDataService">
+			<ref bean="metadataConfigurationService" />
+		</property>
+		<property name="userAttributeValueService">
+			<ref bean="userAttributeValueService" />
+		</property>
+		<property name="userService">
+			<ref bean="userService" />
+		</property>
+		<property name="securityService">
+			<ref bean="securityConfigurationService" />
+		</property>
+	</bean>
+
+	<bean id="metadataConfigurationService"
+		class="com.hp.it.cas.persona.configuration.service.impl.MetadataConfigurationService">
+		<constructor-arg>
+			<ref bean="personaDaoFactory" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="securityConfigurationService"
+		class="com.hp.it.cas.persona.configuration.service.impl.SecurityConfigurationService">
+		<constructor-arg index="0">
+			<ref bean="personaDaoFactory" />
+		</constructor-arg>
+		<constructor-arg index="1">
+			<ref bean="configDaoFactory" />
+		</constructor-arg>
+		<constructor-arg index="2">
+			<ref bean="metadataConfigurationService" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="userAttributeValueService"
+		class="com.hp.it.cas.persona.uav.service.impl.UserAttributeValueService">
+		<constructor-arg index="0">
+			<ref bean="personaDaoFactory" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="userService" class="com.hp.it.cas.persona.user.service.impl.UserService">
+		<constructor-arg>
+			<ref bean="userAttributeValueService" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="simpleAttributeController" class="com.hp.it.cas.persona.web.SimpleAttributeController">
+		<property name="mainViewName">
+			<value>simpleAttributeAdmin</value>
+		</property>
+		<property name="editViewName">
+			<value>simpleAttributeEdit</value>
+		</property>
+		<property name="personaService">
+			<ref bean="personaAdminService" />
+		</property>
+	</bean>
+
+	<bean id="compoundAttributeController" class="com.hp.it.cas.persona.web.CompoundAttributeController">
+		<property name="mainViewName">
+			<value>compoundAttributeAdmin</value>
+		</property>
+		<property name="editViewName">
+			<value>compoundAttributeEdit</value>
+		</property>
+		<property name="personaService">
+			<ref bean="personaAdminService" />
+		</property>
+	</bean>
+
+	<bean id="securityManagementController" class="com.hp.it.cas.persona.web.SecurityManagementController">
+		<property name="mainViewName">
+			<value>security</value>
+		</property>
+		<property name="simpleEditViewName">
+			<value>simpleSecurityEdit</value>
+		</property>
+		<property name="compoundEditViewName">
+			<value>compoundSecurityEdit</value>
+		</property>
+		<property name="personaService">
+			<ref bean="personaAdminService" />
+		</property>
+	</bean>
+
+	<bean id="simpleContentManagementController"
+		class="com.hp.it.cas.persona.web.SimpleContentManagementController">
+		<property name="mainViewName">
+			<value>userBrowsing</value>
+		</property>
+		<property name="simpleAttributeAddViewName">
+			<value>userBrowsingSimple</value>
+		</property>
+		<property name="compAttributeEditViewName">
+			<value>userBrowsingCompound</value>
+		</property>
+		<property name="personaService">
+			<ref bean="personaAdminService" />
+		</property>
+	</bean>
+
+	<bean id="compoundContentManagementController"
+		class="com.hp.it.cas.persona.web.CompoundContentManagementController">
+		<property name="mainViewName">
+			<value>userBrowsingCompound</value>
+		</property>
+		<property name="contentViewName">
+			<value>userBrowsing</value>
+		</property>
+		<property name="personaService">
+			<ref bean="personaAdminService" />
+		</property>
+	</bean>
+
+	<bean id="parameterMappingInterceptor"
+		class="org.springframework.web.portlet.handler.ParameterMappingInterceptor" />
+
+	<bean id="portletSessionContextIntegrationInterceptor"
+		class="org.springframework.security.context.PortletSessionContextIntegrationInterceptor" />
+
+	<bean id="portletProcessingInterceptor"
+		class="com.hp.it.spf.spring.security.SpfPortletProcessingInterceptor">
+		<property name="authenticationManager" ref="applicationAuthenticationManager" />
+	</bean>
+
+	<bean id="portletModeParameterHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+		<property name="order" value="1" />
+		<property name="interceptors">
+			<list>
+				<ref bean="parameterMappingInterceptor" />
+				<ref bean="portletSessionContextIntegrationInterceptor" />
+				<ref bean="portletProcessingInterceptor" />
+			</list>
+		</property>
+		<property name="portletModeParameterMap">
+			<map>
+				<entry key="view"><!--portlet mode: view -->
+					<map>
+						<entry key="simpleAttribute_configuration">
+							<ref bean="simpleAttributeController" />
+						</entry>
+						<entry key="compoundAttribute_configuration">
+							<ref bean="compoundAttributeController" />
+						</entry>
+						<entry key="securityManagement">
+							<ref bean="securityManagementController" />
+						</entry>
+						<entry key="simpleContentManagement">
+							<ref bean="simpleContentManagementController" />
+						</entry>
+						<entry key="compoundContentManagement">
+							<ref bean="compoundContentManagementController" />
+						</entry>
+					</map>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- Handler Mapping -->
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="order" value="2" />
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="simpleAttributeController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+</beans>

@@ -1,0 +1,188 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         
+	<modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <artifactId>security</artifactId>
+        <groupId>com.hp.it.118361</groupId>
+        <version>2.1.2-SNAPSHOT</version>
+    </parent>
+
+	<groupId>com.hp.it.118361</groupId>
+	<artifactId>security-web</artifactId>
+	<packaging>war</packaging>
+
+	<name>CAS Security Web</name>
+	<description>This is a portlet provides the UI for Persona administration.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.portlet</groupId>
+			<artifactId>portlet-api</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.frameworks</groupId>
+			<artifactId>wpa-portlet-core</artifactId>
+			<version>3.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc-portlet</artifactId>
+			<version>${springFrameworkVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.frameworks</groupId>
+			<artifactId>timber-core</artifactId>
+			<version>2.1.2</version>
+		</dependency>
+<!--
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.5.6</version>
+            <scope>runtime</scope>
+        </dependency>
+-->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.118361</groupId>
+			<artifactId>security-service</artifactId>
+			<version>${version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.118361</groupId>
+			<artifactId>security-dao</artifactId>
+			<version>${version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.5.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.xa</groupId>
+			<artifactId>spf-portlet-utilities</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${springSecurityVersion}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-portlet</artifactId>
+			<version>${springSecurityVersion}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${springFrameworkVersion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.5.6</version>
+            <scope>runtime</scope>
+        </dependency>
+		<dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>0.9.15</version>
+            <scope>runtime</scope>
+        </dependency>
+		<dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>0.9.15</version>
+            <scope>runtime</scope>
+        </dependency>
+		<dependency>
+			<groupId>com.hp.it.spf.sso</groupId>
+			<artifactId>spf-portlet-filters</artifactId>
+			<version>2.0.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+        <!--
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+			<version>2.5.6</version>
+		</dependency>
+        -->
+
+<!-- LOGGING -->
+        
+<!--
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>1.5.6</version>
+            <scope>runtime</scope>
+        </dependency>
+-->
+
+	</dependencies>
+
+	<build>
+		<finalName>personaAdmin</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<docfilessubdirs>true</docfilessubdirs>
+					<links>
+						<link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
+						<link>http://static.springframework.org/spring/docs/2.5.x/api/</link>
+						<link>http://static.springsource.org/spring-security/site/apidocs/</link>
+					</links>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+</project>

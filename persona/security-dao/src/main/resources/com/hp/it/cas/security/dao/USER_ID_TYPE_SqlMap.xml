@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="USER_ID_TYPE" >
+    <resultMap id="UserIdTypeKeyResult" class="com.hp.it.cas.security.dao.UserIdTypeKey" >
+        <result column="USER_ID_TYPE_CD" property="userIdTypeCd" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="UserIdTypeResult" class="com.hp.it.cas.security.dao.UserIdType" >
+        <result property="key" resultMap="USER_ID_TYPE.UserIdTypeKeyResult"/>
+        <result column="CRT_USER_ID" property="crtUserId" jdbcType="VARCHAR" />
+        <result column="CRT_TS" property="crtTs" jdbcType="TIMESTAMP" />
+        <result column="LAST_MAINT_USER_ID" property="lastMaintUserId" jdbcType="VARCHAR" />
+        <result column="LAST_MAINT_TS" property="lastMaintTs" jdbcType="TIMESTAMP" />
+        <result column="USER_ID_TYPE_NM" property="userIdTypeNm" jdbcType="VARCHAR" />
+        <result column="USER_ID_TYPE_DN" property="userIdTypeDn" jdbcType="VARCHAR" />
+    </resultMap>
+  
+    <select id="selectByPrimaryKey" resultMap="UserIdTypeResult" parameterClass="com.hp.it.cas.security.dao.UserIdTypeKey" >
+        select USER_ID_TYPE_CD, CRT_USER_ID, CRT_TS, LAST_MAINT_USER_ID, LAST_MAINT_TS, USER_ID_TYPE_NM, USER_ID_TYPE_DN
+          from USER_ID_TYPE
+         where USER_ID_TYPE_CD = #userIdTypeCd:VARCHAR#
+      order by USER_ID_TYPE_CD
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterClass="com.hp.it.cas.security.dao.UserIdTypeKey" >
+        delete from USER_ID_TYPE
+         where USER_ID_TYPE_CD = #userIdTypeCd:VARCHAR#
+    </delete>
+  
+    <insert id="insert" parameterClass="com.hp.it.cas.security.dao.UserIdType" >
+        insert into USER_ID_TYPE 
+                   (
+                    USER_ID_TYPE_CD
+        <dynamic prepend=",">
+            <isNotNull prepend="," property="crtUserId">
+                    CRT_USER_ID
+            </isNotNull>
+            <isNotNull prepend="," property="crtTs">
+                    CRT_TS
+            </isNotNull>
+            <isNotNull prepend="," property="lastMaintUserId">
+                    LAST_MAINT_USER_ID
+            </isNotNull>
+            <isNotNull prepend="," property="lastMaintTs">
+                    LAST_MAINT_TS
+            </isNotNull>
+            <isNotNull prepend="," property="userIdTypeNm">
+                    USER_ID_TYPE_NM
+            </isNotNull>
+            <isNotNull prepend="," property="userIdTypeDn">
+                    USER_ID_TYPE_DN
+            </isNotNull>
+        </dynamic>
+                   )
+            values (
+                    #key.userIdTypeCd:VARCHAR#
+        <dynamic prepend=",">
+            <isNotNull prepend="," property="crtUserId">
+                    #crtUserId:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="crtTs">
+                    #crtTs:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="," property="lastMaintUserId">
+                    #lastMaintUserId:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="lastMaintTs">
+                    #lastMaintTs:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="," property="userIdTypeNm">
+                    #userIdTypeNm:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="userIdTypeDn">
+                    #userIdTypeDn:VARCHAR#
+            </isNotNull>
+        </dynamic>
+                    )
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterClass="com.hp.it.cas.security.dao.UserIdType" >
+        update USER_ID_TYPE
+        <dynamic prepend="set" >
+            <isNotNull prepend="," property="lastMaintUserId" >
+              LAST_MAINT_USER_ID = #lastMaintUserId:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="lastMaintTs" >
+              LAST_MAINT_TS = #lastMaintTs:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="," property="userIdTypeNm" >
+              USER_ID_TYPE_NM = #userIdTypeNm:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="userIdTypeDn" >
+              USER_ID_TYPE_DN = #userIdTypeDn:VARCHAR#
+            </isNotNull>
+        </dynamic>
+         where USER_ID_TYPE_CD = #key.userIdTypeCd:VARCHAR#
+    </update>
+
+
+  
+    <select id="findRangeByUserIdTypeCd" resultMap="UserIdTypeResult" parameterClass="com.hp.it.cas.security.dao.UserIdTypeDAOImpl$FindUserIdTypeByRangeByPrimaryKeyWhere" >
+        <dynamic>
+            <isNotNull property="rownumMin">
+    SELECT * FROM (
+           SELECT X.*, ROWNUM AS RNUM FROM (
+            </isNotNull>
+             SELECT * 
+               FROM USER_ID_TYPE
+              WHERE USER_ID_TYPE_CD >= #userIdTypeCdMin:VARCHAR#
+            <isNotNull prepend="and" property="userIdTypeCdMax">
+<![CDATA[           USER_ID_TYPE_CD <= #userIdTypeCdMax:VARCHAR# ]]>
+            </isNotNull>
+           ORDER BY USER_ID_TYPE_CD
+            <isNull property="rownumMax">
+                <isNotNull property="rownumMin">
+                )
+                </isNotNull>
+            </isNull>
+            <isNotNull property="rownumMax">
+<![CDATA[   ) X WHERE ROWNUM <= #rownumMax:NUMBER#  ]]>
+            </isNotNull>
+            <isNotNull property="rownumMin">
+     ) WHERE RNUM >= #rownumMin:NUMBER#
+            </isNotNull>
+        </dynamic>     
+    </select>
+  
+</sqlMap>

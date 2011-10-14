@@ -1,0 +1,89 @@
+Schema
+
+	The schema is available in the distribution package in the 'schema' directory.
+
++---+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<xsd:schema xmlns="urn:X-hp:com.hp.it.cas.persona.schema.users"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema"			
+			targetNamespace="urn:X-hp:com.hp.it.cas.persona.schema.users"
+			elementFormDefault="qualified"
+			attributeFormDefault="unqualified">
+
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">
+			Persona User-Attribute-Value service bulk data load schema.
+			Copyright 2009 Hewlett-Packard Development Company, L.P.
+		</xsd:documentation>
+	</xsd:annotation>
+
+	<xsd:element name="users">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				The document root element.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="user" type="UserType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+<!-- Types -->
+
+	<xsd:simpleType name="UserIdentifierType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				An enumeration of the values permitted for the 'userType' attribute.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:token">
+			<xsd:enumeration value="EXTERNAL_USER"/>
+			<xsd:enumeration value="EMPLOYEE"/>
+			<xsd:enumeration value="EMPLOYEE_SIMPLIFIED_EMAIL_ADDRESS"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:complexType name="UserType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				A container element for all the attribute values for a single user.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice minOccurs="1" maxOccurs="unbounded">
+			<xsd:element name="attribute"	type="SimpleAttributeValueType"/>
+			<xsd:element name="compound"	type="CompoundAttributeValueType"/>
+		</xsd:choice>
+		<xsd:attribute name="userType"		type="UserIdentifierType"	use="required"/>
+		<xsd:attribute name="userId"		type="xsd:string"			use="required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="SimpleAttributeValueType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				A simple attribute value.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="key" 	type="xsd:positiveInteger" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="CompoundAttributeValueType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				A container element for all simple attributes of a single compound user attribute instance.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+			<xsd:element name="attribute"	type="SimpleAttributeValueType"/>
+		</xsd:sequence>
+		<xsd:attribute name="key"			type="xsd:positiveInteger"	use="required"/>
+	</xsd:complexType>
+
+</xsd:schema>
++---+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="APP_CMPND_ATTR_SMPL_ATTR_PRMSN" >
+
+  <!-- This delete returns an integer and does not really need a result map. -->
+				
+  <delete id="deleteAppCmpndAttrSmplAttrPrmsnWithUserAttrId" parameterClass="java.lang.String" >
+    delete
+	FROM app_cmpnd_attr_smpl_attr_prmsn
+	WHERE cmpnd_user_attr_id = #value#
+	   OR smpl_user_attr_id = #value#
+  </delete>
+  
+  <delete id="deleteAppCmpndAttrSmplAttrPrmsnWithCmpndAttrSmplAttrKey" parameterClass="com.hp.it.cas.security.dao.CmpndAttrSmplAttrKey" >
+    delete
+	FROM app_cmpnd_attr_smpl_attr_prmsn
+	WHERE cmpnd_user_attr_id = #cmpndUserAttrId:VARCHAR#
+	  AND smpl_user_attr_id = #smplUserAttrId:VARCHAR#
+  </delete>
+  
+</sqlMap>

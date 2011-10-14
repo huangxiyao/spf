@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/tx		http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+		"
+	>
+
+	<bean id="userAttributeValueService" class="com.hp.it.cas.persona.uav.service.impl.UserAttributeValueService">
+		<constructor-arg ref="personaDaoFactory"/>
+	</bean>
+	
+	<bean id="webService" class="com.hp.it.cas.persona.uav.webservice.WebService">
+		<description>
+			Transactional service.
+		</description>
+		<constructor-arg ref="userAttributeValueService"/>
+	</bean>
+
+	<!-- Transactional boundaries are indicated by class or method-level annotations. -->
+	<tx:annotation-driven/>
+	
+</beans>

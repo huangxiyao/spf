@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/tx		http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+		http://www.springframework.org/schema/security	http://www.springframework.org/schema/security/spring-security-2.0.xsd
+		"
+	>
+
+<!-- Data source -->
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<constructor-arg index="0">
+			<bean class="oracle.jdbc.driver.OracleDriver"/>
+		</constructor-arg>
+		<constructor-arg index="1" value="${dataSourceUrl}"/>
+		<constructor-arg index="2" value="${dataSourceUserName}"/>
+		<constructor-arg index="3" value="${dataSourcePassword}"/>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<tx:annotation-driven/>
+	
+<!-- DAO -->
+
+	<bean id="securityDaoFactory" class="com.hp.it.cas.security.dao.SecurityDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+	
+	<bean id="securityCustomDaoFactory" class="com.hp.it.cas.security.custom.dao.SecurityCustomDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+	
+	<bean id="personaDaoFactory" class="com.hp.it.cas.persona.dao.PersonaDaoFactory">
+		<constructor-arg ref="securityDaoFactory"/>
+		<constructor-arg ref="securityCustomDaoFactory"/>
+	</bean>
+
+<!-- Service -->
+
+	<bean id="userAttributeValueService" class="com.hp.it.cas.persona.uav.service.impl.UserAttributeValueService">
+		<constructor-arg ref="personaDaoFactory"/>
+	</bean>
+
+<!-- Authentication -->
+
+	<bean id="authentication" class="org.springframework.security.providers.UsernamePasswordAuthenticationToken">
+		<constructor-arg index="0">
+			<bean class="com.hp.it.cas.xa.security.ApplicationPrincipal">
+				<constructor-arg value="${applicationPortfolioIdentifier}"/>
+			</bean>
+		</constructor-arg>
+		<constructor-arg index="1" value="${applicationPassword}"/>
+	</bean>
+	
+<!-- Loader -->
+
+	<bean id="userLoader" class="${userLoaderClass}">
+		<constructor-arg ref="userAttributeValueService"/>
+		<constructor-arg ref="authentication"/>
+	</bean>
+	
+<!-- Method security -->
+
+	<security:global-method-security secured-annotations="enabled"/>
+	<security:authentication-manager alias="authenticationManager"/>
+	
+	<bean id="applicationAuthenticationProvider" class="com.hp.it.cas.persona.security.ApplicationAuthenticationProvider">
+		<security:custom-authentication-provider/>
+	</bean>
+
+</beans>

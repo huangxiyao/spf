@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="CMPND_ATTR_SMPL_ATTR" >
+
+  <!-- This select returns an interger and does not really need a result map. -->
+         
+  <select id="countCmpndAttrSmplAttrWithUserAttrId" resultClass="java.lang.Integer" parameterClass="java.lang.String" >
+    SELECT count(*)
+	FROM cmpnd_attr_smpl_attr
+	WHERE cmpnd_user_attr_id = #value#
+	OR smpl_user_attr_id = #value#
+  </select>
+  
+</sqlMap>

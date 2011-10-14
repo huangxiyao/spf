@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/security	http://www.springframework.org/schema/security/spring-security-2.0.xsd
+		"
+	>
+
+<!-- ====================================================================== -->
+<!-- Authentication providers												-->
+<!-- ====================================================================== -->
+
+	<bean id="applicationAuthenticationProvider" class="org.springframework.security.providers.ldap.LdapAuthenticationProvider">
+		<description>
+			Applications are authenticated by Enterprise Directory. Application account names are composed of the
+			prefix "APP-" followed by the application portfolio identifier.
+		</description>
+		
+		<property name="userDetailsContextMapper">
+			<description>Maps LDAP application account information into an IApplicationPrincipal.</description>
+			<bean class="com.hp.it.cas.persona.security.ApplicationPrincipalMapper"/>
+		</property>
+		
+		<constructor-arg>
+			<bean class="org.springframework.security.providers.ldap.authenticator.BindAuthenticator">
+				<description>
+					Authenticate and retrieve application information using an encrypted LDAP connection.
+				</description>
+				<constructor-arg>
+					<bean class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">						
+						<constructor-arg value="ldaps://ldap.hp.com:636/o=hp.com"/>	<!-- Encrypted connection -->
+					</bean>
+				</constructor-arg>
+				<property name="userDnPatterns">
+					<list>
+						<value>cn={0},ou=Applications</value>
+					</list>
+				</property>
+			</bean>
+		</constructor-arg>
+
+		<constructor-arg>
+			<bean class="org.springframework.security.ldap.populator.DefaultLdapAuthoritiesPopulator">
+				<description>
+					Retrieve application groups (roles) using a normal LDAP connection.
+				</description>
+				<constructor-arg>
+					<bean class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+						<constructor-arg value="ldap://ldap.hp.com:389/o=hp.com"/>	<!-- Non-encrypted connection -->
+					</bean>
+				</constructor-arg>
+				<constructor-arg value="ou=Groups"/>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean id="runAsApplicationAuthenticationProvider" class="org.springframework.security.runas.RunAsImplAuthenticationProvider">
+		<description>
+			Authenticate RUN_AS_APPLICATION.
+		</description>
+		<property name="key" value="${runAsSecurityKey}"/>
+	</bean>
+	
+	<bean id="portletUserAuthenticationProvider" class="org.springframework.security.providers.preauth.PreAuthenticatedAuthenticationProvider">
+		<description>
+			Portlet users are pre-authenticated by the portal.
+		</description>
+		<property name="preAuthenticatedUserDetailsService">
+			<bean class="org.springframework.security.providers.preauth.PreAuthenticatedGrantedAuthoritiesUserDetailsService"/>
+		</property>
+	</bean>
+
+<!-- ====================================================================== -->
+<!-- Authentication manager													-->
+<!-- ====================================================================== -->
+
+	<bean id="authenticationManager" class="org.springframework.security.providers.ProviderManager">
+		<description>
+			Central authentication mechanism that manages all authentication providers.
+		</description>
+		<property name="providers">
+			<list>
+				<ref local="applicationAuthenticationProvider"/>
+				<ref local="runAsApplicationAuthenticationProvider"/>
+				<ref local="portletUserAuthenticationProvider"/>
+			</list>
+		</property>
+	</bean>
+
+<!-- ====================================================================== -->
+<!-- @Secured method security												-->
+<!-- ====================================================================== -->
+
+	<bean id="runAsApplicationManager" class="com.hp.it.cas.persona.security.RunAsApplicationManager">
+		<description>
+			When a RUN_AS_APPLICATION authority is required and the principal is not an application, then this class
+			will substitute the specified application for the current principal (user). Prior to the substitution, the application must
+			be authenticated.
+		</description>
+		<property name="key" value="${runAsSecurityKey}"/>
+		
+		<!-- The substituted application must be authenticated -->
+		<property name="authenticationManager" ref="authenticationManager"/>
+		
+		<!-- Identity of application that will be substituted for RUN_AS_APPLICATION -->
+		<property name="applicationPrincipal">
+			<bean class="com.hp.it.cas.xa.security.ApplicationPrincipal">
+				<constructor-arg value="${applicationPortfolioIdentifier}"/>
+			</bean>
+		</property>
+		<property name="applicationPassword" value="${applicationPassword}"/>
+	</bean>
+
+	<bean id="accessDecisionManager" class="org.springframework.security.vote.AffirmativeBased">
+		<description>
+			Authorization is determined based on authentication or role.
+		</description>
+		<property name="decisionVoters">
+			<list>
+				<bean class="org.springframework.security.vote.AuthenticatedVoter"/>
+				<bean class="org.springframework.security.vote.RoleVoter"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="securedMethods" class="org.springframework.security.annotation.SecuredMethodDefinitionSource">
+		<description>
+			Locate methods marked with @Secured annotations.
+		</description>
+	</bean>
+	
+	<bean id="methodSecurityInterceptor" class="org.springframework.security.intercept.method.aopalliance.MethodSecurityInterceptor">
+		<description>
+			Security interceptor for @Secured methods.
+		</description>
+		<property name="authenticationManager"	ref="authenticationManager"/>
+		<property name="accessDecisionManager"	ref="accessDecisionManager"/>
+		<property name="runAsManager"			ref="runAsApplicationManager"/>
+		<property name="objectDefinitionSource"	ref="securedMethods"/>
+	</bean>	
+
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+		<description>
+			Create proxies based on registered advisors.
+		</description>
+	</bean>	
+	
+	<bean class="org.springframework.security.intercept.method.aopalliance.MethodDefinitionSourceAdvisor">
+		<description>
+			Create proxies for classes with @Secured methods and invoke the methodSecurityInterceptor when those methods are accessed.
+		</description>
+		<constructor-arg value="methodSecurityInterceptor"/>
+		<constructor-arg>
+			<bean class="org.springframework.security.intercept.method.DelegatingMethodDefinitionSource">
+				<property name="methodDefinitionSources">
+					<list>
+						<ref local="securedMethods"/>
+					</list>
+				</property>
+			</bean>
+		</constructor-arg>
+	</bean>
+	
+</beans>
