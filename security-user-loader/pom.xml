@@ -1,0 +1,183 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hp.it.118361</groupId>
+        <artifactId>security</artifactId>
+        <version>2.1.2-SNAPSHOT</version>
+    </parent>
+
+	<groupId>com.hp.it.118361</groupId>
+	<artifactId>security-user-loader</artifactId>
+	<packaging>jar</packaging>
+
+	<name>CAS Security User Loader</name>
+	<description>The Security User Loader imports user profile information into Persona.
+		
+		The loader is a command line facility that can be run on Unix or Windows. The input to the loader is one or more
+		XML data streams, typically files but operating system streams (stdin) are also supported.
+		
+		A single invocation of the loader either succeeds and loads all of the data or fails with no data loaded.</description>
+
+	<developers>
+		<developer>
+			<id>quintin.may@hp.com</id>
+			<name>Quintin May</name>
+			<email>quintin.may@hp.com</email>
+			<roles>
+				<role>Architect</role>
+				<role>Engineer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<build>
+		<plugins>
+			<plugin>
+				<!-- Create an executable -->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>appassembler-maven-plugin</artifactId>
+				<configuration>
+					<repositoryLayout>flat</repositoryLayout>
+					<repositoryName>lib</repositoryName>
+					<programs>
+						<program>
+							<mainClass>com.hp.it.cas.persona.loader.UserLoaderMain</mainClass>
+							<name>load-users</name>
+						</program>
+					</programs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-application</id>
+						<phase>package</phase>
+						<goals>
+							<goal>assemble</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<!-- Run site during package so that it can be included in the assembly -->
+				<artifactId>maven-site-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>site</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/bin.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<dependencies>
+<!-- CAS -->
+		<dependency>
+			<!-- logging formatter -->
+			<groupId>com.hp.it.118361</groupId>
+			<artifactId>core-common</artifactId>
+			<version>${core.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xpp3</groupId>
+					<artifactId>xpp3</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.thoughtworks.xstream</groupId>
+					<artifactId>xstream</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.stream</groupId>
+					<artifactId>sjsxp</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.xml.stream</groupId>
+					<artifactId>stax-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hp.it.118361</groupId>
+			<artifactId>security-service</artifactId>
+			<version>${version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hp.it.118361</groupId>
+			<artifactId>core-dao</artifactId>
+			<version>${core.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.hp.it.118361</groupId>
+			<artifactId>security-dao</artifactId>
+			<version>${version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core-tiger</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ldap</groupId>
+			<artifactId>spring-ldap-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc5</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+		</dependency>
+
+<!-- Spring -->
+		
+<!-- Database -->
+
+<!-- Other -->
+	</dependencies>
+</project>

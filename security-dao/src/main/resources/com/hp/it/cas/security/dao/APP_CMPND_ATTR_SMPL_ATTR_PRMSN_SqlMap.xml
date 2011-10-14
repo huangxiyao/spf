@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="APP_CMPND_ATTR_SMPL_ATTR_PRMSN" >
+    <resultMap id="AppCmpndAttrSmplAttrPrmsnKeyResult" class="com.hp.it.cas.security.dao.AppCmpndAttrSmplAttrPrmsnKey" >
+        <result column="APP_PRTFL_ID" property="appPrtflId" jdbcType="DECIMAL" />
+        <result column="CMPND_USER_ATTR_ID" property="cmpndUserAttrId" jdbcType="VARCHAR" />
+        <result column="SMPL_USER_ATTR_ID" property="smplUserAttrId" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="AppCmpndAttrSmplAttrPrmsnResult" class="com.hp.it.cas.security.dao.AppCmpndAttrSmplAttrPrmsn" >
+        <result property="key" resultMap="APP_CMPND_ATTR_SMPL_ATTR_PRMSN.AppCmpndAttrSmplAttrPrmsnKeyResult"/>
+        <result column="CRT_USER_ID" property="crtUserId" jdbcType="VARCHAR" />
+        <result column="CRT_TS" property="crtTs" jdbcType="TIMESTAMP" />
+    </resultMap>
+  
+    <select id="selectByPrimaryKey" resultMap="AppCmpndAttrSmplAttrPrmsnResult" parameterClass="com.hp.it.cas.security.dao.AppCmpndAttrSmplAttrPrmsnKey" >
+        select APP_PRTFL_ID, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID, CRT_USER_ID, CRT_TS
+          from APP_CMPND_ATTR_SMPL_ATTR_PRMSN
+         where APP_PRTFL_ID = #appPrtflId:DECIMAL# and CMPND_USER_ATTR_ID = #cmpndUserAttrId:VARCHAR# and SMPL_USER_ATTR_ID = #smplUserAttrId:VARCHAR#
+      order by APP_PRTFL_ID, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterClass="com.hp.it.cas.security.dao.AppCmpndAttrSmplAttrPrmsnKey" >
+        delete from APP_CMPND_ATTR_SMPL_ATTR_PRMSN
+         where APP_PRTFL_ID = #appPrtflId:DECIMAL# and CMPND_USER_ATTR_ID = #cmpndUserAttrId:VARCHAR# and SMPL_USER_ATTR_ID = #smplUserAttrId:VARCHAR#
+    </delete>
+  
+    <insert id="insert" parameterClass="com.hp.it.cas.security.dao.AppCmpndAttrSmplAttrPrmsn" >
+        insert into APP_CMPND_ATTR_SMPL_ATTR_PRMSN 
+                   (
+                    APP_PRTFL_ID, 
+                    CMPND_USER_ATTR_ID, 
+                    SMPL_USER_ATTR_ID
+        <dynamic prepend=",">
+            <isNotNull prepend="," property="crtUserId">
+                    CRT_USER_ID
+            </isNotNull>
+            <isNotNull prepend="," property="crtTs">
+                    CRT_TS
+            </isNotNull>
+        </dynamic>
+                   )
+            values (
+                    #key.appPrtflId:DECIMAL#, 
+                    #key.cmpndUserAttrId:VARCHAR#, 
+                    #key.smplUserAttrId:VARCHAR#
+        <dynamic prepend=",">
+            <isNotNull prepend="," property="crtUserId">
+                    #crtUserId:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="crtTs">
+                    #crtTs:TIMESTAMP#
+            </isNotNull>
+        </dynamic>
+                    )
+    </insert>
+
+    <select id="selectByPrimaryKeyDiscretionary" resultMap="AppCmpndAttrSmplAttrPrmsnResult" parameterClass="com.hp.it.cas.security.dao.AppCmpndAttrSmplAttrPrmsnKey" >
+        select APP_PRTFL_ID, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID, CRT_USER_ID, CRT_TS
+          from APP_CMPND_ATTR_SMPL_ATTR_PRMSN
+         where APP_PRTFL_ID = #appPrtflId:DECIMAL#
+        <dynamic>
+            <isNotNull prepend="and" property="cmpndUserAttrId" >
+               CMPND_USER_ATTR_ID = #cmpndUserAttrId:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="smplUserAttrId" >
+               SMPL_USER_ATTR_ID = #smplUserAttrId:VARCHAR#
+            </isNotNull>
+        </dynamic>
+      order by APP_PRTFL_ID, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID
+    </select>
+
+  
+    <select id="findRangeByAppPrtflIdByCmpndUserAttrIdBySmplUserAttrId" resultMap="AppCmpndAttrSmplAttrPrmsnResult" parameterClass="com.hp.it.cas.security.dao.AppCmpndAttrSmplAttrPrmsnDAOImpl$FindAppCmpndAttrSmplAttrPrmsnByRangeByPrimaryKeyWhere" >
+        <dynamic>
+            <isNotNull property="rownumMin">
+    SELECT * FROM (
+           SELECT X.*, ROWNUM AS RNUM FROM (
+            </isNotNull>
+             SELECT * 
+               FROM APP_CMPND_ATTR_SMPL_ATTR_PRMSN
+              WHERE APP_PRTFL_ID >= #appPrtflIdMin:DECIMAL#
+            <isNotNull prepend="and" property="appPrtflIdMax">
+<![CDATA[           APP_PRTFL_ID <= #appPrtflIdMax:DECIMAL# ]]>
+            </isNotNull>
+            <isNotNull prepend="and" property="cmpndUserAttrIdMin">
+                    CMPND_USER_ATTR_ID >= #cmpndUserAttrIdMin:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="cmpndUserAttrIdMax">
+<![CDATA[           CMPND_USER_ATTR_ID <= #cmpndUserAttrIdMax:VARCHAR# ]]>
+            </isNotNull>
+            <isNotNull prepend="and" property="smplUserAttrIdMin">
+                    SMPL_USER_ATTR_ID >= #smplUserAttrIdMin:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="smplUserAttrIdMax">
+<![CDATA[           SMPL_USER_ATTR_ID <= #smplUserAttrIdMax:VARCHAR# ]]>
+            </isNotNull>
+           ORDER BY APP_PRTFL_ID, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID
+            <isNull property="rownumMax">
+                <isNotNull property="rownumMin">
+                )
+                </isNotNull>
+            </isNull>
+            <isNotNull property="rownumMax">
+<![CDATA[   ) X WHERE ROWNUM <= #rownumMax:NUMBER#  ]]>
+            </isNotNull>
+            <isNotNull property="rownumMin">
+     ) WHERE RNUM >= #rownumMin:NUMBER#
+            </isNotNull>
+        </dynamic>     
+    </select>
+  
+    <select id="selectByIe1AppCmpndAttrSmplAttrP" resultMap="AppCmpndAttrSmplAttrPrmsnResult" parameterClass="com.hp.it.cas.security.dao.AppCmpndAttrSmplAttrPrmsn" >
+select APP_PRTFL_ID , CMPND_USER_ATTR_ID , SMPL_USER_ATTR_ID , CRT_USER_ID , CRT_TS    from APP_CMPND_ATTR_SMPL_ATTR_PRMSN
+    where
+        CMPND_USER_ATTR_ID = #key.cmpndUserAttrId:VARCHAR#
+      <dynamic>
+           <isNotNull prepend="and" property="key.smplUserAttrId" >
+        SMPL_USER_ATTR_ID = #key.smplUserAttrId:VARCHAR#
+          </isNotNull>
+      </dynamic>
+order by CMPND_USER_ATTR_ID , SMPL_USER_ATTR_ID      
+  </select>
+  
+    <select id="findRangeByCmpndUserAttrIdBySmplUserAttrId" resultMap="AppCmpndAttrSmplAttrPrmsnResult" parameterClass="com.hp.it.cas.security.dao.AppCmpndAttrSmplAttrPrmsnDAOImpl$FindAppCmpndAttrSmplAttrPrmsnByRangeByIe1AppCmpndAttrSmplAttrPWhere" >
+        <dynamic>
+            <isNotNull property="rownumMin">
+    SELECT * FROM (
+           SELECT X.*, ROWNUM AS RNUM FROM (
+            </isNotNull>
+             SELECT * 
+               FROM APP_CMPND_ATTR_SMPL_ATTR_PRMSN
+              WHERE CMPND_USER_ATTR_ID >= #cmpndUserAttrIdMin:VARCHAR#
+        <isNotNull prepend="and" property="cmpndUserAttrIdMax">
+<![CDATA[           CMPND_USER_ATTR_ID <= #cmpndUserAttrIdMax:VARCHAR# ]]>
+            </isNotNull>
+            <isNotNull prepend="and" property="smplUserAttrIdMin">
+                    SMPL_USER_ATTR_ID >= #smplUserAttrIdMin:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="smplUserAttrIdMax">
+<![CDATA[           SMPL_USER_ATTR_ID <= #smplUserAttrIdMax:VARCHAR# ]]>
+            </isNotNull>
+           ORDER BY APP_PRTFL_ID, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID
+            <isNull property="rownumMax">
+                <isNotNull property="rownumMin">
+                )
+                </isNotNull>
+            </isNull>
+            <isNotNull property="rownumMax">
+<![CDATA[   ) X WHERE ROWNUM <= #rownumMax:NUMBER#  ]]>
+            </isNotNull>
+            <isNotNull property="rownumMin">
+     ) WHERE RNUM >= #rownumMin:NUMBER#
+            </isNotNull>
+        </dynamic>     
+    </select>  
+      
+        
+    <resultMap class="java.util.Hashtable" id="IE1_APP_CMPND_ATTR_SMPL_ATTR_P_distinct_result">
+        <result property="cmpndUserAttrId" column="CMPND_USER_ATTR_ID" />
+        <result property="smplUserAttrId" column="SMPL_USER_ATTR_ID" />
+    </resultMap>
+    
+    <select id="findDistinctByCmpndUserAttrIdBySmplUserAttrId" resultMap="IE1_APP_CMPND_ATTR_SMPL_ATTR_P_distinct_result" parameterClass="com.hp.it.cas.security.dao.AppCmpndAttrSmplAttrPrmsnKey" >
+    select distinct CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID
+      from APP_CMPND_ATTR_SMPL_ATTR_PRMSN
+     where CMPND_USER_ATTR_ID = #cmpndUserAttrId:VARCHAR#
+        <dynamic>
+            <isNotNull prepend="and" property="smplUserAttrId">
+           SMPL_USER_ATTR_ID = #smplUserAttrId:VARCHAR#
+            </isNotNull>
+       </dynamic>
+   order by CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID
+    </select>
+</sqlMap>

@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Untitled</title>
+</head>
+<body>
+	<p>Persona is a system that stores information about users. Logically Persona represents a user as a list of key/value pairs. In Persona
+	terminology the	keys are <em>attributes</em>.</p>
+
+	<div>
+		<img src="doc-files/logical-data-structure.png"/>
+	</div>
+
+	<p>The diagram shows the user identified as <em>hpp:1234</em> having simple attributes <em>email</em> and <em>company</em>. The attributes <em>name</em> and <em>address</em> are compound. Simple attributes identify string values while compound attributes identify maps of attribute/string pairs.</p>
+
+	<p>Both simple and compound attributes can be repeated. The diagram above shows user <em>hpp:1234</em> having multiple <em>email</em> and <em>address</em> attributes.</p>
+
+	<h2>Persona client APIs</h2>
+
+	<p>Persona provides two client APIs.</p>
+
+	<h3>User Attribute Value API</h3>
+	<p>The <em>{@link com.hp.it.cas.persona.uav.service User Attribute Value API}</em> is the low level API that represents information about a user as a collection of triples consisting of the user, an attribute, and a value.</p>
+
+	<table cellpadding="3px" rules="cols" style="border: 3px solid gray; border-collapse: collapse">
+		<caption>User Attribute Value data representation</caption>
+		<thead align="left">
+			<tr>
+				<th style="border-right: 2px solid gray">User</th>
+				<th style="border-right: 2px solid gray" colspan="2">Attribute</th>
+				<th colspan="2">Value</th>
+			</tr>
+			<tr style="border-bottom:2px solid gray">
+				<th style="border-right: 2px solid gray"></th>
+				<th style="border: 1px solid gray; font-weight: normal; font-style: italic">Compound attribute</th>
+				<th style="border: 1px solid gray; font-weight: normal; font-style: italic">Simple attribute</th>
+				<th style="border: solid gray; font-weight: normal; font-style: italic; border-width: 1px 1px 0 2px">Instance</th>
+				<th style="border: 1px solid gray; font-weight: normal; font-style: italic">Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>hpp:1234</td>
+				<td></td>
+				<td>email</td>
+				<td></td>
+				<td>john.doe@hp.com</td>
+			</tr>
+			<tr>
+				<td>hpp:1234</td>
+				<td></td>
+				<td>email</td>
+				<td></td>
+				<td>j.doe@hp.com</td>
+			</tr>
+			<tr>
+				<td>hpp:1234</td>
+				<td></td>
+				<td>company</td>
+				<td></td>
+				<td>Hewlett-Packard</td>
+			</tr>
+			<tr>
+				<td>hpp:1234</td>
+				<td>name</td>
+				<td>givenName</td>
+				<td>A</td>
+				<td>John</td>
+			</tr>
+			<tr>
+				<td>hpp:1234</td>
+				<td>name</td>
+				<td>familyName</td>
+				<td>A</td>
+				<td>Doe</td>
+			</tr>
+			<tr>
+				<td>hpp:1234</td>
+				<td>address</td>
+				<td>city</td>
+				<td>B</td>
+				<td>Atlanta</td>
+			</tr>
+			<tr>
+				<td>hpp:1234</td>
+				<td>address</td>
+				<td>state</td>
+				<td>B</td>
+				<td>GA</td>
+			</tr>
+			<tr>
+				<td>hpp:1234</td>
+				<td>address</td>
+				<td>city</td>
+				<td>C</td>
+				<td>Tampa</td>
+			</tr>
+			<tr>
+				<td>hpp:1234</td>
+				<td>address</td>
+				<td>state</td>
+				<td>C</td>
+				<td>FL</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h3>User API</h3>
+	<p>The <em>{@link com.hp.it.cas.persona.user.service User API}</em> is built upon the <em>User Attribute Value API</em> but represents the user as two maps of attribute/collection pairs. The client manipulates the user data using standard Java Collection methods.</p>
+
+	<p>For example:</p>
+<pre>
+Collection&lt;String&gt; emailAddresses = user.getSimpleAttributeValues().get(EMAIL);
+emailAddresses.remove("j.doe@hp.com");
+emailAddresses.add("jack.doe@hp.com");
+
+if (user.getCompoundAttributeValues().get(ADDRESS).size() &gt; 1) …
+</pre>
+
+	<table cellpadding="5px" style="border: 3px solid gray; border-collapse: collapse">
+		<caption>User hpp:1234</caption>
+		<tbody valign="top">
+			<tr>
+				<td>
+					<table cellpadding="5px" rules="rows" style="border: 2px solid gray">
+						<caption>Simple attribute values</caption>
+						<tbody>
+							<tr>
+								<td>email</td>
+								<td>john.doe@hp.com<br/>j.doe@hp.com</td>
+							</tr>
+							<tr>
+								<td>company</td>
+								<td>Hewlett-Packard</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+				<td>
+					<table cellpadding="5px" rules="rows" style="border: 2px solid gray">
+						<caption>Compound attribute values</caption>
+						<tbody>
+							<tr>
+								<td>name</td>
+								<td>
+									<table cellpadding="3px" rules="rows" frame="box">
+										<tbody>
+											<tr>
+												<td rowspan="2" style="border-right: 1px solid gray">A</td>
+												<td>givenName</td>
+												<td>John</td>
+											</tr>
+											<tr>
+												<td>familyName</td>
+												<td>Doe</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>address</td>
+								<td>
+									<table cellpadding="3px" rules="rows" frame="box" style="margin-bottom: 5px">
+										<tbody>
+											<tr>
+												<td rowspan="2" style="border-right: 1px solid gray">B</td>
+												<td>city</td>
+												<td>Atlanta</td>
+											</tr>
+											<tr>
+												<td>state</td>
+												<td>GA</td>
+											</tr>
+										</tbody>
+									</table>
+									<table cellpadding="3px" rules="rows" frame="box">
+										<tbody>
+											<tr>
+												<td rowspan="2" style="border-right: 1px solid gray">C</td>
+												<td>city</td>
+												<td>Tampa</td>
+											</tr>
+											<tr>
+												<td>state</td>
+												<td>FL</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+</html>

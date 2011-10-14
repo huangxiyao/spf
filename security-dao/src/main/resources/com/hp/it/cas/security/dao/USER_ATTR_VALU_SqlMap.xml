@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="USER_ATTR_VALU" >
+    <resultMap id="UserAttrValuKeyResult" class="com.hp.it.cas.security.dao.UserAttrValuKey" >
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+        <result column="USER_ID_TYPE_CD" property="userIdTypeCd" jdbcType="VARCHAR" />
+        <result column="CMPND_USER_ATTR_ID" property="cmpndUserAttrId" jdbcType="VARCHAR" />
+        <result column="SMPL_USER_ATTR_ID" property="smplUserAttrId" jdbcType="VARCHAR" />
+        <result column="USER_ATTR_INSTNC_ID" property="userAttrInstncId" jdbcType="CHAR" />
+    </resultMap>
+    <resultMap id="UserAttrValuResult" class="com.hp.it.cas.security.dao.UserAttrValu" >
+        <result property="key" resultMap="USER_ATTR_VALU.UserAttrValuKeyResult"/>
+        <result column="CRT_USER_ID" property="crtUserId" jdbcType="VARCHAR" />
+        <result column="CRT_TS" property="crtTs" jdbcType="TIMESTAMP" />
+        <result column="LAST_MAINT_USER_ID" property="lastMaintUserId" jdbcType="VARCHAR" />
+        <result column="LAST_MAINT_TS" property="lastMaintTs" jdbcType="TIMESTAMP" />
+        <result column="USER_ATTR_VALU_TX" property="userAttrValuTx" jdbcType="VARCHAR" />
+    </resultMap>
+  
+    <select id="selectByPrimaryKey" resultMap="UserAttrValuResult" parameterClass="com.hp.it.cas.security.dao.UserAttrValuKey" >
+        select USER_ID, USER_ID_TYPE_CD, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID, RTRIM(USER_ATTR_INSTNC_ID) as user_attr_instnc_id, CRT_USER_ID, CRT_TS, LAST_MAINT_USER_ID, LAST_MAINT_TS, USER_ATTR_VALU_TX
+          from USER_ATTR_VALU
+         where USER_ID = #userId:VARCHAR# and USER_ID_TYPE_CD = #userIdTypeCd:VARCHAR# and CMPND_USER_ATTR_ID = #cmpndUserAttrId:VARCHAR# and SMPL_USER_ATTR_ID = #smplUserAttrId:VARCHAR# and USER_ATTR_INSTNC_ID = RPAD(#userAttrInstncId:CHAR#, 36)
+      order by USER_ID, USER_ID_TYPE_CD, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID, USER_ATTR_INSTNC_ID
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterClass="com.hp.it.cas.security.dao.UserAttrValuKey" >
+        delete from USER_ATTR_VALU
+         where USER_ID = #userId:VARCHAR# and USER_ID_TYPE_CD = #userIdTypeCd:VARCHAR# and CMPND_USER_ATTR_ID = #cmpndUserAttrId:VARCHAR# and SMPL_USER_ATTR_ID = #smplUserAttrId:VARCHAR# and USER_ATTR_INSTNC_ID = #userAttrInstncId:CHAR#
+    </delete>
+  
+    <insert id="insert" parameterClass="com.hp.it.cas.security.dao.UserAttrValu" >
+        insert into USER_ATTR_VALU 
+                   (
+                    USER_ID, 
+                    USER_ID_TYPE_CD, 
+                    CMPND_USER_ATTR_ID, 
+                    SMPL_USER_ATTR_ID, 
+                    USER_ATTR_INSTNC_ID
+        <dynamic prepend=",">
+            <isNotNull prepend="," property="crtUserId">
+                    CRT_USER_ID
+            </isNotNull>
+            <isNotNull prepend="," property="crtTs">
+                    CRT_TS
+            </isNotNull>
+            <isNotNull prepend="," property="lastMaintUserId">
+                    LAST_MAINT_USER_ID
+            </isNotNull>
+            <isNotNull prepend="," property="lastMaintTs">
+                    LAST_MAINT_TS
+            </isNotNull>
+            <isNotNull prepend="," property="userAttrValuTx">
+                    USER_ATTR_VALU_TX
+            </isNotNull>
+        </dynamic>
+                   )
+            values (
+                    #key.userId:VARCHAR#, 
+                    #key.userIdTypeCd:VARCHAR#, 
+                    #key.cmpndUserAttrId:VARCHAR#, 
+                    #key.smplUserAttrId:VARCHAR#, 
+                    #key.userAttrInstncId:CHAR#
+        <dynamic prepend=",">
+            <isNotNull prepend="," property="crtUserId">
+                    #crtUserId:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="crtTs">
+                    #crtTs:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="," property="lastMaintUserId">
+                    #lastMaintUserId:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="lastMaintTs">
+                    #lastMaintTs:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="," property="userAttrValuTx">
+                    #userAttrValuTx:VARCHAR#
+            </isNotNull>
+        </dynamic>
+                    )
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterClass="com.hp.it.cas.security.dao.UserAttrValu" >
+        update USER_ATTR_VALU
+        <dynamic prepend="set" >
+            <isNotNull prepend="," property="lastMaintUserId" >
+              LAST_MAINT_USER_ID = #lastMaintUserId:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="lastMaintTs" >
+              LAST_MAINT_TS = #lastMaintTs:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="," property="userAttrValuTx" >
+              USER_ATTR_VALU_TX = #userAttrValuTx:VARCHAR#
+            </isNotNull>
+        </dynamic>
+         where USER_ID = #key.userId:VARCHAR# and USER_ID_TYPE_CD = #key.userIdTypeCd:VARCHAR# and CMPND_USER_ATTR_ID = #key.cmpndUserAttrId:VARCHAR# and SMPL_USER_ATTR_ID = #key.smplUserAttrId:VARCHAR# and USER_ATTR_INSTNC_ID = RPAD(#key.userAttrInstncId:CHAR#, 36)
+    </update>
+
+    <select id="selectByPrimaryKeyDiscretionary" resultMap="UserAttrValuResult" parameterClass="com.hp.it.cas.security.dao.UserAttrValuKey" >
+        select USER_ID, USER_ID_TYPE_CD, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID, USER_ATTR_INSTNC_ID, CRT_USER_ID, CRT_TS, LAST_MAINT_USER_ID, LAST_MAINT_TS, USER_ATTR_VALU_TX
+          from USER_ATTR_VALU
+         where USER_ID = #userId:VARCHAR#
+        <dynamic>
+            <isNotNull prepend="and" property="userIdTypeCd" >
+               USER_ID_TYPE_CD = #userIdTypeCd:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="cmpndUserAttrId" >
+               CMPND_USER_ATTR_ID = #cmpndUserAttrId:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="smplUserAttrId" >
+               SMPL_USER_ATTR_ID = #smplUserAttrId:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="userAttrInstncId" >
+               USER_ATTR_INSTNC_ID = RPAD(#userAttrInstncId:CHAR#, 36)
+            </isNotNull>
+        </dynamic>
+      order by USER_ID, USER_ID_TYPE_CD, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID, USER_ATTR_INSTNC_ID
+    </select>
+
+  
+    <select id="findRangeByUserIdByUserIdTypeCdByCmpndUserAttrIdBySmplUserAttrIdByUserAttrInstncId" resultMap="UserAttrValuResult" parameterClass="com.hp.it.cas.security.dao.UserAttrValuDAOImpl$FindUserAttrValuByRangeByPrimaryKeyWhere" >
+        <dynamic>
+            <isNotNull property="rownumMin">
+    SELECT * FROM (
+           SELECT X.*, ROWNUM AS RNUM FROM (
+            </isNotNull>
+             SELECT * 
+               FROM USER_ATTR_VALU
+              WHERE USER_ID >= #userIdMin:VARCHAR#
+            <isNotNull prepend="and" property="userIdMax">
+<![CDATA[           USER_ID <= #userIdMax:VARCHAR# ]]>
+            </isNotNull>
+            <isNotNull prepend="and" property="userIdTypeCdMin">
+                    USER_ID_TYPE_CD >= #userIdTypeCdMin:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="userIdTypeCdMax">
+<![CDATA[           USER_ID_TYPE_CD <= #userIdTypeCdMax:VARCHAR# ]]>
+            </isNotNull>
+            <isNotNull prepend="and" property="cmpndUserAttrIdMin">
+                    CMPND_USER_ATTR_ID >= #cmpndUserAttrIdMin:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="cmpndUserAttrIdMax">
+<![CDATA[           CMPND_USER_ATTR_ID <= #cmpndUserAttrIdMax:VARCHAR# ]]>
+            </isNotNull>
+            <isNotNull prepend="and" property="smplUserAttrIdMin">
+                    SMPL_USER_ATTR_ID >= #smplUserAttrIdMin:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="smplUserAttrIdMax">
+<![CDATA[           SMPL_USER_ATTR_ID <= #smplUserAttrIdMax:VARCHAR# ]]>
+            </isNotNull>
+            <isNotNull prepend="and" property="userAttrInstncIdMin">
+                    USER_ATTR_INSTNC_ID >= RPAD(#userAttrInstncIdMin:CHAR#, 36)
+            </isNotNull>
+            <isNotNull prepend="and" property="userAttrInstncIdMax">
+<![CDATA[           USER_ATTR_INSTNC_ID <= RPAD(#userAttrInstncIdMax:CHAR#, 36) ]]>        
+            </isNotNull>
+           ORDER BY USER_ID, USER_ID_TYPE_CD, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID, USER_ATTR_INSTNC_ID
+            <isNull property="rownumMax">
+                <isNotNull property="rownumMin">
+                )
+                </isNotNull>
+            </isNull>
+            <isNotNull property="rownumMax">
+<![CDATA[   ) X WHERE ROWNUM <= #rownumMax:NUMBER#  ]]>
+            </isNotNull>
+            <isNotNull property="rownumMin">
+     ) WHERE RNUM >= #rownumMin:NUMBER#
+            </isNotNull>
+        </dynamic>     
+    </select>
+  
+    <select id="selectByIe1UserAttrValu" resultMap="UserAttrValuResult" parameterClass="com.hp.it.cas.security.dao.UserAttrValu" >
+select USER_ID , USER_ID_TYPE_CD , CMPND_USER_ATTR_ID , SMPL_USER_ATTR_ID , USER_ATTR_INSTNC_ID , CRT_USER_ID , CRT_TS , LAST_MAINT_USER_ID , LAST_MAINT_TS , USER_ATTR_VALU_TX    from USER_ATTR_VALU
+    where
+        CMPND_USER_ATTR_ID = #key.cmpndUserAttrId:VARCHAR#
+      <dynamic>
+           <isNotNull prepend="and" property="key.smplUserAttrId" >
+        SMPL_USER_ATTR_ID = #key.smplUserAttrId:VARCHAR#
+          </isNotNull>
+          <isNotNull prepend="and" property="userAttrValuTx" >
+        USER_ATTR_VALU_TX = #userAttrValuTx:VARCHAR#
+          </isNotNull>
+      </dynamic>
+order by CMPND_USER_ATTR_ID , SMPL_USER_ATTR_ID , USER_ATTR_VALU_TX      
+  </select>
+  
+    <select id="findRangeByCmpndUserAttrIdBySmplUserAttrIdByUserAttrValuTx" resultMap="UserAttrValuResult" parameterClass="com.hp.it.cas.security.dao.UserAttrValuDAOImpl$FindUserAttrValuByRangeByIe1UserAttrValuWhere" >
+        <dynamic>
+            <isNotNull property="rownumMin">
+    SELECT * FROM (
+           SELECT X.*, ROWNUM AS RNUM FROM (
+            </isNotNull>
+             SELECT * 
+               FROM USER_ATTR_VALU
+              WHERE CMPND_USER_ATTR_ID >= #cmpndUserAttrIdMin:VARCHAR#
+        <isNotNull prepend="and" property="cmpndUserAttrIdMax">
+<![CDATA[           CMPND_USER_ATTR_ID <= #cmpndUserAttrIdMax:VARCHAR# ]]>
+            </isNotNull>
+            <isNotNull prepend="and" property="smplUserAttrIdMin">
+                    SMPL_USER_ATTR_ID >= #smplUserAttrIdMin:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="smplUserAttrIdMax">
+<![CDATA[           SMPL_USER_ATTR_ID <= #smplUserAttrIdMax:VARCHAR# ]]>
+            </isNotNull>
+            <isNotNull prepend="and" property="userAttrValuTxMin">
+                    USER_ATTR_VALU_TX >= #userAttrValuTxMin:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="and" property="userAttrValuTxMax">
+<![CDATA[           USER_ATTR_VALU_TX <= #userAttrValuTxMax:VARCHAR# ]]>
+            </isNotNull>
+           ORDER BY USER_ID, USER_ID_TYPE_CD, CMPND_USER_ATTR_ID, SMPL_USER_ATTR_ID, USER_ATTR_INSTNC_ID, USER_ATTR_VALU_TX
+            <isNull property="rownumMax">
+                <isNotNull property="rownumMin">
+                )
+                </isNotNull>
+            </isNull>
+            <isNotNull property="rownumMax">
+<![CDATA[   ) X WHERE ROWNUM <= #rownumMax:NUMBER#  ]]>
+            </isNotNull>
+            <isNotNull property="rownumMin">
+     ) WHERE RNUM >= #rownumMin:NUMBER#
+            </isNotNull>
+        </dynamic>     
+    </select>  
+      
+</sqlMap>

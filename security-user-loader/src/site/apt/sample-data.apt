@@ -1,0 +1,40 @@
+Sample data
+
++---+
+<?xml version="1.0" encoding="UTF-8"?>
+<users xmlns="urn:X-hp:com.hp.it.cas.persona.schema.users">
+	
+	<user userType="EXTERNAL_USER" userId="2222">
+		<attribute key="63">Dr.</attribute>
+		<compound key="64">
+			<attribute key="65">Charles</attribute>
+			<attribute key="66">Schultz</attribute>
+		</compound>
+	</user>
+	
+	<user userType="EXTERNAL_USER" userId="3333">
+		<attribute key="63">Ms.</attribute>
+		<compound key="64">
+			<attribute key="65">Lucy</attribute>
+			<attribute key="66">van Pelt</attribute>
+		</compound>
+	</user>
+	
+	<user userType="EXTERNAL_USER" userId="4444">
+		<attribute key="63">Mr.</attribute>
+		<compound key="64">
+			<attribute key="65">Linus</attribute>
+			<attribute key="66">van Pelt</attribute>
+		</compound>
+	</user>
+	
+	<user userType="EXTERNAL_USER" userId="5555">
+		<attribute key="63">Ms.</attribute>
+		<compound key="64">
+			<attribute key="65">Sally</attribute>
+			<attribute key="66">Brown</attribute>
+		</compound>
+	</user>
+	
+</users>
++---+

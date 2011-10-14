@@ -1,0 +1,39 @@
+Usage
+
+	Unzip the distribution. The expanded directory contains <<<bin>>>, <<<lib>>> and <<<schema>>> sub-directories.
+	The <<<bin>>> directory	contains two executables: <<<load-users>>> for UNIX and <<<load-users.bat>>> for Windows.
+	Substitute the appropriate form of the executable in the following descriptions.
+	
+Once only
+
+	[[1]] Generate a properties file template. The properties file is used to specify database connection and
+	application authentication values.
+
+		<<<bin/load-users -t loader.properties>>>
+
+	[[2]] Use a text editor to supply values for the properties in loader.properties.		
+
+For each data set
+
+	[[1]] Validate the input data.
+
+		<<<bin/load-users -p loader.properties -v users1.xml>>>
+
+	[[2]] Load the input data.
+
+		<<<bin/load-users -p loader.properties users1.xml>>>
+
+Variations
+
+	* Specify more than one input file. This can be done for validation and loading. The single invocation is transactional.
+	Data from all files will be loaded or no data will be loaded if there is an error in any file.
+	
+		<<<bin/load-users -p loader.properties users1.xml users2.xml users3.xml>>>
+	
+	* Get data from stdin. This technique can be used in a command pipeline.
+	
+		<<<cat users1.xml | bin/load-users -p loader.properties>>>
+	
+	* Print a summary of all command line options
+	
+		<<<bin/load-users -h>>>
