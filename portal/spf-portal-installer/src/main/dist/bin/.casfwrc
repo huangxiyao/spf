@@ -27,7 +27,7 @@ if [ -z "${casfw_java_home}" ]; then
         exit 1
     fi
 
-    jvm_version=$(${JAVA_HOME}/bin/java -version 2>&1 | head -n1)
+    jvm_version=$("${JAVA_HOME}/bin/java" -version 2>&1 | head -n1)
     if [[ ! "${jvm_version}" =~ "1.5." ]]; then
         echo "Required Java version is 1.5 but JAVA_HOME JVM using ${jvm_version}."
         echo "Update your environment with JAVA_HOME pointing to JDK 1.5."
