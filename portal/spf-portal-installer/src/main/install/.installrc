@@ -6,7 +6,7 @@ if [[ $0 =~ "nojvm" ]]; then
         exit 1
     fi
     
-    jvm_version="$(${JAVA_HOME}/bin/java -version 2>&1 | head -n1)"
+    jvm_version="$("${JAVA_HOME}/bin/java" -version 2>&1 | head -n1)"
     if [[ ! "${jvm_version}" =~ "1.5." ]]; then
         echo "This installer requires JAVA_HOME to point to Java 1.5 but it uses ${jvm_version}."
         echo "Update your environment with JAVA_HOME pointing to JDK 1.5 and restart the installer."

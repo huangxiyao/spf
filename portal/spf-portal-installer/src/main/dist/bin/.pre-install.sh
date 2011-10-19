@@ -44,11 +44,11 @@ echo "Preparing SPF artifacts"
 spf_war="$(ls ${CASFW_HOME}/software/spf-portal-*.war | tail -n1)"
 pushd ${VIGNETTE_HOME}/portal
 # Let's make sure we can execute "jar" as the permissions are only fixed later
-chmod u+x ${JAVA_HOME}/bin/jar
+chmod u+x "${JAVA_HOME}/bin/jar"
 if ${using_cygwin}; then
-    ${JAVA_HOME}/bin/jar xf "$(cygpath -aw "${spf_war}")"
+    "${JAVA_HOME}/bin/jar" xf "$(cygpath -aw "${spf_war}")"
 else
-    ${JAVA_HOME}/bin/jar xf "${spf_war}"
+    "${JAVA_HOME}/bin/jar" xf "${spf_war}"
 fi
 popd
 
