@@ -12,12 +12,14 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.epicentric.site.Site;
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
 import com.hp.it.spf.user.profile.manager.HPPWebServiceUserProfileRetriever;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
@@ -147,8 +149,11 @@ public class HPPAuthenticator extends AbstractAuthenticator {
             groups.add(AuthenticationConsts.LOCAL_FED_NAME);
         }
 
+        Site site = Utils.getEffectiveSite(request);
+        String siteDNSName = (site == null ? null : site.getDNSName());
+
         // retrieve groups from UserGroupRetriever
-        IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(AuthenticationConsts.HPP_USER_GROUP_RETRIEVER);
+        IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(AuthenticationConsts.HPP_USER_GROUP_RETRIEVER, siteDNSName);
         groups.addAll(retriever.getGroups(userProfile, request));
 
         // set authenticated user group

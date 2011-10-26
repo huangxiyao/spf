@@ -96,8 +96,10 @@ public class UserProfileRetrieverFactory {
                 className = AuthenticatorHelper.getProperty(configKey);
                 siteSpecificRetrieverDefined = false;
             }
+
             Class clazz = Class.forName(className);
             IUserProfileRetriever specifiedRetriever;
+
             if (clazz == CompoundUserProfileRetriever.class) {
                 String delegatesConfigKey =
                         siteSpecificRetrieverDefined

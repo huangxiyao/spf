@@ -723,8 +723,10 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         TimeRecorder timeRecorder = RequestContext.getThreadInstance()
                                                   .getTimeRecorder();
         String profileId = (String)userProfile.get(AuthenticationConsts.KEY_PROFILE_ID);
+
         Site site = Utils.getEffectiveSite(request);
         String siteDNSName = (site == null ? null : site.getDNSName());
+
         IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl(AuthenticationConsts.USER_PROFILE_RETRIEVER, siteDNSName);
         try {
             timeRecorder.recordStart(Operation.PROFILE_CALL);

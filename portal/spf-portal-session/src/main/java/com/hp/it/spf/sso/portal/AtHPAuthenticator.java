@@ -11,10 +11,12 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.epicentric.site.Site;
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
 import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.user.group.manager.IUserGroupRetriever;
 import com.hp.it.spf.user.group.manager.UserGroupRetrieverFactory;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogWrapper;
 
 /**
@@ -112,8 +114,12 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
         // login atHP
         groups.add(AuthenticationConsts.LOCAL_ATHP_NAME);
         
+
+        Site site = Utils.getEffectiveSite(request);
+        String siteDNSName = (site == null ? null : site.getDNSName());
+
         // retrieve groups from UserGroupRetriever
-        IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(AuthenticationConsts.ATHP_USER_GROUP_RETRIEVER);
+        IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(AuthenticationConsts.ATHP_USER_GROUP_RETRIEVER, siteDNSName);
         groups.addAll(retriever.getGroups(userProfile, request));
 
         // set authenticated user group

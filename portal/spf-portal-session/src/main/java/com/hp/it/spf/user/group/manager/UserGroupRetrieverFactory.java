@@ -49,47 +49,67 @@ public class UserGroupRetrieverFactory {
     /**
      * Create a concrete UserGroupsImpl class with the specified retriever key
      * 
-     * @param key specified retriever key
+     * @param configKey specified retriever key
+     * @param siteDNSName DNS name of the site for which the retriever is created.
      * @return a implimentation class of IUserGroupRetriever
      */
     @SuppressWarnings("unchecked")
-    public static IUserGroupRetriever createUserGroupImpl(String key) {
+    public static IUserGroupRetriever createUserGroupImpl(String configKey, String siteDNSName) {
+
+        String siteSpecificConfigKey =
+                siteDNSName == null || siteDNSName.trim().equals("")
+                        ? configKey
+                        : configKey + "." + siteDNSName.trim();
+        String cacheKey = siteSpecificConfigKey;
+        String delegatesCacheKey = cacheKey + ".delegates";
+
         // if specified UserGroupRetriever value doesn't be changed, return the
         // cached one directly
-        if (isLoadedAndNoChange(key)) {
-            return retrieverMap.get(key);
+        if (isLoadedAndNoChange(cacheKey)) {
+            return retrieverMap.get(cacheKey);
         }
 
+        boolean siteSpecificRetrieverDefined = true;
         // specified retriever key doesn't exist
         try {
-            String className = AuthenticatorHelper.getProperty(key);
+            String className = AuthenticatorHelper.getProperty(siteSpecificConfigKey);
+            if (className == null) {
+                className = AuthenticatorHelper.getProperty(configKey);
+                siteSpecificRetrieverDefined = false;
+            }
+
             Class clazz = Class.forName(className);
             IUserGroupRetriever specifiedRetriever;
+
             if (clazz == CompoundUserGroupRetriever.class) {
-                String delegateClassKey = key.concat(".delegates");
-                String delegateClassNames = AuthenticatorHelper.getProperty(delegateClassKey);
+                String delegatesConfigKey =
+                        siteSpecificRetrieverDefined
+                            ? siteSpecificConfigKey.concat(".delegates")
+                            : configKey.concat(".delegates");
+                String delegateClassNames = AuthenticatorHelper.getProperty(delegatesConfigKey);
 
                 specifiedRetriever = (IUserGroupRetriever)clazz.getConstructor(String.class)
                                                                .newInstance((delegateClassNames));
-                retrieverPorperties.put(key, className);
-                retrieverPorperties.put(delegateClassKey, delegateClassNames);
+
+                retrieverPorperties.put(cacheKey, className);
+                retrieverPorperties.put(delegatesCacheKey, delegateClassNames);
             } else {
                 specifiedRetriever = (IUserGroupRetriever)clazz.newInstance();
-                retrieverPorperties.put(key, className);
+                retrieverPorperties.put(cacheKey, className);
             }
 
-            retrieverMap.put(key, specifiedRetriever);
+            retrieverMap.put(cacheKey, specifiedRetriever);
         } catch (Exception ex) {
             if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                 LOG.debug("Error when instantiating user groups retriever.", ex);
             }
             // use default retriever when error occours
-            key = DEFAULT_RETRIEVER;
+            cacheKey = DEFAULT_RETRIEVER;
         }
         if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-            LOG.debug("Use user groups retriever: " + key);
+            LOG.debug("Use user groups retriever: " + (siteSpecificRetrieverDefined ? siteSpecificConfigKey : configKey));
         }
-        return retrieverMap.get(key);
+        return retrieverMap.get(cacheKey);
     }
 
     /**
