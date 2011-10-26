@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.epicentric.common.website.SessionUtils;
 import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.UniquePropertyValueConflictException;
+import com.epicentric.site.Site;
 import com.epicentric.user.User;
 import com.hp.it.spf.user.exception.UserProfileException;
 import com.hp.it.spf.user.profile.manager.IUserProfileRetriever;
@@ -30,6 +31,7 @@ import com.hp.it.spf.xa.dc.portal.ErrorCode;
 import com.hp.it.spf.xa.log.portal.Operation;
 import com.hp.it.spf.xa.log.portal.TimeRecorder;
 import com.hp.it.spf.xa.misc.portal.RequestContext;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
 
@@ -721,7 +723,9 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
         TimeRecorder timeRecorder = RequestContext.getThreadInstance()
                                                   .getTimeRecorder();
         String profileId = (String)userProfile.get(AuthenticationConsts.KEY_PROFILE_ID);
-        IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl(AuthenticationConsts.USER_PROFILE_RETRIEVER);
+        Site site = Utils.getEffectiveSite(request);
+        String siteDNSName = (site == null ? null : site.getDNSName());
+        IUserProfileRetriever retriever = UserProfileRetrieverFactory.createUserProfileImpl(AuthenticationConsts.USER_PROFILE_RETRIEVER, siteDNSName);
         try {
             timeRecorder.recordStart(Operation.PROFILE_CALL);
             Map<String, Object> userProfile = retriever.getUserProfile(profileId,
