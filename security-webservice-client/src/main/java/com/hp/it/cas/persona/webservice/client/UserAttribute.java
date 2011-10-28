@@ -77,6 +77,7 @@ class UserAttribute implements IUserAttribute {
         return true;
     }
 
+    @Override
     public String toString() {
 		return isSimpleUserAttribute() ? String.valueOf(simpleUserAttributeIdentifier) : String.format("%s.%s", compoundUserAttributeIdentifier, simpleUserAttributeIdentifier);
 	}
