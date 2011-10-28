@@ -76,5 +76,10 @@ class UserAttributeValue implements IUserAttributeValue {
             return false;
         return true;
     }
-    
+
+    @Override
+    public String toString() {
+        return String.format("%s[%s, %s, %s, %s]", getClass().getSimpleName(), userIdentifier, userAttribute, getInstanceIdentifier(), getValue());
+    }
+
 }

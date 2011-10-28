@@ -16,7 +16,8 @@ public class UserAttributeValueServiceTest {
     private static final String USER_NAME = "APP-111319";
     private static final String PASSWORD = "123qwe!@#QWE";
     private static final String  WEB_SERVICE_URL = "https://sasuft1cl2.austin.hp.com:21978/cas-persona-webservice";
-    private static final IUserIdentifier userIdentifier = new UserIdentifier(EUserIdentifierType.EMPLOYEE_SIMPLIFIED_EMAIL_ADDRESS, "quintin.may@hp.com");
+//    private static final IUserIdentifier userIdentifier = new UserIdentifier(EUserIdentifierType.EMPLOYEE_SIMPLIFIED_EMAIL_ADDRESS, "quintin.may@hp.com");
+    private static final IUserIdentifier userIdentifier = new UserIdentifier(EUserIdentifierType.EXTERNAL_USER, "173950c3ae9b11716fa77ad265b506d5");
     private static final IUserAttributeValueService SERVICE;
     static {
         try {
@@ -27,7 +28,7 @@ public class UserAttributeValueServiceTest {
     }
     
     @Test
-    public void foo() {
+    public void retrievalWorks() {
         Set<IUserAttributeValue> values = SERVICE.findUserAttributeValues(userIdentifier);
         System.out.println(values);
     }
