@@ -43,6 +43,7 @@
 		<module>security-user-loader</module>
 		<module>security-web</module>
 		<module>security-webservice</module>
+        <module>security-webservice-client</module>
 	</modules>
 
 	<build>
