@@ -30,7 +30,7 @@ import com.hp.it.cas.persona.uav.service.IUserAttributeValueService;
 import com.hp.it.cas.persona.uav.service.IUserIdentifier;
 
 /**
- * Webservice client implementation of the Personal User Attribute Value Service.
+ * Read-only webservice client implementation of the Personal User Attribute Value Service.
  * @author quintin.may@hp.com
  */
 public class UserAttributeValueService implements IUserAttributeValueService {
