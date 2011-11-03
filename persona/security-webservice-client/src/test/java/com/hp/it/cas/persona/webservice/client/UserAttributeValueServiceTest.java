@@ -3,6 +3,7 @@ package com.hp.it.cas.persona.webservice.client;
 import java.net.URL;
 import java.util.Set;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.hp.it.cas.persona.uav.service.EUserIdentifierType;
@@ -27,6 +28,7 @@ public class UserAttributeValueServiceTest {
         }
     }
     
+    @Ignore("Waiting for HP CA Cert to be Installed on Build Server")
     @Test
     public void retrievalWorks() {
         Set<IUserAttributeValue> values = SERVICE.findUserAttributeValues(userIdentifier);
