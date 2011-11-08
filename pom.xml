@@ -35,6 +35,12 @@
         <url>http://code1.corp.hp.com/svn/spf/source/trunk</url>
     </scm>
 
+    <properties>
+        <distributeSnapshotUrl>http://repo1.corp.hp.com/nexus/content/repositories/snapshots</distributeSnapshotUrl>
+        <distributeReleaseUrl>http://repo1.corp.hp.com/nexus/content/repositories/releases</distributeReleaseUrl>
+        <siteUrl>dav:http://repo1.corp.hp.com/site</siteUrl>
+    </properties>
+
     <repositories>
         <repository>
             <id>central</id>
