@@ -53,6 +53,7 @@
 		<property name="xsd" value="/user-attribute-value.xsd"/>
 	</bean>
 
+    <!-- WSDL URL https://sasuft1cl2.austin.hp.com:21978/cas-persona-webservice/soap/PersonaUserAttributeValue.wsdl -->
 	<bean id="PersonaUserAttributeValue" class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition">
 		<property name="schema" ref="schema"/>
 		<property name="portTypeName" value="PersonaUserAttributeValue"/>
