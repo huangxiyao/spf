@@ -11,7 +11,7 @@
 
 	<groupId>com.hp.it.118361</groupId>
 	<artifactId>security</artifactId>
-	<version>2011.11</version>    <!-- override parent version -->
+	<version>2011.11-SNAPSHOT</version>    <!-- override parent version -->
 	<packaging>pom</packaging>
 
 	<name>CAS Security</name>
