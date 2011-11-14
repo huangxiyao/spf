@@ -11,7 +11,7 @@
 
 	<groupId>com.hp.it.118361</groupId>
 	<artifactId>security</artifactId>
-	<version>2011.11-SNAPSHOT</version>    <!-- override parent version -->
+	<version>2011.11</version>    <!-- override parent version -->
 	<packaging>pom</packaging>
 
 	<name>CAS Security</name>
@@ -58,4 +58,10 @@
 			</plugin>
 		</plugins>
 	</build>
+
+  <scm>
+    <connection>scm:svn:http://code1.corp.hp.com/svn/cas/source/tags/security-2011.11</connection>
+    <developerConnection>scm:svn:https://code1.corp.hp.com/svn/cas/source/tags/security-2011.11</developerConnection>
+    <url>http://code1.corp.hp.com/svn/cas/source/tags/security-2011.11</url>
+  </scm>
 </project>
