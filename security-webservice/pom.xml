@@ -16,18 +16,6 @@
 	
 	<name>CAS Security Web Service</name>
 	<description>Web service that exposes the Persona User-Attribute-Value service.</description>
-
-	<developers>
-		<developer>
-			<id>quintin.may@hp.com</id>
-			<name>Quintin May</name>
-			<email>quintin.may@hp.com</email>
-			<roles>
-				<role>Architect</role>
-				<role>Engineer</role>
-			</roles>
-		</developer>
-	</developers>
 	
 	<dependencies>
 

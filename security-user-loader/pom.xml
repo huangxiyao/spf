@@ -22,18 +22,6 @@
 		
 		A single invocation of the loader either succeeds and loads all of the data or fails with no data loaded.</description>
 
-	<developers>
-		<developer>
-			<id>quintin.may@hp.com</id>
-			<name>Quintin May</name>
-			<email>quintin.may@hp.com</email>
-			<roles>
-				<role>Architect</role>
-				<role>Engineer</role>
-			</roles>
-		</developer>
-	</developers>
-
 	<build>
 		<plugins>
 			<plugin>
