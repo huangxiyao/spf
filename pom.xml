@@ -11,25 +11,23 @@
 
 	<groupId>com.hp.it.118361</groupId>
 	<artifactId>security</artifactId>
-	<version>2011.11</version>    <!-- override parent version -->
+	<version>2011.11-SNAPSHOT</version>    <!-- override parent version -->
 	<packaging>pom</packaging>
 
 	<name>CAS Security</name>
 	<description>CAS Security framework</description>
 
-	<!--
-	<scm>
-		<connection>${cas.sourceReadUrl}/trunk/security</connection>
-		<developerConnection>${cas.sourceWriteUrl}/trunk/security</developerConnection>
-		<url>${cas.sourceViewUrl}/trunk/security</url>
-	</scm>
-	-->
+    <scm>
+        <connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk/persona</connection>
+        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/persona</developerConnection>
+        <url>http://code1.corp.hp.com/svn/spf/source/trunk/persona</url>
+    </scm>
 
 	<distributionManagement>
 		<site>
 			<id>site</id>
 			<name>CAS Security Site</name>
-			<url>${siteUrl}/security/${project.version}</url>
+			<url>${siteUrl}/spf/${project.version}/persona</url>
 		</site>
 	</distributionManagement>
 
@@ -58,10 +56,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-  <scm>
-    <connection>scm:svn:http://code1.corp.hp.com/svn/cas/source/tags/security-2011.11</connection>
-    <developerConnection>scm:svn:https://code1.corp.hp.com/svn/cas/source/tags/security-2011.11</developerConnection>
-    <url>http://code1.corp.hp.com/svn/cas/source/tags/security-2011.11</url>
-  </scm>
 </project>

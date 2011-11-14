@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>security</artifactId>
 		<groupId>com.hp.it.118361</groupId>
-		<version>2011.11</version>
+		<version>2011.11-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.hp.it.118361</groupId>
