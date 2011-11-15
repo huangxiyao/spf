@@ -43,7 +43,7 @@
 		<site>
 			<id>site</id>
 			<name>SPF LAF Site</name>
-			<url>${siteUrl}/spf-layout-laf/${project.version}</url>
+			<url>${siteUrl}/spf-layout-laf</url>
 		</site>
 	</distributionManagement>
 	

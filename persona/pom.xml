@@ -27,7 +27,7 @@
 		<site>
 			<id>site</id>
 			<name>CAS Security Site</name>
-			<url>${siteUrl}/spf/${project.version}/persona</url>
+			<url>${siteUrl}/persona</url>
 		</site>
 	</distributionManagement>
 

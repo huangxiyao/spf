@@ -53,7 +53,7 @@
         <spf.sourceViewUrl>http://code1.corp.hp.com/svn/spf/source</spf.sourceViewUrl>
         <distributeSnapshotUrl>http://repo1.corp.hp.com/nexus/content/repositories/snapshots</distributeSnapshotUrl>
         <distributeReleaseUrl>http://repo1.corp.hp.com/nexus/content/repositories/releases</distributeReleaseUrl>
-        <siteUrl>dav:http://repo1.corp.hp.com/site</siteUrl>
+        <siteUrl>dav:http://repo1.corp.hp.com/site/spf/${project.version}</siteUrl>
         <continuousIntegrationUrl>http://build1.corp.hp.com/hudson</continuousIntegrationUrl>
         <sonar.host.url>http://g4t0173g.houston.hp.com/sonar</sonar.host.url>
     </properties>

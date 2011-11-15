@@ -41,7 +41,7 @@
         <site>
             <id>site</id>
             <name>SPF Portlet Site</name>
-            <url>${siteUrl}/portlet/${project.version}</url>
+            <url>${siteUrl}/portlet</url>
         </site>
     </distributionManagement>
 

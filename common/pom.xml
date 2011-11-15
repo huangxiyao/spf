@@ -29,7 +29,7 @@
 		<site>
 			<id>site</id>
 			<name>SPF Common Site</name>
-			<url>${siteUrl}/common/${project.version}</url>
+			<url>${siteUrl}/common</url>
 		</site>
 	</distributionManagement>
 

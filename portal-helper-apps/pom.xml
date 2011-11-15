@@ -25,7 +25,7 @@
 		<site>
 			<id>site</id>
 			<name>SPF Portal Helper Apps</name>
-			<url>${siteUrl}/portal-helper-apps/${project.version}</url>
+			<url>${siteUrl}/portal-helper-apps</url>
 		</site>
 	</distributionManagement>
 	

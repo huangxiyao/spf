@@ -26,7 +26,7 @@
 		<site>
 			<id>site</id>
 			<name>SPF Common Site</name>
-			<url>${siteUrl}/portlet-apps/${project.version}</url>
+			<url>${siteUrl}/portlet-apps</url>
 		</site>
 	</distributionManagement>
 

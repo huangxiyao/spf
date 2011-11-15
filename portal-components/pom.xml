@@ -23,7 +23,7 @@
 		<site>
 			<id>site</id>
 			<name>SPF Common Site</name>
-			<url>${siteUrl}/portal-components/${project.version}</url>
+			<url>${siteUrl}/portal-components</url>
 		</site>
 	</distributionManagement>
 
