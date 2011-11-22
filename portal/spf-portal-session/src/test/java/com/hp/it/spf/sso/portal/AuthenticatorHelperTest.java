@@ -14,18 +14,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
-import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.epicentric.common.website.SessionInfo;
 import com.epicentric.common.website.SessionUtils;
 import com.epicentric.entity.EntityPersistenceException;
 import com.epicentric.entity.UniquePropertyValueConflictException;
@@ -242,18 +238,18 @@ public class AuthenticatorHelperTest {
      */
     @Test
     public void testIsFromHPP() {
-        boolean reslut = false;
-        reslut = AuthenticatorHelper.isFromHPP(hppRequest);
-        assertTrue(reslut);
+        boolean result = false;
+        result = AuthenticatorHelper.isFromHPP(hppRequest);
+        assertTrue(result);
         
-        reslut = AuthenticatorHelper.isFromHPP(athpRequest);
-        assertFalse(reslut);
+        result = AuthenticatorHelper.isFromHPP(athpRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.isFromHPP(fedRequest);
-        assertFalse(reslut);
+        result = AuthenticatorHelper.isFromHPP(fedRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.isFromHPP(anonRequest);
-        assertTrue(reslut);        
+        result = AuthenticatorHelper.isFromHPP(anonRequest);
+        assertTrue(result);
     }
 
     /**
@@ -263,18 +259,18 @@ public class AuthenticatorHelperTest {
      */
     @Test
     public void testIsFromAtHP() {
-        boolean reslut = false;
-        reslut = AuthenticatorHelper.isFromAtHP(hppRequest);
-        assertFalse(reslut);
+        boolean result = false;
+        result = AuthenticatorHelper.isFromAtHP(hppRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.isFromAtHP(athpRequest);
-        assertTrue(reslut);
+        result = AuthenticatorHelper.isFromAtHP(athpRequest);
+        assertTrue(result);
         
-        reslut = AuthenticatorHelper.isFromAtHP(fedRequest);
-        assertFalse(reslut);
+        result = AuthenticatorHelper.isFromAtHP(fedRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.isFromAtHP(anonRequest);
-        assertFalse(reslut); 
+        result = AuthenticatorHelper.isFromAtHP(anonRequest);
+        assertFalse(result);
     }
 
     /**
@@ -284,18 +280,18 @@ public class AuthenticatorHelperTest {
      */
     @Test
     public void testIsFromFed() {
-        boolean reslut = false;
-        reslut = AuthenticatorHelper.isFromFed(hppRequest);
-        assertFalse(reslut);
+        boolean result = false;
+        result = AuthenticatorHelper.isFromFed(hppRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.isFromFed(athpRequest);
-        assertFalse(reslut);
+        result = AuthenticatorHelper.isFromFed(athpRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.isFromFed(fedRequest);
-        assertTrue(reslut);
+        result = AuthenticatorHelper.isFromFed(fedRequest);
+        assertTrue(result);
         
-        reslut = AuthenticatorHelper.isFromFed(anonRequest);
-        assertFalse(reslut); 
+        result = AuthenticatorHelper.isFromFed(anonRequest);
+        assertFalse(result);
     }
 
     /**
@@ -305,9 +301,17 @@ public class AuthenticatorHelperTest {
      */
     @Test
     public void testIsForceInitSession() {
-        boolean reslut = false;
-        reslut = AuthenticatorHelper.isForceInitSession(hppRequest);
-        assertFalse(reslut);
+        assertFalse(AuthenticatorHelper.isForceInitSession(hppRequest));
+    }
+    
+    /**
+     * Test method for
+     * {@link com.hp.it.spf.sso.portal.AuthenticatorHelper#isForceCleanupSession(javax.servlet.http.HttpServletRequest)}
+     * .
+     */
+    @Test
+    public void testIsForceCleanupSession() {
+        assertFalse(AuthenticatorHelper.isForceCleanupSession(hppRequest));
     }
 
     /**
@@ -317,9 +321,7 @@ public class AuthenticatorHelperTest {
      */
     @Test
     public void testIsVAPLoggedIn() {
-        boolean reslut = false;
-        reslut = AuthenticatorHelper.isVAPLoggedIn(hppRequest);
-        assertTrue(reslut);
+        assertTrue(AuthenticatorHelper.isVAPLoggedIn(hppRequest));
     }
 
     /**
@@ -329,18 +331,18 @@ public class AuthenticatorHelperTest {
      */
     @Test
     public void testLoggedIntoAtHP() {
-        boolean reslut = false;
-        reslut = AuthenticatorHelper.loggedIntoAtHP(athpRequest);
-        assertTrue(reslut);
+        boolean result = false;
+        result = AuthenticatorHelper.loggedIntoAtHP(athpRequest);
+        assertTrue(result);
         
-        reslut = AuthenticatorHelper.loggedIntoAtHP(hppRequest);
-        assertFalse(reslut);
+        result = AuthenticatorHelper.loggedIntoAtHP(hppRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.loggedIntoAtHP(fedRequest);
-        assertFalse(reslut);
+        result = AuthenticatorHelper.loggedIntoAtHP(fedRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.loggedIntoAtHP(anonRequest);
-        assertFalse(reslut);
+        result = AuthenticatorHelper.loggedIntoAtHP(anonRequest);
+        assertFalse(result);
     }
 
     /**
@@ -350,18 +352,18 @@ public class AuthenticatorHelperTest {
      */
     @Test
     public void testLoggedIntoHPP() {
-        boolean reslut = false;
-        reslut = AuthenticatorHelper.loggedIntoHPP(athpRequest);
-        assertFalse(reslut);
+        boolean result = false;
+        result = AuthenticatorHelper.loggedIntoHPP(athpRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.loggedIntoHPP(hppRequest);
-        assertTrue(reslut);
+        result = AuthenticatorHelper.loggedIntoHPP(hppRequest);
+        assertTrue(result);
         
-        reslut = AuthenticatorHelper.loggedIntoHPP(fedRequest);
-        assertFalse(reslut);
+        result = AuthenticatorHelper.loggedIntoHPP(fedRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.loggedIntoHPP(anonRequest);
-        assertFalse(reslut);
+        result = AuthenticatorHelper.loggedIntoHPP(anonRequest);
+        assertFalse(result);
     }
 
     /**
@@ -371,18 +373,18 @@ public class AuthenticatorHelperTest {
      */
     @Test
     public void testLoggedIntoFed() {
-        boolean reslut = false;
-        reslut = AuthenticatorHelper.loggedIntoFed(athpRequest);
-        assertFalse(reslut);
+        boolean result = false;
+        result = AuthenticatorHelper.loggedIntoFed(athpRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.loggedIntoFed(hppRequest);
-        assertFalse(reslut);
+        result = AuthenticatorHelper.loggedIntoFed(hppRequest);
+        assertFalse(result);
         
-        reslut = AuthenticatorHelper.loggedIntoFed(fedRequest);
-        assertTrue(reslut);
+        result = AuthenticatorHelper.loggedIntoFed(fedRequest);
+        assertTrue(result);
         
-        reslut = AuthenticatorHelper.loggedIntoFed(anonRequest);
-        assertFalse(reslut);
+        result = AuthenticatorHelper.loggedIntoFed(anonRequest);
+        assertFalse(result);
     }
 
     /**
@@ -391,9 +393,7 @@ public class AuthenticatorHelperTest {
      */
     @Test
     public void testIsSandBox() {
-        boolean reslut = false;
-        reslut = AuthenticatorHelper.isSandBox();
-        assertFalse(reslut);
+        assertFalse(AuthenticatorHelper.isSandBox());
     }
 
     /**

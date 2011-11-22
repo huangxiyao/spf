@@ -68,7 +68,9 @@ public class ANONAuthenticator extends AbstractAuthenticator {
 
         if (currentUser != null) {
             String currUserName = (String)currentUser.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID);
-            if (currUserName.startsWith(AuthenticationConsts.ANON_USER_NAME_PREFIX)) {
+            if (!AuthenticatorHelper.isForceCleanupSession(request) 
+                    && currUserName.startsWith(AuthenticationConsts.ANON_USER_NAME_PREFIX))
+            {
             	String langTag = currUserName.substring(AuthenticationConsts.ANON_USER_NAME_PREFIX.length());
                 Locale userLocale = I18nUtility.languageTagToLocale(langTag);
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {

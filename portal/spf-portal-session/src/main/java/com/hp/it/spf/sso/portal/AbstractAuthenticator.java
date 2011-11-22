@@ -145,7 +145,12 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
             if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                 LOG.debug(String.format("User is Logged in, user: %s", userIdentifier));
             }
-            if (isDiffUser()) {
+            if (AuthenticatorHelper.isForceCleanupSession(request)) {
+                if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+                    LOG.debug(String.format("Force session clean up, userid: %s", userIdentifier));
+                }
+                AuthenticatorHelper.cleanupSession(request);
+            } else if (isDiffUser()) {
                 if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
                     LOG.debug(String.format("Different User, userid: %s", userIdentifier));
                 }

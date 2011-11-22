@@ -527,14 +527,30 @@ public class AuthenticatorHelper {
     }
 
     /**
-     * Check if the initSession tag is true
+     * Check if <code>spf.refreshPortalSession</code> request parameter is present indicating
+     * the need to refresh portal session objects such as user profile and user groups.
+     * Note that the original parameter, <code>initSession</code> is deprecated and should
+     * not be used
      * 
      * @param request HttpServletRequest
-     * @return <code>true</code> if force init session, otherwise <code>false</code>
+     * @return <code>true</code> if SPF portal session objects should be refreshed, otherwise <code>false</code>
      */
     static boolean isForceInitSession(HttpServletRequest request) {
-        return "true".equalsIgnoreCase((String)request.getParameter("initSession"));
+        return "true".equalsIgnoreCase((String)request.getParameter("initSession"))
+                || "true".equalsIgnoreCase((String)request.getParameter("spf.refreshPortalSession"));
     }
+    
+    /**
+     * Check if <code>spf.cleanupSession</code> request parameter is present indicating that
+     * portal and portlet sessions should be cleaned up.
+     * 
+     * @param request HttpServletRequest
+     * @return <code>true</code> if portal and portlet session should be cleaned up, otherwise <code>false</code>
+     */
+    static boolean isForceCleanupSession(HttpServletRequest request) {
+        return "true".equalsIgnoreCase((String)request.getParameter("spf.cleanupSession"));
+    }
+    
     /**
      * Check if the user has loged into VAP. If user from session can be
      * retrieved and is not a guest user, which means user has logged in.
