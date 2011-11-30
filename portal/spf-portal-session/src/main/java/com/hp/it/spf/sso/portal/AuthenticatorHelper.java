@@ -527,17 +527,17 @@ public class AuthenticatorHelper {
     }
 
     /**
-     * Check if <code>spf.refreshPortalSession</code> request parameter is present indicating
+     * Check if <code>spf.refreshProfile</code> request parameter is present indicating
      * the need to refresh portal session objects such as user profile and user groups.
-     * Note that the original parameter, <code>initSession</code> is deprecated and should
-     * not be used
+     * Note that the original parameter, <code>initSession</code>, is deprecated and should
+     * not be used.
      * 
      * @param request HttpServletRequest
      * @return <code>true</code> if SPF portal session objects should be refreshed, otherwise <code>false</code>
      */
     static boolean isForceInitSession(HttpServletRequest request) {
         return "true".equalsIgnoreCase((String)request.getParameter("initSession"))
-                || "true".equalsIgnoreCase((String)request.getParameter("spf.refreshPortalSession"));
+                || "true".equalsIgnoreCase((String)request.getParameter("spf.refreshProfile"));
     }
     
     /**

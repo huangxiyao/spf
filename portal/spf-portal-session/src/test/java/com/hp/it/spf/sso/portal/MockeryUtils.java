@@ -85,7 +85,7 @@ public class MockeryUtils {
                 allowing(request).getParameter("initSession");
                 will(returnValue("false"));
                 
-                allowing(request).getParameter("spf.refreshPortalSession");
+                allowing(request).getParameter("spf.refreshProfile");
                 will(returnValue("false"));
                 
                 allowing(request).getParameter("spf.cleanupSession");
