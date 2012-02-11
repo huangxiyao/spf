@@ -79,14 +79,14 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	}
 
 	/**
-	 * Attempts to set the given locale into the given portal request, returning
-	 * true or false depending on whether the attempt succeeded. Setting a
-	 * locale into the portal request ensures that downstream localization for
-	 * that request will be based on that locale. Feature services generally
-	 * never need to call this method; the framework will manage it for them.
-	 * This method works for both authenticated and anonymous (guest) users -
-	 * the standard published Vignette API at this time of writing works only
-	 * for authenticated users.
+	 * Attempts to set the given locale to the Vignette user in the given
+	 * portal request, returning true or false depending on whether the attempt
+	 * succeeded. Setting a locale into Vignette ensures that downstream
+	 * localization for that user will be based on that locale. Feature
+	 * services generally never need to call this method; the framework will
+	 * manage it for them.  This method works for both authenticated and
+	 * anonymous (guest) users - the standard published Vignette API at this
+	 * time of writing works only for authenticated users.
 	 * 
 	 * @param pReq
 	 *            The portal request.
@@ -109,8 +109,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 				} else {
 					I18nUtils.setUserLocale(currentUser, pLocale);
 				}
-				//cache the resolved locale into session
-				setCachedLocale(pReq, pLocale);
+				// Removed as of SPF 2.2.14.
+				// setCachedLocale(pReq, pLocale);
 			}	
 		} catch (Exception ex) {
 			return false;
@@ -119,19 +119,23 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	}
 
 	/**
-	 * Returns the locale from the given portal request, or the current default
-	 * locale for the portal site if no locale can be found in the request. If
-	 * there is even no default locale enabled for the portal site, then the
-	 * platform default locale is returned. This method works for both
-	 * authenticated and anonymous (guest) users - the standard published
-	 * Vignette API at this time of writing works only for authenticated users.
+	 * Returns the locale for the Vignette user from the given portal request,
+	 * or the current default locale for the portal site if no locale can be
+	 * found in the request. If there is even no default locale enabled for the
+	 * portal site, then the platform default locale is returned. This method
+	 * works for both authenticated and anonymous (guest) users - the standard
+	 * published Vignette API at this time of writing works only for
+	 * authenticated users.
 	 * 
 	 * @param pReq
 	 *            The portal request.
-	 * @return The locale of the request, or else the site default locale.
+	 * @return The locale of the request, or else the site or platform default
+	 * locale.
 	 */
 	public static Locale getLocale(HttpServletRequest pReq) {
-		Locale rLocale = getCachedLocale(pReq);
+		// Removed as of SPF 2.2.14; initialize rLocale to null instead.
+	    // Locale rLocale = getCachedLocale(pReq);
+	    Locale rLocale = null;
         if (rLocale == null) {
 			try {
 				if (pReq != null) {
@@ -150,8 +154,8 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			if (null == rLocale) {
 				rLocale = getDefaultLocale(pReq);
 			}
-			//cache the resolved locale into session
-			setCachedLocale(pReq, rLocale);
+			// Removed as of SPF 2.2.14,
+			// setCachedLocale(pReq, rLocale);
 		}
 		return rLocale;
 	}
@@ -1890,13 +1894,18 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	}
 	
 	/**
-     * Detemines if the user locale is cached in the http session.
+     * <p>Detemines if the given user locale matches the one that has been cached
+     * (see note).</p>
+     * <p><b>Note:</b> As of SPF 2.2.14, user locale is no longer cached in 
+     * session, and this method just checks whether the given locale matches
+     * the one already stored in Vignette.</p>
      * 
      * @param pReq
 	 *            The portal request.
 	 * @param pLocale
 	 *            A locale.
-     * @return true if the locale is cached.
+     * @return true if the locale is cached - ie, matches the user locale in 
+     * Vignette, as of SPF 2.2.14.
      */
 	public static boolean isCachedLocale(HttpServletRequest pReq, Locale pLocale) {
 		Locale cachedLocale = getCachedLocale(pReq);
@@ -1908,37 +1917,32 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	}
 	
 	/**
-     * Returns the user locale cached in http session.
+     * <p>Returns the cached user locale (see note).</p>
+     * <p><b>Note:</b> As of SPF 2.2.14, user locale is no longer cached in
+     * portal session, and this method just returns the Vignette user locale
+     * by calling {@link #getLocale(HttpServletRequest)}.</p>
      * 
      * @param pReq
 	 *            The portal request.
-     * @return the cached locale, or null if it's not found in session.
+     * @return The cached user locale - which is the Vignette user locale as
+     * of SPF 2.2.14.
      */
+	@Deprecated
 	public static Locale getCachedLocale(HttpServletRequest pReq) {
-		if (pReq != null) {
-			HttpSession session = pReq.getSession();
-			if (session != null) {
-				return (Locale) session
-						.getAttribute(Consts.SESSION_ATTR_CACHED_LOCALE);
-			}
-		}
-		return null;
+		return getLocale(pReq);
 	}
 
 	/**
-	 * Set the given locale into http session for cache purpose.
+	 * <p>Caches the given locale (see note).</p>
+	 * <p><b>Note:</b> As of SPF 2.2.14, user locale is no longer cached in 
+	 * portal session, and this method does nothing.</p>
 	 * 
 	 * @param pReq
 	 *            The portal request.
 	 * @param pLocale
 	 *            A locale.
 	 */
+	@Deprecated
 	public static void setCachedLocale(HttpServletRequest pReq, Locale pLocale) {
-		if (pReq != null) {
-			HttpSession session = pReq.getSession();
-			if (session != null) {
-				session.setAttribute(Consts.SESSION_ATTR_CACHED_LOCALE, pLocale);
-			}
-		}
 	}
 }
