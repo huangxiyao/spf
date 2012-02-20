@@ -43,6 +43,13 @@ abstract class AbstractPortalURL implements PortalURL {
 	protected String mActionPortletFriendlyId = null;
 
 	/**
+	 * Support all JSR168 and JSR286 portlet URL types.
+	 */
+	protected enum PortletURLType {    
+		renderURL, actionURL, jsr168ResourceURL, jsr286ResourceURL
+	};
+
+	/**
 	 * @since SPF 1.1
 	 */
 	protected String mResourcePortletFriendlyId = null;
@@ -238,35 +245,31 @@ abstract class AbstractPortalURL implements PortalURL {
 
 	/**
 	 * Checks validity of resource ID and returns a trimmed value. This is a
-	 * JSR-168 implementation. The resource ID is considered to be a URL
-	 * (absolute or relative) for a servlet or static resource file in the
-	 * portlet application.
+	 * JSR-168 and JSR-286 implementation: For JSR-168, the resource ID is 
+	 * considered to be a URL (absolute or relative) for a servlet or static
+	 * resource file in the portlet application; for JSR-286, it is the
+	 * resource ID string for identifying the resource within the portlet's
+	 * <code>serveResource</code> method.
 	 * 
 	 * @param resourceId
 	 *            resource ID requested for the resource URL
 	 * @throws IllegalArgumentException
-	 *             if parameter is null, empty, or neither a relative nor
-	 *             absolute HTTP/HTTPS URL
+	 *            if parameter is null, empty, or (for JSR-168) neither a
+	 *            relative nor absolute HTTP/HTTPS URL
 	 */
 	private String checkResourceId(String resourceId) {
 		if (resourceId == null || resourceId.trim().equals("")) {
 			throw new IllegalArgumentException(
 					"resourceId cannot be null or empty: " + resourceId);
 		}
+
+		// For JSR-168, the resource ID is considered to be a URL
+		// (absolute or relative) for a servlet or static resource file in the
+		// portlet application
 		int pathBegin = 0;
-		if (!resourceId.startsWith("/")) {
+		if (!isJSR286ResourceId(resourceId)) {
 			final String protoEndMarker = "://";
-			final String https = "https";
-			final String http = "http";
 			int protoEnd = resourceId.indexOf(protoEndMarker);
-			if ((protoEnd == -1)
-					|| (!resourceId.substring(0, protoEnd).equalsIgnoreCase(
-							http) && !resourceId.substring(0, protoEnd)
-							.equalsIgnoreCase(https))) {
-				throw new IllegalArgumentException(
-						"resourceId must be a relative or absolute HTTP or HTTPS URL: "
-								+ resourceId);
-			}
 			protoEnd += protoEndMarker.length();
 			if (protoEnd >= resourceId.length()) {
 				throw new IllegalArgumentException(
@@ -278,6 +281,7 @@ abstract class AbstractPortalURL implements PortalURL {
 						"resourceId parameter is a malformedURL: " + resourceId);
 			}
 		}
+
 		return (resourceId.trim());
 	}
 
@@ -711,11 +715,19 @@ abstract class AbstractPortalURL implements PortalURL {
 	/**
 	 * Makes this <code>PortalURL</code> a resource URL for the given resource
 	 * ID, targeted at the portlet with the given <tt>portletFriendlyId</tt>.
-	 * The current implementation is JSR-168 compliant but does not support
-	 * JSR-286 resource serving.
+	 * The current implementation supports both JSR-168 and JSR-286 resource
+	 * URLs.
 	 * <p>
-	 * The given resource ID would typically be a URL for a servlet, image, or
-	 * other static file inside the portlet application.
+	 * For a JSR-168 URL, the given resource ID should be an HTTP or HTTPS
+	 * URL (absolute or relative) for a servlet, image, or other static file
+	 * inside the portlet application.  For a JSR-286 URL, the given resource ID
+	 * should be the resource ID to pass to your resource-serving portlet's
+	 * handler method.  A resource ID is required.  JSR-286 is assumed unless
+	 * your resource ID looks like an absolute or relative HTTP or HTTPS URL:
+	 * ie, starting with <code>http://</code>, <code>https:<//>, or simply
+	 * <code>/</code>.  Then JSR-168 is assumed.
+	 * <p>
+	 * If the resource ID is for JSR-168:
 	 * <ul>
 	 * <li>A relative URL will be assumed to be relative to the portal server,
 	 * so provide an absolute URL if your portlet may be remoted.</li>
@@ -729,14 +741,17 @@ abstract class AbstractPortalURL implements PortalURL {
 	 * once with any one <code>PortalURL</code> object, since setting a
 	 * resource URL or action URL changes the state of the object irreversibly.
 	 * <p>
-	 * Any parameters (private or public), portlet mode or window state you set
-	 * (eg using {@link #setParameter(String, String)} or
-	 * {@link #setPortletMode(String, PortletMode)}) will have undefined
-	 * results.
+	 * With a JSR-286 resource URL, any parameters (private or public) which
+	 * you set (eg using {@link #setParameter(String, String, String)}) will
+	 * be visible to the resource-serving portlet.  Any portlet mode or window
+	 * state that you set will have undefined results.
+	 * <p>
+	 * With a JSR-168 resource URL, any parameters, portlet mode or window
+	 * state that you set will have undefined results.
 	 * 
 	 * @param portletFriendlyId
 	 *            the portlet friendly ID as configured in the portal console
-	 * @param resourceID
+	 * @param resourceId
 	 *            the resource ID (JSR-286) or servlet or static resource URL
 	 *            path (JSR-168) for the resource to serve at that portlet
 	 * @throws IllegalStateException
@@ -946,7 +961,7 @@ abstract class AbstractPortalURL implements PortalURL {
 			addStateAndModeToUrlFragment(result, portletParameters.getValue());
 			addPublicParameters(result, portletParameters, portletFriendlyId);
 			addPrivateParameters(result, portletParameters, portletFriendlyId,
-					false);
+					PortletURLType.renderURL);
 		}
 
 		if ((isRenderUrl && portletParametersSpecified) || isActionUrl) {
@@ -961,8 +976,11 @@ abstract class AbstractPortalURL implements PortalURL {
 						portletParameters.getValue());
 				addPublicParameters(result, portletParameters,
 						portletFriendlyId);
-				addPrivateParameters(result, portletParameters,
-						portletFriendlyId, isActionUrl);
+				if (isActionUrl) {
+					addPrivateParameters(result, portletParameters, portletFriendlyId, PortletURLType.actionURL);
+				} else {
+					addPrivateParameters(result, portletParameters, portletFriendlyId, PortletURLType.renderURL);
+				}
 			}
 			result.append("&javax.portlet.endCacheTok=com.vignette.cachetoken");
 		}
@@ -1079,7 +1097,7 @@ abstract class AbstractPortalURL implements PortalURL {
 
 	protected abstract void addPrivateParameters(StringBuilder result,
 			Map.Entry<String, PortletParameters> portletParameters,
-			String portletFriendlyId, boolean isActionURL);
+			String portletFriendlyId, PortletURLType urlType);
 
 	protected abstract void addPublicParameters(StringBuilder result,
 			Map.Entry<String, PortletParameters> portletParameters,
@@ -1192,5 +1210,24 @@ abstract class AbstractPortalURL implements PortalURL {
 		public PortletMode getPortletMode() {
 			return mPortletMode;
 		}
+	}
+
+	/**
+	 * Check whether the resource ID is for JSR-168 or JSR-286.
+	 */
+	protected boolean isJSR286ResourceId(String resourceId) {
+		if (!resourceId.startsWith("/")) {
+			final String protoEndMarker = "://";
+			final String https = "https";
+			final String http = "http";
+			int protoEnd = resourceId.indexOf(protoEndMarker);
+			if ((protoEnd == -1)
+					|| (!resourceId.substring(0, protoEnd).equalsIgnoreCase(http)
+						&& !resourceId.substring(0, protoEnd).equalsIgnoreCase(https)))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

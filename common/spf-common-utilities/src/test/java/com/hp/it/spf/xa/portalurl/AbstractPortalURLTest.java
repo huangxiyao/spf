@@ -261,7 +261,7 @@ public class AbstractPortalURLTest extends TestCase {
 
 		protected void addPrivateParameters(StringBuilder result,
 				Map.Entry<String, PortletParameters> portletParameters,
-				String portletFriendlyId, boolean isActionURL) {
+				String portletFriendlyId, PortletURLType urlType) {
 		}
 
 		protected void addPublicParameters(StringBuilder result,

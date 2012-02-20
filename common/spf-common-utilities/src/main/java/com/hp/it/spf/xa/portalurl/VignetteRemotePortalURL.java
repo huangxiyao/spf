@@ -34,25 +34,38 @@ class VignetteRemotePortalURL extends AbstractPortalURL {
 	 */
 	protected void addPrivateParameters(StringBuilder result,
 			Map.Entry<String, PortletParameters> portletParameters,
-			String portletFriendlyId, boolean isActionURL) {
+			String portletFriendlyId, PortletURLType urlType) {
 		Map<String, List<String>> parameters = portletParameters.getValue()
 				.getPrivateParameters();
 		if (parameters.isEmpty()) {
 			return;
 		}
 
-		result.append('&').append(PARAM_NAME_PREFIX).append(".prp_").append(
-				portletFriendlyId);
+		if (urlType.equals(PortletURLType.jsr286ResourceURL)) {
+			// For JSR-286, the resource URL parameter is start with rst
+			result.append('&').append(PARAM_NAME_PREFIX).append(".rst_").append(portletFriendlyId);
+		} else {
+			result.append('&').append(PARAM_NAME_PREFIX).append(".prp_").append(portletFriendlyId);
+		}
 		result.append('=');
-		addNavigationalStateValue(result, parameters, isActionURL);
+		addNavigationalStateValue(result, parameters, urlType);
 	}
 
 	private void addNavigationalStateValue(StringBuilder result,
-			Map<String, List<String>> parameters, boolean isActionURL) {
-		if (isActionURL) {
+			Map<String, List<String>> parameters, PortletURLType urlType) {
+		switch (urlType) {
+		case actionURL:
 			result.append("wsrp-interactionState");
-		} else {
+			break;
+		case jsr286ResourceURL:
+			result.append("wsrp-resourceState");
+			break;
+		case jsr168ResourceURL:
 			result.append("wsrp-navigationalState");
+			break;
+		case renderURL:
+			result.append("wsrp-navigationalState");
+			break;
 		}
 
 		// everything following 'wsrp-navigationalState' must be URL-encoded -
@@ -126,16 +139,28 @@ class VignetteRemotePortalURL extends AbstractPortalURL {
 	}
 
 	/**
-	 * Create a resource URL string for a Vignette remote portlet. This is a
-	 * JSR-168 implementation, in which a portlet resource URL is a servlet,
-	 * image or other static file typically in the portlet application. JSR-286
-	 * true portlet resource serving is not supported by this implementation.
+	 * Create a resource URL string for a Vignette remote portlet. This 
+	 * implementation supports both JSR-168 (in which a portlet resource URL
+	 * is for a servlet, image or other static file typically in the portlet
+	 * application), and JSR-286 (in which a portlet resource URL points to a
+	 * portlet's resource-serving handler).
 	 * <p>
 	 * A Vignette remote portlet resource URL contains the resource ID that was
 	 * set earlier (using
-	 * {@link AbstractPortalURL#setAsResourceURL(String, String)}), which was
-	 * either a relative or absolute HTTP or HTTPS URL. This method embeds that
-	 * in a Vignette <code>template.BINARYPORTLET</code> URL and returns it.
+	 * {@link AbstractPortalURL#setAsResourceURL(String, String)}). This method
+	 * determines whether to create a JSR-168 or JSR-286 resource URL by the
+	 * format of the resource ID:
+	 * <ul>
+	 * <li>If the resource ID starts with
+	 * <code>http://</code>, <code>https://</code>,
+	 * or simply <code>/</code>, it is assumed to be a relative or absolute URL
+	 * for a static or servlet resource, and a JSR-168 resource URL is generated
+	 * for it.</li>
+	 * <li>Otherwise, it is assumed to be a JSR-286 resource ID, and a JSR-286
+	 * resource URL is generated for it.</li>
+	 * </ul>
+	 * <p>
+	 * In either case, the returned resource URL is in Vignette remote format.
 	 * <p>
 	 * If the current <code>PortalURL</code> was not set as a resource URL,
 	 * this method returns empty.
@@ -204,27 +229,43 @@ class VignetteRemotePortalURL extends AbstractPortalURL {
 			result.append(PARAM_NAME_PREFIX).append(".tpst=").append(
 					mResourcePortletFriendlyId).append("_ws_BI");
 
-			// then we specify the resource information with ".rst_" parameter
-			result.append('&').append(PARAM_NAME_PREFIX).append(".rst_")
-					.append(mResourcePortletFriendlyId).append('=');
+			if (!isJSR286ResourceId(mResourceId)) {
+				// For JSR-168, we specify the resource information with ".rst_"
+				// parameter
+				result.append('&').append(PARAM_NAME_PREFIX).append(".rst_").append(mResourcePortletFriendlyId)
+						.append('=');
 
-			// first resource info is the WSRP URL
-			StringBuilder info = new StringBuilder();
-			try {
-				info.append("wsrp-url=");
-				info.append(URLEncoder.encode(mResourceId, "UTF-8"));
-				info.append('&');
-				info.append("wsrp-requiresRewrite=false");
-				result.append(URLEncoder.encode(info.toString(), "UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				throw new RuntimeException(
-						"UTF-8 encoding not supported? " + e, e);
+				// first resource info is the WSRP URL
+				StringBuilder info = new StringBuilder();
+				try {
+					info.append("wsrp-url=");
+					info.append(URLEncoder.encode(mResourceId, "UTF-8"));
+					info.append('&');
+					info.append("wsrp-requiresRewrite=false");
+					result.append(URLEncoder.encode(info.toString(), "UTF-8"));
+				} catch (UnsupportedEncodingException e) {
+					throw new RuntimeException("UTF-8 encoding not supported? " + e, e);
+				}
+			} else {
+				// For JSR-286, we specify the resource information with ".rid_"
+				// parameter
+				result.append('&').append(PARAM_NAME_PREFIX).append(".rid_").append(mResourcePortletFriendlyId)
+						.append('=');
+				StringBuilder info = new StringBuilder();
+				try {
+					info.append(URLEncoder.encode(mResourceId, "UTF-8"));
+					result.append(URLEncoder.encode(info.toString(), "UTF-8"));
+				} catch (UnsupportedEncodingException e) {
+					throw new RuntimeException("UTF-8 encoding not supported? " + e, e);
+				}
 			}
 
 			result.append("&javax.portlet.begCacheTok=com.vignette.cachetoken");
 			// we now will add the remaining portlet information if it is there,
-			// though it should not be (this may have undefined results when the
-			// URL is opened)
+			// though in the JSR-168 case it should not be (this may have undefined
+			// results when the URL is opened), and even in the JSR-286 case only
+			// parameters are expected (so window state and portlet mode may have
+			// undefined results when the URL is opened).
 			while (portletParameterEntries.hasNext()) {
 				Map.Entry<String, PortletParameters> portletParameters = portletParameterEntries
 						.next();
@@ -233,8 +274,11 @@ class VignetteRemotePortalURL extends AbstractPortalURL {
 						portletParameters.getValue());
 				addPublicParameters(result, portletParameters,
 						portletFriendlyId);
-				addPrivateParameters(result, portletParameters,
-						portletFriendlyId, false);
+				if (isJSR286ResourceId(mResourceId)) {
+					addPrivateParameters(result, portletParameters, portletFriendlyId, PortletURLType.jsr286ResourceURL);
+				} else {
+					addPrivateParameters(result, portletParameters, portletFriendlyId, PortletURLType.jsr168ResourceURL);
+				}
 			}
 			result.append("&javax.portlet.endCacheTok=com.vignette.cachetoken");
 		}
