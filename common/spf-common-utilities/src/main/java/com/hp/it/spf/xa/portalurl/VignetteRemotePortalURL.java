@@ -252,9 +252,11 @@ class VignetteRemotePortalURL extends AbstractPortalURL {
 				// parameter
 				result.append('&').append(PARAM_NAME_PREFIX).append(".rid_").append(mResourcePortletFriendlyId)
 						.append('=');
-				StringBuilder info = new StringBuilder();
-				info.append(mResourceId);
-				result.append(info.toString());
+				try {
+					result.append(URLEncoder.encode(mResourceId, "UTF-8"));
+				} catch (UnsupportedEncodingException e) {
+					throw new RuntimeException("UTF-8 encoding not supported? " + e, e);
+				}
 			}
 
 			result.append("&javax.portlet.begCacheTok=com.vignette.cachetoken");
