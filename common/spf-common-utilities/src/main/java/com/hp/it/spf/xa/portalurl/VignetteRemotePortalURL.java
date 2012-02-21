@@ -13,6 +13,7 @@ import com.hp.it.spf.xa.portalurl.AbstractPortalURL.PortletParameters;
  * portlet parameters.
  * 
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
+ * @author Ye Liu (ye.liu@hp.com)
  */
 class VignetteRemotePortalURL extends AbstractPortalURL {
 	private static final char NAV_STATE_KEY_DELIMITER = '=';
@@ -252,12 +253,8 @@ class VignetteRemotePortalURL extends AbstractPortalURL {
 				result.append('&').append(PARAM_NAME_PREFIX).append(".rid_").append(mResourcePortletFriendlyId)
 						.append('=');
 				StringBuilder info = new StringBuilder();
-				try {
-					info.append(URLEncoder.encode(mResourceId, "UTF-8"));
-					result.append(URLEncoder.encode(info.toString(), "UTF-8"));
-				} catch (UnsupportedEncodingException e) {
-					throw new RuntimeException("UTF-8 encoding not supported? " + e, e);
-				}
+				info.append(mResourceId);
+				result.append(info.toString());
 			}
 
 			result.append("&javax.portlet.begCacheTok=com.vignette.cachetoken");

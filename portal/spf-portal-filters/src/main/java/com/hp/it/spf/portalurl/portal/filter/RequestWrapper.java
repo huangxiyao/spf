@@ -14,6 +14,7 @@ import java.util.HashMap;
  * wrapper would hide this.
  *
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
+ * @author Ye Liu (ye.liu@hp.com)
  */
 class RequestWrapper extends HttpServletRequestWrapper
 {
@@ -104,6 +105,10 @@ class RequestWrapper extends HttpServletRequestWrapper
 			result = result.replaceAll(
 					"spf_p\\.rst_" + portletFriendlyId + "=",
 					"javax\\.portlet\\.rst_" + portletUid + "=");
+			// parameters starting with javax.portlet.rid_ contain portlet-specific values
+			result = result.replaceAll(
+					"spf_p\\.rid_" + portletFriendlyId + "=",
+					"javax\\.portlet\\.rid_" + portletUid + "=");
 			// parameters starting with javax.portlet.prp_ contain portlet-specific values
 			result = result.replaceAll(
 					"spf_p\\.prp_" + portletFriendlyId + "_",
@@ -161,11 +166,12 @@ class RequestWrapper extends HttpServletRequestWrapper
 					result.put("javax.portlet.pst", paramValue);
 				}
 			}
-			// for parameters starting with "spf_p.prp_", "spf_p.pbp_" and "spf_p.rst_"
+			// for parameters starting with "spf_p.prp_", "spf_p.pbp_", "spf_p.rst_" and "spf_p.rid_"
 			// we have to rename parameters but keeping values the same
 			else if (paramName.startsWith("spf_p.prp_")
 					|| paramName.startsWith("spf_p.pbp_")
-					|| paramName.startsWith("spf_p.rst_"))
+					|| paramName.startsWith("spf_p.rst_")
+					|| paramName.startsWith("spf_p.rid_"))
 			{
 				String newParamName = paramName;
 				for (Iterator<Map.Entry<String, String>> it2 = mPortletFriendlyIdToUidMap.entrySet().iterator(); it2.hasNext(); ) {

@@ -24,6 +24,7 @@ import com.vignette.portal.portlet.management.external.PortletPersistenceExcepti
 
 /**
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
+ * @author Ye Liu (ye.liu@hp.com)
  */
 public class PortalURLRewriterFilter implements Filter
 {
@@ -59,6 +60,7 @@ public class PortalURLRewriterFilter implements Filter
 		Enumeration portletRenderParamNames = getParameterNamesByPrefix(request, "spf_p.prp_");
 		Enumeration portletPublicRenderParamNames = getParameterNamesByPrefix(request, "spf_p.pbp_");
 		Enumeration portletResourceParamNames = getParameterNamesByPrefix(request, "spf_p.rst_");
+		Enumeration jsr286PortletResourceParamNames = getParameterNamesByPrefix(request, "spf_p.rid_");
 		Enumeration portletStates = getParameterValues(request, "spf_p.pst");
 
 		Set<String> portletFriendlyIds = new HashSet<String>();
@@ -81,6 +83,10 @@ public class PortalURLRewriterFilter implements Filter
 
 		if (portletResourceParamNames != null && portletResourceParamNames.hasMoreElements()) {
 			addPortletFriendlyIdsFromParamNames(portletFriendlyIds, portletResourceParamNames, "spf_p.rst_");
+		}
+
+		if (jsr286PortletResourceParamNames != null && jsr286PortletResourceParamNames.hasMoreElements()) {
+			addPortletFriendlyIdsFromParamNames(portletFriendlyIds, jsr286PortletResourceParamNames, "spf_p.rid_");
 		}
 
 		Map<String, String> portletFriendlyIdToUidMap = buildPortletFriendlyIdToUIDMap(portletFriendlyIds);
