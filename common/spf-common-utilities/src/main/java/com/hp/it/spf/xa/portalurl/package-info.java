@@ -1,10 +1,11 @@
 /**
  * The classes in this package allow the creation
- * of a URL pointing to specified portal pages and passing in both portal query parameters and also parameters addressed
+ * of a URL pointing to specified SPF Vignette portal pages and passing in both portal query parameters and also parameters addressed
  * to the portlets present on those pages. Render parameters can be passed, portlet modes and window states can be set,
- * and the action phase of a portlet can be targeted.
+ * and the action or resource phases of a portlet can be targeted.
  * <p>
- * The classes in this package implement the following use cases:
+ * The classes in this package implement the following use cases for both <b>local</b> and <b>remote</b>
+ * portlet deployment topologies in the SPF Vignette environment:
  * <ul>
  * <li>Generate a URL to a page with 1 portlet passing into the portlet some render parameters.</li>
  * <li>Generate a URL to a page with 2+ portlets passing to each of the portlets portlet-specific
@@ -20,8 +21,8 @@
  * parameters and passing in additional render parameters to the other portlets.</li>
  * <li>Generate a URL to a portlet requesting a window state change</li>
  * <li>Generate a URL to a portlet requesting a portlet mode change</li>
- * <li>Generate a URL to a portlet resource (servlet or static file like an image).  This is a JSR-168 resource 
- * URL, not a JSR-286 ResourceRequest URL.</li>
+ * <li>Generate a direct URL to a JSR-168 portlet resource (servlet or static file like an image).</li>
+ * <li>Generate a URL to a JSR-286 resource-serving portlet <i>(supported for remote portlets only at this time)</i></li>
  * </ul>
  * <p>
  * <b>Important:</b> The classes from this package can be used by portlet and portal components.
@@ -46,7 +47,7 @@
  * String href = url.toString();
  * </pre>
  * <p>
- * And another example, for a resource URL (for a resource inside this portlet application):
+ * And another example, for a direct JSR-168 resource URL (for a resource inside this portlet application):
  * <p>
  * <pre>
  * // create PortalURL using one of the factory methods

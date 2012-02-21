@@ -1145,9 +1145,11 @@ operating on collections of locales.</p>
 	<dt>{@link
 	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, sortLocale)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, sortLocale, int)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, sortLocale,
+	int)}</dt>
 	<dt>{@link
-	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection, sortLocale,displayLocale, int)}</dt>
+	com.hp.it.spf.xa.i18n.I18nUtility#sortLocales(Collection,
+	sortLocale,displayLocale, int)}</dt>
 	<dd>
 	<p>These methods return a {@link java.util.Collection} of {@link
 	java.util.Locale} objects, sorted by their localized display names (see
@@ -1160,18 +1162,19 @@ operating on collections of locales.</p>
 		argument.</p>
 		</li>
 		<li>
-		<p>The sortLocale are sorted by their <i>localized display names</i>, not by
-		language code or anything else. By default, the English names for the
-		locales are used, but you can provide an optional <code>Locale</code>
+		<p>The sortLocale are sorted by their <i>localized display
+		names</i>, not by language code or anything else. By default, the English
+		names for the locales are used, but you can provide an optional <code>Locale</code>
 		object as the second argument. This locale is used to localize the
 		display names for purposes of the sort, so that the sort is in
 		localized sequence.</p>
 		</li>
 		<li>
-		<p>As noted, the locales are sorted by their localized display names. By
-		default, this is an ascending sort, with the language name considered
-		over the country name. However there are 2 optional control flags you
-		can provide to the <code>int</code> argument, to override that:</p>
+		<p>As noted, the locales are sorted by their localized display
+		names. By default, this is an ascending sort, with the language name
+		considered over the country name. However there are 2 optional control
+		flags you can provide to the <code>int</code> argument, to override
+		that:</p>
 		<dl>
 			<dt>{@link com.hp.it.spf.xa.i18n.I18nUtility#LOCALE_DESCENDING}</dt>
 			<dd>Use this control flag to perform a descending sort.</dd>
@@ -1207,8 +1210,8 @@ operating on collections of locales.</p>
 		<dt><code>I18nUtility.sortLocales(locales,
 		Locale.JAPANESE, Locale.JAPANESE, I18nUtility.LOCALE_BY_COUNTRY |
 		I18nUtility.LOCALE_DESCENDING)</code></dt>
-		<dd>returns the locales sorted descending by their Japanese readable sorted
-		names, with country over language</dd>
+		<dd>returns the locales sorted descending by their Japanese
+		readable sorted names, with country over language</dd>
 	</dl>
 	</dd>
 </dl>
@@ -1254,10 +1257,10 @@ Portal Utilities Developer's Guide</a>.</p>
 will run in the Shared Portal Framework environment, developers often
 need to create URL's pointing at pages within the portal site and even
 targeting portlets within that page: passing parameters, specifying
-portlet mode, etc. The SPF common utilities give both portlet and portal
-developers the tools to do this, with the {@link
-com.hp.it.spf.xa.portalurl.PortalURL} interface and the {@link
-com.hp.it.spf.xa.portalurl.PortalURLFactory}.</p>
+portlet mode, invoking action or resource handling, etc. The SPF common
+utilities give both portlet and portal developers the tools to do this,
+with the {@link com.hp.it.spf.xa.portalurl.PortalURL} interface and the
+{@link com.hp.it.spf.xa.portalurl.PortalURLFactory}.</p>
 
 <blockquote>
 <p><b>Note:</b> The SPF portal utilities' {@link
@@ -1291,24 +1294,20 @@ query parameters into the portal URL, and (for an absolute URL) you can
 set the scheme/protocol too (if you have a non-standard port configured
 in <code>portalurl.properties</code>, this will be included).</p>
 
-<p>The SPF portlet utilities' {@link
+<blockquote>
+<p><b>Note:</b> The SPF portlet utilities' {@link
 com.hp.it.spf.xa.misc.portlet.Utils} class includes alternative methods
 for generating portal URLs, such as <code>Utils.getPortalSiteURL(PortletRequest)</code>
 and <code>Utils.getPortalSiteURL(PortletRequest,Boolean,String,int,String)</code>.
 So, too, do the SPF portal utilities' {@link
 com.hp.it.spf.xa.misc.portal.Utils} class (eg, <code>Utils.getPortalSiteURL(HttpServletRequest)</code>
 and <code>Utils.getPortalSiteURL(HttpServletRequest,Boolean,String,int,String)</code>.
-With these methods, you can build an absolute URL for this or another
-portal site, and you can specify the path for a particular page, and
-optionally switch the scheme/protocol, too (any non-standard port
-configured in <code>portalurl.properties</code> will automatically be
-included). You can't set portal query parameters explicitly, but you can
-include them on the end of your path (eg Vignette friendly URI) which
-you pass to the method. You can also set an arbitrary port or host,
-something the <code>PortalURL</code> classes do not support. However you
-cannot target portlets with them. If you are interested in using those <code>getPortalSiteURL</code>
+If you are interested in using those <code>getPortalSiteURL</code>
 methods instead, to generate your portal URLs, please see the respective
-developer's guides for the portlet and portal utilities.</p>
+developer's guides for the portlet and portal utilities. However, you
+can not make portlet URLs (see below) with them. To make portlet URLs,
+you must use <code>PortalURLFactory</code> and <code>PortalURL</code>.</p>
+</blockquote>
 
 <a name="url.kinds.portlet">
 <h4>3.1.1. URLs targeting portlets</h4>
@@ -1318,24 +1317,29 @@ developer's guides for the portlet and portal utilities.</p>
 which points to a portal page and targets one or more portlets on that
 page. The page could be within the current portal site, or in another
 site hosted by the same SPF portal server, and the URL could target
-action processing or resource handling (JSR-168) within one of those
-portlets besides just rendering.</p>
+action processing or resource handling within one of those portlets
+besides just rendering. Parameters, window states and portlet modes
+could also be specified in the targeted portlet URL. Targeted portlets
+could be remotely deployed or locally deployed within the portal.</p>
 
 <p>The SPF common utilities' <code>PortalURLFactory</code> and <code>PortalURL</code>
-let you generate portlet URLs as well as portal URLs. You need to know
-the portlet ID (ie the Vignette friendly ID) for the portlet(s) you want
-to target, as well as the page ID (ie the Vignette friendly URL) for the
-page they are on. You can set the portlet mode and window state, and
-target one portlet for action processing. You can also set portlet
-parameters (including public render parameters) for any or all
-portlet(s) on the page. Alternatively, you can target one portlet for
-resource handling. (At present only JSR-168 style resource handling is
-supported. This lets you create URLs for accessing servlets and static
-files like images inside your portlet application. True JSR-286 resource
-URLs for performing ResourceRequests are not supported.)</p>
+let you generate portlet URLs as well as portal URLs for all of those
+cases. You need to know the portlet ID (ie the Vignette friendly ID) for
+the portlet(s) you want to target, as well as the page ID (ie the
+Vignette friendly URL) for the page they are on. You can set the portlet
+mode and window state, and target one portlet for action processing. You
+can also set portlet parameters (including public render parameters) for
+any or all portlet(s) on the page.</p>
 
-<p>In contrast, the various portal and portlet <code>Utils</code>
-methods do not support portlet URLs.</p>
+<p>These utilities also let you target a portlet for resource
+handling. Both direct resource serving (JSR-168 style) and portlet-based
+resource serving (JSR-286 style) are supported. With direct resource
+serving, you can create URLs for accessing servlets and static files
+like images inside your portlet application, via the portal. With
+portlet-based resource serving, you can create URLs for invoking the
+resource phase within a targeted portlet (at present, doing this is
+supported only for remote-deployed portlets, not local-deployed
+portlets).</p>
 
 <hr>
 
@@ -1469,30 +1473,13 @@ to be invalid. Note this just checks the syntax of the arguments you
 provide; it does not validate that the portal site, page URI, etc
 actually exist.</p>
 
-<p>For example, here we make a <code>PortalURL</code> pointing
-simply to the current site's home page. (In this example, <code>siteRootURL</code>
+<p>Here we make a <code>PortalURL</code> object for the current
+site's Forums page, where <code>/forums</code> is assumed to be the
+Vignette "friendly URI" for that page. (In this example, <code>siteRootURL</code>
 is the home page URL for the current site. The procedure for getting the
 site root URL varies between Vignette portal components and Java
 portlets, so is not shown here. See the discussion above about the site
 root URL argument.)</p>
-
-<blockquote><pre>
-import com.hp.it.spf.xa.portalurl.PortalURLFactory;
-import com.hp.it.spf.xa.portalurl.PortalURL;
-...
-try {
-   PortalURL url = PortalURLFactory.createPageURL(siteRootURL, null);
-} catch (IllegalArgumentException e) {
-   // there was a problem with the siteRootURL
-}
-</pre></blockquote>
-
-<p>In the above example, if the <code>siteRootURL</code> was <code>http://portal.hp.com/portal/site/abc</code>,
-then <code>PortalURL.toString()</code> will return <code>http://portal.hp.com/portal/site/abc/</code>.</p>
-
-<p>Here we make a <code>PortalURL</code> object for the current
-site's Forums page, where <code>/forums</code> is assumed to be the
-Vignette "friendly URI" for that page:</p>
 
 <blockquote><pre>
 import com.hp.it.spf.xa.portalurl.PortalURLFactory;
@@ -1540,8 +1527,8 @@ com.hp.it.spf.xa.portalurl.PortalURLFactory}, you can use its {@link
 com.hp.it.spf.xa.portalurl.PortalURL#toString()} method to get it in
 string form (as in the above examples). But so far it will just be a
 base URL. To set portal query parameters or target portlets with
-parameters, modes, window states, etc, you use the following methods in
-the <code>PortalURL</code> interface:</p>
+parameters, modes, window states, resource or action phase, etc, you use
+the following methods in the <code>PortalURL</code> interface:</p>
 
 <dl>
 	<dt>{@link
@@ -1637,29 +1624,82 @@ the <code>PortalURL</code> interface:</p>
 	<dt>{@link
 	com.hp.it.spf.xa.portalurl.PortalURL#setAsResourceURL(String,String)}</dt>
 	<dd>
-	<p>You can target a resource inside a particular portlet with this
-	method.</p>
-	<blockquote>
-	<p><b>Note:</b> This will let a resource packaged inside that
-	portlet's application be accessed via the <code>PortalURL</code>. For
-	example, you can execute a servlet inside the application, or download
-	an image or other static file from it. This is JSR-168 style resource
-	handling from the portlet application, not JSR-286 style resource
-	serving directly from the portlet.</p>
-	</blockquote>
-	<p>The first string is the portlet ID (ie the Vignette "friendly
-	ID") of the portlet in question. The second string is the resource URL
-	for accessing the desired resource inside that portlet's running
+	<p>You can target a resource inside a particular portlet or portlet
+	application with this method. Both direct resource URLs, and URLs for
+	resource-serving portlets, are supported (the latter is only supported
+	for remote-deployed portlets at this time).</p>
+	<ul>
+		<li>
+		<p>Direct resource URLs have been supported since JSR-168. With a
+		direct resource URL, you can execute a servlet inside the target
+		portlet application, or download an image or other static file from
+		it. You can do this regardless of whether the portlet application is
+		locally or remotely deployed.</p>
+		</li>
+		<li>
+		<p>Resource-serving portlet URLs have only been supported since
+		JSR-286, and have been supported by <code>PortalURL</code> only since
+		SPF 2.2.14. With this kind of resource URL, you can invoke the portlet
+		resource-serving phase of the target portlet. <i>However at this
+		time this is only supported for remote-deployed portlets; for
+		local-deployed portlets, only JSR-168 style direct resourcing (see
+		above) is supported.</i></p>
+		</li>
+	</ul>
+	<p>The first string parameter in the <code>setAsResourceURL</code>
+	signature is the portlet ID (ie the Vignette "friendly ID") of the
+	portlet in question. For JSR-286 portlet resource serving, this is the
+	particular portlet whose resource phase you want the <code>PortalURL</code>
+	to invoke. For JSR-168 direct resource serving, though, this can be any
+	portlet within the portlet application containing the desired resource
+	(servlet, image, etc).</p>
+	<p>The second string specifies the resource to be served by that
+	portlet or portlet application. For JSR-286, this is the "resource ID"
+	to be passed to the targeted portlet. For JSR-168, this is the direct
+	URL for accessing the desired resource inside that portlet's running
 	portlet application. For local portlets you can use a relative URL; for
-	remote portlets it should be an absolute URL to the producer server. In
-	either case the portlet application's context path needs to lead the
-	URL path.</p>
-	<p><b>Note:</b> You can only use this method (or the <code>setAsActionURL</code>
-	method above) once; an {@link java.lang.IllegalStateException} is
-	thrown if you use it after action or resource handling has already been
-	set. Also note that when you target resource handling, any portlet
-	parameters (public or private), portlet mode or window state you set on
-	the <code>PortalURL</code> will have undefined behavior.</p>
+	remote portlets it should be an absolute HTTP or HTTPS URL to the
+	producer server. In either case the portlet application's context path
+	needs to begin the URL path, as usual with any direct URL pointing into
+	a web application of any kind.</p>
+	<p>Notes about this method:</p>
+	<ol>
+		<li>
+		<p>The format of the second string parameter is what tells <code>PortalURL</code>
+		whether you want JSR-168 direct resource serving or JSR-286 portlet
+		resource serving. Specifically, if that string begins with <code>http://</code>
+		or <code>https://</code> (indicating an absolute URL) or <code>/</code>
+		(indicating a relative URL), then <code>PortalURL</code> infers you
+		want JSR-168 direct resource serving, and sets itself accordingly.
+		Otherwise, <code>PortalURL</code> assumes you want JSR-286 portlet
+		resource handling.</p>
+		<blockquote>
+		<p><b>Note:</b> JSR-286 resource URLs are presently only supported
+		for remote-deployed portlets. If your <a
+			href="#url.other.config.portalurl">portalurl.properties</a> specifies
+		local deployment, then only JSR-168 resource URLs will be supported,
+		and you will get an exception from <code>setAsResourceURL</code> if
+		you do not pass an absolute or relative HTTP or HTTPS URL as the
+		second string parameter.</p>
+		</blockquote>
+		</li>
+		<li>
+		<p>You can only use the <code>setAsResourceURL</code> method (or
+		the <code>setAsActionURL</code> method above) once; an {@link
+		java.lang.IllegalStateException} is thrown if you use it after action
+		or resource handling has already been set.</p>
+		</li>
+		<li>
+		<p>Lastly, note that any portlet mode or window state you set on
+		the <code>PortalURL</code> will have undefined behavior, since those
+		attributes are irrelevant to resource serving. For JSR-168 direct
+		resource serving, any portlet parameters you set on the <code>PortalURL</code>
+		will likewise have undefined behavior. For JSR-286 resource handling,
+		though, any portlet parameters you set on the <code>PortalURL</code>
+		will be passed to the resource handler for the given portlet and
+		resource ID.</p>
+		</li>
+	</ol>
 	</dd>
 </dl>
 
@@ -1689,7 +1729,8 @@ attribute for an <code>&lt;A&gt;</code>).</p>
 
 <p>In another example, here we construct a URL for running <code>someServlet</code>
 in the <code>forum-display</code> portlet's application, passing the
-servlet some parameter. We use resource handling for this:</p>
+servlet some parameter. We use JSR-168 style direct resource serving for
+this:</p>
 
 <blockquote><pre>
 import com.hp.it.spf.xa.portalurl.PortalURLFactory;
