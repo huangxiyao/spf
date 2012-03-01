@@ -163,6 +163,16 @@ public abstract class ClassicContextualHelpProvider extends
 			// Used to call cchGetMouseXY();
 			+ "    function cchUpdate(e) { cchGetMouseXY(e); } \n"
 
+            // Used to cancel onclick propagation.
+			+ "    function cchNoBubble(e) \n"
+			+ "    { \n"
+			+ "        if (!e) e = window.event; \n"
+            + "        e.cancelBubble = true; \n"
+            + "        e.returnValue = false; \n"
+            + "        if (e.stopPropagation) e.stopPropagation(); \n"
+            + "        if (e.preventDefault) e.preventDefault(); \n"
+            + "    } \n"
+
 			// Used to get position of mouse, and work on IE6,FireFox.
 			+ "    function cchGetMouseXY(e) \n"
 			+ "    { \n"
@@ -379,14 +389,7 @@ public abstract class ClassicContextualHelpProvider extends
             + "            w.style.display = \"block\"; \n"
 			+ "            cchShowFrame(w); \n"
 			+ "        } \n"
-			+ "        if (window.event) { \n"
-			+ "            window.event.cancelBubble = true; \n"
-			+ "            window.event.returnValue = false; \n"
-			+ "        } \n"
-			+ "        if (e && e.stopPropagation && e.preventDefault) { \n"
-			+ "            e.stopPropagation(); \n"
-			+ "            e.preventDefault(); \n"
-			+ "        } \n"
+			+ "        cchNoBubble(e); \n"
 			+ "    } \n"
 
 			// Append the JavaScript code for div moving
@@ -829,6 +832,7 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("<div ");
 		html.append("id=\"" + id + "Help\" ");
 		html.append("onmousedown=\"cchGrab(event,this)\" ");
+		html.append("onclick=\"cchNoBubble(event)\" ");
 		html
 				.append("style=\"cursor:pointer;position:absolute;background-color:white;display:none;top:200px;left:200px\">\n");
 		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
