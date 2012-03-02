@@ -834,7 +834,7 @@ public abstract class ClassicContextualHelpProvider extends
 		html.append("onmousedown=\"cchGrab(event,this)\" ");
 		html.append("onclick=\"cchNoBubble(event)\" ");
 		html
-				.append("style=\"cursor:pointer;position:absolute;background-color:white;display:none;top:200px;left:200px\">\n");
+				.append("style=\"cursor:move;position:absolute;background-color:white;display:none;top:200px;left:200px\">\n");
 		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
 		// DSJ
 		// 2009/6/3
