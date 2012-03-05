@@ -21,6 +21,8 @@ import com.vignette.portal.log.LogWrapper;
 import java.util.Iterator;
 import java.util.Vector;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Utility class which provides methods to retrieve or manipulate information from Axis MessageContext.
  * @author Slawek Zachcial (slawomir.zachcial@hp.com)
@@ -48,10 +50,14 @@ public class Utils {
 		// handling time but not at response handling time. We know this method will be called 
 		// during a request so let's store the request object in message context and have it
 		// ready to use when this method is called at response time
-		HttpServletRequest request = (HttpServletRequest) messageContext.getProperty(REQUEST_MC_KEY);
-		if (request != null) {
-			return request;
+        WeakReference<HttpServletRequest> reference = (WeakReference<HttpServletRequest>) messageContext.getProperty(REQUEST_MC_KEY);
+        HttpServletRequest request = null;
+		if (reference != null) {
+            request = reference.get();
 		}
+        if (request != null) {
+            return request;
+        }
 
 		String userAgentValue = findUserAgentValue(messageContext.getRequestMessage());
 		if (userAgentValue != null) {
@@ -62,8 +68,8 @@ public class Utils {
 				String requestKey = userAgentValue.substring(pos
 						+ RequestBindingFilter.KEY_PREFIX.length());
 				request = RequestMap.getInstance().get(requestKey);
-				// store the request in message context so we can reuse it at response time
-				messageContext.setProperty(REQUEST_MC_KEY, request);
+				// store the request reference in message context so we can reuse it at response time
+				messageContext.setProperty(REQUEST_MC_KEY, new WeakReference<HttpServletRequest>(request));
 				return request;
 			} else {
 				LOG.error("SPF request key not found!");
