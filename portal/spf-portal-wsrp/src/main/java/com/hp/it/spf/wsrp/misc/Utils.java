@@ -50,14 +50,14 @@ public class Utils {
 		// handling time but not at response handling time. We know this method will be called 
 		// during a request so let's store the request object in message context and have it
 		// ready to use when this method is called at response time
-        WeakReference<HttpServletRequest> reference = (WeakReference<HttpServletRequest>) messageContext.getProperty(REQUEST_MC_KEY);
-        HttpServletRequest request = null;
+		WeakReference<HttpServletRequest> reference = (WeakReference<HttpServletRequest>) messageContext.getProperty(REQUEST_MC_KEY);
+		HttpServletRequest request = null;
 		if (reference != null) {
-            request = reference.get();
+			request = reference.get();
 		}
-        if (request != null) {
-            return request;
-        }
+		if (request != null) {
+			return request;
+		}
 
 		String userAgentValue = findUserAgentValue(messageContext.getRequestMessage());
 		if (userAgentValue != null) {
@@ -94,7 +94,11 @@ public class Utils {
 	 */
 	public static HttpSession retrieveSession(MessageContext messageContext) throws Exception
 	{
-		HttpSession session = (HttpSession) messageContext.getProperty(SESSION_MC_KEY);
+		WeakReference<HttpSession> reference = (WeakReference<HttpSession>) messageContext.getProperty(SESSION_MC_KEY);
+		HttpSession session = null;
+		if (reference != null) {
+			session = reference.get();
+		}
 		if (session != null) {
 			return session;
 		}
@@ -102,7 +106,7 @@ public class Utils {
 		HttpServletRequest request = retrieveRequest(messageContext);
 		if (request != null) {
 			session = (HttpSession) request.getAttribute(RequestWrapper.ORIGINAL_SESSION);
-			messageContext.setProperty(SESSION_MC_KEY, session);
+			messageContext.setProperty(SESSION_MC_KEY, new WeakReference<HttpSession>(session));
 		}
 
 		return session;
