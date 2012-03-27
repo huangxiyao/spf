@@ -18,9 +18,9 @@
 	<description>CAS Security framework</description>
 
     <scm>
-        <connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk/persona</connection>
-        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/persona</developerConnection>
-        <url>http://code1.corp.hp.com/svn/spf/source/trunk/persona</url>
+        <connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/persona</connection>
+        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/persona</developerConnection>
+        <url>https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/persona</url>
     </scm>
 
 	<distributionManagement>

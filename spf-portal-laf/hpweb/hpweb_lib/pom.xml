@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hp.frameworks</groupId>
 		<artifactId>spf-hpweb-laf</artifactId>
-		<version>2.2.17-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>hpweb_lib</artifactId>
@@ -87,21 +87,21 @@
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-core</artifactId>
-			<version>7.4.2</version>
+			<version>${vignetteVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-linking</artifactId>
-			<version>7.4.2</version>
+			<version>${vignetteVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-base</artifactId>
-			<version>7.4.2</version>
+			<version>${vignetteVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 

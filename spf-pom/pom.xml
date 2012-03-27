@@ -5,7 +5,7 @@
     <groupId>com.hp.it.spf.tools</groupId>
     <artifactId>spf-pom</artifactId>
     <name>Shared Portal Framework super POM</name>
-    <version>2.2.17-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <description>
@@ -15,9 +15,9 @@
     </description>
 
     <scm>
-        <connection>scm:svn:http://code1.corp.hp.com/svn/spf/source/trunk/spf-pom</connection>
-        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/trunk/spf-pom</developerConnection>
-        <url>http://code1.corp.hp.com/svn/spf/source/trunk/spf-pom</url>
+        <connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/spf-pom</connection>
+        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/spf-pom</developerConnection>
+        <url>https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/spf-pom</url>
     </scm>
 
     <ciManagement>
@@ -31,7 +31,7 @@
 
     <properties>
         <javaVersion>1.5</javaVersion>
-        <springFrameworkVersion>2.5.6</springFrameworkVersion>
+        <springFrameworkVersion>3.0.5.RELEASE</springFrameworkVersion>
         <jmockVersion>2.5.1</jmockVersion>
         <!-- Proposed for next Maven release as project/build/sourceEncoding. In 
             the meantime, some plugins already recognize this. -->
@@ -44,7 +44,7 @@
             2.5, 2.6, 2.6.1) -->
         <mavenJavadocPluginVersion>2.4</mavenJavadocPluginVersion>
         <mavenSourcePluginVersion>2.1.2</mavenSourcePluginVersion>
-        <vignetteVersion>7.4.2</vignetteVersion>
+        <vignetteVersion>8.2.0.700114</vignetteVersion>
         <slf4jVersion>1.5.6</slf4jVersion>
         <logbackVersion>0.9.15</logbackVersion>
 
