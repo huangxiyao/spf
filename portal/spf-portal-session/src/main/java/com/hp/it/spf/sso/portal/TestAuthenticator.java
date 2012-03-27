@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.epicentric.common.website.I18nUtils;
 import com.epicentric.common.website.SessionUtils;
+import com.epicentric.entity.EntityPersistenceException;
+import com.epicentric.entity.UniquePropertyValueConflictException;
 import com.epicentric.site.Site;
 import com.epicentric.user.User;
 import com.hp.it.spf.xa.misc.portal.Utils;
@@ -76,7 +78,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 			if (currentSite != null) {
 				actAsANON = true;
 			}
-			
+
 			// make up message pane
 			StringBuffer message = new StringBuffer("Cound not find " + profileFileName + ".properties.");
 			message.append(" Please create " + profileFileName + ".properties for user ");
@@ -92,7 +94,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 			message.append(" on " + currentSiteName
 					+ " site in %domain_home%/sandbox_resoureces/ directory.");
 			request.getSession().setAttribute(MESSAGEPANE, message.toString());
-			
+
 			String profileFileName2 = "console_" + rb.getString("CurrentUser");
 			LOG.debug("Get Resource Bundle File = " + profileFileName2);
 			// Read current user's info.
@@ -170,9 +172,9 @@ public class TestAuthenticator extends AbstractAuthenticator {
 			// allow ourselves to manipulate the value of the cacheList
 			// (private) property in the ResourceBundle class
 			field.setAccessible(true);
-			sun.misc.SoftCache cache = null;
+			java.util.concurrent.ConcurrentMap cache = null;
 			try {
-				cache = (sun.misc.SoftCache) field.get(null);
+				cache = (java.util.concurrent.ConcurrentMap) field.get(null);
 			} catch (IllegalAccessException illegalAccessEx) {
 				LOG.error(illegalAccessEx);
 			}
@@ -201,8 +203,8 @@ public class TestAuthenticator extends AbstractAuthenticator {
 				groups.add(group);
 			}
 		}
-        // set authenticated user group
-        groups.add(AuthenticationConsts.LOCAL_PORTAL_AUTHENTICATED_USERS);
+		// set authenticated user group
+		groups.add(AuthenticationConsts.LOCAL_PORTAL_AUTHENTICATED_USERS);
 		return groups;
 	}
 
