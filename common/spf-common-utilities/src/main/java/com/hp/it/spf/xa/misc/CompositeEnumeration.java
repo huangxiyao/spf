@@ -1,11 +1,7 @@
 package com.hp.it.spf.xa.misc;
 
-import java.util.Collection;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class CompositeEnumeration<T> implements Enumeration<T>
 {
