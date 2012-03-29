@@ -5,6 +5,23 @@
  */
 package com.hp.it.spf.sso.portal;
 
+
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TimeZone;
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.epicentric.authentication.AuthenticationManager;
 import com.epicentric.authentication.Realm;
 import com.epicentric.common.website.CookieUtils;
@@ -25,21 +42,6 @@ import com.hp.it.spf.xa.misc.portal.Utils;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
 import com.vignette.portal.log.LogConfiguration;
 import com.vignette.portal.log.LogWrapper;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.List;
 
 /**
  * AuthenticatorHelper is the private utility class used for this SSO module.
@@ -881,6 +883,7 @@ public class AuthenticatorHelper {
 	 *
 	 * @param property user property
 	 * @param value    property value
+	 * @param realmId  Realm Id
 	 * @return an instance of the User object corresponding to the logon id or
 	 *         null, if not found
 	 */
@@ -980,6 +983,7 @@ public class AuthenticatorHelper {
 	 * Get correct spf timezone of the SSO Guest user by locale.
 	 *
 	 * @param locale user locale, if locale is not specified, the defalut locale("America/Los_Angeles") will be returned.
+	 * @param realmId Realm Id
 	 * @return SSO guest user's configed locale with the specified locale
 	 */
 	public static String getUserTimeZoneByLocale(Locale locale, String realmId) {
