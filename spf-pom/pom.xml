@@ -30,8 +30,8 @@
     </organization>
 
     <properties>
-        <javaVersion>1.5</javaVersion>
-        <springFrameworkVersion>3.0.5.RELEASE</springFrameworkVersion>
+        <javaVersion>1.6</javaVersion>
+        <springFrameworkVersion>3.0.4.RELEASE</springFrameworkVersion>
         <jmockVersion>2.5.1</jmockVersion>
         <!-- Proposed for next Maven release as project/build/sourceEncoding. In 
             the meantime, some plugins already recognize this. -->
