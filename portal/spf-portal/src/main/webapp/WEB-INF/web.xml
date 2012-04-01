@@ -16,12 +16,8 @@
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:META-INF/vgnPortalContext.xml</param-value>
-	</context-param>
-	<!-- Persona configuration file -->
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:StandaloneUserService-jndi.xml</param-value>
+        <!-- Added Persona configuration file -->
+		<param-value>classpath*:META-INF/vgnPortalContext.xml, classpath:StandaloneUserService-jndi.xml</param-value>
 	</context-param>
 	<!--BEGIN HPD Context Params -->
 	<!--
