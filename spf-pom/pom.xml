@@ -45,7 +45,7 @@
 		<mavenJavadocPluginVersion>2.4</mavenJavadocPluginVersion>
 		<mavenSourcePluginVersion>2.1.2</mavenSourcePluginVersion>
 		<vignetteVersion>8.2.0.700114</vignetteVersion>
-		<slf4jVersion>1.5.6</slf4jVersion>
+		<slf4jVersion>1.5.2</slf4jVersion>
 		<logbackVersion>0.9.15</logbackVersion>
 
 		<spf.sourceReadUrl>scm:svn:http://code1.corp.hp.com/svn/spf/source</spf.sourceReadUrl>

@@ -29,7 +29,7 @@
 	</distributionManagement>
 
 	<properties>
-		<cas.security.version>2.1.1</cas.security.version>
+		<cas.security.version>2011.11</cas.security.version>
 	</properties>
 
 
