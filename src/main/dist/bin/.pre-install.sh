@@ -42,6 +42,9 @@ echo "Preparing SPF artifacts"
 
 # first spf-portal-*.war - let's copy it over Vignette portal directory so Vignette bootstrap picks SPF classes too
 spf_war="$(ls ${CASFW_HOME}/software/spf-portal-*.war | tail -n1)"
+# backup existing portal directory
+mv ${VIGNETTE_HOME}/portal ${VIGNETTE_HOME}/portal.BAK
+mkdir ${VIGNETTE_HOME}/portal
 pushd ${VIGNETTE_HOME}/portal
 # Let's make sure we can execute "jar" as the permissions are only fixed later
 chmod u+x "${JAVA_HOME}/bin/jar"
@@ -89,9 +92,9 @@ done
 
 # Update Java "cacerts" file with the one that we ship and which contains HP Certificate Authority
 echo "Installing HP Certificate Authority"
-for java_dir in $(ls -d ${CASFW_HOME}/software/oracle-java-1.5.* 2>/dev/null); do
+for java_dir in $(ls -d ${CASFW_HOME}/software/oracle-java-1.6.* 2>/dev/null); do
     cp ${java_dir}/jre/lib/security/cacerts ${java_dir}/jre/lib/security/cacerts.ORIGINAL
-    cp ${CASFW_HOME}/etc/security/java5_cacerts ${java_dir}/jre/lib/security/cacerts
+    cp ${CASFW_HOME}/etc/security/java6_cacerts ${java_dir}/jre/lib/security/cacerts
 done 
 
 

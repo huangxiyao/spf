@@ -201,7 +201,7 @@
                 searchable="true"
                 displayable="true"
                 required="true"
-                unique="true"
+                unique="false"
                 />
 
             <entity-property-descriptor id="email"
@@ -532,55 +532,55 @@
 * Note: Changes to this file take effect on restart of VAP.
 **************************************************************************
 -->
-<!-- Start custom user properties -->
-<entity-property-descriptor id="profileid"
-	title="Profile ID"
-	description="Profile ID as defined by SPF"
-	type="java.lang.String"
-	field-length="64"
-	editable="true"
-	searchable="true"
-	displayable="true"
-	required="false"
-	unique="true"
-/>
-	
-<entity-property-descriptor id="lastchangedate"
-	title="Last Change Date"
-	description="Last date and time when user made changes to their profile in SPF"
-	type="java.util.Date"
-	field-length="10"
-	editable="true"
-	searchable="false"
-	displayable="true"
-	required="false"
-	unique="false"
-/>
+            <!-- Start custom user properties -->
+            <entity-property-descriptor id="profileid"
+                title="Profile ID"
+                description="Profile ID as defined by SPF"
+                type="java.lang.String"
+                field-length="64"
+                editable="true"
+                searchable="true"
+                displayable="true"
+                required="false"
+                unique="true"
+            />
 
-<entity-property-descriptor id="lastlogindate"
-	title="Last Login Date"
-	description="Last date and time when user login in SPF"
-	type="java.util.Date"
-	field-length="10"
-	editable="true"
-	searchable="false"
-	displayable="true"
-	required="false"
-	unique="false"
-/>
+            <entity-property-descriptor id="lastchangedate"
+                title="Last Change Date"
+                description="Last date and time when user made changes to their profile in SPF"
+                type="java.util.Date"
+                field-length="10"
+                editable="true"
+                searchable="false"
+                displayable="true"
+                required="false"
+                unique="false"
+            />
 
-<entity-property-descriptor id="spf_timezone"
-	title="Shared Portal Time Zone"
-	description="Shared Portal Time Zone"
-	type="java.lang.String"
-	field-length="64"
-	editable="true"
-	searchable="false"
-	displayable="true"
-	required="false"
-	unique="false"
-/>
-<!-- End custom user properties -->
+            <entity-property-descriptor id="lastlogindate"
+                title="Last Login Date"
+                description="Last date and time when user login in SPF"
+                type="java.util.Date"
+                field-length="10"
+                editable="true"
+                searchable="false"
+                displayable="true"
+                required="false"
+                unique="false"
+            />
+
+            <entity-property-descriptor id="spf_timezone"
+                title="Shared Portal Time Zone"
+                description="Shared Portal Time Zone"
+                type="java.lang.String"
+                field-length="64"
+                editable="true"
+                searchable="false"
+                displayable="true"
+                required="false"
+                unique="false"
+            />
+            <!-- End custom user properties -->
 
         </entity-property-descriptors>
 
