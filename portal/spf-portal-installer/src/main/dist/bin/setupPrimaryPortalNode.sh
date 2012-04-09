@@ -44,7 +44,6 @@ rm "${db_check_sql_path}"
 
 
 if ${vignette_database_setup_required}; then
-
     ##### Setup portal database #####
 
     echo "Setting up Vignette Portal database ${vignette_db_url}"
@@ -98,9 +97,14 @@ if ${vignette_database_setup_required}; then
     ##### Setup admin account #####
 
     echo "Creating administrator account '${vignette_admin_username}'"
-    sh ./create_first_admin_account.sh ${vignette_admin_username} ${vignette_admin_password} \
-     1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
-     2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+    #sh ./create_first_admin_account.sh ${vignette_admin_username} ${vignette_admin_password} \
+    # 1>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.out \
+    # 2>>${CASFW_HOME}/var/log/vignette-portal/setupPrimaryPortalNode.err
+
+    sh ./runs_with_classpath.sh com.hp.it.spf.sso.portal.AdminUserTool \
+     ${vignette_admin_username} hpp_realm1 \
+     1>>${CASFW_HOME}/var/log/vignette-portal/AdminUserTool.out \
+     2>>${CASFW_HOME}/var/log/vignette-portal/AdminUserTool.err
 
     last_exit_code=$?
     if [ ${last_exit_code} -ne 0 ]; then

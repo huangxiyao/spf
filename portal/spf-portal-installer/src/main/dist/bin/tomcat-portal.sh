@@ -9,7 +9,7 @@ umask u=rwx,g=rx,o=rx
 source ${CASFW_HOME}/bin/.casfwrc
 
 vignette_home="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
-trust_store_path=${CASFW_HOME}/etc/security/java5_cacerts
+trust_store_path=${CASFW_HOME}/etc/security/java6_cacerts
 vignette_log_dir=${CASFW_HOME}/var/log/vignette-portal
 
 if ${using_cygwin}; then
@@ -19,7 +19,7 @@ if ${using_cygwin}; then
 fi
 
 default_catalina_opts="-Djava.awt.headless=true -Dcom.vignette.portal.installdir.path=${vignette_home} -Djavax.net.ssl.trustStore=${trust_store_path} -Dlog_dir=${vignette_log_dir}"
-default_memory_opts="-Xms256m -Xmx512m"
+default_memory_opts="-Xms512m -Xmx1024m -XX:MaxPermSize=512m"
 
 # Find the latest tomcat 6
 export CATALINA_HOME="$(cd $(ls -d ${CASFW_HOME}/software/apache-tomcat-6.* | tail -n1) && pwd -P)"

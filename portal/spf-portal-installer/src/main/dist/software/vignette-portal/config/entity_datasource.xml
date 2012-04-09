@@ -136,6 +136,12 @@
 
 	<data-source id="vgn:datasource.aggregate"
 				 type="com.epicentric.entity.datasource.internal.aggregate.AggregateDataSource">
+		<config-properties>
+			<config-property>
+				<key>paginate_user_results</key>
+				<value>true</value>
+			</config-property>
+		</config-properties>
 		<entity-type-schemas>
 			<entity-type-schema entity-type-id="epi:user.standard" xsi:type="composite-entity-type-schema" >
 				<primary-schema-mapping data-source-id="vgn:datasource.sql" search-order="1" >
