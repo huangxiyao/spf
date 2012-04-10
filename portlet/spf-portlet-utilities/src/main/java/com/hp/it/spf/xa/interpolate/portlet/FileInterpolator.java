@@ -1080,7 +1080,7 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </dd>
  * 
  * <dt><a name="secure"><code>{SECURE}...{/SECURE}</code></a><br>
- * <a name="secure"><code>{UNSECURE}...{/UNSECURE}</code></a></dt>
+ * <a name="unsecure"><code>{UNSECURE}...{/UNSECURE}</code></a></dt>
  * <dd>
  * <p>
  * Use these tokens around sections of content which should only be included in
