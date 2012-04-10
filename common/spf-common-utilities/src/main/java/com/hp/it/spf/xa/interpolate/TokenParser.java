@@ -72,11 +72,16 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{BEFORE:<i>date</i>}</code></li>
  * <li><code>{AFTER:<i>date</i>}</code></li>
  * <li><code>{AUTH:<i>type</i>}</code></li>
+ * <li><code>{SECURE:<i>type</i>}</code></li>
+ * <li><code>{UNSECURE:<i>type</i>}</code></li>
  * </dl>
  * 
  * <blockquote>
  * <p>
- * <b>Note:</b> <code>TokenParser</code> is not thread-safe. </blockquote>
+ * <b>Note:</b> <code>TokenParser</code> is not thread-safe. Do not reuse a
+ * <code>TokenParser</code> instance in two or more threads simultaneously.
+ * </p>
+ * </blockquote>
  * 
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @author <link href="jyu@hp.com">Yu Jie</link>
@@ -246,6 +251,18 @@ public abstract class TokenParser {
      */
     private static final String TOKEN_LOGGEDOUT_CONTAINER = "LOGGED-OUT";
 
+    /**
+     * This class attribute is the name of the container token for a secure
+     * section.
+     */
+    private static final String TOKEN_SECURE_CONTAINER = "SECURE";
+    
+    /**
+     * This class attribute is the name of the container token for an unsecure
+     * section.
+     */
+    private static final String TOKEN_UNSECURE_CONTAINER = "UNSECURE";
+    
     /**
      * This class attribute is the name of the container token for a before-date
      * section.
@@ -600,6 +617,8 @@ public abstract class TokenParser {
 	// Start parsing and substituting the tokens:
 	// For efficiency, do containers first:
 	// Starting with the unparameterized containers...
+	content = parseSecureContainer(content);
+	content = parseUnsecureContainer(content);
 	content = parseLoggedInContainer(content);
 	content = parseLoggedOutContainer(content);
 
@@ -2163,6 +2182,154 @@ public abstract class TokenParser {
 
 	return parseContainerToken(content, TOKEN_LOGGEDOUT_CONTAINER,
 		new LoggedOutContainerMatcher(getLoginStatus()));
+    }
+
+    /**
+     * <p>
+     * Parses the string for any <code>{SECURE}</code> tokens; such content
+     * is deleted from the string if the current user request used HTTP
+     * rather than HTTPS.
+     * </p>
+     * 
+     * <p>
+     * For example, consider the following content string:
+     * </p>
+     * 
+     * <pre>
+     *  This content is for everyone.
+     *  {SECURE}
+     *  This content is only for HTTPS users.
+     *  {/SECURE}
+     * </pre>
+     * 
+     * <p>
+     * When the user accesses via HTTPS, the returned content string is:
+     * </p>
+     * 
+     * <pre>
+     *  This content is for everyone.
+     *  
+     *  This content is only for HTTPS users.
+     * </pre>
+     * 
+     * <p>
+     * When the user accesses via HTTP, the returned content string is:
+     * </p>
+     * 
+     * <pre>
+     *  This content is for everyone.
+     * </pre>
+     * 
+     * <p>
+     * If you provide null content, null is returned. The
+     * {@link #isSecure()} method is used to determine if the user accessed
+     * via HTTPS or HTTP.
+     * </p>
+     * <p>
+     * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+     * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if you
+     * prefer.
+     * </p>
+     * 
+     * @param content
+     *            The content string.
+     * @return The interpolated string.
+     */
+    public String parseSecureContainer(String content) {
+
+        /**
+         * <code>ContainerMatcher</code> for secure section parsing. The
+         * constructor stores the given request URL into the class. The match
+         * method returns true if the URL is an HTTPS URL and false otherwise.
+         * The passed container key is not used and is expected to be null.
+         */
+        class SecureContainerMatcher extends ContainerMatcher {
+
+            protected SecureContainerMatcher(String url) {
+            super(url);
+            }
+
+            protected boolean match(String containerKey) {
+            return "https://".startsWith((String) subjectOfComparison);
+            }
+        }
+
+        return parseContainerToken(content, TOKEN_SECURE_CONTAINER,
+            new SecureContainerMatcher(getRequestURL(null, -1)));
+    }
+
+    /**
+     * <p>
+     * Parses the string for any <code>{UNSECURE}</code> tokens; such content
+     * is deleted from the string if the current user request used HTTPS
+     * rather than HTTP.
+     * </p>
+     * 
+     * <p>
+     * For example, consider the following content string:
+     * </p>
+     * 
+     * <pre>
+     *  This content is for everyone.
+     *  {UNSECURE}
+     *  This content is only for HTTP users.
+     *  {UNSECURE}
+     * </pre>
+     * 
+     * <p>
+     * When the user accesses using HTTPS, the returned content string is:
+     * </p>
+     * 
+     * <pre>
+     *  This content is for everyone.
+     * </pre>
+     * 
+     * <p>
+     * When the user accesses using HTTP, the returned content string is:
+     * </p>
+     * 
+     * <pre>
+     *  This content is for everyone.
+     *  
+     *  This content is only for HTTP users.
+     * </pre>
+     * 
+     * <p>
+     * If you provide null content, null is returned. The
+     * {@link #getRequestURL(Boolean, int)} method is used to determine if the
+     * user accessed via HTTPS or HTTP.
+     * </p>
+     * <p>
+     * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+     * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if you
+     * prefer.
+     * </p>
+     * 
+     * @param content
+     *            The content string.
+     * @return The interpolated string.
+     */
+    public String parseUnsecureContainer(String content) {
+
+    /**
+     * <code>ContainerMatcher</code> for unsecure section parsing. The
+     * constructor stores the given request URL into the class. The match
+     * method returns true if the URL is an HTTP URL and false otherwise.
+     * The passed container key is not used and is expected to be null.
+     */
+    class UnsecureContainerMatcher extends ContainerMatcher {
+
+        protected UnsecureContainerMatcher(String url) {
+        super(url);
+        }
+
+        protected boolean match(String containerKey) {
+        return "http://".startsWith((String) subjectOfComparison);
+        }
+    }
+
+    return parseContainerToken(content, TOKEN_UNSECURE_CONTAINER,
+        new UnsecureContainerMatcher(getRequestURL(null, -1)));
     }
 
     /**
