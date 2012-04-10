@@ -1079,6 +1079,38 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * </p>
  * </dd>
  * 
+ * <dt><a name="secure"><code>{SECURE}...{/SECURE}</code></a><br>
+ * <a name="secure"><code>{UNSECURE}...{/UNSECURE}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use these tokens around sections of content which should only be included in
+ * the interpolated content if the current user request was HTTPS (secure) or
+ * HTTP (plain-text), respectively. The wrapped content will be omitted from
+ * the returned content when the current security status does not match.
+ * </p>
+ * <p>
+ * The content enclosed by the tokens can be anything, including any of the
+ * other special tokens listed here.
+ * </p>
+ * <p>
+ * For example, the following markup selectively includes or omits the content
+ * depending on the user security status as indicated:
+ * </p>
+ * <p>
+ * 
+ * <pre>
+ * This content is for everybody.
+ * {SECURE}
+ * This content is only for users who use HTTPS in their request.
+ * {/SECURE}
+ * {UNSECURE}
+ * This content is only for users who use HTTP (not HTTPS) in their request.
+ * {/UNSECURE}
+ * </pre>
+ * 
+ * </p>
+ * </dd>
+ * 
  * <dt><a name="site-name"><code>{SITE-NAME}</code></a></dt>
  * <dd>
  * <p>
