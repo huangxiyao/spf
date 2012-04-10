@@ -53,8 +53,7 @@
                             <artifactId>spf-portal</artifactId>
                             <version>${project.version}</version>
                             <type>war</type>
-                            <!--
-                            <classifier>novgn</classifier>   -->
+                            <classifier>novgn</classifier>
                             <prepareMethod>DOWNLOAD</prepareMethod>
                         </artifact>
                         <artifact>
