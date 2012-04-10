@@ -72,8 +72,8 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{BEFORE:<i>date</i>}</code></li>
  * <li><code>{AFTER:<i>date</i>}</code></li>
  * <li><code>{AUTH:<i>type</i>}</code></li>
- * <li><code>{SECURE:<i>type</i>}</code></li>
- * <li><code>{UNSECURE:<i>type</i>}</code></li>
+ * <li><code>{SECURE}</code></li>
+ * <li><code>{UNSECURE}</code></li>
  * </dl>
  * 
  * <blockquote>
@@ -2222,8 +2222,8 @@ public abstract class TokenParser {
      * 
      * <p>
      * If you provide null content, null is returned. The
-     * {@link #isSecure()} method is used to determine if the user accessed
-     * via HTTPS or HTTP.
+     * {@link #getRequestURL(Boolean, int)} method is used to determine if the
+     * user accessed via HTTPS or HTTP.
      * </p>
      * <p>
      * <b>Note:</b> For the token, you may use <code>&lt;</code> and
