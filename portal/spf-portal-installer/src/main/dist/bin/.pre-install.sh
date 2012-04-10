@@ -42,9 +42,7 @@ echo "Preparing SPF artifacts"
 
 # first spf-portal-*.war - let's copy it over Vignette portal directory so Vignette bootstrap picks SPF classes too
 spf_war="$(ls ${CASFW_HOME}/software/spf-portal-*.war | tail -n1)"
-# backup existing portal directory
-mv ${VIGNETTE_HOME}/portal ${VIGNETTE_HOME}/portal.BAK
-mkdir ${VIGNETTE_HOME}/portal
+
 pushd ${VIGNETTE_HOME}/portal
 # Let's make sure we can execute "jar" as the permissions are only fixed later
 chmod u+x "${JAVA_HOME}/bin/jar"
