@@ -52,10 +52,6 @@ else
     "${JAVA_HOME}/bin/jar" xf "${spf_war}"
 fi
 
-# Apply the spf patch to fix a bug in Vignette 8.2
-cp -R ${VIGNETTE_HOME}/spf-patch/* ${VIGNETTE_HOME}/portal/WEB-INF/classes/
-popd
-
 # Since spf-portal.war is not useful and we have its files already in Vignette let's remove it and 
 # create a symbolic link to the target directory in Vignette
 spf_war_basename="$(basename "$(basename "${spf_war}" .war)" -novgn)"
