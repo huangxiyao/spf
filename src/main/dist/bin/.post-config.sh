@@ -13,8 +13,8 @@ if [[ ${portal_db_driver_class} =~ "derby" ]]; then
     cp -R ${VIGNETTE_HOME}/spf-patch/* ${VIGNETTE_HOME}/portal/WEB-INF/classes/
 else
     spf_patch_file_path="${VIGNETTE_HOME}/portal/WEB-INF/classes/com/epicentric/entity/datasource/internal/sql/SQLEntityQuery.class"
-    if [ ! -f "${spf_patch_file_path}" ]; then
+    if [ -f "${spf_patch_file_path}" ]; then
         echo "Cleaning SPF patch for non-Derby database"
-        rm "${spf_patch_file_path}"
+        rm -f "${spf_patch_file_path}"
     fi
 fi
