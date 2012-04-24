@@ -2250,7 +2250,8 @@ public abstract class TokenParser {
             }
 
             protected boolean match(String containerKey) {
-            return "https://".startsWith((String) subjectOfComparison);
+                return (subjectOfComparison != null)
+                        && ((String) subjectOfComparison).startsWith("https://");
             }
         }
 
@@ -2324,7 +2325,8 @@ public abstract class TokenParser {
         }
 
         protected boolean match(String containerKey) {
-        return "http://".startsWith((String) subjectOfComparison);
+            return !((subjectOfComparison != null)
+                    && ((String) subjectOfComparison).startsWith("https://"));
         }
     }
 
