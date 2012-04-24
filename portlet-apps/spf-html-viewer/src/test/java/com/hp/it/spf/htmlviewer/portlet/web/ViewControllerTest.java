@@ -260,6 +260,17 @@ public class ViewControllerTest extends TestCase {
 		"<html><body>6. Mai 2010 23:00 GMT --- 31. Januar 2011 --- Deutsch/Deutschland --- After 2009 --- Undefined auth type</body></html>",
 		content);
 
+	pp.setValue(Consts.VIEW_FILENAME, "/html/test_secure_token.html");
+    modelAndView = (ModelAndView) viewController.handleRenderRequest(
+        renderRequest, renderResponse);
+    map = modelAndView.getModel();
+    content = (String) map.get(Consts.VIEW_CONTENT);
+    System.out.println("testHandleRenderRequestInternal_Tokens.13 got: "
+        + content);	
+	assertEquals("" +
+		"<html><head><title>Hello world!</title></head><body><h1>Hello world!</h1><p>Non-HTTPS users should see this.</p></body></html>",
+	    content);
+	
     }
 
     public void testHandleRenderRequestInternal_Params() throws Exception {
