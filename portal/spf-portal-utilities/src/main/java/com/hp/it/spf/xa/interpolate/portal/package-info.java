@@ -96,6 +96,10 @@
  * <dt><code>{REQUEST-URL:<i>spec</i>}</code></dt>
  * <dd>Replaced with the complete URL for the current portal request which
  * targeted this portal component, with scheme and port adjusted as specified.</dd>
+ * <dt><code>{SECURE}</code></dt>
+ * <dd>Includes the surrounded content if the user request was secure (ie, the
+ * user used HTTPS in his current request to the portal).  Otherwise suppresses
+ * the surrounded content.</dd>
  * <dt><code>{SITE-NAME}</code></dt>
  * <dd>Replaced with the name of the current portal site which includes this
  * portal component.</dd>
@@ -108,6 +112,10 @@
  * <dt><code>{SITE-URL:<i>spec</i>}</code></dt>
  * <dd>Replaced with the page URL for the given friendly URI at this portal
  * site. Scheme and port can also be specified.</dd>
+ * <dt><code>{UNSECURE}</code></dt>
+ * <dd>Includes the surrounded content if the user request was <b>not</b>
+ * secure (ie, the user used HTTP, not HTTPS, in his current request to the
+ * portal).  Otherwise suppresses the surrounded content.</dd>
  * <dt><code>{URL-ENCODE:<i>string</i>}</code></dt>
  * <dd>Replaced with the URL-encoded version of the given string.</dd>
  * <dt><code>{USER-PROPERTY:<i>key</i>}</code></dt>

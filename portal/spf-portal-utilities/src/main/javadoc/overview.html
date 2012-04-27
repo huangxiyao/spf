@@ -357,7 +357,7 @@ table.props td {
 			<li>4.4.3. <a href="#file.author.token.auth">Permissioning
 			content for authorized users (<code>{LOGGED-IN}</code>, <code>{LOGGED-OUT}</code>,
 			<code>{GROUP:<i>group-names</i>}</code>, <code>{AUTH:<i>types</i>}</code>,
-			<code>{EXIST:<i>property-name</i>}</code>)</a></li>
+			<code>{EXIST:<i>property-name</i>}</code>, <code>{SECURE}</code>, <code>{UNSECURE}</code>)</a></li>
 			<li>4.4.4. <a href="#file.author.token.consolidate">Consolidating
 			content for easier administration (<code>{PAGE:<i>friendly-ids</i>}</code>,
 			<code>{NAV-ITEM:<i>items</i>}</code>, <code>{SITE:<i>site-names</i></code>},
@@ -6150,7 +6150,7 @@ The request property value for 'requestKey' is : {VALUE:requestKey}
 <a name="file.author.token.auth">
 <h4>4.4.3. Permissioning content for authorized users (<code>{LOGGED-IN}</code>,
 <code>{LOGGED-OUT}</code>, <code>{GROUP:<i>group-names</i>}</code>, <code>{AUTH:<i>types</i>}</code>,
-<code>{EXIST:<i>property-name</i>}</code>)</h4>
+<code>{EXIST:<i>property-name</i>}</code>, <code>{SECURE}</code>, <code>{UNSECURE}</code>)</h4>
 </a>
 
 <p>The following tokens may be used to permission content against
@@ -6300,6 +6300,25 @@ This text is for everybody.&lt;BR&gt;
 This text is for everybody.&lt;BR&gt;
 {LOGGED-IN}This text is for logged-in users only.{/LOGGED-IN}
 {LOGGED-OUT}This text is for logged-out users only.{/LOGGED-OUT}
+	</pre></blockquote>
+	</dd>
+
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#secure"><code>{SECURE}...{/SECURE}</code></a></dt>
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#unsecure"><code>{UNSECURE}...{/UNSECURE}</code></a></dt>
+	<dd>
+	<p>Use these container tokens to permission the content inside the
+	container based on the user's current security status. The <code>{SECURE}...{/SECURE}</code>
+	token will cause the wrapped content to be <b>included</b> in the
+	interpolated content if the user request to the portal used HTTPS (ie, was
+	secure), and <b>omitted</b> if not.  The <code>{UNSECURE}...{/UNSECURE}</code>
+	token will do the opposite. Here is some example HTML text using these
+	tokens:</p>
+	<blockquote><pre>
+This text is for everybody.&lt;BR&gt;
+{SECURE}This text is for secure HTTPS users only.{/SECURE}
+{UNSECURE}This text is for non-secure HTTP users only.{/UNSECURE}
 	</pre></blockquote>
 	</dd>
 
@@ -8361,6 +8380,12 @@ public class MyAction extends BaseAction {
 		applicable container tokens like <code>{GROUP}</code>. Corrected
 		documentation about authentication type groups, to note they are only
 		available to authenticated users.</td>
+	</tr>
+	<tr>
+		<td>1.2</td>
+		<td>April 9 2012</td>
+		<td>S. Jorgenson</td>
+		<td>Added <code>{SECURE}</code> and <code>{UNSECURE}</code> tokens.</td>
 	</tr>
 	<!-- 
 	<tr>
