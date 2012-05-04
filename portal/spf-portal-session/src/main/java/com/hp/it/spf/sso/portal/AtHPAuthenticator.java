@@ -47,6 +47,7 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
 	 */
 	public AtHPAuthenticator(HttpServletRequest request) {
 		super(request);
+		realmId = AuthenticationConsts.REALM_ATHP;
 	}
 
 	/**
