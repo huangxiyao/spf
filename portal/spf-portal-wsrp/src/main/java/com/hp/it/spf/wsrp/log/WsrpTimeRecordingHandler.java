@@ -1,5 +1,6 @@
 package com.hp.it.spf.wsrp.log;
 
+import java.lang.ref.WeakReference;
 import java.util.Hashtable;
 import org.apache.axis.handlers.BasicHandler;
 import org.apache.axis.MessageContext;
@@ -241,7 +242,14 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 		// Let's check first if we already have it in the context. This would be the case
 		// when this method is called during web service response because it that case
 		// we cannot retrieve the request as the required data is not available.
-		RequestContext requestContext = (RequestContext) messageContext.getProperty(REQUEST_CONTEXT_MC_KEY);
+
+		// Axis MessageContext finalize prevents GC for Http Request/Session,
+		// so use WeakReference to improve the memory usage and GC behavior.
+		WeakReference<RequestContext> reference = (WeakReference<RequestContext>) messageContext.getProperty(REQUEST_CONTEXT_MC_KEY);
+		RequestContext requestContext = null;
+		if (reference != null) {
+			requestContext = reference.get();
+		}
 		if (requestContext != null) {
 			return requestContext;
 		}
@@ -256,7 +264,7 @@ public class WsrpTimeRecordingHandler extends BasicHandler {
 		// from the portal request in the messageContext so it can be used when this handler
 		// gets called for web service response.
 		if (requestContext != null) {
-			messageContext.setProperty(REQUEST_CONTEXT_MC_KEY, requestContext);
+			messageContext.setProperty(REQUEST_CONTEXT_MC_KEY, new WeakReference<RequestContext>(requestContext));
 		}
 		return requestContext;
 	}

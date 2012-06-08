@@ -50,6 +50,9 @@ public class Utils {
 		// handling time but not at response handling time. We know this method will be called 
 		// during a request so let's store the request object in message context and have it
 		// ready to use when this method is called at response time
+
+		// Axis MessageContext finalize prevents GC for Http Request/Session,
+		// so use WeakReference to improve the memory usage and GC behavior.
 		WeakReference<HttpServletRequest> reference = (WeakReference<HttpServletRequest>) messageContext.getProperty(REQUEST_MC_KEY);
 		HttpServletRequest request = null;
 		if (reference != null) {
@@ -92,8 +95,9 @@ public class Utils {
 	 * this session is associated could not be found.
 	 * @throws Exception If an unexpected error occurs while processing the message context data
 	 */
-	public static HttpSession retrieveSession(MessageContext messageContext) throws Exception
-	{
+	public static HttpSession retrieveSession(MessageContext messageContext) throws Exception {
+		// Axis MessageContext finalize prevents GC for Http Request/Session,
+		// so use WeakReference to improve the memory usage and GC behavior.
 		WeakReference<HttpSession> reference = (WeakReference<HttpSession>) messageContext.getProperty(SESSION_MC_KEY);
 		HttpSession session = null;
 		if (reference != null) {
