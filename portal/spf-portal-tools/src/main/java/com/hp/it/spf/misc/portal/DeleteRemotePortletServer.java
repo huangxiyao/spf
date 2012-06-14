@@ -49,20 +49,20 @@ public class DeleteRemotePortletServer {
 		WsrpPortletApplicationSpiImpl existingRemoteServer =
 				wsrpPortletApplicationManager.getWsrpPortletApplicationByFriendlyID(importId);
 
-		SPFWsrpPortletApplicationSpiImpl spfWsrpPortletApplicationSpi = new SPFWsrpPortletApplicationSpiImpl(existingRemoteServer);
+		WsrpPortletApplicationSpiImpl noDeregisterWsrpPortletApplicationSpi = new NoDeregisterWsrpPortletApplicationSpiImpl(existingRemoteServer);
 
-		deleteRemotePortletServerFromVignette(spfWsrpPortletApplicationSpi);
+		deleteRemotePortletServerFromVignette(noDeregisterWsrpPortletApplicationSpi);
 	}
 
 
-	private void deleteRemotePortletServerFromVignette(SPFWsrpPortletApplicationSpiImpl remotePortletServer)
+	private void deleteRemotePortletServerFromVignette(WsrpPortletApplicationSpiImpl remotePortletServer)
 			throws PortletException {
 		remotePortletServer.deleteImpl();
 	}
 
 
-	private static class SPFWsrpPortletApplicationSpiImpl extends WsrpPortletApplicationSpiImpl {
-		public SPFWsrpPortletApplicationSpiImpl(WsrpPortletApplicationSpiImpl wsrpPortletApplicationSpi) throws ProducerOperationFailedException,
+	private static class NoDeregisterWsrpPortletApplicationSpiImpl extends WsrpPortletApplicationSpiImpl {
+		public NoDeregisterWsrpPortletApplicationSpiImpl(WsrpPortletApplicationSpiImpl wsrpPortletApplicationSpi) throws ProducerOperationFailedException,
 				MissingRegistrationParametersException, PortletPersistenceException, ProducerNotReachableException {
 			super(wsrpPortletApplicationSpi.getTitle(), wsrpPortletApplicationSpi.getDescription(),
 					wsrpPortletApplicationSpi.getRegistrationHandle(), wsrpPortletApplicationSpi.getRegistrationProperties(),
