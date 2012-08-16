@@ -2,7 +2,7 @@
 <weblogic-web-app xmlns="http://www.bea.com/ns/weblogic/90">
 
 	<session-descriptor>
-		<timeout-secs>2700</timeout-secs>
+		<timeout-secs>3600</timeout-secs>
 		<invalidation-interval-secs>60</invalidation-interval-secs>
 		<persistent-store-type>memory</persistent-store-type>
 		<cookie-name>HP_SPF_SID</cookie-name>
