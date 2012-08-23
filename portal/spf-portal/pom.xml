@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.portal</groupId>
 		<artifactId>portal</artifactId>
-		<version>2.2.20-SNAPSHOT</version>
+		<version>2.3.0-SNAPSHOT</version>
 	</parent>
 
 
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal</artifactId>
-			<version>7.4.2.615224</version>
+			<version>7.4.4.704204</version>
 			<type>war</type>
 		</dependency>
 		<dependency>
