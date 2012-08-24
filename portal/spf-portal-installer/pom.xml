@@ -45,7 +45,7 @@
                         <artifact>
                             <groupId>vignette</groupId>
                             <artifactId>vignette-portal</artifactId>
-                            <version>7.4.2.615224</version>
+                            <version>${vignetteVersion}</version>
                             <type>tar.gz</type>
                         </artifact>
                         <artifact>

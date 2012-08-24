@@ -85,7 +85,6 @@
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-jsr-container-taglib</artifactId>
-			<version>7.4.2</version>
 			<scope>runtime</scope>
 		</dependency>
 		

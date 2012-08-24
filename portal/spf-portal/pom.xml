@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal</artifactId>
-			<version>7.4.4.704204</version>
+			<version>${vignetteVersion}</version>
 			<type>war</type>
 		</dependency>
 		<dependency>

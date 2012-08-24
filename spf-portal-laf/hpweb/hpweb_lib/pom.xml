@@ -87,21 +87,18 @@
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-core</artifactId>
-			<version>7.4.2</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-linking</artifactId>
-			<version>7.4.2</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-base</artifactId>
-			<version>7.4.2</version>
 			<scope>provided</scope>
 		</dependency>
 

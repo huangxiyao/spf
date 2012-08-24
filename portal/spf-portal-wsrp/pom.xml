@@ -64,13 +64,11 @@
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-core</artifactId>
-			<version>7.4.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-wsrp-toolkit</artifactId>
-			<version>7.4.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -106,13 +104,11 @@
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-log</artifactId>
-			<version>7.4.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>vignette</groupId>
 			<artifactId>vgn-portal-linking</artifactId>
-			<version>7.4.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
