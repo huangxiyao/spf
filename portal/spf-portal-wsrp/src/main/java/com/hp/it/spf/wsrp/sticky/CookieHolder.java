@@ -1,6 +1,6 @@
 package com.hp.it.spf.wsrp.sticky;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 
 import org.apache.axis.MessageContext;
@@ -25,17 +25,17 @@ class CookieHolder {
 	 * Maps <tt>cookie|host</tt> to VIP corresponding to the host and which was used to get
 	 * the cookie.
 	 */
-	private Map<String, String> mCookies;
+	private ConcurrentHashMap<String, String> mCookies;
 
 	CookieHolder()
 	{
-		this(new HashMap<String, String>());
+		this(new ConcurrentHashMap<String, String>());
 	}
 
 	/**
 	 * Constructor used for testing purposes.
 	 */
-	CookieHolder(Map<String, String> cookies)
+	CookieHolder(ConcurrentHashMap<String, String> cookies)
 	{
 		mCookies = cookies;
 	}

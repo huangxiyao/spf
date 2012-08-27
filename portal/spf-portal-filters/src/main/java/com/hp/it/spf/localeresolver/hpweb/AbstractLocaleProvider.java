@@ -48,7 +48,7 @@ public abstract class AbstractLocaleProvider implements LocaleProvider {
 
     public Collection getLocales() {
         List<Locale> locales = new ArrayList<Locale>();
-        String language = getLanguage();
+        String language = HpLocaleMapper.mapLanguage(getLanguage());
 
         if (language != null) {
         	
@@ -68,7 +68,7 @@ public abstract class AbstractLocaleProvider implements LocaleProvider {
             language = language.toLowerCase(); // ISO-639
 
             if (LANGUAGES.contains(language)) {
-                String country = getCountry();
+                String country = HpLocaleMapper.mapCountry(getCountry());
 
                 if (country == null) {
                     locales.add(new Locale(language));

@@ -52,7 +52,7 @@ public class AdmissionControlFilter implements Filter {
 
 	private static String HEALTHCHECK_USER_AGENT_PREFIX = "healthchecker";
 
-	private static int ADMITTED_CLIENT_QUERY_TIMEOUT = 60; // seconds
+	private static int ADMITTED_CLIENT_QUERY_TIMEOUT = 5 * 60; // seconds
 
 	private static String PRIV_CLIENT_QUERY_ON = "on";
 

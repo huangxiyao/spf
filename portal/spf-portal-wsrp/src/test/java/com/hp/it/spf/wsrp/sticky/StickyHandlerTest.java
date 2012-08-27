@@ -11,6 +11,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.soap.SOAPException;
 
@@ -20,13 +21,13 @@ import javax.xml.soap.SOAPException;
 public class StickyHandlerTest
 {
 	private Map<String, String> mDnsCache;
-	private Map<String, String> mCookieHolderMap;
+	private ConcurrentHashMap<String, String> mCookieHolderMap;
 	private TestStickyHandler mHandler;
 
 	@Before
 	public void setUp() {
 		mDnsCache = new HashMap<String, String>();
-		mCookieHolderMap = new HashMap<String, String>();
+		mCookieHolderMap = new ConcurrentHashMap<String, String>();
 		StickyHandler.setCookieHolder(new CookieHolder(mCookieHolderMap));
 		mHandler = new TestStickyHandler(new TestCache(mDnsCache));
 	}
