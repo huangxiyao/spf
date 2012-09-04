@@ -1,18 +1,16 @@
 package com.hp.it.spf.pulse.portal.component.secondarypagetype.util;
 
 
+import com.epicentric.jdbc.ConnectionPool;
+import com.epicentric.jdbc.ConnectionPoolManager;
+import com.vignette.portal.log.LogWrapper;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.vignette.portal.log.LogWrapper;
-import com.vignette.portal.config.PortalConfigUtils;
 
 /**
  * A class for monitoring the health of the Vignette database.
@@ -27,206 +25,143 @@ import com.vignette.portal.config.PortalConfigUtils;
  */
 public class DatabaseCheckTask extends GeneralComponentCheckTask {
 
-    /**
-     * serialVersionUID
-     * long
-     */
-    private static final long serialVersionUID = -7245998522253322126L;
+	/**
+	 * serialVersionUID
+	 * long
+	 */
+	private static final long serialVersionUID = -7245998522253322126L;
 
-    private static final String VIG_DB_NAME = 
-        "Vignette Database"; // the name of VIG DB
+	private static final String VIG_DB_NAME =
+		"Vignette Database"; // the name of VIG DB
 
-    private static final String QUERY_STRING = 
-        "select * from accounts"; //The SQL for testing the database
+	private static final String QUERY_STRING =
+		"select * from version"; //The SQL for testing the database
 
-    /*
-     * Modified by xie xingxing(xxie@hp.com) for QXCR1000813689 at 5/29/2008.
-     * Collect more information for the error logs, then can provide more information for 
-     * troubleshooting.
-     */
-    // current class name 
-    private static String thisClassname = DatabaseCheckTask.class.getName();
-    
-    /**
-     * define the parameter for connecting vignette database
-     */
-    private String driver = null;
-    private String url = null;
-    private String user = null;
-    private String password = null;
-    private Properties connectionProperties = new Properties();
+	/*
+	 * Modified by xie xingxing(xxie@hp.com) for QXCR1000813689 at 5/29/2008.
+	 * Collect more information for the error logs, then can provide more information for
+	 * troubleshooting.
+	 */
+	// current class name
+	private static String thisClassname = DatabaseCheckTask.class.getName();
 
-    /**
-     * params read from the config file of healthcheck.xml
-     * added by ck for CR: 1000813522 
-     */
-    private Map params = new HashMap();
-    /**
-     * the status of initialization
-     */
-    private boolean initSuccess = false; //false serves as flag meaning init failed
+	/**
+	 * params read from the config file of healthcheck.xml
+	 * added by ck for CR: 1000813522
+	 */
+	private Map params = new HashMap();
+	/**
+	 * the status of initialization
+	 */
+	private boolean initSuccess = false; //false serves as flag meaning init failed
 
-    /**
-     * the log for vignette when throwing exception
-     */
-    private static final LogWrapper LOG = new LogWrapper(
-            DatabaseCheckTask.class);
-    /**
-     * Set the attribute params, like url, pattern, trustStore,
-     * trustStorePassoword, and so on.
-     * added by ck for CR: 1000813522 
-     * @param params
-     *            attribute params like url, pattern, trustStore,
-     *            trustStorePassoword, and so on
-     */
-    public void setParams(Map params) {
-        this.params = params;
-    }
-    /**
-     * constructor for DatabaseCheckTask
-     */
-    public DatabaseCheckTask() {
-        super(VIG_DB_NAME);
-    }
+	/**
+	 * the log for vignette when throwing exception
+	 */
+	private static final LogWrapper LOG = new LogWrapper(
+			DatabaseCheckTask.class);
+	/**
+	 * Set the attribute params, like url, pattern, trustStore,
+	 * trustStorePassoword, and so on.
+	 * added by ck for CR: 1000813522
+	 * @param params
+	 *            attribute params like url, pattern, trustStore,
+	 *            trustStorePassoword, and so on
+	 */
+	public void setParams(Map params) {
+		this.params = params;
+	}
+	/**
+	 * constructor for DatabaseCheckTask
+	 */
+	public DatabaseCheckTask() {
+		super(VIG_DB_NAME);
+	}
 
-    /**
-     * initial the database check task
-     * 
-     * @see GeneralComponentCheckTask#init()
-     */
-    public void init() {
-        /*
-         * Modified by xie xingxing(xxie@hp.com) for QXCR1000813689 at 6/10/2008.
-         * Collect more information for the error logs, then can provide more information for 
-         * troubleshooting.
-         */
-        String thisMethod = thisClassname + ".init(): ";
-        String thisStep = thisMethod + "begin";
-        LOG.debug(thisStep);
-        
-        /*
-         * use the parameter of vignette default database
-         */
-        this.driver = PortalConfigUtils.getProperty("default.db.driver");
-        this.url = PortalConfigUtils.getProperty("default.db.url");
-        this.user = PortalConfigUtils.getProperty("default.db.user");
-        this.password = PortalConfigUtils.getProperty("default.db.password");
+	/**
+	 * test the health of vignette database
+	 *
+	 * @see IComponentCheckTask#run()
+	 */
+	public void run() {
+		/*
+		 * Modified by xie xingxing(xxie@hp.com) for QXCR1000813689 at 6/10/2008.
+		 * Collect more information for the error logs, then can provide more information for
+		 * troubleshooting.
+		 */
+		String thisMethod = thisClassname + ".run(): ";
+		String thisStep = thisMethod + "begin";
+		LOG.debug(thisStep);
 
-        /*
-         * Driver parameters are used to provide driver-specific configuration such as for
-         * Oracle connection timeout or J2EE compliance flag.
-         * Along with user and password they form connection properties which are passed
-         * to the driver manager when retrieving connection: DriverManager.getConnection(url, connectionProperties).
-         */
-        this.connectionProperties.putAll(
-                parseDriverParameters(PortalConfigUtils.getProperty("default.db.parameters")));
-        this.connectionProperties.setProperty("user", user);
-        this.connectionProperties.setProperty("password", password);
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
 
-        try {
-            thisStep = thisMethod + "check driver exists";
-            LOG.debug(thisStep);
-            Class.forName(driver);
-            initSuccess = true;
-        } catch (Exception e) {
-            LOG.error(thisStep + ": driver: " + driver
-                      + ", url: " + url + ", user: " + user
-                      + ", caught: " + e);
-        }
-        thisStep = thisMethod + "end";
-        LOG.debug(thisStep);
-    }
+		int tmpStatus = STATUS_FAIL; //STATUS_FAIL means failing of vig db
+		long beginTime = System.currentTimeMillis(); //the current time
 
-    private Properties parseDriverParameters(String driverParameters)
-    {
-        Properties result = new Properties();
+		/*
+		 * Changed to use Vignette connection pool to setup the JDBC connection.
+		 * Modified by Ye Liu (ye.liu@hp.com).
+		 */
+		ConnectionPool pool = ConnectionPoolManager.getDefaultPool();
 
-        if (driverParameters == null || driverParameters.trim().equals("")) {
-            return result;
-        }
+		try {
+			thisStep = thisMethod + "get connection";
+			LOG.debug(thisStep);
 
-        Pattern pattern = Pattern.compile("(.+?)=(.+?)(;|$)");
-        Matcher matcher = pattern.matcher(driverParameters.trim());
-        while (matcher.find()) {
-            String driverParamName = matcher.group(1).trim();
-            String driverParamValue = matcher.group(2).trim();
-            result.setProperty(driverParamName, driverParamValue);
-        }
+			// Get the JDBC connection from Vignette connection pool
+			con = pool.getConnection();
 
-        LOG.info("JDBC driver parameters: " + result);
+			thisStep = thisMethod + "create statement";
+			LOG.debug(thisStep);
+			stmt = con.prepareStatement(QUERY_STRING);
 
-        return result;
-    }
+			thisStep = thisMethod + "execute query";
+			LOG.debug(thisStep);
+			// execute the SQL
+			resultSet = stmt.executeQuery();
 
-    /**
-     * test the health of vignette database
-     * 
-     * @see IComponentCheckTask#run()
-     */
-    public void run() {
-        /*
-         * Modified by xie xingxing(xxie@hp.com) for QXCR1000813689 at 6/10/2008.
-         * Collect more information for the error logs, then can provide more information for 
-         * troubleshooting.
-         */
-        String thisMethod = thisClassname + ".run(): ";
-        String thisStep = thisMethod + "begin";
-        LOG.debug(thisStep);
-        
-        Connection con = null;
-        Statement stmt = null;
+			if (resultSet != null) {
+				resultSet.next();
+			}
 
-        int tmpStatus = STATUS_FAIL; //STATUS_FAIL means failing of vig db
-        long beginTime = System.currentTimeMillis(); //the current time
-        
-        try {
-            if (!initSuccess) {
-                throw new SQLException("database driver have not been loaded.");
-            }
-            
-            thisStep = thisMethod + "get connection";
-            LOG.debug(thisStep);
-            // connect the database
-            con = DriverManager.getConnection(url, connectionProperties);
-            
-            thisStep = thisMethod + "create statement";
-            LOG.debug(thisStep);
-            stmt = con.createStatement();
-            
-            thisStep = thisMethod + "execute query";
-            LOG.debug(thisStep);
-            // execute the SQL
-            stmt.executeQuery(QUERY_STRING);
+			tmpStatus = STATUS_PASS; //STATUS_FAIL means failing of vig db
+		} catch (Exception e) {
+			LOG.error(thisStep + "query: " + QUERY_STRING
+					+ ", caught: " + e, e);
+		} finally {
+			try {
+				// close the resultSet.
+				if (resultSet != null) {
+					resultSet.close();
+				}
+			} catch (Exception e) {
+				LOG.error(e.toString(), e);
+			}
+			try {
+				// close the PreparedStatement.
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (Exception e) {
+				LOG.error(e.toString(), e);
+			}
+			try {
+				// close the connection and return it to the pool.
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception e) {
+				LOG.error(e.toString(), e);
+			}
+		}
 
-            tmpStatus = STATUS_PASS; //STATUS_FAIL means failing of vig db
-        } catch (Exception e) {
-            LOG.error(thisStep + ": driver: " + driver 
-                    + ", url: " + url
-                    + ", user: " + user 
-                    + ", query: " + QUERY_STRING 
-                    + ", caught: " + e);
-        } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (Exception e) {
-                LOG.error(e.toString());
-            }
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception e) {
-                LOG.error(e.toString());
-            }
-        }
-        
-        status = tmpStatus;
-        responseTime = System.currentTimeMillis() - beginTime;
-        
-        thisStep = thisMethod + "end";
-        LOG.debug(thisStep);
-    }
+		status = tmpStatus;
+		responseTime = System.currentTimeMillis() - beginTime;
+
+		thisStep = thisMethod + "end";
+		LOG.debug(thisStep);
+	}
 
 }
