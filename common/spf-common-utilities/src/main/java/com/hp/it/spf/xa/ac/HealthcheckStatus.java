@@ -65,13 +65,13 @@ public abstract class HealthcheckStatus implements Serializable {
      * where the <code>retrieve</code> method (see) will be able to find it when
      * called.
      * <p>
-     * 
+     *
      * First, the <code>retrieve</code> method is used to obtain whatever
      * <code>HealthcheckStatus</code> was previously saved in the given
      * <code>ServletContext</code>. If none was previously saved, then this one
      * is stored.
      * <p>
-     * 
+     *
      * Otherwise, the class of the previously-saved
      * <code>HealthcheckStatus</code> is checked. If the previously-saved
      * <code>HealthcheckStatus</code> is different than this one, <b>and</b>
@@ -79,11 +79,11 @@ public abstract class HealthcheckStatus implements Serializable {
      * <code>HealthcheckStatus</code> equal to the given threshold, then the
      * first one in the succession is stored.
      * <p>
-     * 
+     *
      * Otherwise, in all other circumstances, the previously-saved
      * <code>HealthcheckStatus</code> is retained.
      * <p>
-     * 
+     *
      * Typically only the <code>HealthcheckDriver</code> should ever be calling
      * this <code>save</code> method.
      * <p>
@@ -279,41 +279,47 @@ public abstract class HealthcheckStatus implements Serializable {
 
     }
 
-    /**
-     * Returns true if the given object is a <code>HealthcheckStatus</code>
-     * equivalent to this one. Two <code>HealthcheckStatus</code> objects can be
-     * considered equal if they are instances of the same class and their
-     * publicly-accessible attributes are equal.
-     */
-    @Override
-    public boolean equals(Object obj) {
+	/**
+	 * Returns true if the given object is a <code>HealthcheckStatus</code>
+	 * equivalent to this one. Two <code>HealthcheckStatus</code> objects can be
+	 * considered equal if they are instances of the same class and their
+	 * publicly-accessible attributes are equal.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof HealthcheckStatus)) return false;
 
-        // If the 2 objects are reference-identical, then they are equal; if
-        // not, they may still be considered equal.
-        if (super.equals(obj))
-            return true;
+		HealthcheckStatus that = (HealthcheckStatus) o;
 
-        // For 2 objects that are not reference-identical, they are identical if
-        // they are non-null instances of the same class and have the same
-        // publicly-accessible attributes.
-        if (obj == null)
-            return false;
-        if (!(obj instanceof HealthcheckStatus))
-            return false;
-        HealthcheckStatus other = (HealthcheckStatus) obj;
-        if (!(other.getClass().getName().equals(this.getClass().getName())))
-            return false;
-        if (!(other.getSimpleName().equals(this.getSimpleName())))
-            return false;
-        if (!(other.getDate().equals(this.getDate())))
-            return false;
-        if (!(other.getOpenSignSource().equals(this.getOpenSignSource())))
-            return false;
-        if (!(other.getPortalPulseSource().equals(this.getPortalPulseSource())))
-            return false;
-        
-        return true;
-    }
+		if (!(that.getClass().getName().equals(this.getClass().getName()))) {
+			return false;
+		}
+		if (getOpenSignSource() != null ? !getOpenSignSource().equals(that.getOpenSignSource()) : that.getOpenSignSource() != null) {
+			return false;
+		}
+		if (getPortalPulseSource() != null ? !getPortalPulseSource().equals(that.getPortalPulseSource()) : that.getPortalPulseSource() != null) {
+			return false;
+		}
+		if (getSimpleName() != null ? !getSimpleName().equals(that.getSimpleName()) : that.getSimpleName() != null) {
+			return false;
+		}
+		if (getDate() != null ? !getDate().equals(that.getDate()) : that.getDate() != null) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = getDate() != null ? getDate().hashCode() : 0;
+		result = 31 * result + (getPortalPulseSource() != null ? getPortalPulseSource().hashCode() : 0);
+		result = 31 * result + (getOpenSignSource() != null ? getOpenSignSource().hashCode() : 0);
+		result = 31 * result + (getSimpleName() != null ? getSimpleName().hashCode() : 0);
+		return result;
+	}
+
     // ///////////////////////////////////////////////////////////////////
     /* PRIVATE METHODS */
     // ///////////////////////////////////////////////////////////////////
