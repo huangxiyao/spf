@@ -192,6 +192,22 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "        } \n"
 			+ "    } \n"
 
+			// Used to calculate div dimensions
+			+ "    function cchGetBoxSize(w, b) \n"
+			+ "    { \n"
+			+ "        var origPosition = w.style.position; \n"
+			+ "        var origVisibility = w.style.visibility; \n"
+			+ "        var origDisplay = w.style.display; \n"
+			+ "        w.style.position = 'absolute'; \n"
+			+ "        w.style.visibility = 'hidden'; \n"
+			+ "        w.style.display = 'block'; \n"
+			+ "        cchBoxHeight = b.offsetHeight; \n"
+			+ "        cchBoxWidth = b.offsetWidth; \n"
+			+ "        w.style.position = origPosition; \n"
+			+ "        w.style.visibility = origVisibility; \n"
+			+ "        w.style.display = origDisplay; \n"
+			+ "    } \n"
+
 			// Set this method to mousedown event of div
 			+ "    function cchGrab(e, context) \n"
 			+ "    { \n"
@@ -277,8 +293,8 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "            if (wframe != null) { \n"
 			+ "                wframe.style.top = o.offsetTop; \n"
 			+ "                wframe.style.left = o.offsetLeft; \n"
-			+ "                wframe.style.width = o.offsetWidth; \n"
-			+ "                wframe.style.height = o.offsetHeight; \n"
+			+ "                wframe.style.width = cchBoxWidth; \n"
+			+ "                wframe.style.height = cchBoxHeight; \n"
 			+ "                wframe.style.display = \"block\"; \n"
 			+ "                wframe.style.zIndex = 4999; \n"
 			+ "            } \n"
@@ -288,6 +304,7 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "        var e = window.event ? window.event : ev; \n"
 			+ "        var t = e.target ? e.target : e.srcElement; \n"
 			+ "        var w = document.getElementById(t.id + 'Help'); \n"
+			+ "        var b = document.getElementById(t.id + 'Box'); \n"
 			// Fix for QC CR#65 - use clientX and clientY in all circumstances -
 			// they are the coordinates relative to the viewport while pageX and
 			// pageY are non-IE and are coordinates relative to the top of the
@@ -311,8 +328,9 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "            cchLastShow = w; \n"
 			+ "            w.style.left = mouseX + \"px\"; \n"
 			+ "            w.style.zIndex = 4999; \n"
-			+ "            var spaceNeeded; \n"
-			+ "            var spaceAvail; \n"
+			+ "            var spaceNeeded, spaceAvail; \n"
+			+ "            var frameWidth, frameHeight; \n"
+			+ "            var scrollTop, scrollLeft; \n"
 			+ "            if (document.documentElement && document.documentElement.clientWidth) { \n"
 
 			// Non-IE5
@@ -326,7 +344,7 @@ public abstract class ClassicContextualHelpProvider extends
 			// Chrome and Safari
 			+ "                    scrollTop = document.body.scrollTop; \n"
 			+ "                    scrollLeft = document.body.scrollLeft; \n"
-			+ "                } \n;"
+			+ "                } \n"
 			+ "            } \n"
 			+ "            else if (document.body) { \n"
 
@@ -337,55 +355,48 @@ public abstract class ClassicContextualHelpProvider extends
 			+ "                scrollLeft = document.body.scrollLeft; \n"
 			+ "            } \n"
 
+			// Get popup dimensions
+			// Fix for CR #694 - now get popup dimensions correctly
+			+ "            cchGetBoxSize(w, b); \n"
+			
 			// Calculate Y position to put popup
 			+ "            spaceAvail = frameHeight - mouseY; \n"
-			+ "            if (spaceAvail > w.offsetHeight) { \n"
+			+ "            if (spaceAvail > cchBoxHeight) { \n"
 
-			// display top of popup at cursor if there's enough space
-			// below cursor position to display entire popup
+			// display top of popup at mouse pointer if there's enough space
+			// below pointer position to display entire popup
 			+ "                w.style.top = mouseY + scrollTop + \"px\"; \n"
 			+ "            } else { \n"
 
-			// top window is big enough to display popup
-			+ "                spaceNeeded = w.offsetHeight - spaceAvail; \n"
+			// not enough space to display entire popup starting at pointer
+			+ "                spaceNeeded = cchBoxHeight - spaceAvail; \n"
 			+ "                if (spaceNeeded < mouseY) { \n"
 
-			// there's room in top window to display popup, position
-			// popup as high as possible in top window to fit
+			// there's room in the window above the pointer to display popup;
+			// so position popup higher up as needed to fit
 			+ "                    w.style.top = mouseY + scrollTop - spaceNeeded + \"px\"; \n"
 			+ "                } else { \n"
-			+ "                    if (mouseY > 100) { \n"
-
-			// popup won't fit top window, so just position popup
-			// at 25 pixel for margin top space, as long as top
-			// window has has more than 100 pixels,
-			+ "                        w.style.top = 25 + scrollTop + \"px\"; \n"
-			+ "                    } else { \n"
-
-			// no margin top space, just display top of popup
-			// at cursor position
-			+ "                        w.style.top = mouseY + scrollTop + \"px\"; \n"
-			+ "                    } \n"
+			
+			// popup won't fit window, so just position popup at top of window
+			+ "                    w.style.top = scrollTop + \"px\"; \n"
 			+ "                } \n"
 			+ "            } \n"
 
 			// Calculate X position to put popup - same algorithm as
 			// displaying Y position above
 			+ "            spaceAvail = frameWidth - mouseX; \n"
-			+ "            if (spaceAvail > w.offsetWidth) { \n"
+			+ "            if (spaceAvail > cchBoxWidth) { \n"
 			+ "                w.style.left = mouseX + scrollLeft + \"px\"; \n"
 			+ "            } else { \n"
-			+ "                spaceNeeded = w.offsetWidth - spaceAvail; \n"
+			+ "                spaceNeeded = cchBoxWidth - spaceAvail; \n"
 			+ "                if (spaceNeeded < mouseX) { \n"
 			+ "                    w.style.left = mouseX + scrollLeft - spaceNeeded + \"px\"; \n"
 			+ "                } else { \n"
-			+ "                    if (mouseX > 100) { \n"
-			+ "                        w.style.left = 25 + scrollLeft + \"px\"; \n"
-			+ "                    } else { \n"
-			+ "                        w.style.left = mouseX + scrollLeft + \"px\"; \n"
-			+ "                    } \n"
+			+ "                    w.style.left = scrollLeft + \"px\"; \n"
 			+ "                } \n"
 			+ "            } \n"
+			
+			// Popup is properly positioned - now display it.
             + "            w.style.display = \"block\"; \n"
 			+ "            cchShowFrame(w); \n"
 			+ "        } \n"
@@ -395,7 +406,8 @@ public abstract class ClassicContextualHelpProvider extends
 			// Append the JavaScript code for div moving
 			// These variables are used to get mouse position, calculate and
 			// change div position.
-			+ "    var cchMouseX = 0, cchMouseY = 0, cchGrabX = 0, cchGrabY = 0, cchOrigX = 0, cchOrigY = 0, cchElemX = 0, cchElemY = 0; \n"
+			+ "    var cchMouseX = 0, cchMouseY = 0, cchGrabX = 0, cchGrabY = 0, cchOrigX = 0, cchOrigY = 0; \n"
+			+ "    var cchBoxHeight = 0, cchBoxWidth = 0, cchElemX = 0, cchElemY = 0; \n"
 			+ "    var cchDragObj = null; \n" + "    var cchLastShow = null;\n"
 
 			// These variables are used to remember document event handlers.
@@ -839,8 +851,10 @@ public abstract class ClassicContextualHelpProvider extends
 		// DSJ
 		// 2009/6/3
 		html.append("<div class=\"select-ie6\">\n");
-		html.append("<table " + borderStyleAttr + widthAttr
-				+ "cellpadding=10 cellspacing=0>\n");
+		html.append("<table ");
+		html.append("id=\"" + id + "Box\" ");
+		html.append(borderStyleAttr + widthAttr
+                + "cellpadding=10 cellspacing=0>\n");
 		// Write title bar with title string and close button
 		html.append("<tr>\n");
 		html.append("<td align=left " + titleStyleAttr + "valign=middle>");
