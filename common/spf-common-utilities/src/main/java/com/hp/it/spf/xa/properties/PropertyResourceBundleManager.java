@@ -5,23 +5,19 @@
  */
 package com.hp.it.spf.xa.properties;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Map;
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
-
+import com.hp.it.spf.xa.i18n.I18nUtility;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.hp.it.spf.xa.misc.Utils;
-import com.hp.it.spf.xa.i18n.I18nUtility;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
@@ -107,6 +103,9 @@ public class PropertyResourceBundleManager {
 	private static int reloadCheckPeriod = DEFAULT_RELOAD_CHECK_PERIOD;
 	// same, in millis
 	private static int reloadCheckMillis = reloadCheckPeriod * 1000;
+
+	// indicate which is the runtime class of PropertyResourceBundleManager
+	protected static Class polymorphismClazz = PropertyResourceBundleManager.class;
 
 	// static block to load the minimum retention interval from file
 	static {
@@ -559,7 +558,15 @@ public class PropertyResourceBundleManager {
 			return null;
 
 		// lookup the filename in the in-memory cache and on the classpath
-		File file = getFile(filename);
+
+		File file = null;
+		try {
+			file = (File)polymorphicExecute(PropertyResourceBundleManager.class.getDeclaredMethod("getFile", String.class), filename);
+		} catch (SecurityException e) {
+			LOG.error("Method getFile(String) is not defined.");
+		} catch (NoSuchMethodException e) {
+			LOG.error("Method getFile(String) is not defined.");
+		}
 		PropertyResourceBundleInfo info = p_map.get(getMapKey(filename, loc));
 		if (info != null) {
 			// if not found on the filesystem, load null file info into cache
@@ -638,9 +645,10 @@ public class PropertyResourceBundleManager {
 		// into map and return)
 		InputStream in = null;
 		try {
-			in = new BufferedInputStream(Utils
-					.getResourceAsStream(getFilenameWithExtension(filename)));
-			// in = new BufferedInputStream(file.toURL().openStream());
+//			in = new BufferedInputStream(Utils.getResourceAsStream(getFilenameWithExtension(filename)));
+			in = new BufferedInputStream(new FileInputStream(file));
+
+//			 in = new BufferedInputStream(file.toURL().openStream());
 		} catch (Exception e) {
 			LOG.warn("Problem opening property file " + filename + ": "
 					+ e.getMessage(), e);
@@ -751,7 +759,7 @@ public class PropertyResourceBundleManager {
 	 *            (with extension)
 	 * @return file handle
 	 */
-	private static File getFile(String filename) {
+	protected static File getFile(String filename) {
 		URL url = null;
 		File file = null;
 		// use the context classloader to lookup the file in the filesystem -
@@ -796,5 +804,38 @@ public class PropertyResourceBundleManager {
 		if (loc != null)
 			key = I18nUtility.localeToLanguageTag(loc) + '/' + key;
 		return key;
+	}
+
+	/**
+	 * Execute the method of the runtime class with the specified parameters. 
+	 *
+	 * @param method the shadow method which will be used to retrieved the runtime method.
+	 * @param args parameters of the method being invoked
+	 * @return  return value deponds on the definition  of the method 
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static Object polymorphicExecute(Method method, Object... args) {
+		Method runtimeMethod;
+		Class runtimeClazz = polymorphismClazz;
+		try {
+			runtimeMethod = runtimeClazz.getDeclaredMethod(method.getName(), method.getParameterTypes());
+		} catch (Exception e) {
+			runtimeMethod = method;
+			runtimeClazz = PropertyResourceBundleManager.class;
+		}
+		runtimeMethod.setAccessible(true);
+		Object obj = null;
+		try {
+			obj = runtimeMethod.invoke(runtimeClazz, args);
+		} catch (IllegalArgumentException e) {
+			LOG.warn("Cannot invoke specified method, " + e.getMessage(), e);
+		} catch (IllegalAccessException e) {
+			LOG.warn("Cannot invoke specified method, " + e.getMessage(), e);
+		} catch (InvocationTargetException e) {
+			LOG.warn("Cannot invoke specified method, " + e.getMessage(), e);
+		} finally {
+			runtimeMethod.setAccessible(false);
+		}
+		return obj;
 	}
 }
