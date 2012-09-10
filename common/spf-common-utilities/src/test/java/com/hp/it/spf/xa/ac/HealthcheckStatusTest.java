@@ -22,6 +22,7 @@ public class HealthcheckStatusTest {
 		ClosedStatus closed = new ClosedStatus();
 
 		// compare based on the class type
+		assertEquals("open status doesn't equal to null", open.equals(null), false);
 		assertEquals("open status equals to itself", open.equals(open), true);
 		assertEquals("open status doesn't equal to down status", open.equals(down), false);
 		assertEquals("open status doesn't equal to closed status", open.equals(closed), false);
