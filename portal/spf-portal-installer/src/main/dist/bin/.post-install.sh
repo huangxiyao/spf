@@ -10,6 +10,18 @@ ${CASFW_HOME}/bin/setupPrimaryPortalNode.sh
 # Setup DB for persona
 ${CASFW_HOME}/bin/setupPersonaDatabase.sh
 
+# Create /opt/casfw/current folder if it doesn't exist
+CASFW_HOME_CURRENT="/opt/casfw/current"
+if [[ ! -d ${CASFW_HOME_CURRENT} ]]; then
+	mkdir -p ${CASFW_HOME_CURRENT}
+fi
+# Create the symbol link pointing to the current installer
+ln -sf ${CASFW_HOME} ${CASFW_HOME_CURRENT}/portal
+# Create init.d folder under ${CASFW_HOME}
+mkdir -p ${CASFW_HOME}/init.d
+# Create the symbol link pointing to the actual shell script
+ln -sf ${CASFW_HOME}/bin/tomcat-portal.sh ${CASFW_HOME}/init.d/tomcat-portal.sh
+
 #Fix permissions for all other files
 echo "Setting other permissions"
 
