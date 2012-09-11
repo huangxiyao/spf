@@ -1998,6 +1998,23 @@ of this class are:</p>
 	logging (so the log message goes to your underlying log framework).</li>
 </ul>
 
+<blockquote>
+<p>
+<b>Note:</b> This common <code>PropertyResourceBundleManager</code> loads its
+property files from the classpath, using the current context classloader.  For
+SPF Vignette component developers, be aware there is a portal-specific 
+subclass of <code>PropertyResourceBundleManager</code> which can also load
+files from the current Vignette component.  You just put your property file
+into your CAR as a secondary support file, and the portal-specific
+<code>PropertyResourceBundleManager</code> can find it there.  In contrast, 
+the common <code>PropertyResourceBundleManager</code> documented here does not
+do this, since it is meant for use by portlets as well.  So if you are writing
+a Vignette portal component, you may wish to use the portal-specific 
+subclass.  Please see the SPF Portal Utilities Developer Guide for more
+information.
+</p>
+</blockquote>
+
 <a name="properties.propertyResourceBundleManager.getBundle">
 <h4>4.2.1. Getting a bundle of properties (<code>PropertyResourceBundleManager.getBundle</code>)</h4>
 </a>
@@ -2268,6 +2285,12 @@ reload.checkPeriod = 3600
 		<td>S. Jorgenson</td>
 		<td>Added new <code>get*DisplayDate</code> methods which take
 		boolean parameter.</td>
+	</tr>
+	<tr>
+		<td>1.5</td>
+		<td>Sep 10 2012</td>
+		<td>S. Jorgenson / Ying-Zhi Wu</td>
+		<td>Documented new portal subclass of <code>PropertyResourceBundleManager</code>.</td>
 	</tr>
 </table>
 <p></p>

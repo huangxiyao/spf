@@ -59,7 +59,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * is currently the value of the
  * {@link PropertyResourceBundleManager#DEFAULT_RELOAD_CHECK_PERIOD} constant.
  * </p>
- * 
+ * <p>
+ * <b>Note:</b> Besides this class, there is also a 
+ * <code>PropertyResourceBundleManager</code> subclass provided by the SPF
+ * portal utilities, specifically for use by SPF Vignette portal components.
+ * Whereas the present class loads only from the current context classloader,
+ * the portal-specific <code>PropertyResourceBundleManager</code> can also
+ * load from your current Vignette component's support files.  Please see the
+ * SPF Portal Utilities Developer Guide for more information.
+ * </p>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @version TBD
