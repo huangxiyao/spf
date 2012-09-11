@@ -6,13 +6,11 @@
 package com.hp.it.spf.xa.properties;
 
 import com.hp.it.spf.xa.i18n.I18nUtility;
+import com.hp.it.spf.xa.misc.Utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -653,10 +651,15 @@ public class PropertyResourceBundleManager {
 		// into map and return)
 		InputStream in = null;
 		try {
-//			in = new BufferedInputStream(Utils.getResourceAsStream(getFilenameWithExtension(filename)));
-			in = new BufferedInputStream(new FileInputStream(file));
+			try {
+				in = new BufferedInputStream(new FileInputStream(file));
+			} catch (FileNotFoundException ex) {
+				LOG.warn("Problem opening property file " + filename + ", file path:" + file.getPath() + ". This property file may be located in a jar file");
+			}
 
-//			 in = new BufferedInputStream(file.toURL().openStream());
+			if (in == null) {
+				in = new BufferedInputStream(Utils.getResourceAsStream(getFilenameWithExtension(filename)));
+			}
 		} catch (Exception e) {
 			LOG.warn("Problem opening property file " + filename + ": "
 					+ e.getMessage(), e);
