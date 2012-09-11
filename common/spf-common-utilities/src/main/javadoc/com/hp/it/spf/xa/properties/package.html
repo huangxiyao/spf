@@ -14,7 +14,7 @@ provides hot-reloadable cached access to property files:</p>
 <ul>
 	<li>The property files may be localized and tagged by locale, in
 	the manner of {@link java.util.ResourceBundle}, but that is optional.</li>
-	<li>Property files are loaded using the current content classloader, and
+	<li>Property files are loaded using the current context classloader, and
 	thus may be located anywhere inside or outside the application (ie
 	portal Web application or portlet application), so long as any
 	non-standard location for class loading has been configured on the JVM
