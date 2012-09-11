@@ -199,10 +199,10 @@ JSR-286 portlet for displaying an arbitrary content file you provide
 	</li>
 	<li>
 	<p>The view file may also contain any of the <a
-		href="http://repo1.corp.hp.com/site/portlet/2.1.2/spf-portlet-utilities/apidocs/overview-summary.html#file.author">special
+		href="../../../portlet/spf-portlet-utilities/apidocs/overview-summary.html#file.author">special
 	markup tokens</a> for server-side text interpolation, as supported by the
 	SPF portlet utilities' <a
-		href="http://repo1.corp.hp.com/site/portlet/2.1.2/spf-portlet-utilities/apidocs/overview-summary.html#file">text
+		href="../../../portlet/spf-portlet-utilities/apidocs/overview-summary.html#file">text
 	interpolation</a> engine. Using these special markup tokens, your view file
 	can:</p>
 	<p>
@@ -261,33 +261,32 @@ JSR-286 portlet for displaying an arbitrary content file you provide
 <h4>1.1.1 Installation of the <code>htmlviewer</code> WAR</h4>
 </a>
 <p>The HTML viewer portlet is distributed as a complete portlet
-application, in J2EE WAR format. The WAR filename is <code>htmlviewer.war</code>.
-The <code>htmlviewer</code> WAR is distributed through Maven 2:</p>
+application, in J2EE WAR format. There are two builds of the WAR file: one
+that can be used for a remote (WSRP) deployment, and the other that can be
+used for a local (Vignette) deployment.</p>
+
+<p>For remote deployment, the WAR filename is <code>spf-html-viewer-<i>&lt;version&gt;</i>.war</code>.
+For local deployment, it is <code>spf-html-viewer-vgn-<i>&lt;version&gt;</i>.war</code>.
+Both WAR's are distributed through Maven 2:</p>
 
 <ul>
 	<li>The current Maven 2 repository is <a
-		href="http://repo1.corp.hp.com/nexus/content/groups/public/com/hp/it/spf/apps/spf-html-viewer/"><code>http://repo1.corp.hp.com/nexus/content/groups/public/com/hp/it/spf/apps/spf-html-viewer/</code></a></li>
+		href="http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/apps/spf-html-viewer/"><code>http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/apps/spf-html-viewer/</code></a></li>
 	<li>The Maven group ID is <code>com.hp.it.spf.apps</code>
 	<li>The Maven artifact ID is <code>spf-html-viewer</code>
 </ul>
 
 <p>To get the HTML viewer portlet, download the latest released
-version of <code>htmlviewer.war</code> from the repository.</p>
+version of the appropriate WAR from the repository.</p>
 
 <p>The HTML viewer is a JSR-286 portlet application, so it needs a
-JSR-286-compliant portlet container. It can be local to the portal
-application, or remoted with the support of a WSRP portlet container. <b>Note:</b>
-For the Shared Portal Framework platform, we will generally use the
-remoted approach, employing the SPF-integrated OpenPortal portlet
-container (installation of this container and the application server in
-which it runs is not covered here). The remainder of these instructions
-will assume use of the SPF-integrated OpenPortal container.</p>
-
-<p>The deployment procedures for the HTML viewer WAR are generally
-the same as for any other JSR-286 portlet application. For the
-SPF-integrated OpenPortal container, general detailed deployment
-instructions are documented elsewhere in the SPF administration
-documentation. For your convenience, here are the steps in summary:</p>
+JSR-286-compliant portlet container. For remote deployment, Shared
+Portal Framework uses the OpenPortal portlet container. For local
+deployment, Vignette itself is the portlet container. In SPF, we
+generally use the remoted approach, and the deployment procedures for
+the remote build of the HTML viewer WAR are generally the same as for
+any other remoted JSR-286 portlet application. For your convenience,
+here are the steps in summary:</p>
 
 <ol>
 	<li>
@@ -366,6 +365,8 @@ documentation. For your convenience, here are the steps in summary:</p>
 	portlet instance</a> below).</p>
 	</li>
 </ol>
+
+<p>Steps for local deployment are not documented here at this time.</p>
 
 <a name="overview.installation.i18n_portlet_config">
 <h4>1.1.2 Installation of <code>i18n_portlet_config.properties</code>
