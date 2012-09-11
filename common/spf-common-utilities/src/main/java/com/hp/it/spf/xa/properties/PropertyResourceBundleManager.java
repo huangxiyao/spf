@@ -654,7 +654,12 @@ public class PropertyResourceBundleManager {
 			try {
 				in = new BufferedInputStream(new FileInputStream(file));
 			} catch (FileNotFoundException ex) {
-				LOG.warn("Problem opening property file " + filename + ", file path:" + file.getPath() + ". This property file may be located in a jar file");
+				LOG
+                        .warn("Problem using FileInputStream to open property file "
+                                + filename
+                                + ", file path:"
+                                + file.getPath()
+                                + " - this property file may be in a JAR file, so try to open using classloader.");
 			}
 
 			if (in == null) {
