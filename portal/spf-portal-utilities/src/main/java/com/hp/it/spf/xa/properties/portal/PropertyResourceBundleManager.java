@@ -336,6 +336,9 @@ public class PropertyResourceBundleManager extends com.hp.it.spf.xa.properties.P
 	private static File getFileFromVignette(String filename) {
 		File file = null;
 		PortalContext pContext = tlContext.get();
+		if (pContext == null) {
+			return null;
+		}
 
 		Style thisStyleObject = pContext.getCurrentStyle();
 		if (thisStyleObject == null) {
