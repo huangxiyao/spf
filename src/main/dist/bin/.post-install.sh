@@ -11,7 +11,7 @@ ${CASFW_HOME}/bin/setupPrimaryPortalNode.sh
 ${CASFW_HOME}/bin/setupPersonaDatabase.sh
 
 # Create /opt/casfw/current folder if it doesn't exist
-CASFW_HOME_CURRENT="/opt/casfw/current"
+CASFW_HOME_CURRENT="${CASFW_HOME}/../current"     
 if [[ ! -d ${CASFW_HOME_CURRENT} ]]; then
 	mkdir -p ${CASFW_HOME_CURRENT}
 fi
