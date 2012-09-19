@@ -2,6 +2,7 @@
 #
 # casfw        Startup script for CAS framework
 #
+# chkconfig: 345 79 21
 # description: casfw application service
 # location: should be located into /etc/init.d folder
 # purpose: will go through /opt/casfw/current folder and target each symlink pointing to the actual installation 
@@ -11,71 +12,42 @@ CASFW_HOME_CURRENT="/opt/casfw/current"
 
 USER="casfw"
 
-# ----------------------------------------------------------------------
-
 if [ $(id -un) != "${USER}" ]
 then
-        exec su -m "${USER}" -c "$0 \"$@\""
+	exec su -m "${USER}" -c "$0 \"$@\""
 fi
 
-# ----------------------------------------------------------------------
-
-
-start() {
-		if [[ -d ${CASFW_HOME_CURRENT} ]]; then
-			for currentLink in $(ls $CASFW_HOME_CURRENT)
+for_each_init_script() {
+	local command=$1
+	if [[ -d ${CASFW_HOME_CURRENT} ]]; then
+		for currentLink in $(ls $CASFW_HOME_CURRENT)
+		do
+			for script in $(ls $CASFW_HOME_CURRENT/$currentLink/init.d/)
 			do
-				for script in $(ls $CASFW_HOME_CURRENT/$currentLink/init.d/)
-				do
-					$CASFW_HOME_CURRENT/$currentLink/init.d/$script start
-				done
+				$CASFW_HOME_CURRENT/$currentLink/init.d/$script $command
 			done
-		fi
-}
-
-stop() {
-		if [[ -d ${CASFW_HOME_CURRENT} ]]; then
-			for currentLink in $(ls $CASFW_HOME_CURRENT)
-			do
-				for script in $(ls $CASFW_HOME_CURRENT/$currentLink/init.d/)
-				do
-					$CASFW_HOME_CURRENT/$currentLink/init.d/$script stop
-				done
-			done
-		fi
-}
-
-restart() {
-        stop
-        start
-}
-
-status() {
-		if [[ -d ${CASFW_HOME_CURRENT} ]]; then
-			for currentLink in $(ls $CASFW_HOME_CURRENT)
-			do
-				for script in $(ls $CASFW_HOME_CURRENT/$currentLink/init.d/)
-				do
-					$CASFW_HOME_CURRENT/$currentLink/init.d/$script status
-				done
-			done
-		fi
+		done
+	else
+		echo "ERROR: $CASFW_HOME_CURRENT does not exist or is not a directory"
+		exit 2
+	fi
 }
 
 case "$1" in
-  start)
-        start
-        ;;
-  stop)
-        stop
-        ;;
-  status)
-        status 
-        ;;
-  restart)
-        restart
-        ;;
-  *)
-        echo $"Usage: $prog {start|stop|restart|status}"
-        exit 1
+	start)
+		for_each_init_script start
+		;;
+	stop)
+		for_each_init_script stop
+		;;
+	status)
+		for_each_init_script status 
+		;;
+	restart)
+		for_each_init_script stop
+		for_each_init_script start
+		;;
+	*)
+		echo $"Usage: $prog {start|stop|restart|status}"
+		exit 1
 esac
