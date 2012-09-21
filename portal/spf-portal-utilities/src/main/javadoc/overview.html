@@ -1045,7 +1045,7 @@ String msg = I18nUtility.getValue("key", null, ctx, null, null, cchps, false, fa
 	documentation.</p>
 
 	<p>Also, note that the above example illustrates the use of the
-	SPF-provided "classic" rendition of contextual help (ie the {@link
+	SPF-provided "classic" rendering of contextual help (ie the {@link
 	com.hp.it.spf.xa.help.portal.ClassicContextualHelpProvider} class). The
 	SPF contextual-help framework is extensible to custom formats of
 	contextual help, where you write and then utilize your own contextual
@@ -1054,14 +1054,50 @@ String msg = I18nUtility.getValue("key", null, ctx, null, null, cchps, false, fa
 	own contextual help provider</a>.</p>
 
 	<blockquote>
-	<p><b>Note 1:</b> The classic rendition of contextual help utilizes
-	an "X" image on which the user can click to close the window. This is a
-	GIF image which you can supply if desired (the SPF Vignette portal
+	<p><b>Note 1:</b> The classic rendering of contextual help utilizes
+	an "X" image on which the user can click to close the window. This is
+	an image which you can supply if desired (the SPF Vignette portal
 	application provides a default for you, looking as in this example).
-	Name the base file for the image <code>btn_close.gif</code>, localize
-	it if desired, and put the image bundle into your component CAR as
-	supporting resource files (ie <i>secondary support files</i>) as
-	explained earlier.</p>
+	There are a few different ways you can supply the image:</p>
+	<ul>
+		<li>
+		<p>Name the image whatever you like and host it anywhere
+		URL-addressable. Then provide the URL of the image in your portal
+		component's message resource bundle, using the <code>contextualHelp.close.url</code>
+		message key. (This way you can have different URL's for different
+		locales, and thus provide a localized image if desired.) Your URL can
+		be relative to the portal application root, or absolute. If you plan
+		to use contextual help under both HTTP and HTTPS pages on your site,
+		we recommend using either an HTTPS URL for the close-button image, or
+		a relative URL; if you use an HTTP close-button image URL and the user
+		accesses a page with contextual help under HTTPS, the user's browser
+		will typically display a warning to the user.</p>
+		</li>
+		<li>
+		<p>Alternatively, put the image into your portal component's
+		secondary support files, and put the filename of the image into your <code>contextualHelp.close.url</code>
+		message property. You can have localized images; just tag them by
+		locale properly, put them all into your component as secondary support
+		files, and put the base filename of the image into the message
+		property. It is OK to put just the base filename into the message
+		property across the whole resource bundle; SPF will generate the
+		actual URL for you automatically, pointing to the best-candidate among
+		the localized versions of the files you supplied.</p>
+		</li>
+		<li>
+		<p>By default, if you do not provide a <code>contextualHelp.close.url</code>
+		message property, then SPF will assume the close-button image file is
+		named <code>btn_close.gif</code> and is located as a secondary support
+		file in your current portal component. As above, it will choose the
+		best-available localized version for the user's locale.</p>
+		</li>
+		<li>
+		<p>Lastly, if you provide no image file, SPF will default to use
+		the <code>btn_close.gif</code> image provided with the SPF Vignette
+		portal application itself - it looks like the "X" image shown in the
+		examples here, and is the same for all locales.</p>
+		</li>
+	</ul>
 	</blockquote>
 
 	<blockquote>
@@ -3806,16 +3842,49 @@ would be inoperable (ie just the question-mark image would display, with
 no contextual-help link around it at all).</p>
 
 <p>Note that the classic contextual help popup includes an "X" image
-on which the user can click to close the popup. Your portal component is
-expected to be deployed with that image (as a secondary support file).
-The image must be named <code>btn_close.gif</code> and can be localized
-(just put the bundle of localized, locale-tagged files into your portal
-component as secondary support files, as described <a
-	href="#i18n.location">earlier</a>). The SPF portal utilities JAR
-contains a sample <code>btn_close.gif</code> which you can copy, if
-desired (it is the image seen in the examples here).</p>
+on which the user can click to close the popup. There are a few
+different ways you can supply the image:</p>
+<ul>
+	<li>
+	<p>Name the image whatever you like and host it anywhere
+	URL-addressable. Then provide the URL of the image in your portal
+	component's message resource bundle, using the <code>contextualHelp.close.url</code>
+	message key. (This way you can have different URL's for different
+	locales, and thus provide a localized image if desired.) Your URL can
+	be relative to the portal application root, or absolute. If you plan to
+	use contextual help under both HTTP and HTTPS pages on your site, we
+	recommend using either an HTTPS URL for the close-button image, or a
+	relative URL; if you use an HTTP close-button image URL and the user
+	accesses a page with contextual help under HTTPS, the user's browser
+	will typically display a warning to the user.</p>
+	</li>
+	<li>
+	<p>Alternatively, put the image into your portal component's
+	secondary support files, and put the filename of the image into your <code>contextualHelp.close.url</code>
+	message property. You can have localized images; just tag them by
+	locale properly, put them all into your component as secondary support
+	files, and put the base filename of the image into the message
+	property. It is OK to put just the base filename into the message
+	property across the whole resource bundle; SPF will generate the actual
+	URL for you automatically, pointing to the best-candidate among the
+	localized versions of the files you supplied.</p>
+	</li>
+	<li>
+	<p>By default, if you do not provide a <code>contextualHelp.close.url</code>
+	message property, then SPF will assume the close-button image file is
+	named <code>btn_close.gif</code> and is located as a secondary support
+	file in your current portal component. As above, it will choose the
+	best-available localized version for the user's locale.</p>
+	</li>
+	<li>
+	<p>Lastly, if you provide no image file, SPF will default to use
+	the <code>btn_close.gif</code> image provided with the SPF Vignette
+	portal application itself - it looks like the "X" image shown in the
+	examples here, and is the same for all locales.</p>
+	</li>
+</ul>
 
-<p>Your "X" image can optionally have an <code>ALT</code> text
+<p>Also, your "X" image can optionally have an <code>ALT</code> text
 string displayed with it when the user hovers the mouse over it. Put
 your desired <code>ALT</code> message into your portal component's
 message resource bundle, using the <code>contextualHelp.close.alt</code>
@@ -4018,17 +4087,50 @@ documentation, in the <a
 description</a>, for more information.</p>
 
 <blockquote>
-<p><b>Note:</b> The classic rendition of contextual help utilizes an
-"X" image on which the user can click to close the window. This is a GIF
-image which you must supply inside your portal component, as a secondary
-support file. The image must be named <code>btn_close.gif</code> and can
-be localized (just put the bundle of localized, locale-tagged files into
-your portal component as secondary support files, as described <a
-	href="#i18n.location">earlier</a>). The SPF portal utilities JAR
-contains a sample <code>btn_close.gif</code> which you can copy, if
-desired (it is the image seen in the examples here).</p>
+<p>Note that the classic contextual help popup includes an "X" image
+on which the user can click to close the popup. There are a few
+different ways you can supply the image:</p>
+<ul>
+	<li>
+	<p>Name the image whatever you like and host it anywhere
+	URL-addressable. Then provide the URL of the image in your portal
+	component's message resource bundle, using the <code>contextualHelp.close.url</code>
+	message key. (This way you can have different URL's for different
+	locales, and thus provide a localized image if desired.) Your URL can
+	be relative to the portal application root, or absolute. If you plan to
+	use contextual help under both HTTP and HTTPS pages on your site, we
+	recommend using either an HTTPS URL for the close-button image, or a
+	relative URL; if you use an HTTP close-button image URL and the user
+	accesses a page with contextual help under HTTPS, the user's browser
+	will typically display a warning to the user.</p>
+	</li>
+	<li>
+	<p>Alternatively, put the image into your portal component's
+	secondary support files, and put the filename of the image into your <code>contextualHelp.close.url</code>
+	message property. You can have localized images; just tag them by
+	locale properly, put them all into your component as secondary support
+	files, and put the base filename of the image into the message
+	property. It is OK to put just the base filename into the message
+	property across the whole resource bundle; SPF will generate the actual
+	URL for you automatically, pointing to the best-candidate among the
+	localized versions of the files you supplied.</p>
+	</li>
+	<li>
+	<p>By default, if you do not provide a <code>contextualHelp.close.url</code>
+	message property, then SPF will assume the close-button image file is
+	named <code>btn_close.gif</code> and is located as a secondary support
+	file in your current portal component. As above, it will choose the
+	best-available localized version for the user's locale.</p>
+	</li>
+	<li>
+	<p>Lastly, if you provide no image file, SPF will default to use
+	the <code>btn_close.gif</code> image provided with the SPF Vignette
+	portal application itself - it looks like the "X" image shown in the
+	examples here, and is the same for all locales.</p>
+	</li>
+</ul>
 
-<p>Your "X" image can optionally have an <code>ALT</code> text
+<p>Also your "X" image can optionally have an <code>ALT</code> text
 string displayed with it when the user hovers the mouse over it. Put
 your desired <code>ALT</code> message into your portal component's
 message resource bundle, using the <code>contextualHelp.close.alt</code>
@@ -4135,17 +4237,50 @@ documentation, in the <a
 description</a>, for more information.</p>
 
 <blockquote>
-<p><b>Note:</b> The classic rendition of contextual help utilizes an
-"X" image on which the user can click to close the window. This is a GIF
-image which you must supply inside your portal component, as a secondary
-support file. The image must be named <code>btn_close.gif</code> and can
-be localized (just put the bundle of localized, locale-tagged files into
-your portal component as secondary support files, as described <a
-	href="#i18n.location">earlier</a>). The SPF portal utilities JAR
-contains a sample <code>btn_close.gif</code> which you can copy, if
-desired (it is the image seen in the examples here).</p>
+<p><b>Note 1:</b> The classic rendition of contextual help utilizes an
+"X" image on which the user can click to close the window. 
+There are a few different ways you can supply the image:</p>
+<ul>
+	<li>
+	<p>Name the image whatever you like and host it anywhere
+	URL-addressable. Then provide the URL of the image in your portal
+	component's message resource bundle, using the <code>contextualHelp.close.url</code>
+	message key. (This way you can have different URL's for different
+	locales, and thus provide a localized image if desired.) Your URL can
+	be relative to the portal application root, or absolute. If you plan to
+	use contextual help under both HTTP and HTTPS pages on your site, we
+	recommend using either an HTTPS URL for the close-button image, or a
+	relative URL; if you use an HTTP close-button image URL and the user
+	accesses a page with contextual help under HTTPS, the user's browser
+	will typically display a warning to the user.</p>
+	</li>
+	<li>
+	<p>Alternatively, put the image into your portal component's
+	secondary support files, and put the filename of the image into your <code>contextualHelp.close.url</code>
+	message property. You can have localized images; just tag them by
+	locale properly, put them all into your component as secondary support
+	files, and put the base filename of the image into the message
+	property. It is OK to put just the base filename into the message
+	property across the whole resource bundle; SPF will generate the actual
+	URL for you automatically, pointing to the best-candidate among the
+	localized versions of the files you supplied.</p>
+	</li>
+	<li>
+	<p>By default, if you do not provide a <code>contextualHelp.close.url</code>
+	message property, then SPF will assume the close-button image file is
+	named <code>btn_close.gif</code> and is located as a secondary support
+	file in your current portal component. As above, it will choose the
+	best-available localized version for the user's locale.</p>
+	</li>
+	<li>
+	<p>Lastly, if you provide no image file, SPF will default to use
+	the <code>btn_close.gif</code> image provided with the SPF Vignette
+	portal application itself - it looks like the "X" image shown in the
+	examples here, and is the same for all locales.</p>
+	</li>
+</ul>
 
-<p>Your "X" image can optionally have an <code>ALT</code> text
+<p><b>Note 2:</b> Your "X" image can optionally have an <code>ALT</code> text
 string displayed with it when the user hovers the mouse over it. Put
 your desired <code>ALT</code> message into your portal component's
 message resource bundle, using the <code>contextualHelp.close.alt</code>

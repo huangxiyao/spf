@@ -204,36 +204,57 @@ public class ClassicContextualHelpProvider extends
 		return noScriptUrl;
 	}
 
-	/**
-	 * A concrete method to generate the image URL for the popup close button.
-	 * This close button is presumed to be named <code>btn_close.gif</code>
-	 * and located in the current portal component. This image may be localized
-	 * if desired; this method looks for the particular localized image (loaded
-	 * in the current portal component's secondary support files) which is the
-	 * best-candidate given the current locale. If the image is not found there,
-	 * then a URL pointing to <code>/images/btn_close.gif</code> under the
-	 * portal root path is assumed and returned.
-	 */
+    /**
+     * A concrete method to generate the image URL for the popup close button.
+     * The URL is presumed to be stored in the current portal component's
+     * message resources, under a message key named
+     * <code>contextualHelp.close.url</code>; the URL may refer to a secondary
+     * support file in the current portal component or an actual URL. If no such
+     * message exists, then the close button is presumed to be named
+     * <code>btn_close.gif</code> and located in the current portal component as
+     * a secondary support file. If the image is still not found there, then a
+     * URL pointing to <code>/images/btn_close.gif</code> under the portal root
+     * path is assumed and returned. Note: Both message lookup, and support file
+     * lookup, search for the best localized candidate, if any, for the user's
+     * current locale.
+     */
 	protected String getCloseImageURL() {
-		String url = "/images/" + CLOSE_BUTTON_IMG_NAME;
-		if (portalContext != null) {
-			if (I18nUtility.getLocalizedFileName(portalContext,
-					CLOSE_BUTTON_IMG_NAME) != null) {
-				url = I18nUtility.getLocalizedFileURL(portalContext,
-						CLOSE_BUTTON_IMG_NAME);
-			} else {
-				url = portalContext.getPortalHttpRoot() + "/" + url;
-				// make sure the path includes the portal application context
-				// root
-				String contextPath = portalContext.getPortalRequest()
-						.getContextPath();
-				if (!url.startsWith(contextPath)) {
-					return Utils.slashify(contextPath + "/" + url);
-				}
-			}
-		}
-		return Utils.slashify(url);
-	}
+        String url = "/images/" + CLOSE_BUTTON_IMG_NAME;
+        if (portalContext != null) {
+            // Look for the message.
+            String msg = I18nUtility.getValue(CLOSE_BUTTON_IMG_URL, "",
+                    portalContext);
+            if (msg.length() > 0) {
+                // If the message is found, use and return it. Either use and
+                // return the message itself, or if the message refers to a file
+                // in the current compoment, return a URL for that file.
+                url = msg;
+                if (I18nUtility.getLocalizedFileName(portalContext, url) != null) {
+                    url = I18nUtility.getLocalizedFileURL(portalContext, url);
+                }
+            } else {
+                // If the message is not found, assume btn_close.gif. If that
+                // file exists in the current component, return a URL for that.
+                // Otherwise assume it exist under the portal root and return a
+                // URL for that.
+                if (I18nUtility.getLocalizedFileName(portalContext,
+                        CLOSE_BUTTON_IMG_NAME) != null) {
+                    url = I18nUtility.getLocalizedFileURL(portalContext,
+                            CLOSE_BUTTON_IMG_NAME);
+                } else {
+                    url = portalContext.getPortalHttpRoot() + "/" + url;
+                    // make sure the path includes the portal application
+                    // context root
+                    String contextPath = portalContext.getPortalRequest()
+                            .getContextPath();
+                    if (!url.startsWith(contextPath)) {
+                        url = contextPath + "/" + url;
+                    }
+                }
+            }
+        }
+        return url;
+    }
 
 	/**
 	 * A concrete method to get the image alt text for the popup close button.
