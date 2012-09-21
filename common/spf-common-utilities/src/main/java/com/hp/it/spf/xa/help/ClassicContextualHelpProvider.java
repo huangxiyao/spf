@@ -82,7 +82,12 @@ public abstract class ClassicContextualHelpProvider extends
 	 */
 	protected static String CLOSE_BUTTON_IMG_ALT = "contextualHelp.close.alt";
 
-	/**
+    /**
+     * Constant for message key for close image URL in the classic popup.
+     */
+    protected static String CLOSE_BUTTON_IMG_URL = "contextualHelp.close.url";
+
+    /**
 	 * Default width for classic popup.
 	 */
 	protected static int DEFAULT_WIDTH = 300;
