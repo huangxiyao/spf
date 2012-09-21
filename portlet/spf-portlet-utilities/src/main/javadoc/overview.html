@@ -1391,7 +1391,7 @@ String msg = I18nUtility.getMessage(request, "key", cchps);
 	documentation.</p>
 
 	<p>Also, note that the above example illustrates the use of the
-	SPF-provided "classic" rendition of contextual help (ie the {@link
+	SPF-provided "classic" rendering of contextual help (ie the {@link
 	com.hp.it.spf.xa.help.portlet.ClassicContextualHelpProvider} class).
 	The SPF contextual-help framework is extensible to custom formats of
 	contextual help, where you write and then utilize your own contextual
@@ -1400,14 +1400,15 @@ String msg = I18nUtility.getMessage(request, "key", cchps);
 	own contextual help provider</a>.</p>
 
 	<blockquote>
-	<p><b>Note:</b> The classic rendition of contextual help utilizes
-	an "X" image on which the user can click to close the window. This is a
-	GIF image which you must supply (either inside your portlet
-	application, or in the external resource bundle folder). You can
-	localize the image if desired. Name the base file for the image <code>btn_close.gif</code>
-	and put it in the <code>images/</code> subfolder (of your portlet WAR
-	or the external folder). Management of this image is the same as for
-	any other supporting resource file.</p>
+	<p><b>Note:</b> The classic rendering of contextual help utilizes
+	an "X" image on which the user can click to close the window. By
+	default this image is assumed to be named <code>btn_close.gif</code>
+	and to exist in the <code>images/</code> subfolder (of the external
+	resource bundle folder or your portlet WAR). Management of this image
+	is the same as for any other supporting resource file. You can override
+	that with a different filename, or even a whole URL (relative to the
+	portal, or absolute), by using the <code>contextualHelp.close.url</code>
+	message property in your application's message resource bundle.</p>
 
 	<p>The SPF portlet utilities JAR contains a sample <code>btn_close.gif</code>.
 	(It is the same one shown in the example above.)</p>
@@ -2995,13 +2996,13 @@ mode, then the link would be inoperable (ie just the question-mark image
 would display, with no contextual-help link around it at all).</p>
 
 <p>Note that the classic contextual help popup includes an "X" image
-on which the user can click to close the popup. Your portlet application
-is expected to be deployed with that image (either as an external
-resource, in the <i>portlet resource bundle folder</i>, or inside the
-portlet WAR). The image must be named <code>btn_close.gif</code> and
-must be in the <code>images/</code> subfolder. The SPF portlet utilities
-JAR contains a sample <code>btn_close.gif</code> which you can copy, if
-desired (it is the image seen in the examples here).</p>
+on which the user can click to close the popup. By default this image is
+assumed to be named <code>btn_close.gif</code> and to exist in the <code>images/</code>
+subfolder (of the external resource bundle folder or your portlet WAR).
+Management of this image is the same as for any other supporting
+resource file. You can override that with a different filename, or even
+a whole URL (relative to the portal, or absolute), by using the <code>contextualHelp.close.url</code>
+message property in your application's message resource bundle.</p>
 
 <p>Your "X" image can optionally have an <code>ALT</code> text
 string displayed with it when the user hovers the mouse over it. Put
@@ -3137,14 +3138,15 @@ documentation, in the <a
 description</a>, for more information.</p>
 
 <blockquote>
-<p><b>Note:</b> The classic rendition of contextual help utilizes an
-"X" image on which the user can click to close the window. This is a GIF
-image which you must supply (either inside your portlet application, or
-in the external resource bundle folder). You can localize the image if
-desired. Name the base file for the image <code>btn_close.gif</code> and
-put it in the <code>images/</code> subfolder (of your portlet WAR or the
-external folder). Management of this image is the same as for any other
-supporting resource file.</p>
+<p><b>Note:</b> The classic rendering of contextual help utilizes an
+"X" image on which the user can click to close the window. By default
+this image is assumed to be named <code>btn_close.gif</code> and to
+exist in the <code>images/</code> subfolder (of the external resource
+bundle folder or your portlet WAR). Management of this image is the same
+as for any other supporting resource file. You can override that with a
+different filename, or even a whole URL (relative to the portal, or
+absolute), by using the <code>contextualHelp.close.url</code> message
+property in your application's message resource bundle.</p>
 
 <p>The SPF portlet utilities JAR contains a sample <code>btn_close.gif</code>
 which you can copy. (It is the same one shown in the example above.)</p>
@@ -3226,14 +3228,15 @@ documentation, in the <a
 description</a>, for more information.</p>
 
 <blockquote>
-<p><b>Note:</b> The classic rendition of contextual help utilizes an
-"X" image on which the user can click to close the window. This is a GIF
-image which you must supply (either inside your portlet application, or
-in the external resource bundle folder). You can localize the image if
-desired. Name the base file for the image <code>btn_close.gif</code> and
-put it in the <code>images/</code> subfolder (of your portlet WAR or the
-external folder). Management of this image is the same as for any other
-supporting resource file.</p>
+<p><b>Note:</b> The classic rendering of contextual help utilizes an
+"X" image on which the user can click to close the window. By default
+this image is assumed to be named <code>btn_close.gif</code> and to
+exist in the <code>images/</code> subfolder (of the external resource
+bundle folder or your portlet WAR). Management of this image is the same
+as for any other supporting resource file. You can override that with a
+different filename, or even a whole URL (relative to the portal, or
+absolute), by using the <code>contextualHelp.close.url</code> message
+property in your application's message resource bundle.</p>
 
 <p>The SPF portlet utilities JAR contains a sample <code>btn_close.gif</code>
 which you can copy. (It is the same one shown in the example above.)</p>

@@ -172,18 +172,44 @@ public class ClassicContextualHelpProvider extends
 		return noscriptUrl;
 	}
 
-	/**
-	 * A concrete method to generate the image URL for the popup close button in
-	 * a portlet. This close button is presumed to be named
-	 * <code>/images/btn_close.gif</code> and located in either the portlet
-	 * resource bundle directory, or in your portlet WAR. This image may be
-	 * localized if desired; the method looks for the particular localized image
-	 * file which is the best-candidate given the current locale.
-	 */
+    /**
+     * A concrete method to generate the image URL for the popup close button in
+     * a portlet. The URL is presumed to be stored in the message resources for
+     * the current portlet, under a message key named
+     * <code>contextualHelp.close.url</code>; the URL may refer to a resource
+     * file in either the portlet resource bundle directory or your portlet WAR,
+     * or it may refer to an actual URL. If no such message exists, then a file
+     * named <code>/images/btn_close.gif</code> is assumed in your portlet
+     * resource bundle directory or portlet WAR, and a URL for that is generated
+     * and returned. Note: Both message lookup, and file lookup lookup, search
+     * for the best localized candidate, if any, for the user's current locale.
+     */
 	protected String getCloseImageURL() {
-		String url = Utils.slashify("/images/" + CLOSE_BUTTON_IMG_NAME);
-		return I18nUtility.getLocalizedFileURL(request, response, url);
-	}
+        String url = "/images/" + CLOSE_BUTTON_IMG_NAME;
+        if (request != null && response != null) {
+            // Look for the message.
+            String msg = I18nUtility.getMessage(request, CLOSE_BUTTON_IMG_URL,
+                    "");
+            if (msg.length() > 0) {
+                // If the message is found, use and return it. Either use and
+                // return the message itself, or if the message refers to a file
+                // in the current portlet bundle directory or WAR, return a URL
+                // for that file.
+                url = msg;
+                if (I18nUtility.getLocalizedFileName(request, url) != null) {
+                    url = I18nUtility.getLocalizedFileURL(request, response,
+                            url);
+                }
+            } else {
+                // If the message is not found, assume btn_close.gif. If that
+                // file exists in the current portlet bundle directory, return a
+                // URL for that. Otherwise assume it exists in the portlet WAR
+                // and return a URL for that.
+                url = I18nUtility.getLocalizedFileURL(request, response, url);
+            }
+        }
+        return url;
+    }
 
 	/**
 	 * A concrete method to get the image alt text for the popup close button in

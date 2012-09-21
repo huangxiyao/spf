@@ -66,7 +66,10 @@ to apply a different size or style.</p>
 <p><b>Note:</b> The class assumes that your portlet application
 includes the "X" image in a GIF file named <code>btn_close.gif</code>,
 in the <code>images/</code> subfolder of either your external <i>portlet
-resource bundle folder</i>, or your portlet WAR.</p>
+resource bundle folder</i>, or your portlet WAR.  Alternatively, you can 
+override this by putting a different filename, or even a relative or absolute
+URL, into the <code>contextualHelp.close.url</code> message of your message
+properties.</p>
 
 <p><b>Note:</b> The returned HTML from this class can include
 no-script markup for the unscripted case (ie JavaScript disabled in the
