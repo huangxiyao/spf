@@ -110,7 +110,7 @@ public class AuthenticatorHelperTest {
     @Test
     public void testCreateVAPUser() throws UniquePropertyValueConflictException,
                                    EntityPersistenceException {
-        User user = AuthenticatorHelper.createVAPUser(ssoUser);
+        User user = AuthenticatorHelper.createVAPUser(ssoUser, "hpp_realm1");
         assertNotNull(user);
     }
 

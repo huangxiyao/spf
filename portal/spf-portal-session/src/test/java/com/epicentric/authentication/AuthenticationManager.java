@@ -9,34 +9,43 @@ import org.jmock.Mockery;
 import com.epicentric.services.GenericService;
 import com.hp.it.spf.sso.portal.MockeryUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p>
- * This is a surrogate class used by JUnit test to instead of 
+ * This is a surrogate class used by JUnit test to instead of
  * Vignette's <tt>AuthenticationManager</tt>
  * </p>
  * <p>
  * In the source code need to be test by JUnit, there are many static
  * methods invoked driectly from the classes of the third party projects,
  * such as Vigentte.
- * </p> 
+ * </p>
  * <p>
- * To avoid invoking that static methods mentioned above, custom classes will be added to 
+ * To avoid invoking that static methods mentioned above, custom classes will be added to
  * instand of that refered classes in the tested code at runtime.
  * </p>
- * 
+ *
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @version 1.0
  */
 public class AuthenticationManager extends GenericService {
-    public static AuthenticationManager getDefaultAuthenticationManager()
-    {
-        return new AuthenticationManager();
-    }
-    
-    public Realm getSSORealm()
-    {
-        Mockery context = MockeryUtils.createMockery();
-        Realm realm = MockeryUtils.mockRealm(context, null);
-        return realm;
-    }
+	public static AuthenticationManager getDefaultAuthenticationManager() {
+		return new AuthenticationManager();
+	}
+
+	public Realm getSSORealm() {
+		Mockery context = MockeryUtils.createMockery();
+		Realm realm = MockeryUtils.mockRealm(context, null);
+		return realm;
+	}
+
+	public List<Realm> getSSORealms() {
+		List result = new ArrayList<Realm>();
+		Mockery context = MockeryUtils.createMockery();
+		Realm realm = MockeryUtils.mockRealm(context, null);
+		result.add(realm);
+		return result;
+	}
 }
