@@ -100,7 +100,13 @@ public class MockPortalContext implements PortalContext {
         return null;
     }
 
-    public String getPortalHttpRoot() {
+	@Override
+	public com.vignette.portal.thirdparty.ThirdPartyAuthInfo getThirdPartyAuthInfo() {
+		//FIXME (slawek) - method not implemented yet: getThirdPartyAuthInfo
+		throw new UnsupportedOperationException("not implemented yet");
+	}
+
+	public String getPortalHttpRoot() {
         // TODO Auto-generated method stub
         return null;
     }
