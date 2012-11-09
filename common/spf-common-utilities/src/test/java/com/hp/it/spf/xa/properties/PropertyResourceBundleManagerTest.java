@@ -1,5 +1,8 @@
 package com.hp.it.spf.xa.properties;
 
+import junit.framework.TestCase;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,14 +13,10 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import junit.framework.TestCase;
-
-import org.apache.commons.io.FileUtils;
-
 /**
+ * Unit tests for {@link PropertyResourceBundleManager}.
  * 
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
- * 
  */
 public class PropertyResourceBundleManagerTest extends TestCase {
 	String propertiesFilename = "propertyresourcebundlemanagertest";
@@ -25,90 +24,64 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 	String checkPeriodKey = "reload.checkPeriod";
 
 	public void testGetBundleString() {
-		String defaultCheckPeriodValue = getOriginalConfigedValue(
-				propertiesFilename.concat(fileExtension), checkPeriodKey);
+		String defaultCheckPeriodValue = getOriginalConfigedValue(propertiesFilename.concat(fileExtension),
+																  checkPeriodKey);
 
-		System.out
-				.println("1.1: Try to retrieve a non-existent resource bundle file from in-memory cache.");
-		ResourceBundle rbNotExist = PropertyResourceBundleManager
-				.getBundle("notexist");
+		System.out.println("1.1: Try to retrieve a non-existent resource bundle file from in-memory cache.");
+		ResourceBundle rbNotExist = PropertyResourceBundleManager.getBundle("notexist");
 		assertNull(rbNotExist);
 
-		System.out
-				.println("1.2: Try to retrieve value from specified properties which has no extension with the specified key.");
-		ResourceBundle rbFileWithoutExtension = PropertyResourceBundleManager
-				.getBundle(propertiesFilename);
-		assertEquals(defaultCheckPeriodValue, rbFileWithoutExtension
-				.getString(checkPeriodKey));
+		System.out.println("1.2: Try to retrieve value from specified properties which has no extension with the specified key.");
+		ResourceBundle rbFileWithoutExtension = PropertyResourceBundleManager.getBundle(propertiesFilename);
+		assertEquals(defaultCheckPeriodValue, rbFileWithoutExtension.getString(checkPeriodKey));
 
-		System.out
-				.println("1.3: Try to retrieve the same bundle when now specifying the file extension.");
-		ResourceBundle rbFileWithExtension = PropertyResourceBundleManager
-				.getBundle(propertiesFilename.concat(fileExtension));
+		System.out.println("1.3: Try to retrieve the same bundle when now specifying the file extension.");
+		ResourceBundle rbFileWithExtension = PropertyResourceBundleManager.getBundle(propertiesFilename.concat(fileExtension));
 		assertSame(rbFileWithoutExtension, rbFileWithExtension);
 
-		System.out
-				.println("1.4: Remove resource bundle file from filesystem during cache retention, then make sure it can still be retrieved.");
+		System.out.println("1.4: Remove resource bundle file from filesystem during cache retention, then make sure it can still be retrieved.");
 		// from in-memory cache if it already exists in cache
 		removeFile(propertiesFilename.concat(fileExtension));
-		ResourceBundle rbAfterFileRemoved = PropertyResourceBundleManager
-				.getBundle(propertiesFilename);
+		ResourceBundle rbAfterFileRemoved = PropertyResourceBundleManager.getBundle(propertiesFilename);
 		assertSame(rbFileWithoutExtension, rbAfterFileRemoved);
-		recoverFile(propertiesFilename.concat(fileExtension).concat(".bak"),
-				".bak");
+		recoverFile(propertiesFilename.concat(fileExtension).concat(".bak"), ".bak");
 
-		System.out
-				.println("1.5: Change the reloadCheckMillis to 0, force time to expire, but the resource bundle is not modified, so make sure same bundle from cache is returned.");
+		System.out.println("1.5: Change the reloadCheckMillis to 0, force time to expire, but the resource bundle is not modified, so make sure same bundle from cache is returned.");
 		dynModifyReloadCheckMillisValue(0);
 		// force thread to sleep 100 millis to avoid timing issue, then do the test
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
-		ResourceBundle rbAfterPropertyNOChangedForceRefresh = PropertyResourceBundleManager
-				.getBundle(propertiesFilename);
+		ResourceBundle rbAfterPropertyNOChangedForceRefresh = PropertyResourceBundleManager.getBundle(propertiesFilename);
 		assertSame(rbFileWithoutExtension, rbAfterPropertyNOChangedForceRefresh);
 		// recover
-		dynModifyReloadCheckMillisValue(new Integer(Integer
-				.valueOf(defaultCheckPeriodValue) * 1000).intValue());
+		dynModifyReloadCheckMillisValue(new Integer(Integer.valueOf(defaultCheckPeriodValue) * 1000).intValue());
 
-		System.out
-				.println("1.6: Change the reload.checkPeriod to 1000, but time is not expired, so make sure cache will be used.");
-		modifyValueInProperties(propertiesFilename.concat(fileExtension),
-				checkPeriodKey, "1000");
-		ResourceBundle rbAfterPropertyChanged = PropertyResourceBundleManager
-				.getBundle(propertiesFilename);
+		System.out.println("1.6: Change the reload.checkPeriod to 1000, but time is not expired, so make sure cache will be used.");
+		modifyValueInProperties(propertiesFilename.concat(fileExtension), checkPeriodKey, "1000");
+		ResourceBundle rbAfterPropertyChanged = PropertyResourceBundleManager.getBundle(propertiesFilename);
 		assertSame(rbFileWithoutExtension, rbAfterPropertyChanged);
-		assertEquals(defaultCheckPeriodValue, rbAfterPropertyChanged
-				.getString(checkPeriodKey));
+		assertEquals(defaultCheckPeriodValue, rbAfterPropertyChanged.getString(checkPeriodKey));
 		// recover
-		modifyValueInProperties(propertiesFilename.concat(fileExtension),
-				checkPeriodKey, defaultCheckPeriodValue);
+		modifyValueInProperties(propertiesFilename.concat(fileExtension), checkPeriodKey, defaultCheckPeriodValue);
 
-		System.out
-				.println("1.7: Change the reloadCheckMillis to 0, force time to expire, modify the properties, and make sure modified bundle is returned.");
+		System.out.println("1.7: Change the reloadCheckMillis to 0, force time to expire, modify the properties, and make sure modified bundle is returned.");
 		dynModifyReloadCheckMillisValue(0);
-		modifyValueInProperties(propertiesFilename.concat(fileExtension),
-				checkPeriodKey, "100000");
+		modifyValueInProperties(propertiesFilename.concat(fileExtension), checkPeriodKey, "100000");
 		// force thread to sleep 100 millis to avoid timing issue, then do the test
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
-		ResourceBundle rbAfterPropertyChangedForceRefresh = PropertyResourceBundleManager
-				.getBundle(propertiesFilename);
-		assertNotSame(rbFileWithoutExtension,
-				rbAfterPropertyChangedForceRefresh);
-		assertEquals("100000", rbAfterPropertyChangedForceRefresh
-				.getString(checkPeriodKey));
+		ResourceBundle rbAfterPropertyChangedForceRefresh = PropertyResourceBundleManager.getBundle(propertiesFilename);
+		assertNotSame(rbFileWithoutExtension, rbAfterPropertyChangedForceRefresh);
+		assertEquals("100000", rbAfterPropertyChangedForceRefresh.getString(checkPeriodKey));
 		// recover
-		modifyValueInProperties(propertiesFilename.concat(fileExtension),
-				checkPeriodKey, defaultCheckPeriodValue);
-		dynModifyReloadCheckMillisValue(new Integer(Integer
-				.valueOf(defaultCheckPeriodValue) * 1000).intValue());
+		modifyValueInProperties(propertiesFilename.concat(fileExtension), checkPeriodKey, defaultCheckPeriodValue);
+		dynModifyReloadCheckMillisValue(new Integer(Integer.valueOf(defaultCheckPeriodValue) * 1000).intValue());
 
-		System.out
-				.println("1.8: Remove resource bundle file from filesystem, then force refresh the cache, and make sure null is returned.");
+		System.out.println("1.8: Remove resource bundle file from filesystem, then force refresh the cache, and make sure null is returned.");
 		removeFile(propertiesFilename.concat(fileExtension));
 		dynModifyReloadCheckMillisValue(0);
 		// again force thread to sleep 100 millis to avoid timing issue, then do the test
@@ -116,45 +89,35 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
-		ResourceBundle rbAfterFileRemovedAndCacheRefresh = PropertyResourceBundleManager
-				.getBundle(propertiesFilename);
+		ResourceBundle rbAfterFileRemovedAndCacheRefresh = PropertyResourceBundleManager.getBundle(propertiesFilename);
 		assertNull(rbAfterFileRemovedAndCacheRefresh);
-		dynModifyReloadCheckMillisValue(new Integer(Integer
-				.valueOf(defaultCheckPeriodValue) * 1000).intValue());
-		recoverFile(propertiesFilename.concat(fileExtension).concat(".bak"),
-				".bak");
+		dynModifyReloadCheckMillisValue(new Integer(Integer.valueOf(defaultCheckPeriodValue) * 1000).intValue());
+		recoverFile(propertiesFilename.concat(fileExtension).concat(".bak"), ".bak");
 
-		System.out
-				.println("1.9: Recover resource bundle file to filesystem, then do not force-refresh the cache, and make sure null still returned.");
-		ResourceBundle rbAfterFileRestoredAndNoRefresh = PropertyResourceBundleManager
-				.getBundle(propertiesFilename);
+		System.out.println("1.9: Recover resource bundle file to filesystem, then do not force-refresh the cache, and make sure null still returned.");
+		ResourceBundle rbAfterFileRestoredAndNoRefresh = PropertyResourceBundleManager.getBundle(propertiesFilename);
 		assertNull(rbAfterFileRestoredAndNoRefresh);
 
-		System.out
-				.println("1.10: Now file is recovered, force refresh the cache, and make sure bundle is returned.");
+		System.out.println("1.10: Now file is recovered, force refresh the cache, and make sure bundle is returned.");
 		dynModifyReloadCheckMillisValue(0);
 		// again force thread to sleep 1 millis to avoid timing issue, then do the test
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
-		ResourceBundle rbAfterFileRestoredAndRefresh = PropertyResourceBundleManager
-				.getBundle(propertiesFilename);
-		assertEquals(defaultCheckPeriodValue, rbAfterFileRestoredAndRefresh
-				.getString(checkPeriodKey));
+		ResourceBundle rbAfterFileRestoredAndRefresh = PropertyResourceBundleManager.getBundle(propertiesFilename);
+		assertEquals(defaultCheckPeriodValue, rbAfterFileRestoredAndRefresh.getString(checkPeriodKey));
 		// recover
-		dynModifyReloadCheckMillisValue(new Integer(Integer
-				.valueOf(defaultCheckPeriodValue) * 1000).intValue());
+		dynModifyReloadCheckMillisValue(new Integer(Integer.valueOf(defaultCheckPeriodValue) * 1000).intValue());
 
 	}
 
 	public void testGetBundleStringLocale() {
-		String defaultCheckPeriodValue = getOriginalConfigedValue(
-				propertiesFilename.concat(fileExtension), checkPeriodKey);
+		String defaultCheckPeriodValue = getOriginalConfigedValue(propertiesFilename.concat(fileExtension),
+																  checkPeriodKey);
 
 		System.out.println("2.1: Find properties for locale zh.");
-		ResourceBundle rb_zh = PropertyResourceBundleManager.getBundle(
-				propertiesFilename, new Locale("zh"));
+		ResourceBundle rb_zh = PropertyResourceBundleManager.getBundle(propertiesFilename, new Locale("zh"));
 		assertEquals("zh", rb_zh.getString("locale"));
 
 		// Fix for QC CR #141 results in update to this test case. Before the
@@ -164,13 +127,11 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 		// the locale is part of the cache key, so cache is no longer global but
 		// is per-locale. Thus the zh-CN file will be found now.
 		System.out.println("2.2: Find properties for locale zh-CN.");
-		ResourceBundle rb_zh_CN = PropertyResourceBundleManager.getBundle(
-				propertiesFilename, Locale.CHINA);
+		ResourceBundle rb_zh_CN = PropertyResourceBundleManager.getBundle(propertiesFilename, Locale.CHINA);
 		assertNotSame(rb_zh, rb_zh_CN);
 		assertEquals("zh_CN", rb_zh_CN.getString("locale"));
 
-		System.out
-				.println("2.3: Repeat 2.2 but force time to expire and make sure zh-CN is still returned.");
+		System.out.println("2.3: Repeat 2.2 but force time to expire and make sure zh-CN is still returned.");
 		// change the reloadCheckMillis to 0, force time to expire.
 		dynModifyReloadCheckMillisValue(0);
 		// sleep 100 millis to avoid timing issue
@@ -178,27 +139,23 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
-		ResourceBundle rb_zh_CN_Refresh = PropertyResourceBundleManager
-				.getBundle(propertiesFilename, Locale.CHINA);
+		ResourceBundle rb_zh_CN_Refresh = PropertyResourceBundleManager.getBundle(propertiesFilename, Locale.CHINA);
 		assertNotSame(rb_zh, rb_zh_CN_Refresh);
 		assertEquals("zh_CN", rb_zh_CN_Refresh.getString("locale"));
 		// recover
-		dynModifyReloadCheckMillisValue(new Integer(Integer
-				.valueOf(defaultCheckPeriodValue) * 1000).intValue());
+		dynModifyReloadCheckMillisValue(new Integer(Integer.valueOf(defaultCheckPeriodValue) * 1000).intValue());
 
-		System.out
-				.println("2.4: zh is still in cache so make sure it is still returned for locale zh.");
+		System.out.println("2.4: zh is still in cache so make sure it is still returned for locale zh.");
 		// though the zh_CN is loaded, zh is still in cache and not modified
-		ResourceBundle rb_zh_After_zh_CN_loaded = PropertyResourceBundleManager
-				.getBundle(propertiesFilename, new Locale("zh"));
+		ResourceBundle rb_zh_After_zh_CN_loaded = PropertyResourceBundleManager.getBundle(propertiesFilename,
+																						  new Locale("zh"));
 		assertSame(rb_zh, rb_zh_After_zh_CN_loaded);
 		assertEquals("zh", rb_zh_After_zh_CN_loaded.getString("locale"));
 
-		System.out
-				.println("2.5: Make sure zh-CN is still in cache.");
+		System.out.println("2.5: Make sure zh-CN is still in cache.");
 		// zh_CN is still in cache and not modified
-		ResourceBundle rb_zh_CN_After_zh_CN_loaded = PropertyResourceBundleManager
-				.getBundle(propertiesFilename, Locale.CHINA);
+		ResourceBundle rb_zh_CN_After_zh_CN_loaded = PropertyResourceBundleManager.getBundle(propertiesFilename,
+																							 Locale.CHINA);
 		assertSame(rb_zh_CN, rb_zh_CN_After_zh_CN_loaded);
 		assertEquals("zh_CN", rb_zh_CN_After_zh_CN_loaded.getString("locale"));
 
@@ -206,7 +163,7 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 
 	/**
 	 * rename file to backup file
-	 * 
+	 *
 	 * @param filename
 	 *            file name
 	 */
@@ -225,7 +182,7 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 
 	/**
 	 * recover the file which is processed by removeFile method
-	 * 
+	 *
 	 * @param filename
 	 *            file name which contains the specified file extension
 	 * @param fileExtension
@@ -236,8 +193,7 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 			ClassLoader cl = Thread.currentThread().getContextClassLoader();
 			URL url = cl.getResource(filename);
 			File file = new File(url.getPath());
-			File target = new File(url.getPath().substring(0,
-					url.getPath().length() - fileExtension.length()));
+			File target = new File(url.getPath().substring(0, url.getPath().length() - fileExtension.length()));
 			try {
 				FileUtils.copyFile(file, target);
 				FileUtils.deleteQuietly(file);
@@ -249,13 +205,12 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 
 	/**
 	 * modify the value in specified properties with the specified key
-	 * 
+	 *
 	 * @param filename
 	 * @param key
 	 * @param value
 	 */
-	private void modifyValueInProperties(String filename, String key,
-			String value) {
+	private void modifyValueInProperties(String filename, String key, String value) {
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 
 		Properties properties = new Properties();
@@ -287,9 +242,8 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 	}
 
 	/**
-	 * get the configed value in the specified properties file with specified
-	 * key
-	 * 
+	 * get the configed value in the specified properties file with specified key
+	 *
 	 * @param filename
 	 * @param key
 	 * @return the configed value
@@ -318,7 +272,7 @@ public class PropertyResourceBundleManagerTest extends TestCase {
 
 	/**
 	 * use java reflect to modify the reloadCheckMillis primitive value
-	 * 
+	 *
 	 * @param i
 	 */
 	private void dynModifyReloadCheckMillisValue(int i) {

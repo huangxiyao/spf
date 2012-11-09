@@ -5,23 +5,17 @@
  */
 package com.hp.it.spf.xa.properties;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Map;
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
-
+import com.hp.it.spf.xa.i18n.I18nUtility;
+import com.hp.it.spf.xa.misc.Utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.hp.it.spf.xa.misc.Utils;
-import com.hp.it.spf.xa.i18n.I18nUtility;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
@@ -63,7 +57,15 @@ import com.hp.it.spf.xa.i18n.I18nUtility;
  * is currently the value of the
  * {@link PropertyResourceBundleManager#DEFAULT_RELOAD_CHECK_PERIOD} constant.
  * </p>
- * 
+ * <p>
+ * <b>Note:</b> Besides this class, there is also a 
+ * <code>PropertyResourceBundleManager</code> subclass provided by the SPF
+ * portal utilities, specifically for use by SPF Vignette portal components.
+ * Whereas the present class loads only from the current context classloader,
+ * the portal-specific <code>PropertyResourceBundleManager</code> can also
+ * load from your current Vignette component's support files.  Please see the
+ * SPF Portal Utilities Developer Guide for more information.
+ * </p>
  * @author <link href="scott.jorgenson@hp.com">Scott Jorgenson</link>
  * @author <link href="ying-zhiw@hp.com">Oliver</link>
  * @version TBD
@@ -108,6 +110,9 @@ public class PropertyResourceBundleManager {
 	// same, in millis
 	private static int reloadCheckMillis = reloadCheckPeriod * 1000;
 
+	// indicate which is the runtime class of PropertyResourceBundleManager
+	protected static Class polymorphismClazz = PropertyResourceBundleManager.class;
+
 	// static block to load the minimum retention interval from file
 	static {
 		try {
@@ -145,7 +150,7 @@ public class PropertyResourceBundleManager {
 	 * localization. This method uses the in-memory "hot" cache (refreshed if
 	 * the file on disk is updated and the configurable cache lifetime has
 	 * expired). The search for the properties file occurs everywhere within the
-	 * current classpath using the standard system class loader. The method
+	 * current classpath using the current context class loader. The method
 	 * returns null if the properties file cannot be found or has been removed
 	 * from disk. If there was a problem opening or reading the properties file,
 	 * a warning is also logged (using Apache commons logging).
@@ -169,7 +174,7 @@ public class PropertyResourceBundleManager {
 	 * locale. This method uses the in-memory "hot" cache (refreshed if the file
 	 * on disk is updated and the configurable cache lifetime has expired). The
 	 * search for the properties file occurs everywhere within the current
-	 * classpath using the standard system class loader. The search includes
+	 * classpath using the current context class loader. The search includes
 	 * looking for the best-fit localized version of the properties file, using
 	 * the standard lookup sequence based on the given locale (see
 	 * {@link java.util.ResourceBundle}). The method returns null if the
@@ -219,8 +224,8 @@ public class PropertyResourceBundleManager {
 	 * properties file and key, without localization. This method uses the
 	 * in-memory "hot" cache (refreshed if the file on disk is updated and the
 	 * configurable cache lifetime has expired). The search for the properties
-	 * file occurs everywhere within the current classpath using the standard
-	 * system class loader. The method returns null if the properties file
+	 * file occurs everywhere within the current classpath using the current
+	 * context class loader. The method returns null if the properties file
 	 * cannot be found or has been removed from disk, or if the key is not found
 	 * in it. If there was a problem opening or reading the properties file, a
 	 * warning is also logged (using Apache commons logging).
@@ -247,7 +252,7 @@ public class PropertyResourceBundleManager {
 	 * localization. This method uses the in-memory "hot" cache (refreshed if
 	 * file on disk is updated and the configurable cache lifetime has expired).
 	 * The search for the properties file occurs everywhere within the current
-	 * classpath using the standard system class loader. The method returns the
+	 * classpath using the current context class loader. The method returns the
 	 * given default value if the properties file cannot be found or has been
 	 * removed from disk, or if the key is not found in it. If there was a
 	 * problem opening or reading the properties file, a warning is also logged
@@ -277,8 +282,8 @@ public class PropertyResourceBundleManager {
 	 * base properties file, key and locale. This method uses the in-memory
 	 * "hot" cache (refreshed if the file on disk is updated and the
 	 * configurable cache lifetime has expired). The search for the properties
-	 * file occurs everywhere within the current classpath using the standard
-	 * system class loader. The search includes looking for the best-fit
+	 * file occurs everywhere within the current classpath using the current
+	 * context class loader. The search includes looking for the best-fit
 	 * localized version of the properties file, using the standard lookup
 	 * sequence based on the given locale (see {@link java.util.ResourceBundle}).
 	 * The method returns null if the best-fit properties file cannot be found
@@ -311,7 +316,7 @@ public class PropertyResourceBundleManager {
 	 * method uses the in-memory "hot" cache (refreshed if file on disk is
 	 * updated and the configurable cache lifetime has expired). The search for
 	 * the properties file occurs everywhere within the current classpath using
-	 * the standard system class loader. The search includes looking for the
+	 * the current context class loader. The search includes looking for the
 	 * best-fit localized version of the properties file, using the standard
 	 * lookup sequence based on the given locale (see
 	 * {@link java.util.ResourceBundle}). The method returns the given default
@@ -559,7 +564,15 @@ public class PropertyResourceBundleManager {
 			return null;
 
 		// lookup the filename in the in-memory cache and on the classpath
-		File file = getFile(filename);
+
+		File file = null;
+		try {
+			file = (File)polymorphicExecute(PropertyResourceBundleManager.class.getDeclaredMethod("getFile", String.class), filename);
+		} catch (SecurityException e) {
+			LOG.error("Method getFile(String) is not defined.");
+		} catch (NoSuchMethodException e) {
+			LOG.error("Method getFile(String) is not defined.");
+		}
 		PropertyResourceBundleInfo info = p_map.get(getMapKey(filename, loc));
 		if (info != null) {
 			// if not found on the filesystem, load null file info into cache
@@ -638,9 +651,20 @@ public class PropertyResourceBundleManager {
 		// into map and return)
 		InputStream in = null;
 		try {
-			in = new BufferedInputStream(Utils
-					.getResourceAsStream(getFilenameWithExtension(filename)));
-			// in = new BufferedInputStream(file.toURL().openStream());
+			try {
+				in = new BufferedInputStream(new FileInputStream(file));
+			} catch (FileNotFoundException ex) {
+				LOG
+                        .warn("Problem using FileInputStream to open property file "
+                                + filename
+                                + ", file path:"
+                                + file.getPath()
+                                + " - this property file may be in a JAR file, so try to open using classloader.");
+			}
+
+			if (in == null) {
+				in = new BufferedInputStream(Utils.getResourceAsStream(getFilenameWithExtension(filename)));
+			}
 		} catch (Exception e) {
 			LOG.warn("Problem opening property file " + filename + ": "
 					+ e.getMessage(), e);
@@ -751,7 +775,7 @@ public class PropertyResourceBundleManager {
 	 *            (with extension)
 	 * @return file handle
 	 */
-	private static File getFile(String filename) {
+	protected static File getFile(String filename) {
 		URL url = null;
 		File file = null;
 		// use the context classloader to lookup the file in the filesystem -
@@ -796,5 +820,38 @@ public class PropertyResourceBundleManager {
 		if (loc != null)
 			key = I18nUtility.localeToLanguageTag(loc) + '/' + key;
 		return key;
+	}
+
+	/**
+	 * Execute the method of the runtime class with the specified parameters. 
+	 *
+	 * @param method the shadow method which will be used to retrieved the runtime method.
+	 * @param args parameters of the method being invoked
+	 * @return  return value deponds on the definition  of the method 
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static Object polymorphicExecute(Method method, Object... args) {
+		Method runtimeMethod;
+		Class runtimeClazz = polymorphismClazz;
+		try {
+			runtimeMethod = runtimeClazz.getDeclaredMethod(method.getName(), method.getParameterTypes());
+		} catch (Exception e) {
+			runtimeMethod = method;
+			runtimeClazz = PropertyResourceBundleManager.class;
+		}
+		runtimeMethod.setAccessible(true);
+		Object obj = null;
+		try {
+			obj = runtimeMethod.invoke(runtimeClazz, args);
+		} catch (IllegalArgumentException e) {
+			LOG.warn("Cannot invoke specified method, " + e.getMessage(), e);
+		} catch (IllegalAccessException e) {
+			LOG.warn("Cannot invoke specified method, " + e.getMessage(), e);
+		} catch (InvocationTargetException e) {
+			LOG.warn("Cannot invoke specified method, " + e.getMessage(), e);
+		} finally {
+			runtimeMethod.setAccessible(false);
+		}
+		return obj;
 	}
 }

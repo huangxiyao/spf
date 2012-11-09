@@ -306,11 +306,11 @@ libraries</a>, below.</p>
 <p>The SPF common utilities are distributed in Java JAR format. The
 base JAR filename is <code>spf-common-utilities.jar</code>; typically a
 version number is included (for example, <code>spf-common-utilities-1.0.0.jar</code>).
-The SPF portlet utilities are distributed through Maven 2:</p>
+The SPF common utilities are distributed through Maven 2:</p>
 
 <ul>
 	<li>The current Maven 2 repository is <a
-		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-common-utilities/"><code>http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-common-utilities/</code></a></li>
+		href="http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/xa/spf-common-utilities/"><code>http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/xa/spf-common-utilities/</code></a></li>
 	<li>The group ID is <code>com.hp.it.spf.xa</code>
 	<li>The artifact ID is <code>spf-common-utilities</code>
 </ul>
@@ -349,11 +349,11 @@ your portal is using non-standard HTTP or HTTPS ports (eg in a sandbox).</p>
 	the appropriate SPF configuration template JAR file. For portlet
 	applications, use the template in the <code>spf-portlet-config.jar</code>,
 	where you can find on the SPF team's Maven 2 repository here: <a
-		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+		href="http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/xa/spf-portlet-config/">http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/xa/spf-portlet-config/</a>
 	(browse for the latest version - the JAR file may have the version
 	number affixed to the file name). SPF portal developers should use the
 	template in the <code>spf-portal-config.jar</code>, here: <a
-		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config/</a>.
+		href="http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/xa/spf-portal-config/">http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/xa/spf-portal-config/</a>.
 	In either case, extract the template from the JAR file once you have
 	downloaded it.</p>
 	</li>
@@ -416,11 +416,11 @@ default behavior (eg the cache duration).</p>
 	from the appropriate SPF configuration template JAR file. For portlet
 	applications, use the template in the <code>spf-portlet-config.jar</code>,
 	where you can find on the SPF team's Maven 2 repository here: <a
-		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portlet-config/</a>
+		href="http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/xa/spf-portlet-config/">http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/xa/spf-portlet-config/</a>
 	(browse for the latest version - the JAR file may have the version
 	number affixed to the file name). SPF portal developers should use the
 	template in the <code>spf-portal-config.jar</code>, here: <a
-		href="http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config">http://samson.atl.hp.com:8081/nexus/content/groups/public/com/hp/it/spf/xa/spf-portal-config/</a>.
+		href="http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/xa/spf-portal-config/">http://repo1.corp.hp.com/nexus/content/repositories/releases/com/hp/it/spf/xa/spf-portal-config/</a>.
 	In either case, extract the template from the JAR file once you have
 	downloaded it.</p>
 	</li>
@@ -506,13 +506,13 @@ above.</p>
 <p>Developers of <b>Java portlet applications</b> for the SPF portal
 will find many more utilities available to them, in the SPF portlet
 utilities artifact. Please see the <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#top">SPF
+	href="../../../portlet/spf-portlet-utilities/apidocs/" target="_blank">SPF
 Portlet Utilities Developer's Guide</a>.</p>
 
 <p>Developers of <b>Vignette portal components</b> for the SPF
 portal will find many more utilities available to them, in the SPF
 portal utilities artifact. Please see the <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/overview-summary.html#top">SPF
+	href="../../../portal/spf-portal-utilities/apidocs/" target="_blank">SPF
 Portal Utilities Developer's Guide</a>.</p>
 
 <hr>
@@ -1232,7 +1232,7 @@ operating on collections of locales.</p>
 class which provides additional, portlet-specific internationalization
 functionality, such as access to message resources and localized
 supporting files. Please see the internationalization chapter in the <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n">SPF
+	href="../../../portlet/spf-portlet-utilities/apidocs/" target="_blank">SPF
 Portlet Utilities Developer's Guide</a>.</p>
 
 <a name="i18n.other.portal">
@@ -1244,7 +1244,7 @@ developers</h4>
 class which provides additional, Vignette-specific internationalization
 functionality, such as access to message resources and localized
 supporting files. Please see the internationalization chapter in the <a
-	href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/overview-summary.html#i18n">SPF
+	href="../../../portal/spf-portal-utilities/apidocs/" target="_blank">SPF
 Portal Utilities Developer's Guide</a>.</p>
 
 <hr>
@@ -1871,11 +1871,11 @@ information on how to manage your message properties:</p>
 <ul>
 	<li>Java portlet developers using SPF should refer to the
 	internationalization chapter in the <a
-		href="http://samson.atl.hp.com:8080/hudson/job/spf-portlet-utilities/site/apidocs/overview-summary.html#i18n">SPF
+		href="../../../portlet/spf-portlet-utilities/apidocs/" target="_blank">SPF
 	Portlet Utilities Developer's Guide</a>.</li>
 	<li>Vignette portal component developers for SPF should refer to
 	the internationalization chapter in the <a
-		href="http://samson.atl.hp.com:8080/hudson/job/spf-portal-utilities/site/apidocs/overview-summary.html#i18n">SPF
+		href="../../../portal/spf-portal-utilities/apidocs/" target="_blank">SPF
 	Portal Utilities Developer's Guide</a>.</li>
 </ul>
 </blockquote>
@@ -1997,6 +1997,23 @@ of this class are:</p>
 	opened or read (the exception is logged too), using Apache commons
 	logging (so the log message goes to your underlying log framework).</li>
 </ul>
+
+<blockquote>
+<p>
+<b>Note:</b> This common <code>PropertyResourceBundleManager</code>
+loads its property files from the classpath, using the current context
+classloader. For SPF Vignette component developers, be aware there is a
+portal-specific subclass of <code>PropertyResourceBundleManager</code>
+which can also load files from the current Vignette component. You just
+put your property file into your CAR as a secondary support file, and
+the portal-specific <code>PropertyResourceBundleManager</code> can find
+it there. In contrast, the common <code>PropertyResourceBundleManager</code>
+documented here does not do this, since it is meant for use by portlets
+as well. So if you are writing a Vignette portal component, you may wish
+to use the portal-specific subclass. Please see the <a
+	href="../../../portal/spf-portal-utilities/apidocs/" target="_blank">SPF Portal
+Utilities Developer's Guide</a> for more information.</p>
+</blockquote>
 
 <a name="properties.propertyResourceBundleManager.getBundle">
 <h4>4.2.1. Getting a bundle of properties (<code>PropertyResourceBundleManager.getBundle</code>)</h4>
@@ -2268,6 +2285,12 @@ reload.checkPeriod = 3600
 		<td>S. Jorgenson</td>
 		<td>Added new <code>get*DisplayDate</code> methods which take
 		boolean parameter.</td>
+	</tr>
+	<tr>
+		<td>1.5</td>
+		<td>Sep 10 2012</td>
+		<td>S. Jorgenson / Ying-Zhi Wu</td>
+		<td>Documented new portal subclass of <code>PropertyResourceBundleManager</code>.</td>
 	</tr>
 </table>
 <p></p>

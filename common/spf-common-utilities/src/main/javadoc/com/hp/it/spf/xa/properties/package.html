@@ -14,7 +14,7 @@ provides hot-reloadable cached access to property files:</p>
 <ul>
 	<li>The property files may be localized and tagged by locale, in
 	the manner of {@link java.util.ResourceBundle}, but that is optional.</li>
-	<li>Property files are loaded using the system classloader, and
+	<li>Property files are loaded using the current context classloader, and
 	thus may be located anywhere inside or outside the application (ie
 	portal Web application or portlet application), so long as any
 	non-standard location for class loading has been configured on the JVM
@@ -24,7 +24,11 @@ provides hot-reloadable cached access to property files:</p>
 	refreshed automatically at the time of the next access.</li>
 </ul>
 
-<p>Please see the class for more information.</p>
+<p>Please see the class for more information.  <b>Note:</b> For use in 
+portal components only, there is also a portal-specific
+<code>PropertyResourceBundleManager</code> which loads from the
+current component's support files (in addition to the classloader).  See
+the SPF Portal Utilities Developer Guide for more information.</p>
 
 </body>
 </html>
