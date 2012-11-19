@@ -30,7 +30,7 @@ use integer;
 $msg_ext_re = "properties";
 $nonmsg_ext_re = "html|htm|xml|txt|css|js|rtf";
 $image_ext_re = "jpg|gif|tif|png";
-$misc_ext_re = "pdf|doc|mpg|wav|psd|eps|wmv|avi|ppt";
+$misc_ext_re = "pdf|doc|docx|mpg|wav|psd|eps|wmv|avi|ppt|xls|xlsx";
 $media_ext_re = "$image_ext_re|$misc_ext_re";
 $text_ext_re = "$msg_ext_re|$nonmsg_ext_re";
 # For CR #218 - pt_br should be normalized to pt, and pt_pt should be left
