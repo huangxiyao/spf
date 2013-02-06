@@ -44,7 +44,7 @@
 			2.5, 2.6, 2.6.1) -->
 		<mavenJavadocPluginVersion>2.4</mavenJavadocPluginVersion>
 		<mavenSourcePluginVersion>2.1.2</mavenSourcePluginVersion>
-		<vignetteVersion>8.2.0.700114</vignetteVersion>
+		<vignetteVersion>8.2.2.713234</vignetteVersion>
 		<slf4jVersion>1.5.2</slf4jVersion>
 		<logbackVersion>0.9.15</logbackVersion>
 
