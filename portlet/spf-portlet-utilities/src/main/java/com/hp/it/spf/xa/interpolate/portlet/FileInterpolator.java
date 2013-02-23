@@ -1324,6 +1324,18 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * is replaced by blank.
  * </p>
  * </dd>
+ * 
+ * <dt><a name="xml-escape"><code>{XML-ESCAPE:<i>string</i>}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use this token to XML-escape the <code><i>string</i></code> parameter. For
+ * example, <code>&lt;p&gt;Welcome, {XML-ESCAPE:{NAME}}!&lt;/p&gt;</code> causes
+ * the current user name to be inserted (XML-escaped) into the surrounding
+ * content. This prevents inadvertent corruption or risk of XSS
+ * (cross-site-scripting) due to XML meta-characters, like <code>&lt;</code> and
+ * <code>&amp;</code>, that might be contained in the name.
+ * </p>
+ * </dd>
  * </dl>
  * </p>
  * 
