@@ -659,6 +659,7 @@ public abstract class TokenParser {
 	content = parseRequestURL(content);
 	content = parseSiteURL(content);
 	content = parseURLEncode(content);
+	content = parseXMLEscape(content);
 	content = parseDate(content);
 
 	// Done.
