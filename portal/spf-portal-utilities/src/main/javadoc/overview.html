@@ -364,7 +364,7 @@ table.props td {
 			<code>{INCLUDE:<i>key</i>}</code>)</a></li>
 			<li>4.4.5. <a href="#file.author.token.misc">Miscellaneous (<code>{AFTER:<i>date</i>}</code>,
 			<code>{BEFORE:<i>date</i>}</code>, <code>{DATE:<i>date</i>}</code>, <code>{SITE-NAME}</code>,
-			<code>{URL-ENCODE:<i>string</i>}</code>)</a></li>
+			<code>{URL-ENCODE:<i>string</i>}</code>, <code>{XML-ESCAPE:<i>string</i>}</code>)</a></li>
 		</ul>
 		</li>
 	</ul>
@@ -6762,7 +6762,8 @@ This text is for everybody.&lt;BR&gt;
 
 <a name="file.author.token.misc">
 <h4>4.4.5. Miscellaneous (<code>{AFTER:<i>date</i>}</code>, <code>{BEFORE:<i>date</i>}</code>,
-<code>{DATE:<i>date</i>}</code>, <code>{SITE-NAME}</code>, <code>{URL-ENCODE:<i>string</i>}</code>)</h4>
+<code>{DATE:<i>date</i>}</code>, <code>{SITE-NAME}</code>, <code>{URL-ENCODE:<i>string</i>}</code>,
+<code>{XML-ESCAPE:<i>string</i>}</code>)</h4>
 </a>
 
 <p>These are miscellaneous tokens. Please click on the links for
@@ -6946,6 +6947,29 @@ This text is only displayed until 12:30 PM sharp (Greenwhich Mean Time) on Febru
 	<p>This inserts the current request URL, properly encoded, into the
 	query string of that hyperlink.</p>
 	</dd>
+	
+	<dt><a
+		href="com/hp/it/spf/xa/interpolate/portal/FileInterpolator.html#xml-escape"><code>{XML-ESCAPE:<i>string</i>}</code></a></dt>
+	<dd>
+	<p>Use this token to insert a <code><i>string</i></code>,
+	XML-escaped, into the interpolated content. For example:</p>
+
+	<blockquote><pre>
+&lt;P&gt;
+   Welcome, {XML-ESCAPE:{NAME}}!
+&lt;/P&gt;
+	</pre></blockquote>
+
+	<p>This inserts the current user name, safely escaped, into the
+	surrounding HTML content. This way, if the name happens to contain any
+	sensitive XML meta-characters like <code>&lt;</code> and <code>&amp;</code>
+	they will be converted to their equivalent escape sequences so the user
+	agent will render them properly instead of interpreting them as HTML.
+	This helps prevent inadvertent corruption to your content by the
+	presence of such characters, or even deliberate cross-site-scripting
+	(XSS) attacks.</p>
+	</dd>
+	
 </dl>
 
 <hr>

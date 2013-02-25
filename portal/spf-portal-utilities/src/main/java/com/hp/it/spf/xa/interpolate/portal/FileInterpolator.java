@@ -922,8 +922,8 @@ import com.vignette.portal.website.enduser.PortalContext;
  * <p>
  * Use these tokens around sections of content which should only be included in
  * the interpolated content if the current user request was HTTPS (secure) or
- * HTTP (plain-text), respectively. The wrapped content will be omitted from
- * the returned content when the current security status does not match.
+ * HTTP (plain-text), respectively. The wrapped content will be omitted from the
+ * returned content when the current security status does not match.
  * </p>
  * <p>
  * The content enclosed by the tokens can be anything, including any of the
@@ -1156,6 +1156,19 @@ import com.vignette.portal.website.enduser.PortalContext;
  * is replaced by blank.
  * </p>
  * </dd>
+ * 
+ * <dt><a name="xml-escape"><code>{XML-ESCAPE:<i>string</i>}</code></a></dt>
+ * <dd>
+ * <p>
+ * Use this token to XML-escape the <code><i>string</i></code> parameter. For
+ * example, <code>&lt;p&gt;Welcome, {XML-ESCAPE:{NAME}}!&lt;/p&gt;</code> causes
+ * the current user name to be inserted (XML-escaped) into the surrounding
+ * content. This prevents inadvertent corruption or risk of XSS
+ * (cross-site-scripting) due to XML meta-characters, like <code>&lt;</code> and
+ * <code>&amp;</code>, that might be contained in the name.
+ * </p>
+ * </dd>
+ * 
  * </dl>
  * 
  * </p>
