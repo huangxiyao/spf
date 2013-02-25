@@ -58,6 +58,7 @@ import com.hp.it.spf.xa.misc.Utils;
  * <li><code>{SITE-NAME}</code></li>
  * <li><code>{SITE-URL}</code></li>
  * <li><code>{SITE-URL:<i>spec</i>}</code></li>
+ * <li><code>{XML-ESCAPE:<i>string</i>}</code></li>
  * <li><code>{URL-ENCODE:<i>string</i>}</code></li>
  * <li><code>{DATE:<i>date</i>}</code></li>
  * <li><code>{NAV-ITEM:<i>ids</i>}</code></li>
@@ -203,6 +204,11 @@ public abstract class TokenParser {
      * This class attribute is the token for the URL encoder.
      */
     private static final String TOKEN_URL_ENCODE = "URL-ENCODE";
+
+    /**
+     * This class attribute is the token for the HTML/XML escaper.
+     */
+    private static final String TOKEN_XML_ESCAPE = "XML-ESCAPE";
 
     /**
      * This class attribute is the token for a localized date/time string.
@@ -653,6 +659,7 @@ public abstract class TokenParser {
 	content = parseRequestURL(content);
 	content = parseSiteURL(content);
 	content = parseURLEncode(content);
+	content = parseXMLEscape(content);
 	content = parseDate(content);
 
 	// Done.
@@ -952,6 +959,44 @@ public abstract class TokenParser {
 
 	return parseElementalToken(content, TOKEN_URL_ENCODE,
 		new URLEncodedValueProvider());
+    }
+
+    /**
+     * <p>
+     * Parses the given string, converting the
+     * <code>{XML-ESCAPE:<i>string</i>}</code> token into the XML-escaped value
+     * of that <code><i>string</i></code>. For example,
+     * <code>&lt;p&gt;Welcome, {XML-ESCAPE:{NAME}}!&lt;/p&gt;</code>
+     * causes the value interpolated from the <code>{NAME}</code> token to be
+     * XML-escaped so it can be safely embedded in the surrounding HTML context.
+     * If you provide null content to the token, then null is returned.
+     * </p>
+     * <p>
+     * <b>Note:</b> For the token, you may use <code>&lt;</code> and
+     * <code>&gt;</code> instead of <code>{</code> and <code>}</code>, if you
+     * prefer.
+     * </p>
+     * 
+     * @param content
+     *            The content string.
+     * @return The interpolated string.
+     */
+    public String parseXMLEscape(String content) {
+
+    /**
+     * Value provider for the XML-escaped string.
+     */
+    class XMLEscapedValueProvider extends ValueProvider {
+        protected String getValue(String param) {
+        if (param != null) {
+            param = Utils.escapeXml(param);
+        }
+        return (param);
+        }
+    }
+
+    return parseElementalToken(content, TOKEN_XML_ESCAPE,
+        new XMLEscapedValueProvider());
     }
 
     /**
