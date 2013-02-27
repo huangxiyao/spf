@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
 CASFW_HOME="$(cd "$(dirname "$0")/.." && pwd -P)" 
 
-source ${CASFW_HOME}/bin/.casfwrc
+. ${CASFW_HOME}/bin/.casfwrc
 
 VIGNETTE_HOME="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
 
@@ -19,7 +19,7 @@ vignette_database_setup_required=true
 
 echo "Checking Vignette Portal database"
 # Will use Vignette-provided tools to do that
-pushd ${VIGNETTE_HOME}/bin
+cd ${VIGNETTE_HOME}/bin
 
 db_check_sql_path="${CASFW_HOME}/var/vap_db_check.sql"
 echo "select count(*) from users;" > "${db_check_sql_path}"
@@ -62,14 +62,14 @@ if ${vignette_database_setup_required}; then
     if [ ${last_exit_code} -ne 0 ]; then
         echo "Table creation failed with code ${last_exit_code}."
         echo "Aborting."
-        popd
         exit ${last_exit_code}
     fi
 
 
     echo "Applying SPF database extensions"
     alter_sql_path="${VIGNETTE_HOME}/config/spf_vap_alter_users.sql"
-    if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
+#    if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
+    if echo ${vignette_db_driver_class} | grep -q -e "derby" ; then
         alter_sql_path="${alter_sql_path}.derby"
     fi
     if ${using_cygwin}; then
@@ -89,7 +89,6 @@ if ${vignette_database_setup_required}; then
     if [ ${last_exit_code} -ne 0 ]; then
         echo "Creating custom SPF columns failed with code ${last_exit_code}."
         echo "Aborting."
-        popd
         exit ${last_exit_code}
     fi
 
@@ -110,7 +109,6 @@ if ${vignette_database_setup_required}; then
     if [ ${last_exit_code} -ne 0 ]; then
         echo "Administration account creation failed with code ${last_exit_code}."
         echo "Aborting."
-        popd
         exit ${last_exit_code}
     fi
 
@@ -126,7 +124,6 @@ if ${vignette_database_setup_required}; then
     if [ ${last_exit_code} -ne 0 ]; then
         echo "Bootstraping portal application failed with code ${last_exit_code}."
         echo "Aborting."
-        popd
         exit ${last_exit_code}
     fi
 
@@ -137,7 +134,8 @@ if ${vignette_database_setup_required}; then
 
     echo "Setting administrator account's profile ID"
     update_sql_path="${VIGNETTE_HOME}/config/spf_vap_update_admin.sql"
-    if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
+#    if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
+     if echo ${vignette_db_driver_class} | grep -q -e "derby" ; then
         update_sql_path="${update_sql_path}.derby"
     fi
     if ${using_cygwin}; then
@@ -157,7 +155,6 @@ if ${vignette_database_setup_required}; then
     if [ ${last_exit_code} -ne 0 ]; then
         echo "Updating administrator account profile id failed with code ${last_exit_code}."
         echo "Aborting."
-        popd
         exit ${last_exit_code}
     fi
 else
@@ -181,7 +178,6 @@ last_exit_code=$?
 if [ ${last_exit_code} -ne 0 ]; then
     echo "Registering remote portlet servers failed with code ${last_exit_code}."
     echo "Aborting."
-    popd
     exit ${last_exit_code}
 fi
 
@@ -203,7 +199,6 @@ last_exit_code=$?
 if [ ${last_exit_code} -ne 0 ]; then
     echo "Registering portlet applications failed with code ${last_exit_code}."
     echo "Aborting."
-    popd
     exit ${last_exit_code}
 fi
 
@@ -225,7 +220,6 @@ last_exit_code=$?
 if [ ${last_exit_code} -ne 0 ]; then
     echo "Registering support languages failed with code ${last_exit_code}."
     echo "Aborting."
-    popd
     exit ${last_exit_code}
 fi
 
@@ -256,7 +250,6 @@ function import_car_files {
         if [ ${last_exit_code} -ne 0 ]; then
             echo "Importing file ${car_file} failed with code ${last_exit_code}."
             echo "Aborting."
-            popd
             rm ${CASFW_HOME}/var/accept_components_import.txt
             exit ${last_exit_code}
         fi
@@ -288,9 +281,5 @@ last_exit_code=$?
 if [ ${last_exit_code} -ne 0 ]; then
     echo "Adding anonymous users failed with code ${last_exit_code}."
     echo "Aborting."
-    popd
     exit ${last_exit_code}
 fi
-
-popd
-

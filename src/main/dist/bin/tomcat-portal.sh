@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This file is deployed into {casfw_home}/bin so let's walk up
 # the directory hierarchy to get to CASFW root directory
@@ -6,7 +6,7 @@ CASFW_HOME="$(cd "$(dirname "$0")/.." && pwd -P)"
 
 umask u=rwx,g=rx,o=rx
 
-source ${CASFW_HOME}/bin/.casfwrc
+. ${CASFW_HOME}/bin/.casfwrc
 
 vignette_home="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
 trust_store_path=${CASFW_HOME}/etc/security/java6_cacerts

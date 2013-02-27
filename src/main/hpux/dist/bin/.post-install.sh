@@ -29,11 +29,8 @@ if [ -r ${CASFW_HOME}/bin/.post-install_custom.sh ]; then
 fi
 
 # Print message about URL at which Portal runs
-tomcat_portal_http_port="$(get_property_value "${CASFW_HOME}/etc/casfw.properties" "tomcat_portal_connector_http_port")"
 echo
-echo "Starting Tomcat with Vignette Portal at http://$(hostname):${tomcat_portal_http_port}/portal/"
-${CASFW_HOME}/bin/tomcat-portal.sh start
-
+echo "Please configure WebLogic with Vignette Portal as post installation."
 
 #echo
 #echo "Please check ${CASFW_HOME}/README.txt for details of the components included"
