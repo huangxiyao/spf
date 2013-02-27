@@ -1,11 +1,11 @@
 # CASFW_HOME is expected to be set before including this file
 
 if [ -r ${HOME}/.casfwrc ]; then
-    source ${HOME}/.casfwrc
+    . ${HOME}/.casfwrc
 fi
 
 
-function get_property_value() {
+get_property_value() {
     local file_path="$1"
     local prop_name="$2"
     local prop_value="$(grep "^${prop_name}=" "${file_path}" | tail -n1 | awk '{print substr($0, index($0, "=")+1)}')"
@@ -28,7 +28,8 @@ if [ -z "${casfw_java_home}" ]; then
     fi
 
     jvm_version=$("${JAVA_HOME}/bin/java" -version 2>&1 | head -n1)
-    if [[ ! "${jvm_version}" =~ "1.6." ]]; then
+#    if [[ ! "${jvm_version}" =~ "1.6." ]]; then
+    if echo ${jvm_version} | grep -v -q -e '1.6.'; then
         echo "Required Java version is 1.6 but JAVA_HOME JVM using ${jvm_version}."
         echo "Update your environment with JAVA_HOME pointing to JDK 1.6."
         exit 2
@@ -38,7 +39,8 @@ else
 fi
 
 using_cygwin=false
-if [[ "$(uname)" =~ "CYGWIN" ]]; then
+#if [[ "$(uname)" =~ "CYGWIN" ]]; then
+if echo "$(uname)" | grep -q -e "CYGWIN"; then
     using_cygwin=true
 fi 
 
@@ -73,5 +75,5 @@ CASFW_DYNAMIC_CONFIG_TOKENS="-Dportal_version=${portal_version} -Dvignette_home=
 
 # allow other installers using this one as base to provide their additional settings
 if [ -r ${CASFW_HOME}/bin/.casfwrc_custom ]; then
-    source ${CASFW_HOME}/bin/.casfwrc_custom
+    . ${CASFW_HOME}/bin/.casfwrc_custom
 fi

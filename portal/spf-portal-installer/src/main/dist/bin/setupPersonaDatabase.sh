@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
 CASFW_HOME="$(cd "$(dirname "$0")/.." && pwd -P)" 
 
-source ${CASFW_HOME}/bin/.casfwrc
+. ${CASFW_HOME}/bin/.casfwrc
 
 VIGNETTE_HOME="$(cd $(ls -d ${CASFW_HOME}/software/vignette-portal-* | tail -n1) && pwd -P)"
 
@@ -16,7 +16,7 @@ persona_database_setup_required=true
 
 echo "Checking Persona database"
 # Will use Vignette-provided tools to do that
-pushd ${VIGNETTE_HOME}/bin
+cd ${VIGNETTE_HOME}/bin
 
 db_check_sql_path="${CASFW_HOME}/var/persona_db_check.sql"
 echo "select count(*) from app;" > "${db_check_sql_path}"
@@ -64,12 +64,9 @@ if ${persona_database_setup_required}; then
     if [ ${last_exit_code} -ne 0 ]; then
         echo "Creating Persona tables with code ${last_exit_code}."
         echo "Aborting."
-        popd
         exit ${last_exit_code}
     fi
 
 else
     echo "Persona database ${persona_db_url} already exists - skipping its setup"
 fi
-
-popd

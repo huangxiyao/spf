@@ -1,5 +1,6 @@
 
-if [[ $0 =~ "nojvm" ]]; then
+#if [[ $0 =~ "nojvm" ]]; then
+if echo "$0" | grep -q -e "nojvm" -e "hpux" ; then
     if [ -z "${JAVA_HOME}" ]; then
         echo "JAVA_HOME variable not set."
         echo "update your environment with JAVA_HOME pointing to JDK 1.6 and restart the installer."
@@ -7,7 +8,8 @@ if [[ $0 =~ "nojvm" ]]; then
     fi
     
     jvm_version="$("${JAVA_HOME}/bin/java" -version 2>&1 | head -n1)"
-    if [[ ! "${jvm_version}" =~ "1.6." ]]; then
+#    if [[ ! "${jvm_version}" =~ "1.6." ]]; then
+    if echo "${jvm_version}" | grep -v -q -e "1.6." ; then
         echo "This installer requires JAVA_HOME to point to Java 1.6 but it uses ${jvm_version}."
         echo "Update your environment with JAVA_HOME pointing to JDK 1.6 and restart the installer."
         exit 2

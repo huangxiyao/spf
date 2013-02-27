@@ -26,7 +26,8 @@ then
  MEM_ARGS="-Xms256m -Xmx512m"
 fi
 
-if [[ "$(uname)" =~ "CYGWIN" ]]; then
+#if [[ "$(uname)" =~ "CYGWIN" ]]; then
+if echo "$(uname)" | grep -q -e "CYGWIN" ; then
     "$JVM" $MEM_ARGS -classpath "$(cygpath -pw "./util:$CLASSPATH")" -Dcom.vignette.portal.installdir.path="$(cygpath -aw $VAP_INSTALL_DIR)" -Dcom.vignette.portal.webappdir.path="$(cygpath -aw $VAP_WEBAPP_DIR)" PathLoader "$@"
 else
     "$JVM" $MEM_ARGS -classpath "./util:$CLASSPATH" -Dcom.vignette.portal.installdir.path=$VAP_INSTALL_DIR -Dcom.vignette.portal.webappdir.path=$VAP_WEBAPP_DIR PathLoader "$@"

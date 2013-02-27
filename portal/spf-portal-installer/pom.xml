@@ -24,7 +24,7 @@
             <plugin>
                 <groupId>com.hp.it.118361</groupId>
                 <artifactId>install-assembler-maven-plugin</artifactId>
-                <version>2012.02</version>
+                <version>2013.05-SNAPSHOT</version>
                 <extensions>true</extensions>
                 <configuration>
                     <installDirectoryName>portal-${project.version}</installDirectoryName>
@@ -102,6 +102,7 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>nojvm</id>
                         <goals>
                             <goal>prepareContent</goal>
                             <goal>package</goal>
@@ -113,7 +114,25 @@
                             </excludes>
                         </configuration>
                     </execution>
-                </executions> 
+                    <execution>
+                        <id>hpux</id>
+                        <goals>
+                            <goal>prepareContent</goal>
+                            <goal>package</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>hpux</classifier>
+                            <excludes>
+                                <exclude>software/oracle-java-*/**</exclude>
+                                <exclude>software/apache-tomcat-*/**</exclude>
+                                <exclude>bin/casfw.service</exclude>
+                                <exclude>bin/tomcat-portal.sh</exclude>
+                                <exclude>etc/tomcat-portal/**</exclude>
+                                <exclude>etc/resources_tomcat-portal/**</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
