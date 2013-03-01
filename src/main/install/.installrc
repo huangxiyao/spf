@@ -1,5 +1,6 @@
 
-#if [[ $0 =~ "nojvm" ]]; then
+# Check if cdi is for "nojvm" or "hpux"
+# Use return code of echo/grep to test if string is regex matched (replacement for =~ operator to support general shell)
 if echo "$0" | grep -q -e "nojvm" -e "hpux" ; then
     if [ -z "${JAVA_HOME}" ]; then
         echo "JAVA_HOME variable not set."
@@ -8,7 +9,9 @@ if echo "$0" | grep -q -e "nojvm" -e "hpux" ; then
     fi
     
     jvm_version="$("${JAVA_HOME}/bin/java" -version 2>&1 | head -n1)"
-#    if [[ ! "${jvm_version}" =~ "1.6." ]]; then
+
+# Check if JDK version is 1.6 based
+# Use return code of echo/grep to test if string is regex matched (replacement for =~ operator to support general shell)
     if echo "${jvm_version}" | grep -v -q -e "1.6." ; then
         echo "This installer requires JAVA_HOME to point to Java 1.6 but it uses ${jvm_version}."
         echo "Update your environment with JAVA_HOME pointing to JDK 1.6 and restart the installer."

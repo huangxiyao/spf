@@ -68,8 +68,7 @@ if ${vignette_database_setup_required}; then
 
     echo "Applying SPF database extensions"
     alter_sql_path="${VIGNETTE_HOME}/config/spf_vap_alter_users.sql"
-#    if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
-    if echo ${vignette_db_driver_class} | grep -q -e "derby" ; then
+    if test_regex_match "${vignette_db_driver_class}" "derby" ; then
         alter_sql_path="${alter_sql_path}.derby"
     fi
     if ${using_cygwin}; then
@@ -134,8 +133,7 @@ if ${vignette_database_setup_required}; then
 
     echo "Setting administrator account's profile ID"
     update_sql_path="${VIGNETTE_HOME}/config/spf_vap_update_admin.sql"
-#    if [[ ${vignette_db_driver_class} =~ "derby" ]]; then
-     if echo ${vignette_db_driver_class} | grep -q -e "derby" ; then
+    if test_regex_match "${vignette_db_driver_class}" "derby" ; then
         update_sql_path="${update_sql_path}.derby"
     fi
     if ${using_cygwin}; then

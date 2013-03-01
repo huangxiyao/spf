@@ -31,7 +31,3 @@ fi
 # Print message about URL at which Portal runs
 echo
 echo "Please configure WebLogic with Vignette Portal as post installation."
-
-#echo
-#echo "Please check ${CASFW_HOME}/README.txt for details of the components included"
-#echo "in this installation."
