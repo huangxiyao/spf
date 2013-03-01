@@ -26,7 +26,7 @@ then
  MEM_ARGS="-Xms256m -Xmx512m"
 fi
 
-#if [[ "$(uname)" =~ "CYGWIN" ]]; then
+# Use return code of echo/grep to test if string is regex matched (replacement for =~ operator to support general shell)
 if echo "$(uname)" | grep -q -e "CYGWIN" ; then
     "$JVM" $MEM_ARGS -classpath "$(cygpath -pw "./util:$CLASSPATH")" -Dcom.vignette.portal.installdir.path="$(cygpath -aw $VAP_INSTALL_DIR)" -Dcom.vignette.portal.webappdir.path="$(cygpath -aw $VAP_WEBAPP_DIR)" PathLoader "$@"
 else
