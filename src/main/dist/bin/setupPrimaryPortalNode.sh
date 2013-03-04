@@ -281,3 +281,6 @@ if [ ${last_exit_code} -ne 0 ]; then
     echo "Aborting."
     exit ${last_exit_code}
 fi
+
+# Remove deployment.dat file to avoid this to be copied to the app server stage directory, and other app server not synced from DB
+rm -f ${VIGNETTE_HOME}/portal/WEB-INF/system/deployment.dat

@@ -17,8 +17,11 @@ echo "Preparing SPF artifacts"
 spf_war="$(ls ${CASFW_HOME}/software/spf-portal-*.war | tail -n1)"
 
 cd ${VIGNETTE_HOME}/portal
-
-"${JAVA_HOME}/bin/jar" xf "${spf_war}"
+if ${using_cygwin}; then
+    "${JAVA_HOME}/bin/jar" xf "$(cygpath -aw "${spf_war}")"
+else
+    "${JAVA_HOME}/bin/jar" xf "${spf_war}"
+fi
 
 # Since spf-portal.war is not useful and we have its files already in Vignette let's remove it and 
 # create a symbolic link to the target directory in Vignette
