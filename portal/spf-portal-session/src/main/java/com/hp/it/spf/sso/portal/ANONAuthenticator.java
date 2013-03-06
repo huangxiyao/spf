@@ -105,7 +105,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
 					  + language
 					  + "-"
 					  + country;
-		User vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID,
+		User vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_PROFILE_ID,
 																  ssousername, realmId);
 		if (vapUser != null) {
 			userName = ssousername;
@@ -118,7 +118,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
 
 		// search sso_guest_user_<language_from_locale> user
 		ssousername = AuthenticationConsts.ANON_USER_NAME_PREFIX + language;
-		vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID,
+		vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_PROFILE_ID,
 															 ssousername, realmId);
 		if (vapUser != null) {
 			userName = ssousername;
@@ -132,7 +132,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
 		// for default user
 		ssousername = AuthenticationConsts.ANON_USER_NAME_PREFIX
 					  + AuthenticationConsts.DEFAULT_LANGUAGE;
-		vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID,
+		vapUser = AuthenticatorHelper.retrieveUserByProperty(AuthenticationConsts.PROPERTY_PROFILE_ID,
 															 ssousername, realmId);
 		if (vapUser != null) {
 			userName = ssousername;

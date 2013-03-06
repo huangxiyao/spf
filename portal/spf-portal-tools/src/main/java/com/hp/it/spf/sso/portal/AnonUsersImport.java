@@ -144,8 +144,8 @@ public class AnonUsersImport {
 		User user;
 		try {
 			user = UserManager.getInstance().getUser(
-					AuthenticationConsts.PROPERTY_USER_NAME_ID,
-					userProperties.get(AuthenticationConsts.PROPERTY_USER_NAME_ID));
+					AuthenticationConsts.PROPERTY_PROFILE_ID,
+					userProperties.get(AuthenticationConsts.PROPERTY_PROFILE_ID));
 
 			LOG.info("Updating user: " + userProperties);
 			for (Map.Entry<String, Object> userProperty : userProperties.entrySet()) {
