@@ -724,14 +724,19 @@ public abstract class ClassicContextualHelpProvider extends
 		String link = this.linkContent;
 		String title = this.titleContent;
 		String help = this.helpContent;
+		
 		// Add element ID to <img> (it does not already have it and the script
 		// needs it).
 		if (isImage(link)) {
 			link = "<img id=\"" + id + "\" " + link.substring(5);
 		}
+		
 		// Escape XML meta-characters if needed.
 		if (escape) {
-			link = Utils.escapeXml(link);
+		    // Do not escape the link if it is an <img> tag.
+		    if (!isImage(link)) {
+		        link = Utils.escapeXml(link);
+		    }
 			title = Utils.escapeXml(title);
 			help = Utils.escapeXml(help);
 		}
@@ -810,21 +815,35 @@ public abstract class ClassicContextualHelpProvider extends
 			helpStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_HELP_STYLE)
 					+ "\" ";
 
+		// Generate the link HTML.
+		String href = noscriptUrl;
+		if (href == null) {
+		    href = "javascript:void(0);";
+		}
+		String anchor = "<a href=\"" + href + "\"";
+		if (!isImage(link)) {
+		    // If the anchor text is not an image tag, put the ID on the anchor
+		    // (otherwise the image already has the ID on it so do nothing)
+		    anchor += " id=\"" + id + "\"";
+		}
+		anchor += ">" + link + "</a>";
+		html.append(anchor);
+		
 		// Generate the main HTML and event-handling code by assembling the
 		// pieces. First, assemble the event-handler script.
 
 		html.append("<script>\n");
-		if (isImage(link)) {
+		// Comment this out - the link is not written from the script anymore.
+		//if (isImage(link)) {
 			// If the anchor text is an image tag, then don't need an
 			// anchor tag to surround it.
-			html.append("document.write('" + escapeQuotes(link) + "');\n");
-		} else {
-			html.append("document.write('<a href=\"javascript:noop\" id=\""
-					+ id + "\">" + escapeQuotes(link) + "</a>');\n");
-		}
+		//	html.append("document.write('" + escapeQuotes(link) + "');\n");
+		//} else {
+		//	html.append("document.write('<a href=\"javascript:noop\" id=\""
+		//			+ id + "\">" + escapeQuotes(link) + "</a>');\n");
+		//}
 		// Write html to call javascript popup function
-		html
-				.append("classicContextualHelpUtil.addEvent(document.getElementById('"
+		html.append("classicContextualHelpUtil.addEvent(document.getElementById('"
 						+ id + "'), 'click', cchShowObject);\n");
 		// Add iframe to avoid IE select bug
 		// html.append("if (cchIsMSIE() == true) \n");
@@ -833,16 +852,17 @@ public abstract class ClassicContextualHelpProvider extends
 		// style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
 		html.append("</script>");
 
-		// Next, add the noscript for unscripted browsers. Use the noscript URL
-		// if one was returned.
-		html.append("<noscript>");
-		if (noscriptUrl != null) {
-			html.append("<a href=\"" + noscriptUrl + "\" target=\"_self\">"
-					+ link + "</a>");
-		} else {
-			html.append(link);
-		}
-		html.append("</noscript>");
+        // Next, add the noscript for unscripted browsers. Use the noscript URL
+        // if one was returned.
+        // Comment this out - noscript handling is now done through the link href instead.
+        //html.append("<noscript>");
+        //if (noscriptUrl != null) {
+        //  html.append("<a href=\"" + noscriptUrl + "\" target=\"_self\">"
+        //          + link + "</a>");
+        //} else {
+        //  html.append(link);
+        //}
+        //html.append("</noscript>");
 
 		// Next, write the popup window (layer) itself.
 
