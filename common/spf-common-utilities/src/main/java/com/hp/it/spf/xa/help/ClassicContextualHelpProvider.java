@@ -700,70 +700,75 @@ public abstract class ClassicContextualHelpProvider extends
 	 *            content contained in the returned HTML)
 	 * @return A string containing all of the HTML for the help hyperlink.
 	 */
-	public String getHTML(boolean escape) {
+    public String getHTML(boolean escape) {
 
-		// Get the contextual help link counter which tracks any previous
-		// invocation.
-		int count = getClassicContextualHelpCounter();
+        // Get the contextual help link counter which tracks any previous
+        // invocation.
+        int count = getClassicContextualHelpCounter();
 
-		// If common JavaScript has not previously been returned, then include
-		// it now. Bump the counter.
-		// DSJ 2009/6/3 - add common style definition too, if not already set.
-		// Fix for QC CR# 64.
-		StringBuffer html = new StringBuffer();
-		if (count == 0) {
-			html.append(CLASSIC_CONTEXTUAL_HELP_JS);
-			html.append(CLASSIC_CONTEXTUAL_HELP_STYLE);
-		}
-		++count;
+        // If common JavaScript has not previously been returned, then include
+        // it now. Bump the counter.
+        // DSJ 2009/6/3 - add common style definition too, if not already set.
+        // Fix for QC CR# 64.
+        StringBuffer html = new StringBuffer();
+        if (count == 0) {
+            html.append(CLASSIC_CONTEXTUAL_HELP_JS);
+            html.append(CLASSIC_CONTEXTUAL_HELP_STYLE);
+        }
+        ++count;
 
-		// Make the element ID.
-		String id = "classicContextualHelp" + UUID.randomUUID().toString();
+        // Make the element ID.
+        String id = "classicContextualHelp" + UUID.randomUUID().toString();
 
-		// Make the link, title, and help contents.
-		String link = this.linkContent;
-		String title = this.titleContent;
-		String help = this.helpContent;
-		// Add element ID to <img> (it does not already have it and the script
-		// needs it).
-		if (isImage(link)) {
-			link = "<img id=\"" + id + "\" " + link.substring(5);
-		}
-		// Escape XML meta-characters if needed.
-		if (escape) {
-			link = Utils.escapeXml(link);
-			title = Utils.escapeXml(title);
-			help = Utils.escapeXml(help);
-		}
-		// Remove special <NO_LOCALIZATION> markup.
-		link = I18nUtility.filterNoLocalizationTokens(link);
-		title = I18nUtility.filterNoLocalizationTokens(title);
-		help = I18nUtility.filterNoLocalizationTokens(help);
+        // Make the link, title, and help contents.
+        String link = this.linkContent;
+        String title = this.titleContent;
+        String help = this.helpContent;
+        
+        // Add element ID to <img> (it does not already have it and the script
+        // needs it).
+        if (isImage(link)) {
+            link = "<img id=\"" + id + "\" " + link.substring(5);
+        }
+        
+        // Escape XML meta-characters if needed.
+        if (escape) {
+            // Do not escape the link if it is an <img> tag.
+            if (!isImage(link)) {
+                link = Utils.escapeXml(link);
+            }
+            title = Utils.escapeXml(title);
+            help = Utils.escapeXml(help);
+        }
+        // Remove special <NO_LOCALIZATION> markup.
+        link = I18nUtility.filterNoLocalizationTokens(link);
+        title = I18nUtility.filterNoLocalizationTokens(title);
+        help = I18nUtility.filterNoLocalizationTokens(help);
 
-		// Make the noscript URL.
-		String noscriptUrl = getNoScriptURL();
+        // Make the noscript URL.
+        String noscriptUrl = getNoScriptURL();
 
-		// Make the close button image URL and alt message.
-		String closeButtonUrl = getCloseImageURL();
-		String closeButtonAlt = normalize(getCloseImageAlt());
-		if (escape) {
-		    closeButtonAlt = Utils.escapeXml(closeButtonAlt);
-		}
-		closeButtonAlt = I18nUtility.filterNoLocalizationTokens(closeButtonAlt);
+        // Make the close button image URL and alt message.
+        String closeButtonUrl = getCloseImageURL();
+        String closeButtonAlt = normalize(getCloseImageAlt());
+        if (escape) {
+            closeButtonAlt = Utils.escapeXml(closeButtonAlt);
+        }
+        closeButtonAlt = I18nUtility.filterNoLocalizationTokens(closeButtonAlt);
 
-		// Make the width.
-		String widthAttr = "";
-		String widthStyleAttr = "";
-		if (this.width > 0) {
-			widthAttr = "width=\"" + this.width + "\" ";
-			widthStyleAttr = "style=\"width: " + this.width + "px;\" ";
-		}
-		if ("".equals(widthAttr) && (DEFAULT_WIDTH > 0)) {
-			widthAttr = "width=\"" + DEFAULT_WIDTH + "\" ";
-			widthStyleAttr = "style=\"width: " + DEFAULT_WIDTH + "px;\" ";
-		}
+        // Make the width.
+        String widthAttr = "";
+        String widthStyleAttr = "";
+        if (this.width > 0) {
+            widthAttr = "width=\"" + this.width + "\" ";
+            widthStyleAttr = "style=\"width: " + this.width + "px;\" ";
+        }
+        if ("".equals(widthAttr) && (DEFAULT_WIDTH > 0)) {
+            widthAttr = "width=\"" + DEFAULT_WIDTH + "\" ";
+            widthStyleAttr = "style=\"width: " + DEFAULT_WIDTH + "px;\" ";
+        }
 
-		// Make the border style.
+        // Make the border style.
         // Add width to the style to workaround Cleansheet-provoked issue.
         // DSJ 2011/8/24
         String borderStyleAttr = "";
@@ -786,128 +791,143 @@ public abstract class ClassicContextualHelpProvider extends
             borderStyleAttr += widthStyleAttr;
         }
 
-		// Make the title style.
-		String titleStyleAttr = "";
-		if (this.titleStyle != null)
-			titleStyleAttr += "style=\"" + Utils.escapeXml(this.titleStyle)
-					+ "\" ";
-		if (this.titleClass != null)
-			titleStyleAttr += "class=\"" + Utils.escapeXml(this.titleClass)
-					+ "\" ";
-		if ("".equals(titleStyleAttr) && (DEFAULT_TITLE_STYLE != null))
-			titleStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_TITLE_STYLE)
-					+ "\" ";
+        // Make the title style.
+        String titleStyleAttr = "";
+        if (this.titleStyle != null)
+            titleStyleAttr += "style=\"" + Utils.escapeXml(this.titleStyle)
+                    + "\" ";
+        if (this.titleClass != null)
+            titleStyleAttr += "class=\"" + Utils.escapeXml(this.titleClass)
+                    + "\" ";
+        if ("".equals(titleStyleAttr) && (DEFAULT_TITLE_STYLE != null))
+            titleStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_TITLE_STYLE)
+                    + "\" ";
 
-		// Make the help content style.
-		String helpStyleAttr = "";
-		if (this.helpStyle != null)
-			helpStyleAttr += "style=\"" + Utils.escapeXml(this.helpStyle)
-					+ "\" ";
-		if (this.helpClass != null)
-			helpStyleAttr += "class=\"" + Utils.escapeXml(this.helpClass)
-					+ "\" ";
-		if ("".equals(helpStyleAttr) && (DEFAULT_HELP_STYLE != null))
-			helpStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_HELP_STYLE)
-					+ "\" ";
+        // Make the help content style.
+        String helpStyleAttr = "";
+        if (this.helpStyle != null)
+            helpStyleAttr += "style=\"" + Utils.escapeXml(this.helpStyle)
+                    + "\" ";
+        if (this.helpClass != null)
+            helpStyleAttr += "class=\"" + Utils.escapeXml(this.helpClass)
+                    + "\" ";
+        if ("".equals(helpStyleAttr) && (DEFAULT_HELP_STYLE != null))
+            helpStyleAttr += "style=\"" + Utils.escapeXml(DEFAULT_HELP_STYLE)
+                    + "\" ";
 
-		// Generate the main HTML and event-handling code by assembling the
-		// pieces. First, assemble the event-handler script.
+        // Generate the link HTML.
+        String href = noscriptUrl;
+        if (href == null) {
+            href = "javascript:void(0);";
+        }
+        String anchor = "<a href=\"" + href + "\"";
+        if (!isImage(link)) {
+            // If the anchor text is not an image tag, put the ID on the anchor
+            // (otherwise the image already has the ID on it so do nothing)
+            anchor += " id=\"" + id + "\"";
+        }
+        anchor += ">" + link + "</a>";
+        html.append(anchor);
+        
+        // Generate the main HTML and event-handling code by assembling the
+        // pieces. First, assemble the event-handler script.
 
-		html.append("<script>\n");
-		if (isImage(link)) {
-			// If the anchor text is an image tag, then don't need an
-			// anchor tag to surround it.
-			html.append("document.write('" + escapeQuotes(link) + "');\n");
-		} else {
-			html.append("document.write('<a href=\"javascript:noop\" id=\""
-					+ id + "\">" + escapeQuotes(link) + "</a>');\n");
-		}
-		// Write html to call javascript popup function
-		html
-				.append("classicContextualHelpUtil.addEvent(document.getElementById('"
-						+ id + "'), 'click', cchShowObject);\n");
-		// Add iframe to avoid IE select bug
-		// html.append("if (cchIsMSIE() == true) \n");
-		// html.append(" document.write('<iframe id=\"" + id + "HelpFrame\"
-		// src=\"javascript:false;\"
-		// style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
-		html.append("</script>");
+        html.append("<script>\n");
+        // Comment this out - the link is not written from the script anymore.
+        //if (isImage(link)) {
+            // If the anchor text is an image tag, then don't need an
+            // anchor tag to surround it.
+        //  html.append("document.write('" + escapeQuotes(link) + "');\n");
+        //} else {
+        //  html.append("document.write('<a href=\"javascript:noop\" id=\""
+        //          + id + "\">" + escapeQuotes(link) + "</a>');\n");
+        //}
+        // Write html to call javascript popup function
+        html.append("classicContextualHelpUtil.addEvent(document.getElementById('"
+                        + id + "'), 'click', cchShowObject);\n");
+        // Add iframe to avoid IE select bug
+        // html.append("if (cchIsMSIE() == true) \n");
+        // html.append(" document.write('<iframe id=\"" + id + "HelpFrame\"
+        // src=\"javascript:false;\"
+        // style=\"position:absolute;background-color:white;display:none;\"></iframe>');\n");
+        html.append("</script>");
 
-		// Next, add the noscript for unscripted browsers. Use the noscript URL
-		// if one was returned.
-		html.append("<noscript>");
-		if (noscriptUrl != null) {
-			html.append("<a href=\"" + noscriptUrl + "\" target=\"_self\">"
-					+ link + "</a>");
-		} else {
-			html.append(link);
-		}
-		html.append("</noscript>");
+        // Next, add the noscript for unscripted browsers. Use the noscript URL
+        // if one was returned.
+        // Comment this out - noscript handling is now done through the link href instead.
+        //html.append("<noscript>");
+        //if (noscriptUrl != null) {
+        //  html.append("<a href=\"" + noscriptUrl + "\" target=\"_self\">"
+        //          + link + "</a>");
+        //} else {
+        //  html.append(link);
+        //}
+        //html.append("</noscript>");
 
-		// Next, write the popup window (layer) itself.
+        // Next, write the popup window (layer) itself.
 
-		html.append("<div ");
-		html.append("id=\"" + id + "Help\" ");
-		html.append("onmousedown=\"cchGrab(event,this)\" ");
-		html.append("onclick=\"cchNoBubble(event)\" ");
-		html
-				.append("style=\"cursor:move;position:absolute;background-color:white;display:none;top:200px;left:200px\">\n");
-		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
-		// DSJ
-		// 2009/6/3
-		html.append("<div class=\"select-ie6\">\n");
-		html.append("<table ");
-		html.append("id=\"" + id + "Box\" ");
-		html.append(borderStyleAttr + widthAttr
+        html.append("<div ");
+        html.append("id=\"" + id + "Help\" ");
+        html.append("onmousedown=\"cchGrab(event,this)\" ");
+        html.append("onclick=\"cchNoBubble(event)\" ");
+        html
+                .append("style=\"cursor:move;position:absolute;background-color:white;display:none;top:200px;left:200px\">\n");
+        // Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
+        // DSJ
+        // 2009/6/3
+        html.append("<div class=\"select-ie6\">\n");
+        html.append("<table ");
+        html.append("id=\"" + id + "Box\" ");
+        html.append(borderStyleAttr + widthAttr
                 + "cellpadding=10 cellspacing=0>\n");
-		// Write title bar with title string and close button
-		html.append("<tr>\n");
-		html.append("<td align=left " + titleStyleAttr + "valign=middle>");
-		html.append(title);
-		html.append("</td>\n");
-		html.append("<td align=right " + titleStyleAttr + "valign=middle>");
-		html.append("<img id=\"" + id + "HelpClose\" ");
-		html.append("src=\"" + closeButtonUrl + "\" style=\"cursor:pointer\" ");
-		if (closeButtonAlt != null) {
-			// Add alt text for the close image if there is any.
-			html.append("alt=\"" + closeButtonAlt + "\" ");
-			// Duplicate the alt text into the title attribute.
-			html.append("title=\"" + closeButtonAlt + "\" ");
-		}
-		// Don't specify size since we can't know the size of the image
-		// html.append("width=\"15\" height=\"15\" ");
-		html.append("align=right border=\"0\"/ ></td>\n");
-		html.append("</tr>\n");
-		html.append("<tr valign=top height=\"100%\">\n");
-		html.append("<td " + helpStyleAttr + "colspan=2>\n");
-		// Write popup content
-		// Add width to inner table to workaround Cleansheet-provoked issue -
-		// DSJ 2011/8/24
+        // Write title bar with title string and close button
+        html.append("<tr>\n");
+        html.append("<td align=left " + titleStyleAttr + "valign=middle>");
+        html.append(title);
+        html.append("</td>\n");
+        html.append("<td align=right " + titleStyleAttr + "valign=middle>");
+        html.append("<img id=\"" + id + "HelpClose\" ");
+        html.append("src=\"" + closeButtonUrl + "\" style=\"cursor:pointer\" ");
+        if (closeButtonAlt != null) {
+            // Add alt text for the close image if there is any.
+            html.append("alt=\"" + closeButtonAlt + "\" ");
+            // Duplicate the alt text into the title attribute.
+            html.append("title=\"" + closeButtonAlt + "\" ");
+        }
+        // Don't specify size since we can't know the size of the image
+        // html.append("width=\"15\" height=\"15\" ");
+        html.append("align=right border=\"0\"/ ></td>\n");
+        html.append("</tr>\n");
+        html.append("<tr valign=top height=\"100%\">\n");
+        html.append("<td " + helpStyleAttr + "colspan=2>\n");
+        // Write popup content
+        // Add width to inner table to workaround Cleansheet-provoked issue -
+        // DSJ 2011/8/24
         html.append("<table " + widthStyleAttr + widthAttr
                 + "cellpadding=10 cellspacing=0>\n");
-		html.append("<tr><td align=left>");
-		html.append(help);
-		html.append("</td></tr>\n");
-		html.append("</table></td>\n");
-		html.append("</tr></table>\n");
-		// Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
-		// DSJ 2009/6/3
-		html.append("<!--[if lte IE 6.5]><iframe " + widthStyleAttr
-				+ "src=\"javascript:false;\"></iframe><![endif]--></div>\n");
-		html.append("</div>");
+        html.append("<tr><td align=left>");
+        html.append(help);
+        html.append("</td></tr>\n");
+        html.append("</table></td>\n");
+        html.append("</tr></table>\n");
+        // Next line is a workaround for IE6 <SELECT> bug. Fix for QC CR# 64.
+        // DSJ 2009/6/3
+        html.append("<!--[if lte IE 6.5]><iframe " + widthStyleAttr
+                + "src=\"javascript:false;\"></iframe><![endif]--></div>\n");
+        html.append("</div>");
 
-		// Finally, write script which adds event for close button.
+        // Finally, write script which adds event for close button.
 
-		html.append("<script>\n");
-		html
-				.append("classicContextualHelpUtil.addEvent(document.getElementById('"
-						+ id + "HelpClose'), 'click', cchHideObject);\n");
-		html.append("</script>");
+        html.append("<script>\n");
+        html
+                .append("classicContextualHelpUtil.addEvent(document.getElementById('"
+                        + id + "HelpClose'), 'click', cchHideObject);\n");
+        html.append("</script>");
 
-		// Bump counter and return.
-		bumpClassicContextualHelpCounter();
-		return html.toString();
-	}
+        // Bump counter and return.
+        bumpClassicContextualHelpCounter();
+        return html.toString();
+    }
 
 	/**
 	 * <p>
