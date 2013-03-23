@@ -4,11 +4,11 @@
     <parent>
         <artifactId>spf-pom</artifactId>
         <groupId>com.hp.it.spf.tools</groupId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.0.1-SNAPSHOT</version>
     </parent>
 
 
-    <version>3.0.2-SNAPSHOT</version>
+    <version>3.0.1-SNAPSHOT</version>
     <groupId>com.hp.it.spf.portlet</groupId>
     <artifactId>portlet</artifactId>
     <packaging>pom</packaging>
