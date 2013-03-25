@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.hp.it.spf.tools</groupId>
-    <version>3.0.1</version>
+    <version>3.0.2-SNAPSHOT</version>
     <artifactId>spf-all</artifactId>
     <packaging>pom</packaging>
     <name>SPF Aggregator POM</name>
@@ -30,9 +30,9 @@
     </modules>
     
     <scm>
-        <connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.1</connection>
-        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.1</developerConnection>
-        <url>https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.1</url>
+        <connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0</connection>
+        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0</developerConnection>
+        <url>https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0</url>
     </scm>
 
     <properties>
