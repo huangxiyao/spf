@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.hp.it.spf.portal</groupId>
         <artifactId>portal</artifactId>
-        <version>3.0.1-SNAPSHOT</version>
+        <version>3.0.1</version>
     </parent>
 
     <groupId>com.hp.it.spf.apps</groupId>
@@ -24,7 +24,7 @@
             <plugin>
                 <groupId>com.hp.it.118361</groupId>
                 <artifactId>install-assembler-maven-plugin</artifactId>
-                <version>2013.05-SNAPSHOT</version>
+                <version>2013.05-M2</version>
                 <extensions>true</extensions>
                 <configuration>
                     <installDirectoryName>portal-${project.version}</installDirectoryName>
