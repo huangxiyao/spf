@@ -4,14 +4,14 @@
     <parent>
         <groupId>com.hp.it.spf.portal</groupId>
         <artifactId>portal</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2-SNAPSHOT</version>
     </parent>
 
     <groupId>com.hp.it.spf.apps</groupId>
     <artifactId>spf-portal-installer</artifactId>
     <name>SPF Portal Installer</name>
     <packaging>cdi</packaging>
-    <version>3.0.1</version>
+    <version>3.0.2-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
