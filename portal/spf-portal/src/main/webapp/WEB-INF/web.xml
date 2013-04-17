@@ -160,6 +160,10 @@
 		<filter-name>RequestBindingFilter</filter-name>
 		<filter-class>com.hp.it.spf.wsrp.injector.context.portal.filter.RequestBindingFilter</filter-class>
 	</filter>
+	<filter>
+		<filter-name>RequestConcurrentAccessFilter</filter-name>
+		<filter-class>com.hp.it.spf.misc.portal.filter.RequestConcurrentAccessFilter</filter-class>
+	</filter>
 	<!-- SPP FILTER DEFINITIONS - END -->
 	<!-- BEGIN HPD Filters  -->
 	<!-- Only uncomment if HPD is being used.
@@ -392,6 +396,10 @@
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>RequestConcurrentAccessFilter</filter-name>
+		<servlet-name>controller</servlet-name>
 	</filter-mapping>
 	<!-- END-USER WEBSITE FILTER MAPPINGS - END -->
 	<!-- ADMIN WEBSITE FILTER MAPPINGS - BEGIN -->
