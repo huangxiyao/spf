@@ -315,6 +315,10 @@
 		<servlet-name>controller</servlet-name>
 	</filter-mapping>
 	<filter-mapping>
+		<filter-name>RequestConcurrentAccessFilter</filter-name>
+		<servlet-name>controller</servlet-name>
+	</filter-mapping>
+	<filter-mapping>
 		<filter-name>RequestBindingFilter</filter-name>
 		<servlet-name>controller</servlet-name>
 	</filter-mapping>
@@ -396,10 +400,6 @@
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>RequestConcurrentAccessFilter</filter-name>
-		<servlet-name>controller</servlet-name>
 	</filter-mapping>
 	<!-- END-USER WEBSITE FILTER MAPPINGS - END -->
 	<!-- ADMIN WEBSITE FILTER MAPPINGS - BEGIN -->
