@@ -28,7 +28,7 @@ use integer;
 # RegExpressions for matching text and media files
 
 $msg_ext_re = "properties";
-$nonmsg_ext_re = "html|htm|xml|txt|css|js|rtf";
+$nonmsg_ext_re = "html|htm|xml|txt|css|js|rtf|json";
 $image_ext_re = "jpg|gif|tif|png";
 $misc_ext_re = "pdf|doc|docx|mpg|wav|psd|eps|wmv|avi|ppt|xls|xlsx";
 $media_ext_re = "$image_ext_re|$misc_ext_re";
