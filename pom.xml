@@ -11,12 +11,12 @@
     <artifactId>spf-portal-installer</artifactId>
     <name>SPF Portal Installer</name>
     <packaging>cdi</packaging>
-    <version>3.0.3-SNAPSHOT</version>
+    <version>3.0.2</version>
 
     <scm>
-        <connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal/spf-portal-installer</connection>
-        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal/spf-portal-installer</developerConnection>
-        <url>https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal/spf-portal-installer</url>
+        <connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-portal-installer-3.0.2</connection>
+        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-portal-installer-3.0.2</developerConnection>
+        <url>https://code1.corp.hp.com/svn/spf/source/tags/spf-portal-installer-3.0.2</url>
     </scm>
     
     <properties>
