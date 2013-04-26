@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hp.frameworks</groupId>
 		<artifactId>spf-athp-laf</artifactId>
-		<version>3.0.2</version>
+		<version>3.0.3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>AtHPVerticalNavigation</artifactId>
