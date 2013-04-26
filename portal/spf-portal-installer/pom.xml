@@ -13,6 +13,12 @@
     <packaging>cdi</packaging>
     <version>3.0.3-SNAPSHOT</version>
 
+    <scm>
+        <connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal/spf-portal-installer</connection>
+        <developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal/spf-portal-installer</developerConnection>
+        <url>https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal/spf-portal-installer</url>
+    </scm>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- This normally comes from Hudson which uses -DscmRevision=${SVN_REVISION} -->
