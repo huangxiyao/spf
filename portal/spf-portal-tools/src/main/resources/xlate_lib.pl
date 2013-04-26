@@ -16,7 +16,8 @@
 # 3.1   04/01/09        DSJ updated to duplicate files for Hebrew
 # 3.2   11/20/09        DSJ updated to duplicate files for Hong Kong Chinese
 # 3.3   2/8/11          DSJ updated to normalize pt_br instead of pt_pt, and 
-#                           add eps to misc extensions list
+#                           added eps to misc extensions list
+# 3.4   4/26/13         DSJ added json to nonmsg text extensions list
 #
 ################################################################
 package main;
