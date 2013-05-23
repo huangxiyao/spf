@@ -209,7 +209,7 @@ public class SessionCleanupFilter implements ActionFilter, RenderFilter, EventFi
 				String mode = filterConfig.getInitParameter(INIT_PARAM);
 				cleanupSessionAttributes(portletSession, mode, PortletSession.PORTLET_SCOPE);
 				portletSession.setAttribute(Consts.KEY_LAST_PORTLET_SCOPE_SESSION_CLEANUP_DATE, 
-											Long.valueOf(System.currentTimeMillis()), 
+											lastPortalSessionCleanupDate,
 											PortletSession.PORTLET_SCOPE);
 			}
 
@@ -222,7 +222,7 @@ public class SessionCleanupFilter implements ActionFilter, RenderFilter, EventFi
 		        String mode = filterConfig.getInitParameter(INIT_PARAM);
 		        cleanupSessionAttributes(portletSession, mode, PortletSession.APPLICATION_SCOPE);
 		        portletSession.setAttribute(Consts.KEY_LAST_APP_SCOPE_SESSION_CLEANUP_DATE, 
-		        							Long.valueOf(System.currentTimeMillis()), 
+				                            lastPortalSessionCleanupDate,
 		        							PortletSession.APPLICATION_SCOPE);
 
 		    }
