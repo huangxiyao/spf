@@ -140,7 +140,11 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 
         // retrieve groups from UserGroupRetriever
         IUserGroupRetriever retriever = UserGroupRetrieverFactory.createUserGroupImpl(AuthenticationConsts.HPP_USER_GROUP_RETRIEVER, siteDNSName);
-        groups.addAll(retriever.getGroups(userProfile, request));
+        Set<String> retrievedGroups = retriever.getGroups(userProfile, request);
+        // per CR #952, check groups returned from retriever are not null before adding them to the groups list
+        if (retrievedGroups != null) {
+            groups.addAll(retrievedGroups);
+        }
 
         // set authenticated user group
         groups.add(AuthenticationConsts.LOCAL_PORTAL_AUTHENTICATED_USERS);
