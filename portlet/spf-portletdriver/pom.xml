@@ -27,6 +27,10 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+        	<groupId>org.eclipse.persistence</groupId>
+        	<artifactId>javax.persistence</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.sun.portal.portletcontainer</groupId>
             <artifactId>portlet-container</artifactId>
             <scope>provided</scope>
@@ -120,6 +124,9 @@
                             <directory>src/main/webapp-wls103</directory>
                         </resource>
                     </webResources>
+                    <packagingExcludes>
+                    	WEB-INF/lib/javax.persistence_1.0.0.jar
+                    </packagingExcludes>
                 </configuration>
                 <executions>
                     <execution>
