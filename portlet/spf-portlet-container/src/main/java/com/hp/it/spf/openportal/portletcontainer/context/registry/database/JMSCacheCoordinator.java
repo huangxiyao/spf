@@ -78,8 +78,6 @@ public class JMSCacheCoordinator implements SessionCustomizer{
         // Start joining the cluster
         if(session.isConnected ()) {
         	((DatabaseSession)session).getCommandManager().initialize();
-        } else {
-        	((DatabaseSession)session).login();
         }
 	}
 
