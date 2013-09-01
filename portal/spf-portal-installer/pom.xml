@@ -58,7 +58,7 @@
                         <artifact>
                             <groupId>com.hp.it.spf.apps</groupId>
                             <artifactId>spf-portal</artifactId>
-                            <version>${project.version}</version>
+                            <version>${project.parent.version}</version>
                             <type>war</type>
                             <classifier>novgn</classifier>
                             <prepareMethod>DOWNLOAD</prepareMethod>
@@ -66,14 +66,14 @@
                         <artifact>
                             <groupId>com.hp.it.spf.comps</groupId>
                             <artifactId>spf-portal-components</artifactId>
-                            <version>${project.version}</version>
+                            <version>${project.parent.version}</version>
                             <type>car</type>
                             <prepareMethod>DOWNLOAD</prepareMethod>
                         </artifact>
                         <artifact>
                             <groupId>com.hp.frameworks</groupId>
                             <artifactId>HPWebComponents</artifactId>
-                            <version>${project.version}</version>
+                            <version>${project.parent.version}</version>
                             <type>car</type>
                             <prepareMethod>DOWNLOAD</prepareMethod>
                         </artifact>
@@ -88,20 +88,20 @@
                         <artifact>
                             <groupId>com.hp.it.spf.apps</groupId>
                             <artifactId>spf-html-viewer</artifactId>
-                            <version>${project.version}</version>
+                            <version>${project.parent.version}</version>
                             <type>war</type>
                             <classifier>vgn</classifier>
                         </artifact>
                         <artifact>
                             <groupId>com.hp.it.spf.apps</groupId>
                             <artifactId>spf-open-sign</artifactId>
-                            <version>${project.version}</version>
+                            <version>${project.parent.version}</version>
                             <type>war</type>
                         </artifact>
                         <artifact>
                             <groupId>com.hp.it.spf.apps</groupId>
                             <artifactId>spf-healthcheck</artifactId>
-                            <version>${project.version}</version>
+                            <version>${project.parent.version}</version>
                             <type>war</type>
                         </artifact>
                     </software>

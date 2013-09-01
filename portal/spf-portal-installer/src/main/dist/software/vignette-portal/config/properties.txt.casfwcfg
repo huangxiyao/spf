@@ -741,7 +741,9 @@ portlet.wsrpportletcontainer.requesttimeout=120
 # If longer time out value is needed you may want to uncomment the
 # this property and set the desired time out.
 
-# portlet.management.wsrp.resource_url_timeout_millis = 10000
+portlet.management.wsrp.resource_url_timeout_millis = 45000
+portlet.wsrpportletcontainer.allowedResourceURLPrefixes=@@portal_wsrp_resource_url_prefix@@
+portlet.management.wsrp.servicedescription.refresh.interval=60
 
 
 ############################################################
