@@ -396,7 +396,10 @@ function getCookieValue(cookiename) {
 
 function loggedIn() {
 	var allcookies = document.cookie;
-	var cookiestart = allcookies.indexOf("SMSESSION");
+	var cookiestart = allcookies.indexOf("HPPSESSION");
+	if (cookiestart == -1) {
+	    cookiestart = allcookies.indexOf("SMSESSION");
+	}
 	if (cookiestart != -1) {
 		var cookieend = allcookies.indexOf(";", cookiestart);
 		if (cookieend == -1) cookieend=allcookies.length;

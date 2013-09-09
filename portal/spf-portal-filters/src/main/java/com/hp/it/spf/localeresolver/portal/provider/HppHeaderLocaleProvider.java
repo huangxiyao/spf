@@ -40,9 +40,12 @@ public class HppHeaderLocaleProvider extends AbstractLocaleProvider implements
 	}
 
 	private boolean userNotLoggedIn() {
-		Cookie cookie = WebUtils.getCookie(request,
+		Cookie hppCookie = WebUtils.getCookie(request,
+				Consts.COOKIE_NAME_HPPSESSION);
+		Cookie smCookie = WebUtils.getCookie(request,
 				Consts.COOKIE_NAME_SMSESSION);
-		return (cookie == null);
+				
+		return (hppCookie == null && smCookie == null);
 	}
 
 	/**

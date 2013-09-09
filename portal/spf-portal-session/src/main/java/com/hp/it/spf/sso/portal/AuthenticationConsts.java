@@ -22,6 +22,8 @@ public class AuthenticationConsts {
     public static final String SHARED_PORTAL_SSO_FILE_BASE = "SharedPortalSSO";
 
     static final String COOKIE_ATTR_SMSESSION = "SMSESSION";
+
+    static final String COOKIE_ATTR_HPPSESSION = "HPPSESSION";
     
     static final String SP_FROM_HPP = "HPP";
 

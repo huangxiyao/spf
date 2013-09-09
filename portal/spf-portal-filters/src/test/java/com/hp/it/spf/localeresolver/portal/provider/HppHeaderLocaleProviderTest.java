@@ -25,7 +25,8 @@ public class HppHeaderLocaleProviderTest extends TestCase {
 
     protected void setUp() {
         this.request = new MockHttpServletRequest();
-        Cookie[] cookies = {new Cookie(Consts.COOKIE_NAME_SMSESSION, "value")};
+        Cookie[] cookies = {new Cookie(Consts.COOKIE_NAME_HPPSESSION, "value")
+            , new Cookie(Consts.COOKIE_NAME_SMSESSION, "value")};
         request.setCookies(cookies);
     }
 
@@ -55,7 +56,7 @@ public class HppHeaderLocaleProviderTest extends TestCase {
     	assertEquals("tw", actual);
     }
     
-    /* We test for the user being logged in by seeing if the smsession cookie
+    /* We test for the user being logged in by seeing if the hppsession or smsession cookie
      * is present.  We cant just test to see if the sm headers are present 
      * because site minder is currently adding headers whether we are logged
      * in or not.  For instance this is the header at the login page

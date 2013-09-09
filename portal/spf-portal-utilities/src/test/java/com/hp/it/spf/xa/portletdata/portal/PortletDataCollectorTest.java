@@ -133,7 +133,7 @@ public class PortletDataCollectorTest
 	}
 
 	@Test
-	public void testGetHppSessionTokenEmptyWithoutSmsession() {
+	public void testGetHppSessionTokenEmptyWithoutHppsessionAndSmsession() {
 		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
 		mContext.checking(new Expectations() {{
 			allowing(request).getCookies(); will(
@@ -142,12 +142,28 @@ public class PortletDataCollectorTest
 							new Cookie("cookie2", "value2")}));
 		}});
 
-		assertThat("Returns empty string when no SMSESSION cookie found",
+		assertThat("Returns empty string when no HPPSESSION and SMSESSION cookie found",
 				mCollector.getHppSessionToken(request), is(""));
 	}
 
 	@Test
 	public void testGetHppSessionToken() {
+		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
+		mContext.checking(new Expectations() {{
+			allowing(request).getCookies(); will(
+					returnValue(new Cookie[] {
+							new Cookie("cookie1", "value1"),
+							new Cookie("HPPSESSION", "xyz"),
+							new Cookie("cookie2", "value2")
+					}));
+		}});
+
+		assertThat("Returns HPPSESSION cookie value if present",
+				mCollector.getHppSessionToken(request), is("xyz"));
+	}
+
+	@Test
+	public void testGetSmSessionToken() {
 		final HttpServletRequest request = mContext.mock(HttpServletRequest.class);
 		mContext.checking(new Expectations() {{
 			allowing(request).getCookies(); will(

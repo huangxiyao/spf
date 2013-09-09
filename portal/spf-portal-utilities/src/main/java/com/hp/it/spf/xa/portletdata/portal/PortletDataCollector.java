@@ -166,9 +166,9 @@ public class PortletDataCollector
 	}
 
 	/**
-	 * Retrieves the value of HP Passport SMSESSION cookie.
+	 * Retrieves the value of HP Passport HPPSESSION cookie.
 	 * @param request incoming user request
-	 * @return value of <code>SMSESSION</code> cookie set by HPP or empty string
+	 * @return value of <code>HPPSESSION</code> cookie set by HPP or empty string
 	 *         if non could be found
 	 */
 	/*private*/ String getHppSessionToken(HttpServletRequest request) {
@@ -176,8 +176,10 @@ public class PortletDataCollector
 		if (cookies != null) {
 			for (int i = 0, len = cookies.length; i < len; i++) {
 				Cookie cookie = cookies[i];
-				if ("SMSESSION".equals(cookie.getName())) {
+				if (Consts.COOKIE_NAME_HPPSESSION.equals(cookie.getName())) {
 					return cookie.getValue();
+				} else if (Consts.COOKIE_NAME_SMSESSION.equals(cookie.getName())) {
+				    return cookie.getValue();
 				}
 			}
 		}
