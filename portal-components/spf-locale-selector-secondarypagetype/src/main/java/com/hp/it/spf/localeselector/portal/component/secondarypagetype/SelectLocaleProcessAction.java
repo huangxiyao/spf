@@ -213,7 +213,11 @@ public class SelectLocaleProcessAction extends BaseAction {
 			HttpServletRequest request, Locale locale)
 			throws PassportServiceException {
 		String sessionToken = CookieUtils.getCookieValue(request,
+				Consts.COOKIE_NAME_HPPSESSION);
+		if (sessionToken == null) {
+		    sessionToken = CookieUtils.getCookieValue(request,
 				Consts.COOKIE_NAME_SMSESSION);
+		}
 		LOG.debug("retrieve SessionToken: " + sessionToken);
 
 		String langCode = I18nUtility.localeToHPPLanguage(locale);

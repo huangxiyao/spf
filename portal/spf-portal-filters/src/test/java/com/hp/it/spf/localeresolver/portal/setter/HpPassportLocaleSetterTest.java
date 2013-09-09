@@ -36,8 +36,9 @@ public class HpPassportLocaleSetterTest extends TestCase {
     }
 
     public void testSetLocaleForUserLoggedInNotExpired() {
-        Cookie[] cookies = new Cookie[] { new Cookie("SMSESSION",
-                "00ddeidieje3wuu3334"), };
+        Cookie[] cookies = new Cookie[] { new Cookie("HPPSESSION",
+                "00ddeidieje3wuu3334"), new Cookie("SMSESSION",
+                "00ddeidieje3wuu3334"),};
         request.setCookies(cookies);
         setter.setLocale(request, response, Locale.JAPAN);
 

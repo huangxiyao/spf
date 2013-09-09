@@ -590,7 +590,7 @@ public class AuthenticatorHelper {
 
 	/**
 	 * Check if user has logged in HPP siteminder. This is judges by the
-	 * CL_Header in the request and the SMSession cookie value.
+	 * CL_Header in the request and the HPPSession or SMSession cookie value.
 	 *
 	 * @param request
 	 *            current request
@@ -602,7 +602,7 @@ public class AuthenticatorHelper {
 
 	/**
 	 * Check if user has logged in general HPP siteminder. This is judges by the
-	 * CL_Header in the request and the SMSession cookie value. General HPP case
+	 * CL_Header in the request and the HPPSession or SMSession cookie value. General HPP case
 	 * including standard HPP and federated HPP.
 	 *
 	 * @param request
@@ -610,8 +610,10 @@ public class AuthenticatorHelper {
 	 * @return true if user has logged in HHP, otherwise false
 	 */
 	private static boolean loggedIntoHPPGeneral(HttpServletRequest request) {
-		String smSession = CookieUtils.getCookieValue(request,
-				AuthenticationConsts.COOKIE_ATTR_SMSESSION);
+        String hppSession = CookieUtils.getCookieValue(request,
+                AuthenticationConsts.COOKIE_ATTR_HPPSESSION);
+        String smSession = CookieUtils.getCookieValue(request,
+                AuthenticationConsts.COOKIE_ATTR_SMSESSION);
 		String clHeaderHpp = AuthenticatorHelper
 				.getRequestHeader(
 						request,
@@ -622,11 +624,15 @@ public class AuthenticatorHelper {
 						clHeaderHpp,
 						getProperty(AuthenticationConsts.HEADER_HPCLNAME_PROPERTY_NAME));
 
-		return isFromHPPGeneral(request)
-				&& smSession != null
-				&& smSession.trim().length() > 0
-				&& !smSession
-						.equals(getProperty(AuthenticationConsts.HPP_LOGGEDOFF_PROPERTY_NAME))
+        return isFromHPPGeneral(request)
+                && ((hppSession != null
+                && hppSession.trim().length() > 0
+                && !hppSession
+                        .equals(getProperty(AuthenticationConsts.HPP_LOGGEDOFF_PROPERTY_NAME)))
+                || (smSession != null 
+                && smSession.trim().length() > 0
+                && !smSession
+                        .equals(getProperty(AuthenticationConsts.HPP_LOGGEDOFF_PROPERTY_NAME))))
 				&& hpclName != null
 				&& hpclName.trim().length() > 0
 				&& !hpclName

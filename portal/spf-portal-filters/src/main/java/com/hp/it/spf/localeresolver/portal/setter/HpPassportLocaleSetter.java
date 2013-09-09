@@ -77,7 +77,11 @@ public class HpPassportLocaleSetter implements ILocaleSetter {
             HttpServletResponse response, final Locale locale) {
 
         String sessionToken = CookieUtils.getCookieValue(request,
+                Consts.COOKIE_NAME_HPPSESSION);
+        if (sessionToken == null) {
+            sessionToken = CookieUtils.getCookieValue(request,
                 Consts.COOKIE_NAME_SMSESSION);
+        }
         String langCode = this.getHppFormatLanguageCode(locale);
 
         if (hppProfileCanBeUpdated(langCode, sessionToken)) {

@@ -16,9 +16,14 @@ package com.hp.it.spf.xa.misc.portal;
 public class Consts extends com.hp.it.spf.xa.misc.Consts {
 
 	/**
-	 * The name of the SiteMinder session cookie (for both HPP and AtHP)
+	 * The name of the SiteMinder session cookie (for AtHP)
 	 */
 	public static final String COOKIE_NAME_SMSESSION = "SMSESSION";
+
+	/**
+	 * The name of the SiteMinder session cookie (for HPP)
+	 */
+	public static final String COOKIE_NAME_HPPSESSION = "HPPSESSION";
 
 	/**
 	 * Added as part of HPP SSO FEDERATION

@@ -23,6 +23,8 @@ public class AuthenticationConsts {
 
 	static final String COOKIE_ATTR_SMSESSION = "SMSESSION";
 
+	static final String COOKIE_ATTR_HPPSESSION = "HPPSESSION";
+	
 	static final String SP_FROM_HPP = "HPP";
 
 	static final String SP_FROM_ATHP = "ATHP";
