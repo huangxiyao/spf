@@ -224,7 +224,7 @@
                 editable="true"
                 searchable="true"
                 displayable="true"
-                required="true"
+                required="false"
                 unique="false"
                 />
 

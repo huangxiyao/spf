@@ -120,6 +120,9 @@ cache_service.default.file_root_path=${com.vignette.portal.installdir.path}/cach
 # elements in the in-memory cache will be removed and stored into the disk.
 cache_service.resource_cache.default.cache_size=10
 
+# Disable the vignette cache behavior
+com.epicentric.i18n.LocalizedBundleManager.cache.ttl=0
+
 ##########END CACHING#####################################################
 
 ##########METRICS#########################################################
