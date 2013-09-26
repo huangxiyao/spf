@@ -36,7 +36,9 @@ import com.vignette.portal.website.enduser.PortalContext;
  * </ul>
  */
 public class RememberReturnURLFilter implements Filter {
-	private static final String PAGE_FRIENDLY_ID_BINARYPORTLET = "BINARYPORTLET";
+	private static final String TEMPLATE_FRIENDLY_ID_BINARYPORTLET = "BINARYPORTLET";
+	private static final String TEMPLATE_FRIENDLY_ID_ASYNC = "ASYNC";
+	private static final String TEMPLATE_FRIENDLY_ID_AJAXREDIRECTTYPE = "Ajax_Redirect_Type";
 
 	private static final LogWrapper LOG = new LogWrapper(
 			RememberReturnURLFilter.class);
@@ -74,23 +76,25 @@ public class RememberReturnURLFilter implements Filter {
 		PortalContext context = (PortalContext) request.getAttribute("portalContext");
 		if (context != null) {
 			Style thisPage = context.getCurrentSecondaryPage();
-			if (thisPage != null) {
-				if (!Consts.PAGE_FRIENDLY_ID_RETURN.equals(thisPage
-						.getFriendlyID())) {
-					if (!PAGE_FRIENDLY_ID_BINARYPORTLET.equals(thisPage
-							.getFriendlyID())) {
-						String currentURL = Utils.getRequestURL(request);
-						if (session != null) {
-							session.setAttribute(
-									Consts.SESSION_ATTR_RETURN_URL, currentURL);
-						}
-					}
+			String templateID = thisPage.getTemplateFriendlyID();
+			if (thisPage != null && shouldSaveCurrentUrl(templateID)) {
+				String currentURL = Utils.getRequestURL(request);
+				if (session != null) {
+					session.setAttribute(
+							Consts.SESSION_ATTR_RETURN_URL, currentURL);
 				}
 			}
 		}
 	}
 
-	/**
+	private boolean shouldSaveCurrentUrl(String templateID) {
+		return !Consts.PAGE_FRIENDLY_ID_RETURN.equals(templateID)
+				&& !TEMPLATE_FRIENDLY_ID_BINARYPORTLET.equals(templateID)
+				&& !TEMPLATE_FRIENDLY_ID_ASYNC.equals(templateID)
+				&& !TEMPLATE_FRIENDLY_ID_AJAXREDIRECTTYPE.equals(templateID);
+	}
+
+    /**
 	 * Saves current site's DNS name in cookie os if external applications call
 	 * <tt>PUBLIC_SPF_RETURN</tt> secondary page and the cookie exists, the user
 	 * will be redirected to that site's home (root) page. The cookie is created
