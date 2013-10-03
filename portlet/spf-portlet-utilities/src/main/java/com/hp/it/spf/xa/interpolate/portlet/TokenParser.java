@@ -459,12 +459,14 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
     /**
      * Get the portal site URL for the portal site and page indicated by the
-     * given scheme, port, and URI. Returns null if this has not been set in the
+     * given scheme, hostname, port, and URI. Returns null if this has not been set in the
      * request, or the request provided to the constructor was null.
      * 
      * @param secure
      *            If true, force use of <code>https</code>; if false, force use
      *            of <code>http</code>. If null, use the current scheme.
+     * @param hostname
+     *            The hostname to use.  If null, use the current hostname.
      * @param port
      *            The port to use (an integer; if non-positive, use the current
      *            port).
@@ -474,17 +476,17 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
      *            first <code>/</code> is considered the site name.)
      * @return site URL string
      */
-    protected String getSiteURL(String URI, Boolean secure, int port) {
+    protected String getSiteURL(String URI, Boolean secure, String hostname, int port) {
         if (request == null) {
             return null;
         }
-        return Utils.getPortalSiteURL(request, secure, null, port, URI);
+        return Utils.getPortalSiteURL(request, secure, hostname, port, URI);
     }
 
     /**
      * Get the portal request URL for the current request, modified to use the
-     * given scheme and port. This is the URL which was opened by the browser in
-     * order to invoke this portlet, with its scheme and port modified. It is
+     * given scheme, hostname, and port. This is the URL which was opened by the browser in
+     * order to invoke this portlet, with its scheme, hostname and port modified. It is
      * obtained from the portlet request provided to the constructor. Returns
      * null if this has not been set in the request, or the request provided to
      * the constructor was null.
@@ -492,16 +494,18 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
      * @param secure
      *            If true, force use of <code>https</code>; if false, force use
      *            of <code>http</code>. If null, use the current scheme.
+     * @param hostname
+     *            The hostname to use.  If null, use the current hostname.
      * @param port
      *            The port to use (an integer; if non-positive, use the current
      *            port).
      * @return request URL string
      */
-    protected String getRequestURL(Boolean secure, int port) {
+    protected String getRequestURL(Boolean secure, String hostname, int port) {
         if (request == null) {
             return null;
         }
-        return Utils.getPortalRequestURL(request, secure, null, port);
+        return Utils.getPortalRequestURL(request, secure, hostname, port);
     }
 
     /**

@@ -5962,11 +5962,11 @@ text. Please click on the links for more documentation for each token.</p>
 	interpolated content. Like the above token, this is a reconstruction of
 	the URL which, if opened by the browser, would re-request the current
 	portal page and portlet (including any form arguments). With this
-	token, you can provide a <code><i>spec</i></code> to switch the scheme
-	or port. The format of the <code><i>spec</i></code> is as follows:</p>
+	token, you can provide a <code><i>spec</i></code> to switch the scheme,
+	hostname and/or port. The format of the <code><i>spec</i></code> is as follows:</p>
 
 	<blockquote><pre>
-<i>scheme</i>:<i>port</i>	
+<i>scheme</i>:<i>hostname</i>:<i>port</i>	
 	</pre></blockquote>
 
 	<p>Each element is optional.</p>
@@ -5975,6 +5975,10 @@ text. Please click on the links for more documentation for each token.</p>
 		<p>You can specify a <code><i>scheme</i></code>, either <code>http</code>
 		or <code>https</code>. By default the scheme of the current request is
 		assumed.
+		</li>
+		<li>
+		<p>You can specify a <code><i>hostname</i></code>.  By default the
+		hostname of the current request is assumed.</p>
 		</li>
 		<li>
 		<p>You can provide a <code><i>port</i></code>. By default the port
@@ -6015,7 +6019,7 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 	is as follows:</p>
 
 	<blockquote><pre>
-<i>scheme</i>:<i>port</i>;<i>uri</i>	
+<i>scheme</i>:<i>hostname</i>:<i>port</i>;<i>uri</i>	
 	</pre></blockquote>
 
 	<p>Each element is optional.</p>
@@ -6025,6 +6029,10 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 		or <code>https</code>. By default the scheme of the current request is
 		assumed. When you don't provide a scheme or port, you don't need the <code>:</code>
 		or <code>;</code> characters.</p>
+		</li>
+		<li>
+		<p>You can specify a <code><i>hostname</i></code>.  By default the
+		hostname of the current request is assumed.</p>
 		</li>
 		<li>
 		<p>You can provide a <code><i>port</i></code>. By default the port

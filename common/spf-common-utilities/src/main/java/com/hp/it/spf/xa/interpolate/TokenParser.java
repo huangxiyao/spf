@@ -475,12 +475,14 @@ public abstract class TokenParser {
 
     /**
      * Get the portal site URL for the portal site and page indicated by the
-     * given scheme, port, and URI. Different action by portal and portlet, so
+     * given scheme, hostname, port, and URI. Different action by portal and portlet, so
      * therefore this is an abstract method.
      * 
      * @param secure
      *            If true, force use of <code>https</code>; if false, force use
      *            of <code>http</code>. If null, use the current scheme.
+     * @param hostname
+     *            The hostname to use.  If null, use the current hostname.
      * @param port
      *            The port to use (an integer; if non-positive, use the current
      *            port).
@@ -490,7 +492,7 @@ public abstract class TokenParser {
      *            first <code>/</code> is considered the site name.)
      * @return site URL string
      */
-    protected abstract String getSiteURL(String URI, Boolean secure, int port);
+    protected abstract String getSiteURL(String URI, Boolean secure, String hostname, int port);
 
     /**
      * Get the current portal request URL, modified to use the given scheme and
@@ -500,12 +502,14 @@ public abstract class TokenParser {
      * @param secure
      *            If true, force use of <code>https</code>; if false, force use
      *            of <code>http</code>. If null, use the current scheme.
+     * @param hostname
+     *            The hostname to use.  If null, use the current hostname.
      * @param port
      *            The port to use (an integer; if non-positive, use the current
      *            port).
      * @return request URL string
      */
-    protected abstract String getRequestURL(Boolean secure, int port);
+    protected abstract String getRequestURL(Boolean secure, String hostname, int port);
 
     /**
      * Get the authorization groups for the current request. Different action by
@@ -1229,12 +1233,14 @@ public abstract class TokenParser {
      * and/or port. The format of the <i>spec</i> is:
      * </p>
      * 
-     * <code><i>[scheme[:port];]uri</i></code>
+     * <code><i>[scheme[:hostname[:port]];]uri</i></code>
      * 
      * <ul>
      * <li>The <code><i>scheme</i></code> may be <code>http</code> or
      * <code>https</code>. If you omit a valid scheme, then the scheme used for
      * the current request is assumed.</li>
+     * <li>The <code><i>hostname</i></code> is the hostname to use.  If you omit
+     * it, then the hostname from the current request is assumed.</li>
      * <li>The <code><i>port</i></code> is the port number to use. If you omit a
      * port number, then the one used for the current request is assumed.</li>
      * <li>The <code><i>uri</i></code> can be whatever string you need to come
@@ -1279,16 +1285,16 @@ public abstract class TokenParser {
      * <code>&lt;a href="https://portal.hp.com/portal/site/acme/"&gt;go to secure home page&lt;/a&gt;</code>
      * </dd>
      * <dt>
-     * <code>&lt;a href="{SITE-URL:http:7001;itrc}"&gt;go to unsecure ITRC home page&lt;/a&gt;</code>
+     * <code>&lt;a href="{SITE-URL:http:other.hp.com:7001;itrc}"&gt;go to unsecure ITRC home page&lt;/a&gt;</code>
      * </dt>
      * <dd>becomes
-     * <code>&lt;a href="http://portal.hp.com:7001/portal/site/acme/"&gt;go to unsecure home page&lt;/a&gt;</code>
+     * <code>&lt;a href="http://other.hp.com:7001/portal/site/itrc/"&gt;go to unsecure home page&lt;/a&gt;</code>
      * </dd>
      * </dl>
      * </p>
      * <p>
      * The site root URL is obtained from the
-     * {@link #getSiteURL(String,String,String)} method - if that method returns
+     * {@link #getSiteURL(String,String,String,String)} method - if that method returns
      * null, the token is replaced with just the <i>uri</i>. If you provide null
      * content, null is returned.
      * </p>
@@ -1310,7 +1316,7 @@ public abstract class TokenParser {
 	class SiteURLProvider extends ValueProvider {
 	    protected String getValue(String param) {
 		return getSiteURL(getURI(param), getSecure(param),
-			getPort(param));
+			getHostname(param), getPort(param));
 	    }
 	}
 
@@ -1323,16 +1329,18 @@ public abstract class TokenParser {
      * Parses the given string, modifying and substituting the current portal
      * request URL for the <code>{REQUEST-URL}</code> and
      * <code>{REQUEST-URL:<i>spec</i>}</code> tokens. The optional <i>spec</i>
-     * specifies an alternate scheme and/or port to switch to. The format of the
+     * specifies an alternate scheme, hostname and/or port to switch to. The format of the
      * <i>spec</i> is:
      * </p>
      * 
-     * <code><i>scheme[:port]</i></code>
+     * <code><i>scheme[:hostname[:port]]</i></code>
      * 
      * <ul>
      * <li>The <code><i>scheme</i></code> may be <code>http</code> or
      * <code>https</code>. If you omit a valid scheme, then the scheme used for
      * the current request is assumed.</li>
+     * <li>The <code><i>hostname</i></code> is the hostname to use.  If you omit
+     * it, the hostname from the current request is assumed.</li>
      * <li>The <code><i>port</i></code> is the port number to use. If you omit a
      * port number, then the one used for the current request is assumed.</li>
      * </ul>
@@ -1355,15 +1363,15 @@ public abstract class TokenParser {
      * <code>&lt;a href="https://portal.hp.com/portal/site/acme/template.PAGE/..."&gt;switch to secure&lt;/a&gt;</code>
      * </dd>
      * <dt>
-     * <code>&lt;a href="{REQUEST-URL:http:7001}"&gt;switch to unsecure&lt;/a&gt;</code>
+     * <code>&lt;a href="{REQUEST-URL:http:other.hp.com}"&gt;switch to unsecure&lt;/a&gt;</code>
      * </dt>
      * <dd>becomes
-     * <code>&lt;a href="http://portal.hp.com:7001/portal/site/acme/template.PAGE/..."&gt;switch to unsecure&lt;/a&gt;</code>
+     * <code>&lt;a href="http://other.hp.com/portal/site/acme/template.PAGE/..."&gt;switch to unsecure&lt;/a&gt;</code>
      * </dd>
      * </dl>
      * 
      * <p>
-     * The {@link #getRequestURL(String,String)} method is used to obtain the
+     * The {@link #getRequestURL(String,String,String)} method is used to obtain the
      * request URL; if it is null, the token is replaced with blank. If you
      * provide null content, null is returned.
      * </p>
@@ -1386,7 +1394,7 @@ public abstract class TokenParser {
 	    protected String getValue(String param) {
 		if (!param.endsWith(";"))
 		    param += ';';
-		return getRequestURL(getSecure(param), getPort(param));
+		return getRequestURL(getSecure(param), getHostname(param), getPort(param));
 	    }
 	}
 
@@ -2301,7 +2309,7 @@ public abstract class TokenParser {
         }
 
         return parseContainerToken(content, TOKEN_SECURE_CONTAINER,
-            new SecureContainerMatcher(getRequestURL(null, -1)));
+            new SecureContainerMatcher(getRequestURL(null, null, -1)));
     }
 
     /**
@@ -2376,7 +2384,7 @@ public abstract class TokenParser {
     }
 
     return parseContainerToken(content, TOKEN_UNSECURE_CONTAINER,
-        new UnsecureContainerMatcher(getRequestURL(null, -1)));
+        new UnsecureContainerMatcher(getRequestURL(null, null, -1)));
     }
 
     /**
@@ -3438,14 +3446,15 @@ public abstract class TokenParser {
 	String scheme = null;
 	spec = spec.trim();
 	int i = spec.indexOf(';');
-	if (i == -1) {
+	if (i <= 0) {
 	    return null;
 	}
-	int j = spec.substring(0, i).indexOf(':');
-	if (j == -1) {
-	    scheme = spec.substring(0, i).trim();
+	spec = spec.substring(0, i);
+	i = spec.indexOf(':');
+	if (i == -1) {
+	    scheme = spec.trim();
 	} else {
-	    scheme = spec.substring(0, j).trim();
+	    scheme = spec.substring(0, i).trim();
 	}
 	if ("http".equalsIgnoreCase(scheme)) {
 	    return new Boolean(false);
@@ -3454,6 +3463,38 @@ public abstract class TokenParser {
 	} else {
 	    return null;
 	}
+    }
+
+    /**
+     * Parse a spec string for a page URL and get the hostname if any (returns null
+     * if hostname was not specified).
+     */
+    protected String getHostname(String spec) {
+	if (spec == null) {
+	    return null;
+	}
+	String hostname = null;
+	spec = spec.trim();
+	int i = spec.indexOf(';');
+	if (i <= 0) {
+	    return null;
+	}
+	spec = spec.substring(0, i);
+	i = spec.indexOf(':');
+	if ((i == -1) || (i == spec.length() - 1)) {
+	    return null;
+	}
+	spec = spec.substring(i + 1);
+	i = spec.indexOf(':');
+	if (i == -1) {
+		hostname = spec.trim();
+	} else {
+		hostname = spec.substring(0, i).trim();
+	}
+	if (hostname.length() == 0) {
+		return null;
+	}
+	return hostname;
     }
 
     /**
@@ -3467,15 +3508,20 @@ public abstract class TokenParser {
 	String port = null;
 	spec = spec.trim();
 	int i = spec.indexOf(';');
-	if (i == -1) {
+	if (i <= 0) {
 	    return -1;
 	}
-	int j = spec.substring(0, i).indexOf(':');
-	if (j == -1) {
+	spec = spec.substring(0, i);
+	i = spec.indexOf(':');
+	if ((i == -1) || (i == spec.length() - 1)) {
 	    return -1;
-	} else {
-	    port = spec.substring(j + 1, i).trim();
 	}
+	spec = spec.substring(i + 1);
+	i = spec.indexOf(':');
+	if ((i == -1) || (i == spec.length() - 1)) {
+		return -1;
+	}
+	port = spec.substring(i + 1).trim();
 	try {
 	    int p = Integer.parseInt(port);
 	    return p;

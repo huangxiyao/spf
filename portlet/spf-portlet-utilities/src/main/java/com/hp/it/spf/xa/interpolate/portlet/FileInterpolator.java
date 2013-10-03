@@ -1003,14 +1003,15 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * <p>
  * Use these related tokens to insert into the content the complete current URL
  * which the browser used to access the current portlet and page, optionally
- * with the scheme and/or port set, as per the <code><i>spec</i></code>.
+ * modified to use the scheme, hostname, and/or port set in the <code><i>spec</i></code>.
  * </p>
  * <p>
  * The current request URL is taken from a non-standard attribute in the request
  * which it is assumed the portal has set (SPF sets this by default). The
  * <code><i>spec</i></code> can contain a scheme (<code>http</code> or
- * <code>https</code>) and/or port number in the following format:
- * <code><i>scheme</i>:<i>port</i></code>.
+ * <code>https</code>), hostname, and/or port number in the following format:
+ * <code><i>scheme</i>:<i>hostname</i>:<i>port</i></code>.  Each part is
+ * optional.
  * </p>
  * <p>
  * For example, <code>{REQUEST-URL}</code> is replaced with
@@ -1196,15 +1197,17 @@ import com.hp.it.spf.xa.misc.portlet.Utils;
  * The portal site URL is taken from a non-standard attribute in the request
  * which it is assumed the portal has set (SPF sets this by default). The
  * <code><i>spec</i></code> identifies the particular page within the current
- * site, and may also identify the scheme and/or port to use. The
- * <code><i>spec</i></code> has the following format:
+ * site, and may also identify the scheme, hostname, and/or port to use. The
+ * <code><i>spec</i></code> has the following format (all parts are optional):
  * </p>
  * 
- * <code><i>scheme</i>:<i>port</i>;<i>uri</i></code>
+ * <code><i>scheme</i>:<i>hostname</i>:<i>port</i>;<i>uri</i></code>
  * 
  * <p>
  * The <code><i>scheme</i></code> can be <code>http</code> or <code>https</code>
- * ; if it is not specified, then the scheme in the current request is used. The
+ * ; if it is not specified, then the scheme in the current request is used. 
+ * The <code><i>hostname</i></code> can be the hostname to use; if it is not
+ * specified, then the hostname in the current request is used.  The
  * <code><i>port</i></code> can be a port number; if it is not specified, then
  * the one from the current request is used. The <code><i>uri</i></code> is used
  * to give a site-relative URI for identifying the particular page and/or portal

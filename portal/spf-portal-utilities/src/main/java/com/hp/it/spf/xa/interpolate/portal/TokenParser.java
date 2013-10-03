@@ -476,6 +476,8 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 * @param secure
 	 *            If true, force use of <code>https</code>; if false, force
 	 *            use of <code>http</code>. If null, use the current scheme.
+     * @param hostname
+     *            The hostname to use.  If null, use the current hostname.
 	 * @param port
 	 *            The port to use (an integer; if non-positive, use the current
 	 *            port).
@@ -485,13 +487,13 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 	 *            first <code>/</code> is considered the site name.)
 	 * @return site URL string
 	 */
-	protected String getSiteURL(String URI, Boolean secure, int port) {
+	protected String getSiteURL(String URI, Boolean secure, String hostname, int port) {
 		if (portalContext == null) {
 			return null;
 		}
 		try {
 			HttpServletRequest request = portalContext.getHttpServletRequest();
-			return Utils.getPortalSiteURL(request, secure, null, port, URI);
+			return Utils.getPortalSiteURL(request, secure, hostname, port, URI);
 		} catch (Exception e) {
 			return null;
 		}
@@ -499,26 +501,28 @@ public class TokenParser extends com.hp.it.spf.xa.interpolate.TokenParser {
 
 	/**
 	 * Get the portal request URL for the current request, modified to use the
-	 * given scheme and port. This is the URL which was opened by the browser in
-	 * order to invoke this page, with its scheme and port modified. It is
+	 * given scheme, hostname, and port. This is the URL which was opened by the browser in
+	 * order to invoke this page, with its scheme, hostname and port modified. It is
 	 * obtained from the portal context provided to the constructor. Returns
 	 * null if the portal context was null.
 	 * 
 	 * @param secure
 	 *            If true, force use of <code>https</code>; if false, force
 	 *            use of <code>http</code>. If null, use the current scheme.
+     * @param hostname
+     *            The hostname to use.  If null, use the current hostname.
 	 * @param port
 	 *            The port to use (an integer; if non-positive, use the current
 	 *            port).
 	 * @return request URL string
 	 */
-	protected String getRequestURL(Boolean secure, int port) {
+	protected String getRequestURL(Boolean secure, String hostname, int port) {
 		if (portalContext == null) {
 			return null;
 		}
 		try {
 			HttpServletRequest request = portalContext.getHttpServletRequest();
-			return Utils.getRequestURL(request, secure, null, port);
+			return Utils.getRequestURL(request, secure, hostname, port);
 		} catch (Exception e) {
 			return null;
 		}

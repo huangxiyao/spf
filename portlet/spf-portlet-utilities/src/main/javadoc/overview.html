@@ -4347,11 +4347,11 @@ text. Please click on the links for more documentation for each token.</p>
 	interpolated content. Like the above token, this is a reconstruction of
 	the URL which, if opened by the browser, would re-request the current
 	portal page and portlet (including any form arguments). With this
-	token, you can provide a <code><i>spec</i></code> to switch the scheme
-	or port. The format of the <code><i>spec</i></code> is as follows:</p>
+	token, you can provide a <code><i>spec</i></code> to switch the scheme,
+	hostname, and/or port. The format of the <code><i>spec</i></code> is as follows:</p>
 
 	<blockquote><pre>
-<i>scheme</i>:<i>port</i>	
+<i>scheme</i>:<i>hostname</i>:<i>port</i>	
 	</pre></blockquote>
 
 	<p>Each element is optional.</p>
@@ -4359,11 +4359,15 @@ text. Please click on the links for more documentation for each token.</p>
 		<li>
 		<p>You can specify a <code><i>scheme</i></code>, either <code>http</code>
 		or <code>https</code>. By default the scheme of the current request is
-		assumed.
+		assumed.</p>
+		</li>
+		<li>
+		<p>You can provide a <code><i>hostname</i></code>.  By default the
+		hostname of the current request is assumed.</p>
 		</li>
 		<li>
 		<p>You can provide a <code><i>port</i></code>. By default the port
-		from the current request is assumed.
+		from the current request is assumed.</p>
 		</li>
 	</ul>
 
@@ -4395,12 +4399,12 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 	<dd>
 	<p>Use this token to insert a URL pointing to any page in the
 	portal site, by the site-relative URI for that page. You can also
-	adjust the URL scheme (<code>http</code> or <code>https</code>) and
-	port number with this token. The format of the <code><i>spec</i></code>
+	adjust the URL scheme (<code>http</code> or <code>https</code>), hostname,
+	and/or port number with this token. The format of the <code><i>spec</i></code>
 	is as follows:</p>
 
 	<blockquote><pre>
-<i>scheme</i>:<i>port</i>;<i>uri</i>	
+<i>scheme</i>:<i>hostname</i>:<i>port</i>;<i>uri</i>	
 	</pre></blockquote>
 
 	<p>Each element is optional.</p>
@@ -4410,6 +4414,10 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 		or <code>https</code>. By default the scheme of the current request is
 		assumed. When you don't provide a scheme or port, you don't need the <code>:</code>
 		or <code>;</code> characters.</p>
+		</li>
+		<li>
+		<p>You can specify a <code><i>hostname</i></code>.  By default the
+		hostname of the current request is assumed.</p>
 		</li>
 		<li>
 		<p>You can provide a <code><i>port</i></code>. By default the port
@@ -7481,6 +7489,14 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 		<td>S. Jorgenson</td>
 		<td>Added <code>{SECURE}</code> and <code>{UNSECURE}</code> tokens.</td>
 	</tr>
+		<tr>
+		<td>2.5</td>
+		<td>October 2 20132</td>
+		<td>S. Jorgenson</td>
+		<td>Added support for switching hostnamet in <code>{REQUEST-URL}</code>
+			and <code>{SITE-URL}</code> text interpolation tokens.</td>
+	</tr>
+	
 </table>
 <p></p>
 
