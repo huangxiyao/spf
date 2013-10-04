@@ -45,6 +45,34 @@ public class I18nUtilityTest extends TestCase {
         assertEquals("GMT+08:00", name);
     }
 
+    public void testAtHPTimezoneCodeToTimeZone() {
+    	String athpTZ = "Pacific Time (US & Canada); Tijuana";
+    	TimeZone tz = I18nUtility.athpTimezoneCodeToTimeZone(athpTZ);
+    	assertEquals(TimeZone.getTimeZone("America/Los_Angeles"), tz);
+
+    	athpTZ = "unknown_value";
+    	tz = I18nUtility.athpTimezoneCodeToTimeZone(athpTZ);
+    	assertEquals(null, tz);
+
+    	athpTZ = "bad_value";
+    	tz = I18nUtility.athpTimezoneCodeToTimeZone(athpTZ);
+    	assertEquals(null, tz);
+    }
+    
+    public void testHppTimezoneCodeToTimeZone() {
+    	String hppTz = "PST8PDT";
+    	TimeZone tz = I18nUtility.hppTimezoneCodeToTimeZone(hppTz);
+    	assertEquals(TimeZone.getTimeZone("America/Los_Angeles"), tz);
+
+    	hppTz = "unknown_value";
+    	tz = I18nUtility.hppTimezoneCodeToTimeZone(hppTz);
+    	assertEquals(null, tz);
+
+    	hppTz = "bad_value";
+    	tz = I18nUtility.hppTimezoneCodeToTimeZone(hppTz);
+    	assertEquals(null, tz);
+    }
+    
     public void testHppLanguageToLocaleString() {
         String lCode = "12";
         Locale locale = I18nUtility.hppLanguageToLocale(lCode);

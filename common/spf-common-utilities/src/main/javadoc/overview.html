@@ -180,12 +180,21 @@ table.props td {
 			<li>2.3.1. <a href="#i18n.manipulate.sort">Sorting locales (<code>I18nUtility.sortLocales</code>)</a></li>
 		</ul>
 		</li>
-		<li>2.4. <a href="#i18n.other">Other internationalization
+		<li>2.4. <a href="#i18n.convert.tz">Converting between different
+		representations of timezone</a>
+		<ul>
+			<li>2.4.1. <a href="#i18n.convert.hpp.tz">Converting HP
+			Passport timezone codes (<code>I18nUtility.hppTimezoneCodeToTimeZone</code>)</a></li>
+			<li>2.4.2. <a href="#i18n.convert.athp.tz">Converting @HP
+			timezone codes (<code>I18nUtility.athppTimezoneCodeToTimeZone</code>)</a></li>
+		</ul>
+		</li>
+		<li>2.5. <a href="#i18n.other">Other internationalization
 		topics</a>
 		<ul>
-			<li>2.4.1. <a href="#i18n.other.portlet">Internationalization
+			<li>2.5.1. <a href="#i18n.other.portlet">Internationalization
 			topics for portlet developers</a></li>
-			<li>2.4.2. <a href="#i18n.other.portal">Internationalization
+			<li>2.5.2. <a href="#i18n.other.portal">Internationalization
 			topics for portal component developers</a></li>
 		</ul>
 		</li>
@@ -1219,13 +1228,110 @@ operating on collections of locales.</p>
 <p>Please see the method documentation for more information.</p>
 
 <hr>
+<a name="i18n.convert.tz">
+<h3>2.4. Converting between different representations of timezone</h3>
+</a>
+
+<p>In SPF, the Java {@link java.util.TimeZone} object is the canonical
+form for a timezone. However there are a couple of related representations for
+timezone that developers may need to be concerned with:</p>
+
+<ul>
+	<li>
+	<p>HP Passport (the identity and authentication service
+	provider for Shared Portal Framework public users) represents the
+	timezone as a proprietary string with values like <code>Pacific-Standard-Time</code>.
+	These string values are not in themselves valid Java <code>TimeZone</code> IDs.
+	SPF knows how to map from HPP timezone codes into Java <code>TimeZone</code>
+	objects, though, so you don't have to.</p>
+	</li>
+	<li>
+	<p>Similarly, the HP Enterprise Directory (used for @HP employee
+	portal access to Shared Portal Framework sites) represents the
+	timezone as another proprietary string, with values like
+	<code>Pacific Time (US &amp; Canada); Tijuana</code>.  These string
+	values are different from those used by HP Passport, but they also
+	are not valid Java <code>TimeZone</code> IDs. SPF provides a converter
+	method for you.</p>
+	</li>
+</ul>
+
+<a name="i18n.convert.hpp.tz">
+<h4>2.4.1. Converting HP Passport timezone codes (<code>I18nUtility.hppTimezoneCodeToTimeZone</code>)</h4>
+</a>
+
+<p>The SPF common utilities {@link com.hp.it.spf.xa.I18nUtility}
+class provides a method for converting from an HP Passport timezone
+code to a Java {@link java.util.TimeZone} object.  <b>Note:</b>
+Currently there is no method for the opposite conversion.</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#hppTimezoneCodeToTimeZone(String)}</dt>
+	<dd>
+	<p>Returns the <code>TimeZone</code> for the given HPP timezone code. You give this method an HPP
+	timezone code and it returns you the equivalent <code>TimeZone</code>. If the HPP timezone was
+	not recognized or supported, then null will be returned.</p>
+	<p>For example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.hppTimezoneCodeToTimeZone("Pacific-Standard-Time")</code></dt>
+		<dd>returns a <code>TimeZone</code> for the US West Coast timezone
+		(ie, the same <code>TimeZone</code> returned by <code>TimeZone.getTimeZone("America/Los_Angeles")</code>).</dd>
+		<dt><code>I18nUtility.hppTimezoneCodeToTimeZone("India-Standard-Time")</code></dt>
+		<dd>returns a <code>TimeZone</code> for India
+		(ie, the same <code>TimeZone</code> returned by <code>TimeZone.getTimeZone("Asia/Calcutta")</code>).</dd>
+		<dt>Etc.</dt>
+	</dl>
+	<p></p>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<a name="i18n.convert.athp.tz">
+<h4>Converting @HP timezone codes (<code>I18nUtility.athppTimezoneCodeToTimeZone</code>)</h4>
+</a>
+
+<p>The SPF common utilities {@link com.hp.it.spf.xa.I18nUtility}
+class provides a method for converting from an HP employee timezone
+code (from the HP Enterprise Directory) to a Java {@link java.util.TimeZone} object.
+<b>Note:</b> Currently there is no method for the opposite conversion.</p>
+
+<dl>
+	<dt>{@link
+	com.hp.it.spf.xa.i18n.I18nUtility#athpTimezoneCodeToTimeZone(String)}</dt>
+	<dd>
+	<p>Returns the <code>TimeZone</code> for the given HP employee timezone code.  The
+	values for employee timezones in the HP Enterprise Directory, as returned from
+	AtHP authentication in SPF, are supported. You give this method an employee
+	timezone code and it returns you the equivalent <code>TimeZone</code>. If the
+	employee timezone was not recognized or supported, then null will be returned.</p>
+	<p>For example:</p>
+
+	<dl>
+		<dt><code>I18nUtility.athpTimezoneCodeToTimeZone("Pacific Time (US &amp; Canada); Tijuana")</code></dt>
+		<dd>returns a <code>TimeZone</code> for the US West Coast timezone
+		(ie, the same <code>TimeZone</code> returned by <code>TimeZone.getTimeZone("America/Los_Angeles")</code>).</dd>
+		<dt><code>I18nUtility.athpTimezoneCodeToTimeZone("India Standard Time")</code></dt>
+		<dd>returns a <code>TimeZone</code> for India
+		(ie, the same <code>TimeZone</code> returned by <code>TimeZone.getTimeZone("Asia/Calcutta")</code>).</dd>
+		<dt>Etc.</dt>
+	</dl>
+	<p></p>
+	</dd>
+</dl>
+
+<p>Please see the method documentation for more information.</p>
+
+<hr>
 
 <a name="i18n.other">
-<h3>2.4. Other internationalization topics</h3>
+<h3>2.5. Other internationalization topics</h3>
 </a>
 
 <a name="i18n.other.portlet">
-<h4>2.4.1. Internationalization topics for portlet developers</h4>
+<h4>2.5.1. Internationalization topics for portlet developers</h4>
 </a>
 
 <p>The <i>SPF portlet utilities</i> provide an extension of the <code>com.hp.it.spf.xa.i18n.I18nUtility</code>
@@ -1236,7 +1342,7 @@ supporting files. Please see the internationalization chapter in the <a
 Portlet Utilities Developer's Guide</a>.</p>
 
 <a name="i18n.other.portal">
-<h4>2.4.2. Internationalization topics for portal component
+<h4>2.5.2. Internationalization topics for portal component
 developers</h4>
 </a>
 
@@ -2291,6 +2397,13 @@ reload.checkPeriod = 3600
 		<td>Sep 10 2012</td>
 		<td>S. Jorgenson / Ying-Zhi Wu</td>
 		<td>Documented new portal subclass of <code>PropertyResourceBundleManager</code>.</td>
+	</tr>
+	<tr>
+		<td>1.6</td>
+		<td>Oct 3 2013</td>
+		<td>S. Jorgenson</td>
+		<td>Documented new <code>I18nUtility</code> methods for converting HPP and AtHP
+		timezone codes into <code>TimeZone</code> objects.</td>
 	</tr>
 </table>
 <p></p>

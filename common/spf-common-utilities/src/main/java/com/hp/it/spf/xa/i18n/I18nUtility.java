@@ -64,6 +64,20 @@ public class I18nUtility {
     protected static final String I18N_CONFIG_KEY_REVERSE_USERNAME_LANGS = "userDisplayName.reverse.lang";
 
     /**
+     * In the internationalization configuration file, this is the property
+     * keyname prefix for the mappings of HPP timezone to Java TimeZone ID.
+     * See {@link #hppTimezoneCodeToTimeZone(String)} for how this is used.
+     */
+    protected static final String I18N_CONFIG_KEY_PREFIX_HPP_TZ = "timezone.hpp.";
+    
+    /**
+     * In the internationalization configuration file, this is the property
+     * keyname prefix for the mappings of AtHP timezone to Java TimeZone ID.
+     * See {@link #athpTimezoneCodeToTimeZone(String)} for how this is used.
+     */
+    protected static final String I18N_CONFIG_KEY_PREFIX_ATHP_TZ = "timezone.athp.";
+
+    /**
      * Not currently used.
      */
     protected static final String I18N_CONFIG_KEY_EMAIL_ENCODING_FOR = "emailTemplate.encoding";
@@ -234,6 +248,133 @@ public class I18nUtility {
             return timezone.getDisplayName(timezone.inDaylightTime(datetime),
                     TimeZone.SHORT, inLocale);
         }
+    }
+
+    /**
+     * <p>
+     * Transform employee timezone (from HP LDAP server and retrieved via
+     * AtHP authentication, presumably) into a Java <code>TimeZone</code> object.
+     * </p>
+     * <p>
+     * This utility is based on mappings from employee timezone to
+     * Java <code>TimeZone</code> ID maintained in the <code>i18n_config.properties</code>
+     * file.  The mappings are <b>case-sensitive</b>.  If the given employee 
+     * timezone value is not found in the mappings, then null is returned.
+     * If the <code>TimeZone</code> ID from the mapping is not one of the
+     * available ones in this JVM, then null is also returned.
+     * </p>
+     * <p>
+     * The <code>i18n_config.properties</code> file can be located anywhere
+     * accessible to the system classloader. The property within that file which
+     * is used by this method is {@link #I18N_CONFIG_KEY_PREFIX_ATHP_TZ}.
+     * For configuring the property file, please see the file itself - it is
+     * contained inside the SPF common utilities JAR, and generally should never
+     * need to be customized by application developers or administrators.
+     * </p>
+     * @param athpTZ
+     *            An employee timezone value.
+     * @return The equivalent Java <code>TimeZone</code>, or null if the
+     *         employee timezone was not recognized.
+     */
+    public static TimeZone athpTimezoneCodeToTimeZone(String athpTZ) 
+    {
+        if (athpTZ == null) {
+            return null;
+        }
+        athpTZ = athpTZ.trim();
+        String key = I18N_CONFIG_KEY_PREFIX_ATHP_TZ + athpTZ;
+        String tzID = null;
+        TimeZone tz = null;
+        
+        // load property file and lookup timezone ID
+        ResourceBundle rb = PropertyResourceBundleManager.getBundle(I18N_CONFIG_FILE);
+        if (rb == null) {
+            LOG.error("I18nUtility: athpTimezoneCodeToTimeZone failed to open "
+                    + I18N_CONFIG_FILE + " properties file");
+        } else {
+            try {
+                tzID = rb.getString(key);
+            }
+            catch (Exception ex) {
+                LOG.warn("I18nUtility: athpTimezoneCodeToTimeZone failed to find "
+                        + key + " property in " + I18N_CONFIG_FILE + " properties file");
+                LOG.warn("I18nUtility: " + ex.getMessage());
+            }
+        }
+
+        // construct TimeZone from the timezone ID
+        if (tzID != null) {
+        	if (Arrays.asList(TimeZone.getAvailableIDs()).contains(tzID)) {
+                tz = TimeZone.getTimeZone(tzID);        		
+        	} else {
+        		LOG.warn("I18nUtility: athpTimezoneCodeToTimeZone failed to get TimeZone for "
+        				+ tzID + " ID in " + I18N_CONFIG_FILE + " properties file");
+        	}
+        }
+        return tz;
+    }
+
+    /**
+     * <p>
+     * Transform HP Passport timezone into a Java <code>TimeZone</code> object.
+     * </p>
+     * <p>
+     * This utility is based on mappings from HPP timezone to
+     * Java <code>TimeZone</code> ID maintained in the <code>i18n_config.properties</code>
+     * file.  The mappings are <b>case-sensitive</b>.  If the given HPP 
+     * timezone value is not found in the mappings, then null is returned.
+     * If the <code>TimeZone</code> ID from the mapping is not one of the
+     * available ones in this JVM, then null is also returned.
+     * </p>
+     * <p>
+     * The <code>i18n_config.properties</code> file can be located anywhere
+     * accessible to the system classloader. The property within that file which
+     * is used by this method is {@link #I18N_CONFIG_KEY_PREFIX_HPP_TZ}.
+     * For configuring the property file, please see the file itself - it is
+     * contained inside the SPF common utilities JAR, and generally should never
+     * need to be customized by application developers or administrators.
+     * </p>
+     * @param hppTZ
+     *            An HPP timezone value.
+     * @return The equivalent Java <code>TimeZone</code>, or null if the
+     *         HPP timezone was not recognized.
+     */
+    public static TimeZone hppTimezoneCodeToTimeZone(String hppTZ) 
+    {
+        if (hppTZ == null) {
+            return null;
+        }
+        hppTZ = hppTZ.trim();
+        String key = I18N_CONFIG_KEY_PREFIX_HPP_TZ + hppTZ;
+        String tzID = null;
+        TimeZone tz = null;
+        
+        // load property file and lookup timezone ID
+        ResourceBundle rb = PropertyResourceBundleManager.getBundle(I18N_CONFIG_FILE);
+        if (rb == null) {
+            LOG.error("I18nUtility: hppTimezoneCodeToTimeZone failed to open "
+                    + I18N_CONFIG_FILE + " properties file");
+        } else {
+            try {
+                tzID = rb.getString(key);
+            }
+            catch (Exception ex) {
+                LOG.warn("I18nUtility: hppTimezoneCodeToTimeZone failed to find "
+                        + key + " property in " + I18N_CONFIG_FILE + " properties file");
+                LOG.warn("I18nUtility: " + ex.getMessage());
+            }
+        }
+
+        // construct TimeZone from the timezone ID
+        if (tzID != null) {
+        	if (Arrays.asList(TimeZone.getAvailableIDs()).contains(tzID)) {
+                tz = TimeZone.getTimeZone(tzID);        		
+        	} else {
+        		LOG.warn("I18nUtility: hppTimezoneCodeToTimeZone failed to get TimeZone for "
+        				+ tzID + " ID in " + I18N_CONFIG_FILE + " properties file");
+        	}
+        }
+        return tz;
     }
 
     /**
