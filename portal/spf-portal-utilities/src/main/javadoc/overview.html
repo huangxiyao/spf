@@ -5969,12 +5969,13 @@ text. Please click on the links for more documentation for each token.</p>
 <i>scheme</i>:<i>hostname</i>:<i>port</i>	
 	</pre></blockquote>
 
-	<p>Each element is optional.</p>
+	<p>Each element is optional. Unprovided trailing elements do not need the
+	intervening <code>:</code> character to be provided either.</p>
 	<ul>
 		<li>
 		<p>You can specify a <code><i>scheme</i></code>, either <code>http</code>
 		or <code>https</code>. By default the scheme of the current request is
-		assumed.
+		assumed.</p>
 		</li>
 		<li>
 		<p>You can specify a <code><i>hostname</i></code>.  By default the
@@ -5982,7 +5983,7 @@ text. Please click on the links for more documentation for each token.</p>
 		</li>
 		<li>
 		<p>You can provide a <code><i>port</i></code>. By default the port
-		from the current request is assumed.
+		from the current request is assumed.</p>
 		</li>
 	</ul>
 
@@ -5992,6 +5993,20 @@ text. Please click on the links for more documentation for each token.</p>
 
 	<blockquote><pre>
 &lt;INPUT TYPE="hidden" NAME="returnURL" VALUE="{REQUEST-URL:https}"&gt;
+</pre></blockquote>
+
+	<p>Here is another example, where the request URL scheme has been forced
+	to HTTPS on a different host (<code>foo.hp.com</code>):</p>
+
+	<blockquote><pre>
+&lt;INPUT TYPE="hidden" NAME="returnURL" VALUE="{REQUEST-URL:https:foo.hp.com}"&gt;
+</pre></blockquote>
+
+	<p>And finally where the request URL scheme has just been forced to a 
+	different host (<code>foo.hp.com</code>) keeping the scheme the same:</p>
+
+	<blockquote><pre>
+&lt;INPUT TYPE="hidden" NAME="returnURL" VALUE="{REQUEST-URL::foo.hp.com}"&gt;
 </pre></blockquote>
 	</dd>
 
@@ -6014,7 +6029,7 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 	<dd>
 	<p>Use this token to insert a URL pointing to any page in the
 	portal site, by the site-relative URI for that page. You can also
-	adjust the URL scheme (<code>http</code> or <code>https</code>) and
+	adjust the URL scheme (<code>http</code> or <code>https</code>), hostname and
 	port number with this token. The format of the <code><i>spec</i></code>
 	is as follows:</p>
 
@@ -6022,13 +6037,15 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 <i>scheme</i>:<i>hostname</i>:<i>port</i>;<i>uri</i>	
 	</pre></blockquote>
 
-	<p>Each element is optional.</p>
+	<p>Each element is optional.  Unprovided trailing elements do not need the
+	intervening <code>:</code> character to be provided.  And if you are only
+	providing a <code><i>uri</i></code> then the <code>:</code> and <code>;</code>
+	characters do not need to be provided.</p>
 	<ul>
 		<li>
 		<p>You can specify a <code><i>scheme</i></code>, either <code>http</code>
 		or <code>https</code>. By default the scheme of the current request is
-		assumed. When you don't provide a scheme or port, you don't need the <code>:</code>
-		or <code>;</code> characters.</p>
+		assumed.</p>
 		</li>
 		<li>
 		<p>You can specify a <code><i>hostname</i></code>.  By default the
@@ -6036,9 +6053,7 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 		</li>
 		<li>
 		<p>You can provide a <code><i>port</i></code>. By default the port
-		from the current request is assumed. When you don't provide a scheme
-		or port, you don't need the <code>:</code> or <code>;</code>
-		characters.</p>
+		from the current request is assumed.</p>
 		</li>
 		<li>
 		<p>You can provide a <code><i>uri</i></code>, which you use to
@@ -6066,8 +6081,8 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 	<p>To repeat the above example, but switch to the <code>itrc</code>
 	site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
 
-	<p>To repeat both of those examples, and force use of HTTPS in the
-	URL, use {SITE-URL:https;/forums}<code>{SITE-URL:https;itrc/forums}</code>
+	<p>To repeat both of those examples, and force use of HTTPS on the
+	<code>foo.hp.com</code> host, use <code>{SITE-URL:https:foo.hp.com;itrc/forums}</code>
 	instead.</p>
 
 	<p>To force use of HTTPS but otherwise generate just a home page
@@ -8854,6 +8869,13 @@ support files.</p>
 		<td>September 10 2012</td>
 		<td>S. Jorgenson / Ying-Zhi Wu</td>
 		<td>Documented new portal subclass of <code>PropertyResourceBundleManager</code>.</td>
+	</tr>
+	<tr>
+		<td>1.4</td>
+		<td>October 24 2013</td>
+		<td>S. Jorgenson</td>
+		<td>Added hostname to <code><i>spec</i></code> for <code>{SITE-URL:<i>spec</i>}</code>
+		and <code>{REQUEST-URL:<i>spec</i>}</code> tokens.</td>
 	</tr>
 	<!-- 
 	<tr>

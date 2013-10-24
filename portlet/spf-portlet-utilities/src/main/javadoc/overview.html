@@ -4354,7 +4354,8 @@ text. Please click on the links for more documentation for each token.</p>
 <i>scheme</i>:<i>hostname</i>:<i>port</i>	
 	</pre></blockquote>
 
-	<p>Each element is optional.</p>
+	<p>Each element is optional. Unprovided trailing elements do not need the
+	intervening <code>:</code> character to be provided either.</p>
 	<ul>
 		<li>
 		<p>You can specify a <code><i>scheme</i></code>, either <code>http</code>
@@ -4377,6 +4378,20 @@ text. Please click on the links for more documentation for each token.</p>
 
 	<blockquote><pre>
 &lt;INPUT TYPE="hidden" NAME="returnURL" VALUE="{REQUEST-URL:https}"&gt;
+</pre></blockquote>
+
+	<p>Here is another example, where the request URL scheme has been forced
+	to HTTPS on a different host (<code>foo.hp.com</code>):</p>
+
+	<blockquote><pre>
+&lt;INPUT TYPE="hidden" NAME="returnURL" VALUE="{REQUEST-URL:https:foo.hp.com}"&gt;
+</pre></blockquote>
+
+	<p>And finally where the request URL scheme has just been forced to a 
+	different host (<code>foo.hp.com</code>) keeping the scheme the same:</p>
+
+	<blockquote><pre>
+&lt;INPUT TYPE="hidden" NAME="returnURL" VALUE="{REQUEST-URL::foo.hp.com}"&gt;
 </pre></blockquote>
 	</dd>
 
@@ -4407,13 +4422,15 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 <i>scheme</i>:<i>hostname</i>:<i>port</i>;<i>uri</i>	
 	</pre></blockquote>
 
-	<p>Each element is optional.</p>
+	<p>Each element is optional.  Unprovided trailing elements do not need the
+	intervening <code>:</code> character to be provided.  And if you are only
+	providing a <code><i>uri</i></code> then the <code>:</code> and <code>;</code>
+	characters do not need to be provided.</p>
 	<ul>
 		<li>
 		<p>You can specify a <code><i>scheme</i></code>, either <code>http</code>
 		or <code>https</code>. By default the scheme of the current request is
-		assumed. When you don't provide a scheme or port, you don't need the <code>:</code>
-		or <code>;</code> characters.</p>
+		assumed.</p>
 		</li>
 		<li>
 		<p>You can specify a <code><i>hostname</i></code>.  By default the
@@ -4421,9 +4438,7 @@ Click &lt;A HREF="{SITE-URL}"&gt;here&lt;/A&gt; to go to the home page.
 		</li>
 		<li>
 		<p>You can provide a <code><i>port</i></code>. By default the port
-		from the current request is assumed. When you don't provide a scheme
-		or port, you don't need the <code>:</code> or <code>;</code>
-		characters.</p>
+		from the current request is assumed.</p>
 		</li>
 		<li>
 		<p>You can provide a <code><i>uri</i></code>, which you use to
@@ -4450,8 +4465,8 @@ Click &lt;A HREF="{SITE-URL:/forums}"&gt;here&lt;/A&gt; to go to the Forums.
 	<p>To repeat the above example, but switch to the <code>itrc</code>
 	site as well, use <code>{SITE-URL:itrc/forums}</code> instead.</p>
 
-	<p>To repeat both of those examples, and force use of HTTPS in the
-	URL, use {SITE-URL:https;/forums}<code>{SITE-URL:https;itrc/forums}</code>
+	<p>To repeat both of those examples, and force use of HTTPS on the
+	<code>foo.hp.com</code> host, use <code>{SITE-URL:https:foo.hp.com;itrc/forums}</code>
 	instead.</p>
 
 	<p>To force use of HTTPS but otherwise generate just a home page
@@ -7491,12 +7506,11 @@ view needs, and return the <code>ModelAndView</code> to forward to that
 	</tr>
 		<tr>
 		<td>2.5</td>
-		<td>October 2 20132</td>
+		<td>October 24 2013</td>
 		<td>S. Jorgenson</td>
-		<td>Added support for switching hostnamet in <code>{REQUEST-URL}</code>
+		<td>Added support for switching hostname in <code>{REQUEST-URL}</code>
 			and <code>{SITE-URL}</code> text interpolation tokens.</td>
 	</tr>
-	
 </table>
 <p></p>
 
