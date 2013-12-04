@@ -1142,3 +1142,6 @@ audit.db.connectionpool=default
 
 ### Disable check admin token on console because of v8.2.2 default (true) cause issue in Siteminder integration
 portal.admin.checkSyncToken=false
+
+### Per Vignette 8.2 security vulnerabilities report, disable this to avoid security issue
+portal.diag.enabled=false
