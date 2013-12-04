@@ -277,6 +277,7 @@
 									<excludes>
 										<exclude>WEB-INF/web.xml</exclude>
 										<exclude>WEB-INF/weblogic.xml</exclude>
+										<exclude>devutil/*</exclude>
 										<!--
 										<exclude>WEB-INF/lib/spring-core.jar</exclude>
 										<exclude>WEB-INF/lib/commons-lang.jar</exclude>
