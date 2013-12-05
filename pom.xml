@@ -108,6 +108,18 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>prepareContent</goal>
+                            <goal>package</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>software/vignette-portal-*/portal/devutil/**</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>nojvm</id>
                         <goals>
                             <goal>prepareContent</goal>
@@ -117,6 +129,7 @@
                             <classifier>nojvm</classifier>
                             <excludes>
                                 <exclude>software/oracle-java-*/**</exclude>
+                                <exclude>software/vignette-portal-*/portal/devutil/**</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -136,6 +149,7 @@
                                 <exclude>bin/tomcat-portal.sh</exclude>
                                 <exclude>etc/tomcat-portal/**</exclude>
                                 <exclude>etc/resources_tomcat-portal/**</exclude>
+                                <exclude>software/vignette-portal-*/portal/devutil/**</exclude>
                             </excludes>
                         </configuration>
                     </execution>
