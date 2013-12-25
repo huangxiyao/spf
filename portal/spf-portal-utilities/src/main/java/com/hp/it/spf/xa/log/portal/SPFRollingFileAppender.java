@@ -3,9 +3,11 @@ package com.hp.it.spf.xa.log.portal;
 import org.apache.log4j.Layout;
 import org.apache.log4j.helpers.LogLog;
 
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -183,6 +185,39 @@ public class SPFRollingFileAppender extends org.apache.log4j.RollingFileAppender
 
 
 	public void rollOver() {
+		//Perform the rollover activities - remove the old log files than the max backup index setting
+		File file;
+
+		LogLog.debug("maxBackupIndex=" + maxBackupIndex);
+		if(maxBackupIndex > 0) {
+			// Delete the oldest file
+			String calculatedLogFilePath = calculateLogFilePath();
+			File tempLogFile = new File(calculatedLogFilePath);
+			File logDirectory = tempLogFile.getParentFile();
+
+			FilenameFilter textFilter = new FilenameFilter() {
+				public boolean accept(File dir, String name) {
+					String lowercaseName = name.toLowerCase();
+					if (lowercaseName.endsWith(".txt")) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			};
+
+			// Only get expected txt log files
+			String[] oldFiles = logDirectory.list(textFilter);
+			Arrays.sort(oldFiles);
+
+			for (int i = 0; i < oldFiles.length - maxBackupIndex; i++) {
+				// Delete the old file
+				file = new File(logDirectory, oldFiles[i]);
+				boolean deleteSuccess = file.delete();
+				LogLog.debug("Deleted file " + file + " succeed: " + deleteSuccess);
+			}
+		}
+
 		setNewFile();
 	}
 
