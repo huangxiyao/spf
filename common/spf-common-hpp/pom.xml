@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.xa</groupId>
 		<artifactId>common</artifactId>
-		<version>3.0.7</version>
+		<version>3.0.8-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.hp.it.spf.xa</groupId>
