@@ -4,19 +4,19 @@
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
 		<artifactId>spf-pom</artifactId>
-		<version>3.0.7-SNAPSHOT</version>
+		<version>3.0.7</version>
 	</parent>
 
-	<version>3.0.7-SNAPSHOT</version>
+	<version>3.0.7</version>
 	<groupId>com.hp.it.spf.portal</groupId>
 	<artifactId>portal-components</artifactId>
 	<packaging>pom</packaging>
 	<name>SPF portal components aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal-components</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal-components</developerConnection>
-		<url>https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal-components</url>
+		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.7/portal-components</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.7/portal-components</developerConnection>
+		<url>https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.7/portal-components</url>
 	</scm>
 
 	<distributionManagement>
