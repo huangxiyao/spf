@@ -4,21 +4,21 @@
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
 		<artifactId>spf-pom</artifactId>
-		<version>3.0.7-SNAPSHOT</version>
+		<version>3.0.7</version>
 	</parent>
 
 
 	<groupId>com.hp.it.spf.apps</groupId>
 	<artifactId>portal-helper-apps</artifactId>
-	<version>3.0.7-SNAPSHOT</version>
+	<version>3.0.7</version>
 	
 	<packaging>pom</packaging>
 	<name>SPF portal helper applications aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal-helper-apps</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal-helper-apps</developerConnection>
-		<url>https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal-helper-apps</url>
+		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.7/portal-helper-apps</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.7/portal-helper-apps</developerConnection>
+		<url>https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.7/portal-helper-apps</url>
 	</scm>
 
 	<distributionManagement>
