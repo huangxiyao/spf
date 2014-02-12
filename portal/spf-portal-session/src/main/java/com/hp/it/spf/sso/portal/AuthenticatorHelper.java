@@ -33,10 +33,7 @@ import com.epicentric.entity.UniquePropertyValueConflictException;
 import com.epicentric.site.Site;
 import com.epicentric.site.SiteException;
 import com.epicentric.site.SiteManager;
-import com.epicentric.user.User;
-import com.epicentric.user.UserGroup;
-import com.epicentric.user.UserGroupManager;
-import com.epicentric.user.UserManager;
+import com.epicentric.user.*;
 import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.hp.it.spf.xa.properties.PropertyResourceBundleManager;
@@ -610,10 +607,10 @@ public class AuthenticatorHelper {
 	 * @return true if user has logged in HHP, otherwise false
 	 */
 	private static boolean loggedIntoHPPGeneral(HttpServletRequest request) {
-        String hppSession = CookieUtils.getCookieValue(request,
-                AuthenticationConsts.COOKIE_ATTR_HPPSESSION);
-        String smSession = CookieUtils.getCookieValue(request,
-                AuthenticationConsts.COOKIE_ATTR_SMSESSION);
+		String hppSession = CookieUtils.getCookieValue(request,
+				AuthenticationConsts.COOKIE_ATTR_HPPSESSION);
+		String smSession = CookieUtils.getCookieValue(request,
+				AuthenticationConsts.COOKIE_ATTR_SMSESSION);
 		String clHeaderHpp = AuthenticatorHelper
 				.getRequestHeader(
 						request,
@@ -624,15 +621,15 @@ public class AuthenticatorHelper {
 						clHeaderHpp,
 						getProperty(AuthenticationConsts.HEADER_HPCLNAME_PROPERTY_NAME));
 
-        return isFromHPPGeneral(request)
-                && ((hppSession != null
-                && hppSession.trim().length() > 0
-                && !hppSession
-                        .equals(getProperty(AuthenticationConsts.HPP_LOGGEDOFF_PROPERTY_NAME)))
-                || (smSession != null 
-                && smSession.trim().length() > 0
-                && !smSession
-                        .equals(getProperty(AuthenticationConsts.HPP_LOGGEDOFF_PROPERTY_NAME))))
+		return isFromHPPGeneral(request)
+				&& ((hppSession != null
+				&& hppSession.trim().length() > 0
+				&& !hppSession
+						.equals(getProperty(AuthenticationConsts.HPP_LOGGEDOFF_PROPERTY_NAME)))
+				|| (smSession != null
+				&& smSession.trim().length() > 0
+				&& !smSession
+						.equals(getProperty(AuthenticationConsts.HPP_LOGGEDOFF_PROPERTY_NAME))))
 				&& hpclName != null
 				&& hpclName.trim().length() > 0
 				&& !hpclName
@@ -898,15 +895,9 @@ public class AuthenticatorHelper {
 			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 				LOG.debug("Retrieving user. PROPERTY: " + property + " VALUE: " + value);
 			}
-			List<Realm> realms = AuthenticationManager.getDefaultAuthenticationManager().getSSORealms();
-			Realm realm = null;
-			for (Realm rlm : realms) {
-				if (realmId.equals(rlm.getID())) {
-					realm = rlm;
-					break;
-				}
-			}
+			Realm realm = getRealm(realmId);
 			User u = UserManager.getInstance().getUser(property, value, realm);
+			LOG.info("UserManager.getInstance()=" + UserManager.getInstance());
 			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 				LOG.debug("Retrieved user. PROPERTY: " + property + " VALUE: " + value);
 			}
@@ -917,9 +908,51 @@ public class AuthenticatorHelper {
 			}
 			return null;
 		} catch (EntityPersistenceException e) {
-			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-				LOG.debug("Entity Persistence Exception when retrieving user.  PROPERTY: " + property + " VALUE: " + value, e);
+			LOG.error("Entity Persistence Exception when retrieving user.  PROPERTY: " + property + " VALUE: " + value, e);
+			return null;
+		}
+	}
+
+	private static Realm getRealm(String realmId) {
+		List<Realm> realms = AuthenticationManager.getDefaultAuthenticationManager().getSSORealms();
+		for (Realm rlm : realms) {
+			if (realmId.equals(rlm.getID())) {
+				return rlm;
 			}
+		}
+		throw new IllegalArgumentException("Couldn't find the ream based on the ID = " + realmId);
+	}
+
+	/**
+	 * Retrieves a user based on user name.
+	 *
+	 * @param userName user name
+	 * @param realmId  Realm Id
+	 * @return an instance of the User object corresponding to the logon id or
+	 *         null, if not found
+	 */
+	static User retrieveUserByUserName(String userName, String realmId) {
+		try {
+			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+				LOG.debug("Retrieving user. User Name: " + userName + " Realm: " + realmId);
+			}
+
+			Realm realm = getRealm(realmId);
+
+			User u = null;
+			UserQueryResults results = UserManager.getInstance().getUsers(AuthenticationConsts.PROPERTY_USER_NAME_ID,
+					userName, realm);
+
+			if (results.hasNext()) {
+				u = (User) results.next();
+			}
+
+			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+				LOG.debug("Retrieved user. User Name: " + userName + " Realm: " + realmId);
+			}
+			return u;
+		} catch (EntityPersistenceException e) {
+			LOG.error("Entity Persistence Exception when retrieving user.  User Name: " + userName + " Realm: " + realmId, e);
 			return null;
 		}
 	}

@@ -544,7 +544,7 @@ public class MockeryUtils {
         context.checking(new Expectations() {
             {
                 one(realm).getID();
-                will(returnValue("realmid"));
+                will(returnValue(name));
             }
         });
         return realm;

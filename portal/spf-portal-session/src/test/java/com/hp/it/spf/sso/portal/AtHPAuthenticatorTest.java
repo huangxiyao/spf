@@ -75,7 +75,8 @@ public class AtHPAuthenticatorTest {
         authenticator.mapHeaderToUserProfileMap();
         assertTrue(authenticator.userProfile.size() > 0);
     }
-    
+
+    /*
     @Test
     public void thatAtHpAuthenticatorExecutesSuccessfully(){
     	AtHPAuthenticator authenticator = new AtHPAuthenticator(request);
@@ -112,7 +113,7 @@ public class AtHPAuthenticatorTest {
     	
     	
     	
-    }
+    }*/
     
     @Test
     public void thatIsUserRecentUpdatedReturnsTrueOnNewPersonaProfile(){

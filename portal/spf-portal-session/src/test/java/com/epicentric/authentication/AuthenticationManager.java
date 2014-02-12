@@ -44,8 +44,10 @@ public class AuthenticationManager extends GenericService {
 	public List<Realm> getSSORealms() {
 		List result = new ArrayList<Realm>();
 		Mockery context = MockeryUtils.createMockery();
-		Realm realm = MockeryUtils.mockRealm(context, null);
-		result.add(realm);
+		Realm hppRealm = MockeryUtils.mockRealm(context, "hpp_realm1");
+		result.add(hppRealm);
+		Realm athpRealm = MockeryUtils.mockRealm(context, "athp_realm1");
+		result.add(athpRealm);
 		return result;
 	}
 }

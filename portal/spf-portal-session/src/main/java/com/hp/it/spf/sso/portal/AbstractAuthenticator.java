@@ -712,16 +712,44 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 			if (emailUser != null) {
 				emailUser.delete();
 			}
-			if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
-				LOG.debug("Not found this user in SP, now creating this user"
-						  + ssoUser.getUserName());
+
+			// For CR #961, if the incoming user has the different profile id but same user name as an existing
+			// account in Vignette database, delete the existing account and create a new one.
+			User sameIdUser = AuthenticatorHelper.retrieveUserByUserName(ssoUser.getUserName(), realmId);
+			if (sameIdUser != null && isAllowedForDelete(sameIdUser)) {
+				LOG.info("Found an existing user in Vignette DB with same user name but different profile id, now re-creating this user"
+						+ ssoUser.getUserName());
+				sameIdUser.delete();
+			} else {
+				if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
+					LOG.debug("Not found this user in Vignette DB, now creating this user"
+							+ ssoUser.getUserName());
+				}
 			}
+
 			vapUser = createVAPUser(realmId);
 		} else { // Try to update user info if needed
+			// For CR #961, if the incoming user has the different profile id but same user name as an existing
+			// account in Vignette database, delete the existing account and then perform the update.
+			User sameIdUser = AuthenticatorHelper.retrieveUserByUserName(ssoUser.getUserName(), realmId);
+			if (sameIdUser != null) {
+				String sameIdUserProfileId = (String) sameIdUser.getProperty(AuthenticationConsts.PROPERTY_PROFILE_ID);
+				if (!sameIdUserProfileId.equals(ssoUser.getProfileId()) && isAllowedForDelete(sameIdUser)) {
+					LOG.info("Found an existing user in Vignette DB with same user name but different profile id, now deleting this user"
+							+ ssoUser.getUserName());
+					sameIdUser.delete();
+				}
+			}
+
 			vapUser = updateVAPUser(vapUser);
 		}
 
 		return vapUser;
+	}
+
+	private boolean isAllowedForDelete(User user) throws EntityPersistenceException {
+		String name = (String)user.getProperty(AuthenticationConsts.PROPERTY_USER_NAME_ID);
+		return !user.isSystemAdminUser() && !name.startsWith("sso_guest_user");
 	}
 
 	/**
