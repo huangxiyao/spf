@@ -114,6 +114,37 @@
         <finalName>portletdriver</finalName>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                  <execution>
+                    <id>copy</id>
+                    <phase>package</phase>
+                    <goals>
+                      <goal>copy</goal>
+                    </goals>
+                    <configuration>
+                      <artifactItems>
+                        <artifactItem>
+                          <groupId>com.sun.portal.wsrp</groupId>
+                          <artifactId>wsrp-producer</artifactId>
+                          <version>2.1-r806</version>
+                          <classifier>tomcat</classifier>
+                          <type>jar</type>
+                          <overWrite>true</overWrite>
+                          <outputDirectory>${project.build.directory}/${project.build.finalName}-tomcat/WEB-INF/lib</outputDirectory>
+                          <destFileName>wsrp-producer.jar</destFileName>
+                        </artifactItem>
+                      </artifactItems>
+                      <outputDirectory>${project.build.directory}/${project.build.finalName}-tomcat/WEB-INF/lib</outputDirectory>
+                      <overWriteReleases>true</overWriteReleases>
+                      <overWriteSnapshots>true</overWriteSnapshots>
+                    </configuration>
+                  </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <webResources>
@@ -143,6 +174,29 @@
                                     <directory>src/main/webapp-wls100</directory>
                                 </resource>
                             </webResources>
+                        </configuration>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>package-tomcat</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <classifier>tomcat</classifier>
+                            <webappDirectory>${project.build.directory}/${project.build.finalName}-tomcat</webappDirectory>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                </resource>
+                                <resource>
+                                    <directory>${project.build.directory}/${project.build.finalName}-tomcat/WEB-INF/lib</directory>
+                                    <includes>
+                                        <include>WEB-INF/wsrp-producer.jar</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
+                            <packagingExcludes>WEB-INF/weblogic.xml,WEB-INF/lib/javax.persistence_1.0.0.jar</packagingExcludes>
                         </configuration>
                         <goals>
                             <goal>war</goal>
