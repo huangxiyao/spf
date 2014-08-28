@@ -42,6 +42,11 @@
             <artifactId>commons-logging</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>javax.persistence</artifactId>
+            <scope>compile</scope>
+        </dependency>
         <!--
             The goal of spf-pc-database-persistence is to privide generic DB persistence layer for 
             OpenPortal. SPF requires some further customizations and those are captured in spf-portlet-container
@@ -140,6 +145,40 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>copy-tomcat-required-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.hp.it.spf.openportal</groupId>
+                                    <artifactId>spf-portlet-container</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>tomcat</classifier>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/dependency-tomcat</outputDirectory>
+                                    <destFileName>spf-portlet-container-${project.version}.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.sun.portal.portletcontainer</groupId>
+                                    <artifactId>spf-pc-database-persistence</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>tomcat</classifier>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/dependency-tomcat</outputDirectory>
+                                    <destFileName>spf-pc-database-persistence-${project.version}.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/dependency-tomcat</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -148,6 +187,7 @@
                 <configuration>
                     <descriptors>
                         <descriptor>src/main/assembly/jars.xml</descriptor>
+                        <descriptor>src/main/assembly/jars-tomcat.xml</descriptor>
                     </descriptors>
                 </configuration>
                 <executions>
