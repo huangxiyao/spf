@@ -129,7 +129,7 @@ public class HPPAuthenticator extends AbstractAuthenticator {
 	 */
 	@SuppressWarnings("unchecked")
 	protected Set getUserGroups() {
-		Set<String> groups = new HashSet<String>();
+		Set<String> groups = super.getUserGroups();
 
 		// login HPP/Fed
 		if (AuthenticatorHelper.loggedIntoHPP(request)) {

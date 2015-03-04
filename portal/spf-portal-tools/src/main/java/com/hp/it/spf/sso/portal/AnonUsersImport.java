@@ -8,6 +8,7 @@ import com.epicentric.user.UserManager;
 import com.epicentric.user.UserGroup;
 import com.epicentric.user.UserGroupManager;
 import com.epicentric.user.UserGroupQueryResults;
+import com.hp.it.spf.xa.misc.Consts;
 import com.vignette.portal.log.LogWrapper;
 
 import java.io.FileNotFoundException;
@@ -124,6 +125,19 @@ public class AnonUsersImport {
 				LOG.error("Error reading/writing Vignette user", e);
 			}
 		}
+
+		// create LOCAL groups for HP split
+		try {
+			createGroup(Consts.GROUP_COMPANY_HP);
+			createGroup(Consts.GROUP_COMPANY_HPI);
+			createGroup(Consts.GROUP_COMPANY_HPE);
+			LOG.info("Create HPI and HPE LOCAL groups complete!");
+		} catch (EntityPersistenceException e) {
+			LOG.error("Error creating HPI and HPE LOCAL groups", e);
+		} catch (UniquePropertyValueConflictException e) {
+			LOG.error("Error creating HPI and HPE LOCAL groups", e);
+		}
+
 		LOG.info("Anonymous users import process complete! Successfully created/updated users: " + counter);
 	}
 
@@ -265,13 +279,18 @@ public class AnonUsersImport {
 			return userGroup;
 		}
 		else {
-			Map<String, String> groupProperties = new HashMap<String, String>();
-			groupProperties.put(AuthenticationConsts.GROUP_TITLE, groupName);
-			UserGroup userGroup = UserGroupManager.getInstance().createUserGroup(groupProperties);
-			LOG.info("User group created: " + groupName);
-			return userGroup;
+			return createGroup(groupName);
 		}
 	}
 
 
+	private UserGroup createGroup(String groupName) throws EntityPersistenceException, UniquePropertyValueConflictException
+	{
+		Map<String, String> groupProperties = new HashMap<String, String>();
+		groupProperties.put(AuthenticationConsts.GROUP_TITLE, groupName);
+		UserGroup userGroup = UserGroupManager.getInstance().createUserGroup(groupProperties);
+		LOG.info("User group created: " + groupName);
+
+		return userGroup;
+	}
 }

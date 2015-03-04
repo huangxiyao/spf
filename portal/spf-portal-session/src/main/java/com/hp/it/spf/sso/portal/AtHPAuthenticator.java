@@ -113,7 +113,7 @@ public class AtHPAuthenticator extends AbstractAuthenticator {
 	 */
 	@SuppressWarnings("unchecked")
 	protected Set getUserGroups() {
-		Set<String> groups = new HashSet<String>();
+		Set<String> groups = super.getUserGroups();
 
 		// login atHP
 		groups.add(AuthenticationConsts.LOCAL_ATHP_NAME);

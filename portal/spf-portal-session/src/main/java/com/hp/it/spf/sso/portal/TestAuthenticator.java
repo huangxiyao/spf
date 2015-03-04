@@ -192,7 +192,7 @@ public class TestAuthenticator extends AbstractAuthenticator {
 	 * @return groups
 	 */
 	protected Set getUserGroups() {
-		Set groups = new HashSet();
+		Set groups = super.getUserGroups();
 		String groupstring = getValue(AuthenticationConsts.HEADER_GROUP_NAME);
 		// groups are divided by ,
 		if (groupstring != null) {

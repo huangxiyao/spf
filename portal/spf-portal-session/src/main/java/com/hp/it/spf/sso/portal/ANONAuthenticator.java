@@ -6,6 +6,7 @@
 package com.hp.it.spf.sso.portal;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -164,11 +165,19 @@ public class ANONAuthenticator extends AbstractAuthenticator {
 			userProfile.put(AuthenticationConsts.KEY_TIMEZONE,
 							vapUser.getProperty(AuthenticationConsts.PROPERTY_SPF_TIMEZONE_ID));
 			super.saveUserProfile2Session(vapUser);
+
+			addLOCALHPCompanyGroup();
 		}
 	}
 
 	@Override
 	protected Set getUserGroups() {
-		return new HashSet();
+		//get LOCAL groups for HP split
+		return super.getUserGroups();
+	}
+
+	private void addLOCALHPCompanyGroup() {
+		List<String> sessionGroups = (List<String>)userProfile.get(AuthenticationConsts.KEY_USER_GROUPS);
+		sessionGroups.addAll(getUserGroups());
 	}
 }

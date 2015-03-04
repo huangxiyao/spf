@@ -788,7 +788,25 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 	 *
 	 * @return retrieved groups set or an empty set
 	 */
-	protected abstract Set getUserGroups();
+	protected Set getUserGroups() {
+		Set<String> groups = new HashSet<String>();
+		// if the switch of Enable_HPI_HPE is on
+		if (AuthenticatorHelper.isEnabledHPIAndHPE()) {
+			// and the URL is hp.com, put them into the LOCAL_PORTAL_COMPANY_HPI group
+			if (AuthenticatorHelper.isFromHPI(request)) {
+				groups.add(AuthenticationConsts.LOCAL_COMPANY_HPI);
+			}
+			// and the URL is hpe.com, put them into the LOCAL_PORTAL_COMPANY_HPE group
+			if (AuthenticatorHelper.isFromHPE(request)) {
+				groups.add(AuthenticationConsts.LOCAL_COMPANY_HPE);
+			}
+		} else {
+			// if the swtich of Enable_HPI_HPE is off, the user will be added into the LOCAL_PORTAL_COMPANY_HP group
+			groups.add(AuthenticationConsts.LOCAL_COMPANY_HP);
+		}
+
+		return groups;
+	}
 
 	/**
 	 * This is the method used to retrieve locale groups info and return as a

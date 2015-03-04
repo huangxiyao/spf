@@ -527,6 +527,48 @@ public class AuthenticatorHelper {
 	}
 
 	/**
+	 * Method to judge whether the user is from HPI company.
+	 *
+	 * @param request
+	 *            HttpServletRequest object
+	 * @return true for this user is from HPI, otherwise false
+	 */
+	public static boolean isFromHPI(HttpServletRequest request) {
+		//If the URL domain is hp.com,
+		//the user is from HPI.
+		String serverName = request.getHeader("Host");
+		if (serverName==null || "".equals(serverName.trim())) {
+			serverName = request.getServerName();
+		}
+		if (serverName.toLowerCase().contains("hp.com")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Method to judge whether the user is from HPE company.
+	 *
+	 * @param request
+	 *            HttpServletRequest object
+	 * @return true for this user is from HPE, otherwise false
+	 */
+	public static boolean isFromHPE(HttpServletRequest request) {
+		//If the URL domain is hpe.com,
+		//the user is from HPE.
+		String serverName = request.getHeader("Host");
+		if (serverName==null || "".equals(serverName.trim())) {
+			serverName = request.getServerName();
+		}
+		if (serverName.toLowerCase().contains("hpe.com")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Check if <code>spf.refreshProfile</code> request parameter is present indicating
 	 * the need to refresh portal session objects such as user profile and user groups.
 	 * Note that the original parameter, <code>initSession</code>, is deprecated and should
@@ -653,6 +695,11 @@ public class AuthenticatorHelper {
 	static boolean isSandBox() {
 		return AuthenticationConsts.YES
 				.equalsIgnoreCase(getProperty(AuthenticationConsts.SANDBOX_MODE));
+	}
+
+	static boolean isEnabledHPIAndHPE() {
+		return AuthenticationConsts.YES
+				.equalsIgnoreCase(getProperty(AuthenticationConsts.ENABLE_HPI_HPE));
 	}
 
 	/**

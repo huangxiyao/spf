@@ -59,6 +59,24 @@ public class Consts {
     public static final String GROUP_AUTH_STATUS_ANONYMOUS = GROUP_PREFIX
 	    + "ANONYMOUS_USERS";
 
+	/**
+	 * The SPF-assigned user group indicating the user is from HP company.
+	 */
+	public static final String GROUP_COMPANY_HP = GROUP_PREFIX
+		+ "COMPANY_HP";
+
+	/**
+	 * The SPF-assigned user group indicating the user is from HPI company.
+	 */
+	public static final String GROUP_COMPANY_HPI = GROUP_PREFIX
+		+ "COMPANY_HPI";
+
+	/**
+	 * The SPF-assigned user group indicating the user is from HPE company.
+	 */
+	public static final String GROUP_COMPANY_HPE = GROUP_PREFIX
+		+ "COMPANY_HPE";
+
     /**
      * The prefix for the SPF-assigned user group for country - if the user is
      * in this group, it indicates his or her resolved locale includes that

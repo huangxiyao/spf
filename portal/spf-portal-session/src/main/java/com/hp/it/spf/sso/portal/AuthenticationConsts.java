@@ -262,6 +262,8 @@ public class AuthenticationConsts {
 
 	static final String SANDBOX_MODE = "SandboxMode";
 
+	static final String ENABLE_HPI_HPE = "Enable_HPI_HPE";
+
 	static final String HPPGROUPS_FROM_WEBSERVICE = "hppgroups_from_webservice";
 
 	/**
@@ -286,6 +288,13 @@ public class AuthenticationConsts {
 	public final static String LOCAL_ATHP_NAME = Consts.GROUP_AUTH_TYPE_ATHP;
 	public final static String LOCAL_FED_NAME = Consts.GROUP_AUTH_TYPE_FED;
 	public final static String LOCAL_HPP_NAME = Consts.GROUP_AUTH_TYPE_HPP;
+
+	/**
+	 * Groups stand for the company users come from.
+	 */
+	public final static String LOCAL_COMPANY_HP = Consts.GROUP_COMPANY_HP;
+	public final static String LOCAL_COMPANY_HPI = Consts.GROUP_COMPANY_HPI;
+	public final static String LOCAL_COMPANY_HPE = Consts.GROUP_COMPANY_HPE;
 
 	/**
 	 * Groups that indicate the user is authenticated or not.
