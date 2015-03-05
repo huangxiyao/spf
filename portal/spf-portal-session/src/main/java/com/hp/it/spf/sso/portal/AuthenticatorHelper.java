@@ -536,10 +536,7 @@ public class AuthenticatorHelper {
 	public static boolean isFromHPI(HttpServletRequest request) {
 		//If the URL domain is hp.com,
 		//the user is from HPI.
-		String serverName = request.getHeader("Host");
-		if (serverName==null || "".equals(serverName.trim())) {
-			serverName = request.getServerName();
-		}
+		String serverName = Utils.getServerHostName(request);
 		if (serverName.toLowerCase().contains("hp.com")) {
 			return true;
 		} else {
@@ -557,10 +554,7 @@ public class AuthenticatorHelper {
 	public static boolean isFromHPE(HttpServletRequest request) {
 		//If the URL domain is hpe.com,
 		//the user is from HPE.
-		String serverName = request.getHeader("Host");
-		if (serverName==null || "".equals(serverName.trim())) {
-			serverName = request.getServerName();
-		}
+		String serverName = Utils.getServerHostName(request);
 		if (serverName.toLowerCase().contains("hpe.com")) {
 			return true;
 		} else {

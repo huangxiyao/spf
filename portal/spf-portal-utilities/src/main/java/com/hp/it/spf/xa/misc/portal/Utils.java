@@ -1061,4 +1061,64 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 
 	}
 
+	/**
+	 * <p>
+	 * Get the server host name from the http servlet request.
+	 *
+	 * @param request
+	 *            The current request.
+	 * @return The server host name.
+	 */
+	public static String getServerHostName(HttpServletRequest request) {
+		String serverName = request.getHeader("Host");
+		if (serverName==null || "".equals(serverName.trim())) {
+			serverName = request.getServerName();
+		}
+		if (serverName.contains(":")) {
+			serverName = serverName.substring(0, serverName.indexOf(":"));
+		}
+		return serverName;
+	}
+
+	/**
+	 * <p>
+	 * Cookies will need to be instead set relative to the network domain of the request.
+	 * Eg, if the request comes with an hp.com URL the cookie should be set into that domain,
+	 * but with an hpe.com URL the cookie should be set into that domain.
+	 *
+	 * @param request
+	 *            The current request.
+	 * @return The cookie domain name.
+	 */
+	public static String getCookieDomainName(HttpServletRequest request) {
+		String serverName = getServerHostName(request);
+
+		return getCookieDomainName(serverName);
+	}
+
+	/**
+	 * <p>
+	 * Cookies will need to be instead set relative to the network domain of the request.
+	 * Eg, if the request comes with an hp.com URL the cookie should be set into that domain,
+	 * but with an hpe.com URL the cookie should be set into that domain.
+	 *
+	 * @param serverName
+	 *            The request server name.
+	 * @return The cookie domain name.
+	 */
+	public static String getCookieDomainName(String serverName){
+		String domain = "";
+		if (serverName != null && !"".equals(serverName)) {
+			String[] parts = serverName.split("\\.");
+			int partsLen = parts.length;
+
+			if (partsLen >= 2) {
+				domain = "." + parts[partsLen - 2] + "." + parts[partsLen - 1];
+			}
+		}
+
+		return domain;
+	}
+
+
 }

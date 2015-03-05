@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
 
+import com.hp.it.spf.xa.misc.portal.Utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -219,7 +220,7 @@ public class AdmissionControlFilter implements Filter {
 
 		LOG.debug("-- Exit 8 AdmissionControlFilter.doFilter");
 		LOG.debug("- AdmissionControlFilter.doFilter: outcome: [admitted]");
-		this.setSiteCookie(response, poolID);
+		this.setSiteCookie(request, response, poolID);
 		this.setClosingTime(request);
 		this.admitClient(request, poolID, thisSiteHostname);
 		chain.doFilter(request, response);
@@ -368,7 +369,7 @@ public class AdmissionControlFilter implements Filter {
 
 	} // end method redirect
 
-	private void setSiteCookie(HttpServletResponse response, String poolID) {
+	private void setSiteCookie(HttpServletRequest request, HttpServletResponse response, String poolID) {
 
 		String name, value, domain, path;
 		Cookie cookie;
@@ -377,7 +378,10 @@ public class AdmissionControlFilter implements Filter {
 		// set.
 		name = this.config.getSiteCookieName(poolID);
 		if (name != null) {
-			domain = this.config.getSiteCookieDomain(poolID);
+			//
+			//domain = this.config.getSiteCookieDomain(poolID);
+			// Change to determine domain based on the request
+			domain = Utils.getCookieDomainName(request);
 			path = this.config.getSiteCookiePath(poolID);
 
 			// An undefined site cookie value for this pool means to use this
@@ -388,7 +392,7 @@ public class AdmissionControlFilter implements Filter {
 
 			if (value != null) {
 				cookie = new Cookie(name, value);
-				if (domain != null)
+				if (domain != null && !"".equalsIgnoreCase(domain.trim()))
 					cookie.setDomain(domain);
 				if (path != null)
 					cookie.setPath(path);

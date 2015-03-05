@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.util.CookieGenerator;
 
 import com.hp.it.spf.xa.misc.portal.Consts;
+import com.hp.it.spf.xa.misc.portal.Utils;
 
 /**
  * @author <link href="marc.derosa@hp.com"></link>
@@ -41,16 +42,19 @@ public class HpDomainCookieLocaleSetter implements ILocaleSetter {
     public void setLocale(HttpServletRequest request,
             HttpServletResponse response, final Locale locale) {
 
-        CookieGenerator lang = initCookieGenerator(cookieName);
+        CookieGenerator lang = initCookieGenerator(cookieName, request);
         String code = locale.toString().replace('_', '-');
         if (StringUtils.hasLength(code)) {
             lang.addCookie(response, code);
         }
     }
 
-    private CookieGenerator initCookieGenerator(final String name) {
+    private CookieGenerator initCookieGenerator(final String name, HttpServletRequest request) {
         CookieGenerator gen = new CookieGenerator();
-        gen.setCookieDomain(Consts.HP_COOKIE_DOMAIN);
+        String cookieDomain = Utils.getCookieDomainName(request);
+        if (cookieDomain != null && !"".equalsIgnoreCase(cookieDomain.trim())) {
+            gen.setCookieDomain(cookieDomain);
+        }
         gen.setCookieMaxAge(-1);
         gen.setCookieName(name);
         gen.setCookiePath(Consts.HP_COOKIE_PATH);
