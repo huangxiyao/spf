@@ -139,9 +139,10 @@ public class RememberReturnURLFilter implements Filter {
 				// Set the cookie domain, path and age. Age of the cookie is
 				// 2 years.
 
+                String cookieDomain = Utils.getCookieDomainName(request);
 				res.addCookie(AuthenticatorHelper.newCookie(
 						Consts.COOKIE_NAME_SITE, currentSiteName,
-						com.hp.it.spf.xa.misc.Consts.HP_COOKIE_DOMAIN,
+                        cookieDomain,
 						com.hp.it.spf.xa.misc.Consts.HP_COOKIE_PATH,
 						2 * 365 * 24 * 60 * 60));
 

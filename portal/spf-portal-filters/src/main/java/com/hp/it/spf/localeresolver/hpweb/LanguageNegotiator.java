@@ -15,6 +15,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hp.it.spf.xa.misc.portal.Utils;
 import org.springframework.util.StringUtils;
 import com.hp.it.spf.localeresolver.http.ContentNegotiator;
 import com.hp.it.spf.localeresolver.http.Negotiators;
@@ -299,31 +300,35 @@ public class LanguageNegotiator implements ContentNegotiator {
 		void saveLocale(HttpServletRequest request,
 				HttpServletResponse response, Locale locale) {
 			if (locale != null) {
-				addCookie(response, Consts.COOKIE_NAME_HPCOM_LANGUAGE, 
+				addCookie(request, response, Consts.COOKIE_NAME_HPCOM_LANGUAGE,
 						I18nUtility.localeToLanguageTag(locale).toLowerCase());
 
 				if (locale.getCountry() == null) {
-					deleteCookie(response, Consts.COOKIE_NAME_HPCOM_COUNTRY);
+					deleteCookie(request, response, Consts.COOKIE_NAME_HPCOM_COUNTRY);
 				} else {
-					addCookie(response, Consts.COOKIE_NAME_HPCOM_COUNTRY,
+					addCookie(request, response, Consts.COOKIE_NAME_HPCOM_COUNTRY,
 							locale.getCountry().toLowerCase());
 				}
 			}
 		}
 
-		private void addCookie(HttpServletResponse response, String name,
+		private void addCookie(HttpServletRequest request, HttpServletResponse response, String name,
 				String value) {
-			response.addCookie(createCookie(name, value, -1)); // -1 = session
+            String cookieDomain = Utils.getCookieDomainName(request);
+			response.addCookie(createCookie(name, cookieDomain, value, -1)); // -1 = session
 		}
 
-		private void deleteCookie(HttpServletResponse response, String name) {
-			response.addCookie(createCookie(name, "", 0));
+		private void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
+            String cookieDomain = Utils.getCookieDomainName(request);
+            response.addCookie(createCookie(name, cookieDomain, "", 0));
 		}
 
-		private Cookie createCookie(String name, String value, int maxAge) {
+		private Cookie createCookie(String name, String domain, String value, int maxAge) {
 			Cookie cookie = new Cookie(name, value);
 
-			cookie.setDomain(Consts.HP_COOKIE_DOMAIN);
+            if (domain != null && !"".equalsIgnoreCase(domain.trim())) {
+                cookie.setDomain(domain);
+            }
 			cookie.setPath(Consts.HP_COOKIE_PATH);
 			cookie.setMaxAge(maxAge);
 
