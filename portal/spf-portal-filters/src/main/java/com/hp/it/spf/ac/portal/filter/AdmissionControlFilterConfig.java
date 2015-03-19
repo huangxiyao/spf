@@ -345,7 +345,7 @@ public class AdmissionControlFilterConfig {
                 + PROPERTIES_FILE
                 + "] on classpath.  Reverting to <init-param> set in web.xml (if any).";
         props = new Properties();
-        in = ClassLoader.getSystemResourceAsStream(PROPERTIES_FILE);
+        in = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE);
         if (in == null) {
             LOG.warn(errMsg);
         } else {
