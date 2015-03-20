@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.hp.frameworks</groupId>
 		<artifactId>spf-athp-laf</artifactId>
-		<version>3.0.8</version>
+		<version>3.0.9-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>AtHPComponents</artifactId>
