@@ -74,6 +74,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>com.sun.portal.portletcontainer</groupId>
+            <artifactId>spf-pc-database-persistence</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+            <classifier>tomcat</classifier>
+        </dependency>
+        <dependency>
             <groupId>javax.ccpp</groupId>
             <artifactId>ccpp</artifactId>
             <scope>compile</scope>
@@ -152,6 +159,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                     </execution>
+                    <!--
                     <execution>
                         <id>copy-tomcat-required-dependencies</id>
                         <phase>package</phase>
@@ -184,6 +192,35 @@
                             <outputDirectory>${project.build.directory}/dependency-tomcat</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>-->
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.coderplus.maven.plugins</groupId>
+                <artifactId>copy-rename-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-spf-portlet-container*-tomcat.jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <sourceFile>${project.build.directory}/dependency/spf-portlet-container-${project.version}-tomcat.jar</sourceFile>
+                            <destinationFile>${project.build.directory}/dependency-tomcat/spf-portlet-container-${project.version}.jar</destinationFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-spf-pc-database-persistence*-tomcat.jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <sourceFile>${project.build.directory}/dependency/spf-pc-database-persistence-${project.version}-tomcat.jar</sourceFile>
+                            <destinationFile>${project.build.directory}/dependency-tomcat/spf-pc-database-persistence-${project.version}.jar</destinationFile>
                         </configuration>
                     </execution>
                 </executions>
