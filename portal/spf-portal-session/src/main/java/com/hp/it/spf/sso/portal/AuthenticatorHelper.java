@@ -579,10 +579,12 @@ public class AuthenticatorHelper {
         }
         String headerflag = request
                 .getHeader(AuthenticationConsts.HEADER_ATHP_FLAG);
-        return isFromAtHP(request)
-                && headerflag != null
-                && headerflag
-                        .startsWith(getProperty(AuthenticationConsts.PROPERTY_ATHP_FLAG));
+		return isFromAtHP(request)
+				&& headerflag != null
+				&& ( headerflag.startsWith(getProperty(AuthenticationConsts.PROPERTY_ATHPE_FLAG))
+					|| headerflag.startsWith(getProperty(AuthenticationConsts.PROPERTY_ATHPI_FLAG))
+					|| headerflag.startsWith(getProperty(AuthenticationConsts.PROPERTY_ATHP_FLAG))
+					);
     }
 
     /**

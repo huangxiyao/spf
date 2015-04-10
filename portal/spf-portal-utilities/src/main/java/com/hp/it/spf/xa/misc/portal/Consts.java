@@ -19,6 +19,8 @@ public class Consts extends com.hp.it.spf.xa.misc.Consts {
 	 * The name of the SiteMinder session cookie (for AtHP)
 	 */
 	public static final String COOKIE_NAME_SMSESSION = "SMSESSION";
+	public static final String COOKIE_NAME_HPISESSION = "HPISESSION";
+	public static final String COOKIE_NAME_HPESESSION = "HPESESSION";
 
 	/**
 	 * The name of the SiteMinder session cookie (for HPP)

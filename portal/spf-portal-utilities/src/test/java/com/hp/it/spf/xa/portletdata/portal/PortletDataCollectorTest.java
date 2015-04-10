@@ -143,7 +143,7 @@ public class PortletDataCollectorTest
 		}});
 
 		assertThat("Returns empty string when no HPPSESSION and SMSESSION cookie found",
-				mCollector.getHppSessionToken(request), is(""));
+				mCollector.getSessionToken(request), is(""));
 	}
 
 	@Test
@@ -159,7 +159,7 @@ public class PortletDataCollectorTest
 		}});
 
 		assertThat("Returns HPPSESSION cookie value if present",
-				mCollector.getHppSessionToken(request), is("xyz"));
+				mCollector.getSessionToken(request), is("xyz"));
 	}
 
 	@Test
@@ -175,7 +175,7 @@ public class PortletDataCollectorTest
 		}});
 
 		assertThat("Returns SMSESSION cookie value if present",
-				mCollector.getHppSessionToken(request), is("xyz"));
+				mCollector.getSessionToken(request), is("xyz"));
 	}
 
 	@Test

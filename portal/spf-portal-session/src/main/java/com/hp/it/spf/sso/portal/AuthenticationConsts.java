@@ -254,6 +254,9 @@ public class AuthenticationConsts {
      */
     static final String PROPERTY_ATHP_FLAG = "flagForATHP";
     
+	static final String PROPERTY_ATHPI_FLAG = "flagForATHPI";
+
+	static final String PROPERTY_ATHPE_FLAG = "flagForATHPE";
     static final String YES = "YES";
     
     static final String SANDBOX_MODE = "SandboxMode";

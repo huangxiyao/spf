@@ -59,7 +59,7 @@ public class PortletDataCollector
 			userContext.put(Consts.KEY_PORTAL_REQUEST_URL, getRequestURL(request));
 			userContext.put(Consts.KEY_PORTAL_SITE_NAME, getPortalSiteName(request));
 			userContext.put(Consts.KEY_PORTAL_SESSION_ID, getPortalSessionId(request));
-			userContext.put(Consts.KEY_SESSION_TOKEN, getHppSessionToken(request));
+			userContext.put(Consts.KEY_SESSION_TOKEN, getSessionToken(request));
 			userContext.put(Consts.KEY_NAVIGATION_ITEM_NAME, getNavigationItemName(request));
 			userContext.put(Consts.KEY_PORTAL_PAGE_ID, getPageFriendlyId(request));
 			// add last session cleanup date in usercontext to be passed to portlets per CR 86
@@ -166,17 +166,21 @@ public class PortletDataCollector
 	}
 
 	/**
-	 * Retrieves the value of HP Passport HPPSESSION cookie.
+	 * Retrieves the value of Siteminder SESSION token cookie.
 	 * @param request incoming user request
-	 * @return value of <code>HPPSESSION</code> cookie set by HPP or empty string
+	 * @return value of SESSION token cookie set by HPP or @HP
 	 *         if non could be found
 	 */
-	/*private*/ String getHppSessionToken(HttpServletRequest request) {
+	/*private*/ String getSessionToken(HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (int i = 0, len = cookies.length; i < len; i++) {
 				Cookie cookie = cookies[i];
 				if (Consts.COOKIE_NAME_HPPSESSION.equals(cookie.getName())) {
+					return cookie.getValue();
+				} else if (Consts.COOKIE_NAME_HPISESSION.equals(cookie.getName())) {
+				    return cookie.getValue();
+				} else if (Consts.COOKIE_NAME_HPESESSION.equals(cookie.getName())) {
 					return cookie.getValue();
 				} else if (Consts.COOKIE_NAME_SMSESSION.equals(cookie.getName())) {
 				    return cookie.getValue();
