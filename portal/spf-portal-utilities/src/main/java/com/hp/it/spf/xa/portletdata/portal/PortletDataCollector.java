@@ -178,11 +178,11 @@ public class PortletDataCollector
 				Cookie cookie = cookies[i];
 				if (Consts.COOKIE_NAME_HPPSESSION.equals(cookie.getName())) {
 					return cookie.getValue();
+				} else if (Consts.COOKIE_NAME_SMSESSION.equals(cookie.getName())) {
+					return cookie.getValue();
 				} else if (Consts.COOKIE_NAME_HPISESSION.equals(cookie.getName())) {
 				    return cookie.getValue();
 				} else if (Consts.COOKIE_NAME_HPESESSION.equals(cookie.getName())) {
-					return cookie.getValue();
-				} else if (Consts.COOKIE_NAME_SMSESSION.equals(cookie.getName())) {
 					return cookie.getValue();
 				}
 			}
