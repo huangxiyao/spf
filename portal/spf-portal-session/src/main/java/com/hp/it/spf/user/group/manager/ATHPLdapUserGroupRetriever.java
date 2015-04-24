@@ -30,9 +30,12 @@ import java.util.TreeSet;
  */
 public class ATHPLdapUserGroupRetriever implements IUserGroupRetriever {
 	private static final LogWrapper LOG = AuthenticatorHelper.getLog(ATHPLdapUserGroupRetriever.class);
-	private static final String LDAP_HOST = "ldap.hp.com";
-	private static final int LDAP_PORT = 389;
-	private static final String LDAP_BASE = "ou=Groups, o=hp.com";
+	private static final String HPI_LDAP_HOST = "ed.hpicorp.net";
+	private static final int HPI_LDAP_PORT = 389;
+	private static final String HPI_LDAP_BASE = "ou=Groups, o=hp.com";
+	private static final String HPE_LDAP_HOST = "ldap.hp.com";
+	private static final int HPE_LDAP_PORT = 389;
+	private static final String HPE_LDAP_BASE = "ou=Groups, o=hp.com";
 
 	/**
 	 * Retrieve user groups from @HP LDAP.
@@ -44,7 +47,7 @@ public class ATHPLdapUserGroupRetriever implements IUserGroupRetriever {
 	 */
 	public Set<String> getGroups(Map<String, Object> userProfile,
 								 HttpServletRequest request) throws UserGroupsException {
-		return getLDAPGroups((String)userProfile.get(AuthenticationConsts.KEY_USER_NAME));
+		return getLDAPGroups((String)userProfile.get(AuthenticationConsts.KEY_USER_NAME), request);
 	}
 
 	/**
@@ -53,7 +56,7 @@ public class ATHPLdapUserGroupRetriever implements IUserGroupRetriever {
 	 * @param uid  @HP user name
 	 * @return user groups set, if user has no groups, an empty Set will be returned.
 	 */
-	private Set<String> getLDAPGroups(String uid) {
+	private Set<String> getLDAPGroups(String uid, HttpServletRequest request) {
 		int scope = LDAPConnection.SCOPE_SUB;
 
 		String user_filter = "(member=uid=" + uid + ", ou=People, o=hp.com)";
@@ -67,11 +70,15 @@ public class ATHPLdapUserGroupRetriever implements IUserGroupRetriever {
 			// Create a new connection
 			ld = new LDAPConnection();
 
+			LDAPSearchResults res;
 			// Connect and bind to the directory anonymously
-			ld.connect(LDAP_HOST, LDAP_PORT);
-
-			// Perform search - Get the groups for a specific customer  from the directory
-			LDAPSearchResults res = ld.search(LDAP_BASE, scope, user_filter, getAttrs, false);
+			if (AuthenticatorHelper.isFromHPE(request)) {
+				ld.connect(HPE_LDAP_HOST, HPE_LDAP_PORT);
+				res = ld.search(HPE_LDAP_BASE, scope, user_filter, getAttrs, false);
+			} else {
+				ld.connect(HPI_LDAP_HOST, HPI_LDAP_PORT);
+				res = ld.search(HPI_LDAP_BASE, scope, user_filter, getAttrs, false);
+			}
 
 			if (res != null) {
 				parseGroupsFromLDAPSearchResults(groups, res);

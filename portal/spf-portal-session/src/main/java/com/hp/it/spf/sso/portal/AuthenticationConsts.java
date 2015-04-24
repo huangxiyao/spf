@@ -261,6 +261,7 @@ public class AuthenticationConsts {
     
     static final String SANDBOX_MODE = "SandboxMode";
     
+	static final String ENABLE_HPI_HPE = "Enable_HPI_HPE";
     static final String HPPGROUPS_FROM_WEBSERVICE = "hppgroups_from_webservice";
     
     /**
