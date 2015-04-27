@@ -23,9 +23,9 @@ public class ValidateSessionTokenTask extends Task {
 		return new ValidateSessionTokenResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String sessionToken = (String) args.get("sessionToken");
 
         requestElement = new ValidateSessionTokenRequestElement();

@@ -24,9 +24,9 @@ public class IsMemberOfGroupTask extends Task {
 		return new IsMemberOfGroupResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String sessionToken = (String) args.get("sessionToken");
         ProfileIdentity profileIdentity = (ProfileIdentity) args.get("profileIdentity");
         String groupName = (String) args.get("groupName");

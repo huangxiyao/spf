@@ -108,6 +108,44 @@ public class CreateUserResultTypeDescriptor extends org.exolab.castor.xml.util.X
             fieldValidator.setValidator(typeValidator);
         }
         desc.setValidator(fieldValidator);
+        //-- _requiresEV
+        desc = new org.exolab.castor.xml.util.XMLFieldDescriptorImpl(java.lang.String.class, "_requiresEV", "requiresEV", org.exolab.castor.xml.NodeType.Element);
+        desc.setImmutable(true);
+        handler = new org.exolab.castor.xml.XMLFieldHandler() {
+            public java.lang.Object getValue( java.lang.Object object ) 
+                throws IllegalStateException
+            {
+                CreateUserResultType target = (CreateUserResultType) object;
+                return target.getRequiresEV();
+            }
+            public void setValue( java.lang.Object object, java.lang.Object value) 
+                throws IllegalStateException, IllegalArgumentException
+            {
+                try {
+                    CreateUserResultType target = (CreateUserResultType) object;
+                    target.setRequiresEV( (java.lang.String) value);
+                }
+                catch (java.lang.Exception ex) {
+                    throw new IllegalStateException(ex.toString());
+                }
+            }
+            public java.lang.Object newInstance( java.lang.Object parent ) {
+                return null;
+            }
+        };
+        desc.setHandler(handler);
+        desc.setNameSpaceURI("http://hppws.globalops.hp.com/PassportService");
+        desc.setMultivalued(false);
+        addFieldDescriptor(desc);
+        
+        //-- validation code for: _requiresEV
+        fieldValidator = new org.exolab.castor.xml.FieldValidator();
+        { //-- local scope
+            StringValidator typeValidator = new StringValidator();
+            typeValidator.setWhiteSpace("preserve");
+            fieldValidator.setValidator(typeValidator);
+        }
+        desc.setValidator(fieldValidator);
     } //-- com.hp.globalops.hppcbl.webservice.CreateUserResultTypeDescriptor()
 
 

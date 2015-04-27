@@ -14,9 +14,9 @@ public class RecoverUserIdTask extends Task {
         super();
     }
 
-    public void init(Map args) throws TaskExecutionException {
+    public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String emailAddress = (String) args.get("emailAddress");
         //String firstName = (String) args.get("firstName");
         //String lastName = (String) args.get("lastName");

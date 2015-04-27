@@ -15,6 +15,7 @@ public class IConstantPassportService {
 	public final static String PROXYPORT_PREFIX = "ProxyPort";
 	public final static String ADMINUSER_PREFIX = "AdminUser";
 	public final static String ADMINPASSWORD_PREFIX = "AdminPassword";
+    public final static String APPLICATION_ID_PREFIX = "ApplicationId";
 
 	//Definition for contorl characters error
 	public final static int FAULT_MARSHALEXCEPTION_RULENUMBER = -100;

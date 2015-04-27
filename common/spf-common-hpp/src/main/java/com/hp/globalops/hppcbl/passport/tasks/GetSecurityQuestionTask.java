@@ -23,9 +23,9 @@ public class GetSecurityQuestionTask extends Task {
 		return new GetSecurityQuestionResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String guid = (String) args.get("guid");
 
         requestElement = new GetSecurityQuestionRequestElement();

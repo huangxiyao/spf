@@ -37,6 +37,11 @@ public class LoginRequestType implements java.io.Serializable {
      */
     private java.lang.String _password;
 
+    /**
+     * Field _applicationId
+     */
+    private java.lang.String _applicationId;
+
 
       //----------------/
      //- Constructors -/
@@ -51,6 +56,17 @@ public class LoginRequestType implements java.io.Serializable {
       //-----------/
      //- Methods -/
     //-----------/
+
+    /**
+     * Returns the value of field 'applicationId'.
+     * 
+     * @return String
+     * @return the value of field 'applicationId'.
+     */
+    public java.lang.String getApplicationId()
+    {
+        return this._applicationId;
+    } //-- java.lang.String getApplicationId() 
 
     /**
      * Returns the value of field 'password'.
@@ -73,6 +89,16 @@ public class LoginRequestType implements java.io.Serializable {
     {
         return this._userId;
     } //-- java.lang.String getUserId() 
+
+    /**
+     * Sets the value of field 'applicationId'.
+     * 
+     * @param applicationId the value of field 'applicationId'.
+     */
+    public void setApplicationId(java.lang.String applicationId)
+    {
+        this._applicationId = applicationId;
+    } //-- void setApplicationId(java.lang.String) 
 
     /**
      * Sets the value of field 'password'.

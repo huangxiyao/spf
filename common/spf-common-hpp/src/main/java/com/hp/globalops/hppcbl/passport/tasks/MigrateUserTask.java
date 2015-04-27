@@ -26,9 +26,9 @@ public class MigrateUserTask extends Task {
 		return new MigrateUserResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String sessionToken = (String) args.get("SessionToken");
         String applicationRefId = (String) args.get("ApplicationRefId");
         ProfileCredentials profileCredentials = (ProfileCredentials) args.get("ProfileCredentials");

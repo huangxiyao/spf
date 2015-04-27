@@ -23,9 +23,9 @@ public class UpdateCredentialsTask extends Task {
 		return new UpdateCredentialsResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String guid = (String) args.get("guid");
         String newPassword = (String) args.get("newPassword");
         String newPasswordConfirm = (String) args.get("newPasswordConfirm");

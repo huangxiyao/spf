@@ -75,20 +75,20 @@ public class PassportParametersManager {
         M_wsManager = manager;
     }
 
-    public String getAdminPassword() {
+    public String getAdminPassword(String company) {
         return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
-                IConstantPassportService.ADMINPASSWORD_PREFIX + getMode());
+                company.toUpperCase() + IConstantPassportService.ADMINPASSWORD_PREFIX + getMode());
     }
 
     private void setAdminPassword(String adminPassword) {
         this.adminPassword = adminPassword;
     }
 
-    public String getAdminUser() {
+    public String getAdminUser(String company) {
         return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
-                IConstantPassportService.ADMINUSER_PREFIX + getMode());
+                company.toUpperCase() + IConstantPassportService.ADMINUSER_PREFIX + getMode());
     }
 
     private void setAdminUser(String adminUser) {
@@ -173,5 +173,11 @@ public class PassportParametersManager {
 
     private void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getApplicationId(String company){
+        return PropertyResourceBundleManager.getString(
+                IConstantPassportService.WSPARAMETERSFILENAME,
+                company.toUpperCase() + IConstantPassportService.APPLICATION_ID_PREFIX + getMode());
     }
 }

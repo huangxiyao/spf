@@ -23,9 +23,9 @@ public class ChangePasswordTask extends Task {
 		return new ChangePasswordResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String userId = (String) args.get("userId");
         String currentPassword = (String) args.get("currentPassword");
         String newPassword = (String) args.get("newPassword");

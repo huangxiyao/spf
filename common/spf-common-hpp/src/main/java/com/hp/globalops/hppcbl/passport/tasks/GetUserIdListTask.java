@@ -23,9 +23,9 @@ public class GetUserIdListTask extends Task {
 		return new GetUserIdListResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String[] profileId = (String[]) args.get("ProfileId");
         String[] applicationRefId = (String[]) args.get("ApplicationRefId");
 
