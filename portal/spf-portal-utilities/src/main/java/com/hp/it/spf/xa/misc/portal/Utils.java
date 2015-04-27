@@ -1062,7 +1062,6 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
-	 * <p>
 	 * Get the server host name from the http servlet request.
 	 *
 	 * @param request
@@ -1081,7 +1080,6 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
-	 * <p>
 	 * Cookies will need to be instead set relative to the network domain of the request.
 	 * Eg, if the request comes with an hp.com URL the cookie should be set into that domain,
 	 * but with an hpe.com URL the cookie should be set into that domain.
@@ -1097,7 +1095,6 @@ public class Utils extends com.hp.it.spf.xa.misc.Utils {
 	}
 
 	/**
-	 * <p>
 	 * Cookies will need to be instead set relative to the network domain of the request.
 	 * Eg, if the request comes with an hp.com URL the cookie should be set into that domain,
 	 * but with an hpe.com URL the cookie should be set into that domain.
