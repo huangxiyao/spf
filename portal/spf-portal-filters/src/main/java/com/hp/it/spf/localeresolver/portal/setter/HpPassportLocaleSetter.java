@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.hp.it.spf.xa.misc.portal.Utils;
 import org.springframework.util.StringUtils;
 import com.epicentric.common.website.CookieUtils;
 import com.hp.globalops.hppcbl.passport.PassportService;
@@ -83,15 +85,15 @@ public class HpPassportLocaleSetter implements ILocaleSetter {
                 Consts.COOKIE_NAME_SMSESSION);
         }
         String langCode = this.getHppFormatLanguageCode(locale);
-
+        String company = Utils.getCookieDomainName(request);
         if (hppProfileCanBeUpdated(langCode, sessionToken)) {
             try {
                 GetUserCoreResponseElement rspGet = hppService
-                        .getUserCore(sessionToken);
+                        .getUserCore(sessionToken, company);
                 ProfileCore profileCore = rspGet.getProfileCore();
                 profileCore.setLangCode(langCode);
                 /*ModifyUserResponseElement rspModify = */
-                hppService.modifyUser(sessionToken, profileCore, null);
+                hppService.modifyUser(sessionToken, profileCore, null, company);
 
             } catch (PassportServiceException e) {
                 LOG.error(e);

@@ -221,6 +221,7 @@ public class SelectLocaleProcessAction extends BaseAction {
 		LOG.debug("retrieve SessionToken: " + sessionToken);
 
 		String langCode = I18nUtility.localeToHPPLanguage(locale);
+        String company = Utils.getCookieDomainName(request);
 
 		PassportService ws = new PassportService();
 		ws.setSystemLangCode(langCode);
@@ -228,7 +229,7 @@ public class SelectLocaleProcessAction extends BaseAction {
 		ProfileCore pc = new ProfileCore();
 		pc.setLangCode(langCode);
 
-		ws.modifyUser(sessionToken, pc, null);
+		ws.modifyUser(sessionToken, pc, null, company);
 	}
 
 	/**

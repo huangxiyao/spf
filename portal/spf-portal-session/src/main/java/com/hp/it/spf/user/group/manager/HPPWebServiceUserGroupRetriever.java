@@ -19,6 +19,7 @@ import com.hp.globalops.hppcbl.webservice.ProfileIdentity;
 import com.hp.it.spf.sso.portal.AuthenticationConsts;
 import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.hp.it.spf.user.exception.UserGroupsException;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogWrapper;
 
 /**
@@ -49,14 +50,15 @@ public class HPPWebServiceUserGroupRetriever implements IUserGroupRetriever {
         try {
             PassportService ws = new PassportService();
             PassportParametersManager wsManager = PassportParametersManager.getInstance();
-            String adminSessionToken = (ws.login(wsManager.getAdminUser(),
-                                                 wsManager.getAdminPassword())).getSessionToken();
+            String company = Utils.getCookieDomainName(request);
+            String adminSessionToken = (ws.login(wsManager.getAdminUser(company),
+                                                 wsManager.getAdminPassword(company), company)).getSessionToken();
 
             ProfileIdentity profileIdentity = new ProfileIdentity();
             profileIdentity.setUserId((String)userProfile.get(AuthenticationConsts.KEY_USER_NAME));
 
             GetUserGroupsResponseElement response = ws.getUserGroups(adminSessionToken,
-                                                                     profileIdentity);
+                                                                     profileIdentity, company);
             for (int i = 0; i < response.getGroupRoleCount(); i++) {
                 GroupRole groupRole = response.getGroupRole(i);
                 groups.add(groupRole.getGroupName());

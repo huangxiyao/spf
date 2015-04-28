@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.hp.it.spf.xa.misc.portal.Utils;
 import org.apache.commons.lang.StringUtils;
 
 import com.hp.globalops.hppcbl.passport.PassportService;
@@ -66,14 +67,15 @@ public class HPPWebServiceUserProfileRetriever implements IUserProfileRetriever 
     	try {
     		passportService.setVersion("2"); // enables persistence and retrieval of business data fields
     		String adminSessionToken = null;
-    		LoginResponseElement loginResponse = passportService.login(wsManager.getAdminUser(),
-                    wsManager.getAdminPassword());
+            String company = Utils.getCookieDomainName(request);
+    		LoginResponseElement loginResponse = passportService.login(wsManager.getAdminUser(company),
+                    wsManager.getAdminPassword(company), company);
     		
     		if (loginResponse != null) {
     			adminSessionToken = loginResponse.getSessionToken();
     			
     			if (adminSessionToken != null) {
-    				retrieveUserProfiles(passportService, adminSessionToken, userIdentifier, userProfiles);
+    				retrieveUserProfiles(passportService, adminSessionToken, userIdentifier, userProfiles, company);
     			}
     			else {
     				LOG.error("Retrieve user profile failed: HPP Webservices did not return admin Session token");
@@ -104,10 +106,10 @@ public class HPPWebServiceUserProfileRetriever implements IUserProfileRetriever 
     private void retrieveUserProfiles(PassportService passportService, 
     								String adminSessionToken, 
     								String userId, 
-    								Map<String,	Object> userProfile) throws PassportServiceException {
+    								Map<String,	Object> userProfile, String company) throws PassportServiceException {
 
-    	
-    	AdminViewUserResponseElement user = passportService.adminViewUser(adminSessionToken, userId, "userId");
+
+    	AdminViewUserResponseElement user = passportService.adminViewUser(adminSessionToken, userId, "userId", company);
     	
     	AdminViewUserResultTypeChoice choice = user.getAdminViewUserResultTypeChoice();
     	PrivateData privateData = choice.getPrivateData();
