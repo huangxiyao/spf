@@ -53,7 +53,7 @@ public class SurrogatePassportService extends PassportService {
         this.userResp = userResp;
     }
 
-    public GetUserCoreResponseElement getUserCore(String sessionToken)
+    public GetUserCoreResponseElement getUserCore(String sessionToken, String company)
             throws PassportServiceException {
         gotUserCore = true;
         GetUserCoreResponseElement resp = new GetUserCoreResponseElement();
@@ -62,7 +62,7 @@ public class SurrogatePassportService extends PassportService {
     }
 
     public ModifyUserResponseElement modifyUser(String sessionToken,
-            ProfileCore profileCore, ProfileExtended profileExtended)
+            ProfileCore profileCore, ProfileExtended profileExtended, String company)
             throws PassportServiceException {
         modifiedUser = true;
         return this.userResp;
