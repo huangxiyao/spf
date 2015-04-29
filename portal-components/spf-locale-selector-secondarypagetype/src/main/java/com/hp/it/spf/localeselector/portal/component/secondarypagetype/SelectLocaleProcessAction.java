@@ -18,6 +18,7 @@ import com.hp.globalops.hppcbl.passport.PassportServiceException;
 import com.hp.globalops.hppcbl.passport.beans.Fault;
 import com.hp.globalops.hppcbl.webservice.ProfileCore;
 import com.hp.it.spf.sso.portal.AuthenticationUtility;
+import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.log.portal.LogHelper;
@@ -221,7 +222,15 @@ public class SelectLocaleProcessAction extends BaseAction {
 		LOG.debug("retrieve SessionToken: " + sessionToken);
 
 		String langCode = I18nUtility.localeToHPPLanguage(locale);
-        String company = Utils.getCookieDomainName(request);
+
+		String company = "";
+		if (AuthenticatorHelper.isEnabledHPIAndHPE()) {
+			if (AuthenticatorHelper.isFromHPE(request)) {
+				company = Consts.COMPANY_HPE;
+			} else if (AuthenticatorHelper.isFromHPI(request)) {
+				company = Consts.COMPANY_HPI;
+			}
+		}
 
 		PassportService ws = new PassportService();
 		ws.setSystemLangCode(langCode);

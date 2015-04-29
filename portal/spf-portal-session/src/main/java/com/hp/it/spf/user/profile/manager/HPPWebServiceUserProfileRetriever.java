@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import org.apache.commons.lang.StringUtils;
 
@@ -67,7 +68,16 @@ public class HPPWebServiceUserProfileRetriever implements IUserProfileRetriever 
     	try {
     		passportService.setVersion("2"); // enables persistence and retrieval of business data fields
     		String adminSessionToken = null;
-            String company = Utils.getCookieDomainName(request);
+
+			String company = "";
+			if (AuthenticatorHelper.isEnabledHPIAndHPE()) {
+				if (AuthenticatorHelper.isFromHPE(request)) {
+					company = Consts.COMPANY_HPE;
+				} else if (AuthenticatorHelper.isFromHPI(request)) {
+					company = Consts.COMPANY_HPI;
+				}
+			}
+
     		LoginResponseElement loginResponse = passportService.login(wsManager.getAdminUser(company),
                     wsManager.getAdminPassword(company), company);
     		

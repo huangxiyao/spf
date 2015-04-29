@@ -19,6 +19,7 @@ import com.hp.globalops.hppcbl.webservice.ProfileIdentity;
 import com.hp.it.spf.sso.portal.AuthenticationConsts;
 import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.hp.it.spf.user.exception.UserGroupsException;
+import com.hp.it.spf.xa.misc.portal.Consts;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogWrapper;
 
@@ -50,7 +51,16 @@ public class HPPWebServiceUserGroupRetriever implements IUserGroupRetriever {
         try {
             PassportService ws = new PassportService();
             PassportParametersManager wsManager = PassportParametersManager.getInstance();
-            String company = Utils.getCookieDomainName(request);
+
+            String company = "";
+            if (AuthenticatorHelper.isEnabledHPIAndHPE()) {
+                if (AuthenticatorHelper.isFromHPE(request)) {
+                    company = Consts.COMPANY_HPE;
+                } else if (AuthenticatorHelper.isFromHPI(request)) {
+                    company = Consts.COMPANY_HPI;
+                }
+            }
+
             String adminSessionToken = (ws.login(wsManager.getAdminUser(company),
                                                  wsManager.getAdminPassword(company), company)).getSessionToken();
 

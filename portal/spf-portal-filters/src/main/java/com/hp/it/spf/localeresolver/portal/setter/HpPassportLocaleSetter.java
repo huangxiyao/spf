@@ -86,15 +86,16 @@ public class HpPassportLocaleSetter implements ILocaleSetter {
                 Consts.COOKIE_NAME_SMSESSION);
         }
         String langCode = this.getHppFormatLanguageCode(locale);
+
         String company = "";
         if (AuthenticatorHelper.isEnabledHPIAndHPE()) {
-            if (AuthenticatorHelper.isFromHPE()) {
+            if (AuthenticatorHelper.isFromHPE(request)) {
                 company = Consts.COMPANY_HPE;
-            } else if (AuthenticatorHelper.isFromHPI()) {
+            } else if (AuthenticatorHelper.isFromHPI(request)) {
                 company = Consts.COMPANY_HPI;
             }
         }
-        AuthenticatorHelper.isFromHPE();
+
         if (hppProfileCanBeUpdated(langCode, sessionToken)) {
             try {
                 GetUserCoreResponseElement rspGet = hppService
