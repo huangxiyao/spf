@@ -64,11 +64,6 @@ import com.vignette.portal.website.enduser.components.BaseAction;
  */
 public class LogoutDisplayAction extends BaseAction {
 
-	/**
-	 * The URL to which to redirect upon logout in the athp case.
-	 */
-	private static final String ATHP_LOGOUT_URL = "http://athp.hp.com/portal/site/athp/template.LOGOUT";
-
 	private static final LogWrapper LOG = new LogWrapper(
 			LogoutDisplayAction.class);
 
@@ -91,12 +86,7 @@ public class LogoutDisplayAction extends BaseAction {
 			// determine which site to redirect to
 			String site = Utils.getEffectiveSiteDNS(request);
 
-			// redirect to AtHP landing page in AtHP case
-			if (AuthenticationUtility.isFromAtHP(request)) {
-				LOG
-						.info("LogoutDisplayAction: user was accessing from @HP - redirecting to @HP logout confirmation page.");
-				url = ATHP_LOGOUT_URL;
-			} else if (Utils.isFederatedSite(site)) {
+			if (Utils.isFederatedSite(site)) {
 				// otherwise, if not AtHP, assume we are using HPP, and check
 				// for federation.
 				// if federated, redirect to federated landing page at the
