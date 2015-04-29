@@ -141,6 +141,12 @@ public class PassportParametersManager {
                 IConstantPassportService.PASSWORD_PREFIX + getMode());
     }
 
+    public String getPassword(String company) {
+        return PropertyResourceBundleManager.getString(
+                IConstantPassportService.WSPARAMETERSFILENAME,
+                company.toUpperCase() + IConstantPassportService.PASSWORD_PREFIX + getMode());
+    }
+
     private void setPassword(String password) {
         this.password = password;
     }
@@ -169,6 +175,12 @@ public class PassportParametersManager {
         return PropertyResourceBundleManager.getString(
                 IConstantPassportService.WSPARAMETERSFILENAME,
                 IConstantPassportService.USERNAME_PREFIX + getMode());
+    }
+
+    public String getUserName(String company) {
+        return PropertyResourceBundleManager.getString(
+                IConstantPassportService.WSPARAMETERSFILENAME,
+                company.toUpperCase() + IConstantPassportService.USERNAME_PREFIX + getMode());
     }
 
     private void setUserName(String userName) {

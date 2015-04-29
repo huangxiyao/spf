@@ -214,8 +214,8 @@ public abstract class Task {
                     + e.getMessage());
         }
 
-        call.setUsername(M_wsManagerInstance.getAdminUser(company));
-        call.setPassword(M_wsManagerInstance.getAdminPassword(company));
+        call.setUsername(M_wsManagerInstance.getUserName(company));
+        call.setPassword(M_wsManagerInstance.getPassword(company));
 
     }
 
