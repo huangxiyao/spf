@@ -693,7 +693,7 @@ public class AuthenticatorHelper {
 				.equalsIgnoreCase(getProperty(AuthenticationConsts.SANDBOX_MODE));
 	}
 
-	static boolean isEnabledHPIAndHPE() {
+	static public boolean isEnabledHPIAndHPE() {
 		return AuthenticationConsts.YES
 				.equalsIgnoreCase(getProperty(AuthenticationConsts.ENABLE_HPI_HPE));
 	}

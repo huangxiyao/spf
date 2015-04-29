@@ -9,6 +9,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.hp.it.spf.xa.misc.portal.Utils;
 import org.springframework.util.StringUtils;
 import com.epicentric.common.website.CookieUtils;
@@ -85,7 +86,15 @@ public class HpPassportLocaleSetter implements ILocaleSetter {
                 Consts.COOKIE_NAME_SMSESSION);
         }
         String langCode = this.getHppFormatLanguageCode(locale);
-        String company = Utils.getCookieDomainName(request);
+        String company = "";
+        if (AuthenticatorHelper.isEnabledHPIAndHPE()) {
+            if (AuthenticatorHelper.isFromHPE()) {
+                company = Consts.COMPANY_HPE;
+            } else if (AuthenticatorHelper.isFromHPI()) {
+                company = Consts.COMPANY_HPI;
+            }
+        }
+        AuthenticatorHelper.isFromHPE();
         if (hppProfileCanBeUpdated(langCode, sessionToken)) {
             try {
                 GetUserCoreResponseElement rspGet = hppService
