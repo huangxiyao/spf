@@ -5,7 +5,7 @@
 	<groupId>com.hp.it.spf.tools</groupId>
 	<artifactId>spf-pom</artifactId>
 	<name>Shared Portal Framework super POM</name>
-	<version>3.0.11</version>
+	<version>3.0.12-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<description>
@@ -15,9 +15,9 @@
 	</description>
 
 	<scm>
-		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.11/spf-pom</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.11/spf-pom</developerConnection>
-		<url>https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.11/spf-pom</url>
+		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/spf-pom</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/spf-pom</developerConnection>
+		<url>https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/spf-pom</url>
 	</scm>
 
 	<ciManagement>

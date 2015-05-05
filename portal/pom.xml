@@ -4,20 +4,20 @@
 	<parent>
 		<groupId>com.hp.it.spf.tools</groupId>
 		<artifactId>spf-pom</artifactId>
-		<version>3.0.11</version>
+		<version>3.0.12-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.hp.it.spf.portal</groupId>
 	<artifactId>portal</artifactId>
-	<version>3.0.11</version>
+	<version>3.0.12-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 	<name>SPF portal aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.11/portal</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.11/portal</developerConnection>
-		<url>https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.11/portal</url>
+		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal</developerConnection>
+		<url>https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/portal</url>
 	</scm>
 
 	<distributionManagement>

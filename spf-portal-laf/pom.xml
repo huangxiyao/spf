@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>3.0.11</version>
+		<version>3.0.12-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -12,7 +12,7 @@
 	<packaging>pom</packaging>
 
 	<!-- This version number doesn't need to change. -->
-	<version>3.0.11</version>
+	<version>3.0.12-SNAPSHOT</version>
 
 	<name>HP Layout VAP Components</name>
 	<url>http://frameworks.hp.com</url>
@@ -25,9 +25,9 @@
 	</modules>
 
 	<scm>
-		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.11/spf-portal-laf</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.11/spf-portal-laf</developerConnection>
-		<url>https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.11/spf-portal-laf</url>
+		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/spf-portal-laf</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/spf-portal-laf</developerConnection>
+		<url>https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/spf-portal-laf</url>
 	</scm>
 	
 	<ciManagement>
