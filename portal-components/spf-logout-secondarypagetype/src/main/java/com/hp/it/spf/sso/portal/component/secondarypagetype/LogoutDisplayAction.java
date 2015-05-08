@@ -110,6 +110,8 @@ public class LogoutDisplayAction extends BaseAction {
 						"logout.confirmation.text", "", portalContext);
 				session.setAttribute(Consts.SESSION_ATTR_STATUS_MSG, msg);
 				url = Utils.getEffectiveSiteURL(request);
+				// Set the site home scheme to http
+				url = Utils.getPortalSiteURL(url, Boolean.FALSE, null, -1, null);
 			}
 
 			// send the redirect and return null to allow processing to continue

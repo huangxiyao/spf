@@ -299,6 +299,7 @@ public class AuthenticationConsts {
 	public final static String LOCAL_COMPANY_HP = Consts.GROUP_COMPANY_HP;
 	public final static String LOCAL_COMPANY_HPI = Consts.GROUP_COMPANY_HPI;
 	public final static String LOCAL_COMPANY_HPE = Consts.GROUP_COMPANY_HPE;
+	public final static String LOCAL_COMPANY_PREFIX = Consts.GROUP_COMPANY_PREFIX;
 
 	/**
 	 * Groups that indicate the user is authenticated or not.

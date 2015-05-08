@@ -173,7 +173,7 @@ public class ANONAuthenticator extends AbstractAuthenticator {
 	@Override
 	protected Set getUserGroups() {
 		//get LOCAL groups for HP split
-		return super.getUserGroups();
+		return new HashSet();
 	}
 
 	private void addLOCALHPCompanyGroup() {

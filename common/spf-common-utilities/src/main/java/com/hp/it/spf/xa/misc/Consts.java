@@ -78,6 +78,12 @@ public class Consts {
 		+ "COMPANY_HPE";
 
     /**
+     * The prefix for SPF-assigned user group indicating the user is from HPE/HPI company.
+     */
+    public static final String GROUP_COMPANY_PREFIX = GROUP_PREFIX
+            + "COMPANY_";
+
+    /**
      * The prefix for the SPF-assigned user group for country - if the user is
      * in this group, it indicates his or her resolved locale includes that
      * country. Append this string with the <a href="http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm"

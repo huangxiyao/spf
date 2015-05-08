@@ -194,6 +194,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 				// get groups from userProfile
 				List<String> sessionGroups = (List<String>)userProfile.get(AuthenticationConsts.KEY_USER_GROUPS);
 				refreshLocaleRelatedGroups(sessionGroups);
+				refreshCompanyRelatedGroups(sessionGroups);
 
 				// refresh user timezone
 				refreshUserTimezone(userProfile, httpHeaderUserProfile);
@@ -234,6 +235,37 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 		}
 		if (LOG.willLogAtLevel(LogConfiguration.DEBUG)) {
 			LOG.debug(String.format("Time spent on AbstractAuthenticator.execute (sec): %s for user: %s", (System.currentTimeMillis()-startTime)/1000, userName));
+		}
+	}
+
+	/**
+	 * This method is used to update user's company groups.
+	 */
+	@SuppressWarnings("unchecked")
+	protected void refreshCompanyRelatedGroups(List<String> sessionGroups) {
+		Set<String> inputGroups = new HashSet<String>();
+
+		Iterator<String> iterator = sessionGroups.iterator();
+		while (iterator.hasNext()) {
+			String group = iterator.next();
+			if (!group.startsWith(AuthenticationConsts.LOCAL_COMPANY_PREFIX)) {
+				// find all groups which are not company groups
+				inputGroups.add(group);
+			}
+		}
+
+		inputGroups.addAll(getCompanyGroups());
+		ssoUser.setGroups(inputGroups);
+		try {
+			// Retrieve user from session, in current situation user will
+			// not be null
+			User currentUser = SessionUtils.getCurrentUser(request.getSession());
+			updateVAPUserGroups(currentUser);
+			saveUserProfile2Session(currentUser);
+		} catch (EntityPersistenceException ex) {
+			LOG.error("Invoke Authenticator.execute error: updateVAPUserGroups error: "
+							+ ex.getMessage(),
+					ex);
 		}
 	}
 
@@ -328,7 +360,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 								   headerUserProfile.get(getProperty(AuthenticationConsts.HEADER_TIMEZONE_PROPERTY_NAME)));
 			sessionUserProfile.put(AuthenticationConsts.KEY_TIMEZONE, headerTimezone);
 			AuthenticatorHelper.updateVAPUserTimeZone(currentUser,
-													  headerTimezone);
+					headerTimezone);
 		}
 	}
 
@@ -695,6 +727,7 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 		mapUserProfile2SSOUser();
 		Set groups = getUserGroups();
 		groups.addAll(getLocaleGroups());
+		groups.addAll(getCompanyGroups());
 		ssoUser.setGroups(groups);
 
 		// Retrieve user from Vignette.
@@ -788,24 +821,33 @@ public abstract class AbstractAuthenticator implements IAuthenticator {
 	 *
 	 * @return retrieved groups set or an empty set
 	 */
-	protected Set getUserGroups() {
-		Set<String> groups = new HashSet<String>();
-		// if the switch of Enable_HPI_HPE is on
+	protected abstract Set getUserGroups();
+
+	/**
+	 * This is the method used to retrieve company groups info and return as a
+	 * Set
+	 *
+	 * @return retrieved groups set or an empty set
+	 */
+	@SuppressWarnings("unchecked")
+	protected Set getCompanyGroups() {
+		Set<String> group = new HashSet<String>();
+
 		if (AuthenticatorHelper.isEnabledHPIAndHPE()) {
 			// and the URL is hp.com, put them into the LOCAL_PORTAL_COMPANY_HPI group
 			if (AuthenticatorHelper.isFromHPI(request)) {
-				groups.add(AuthenticationConsts.LOCAL_COMPANY_HPI);
+				group.add(AuthenticationConsts.LOCAL_COMPANY_HPI);
 			}
 			// and the URL is hpe.com, put them into the LOCAL_PORTAL_COMPANY_HPE group
 			if (AuthenticatorHelper.isFromHPE(request)) {
-				groups.add(AuthenticationConsts.LOCAL_COMPANY_HPE);
+				group.add(AuthenticationConsts.LOCAL_COMPANY_HPE);
 			}
 		} else {
 			// if the swtich of Enable_HPI_HPE is off, the user will be added into the LOCAL_PORTAL_COMPANY_HP group
-			groups.add(AuthenticationConsts.LOCAL_COMPANY_HP);
+			group.add(AuthenticationConsts.LOCAL_COMPANY_HP);
 		}
 
-		return groups;
+		return group;
 	}
 
 	/**
