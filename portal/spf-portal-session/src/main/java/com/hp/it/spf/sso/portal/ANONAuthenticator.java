@@ -178,6 +178,6 @@ public class ANONAuthenticator extends AbstractAuthenticator {
 
 	private void addLOCALHPCompanyGroup() {
 		List<String> sessionGroups = (List<String>)userProfile.get(AuthenticationConsts.KEY_USER_GROUPS);
-		sessionGroups.addAll(getUserGroups());
+		sessionGroups.addAll(super.getCompanyGroups());
 	}
 }
