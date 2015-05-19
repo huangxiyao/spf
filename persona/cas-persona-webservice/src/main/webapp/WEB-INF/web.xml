@@ -1,0 +1,58 @@
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" 
+		version="2.4">
+		
+	<display-name>Persona User-Attribute-Value Service</display-name>
+	
+	<context-param>
+		<description>
+			Location of the XML files that define the root application context applied by ContextLoaderListener.
+		</description>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/application-context/*.xml</param-value>
+	</context-param>
+
+	<listener>
+		<description>
+			Loads the root application context of this web app at startup. The application context is then available via
+			WebApplicationContextUtils.getWebApplicationContext(servletContext).
+ 		</description>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
+      <filter-name>springSecurityFilterChain</filter-name>
+      <servlet-name>soap</servlet-name>
+    </filter-mapping>
+
+	<servlet>
+		<description>
+			Handles all SOAP messages including WSDL.
+		</description>
+		<servlet-name>soap</servlet-name> 
+		<servlet-class>org.springframework.ws.transport.http.MessageDispatcherServlet</servlet-class> 
+		<init-param>
+			<description>
+				Transform service location in WSDL to match the servlet URL.
+			</description>
+			<param-name>transformWsdlLocations</param-name> 
+			<param-value>true</param-value> 
+		</init-param>
+	</servlet>
+	
+	<servlet-mapping> 
+		<servlet-name>soap</servlet-name> 
+		<url-pattern>/soap/*</url-pattern> 
+	</servlet-mapping>
+
+	<mime-mapping>
+		<extension>xsd</extension>
+		<mime-type>application/xml</mime-type>
+	</mime-mapping>
+</web-app>

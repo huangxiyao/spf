@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<xsd:schema xmlns="urn:X-hp:com.hp.it.cas.persona.schema.uav"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema"			
+			targetNamespace="urn:X-hp:com.hp.it.cas.persona.schema.uav"
+			elementFormDefault="qualified"
+			attributeFormDefault="unqualified">
+
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">
+			Persona User-Attribute-Value service schema.
+			Copyright 2009 Hewlett-Packard Development Company, L.P.
+		</xsd:documentation>
+	</xsd:annotation>
+
+<!-- FindUserAttributeValues -->
+
+	<xsd:element name="FindUserAttributeValuesRequest">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				Request to find all user attribute values for the specified user.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:attribute name="userType"	type="UserIdentifierType"/>
+			<xsd:attribute name="userId"	type="xsd:token"/>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="FindUserAttributeValuesResponse">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				Response containing all user attribute values.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="attribute" type="UserAttributeValueType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+<!-- PutUserAttributeValue -->
+
+	<xsd:element name="PutUserAttributeValuesRequest">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				Request to insert or update user attribute values. The request can contain multiple user attribute values.
+				The request will either succeed as a unit or fail (transactional).
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+				<xsd:element name="attribute" type="UserAttributeValueType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="PutUserAttributeValuesResponse">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				Response containing the same user attribute values as the request, but instance identifiers will have all
+				been populated.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+				<xsd:element name="attribute" type="UserAttributeValueType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+<!-- RemoveUserAttributeValue -->
+
+	<xsd:element name="RemoveUserAttributeValuesRequest">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				Request to remove user attribute values. The request can contain multiple user attribute values.
+				The request will either succeed as a unit or fail (transactional).
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="unbounded">
+				<xsd:element name="attribute" type="UserAttributeValueType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+<!-- Types -->
+
+	<xsd:simpleType name="UserIdentifierType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				An enumeration of the values permitted for the 'userType' attribute.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:token">
+			<xsd:enumeration value="EXTERNAL_USER"/>
+			<xsd:enumeration value="EMPLOYEE"/>
+			<xsd:enumeration value="EMPLOYEE_SIMPLIFIED_EMAIL_ADDRESS"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:complexType name="UserAttributeValueType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en"><![CDATA[
+				The primary record type containing the user identifier, the user attribute and the value of the attribute.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="userType"		type="UserIdentifierType"			use="required"/>
+				<xsd:attribute name="userId"		type="xsd:string"					use="required"/>
+				<xsd:attribute name="simpleId"		type="xsd:string"       			use="required"/>
+				<xsd:attribute name="compoundId"	type="xsd:string"/>
+				<xsd:attribute name="instance"		type="xsd:token"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+</xsd:schema>
