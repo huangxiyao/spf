@@ -9,7 +9,7 @@
 	</parent>
 
 	<groupId>com.hp.it.cas.persona</groupId>
-	<artifactId>cas-persona</artifactId>
+	<artifactId>cas-persona-noldap</artifactId>
 	<packaging>jar</packaging>
 	<version>2.0.1</version>
 
