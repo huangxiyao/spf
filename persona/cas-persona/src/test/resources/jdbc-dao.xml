@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/tx		http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+		"
+	>
+
+<!-- Database -->
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="driverClass" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="${dataSourceUrl}"/>
+		<property name="username" value="${dataSourceUserName}"/>
+		<property name="password" value="${dataSourcePassword}"/>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+<!-- DAO -->
+
+	<bean id="securityDaoFactory" class="com.hp.it.cas.security.dao.SecurityDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+	
+	<bean id="securityCustomDaoFactory" class="com.hp.it.cas.security.custom.dao.SecurityCustomDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+	
+	<bean id="personaDaoFactory" class="com.hp.it.cas.persona.dao.PersonaDaoFactory">
+		<constructor-arg ref="securityDaoFactory"/>
+		<constructor-arg ref="securityCustomDaoFactory"/>
+	</bean>
+	
+	<bean id="configDaoFactory" class="com.hp.it.cas.config.dao.ConfigDAOFactoryImpl">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+
+</beans>
