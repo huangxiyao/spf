@@ -1,0 +1,79 @@
+.contentTable {
+	width: 100%
+}
+
+.personaTable {
+	width: 98%
+}
+
+.personaTable textarea {
+	width: 100%;
+	overflow: auto;
+}
+
+.personaTable ul {
+	padding: 0;
+	list-style-type: none
+}
+
+.personaTable input,.personaTable select {
+	vertical-align: middle;
+}
+
+.personaTable,.personaTable td,.personaTable th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px
+}
+
+.personaTable th {
+	background-color: #06F;
+	color: #fff;
+	font-weight: bold;
+	padding-left: 10px;
+}
+
+.personaTable a,.personaTable a:visited,.personaTable a:hover,.personaTable a:active
+    {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    COLOR: #000;
+}
+
+.personaTable a {
+    TEXT-DECORATION: none
+}
+
+.personaTable a:hover {
+    cursor: pointer;
+    TEXT-DECORATION: underline
+}
+
+.personaButton {
+	vertical-align: middle;
+	cursor: pointer;
+	width: auto;
+	overflow: visible;
+	font: bold 11px Arial, Helvetica, sans-serif;
+	color: #F5F5F5;
+	background-color: #626262;
+	outline: 1px solid #626262;
+	border: 1px solid #FFF !important;
+	border: 3px double #626262;
+	outline-bottom: 1px solid #626262;
+	border-bottom: 1px solid #626262 !important;
+	border-bottom: 1px solid #626262;
+	padding-left: 4px;
+	padding-right: 4px
+}
+
+.personaTable .odd {
+	background-color: #fff
+}
+
+.personaTable .even {
+	background-color: #e7e7e7
+}
+
+#errorMsg {
+	color: red
+}

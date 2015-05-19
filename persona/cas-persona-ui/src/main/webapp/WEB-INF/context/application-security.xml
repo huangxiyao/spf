@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/security	http://www.springframework.org/schema/security/spring-security-2.0.xsd
+		"
+	>
+	
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>/WEB-INF/context/application.properties</value>
+		</property>
+	</bean>
+
+<!-- LDAP Application Authentication Provider -->
+
+	<bean id="applicationAuthenticationProvider" class="com.hp.it.cas.persona.security.ApplicationAuthenticationProvider"/>
+
+<!-- Run-As Authentication Provider -->
+
+	<!-- Handles RUN_AS_APPLICATION authentication -->
+	<bean id="runAsApplicationAuthenticationProvider" class="org.springframework.security.runas.RunAsImplAuthenticationProvider">
+		<property name="key" value="!!TOP_SECRET_PERSONA_RUN_AS_KEY!!"/>
+	</bean>
+	
+	<bean id="portletUserAuthenticationProvider"
+		class="org.springframework.security.providers.preauth.PreAuthenticatedAuthenticationProvider">
+		<description>
+			Portlet users are pre-authenticated by the portal.
+		</description>
+		<property name="preAuthenticatedUserDetailsService">
+			<bean
+				class="org.springframework.security.providers.preauth.PreAuthenticatedGrantedAuthoritiesUserDetailsService" />
+		</property>
+	</bean>
+	
+<!-- Authentication Manager -->
+
+	<!-- All authentication methods: LDAP and RUN_AS_APPLICATION -->
+	<bean id="applicationAuthenticationManager" class="org.springframework.security.providers.ProviderManager">
+		<property name="providers">
+			<list>
+				<ref local="applicationAuthenticationProvider"/>
+				<ref local="runAsApplicationAuthenticationProvider"/>
+				<ref local="portletUserAuthenticationProvider" />
+			</list>
+		</property>
+	</bean>
+
+<!-- Run-As Application Manager -->
+
+	<!-- Defines principal that will be substituted for RUN_AS_APPLICATION -->
+	<bean id="runAsApplicationManager" class="com.hp.it.cas.persona.security.RunAsApplicationManager">
+		<property name="key" value="!!TOP_SECRET_PERSONA_RUN_AS_KEY!!"/>
+		
+		<!-- The substituted application must be authenticated -->
+		<property name="authenticationManager" ref="applicationAuthenticationManager"/>
+		
+		<!-- Identity of application that will be substituted for RUN_AS_APPLICATION -->
+		<property name="applicationPrincipal">
+			<bean class="com.hp.it.cas.xa.security.ApplicationPrincipal">
+				<constructor-arg value="${applicationPortfolioIdentifier}"/>
+			</bean>
+		</property>
+		<property name="applicationPassword" value="${applicationPassword}"/>
+	</bean>
+
+<!-- Access Decision Manager -->
+
+	<!-- Authorization is determined based on authentication or role -->
+	<bean id="accessDecisionManager" class="org.springframework.security.vote.AffirmativeBased">
+		<property name="decisionVoters">
+			<list>
+				<bean class="org.springframework.security.vote.AuthenticatedVoter"/>
+				<bean class="org.springframework.security.vote.RoleVoter"/>
+			</list>
+		</property>
+	</bean>
+
+<!-- Method Security Interceptor -->
+
+	<!-- Locate methods marked with @Secured -->
+	<bean id="securedMethods" class="org.springframework.security.annotation.SecuredMethodDefinitionSource"/>
+	
+	<!-- @Secured methods will have this security configuration applied -->
+	<bean id="methodSecurityInterceptor" class="org.springframework.security.intercept.method.aopalliance.MethodSecurityInterceptor">
+		<property name="authenticationManager"	ref="applicationAuthenticationManager"/>
+		<property name="accessDecisionManager"	ref="accessDecisionManager"/>
+		<property name="runAsManager"			ref="runAsApplicationManager"/>
+		<property name="objectDefinitionSource"	ref="securedMethods"/>
+	</bean>	
+
+<!-- Create proxies for beans with secured methods and have those methods invoke the security system when accessed-->
+
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>	
+	
+	<bean class="org.springframework.security.intercept.method.aopalliance.MethodDefinitionSourceAdvisor">
+		<constructor-arg value="methodSecurityInterceptor"/>
+		<constructor-arg>
+			<bean class="org.springframework.security.intercept.method.DelegatingMethodDefinitionSource">
+				<property name="methodDefinitionSources">
+					<list>
+						<ref local="securedMethods"/>
+					</list>
+				</property>
+			</bean>
+		</constructor-arg>
+	</bean>
+	
+</beans>
