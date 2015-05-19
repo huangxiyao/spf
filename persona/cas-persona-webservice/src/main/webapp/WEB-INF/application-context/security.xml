@@ -10,7 +10,7 @@
 
 	<security:global-method-security secured-annotations="enabled"/>
 	
-	<bean id="applicationAuthenticationProvider" class="com.hp.it.cas.persona.security.ApplicationAuthenticationProvider">
+	<bean id="applicationAuthenticationProvider" class="com.hp.it.cas.persona.security.NoLDAPAuthenticationProvider">
 		<security:custom-authentication-provider/>
 	</bean>
 
