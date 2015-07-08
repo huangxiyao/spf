@@ -98,6 +98,10 @@ public class Consts {
      */
     public static final String AUTH_TYPE_FED = "FED";
 
+    public static final String COMPANY_HPI = "HPI";
+
+    public static final String COMPANY_HPE = "HPE";
+
     /**
      * The key to get profile id from user profile map.
      */

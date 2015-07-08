@@ -692,7 +692,12 @@ public class AuthenticatorHelper {
 		return AuthenticationConsts.YES
 				.equalsIgnoreCase(getProperty(AuthenticationConsts.SANDBOX_MODE));
 	}
-   
+
+	static public boolean isEnabledHPIAndHPE() {
+		return AuthenticationConsts.YES
+				.equalsIgnoreCase(getProperty(AuthenticationConsts.ENABLE_HPI_HPE));
+	}
+
 	/**
 	 * Session cleanup when doing implicit logout. Only remove service portal
 	 * session attributes that does not start with SP_RETAIN. After cleaning, a

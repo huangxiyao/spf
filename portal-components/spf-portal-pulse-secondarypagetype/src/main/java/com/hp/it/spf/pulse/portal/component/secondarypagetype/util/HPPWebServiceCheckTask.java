@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.hp.globalops.hppcbl.passport.PassportService;
 import com.hp.globalops.hppcbl.passport.manager.PassportParametersManager;
+import com.hp.it.spf.xa.misc.portal.Utils;
 import com.vignette.portal.log.LogWrapper;
 
 /**
@@ -93,12 +94,19 @@ public class HPPWebServiceCheckTask extends GeneralComponentCheckTask {
             // login using admin account
             PassportParametersManager wsManagerInstance = PassportParametersManager
                     .getInstance();
-            String adminUserName = wsManagerInstance.getAdminUser();
+
+            /*
+            *  Comment out the statements to bypass the building since the Task is not invoked in pulse.xml
+            */
+            /*String adminUserName = wsManagerInstance.getAdminUser();
             String adminUserPWD = wsManagerInstance.getAdminPassword();
 
-            thisStep = thisMethod + "execute Web service test: adminUserName: " + adminUserName;
+            thisStep = thisMethod + "execute Web service test: adminUserName: " + adminUserName;*/
             LOG.debug(thisStep);
-            ws.login(adminUserName, adminUserPWD);
+            /*
+            *  Comment out the statements to bypass the building since the Task is not invoked in pulse.xml
+            */
+            //ws.login(adminUserName, adminUserPWD);
 
             tmpStatus = STATUS_PASS; // STATUS_PASS means failing of the HPP ws
         } catch (Exception e) {

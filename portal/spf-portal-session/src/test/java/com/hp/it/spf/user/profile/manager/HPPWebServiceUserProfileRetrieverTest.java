@@ -34,6 +34,7 @@ public class HPPWebServiceUserProfileRetrieverTest {
 	private final String adminUsername = "hpp_groupuser";
 	private final String adminPassword = "password123";
 	private final String securityToken = "11111111111";
+    private final String company = "HPI";
 	
 	HPPWebServiceUserProfileRetriever userProfileRetriever = new HPPWebServiceUserProfileRetriever();
 	
@@ -50,13 +51,13 @@ public class HPPWebServiceUserProfileRetrieverTest {
 		context.checking(new Expectations() {{
 			allowing(passportService).setVersion(with("2"));
 
-			allowing(parametersManager).getAdminUser();
+			allowing(parametersManager).getAdminUser(company);
 				will(returnValue(adminUsername));
 
-			allowing(parametersManager).getAdminPassword();
+			allowing(parametersManager).getAdminPassword(company);
 				will(returnValue(adminPassword));
 
-			allowing(passportService).login(adminUsername, adminPassword).getSessionToken();
+			allowing(passportService).login(adminUsername, adminPassword, company).getSessionToken();
 				will(returnValue(securityToken));
 				
 		}});

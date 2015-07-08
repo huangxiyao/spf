@@ -18,6 +18,7 @@ import com.hp.globalops.hppcbl.passport.PassportServiceException;
 import com.hp.globalops.hppcbl.passport.beans.Fault;
 import com.hp.globalops.hppcbl.webservice.ProfileCore;
 import com.hp.it.spf.sso.portal.AuthenticationUtility;
+import com.hp.it.spf.sso.portal.AuthenticatorHelper;
 import com.hp.it.spf.xa.exception.portal.ExceptionUtil;
 import com.hp.it.spf.xa.i18n.portal.I18nUtility;
 import com.hp.it.spf.xa.log.portal.LogHelper;
@@ -106,17 +107,17 @@ public class SelectLocaleProcessAction extends BaseAction {
 				// set locale into the HP.com cookies
 				LOG
 						.info("SelectLocaleProcessAction: updating user's locale into HP.com standard cookie(s).");
-				addCookie(response, Consts.PARAM_HPCOM_LANGUAGE, 
+				addCookie(request, response, Consts.PARAM_HPCOM_LANGUAGE,
 						I18nUtility.localeToLanguageTag(plocale).toLowerCase(),
 						 1 * SECONDS_PER_YEAR);
 				
 				if (hasCountry(plocale)) {
 					// country is not null, set country cookie
-					addCookie(response, Consts.PARAM_HPCOM_COUNTRY, plocale
+					addCookie(request, response, Consts.PARAM_HPCOM_COUNTRY, plocale
 							.getCountry().toLowerCase(), 1 * SECONDS_PER_YEAR);
 				} else {
 					// country is null, delete country cookie
-					delCookie(response, Consts.PARAM_HPCOM_COUNTRY);
+					delCookie(request, response, Consts.PARAM_HPCOM_COUNTRY);
 				}
 
 				// set locale into HPP
@@ -222,13 +223,22 @@ public class SelectLocaleProcessAction extends BaseAction {
 
 		String langCode = I18nUtility.localeToHPPLanguage(locale);
 
+		String company = "";
+		if (AuthenticatorHelper.isEnabledHPIAndHPE()) {
+			if (AuthenticatorHelper.isFromHPE(request)) {
+				company = Consts.COMPANY_HPE;
+			} else if (AuthenticatorHelper.isFromHPI(request)) {
+				company = Consts.COMPANY_HPI;
+			}
+		}
+
 		PassportService ws = new PassportService();
 		ws.setSystemLangCode(langCode);
 
 		ProfileCore pc = new ProfileCore();
 		pc.setLangCode(langCode);
 
-		ws.modifyUser(sessionToken, pc, null);
+		ws.modifyUser(sessionToken, pc, null, company);
 	}
 
 	/**
@@ -242,9 +252,10 @@ public class SelectLocaleProcessAction extends BaseAction {
 	 * @param maxAge
 	 *            the max age of the cookie (in seconds)
 	 */
-	private void addCookie(HttpServletResponse response, String name,
+	private void addCookie(HttpServletRequest request, HttpServletResponse response, String name,
 			String value, int maxAge) {
-		Cookie cookie = Utils.newCookie(name, value, Consts.HP_COOKIE_DOMAIN,
+        String cookieDomain = Utils.getCookieDomainName(request);
+		Cookie cookie = Utils.newCookie(name, value, cookieDomain,
 				Consts.HP_COOKIE_PATH, maxAge);
 		response.addCookie(cookie);
 	}
@@ -256,7 +267,7 @@ public class SelectLocaleProcessAction extends BaseAction {
 	 * @param name
 	 *            cookie name
 	 */
-	private void delCookie(HttpServletResponse response, String name) {
-		addCookie(response, name, null, 0);
+	private void delCookie(HttpServletRequest request, HttpServletResponse response, String name) {
+		addCookie(request, response, name, null, 0);
 	}
 }
