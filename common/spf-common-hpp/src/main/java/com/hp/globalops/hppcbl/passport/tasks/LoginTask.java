@@ -21,14 +21,15 @@ public class LoginTask extends Task {
         super();
     }
 
-    public void init(Map args) throws TaskExecutionException {
+    public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String userId = (String) args.get("userId");
         String password = (String) args.get("password");
         requestElement = new LoginRequestElement();
         requestElement.setUserId(userId);
         requestElement.setPassword(password);
+        requestElement.setApplicationId(getApplicationId(company));
     }
 
     protected Object getRequestElement() throws TaskExecutionException {

@@ -26,9 +26,9 @@ public class AdminCreateUserTask extends Task {
 		return new AdminCreateUserResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String adminSessionToken = (String) args.get("adminSessionToken");
         String userId = (String) args.get("userId");
         String groupName = (String) args.get("groupName");

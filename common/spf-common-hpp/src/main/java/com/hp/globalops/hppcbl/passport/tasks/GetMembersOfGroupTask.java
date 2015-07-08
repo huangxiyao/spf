@@ -23,9 +23,9 @@ public class GetMembersOfGroupTask extends Task {
 		return new GetGroupInfoResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String adminSessionToken = (String) args.get("adminSessionToken");
         String groupName = (String) args.get("groupName");
         String roleName = (String) args.get("roleName");

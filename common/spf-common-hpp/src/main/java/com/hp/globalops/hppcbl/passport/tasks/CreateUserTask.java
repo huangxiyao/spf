@@ -17,9 +17,9 @@ public class CreateUserTask extends Task {
         super();
     }
 
-    public void init(Map args) throws TaskExecutionException {
+    public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String userId = (String) args.get("userId");
         ProfileCore profileCore = (ProfileCore) args.get("ProfileCore");
         ProfileExtended profileExtended = (ProfileExtended) args.get("ProfileExtended");
@@ -31,6 +31,7 @@ public class CreateUserTask extends Task {
         requestElement.setProfileCredentials(profileCredentials);
         if(profileExtended != null)
         	requestElement.setProfileExtended(profileExtended);
+        requestElement.setApplicationId(getApplicationId(company));
     }
 
     protected Object getRequestElement() throws TaskExecutionException {

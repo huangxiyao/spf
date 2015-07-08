@@ -23,9 +23,9 @@ public class GetUserCoreTask extends Task {
 		return new GetUserCoreResponseElement() ;
 	}
 
-    public void init(Map args) throws TaskExecutionException {
+    public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String sessionToken = (String) args.get("sessionToken");
         requestElement = new GetUserCoreRequestElement();
         requestElement.setSessionToken(sessionToken);

@@ -25,8 +25,8 @@ public class AddUserToGroupTask extends Task {
 		return new AddUserToGroupResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
-        super.init();
+	public void init(Map args, String company) throws TaskExecutionException {
+        super.init(company);
         String adminSessionToken = (String) args.get("adminSessionToken");
         ProfileIdentity profileIdentity = (ProfileIdentity) args.get("profileIdentity");
         String groupName = (String) args.get("groupName");

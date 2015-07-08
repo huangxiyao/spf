@@ -23,9 +23,9 @@ public class GetRMCookieDataTask extends Task {
 		return new GetRMCookieDataResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String profileId = (String) args.get("profileId");
 
         requestElement = new GetRMCookieDataRequestElement();

@@ -94,7 +94,7 @@ public class PassportService {
         this.version = version;
     }
 
-    public CheckUserExistsResponseElement checkUserExists(String userId, String email) throws PassportServiceException {
+    public CheckUserExistsResponseElement checkUserExists(String userId, String email, String company) throws PassportServiceException {
 		CheckUserExistsTask checkUserExistsTask = new CheckUserExistsTask();
 		CheckUserExistsResponseElement response = null;
 
@@ -106,7 +106,7 @@ public class PassportService {
 				checkUserExistsTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    checkUserExistsTask.setVersion(version);
-			checkUserExistsTask.init(props);
+			checkUserExistsTask.init(props, company);
 			response = (CheckUserExistsResponseElement) checkUserExistsTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -119,7 +119,7 @@ public class PassportService {
 		return response;
 	}
 
-	public CreateUserResponseElement createUser(String userId, ProfileCore profileCore, ProfileExtended profileExtended, ProfileCredentials profileCredentials) throws PassportServiceException {
+	public CreateUserResponseElement createUser(String userId, ProfileCore profileCore, ProfileExtended profileExtended, ProfileCredentials profileCredentials, String company) throws PassportServiceException {
 		CreateUserTask createUserTask = new CreateUserTask();
 		CreateUserResponseElement response = null;
 
@@ -133,7 +133,7 @@ public class PassportService {
 				createUserTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    createUserTask.setVersion(version);
-			createUserTask.init(props);
+			createUserTask.init(props, company);
 			response = (CreateUserResponseElement) createUserTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -146,7 +146,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetProfileIdResponseElement getProfileId(String userId) throws PassportServiceException {
+	public GetProfileIdResponseElement getProfileId(String userId, String company) throws PassportServiceException {
 		GetProfileIdTask getProfileIdTask = new GetProfileIdTask();
 		GetProfileIdResponseElement response = null;
 		try {
@@ -156,7 +156,7 @@ public class PassportService {
 				getProfileIdTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getProfileIdTask.setVersion(version);
-			getProfileIdTask.init(props);
+			getProfileIdTask.init(props, company);
 			response = (GetProfileIdResponseElement) getProfileIdTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -169,7 +169,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetRMCookieDataResponseElement getRMCookieData(String profileId) throws PassportServiceException {
+	public GetRMCookieDataResponseElement getRMCookieData(String profileId, String company) throws PassportServiceException {
 		GetRMCookieDataTask getRMCookieDataTask = new GetRMCookieDataTask();
 		GetRMCookieDataResponseElement response = null;
 		try {
@@ -179,7 +179,7 @@ public class PassportService {
 				getRMCookieDataTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getRMCookieDataTask.setVersion(version);
-			getRMCookieDataTask.init(props);
+			getRMCookieDataTask.init(props, company);
 			response = (GetRMCookieDataResponseElement) getRMCookieDataTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -192,7 +192,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetRMDataResponseElement getRMData(String rMdataField) throws PassportServiceException {
+	public GetRMDataResponseElement getRMData(String rMdataField, String company) throws PassportServiceException {
 		GetRMDataTask getRMDataTask = new GetRMDataTask();
 		GetRMDataResponseElement response = null;
 		try {
@@ -202,7 +202,7 @@ public class PassportService {
 				getRMDataTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getRMDataTask.setVersion(version);
-			getRMDataTask.init(props);
+			getRMDataTask.init(props, company);
 			response = (GetRMDataResponseElement) getRMDataTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -215,7 +215,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetUserResponseElement getUser(String sessionToken) throws PassportServiceException {
+	public GetUserResponseElement getUser(String sessionToken, String company) throws PassportServiceException {
 		GetUserTask getUserTask = new GetUserTask();
 		GetUserResponseElement response = null;
 		try {
@@ -225,7 +225,7 @@ public class PassportService {
 				getUserTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getUserTask.setVersion(version);
-			getUserTask.init(props);
+			getUserTask.init(props, company);
 			response = (GetUserResponseElement) getUserTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -238,7 +238,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetUserCoreResponseElement getUserCore(String sessionToken) throws PassportServiceException {
+	public GetUserCoreResponseElement getUserCore(String sessionToken, String company) throws PassportServiceException {
 		GetUserCoreTask getUserCoreTask = new GetUserCoreTask();
 		GetUserCoreResponseElement response = null;
 		try {
@@ -248,7 +248,7 @@ public class PassportService {
 				getUserCoreTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getUserCoreTask.setVersion(version);
-			getUserCoreTask.init(props);
+			getUserCoreTask.init(props, company);
 			response = (GetUserCoreResponseElement) getUserCoreTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -261,7 +261,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetUserIdResponseElement getUserId(ProfileIdentity profileIdentity) throws PassportServiceException {
+	public GetUserIdResponseElement getUserId(ProfileIdentity profileIdentity, String company) throws PassportServiceException {
 		GetUserIdTask getUserIdTask = new GetUserIdTask();
 		GetUserIdResponseElement response = null;
 		try {
@@ -271,7 +271,7 @@ public class PassportService {
 				getUserIdTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getUserIdTask.setVersion(version);
-			getUserIdTask.init(props);
+			getUserIdTask.init(props, company);
 			response = (GetUserIdResponseElement) getUserIdTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -284,7 +284,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetUserIdListResponseElement getUserIdList(String[] profileId, String[] applicationRefId) throws PassportServiceException {
+	public GetUserIdListResponseElement getUserIdList(String[] profileId, String[] applicationRefId, String company) throws PassportServiceException {
 		GetUserIdListTask getUserIdListTask = new GetUserIdListTask();
 		GetUserIdListResponseElement response = null;
 		try {
@@ -295,7 +295,7 @@ public class PassportService {
 				getUserIdListTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getUserIdListTask.setVersion(version);
-			getUserIdListTask.init(props);
+			getUserIdListTask.init(props, company);
 			response = (GetUserIdListResponseElement) getUserIdListTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -308,7 +308,7 @@ public class PassportService {
 		return response;
 	}
 
-	public MigrateUserResponseElement migrateUser(String sessionToken, String applicationRefId, ProfileCredentials profileCredentials, ProfileCore profileCore, ProfileExtended profileExtended) throws PassportServiceException {
+	public MigrateUserResponseElement migrateUser(String sessionToken, String applicationRefId, ProfileCredentials profileCredentials, ProfileCore profileCore, ProfileExtended profileExtended, String company) throws PassportServiceException {
 		MigrateUserTask migrateUserTask = new MigrateUserTask();
 		MigrateUserResponseElement response = null;
 
@@ -323,7 +323,7 @@ public class PassportService {
 				migrateUserTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    migrateUserTask.setVersion(version);
-			migrateUserTask.init(props);
+			migrateUserTask.init(props, company);
 			response = (MigrateUserResponseElement) migrateUserTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -336,7 +336,7 @@ public class PassportService {
 		return response;
 	}
 
-	public ModifyUserResponseElement modifyUser(String sessionToken, ProfileCore profileCore, ProfileExtended profileExtended) throws PassportServiceException {
+	public ModifyUserResponseElement modifyUser(String sessionToken, ProfileCore profileCore, ProfileExtended profileExtended, String company) throws PassportServiceException {
 		ModifyUserTask modifyUserTask = new ModifyUserTask();
 		ModifyUserResponseElement response = null;
 
@@ -349,7 +349,7 @@ public class PassportService {
 				modifyUserTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    modifyUserTask.setVersion(version);
-			modifyUserTask.init(props);
+			modifyUserTask.init(props, company);
 			response = (ModifyUserResponseElement) modifyUserTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -362,7 +362,7 @@ public class PassportService {
 		return response;
 	}
 
-	public ChangePasswordResponseElement changePassword(String userId, String currentPassword, String newPassword, String newPasswordConfirm) throws PassportServiceException {
+	public ChangePasswordResponseElement changePassword(String userId, String currentPassword, String newPassword, String newPasswordConfirm, String company) throws PassportServiceException {
 		ChangePasswordTask changePasswordTask = new ChangePasswordTask();
 		ChangePasswordResponseElement response = null;
 
@@ -376,7 +376,7 @@ public class PassportService {
 				changePasswordTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    changePasswordTask.setVersion(version);
-			changePasswordTask.init(props);
+			changePasswordTask.init(props, company);
 			response = (ChangePasswordResponseElement) changePasswordTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -389,7 +389,7 @@ public class PassportService {
 		return response;
 	}
 
-	public ChangeUserIdResponseElement changeUserId(String sessionToken, String newUserId, String currentPassword) throws PassportServiceException {
+	public ChangeUserIdResponseElement changeUserId(String sessionToken, String newUserId, String currentPassword, String company) throws PassportServiceException {
 		ChangeUserIdTask changeUserIdTask = new ChangeUserIdTask();
 		ChangeUserIdResponseElement response = null;
 
@@ -402,7 +402,7 @@ public class PassportService {
 				changeUserIdTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    changeUserIdTask.setVersion(version);
-			changeUserIdTask.init(props);
+			changeUserIdTask.init(props, company);
 			response = (ChangeUserIdResponseElement) changeUserIdTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -415,7 +415,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetGUIDExpirationResponseElement getGUIDExpiration(String guid) throws PassportServiceException {
+	public GetGUIDExpirationResponseElement getGUIDExpiration(String guid, String company) throws PassportServiceException {
 		GetGUIDExpirationTask getGUIDExpirationTask = new GetGUIDExpirationTask();
 		GetGUIDExpirationResponseElement response = null;
 
@@ -426,7 +426,7 @@ public class PassportService {
 				getGUIDExpirationTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getGUIDExpirationTask.setVersion(version);
-			getGUIDExpirationTask.init(props);
+			getGUIDExpirationTask.init(props, company);
 			response = (GetGUIDExpirationResponseElement) getGUIDExpirationTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -439,7 +439,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetSecurityQuestionResponseElement getSecurityQuestion(String guid) throws PassportServiceException {
+	public GetSecurityQuestionResponseElement getSecurityQuestion(String guid, String company) throws PassportServiceException {
 		GetSecurityQuestionTask getSecurityQuestionTask = new GetSecurityQuestionTask();
 		GetSecurityQuestionResponseElement response = null;
 
@@ -450,7 +450,7 @@ public class PassportService {
 				getSecurityQuestionTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getSecurityQuestionTask.setVersion(version);
-			getSecurityQuestionTask.init(props);
+			getSecurityQuestionTask.init(props, company);
 			response = (GetSecurityQuestionResponseElement) getSecurityQuestionTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -464,7 +464,7 @@ public class PassportService {
 	}
 
 	//public RecoverUserIdResponseElement recoverUserId(String emailAddress, String firstName, String lastName) throws PassportServiceException {
-	public RecoverUserIdResponseElement recoverUserId(String emailAddress) throws PassportServiceException {	
+	public RecoverUserIdResponseElement recoverUserId(String emailAddress, String company) throws PassportServiceException {
 		RecoverUserIdTask recoverUserIdTask = new RecoverUserIdTask();
 		RecoverUserIdResponseElement response = null;
 		try {
@@ -476,7 +476,7 @@ public class PassportService {
 				recoverUserIdTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    recoverUserIdTask.setVersion(version);
-			recoverUserIdTask.init(props);
+			recoverUserIdTask.init(props, company);
 			response = (RecoverUserIdResponseElement) recoverUserIdTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -489,7 +489,7 @@ public class PassportService {
 		return response;
 	}
 
-	public ResetPasswordResponseElement resetPassword(String userId, String email, EmailTemplate[] emailTemplate) throws PassportServiceException {
+	public ResetPasswordResponseElement resetPassword(String userId, String email, EmailTemplate[] emailTemplate, String company) throws PassportServiceException {
 		ResetPasswordTask resetPasswordTask = new ResetPasswordTask();
 		ResetPasswordResponseElement response = null;
 		try {
@@ -501,7 +501,7 @@ public class PassportService {
 				resetPasswordTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    resetPasswordTask.setVersion(version);
-			resetPasswordTask.init(props);
+			resetPasswordTask.init(props, company);
 			response = (ResetPasswordResponseElement) resetPasswordTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -514,7 +514,7 @@ public class PassportService {
 		return response;
 	}
 
-	public UpdateCredentialsResponseElement updateCredentials(String guid, String newPassword, String newPasswordConfirm, String securityAnswer, String securityQuestion, String userId) throws PassportServiceException {
+	public UpdateCredentialsResponseElement updateCredentials(String guid, String newPassword, String newPasswordConfirm, String securityAnswer, String securityQuestion, String userId, String company) throws PassportServiceException {
 		UpdateCredentialsTask updateCredentialsTask = new UpdateCredentialsTask();
 		UpdateCredentialsResponseElement response = null;
 		try {
@@ -529,7 +529,7 @@ public class PassportService {
 				updateCredentialsTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    updateCredentialsTask.setVersion(version);
-			updateCredentialsTask.init(props);
+			updateCredentialsTask.init(props, company);
 			response = (UpdateCredentialsResponseElement) updateCredentialsTask.invoke();
 
 		} catch (TaskExecutionException e) {
@@ -542,7 +542,7 @@ public class PassportService {
 		return response;
 	}
 
-	public LoginResponseElement login(String userId, String password) throws PassportServiceException {
+	public LoginResponseElement login(String userId, String password, String company) throws PassportServiceException {
 		LoginTask loginTask = new LoginTask();
 		LoginResponseElement response = null;
 		try {
@@ -553,8 +553,9 @@ public class PassportService {
 				loginTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    loginTask.setVersion(version);
-			loginTask.init(props);
-			response = (LoginResponseElement) loginTask.invoke();
+			loginTask.init(props, company);
+			response = (LoginResponseElement)loginTask.invoke();
+                    //Vector rs = loginTask.invoke();
 
 		} catch (TaskExecutionException e) {
 			// displayFaults(loginTask.getFaults());
@@ -566,7 +567,7 @@ public class PassportService {
 		return response;
 	}
 
-	public AdminCreateUserResponseElement adminCreateUser(String adminSessionToken, String userId, String groupName, String roleName, EmailTemplate[] emailTemplate, ProfileCore profileCore, ProfileExtended profileExtended) throws PassportServiceException {
+	public AdminCreateUserResponseElement adminCreateUser(String adminSessionToken, String userId, String groupName, String roleName, EmailTemplate[] emailTemplate, ProfileCore profileCore, ProfileExtended profileExtended, String company) throws PassportServiceException {
 		AdminCreateUserTask adminCreateUserTask = new AdminCreateUserTask();
 		AdminCreateUserResponseElement response = null;
 		try {
@@ -582,7 +583,7 @@ public class PassportService {
 				adminCreateUserTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    adminCreateUserTask.setVersion(version);
-			adminCreateUserTask.init(props);
+			adminCreateUserTask.init(props, company);
 			response = (AdminCreateUserResponseElement) adminCreateUserTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(adminCreateUserTask.getFaults());
@@ -594,7 +595,7 @@ public class PassportService {
 		return response;
 	}
 
-	public AdminModifyUserResponseElement adminModifyUser(String adminSessionToken, String profileId, EmailTemplate emailTemplate, ProfileCore profileCore, ProfileExtended profileExtended) throws PassportServiceException {
+	public AdminModifyUserResponseElement adminModifyUser(String adminSessionToken, String profileId, EmailTemplate emailTemplate, ProfileCore profileCore, ProfileExtended profileExtended, String company) throws PassportServiceException {
 		AdminModifyUserTask adminModifyUserTask = new AdminModifyUserTask();
 		AdminModifyUserResponseElement response = null;
 		try {
@@ -608,7 +609,7 @@ public class PassportService {
 				adminModifyUserTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    adminModifyUserTask.setVersion(version);
-			adminModifyUserTask.init(props);
+			adminModifyUserTask.init(props, company);
 			response = (AdminModifyUserResponseElement) adminModifyUserTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(adminModifyUserTask.getFaults());
@@ -620,7 +621,7 @@ public class PassportService {
 		return response;
 	}
 
-	public AdminResetPasswordResponseElement adminResetPassword(String adminSessionToken, String profileId, String url, EmailTemplate[] emailTemplate) throws PassportServiceException {
+	public AdminResetPasswordResponseElement adminResetPassword(String adminSessionToken, String profileId, String url, EmailTemplate[] emailTemplate, String company) throws PassportServiceException {
 		AdminResetPasswordTask adminResetPasswordTask = new AdminResetPasswordTask();
 		AdminResetPasswordResponseElement response = null;
 		try {
@@ -633,7 +634,7 @@ public class PassportService {
 				adminResetPasswordTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
                 adminResetPasswordTask.setVersion(version);
-			adminResetPasswordTask.init(props);
+			adminResetPasswordTask.init(props, company);
 			response = (AdminResetPasswordResponseElement) adminResetPasswordTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(adminResetPasswordTask.getFaults());
@@ -645,7 +646,7 @@ public class PassportService {
 		return response;
 	}
 
-	public AdminViewUserResponseElement adminViewUser(String adminSessionToken, String searchValue, String searchCriteria) throws PassportServiceException {
+	public AdminViewUserResponseElement adminViewUser(String adminSessionToken, String searchValue, String searchCriteria, String company) throws PassportServiceException {
 		AdminViewUserTask adminViewUserTask = new AdminViewUserTask();
 		AdminViewUserResponseElement response = null;
 		try {
@@ -664,7 +665,7 @@ public class PassportService {
 				adminViewUserTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    adminViewUserTask.setVersion(version);
-			adminViewUserTask.init(props);
+			adminViewUserTask.init(props, company);
 			response = (AdminViewUserResponseElement) adminViewUserTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(adminViewUserTask.getFaults());
@@ -676,7 +677,7 @@ public class PassportService {
 		return response;
 	}
 
-	public SendEmailResponseElement sendEmail(String userId, EmailTemplate[] emailTemplate) throws PassportServiceException {
+	public SendEmailResponseElement sendEmail(String userId, EmailTemplate[] emailTemplate, String company) throws PassportServiceException {
 		SendEmailTask sendEmailTask = new SendEmailTask();
 		SendEmailResponseElement response = null;
 		try {
@@ -687,7 +688,7 @@ public class PassportService {
 				sendEmailTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    sendEmailTask.setVersion(version);
-			sendEmailTask.init(props);
+			sendEmailTask.init(props, company);
 			response = (SendEmailResponseElement) sendEmailTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(sendEmailTask.getFaults());
@@ -699,7 +700,7 @@ public class PassportService {
 		return response;
 	}
 
-	public ValidatePinResponseElement validatePin(String guid, String newPassword, String newPasswordConfirm, String securityAnswer, String securityQuestion, String pin) throws PassportServiceException {
+	public ValidatePinResponseElement validatePin(String guid, String newPassword, String newPasswordConfirm, String securityAnswer, String securityQuestion, String pin, String company) throws PassportServiceException {
 		ValidatePinTask validatePinTask = new ValidatePinTask();
 		ValidatePinResponseElement response = null;
 		try {
@@ -714,7 +715,7 @@ public class PassportService {
 				validatePinTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    validatePinTask.setVersion(version);
-			validatePinTask.init(props);
+			validatePinTask.init(props, company);
 			response = (ValidatePinResponseElement) validatePinTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(validatePinTask.getFaults());
@@ -726,7 +727,7 @@ public class PassportService {
 		return response;
 	}
 
-	public AddUserToGroupResponseElement addUserToGroup(String adminSessionToken, ProfileIdentity profileIdentity, String groupName, String roleName, EmailTemplate[] emailTemplate) throws PassportServiceException {
+	public AddUserToGroupResponseElement addUserToGroup(String adminSessionToken, ProfileIdentity profileIdentity, String groupName, String roleName, EmailTemplate[] emailTemplate, String company) throws PassportServiceException {
 		AddUserToGroupTask addUserToGroupTask = new AddUserToGroupTask();
 		AddUserToGroupResponseElement response = null;
 		try {
@@ -740,7 +741,7 @@ public class PassportService {
 				addUserToGroupTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    addUserToGroupTask.setVersion(version);
-			addUserToGroupTask.init(props);
+			addUserToGroupTask.init(props, company);
 			response = (AddUserToGroupResponseElement) addUserToGroupTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(addUserToGroupTask.getFaults());
@@ -752,7 +753,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetGroupInfoResponseElement getGroupInfo(String adminSessionToken, String groupName, String roleName) throws PassportServiceException {
+	public GetGroupInfoResponseElement getGroupInfo(String adminSessionToken, String groupName, String roleName, String company) throws PassportServiceException {
 		GetGroupInfoTask getGroupInfoTask = new GetGroupInfoTask();
 		GetGroupInfoResponseElement response = null;
 		try {
@@ -764,7 +765,7 @@ public class PassportService {
 				getGroupInfoTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getGroupInfoTask.setVersion(version);
-			getGroupInfoTask.init(props);
+			getGroupInfoTask.init(props, company);
 			response = (GetGroupInfoResponseElement) getGroupInfoTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(getGroupInfoTask.getFaults());
@@ -776,7 +777,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetMembersOfGroupResponseElement getMembersOfGroup(String adminSessionToken, String groupName, String roleName) throws PassportServiceException {
+	public GetMembersOfGroupResponseElement getMembersOfGroup(String adminSessionToken, String groupName, String roleName, String company) throws PassportServiceException {
 		GetMembersOfGroupTask getMembersOfGroupTask = new GetMembersOfGroupTask();
 		GetMembersOfGroupResponseElement response = null;
 		try {
@@ -788,7 +789,7 @@ public class PassportService {
 				getMembersOfGroupTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getMembersOfGroupTask.setVersion(version);
-			getMembersOfGroupTask.init(props);
+			getMembersOfGroupTask.init(props, company);
 			response = (GetMembersOfGroupResponseElement) getMembersOfGroupTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(getMembersOfGroupTask.getFaults());
@@ -800,7 +801,7 @@ public class PassportService {
 		return response;
 	}
 
-	public GetUserGroupsResponseElement getUserGroups(String adminSessionToken, ProfileIdentity profileIdentity) throws PassportServiceException {
+	public GetUserGroupsResponseElement getUserGroups(String adminSessionToken, ProfileIdentity profileIdentity, String company) throws PassportServiceException {
 		GetUserGroupsTask getUserGroupsTask = new GetUserGroupsTask();
 		GetUserGroupsResponseElement response = null;
 		try {
@@ -811,7 +812,7 @@ public class PassportService {
 				getUserGroupsTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    getUserGroupsTask.setVersion(version);
-			getUserGroupsTask.init(props);
+			getUserGroupsTask.init(props, company);
 			response = (GetUserGroupsResponseElement) getUserGroupsTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(getUserGroupsTask.getFaults());
@@ -823,7 +824,7 @@ public class PassportService {
 		return response;
 	}
 
-	public IsMemberOfGroupResponseElement isMemberOfGroup(String sessionToken, ProfileIdentity profileIdentity, String groupName, String roleName) throws PassportServiceException {
+	public IsMemberOfGroupResponseElement isMemberOfGroup(String sessionToken, ProfileIdentity profileIdentity, String groupName, String roleName, String company) throws PassportServiceException {
 		IsMemberOfGroupTask isMemberOfGroupTask = new IsMemberOfGroupTask();
 		IsMemberOfGroupResponseElement response = null;
 		try {
@@ -836,7 +837,7 @@ public class PassportService {
 				isMemberOfGroupTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    isMemberOfGroupTask.setVersion(version);
-			isMemberOfGroupTask.init(props);
+			isMemberOfGroupTask.init(props, company);
 			response = (IsMemberOfGroupResponseElement) isMemberOfGroupTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(isMemberOfGroupTask.getFaults());
@@ -848,7 +849,7 @@ public class PassportService {
 		return response;
 	}
 
-	public RemoveUserFromGroupResponseElement removeUserFromGroup(String adminSessionToken, ProfileIdentity profileIdentity, String groupName, String roleName, EmailTemplate[] emailTemplate) throws PassportServiceException {
+	public RemoveUserFromGroupResponseElement removeUserFromGroup(String adminSessionToken, ProfileIdentity profileIdentity, String groupName, String roleName, EmailTemplate[] emailTemplate, String company) throws PassportServiceException {
 		RemoveUserFromGroupTask removeUserFromGroupTask = new RemoveUserFromGroupTask();
 		RemoveUserFromGroupResponseElement response = null;
 		try {
@@ -862,7 +863,7 @@ public class PassportService {
 				removeUserFromGroupTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    removeUserFromGroupTask.setVersion(version);
-			removeUserFromGroupTask.init(props);
+			removeUserFromGroupTask.init(props, company);
 			response = (RemoveUserFromGroupResponseElement) removeUserFromGroupTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(removeUserFromGroupTask.getFaults());
@@ -874,7 +875,7 @@ public class PassportService {
 		return response;
 	}
 
-	public CheckAuthorityResponseElement checkAuthority(String adminSessionToken, String userId) throws PassportServiceException {
+	public CheckAuthorityResponseElement checkAuthority(String adminSessionToken, String userId, String company) throws PassportServiceException {
 		CheckAuthorityTask checkAuthorityTask = new CheckAuthorityTask();
 		CheckAuthorityResponseElement response = null;
 		try {
@@ -885,7 +886,7 @@ public class PassportService {
 				checkAuthorityTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    checkAuthorityTask.setVersion(version);
-			checkAuthorityTask.init(props);
+			checkAuthorityTask.init(props, company);
 			response = (CheckAuthorityResponseElement) checkAuthorityTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(checkAuthorityTask.getFaults());
@@ -897,7 +898,7 @@ public class PassportService {
 		return response;
 	}
 
-	public ValidateSessionTokenResponseElement validateSessionToken(String guid, String newPassword, String newPasswordConfirm, String securityAnswer, String securityQuestion, String pin) throws PassportServiceException {
+	public ValidateSessionTokenResponseElement validateSessionToken(String guid, String newPassword, String newPasswordConfirm, String securityAnswer, String securityQuestion, String pin, String company) throws PassportServiceException {
 		ValidateSessionTokenTask validateSessionTokenTask = new ValidateSessionTokenTask();
 		ValidateSessionTokenResponseElement response = null;
 		try {
@@ -912,7 +913,7 @@ public class PassportService {
 				validateSessionTokenTask.setSystemLangCode(mSystemLangCode);
 			if (version != null && !version.equals(""))
 			    validateSessionTokenTask.setVersion(version);
-			validateSessionTokenTask.init(props);
+			validateSessionTokenTask.init(props, company);
 			response = (ValidateSessionTokenResponseElement) validateSessionTokenTask.invoke();
 		} catch (TaskExecutionException e) {
 			// displayFaults(validateSessionTokenTask.getFaults());

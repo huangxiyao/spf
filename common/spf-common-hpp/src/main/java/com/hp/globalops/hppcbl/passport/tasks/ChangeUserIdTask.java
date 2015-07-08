@@ -23,9 +23,9 @@ public class ChangeUserIdTask extends Task {
 		return new ChangeUserIdResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String sessionToken = (String) args.get("sessionToken");
         String newUserId = (String) args.get("newUserId");
         String currentPassword = (String) args.get("currentPassword");

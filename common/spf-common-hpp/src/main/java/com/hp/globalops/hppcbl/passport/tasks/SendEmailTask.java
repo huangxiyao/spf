@@ -24,9 +24,9 @@ public class SendEmailTask extends Task {
 		return new SendEmailResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String userId = (String) args.get("userId");
         EmailTemplate[] emailTemplate = (EmailTemplate[]) args.get("emailTemplate");
 

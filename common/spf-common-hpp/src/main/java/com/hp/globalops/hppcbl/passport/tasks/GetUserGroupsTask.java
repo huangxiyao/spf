@@ -24,9 +24,9 @@ public class GetUserGroupsTask extends Task {
 		return new GetUserGroupsResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String adminSessionToken = (String) args.get("adminSessionToken");
         ProfileIdentity profileIdentity = (ProfileIdentity) args.get("profileIdentity");
 

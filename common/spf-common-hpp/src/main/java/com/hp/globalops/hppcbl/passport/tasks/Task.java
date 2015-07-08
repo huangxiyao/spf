@@ -164,7 +164,7 @@ public abstract class Task {
         return resolvedAddr;
     }
 
-    public void init() throws TaskExecutionException {
+    public void init(String company) throws TaskExecutionException {
 
         if (M_wsManagerInstance == null)
             throw new TaskExecutionException(
@@ -213,9 +213,10 @@ public abstract class Task {
             throw new TaskExecutionException("Security exception: "
                     + e.getMessage());
         }
-        call.setUsername(M_wsManagerInstance.getUserName());
-        call.setPassword(M_wsManagerInstance.getPassword());
-        // System.out.println("Call Initiated...");
+
+        call.setUsername(M_wsManagerInstance.getUserName(company));
+        call.setPassword(M_wsManagerInstance.getPassword(company));
+
     }
 
     protected abstract Object getRequestElement() throws TaskExecutionException;
@@ -430,5 +431,9 @@ public abstract class Task {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    protected String getApplicationId(String env){
+        return M_wsManagerInstance.getApplicationId(env);
     }
 }

@@ -23,9 +23,9 @@ public class GetRMDataTask extends Task {
 		return new GetRMDataResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String rMdataField = (String) args.get("rMdataField");
 
         requestElement = new GetRMDataRequestElement();

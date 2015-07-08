@@ -23,9 +23,9 @@ public class CheckUserExistsTask extends Task {
 		return new CheckUserExistsResponseElement() ;
 	}
 
-	public void init(Map args) throws TaskExecutionException {
+	public void init(Map args, String company) throws TaskExecutionException {
         //initialize
-        super.init();
+        super.init(company);
         String email = (String) args.get("email");
         String userId = (String) args.get("userId");
 
