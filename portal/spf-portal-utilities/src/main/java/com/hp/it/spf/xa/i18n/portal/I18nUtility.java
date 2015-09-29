@@ -376,6 +376,9 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			String value = sso_config.getString(I18nUtility.ENABLE_HPI_HPE);
 			return "YES".equalsIgnoreCase(value);
 		} catch (Exception ex) {
+			LOG.error("I18nUtility: isEnabledHPIAndHPE failed to open "
+					+ SHARED_PORTAL_SSO_FILE_BASE
+					+ " properties file");
 			return false;
 		}
 	}
@@ -442,6 +445,10 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 						}
 						value = rb.getString(bundleKey);
 						if (value == null || "".equalsIgnoreCase(value)) {
+							LOG.warning("I18nUtility: getSiteAdditionalLocales didn't get any value from "
+									+ bundleKey + " in "
+									+ SITE_ADDL_LOCALE_CONFIG_FILE
+									+ " properties file");
 							value = rb.getString(pSite.getDNSName());
 						}
 					} else {
