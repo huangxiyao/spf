@@ -8,7 +8,6 @@ package com.hp.it.spf.xa.i18n.portal;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,8 +23,6 @@ import com.epicentric.common.website.SessionUtils;
 import com.epicentric.i18n.LocalizedBundle;
 import com.epicentric.i18n.LocalizedBundleManager;
 import com.epicentric.site.Site;
-import com.epicentric.site.SiteException;
-import com.epicentric.site.SiteManager;
 import com.epicentric.template.Style;
 import com.epicentric.user.User;
 import com.hp.it.spf.xa.help.ContextualHelpProvider;
@@ -60,6 +57,14 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * PropertyResourceBundleManager.)
 	 */
 	private static final String SITE_ADDL_LOCALE_CONFIG_FILE = "site_locale_support";
+
+	/**
+	 * The name of the property file which stores the information about enablement of HPE/HPI
+	 * (The file extension .properties is assumed by the
+	 * PropertyResourceBundleManager.)
+	 */
+	private static final String SHARED_PORTAL_SSO_FILE_BASE = "SharedPortalSSO";
+	private static final String ENABLE_HPI_HPE = "Enable_HPI_HPE";
 
 	/**
 	 * Regular expression for opening <code>&lt;SPAN&gt;</code> tag.
@@ -224,7 +229,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 			Site currentSite = Utils.getEffectiveSite(request);
 			if (currentSite != null) {
 				availableLocales = getAvailableLocales(currentSite,
-						expandLocales);
+						expandLocales, request);
 			}
 		}
 		return availableLocales;
@@ -296,7 +301,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return The locales enabled for that site.
 	 */
 	public static Collection getAvailableLocales(Site site,
-			boolean expandLocales) {
+			boolean expandLocales, HttpServletRequest request) {
 		Collection availableLocales = new HashSet();
 
 		if (site != null) {
@@ -305,7 +310,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 
 			// get additional locales for the site from properties file, and
 			// mask against server-registered locales
-			Collection siteLocales = getSiteAdditionalLocales(site);
+			Collection siteLocales = getSiteAdditionalLocales(site, request);
 			if (siteLocales != null) {
 				siteLocales.retainAll(registeredLocales);
 				availableLocales = siteLocales;
@@ -360,9 +365,43 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 * @return The locales enabled for the portal site indicated in the request.
 	 *         These locales are <b>not</b> expanded.
 	 */
-	public static Collection getAvailableLocales(Site site) {
-		return getAvailableLocales(site, false);
+	public static Collection getAvailableLocales(Site site, HttpServletRequest request) {
+		return getAvailableLocales(site, false, request);
 	}
+
+	private static boolean isEnabledHPIAndHPE() {
+		try {
+			ResourceBundle sso_config = PropertyResourceBundleManager
+					.getBundle(I18nUtility.SHARED_PORTAL_SSO_FILE_BASE);
+			String value = sso_config.getString(I18nUtility.ENABLE_HPI_HPE);
+			return "YES".equalsIgnoreCase(value);
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	private static boolean isFromHPE(HttpServletRequest request) {
+		//If the URL domain is hpe.com,
+		//the user is from HPE.
+		String serverName = Utils.getServerHostName(request);
+		if (serverName.toLowerCase().contains("hpe.com")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static boolean isFromHPI(HttpServletRequest request) {
+		//If the URL domain is hp.com,
+		//the user is from HPI.
+		String serverName = Utils.getServerHostName(request);
+		if (serverName.toLowerCase().contains("hp.com")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 
 	/**
 	 * Get the additional locales for the given site which are configured in
@@ -377,7 +416,7 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 	 *            A portal site.
 	 * @return The additional locales enabled for that site.
 	 */
-	private static Collection getSiteAdditionalLocales(Site pSite) {
+	private static Collection getSiteAdditionalLocales(Site pSite, HttpServletRequest request) {
 		if (pSite == null) {
 			return null;
 		}
@@ -394,7 +433,20 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 								+ " properties file");
 			} else {
 				try {
-					value = rb.getString(pSite.getDNSName());
+					String bundleKey = pSite.getDNSName();
+					if (isEnabledHPIAndHPE()) {
+						if (isFromHPE(request)) {
+							bundleKey = "hpe_" + bundleKey;
+						} else if (isFromHPI(request)) {
+							bundleKey = "hpi_" + bundleKey;
+						}
+						value = rb.getString(bundleKey);
+						if (value == null || "".equalsIgnoreCase(value)) {
+							value = rb.getString(pSite.getDNSName());
+						}
+					} else {
+						value = rb.getString(pSite.getDNSName());
+					}
 				} catch (Exception ex) {
 				}
 			}
