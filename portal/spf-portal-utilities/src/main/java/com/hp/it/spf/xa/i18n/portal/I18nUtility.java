@@ -369,6 +369,11 @@ public class I18nUtility extends com.hp.it.spf.xa.i18n.I18nUtility {
 		return getAvailableLocales(site, false, request);
 	}
 
+	/**
+	 * The below 3 prviate methods are used to evaluate if the HPE/HPI flag is enabled
+	 * and if the user is from HPE or HPI. To avoid big refactor at this SMO stage, the codes
+	 * were copied from <code>com.hp.it.spf.sso.portal.AuthenticatorHelper</code>.
+	 */
 	private static boolean isEnabledHPIAndHPE() {
 		try {
 			ResourceBundle sso_config = PropertyResourceBundleManager
