@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hp.it.spf.apps</groupId>
 		<artifactId>portal-helper-apps</artifactId>
-		<version>3.0.13</version>
+		<version>3.0.14-SNAPSHOT</version>
 	</parent>
 	
 	<groupId>com.hp.it.spf.apps</groupId>

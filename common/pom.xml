@@ -5,19 +5,19 @@
 	<parent>
 		<artifactId>spf-pom</artifactId>
 		<groupId>com.hp.it.spf.tools</groupId>
-		<version>3.0.13</version>
+		<version>3.0.14-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.hp.it.spf.xa</groupId>
 	<artifactId>common</artifactId>
-	<version>3.0.13</version>
+	<version>3.0.14-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>SPF common aggregator POM</name>
 
 	<scm>
-		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.13/common</connection>
-		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.13/common</developerConnection>
-		<url>https://code1.corp.hp.com/svn/spf/source/tags/spf-all-3.0.13/common</url>
+		<connection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/common</connection>
+		<developerConnection>scm:svn:https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/common</developerConnection>
+		<url>https://code1.corp.hp.com/svn/spf/source/branches/spf-3.0/common</url>
 	</scm>
 
 	<modules>
